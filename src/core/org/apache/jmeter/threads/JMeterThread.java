@@ -198,10 +198,9 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     /**
-     * Check the scheduled time is completed.
-     *
+     * Check if the scheduled time is completed.
      */
-    private void stopScheduler() {
+    private void stopSchedulerIfNeeded() {
         long now = System.currentTimeMillis();
         long delay = now - endTime;
         if ((delay >= 0)) {
@@ -259,30 +258,32 @@ public class JMeterThread implements Runnable, Interruptible {
                 while (running && sam != null) {
                     processSampler(sam, null, threadContext);
                     threadContext.cleanAfterSample();
-                    if(onErrorStartNextLoop || threadContext.isRestartNextLoop()) {
-                        if(threadContext.isRestartNextLoop()) {
-                            triggerEndOfLoopOnParentControllers(sam, threadContext);
-                            sam = null;
-                            threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                            threadContext.setRestartNextLoop(false);
-                        } else {
-                            boolean lastSampleFailed = !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK));
-                            if(lastSampleFailed) {
-                                if(log.isDebugEnabled()) {
-                                    log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
-                                }
-                                triggerEndOfLoopOnParentControllers(sam, threadContext);
-                                sam = null;
-                                threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                            } else {
-                                sam = controller.next();
+                    
+                    // restart of the next loop 
+                    // - was request through threadContext
+                    // - or the last sample failed AND the onErrorStartNextLoop option is enabled
+                    if(threadContext.isRestartNextLoop()
+                            || (onErrorStartNextLoop
+                                    && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) 
+                    {
+                        
+                        if(log.isDebugEnabled()) {
+                            if(onErrorStartNextLoop
+                                    && !threadContext.isRestartNextLoop()) {
+                                log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
                             }
                         }
-                    } 
+                        
+                        triggerEndOfLoopOnParentControllers(sam, threadContext);
+                        sam = null;
+                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                        threadContext.setRestartNextLoop(false);
+                    }
                     else {
                         sam = controller.next();
                     }
                 }
+                
                 if (controller.isDone()) {
                     running = false;
                     log.info("Thread is done: " + threadName);
@@ -474,7 +475,7 @@ public class JMeterThread implements Runnable, Interruptible {
             }
             if (scheduler) {
                 // checks the scheduler to stop the iteration
-                stopScheduler();
+                stopSchedulerIfNeeded();
             }
         } catch (JMeterStopTestException e) {
             log.info("Stopping Test: " + e.toString());
