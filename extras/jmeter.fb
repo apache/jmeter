@@ -52,7 +52,6 @@ lib/velocity-1.4-dev.jar
 lib/xalan.jar
 lib/xercesimpl.jar
 lib/xml-apis.jar
-lib/xpp3-1.1.3.4.d.jar
 lib/xstream-1.0.1.jar
 lib/opt/activation.jar
 lib/opt/bsf.jar
