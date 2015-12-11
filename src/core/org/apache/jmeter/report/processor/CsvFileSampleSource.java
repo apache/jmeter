@@ -115,6 +115,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
             throw new SampleException("Could not locate input sample files !",
                     e);
         }
+        if (secondaryInputs == null) {
+            secondaryInputs = new File[0];
+        }
         inputFiles = new File[secondaryInputs.length + 1];
         csvReaders = new CsvSampleReader[secondaryInputs.length + 1];
         int k = 0;
