@@ -209,6 +209,6 @@ public class CsvSampleReader implements Closeable{
      */
     @Override
     public void close() {
-	JOrphanUtils.closeQuietly(reader);
+        JOrphanUtils.closeQuietly(reader);
     }
 }
