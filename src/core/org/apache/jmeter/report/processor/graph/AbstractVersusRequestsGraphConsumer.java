@@ -261,9 +261,9 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             // Handle the working directory
             File workDir = parent.getWorkingDirectory();
             createdWorkDir = false;
-            if (workDir.exists() == false) {
+            if (!workDir.exists()) {
                 createdWorkDir = workDir.mkdir();
-                if (createdWorkDir == false) {
+                if (!createdWorkDir) {
                     String message = String.format(
                             "Cannot create create working directory \"%s\"",
                             workDir);

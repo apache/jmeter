@@ -188,9 +188,9 @@ public class ReportGenerator {
 
         File tmpDir = configuration.getTempDirectory();
         boolean tmpDirCreated = false;
-        if (tmpDir.exists() == false) {
+        if (!tmpDir.exists()) {
             tmpDirCreated = tmpDir.mkdir();
-            if (tmpDirCreated == false) {
+            if (!tmpDirCreated) {
                 String message = String.format(
                         "Cannot create temporary directory \"%s\".", tmpDir);
                 log.error(message);
@@ -317,7 +317,7 @@ public class ReportGenerator {
                     try {
                         int i = 0;
                         boolean invoked = false;
-                        while (i < methods.length && invoked == false) {
+                        while (i < methods.length && !invoked) {
                             Method method = methods[i];
                             if (method.getName().equals(setterName)) {
                                 Class<?>[] parameterTypes = method
@@ -345,7 +345,7 @@ public class ReportGenerator {
                             }
                             i++;
                         }
-                        if (invoked == false) {
+                        if (!invoked) {
                             log.warn(String
                                     .format("\"%s\" is not a valid property for class \"%s\", skip it",
                                             propertyName, className));

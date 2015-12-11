@@ -438,7 +438,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             if (l.hasNext() && r.hasNext()) {
                 Sample firstLeft = l.next();
                 Sample firstRight = r.next();
-                if (revertedSort == false
+                if (!revertedSort
                         && sampleComparator.compare(firstLeft, firstRight) < 0
                         || revertedSort == true
                         && sampleComparator.compare(firstLeft, firstRight) >= 0) {
@@ -543,7 +543,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
                     Sample firstRight = r.peek();
-                    if (revertedSort == false
+                    if (!revertedSort
                             && sampleComparator.compare(firstLeft, firstRight) < 0
                             || revertedSort == true
                             && sampleComparator.compare(firstLeft, firstRight) >= 0) {
@@ -570,7 +570,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
                     Sample firstRight = r.peek();
-                    if (revertedSort == false
+                    if (!revertedSort
                             && sampleComparator.compare(firstLeft, firstRight) < 0
                             || revertedSort == true
                             && sampleComparator.compare(firstLeft, firstRight) >= 0) {

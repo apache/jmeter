@@ -157,7 +157,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Get template directory property value
         File templateDirectory = getPropertyFromConfig(exportCfg, TEMPLATE_DIR,
                 TEMPLATE_DIR_DEFAULT, File.class);
-        if (templateDirectory.isDirectory() == false) {
+        if (!templateDirectory.isDirectory()) {
             String message = String.format(INVALID_TEMPLATE_DIRECTORY_FMT,
                     templateDirectory);
             log.error(message);
