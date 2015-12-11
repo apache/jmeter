@@ -17,6 +17,8 @@
  */
 package org.apache.jmeter.report.core;
 
+import java.io.Closeable;
+
 import org.apache.jmeter.report.core.Sample;
 
 /**
@@ -27,7 +29,7 @@ import org.apache.jmeter.report.core.Sample;
  * 
  * @since 2.14
  */
-abstract public class SampleWriter {
+abstract public class SampleWriter implements Closeable {
 
     /**
      * Write a sample to the underlying destination
@@ -38,9 +40,4 @@ abstract public class SampleWriter {
      *         destination
      */
     abstract public long write(Sample s);
-
-    /**
-     * Flushes and closes this sample writer.
-     */
-    abstract public void close();
 }
