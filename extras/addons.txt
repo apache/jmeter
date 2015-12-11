@@ -10,7 +10,7 @@ Copy addons.xml into JMETER_HOME
 
 To build the addons, run ant as follows:
 
-ant -buildfile=addons.xml
+ant -buildfile addons.xml
 
 This will compile the sources to build/addons/...
 
