@@ -30,6 +30,7 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 //import org.apache.jmeter.samplers.SampleResult;
 //import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -45,6 +46,9 @@ public class CsvSampleReader implements Closeable{
     private static final int BUF_SIZE = 10000;
 
     private static final String CHARSET = "ISO8859-1";
+
+    private static final char DEFAULT_SEPARATOR =
+	    JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
 
     private File file;
 
@@ -84,16 +88,16 @@ public class CsvSampleReader implements Closeable{
      *            the metadata
      */
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
-        this(inputFile, metadata, null, false);
+        this(inputFile, metadata, DEFAULT_SEPARATOR, false);
     }
 
     private CsvSampleReader(File inputFile, SampleMetadata metadata,
-            Character separator, boolean useSaveSampleCfg) {
+            char separator, boolean useSaveSampleCfg) {
         if (inputFile == null) {
             throw new ArgumentNullException("inputFile");
         }
 
-        if (inputFile.isFile() == false || inputFile.canRead() == false) {
+        if (!(inputFile.isFile() && inputFile.canRead())) {
             throw new IllegalArgumentException(inputFile.getAbsolutePath()
                     + "does not exist or is not readable");
         }
