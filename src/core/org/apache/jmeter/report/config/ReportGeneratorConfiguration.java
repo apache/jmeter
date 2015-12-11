@@ -56,12 +56,12 @@ public class ReportGeneratorConfiguration {
     // Apdex Satified Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_statisfied_threshold";
-    private static final long REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT = 500L;
+    private static final Long REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT = Long.valueOf(500L);
 
     // Apdex Tolerated Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_tolerated_threshold";
-    private static final long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = 1500L;
+    private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
 
     // Sample Filter
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
@@ -75,7 +75,7 @@ public class ReportGeneratorConfiguration {
     // Required graph properties
     // Exclude controllers
     public static final String GRAPH_KEY_EXCLUDE_CONTROLLERS = "exclude_controllers";
-    public static final boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = false;
+    public static final Boolean GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT = Boolean.FALSE;
 
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
@@ -84,7 +84,7 @@ public class ReportGeneratorConfiguration {
     // Required exporter properties
     // Filters only sample series ?
     public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
-    public static final boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = false;
+    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.FALSE;
 
     // Series filter
     public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";
@@ -92,7 +92,7 @@ public class ReportGeneratorConfiguration {
 
     // Show controllers only
     private static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
-    private static final boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = false;
+    private static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = Boolean.FALSE;
 
     // Optional exporter properties
     public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";
@@ -492,14 +492,14 @@ public class ReportGeneratorConfiguration {
         final long apdexSatisfiedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
-                long.class);
+                long.class).longValue();
         configuration.setApdexSatisfiedThreshold(apdexSatisfiedThreshold);
 
         // Load apdex tolerated threshold
         final long apdexToleratedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
-                long.class);
+                long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
 
         // Load sample filter
@@ -532,7 +532,7 @@ public class ReportGeneratorConfiguration {
                                 getGraphPropertyKey(graphId,
                                         GRAPH_KEY_EXCLUDE_CONTROLLERS),
                                 GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
-                                Boolean.class);
+                                Boolean.class).booleanValue();
                         graphConfiguration
                                 .setExcludeControllers(excludeControllers);
 
@@ -590,7 +590,7 @@ public class ReportGeneratorConfiguration {
                                 getExporterPropertyKey(exportId,
                                         EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
                                 EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
-                                Boolean.class);
+                                Boolean.class).booleanValue();
                         exportConfiguration
                                 .filtersOnlySampleSeries(filtersOnlySampleSeries);
 
@@ -610,7 +610,7 @@ public class ReportGeneratorConfiguration {
                                 getExporterPropertyKey(exportId,
                                         EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
                                 EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
-                                Boolean.class);
+                                Boolean.class).booleanValue();
                         exportConfiguration
                                 .showControllerSeriesOnly(showControllerSeriesOnly);
 
