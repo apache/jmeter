@@ -83,8 +83,6 @@ public class CsvSampleReader {
      *            the input file
      * @param metadata
      *            the metadata
-     * @param isStrict
-     *            indicates if the reader uses strict mode
      */
     public CsvSampleReader(File inputFile, SampleMetadata metadata) {
         this(inputFile, metadata, null, false);
