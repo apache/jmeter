@@ -116,7 +116,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      */
     @Override
     public void close() {
-	JOrphanUtils.closeQuietly(writer);
+        JOrphanUtils.closeQuietly(writer);
         this.writer = null;
     }
 
