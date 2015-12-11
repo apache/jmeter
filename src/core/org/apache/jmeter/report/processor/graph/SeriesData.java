@@ -117,6 +117,9 @@ public class SeriesData {
      * @param isControllersSeries
      *            the flag using to indicate if the current series is built from
      *            controller samples
+     * @param isOverallSeries
+     *            flag to indicate whether the current series is an aggregation of
+     *            other series
      */
     public SeriesData(AggregatorFactory factory, boolean hasAggregatedKey,
             boolean isControllersSeries, boolean isOverallSeries) {
