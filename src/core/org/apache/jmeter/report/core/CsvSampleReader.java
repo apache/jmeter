@@ -97,7 +97,7 @@ public class CsvSampleReader {
         }
 
         if (inputFile.isFile() == false || inputFile.canRead() == false) {
-            throw new IllegalArgumentException(file.getAbsolutePath()
+            throw new IllegalArgumentException(inputFile.getAbsolutePath()
                     + "does not exist or is not readable");
         }
         this.file = inputFile;
