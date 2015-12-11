@@ -123,7 +123,9 @@ public class CsvSampleReader implements Closeable{
             SampleMetadata metadata;
             // Read first line
             String line = reader.readLine();
-
+            if(line == null) {
+                throw new IllegalArgumentException("File is empty");
+            }
             // When we can use sample save config and there is no header in csv
             // file
             if (useSaveSampleCfg
