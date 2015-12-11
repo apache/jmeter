@@ -106,6 +106,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     }
 
     private long formatTimestamp(String key, DataContext context) {
+        // FIXME Why convert to double then long (rounding ?)
         double result = Double.valueOf((String) context.get(key));
         long timestamp = (long) result;
         // Quote the string to respect Json spec.
@@ -172,7 +173,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Add the flag defining whether only sample series are filtered to the
         // context
         addToContext(DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
-                exportCfg.filtersOnlySampleSeries(), dataContext);
+                Boolean.valueOf(exportCfg.filtersOnlySampleSeries()), dataContext);
 
         // Add the series filter to the context
         addToContext(DATA_CTX_SERIES_FILTER, exportCfg.getSeriesFilter(),
@@ -180,7 +181,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Add the flag defining whether only controller series are displayed
         addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY,
-                exportCfg.showControllerSeriesOnly(), dataContext);
+                Boolean.valueOf(exportCfg.showControllerSeriesOnly()), dataContext);
 
         JsonizerVisitor jsonizer = new JsonizerVisitor();
         Map<String, Object> storedData = context.getData();
@@ -220,8 +221,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                         @Override
                         public ResultData customizeResult(ResultData result) {
                             MapResultData customizedResult = new MapResultData();
-                            customizedResult.setResult(DATA_CTX_RESULT,
-                                    (ResultData) result);
+                            customizedResult.setResult(DATA_CTX_RESULT,result);
                             if (extraOptions != null) {
                                 MapResultData extraResult = new MapResultData();
                                 for (Map.Entry<String, String> extraEntry : extraOptions
@@ -250,7 +250,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         // Add time zone offset (that matches the begin date) to the context
         TimeZone timezone = TimeZone.getDefault();
         addToContext(DATA_CTX_TIMEZONE_OFFSET,
-                timezone.getOffset(oldTimestamp), dataContext);
+                Integer.valueOf(timezone.getOffset(oldTimestamp)), dataContext);
 
         // Add the test file name to the context
         addToContext(DATA_CTX_TESTFILE, file.getName(), dataContext);
