@@ -111,7 +111,7 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
             Path newPath = target.resolve(FilenameUtils
                     .removeExtension(templatePath));
             try (Writer writer = new FileWriter(newPath.toString());
-        	    BufferedWriter bufferedWriter = new BufferedWriter(writer)){
+                    BufferedWriter bufferedWriter = new BufferedWriter(writer)){
                 template.process(data, bufferedWriter);
             } catch (TemplateException ex) {
                 throw new IOException(ex);
