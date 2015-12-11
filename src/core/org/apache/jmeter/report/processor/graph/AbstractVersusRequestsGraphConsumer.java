@@ -43,7 +43,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractVersusRequestsGraphConsumer extends
         AbstractGraphConsumer {
-
+    private static final Long ONE = Long.valueOf(1L);
     public static final String RESULT_CTX_GRANULARITY = "granularity";
     public static final String TIME_INTERVAL_LABEL = "Interval";
 
@@ -156,7 +156,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
-                granularity));
+                Long.valueOf(granularity)));
     }
 
     private static class TimeCountConsumer extends AbstractSampleConsumer {
@@ -210,9 +210,9 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             this.parent = parent;
         }
 
-        private long getTimeInterval(Sample sample) {
+        private Long getTimeInterval(Sample sample) {
             long time = sample.getEndTime();
-            return time - (time % parent.getGranularity());
+            return Long.valueOf(time - (time % parent.getGranularity()));
         }
 
         // Adds a new field in the sample metadata for each channel
@@ -283,7 +283,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                             .add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
                     String message = String.format(
-                            "Cannot create temporary file for channel #%d", i);
+                            "Cannot create temporary file for channel #%s", Integer.toString(i));
                     log.error(message, ex);
                     throw new SampleException(message, ex);
                 }
@@ -303,12 +303,12 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
         @Override
         public void consume(Sample sample, int channel) {
             // Count sample depending on time interval
-            long time = getTimeInterval(sample);
+            Long time = getTimeInterval(sample);
             Long count = counts.get(time);
             if (count != null) {
-                counts.put(time, count + 1);
+                counts.put(time, Long.valueOf(count.longValue() + 1));
             } else {
-                counts.put(time, 1L);
+                counts.put(time, ONE);
             }
             fileInfos.get(channel).getWriter().write(sample);
         }
@@ -337,7 +337,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                         // Ask parent to consume the altered sample
                         parent.consumeBase(
                                 createIndexedSample(sample, i,
-                                        counts.get(getTimeInterval(sample))
+                                        counts.get(getTimeInterval(sample)).longValue()
                                                 % parent.getGranularity()), i);
                     }
                 } finally {
