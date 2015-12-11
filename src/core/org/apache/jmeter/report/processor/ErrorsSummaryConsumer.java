@@ -33,6 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
+    private static final Long ZERO = Long.valueOf(0);
     private static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private long errorCount = 0L;
 
@@ -56,9 +57,9 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         result.addResult(new ValueResultData(key != null ? key : JMeterUtils
                 .getResString("reportgenerator_summary_total")));
         result.addResult(new ValueResultData(data));
-        result.addResult(new ValueResultData((double) data * 100 / errorCount));
-        result.addResult(new ValueResultData((double) data * 100
-                / getOverallInfo().getData()));
+        result.addResult(new ValueResultData(Double.valueOf(((double) data.longValue() * 100 / errorCount))));
+        result.addResult(new ValueResultData(Double.valueOf((double) data.longValue() * 100
+                / getOverallInfo().getData().doubleValue())));
         return result;
     }
 
@@ -101,9 +102,9 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         SummaryInfo overallInfo = getOverallInfo();
         Long overallData = overallInfo.getData();
         if (overallData == null) {
-            overallData = Long.valueOf(0);
+            overallData = ZERO;
         }
-        overallInfo.setData(overallData + 1);
+        overallInfo.setData(Long.valueOf(overallData.longValue() + 1));
 
         // Process only failed samples
         if (!sample.getSuccess()) {
@@ -113,7 +114,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
             if (data == null) {
                 data = Long.valueOf(1);
             }
-            info.setData(data + 1);
+            info.setData(Long.valueOf(data.longValue() + 1));
         }
     }
 
