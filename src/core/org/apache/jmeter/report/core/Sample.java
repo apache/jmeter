@@ -58,7 +58,7 @@ public class Sample {
     }
 
     /**
-     * Return the row number from the CSV source from which this sample has been
+     * @return the row number from the CSV source from which this sample has been
      * built.
      */
     public long getSampleRow() {
