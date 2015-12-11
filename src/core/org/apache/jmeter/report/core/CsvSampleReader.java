@@ -18,6 +18,7 @@
 package org.apache.jmeter.report.core;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,13 +26,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.core.SampleException;
-import org.apache.jmeter.report.core.SampleMetadata;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 //import org.apache.jmeter.samplers.SampleResult;
 //import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
+import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Reader class for reading CSV files.<reader>
@@ -41,7 +40,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * 
  * @since 2.14
  */
-public class CsvSampleReader {
+public class CsvSampleReader implements Closeable{
 
     private static final int BUF_SIZE = 10000;
 
@@ -204,11 +203,8 @@ public class CsvSampleReader {
     /**
      * Close the reader.
      */
+    @Override
     public void close() {
-        try {
-            reader.close();
-        } catch (Exception e) {
-            // ignore
-        }
+	JOrphanUtils.closeQuietly(reader);
     }
 }
