@@ -35,7 +35,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
-    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%> on sample %s";
+    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%s> on sample %s";
 
     // TODO Get the date format from jmeter properties
     private static String DEFAULT_DATE_FORMAT = "HH:mm:ss";
