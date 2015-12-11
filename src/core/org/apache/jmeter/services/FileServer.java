@@ -511,6 +511,7 @@ public class FileServer {
             File src = new File(basedir);
             if (src.isDirectory() && src.list() != null) {
                 File[] lfiles = src.listFiles(new JMeterFileFilter(extensions));
+                // lfiles cannot be null as it has been checked before
                 int count = lfiles.length;
                 input = lfiles[ThreadLocalRandom.current().nextInt(count)];
             }
