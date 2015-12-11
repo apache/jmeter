@@ -161,6 +161,7 @@ public class WebServiceSampler extends HTTPSamplerBase  {
             File src = new File(this.getXmlPathLoc());
             if (src.isDirectory() && src.list() != null) {
                 File [] fileList = src.listFiles(new JMeterFileFilter(new String[] { ".xml" }, false));
+                // fileList cannot be null as we checked it
                 File one = fileList[ThreadLocalRandom.current().nextInt(fileList.length)];
                 // return the absolutePath of the file
                 return one.getAbsolutePath();
