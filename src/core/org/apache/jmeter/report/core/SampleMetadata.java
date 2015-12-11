@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 
@@ -200,14 +201,6 @@ public class SampleMetadata {
      */
     @Override
     public String toString() {
-        StringBuffer out = new StringBuffer();
-        int size = columns.size();
-        for (int i = 0; i < size; i++) {
-            out.append(columns.get(i));
-            if (i < size - 1) {
-                out.append(separator);
-            }
-        }
-        return out.toString();
+        return StringUtils.join(columns, separator);
     }
 }
