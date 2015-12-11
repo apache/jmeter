@@ -324,7 +324,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             log.debug("sort(): " + inputSampleCount.longValue()
                     + " samples read from input, " + chunkedSampleCount.longValue()
                     + " samples written to chunk files");
-            if (!inputSampleCount.equals(chunkedSampleCount)) {
+            if (inputSampleCount.get() != chunkedSampleCount.get()) {
                 log.error("Failure! Number of samples read from input and written to chunk files differ");
             } else {
                 log.info("chunked samples dumps succeeded.");
