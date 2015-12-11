@@ -55,7 +55,7 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
     @Override
     public void consume(Sample sample, int channel) {
         count++;
-        if (sample.getSuccess() == false) {
+        if (!sample.getSuccess()) {
             errorCount++;
         }
         super.produce(sample, channel);

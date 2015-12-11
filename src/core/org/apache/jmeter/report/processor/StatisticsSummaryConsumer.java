@@ -50,9 +50,9 @@ public class StatisticsSummaryConsumer extends
         data.IncTotal();
         data.IncBytes(sample.getSentBytes());
 
-        if (sample.getSuccess() == false) {
-                data.IncErrors();
-                }
+        if (!sample.getSuccess()) {
+            data.IncErrors();
+        }
 
         long elapsedTime = sample.getElapsedTime();
         data.getPercentile1().addValue(elapsedTime);

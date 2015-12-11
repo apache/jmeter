@@ -270,7 +270,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
         // Populate it with data from groupData
         Map<Double, Aggregator> aggInfo;
-        if (aggregated == false) {
+        if (!aggregated) {
             aggInfo = seriesData.getAggregatorInfo();
         } else {
             series = String.format(aggregatedKeysSeriesFormat, series);
@@ -278,7 +278,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             aggInfo.put(seriesData.getKeysAggregator().getResult(),
                     seriesData.getValuesAggregator());
         }
-        if (renderPercentiles == false) {
+        if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
                 // Init key and value depending on revertsKeysAndValues property
                 Double key = entry.getKey();
@@ -287,7 +287,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 // Create result storage for coordinates
                 ListResultData coordResult = new ListResultData();
 
-                if (revertsKeysAndValues == false) {
+                if (!revertsKeysAndValues) {
                     key = entry.getKey();
                     value = entry.getValue().getResult();
                 } else {
@@ -307,7 +307,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             int rank = 0;
             double percent = 0;
             TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
-            if (revertsKeysAndValues == false) {
+            if (!revertsKeysAndValues) {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
                     double value = entry.getKey();
