@@ -41,26 +41,10 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-///**
-// * The <code>ListenerNotifier</code> thread is responsible for performing
-// * asynchronous notifications that a sample has occurred. Each time a sample
-// * occurs, the <code>addLast</code> method should be called to add the sample
-// * and its list of listeners to the notification queue. This thread will then
-// * notify those listeners asynchronously at some future time.
-// * <p>
-// * In the current implementation, the notifications will be made in batches,
-// * with 2 seconds between the beginning of successive batches. If the notifier
-// * thread starts to get behind, the priority of the thread will be increased in
-// * an attempt to help it to keep up.
-// *
-// * @see org.apache.jmeter.samplers.SampleListener
-// *
-// */
 /**
  * Processes sample events.
  * The current implementation processes events in the calling thread
  * using {@link #notifyListeners(SampleEvent, List)}
- * The other code is not used currently, so is commented out.
  */
 public class ListenerNotifier {
     private static final Logger log = LoggingManager.getLoggerForClass();
