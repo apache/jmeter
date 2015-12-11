@@ -75,7 +75,6 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
      * @throws java.awt.HeadlessException - when run headless
      */
     public SavePropertyDialog(Frame owner, String title, boolean modal, SampleSaveConfiguration s)
-    // throws HeadlessException
     {
         super(owner, title, modal);
         saveConfig = s;

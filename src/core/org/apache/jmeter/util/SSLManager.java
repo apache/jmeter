@@ -253,20 +253,6 @@ public abstract class SSLManager {
     public static final synchronized SSLManager getInstance() {
         if (null == SSLManager.manager) {
             SSLManager.manager = new JsseSSLManager(null);
-//          if (SSLManager.isSSLSupported) {
-//              String classname = null;
-//              classname = "org.apache.jmeter.util.JsseSSLManager"; // $NON-NLS-1$
-//
-//              try {
-//                  Class clazz = Class.forName(classname);
-//                  Constructor con = clazz.getConstructor(new Class[] { Provider.class });
-//                  SSLManager.manager = (SSLManager) con.newInstance(new Object[] { SSLManager.sslProvider });
-//              } catch (Exception e) {
-//                  log.error("Could not create SSLManager instance", e); // $NON-NLS-1$
-//                  SSLManager.isSSLSupported = false;
-//                  return null;
-//              }
-//          }
         }
 
         return SSLManager.manager;
