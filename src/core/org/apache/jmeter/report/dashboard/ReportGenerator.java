@@ -98,6 +98,8 @@ public class ReportGenerator {
     public static final String STATISTICS_SUMMARY_CONSUMER_NAME = "statisticsSummary";
     public static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
 
+    private static final Pattern POTENTIAL_CAMEL_CASE_PATTERN = Pattern.compile("_(.)");
+
     private final File testFile;
     private final ReportGeneratorConfiguration configuration;
 
@@ -113,6 +115,7 @@ public class ReportGenerator {
      *            the test results file
      * @param resultCollector
      *            Can be null, used if generation occurs at end of test
+     * @throws ConfigurationException when loading configuration from file fails
      */
     public ReportGenerator(String resultsFile, ResultCollector resultCollector)
             throws ConfigurationException {
@@ -160,9 +163,7 @@ public class ReportGenerator {
      * @return the name of the property setter
      */
     private static String getSetterName(String propertyKey) {
-        // TODO use jmeter regex cache
-        Pattern pattern = Pattern.compile("_(.)");
-        Matcher matcher = pattern.matcher(propertyKey);
+        Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
         StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {
             matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
