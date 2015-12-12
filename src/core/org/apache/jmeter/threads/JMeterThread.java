@@ -226,18 +226,10 @@ public class JMeterThread implements Runnable, Interruptible {
      * See below for reason for this change. Just in case this causes problems,
      * allow the change to be backed out
      */
-    private static final boolean startEarlier =
-        JMeterUtils.getPropDefault("jmeterthread.startearlier", true); // $NON-NLS-1$
-
     private static final boolean reversePostProcessors =
-        JMeterUtils.getPropDefault("jmeterthread.reversePostProcessors",false); // $NON-NLS-1$
+        JMeterUtils.getPropDefault("jmeterthread.reversePostProcessors", false); // $NON-NLS-1$
 
     static {
-        if (startEarlier) {
-            log.info("jmeterthread.startearlier=true (see jmeter.properties)");
-        } else {
-            log.info("jmeterthread.startearlier=false (see jmeter.properties)");
-        }
         if (reversePostProcessors) {
             log.info("Running PostProcessors in reverse order");
         } else {
@@ -551,15 +543,12 @@ public class JMeterThread implements Runnable, Interruptible {
          * them to access the running values of functions and variables (however
          * it does not seem to help with the listeners)
          */
-        if (startEarlier) {
-            threadContext.setSamplingStarted(true);
-        }
+        threadContext.setSamplingStarted(true);
+        
         controller.initialize();
         IterationListener iterationListener = new IterationListener();
         controller.addIterationListener(iterationListener);
-        if (!startEarlier) {
-            threadContext.setSamplingStarted(true);
-        }
+
         threadStarted();
         return iterationListener;
     }
