@@ -96,15 +96,15 @@ public class ApdexSummaryData {
         apdexThresholdInfo = info;
     }
 
-    public void IncSatisfiedCount() {
+    public void incSatisfiedCount() {
         satisfiedCount++;
     }
 
-    public void IncToleratedCount() {
+    public void incToleratedCount() {
         toleratedCount++;
     }
 
-    public void IncTotalCount() {
+    public void incTotalCount() {
         totalCount++;
     }
 }

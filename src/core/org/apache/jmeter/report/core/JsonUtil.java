@@ -47,7 +47,7 @@ public final class JsonUtil {
      * @return the string
      */
     public static String toJsonObject(Map<String, String> map) {
-        String result = "{";
+        StringBuilder result = new StringBuilder("{");
         if (map != null) {
             String[] array = new String[map.size()];
             int index = 0;
