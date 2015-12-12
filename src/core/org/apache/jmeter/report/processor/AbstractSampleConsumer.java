@@ -182,8 +182,8 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
     public void setChannelAttribute(int channel, String key, Object value) {
         super.setChannelAttribute(channel, key, value);
         // propagate attribute to all of this SampleConsumer consumers
-        for (SampleConsumer c : sampleConsumers) {
-            c.setChannelAttribute(channel, key, value);
+        for (SampleConsumer consumer : sampleConsumers) {
+            consumer.setChannelAttribute(channel, key, value);
         }
     }
 
