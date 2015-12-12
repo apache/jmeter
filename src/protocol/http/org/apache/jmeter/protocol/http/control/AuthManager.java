@@ -30,7 +30,6 @@ import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 import javax.security.auth.Subject;
 
@@ -378,24 +377,29 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                     if (line.startsWith("#") || JOrphanUtils.isBlank(line)) { //$NON-NLS-1$
                         continue;
                     }
-                    StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
-                    String url = st.nextToken();
-                    String user = st.nextToken();
-                    String pass = st.nextToken();
-                    String domain = "";
-                    String realm = "";
-                    if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
-                        domain = st.nextToken();
-                        realm = st.nextToken();
+                    String[] tokens = line.split("\t"); //$NON-NLS-1$
+                    String url = tokens[0];
+                    String user = tokens[1];
+                    String pass = tokens[2];
+                    String domain;
+                    String realm;
+                    if (tokens.length > 2){ // Allow for old format file without the extra columnns
+                        domain = tokens[3];
+                        realm = tokens[4];
+                    } else {
+                        domain = "";
+                        realm = "";
                     }
-                    Mechanism mechanism = Mechanism.BASIC_DIGEST;
-                    if (st.hasMoreTokens()){// Allow for old format file without mechanism support
-                        mechanism = Mechanism.valueOf(st.nextToken());
+                    Mechanism mechanism;
+                    if (tokens.length > 4) { // Allow for old format file without mechanism support
+                        mechanism = Mechanism.valueOf(tokens[5]);
+                    } else {
+                        mechanism = Mechanism.BASIC_DIGEST;
                     }
                     Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
                     getAuthObjects().addItem(auth);
                 } catch (NoSuchElementException e) {
-                    log.error("Error parsing auth line: '" + line + "'");
+                    log.error("Error parsing auth line: '" + line + "'", e);
                     ok = false;
                 }
             }
