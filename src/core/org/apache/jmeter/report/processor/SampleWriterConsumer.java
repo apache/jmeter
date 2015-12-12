@@ -80,6 +80,8 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
 
     /**
      * Enables the CSV header on the output file (defaults to false)
+     * 
+     * @param writeHeader flag, whether CSV header should be written
      */
     public void setWriteHeader(boolean writeHeader) {
         this.shouldWriteHeader = writeHeader;
