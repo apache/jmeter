@@ -220,15 +220,15 @@ public class StatisticsSummaryData {
         return (total / (double) getElapsedTime()) * 1000.0;
     }
 
-    public void IncTotal() {
+    public void incTotal() {
         total++;
     }
 
-    public void IncBytes(long value) {
+    public void incBytes(long value) {
         bytes += value;
     }
 
-    public void IncErrors() {
+    public void incErrors() {
         errors++;
     }
 }
