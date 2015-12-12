@@ -215,12 +215,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private void setMinResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Math.min((Double) valueResult.getValue(), value));
+        valueResult.setValue(Double.valueOf(Math.min(((Double) valueResult.getValue()).doubleValue(), 
+                value.doubleValue())));
     }
 
     private void setMaxResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Math.max((Double) valueResult.getValue(), value));
+        valueResult.setValue(Double.valueOf(Math.max(((Double) valueResult.getValue()).doubleValue(), 
+                value.doubleValue())));
     }
 
     /**
@@ -258,9 +260,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             seriesResult.setResult(RESULT_SERIES_NAME, new ValueResultData(
                     series));
             seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
-                    new ValueResultData(seriesData.isControllersSeries()));
+                    new ValueResultData(Boolean.valueOf(seriesData.isControllersSeries())));
             seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
-                    new ValueResultData(seriesData.isOverallSeries()));
+                    new ValueResultData(Boolean.valueOf(seriesData.isOverallSeries())));
             seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
             seriesList.addResult(seriesResult);
         }
@@ -310,13 +312,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             if (!revertsKeysAndValues) {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
-                    double value = entry.getKey();
+                    Double value = entry.getKey();
                     percent += (double) 100 * entry.getValue().getCount()
                             / count;
                     double percentile = (double) rank / 10;
                     while (percentile < percent) {
                         ListResultData coordResult = new ListResultData();
-                        coordResult.addResult(new ValueResultData(percentile));
+                        coordResult.addResult(new ValueResultData(Double.valueOf(percentile)));
                         coordResult.addResult(new ValueResultData(value));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
@@ -324,27 +326,27 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     setMinResult(result, RESULT_MIN_Y, value);
                     setMaxResult(result, RESULT_MAX_Y, value);
                 }
-                setMinResult(result, RESULT_MIN_X, 0d);
-                setMaxResult(result, RESULT_MAX_X, 100d);
+                setMinResult(result, RESULT_MIN_X, Double.valueOf(0d));
+                setMaxResult(result, RESULT_MAX_X, Double.valueOf(100d));
             } else {
                 for (Map.Entry<Double, Aggregator> entry : sortedInfo
                         .entrySet()) {
-                    double value = entry.getKey();
+                    Double value = entry.getKey();
                     percent += (double) 100 * entry.getValue().getCount()
                             / count;
                     double percentile = (double) rank / 10;
                     while (percentile < percent) {
                         ListResultData coordResult = new ListResultData();
                         coordResult.addResult(new ValueResultData(value));
-                        coordResult.addResult(new ValueResultData(percentile));
+                        coordResult.addResult(new ValueResultData(Double.valueOf(percentile)));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
                     }
                     setMinResult(result, RESULT_MIN_X, value);
                     setMaxResult(result, RESULT_MAX_X, value);
                 }
-                setMinResult(result, RESULT_MIN_Y, 0d);
-                setMaxResult(result, RESULT_MAX_Y, 100d);
+                setMinResult(result, RESULT_MIN_Y, Double.valueOf(0d));
+                setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
             }
         }
     }
