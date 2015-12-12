@@ -117,10 +117,10 @@ public class ApdexSummaryConsumer extends
         }
 
         // Increment the total count of samples with the current name
-        data.IncTotalCount();
+        data.incTotalCount();
 
         // Increment the total count of samples
-        overallData.IncTotalCount();
+        overallData.incTotalCount();
 
         // Process only succeeded samples
         if (sample.getSuccess()) {
@@ -129,19 +129,19 @@ public class ApdexSummaryConsumer extends
             // Increment the counters depending on the elapsed time.
             ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
             if (elapsedTime <= thresholdsInfo.getSatisfiedThreshold()) {
-                data.IncSatisfiedCount();
+                data.incSatisfiedCount();
             } else if (elapsedTime <= thresholdsInfo.getToleratedThreshold()) {
-                data.IncToleratedCount();
+                data.incToleratedCount();
             }
 
             // Increment the overall counters depending on the elapsed time.
             ApdexThresholdsInfo overallThresholdsInfo = overallData
                     .getApdexThresholdInfo();
             if (elapsedTime <= overallThresholdsInfo.getSatisfiedThreshold()) {
-                overallData.IncSatisfiedCount();
+                overallData.incSatisfiedCount();
             } else if (elapsedTime <= overallThresholdsInfo
                     .getToleratedThreshold()) {
-                overallData.IncToleratedCount();
+                overallData.incToleratedCount();
             }
         }
 
