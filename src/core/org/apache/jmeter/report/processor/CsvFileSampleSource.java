@@ -200,10 +200,9 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 producer.stopProducing();
                 csvReader.close();
             }
-            long time = now() - start;
             if (log.isInfoEnabled()) {
                 log.info("produce(): " + sampleCount + " samples produced in "
-                        + time(time) + " on channel " + i);
+                        + time(now() - start) + " on channel " + i);
             }
         }
     }
