@@ -338,8 +338,9 @@ public class JMeterThread implements Runnable, Interruptible {
             pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
         }
         testTree.traverse(pathToRootTraverser);
-        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
+        
         // Trigger end of loop condition on all parent controllers of current sampler
+        List<Controller> controllersToReinit = pathToRootTraverser.getControllersToRoot();
         for (Controller parentController : controllersToReinit) {
             if(parentController instanceof AbstractThreadGroup) {
                 AbstractThreadGroup tg = (AbstractThreadGroup) parentController;
@@ -348,8 +349,14 @@ public class JMeterThread implements Runnable, Interruptible {
                 parentController.triggerEndOfLoop();
             }
         }
+        
+        // bug 52968
+        // When using Start Next Loop option combined to TransactionController.
+        // if an error occurs in a Sample (child of TransactionController) 
+        // then we still need to report the Transaction in error (and create the sample result)
         if(transactionSampler != null) {
-            processSampler(transactionSampler, null, threadContext);
+            SamplePackage transactionPack = compiler.configureTransactionSampler(transactionSampler);
+            doEndTransactionSampler(transactionSampler, null, transactionPack, threadContext);
         }
     }
 
@@ -377,19 +384,10 @@ public class JMeterThread implements Runnable, Interruptible {
 
                 // Check if the transaction is done
                 if(transactionSampler.isTransactionDone()) {
-                    // Get the transaction sample result
-                    transactionResult = transactionSampler.getTransactionResult();
-                    transactionResult.setThreadName(threadName);
-                    transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
-                    transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
-
-                    // Check assertions for the transaction sample
-                    checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
-                    // Notify listeners with the transaction sample result
-                    if (!(parent instanceof TransactionSampler)) {
-                        notifyListeners(transactionPack.getSampleListeners(), transactionResult);
-                    }
-                    compiler.done(transactionPack);
+                    transactionResult = doEndTransactionSampler(transactionSampler, 
+                            parent, 
+                            transactionPack,
+                            threadContext);
                     // Transaction is done, we do not have a sampler to sample
                     current = null;
                 }
@@ -401,7 +399,7 @@ public class JMeterThread implements Runnable, Interruptible {
                         SampleResult res = processSampler(current, prev, threadContext);// recursive call
                         threadContext.setCurrentSampler(prev);
                         current = null;
-                        if (res != null){
+                        if (res != null) {
                             transactionSampler.addSubSamplerResult(res);
                         }
                     }
@@ -490,6 +488,28 @@ public class JMeterThread implements Runnable, Interruptible {
                 log.error("", e);
             }
         }
+        return transactionResult;
+    }
+
+    private SampleResult doEndTransactionSampler(
+                            TransactionSampler transactionSampler, 
+                            Sampler parent,
+                            SamplePackage transactionPack,
+                            JMeterContext threadContext) {
+        SampleResult transactionResult;
+        // Get the transaction sample result
+        transactionResult = transactionSampler.getTransactionResult();
+        transactionResult.setThreadName(threadName);
+        transactionResult.setGroupThreads(threadGroup.getNumberOfThreads());
+        transactionResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+
+        // Check assertions for the transaction sample
+        checkAssertions(transactionPack.getAssertions(), transactionResult, threadContext);
+        // Notify listeners with the transaction sample result
+        if (!(parent instanceof TransactionSampler)) {
+            notifyListeners(transactionPack.getSampleListeners(), transactionResult);
+        }
+        compiler.done(transactionPack);
         return transactionResult;
     }
 
