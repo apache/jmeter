@@ -47,11 +47,11 @@ public class StatisticsSummaryConsumer extends
     }
 
     void aggregateSample(Sample sample, StatisticsSummaryData data) {
-        data.IncTotal();
-        data.IncBytes(sample.getSentBytes());
+        data.incTotal();
+        data.incBytes(sample.getSentBytes());
 
         if (!sample.getSuccess()) {
-            data.IncErrors();
+            data.incErrors();
         }
 
         long elapsedTime = sample.getElapsedTime();
