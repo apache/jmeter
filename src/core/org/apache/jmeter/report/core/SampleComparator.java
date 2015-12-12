@@ -17,9 +17,6 @@
  */
 package org.apache.jmeter.report.core;
 
-import org.apache.jmeter.report.core.Sample;
-import org.apache.jmeter.report.core.SampleMetadata;
-
 /**
  * Defines a comparator for {@link Sample} instances
  * 
