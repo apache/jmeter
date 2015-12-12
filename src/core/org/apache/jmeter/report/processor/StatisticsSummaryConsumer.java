@@ -32,11 +32,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class StatisticsSummaryConsumer extends
         AbstractSummaryConsumer<StatisticsSummaryData> {
 
-    private static final int percentileIndex1 = JMeterUtils.getPropDefault(
+    private static final int PERCENTILE_INDEX1 = JMeterUtils.getPropDefault(
         "aggregate_rpt_pct1", 90);
-    private static final int percentileIndex2 = JMeterUtils.getPropDefault(
+    private static final int PERCENTILE_INDEX2 = JMeterUtils.getPropDefault(
         "aggregate_rpt_pct2", 95);
-    private static final int percentileIndex3 = JMeterUtils.getPropDefault(
+    private static final int PERCENTILE_INDEX3 = JMeterUtils.getPropDefault(
         "aggregate_rpt_pct3", 99);
 
     /**
@@ -80,15 +80,15 @@ public class StatisticsSummaryConsumer extends
         SummaryInfo overallInfo = getOverallInfo();
         StatisticsSummaryData overallData = overallInfo.getData();
         if (overallData == null) {
-            overallData = new StatisticsSummaryData(percentileIndex1,
-                            percentileIndex2, percentileIndex3);
+            overallData = new StatisticsSummaryData(PERCENTILE_INDEX1,
+                            PERCENTILE_INDEX2, PERCENTILE_INDEX3);
             overallInfo.setData(overallData);
             }
 
         StatisticsSummaryData data = info.getData();
         if (data == null) {
-            data = new StatisticsSummaryData(percentileIndex1,
-                        percentileIndex2, percentileIndex3);
+            data = new StatisticsSummaryData(PERCENTILE_INDEX1,
+                        PERCENTILE_INDEX2, PERCENTILE_INDEX3);
             info.setData(data);
         }
 
@@ -157,15 +157,15 @@ public class StatisticsSummaryConsumer extends
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    percentileIndex1)));
+                    PERCENTILE_INDEX1)));
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    percentileIndex2)));
+                    PERCENTILE_INDEX2)));
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
-                    percentileIndex3)));
+                    PERCENTILE_INDEX3)));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_throughput")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_kbytes")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_min")));
