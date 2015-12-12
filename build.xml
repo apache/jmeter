@@ -871,6 +871,9 @@
   <target name="package" depends="compile, prepare-resources, package-only"
      description="Compile everything and create the jars"/>
 
+  <target name="package-and-check" depends="package, checkstyle" 
+     description="Compile, create jars and apply checkstyle before commiting code"/>
+
   <target name="prepare-resources"
      description="Prepare some resources files, update date">
     <mkdir dir="${build.res}" />
