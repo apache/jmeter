@@ -477,7 +477,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                         sample);
 
                 aggregateValue(factory, seriesData, key, value);
-                if (overallSeries == true) {
+                if (overallSeries) {
                     SeriesData overallData = groupData.getOverallSeries();
                     aggregateValue(factory, overallData, key, value);
                 }
@@ -520,19 +520,19 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 String seriesName = seriesEntry.getKey();
                 SeriesData seriesData = seriesEntry.getValue();
                 addKeyData(result, groupName, seriesName, seriesData, false);
-                if (aggregatedKeysSeries == true) {
+                if (aggregatedKeysSeries) {
                     addKeyData(result, groupName, seriesName, seriesData, true);
                 }
             }
 
             // Add overall values if needed
-            if (overallSeries == true) {
+            if (overallSeries) {
                 SeriesData overallData = groupData.getOverallSeries();
                 String overallSeriesName = String.format(overallSeriesFormat,
                         groupName);
                 addKeyData(result, groupName, overallSeriesName, overallData,
                         false);
-                if (aggregatedKeysSeries == true) {
+                if (aggregatedKeysSeries) {
                     addKeyData(result, groupName, overallSeriesName,
                             overallData, true);
                 }
