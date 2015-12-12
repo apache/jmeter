@@ -378,26 +378,28 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                         continue;
                     }
                     String[] tokens = line.split("\t"); //$NON-NLS-1$
-                    String url = tokens[0];
-                    String user = tokens[1];
-                    String pass = tokens[2];
-                    String domain;
-                    String realm;
-                    if (tokens.length > 2){ // Allow for old format file without the extra columnns
-                        domain = tokens[3];
-                        realm = tokens[4];
-                    } else {
-                        domain = "";
-                        realm = "";
+                    if (tokens.length >= 3) {
+                        String url = tokens[0];
+                        String user = tokens[1];
+                        String pass = tokens[2];
+                        String domain;
+                        String realm;
+                        if (tokens.length > 3){ // Allow for old format file without the extra columnns
+                            domain = tokens[3];
+                            realm = tokens[4];
+                        } else {
+                            domain = "";
+                            realm = "";
+                        }
+                        Mechanism mechanism;
+                        if (tokens.length > 5) { // Allow for old format file without mechanism support
+                            mechanism = Mechanism.valueOf(tokens[5]);
+                        } else {
+                            mechanism = Mechanism.BASIC_DIGEST;
+                        }
+                        Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
+                        getAuthObjects().addItem(auth);
                     }
-                    Mechanism mechanism;
-                    if (tokens.length > 4) { // Allow for old format file without mechanism support
-                        mechanism = Mechanism.valueOf(tokens[5]);
-                    } else {
-                        mechanism = Mechanism.BASIC_DIGEST;
-                    }
-                    Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
-                    getAuthObjects().addItem(auth);
                 } catch (NoSuchElementException e) {
                     log.error("Error parsing auth line: '" + line + "'", e);
                     ok = false;
