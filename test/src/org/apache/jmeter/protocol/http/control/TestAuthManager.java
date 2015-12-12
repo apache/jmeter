@@ -18,7 +18,10 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -76,5 +79,35 @@ public class TestAuthManager extends JMeterTestCase {
             at = am.getAuthForURL(new URL("https://l.m.n:8443/"));
             assertEquals("lmn8443", at.getUser());
             assertEquals("pass", at.getPass());
+        }
+
+        public void testAddFileWithoutDomainAndRealmWithMechanism() throws IOException {
+            File authFile = File.createTempFile("auth", ".txt");
+            Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\t\t\tBASIC_DIGEST".getBytes());
+            AuthManager manager = new AuthManager();
+            manager.addFile(authFile.getAbsolutePath());
+            Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));
+            assertEquals("password", authForURL.getPass());
+        }
+
+        public void testAddFileWithDomainAndRealmAndDefaultMechanism() throws IOException {
+            File authFile = File.createTempFile("auth", ".txt");
+            Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tBASIC_DIGEST".getBytes());
+            AuthManager manager = new AuthManager();
+            manager.addFile(authFile.getAbsolutePath());
+            Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));
+            assertEquals("password", authForURL.getPass());
+            assertEquals("domain", authForURL.getDomain());
+        }
+
+        public void testAddFileWithDomainAndRealmAndMechanism() throws IOException {
+            File authFile = File.createTempFile("auth", ".txt");
+            Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tKERBEROS".getBytes());
+            AuthManager manager = new AuthManager();
+            manager.addFile(authFile.getAbsolutePath());
+            Authorization authForURL = manager.getAuthForURL(new URL("http://example.com"));
+            assertEquals("password", authForURL.getPass());
+            assertEquals("domain", authForURL.getDomain());
+            assertEquals(AuthManager.Mechanism.KERBEROS, authForURL.getMechanism());
         }
 }
