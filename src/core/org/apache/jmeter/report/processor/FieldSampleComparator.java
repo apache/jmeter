@@ -54,6 +54,6 @@ public class FieldSampleComparator implements SampleComparator {
      */
     @Override
     public long compare(Sample s1, Sample s2) {
-        return s1.getLong(index) - s2.getLong(index);
+        return Long.compare(s1.getLong(index), s2.getLong(index));
     }
 }
