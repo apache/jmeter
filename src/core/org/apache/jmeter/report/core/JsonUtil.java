@@ -35,7 +35,7 @@ public final class JsonUtil {
      *            the array
      * @return the json string
      */
-    public static String toJsonArray(String[] array) {
+    public static String toJsonArray(final String... array) {
         return '[' + StringUtils.join(array, ", ") + ']';
     }
 
