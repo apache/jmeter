@@ -108,6 +108,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private SampleMetadata sampleMetadata;
 
     private boolean revertedSort;
+    
+    private AtomicInteger sequence = new AtomicInteger();
+
 
     public ExternalSampleSorter() {
         chunkSize = DEFAULT_CHUNK_SIZE;
@@ -501,9 +504,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             File f = chunks.get(0);
             try (CsvSampleReader reader = new CsvSampleReader(f, metadata)) {
                 Sample s = null;
-        	while ((s = reader.readSample()) != null) {
-        	    out.produce(s, 0);
-        	}
+                while ((s = reader.readSample()) != null) {
+                    out.produce(s, 0);
+                }
             }
         }
     }
@@ -532,9 +535,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         if (out == null) {
             out = getChunkFile();
         }
-        
+
         try (CsvSampleWriter csvWriter = new CsvSampleWriter(out, metadata);
-        	CsvSampleReader l = new CsvSampleReader(left, metadata);
+                CsvSampleReader l = new CsvSampleReader(left, metadata);
                 CsvSampleReader r = new CsvSampleReader(right, metadata)) {
             if (writeHeader) {
                 csvWriter.writeHeader();
@@ -565,7 +568,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private void mergeFiles(SampleMetadata metadata, File left, File right,
             SampleProducer out) {
         try (CsvSampleReader l = new CsvSampleReader(left, metadata);
-        	CsvSampleReader r = new CsvSampleReader(right, metadata)){
+                CsvSampleReader r = new CsvSampleReader(right, metadata)) {
             while (l.hasNext() || r.hasNext()) {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
@@ -588,8 +591,6 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             }
         }
     }
-
-    private AtomicInteger sequence = new AtomicInteger();
 
     private File getChunkFile() {
         DecimalFormat df = new DecimalFormat("00000");
