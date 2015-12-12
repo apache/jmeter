@@ -138,8 +138,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         if (idx < 0) {
             return fName;
         }
-        fName = fName.substring(0, idx);
-        return fName;
+        return fName.substring(0, idx);
     }
 
     private static String getFileExtension(String fName) {
