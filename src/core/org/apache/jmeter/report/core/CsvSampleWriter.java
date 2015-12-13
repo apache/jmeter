@@ -114,29 +114,27 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     @Override
     public long write(Sample sample) {
-        try {
-            row.setLength(0);
-            char[] specials = new char[] { separator,
-                    CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
-            for (int i = 0; i < columnCount; i++) {
-                String data = sample.getString(i);
-                row.append(CSVSaveService.quoteDelimiters(data, specials))
-                        .append(separator);
-            }
-            int rowLength = row.length() - 1;
-            row.setLength(rowLength);
-            writer.println(row.toString());
-            sampleCount++;
-        } catch (NullPointerException npe) {
-            if (writer == null) {
-                throw new IllegalStateException(
-                        "No writer set ! Call setWriter() first !", npe);
-            } else if (sample == null) {
-                throw new ArgumentNullException("sample");
-            } else {
-                throw npe;
-            }
+        if (sample == null) {
+            throw new ArgumentNullException("sample");
         }
+        if (writer == null) {
+            throw new IllegalStateException(
+                    "No writer set! Call setWriter() first!");
+        }
+
+        row.setLength(0);
+        char[] specials = new char[] { separator,
+                CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
+        for (int i = 0; i < columnCount; i++) {
+            String data = sample.getString(i);
+            row.append(CSVSaveService.quoteDelimiters(data, specials))
+                    .append(separator);
+        }
+        int rowLength = row.length() - 1;
+        row.setLength(rowLength);
+        writer.println(row.toString());
+        sampleCount++;
+
         return sampleCount;
     }
 
