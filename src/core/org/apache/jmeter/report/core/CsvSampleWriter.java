@@ -45,8 +45,6 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     private SampleMetadata metadata;
 
-    private StringBuilder row = new StringBuilder();
-
     private long sampleCount;
 
     public CsvSampleWriter(SampleMetadata metadata) {
@@ -102,7 +100,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
      * header information will be written in the middle of the file.
      */
     public void writeHeader() {
-        row.setLength(0);
+        StringBuilder row = new StringBuilder();
         for (int i = 0; i < columnCount; i++) {
             row.append(metadata.getColumnName(i));
             if (i < columnCount - 1) {
@@ -122,7 +120,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
                     "No writer set! Call setWriter() first!");
         }
 
-        row.setLength(0);
+        StringBuilder row = new StringBuilder();
         char[] specials = new char[] { separator,
                 CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
         for (int i = 0; i < columnCount; i++) {
