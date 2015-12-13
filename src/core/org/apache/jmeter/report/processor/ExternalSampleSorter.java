@@ -320,7 +320,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     @Override
     public void stopConsuming() {
-        if (samples.size() > 0) {
+        if (!samples.isEmpty()) {
             chunks.add(sortAndDump(samples, sampleMetadata));
         }
         if (log.isDebugEnabled()) {
