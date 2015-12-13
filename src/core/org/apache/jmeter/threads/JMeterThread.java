@@ -245,40 +245,38 @@ public class JMeterThread implements Runnable, Interruptible {
 
         try {
             iterationListener = initRun(threadContext);
-            while (running) {
-                Sampler sam = controller.next();
-                while (running && sam != null) {
-                    processSampler(sam, null, threadContext);
-                    threadContext.cleanAfterSample();
+            Sampler sam = controller.next();
+            while (running && sam != null) {
+                processSampler(sam, null, threadContext);
+                threadContext.cleanAfterSample();
+                
+                // restart of the next loop 
+                // - was request through threadContext
+                // - or the last sample failed AND the onErrorStartNextLoop option is enabled
+                if(threadContext.isRestartNextLoop()
+                        || (onErrorStartNextLoop
+                                && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) 
+                {
                     
-                    // restart of the next loop 
-                    // - was request through threadContext
-                    // - or the last sample failed AND the onErrorStartNextLoop option is enabled
-                    if(threadContext.isRestartNextLoop()
-                            || (onErrorStartNextLoop
-                                    && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) 
-                    {
-                        
-                        if(log.isDebugEnabled()) {
-                            if(onErrorStartNextLoop
-                                    && !threadContext.isRestartNextLoop()) {
-                                log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
-                            }
+                    if(log.isDebugEnabled()) {
+                        if(onErrorStartNextLoop
+                                && !threadContext.isRestartNextLoop()) {
+                            log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
                         }
-                        
-                        triggerEndOfLoopOnParentControllers(sam, threadContext);
-                        sam = null;
-                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                        threadContext.setRestartNextLoop(false);
                     }
-                    else {
-                        sam = controller.next();
-                    }
+                    
+                    triggerEndOfLoopOnParentControllers(sam, threadContext);
+                    threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                    threadContext.setRestartNextLoop(false);
+                    sam = null;
                 }
                 
-                if (controller.isDone()) {
+                if (sam == null && controller.isDone()) {
                     running = false;
                     log.info("Thread is done: " + threadName);
+                }
+                else {
+                    sam = controller.next();
                 }
             }
         }
@@ -423,11 +421,16 @@ public class JMeterThread implements Runnable, Interruptible {
         return transactionResult;
     }
 
+    /*
+     * Execute the sampler with its pre/post processors, timers, assertions
+     * Brodcast the result to the sample listeners
+     */
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void executeSamplePackage(Sampler current,
             TransactionSampler transactionSampler,
             SamplePackage transactionPack,
             JMeterContext threadContext) {
+        
         threadContext.setCurrentSampler(current);
         // Get the sampler ready to sample
         SamplePackage pack = compiler.configureSampler(current);
@@ -451,14 +454,16 @@ public class JMeterThread implements Runnable, Interruptible {
 
         // If we got any results, then perform processing on the result
         if (result != null) {
-            result.setGroupThreads(threadGroup.getNumberOfThreads());
-            result.setAllThreads(JMeterContextService.getNumberOfThreads());
+            int nbActiveThreadsInThreadGroup = threadGroup.getNumberOfThreads();
+            int nbTotalActiveThreads = JMeterContextService.getNumberOfThreads();
+            result.setGroupThreads(nbActiveThreadsInThreadGroup);
+            result.setAllThreads(nbTotalActiveThreads);
             result.setThreadName(threadName);
             SampleResult[] subResults = result.getSubResults();
             if(subResults != null) {
                 for (SampleResult subResult : subResults) {
-                    subResult.setGroupThreads(threadGroup.getNumberOfThreads());
-                    subResult.setAllThreads(JMeterContextService.getNumberOfThreads());
+                    subResult.setGroupThreads(nbActiveThreadsInThreadGroup);
+                    subResult.setAllThreads(nbTotalActiveThreads);
                     subResult.setThreadName(threadName);
                 }
             }
