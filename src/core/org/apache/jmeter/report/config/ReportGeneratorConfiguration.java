@@ -346,18 +346,13 @@ public class ReportGeneratorConfiguration {
     private static <TProperty> TProperty getProperty(Props props, String key,
             TProperty defaultValue, Class<TProperty> clazz)
             throws ConfigurationException {
-        TProperty property = null;
         String value = props.getValue(key);
         if (value == null) {
-            if (defaultValue != null) {
-                property = defaultValue;
-                log.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
-                        defaultValue));
-            }
-        } else {
-            property = ConfigurationUtils.convert(value, clazz);
+            log.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
+                    defaultValue));
+            return defaultValue;
         }
-        return property;
+        return ConfigurationUtils.convert(value, clazz);
     }
 
     private static <TProperty> TProperty getOptionalProperty(Props props,
