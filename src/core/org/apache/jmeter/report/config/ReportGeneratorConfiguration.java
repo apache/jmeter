@@ -123,9 +123,9 @@ public class ReportGeneratorConfiguration {
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
-    private ArrayList<String> filteredSamples = new ArrayList<>();
-    private HashMap<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
-    private HashMap<String, GraphConfiguration> graphConfigurations = new HashMap<>();
+    private List<String> filteredSamples = new ArrayList<>();
+    private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
+    private Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
     /**
      * Gets the overall sample filter.
@@ -147,10 +147,8 @@ public class ReportGeneratorConfiguration {
             this.sampleFilter = sampleFilter;
             filteredSamples.clear();
             if (sampleFilter != null) {
-                String[] items = sampleFilter.split(",");
-                int count = items.length;
-                for (int index = 0; index < count; index++) {
-                    filteredSamples.add(items[index].trim());
+                for (String item: sampleFilter.split(",")) {
+                    filteredSamples.add(item.trim());
                 }
             }
         }
