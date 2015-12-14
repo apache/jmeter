@@ -362,7 +362,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the value
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
-            double key, double value) {
+            Double key, Double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
@@ -406,7 +406,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     .allowsControllersDiscrimination();
         }
         result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                new ValueResultData(supportsControllersDiscrimination));
+                new ValueResultData(Boolean.valueOf(supportsControllersDiscrimination)));
 
         initializeExtraResults(result);
         return result;
@@ -473,8 +473,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 }
 
                 // Get the value to aggregate and dispatch it to the groupData
-                double value = groupInfo.getValueSelector().select(seriesName,
-                        sample);
+                Double value = Double.valueOf(groupInfo.getValueSelector().select(seriesName, sample));
 
                 aggregateValue(factory, seriesData, key, value);
                 if (overallSeries) {
