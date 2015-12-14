@@ -106,7 +106,6 @@ public class ModuleController extends GenericController implements ReplaceableCo
             for (TreeNode node : path) {
                 nodePath.add(((JMeterTreeNode) node).getName());
             }
-            // nodePath.add(selectedNode.getName());
         }
         setProperty(new CollectionProperty(NODE_PATH, nodePath));
     }

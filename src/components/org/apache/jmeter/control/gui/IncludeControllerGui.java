@@ -30,7 +30,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class IncludeControllerGui extends AbstractControllerGui
-       // implements UnsharedComponent
 {
 
     private static final long serialVersionUID = 240L;

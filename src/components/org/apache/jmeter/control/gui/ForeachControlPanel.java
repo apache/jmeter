@@ -199,7 +199,6 @@ public class ForeachControlPanel extends AbstractControllerGui {
      * @return a GUI panel containing the loop count components
      */
     private JPanel createLoopCountPanel() {
-        // JPanel loopPanel = new JPanel(new BorderLayout(5, 0));
         VerticalPanel loopPanel = new VerticalPanel();
 
         // LOOP LABEL
