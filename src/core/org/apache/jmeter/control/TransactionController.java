@@ -52,7 +52,7 @@ public class TransactionController extends GenericController implements SampleLi
     
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
-    private static final String PARENT = "TransactionController.parent";// $NON-NLS-1$
+    private static final String GENERATE_PARENT_SAMPLE = "TransactionController.parent";// $NON-NLS-1$
 
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
     
@@ -111,12 +111,22 @@ public class TransactionController extends GenericController implements SampleLi
         return this;
     }
 
-    public void setParent(boolean _parent){
-        setProperty(new BooleanProperty(PARENT, _parent));
+    public void setGenerateParentSample(boolean _parent) {
+        setProperty(new BooleanProperty(GENERATE_PARENT_SAMPLE, _parent));
     }
 
-    public boolean isParent(){
-        return getPropertyAsBoolean(PARENT);
+    public boolean isGenerateParentSample() {
+        return getPropertyAsBoolean(GENERATE_PARENT_SAMPLE);
+    }
+    
+    @Deprecated
+    public boolean isParent() {
+        return isGenerateParentSample();
+    }
+    
+    @Deprecated
+    public void setParent(boolean _parent) {
+        setGenerateParentSample(_parent);
     }
 
     /**
@@ -124,15 +134,15 @@ public class TransactionController extends GenericController implements SampleLi
      */
     @Override
     public Sampler next(){
-        if (isParent()){
-            return next1();
+        if (isGenerateParentSample()){
+            return nextWithTransactionSampler();
         }
-        return next2();
+        return nextWithoutTransactionSampler();
     }
 
 ///////////////// Transaction Controller - parent ////////////////
 
-    private Sampler next1() {
+    private Sampler nextWithTransactionSampler() {
         // Check if transaction is done
         if(transactionSampler != null && transactionSampler.isTransactionDone()) {
             if (log.isDebugEnabled()) {
@@ -164,7 +174,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     @Override
     protected Sampler nextIsAController(Controller controller) throws NextIsNullException {
-        if (!isParent()) {
+        if (!isGenerateParentSample()) {
             return super.nextIsAController(controller);
         }
         Sampler returnValue;
@@ -183,7 +193,7 @@ public class TransactionController extends GenericController implements SampleLi
 
 ////////////////////// Transaction Controller - additional sample //////////////////////////////
 
-    private Sampler next2() {
+    private Sampler nextWithoutTransactionSampler() {
         if (isFirst()) // must be the start of the subtree
         {
             calls = 0;
@@ -237,9 +247,9 @@ public class TransactionController extends GenericController implements SampleLi
      */
     @Override
     public void triggerEndOfLoop() {
-        if(!isParent()) {
+        if(!isGenerateParentSample()) {
             if (res != null) {
-                res.setIdleTime(pauseTime+res.getIdleTime());
+                res.setIdleTime(pauseTime + res.getIdleTime());
                 res.sampleEnd();
                 res.setSuccessful(TRUE.equals(JMeterContextService.getContext().getVariables().get(JMeterThread.LAST_SAMPLE_OK)));
                 res.setResponseMessage(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX + calls + ", number of failing samples : " + noFailingSamples);
@@ -288,7 +298,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     @Override
     public void sampleOccurred(SampleEvent se) {
-        if (!isParent()) {
+        if (!isGenerateParentSample()) {
             // Check if we are still sampling our children
             if(res != null && !se.isTransactionSampleEvent()) {
                 SampleResult sampleResult = se.getResult();
