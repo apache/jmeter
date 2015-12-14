@@ -56,7 +56,9 @@ public class ConfigurationUtils {
 
         TProperty result;
         if (clazz.isAssignableFrom(String.class)) {
-            result = (TProperty) value;
+            @SuppressWarnings("unchecked") // OK because checked above
+            TProperty temp = (TProperty) value;
+            result = temp;
         } else {
             StringConverter<TProperty> converter = Converters
                     .getConverter(clazz);
