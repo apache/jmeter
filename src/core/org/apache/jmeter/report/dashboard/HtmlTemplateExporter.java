@@ -107,7 +107,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     private long formatTimestamp(String key, DataContext context) {
         // FIXME Why convert to double then long (rounding ?)
-        double result = Double.valueOf((String) context.get(key));
+        double result = Double.parseDouble((String) context.get(key));
         long timestamp = (long) result;
         // Quote the string to respect Json spec.
         context.put(key, '"' + TimeHelper.formatTimeStamp(timestamp) + '"');
