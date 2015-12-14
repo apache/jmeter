@@ -362,7 +362,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the value
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
-            Double key, Double value) {
+            Double key, double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
@@ -381,7 +381,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         // Aggregate keys if needed (if aggregated keys series is set)
         Aggregator keysAgg = data.getKeysAggregator();
         if (keysAgg != null) {
-            keysAgg.addValue(key);
+            keysAgg.addValue(key.doubleValue());
         }
 
         // Aggregate values if needed (if aggregated keys series is set)
@@ -473,7 +473,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 }
 
                 // Get the value to aggregate and dispatch it to the groupData
-                Double value = Double.valueOf(groupInfo.getValueSelector().select(seriesName, sample));
+                double value = groupInfo.getValueSelector().select(seriesName, sample);
 
                 aggregateValue(factory, seriesData, key, value);
                 if (overallSeries) {
