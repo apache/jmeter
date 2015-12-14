@@ -103,6 +103,6 @@ public abstract class AbstractOverTimeGraphConsumer extends
     @Override
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(RESULT_CTX_GRANULARITY, new ValueResultData(
-                granularity));
+                Long.valueOf(granularity)));
     }
 }

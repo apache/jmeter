@@ -76,7 +76,7 @@ public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
         factory.setPercentileIndex(property);
         StaticSeriesSelector seriesSelector = new StaticSeriesSelector();
         seriesSelector.setSeriesName(String.format(
-                RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, property));
+                RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT, Integer.valueOf(property)));
 
         return new GroupInfo(factory, seriesSelector,
                 new ElapsedTimeValueSelector(), false, false);
