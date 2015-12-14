@@ -166,6 +166,8 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 break;
             case END:
                 break;
+            default:
+                throw new IllegalStateException("Unexpected tagType " + tagType);
             }
         }
 
