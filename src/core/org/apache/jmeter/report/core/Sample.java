@@ -203,9 +203,9 @@ public class Sample {
      * @throws NumberFormatException
      *             if the data could not be parsed as a double
      */
-    public double getDouble(String name) {
+    public Double getDouble(String name) {
         try {
-            return Double.parseDouble(data[metadata.indexOf(name)]);
+            return Double.valueOf(data[metadata.indexOf(name)]);
         } catch (NumberFormatException ex) {
             throw new SampleException("Error on sample #" + row, ex);
         }
