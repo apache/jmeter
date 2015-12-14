@@ -26,7 +26,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
