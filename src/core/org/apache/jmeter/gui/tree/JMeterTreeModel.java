@@ -48,9 +48,6 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     public JMeterTreeModel() {
         this(new TestPlanGui().createTestElement(),new WorkBenchGui().createTestElement());
-//        super(new JMeterTreeNode(new WorkBenchGui().createTestElement(), null));
-//        TestElement tp = new TestPlanGui().createTestElement();
-//        initTree(tp);
     }
 
     /**
@@ -62,9 +59,6 @@ public class JMeterTreeModel extends DefaultTreeModel {
     @Deprecated
     public JMeterTreeModel(Object o) {
         this(new TestPlan(),new WorkBench());
-//      super(new JMeterTreeNode(new WorkBench(), null));
-//      TestElement tp = new TestPlan();
-//      initTree(tp, new WorkBench());
     }
 
     /**

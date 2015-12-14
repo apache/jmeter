@@ -1066,11 +1066,11 @@ public class SmtpPanel extends JPanel {
 
     private void clearHeaderFields() {
         headerFieldName.setVisible(false);
-           headerFieldValue.setVisible(false);
+        headerFieldValue.setVisible(false);
 
         for (Iterator<JButton> iterator = removeButtons.keySet().iterator(); iterator.hasNext();) {
             JButton removeButton = iterator.next();
-               JTextField headerName = removeButtons.get(removeButton);
+            JTextField headerName = removeButtons.get(removeButton);
             JTextField headerValue = headerFields.get(headerName);
 
             headerFieldsPanel.remove(headerName);

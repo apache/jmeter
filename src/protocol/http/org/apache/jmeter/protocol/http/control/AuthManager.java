@@ -30,7 +30,6 @@ import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 import javax.security.auth.Subject;
 
@@ -49,7 +48,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -235,10 +234,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-            log.debug("Target URL strings to match against: "+s1+" and "+s2);
+        log.debug("Target URL strings to match against: "+s1+" and "+s2);
         // TODO should really return most specific (i.e. longest) match.
-        for (PropertyIterator iter = getAuthObjects().iterator(); iter.hasNext();) {
-            Authorization auth = (Authorization) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getAuthObjects()) {
+            Authorization auth = (Authorization) jMeterProperty.getObjectValue();
 
             String uRL = auth.getURL();
             log.debug("Checking match against auth'n entry: "+uRL);
@@ -291,11 +290,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param newAuthorization authorization to be added
      */
     public void addAuth(Authorization newAuthorization) {
-        boolean alreadyExists=false;
-        PropertyIterator iter = getAuthObjects().iterator();
+        boolean alreadyExists = false;
         //iterate over authentication objects in manager
-        while (iter.hasNext()) {
-            Authorization authorization = (Authorization) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getAuthObjects()) {
+            Authorization authorization = (Authorization) jMeterProperty.getObjectValue();
             if (authorization == null) {
                 continue;
             }
@@ -379,24 +377,31 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                     if (line.startsWith("#") || JOrphanUtils.isBlank(line)) { //$NON-NLS-1$
                         continue;
                     }
-                    StringTokenizer st = new StringTokenizer(line, "\t"); //$NON-NLS-1$
-                    String url = st.nextToken();
-                    String user = st.nextToken();
-                    String pass = st.nextToken();
-                    String domain = "";
-                    String realm = "";
-                    if (st.hasMoreTokens()){// Allow for old format file without the extra columnns
-                        domain = st.nextToken();
-                        realm = st.nextToken();
+                    String[] tokens = line.split("\t"); //$NON-NLS-1$
+                    if (tokens.length >= 3) {
+                        String url = tokens[0];
+                        String user = tokens[1];
+                        String pass = tokens[2];
+                        String domain;
+                        String realm;
+                        if (tokens.length > 3){ // Allow for old format file without the extra columnns
+                            domain = tokens[3];
+                            realm = tokens[4];
+                        } else {
+                            domain = "";
+                            realm = "";
+                        }
+                        Mechanism mechanism;
+                        if (tokens.length > 5) { // Allow for old format file without mechanism support
+                            mechanism = Mechanism.valueOf(tokens[5]);
+                        } else {
+                            mechanism = Mechanism.BASIC_DIGEST;
+                        }
+                        Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
+                        getAuthObjects().addItem(auth);
                     }
-                    Mechanism mechanism = Mechanism.BASIC_DIGEST;
-                    if (st.hasMoreTokens()){// Allow for old format file without mechanism support
-                        mechanism = Mechanism.valueOf(st.nextToken());
-                    }
-                    Authorization auth = new Authorization(url, user, pass, domain, realm, mechanism);
-                    getAuthObjects().addItem(auth);
                 } catch (NoSuchElementException e) {
-                    log.error("Error parsing auth line: '" + line + "'");
+                    log.error("Error parsing auth line: '" + line + "'", e);
                     ok = false;
                 }
             }

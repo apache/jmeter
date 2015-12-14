@@ -46,7 +46,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -186,8 +186,8 @@ public class HC4CookieHandler implements CookieHandler {
             CollectionProperty cookiesCP, URL url, boolean allowVariableCookie) {
         List<org.apache.http.cookie.Cookie> cookies = new ArrayList<>();
 
-        for (PropertyIterator iter = cookiesCP.iterator(); iter.hasNext();) {
-            Cookie jmcookie = (Cookie) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : cookiesCP) {
+            Cookie jmcookie = (Cookie) jMeterProperty.getObjectValue();
             // Set to running version, to allow function evaluation for the cookie values (bug 28715)
             if (allowVariableCookie) {
                 jmcookie.setRunningVersion(true);

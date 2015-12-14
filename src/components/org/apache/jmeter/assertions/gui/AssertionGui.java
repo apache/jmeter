@@ -39,7 +39,7 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.TextAreaCellRenderer;
 import org.apache.jmeter.gui.util.TextAreaTableCellEditor;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 
@@ -250,9 +250,8 @@ public class AssertionGui extends AbstractAssertionGui {
         assumeSuccess.setSelected(model.getAssumeSuccess());
 
         tableModel.clearData();
-        PropertyIterator tests = model.getTestStrings().iterator();
-        while (tests.hasNext()) {
-            tableModel.addRow(new Object[] { tests.next().getStringValue() });
+        for (JMeterProperty jMeterProperty : model.getTestStrings()) {
+            tableModel.addRow(new Object[] { jMeterProperty.getStringValue() });
         }
 
         if (model.getTestStrings().size() == 0) {

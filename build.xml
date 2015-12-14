@@ -86,6 +86,10 @@
   <!-- The version of this file -->
   <property name="version.build" value="$Revision$"/>
 
+  <script language="javascript">
+    project.setProperty('EPOCHSECONDS', new Date().getTime());
+  </script>
+
   <property file="build-local.properties"/> <!-- allow local overrides -->
 
    <!-- Findbugs task and target -->
@@ -377,6 +381,7 @@
     <include name="${lib.dir}/${excalibur-pool-api.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <include name="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
+  	<include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -391,6 +396,7 @@
     <include name="${lib.dir}/${jodd-core.jar}"/>
     <include name="${lib.dir}/${jodd-lagarto.jar}"/>
     <include name="${lib.dir}/${jodd-log.jar}"/>
+    <include name="${lib.dir}/${jodd-props.jar}"/>
     <include name="${lib.dir}/${json-path.jar}"/>
     <include name="${lib.dir}/${json-smart.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
@@ -452,6 +458,7 @@
     <pathelement location="${lib.dir}/${excalibur-pool-api.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-impl.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
+  	<pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
@@ -466,6 +473,7 @@
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
     <pathelement location="${lib.dir}/${jodd-lagarto.jar}"/>
     <pathelement location="${lib.dir}/${jodd-log.jar}"/>
+    <pathelement location="${lib.dir}/${jodd-props.jar}"/>
     <pathelement location="${lib.dir}/${json-path.jar}"/>
   	<pathelement location="${lib.dir}/${json-smart.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
@@ -863,6 +871,9 @@
   <target name="package" depends="compile, prepare-resources, package-only"
      description="Compile everything and create the jars"/>
 
+  <target name="package-and-check" depends="package, checkstyle" 
+     description="Compile, create jars and apply checkstyle before commiting code"/>
+
   <target name="prepare-resources"
      description="Prepare some resources files, update date">
     <mkdir dir="${build.res}" />
@@ -1161,6 +1172,20 @@ run JMeter unless all the JMeter jars are added.
     <fail message="Cannot find required classes"/>
   </target>
 
+ <target name="setup-eclipse-project" description="Setup eclipse project to contribute to JMeter">
+    <echo>Creating eclipse project</echo>
+    <copy overwrite="false" file="eclipse.project" tofile=".project" />
+    <copy overwrite="false" file="eclipse.classpath" tofile=".classpath"/>
+    <input message="Next step will download dependencies for JMeter, do you agree with the download ?" addproperty="do.download" validargs="y,n"/>
+    <condition property="do.abort">
+        <equals arg1="n" arg2="${do.download}"/>
+    </condition>
+    <fail message="You didn't agree to download dependencies, ensure you call Ant target 'download_jars when importing project" if="do.abort"/>
+    <echo>Downloading dependencies</echo>
+    <antcall target="download_jars" />
+    <echo>Project has been successfully created, you can now import it in Eclipse using Right click > Import > Existing projects into Workspace</echo>
+  </target>
+	
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
     <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/mirror-server"/>
   </target>
@@ -1238,6 +1263,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
+    <include name="${dest.jar.jmeter}/report-template/**/*.*"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
@@ -1312,6 +1338,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
     <include name="eclipse.classpath"/>
+    <include name="eclipse.project"/>
     <include name="eclipse.readme"/>
     <include name="checkstyle.xml"/>
     <include name="${lib.dir}/aareadme.txt"/>
@@ -2832,6 +2859,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="excalibur-pool-api"/>
         <process_jarfile jarname="excalibur-pool-impl"/>
         <process_jarfile jarname="excalibur-pool-instrumented"/>
+        <process_jarfile jarname="freemarker"/>
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
@@ -2846,6 +2874,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jodd-core"/>
         <process_jarfile jarname="jodd-lagarto"/>
         <process_jarfile jarname="jodd-log"/>
+        <process_jarfile jarname="jodd-props"/>
         <process_jarfile jarname="json-path"/>
         <process_jarfile jarname="json-smart"/>
         <process_jarfile jarname="jsoup"/>
@@ -2876,6 +2905,10 @@ run JMeter unless all the JMeter jars are added.
       <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 
+    <target name="_process_checkstyle_jars">
+      <process_jarfile jarname="checkstyle-all"    dest.dir="${lib.opt}"/>
+    </target>
+
     <!-- Update a jar (clean, download, package in one shot.-->
     <target name="update_jar" depends="clean, download_jars, package">
     </target>
@@ -2904,6 +2937,14 @@ run JMeter unless all the JMeter jars are added.
       <mkdir dir="${build.dir}" />
       <antcall target="_process_doc_jars">
           <param name="_get_file" value="true"/>
+      </antcall>
+    </target>
+
+    <target name="download_checkstyle">
+      <!-- build.dir may be needed as a temporary work area -->
+     <mkdir dir="${build.dir}" />
+      <antcall target="_process_checkstyle_jars">
+        <param name="_get_file" value="true"/>
       </antcall>
     </target>
 
@@ -2964,9 +3005,12 @@ run JMeter unless all the JMeter jars are added.
         <delete file="${build.dir}/${zip}"/>
     </target>
     -->
+
+    <!-- Need to define config_loc for use by Eclipse -->
+    <property name="config_loc" value="."/>
     <target name="checkstyle">
-        <taskdef resource="checkstyletask.properties"
-                 classpath="${lib.opt}/checkstyle-5.3-all.jar"/>
+        <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+                 classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
         <checkstyle config="checkstyle.xml">
           <fileset dir="src" includes="**/*.java"/>
           <formatter type="plain"/>

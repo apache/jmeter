@@ -42,10 +42,10 @@ import org.apache.jmeter.protocol.java.config.JavaConfig;
 import org.apache.jmeter.protocol.java.sampler.JavaSampler;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.log.Logger;
 
 /**
@@ -184,9 +184,8 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
                 }
 
                 if (testParams != null) {
-                    PropertyIterator i = testParams.getArguments().iterator();
-                    while (i.hasNext()) {
-                        Argument arg = (Argument) i.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : testParams.getArguments()) {
+                        Argument arg = (Argument) jMeterProperty.getObjectValue();
                         String name = arg.getName();
                         String value = arg.getValue();
 

@@ -109,8 +109,7 @@ public class Save implements Command {
     /**
      * Constructor for the Save object.
      */
-    public Save() {
-    }
+    public Save() {}
 
     /**
      * Gets the ActionNames attribute of the Save object.
@@ -167,8 +166,7 @@ public class Save implements Command {
             fullSave = true;
             HashTree testPlan = GuiPackage.getInstance().getTreeModel().getTestPlan();
             // If saveWorkBench 
-            JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
-            if (((WorkBench)workbenchNode.getUserObject()).getSaveWorkBench()) {
+            if (isWorkbenchSaveable()) {
                 HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
                 testPlan.add(workbench);
             }
@@ -185,7 +183,7 @@ public class Save implements Command {
             }
             updateFile = chooser.getSelectedFile().getAbsolutePath();
             // Make sure the file ends with proper extension
-            if(FilenameUtils.getExtension(updateFile).equals("")) {
+            if(FilenameUtils.getExtension(updateFile).isEmpty()) {
                 updateFile = updateFile + JMX_FILE_EXTENSION;
             }
             // Check if the user is trying to save to an existing file
@@ -227,6 +225,10 @@ public class Save implements Command {
             SaveService.saveTree(subTree, ostream);
             if (fullSave) { // Only update the stored copy of the tree for a full save
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
+                if (isWorkbenchSaveable()) {
+                    HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
+                    subTree.add(workbench);
+                }
                 ActionRouter.getInstance().doActionNow(new ActionEvent(subTree, e.getID(), ActionNames.SUB_TREE_SAVED));
             }
             
@@ -391,6 +393,14 @@ public class Save implements Command {
             expiredFiles.addAll(backupFiles.subList(0, backupFiles.size() - BACKUP_MAX_COUNT));
         }
         return expiredFiles;
+    }
+    
+    /**
+     * check if the workbench should be saved
+     */
+    private boolean isWorkbenchSaveable() {
+        JMeterTreeNode workbenchNode = (JMeterTreeNode) ((JMeterTreeNode) GuiPackage.getInstance().getTreeModel().getRoot()).getChildAt(1);
+        return ((WorkBench) workbenchNode.getUserObject()).getSaveWorkBench();
     }
 
     /**

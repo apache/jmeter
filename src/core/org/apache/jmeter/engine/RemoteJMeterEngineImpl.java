@@ -26,7 +26,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ServerNotActiveException;
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.jmeter.services.FileServer;
@@ -216,8 +215,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         if(remotelySetProperties != null) {
             Properties jmeterProperties = JMeterUtils.getJMeterProperties();
             log.info("Cleaning previously set properties "+remotelySetProperties);
-            for (Iterator<?> iterator = remotelySetProperties.keySet().iterator(); iterator.hasNext();) {
-                String key = (String) iterator.next();
+            for (Object key  : remotelySetProperties.keySet()) {
                 jmeterProperties.remove(key);
             }
         }

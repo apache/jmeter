@@ -180,9 +180,13 @@ public class KeyToolUtils {
         boolean redact = false; // whether to redact next parameter
         for (String string : arguments) {
             final boolean quote = string.contains(" ");
-            if (quote) builder.append("\"");
+            if (quote) {
+                builder.append("\"");
+            }
             builder.append(redact? "{redacted}" : string);
-            if (quote) builder.append("\"");
+            if (quote) {
+                builder.append("\"");
+            }
             builder.append(" ");
             redact = string.equals("-storepass") || string.equals("-keypass");
         }

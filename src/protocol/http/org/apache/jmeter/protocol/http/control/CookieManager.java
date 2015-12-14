@@ -37,6 +37,7 @@ import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.util.JMeterUtils;
@@ -169,19 +170,18 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
             file = new File(System.getProperty("user.dir") // $NON-NLS-1$
                     + File.separator + authFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file)); // TODO Charset ?
-        writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
-        PropertyIterator cookies = getCookies().iterator();
-        long now = System.currentTimeMillis();
-        while (cookies.hasNext()) {
-            Cookie cook = (Cookie) cookies.next().getObjectValue();
-            final long expiresMillis = cook.getExpiresMillis();
-            if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
-                writer.println(cookieToString(cook));
+        try(PrintWriter writer = new PrintWriter(new FileWriter(file))) { // TODO Charset ?
+            writer.println("# JMeter generated Cookie file");// $NON-NLS-1$
+            long now = System.currentTimeMillis();
+            for (JMeterProperty jMeterProperty : getCookies()) {
+                Cookie cook = (Cookie) jMeterProperty.getObjectValue();
+                final long expiresMillis = cook.getExpiresMillis();
+                if (expiresMillis == 0 || expiresMillis > now) { // only save unexpired cookies
+                    writer.println(cookieToString(cook));
+                }
             }
+            writer.flush();
         }
-        writer.flush();
-        writer.close();
     }
 
     /**

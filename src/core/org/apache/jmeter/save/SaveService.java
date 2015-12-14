@@ -145,8 +145,12 @@ public class SaveService {
         , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
 
     private static boolean validateFormat(String format){
-        if ("2.2".equals(format)) return true;
-        if ("2.1".equals(format)) return true;
+        if ("2.2".equals(format)) {
+            return true;
+        }
+        if ("2.1".equals(format)) {
+            return true;
+        }
         return false;
     }
 
@@ -513,6 +517,7 @@ public class SaveService {
      * @throws IOException if there is a problem reading the file or processing it
      * @deprecated use {@link SaveService}{@link #loadTree(File)}
      */
+    @Deprecated
     public static HashTree loadTree(InputStream reader) throws IOException {
         try {
             return readTree(reader, null);

@@ -30,7 +30,7 @@ import javax.swing.JRootPane;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 
-public class EscapeDialog extends JDialog {         
+public class EscapeDialog extends JDialog {
 
     private static final long serialVersionUID = 1319421816741139938L;
 
@@ -43,9 +43,9 @@ public class EscapeDialog extends JDialog {
     }
     
     @Override
-    protected JRootPane createRootPane() { 
+    protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
-        Action escapeAction = new AbstractAction("ESCAPE") {    
+        Action escapeAction = new AbstractAction("ESCAPE") {
             /**
              * 
              */
@@ -60,5 +60,5 @@ public class EscapeDialog extends JDialog {
         inputMap.put(KeyStrokes.ESC, escapeAction.getValue(Action.NAME));
         rootPane.getActionMap().put(escapeAction.getValue(Action.NAME), escapeAction);
         return rootPane;
-    } 
-} 
+    }
+}

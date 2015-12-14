@@ -32,7 +32,6 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -133,20 +132,16 @@ public class TestBeanHelper {
         return value;
     }
 
-    private static Object unwrapCollection(MultiProperty prop,String type)
+    private static Object unwrapCollection(MultiProperty prop, String type)
     {
         if(prop instanceof CollectionProperty)
         {
             Collection<Object> values = new LinkedList<>();
-            PropertyIterator iter = prop.iterator();
-            while(iter.hasNext())
-            {
-                try
-                {
-                    values.add(unwrapProperty(null,iter.next(),Class.forName(type)));
+            for (JMeterProperty jMeterProperty : prop) {
+                try {
+                    values.add(unwrapProperty(null, jMeterProperty, Class.forName(type)));
                 }
-                catch(Exception e)
-                {
+                catch(Exception e) {
                     log.error("Couldn't convert object: " + prop.getObjectValue() + " to " + type,e);
                 }
             }

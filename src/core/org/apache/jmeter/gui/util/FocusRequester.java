@@ -34,7 +34,7 @@ public class FocusRequester {
             @Override
             public void run() {
                 comp.requestFocusInWindow();
-            }            
+            }
         });
     }
 }

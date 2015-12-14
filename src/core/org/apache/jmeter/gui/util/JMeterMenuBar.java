@@ -63,64 +63,62 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenu fileMenu;
 
-    private JMenuItem file_save_as;
+    private JMenuItem fileSaveAs;
 
-    private JMenuItem file_selection_as;
+    private JMenuItem fileSelectionAs;
 
-    private JMenuItem file_selection_as_test_fragment;
+    private JMenuItem fileSelectionAsTestFragment;
 
-    private JMenuItem file_revert;
+    private JMenuItem fileRevert;
 
-    private JMenuItem file_load;
+    private JMenuItem fileLoad;
 
     private JMenuItem templates;
 
-    private List<JComponent> file_load_recent_files;
+    private List<JComponent> fileLoadRecentFiles;
 
-    private JMenuItem file_merge;
+    private JMenuItem fileMerge;
 
-    private JMenuItem file_exit;
+    private JMenuItem fileExit;
 
-    private JMenuItem file_close;
+    private JMenuItem fileClose;
 
     private JMenu editMenu;
 
-    private JMenu edit_add;
+    private JMenu editAdd;
 
     private JMenu runMenu;
 
-    private JMenuItem run_start;
+    private JMenuItem runStart;
 
-    private JMenuItem run_start_no_timers;
+    private JMenuItem runStartNoTimers;
 
-    private JMenu remote_start;
+    private JMenu remoteStart;
 
-    private JMenuItem remote_start_all;
+    private JMenuItem remoteStartAll;
 
-    private Collection<JMenuItem> remote_engine_start;
+    private Collection<JMenuItem> remoteEngineStart;
 
-    private JMenuItem run_stop;
+    private JMenuItem runStop;
 
-    private JMenuItem run_shut;
+    private JMenuItem runShut;
 
-    private JMenu remote_stop;
+    private JMenu remoteStop;
 
-    private JMenu remote_shut;
+    private JMenu remoteShut;
 
-    private JMenuItem remote_stop_all;
+    private JMenuItem remoteStopAll;
 
-    private JMenuItem remote_shut_all;
+    private JMenuItem remoteShutAll;
 
-    private Collection<JMenuItem> remote_engine_stop;
+    private Collection<JMenuItem> remoteEngineStop;
 
-    private Collection<JMenuItem> remote_engine_shut;
+    private Collection<JMenuItem> remoteEngineShut;
 
-    private JMenuItem run_clear;
+    private JMenuItem runClear;
 
-    private JMenuItem run_clearAll;
+    private JMenuItem runClearAll;
 
-    // JMenu reportMenu;
-    // JMenuItem analyze;
     private JMenu optionsMenu;
 
     private JMenu lafMenu;
@@ -129,15 +127,15 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenu helpMenu;
 
-    private JMenuItem help_about;
+    private JMenuItem helpAbout;
 
     private String[] remoteHosts;
 
-    private JMenu remote_exit;
+    private JMenu remoteExit;
 
-    private JMenuItem remote_exit_all;
+    private JMenuItem remoteExitAll;
 
-    private Collection<JMenuItem> remote_engine_exit;
+    private Collection<JMenuItem> remoteEngineExit;
 
     private JMenu searchMenu;
 
@@ -149,14 +147,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public JMeterMenuBar() {
         // List for recent files menu items
-        file_load_recent_files = new LinkedList<>();
+        fileLoadRecentFiles = new LinkedList<>();
         // Lists for remote engines menu items
-        remote_engine_start = new LinkedList<>();
-        remote_engine_stop = new LinkedList<>();
-        remote_engine_shut = new LinkedList<>();
-        remote_engine_exit = new LinkedList<>();
+        remoteEngineStart = new LinkedList<>();
+        remoteEngineStop = new LinkedList<>();
+        remoteEngineShut = new LinkedList<>();
+        remoteEngineExit = new LinkedList<>();
         remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
-        if (remoteHosts.length == 1 && remoteHosts[0].equals("")) {
+        if (remoteHosts.length == 1 && remoteHosts[0].isEmpty()) {
             remoteHosts = new String[0];
         }
         this.getRemoteItems();
@@ -165,29 +163,29 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     public void setFileSaveEnabled(boolean enabled) {
-        if(file_save_as != null) {
-            file_save_as.setEnabled(enabled);
+        if(fileSaveAs != null) {
+            fileSaveAs.setEnabled(enabled);
         }
     }
 
     public void setFileLoadEnabled(boolean enabled) {
-        if (file_load != null) {
-            file_load.setEnabled(enabled);
+        if (fileLoad != null) {
+            fileLoad.setEnabled(enabled);
         }
-        if (file_merge != null) {
-            file_merge.setEnabled(enabled);
+        if (fileMerge != null) {
+            fileMerge.setEnabled(enabled);
         }
     }
 
     public void setFileRevertEnabled(boolean enabled) {
-        if(file_revert != null) {
-            file_revert.setEnabled(enabled);
+        if(fileRevert != null) {
+            fileRevert.setEnabled(enabled);
         }
     }
 
     public void setProjectFileLoaded(String file) {
-        if(file_load_recent_files != null && file != null) {
-            LoadRecentProject.updateRecentFileMenuItems(file_load_recent_files, file);
+        if(fileLoadRecentFiles != null && file != null) {
+            LoadRecentProject.updateRecentFileMenuItems(fileLoadRecentFiles, file);
         }
     }
 
@@ -200,12 +198,12 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     // Does not appear to be used; called by MainFrame#setEditAddMenu() but that is not called
     public void setEditAddMenu(JMenu menu) {
         // If the Add menu already exists, remove it.
-        if (edit_add != null) {
-            editMenu.remove(edit_add);
+        if (editAdd != null) {
+            editMenu.remove(editAdd);
         }
         // Insert the Add menu as the first menu item in the Edit menu.
-        edit_add = menu;
-        editMenu.insert(edit_add, 0);
+        editAdd = menu;
+        editMenu.insert(editAdd, 0);
     }
 
     // Called by MainFrame#setEditMenu() which is called by EditCommand#doAction and GuiPackage#localeChanged
@@ -224,8 +222,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     public void setEditAddEnabled(boolean enabled) {
         // There was a NPE being thrown without the null check here.. JKB
-        if (edit_add != null) {
-            edit_add.setEnabled(enabled);
+        if (editAdd != null) {
+            editAdd.setEnabled(enabled);
         }
         // If we are enabling the Edit-->Add menu item, then we also need to
         // enable the Edit menu. The Edit menu may already be enabled, but
@@ -241,8 +239,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         this.menuCreators = new ArrayList<>();
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(), 
-                    new Class[] {MenuCreator.class }); 
+                    JMeterUtils.getSearchPaths(),
+                    new Class[] {MenuCreator.class });
             for (String strClassName : listClasses) {
                 try {
                     if(log.isDebugEnabled()) {
@@ -254,7 +252,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
                             log.debug("Instantiating: "+ commandClass.getName());
                         }
                         MenuCreator creator = (MenuCreator) commandClass.newInstance();
-                        menuCreators.add(creator);                  
+                        menuCreators.add(creator);
                     }
                 } catch (Exception e) {
                     log.error("Exception registering "+MenuCreator.class.getName() + " with implementation:"+strClassName, e);
@@ -298,7 +296,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JMenuItem heapDump = makeMenuItemRes("heap_dump", ActionNames.HEAP_DUMP);//$NON-NLS-1$
 
-        help_about = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
+        helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
 
         helpMenu.add(contextHelp);
         helpMenu.addSeparator();
@@ -310,7 +308,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         addPluginsMenuItems(helpMenu, menuCreators, MENU_LOCATION.HELP);
 
         helpMenu.addSeparator();
-        helpMenu.add(help_about);
+        helpMenu.add(helpAbout);
     }
 
     private void makeOptionsMenu() {
@@ -430,51 +428,51 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // RUN MENU
         runMenu = makeMenuRes("run",'R'); //$NON-NLS-1$
 
-        run_start = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
+        runStart = makeMenuItemRes("start", 'S', ActionNames.ACTION_START, KeyStrokes.ACTION_START); //$NON-NLS-1$
 
-        run_start_no_timers = makeMenuItemRes("start_no_timers", ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
+        runStartNoTimers = makeMenuItemRes("start_no_timers", ActionNames.ACTION_START_NO_TIMERS); //$NON-NLS-1$
         
-        run_stop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
-        run_stop.setEnabled(false);
+        runStop = makeMenuItemRes("stop", 'T', ActionNames.ACTION_STOP, KeyStrokes.ACTION_STOP); //$NON-NLS-1$
+        runStop.setEnabled(false);
 
-        run_shut = makeMenuItemRes("shutdown", 'Y', ActionNames.ACTION_SHUTDOWN, KeyStrokes.ACTION_SHUTDOWN); //$NON-NLS-1$
-        run_shut.setEnabled(false);
+        runShut = makeMenuItemRes("shutdown", 'Y', ActionNames.ACTION_SHUTDOWN, KeyStrokes.ACTION_SHUTDOWN); //$NON-NLS-1$
+        runShut.setEnabled(false);
 
-        run_clear = makeMenuItemRes("clear", 'C', ActionNames.CLEAR, KeyStrokes.CLEAR); //$NON-NLS-1$
+        runClear = makeMenuItemRes("clear", 'C', ActionNames.CLEAR, KeyStrokes.CLEAR); //$NON-NLS-1$
 
-        run_clearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL); //$NON-NLS-1$
+        runClearAll = makeMenuItemRes("clear_all", 'a', ActionNames.CLEAR_ALL, KeyStrokes.CLEAR_ALL); //$NON-NLS-1$
 
-        runMenu.add(run_start);
-        runMenu.add(run_start_no_timers);
-        if (remote_start != null) {
-            runMenu.add(remote_start);
+        runMenu.add(runStart);
+        runMenu.add(runStartNoTimers);
+        if (remoteStart != null) {
+            runMenu.add(remoteStart);
         }
-        remote_start_all = makeMenuItemRes("remote_start_all", ActionNames.REMOTE_START_ALL, KeyStrokes.REMOTE_START_ALL); //$NON-NLS-1$
+        remoteStartAll = makeMenuItemRes("remote_start_all", ActionNames.REMOTE_START_ALL, KeyStrokes.REMOTE_START_ALL); //$NON-NLS-1$
 
-        runMenu.add(remote_start_all);
-        runMenu.add(run_stop);
-        runMenu.add(run_shut);
-        if (remote_stop != null) {
-            runMenu.add(remote_stop);
+        runMenu.add(remoteStartAll);
+        runMenu.add(runStop);
+        runMenu.add(runShut);
+        if (remoteStop != null) {
+            runMenu.add(remoteStop);
         }
-        remote_stop_all = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL); //$NON-NLS-1$
-        runMenu.add(remote_stop_all);
+        remoteStopAll = makeMenuItemRes("remote_stop_all", 'X', ActionNames.REMOTE_STOP_ALL, KeyStrokes.REMOTE_STOP_ALL); //$NON-NLS-1$
+        runMenu.add(remoteStopAll);
 
-        if (remote_shut != null) {
-            runMenu.add(remote_shut);
+        if (remoteShut != null) {
+            runMenu.add(remoteShut);
         }
-        remote_shut_all = makeMenuItemRes("remote_shut_all", 'X', ActionNames.REMOTE_SHUT_ALL, KeyStrokes.REMOTE_SHUT_ALL); //$NON-NLS-1$
-        runMenu.add(remote_shut_all);
+        remoteShutAll = makeMenuItemRes("remote_shut_all", 'X', ActionNames.REMOTE_SHUT_ALL, KeyStrokes.REMOTE_SHUT_ALL); //$NON-NLS-1$
+        runMenu.add(remoteShutAll);
 
-        if (remote_exit != null) {
-            runMenu.add(remote_exit);
+        if (remoteExit != null) {
+            runMenu.add(remoteExit);
         }
-        remote_exit_all = makeMenuItemRes("remote_exit_all", ActionNames.REMOTE_EXIT_ALL); //$NON-NLS-1$
-        runMenu.add(remote_exit_all);
+        remoteExitAll = makeMenuItemRes("remote_exit_all", ActionNames.REMOTE_EXIT_ALL); //$NON-NLS-1$
+        runMenu.add(remoteExitAll);
 
         runMenu.addSeparator();
-        runMenu.add(run_clear);
-        runMenu.add(run_clearAll);
+        runMenu.add(runClear);
+        runMenu.add(runClearAll);
 
         addPluginsMenuItems(runMenu, menuCreators, MENU_LOCATION.RUN);
     }
@@ -497,58 +495,58 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         JMenuItem file_save = makeMenuItemRes("save", 'S', ActionNames.SAVE, KeyStrokes.SAVE); //$NON-NLS-1$
         file_save.setEnabled(true);
 
-        file_save_as = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
-        file_save_as.setEnabled(true);
+        fileSaveAs = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
+        fileSaveAs.setEnabled(true);
 
-        file_selection_as = makeMenuItemRes("save_as", ActionNames.SAVE_AS); //$NON-NLS-1$
-        file_selection_as.setEnabled(true);
+        fileSelectionAs = makeMenuItemRes("save_as", ActionNames.SAVE_AS); //$NON-NLS-1$
+        fileSelectionAs.setEnabled(true);
 
-        file_selection_as_test_fragment = makeMenuItemRes("save_as_test_fragment", ActionNames.SAVE_AS_TEST_FRAGMENT); //$NON-NLS-1$
-        file_selection_as_test_fragment.setEnabled(true);
+        fileSelectionAsTestFragment = makeMenuItemRes("save_as_test_fragment", ActionNames.SAVE_AS_TEST_FRAGMENT); //$NON-NLS-1$
+        fileSelectionAsTestFragment.setEnabled(true);
 
-        file_revert = makeMenuItemRes("revert_project", 'R', ActionNames.REVERT_PROJECT); //$NON-NLS-1$
-        file_revert.setEnabled(false);
+        fileRevert = makeMenuItemRes("revert_project", 'R', ActionNames.REVERT_PROJECT); //$NON-NLS-1$
+        fileRevert.setEnabled(false);
 
-        file_load = makeMenuItemRes("menu_open", 'O', ActionNames.OPEN, KeyStrokes.OPEN); //$NON-NLS-1$
+        fileLoad = makeMenuItemRes("menu_open", 'O', ActionNames.OPEN, KeyStrokes.OPEN); //$NON-NLS-1$
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
-        file_load.setEnabled(false);
+        fileLoad.setEnabled(false);
 
         templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES); //$NON-NLS-1$
         templates.setEnabled(true);
 
-        file_close = makeMenuItemRes("menu_close", 'C', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
+        fileClose = makeMenuItemRes("menu_close", 'C', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
 
-        file_exit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
+        fileExit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
 
-        file_merge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
+        fileMerge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
         // file_merge.setAccelerator(
         // KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
         // Set default SAVE menu item to disabled since the default node that
         // is selected is ROOT, which does not allow items to be inserted.
-        file_merge.setEnabled(false);
+        fileMerge.setEnabled(false);
 
-        fileMenu.add(file_close);
-        fileMenu.add(file_load);
+        fileMenu.add(fileClose);
+        fileMenu.add(fileLoad);
         fileMenu.add(templates);
-        fileMenu.add(file_merge);
+        fileMenu.add(fileMerge);
         fileMenu.addSeparator();
         fileMenu.add(file_save);
-        fileMenu.add(file_save_as);
-        fileMenu.add(file_selection_as);
-        fileMenu.add(file_selection_as_test_fragment);
-        fileMenu.add(file_revert);
+        fileMenu.add(fileSaveAs);
+        fileMenu.add(fileSelectionAs);
+        fileMenu.add(fileSelectionAsTestFragment);
+        fileMenu.add(fileRevert);
         fileMenu.addSeparator();
         // Add the recent files, which will also add a separator that is
         // visible when needed
-        file_load_recent_files = LoadRecentProject.getRecentFileMenuItems();
-        for(JComponent jc : file_load_recent_files){
+        fileLoadRecentFiles = LoadRecentProject.getRecentFileMenuItems();
+        for(JComponent jc : fileLoadRecentFiles){
             fileMenu.add(jc);
         }
 
         addPluginsMenuItems(fileMenu, menuCreators, MENU_LOCATION.FILE);
 
-        fileMenu.add(file_exit);
+        fileMenu.add(fileExit);
     }
 
     private void makeSearchMenu() {
@@ -567,7 +565,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     }
 
     /**
-     * @param menu 
+     * @param menu
      * @param menuCreators
      * @param location
      */
@@ -590,10 +588,10 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         if(org.apache.jmeter.gui.MainFrame.LOCAL.equals(host)) {
             return;
         }
-        Iterator<JMenuItem> iter = remote_engine_start.iterator();
-        Iterator<JMenuItem> iter2 = remote_engine_stop.iterator();
-        Iterator<JMenuItem> iter3 = remote_engine_exit.iterator();
-        Iterator<JMenuItem> iter4 = remote_engine_shut.iterator();
+        Iterator<JMenuItem> iter = remoteEngineStart.iterator();
+        Iterator<JMenuItem> iter2 = remoteEngineStop.iterator();
+        Iterator<JMenuItem> iter3 = remoteEngineExit.iterator();
+        Iterator<JMenuItem> iter4 = remoteEngineShut.iterator();
         while (iter.hasNext() && iter2.hasNext() && iter3.hasNext() &&iter4.hasNext()) {
             JMenuItem start = iter.next();
             JMenuItem stop = iter2.next();
@@ -621,40 +619,40 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     /** {@inheritDoc} */
     @Override
     public void setEnabled(boolean enable) {
-        run_start.setEnabled(!enable);
-        run_start_no_timers.setEnabled(!enable);
-        run_stop.setEnabled(enable);
-        run_shut.setEnabled(enable);
+        runStart.setEnabled(!enable);
+        runStartNoTimers.setEnabled(!enable);
+        runStop.setEnabled(enable);
+        runShut.setEnabled(enable);
     }
 
     private void getRemoteItems() {
         if (remoteHosts.length > 0) {
-            remote_start = makeMenuRes("remote_start"); //$NON-NLS-1$
-            remote_stop = makeMenuRes("remote_stop"); //$NON-NLS-1$
-            remote_shut = makeMenuRes("remote_shut"); //$NON-NLS-1$
-            remote_exit = makeMenuRes("remote_exit"); //$NON-NLS-1$
+            remoteStart = makeMenuRes("remote_start"); //$NON-NLS-1$
+            remoteStop = makeMenuRes("remote_stop"); //$NON-NLS-1$
+            remoteShut = makeMenuRes("remote_shut"); //$NON-NLS-1$
+            remoteExit = makeMenuRes("remote_exit"); //$NON-NLS-1$
 
             for (int i = 0; i < remoteHosts.length; i++) {
                 remoteHosts[i] = remoteHosts[i].trim();
 
                 JMenuItem item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_START);
-                remote_engine_start.add(item);
-                remote_start.add(item);
+                remoteEngineStart.add(item);
+                remoteStart.add(item);
 
                 item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_STOP);
                 item.setEnabled(false);
-                remote_engine_stop.add(item);
-                remote_stop.add(item);
+                remoteEngineStop.add(item);
+                remoteStop.add(item);
 
                 item = makeMenuItemNoRes(remoteHosts[i], ActionNames.REMOTE_SHUT);
                 item.setEnabled(false);
-                remote_engine_shut.add(item);
-                remote_shut.add(item);
+                remoteEngineShut.add(item);
+                remoteShut.add(item);
 
                 item = makeMenuItemNoRes(remoteHosts[i],ActionNames.REMOTE_EXIT);
                 item.setEnabled(false);
-                remote_engine_exit.add(item);
-                remote_exit.add(item);
+                remoteEngineExit.add(item);
+                remoteExit.add(item);
             }
         }
     }
@@ -833,7 +831,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         return makeCheckBoxMenuItemRes(resource, actionCommand, null);
     }
 
-    private static JCheckBoxMenuItem makeCheckBoxMenuItemRes(String resource, 
+    private static JCheckBoxMenuItem makeCheckBoxMenuItemRes(String resource,
             String actionCommand, KeyStroke keyStroke){
         JCheckBoxMenuItem cbkMenuItem = new JCheckBoxMenuItem(JMeterUtils.getResString(resource));
         cbkMenuItem.setName(resource);

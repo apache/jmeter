@@ -26,19 +26,17 @@ import java.util.Map;
 import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.config.ConfigElement;
 
-// TODO - not used at present - could perhaps be removed
+// TODO - the class contents are not used at present - could perhaps be removed
 public class Entry {
 
     private Map<Class<?>, ConfigElement> configSet;
 
-    // Set clonedSet;
     private Class<?> sampler;
 
     private List<Assertion> assertions;
 
     public Entry() {
         configSet = new HashMap<>();
-        // clonedSet = new HashSet();
         assertions = new LinkedList<>();
     }
 

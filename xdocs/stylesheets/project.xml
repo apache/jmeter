@@ -56,7 +56,7 @@
      <menu name="Community">
         <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
         <item name="Mailing Lists"       href="/mail.html"/>
-        <item name="SVN Repositories"    href="/svnindex.html"/>
+        <item name="Source Repositories"    href="/svnindex.html"/>
      </menu>
      <menu name="Foundation">
         <item name="ASF"                 href="http://www.apache.org/"/>

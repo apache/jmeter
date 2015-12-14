@@ -112,10 +112,7 @@ public class AboutCommand implements Command {
             panel.add(infos, BorderLayout.SOUTH);
         }
 
-        // NOTE: these lines center the about dialog in the
-        // current window. Some older Swing versions have
-        // a bug in getLocationOnScreen() and they may not
-        // make this behave properly.
+        // NOTE: these lines center the about dialog in the current window. 
         Point p = mainFrame.getLocationOnScreen();
         Dimension d1 = mainFrame.getSize();
         Dimension d2 = about.getSize();
