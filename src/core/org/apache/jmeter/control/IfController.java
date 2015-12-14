@@ -83,9 +83,6 @@ public class IfController extends GenericController implements Serializable, Thr
     
     private static final ThreadLocal<ScriptEngine> NASHORN_ENGINE = new ThreadLocal<ScriptEngine>() {
 
-        /* (non-Javadoc)
-         * @see java.lang.ThreadLocal#initialValue()
-         */
         @Override
         protected ScriptEngine initialValue() {
             return getInstance().getEngineByName("nashorn");//$NON-NLS-N$
@@ -200,10 +197,10 @@ public class IfController extends GenericController implements Serializable, Thr
         boolean result;
         switch(resultStr) {
             case "false":
-                result=false;
+                result = false;
                 break;
             case "true":
-                result=true;
+                result = true;
                 break;
             default:
                 throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
@@ -219,22 +216,12 @@ public class IfController extends GenericController implements Serializable, Thr
         return cond.equalsIgnoreCase("true"); // $NON-NLS-1$
     }
 
-    /**
-     * This is overriding the parent method. IsDone indicates whether the
-     * termination condition is reached. I.e. if the condition evaluates to
-     * False - then isDone() returns TRUE
-     */
     @Override
     public boolean isDone() {
-        // boolean result = true;
-        // try {
-        // result = !evaluateCondition();
-        // } catch (Exception e) {
-        // logger.error(e.getMessage(), e);
-        // }
-        // setDone(true);
-        // return result;
-        // setDone(false);
+        // bug 26672 : the isDone result should always be false and not based on the expession evaluation
+        // if an IfController ever gets evaluated to false it gets removed from the test tree. 
+        // The problem is that the condition might get evaluated to true the next iteration, 
+        // which we don't get the opportunity for
         return false;
     }
 
@@ -291,10 +278,10 @@ public class IfController extends GenericController implements Serializable, Thr
     public void setUseExpression(boolean selected) {
         setProperty(USE_EXPRESSION, selected, false);
     }
+    
     @Override
-    public void threadStarted() {
-        
-    }
+    public void threadStarted() {}
+    
     @Override
     public void threadFinished() {
        NASHORN_ENGINE.remove();
