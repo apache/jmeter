@@ -154,11 +154,11 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
 
     @Override
     public void setConsumedMetadata(SampleMetadata sampleMetadata, int channel) {
-        consumedMetadata.put(channel, sampleMetadata);
+        consumedMetadata.put(Integer.valueOf(channel), sampleMetadata);
     }
 
     public SampleMetadata getConsumedMetadata(int channel) {
-        return consumedMetadata.get(channel);
+        return consumedMetadata.get(Integer.valueOf(channel));
     }
 
     public int getConsumedChannelCount() {

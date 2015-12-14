@@ -215,7 +215,7 @@ public class ReportGenerator {
 
                     @Override
                     public Double select(Sample sample) {
-                        return (double) sample.getStartTime();
+                        return Double.valueOf(sample.getStartTime());
                     }
                 });
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
@@ -226,7 +226,7 @@ public class ReportGenerator {
 
                     @Override
                     public Double select(Sample sample) {
-                        return (double) sample.getEndTime();
+                        return Double.valueOf(sample.getEndTime());
                     }
                 });
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);

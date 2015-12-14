@@ -55,7 +55,7 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
             @Override
             public Double select(Sample sample) {
-                return (double) sample.getElapsedTime();
+                return Double.valueOf(sample.getElapsedTime());
             }
         };
     }

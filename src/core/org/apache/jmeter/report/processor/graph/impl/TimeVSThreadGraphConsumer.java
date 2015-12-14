@@ -48,7 +48,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 
             @Override
             public Double select(Sample sample) {
-                return (double) sample.getAllThreads();
+                return Double.valueOf(sample.getAllThreads());
             }
         };
     }

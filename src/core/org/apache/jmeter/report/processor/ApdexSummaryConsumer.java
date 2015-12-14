@@ -64,12 +64,12 @@ public class ApdexSummaryConsumer extends
     @Override
     protected ListResultData createDataResult(String key, ApdexSummaryData data) {
         ListResultData result = new ListResultData();
-        result.addResult(new ValueResultData(getApdex(data)));
+        result.addResult(new ValueResultData(Double.valueOf(getApdex(data))));
         ApdexThresholdsInfo thresholdsInfo = data.getApdexThresholdInfo();
-        result.addResult(new ValueResultData(thresholdsInfo
-                .getSatisfiedThreshold()));
-        result.addResult(new ValueResultData(thresholdsInfo
-                .getToleratedThreshold()));
+        result.addResult(new ValueResultData(Long.valueOf(thresholdsInfo
+                .getSatisfiedThreshold())));
+        result.addResult(new ValueResultData(Long.valueOf(thresholdsInfo
+                .getToleratedThreshold())));
         result.addResult(new ValueResultData(key != null ? key : JMeterUtils
                 .getResString("reportgenerator_summary_total")));
 

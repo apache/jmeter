@@ -72,7 +72,7 @@ public class ResponseTimeDistributionGraphConsumer extends
             @Override
             public Double select(Sample sample) {
                 long elapsed = sample.getElapsedTime();
-                return (double) (elapsed - elapsed % granularity);
+                return Double.valueOf(((double) (elapsed - elapsed % granularity)));
 
             }
         };
@@ -105,7 +105,7 @@ public class ResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         parentResult.setResult(
                 AbstractOverTimeGraphConsumer.RESULT_CTX_GRANULARITY,
-                new ValueResultData(granularity));
+                new ValueResultData(Long.valueOf(granularity)));
 
     }
 }
