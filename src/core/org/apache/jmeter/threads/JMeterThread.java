@@ -245,40 +245,38 @@ public class JMeterThread implements Runnable, Interruptible {
 
         try {
             iterationListener = initRun(threadContext);
-            while (running) {
-                Sampler sam = controller.next();
-                while (running && sam != null) {
-                    processSampler(sam, null, threadContext);
-                    threadContext.cleanAfterSample();
+            Sampler sam = controller.next();
+            while (running && sam != null) {
+                processSampler(sam, null, threadContext);
+                threadContext.cleanAfterSample();
+                
+                // restart of the next loop 
+                // - was request through threadContext
+                // - or the last sample failed AND the onErrorStartNextLoop option is enabled
+                if(threadContext.isRestartNextLoop()
+                        || (onErrorStartNextLoop
+                                && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) 
+                {
                     
-                    // restart of the next loop 
-                    // - was request through threadContext
-                    // - or the last sample failed AND the onErrorStartNextLoop option is enabled
-                    if(threadContext.isRestartNextLoop()
-                            || (onErrorStartNextLoop
-                                    && !TRUE.equals(threadContext.getVariables().get(LAST_SAMPLE_OK)))) 
-                    {
-                        
-                        if(log.isDebugEnabled()) {
-                            if(onErrorStartNextLoop
-                                    && !threadContext.isRestartNextLoop()) {
-                                log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
-                            }
+                    if(log.isDebugEnabled()) {
+                        if(onErrorStartNextLoop
+                                && !threadContext.isRestartNextLoop()) {
+                            log.debug("StartNextLoop option is on, Last sample failed, starting next loop");
                         }
-                        
-                        triggerEndOfLoopOnParentControllers(sam, threadContext);
-                        sam = null;
-                        threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
-                        threadContext.setRestartNextLoop(false);
                     }
-                    else {
-                        sam = controller.next();
-                    }
+                    
+                    triggerEndOfLoopOnParentControllers(sam, threadContext);
+                    threadContext.getVariables().put(LAST_SAMPLE_OK, TRUE);
+                    threadContext.setRestartNextLoop(false);
+                    sam = null;
                 }
                 
-                if (controller.isDone()) {
+                if (sam == null && controller.isDone()) {
                     running = false;
                     log.info("Thread is done: " + threadName);
+                }
+                else {
+                    sam = controller.next();
                 }
             }
         }
@@ -360,7 +358,7 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param threadContext
      * @return SampleResult if a transaction was processed
      */
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
+    
     private SampleResult processSampler(Sampler current, Sampler parent, JMeterContext threadContext) {
         SampleResult transactionResult = null;
         try {
@@ -400,69 +398,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
             // Check if we have a sampler to sample
             if(current != null) {
-                threadContext.setCurrentSampler(current);
-                // Get the sampler ready to sample
-                SamplePackage pack = compiler.configureSampler(current);
-                runPreProcessors(pack.getPreProcessors());
-
-                // Hack: save the package for any transaction controllers
-                threadVars.putObject(PACKAGE_OBJECT, pack);
-
-                delay(pack.getTimers());
-                Sampler sampler = pack.getSampler();
-                sampler.setThreadContext(threadContext);
-                // TODO should this set the thread names for all the subsamples?
-                // might be more efficient than fetching the name elsewhere
-                sampler.setThreadName(threadName);
-                TestBeanHelper.prepare(sampler);
-
-                // Perform the actual sample
-                currentSampler = sampler;
-                SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
-                currentSampler = null;
-
-                // If we got any results, then perform processing on the result
-                if (result != null) {
-                    result.setGroupThreads(threadGroup.getNumberOfThreads());
-                    result.setAllThreads(JMeterContextService.getNumberOfThreads());
-                    result.setThreadName(threadName);
-                    SampleResult[]subResults = result.getSubResults();
-                    if(subResults != null) {
-                        for (SampleResult subResult : subResults) {
-                            subResult.setGroupThreads(threadGroup.getNumberOfThreads());
-                            subResult.setAllThreads(JMeterContextService.getNumberOfThreads());
-                            subResult.setThreadName(threadName);
-                        }
-                    }
-                    threadContext.setPreviousResult(result);
-                    runPostProcessors(pack.getPostProcessors());
-                    checkAssertions(pack.getAssertions(), result, threadContext);
-                    // Do not send subsamples to listeners which receive the transaction sample
-                    List<SampleListener> sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
-                    notifyListeners(sampleListeners, result);
-                    compiler.done(pack);
-                    // Add the result as subsample of transaction if we are in a transaction
-                    if(transactionSampler != null) {
-                        transactionSampler.addSubSamplerResult(result);
-                    }
-
-                    // Check if thread or test should be stopped
-                    if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
-                        stopThread();
-                    }
-                    if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
-                        stopTest();
-                    }
-                    if (result.isStopTestNow() || (!result.isSuccessful() && onErrorStopTestNow)) {
-                        stopTestNow();
-                    }
-                    if(result.isStartNextThreadLoop()) {
-                        threadContext.setRestartNextLoop(true);
-                    }
-                } else {
-                    compiler.done(pack); // Finish up
-                }
+                executeSamplePackage(current, transactionSampler, transactionPack, threadContext);
             }
+            
             if (scheduler) {
                 // checks the scheduler to stop the iteration
                 stopSchedulerIfNeeded();
@@ -481,6 +419,82 @@ public class JMeterThread implements Runnable, Interruptible {
             }
         }
         return transactionResult;
+    }
+
+    /*
+     * Execute the sampler with its pre/post processors, timers, assertions
+     * Brodcast the result to the sample listeners
+     */
+    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
+    private void executeSamplePackage(Sampler current,
+            TransactionSampler transactionSampler,
+            SamplePackage transactionPack,
+            JMeterContext threadContext) {
+        
+        threadContext.setCurrentSampler(current);
+        // Get the sampler ready to sample
+        SamplePackage pack = compiler.configureSampler(current);
+        runPreProcessors(pack.getPreProcessors());
+
+        // Hack: save the package for any transaction controllers
+        threadVars.putObject(PACKAGE_OBJECT, pack);
+
+        delay(pack.getTimers());
+        Sampler sampler = pack.getSampler();
+        sampler.setThreadContext(threadContext);
+        // TODO should this set the thread names for all the subsamples?
+        // might be more efficient than fetching the name elsewhere
+        sampler.setThreadName(threadName);
+        TestBeanHelper.prepare(sampler);
+
+        // Perform the actual sample
+        currentSampler = sampler;
+        SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
+        currentSampler = null;
+
+        // If we got any results, then perform processing on the result
+        if (result != null) {
+            int nbActiveThreadsInThreadGroup = threadGroup.getNumberOfThreads();
+            int nbTotalActiveThreads = JMeterContextService.getNumberOfThreads();
+            result.setGroupThreads(nbActiveThreadsInThreadGroup);
+            result.setAllThreads(nbTotalActiveThreads);
+            result.setThreadName(threadName);
+            SampleResult[] subResults = result.getSubResults();
+            if(subResults != null) {
+                for (SampleResult subResult : subResults) {
+                    subResult.setGroupThreads(nbActiveThreadsInThreadGroup);
+                    subResult.setAllThreads(nbTotalActiveThreads);
+                    subResult.setThreadName(threadName);
+                }
+            }
+            threadContext.setPreviousResult(result);
+            runPostProcessors(pack.getPostProcessors());
+            checkAssertions(pack.getAssertions(), result, threadContext);
+            // Do not send subsamples to listeners which receive the transaction sample
+            List<SampleListener> sampleListeners = getSampleListeners(pack, transactionPack, transactionSampler);
+            notifyListeners(sampleListeners, result);
+            compiler.done(pack);
+            // Add the result as subsample of transaction if we are in a transaction
+            if(transactionSampler != null) {
+                transactionSampler.addSubSamplerResult(result);
+            }
+
+            // Check if thread or test should be stopped
+            if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
+                stopThread();
+            }
+            if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
+                stopTest();
+            }
+            if (result.isStopTestNow() || (!result.isSuccessful() && onErrorStopTestNow)) {
+                stopTestNow();
+            }
+            if(result.isStartNextThreadLoop()) {
+                threadContext.setRestartNextLoop(true);
+            }
+        } else {
+            compiler.done(pack); // Finish up
+        }
     }
 
     private SampleResult doEndTransactionSampler(
