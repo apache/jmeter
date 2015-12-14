@@ -277,23 +277,23 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         } else {
             series = String.format(aggregatedKeysSeriesFormat, series);
             aggInfo = new HashMap<>();
-            aggInfo.put(seriesData.getKeysAggregator().getResult(),
+            aggInfo.put(Double.valueOf(seriesData.getKeysAggregator().getResult()),
                     seriesData.getValuesAggregator());
         }
         if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
                 // Init key and value depending on revertsKeysAndValues property
                 Double key = entry.getKey();
-                Double value = entry.getValue().getResult();
+                Double value = Double.valueOf(entry.getValue().getResult());
 
                 // Create result storage for coordinates
                 ListResultData coordResult = new ListResultData();
 
                 if (!revertsKeysAndValues) {
                     key = entry.getKey();
-                    value = entry.getValue().getResult();
+                    value = Double.valueOf(entry.getValue().getResult());
                 } else {
-                    key = entry.getValue().getResult();
+                    key = Double.valueOf(entry.getValue().getResult());
                     value = entry.getKey();
                 }
                 coordResult.addResult(new ValueResultData(key));
@@ -393,10 +393,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private MapResultData createResult() {
         MapResultData result = new MapResultData();
-        result.setResult(RESULT_MIN_X, new ValueResultData(Double.MAX_VALUE));
-        result.setResult(RESULT_MAX_X, new ValueResultData(Double.MIN_VALUE));
-        result.setResult(RESULT_MIN_Y, new ValueResultData(Double.MAX_VALUE));
-        result.setResult(RESULT_MAX_Y, new ValueResultData(Double.MIN_VALUE));
+        result.setResult(RESULT_MIN_X, new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_X, new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_MIN_Y, new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_Y, new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
         result.setResult(RESULT_SERIES, new ListResultData());
 
         boolean supportsControllersDiscrimination = true;

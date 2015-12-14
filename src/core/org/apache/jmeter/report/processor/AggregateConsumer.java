@@ -110,7 +110,7 @@ public class AggregateConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
-        setDataToContext(getName(), new ValueResultData(aggregator.getResult()));
+        setDataToContext(getName(), new ValueResultData(Double.valueOf(aggregator.getResult())));
         super.stopProducing();
     }
 
