@@ -147,6 +147,9 @@ public class ServerPanel extends JPanel implements MonitorGuiListener {
         case Stats.DEAD:
             i = DEAD;
             break;
+        default:
+            // better than returning null ...
+            throw new IllegalStateException("Unexpected health value: " + health);
         }
         return i;
     }
