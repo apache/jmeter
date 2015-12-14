@@ -5613,6 +5613,36 @@ this one will be used by "<code>Calculate Price cut off</code>".
         <link href="../demos/RegEx-User-Parameters.jmx">Test Plan showing how to use RegEx User Parameters</link>
 </links>
 
+<component name="Sample Timeout" index="&sect-num;.7.11" anchor="interrupt" width="316" height="138" screenshot="sample_timeout.png">
+<description>
+<note>BETA CODE - the test element may be moved or replaced in a future release</note>
+<p>This Pre-Processor schedules a timer task to interrupt a sample if it takes too long to complete.
+The timeout is ignored if it is zero or negative.
+For this to work, the sampler must implement Interruptible. 
+The following samplers are known to do so:<br></br>
+AJP, BeanShell, FTP, HTTP, Soap, AccessLog, MailReader, JMS Subscriber, TCPSampler, TestAction, JavaSampler
+</p>
+<p>
+The test element is intended for use where individual timeouts such as Connection Timeout or Response Timeout are insufficient,
+or where the Sampler does not support timeouts.
+The timeout should be set sufficiently long so that it is not triggered in normal tests, but short enough that it interrupts samples
+that are stuck.
+</p>
+<p>
+[By default, JMeter uses a Callable to interrupt the sampler.
+This executes in the same thread as the timer, so if the interrupt takes a long while, 
+it may delay the processing of subsequent timeouts.
+This is not expected to be a problem, but if necessary the property <code>InterruptTimer.useRunnable</code>
+can be set to <code>true</code> to use a separate Runnable thread instead of the Callable.]
+</p>
+</description>
+
+<properties>
+        <property name="Name" required="No">Descriptive name for this timer that is shown in the tree.</property>
+        <property name="Sampler Timeout" required="Yes">If the sample takes longer to complete, it will be interrupted.</property>
+</properties>
+</component>
+
 <a href="#">^</a>
 
 </section>
