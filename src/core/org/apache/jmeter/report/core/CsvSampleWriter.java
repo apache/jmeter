@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.AbstractSampleWriter;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
@@ -39,6 +40,7 @@ import org.apache.jmeter.save.CSVSaveService;
  */
 public class CsvSampleWriter extends AbstractSampleWriter {
 
+    private static final String MUST_NOT_BE_NULL = "%1s must not be null";
     private int columnCount;
 
     private char separator;
@@ -48,9 +50,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     private long sampleCount;
 
     public CsvSampleWriter(SampleMetadata metadata) {
-        if (metadata == null) {
-            throw new ArgumentNullException("metadata");
-        }
+        Validate.notNull(metadata, MUST_NOT_BE_NULL, "metadata");
         this.metadata = metadata;
         this.columnCount = metadata.getColumnCount();
         this.separator = metadata.getSeparator();
@@ -59,25 +59,19 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     public CsvSampleWriter(Writer output, SampleMetadata metadata) {
         this(metadata);
-        if (output == null) {
-            throw new ArgumentNullException("output");
-        }
+        Validate.notNull(output, MUST_NOT_BE_NULL, "output");
         setWriter(output);
     }
 
     public CsvSampleWriter(OutputStream output, SampleMetadata metadata) {
         this(metadata);
-        if (output == null) {
-            throw new ArgumentNullException("output");
-        }
+        Validate.notNull(output, MUST_NOT_BE_NULL, "output");
         setOutputStream(output);
     }
 
     public CsvSampleWriter(File output, SampleMetadata metadata) {
         this(metadata);
-        if (output == null) {
-            throw new ArgumentNullException("output");
-        }
+        Validate.notNull(output, MUST_NOT_BE_NULL, "output");
         setOutputFile(output);
     }
 
@@ -112,13 +106,8 @@ public class CsvSampleWriter extends AbstractSampleWriter {
 
     @Override
     public long write(Sample sample) {
-        if (sample == null) {
-            throw new ArgumentNullException("sample");
-        }
-        if (writer == null) {
-            throw new IllegalStateException(
-                    "No writer set! Call setWriter() first!");
-        }
+        Validate.notNull(sample, MUST_NOT_BE_NULL, "sample");
+        Validate.validState(writer != null, "No writer set! Call setWriter() first!");
 
         StringBuilder row = new StringBuilder();
         char[] specials = new char[] { separator,
