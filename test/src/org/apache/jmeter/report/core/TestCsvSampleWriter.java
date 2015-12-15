@@ -17,13 +17,12 @@
  */
 package org.apache.jmeter.report.core;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.apache.jmeter.util.JMeterUtils;
-
 import junit.framework.TestCase;
+
+import org.apache.jmeter.util.JMeterUtils;
 
 public class TestCsvSampleWriter extends TestCase {
 
@@ -50,15 +49,8 @@ public class TestCsvSampleWriter extends TestCase {
                 CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
                         metadata)) {
             csvWriter.writeHeader();
-            // need to replace the writer to flush the original one
-            replaceWriter(csvWriter);
+            csvWriter.flush();
             assertEquals("a,b\n", writer.toString());
-        }
-    }
-
-    private void replaceWriter(CsvSampleWriter csvWriter) throws IOException {
-        try (Writer replacement = new StringWriter()) {
-            csvWriter.setWriter(replacement);
         }
     }
 
@@ -95,8 +87,7 @@ public class TestCsvSampleWriter extends TestCase {
             Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
                     .build();
             csvWriter.write(sample);
-            // need to replace the writer to flush the original one
-            replaceWriter(csvWriter);
+            csvWriter.flush();
             assertEquals("a1,b1\n", writer.toString());
         }
     }
