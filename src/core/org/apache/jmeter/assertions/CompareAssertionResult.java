@@ -18,11 +18,12 @@
 
 package org.apache.jmeter.assertions;
 
+import java.io.Serializable;
 
 public class CompareAssertionResult extends AssertionResult {
     private static final long serialVersionUID = 1;
 
-    private transient final ResultHolder comparedResults = new ResultHolder();
+    private final ResultHolder comparedResults = new ResultHolder();
 
     /**
      * For testing only
@@ -57,8 +58,9 @@ public class CompareAssertionResult extends AssertionResult {
         return comparedResults.secondaryResult;
     }
 
-    private static class ResultHolder
+    private static class ResultHolder implements Serializable
     {
+        private static final long serialVersionUID = 1L;
         private String baseResult;
         private String secondaryResult;
 
