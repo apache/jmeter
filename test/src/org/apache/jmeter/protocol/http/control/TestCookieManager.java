@@ -28,8 +28,10 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.junit.Assert;
 
 public class TestCookieManager extends JMeterTestCase {
         private CookieManager man = null;
@@ -84,6 +86,8 @@ public class TestCookieManager extends JMeterTestCase {
             sampler.setMethod(HTTPConstants.GET);
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
+        
+
 
         /**
          * Test that the cookie domain field is actually handled as browsers do
@@ -96,6 +100,29 @@ public class TestCookieManager extends JMeterTestCase {
             man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
             assertNotNull(man.getCookieHeaderForURL(url));
         }
+        
+        
+        /**
+         * Waiting for Mailing list answer (message sent on 15th dec 2015)
+         * @throws Exception
+         */
+        public void testAddCookieFromHeaderWithWildcard() throws Exception {
+            URL url = new URL("https://subdomain.bt.com/page");
+            CookieManager mgr = new CookieManager();
+            String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
+            man.addCookieFromHeader(headerLine, url);
+            CollectionProperty cp = mgr.getCookies();
+            Assert.assertEquals(1, man.getCookieCount());
+            HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
+            List<org.apache.http.cookie.Cookie> cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+
+            for (org.apache.http.cookie.Cookie cookie : cookies) {
+                Assert.assertEquals(".bt.com", cookie.getDomain());
+            }
+        }
+        
 
         public void testCrossDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
@@ -297,6 +324,7 @@ public class TestCookieManager extends JMeterTestCase {
         public void testCookieOrdering1() throws Exception {
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;path=/", url);
+            // Waiting for https://issues.apache.org/jira/browse/HTTPCLIENT-1705
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
             man.addCookieFromHeader("test2=moo3;path=/", url);
             assertEquals(3,man.getCookieCount());
@@ -321,9 +349,9 @@ public class TestCookieManager extends JMeterTestCase {
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
-            //assertFalse(c[0].isPathAttributeSpecified());
+            assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/sub1",c.get(1).getPath());
-            //assertTrue(c[1].isPathAttributeSpecified());
+            assertTrue(((BasicClientCookie)c.get(1)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/",c.get(2).getPath());
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
@@ -336,7 +364,7 @@ public class TestCookieManager extends JMeterTestCase {
             man.addCookieFromHeader("test2=moo2;path=/sub1", url);
             man.addCookieFromHeader("test2=moo3;path=/", url);
             assertEquals(3,man.getCookieCount());
-            //assertEquals("/",man.get(0).getPath());
+            assertEquals("/sub1",man.get(0).getPath());
             assertEquals("/sub1",man.get(1).getPath());
             assertEquals("/",man.get(2).getPath());
             String s = man.getCookieHeaderForURL(url);
@@ -346,11 +374,11 @@ public class TestCookieManager extends JMeterTestCase {
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
-            //assertFalse(c[0].isPathAttributeSpecified());
+            assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/sub1",c.get(1).getPath());
-            //assertTrue(c[1].isPathAttributeSpecified());
+            assertTrue(((BasicClientCookie)c.get(1)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/",c.get(2).getPath());
-            //assertTrue(c[2].isPathAttributeSpecified());
+            assertTrue(((BasicClientCookie)c.get(2)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("$Version=0; test1=moo1; test2=moo2; $Path=/sub1; test2=moo3; $Path=/", s);
         }
 
