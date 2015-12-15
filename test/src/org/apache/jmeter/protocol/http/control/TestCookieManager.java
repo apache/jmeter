@@ -168,7 +168,21 @@ public class TestCookieManager extends JMeterTestCase {
         
         public void testCookies2() throws Exception {
             URL url = new URL("https://a.b.c.d/testCookies2");
+            //The cookie in question does not have a version attribute mandatory for
+            //standard (RFC 2109 and RFC 2965) cookies. Therefore it is parsed as
+            //Netscape style cookie in which case comma is not considered a valid
+            //header element delimiter and is treated as normal character.
+            
             man.addCookieFromHeader("test1=1;secure, test2=2;secure", url);
+            assertEquals(1,man.getCookieCount());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("test1=1", s);
+        }
+        
+        public void testCookies3() throws Exception {
+            URL url = new URL("https://a.b.c.d/testCookies2");
+            man.addCookieFromHeader("test1=1;secure, test2=2;secure; version=1", url);
             assertEquals(2,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
