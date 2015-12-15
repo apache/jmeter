@@ -614,13 +614,10 @@ public class JMeterUtils implements UnitTestManager {
             if(is != null) {
                 fileReader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder text = new StringBuilder();
-                String line = "NOTNULL"; // $NON-NLS-1$
-                while (line != null) {
-                    line = fileReader.readLine();
-                    if (line != null) {
-                        text.append(line);
-                        text.append(lineEnd);
-                    }
+                String line;
+                while ((line = fileReader.readLine()) != null) {
+                    text.append(line);
+                    text.append(lineEnd);
                 }
                 // Done by finally block: fileReader.close();
                 return text.toString();
