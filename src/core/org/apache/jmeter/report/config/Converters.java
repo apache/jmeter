@@ -38,7 +38,7 @@ public final class Converters {
                 try {
                     return Double.valueOf(value);
                 } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Double.class.getName());
+                    throw new ConvertException(value, Double.class.getName(), ex);
                 }
             }
         };
@@ -52,7 +52,7 @@ public final class Converters {
                 try {
                     return Long.valueOf(value);
                 } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Long.class.getName());
+                    throw new ConvertException(value, Long.class.getName(), ex);
                 }
             }
         };
@@ -62,7 +62,7 @@ public final class Converters {
         StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
 
             @Override
-            public Boolean convert(String value) throws ConvertException {
+            public Boolean convert(String value) {
                 return Boolean.valueOf(value);
             }
         };
