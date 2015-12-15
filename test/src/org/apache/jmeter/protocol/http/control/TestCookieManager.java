@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.cookie.ClientCookie;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -353,7 +355,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         public void testCookiePolicyNetscape() throws Exception {
-            man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.NETSCAPE);
+            man.setCookiePolicy(CookieSpecs.NETSCAPE);
             man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://www.order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
@@ -371,11 +373,11 @@ public class TestCookieManager extends JMeterTestCase {
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertEquals("/sub1",c.get(0).getPath());
-            //assertFalse(c.get(0).isPathAttributeSpecified());
+            assertFalse(((BasicClientCookie)c.get(0)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/sub1",c.get(1).getPath());
-            //assertTrue(c.get(1).isPathAttributeSpecified());
+            assertTrue(((BasicClientCookie)c.get(1)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("/",c.get(2).getPath());
-            //assertTrue(c.get(2).isPathAttributeSpecified());
+            assertTrue(((BasicClientCookie)c.get(2)).containsAttribute(ClientCookie.PATH_ATTR));
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
 
