@@ -33,8 +33,13 @@ public class TestJMeterUtils extends TestCase {
     public TestJMeterUtils(String arg0) {
         super(arg0);
     }
-    //TODO add some real tests now that split() has been removed
-    public void test1() throws Exception{
-        
+
+    public void testGetResourceFileAsText() throws Exception{
+        String sep = System.getProperty("line.separator");
+        assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
+    }
+    
+    public void testGetResourceFileAsTextWithMisingResource() throws Exception{
+        assertEquals("", JMeterUtils.getResourceFileAsText("not_existant_resourcefile.txt"));
     }
 }
