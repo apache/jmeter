@@ -119,7 +119,9 @@ public class TestCookieManager extends JMeterTestCase {
                     CookieManager.ALLOW_VARIABLE_COOKIES);
 
             for (org.apache.http.cookie.Cookie cookie : cookies) {
-                Assert.assertEquals(".bt.com", cookie.getDomain());
+                // See http://tools.ietf.org/html/rfc6265#section-5.2.3
+                Assert.assertEquals("bt.com", cookie.getDomain());
+                Assert.assertTrue( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
             }
         }
         
