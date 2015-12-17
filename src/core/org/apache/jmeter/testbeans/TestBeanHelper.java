@@ -57,9 +57,7 @@ public class TestBeanHelper {
      * <p>
      *
      * @param el the TestElement to be prepared
-     * @deprecated to limit it's usage in expectation of moving it elsewhere.
      */
-    @Deprecated
     public static void prepare(TestElement el) {
         if (!(el instanceof TestBean)) {
             return;
