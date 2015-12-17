@@ -58,6 +58,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         static final ScheduledExecutorService EXEC_SERVICE =
                 Executors.newScheduledThreadPool(1,
                         new ThreadFactory() {
+                            @Override
                             public Thread newThread(Runnable r) {
                                 Thread t = Executors.defaultThreadFactory().newThread(r);
                                 t.setDaemon(true); // also ensures that Executor thread is daemon
@@ -136,6 +137,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         
         if (useRunnable) {
             Runnable run=new Runnable() {
+                @Override
                 public void run() {
                     long start = System.nanoTime();
                     boolean interrupted = sampler.interrupt();
