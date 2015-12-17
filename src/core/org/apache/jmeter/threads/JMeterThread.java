@@ -64,7 +64,7 @@ import org.apache.log.Logger;
 public class JMeterThread implements Runnable, Interruptible {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public static final boolean IMPLEMENTS_SAMPLE_STARTED = JMeterUtils.getPropDefault("temp.sampleStarted", true);
+    public static final boolean IMPLEMENTS_SAMPLE_STARTED = JMeterUtils.getPropDefault("JMeterThread.sampleStarted", true);
     static {
         log.info("IMPLEMENTS_SAMPLE_STARTED="+IMPLEMENTS_SAMPLE_STARTED);
     }
