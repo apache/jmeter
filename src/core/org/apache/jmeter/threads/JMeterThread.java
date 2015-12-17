@@ -21,7 +21,6 @@ package org.apache.jmeter.threads;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -225,21 +224,6 @@ public class JMeterThread implements Runnable, Interruptible {
 
     public void setThreadName(String threadName) {
         this.threadName = threadName;
-    }
-
-    /*
-     * See below for reason for this change. Just in case this causes problems,
-     * allow the change to be backed out
-     */
-    private static final boolean reversePostProcessors =
-        JMeterUtils.getPropDefault("jmeterthread.reversePostProcessors", false); // $NON-NLS-1$
-
-    static {
-        if (reversePostProcessors) {
-            log.info("Running PostProcessors in reverse order");
-        } else {
-            log.info("Running PostProcessors in forward order");
-        }
     }
 
     @Override
@@ -777,19 +761,9 @@ public class JMeterThread implements Runnable, Interruptible {
 
     @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void runPostProcessors(List<PostProcessor> extractors) {
-        ListIterator<PostProcessor> iter;
-        if (reversePostProcessors) {// Original (rather odd) behaviour
-            iter = extractors.listIterator(extractors.size());// start at the end
-            while (iter.hasPrevious()) {
-                PostProcessor ex = iter.previous();
-                TestBeanHelper.prepare((TestElement) ex);
-                ex.process();
-            }
-        } else {
-            for (PostProcessor ex : extractors) {
-                TestBeanHelper.prepare((TestElement) ex);
-                ex.process();
-            }
+        for (PostProcessor ex : extractors) {
+            TestBeanHelper.prepare((TestElement) ex);
+            ex.process();
         }
     }
 
