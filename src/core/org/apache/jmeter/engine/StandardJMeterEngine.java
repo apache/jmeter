@@ -32,8 +32,8 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.TestPlan;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.ListenerNotifier;
@@ -58,16 +58,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean exitAfterTest =
         JMeterUtils.getPropDefault("server.exitaftertest", false);  // $NON-NLS-1$
-
-    private static final boolean startListenersLater =
-        JMeterUtils.getPropDefault("jmeterengine.startlistenerslater", true); // $NON-NLS-1$
-
-    static {
-        if (startListenersLater){
-            log.info("Listeners will be started after enabling running version");
-            log.info("To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false");
-        }
-    }
 
     // Allow engine and threads to be stopped from outside a thread
     // e.g. from beanshell server
@@ -331,9 +321,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         testListeners.getSearchResults().addAll(testList);
         testList.clear(); // no longer needed
 
-        if (!startListenersLater ) { notifyTestListenersOfStart(testListeners); }
         test.traverse(new TurnElementsOn());
-        if (startListenersLater) { notifyTestListenersOfStart(testListeners); }
+        notifyTestListenersOfStart(testListeners);
 
         List<?> testLevelElements = new LinkedList<>(test.list(test.getArray()[0]));
         removeThreadGroups(testLevelElements);
