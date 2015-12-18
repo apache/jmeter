@@ -76,7 +76,7 @@ commons-math3-3.5
 http://commons.apache.org/proper/commons-math/download_math.cgi
 - BackendListener
 
-commons-net-3.3
+commons-net-3.4
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler

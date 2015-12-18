@@ -14,7 +14,7 @@ commons-jexl-2.1.1.jar
 commons-lang3-3.4.jar
 commons-logging-1.2.jar
 commons-math3-3.5.jar
-commons-net-3.3.jar
+commons-net-3.4.jar
 commons-pool2-2.4.2.jar
 excalibur-datasource-2.1.jar
 excalibur-instrument-1.0.jar
