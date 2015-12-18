@@ -77,7 +77,7 @@ under the License.
       <excalibur-pool-api.version>${excalibur-pool.version}</excalibur-pool-api.version>
       <excalibur-pool-impl.version>${excalibur-pool.version}</excalibur-pool-impl.version>
       <excalibur-pool-instrumented.version>${excalibur-pool.version}</excalibur-pool-instrumented.version>
-      <freemarker.version>2.3.22</freemarker.version>
+      <freemarker.version>2.3.23</freemarker.version>
       <htmlparser.version>2.1</htmlparser.version>
       <httpclient.version>4.2.6</httpclient.version>
       <httpcore.version>4.2.5</httpcore.version>
