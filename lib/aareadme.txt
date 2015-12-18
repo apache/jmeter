@@ -107,7 +107,7 @@ excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
 ------------------
 - used by excalibur-datasource
 
-freemarker-2.3.22.jar
+freemarker-2.3.23.jar
 ----------------------
 - used by Report/Dashboard feature
 
