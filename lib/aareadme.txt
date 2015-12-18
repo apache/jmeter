@@ -34,7 +34,7 @@ http://commons.apache.org/downloads/download_codec.cgi
 - used by commons-httpclient-3.1
 - also HtmlParserTester for Base64
 
-commons-collections-3.2.1
+commons-collections-3.2.2
 -------------------------
 http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
