@@ -26,6 +26,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 public class TestCsvSampleWriter extends TestCase {
 
+    @Override
     protected void setUp() throws Exception {
         // We have to initialize JMeterUtils
         JMeterUtils.loadJMeterProperties("jmeter.properties");
