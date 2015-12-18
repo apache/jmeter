@@ -64,7 +64,7 @@
 	<classpathentry kind="lib" path="lib/excalibur-pool-api-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-impl-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-pool-instrumented-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/freemarker-2.3.22.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmlparser-2.1.jar"/>
