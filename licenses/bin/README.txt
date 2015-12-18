@@ -6,7 +6,7 @@ avalon-framework-4.1.4.jar
 bsf-2.4.0.jar
 bshclient.jar (part of JMeter)
 commons-codec-1.10.jar
-commons-collections-3.2.1.jar
+commons-collections-3.2.2.jar
 commons-httpclient-3.1.jar
 commons-io-2.4.jar
 commons-jexl-1.1.jar
