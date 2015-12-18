@@ -103,7 +103,6 @@ public class TestCookieManager extends JMeterTestCase {
         
         
         /**
-         * Waiting for Mailing list answer (message sent on 15th dec 2015)
          * @throws Exception
          */
         public void testAddCookieFromHeaderWithWildcard() throws Exception {
@@ -123,7 +122,76 @@ public class TestCookieManager extends JMeterTestCase {
                 Assert.assertEquals("bt.com", cookie.getDomain());
                 Assert.assertTrue( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
             }
+            
+            // we check that CookieManager returns the cookies for the main domain
+            URL urlMainDomain = new URL("https://www.bt.com/page");
+            cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+            Assert.assertEquals(1, cookies.size());
+            for (org.apache.http.cookie.Cookie cookie : cookies) {
+                // See http://tools.ietf.org/html/rfc6265#section-5.2.3
+                Assert.assertEquals("bt.com", cookie.getDomain());
+                Assert.assertTrue( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
+            }
+
         }
+        
+        
+        /**
+         * @throws Exception
+         */
+        public void testAddCookieFromHeaderWithNoWildcard() throws Exception {
+            URL url = new URL("https://subdomain.bt.com/page");
+            CookieManager mgr = new CookieManager();
+            String headerLine = "SMTRYNO=1; path=/";
+            man.addCookieFromHeader(headerLine, url);
+            CollectionProperty cp = mgr.getCookies();
+            Assert.assertEquals(1, man.getCookieCount());
+            HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
+            List<org.apache.http.cookie.Cookie> cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), url, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+            Assert.assertEquals(1, cookies.size());
+            for (org.apache.http.cookie.Cookie cookie : cookies) {
+                // See http://tools.ietf.org/html/rfc6265#section-5.2.3
+                Assert.assertEquals("subdomain.bt.com", cookie.getDomain());
+                Assert.assertFalse( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
+            }
+            
+            // we check that CookieManager returns the cookies for the main domain
+            URL urlMainDomain = new URL("https://www.bt.com/page");
+            cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlMainDomain, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+            Assert.assertEquals(0, cookies.size());
+        }
+        
+        /**
+         * @throws Exception
+         */
+        public void testAddCookieFromHeaderWithWildcard2() throws Exception {
+            URL url = new URL("https://www.bt.com/page");
+            CookieManager mgr = new CookieManager();
+            String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
+            man.addCookieFromHeader(headerLine, url);
+            
+            CollectionProperty cp = mgr.getCookies();
+            Assert.assertEquals(1, man.getCookieCount());
+            HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
+            URL urlSubDomain = new URL("https://subdomain.bt.com/page");
+            
+            List<org.apache.http.cookie.Cookie> cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSubDomain, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+            Assert.assertEquals(1, cookies.size());
+            for (org.apache.http.cookie.Cookie cookie : cookies) {
+                // See http://tools.ietf.org/html/rfc6265#section-5.2.3
+                Assert.assertEquals("bt.com", cookie.getDomain());
+                Assert.assertTrue( ((BasicClientCookie)cookie).containsAttribute(ClientCookie.DOMAIN_ATTR));
+            }
+        }
+        
         
 
         public void testCrossDomainHandling() throws Exception {
@@ -332,7 +400,11 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals(3,man.getCookieCount());
             String s = man.getCookieHeaderForURL(url);
             assertNotNull(s);
-            assertEquals("test2=moo2; test1=moo1; test2=moo3", s);
+            //Cookies like "test1=moo1;path=/" are invalid from the standpoint of RFC 2109 and RFC 2965 as they lack mandatory version attribute.
+            // The default policy treats such cookies as Netscape draft compatible.  And the Netscape draft does not define any particular order 
+            // for cookies in the cookie header.
+            // see https://issues.apache.org/jira/browse/HTTPCLIENT-1705
+            // assertEquals("test2=moo2; test1=moo1; test2=moo3", s);
         }
 
         public void testCookieOrdering2() throws Exception {
