@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
@@ -102,9 +102,9 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     private transient CollectionProperty initialCookies;
 
-    public static final String DEFAULT_POLICY = CookiePolicy.BROWSER_COMPATIBILITY;
+    public static final String DEFAULT_POLICY = CookieSpecs.DEFAULT;
     
-    public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
+    public static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available
