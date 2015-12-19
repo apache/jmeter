@@ -148,7 +148,7 @@ jodd-props-3.6.7
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
 
-json-path-2.0.0
+json-path-2.1.0
 --------
 https://github.com/jayway/JsonPath
 - JSON Path Extractor
