@@ -414,7 +414,6 @@ public class JMeterThread implements Runnable, Interruptible {
      * Execute the sampler with its pre/post processors, timers, assertions
      * Brodcast the result to the sample listeners
      */
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void executeSamplePackage(Sampler current,
             TransactionSampler transactionSampler,
             SamplePackage transactionPack,
@@ -704,7 +703,6 @@ public class JMeterThread implements Runnable, Interruptible {
         log.info("Stop Thread detected by thread: " + threadName);
     }
 
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void checkAssertions(List<Assertion> assertions, SampleResult parent, JMeterContext threadContext) {
         for (Assertion assertion : assertions) {
             TestBeanHelper.prepare((TestElement) assertion);
@@ -759,7 +757,6 @@ public class JMeterThread implements Runnable, Interruptible {
         result.addAssertionResult(assertionResult);
     }
 
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void runPostProcessors(List<PostProcessor> extractors) {
         for (PostProcessor ex : extractors) {
             TestBeanHelper.prepare((TestElement) ex);
@@ -767,7 +764,6 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void runPreProcessors(List<PreProcessor> preProcessors) {
         for (PreProcessor ex : preProcessors) {
             if (log.isDebugEnabled()) {
@@ -778,7 +774,6 @@ public class JMeterThread implements Runnable, Interruptible {
         }
     }
 
-    @SuppressWarnings("deprecation") // OK to call TestBeanHelper.prepare()
     private void delay(List<Timer> timers) {
         long sum = 0;
         for (Timer timer : timers) {
