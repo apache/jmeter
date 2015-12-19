@@ -27,8 +27,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.samplers.Interruptible;
-import org.apache.jmeter.samplers.SampleEvent;
-import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleMonitor;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -44,7 +43,7 @@ import org.apache.log.Logger;
  * Sample timeout implementation using Executor threads
  *
  */
-public class SampleTimeout extends AbstractTestElement implements Serializable, ThreadListener, SampleListener {
+public class SampleTimeout extends AbstractTestElement implements Serializable, ThreadListener, SampleMonitor {
 
     private static final long serialVersionUID = 1L;
 
@@ -109,17 +108,17 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     }
 
     @Override
-    public void sampleStarted(SampleEvent e) {
+    public void sampleStarting() {
         if (debug) {
-            LOG.debug(whoAmI("sampleStarted()", this));
+            LOG.debug(whoAmI("sampleStarting()", this));
         }
         createTask();
     }
 
     @Override
-    public void sampleStopped(SampleEvent e) {
+    public void sampleEnded() {
         if (debug) {
-            LOG.debug(whoAmI("sampleStopped()", this));
+            LOG.debug(whoAmI("sampleEnded()", this));
         }
         cancelTask();
     }
@@ -225,8 +224,4 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         }        
     }
 
-    @Override
-    public void sampleOccurred(SampleEvent e) {
-        // Not used
-    }
 }
