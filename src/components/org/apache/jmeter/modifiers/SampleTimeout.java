@@ -32,8 +32,6 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jmeter.threads.JMeterContext;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -69,8 +67,6 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     private static ScheduledExecutorService getExecutorService() {
         return TPOOLHolder.EXEC_SERVICE;
     }
-
-    private JMeterContext context; // Cache this here to avoid refetching
 
     private ScheduledFuture<?> future;
     
@@ -108,27 +104,26 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     }
 
     @Override
-    public void sampleStarting() {
+    public void sampleStarting(Sampler sampler) {
         if (debug) {
             LOG.debug(whoAmI("sampleStarting()", this));
         }
-        createTask();
+        createTask(sampler);
     }
 
     @Override
-    public void sampleEnded() {
+    public void sampleEnded(final Sampler sampler) {
         if (debug) {
             LOG.debug(whoAmI("sampleEnded()", this));
         }
         cancelTask();
     }
 
-    private void createTask() {
+    private void createTask(final Sampler samp) {
         long timeout = getPropertyAsLong(TIMEOUT); // refetch each time so it can be a variable
         if (timeout <= 0) {
             return;
         }
-        final Sampler samp = context.getCurrentSampler();
         if (!(samp instanceof Interruptible)) { // may be applied to a whole test 
             return; // Cannot time out in this case
         }
@@ -183,7 +178,6 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         if (debug) {
             LOG.debug(whoAmI("threadStarted()", this));
         }
-        context = JMeterContextService.getContext();
      }
 
     @Override
@@ -191,7 +185,7 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         if (debug) {
             LOG.debug(whoAmI("threadFinished()", this));
         }
-        cancelTask(); // cancel final if any
+        cancelTask(); // cancel future if any
      }
 
     /**
