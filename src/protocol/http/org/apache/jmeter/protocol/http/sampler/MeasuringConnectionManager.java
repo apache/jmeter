@@ -18,12 +18,19 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLSession;
+
 import org.apache.http.HttpConnectionMetrics;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.conn.ClientConnectionRequest;
 import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.conn.DnsResolver;
@@ -34,11 +41,6 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.samplers.SampleResult;
-
-import javax.net.ssl.SSLSession;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Adapter for {@link PoolingClientConnectionManager}
@@ -264,6 +266,21 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
         @Override
         public HttpConnectionMetrics getMetrics() {
             return handler.getMetrics();
+        }
+
+        @Override
+        public void bind(Socket arg0) throws IOException {
+            handler.bind(arg0);
+        }
+
+        @Override
+        public String getId() {
+            return handler.getId();
+        }
+
+        @Override
+        public Socket getSocket() {
+            return handler.getSocket();
         }
     }
 }
