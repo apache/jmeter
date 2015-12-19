@@ -30,7 +30,7 @@ public class TestCsvSampleWriter extends TestCase {
     protected void setUp() throws Exception {
         // We have to initialize JMeterUtils
         JMeterUtils.loadJMeterProperties("jmeter.properties");
-    };
+    }
 
     SampleMetadata metadata = new SampleMetadata(',', "a", "b");
 
