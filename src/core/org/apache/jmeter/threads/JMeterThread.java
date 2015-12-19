@@ -37,6 +37,7 @@ import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
+import org.apache.jmeter.samplers.SampleMonitor;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -94,6 +95,8 @@ public class JMeterThread implements Runnable, Interruptible {
     // The memory used will be released when the thread finishes
     private final Collection<TestIterationListener> testIterationStartListeners;
 
+    private final Collection<SampleMonitor> sampleMonitors;
+
     private final ListenerNotifier notifier;
 
     /*
@@ -146,6 +149,13 @@ public class JMeterThread implements Runnable, Interruptible {
         SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
         testIterationStartListeners = threadListenerSearcher.getSearchResults();
+        if (IMPLEMENTS_SAMPLE_STARTED) {
+            SearchByClass<SampleMonitor> sampleMonitorSearcher = new SearchByClass<>(SampleMonitor.class);
+            test.traverse(sampleMonitorSearcher);
+            sampleMonitors = sampleMonitorSearcher.getSearchResults();
+        } else {
+            sampleMonitors = null;
+        }
         notifier = note;
         running = true;
     }
@@ -438,21 +448,14 @@ public class JMeterThread implements Runnable, Interruptible {
         // Perform the actual sample
         currentSampler = sampler;
         if (IMPLEMENTS_SAMPLE_STARTED) {
-            for(SampleListener listener : pack.getSampleListeners()) {
-                try {
-                    TestBeanHelper.prepare((TestElement) listener);
-                    listener.sampleStarted(null);
-                } catch (RuntimeException e) {
-                    log.error("Detected problem in Listener: ", e);
-                    log.info("Continuing to process further listeners");
-                }
+            for(SampleMonitor monitor : sampleMonitors) {
+                monitor.sampleStarting();
             }                    
         }
         SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
         if (IMPLEMENTS_SAMPLE_STARTED) {
-            for(SampleListener listener : pack.getSampleListeners()) {
-                // We don't need to prepare these again here
-                listener.sampleStopped(null);
+            for(SampleMonitor monitor : sampleMonitors) {
+                monitor.sampleEnded();
             }                    
         }
         currentSampler = null;
