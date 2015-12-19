@@ -154,7 +154,7 @@ https://github.com/jayway/JsonPath
 - JSON Path Extractor
 - JSON Path Renderer
 
-json-smart-2.2
+json-smart-2.2.1
 --------
 https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
