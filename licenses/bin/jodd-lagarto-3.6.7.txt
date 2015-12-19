@@ -1,0 +1,1 @@
+See jodd-core-3.6.7.txt
