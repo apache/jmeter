@@ -149,13 +149,9 @@ public class JMeterThread implements Runnable, Interruptible {
         SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
         testIterationStartListeners = threadListenerSearcher.getSearchResults();
-        if (IMPLEMENTS_SAMPLE_STARTED) {
-            SearchByClass<SampleMonitor> sampleMonitorSearcher = new SearchByClass<>(SampleMonitor.class);
-            test.traverse(sampleMonitorSearcher);
-            sampleMonitors = sampleMonitorSearcher.getSearchResults();
-        } else {
-            sampleMonitors = null;
-        }
+        SearchByClass<SampleMonitor> sampleMonitorSearcher = new SearchByClass<>(SampleMonitor.class);
+        test.traverse(sampleMonitorSearcher);
+        sampleMonitors = sampleMonitorSearcher.getSearchResults();
         notifier = note;
         running = true;
     }
@@ -447,16 +443,16 @@ public class JMeterThread implements Runnable, Interruptible {
 
         // Perform the actual sample
         currentSampler = sampler;
-        if (IMPLEMENTS_SAMPLE_STARTED) {
-            for(SampleMonitor monitor : sampleMonitors) {
-                monitor.sampleStarting();
-            }                    
+        for(SampleMonitor monitor : sampleMonitors) {
+            monitor.sampleStarting();
         }
-        SampleResult result = sampler.sample(null); // TODO: remove this useless Entry parameter
-        if (IMPLEMENTS_SAMPLE_STARTED) {
+        SampleResult result = null;
+        try {
+            result = sampler.sample(null); // TODO: remove this useless Entry parameter
+        } finally {
             for(SampleMonitor monitor : sampleMonitors) {
                 monitor.sampleEnded();
-            }                    
+            }            
         }
         currentSampler = null;
 
