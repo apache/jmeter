@@ -27,10 +27,10 @@ public interface SampleMonitor {
     /**
      * A sample is about to start
      */
-    void sampleStarting();
+    void sampleStarting(Sampler sampler);
 
     /**
      * A sample has just finished
      */
-    void sampleEnded();
+    void sampleEnded(Sampler sampler);
 }
