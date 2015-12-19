@@ -161,8 +161,8 @@ Summary
 <li>Updated to commons-lang 3.4 (from 3.3.2)</li>
 <li>Updated to rhino-1.7.7 (from 1.7R5)</li>
 <li>Updated to jodd-3.6.7.jar (from 3.6.4)</li>
-<li>Updated to jsoup-1.8.2 (from 1.8.1)</li>
-<li>Updated to rsyntaxtextarea-2.5.7 (from 2.5.6)</li>
+<li>Updated to jsoup-1.8.3 (from 1.8.1)</li>
+<li>Updated to rsyntaxtextarea-2.5.8 (from 2.5.6)</li>
 <li>Updated to slf4j-1.7.12 (from 1.7.10)</li>
 <li>Updated to xmlgraphics-commons-2.0.1 (from 1.5)</li>
 <li>Updated to commons-collections-3.2.2 (from 3.2.1)</li>
