@@ -34,10 +34,10 @@ abstract public class SampleWriter implements Closeable {
     /**
      * Write a sample to the underlying destination
      * 
-     * @param s
-     *            The sample to be written
-     * @return The number of samples written at this time to the undernlying
+     * @param sample
+     *            The sample to be written (Must not be {@code null})
+     * @return The number of samples written at this time to the underlying
      *         destination
      */
-    abstract public long write(Sample s);
+    abstract public long write(Sample sample);
 }
