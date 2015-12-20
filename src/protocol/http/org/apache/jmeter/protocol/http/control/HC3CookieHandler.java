@@ -36,6 +36,15 @@ import org.apache.log.Logger;
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
+   public static final String[] AVAILABLE_POLICIES = new String[] {
+       "default",
+       "compatibility",
+       "rfc2109",
+       "rfc2965",
+       "ignorecookies",
+       "netscape"
+   };
+
     private final transient CookieSpec cookieSpec;
 
     /**
