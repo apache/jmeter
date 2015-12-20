@@ -23,9 +23,9 @@ excalibur-pool-api-2.1.jar
 excalibur-pool-impl-2.1.jar
 excalibur-pool-instrumented-2.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-httpclient-4.2.6.jar
-httpcore-4.2.5.jar
-httpmime-4.2.6.jar
+httpclient-4.5.1.jar
+httpcore-4.4.4.jar
+httpmime-4.5.1.jar
 jorphan.jar (part of JMeter)
 logkit-2.0.jar
 oro-2.0.8.jar
