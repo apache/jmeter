@@ -54,6 +54,18 @@ import org.apache.log.Logger;
 public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
     
+    public static final String[] AVAILABLE_POLICIES = new String[]{
+        CookieSpecs.DEFAULT,
+        CookieSpecs.STANDARD,
+        CookieSpecs.STANDARD_STRICT,
+        CookieSpecs.IGNORE_COOKIES,
+        CookieSpecs.BEST_MATCH,
+        CookieSpecs.BROWSER_COMPATIBILITY,
+        "rfc2109",
+        "rfc2965",
+        CookieSpecs.NETSCAPE
+    };
+
     private final transient CookieSpec cookieSpec;
     
     private static PublicSuffixMatcher publicSuffixMatcher = PublicSuffixMatcherLoader.getDefault();
