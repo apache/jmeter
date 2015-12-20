@@ -499,6 +499,7 @@ public class TestCookieManager extends JMeterTestCase {
             // FIXME Enable when HTTPCLIENT 4.5.2 is available
             // see https://issues.apache.org/jira/browse/HTTPCLIENT-1704
             //assertEquals(0,c.size()); // Cookies again ignored
+            System.out.println("Uncomment assertEquals(0,c.size()) when migrating to httpclient-4.5.2");
         }
 
         public void testLoad() throws Exception{
