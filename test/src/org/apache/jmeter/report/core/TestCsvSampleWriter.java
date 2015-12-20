@@ -76,7 +76,7 @@ public class TestCsvSampleWriter extends TestCase {
                 csvWriter.write(null);
                 fail("NPE expected");
             } catch (NullPointerException e) {
-                assertEquals("sample must not be null", e.getMessage());
+                // OK. Excpected to land here
             }
         }
     }
