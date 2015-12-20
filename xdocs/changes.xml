@@ -123,6 +123,7 @@ Summary
   <li><bug>58303</bug>Change usage of bouncycastle api in SMIMEAssertion to get rid of deprecation warnings.</li>
   <li><bug>58515</bug>New JSON related components : JSON-PATH Extractor and JSON-PATH Renderer in View Results Tree. Donated by Ubik Load Pack (support at ubikloadpack.com).</li>
   <li><bug>58698</bug>Correct parsing of auth-files in HTTP Authorization Manager.</li>
+  <li><bug>58756</bug>CookieManager : Cookie Policy select box content must depend on Cookie implementation.</li>
 </ul>
 
 <h3>Functions</h3>
