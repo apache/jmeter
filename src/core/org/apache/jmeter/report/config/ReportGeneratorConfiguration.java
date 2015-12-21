@@ -252,10 +252,12 @@ public class ReportGeneratorConfiguration {
     // }
 
     /**
-     * Gets the sub configuration property prefix from the specified sub
-     * configuration identifier.
+     * Gets the sub configuration property prefix from the specified key
+     * prefix and sub configuration identifier.
      *
-     * @param exporterId
+     * @param keyPrefix
+     *            the key prefix
+     * @param subConfId
      *            the sub configuration identifier
      * @return the sub configuration property prefix
      */
@@ -265,10 +267,12 @@ public class ReportGeneratorConfiguration {
     }
 
     /**
-     * Gets the sub configuration property key from the specified identifier and
-     * property name.
+     * Gets the sub configuration property key from the specified key
+     * prefix, sub configuration identifier and property name.
      *
-     * @param exporterId
+     * @param keyPrefix
+     *            the key prefix
+     * @param subConfId
      *            the sub configuration identifier
      * @param propertyName
      *            the property name
