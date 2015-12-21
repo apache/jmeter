@@ -122,7 +122,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      * Determine if the HTTP status code is successful or not i.e. in range 200
      * to 399 inclusive
      *
-     * @param code
+     * @param codeAsString
      *            status code to check
      * @return whether in range 200-399 or not
      * 
