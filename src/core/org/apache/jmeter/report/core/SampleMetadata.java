@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 
@@ -52,12 +53,10 @@ public class SampleMetadata {
      * @param separator
      *            The character used for column separation
      * @param columns
-     *            The list of columns names
+     *            The list of columns names (must not be {@code null})
      */
     public SampleMetadata(char separator, String... columns) {
-        if (columns == null) {
-            throw new ArgumentNullException("columns");
-        }
+        Validate.notNull(columns, "columns must not be null");
         initialize(separator, Arrays.asList(columns));
     }
 
