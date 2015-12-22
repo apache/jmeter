@@ -17,8 +17,6 @@
  */
 package org.apache.jmeter.report.config;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
-
 /**
  * The class ConfigurationUtils provides helper method for configuration
  * handling.
