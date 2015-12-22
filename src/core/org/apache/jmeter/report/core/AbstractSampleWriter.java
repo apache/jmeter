@@ -47,8 +47,6 @@ abstract public class AbstractSampleWriter extends SampleWriter {
 
     private static final String CHARSET = "ISO8859-1";
 
-    protected static int CHAR_SIZE = 1;
-
     /** output writer to write samples to */
     protected PrintWriter writer;
 
