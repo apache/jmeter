@@ -68,7 +68,7 @@ public class CsvSampleReader implements Closeable{
      * Instantiates a new csv sample reader.
      *
      * @param inputFile
-     *            the input file
+     *            the input file (must not be {@code null})
      * @param separator
      *            the separator
      * @param useSaveSampleCfg
@@ -83,7 +83,7 @@ public class CsvSampleReader implements Closeable{
      * Instantiates a new csv sample reader.
      *
      * @param inputFile
-     *            the input file
+     *            the input file (must not be {@code null})
      * @param metadata
      *            the metadata
      */
@@ -93,10 +93,6 @@ public class CsvSampleReader implements Closeable{
 
     private CsvSampleReader(File inputFile, SampleMetadata metadata,
             char separator, boolean useSaveSampleCfg) {
-        if (inputFile == null) {
-            throw new ArgumentNullException("inputFile");
-        }
-
         if (!(inputFile.isFile() && inputFile.canRead())) {
             throw new IllegalArgumentException(inputFile.getAbsolutePath()
                     + "does not exist or is not readable");
