@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.CsvFile;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.CsvSampleWriter;
@@ -79,6 +79,8 @@ import org.slf4j.LoggerFactory;
  * @since 2.14
  */
 public class ExternalSampleSorter extends AbstractSampleConsumer {
+
+    private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     private static final Logger log = LoggerFactory
             .getLogger(ExternalSampleSorter.class);
@@ -174,21 +176,13 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * </p>
      * 
      * @param inputFile
-     *            The CSV file to be sorted
+     *            The CSV file to be sorted (must not be {@code null})
      * @param outputFile
-     *            The sorted destination CSV file
+     *            The sorted destination CSV file (must not be {@code null})
      * @param writeHeader
      *            Wether the CSV header should be written in the output CSV file
      */
     public void sort(CsvFile inputFile, File outputFile, boolean writeHeader) {
-        if (inputFile == null) {
-            throw new ArgumentNullException("inputFile");
-        }
-
-        if (outputFile == null) {
-            throw new ArgumentNullException("outputFile");
-        }
-
         if (!inputFile.isFile()) {
             throw new SampleException(
                     inputFile.getAbsolutePath()
@@ -212,28 +206,18 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * provided through the sampleMetadata parameter.
      * 
      * @param sampleMetadata
-     *            The CSV metadata : header information + separator
+     *            The CSV metadata : header information + separator (must not be {@code null})
      * @param inputFile
-     *            The input file to be sorted
+     *            The input file to be sorted (must not be {@code null})
      * @param outputFile
-     *            THe ouput sorted file
+     *            THe ouput sorted file (must not be {@code null})
      * @param writeHeader
      *            Whether output CSV header should be written (based on provided
      *            sample metadata)
      */
     public void sort(SampleMetadata sampleMetadata, File inputFile,
             File outputFile, boolean writeHeader) {
-        if (sampleMetadata == null) {
-            throw new ArgumentNullException("sampleMetadata");
-        }
-
-        if (inputFile == null) {
-            throw new ArgumentNullException("inputFile");
-        }
-
-        if (outputFile == null) {
-            throw new ArgumentNullException("outputFile");
-        }
+        Validate.notNull(sampleMetadata, MUST_NOT_BE_NULL, "sampleMetadata");
 
         if (!inputFile.isFile()) {
             throw new SampleException(
@@ -256,7 +240,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * specified output file.
      * 
      * @param csvReader
-     *            The that provide samples to be sorted
+     *            The that provide samples to be sorted (must not be {@code null})
      * @param output
      *            The output file that will contains sorted samples
      * @param writeHeader
@@ -264,13 +248,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     private void sort(CsvSampleReader csvReader, File output,
             boolean writeHeader) {
-        if (csvReader == null) {
-            throw new ArgumentNullException("csvReader");
-        }
-
-        if (output == null) {
-            throw new ArgumentNullException("output");
-        }
+        Validate.notNull(output, "%s must not be null", "output");
 
         SampleMetadata sampleMetadata = csvReader.getMetadata();
         SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
@@ -292,10 +270,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     @Override
     public void startConsuming() {
-        if (sampleComparator == null) {
-            throw new IllegalStateException(
-                    "sampleComparator is not set, call setSampleComparator() first.");
-        }
+        Validate.validState(sampleComparator != null,
+                "sampleComparator is not set, call setSampleComparator() first.");
 
         File workDir = getWorkingDirectory();
         workDir.mkdir();
