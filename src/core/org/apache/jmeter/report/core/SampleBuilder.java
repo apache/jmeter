@@ -61,22 +61,32 @@ public class SampleBuilder {
 
     private long row = 0;
 
+    /**
+     * Construct a SampleBuilder.
+     *
+     * @param metadata
+     *            the details about expected sample data (must not be {@code null})
+     * @param floatFormater
+     *            the formater to be used (the default formater will be used, if
+     *            {@code null} is given.)
+     */
     public SampleBuilder(SampleMetadata metadata, NumberFormat floatFormater) {
-        if (metadata == null) {
-            throw new ArgumentNullException("metadata");
-        }
-
         if (floatFormater == null) {
-            throw new ArgumentNullException("floatFormater");
+            this.floatFormater = DEFAULT_FLOAT_FORMATER;
+        } else {
+            this.floatFormater = floatFormater;
         }
-
-        this.floatFormater = floatFormater;
         this.metadata = metadata;
         this.data = new String[metadata.getColumnCount()];
         k = 0;
         row = 0;
     }
 
+    /**
+     * Construct a SampleBuilder with default formater
+     * @param metadata
+     *            the details about expected sample data (must not be {@code null})
+     */
     public SampleBuilder(SampleMetadata metadata) {
         this(metadata, DEFAULT_FLOAT_FORMATER);
     }
