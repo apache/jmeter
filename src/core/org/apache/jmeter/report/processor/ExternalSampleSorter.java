@@ -416,7 +416,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 Sample firstRight = r.next();
                 if (!revertedSort
                         && sampleComparator.compare(firstLeft, firstRight) < 0
-                        || revertedSort == true
+                        || revertedSort
                         && sampleComparator.compare(firstLeft, firstRight) >= 0) {
                     out.add(firstLeft);
                     r.previous();
