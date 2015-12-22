@@ -61,10 +61,14 @@ public class SampleMetadata {
         initialize(separator, Arrays.asList(columns));
     }
 
+    /**
+     * Construct SampleMetaData from {@link SampleSaveConfiguration}.
+     *
+     * @param saveConfig
+     *            config from which metadata gets extracted (must not be
+     *            {@code null})
+     */
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
-        if (saveConfig == null) {
-            throw new ArgumentNullException("saveConfig");
-        }
         ArrayList<String> columns = new ArrayList<>();
         if (saveConfig.saveTimestamp()) {
             columns.add(CSVSaveService.TIME_STAMP);
