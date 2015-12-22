@@ -30,7 +30,7 @@ import java.util.Map;
 public class SampleContext {
 
     private File workingDirectory;
-    private HashMap<String, Object> data = new HashMap<>();
+    private Map<String, Object> data = new HashMap<>();
 
     /**
      * Return the root directory that consumers are authorized to use for
@@ -51,11 +51,7 @@ public class SampleContext {
      *            the new working directory
      */
     public final void setWorkingDirectory(File workingDirectory) {
-        // if (workingDirectory == null)
-        // throw new ArgumentNullException("workingDirectory");
-
         this.workingDirectory = workingDirectory;
-        // workingDirectory.mkdirs();
     }
 
     /**
