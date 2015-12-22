@@ -418,7 +418,7 @@ public class ReportGenerator {
 
         log.debug("End of data exporting");
 
-        if (tmpDirCreated == true) {
+        if (tmpDirCreated) {
             try {
                 FileUtils.deleteDirectory(tmpDir);
             } catch (IOException ex) {
