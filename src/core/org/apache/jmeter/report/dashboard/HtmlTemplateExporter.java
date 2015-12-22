@@ -23,11 +23,11 @@ import java.nio.file.Files;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
-import org.apache.jmeter.report.core.ArgumentNullException;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.MapResultData;
@@ -48,6 +48,9 @@ import freemarker.template.TemplateExceptionHandler;
  * @since 2.14
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
+
+    /** Format used for non null check of parameters. */
+    private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -136,15 +139,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     @Override
     public void export(SampleContext context, File file,
             ReportGeneratorConfiguration configuration) throws ExportException {
-        if (context == null) {
-            throw new ArgumentNullException("context");
-        }
-        if (file == null) {
-            throw new ArgumentNullException("file");
-        }
-        if (configuration == null) {
-            throw new ArgumentNullException("configuration");
-        }
+        Validate.notNull(context, MUST_NOT_BE_NULL, "context");
+        Validate.notNull(file, MUST_NOT_BE_NULL, "file");
+        Validate.notNull(configuration, MUST_NOT_BE_NULL, "configuration");
 
         log.debug("Start template processing");
 
