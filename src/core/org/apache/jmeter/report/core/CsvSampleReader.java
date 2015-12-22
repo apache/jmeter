@@ -105,11 +105,12 @@ public class CsvSampleReader implements Closeable{
             throw new SampleException("Could not create file reader !", ex);
         }
         if (metadata == null) {
-            metadata = readMetadata(separator, useSaveSampleCfg);
+            this.metadata = readMetadata(separator, useSaveSampleCfg);
+        } else {
+            this.metadata = metadata;
         }
-        this.metadata = metadata;
-        this.columnCount = metadata.getColumnCount();
-        this.separator = metadata.getSeparator();
+        this.columnCount = this.metadata.getColumnCount();
+        this.separator = this.metadata.getSeparator();
         this.row = 0;
         this.lastSampleRead = nextSample();
     }
