@@ -322,7 +322,6 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private File sortAndDump(final List<Sample> samples,
             final SampleMetadata sampleMetadata) {
         long start = 0;
-        long stop = 0;
         if (log.isDebugEnabled()) {
             log.debug("sortAndDump(): Sorting " + samples.size()
                     + " samples...");
@@ -334,8 +333,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                     + " != " + samples.size());
         }
         if (log.isDebugEnabled()) {
-            stop = System.currentTimeMillis();
-            log.debug("sortAndDump(): in " + (stop - start) / 1000f
+            log.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
                     + " s. Sorted  " + samples.size() + " samples.");
         }
         File out = getChunkFile();
@@ -350,8 +348,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             }
         }
         if (log.isDebugEnabled()) {
-            stop = System.currentTimeMillis();
-            log.debug("sortAndDump(): in " + (stop - start) / 1000f
+            log.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
                     + " s : Dumped chunk " + out.getAbsolutePath());
         }
         return out;
