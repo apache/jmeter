@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
@@ -126,10 +126,14 @@ abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
         setWorkingDirectory(sampleContext.getWorkingDirectory());
     }
 
+    /**
+     * Sets the consumers
+     * 
+     * @param consumers
+     *            for the samples (must not be {@code null})
+     */
     public void setSampleConsumers(List<SampleConsumer> consumers) {
-        if (consumers == null) {
-            throw new ArgumentNullException("consumers");
-        }
+        Validate.notNull(consumers, "consumers must not be null");
 
         this.sampleConsumers = consumers;
     }
