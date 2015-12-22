@@ -243,7 +243,7 @@ public class ReportGenerator {
                         .getFilteredSamples();
                 // Sample is kept if none filter is set or if the filter
                 // contains its name
-                return filteredSamples.size() == 0
+                return filteredSamples.isEmpty()
                         || filteredSamples.contains(sample.getName());
             }
         });
