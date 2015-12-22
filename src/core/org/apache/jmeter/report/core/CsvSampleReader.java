@@ -27,8 +27,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-//import org.apache.jmeter.samplers.SampleResult;
-//import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
