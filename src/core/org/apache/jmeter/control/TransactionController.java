@@ -111,19 +111,37 @@ public class TransactionController extends GenericController implements SampleLi
         return this;
     }
 
-    public void setGenerateParentSample(boolean _parent) {
-        setProperty(new BooleanProperty(GENERATE_PARENT_SAMPLE, _parent));
+    /**
+     * @param generateParent flag whether a parent sample should be generated.
+     */
+    public void setGenerateParentSample(boolean generateParent) {
+        setProperty(new BooleanProperty(GENERATE_PARENT_SAMPLE, generateParent));
     }
 
+    /**
+     * @return {@true} if a parent sample will be generated
+     */
     public boolean isGenerateParentSample() {
         return getPropertyAsBoolean(GENERATE_PARENT_SAMPLE);
     }
-    
+
+    /**
+     * @deprecated use {@link TransactionController#isGenerateParentSample()}
+     *             instead
+     * @return {@true} if a parent sample will be generated
+     */
     @Deprecated
     public boolean isParent() {
         return isGenerateParentSample();
     }
-    
+
+    /**
+     * @deprecated use
+     *             {@link TransactionController#setGenerateParentSample(boolean)}
+     *             instead
+     * @param _parent
+     *            flag whether a parent sample should be generated
+     */
     @Deprecated
     public void setParent(boolean _parent) {
         setGenerateParentSample(_parent);
