@@ -116,7 +116,7 @@ public class CsvSampleReader implements Closeable{
 
     private SampleMetadata readMetadata(char separator, boolean useSaveSampleCfg) {
         try {
-            SampleMetadata metadata;
+            SampleMetadata result;
             // Read first line
             String line = reader.readLine();
             if(line == null) {
@@ -128,14 +128,14 @@ public class CsvSampleReader implements Closeable{
                     && CSVSaveService.getSampleSaveConfiguration(line,
                             file.getAbsolutePath()) == null) {
                 // Build metadata from default save config
-                metadata = new SampleMetadata(
+                result = new SampleMetadata(
                         SampleSaveConfiguration.staticConfig());
 
             } else {
                 // Build metadata from headers
-                metadata = new SampleMetaDataParser(separator).parse(line);
+                result = new SampleMetaDataParser(separator).parse(line);
             }
-            return metadata;
+            return result;
         } catch (Exception e) {
             throw new SampleException("Could not read metadata !", e);
         }
