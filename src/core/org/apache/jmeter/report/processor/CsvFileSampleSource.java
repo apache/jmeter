@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.CsvSampleReader;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
@@ -83,16 +83,12 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * separator.
      * 
      * @param inputFile
-     *            The input sample file (CSV file)
+     *            The input sample file (CSV file) (must not be {@code null})
      * @param separator
      *            The character separator to be used for delimiting samples
      *            columns
      */
     public CsvFileSampleSource(final File inputFile, final char separator) {
-        if (inputFile == null) {
-            throw new ArgumentNullException("inputFile");
-        }
-
         final String inputRootName = getFileRootName(inputFile.getName());
         final String inputExtension = getFileExtension(inputFile.getName());
 
@@ -176,10 +172,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      */
     private void produce() {
         SampleContext context = getSampleContext();
-        if (context == null) {
-            throw new IllegalStateException(
-                    "Set a sample context before produce samples.");
-        }
+        Validate.validState(context != null, "Set a sample context before producing samples.");
 
         for (int i = 0; i < csvReaders.length; i++) {
             long sampleCount = 0;
@@ -258,10 +251,15 @@ public class CsvFileSampleSource extends AbstractSampleSource {
 
         private List<SampleConsumer> sampleConsumers = new ArrayList<>();
 
+        /**
+         * Set the consumers for the samples that are to be consumed
+         *
+         * @param consumers
+         *            list of consumers for the samples (must not be
+         *            {@code null})
+         */
         public void setSampleConsumers(List<SampleConsumer> consumers) {
-            if (consumers == null) {
-                throw new ArgumentNullException("consumers");
-            }
+            Validate.notNull(consumers, "consumers must not be null");
 
             this.sampleConsumers = consumers;
         }
