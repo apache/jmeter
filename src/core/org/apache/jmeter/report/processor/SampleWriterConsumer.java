@@ -19,7 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.io.File;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
+import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.core.CsvSampleWriter;
 import org.apache.jmeter.report.core.Sample;
 import org.slf4j.Logger;
@@ -48,10 +48,7 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
     }
 
     public void setOutputFile(File outputFile) {
-        if (outputFile == null) {
-        throw new ArgumentNullException("outputFile");
-        }
-
+        Validate.notNull(outputFile, "outputFile must not be null");
         this.outputFile = outputFile;
     }
 
