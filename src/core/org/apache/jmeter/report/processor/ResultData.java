@@ -28,7 +28,7 @@ public interface ResultData {
      * Accepts the specified visitor.
      *
      * @param visitor
-     *            the visitor
+     *            the visitor (must not be {@code null})
      */
     <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor);
 }
