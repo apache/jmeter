@@ -49,11 +49,11 @@ public interface DataExporter {
      * Export data from the specified context using the given configuration.
      *
      * @param context
-     *            the context
+     *            the context (must not be {@code null})
      * @param file
-     *            the file which from samples come
+     *            the file which from samples come (must not be {@code null})
      * @param configuration
-     *            the configuration
+     *            the configuration (must not be {@code null})
      * @throws ExportException
      *             the export exception
      */
