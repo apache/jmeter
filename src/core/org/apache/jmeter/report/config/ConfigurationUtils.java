@@ -43,17 +43,13 @@ public class ConfigurationUtils {
      * @param value
      *            the string value
      * @param clazz
-     *            the class of the property
+     *            the class of the property (must not be {@code null})
      * @return the converted string
      * @throws ConfigurationException
      *             when unable to convert the string
      */
     public static <TProperty> TProperty convert(String value,
         Class<TProperty> clazz) throws ConfigurationException {
-        if (clazz == null) {
-            throw new ArgumentNullException("clazz");
-        }
-
         TProperty result;
         if (clazz.isAssignableFrom(String.class)) {
             @SuppressWarnings("unchecked") // OK because checked above
