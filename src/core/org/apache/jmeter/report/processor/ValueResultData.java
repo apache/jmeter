@@ -17,8 +17,6 @@
  */
 package org.apache.jmeter.report.processor;
 
-import org.apache.jmeter.report.core.ArgumentNullException;
-
 /**
  * The class ValueResultData provides a value result from samples processing.
  * 
@@ -72,9 +70,6 @@ public class ValueResultData implements ResultData {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-        if (visitor == null) {
-            throw new ArgumentNullException("visitor");
-        }
         return visitor.visitValueResult(this);
     }
 

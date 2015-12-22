@@ -19,8 +19,7 @@ package org.apache.jmeter.report.processor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.apache.jmeter.report.core.ArgumentNullException;
+import java.util.List;
 
 /**
  * The class ListResultData provides a list of results from sample processing.
@@ -30,7 +29,7 @@ import org.apache.jmeter.report.core.ArgumentNullException;
 public class ListResultData implements ResultData, Iterable<ResultData> {
 
     /** The items. */
-    private ArrayList<ResultData> items = new ArrayList<>();
+    private List<ResultData> items = new ArrayList<>();
 
     /*
      * (non-Javadoc)
@@ -41,9 +40,6 @@ public class ListResultData implements ResultData, Iterable<ResultData> {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-        if (visitor == null) {
-            throw new ArgumentNullException("visitor");
-        }
         return visitor.visitListResult(this);
     }
 
