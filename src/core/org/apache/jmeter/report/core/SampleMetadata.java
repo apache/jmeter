@@ -68,67 +68,67 @@ public class SampleMetadata {
      *            {@code null})
      */
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
-        ArrayList<String> columns = new ArrayList<>();
+        List<String> configuredColumns = new ArrayList<>();
         if (saveConfig.saveTimestamp()) {
-            columns.add(CSVSaveService.TIME_STAMP);
+            configuredColumns.add(CSVSaveService.TIME_STAMP);
         }
         if (saveConfig.saveTime()) {
-            columns.add(CSVSaveService.CSV_ELAPSED);
+            configuredColumns.add(CSVSaveService.CSV_ELAPSED);
         }
         if (saveConfig.saveLabel()) {
-            columns.add(CSVSaveService.LABEL);
+            configuredColumns.add(CSVSaveService.LABEL);
         }
         if (saveConfig.saveCode()) {
-            columns.add(CSVSaveService.RESPONSE_CODE);
+            configuredColumns.add(CSVSaveService.RESPONSE_CODE);
         }
         if (saveConfig.saveMessage()) {
-            columns.add(CSVSaveService.RESPONSE_MESSAGE);
+            configuredColumns.add(CSVSaveService.RESPONSE_MESSAGE);
         }
         if (saveConfig.saveThreadName()) {
-            columns.add(CSVSaveService.THREAD_NAME);
+            configuredColumns.add(CSVSaveService.THREAD_NAME);
         }
         if (saveConfig.saveDataType()) {
-            columns.add(CSVSaveService.DATA_TYPE);
+            configuredColumns.add(CSVSaveService.DATA_TYPE);
         }
         if (saveConfig.saveSuccess()) {
-            columns.add(CSVSaveService.SUCCESSFUL);
+            configuredColumns.add(CSVSaveService.SUCCESSFUL);
         }
         if (saveConfig.saveAssertionResultsFailureMessage()) {
-            columns.add(CSVSaveService.FAILURE_MESSAGE);
+            configuredColumns.add(CSVSaveService.FAILURE_MESSAGE);
         }
         if (saveConfig.saveBytes()) {
-            columns.add(CSVSaveService.CSV_BYTES);
+            configuredColumns.add(CSVSaveService.CSV_BYTES);
         }
         if (saveConfig.saveThreadCounts()) {
-            columns.add(CSVSaveService.CSV_THREAD_COUNT1);
-            columns.add(CSVSaveService.CSV_THREAD_COUNT2);
+            configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT1);
+            configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT2);
         }
         if (saveConfig.saveUrl()) {
-            columns.add(CSVSaveService.CSV_URL);
+            configuredColumns.add(CSVSaveService.CSV_URL);
         }
         if (saveConfig.saveFileName()) {
-            columns.add(CSVSaveService.CSV_FILENAME);
+            configuredColumns.add(CSVSaveService.CSV_FILENAME);
         }
         if (saveConfig.saveLatency()) {
-            columns.add(CSVSaveService.CSV_LATENCY);
+            configuredColumns.add(CSVSaveService.CSV_LATENCY);
         }
         if (saveConfig.saveEncoding()) {
-            columns.add(CSVSaveService.CSV_ENCODING);
+            configuredColumns.add(CSVSaveService.CSV_ENCODING);
         }
         if (saveConfig.saveSampleCount()) {
-            columns.add(CSVSaveService.CSV_SAMPLE_COUNT);
-            columns.add(CSVSaveService.CSV_ERROR_COUNT);
+            configuredColumns.add(CSVSaveService.CSV_SAMPLE_COUNT);
+            configuredColumns.add(CSVSaveService.CSV_ERROR_COUNT);
         }
         if (saveConfig.saveHostname()) {
-            columns.add(CSVSaveService.CSV_HOSTNAME);
+            configuredColumns.add(CSVSaveService.CSV_HOSTNAME);
         }
         if (saveConfig.saveIdleTime()) {
-            columns.add(CSVSaveService.CSV_IDLETIME);
+            configuredColumns.add(CSVSaveService.CSV_IDLETIME);
         }
         if (saveConfig.saveConnectTime()) {
-            columns.add(CSVSaveService.CSV_CONNECT_TIME);
+            configuredColumns.add(CSVSaveService.CSV_CONNECT_TIME);
         }
-        initialize(saveConfig.getDelimiter().charAt(0), columns);
+        initialize(saveConfig.getDelimiter().charAt(0), configuredColumns);
     }
 
     private void initialize(char separator, List<String> columns) {
