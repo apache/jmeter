@@ -39,23 +39,23 @@ import org.apache.jmeter.report.core.SampleMetadata;
  */
 public class SampleBuilder {
 
-    private static final DecimalFormat DEFAULT_FLOAT_FORMATER = new DecimalFormat(
+    private static final DecimalFormat DEFAULT_FLOAT_FORMATTER = new DecimalFormat(
             "#########0.00#");
 
     static {
-        DEFAULT_FLOAT_FORMATER.setRoundingMode(RoundingMode.HALF_DOWN);
-        DEFAULT_FLOAT_FORMATER.setGroupingUsed(false);
+        DEFAULT_FLOAT_FORMATTER.setRoundingMode(RoundingMode.HALF_DOWN);
+        DEFAULT_FLOAT_FORMATTER.setGroupingUsed(false);
         DecimalFormatSymbols newSymbols = new DecimalFormatSymbols(
                 Locale.getDefault());
         newSymbols.setDecimalSeparator('.');
-        DEFAULT_FLOAT_FORMATER.setDecimalFormatSymbols(newSymbols);
+        DEFAULT_FLOAT_FORMATTER.setDecimalFormatSymbols(newSymbols);
     }
 
     private final SampleMetadata metadata;
 
     private String[] data;
 
-    private NumberFormat floatFormater;
+    private NumberFormat floatFormatter;
 
     private int k = 0;
 
@@ -66,15 +66,15 @@ public class SampleBuilder {
      *
      * @param metadata
      *            the details about expected sample data (must not be {@code null})
-     * @param floatFormater
-     *            the formater to be used (the default formater will be used, if
+     * @param floatFormatter
+     *            the formatter to be used (the default formatter will be used, if
      *            {@code null} is given.)
      */
-    public SampleBuilder(SampleMetadata metadata, NumberFormat floatFormater) {
-        if (floatFormater == null) {
-            this.floatFormater = DEFAULT_FLOAT_FORMATER;
+    public SampleBuilder(SampleMetadata metadata, NumberFormat floatFormatter) {
+        if (floatFormatter == null) {
+            this.floatFormatter = DEFAULT_FLOAT_FORMATTER;
         } else {
-            this.floatFormater = floatFormater;
+            this.floatFormatter = floatFormatter;
         }
         this.metadata = metadata;
         this.data = new String[metadata.getColumnCount()];
@@ -83,12 +83,12 @@ public class SampleBuilder {
     }
 
     /**
-     * Construct a SampleBuilder with default formater
+     * Construct a SampleBuilder with default formatter
      * @param metadata
      *            the details about expected sample data (must not be {@code null})
      */
     public SampleBuilder(SampleMetadata metadata) {
-        this(metadata, DEFAULT_FLOAT_FORMATER);
+        this(metadata, DEFAULT_FLOAT_FORMATTER);
     }
 
     /**
@@ -111,7 +111,7 @@ public class SampleBuilder {
     }
 
     public SampleBuilder add(double e) {
-        add(floatFormater.format(e));
+        add(floatFormatter.format(e));
         return this;
     }
 
