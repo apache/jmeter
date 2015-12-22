@@ -29,8 +29,8 @@ public interface SamplePredicate {
      * Defines if the specified sample matches the current predicate.
      *
      * @param sample
-     *            the sample to test
-     * @return true, if successful; otherwise false
+     *            the sample to test (must not be {@code null})
+     * @return {@code true}, if successful; otherwise {@code false}
      */
     boolean matches(Sample sample);
 }

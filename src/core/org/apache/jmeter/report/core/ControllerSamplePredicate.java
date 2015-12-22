@@ -33,10 +33,6 @@ public class ControllerSamplePredicate implements SamplePredicate {
      */
     @Override
     public boolean matches(Sample sample) {
-        if (sample == null) {
-            throw new ArgumentNullException("sample");
-        }
-
         return sample.isController();
     }
 
