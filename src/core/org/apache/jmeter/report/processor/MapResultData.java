@@ -18,10 +18,9 @@
 package org.apache.jmeter.report.processor;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.apache.jmeter.report.core.ArgumentNullException;
 
 /**
  * The class MapResultData provides a hash map of results from samples
@@ -31,7 +30,7 @@ import org.apache.jmeter.report.core.ArgumentNullException;
  */
 public class MapResultData implements ResultData {
 
-    private HashMap<String, ResultData> map = new HashMap<>();
+    private Map<String, ResultData> map = new HashMap<>();
 
     /*
      * (non-Javadoc)
@@ -42,9 +41,6 @@ public class MapResultData implements ResultData {
      */
     @Override
     public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
-        if (visitor == null) {
-            throw new ArgumentNullException("visitor");
-        }
         return visitor.visitMapResult(this);
     }
 
