@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -62,9 +63,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            sample writer
      */
     public void setWriter(Writer writer) {
-        if (writer == null) {
-            throw new ArgumentNullException("writer");
-        }
+        Validate.notNull(writer, "writer must not be null.");
 
         if (this.writer != null) {
             // flush and close previous writer
@@ -81,9 +80,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-        if (out == null) {
-            throw new ArgumentNullException("out");
-        }
+        Validate.notNull(out, "out must not be null.");
 
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));
