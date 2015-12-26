@@ -72,6 +72,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
@@ -120,6 +121,7 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
@@ -200,6 +202,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * This allows the defaults to be overridden if necessary from the properties file.
      */
     private static final HttpParams DEFAULT_HTTP_PARAMS;
+
+    private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
 
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
@@ -313,6 +317,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         HttpContext localContext = new BasicHttpContext();
+        setupClientContextBeforeSample(localContext);
         
         res.sampleStart();
 
@@ -332,6 +337,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Needs to be done after execute to pick up all the headers
             final HttpRequest request = (HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+            extractClientContextAfterSample(localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
             final InetAddress localAddr = (InetAddress) httpRequest.getParams().getParameter(ConnRoutePNames.LOCAL_ADDRESS);
             if (localAddr != null) {
@@ -431,6 +437,45 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             currentRequest = null;
         }
         return res;
+    }
+
+    /**
+     * Store in JMeter Variables the UserToken so that the SSL context is reused
+     * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
+     * @param localContext {@link HttpContext}
+     */
+    private final void extractClientContextAfterSample(HttpContext localContext) {
+        Object userToken = localContext.getAttribute(ClientContext.USER_TOKEN);
+        if(userToken != null) {
+            if(log.isDebugEnabled()) {
+                log.debug("Extracted from HttpContext user token:"+userToken+", storing it as JMeter variable:"+USER_TOKEN);
+            }
+            JMeterContextService.getContext().getVariables().putObject(USER_TOKEN, userToken); 
+        }
+    }
+
+    /**
+     * Configure the UserToken so that the SSL context is reused
+     * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
+     * @param localContext {@link HttpContext}
+     */
+    private final void setupClientContextBeforeSample(HttpContext localContext) {
+        Object userToken = JMeterContextService.getContext().getVariables().getObject(USER_TOKEN);
+        if(userToken != null) {
+            if(log.isDebugEnabled()) {
+                log.debug("Found user token:"+userToken+" as JMeter variable:"+USER_TOKEN+", storing it in HttpContext");
+            }
+            localContext.setAttribute(ClientContext.USER_TOKEN, userToken);
+        } else {
+            // It would be better to create a ClientSessionManager that would compute this value
+            // for now it can be Thread.currentThread().getName() but must be changed when we would change 
+            // the Thread per User model
+            String userId = Thread.currentThread().getName();
+            if(log.isDebugEnabled()) {
+                log.debug("Storing in HttpContext the user token:"+userId);
+            }
+            localContext.setAttribute(ClientContext.USER_TOKEN, userId);
+        }
     }
 
     /**
