@@ -119,7 +119,7 @@ public class TransactionController extends GenericController implements SampleLi
     }
 
     /**
-     * @return {@true} if a parent sample will be generated
+     * @return {@code true} if a parent sample will be generated
      */
     public boolean isGenerateParentSample() {
         return getPropertyAsBoolean(GENERATE_PARENT_SAMPLE);
@@ -128,7 +128,7 @@ public class TransactionController extends GenericController implements SampleLi
     /**
      * @deprecated use {@link TransactionController#isGenerateParentSample()}
      *             instead
-     * @return {@true} if a parent sample will be generated
+     * @return {@code true} if a parent sample will be generated
      */
     @Deprecated
     public boolean isParent() {
