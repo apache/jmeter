@@ -2061,7 +2061,7 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 </properties>
 </component>
 
-<component name="MongoDB Script" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
+<component name="MongoDB Script (DEPRECATED)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
 <description><p>This sampler lets you send an Request to a MongoDB.</p>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
@@ -4381,7 +4381,7 @@ GUI that they can use while developing new JMeter components.</p>
 </component>
 
 
-<component name="MongoDB Source Config" index="&sect-num;.4.20" 
+<component name="MongoDB Source Config (DEPRECATED)" index="&sect-num;.4.20" 
                  width="1233" height="618" screenshot="mongodb-source-config.png">
     <description>Creates a MongoDB connection (used by <complink name="MongoDB Script"/>Sampler)
      from the supplied Connection settings. Each thread gets its own connection.
