@@ -182,6 +182,30 @@ public class TestCookieManager extends JMeterTestCase {
             }
         }
 
+        /**
+         * @throws Exception
+         */
+        public void testBug56358() throws Exception {
+            URL url = new URL("http://remote.com:10008/get/cookie");
+            String headerLine = "test=value;Max-age=120;path=/;Version=1";
+            man.setCookiePolicy(CookieSpecs.STANDARD);
+            man.addCookieFromHeader(headerLine, url);
+            
+            Assert.assertEquals(1, man.getCookieCount());
+            HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
+            URL urlSameDomainDifferentPort = new URL("http://remote.com:10001/test/me");
+            
+            List<org.apache.http.cookie.Cookie> cookies = 
+                    cookieHandler.getCookiesForUrl(man.getCookies(), urlSameDomainDifferentPort, 
+                    CookieManager.ALLOW_VARIABLE_COOKIES);
+            Assert.assertEquals(1, cookies.size());
+            for (org.apache.http.cookie.Cookie cookie : cookies) {
+                // See http://tools.ietf.org/html/rfc6265#section-5.2.3
+                Assert.assertEquals("remote.com", cookie.getDomain());
+                Assert.assertEquals("test", cookie.getName());
+            }
+        }
+        
         public void testCrossDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
             assertEquals(0,man.getCookieCount()); // starts empty

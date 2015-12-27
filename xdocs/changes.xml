@@ -125,6 +125,7 @@ Summary
   <li><bug>58515</bug>New JSON related components : JSON-PATH Extractor and JSON-PATH Renderer in View Results Tree. Donated by Ubik Load Pack (support at ubikloadpack.com).</li>
   <li><bug>58698</bug>Correct parsing of auth-files in HTTP Authorization Manager.</li>
   <li><bug>58756</bug>CookieManager : Cookie Policy select box content must depend on Cookie implementation.</li>
+  <li><bug>56358</bug>Cookie manager supports cross port cookies and RFC6265.</li>
 </ul>
 
 <h3>Functions</h3>
