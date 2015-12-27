@@ -89,7 +89,6 @@ public class DataSourceElement extends AbstractTestElement
     }
 
     @Override
-    @SuppressWarnings("deprecation") // call to TestBeanHelper.prepare() is intentional
     public void testStarted() {
         this.setRunningVersion(true);
         TestBeanHelper.prepare(this);
