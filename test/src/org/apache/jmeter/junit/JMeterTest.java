@@ -357,7 +357,7 @@ public class JMeterTest extends JMeterTestCase {
                 && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(ALPHA") == -1) 
                 && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(BETA") == -1)
                 && (!title.matches("Example\\d+")) // Skip the example samplers ...
-                && (!name.startsWith("org.apache.jmeter.examples."))) // Skip report GUI as implementation is incomplete
+                && (!name.startsWith("org.apache.jmeter.examples."))) 
             {// No, not a work in progress ...
                 String s = "component_reference.xml needs '" + title + "' anchor for " + name;
                 if (!ct) {
