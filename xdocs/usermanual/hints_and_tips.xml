@@ -68,7 +68,8 @@ It is sometimes very useful to see Log messages to debug dynamic scripting langu
 groovy used in JMeter.
 Since version 2.6, you can view log messages directly in JMeter GUI, to do so:</p>
 <ul>
-<li>use menu <code>Options</code> &gt; <code>Log Viewer</code>, a log console will appear at the bottom of the interface</li>
+<li>use menu <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Log Viewer</guimenuitem></menuchoice>,
+a log console will appear at the bottom of the interface</li>
 <li>Or click on the Warning icon in the upper right corner of GUI</li>
 </ul>
 By default this log console is disabled, you can enable it by changing in <code>jmeter.properties</code>:
