@@ -30,7 +30,7 @@ public class TestCSVSaveService extends JMeterTestCase {
         super(name);
     }
     
-    private void checkSplitString(String input, char delim, String []expected) throws Exception {
+    private void checkSplitString(String input, char delim, String[] expected) throws Exception {
         String out[] = CSVSaveService.csvSplitString(input, delim);     
         checkStrings(expected, out);
     }
@@ -87,7 +87,7 @@ public class TestCSVSaveService extends JMeterTestCase {
 
     public void testSplitBadQuote() throws Exception {
         try {
-            checkSplitString("a\"b",',',null);
+            checkSplitString("a\"b",',',new String[]{});
             fail("Should have generated IOException");
         } catch (IOException e) {
         }
