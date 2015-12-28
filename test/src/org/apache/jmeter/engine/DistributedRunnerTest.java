@@ -134,7 +134,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         private String host;
 
         public EmulatorEngine() {
-            log.debug("Creating emulator " + host);
+            log.debug("Creating emulator");
         }
 
         @Override
