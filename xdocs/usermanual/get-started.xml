@@ -464,53 +464,58 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
 <p>Invoking JMeter as "<code>jmeter -?</code>" will print a list of all the command-line options. 
 These are shown below.</p>
 <source>
--h, --help
+    -h, --help
         print usage information and exit
--v, --version
+    -v, --version
         print the version information and exit
--p, --propfile {argument}
+    -p, --propfile &lt;argument&gt;
         the jmeter property file to use
--q, --addprop {argument}
-        additional property file(s)
--t, --testfile {argument}
+    -q, --addprop &lt;argument&gt;
+        additional JMeter property file(s)
+    -t, --testfile &lt;argument&gt;
         the jmeter test(.jmx) file to run
--j, --jmeterlogfile {argument}
-        the jmeter log file
--l, --logfile {argument}
+    -l, --logfile &lt;argument&gt;
         the file to log samples to
--n, --nongui
+    -j, --jmeterlogfile &lt;argument&gt;
+        jmeter run log file (jmeter.log)
+    -n, --nongui
         run JMeter in nongui mode
--s, --server
+    -s, --server
         run the JMeter server
--H, --proxyHost {argument}
+    -H, --proxyHost &lt;argument&gt;
         Set a proxy server for JMeter to use
--P, --proxyPort {argument}
+    -P, --proxyPort &lt;argument&gt;
         Set proxy server port for JMeter to use
--u, --username {argument}
+    -N, --nonProxyHosts &lt;argument&gt;
+        Set nonproxy host list (e.g. *.apache.org|localhost)
+    -u, --username &lt;argument&gt;
         Set username for proxy server that JMeter is to use
--a, --password {argument}
+    -a, --password &lt;argument&gt;
         Set password for proxy server that JMeter is to use
--J, --jmeterproperty {argument}={value}
+    -J, --jmeterproperty &lt;argument&gt;=&lt;value&gt;
         Define additional JMeter properties
--G, --globalproperty (argument)[=(value)]
+    -G, --globalproperty &lt;argument&gt;=&lt;value&gt;
         Define Global properties (sent to servers)
         e.g. -Gport=123
          or -Gglobal.properties
--D, --systemproperty {argument}={value}
-        Define additional System properties
--S, --systemPropertyFile {filename}
-        a property file to be added as System properties
--L, --loglevel {argument}={value}
-        Define loglevel: [category=]level 
-        e.g. jorphan=INFO or jmeter.util=DEBUG
--r, --runremote (non-GUI only)
-        Start remote servers (as defined by the jmeter property remote_hosts)
--R, --remotestart  server1, &hellip; (non-GUI only)
+    -D, --systemproperty &lt;argument&gt;=&lt;value&gt;
+        Define additional system properties
+    -S, --systemPropertyFile &lt;argument&gt;
+        additional system property file(s)
+    -L, --loglevel &lt;argument&gt;=&lt;value&gt;
+        [category=]level e.g. jorphan=INFO or jmeter.util=DEBUG
+    -r, --runremote
+        Start remote servers (as defined in remote_hosts)
+    -R, --remotestart &lt;argument&gt;
         Start these remote servers (overrides remote_hosts)
--d, --homedir {argument}
+    -d, --homedir &lt;argument&gt;
         the jmeter home directory to use
--X, --remoteexit
+    -X, --remoteexit
         Exit the remote servers at end of test (non-GUI)
+    -g, --reportonly &lt;argument&gt;
+        generate report dashboard only
+    -e, --reportatendofloadtests
+        generate report dashboard after load test
 </source>
 <p>
 Note: the JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) 
