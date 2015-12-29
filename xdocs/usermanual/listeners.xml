@@ -282,7 +282,7 @@ Less memory is now needed, especially if most samples only take a second or two 
 <li>Aggregate Graph</li>
 <li>Distribution Graph</li>
 </ul>
-<p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
+<p>To minimize the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 </section>
 
 <section name="&sect-num;.4 CSV Log format" anchor="csvlogformat">
@@ -443,12 +443,9 @@ The sample attributes have the following meaning:
 <tr><td><code>ts</code></td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
 <tr><td><code>varname</code></td><td>Value of the named variable (versions of JMeter after 2.3.1)</td></tr>
 </table>
-<p>
-Versions 2.1 and 2.1.1 of JMeter saved the Response Code as "<code>rs</code>", but read it back expecting to find "<code>rc</code>".
-This has been corrected so that it is always saved as "<code>rc</code>"; either "<code>rc</code>" or "<code>rs</code>" can be read.
-</p>
+
 <note>
-Versions of JMeter after 2.3.1 allow additional variables to be saved with the test plan.
+JMeter allows additional variables to be saved with the test plan.
 Currently, the variables are saved as additional attributes.
 The testplan variable name is used as the attribute name.
 See <a href="#sample_variables">Sample variables</a> (above) for more information.
@@ -477,10 +474,8 @@ When reading from CSV results files, the header (if present) is used to determin
 <b>In order to interpret a header-less CSV file correctly, the appropriate JMeter properties must be set.</b>
 </p>
 <note>
-Versions of JMeter up to 2.3.2 used to clear any current data before loading the new file.
-This is no longer done, thus allowing files to be merged.
-If the previous behaviour is required, 
-use the menu item
+JMeter does not clear any current data before loading the new file thus allowing files to be merged.
+If you want to clear the current data, use the menu item:
   <menuchoice>
     <guimenuitem>Run</guimenuitem>
     <guimenuitem>Clear</guimenuitem>
