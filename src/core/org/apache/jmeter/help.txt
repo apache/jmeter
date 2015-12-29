@@ -13,11 +13,8 @@ jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l log-
 --------------------------------------------------
 
 To tell Apache JMeter to use a proxy server:
-Open a command prompt and type for Linux/Unix:
+Open a command prompt and type:
 
-jmeter.bat(Windows)/jmeter.sh(Linux) -H [your.proxy.server] -P [your proxy server port]
-
-For Windows:
 jmeter.bat(Windows)/jmeter.sh(Linux) -H [your.proxy.server] -P [your proxy server port]
 
 ---------------------------------------------------
