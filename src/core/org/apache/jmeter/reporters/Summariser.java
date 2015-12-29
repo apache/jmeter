@@ -252,15 +252,8 @@ public class Summariser extends AbstractTestElement
         sb.append(" in ");
         long elapsed = summariserRunningSample.getElapsed();
         long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
-        if (elapsedSec > 100       // No point displaying decimals (less than 1% error)
-         || (elapsed - elapsedSec * 1000) < 50 // decimal would be zero
-         ) {
-            sb.append(longToSb(tmp, elapsedSec, 5));
-        } else {
-            double elapsedSecf = elapsed / 1000.0d; // fractional seconds
-            sb.append(doubleToSb(dfDouble, tmp, elapsedSecf, 5, 1)); // This will round
-        }
-        sb.append("s = ");
+        sb.append(String.format("%d:%02d:%02d", elapsedSec / 3600, (elapsedSec % 3600) / 60, (elapsedSec % 60)));
+        sb.append(" = ");
         if (elapsed > 0) {
             sb.append(doubleToSb(dfDouble, tmp, summariserRunningSample.getRate(), 6, 1));
         } else {
