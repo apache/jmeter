@@ -122,11 +122,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         }
         scheduler.setSelected(tg.getPropertyAsBoolean(ThreadGroup.SCHEDULER));
 
-        if (scheduler.isSelected()) {
-            mainPanel.setVisible(true);
-        } else {
-            mainPanel.setVisible(false);
-        }
+        toggleSchedulerFields(scheduler.isSelected());
 
         // Check if the property exists
         String s = tg.getPropertyAsString(ThreadGroup.START_TIME);
@@ -144,12 +140,18 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     @Override
     public void itemStateChanged(ItemEvent ie) {
         if (ie.getItem().equals(scheduler)) {
-            if (scheduler.isSelected()) {
-                mainPanel.setVisible(true);
-            } else {
-                mainPanel.setVisible(false);
-            }
+            toggleSchedulerFields(scheduler.isSelected());
         }
+    }
+    
+    /**
+     * @param enable boolean used to enable/disable fields related to scheduler
+     */
+    private void toggleSchedulerFields(boolean enable) {
+        start.setEnabled(enable);
+        end.setEnabled(enable);
+        duration.setEnabled(enable);
+        delay.setEnabled(enable);
     }
 
     private JPanel createControllerPanel() {
@@ -291,11 +293,11 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         mainPanel = new VerticalPanel();
         mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
-        mainPanel.add(createStartTimePanel());
-        mainPanel.add(createEndTimePanel());
         mainPanel.add(createDurationPanel());
         mainPanel.add(createDelayPanel());
-        mainPanel.setVisible(false);
+        mainPanel.add(createStartTimePanel());
+        mainPanel.add(createEndTimePanel());
+        toggleSchedulerFields(false);
         VerticalPanel intgrationPanel = new VerticalPanel();
         intgrationPanel.add(threadPropsPanel);
         intgrationPanel.add(mainPanel);
