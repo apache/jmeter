@@ -74,14 +74,20 @@ Start with Ramp-up = number of threads and adjust up or down as needed.
 
 <p>By default, the thread group is configured to loop once through its elements.</p>
 
-<p>Version 1.9 introduces a test run <b>scheduler</b>. 
-    Click the checkbox at the bottom of the Thread Group panel to reveal extra fields
-     in which you can enter the start and end times of the run. 
+<p>Thread Group also provides a <b>scheduler</b>. 
+    Click the checkbox at the bottom of the Thread Group panel to enable/disable extra fields
+     in which you can enter the duration of test, the startup delay, the start and end times of the run. 
+     You can configure <code>Duration (seconds)</code> and <code>Startup Delay (seconds)</code> to control
+     the duration of each thread group and the after how much seconds it starts.
+     When the test is started, JMeter will wait <code>Startup Delay (seconds)</code> before starting the Threads 
+     of the Thread Group and run for the configured <code>Duration (seconds)</code> time.
+     Note those 2 options override the <code>Start time</code> and <code>End time</code>.
+     
+     <p>Alternatively (although not recommended as not very flexible) you can use the two other fields <code>Start time</code> and <code>End time</code>.
      When the test is started, JMeter will wait if necessary until the start-time has been reached.
      At the end of each cycle, JMeter checks if the end-time has been reached, and if so, the run is stopped,
      otherwise the test is allowed to continue until the iteration limit is reached.</p>
-     <p>Alternatively, one can use the relative delay and duration fields. 
-     Note that delay overrides start-time, and duration over-rides end-time.</p>
+     </p>
 </subsection>
 
 <subsection name="&sect-num;.2 Controllers" anchor="controllers">
@@ -116,12 +122,15 @@ Controllers can be used to modify the number of repetitions of a sampler.
 JMeter samplers include:
 <ul>
     <li>FTP Request</li>
-    <li>HTTP Request</li>
+    <li>HTTP Request (can be used for SOAP or REST Webservice also)</li>
     <li>JDBC Request</li>
     <li>Java object request</li>
+    <li>JMS request</li>
+    <li>JUnit Test request</li>
     <li>LDAP Request</li>
-    <li>SOAP/XML-RPC Request</li>
-    <li>WebService (SOAP) Request</li>
+    <li>Mail request</li>
+    <li>OS Process request</li>
+    <li>TCP request</li>
 </ul>
 Each sampler has several properties you can set.
 You can further customize a sampler by adding one or more Configuration Elements to the Test Plan.
