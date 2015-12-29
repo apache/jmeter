@@ -345,7 +345,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                 }
             }
 
-            if (createdWorkDir == true) {
+            if (createdWorkDir) {
                 File workingDir = parent.getWorkingDirectory();
                 try {
                     FileUtils.deleteDirectory(workingDir);
