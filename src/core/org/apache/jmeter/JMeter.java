@@ -119,6 +119,7 @@ public class JMeter implements JMeterPlugin {
     private static final int PROXY_PASSWORD     = 'a';// $NON-NLS-1$
     private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
     private static final int HELP_OPT           = 'h';// $NON-NLS-1$
+    private static final int OPTIONS_OPT        = '?';// $NON-NLS-1$
     // jmeter.log
     private static final int JMLOGFILE_OPT      = 'j';// $NON-NLS-1$
     // sample result log file
@@ -157,6 +158,8 @@ public class JMeter implements JMeterPlugin {
      * </ul>
      */
     private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
+            new CLOptionDescriptor("?", CLOptionDescriptor.ARGUMENT_DISALLOWED, OPTIONS_OPT,
+                "print command line options and exit"),
             new CLOptionDescriptor("help", CLOptionDescriptor.ARGUMENT_DISALLOWED, HELP_OPT,
                     "print usage information and exit"),
             new CLOptionDescriptor("version", CLOptionDescriptor.ARGUMENT_DISALLOWED, VERSION_OPT,
@@ -371,6 +374,8 @@ public class JMeter implements JMeterPlugin {
                 System.out.println("Version " + JMeterUtils.getJMeterVersion());
             } else if (parser.getArgumentById(HELP_OPT) != null) {
                 System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));// $NON-NLS-1$
+            } else if (parser.getArgumentById(OPTIONS_OPT) != null) {
+                System.out.println(CLUtil.describeOptions(options).toString());
             } else if (parser.getArgumentById(SERVER_OPT) != null) {
                 // Start the server
                 try {
