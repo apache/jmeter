@@ -3743,16 +3743,17 @@ The BeanShell jar is now included with the binary archive; there is no need to d
 
 <p>
 The Include Controller has some problems in non-GUI mode. 
-In particular, it can cause a NullPointerException if there are two include controllers with the same name.
+In particular, it can cause a <code>NullPointerException</code> if there are two include controllers with the same name.
 </p>
 
 <p>Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</p>
 
 <p>
-The menu item Options / Choose Language does not change all the displayed text to the new language.
+The menu item <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Choose Language</guimenuitem></menuchoice>
+does not change all the displayed text to the new language.
 [The behaviour has improved, but language change is still not fully working]
-To override the default local language fully, set the JMeter property "language" before starting JMeter. 
+To override the default local language fully, set the JMeter property "<code>language</code>" before starting JMeter. 
 </p>
 
 <h2>Incompatible changes</h2>
@@ -3760,7 +3761,23 @@ To override the default local language fully, set the JMeter property "language"
 When loading sample results from a file, previous results are no longer cleared.
 This allows one to merge multiple files.
 If the previous behaviour is required,
-use the menu item Run/Clear (Ctrl+Shift+E) or Run/Clear All (Ctrl+E) before loading the file.
+use the menu item <menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear</guimenuitem>
+  <shortcut>
+    <keycombo>
+      <keysym>Ctrl</keysym><keysym>Shift</keysym><keysym>E</keysym>
+    </keycombo>
+  </shortcut>
+</menuchoice> or <menuchoice>
+  <guimenuitem>Run</guimenuitem>
+  <guimenuitem>Clear All</guimenuitem>
+  <shortcut>
+    <keycombo>
+     <keysym>Ctrl</keysym><keysym>E</keysym>
+    </keycombo>
+  </shortcut>
+</menuchoice> before loading the file.
 </p>
 <p>
 The test elements "Save Results to a file" and "Generate Summary Results" are now shown as Listeners.
@@ -3768,9 +3785,9 @@ They were previously shown as Post-Processors, even though they are implemented 
 </p>
 <p>
 The Cookie Manager no longer saves incoming cookies as variables by default.
-To save cookies as variables, define the property "CookieManager.save.cookies=true".
-Also, cookies names are prefixed with "COOKIE_" before they are stored (this avoids accidental corruption of local variables)
-To revert to the original behaviour, define the property "CookieManager.name.prefix= " (one or more spaces).
+To save cookies as variables, define the property "<code>CookieManager.save.cookies=true</code>".
+Also, cookies names are prefixed with "<code>COOKIE_</code>" before they are stored (this avoids accidental corruption of local variables)
+To revert to the original behaviour, define the property "<code>CookieManager.name.prefix= </code>" (one or more spaces).
 </p>
 <p>
 The Counter element is now shown as a Configuration element.
@@ -3791,7 +3808,7 @@ Moved the Scoping Rules sub-section from Section 3. "Building a Test Plan"  to S
 
 <p>
 The While controller now trims leading and trailing spaces from the condition value before it is compared
-with LAST, blank or false.
+with <code>LAST</code>, blank or false.
 </p>
 
 <p>
