@@ -53,7 +53,7 @@ your elements are saved.  JMeter will merge the elements into the tree.</p>
 JMeter will save the element selected, plus all child elements beneath it.  In this way,
 you can save test tree fragments and individual elements for later use.</p>
 
-<note>The workbench is not automatically saved with the test plan, but it can be saved separately as above.</note>
+<note>By default, the workbench is not automatically saved with the test plan, but it can be saved by checking "Save Workbench" option on Workbench element.</note>
 </subsection>
 
 <subsection name="&sect-num;.3 Configuring Tree Elements" anchor="config_element">
@@ -89,6 +89,7 @@ then JMeter is running your test plan (or, at least, it thinks it is).</p>
 The numbers to the left of the green box are the number of active threads / total number of threads.
 These only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode.
 </p>
+<note>Using GUI mode in the way we described it here is reserved to Testing and debugging your Test Plan. To run the real load test, use NON-GUI mode.</note>
 </subsection>
 
 <subsection name="&sect-num;.6 Stopping a Test" anchor="stop">
@@ -96,7 +97,7 @@ These only apply to a locally run test; they do not include any threads started 
 There are two types of stop command available from the menu:
 <ul>
 <li>Stop (Control + '.') - stops the threads immediately if possible.
-In Versions of JMeter after 2.3.2, many samplers are now Interruptible which means that active samples can be terminated early.
+Many samplers are Interruptible which means that active samples can be terminated early.
 The stop command will check that all threads have stopped within the default timeout, which is 5000 ms = 5 seconds.
 [This can be changed using the JMeter property <code>jmeterengine.threadstop.wait</code>]
 If the threads have not stopped, then a message is displayed.
@@ -106,19 +107,15 @@ The Stop command can be retried, but if it fails, then it is necessary to exit J
 Will not interrupt any active samples.
 The modal shutdown dialog box will remain active until all threads have stopped.</li>
 </ul>
-Versions of JMeter after 2.3.2 allow a Stop to be initiated if Shutdown is taking too long.
-Close the Shutdown dialog box and select Run/Stop, or just press Control + '.'.
+If Shutdown is taking too long. Close the Shutdown dialog box and select Run/Stop, or just press Control + '.'.
 </p>
 <p>
 When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as Control + '.'.
-So in versions after 2.3.2, JMeter non-GUI mode will listen for commands on a specific port
-(default 4445, see the JMeter property <code>jmeterengine.nongui.port</code>).
-In versions after 2.4, JMeter supports automatic choice of an alternate port if the default port is being used 
+So JMeter non-GUI mode will listen for commands on a specific port (default 4445, see the JMeter property <code>jmeterengine.nongui.port</code>).
+JMeter supports automatic choice of an alternate port if the default port is being used 
 (for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
 it reaches the JMeter property <code>jmeterengine.nongui.maxport</code>) which defaults to 4455.
 If <code>maxport</code> is less than or equal to <code>port</code>, port scanning will not take place.
-Note that JMeter 2.4 and earlier did not set up the listener for non-GUI clients, only non-GUI standalone tests;
-this has been fixed. 
 <br></br>
 The chosen port is displayed in the console window.
 <br/>
