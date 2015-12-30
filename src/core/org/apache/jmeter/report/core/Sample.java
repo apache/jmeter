@@ -298,7 +298,7 @@ public class Sample {
      */
     @Override
     public String toString() {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
             out.append(data[i]);
             if (i < data.length - 1) {
