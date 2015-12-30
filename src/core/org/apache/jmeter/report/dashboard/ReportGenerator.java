@@ -216,43 +216,8 @@ public class ReportGenerator {
         HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<>();
         for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
                 .entrySet()) {
-            String graphName = entryGraphCfg.getKey();
-            GraphConfiguration graphConfiguration = entryGraphCfg.getValue();
-
-            // Instantiate the class from the classname
-            String className = graphConfiguration.getClassName();
-            try {
-                Class<?> clazz = Class.forName(className);
-                Object obj = clazz.newInstance();
-                AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
-                graph.setName(graphName);
-
-                // Set graph properties using reflection
-                Method[] methods = clazz.getMethods();
-                for (Map.Entry<String, String> entryProperty : graphConfiguration
-                        .getProperties().entrySet()) {
-                    String propertyName = entryProperty.getKey();
-                    String propertyValue = entryProperty.getValue();
-                    String setterName = getSetterName(propertyName);
-
-                    setProperty(className, obj, methods, propertyName,
-                            propertyValue, setterName);
-                }
-
-                // Choose which entry point to use to plug the graph
-                AbstractSampleConsumer entryPoint = graphConfiguration
-                        .excludesControllers() ? excludeControllerFilter
-                        : nameFilter;
-                entryPoint.addSampleConsumer(graph);
-
-                // Add to the map
-                graphMap.put(graphConfiguration, graph);
-            } catch (ClassNotFoundException | IllegalAccessException
-                    | InstantiationException | ClassCastException ex) {
-                String error = String.format(INVALID_CLASS_FMT, className);
-                log.error(error, ex);
-                throw new GenerationException(error, ex);
-            }
+            addGraphConsumer(nameFilter, excludeControllerFilter, graphMap,
+                    entryGraphCfg);
         }
 
         // Generate data
@@ -288,6 +253,50 @@ public class ReportGenerator {
 
         log.debug("End of report generation");
 
+    }
+
+    private void addGraphConsumer(FilterConsumer nameFilter,
+            FilterConsumer excludeControllerFilter,
+            HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap,
+            Map.Entry<String, GraphConfiguration> entryGraphCfg)
+            throws GenerationException {
+        String graphName = entryGraphCfg.getKey();
+        GraphConfiguration graphConfiguration = entryGraphCfg.getValue();
+
+        // Instantiate the class from the classname
+        String className = graphConfiguration.getClassName();
+        try {
+            Class<?> clazz = Class.forName(className);
+            Object obj = clazz.newInstance();
+            AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
+            graph.setName(graphName);
+
+            // Set graph properties using reflection
+            Method[] methods = clazz.getMethods();
+            for (Map.Entry<String, String> entryProperty : graphConfiguration
+                    .getProperties().entrySet()) {
+                String propertyName = entryProperty.getKey();
+                String propertyValue = entryProperty.getValue();
+                String setterName = getSetterName(propertyName);
+
+                setProperty(className, obj, methods, propertyName,
+                        propertyValue, setterName);
+            }
+
+            // Choose which entry point to use to plug the graph
+            AbstractSampleConsumer entryPoint = graphConfiguration
+                    .excludesControllers() ? excludeControllerFilter
+                    : nameFilter;
+            entryPoint.addSampleConsumer(graph);
+
+            // Add to the map
+            graphMap.put(graphConfiguration, graph);
+        } catch (ClassNotFoundException | IllegalAccessException
+                | InstantiationException | ClassCastException ex) {
+            String error = String.format(INVALID_CLASS_FMT, className);
+            log.error(error, ex);
+            throw new GenerationException(error, ex);
+        }
     }
 
     private void exportData(SampleContext sampleContext, String exporterName,
