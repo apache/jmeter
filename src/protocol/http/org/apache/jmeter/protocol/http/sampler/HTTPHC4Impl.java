@@ -1079,9 +1079,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                if (arg.isSkippable(parameterName)){
                    continue;
                }
-               FormBodyPart formPart;
                StringBody stringBody = new StringBody(arg.getValue(), charset);
-               formPart = new FormBodyPart(arg.getName(), stringBody);                   
+               FormBodyPart formPart = new FormBodyPart(arg.getName(), stringBody);                   
                multiPart.addPart(formPart);
             }
 
