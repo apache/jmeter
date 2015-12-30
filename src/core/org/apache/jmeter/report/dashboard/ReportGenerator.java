@@ -194,22 +194,19 @@ public class ReportGenerator {
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
-        source.addSampleConsumer(normalizer);
 
         normalizer.addSampleConsumer(createBeginDateConsumer());
         normalizer.addSampleConsumer(createEndDateConsumer());
 
         FilterConsumer nameFilter = createNameFilter();
-        normalizer.setSampleConsumer(nameFilter);
-
-        nameFilter.setSampleConsumer(createApdexSummaryConsumer());
-        nameFilter.setSampleConsumer(createRequestsSummaryConsumer());
-        nameFilter.setSampleConsumer(createStatisticsSummaryConsumer());
 
         FilterConsumer excludeControllerFilter = createExcludeControllerFilter();
-        nameFilter.setSampleConsumer(excludeControllerFilter);
 
-        excludeControllerFilter.setSampleConsumer(createErrorsSummaryConsumer());
+        nameFilter.addSampleConsumer(excludeControllerFilter);
+
+        normalizer.addSampleConsumer(nameFilter);
+
+        source.addSampleConsumer(normalizer);
 
         // Get graph configurations
         Map<String, GraphConfiguration> graphConfigurations = configuration
@@ -328,6 +325,7 @@ public class ReportGenerator {
         excludeControllerFilter
                 .setSamplePredicate(new ControllerSamplePredicate());
         excludeControllerFilter.setReverseFilter(true);
+        excludeControllerFilter.addSampleConsumer(createErrorsSummaryConsumer());
         return excludeControllerFilter;
     }
 
@@ -379,6 +377,9 @@ public class ReportGenerator {
                         || filteredSamples.contains(sample.getName());
             }
         });
+        nameFilter.addSampleConsumer(createApdexSummaryConsumer());
+        nameFilter.addSampleConsumer(createRequestsSummaryConsumer());
+        nameFilter.addSampleConsumer(createStatisticsSummaryConsumer());
         return nameFilter;
     }
 
