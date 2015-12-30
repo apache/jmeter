@@ -122,6 +122,7 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
@@ -450,7 +451,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(log.isDebugEnabled()) {
                 log.debug("Extracted from HttpContext user token:"+userToken+", storing it as JMeter variable:"+USER_TOKEN);
             }
-            JMeterContextService.getContext().getVariables().putObject(USER_TOKEN, userToken); 
+            // During recording JMeterContextService.getContext().getVariables() is null
+            JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
+            if (jMeterVariables != null) {
+                jMeterVariables.putObject(USER_TOKEN, userToken); 
+            }
         }
     }
 
@@ -460,7 +465,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param localContext {@link HttpContext}
      */
     private final void setupClientContextBeforeSample(HttpContext localContext) {
-        Object userToken = JMeterContextService.getContext().getVariables().getObject(USER_TOKEN);
+        Object userToken = null;
+        // During recording JMeterContextService.getContext().getVariables() is null
+        JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();
+        if(jMeterVariables != null) {
+            userToken = jMeterVariables.getObject(USER_TOKEN);            
+        }
         if(userToken != null) {
             if(log.isDebugEnabled()) {
                 log.debug("Found user token:"+userToken+" as JMeter variable:"+USER_TOKEN+", storing it in HttpContext");
