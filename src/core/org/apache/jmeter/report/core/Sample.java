@@ -31,6 +31,8 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Sample {
 
+    private static final String ERROR_ON_SAMPLE = "Error on sample #";
+
     public final static String CONTROLLER_PATTERN = "Number of samples in transaction";
 
     private boolean storesStartTimeStamp;
@@ -101,7 +103,7 @@ public class Sample {
         try {
             return Integer.parseInt(data[metadata.indexOf(name)]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -118,7 +120,7 @@ public class Sample {
         try {
             return Integer.parseInt(data[i]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -136,7 +138,7 @@ public class Sample {
         try {
             return Long.parseLong(data[metadata.indexOf(name)]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -154,7 +156,7 @@ public class Sample {
         try {
             return Long.parseLong(data[i]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -172,7 +174,7 @@ public class Sample {
         try {
             return Float.parseFloat(data[metadata.indexOf(name)]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -189,7 +191,7 @@ public class Sample {
         try {
             return Float.parseFloat(data[i]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -207,7 +209,7 @@ public class Sample {
         try {
             return Double.valueOf(data[metadata.indexOf(name)]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
@@ -225,7 +227,7 @@ public class Sample {
         try {
             return Double.parseDouble(data[id]);
         } catch (NumberFormatException ex) {
-            throw new SampleException("Error on sample #" + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
         }
     }
 
