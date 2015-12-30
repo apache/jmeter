@@ -271,29 +271,7 @@ public class ReportGenerator {
         // Process configuration to build data exporters
         for (Map.Entry<String, ExporterConfiguration> entry : configuration
                 .getExportConfigurations().entrySet()) {
-            String exporterName = entry.getKey();
-            ExporterConfiguration exporterConfiguration = entry.getValue();
-
-            // Instantiate the class from the classname
-            String className = exporterConfiguration.getClassName();
-            try {
-                Class<?> clazz = Class.forName(className);
-                Object obj = clazz.newInstance();
-                DataExporter exporter = (DataExporter) obj;
-                exporter.setName(exporterName);
-
-                // Export data
-                exporter.export(sampleContext, testFile, configuration);
-            } catch (ClassNotFoundException | IllegalAccessException
-                    | InstantiationException | ClassCastException ex) {
-                String error = String.format(INVALID_CLASS_FMT, className);
-                log.error(error, ex);
-                throw new GenerationException(error, ex);
-            } catch (ExportException ex) {
-                String error = String.format(INVALID_EXPORT_FMT, exporterName);
-                log.error(error, ex);
-                throw new GenerationException(error, ex);
-            }
+            exportData(sampleContext, entry.getKey(), entry.getValue());
         }
 
         log.debug("End of data exporting");
@@ -310,6 +288,31 @@ public class ReportGenerator {
 
         log.debug("End of report generation");
 
+    }
+
+    private void exportData(SampleContext sampleContext, String exporterName,
+            ExporterConfiguration exporterConfiguration)
+            throws GenerationException {
+        // Instantiate the class from the classname
+        String className = exporterConfiguration.getClassName();
+        try {
+            Class<?> clazz = Class.forName(className);
+            Object obj = clazz.newInstance();
+            DataExporter exporter = (DataExporter) obj;
+            exporter.setName(exporterName);
+
+            // Export data
+            exporter.export(sampleContext, testFile, configuration);
+        } catch (ClassNotFoundException | IllegalAccessException
+                | InstantiationException | ClassCastException ex) {
+            String error = String.format(INVALID_CLASS_FMT, className);
+            log.error(error, ex);
+            throw new GenerationException(error, ex);
+        } catch (ExportException ex) {
+            String error = String.format(INVALID_EXPORT_FMT, exporterName);
+            log.error(error, ex);
+            throw new GenerationException(error, ex);
+        }
     }
 
     private ErrorsSummaryConsumer createErrorsSummaryConsumer() {
