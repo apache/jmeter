@@ -59,13 +59,13 @@ import org.slf4j.LoggerFactory;
  * </p>
  * <p>
  * When <b>parallel mode</b> is enabled and several CPU are available to the
- * JVM, this sorter uses 2 CPU to reduce sort time.<br>
+ * JVM, this sorter uses multiple CPU to reduce sort time.<br>
  * The <b>parallel mode</b> can be disabled if some sort of concurrency issue is
  * encountered.
  * </p>
  * <p>
- * As a lest note, this {@link SampleConsumer} can be used as normal class with
- * the differences <code>sort()</code> methods
+ * As a last note, this {@link SampleConsumer} can be used as normal class with
+ * the different <code>sort()</code> methods
  * </p>
  * <p>
  * It is important to set the <b><code>chunkSize</code></b> property according
@@ -129,14 +129,14 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     }
 
     /**
-     * Set the number of samples that will be stored in memory. This as well
-     * define the number of samples that will be written in each chunk file
-     * before merging step
+     * Set the number of samples that will be stored in memory. This
+     * defines the number of samples that will be written in each chunk file
+     * before merging step as well.
      * 
      * @param chunkSize
-     *            The number of sample sorted in memory before they are written
-     *            to disk. 5000 is the minimum and will be averwritten is
-     *            provided chunkSize is <5000
+     *            The number of samples sorted in memory before they are written
+     *            to disk. 5000 is the minimum and will be used if given
+     *            chunkSize is less than 5000
      */
     public void setChunkSize(long chunkSize) {
         if (chunkSize < 50000) {
@@ -158,21 +158,24 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * Enabled parallel mode
      * 
      * @param parallelize
-     *            true to enable, false to disable
+     *            {@code true} to enable, {@code false} to disable
      */
     public void setParallelize(boolean parallelize) {
         this.parallelize = parallelize;
     }
 
+    /**
+     * @return {@code true} when parallel mode is enabled, {@code false} otherwise
+     */
     public boolean isParallelize() {
         return parallelize;
     }
 
     /**
-     * Sort an input CSV file to an output sorted CSV file.<br>
+     * Sort an input CSV file to an sorted output CSV file.<br>
      * <p>
-     * The input CSV <b>must</b> have a header otherwise the sorted will give
-     * unprectable results
+     * The input CSV <b>must</b> have a header otherwise sorting will give
+     * unpredictable results
      * </p>
      * 
      * @param inputFile
@@ -180,7 +183,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * @param outputFile
      *            The sorted destination CSV file (must not be {@code null})
      * @param writeHeader
-     *            Wether the CSV header should be written in the output CSV file
+     *            Whether the CSV header should be written to the output CSV file
      */
     public void sort(CsvFile inputFile, File outputFile, boolean writeHeader) {
         if (!inputFile.isFile()) {
@@ -240,11 +243,11 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * specified output file.
      * 
      * @param csvReader
-     *            The that provide samples to be sorted (must not be {@code null})
+     *            The reader that provides the samples to be sorted (must not be {@code null})
      * @param output
-     *            The output file that will contains sorted samples
+     *            The output file that will contain the sorted samples
      * @param writeHeader
-     *            Wether to writer CSV header on the output file
+     *            Whether to write CSV header to the output file
      */
     private void sort(CsvSampleReader csvReader, File output,
             boolean writeHeader) {
@@ -306,7 +309,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             if (inputSampleCount.get() != chunkedSampleCount.get()) {
                 log.error("Failure! Number of samples read from input and written to chunk files differ");
             } else {
-                log.info("chunked samples dumps succeeded.");
+                log.info("dumping of samples chunk succeeded.");
             }
         }
         super.setProducedMetadata(sampleMetadata, 0);
@@ -574,7 +577,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     }
 
     /**
-     * @return the revertedSort
+     * @return flag, whether the order of the sort should be reverted
      */
     public final boolean isRevertedSort() {
         return revertedSort;
@@ -582,7 +585,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     /**
      * @param revertedSort
-     *            the revertedSort to set
+     *            flag, whether the order of the sort should be reverted.
+     *            {@code false} uses the order of the configured
+     *            {@link SampleComparator}
      */
     public final void setRevertedSort(boolean revertedSort) {
         this.revertedSort = revertedSort;
