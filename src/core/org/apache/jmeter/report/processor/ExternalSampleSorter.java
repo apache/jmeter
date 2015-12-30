@@ -522,10 +522,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
                     Sample firstRight = r.peek();
-                    if (!revertedSort
-                            && sampleComparator.compare(firstLeft, firstRight) < 0
-                            || revertedSort == true
-                            && sampleComparator.compare(firstLeft, firstRight) >= 0) {
+                    if (leftBeforeRight(firstLeft, firstRight)) {
                         csvWriter.write(firstLeft);
                         l.readSample();
                     } else {
@@ -549,10 +546,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 if (l.hasNext() && r.hasNext()) {
                     Sample firstLeft = l.peek();
                     Sample firstRight = r.peek();
-                    if (!revertedSort
-                            && sampleComparator.compare(firstLeft, firstRight) < 0
-                            || revertedSort == true
-                            && sampleComparator.compare(firstLeft, firstRight) >= 0) {
+                    if (leftBeforeRight(firstLeft, firstRight)) {
                         out.produce(firstLeft, 0);
                         l.readSample();
                     } else {
@@ -566,6 +560,24 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 }
             }
         }
+    }
+
+    /**
+     * Decides which sample should be written first given the configured
+     * {@link SampleComparator} and the sort order.
+     * 
+     * @param leftSample
+     *            the <em>left</em> sample
+     * @param rightSample
+     *            the <em>right</em> sample
+     * @return {@code true} when {@code leftSample} should be written first,
+     *         {@code false} otherwise
+     */
+    private boolean leftBeforeRight(Sample leftSample, Sample rightSample) {
+        return !revertedSort
+                && sampleComparator.compare(leftSample, rightSample) < 0
+                || revertedSort
+                && sampleComparator.compare(leftSample, rightSample) >= 0;
     }
 
     private File getChunkFile() {
