@@ -300,49 +300,8 @@ public class ReportGenerator {
                     String propertyValue = entryProperty.getValue();
                     String setterName = getSetterName(propertyName);
 
-                    try {
-                        int i = 0;
-                        boolean invoked = false;
-                        while (i < methods.length && !invoked) {
-                            Method method = methods[i];
-                            if (method.getName().equals(setterName)) {
-                                Class<?>[] parameterTypes = method
-                                        .getParameterTypes();
-                                if (parameterTypes.length == 1) {
-                                    Class<?> parameterType = parameterTypes[0];
-                                    if (parameterType
-                                            .isAssignableFrom(String.class)) {
-                                        method.invoke(obj, propertyValue);
-                                    } else {
-                                        StringConverter<?> converter = Converters
-                                                .getConverter(parameterType);
-                                        if (converter == null) {
-                                            throw new GenerationException(
-                                                    String.format(
-                                                            NOT_SUPPORTED_CONVERTION_FMT,
-                                                            parameterType
-                                                                    .getName()));
-                                        }
-                                        method.invoke(obj, converter
-                                                .convert(propertyValue));
-                                    }
-                                    invoked = true;
-                                }
-                            }
-                            i++;
-                        }
-                        if (!invoked) {
-                            log.warn(String
-                                    .format("\"%s\" is not a valid property for class \"%s\", skip it",
-                                            propertyName, className));
-                        }
-                    } catch (InvocationTargetException | ConvertException ex) {
-                        String message = String
-                                .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
-                                        propertyValue, propertyName, setterName);
-                        log.error(message, ex);
-                        throw new GenerationException(message, ex);
-                    }
+                    setProperty(className, obj, methods, propertyName,
+                            propertyValue, setterName);
                 }
 
                 // Choose which entry point to use to plug the graph
@@ -416,5 +375,73 @@ public class ReportGenerator {
 
         log.debug("End of report generation");
 
+    }
+
+    /**
+     * Try to set a property on an object by reflection.
+     *
+     * @param className
+     *            name of the objects class
+     * @param obj
+     *            the object on which the property should be set
+     * @param methods
+     *            methods of the object which will be search for the property
+     *            setter
+     * @param propertyName
+     *            name of the property to be set
+     * @param propertyValue
+     *            value to be set
+     * @param setterName
+     *            name of the property setter that should be used to set the
+     *            property
+     * @throws IllegalAccessException
+     *             if reflection throws an IllegalAccessException
+     * @throws GenerationException
+     *             if conversion of the property value fails or reflection
+     *             throws an InvocationTargetException
+     */
+    private void setProperty(String className, Object obj, Method[] methods,
+            String propertyName, String propertyValue, String setterName)
+            throws IllegalAccessException, GenerationException {
+        try {
+            int i = 0;
+            while (i < methods.length) {
+                Method method = methods[i];
+                if (method.getName().equals(setterName)) {
+                    Class<?>[] parameterTypes = method
+                            .getParameterTypes();
+                    if (parameterTypes.length == 1) {
+                        Class<?> parameterType = parameterTypes[0];
+                        if (parameterType
+                                .isAssignableFrom(String.class)) {
+                            method.invoke(obj, propertyValue);
+                        } else {
+                            StringConverter<?> converter = Converters
+                                    .getConverter(parameterType);
+                            if (converter == null) {
+                                throw new GenerationException(
+                                        String.format(
+                                                NOT_SUPPORTED_CONVERTION_FMT,
+                                                parameterType
+                                                        .getName()));
+                            }
+                            method.invoke(obj, converter
+                                    .convert(propertyValue));
+                        }
+                        return;
+                    }
+                }
+                i++;
+            }
+            log.warn(String
+                        .format("\"%s\" is not a valid property for class \"%s\", skip it",
+                                propertyName, className));
+        } catch (InvocationTargetException | ConvertException ex) {
+            String message = String
+                    .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
+                            propertyValue, propertyName, setterName);
+            log.error(message, ex);
+            throw new GenerationException(message, ex);
+        }
     }
 }
