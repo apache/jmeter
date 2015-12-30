@@ -272,7 +272,7 @@ public class Sample {
      * @return The data of the specified column as a boolean
      */
     public boolean getBoolean(String name) {
-        return "true".equalsIgnoreCase(data[metadata.indexOf(name)]);
+        return Boolean.parseBoolean(data[metadata.indexOf(name)]);
     }
 
     /**
@@ -285,12 +285,12 @@ public class Sample {
      * @param id
      *            The column number (zero based) of the data to be returned as a
      *            boolean
-     * @return The ith column data as a double
+     * @return The ith column data as a boolean
      * @throws NumberFormatException
-     *             if the data could not be parsed as a double
+     *             if the data could not be parsed as a boolean
      */
     public boolean getBoolean(int id) {
-        return "true".equalsIgnoreCase(data[id]);
+        return Boolean.parseBoolean(data[id]);
     }
 
     /*
