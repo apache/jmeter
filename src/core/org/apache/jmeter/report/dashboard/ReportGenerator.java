@@ -196,82 +196,20 @@ public class ReportGenerator {
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
         source.addSampleConsumer(normalizer);
 
-        AggregateConsumer beginDateConsumer = new AggregateConsumer(
-                new MinAggregator(), new SampleSelector<Double>() {
+        normalizer.addSampleConsumer(createBeginDateConsumer());
+        normalizer.addSampleConsumer(createEndDateConsumer());
 
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getStartTime());
-                    }
-                });
-        beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
-        normalizer.addSampleConsumer(beginDateConsumer);
-
-        AggregateConsumer endDateConsumer = new AggregateConsumer(
-                new MaxAggregator(), new SampleSelector<Double>() {
-
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getEndTime());
-                    }
-                });
-        endDateConsumer.setName(END_DATE_CONSUMER_NAME);
-        normalizer.addSampleConsumer(endDateConsumer);
-
-        FilterConsumer nameFilter = new FilterConsumer();
-        nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
-        nameFilter.setSamplePredicate(new SamplePredicate() {
-
-            @Override
-            public boolean matches(Sample sample) {
-                // Get filtered samples from configuration
-                List<String> filteredSamples = configuration
-                        .getFilteredSamples();
-                // Sample is kept if none filter is set or if the filter
-                // contains its name
-                return filteredSamples.isEmpty()
-                        || filteredSamples.contains(sample.getName());
-            }
-        });
+        FilterConsumer nameFilter = createNameFilter();
         normalizer.setSampleConsumer(nameFilter);
 
-        ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
-        apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
-        apdexSummaryConsumer.setHasOverallResult(true);
-        apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
+        nameFilter.setSampleConsumer(createApdexSummaryConsumer());
+        nameFilter.setSampleConsumer(createRequestsSummaryConsumer());
+        nameFilter.setSampleConsumer(createStatisticsSummaryConsumer());
 
-            @Override
-            public ApdexThresholdsInfo select(String sampleName) {
-                ApdexThresholdsInfo info = new ApdexThresholdsInfo();
-                info.setSatisfiedThreshold(configuration
-                        .getApdexSatisfiedThreshold());
-                info.setToleratedThreshold(configuration
-                        .getApdexToleratedThreshold());
-                return info;
-            }
-        });
-        nameFilter.setSampleConsumer(apdexSummaryConsumer);
-
-        RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
-        requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
-        nameFilter.setSampleConsumer(requestsSummaryConsumer);
-
-        StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
-        statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
-        statisticsSummaryConsumer.setHasOverallResult(true);
-        nameFilter.setSampleConsumer(statisticsSummaryConsumer);
-
-        FilterConsumer excludeControllerFilter = new FilterConsumer();
-        excludeControllerFilter
-                .setName(START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME);
-        excludeControllerFilter
-                .setSamplePredicate(new ControllerSamplePredicate());
-        excludeControllerFilter.setReverseFilter(true);
+        FilterConsumer excludeControllerFilter = createExcludeControllerFilter();
         nameFilter.setSampleConsumer(excludeControllerFilter);
 
-        ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
-        errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
-        excludeControllerFilter.setSampleConsumer(errorsSummaryConsumer);
+        excludeControllerFilter.setSampleConsumer(createErrorsSummaryConsumer());
 
         // Get graph configurations
         Map<String, GraphConfiguration> graphConfigurations = configuration
@@ -375,6 +313,99 @@ public class ReportGenerator {
 
         log.debug("End of report generation");
 
+    }
+
+    private ErrorsSummaryConsumer createErrorsSummaryConsumer() {
+        ErrorsSummaryConsumer errorsSummaryConsumer = new ErrorsSummaryConsumer();
+        errorsSummaryConsumer.setName(ERRORS_SUMMARY_CONSUMER_NAME);
+        return errorsSummaryConsumer;
+    }
+
+    private FilterConsumer createExcludeControllerFilter() {
+        FilterConsumer excludeControllerFilter = new FilterConsumer();
+        excludeControllerFilter
+                .setName(START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME);
+        excludeControllerFilter
+                .setSamplePredicate(new ControllerSamplePredicate());
+        excludeControllerFilter.setReverseFilter(true);
+        return excludeControllerFilter;
+    }
+
+    private StatisticsSummaryConsumer createStatisticsSummaryConsumer() {
+        StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
+        statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
+        statisticsSummaryConsumer.setHasOverallResult(true);
+        return statisticsSummaryConsumer;
+    }
+
+    private RequestsSummaryConsumer createRequestsSummaryConsumer() {
+        RequestsSummaryConsumer requestsSummaryConsumer = new RequestsSummaryConsumer();
+        requestsSummaryConsumer.setName(REQUESTS_SUMMARY_CONSUMER_NAME);
+        return requestsSummaryConsumer;
+    }
+
+    private ApdexSummaryConsumer createApdexSummaryConsumer() {
+        ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
+        apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
+        apdexSummaryConsumer.setHasOverallResult(true);
+        apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
+
+            @Override
+            public ApdexThresholdsInfo select(String sampleName) {
+                ApdexThresholdsInfo info = new ApdexThresholdsInfo();
+                info.setSatisfiedThreshold(configuration
+                        .getApdexSatisfiedThreshold());
+                info.setToleratedThreshold(configuration
+                        .getApdexToleratedThreshold());
+                return info;
+            }
+        });
+        return apdexSummaryConsumer;
+    }
+
+    private FilterConsumer createNameFilter() {
+        FilterConsumer nameFilter = new FilterConsumer();
+        nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
+        nameFilter.setSamplePredicate(new SamplePredicate() {
+
+            @Override
+            public boolean matches(Sample sample) {
+                // Get filtered samples from configuration
+                List<String> filteredSamples = configuration
+                        .getFilteredSamples();
+                // Sample is kept if none filter is set or if the filter
+                // contains its name
+                return filteredSamples.isEmpty()
+                        || filteredSamples.contains(sample.getName());
+            }
+        });
+        return nameFilter;
+    }
+
+    private AggregateConsumer createEndDateConsumer() {
+        AggregateConsumer endDateConsumer = new AggregateConsumer(
+                new MaxAggregator(), new SampleSelector<Double>() {
+
+                    @Override
+                    public Double select(Sample sample) {
+                        return Double.valueOf(sample.getEndTime());
+                    }
+                });
+        endDateConsumer.setName(END_DATE_CONSUMER_NAME);
+        return endDateConsumer;
+    }
+
+    private AggregateConsumer createBeginDateConsumer() {
+        AggregateConsumer beginDateConsumer = new AggregateConsumer(
+                new MinAggregator(), new SampleSelector<Double>() {
+
+                    @Override
+                    public Double select(Sample sample) {
+                        return Double.valueOf(sample.getStartTime());
+                    }
+                });
+        beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
+        return beginDateConsumer;
     }
 
     /**
