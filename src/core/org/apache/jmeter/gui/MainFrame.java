@@ -96,6 +96,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.LogEvent;
 import org.apache.log.LogTarget;
 import org.apache.log.Logger;
@@ -174,6 +175,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private JMeterToolBar toolbar;
 
     /**
+     * Label at top right showing test duration
+     */
+    private JLabel testTimeDuration;
+
+    /**
      * Indicator for Log errors and Fatals
      */
     private JButton warnIndicator;
@@ -185,6 +191,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * LogTarget that receives ERROR or FATAL
      */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
+    
+    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            computeTestDuration();
+        }
+    });
 
     /**
      * Create a new JMeter frame.
@@ -200,6 +214,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setMargin(new Insets(0, 0, 0, 0));
         runningIndicator.setBorder(BorderFactory.createEmptyBorder());
+
+        testTimeDuration = new JLabel("00:00:00"); //$NON-NLS-1$
 
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
@@ -226,6 +242,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         init();
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    }
+
+    protected void computeTestDuration() {
+        long startTime = JMeterContextService.getTestStartTime();
+        if (startTime > 0) {
+            long elapsedSec = (System.currentTimeMillis()-startTime + 500) / 1000; // rounded seconds
+            testTimeDuration.setText(JOrphanUtils.formatDuration(elapsedSec));
+        }
     }
 
     /**
@@ -413,6 +437,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void testStarted(String host) {
         hosts.add(host);
+        computeTestDurationTimer.start();
         runningIndicator.setIcon(runningIcon);
         activeThreads.setText("0"); // $NON-NLS-1$
         totalThreads.setText("0"); // $NON-NLS-1$
@@ -448,6 +473,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         if (hosts.size() == 0) {
             runningIndicator.setIcon(stoppedIcon);
             JMeterContextService.endTest();
+            computeTestDurationTimer.stop();
         }
         menuBar.setRunning(false, host);
         if (LOCAL.equals(host)) {
@@ -557,6 +583,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
         toolPanel.add(Box.createGlue());
+
+        toolPanel.add(testTimeDuration);
+        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
 
         if (DISPLAY_ERROR_FATAL_COUNTER) {
             toolPanel.add(errorsOrFatalsLabel);

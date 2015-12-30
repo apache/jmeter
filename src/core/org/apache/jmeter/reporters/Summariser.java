@@ -252,7 +252,7 @@ public class Summariser extends AbstractTestElement
         sb.append(" in ");
         long elapsed = summariserRunningSample.getElapsed();
         long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
-        sb.append(String.format("%d:%02d:%02d", elapsedSec / 3600, (elapsedSec % 3600) / 60, (elapsedSec % 60)));
+        sb.append(JOrphanUtils.formatDuration(elapsedSec));
         sb.append(" = ");
         if (elapsed > 0) {
             sb.append(doubleToSb(dfDouble, tmp, summariserRunningSample.getRate(), 6, 1));
