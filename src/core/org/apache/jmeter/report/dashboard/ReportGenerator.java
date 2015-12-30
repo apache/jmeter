@@ -213,10 +213,9 @@ public class ReportGenerator {
                 .getGraphConfigurations();
 
         // Process configuration to build graph consumers
-        HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap = new HashMap<>();
         for (Map.Entry<String, GraphConfiguration> entryGraphCfg : graphConfigurations
                 .entrySet()) {
-            addGraphConsumer(nameFilter, excludeControllerFilter, graphMap,
+            addGraphConsumer(nameFilter, excludeControllerFilter,
                     entryGraphCfg);
         }
 
@@ -257,7 +256,6 @@ public class ReportGenerator {
 
     private void addGraphConsumer(FilterConsumer nameFilter,
             FilterConsumer excludeControllerFilter,
-            HashMap<GraphConfiguration, AbstractGraphConsumer> graphMap,
             Map.Entry<String, GraphConfiguration> entryGraphCfg)
             throws GenerationException {
         String graphName = entryGraphCfg.getKey();
@@ -288,9 +286,6 @@ public class ReportGenerator {
                     .excludesControllers() ? excludeControllerFilter
                     : nameFilter;
             entryPoint.addSampleConsumer(graph);
-
-            // Add to the map
-            graphMap.put(graphConfiguration, graph);
         } catch (ClassNotFoundException | IllegalAccessException
                 | InstantiationException | ClassCastException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
