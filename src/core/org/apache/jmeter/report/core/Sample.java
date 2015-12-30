@@ -47,7 +47,7 @@ public class Sample {
      *            the row number in the CSV source from which this sample is
      *            built
      * @param metadata
-     *            The sample metadata (containes column names)
+     *            The sample metadata (contains column names)
      * @param data
      *            The sample data as a string array
      */
@@ -112,7 +112,7 @@ public class Sample {
      * 
      * @param i
      *            the column number (zero based) of the data to be returned
-     * @return The ith columndata an an integer
+     * @return The ith column data an an integer
      * @throws NumberFormatException
      *             if the data could not be parsed as an integer
      */
@@ -125,7 +125,7 @@ public class Sample {
     }
 
     /**
-     * Return the sample data whose column name is specified as a float. Use of
+     * Return the sample data whose column name is specified as a long. Use of
      * this method should be avoided because of it inefficiency.
      * 
      * @param name
@@ -143,14 +143,14 @@ public class Sample {
     }
 
     /**
-     * Return the sample data at the ith column as an integer.
+     * Return the sample data at the ith column as a long.
      * 
      * @param i
      *            The column number (zero based) of the data to be returned as
      *            an integer
-     * @return The ith column data as a integer
+     * @return The ith column data as a long
      * @throws NumberFormatException
-     *             if the data could not be parsed as an integer
+     *             if the data could not be parsed as a long
      */
     public long getLong(int i) {
         try {
@@ -239,7 +239,7 @@ public class Sample {
      *            The column data name.
      * @return The data of the specified column as a char
      * @throws IndexOutOfBoundsException
-     *             if the data could is an empty string
+     *             if the data for this column is an empty string
      */
     public char getChar(String name) {
         return data[metadata.indexOf(name)].charAt(0);
@@ -251,9 +251,9 @@ public class Sample {
      * @param id
      *            The column number (zero based) of the data to be returned as a
      *            char
-     * @return The ith column data as a double
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a double
+     * @return The ith column data as a char
+     * @throws IndexOutOfBoundsException
+     *             if the data for this column is an empty string
      */
     public char getChar(int id) {
         return data[id].charAt(0);
@@ -263,8 +263,8 @@ public class Sample {
      * Return the sample data whose column name is specified as a boolean. Use
      * of this method should be avoided because of it inefficiency.
      * <p>
-     * The boolean is assumed to be true if and only if the data string is
-     * "true", in any other cases this method returns false
+     * The boolean is assumed to be {@code true} if and only if the data string is
+     * "true", in any other cases this method returns {@code false}
      * </p>
      * 
      * @param name
@@ -278,8 +278,8 @@ public class Sample {
     /**
      * Return the sample data at the ith column as a boolean.
      * <p>
-     * The boolean is assumed to be true if and only if the data string is
-     * "true", in any other cases this method returns false
+     * The boolean is assumed to be {@code true} if and only if the data string is
+     * "true", in any other cases this method returns {@code false}
      * </p>
      * 
      * @param id
@@ -464,7 +464,7 @@ public class Sample {
     /**
      * Checks if this sample is a controller.
      *
-     * @return true, if this sample is a controller; otherwise false
+     * @return {@code true}, if this sample is a controller; otherwise {@code false}
      */
     public boolean isController() {
         String message = getResponseMessage();
