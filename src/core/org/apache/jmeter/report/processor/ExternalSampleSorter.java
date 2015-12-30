@@ -251,7 +251,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      */
     private void sort(CsvSampleReader csvReader, File output,
             boolean writeHeader) {
-        Validate.notNull(output, "%s must not be null", "output");
+        Validate.notNull(output, MUST_NOT_BE_NULL, "output");
 
         SampleMetadata readSampleMetadata = csvReader.getMetadata();
         SampleWriterConsumer writerConsumer = new SampleWriterConsumer();
