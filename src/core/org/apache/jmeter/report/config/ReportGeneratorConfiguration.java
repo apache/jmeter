@@ -631,10 +631,8 @@ public class ReportGeneratorConfiguration {
 
                                     @Override
                                     public void initialize(String subConfId,
-                                            SubConfiguration subConfiguration)
-                                            throws ConfigurationException {
+                                            SubConfiguration subConfiguration) {
                                         // do nothing
-
                                     }
                                 });
                     }
