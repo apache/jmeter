@@ -37,7 +37,7 @@ public class Sample {
 
     private boolean storesStartTimeStamp;
     private SampleMetadata metadata;
-    String[] data;
+    private String[] data;
     private long row;
 
     /**
