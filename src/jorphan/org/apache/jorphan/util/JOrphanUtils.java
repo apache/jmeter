@@ -567,4 +567,12 @@ public final class JOrphanUtils {
             offset += chunk;
         }
     }
+
+    /**
+     * @param elapsedSec long elapsed time in seconds
+     * @return String formated with format HH:mm:ss
+     */
+    public static String formatDuration(long elapsedSec) {
+        return String.format("%02d:%02d:%02d", elapsedSec / 3600, (elapsedSec % 3600) / 60, (elapsedSec % 60));
+    }
 }
