@@ -173,16 +173,7 @@ public class ReportGenerator {
         log.debug("Start report generation");
 
         File tmpDir = configuration.getTempDirectory();
-        boolean tmpDirCreated = false;
-        if (!tmpDir.exists()) {
-            tmpDirCreated = tmpDir.mkdir();
-            if (!tmpDirCreated) {
-                String message = String.format(
-                        "Cannot create temporary directory \"%s\".", tmpDir);
-                log.error(message);
-                throw new GenerationException(message);
-            }
-        }
+        boolean tmpDirCreated = createTempDir(tmpDir);
 
         // Build consumers chain
         SampleContext sampleContext = new SampleContext();
@@ -240,6 +231,13 @@ public class ReportGenerator {
 
         log.debug("End of data exporting");
 
+        removeTempDir(tmpDir, tmpDirCreated);
+
+        log.debug("End of report generation");
+
+    }
+
+    private void removeTempDir(File tmpDir, boolean tmpDirCreated) {
         if (tmpDirCreated) {
             try {
                 FileUtils.deleteDirectory(tmpDir);
@@ -249,9 +247,20 @@ public class ReportGenerator {
                         tmpDir), ex);
             }
         }
+    }
 
-        log.debug("End of report generation");
-
+    private boolean createTempDir(File tmpDir) throws GenerationException {
+        boolean tmpDirCreated = false;
+        if (!tmpDir.exists()) {
+            tmpDirCreated = tmpDir.mkdir();
+            if (!tmpDirCreated) {
+                String message = String.format(
+                        "Cannot create temporary directory \"%s\".", tmpDir);
+                log.error(message);
+                throw new GenerationException(message);
+            }
+        }
+        return tmpDirCreated;
     }
 
     private void addGraphConsumer(FilterConsumer nameFilter,
