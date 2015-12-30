@@ -150,7 +150,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * 
      * @param sampleComparator comparator to define the ordering
      */
-    public void setSampleComparator(SampleComparator sampleComparator) {
+    public final void setSampleComparator(SampleComparator sampleComparator) {
         this.sampleComparator = sampleComparator;
     }
 
