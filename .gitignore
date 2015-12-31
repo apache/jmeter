@@ -1,11 +1,4 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Java template
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.ear
@@ -14,8 +7,7 @@
 hs_err_pid*
 
 
-### Eclipse template
-*.pydevproject
+### Eclipse
 .metadata
 .gradle
 bin/
@@ -31,28 +23,17 @@ local.properties
 # Eclipse Core
 .project
 
-# External tool builders
-.externalToolBuilders/
-
 # Locally stored "Eclipse launch configurations"
 *.launch
-
-# CDT-specific
-.cproject
 
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# Java annotation processor (APT)
-.factorypath
-
-# PDT-specific
-.buildpath
-
-# sbteclipse plugin
 .target
-
-# TeXlipse plugin
-.texlipse
-
-
+### idea related stuff
+*.iml
+*.ipr
+.idea
+out
+build
+backups
