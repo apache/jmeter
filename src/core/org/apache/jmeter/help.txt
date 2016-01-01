@@ -20,7 +20,7 @@ jmeter.bat(Windows)/jmeter.sh(Linux) -H [your.proxy.server] -P [your proxy serve
 ---------------------------------------------------
 
 To run Apache JMeter in server mode:
-Open a command prompty and type for Linux/Unix:
+Open a command prompt and type:
 
 jmeter-server.bat(Windows)/jmeter-server(Linux)
 
