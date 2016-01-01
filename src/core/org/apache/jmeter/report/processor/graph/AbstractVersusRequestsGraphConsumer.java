@@ -70,7 +70,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
      * @param granularity
      *            the granularity to set
      */
-    public void setGranularity(long granularity) {
+    public final void setGranularity(long granularity) {
         this.granularity = granularity;
     }
 
