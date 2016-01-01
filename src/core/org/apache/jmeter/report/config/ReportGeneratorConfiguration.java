@@ -106,6 +106,138 @@ public class ReportGeneratorConfiguration {
     private static final String REQUIRED_PROPERTY_FMT = "Use \"%s\" value for required property \"%s\"";
     private static final String OPTIONAL_PROPERTY_FMT = "Use \"%s\" value for optional property \"%s\"";
 
+    private static final class ExporterConfigurationFactory implements
+            SubConfigurationFactory<ExporterConfiguration> {
+        private final Props props;
+
+        private ExporterConfigurationFactory(Props props) {
+            this.props = props;
+        }
+
+        @Override
+        public ExporterConfiguration createSubConfiguration() {
+            return new ExporterConfiguration();
+        }
+
+        @Override
+        public void initialize(String exportId,
+                ExporterConfiguration exportConfiguration)
+                throws ConfigurationException {
+            log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
+
+            // Get the property defining the class name
+            String className = getRequiredProperty(
+                    props,
+                    getExporterPropertyKey(exportId,
+                            SUBCONF_KEY_CLASSNAME), "",
+                    String.class);
+            exportConfiguration.setClassName(className);
+
+            // Get the property defining whether only sample series
+            // are filtered
+            boolean filtersOnlySampleSeries = getRequiredProperty(
+                    props,
+                    getExporterPropertyKey(exportId,
+                            EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
+                    EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
+                    Boolean.class).booleanValue();
+            exportConfiguration
+                    .filtersOnlySampleSeries(filtersOnlySampleSeries);
+
+            // Get the property defining the series filter
+            String seriesFilter = getRequiredProperty(
+                    props,
+                    getExporterPropertyKey(exportId,
+                            EXPORTER_KEY_SERIES_FILTER),
+                    EXPORTER_KEY_SERIES_FILTER_DEFAULT,
+                    String.class);
+            exportConfiguration.setSeriesFilter(seriesFilter);
+
+            // Get the property defining whether only controllers
+            // series are shown
+            boolean showControllerSeriesOnly = getRequiredProperty(
+                    props,
+                    getExporterPropertyKey(exportId,
+                            EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
+                    EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
+                    Boolean.class).booleanValue();
+            exportConfiguration
+                    .showControllerSeriesOnly(showControllerSeriesOnly);
+
+            // Load graph extra properties
+            Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
+                    .getGraphExtraConfigurations();
+            loadSubConfiguration(
+                    graphExtraConfigurations,
+                    props,
+                    getSubConfigurationPropertyKey(
+                            REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
+                            exportId,
+                            EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
+                    true,
+                    new SubConfigurationFactory<SubConfiguration>() {
+
+                        @Override
+                        public SubConfiguration createSubConfiguration() {
+                            return new SubConfiguration();
+                        }
+
+                        @Override
+                        public void initialize(String subConfId,
+                                SubConfiguration subConfiguration) {
+                            // do nothing
+                        }
+                    });
+        }
+    }
+
+    private static final class GraphConfigurationFactory implements
+            SubConfigurationFactory<GraphConfiguration> {
+        private final Props props;
+
+        private GraphConfigurationFactory(Props props) {
+            this.props = props;
+        }
+
+        @Override
+        public GraphConfiguration createSubConfiguration() {
+            return new GraphConfiguration();
+        }
+
+        @Override
+        public void initialize(String graphId,
+                GraphConfiguration graphConfiguration)
+                throws ConfigurationException {
+            log.debug(String.format(LOAD_GRAPH_FMT, graphId));
+
+            // Get the property defining whether the graph have to
+            // filter controller samples
+            boolean excludeControllers = getRequiredProperty(
+                    props,
+                    getGraphPropertyKey(graphId,
+                            GRAPH_KEY_EXCLUDE_CONTROLLERS),
+                    GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
+                    Boolean.class).booleanValue();
+            graphConfiguration
+                    .setExcludeControllers(excludeControllers);
+
+            // Get the property defining the title of the graph
+            String title = getRequiredProperty(props,
+                    getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
+                    GRAPH_KEY_TITLE_DEFAULT, String.class);
+            graphConfiguration.setTitle(title);
+
+            // Get the property defining the class name
+            String className = getRequiredProperty(
+                    props,
+                    getGraphPropertyKey(graphId,
+                            SUBCONF_KEY_CLASSNAME), "",
+                    String.class);
+            graphConfiguration.setClassName(className);
+
+        }
+    }
+
     /**
      * A factory for creating SubConfiguration objects.
      *
@@ -511,46 +643,7 @@ public class ReportGeneratorConfiguration {
                 .getGraphConfigurations();
         loadSubConfiguration(graphConfigurations, props,
                 REPORT_GENERATOR_GRAPH_KEY_PREFIX, false,
-                new SubConfigurationFactory<GraphConfiguration>() {
-
-                    @Override
-                    public GraphConfiguration createSubConfiguration() {
-                        return new GraphConfiguration();
-                    }
-
-                    @Override
-                    public void initialize(String graphId,
-                            GraphConfiguration graphConfiguration)
-                            throws ConfigurationException {
-                        log.debug(String.format(LOAD_GRAPH_FMT, graphId));
-
-                        // Get the property defining whether the graph have to
-                        // filter controller samples
-                        boolean excludeControllers = getRequiredProperty(
-                                props,
-                                getGraphPropertyKey(graphId,
-                                        GRAPH_KEY_EXCLUDE_CONTROLLERS),
-                                GRAPH_KEY_EXCLUDE_CONTROLLERS_DEFAULT,
-                                Boolean.class).booleanValue();
-                        graphConfiguration
-                                .setExcludeControllers(excludeControllers);
-
-                        // Get the property defining the title of the graph
-                        String title = getRequiredProperty(props,
-                                getGraphPropertyKey(graphId, GRAPH_KEY_TITLE),
-                                GRAPH_KEY_TITLE_DEFAULT, String.class);
-                        graphConfiguration.setTitle(title);
-
-                        // Get the property defining the class name
-                        String className = getRequiredProperty(
-                                props,
-                                getGraphPropertyKey(graphId,
-                                        SUBCONF_KEY_CLASSNAME), "",
-                                String.class);
-                        graphConfiguration.setClassName(className);
-
-                    }
-                });
+                new GraphConfigurationFactory(props));
 
         if (graphConfigurations.isEmpty()) {
             log.info("No graph configuration found.");
@@ -561,84 +654,7 @@ public class ReportGeneratorConfiguration {
                 .getExportConfigurations();
         loadSubConfiguration(exportConfigurations, props,
                 REPORT_GENERATOR_EXPORTER_KEY_PREFIX, false,
-                new SubConfigurationFactory<ExporterConfiguration>() {
-
-                    @Override
-                    public ExporterConfiguration createSubConfiguration() {
-                        return new ExporterConfiguration();
-                    }
-
-                    @Override
-                    public void initialize(String exportId,
-                            ExporterConfiguration exportConfiguration)
-                            throws ConfigurationException {
-                        log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
-
-                        // Get the property defining the class name
-                        String className = getRequiredProperty(
-                                props,
-                                getExporterPropertyKey(exportId,
-                                        SUBCONF_KEY_CLASSNAME), "",
-                                String.class);
-                        exportConfiguration.setClassName(className);
-
-                        // Get the property defining whether only sample series
-                        // are filtered
-                        boolean filtersOnlySampleSeries = getRequiredProperty(
-                                props,
-                                getExporterPropertyKey(exportId,
-                                        EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES),
-                                EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT,
-                                Boolean.class).booleanValue();
-                        exportConfiguration
-                                .filtersOnlySampleSeries(filtersOnlySampleSeries);
-
-                        // Get the property defining the series filter
-                        String seriesFilter = getRequiredProperty(
-                                props,
-                                getExporterPropertyKey(exportId,
-                                        EXPORTER_KEY_SERIES_FILTER),
-                                EXPORTER_KEY_SERIES_FILTER_DEFAULT,
-                                String.class);
-                        exportConfiguration.setSeriesFilter(seriesFilter);
-
-                        // Get the property defining whether only controllers
-                        // series are shown
-                        boolean showControllerSeriesOnly = getRequiredProperty(
-                                props,
-                                getExporterPropertyKey(exportId,
-                                        EXPORTER_KEY_SHOW_CONTROLLERS_ONLY),
-                                EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT,
-                                Boolean.class).booleanValue();
-                        exportConfiguration
-                                .showControllerSeriesOnly(showControllerSeriesOnly);
-
-                        // Load graph extra properties
-                        Map<String, SubConfiguration> graphExtraConfigurations = exportConfiguration
-                                .getGraphExtraConfigurations();
-                        loadSubConfiguration(
-                                graphExtraConfigurations,
-                                props,
-                                getSubConfigurationPropertyKey(
-                                        REPORT_GENERATOR_EXPORTER_KEY_PREFIX,
-                                        exportId,
-                                        EXPORTER_KEY_GRAPH_EXTRA_OPTIONS),
-                                true,
-                                new SubConfigurationFactory<SubConfiguration>() {
-
-                                    @Override
-                                    public SubConfiguration createSubConfiguration() {
-                                        return new SubConfiguration();
-                                    }
-
-                                    @Override
-                                    public void initialize(String subConfId,
-                                            SubConfiguration subConfiguration) {
-                                        // do nothing
-                                    }
-                                });
-                    }
-                });
+                new ExporterConfigurationFactory(props));
 
         if (exportConfigurations.isEmpty()) {
             log.warn("No export configuration found. None report will be generated.");
