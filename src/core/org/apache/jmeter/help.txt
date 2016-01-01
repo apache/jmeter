@@ -1,4 +1,10 @@
 
+To list all command line options, open a command prompt and type:
+
+jmeter.bat(Windows)/jmeter.sh(Linux) -?
+
+--------------------------------------------------
+
 To run Apache JMeter in GUI mode, open a command prompt and type:
 
 jmeter.bat(Windows)/jmeter.sh(Linux) [-p property-file]
