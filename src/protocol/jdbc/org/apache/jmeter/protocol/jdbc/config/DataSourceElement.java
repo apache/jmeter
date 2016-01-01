@@ -24,12 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.avalon.excalibur.datasource.DataSourceComponent;
-import org.apache.avalon.excalibur.datasource.ResourceLimitingJdbcDataSource;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.avalon.framework.logger.LogKitLogger;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -42,26 +37,35 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 public class DataSourceElement extends AbstractTestElement
-    implements ConfigElement, TestStateListener, TestBean
-    {
+    implements ConfigElement, TestStateListener, TestBean {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
-    private transient String dataSource, driver, dbUrl, username, password, checkQuery, poolMax, connectionAge, timeout,
-            trimInterval,transactionIsolation;
+    private transient String dataSource;
+    private transient String driver;
+    private transient String dbUrl;
+    private transient String username;
+    private transient String password;
+    private transient String checkQuery;
+    private transient String poolMax;
+    private transient String connectionAge;
+    private transient String timeout;
+    private transient String trimInterval;
+    private transient String transactionIsolation;
 
-    private transient boolean keepAlive, autocommit;
+    private transient boolean keepAlive;
+    private transient boolean autocommit;
 
     /*
      *  The datasource is set up by testStarted and cleared by testEnded.
      *  These are called from different threads, so access must be synchronized.
      *  The same instance is called in each case.
     */
-    private transient ResourceLimitingJdbcDataSource excaliburSource;
+    private transient BasicDataSource dbcpDataSource;
 
     // Keep a record of the pre-thread pools so that they can be disposed of at the end of a test
-    private transient Set<ResourceLimitingJdbcDataSource> perThreadPoolSet;
+    private transient Set<BasicDataSource> perThreadPoolSet;
 
     public DataSourceElement() {
     }
@@ -69,15 +73,23 @@ public class DataSourceElement extends AbstractTestElement
     @Override
     public void testEnded() {
         synchronized (this) {
-            if (excaliburSource != null) {
-                excaliburSource.dispose();
+            if (dbcpDataSource != null) {
+                try {
+                    dbcpDataSource.close();
+                } catch (SQLException ex) {
+                    log.error("Error closing pool:"+getName(), ex);
+                }
             }
-            excaliburSource = null;
+            dbcpDataSource = null;
         }
         if (perThreadPoolSet != null) {// in case
-            for(ResourceLimitingJdbcDataSource dsc : perThreadPoolSet){
-                log.debug("Disposing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
-                dsc.dispose();
+            for(BasicDataSource dsc : perThreadPoolSet){
+                log.debug("Closing pool: "+ getDataSourceName()+" @"+System.identityHashCode(dsc));
+                try {
+                    dsc.close();
+                } catch (SQLException ex) {
+                    log.error("Error closing pool:"+getName(), ex);
+                }
             }
             perThreadPoolSet=null;
         }
@@ -100,14 +112,14 @@ public class DataSourceElement extends AbstractTestElement
             log.error("JDBC data source already defined for: "+poolName);
         } else {
             String maxPool = getPoolMax();
-            perThreadPoolSet = Collections.synchronizedSet(new HashSet<ResourceLimitingJdbcDataSource>());
+            perThreadPoolSet = Collections.synchronizedSet(new HashSet<BasicDataSource>());
             if (maxPool.equals("0")){ // i.e. if we want per thread pooling
                 variables.putObject(poolName, new DataSourceComponentImpl()); // pool will be created later
             } else {
-                ResourceLimitingJdbcDataSource src=initPool(maxPool);
+                BasicDataSource src = initPool(maxPool);
                 synchronized(this){
-                    excaliburSource = src;
-                    variables.putObject(poolName, new DataSourceComponentImpl(excaliburSource));
+                    dbcpDataSource = src;
+                    variables.putObject(poolName, new DataSourceComponentImpl(dbcpDataSource));
                 }
             }
         }
@@ -122,7 +134,7 @@ public class DataSourceElement extends AbstractTestElement
     public Object clone() {
         DataSourceElement el = (DataSourceElement) super.clone();
         synchronized (this) {
-            el.excaliburSource = excaliburSource;
+            el.dbcpDataSource = dbcpDataSource;
             el.perThreadPoolSet = perThreadPoolSet;            
         }
         return el;
@@ -140,8 +152,8 @@ public class DataSourceElement extends AbstractTestElement
         if (poolObject == null) {
             throw new SQLException("No pool found named: '" + poolName + "', ensure Variable Name matches Variable Name of JDBC Connection Configuration");
         } else {
-            if(poolObject instanceof DataSourceComponent) {
-                DataSourceComponent pool = (DataSourceComponent) poolObject;
+            if(poolObject instanceof DataSourceComponentImpl) {
+                DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
                 return pool.getConnection();    
             } else {
                 String errorMsg = "Found object stored under variable:'"+poolName
@@ -156,10 +168,8 @@ public class DataSourceElement extends AbstractTestElement
      * Set up the DataSource - maxPool is a parameter, so the same code can
      * also be used for setting up the per-thread pools.
     */
-    private ResourceLimitingJdbcDataSource initPool(String maxPool) {
-        ResourceLimitingJdbcDataSource source = null;
-        source = new ResourceLimitingJdbcDataSource();
-        DefaultConfiguration config = new DefaultConfiguration("rl-jdbc"); // $NON-NLS-1$
+    private BasicDataSource initPool(String maxPool) {
+        BasicDataSource dataSource = new BasicDataSource();
 
         if (log.isDebugEnabled()) {
             StringBuilder sb = new StringBuilder(40);
@@ -173,17 +183,14 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(isAutocommit());
             log.debug(sb.toString());
         }
-        DefaultConfiguration poolController = new DefaultConfiguration("pool-controller"); // $NON-NLS-1$
-        poolController.setAttribute("max", maxPool); // $NON-NLS-1$
-        poolController.setAttribute("max-strict", "true"); // $NON-NLS-1$ $NON-NLS-2$
-        poolController.setAttribute("blocking", "true"); // $NON-NLS-1$ $NON-NLS-2$
-        poolController.setAttribute("timeout", getTimeout()); // $NON-NLS-1$
-        poolController.setAttribute("trim-interval", getTrimInterval()); // $NON-NLS-1$
-        config.addChild(poolController);
+        int poolSize = Integer.parseInt(maxPool);
+        dataSource.setMinIdle(0);
+        dataSource.setInitialSize(poolSize);
+        dataSource.setMaxIdle(poolSize);
+        dataSource.setMaxTotal(poolSize);
+        dataSource.setMaxWaitMillis(Long.parseLong(getTimeout()));
 
-        DefaultConfiguration autoCommit = new DefaultConfiguration("auto-commit"); // $NON-NLS-1$
-        autoCommit.setValue(String.valueOf(isAutocommit()));
-        config.addChild(autoCommit);
+        dataSource.setDefaultAutoCommit(Boolean.valueOf(isAutocommit()));
 
         if (log.isDebugEnabled()) {
             StringBuilder sb = new StringBuilder(40);
@@ -195,11 +202,22 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(getCheckQuery());
             log.debug(sb.toString());
         }
-        DefaultConfiguration cfgKeepAlive = new DefaultConfiguration("keep-alive"); // $NON-NLS-1$
-        cfgKeepAlive.setAttribute("disable", String.valueOf(!isKeepAlive())); // $NON-NLS-1$
-        cfgKeepAlive.setAttribute("age", getConnectionAge()); // $NON-NLS-1$
-        cfgKeepAlive.setValue(getCheckQuery());
-        poolController.addChild(cfgKeepAlive);
+        dataSource.setTestOnBorrow(false);
+        dataSource.setTestOnReturn(false);
+        dataSource.setTestOnCreate(false);
+        dataSource.setTestWhileIdle(false);
+
+        if(isKeepAlive()) {
+            dataSource.setTestWhileIdle(true);
+            dataSource.setValidationQuery(getCheckQuery());
+            dataSource.setMaxConnLifetimeMillis(Long.parseLong(getConnectionAge()));            
+            dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(getTrimInterval()));
+        }
+
+        int transactionIsolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
+        if (transactionIsolation >= 0) {
+            dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        }
 
         String _username = getUsername();
         if (log.isDebugEnabled()) {
@@ -212,38 +230,27 @@ public class DataSourceElement extends AbstractTestElement
             sb.append(_username);
             log.debug(sb.toString());
         }
-        DefaultConfiguration cfgDriver = new DefaultConfiguration("driver"); // $NON-NLS-1$
-        cfgDriver.setValue(getDriver());
-        config.addChild(cfgDriver);
-        DefaultConfiguration cfgDbUrl = new DefaultConfiguration("dburl"); // $NON-NLS-1$
-        cfgDbUrl.setValue(getDbUrl());
-        config.addChild(cfgDbUrl);
+        dataSource.setDriverClassName(getDriver());
+        dataSource.setUrl(getDbUrl());
 
         if (_username.length() > 0){
-            DefaultConfiguration cfgUsername = new DefaultConfiguration("user"); // $NON-NLS-1$
-            cfgUsername.setValue(_username);
-            config.addChild(cfgUsername);
-            DefaultConfiguration cfgPassword = new DefaultConfiguration("password"); // $NON-NLS-1$
-            cfgPassword.setValue(getPassword());
-            config.addChild(cfgPassword);
+            dataSource.setUsername(_username);
+            dataSource.setPassword(getPassword());
         }
 
         // log is required to ensure errors are available
-        source.enableLogging(new LogKitLogger(log));
-        try {
-            source.configure(config);
-            source.setInstrumentableName(getDataSource());
-        } catch (ConfigurationException e) {
-            log.error("Could not configure datasource for pool: "+getDataSource(),e);
+        //source.enableLogging(new LogKitLogger(log));
+        if(log.isDebugEnabled()) {
+            log.debug("PoolConfiguration:"+this.dataSource);
         }
-        return source;
+        return dataSource;
     }
 
     // used to hold per-thread singleton connection pools
-    private static final ThreadLocal<Map<String, ResourceLimitingJdbcDataSource>> perThreadPoolMap =
-        new ThreadLocal<Map<String, ResourceLimitingJdbcDataSource>>(){
+    private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
+        new ThreadLocal<Map<String, BasicDataSource>>(){
         @Override
-        protected Map<String, ResourceLimitingJdbcDataSource> initialValue() {
+        protected Map<String, BasicDataSource> initialValue() {
             return new HashMap<>();
         }
     };
@@ -253,31 +260,34 @@ public class DataSourceElement extends AbstractTestElement
      * and per-thread pools.
      *
      */
-    private class DataSourceComponentImpl implements DataSourceComponent{
+    private class DataSourceComponentImpl {
 
-        private final ResourceLimitingJdbcDataSource sharedDSC;
+        private final BasicDataSource sharedDSC;
 
         DataSourceComponentImpl(){
             sharedDSC=null;
         }
 
-        DataSourceComponentImpl(ResourceLimitingJdbcDataSource p_dsc){
+        DataSourceComponentImpl(BasicDataSource p_dsc){
             sharedDSC=p_dsc;
         }
 
-        @Override
+        /**
+         * @return Connection
+         * @throws SQLException
+         */
         public Connection getConnection() throws SQLException {
             Connection conn = null;
-            ResourceLimitingJdbcDataSource dsc = null;
+            BasicDataSource dsc = null;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
             } else {
-                Map<String, ResourceLimitingJdbcDataSource> poolMap = perThreadPoolMap.get();
-                dsc = poolMap.get(getDataSource());
+                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
+                dsc = poolMap.get(getDataSourceName());
                 if (dsc == null){
                     dsc = initPool("1");
-                    poolMap.put(getDataSource(),dsc);
-                    log.debug("Storing pool: "+dsc.getInstrumentableName()+" @"+System.identityHashCode(dsc));
+                    poolMap.put(getDataSourceName(),dsc);
+                    log.debug("Storing pool: "+getName()+" @"+System.identityHashCode(dsc));
                     perThreadPoolSet.add(dsc);
                 }
             }
@@ -298,11 +308,6 @@ public class DataSourceElement extends AbstractTestElement
             }
             return conn;
         }
-
-        @Override
-        public void configure(Configuration arg0) throws ConfigurationException {
-        }
-
     }
 
     @Override
@@ -357,6 +362,10 @@ public class DataSourceElement extends AbstractTestElement
      */
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
+    }
+    
+    private String getDataSourceName() {
+        return getDataSource();
     }
 
     /**

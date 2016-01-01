@@ -4143,7 +4143,7 @@ instead. (see figures 12 and 13).</p>
         </property>
         <property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
         process of trying to retrieve a connection</property>
-        <property name="Idle Cleanup Interval (ms)" required="Yes">This is used to specify how long idle connections will be maintained in the pool before being closed. For a complete explanation on how this works, see <a href="http://excalibur.apache.org/apidocs/org/apache/avalon/excalibur/pool/ResourceLimitingPool.html#trim%28%29">ResourceLimitingPool.trim()</a> (Defaults to "<code>60000</code>", 1 minute)</property>
+        <property name="Idle Cleanup Interval (ms)" required="Yes">This is used to specify how long idle connections will be maintained in the pool before being closed. (Defaults to "<code>60000</code>", 1 minute)</property>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
         <property name="Keep-alive" required="Yes">The keep-alive is used enable a mechanism to monitor the health of connections. If a connection has not been used for Max Connection Age (ms) then before returning the connection from a call to <code>getConnection()</code>, the connection is first used to ping the database to make sure that it is still alive. 
         Setting the age allows the 5 second age to be overridden. Validation Query will be used to test it.</property>
