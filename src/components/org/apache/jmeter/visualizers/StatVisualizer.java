@@ -114,7 +114,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(true, new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 SamplingStatCalculator row = null;

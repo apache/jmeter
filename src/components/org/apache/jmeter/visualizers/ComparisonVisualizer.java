@@ -60,7 +60,7 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 
     @Override
     public void add(final SampleResult sample) {
-        JMeterUtils.runSafe(true, new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);

@@ -361,7 +361,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
-            JMeterUtils.runSafe(true, new Runnable() {
+            JMeterUtils.runSafe(false, new Runnable() {
                 @Override
                 public void run() {
                     SamplingStatCalculator row = null;
