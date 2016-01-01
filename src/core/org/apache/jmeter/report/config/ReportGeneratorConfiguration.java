@@ -578,7 +578,7 @@ public class ReportGeneratorConfiguration {
      * @throws ConfigurationException
      *             when mandatory properties are missing
      */
-    public static ReportGeneratorConfiguration LoadFromProperties(
+    public static ReportGeneratorConfiguration loadFromProperties(
             Properties properties) throws ConfigurationException {
 
         log.debug(START_LOADING_MSG);

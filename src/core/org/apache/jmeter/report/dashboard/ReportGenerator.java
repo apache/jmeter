@@ -132,7 +132,7 @@ public class ReportGenerator {
         this.resultCollector = resultCollector;
         this.testFile = file;
         configuration = ReportGeneratorConfiguration
-                .LoadFromProperties(JMeterUtils.getJMeterProperties());
+                .loadFromProperties(JMeterUtils.getJMeterProperties());
     }
 
     /**
