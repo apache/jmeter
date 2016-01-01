@@ -241,13 +241,13 @@ public class ReportGeneratorConfiguration {
     /**
      * A factory for creating SubConfiguration objects.
      *
-     * @param <TSubConfiguration>
+     * @param <T>
      *            the generic type
      */
-    private interface SubConfigurationFactory<TSubConfiguration> {
-        TSubConfiguration createSubConfiguration();
+    private interface SubConfigurationFactory<T extends SubConfiguration> {
+        T createSubConfiguration();
 
-        void initialize(String subConfId, TSubConfiguration subConfiguration)
+        void initialize(String subConfId, T subConfiguration)
                 throws ConfigurationException;
     }
 
