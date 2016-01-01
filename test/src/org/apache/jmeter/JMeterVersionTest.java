@@ -64,8 +64,14 @@ public class JMeterVersionTest extends JMeterTestCase {
     public JMeterVersionTest(String arg0) {
         super(arg0);
     }
-
+    
+    /**
+     * Versions of libraries mentioned in build.properties
+     */
     private final Map<String, String> versions = new HashMap<>();
+    /**
+     * Libraries mentioned in build.properties
+     */
     private final Set<String> propNames = new HashSet<>();
 
     private File getFileFromHome(String relativeFile) {
