@@ -370,19 +370,6 @@ public class ReportGeneratorConfiguration {
         return graphConfigurations;
     }
 
-    // /**
-    // * Gets the exporter property prefix from the specified exporter
-    // identifier.
-    // *
-    // * @param exporterId
-    // * the exporter identifier
-    // * @return the exporter property prefix
-    // */
-    // public static String getExporterPropertyPrefix(String exporterId) {
-    // return REPORT_GENERATOR_EXPORTER_KEY_PREFIX + KEY_DELIMITER
-    // + exporterId;
-    // }
-
     /**
      * Gets the sub configuration property prefix from the specified key
      * prefix and sub configuration identifier.
@@ -432,17 +419,6 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_EXPORTER_KEY_PREFIX, exporterId)
                 + KEY_DELIMITER + propertyName;
     }
-
-    // /**
-    // * Gets the graph property prefix from the specified graph identifier.
-    // *
-    // * @param graphId
-    // * the graph identifier
-    // * @return the graph property prefix
-    // */
-    // public static String getGraphPropertyPrefix(String graphId) {
-    // return REPORT_GENERATOR_GRAPH_KEY_PREFIX + KEY_DELIMITER + graphId;
-    // }
 
     /**
      * Gets the graph property key from the specified identifier and property
