@@ -166,7 +166,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(new Runnable() {
+        JMeterUtils.runSafe(true, new Runnable() {
             @Override
             public void run() {
                 if (childSamples.isSelected()) {

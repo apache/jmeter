@@ -94,7 +94,7 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(new Runnable() {            
+        JMeterUtils.runSafe(true, new Runnable() {            
             @Override
             public void run() {
                 model.add(res);
