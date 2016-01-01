@@ -846,7 +846,7 @@ public class ProxyControl extends GenericController {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
-        JMeterUtils.runSafe(new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 try {
@@ -876,7 +876,7 @@ public class ProxyControl extends GenericController {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
-        JMeterUtils.runSafe(new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 try {
@@ -907,7 +907,7 @@ public class ProxyControl extends GenericController {
         sc.setIncludeTimers(false);
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
-        JMeterUtils.runSafe(new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                  try {
@@ -1145,7 +1145,7 @@ public class ProxyControl extends GenericController {
             final long deltaTFinal = deltaT;
             final boolean firstInBatchFinal = firstInBatch;
             final JMeterTreeNode myTargetFinal = myTarget;
-            JMeterUtils.runSafe(new Runnable() {
+            JMeterUtils.runSafe(false, new Runnable() {
                 @Override
                 public void run() {
                     try {

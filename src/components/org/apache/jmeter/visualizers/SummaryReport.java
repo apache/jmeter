@@ -177,7 +177,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     @Override
     public void add(final SampleResult res) {
         final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-        JMeterUtils.runSafe(new Runnable() {
+        JMeterUtils.runSafe(true, new Runnable() {
             @Override
             public void run() {
                 Calculator row = null;
