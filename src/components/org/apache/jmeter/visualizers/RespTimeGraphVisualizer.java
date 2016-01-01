@@ -299,7 +299,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         if ((matcher == null) || (matcher.find())) {
             final long startTimeMS = sampleResult.getStartTime();
             final long startTimeInterval = startTimeMS / intervalValue;
-            JMeterUtils.runSafe(new Runnable() {
+            JMeterUtils.runSafe(true, new Runnable() {
                 @Override
                 public void run() {
                     synchronized (lock) {

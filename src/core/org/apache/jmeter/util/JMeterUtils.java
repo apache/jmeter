@@ -1306,15 +1306,30 @@ public class JMeterUtils implements UnitTestManager {
      * @param runnable {@link Runnable}
      */
     public static final void runSafe(Runnable runnable) {
+        runSafe(true, runnable);
+    }
+
+    /**
+     * Run the runnable in AWT Thread if current thread is not AWT thread
+     * otherwise runs call {@link SwingUtilities#invokeAndWait(Runnable)}
+     * @param synchronous flag, whether we will wait for the AWT Thread to finish its job.
+     * @param runnable {@link Runnable}
+     */
+    public static final void runSafe(boolean synchronous, Runnable runnable) {
         if(SwingUtilities.isEventDispatchThread()) {
             runnable.run();
         } else {
-            try {
-                SwingUtilities.invokeAndWait(runnable);
-            } catch (InterruptedException e) {
-                log.warn("Interrupted in thread "+Thread.currentThread().getName(), e);
-            } catch (InvocationTargetException e) {
-                throw new Error(e);
+            if (synchronous) {
+                try {
+                    SwingUtilities.invokeAndWait(runnable);
+                } catch (InterruptedException e) {
+                    log.warn("Interrupted in thread "
+                            + Thread.currentThread().getName(), e);
+                } catch (InvocationTargetException e) {
+                    throw new Error(e);
+                }
+            } else {
+                SwingUtilities.invokeLater(runnable);
             }
         }
     }
