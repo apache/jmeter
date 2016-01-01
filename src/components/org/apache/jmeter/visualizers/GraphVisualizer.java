@@ -131,7 +131,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(true, new Runnable() {            
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 updateGui(model.addSample(res));

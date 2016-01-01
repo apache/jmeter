@@ -122,7 +122,7 @@ public class MailerVisualizer extends AbstractVisualizer implements ActionListen
     @Override
     public void add(final SampleResult res) {
         if (getModel() != null) {
-            JMeterUtils.runSafe(true, new Runnable() {
+            JMeterUtils.runSafe(false, new Runnable() {
                 @Override
                 public void run() {
                     MailerModel model = ((MailerResultCollector) getModel()).getMailerModel();
