@@ -108,7 +108,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(true, new Runnable() {
+        JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
                 // made currentSample volatile
