@@ -467,6 +467,8 @@ public class ReportGeneratorConfiguration {
      * @param properties
      *            the properties
      * @return the report generator configuration
+     * @throws ConfigurationException
+     *             when mandatory properties are missing
      */
     public static ReportGeneratorConfiguration LoadFromProperties(
             Properties properties) throws ConfigurationException {
