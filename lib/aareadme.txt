@@ -91,21 +91,9 @@ dnsjava-2.1.7
 http://www.dnsjava.org/download/
 - DNSCacheManager
 
-excalibur-datasource-1.1.1 (org.apache.avalon.excalibur.datasource)
---------------------------
-- DataSourceElement (JDBC)
-
-excalibur-instrument-1.0 (org.apache.excalibur.instrument)
-------------------------
-- used by excalibur-datasource
-
 excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 --------------------
 - LoggingManager
-
-excalibur-pool-1.2 (org.apache.avalon.excalibur.pool)
-------------------
-- used by excalibur-datasource
 
 freemarker-2.3.23.jar
 ----------------------
@@ -226,6 +214,10 @@ tika-1.11
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
+
+commons-dbcp2-2.1.1 (org.apache.commons.dbcp2)
+--------------------------
+- DataSourceElement (JDBC)
 
 velocity-1.7
 --------------

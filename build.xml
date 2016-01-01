@@ -365,6 +365,7 @@
     <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
     <include name="${lib.dir}/${commons-collections.jar}"/>
+    <include name="${lib.dir}/${commons-dbcp2.jar}"/>
     <include name="${lib.dir}/${commons-httpclient.jar}"/>
     <include name="${lib.dir}/${commons-io.jar}"/>
     <include name="${lib.dir}/${commons-jexl.jar}"/>
@@ -375,12 +376,7 @@
     <include name="${lib.dir}/${commons-net.jar}"/>
     <include name="${lib.dir}/${commons-pool2.jar}"/>
     <include name="${lib.dir}/${dnsjava.jar}"/>
-    <include name="${lib.dir}/${excalibur-datasource.jar}"/>
-    <include name="${lib.dir}/${excalibur-instrument.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
-    <include name="${lib.dir}/${excalibur-pool-api.jar}"/>
-    <include name="${lib.dir}/${excalibur-pool-impl.jar}"/>
-    <include name="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
   	<include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
@@ -442,6 +438,7 @@
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
+  	<pathelement location="${lib.dir}/${commons-dbcp2.jar}"/>
     <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
     <pathelement location="${lib.dir}/${commons-io.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl.jar}"/>
@@ -452,12 +449,7 @@
     <pathelement location="${lib.dir}/${commons-net.jar}"/>
     <pathelement location="${lib.dir}/${commons-pool2.jar}"/>
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-datasource.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-instrument.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-pool-api.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-pool-impl.jar}"/>
-    <pathelement location="${lib.dir}/${excalibur-pool-instrumented.jar}"/>
   	<pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
@@ -488,7 +480,7 @@
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
-    <pathelement location="${lib.dir}/${xalan.jar}"/>
+  	<pathelement location="${lib.dir}/${xalan.jar}"/>
     <pathelement location="${lib.dir}/${xerces.jar}"/>
     <pathelement location="${lib.dir}/${xml-apis.jar}"/>
     <pathelement location="${lib.dir}/${xmlgraphics-commons.jar}"/>
@@ -871,7 +863,7 @@
   <target name="package" depends="compile, prepare-resources, package-only"
      description="Compile everything and create the jars"/>
 
-  <target name="package-and-check" depends="package, checkstyle" 
+  <target name="package-and-check" depends="clean, package, checkstyle" 
      description="Compile, create jars and apply checkstyle before commiting code"/>
 
   <target name="prepare-resources"
@@ -2843,6 +2835,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="beanshell"/>
         <process_jarfile jarname="commons-codec"/>
         <process_jarfile jarname="commons-collections"/>
+    	<process_jarfile jarname="commons-dbcp2"/>
         <process_jarfile jarname="commons-httpclient"/>
         <process_jarfile jarname="commons-io"/>
         <process_jarfile jarname="commons-jexl"/>
@@ -2853,12 +2846,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-net"/>
     	<process_jarfile jarname="commons-pool2"/>
         <process_jarfile jarname="dnsjava"/>
-        <process_jarfile jarname="excalibur-datasource"/>
-        <process_jarfile jarname="excalibur-instrument"/>
         <process_jarfile jarname="excalibur-logger"/>
-        <process_jarfile jarname="excalibur-pool-api"/>
-        <process_jarfile jarname="excalibur-pool-impl"/>
-        <process_jarfile jarname="excalibur-pool-instrumented"/>
         <process_jarfile jarname="freemarker"/>
         <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
@@ -2925,7 +2913,6 @@ run JMeter unless all the JMeter jars are added.
         <delete verbose="true">
           <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
           <!-- tidy up old pool jar -->
-          <fileset dir="${lib.dir}" includes="excalibur-pool-1.2.jar"/>
         </delete>
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>

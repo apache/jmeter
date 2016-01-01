@@ -48,6 +48,7 @@
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp2-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
@@ -58,12 +59,7 @@
 	<classpathentry kind="lib" path="lib/commons-net-3.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.7.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-datasource-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-instrument-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/excalibur-logger-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-pool-api-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-pool-impl-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/excalibur-pool-instrumented-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer-2.1.jar"/>

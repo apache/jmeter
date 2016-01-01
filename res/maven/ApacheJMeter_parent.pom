@@ -60,6 +60,7 @@ under the License.
       <bcpkix.version>1.49</bcpkix.version>
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
+      <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
       <commons-io.version>2.4</commons-io.version>
       <commons-jexl.version>1.1</commons-jexl.version>
@@ -70,13 +71,7 @@ under the License.
       <commons-net.version>3.4</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
       <dnsjava.version>2.1.7</dnsjava.version>
-      <excalibur-datasource.version>2.1</excalibur-datasource.version>
-      <excalibur-instrument.version>1.0</excalibur-instrument.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
-      <excalibur-pool.version>2.1</excalibur-pool.version>
-      <excalibur-pool-api.version>${excalibur-pool.version}</excalibur-pool-api.version>
-      <excalibur-pool-impl.version>${excalibur-pool.version}</excalibur-pool-impl.version>
-      <excalibur-pool-instrumented.version>${excalibur-pool.version}</excalibur-pool-instrumented.version>
       <freemarker.version>2.3.23</freemarker.version>
       <htmlparser.version>2.1</htmlparser.version>
       <httpclient.version>4.5.1</httpclient.version>
@@ -155,6 +150,11 @@ under the License.
         <version>${commons-collections.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-dbcp2</artifactId>
+        <version>${commons-dbcp2.version}</version>
+      </dependency>
+      <dependency>
         <groupId>commons-httpclient</groupId>
         <artifactId>commons-httpclient</artifactId>
         <version>${commons-httpclient.version}</version>
@@ -205,44 +205,9 @@ under the License.
         <version>${dnsjava.version}</version>
       </dependency>
       <dependency>
-        <groupId>excalibur-datasource</groupId>
-        <artifactId>excalibur-datasource</artifactId>
-        <version>${excalibur-datasource.version}</version>
-        <exclusions>
-            <exclusion>
-                <groupId>excalibur-fortress</groupId>
-                <artifactId>excalibur-fortress-container-api</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>excalibur-fortress</groupId>
-                <artifactId>excalibur-fortress-meta</artifactId>
-            </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>excalibur-instrument</groupId>
-        <artifactId>excalibur-instrument</artifactId>
-        <version>${excalibur-instrument.version}</version>
-      </dependency>
-      <dependency>
         <groupId>excalibur-logger</groupId>
         <artifactId>excalibur-logger</artifactId>
         <version>${excalibur-logger.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>excalibur-pool</groupId>
-        <artifactId>excalibur-pool-api</artifactId>
-        <version>${excalibur-pool-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>excalibur-pool</groupId>
-        <artifactId>excalibur-pool-impl</artifactId>
-        <version>${excalibur-pool-impl.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>excalibur-pool</groupId>
-        <artifactId>excalibur-pool-instrumented</artifactId>
-        <version>${excalibur-pool-instrumented.version}</version>
       </dependency>
       <dependency>
         <groupId>org.htmlparser</groupId>
