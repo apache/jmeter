@@ -31,7 +31,7 @@
 
 <section name="&sect-num;. Elements of a Test Plan">
 
-<p>The Test Plan object has a checkbox called "Functional Testing".  If selected, it
+<p>The Test Plan object has a checkbox called "<code>Functional Testing</code>".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
 selected a file in your test listeners, this data will be written to file.  This can be useful if
 you are doing a small run to ensure that JMeter is configured correctly, and that your server
@@ -39,7 +39,7 @@ is returning the expected results.  The consequence is that the file will grow h
 JMeter's performance will suffer.  This option should be off if you are doing stress-testing (it
 is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
-<p>You can also use the Configuration button on a listener to decide what fields to save.</p>
+<p>You can also use the <code>Configuration</code> button on a listener to decide what fields to save.</p>
 
 <subsection name="&sect-num;.1 Thread Group" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.
@@ -257,7 +257,7 @@ Other listeners provide summary or aggregation information.
 Additionally, listeners can direct the data to a file for later use.  
 Every listener in JMeter provides a field to indicate the file to store data to.
 There is also a Configuration button which can be used to choose which fields to save, and whether to use CSV or XML format.
-<b>Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.</b>
+<note>Note that all Listeners save the same data; the only difference is in the way the data is presented on the screen.</note>
 </p>
 
 <p>
@@ -305,10 +305,10 @@ add an assertion to a HTTP Request that checks for the text, "<code>&lt;/HTML&gt
 will then check that the text is present in the HTTP response.  If JMeter cannot find the
 text, then it will mark this as a failed request.</p>
 
-<p>
+<note>
 Note that assertions apply to all samplers which are in its <a href="#scoping_rules">scope</a>.
 To restrict the assertion to a single sampler, add the assertion as a child of the sampler.
-</p>
+</note>
 
 <p>To view the assertion results, add an Assertion Listener to the Thread Group.
 Failed Assertions will also show up in the Tree View and Table Listeners, 
@@ -359,9 +359,9 @@ See the <a href="test_plan.html#scoping_rules"><b>scoping rules</b></a> for more
 <li>Pre-Processors</li>
 <li>Timers</li>
 <li>Sampler</li>
-<li>Post-Processors (unless SampleResult is null)</li>
-<li>Assertions (unless SampleResult is null)</li>
-<li>Listeners (unless SampleResult is null)</li>
+<li>Post-Processors (unless SampleResult is <code>null</code>)</li>
+<li>Assertions (unless SampleResult is <code>null</code>)</li>
+<li>Listeners (unless SampleResult is <code>null</code>)</li>
 </ol>
 
 <note>
@@ -422,30 +422,30 @@ that Controller.  In the following test tree:</p>
 <figure image="scoping3.png">complex example</figure>
 <p>In this example, the requests are named to reflect the order in which they will be executed.  Timer #1 will apply to Requests Two, Three, and Four (notice how order is irrelevant for hierarchical elements).  Assertion #1 will apply only to Request Three.  Timer #2 will affect all the requests.</p>
 <p>Hopefully these examples make it clear how configuration (hierarchical) elements are applied.  If you imagine each Request being passed up the tree branches, to its parent, then to its parent's parent, etc., and each time collecting all the configuration elements of that parent, then you will see how it works.  </p>
-<b>
+<note>
 The Configuration elements Header Manager, Cookie Manager and Authorization manager are
 treated differently from the Configuration Default elements.
 The settings from the Configuration Default elements are merged into a set of values that the Sampler has access to.
 However, the settings from the Managers are not merged.
 If more than one Manager is in the scope of a Sampler, 
-only one Manager is used, but there is currently no way to specify <b>which</b> is used.
-</b>
+only one Manager is used, but there is currently no way to specify <em>which</em> is used.
+</note>
 </subsection>
 
 
 <subsection name="&sect-num;.11 Properties and Variables" anchor="properties">
 
 <p>
-JMeter <b>properties</b> are defined in jmeter.properties (see <a href="get-started.html#configuring_jmeter">Getting Started - Configuring JMeter</a> for more details).
+JMeter <em>properties</em> are defined in <code>jmeter.properties</code> (see <a href="get-started.html#configuring_jmeter">Getting Started - Configuring JMeter</a> for more details).
 <br></br>
 Properties are global to jmeter, and are mostly used to define some of the defaults JMeter uses.
-For example the property remote_hosts defines the servers that JMeter will try to run remotely.
+For example the property <code>remote_hosts</code> defines the servers that JMeter will try to run remotely.
 Properties can be referenced in test plans 
 - see <a href="functions.html#__property">Functions - read a property</a> -
 but cannot be used for thread-specific values.
 </p>
 <p>
-JMeter <b>variables</b> are local to each thread. The values may be the same for each thread, or they may be different.
+JMeter <em>variables</em> are local to each thread. The values may be the same for each thread, or they may be different.
 <br></br>
 If a variable is updated by a thread, only the thread copy of the variable is changed.
 For example the <complink name="Regular Expression Extractor"/> Post-Processor 
@@ -480,7 +480,7 @@ For example, the name of a host, or the number of threads in a thread group.
 When deciding how to structure a Test Plan, 
 make a note of which items are constant for the run, but which may change between runs.
 Decide on some variable names for these - 
-perhaps use a naming convention such as prefixing them with C_ or K_ or using uppercase only
+perhaps use a naming convention such as prefixing them with <code>C_</code> or <code>K_</code> or using uppercase only
 to distinguish them from variables that need to change during the test.
 Also consider which items need to be local to a thread - 
 for example counters or values extracted with the Regular Expression Post-Processor.
@@ -493,8 +493,8 @@ HOST             www.example.com
 THREADS          10
 LOOPS            20
 </pre>
-You can refer to these in the test plan as ${HOST} ${THREADS} etc.
-If you later want to change the host, just change the value of the HOST variable.
+You can refer to these in the test plan as <code>${HOST}</code> <code>${THREADS}</code> etc.
+If you later want to change the host, just change the value of the <code>HOST</code> variable.
 This works fine for small numbers of tests, but becomes tedious when testing lots of different combinations.
 One solution is to use a property to define the value of the variables, for example:
 <pre>
