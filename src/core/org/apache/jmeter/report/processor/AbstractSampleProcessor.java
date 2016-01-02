@@ -68,8 +68,7 @@ public class AbstractSampleProcessor implements SampleProcessor {
         while (channelContexts.size() <= channel) {
             channelContexts.add(new ChannelContext());
         }
-        ChannelContext out = channelContexts.get(channel);
-        return out;
+        return channelContexts.get(channel);
     }
 
     /*
