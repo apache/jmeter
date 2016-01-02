@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @since 2.14
  */
-abstract public class AbstractSampleConsumer extends AbstractSampleProcessor
+public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
         implements SampleConsumer, SampleProducer {
 
     private static final Logger log = LoggerFactory
