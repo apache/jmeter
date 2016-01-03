@@ -52,8 +52,7 @@ For testing how JMeter performs on a given platform, the JavaTest sampler can be
 It does not require any network access so can give some idea as to the maximum throughput achievable.
 </p>
 <p>
-JMeter versions since 2.8 have an option to delay thread creation until the thread
-starts sampling, i.e. after any thread group delay and the ramp-up time for the thread itself.
+JMeter has an option to delay thread creation until the thread starts sampling, i.e. after any thread group delay and the ramp-up time for the thread itself.
 This allows for a very large total number of threads, provided that not too many are active concurrently.
 </p>
 </section>
