@@ -51,6 +51,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -80,7 +81,9 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10);
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     //+ JMX property names; do not change
 

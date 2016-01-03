@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -97,7 +98,9 @@ public class MonitorPerformancePanel extends JSplitPane implements TreeSelection
 
     private final String SERVER_TITLE = JMeterUtils.getResString("monitor_performance_servers"); //$NON-NLS-1$
 
-    private Font plaintext = new Font("plain", Font.TRUETYPE_FONT, 10); //$NON-NLS-1$
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+
+    private static final Font plaintext = new Font("plain", Font.TRUETYPE_FONT, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     /**
      *
