@@ -66,7 +66,7 @@ You can use these to determine the correct property setting to change the loggin
 <p>
 It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
 groovy used in JMeter.
-Since version 2.6, you can view log messages directly in JMeter GUI, to do so:</p>
+You can view log messages directly in JMeter GUI, to do so:</p>
 <ul>
 <li>use menu <menuchoice><guimenuitem>Options</guimenuitem><guimenuitem>Log Viewer</guimenuitem></menuchoice>,
 a log console will appear at the bottom of the interface</li>
