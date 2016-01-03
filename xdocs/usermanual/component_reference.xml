@@ -2787,7 +2787,6 @@ Less memory is now needed, especially if most samples only take a second or two 
 <ul>
 <li>Aggregate Report</li>
 <li>Aggregate Graph</li>
-<li>Distribution Graph</li>
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 <note>
@@ -2874,7 +2873,7 @@ Further details on the precise meaning of the statistical terms can be found on 
  <p>The value displayed on the top left of graph is the max of 90<sup>th</sup> percentile of response time.</p>
 </component>
 
-<component name="Spline Visualizer" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
+<component name="Spline Visualizer (DEPRECATED)" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
 <note>
 Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
 during Test Plan debugging and Validation.
@@ -3176,7 +3175,7 @@ For a detailed description of how to use the monitor, please refer to
 </description>
 </component>
 
-<component name="Distribution Graph (alpha)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
+<component name="Distribution Graph (DEPRECATED)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
 <description>
 <note>
 Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 

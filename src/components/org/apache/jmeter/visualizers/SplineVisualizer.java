@@ -43,7 +43,9 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
  * Spline interpolated curve. Currently, it tries to look mostly like the
  * GraphVisualizer.
  *
+ * @deprecated since 3.0
  */
+@Deprecated
 public class SplineVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener {
 
     private static final long serialVersionUID = 240L;
