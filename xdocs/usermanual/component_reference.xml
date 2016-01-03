@@ -701,89 +701,6 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
         </property>
         <property name="Filename" required="No">If specified, then the contents of the file are sent, and the Data field is ignored</property>
         </properties>
-
-</component>
-
-<component name="WebService(SOAP) Request (DEPRECATED)" useinstead="HTTP_Request" index="&sect-num;.1.6" width="943" height="648" screenshot="webservice_sampler.png">
-<note>
-See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
-</note>
-<description><p>This sampler has been tested with IIS Webservice running .NET 1.0 and .NET 1.1.
- It has been tested with SUN JWSDP, IBM webservices, Axis and gSoap toolkit for C/C++.
- The sampler uses Apache SOAP driver to serialize the message and set the header
- with the correct SOAPAction. Right now the sampler doesn't support automatic WSDL
- handling, since Apache SOAP currently does not provide support for it. Both IBM
- and SUN provide WSDL drivers. There are 3 options for the post data: text area,
- external file, or directory. If you want the sampler to randomly select a message,
- use the directory. Otherwise, use the text area or a file. The if either the
- file or path are set, it will not use the message in the text area. If you need
- to test a soap service that uses different encoding, use the file or path. If you
- paste the message in to text area, it will not retain the encoding and will result
- in errors. Save your message to a file with the proper encoding, and the sampler
- will read it as java.io.FileInputStream.</p>
- <p>An important note on the sampler is it will automatically use the proxy host
- and port passed to JMeter from command line, if those fields in the sampler are
- left blank. If a sampler has values in the proxy host and port text field, it
- will use the ones provided by the user. This behavior may not be what users
- expect.</p>
- <p>By default, the webservice sampler sets SOAPHTTPConnection.setMaintainSession
- (true). If you need to maintain the session, add a blank Header Manager. The
- sampler uses the Header Manager to store the SOAPHTTPConnection object, since
- the version of apache soap does not provide a easy way to get and set the cookies.</p>
- <note>If you are using CSVDataSet, do not check "Memory Cache". If memory
- cache is checked, it will not iterate to the next value. That means all the requests
- will use the first value.</note>
- <p>Make sure you use <code>&lt;soap:Envelope</code> rather than <code>&lt;Envelope</code>. For example:</p>
- <source>
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;soap:Envelope 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
-&lt;soap:Body&gt;
-&lt;foo xmlns="http://clients-xlmns"/&gt;
-&lt;/soap:Body&gt;
-&lt;/soap:Envelope&gt;
-</source>
-<note>The SOAP library that is used does not support SOAP 1.2, only SOAP 1.1. 
-Also the library does not provide access to the HTTP response code (e.g. 200) or message (e.g. OK). 
-To get round this, versions of JMeter after 2.3.2 check the returned message length.
-If this is zero, then the request is marked as failed.
-</note>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler
-         that is shown in the tree.</property>
-        <property name="WSDL URL" required="No">The WSDL URL with the service description.
-        Versions of JMeter after 2.3.1 support the <code>file:</code> protocol for local WSDL files.
-        </property>
-        <property name="Web Methods" required="No">Will be populated from the WSDL when the Load WSDL button is pressed.
-        Select one of the methods and press the Configure button to populate the <code>Protocol</code>, <code>Server</code>,
-        <code>Port</code>, <code>Path</code> and <code>SOAPAction</code> fields.
-        </property>
-        <property name="Protocol" required="Yes"><code>HTTP</code> or <code>HTTPS</code> are acceptable protocol.</property>
-        <property name="Server Name or IP" required="Yes">The hostname or IP address.</property>
-        <property name="Port Number" required="Yes">Port Number.</property>
-        <property name="Timeout" required="No">Connection timeout.</property>
-        <property name="Path" required="Yes">Path for the webservice.</property>
-        <property name="SOAPAction" required="Yes">The SOAPAction defined in the webservice description or WSDL.</property>
-        <property name="Soap/XML-RPC Data" required="Yes">The Soap XML message</property>
-        <property name="Soap file" required="No">File containing soap message</property>
-        <property name="Message(s) Folder" required="No">Folder containing soap files. Files are choose randomly during test.</property>
-        <property name="Memory cache" required="Yes">
-        When using external files, setting this causes the file to be processed once and caches the result.
-        This may use a lot of memory if there are many different large files.
-        </property>
-        <property name="Read SOAP Response" required="No">Read the SOAP response (consumes performance). Permit to have assertions or post-processors</property>
-        <property name="Use HTTP Proxy" required="No">Check box if http proxy should be used</property>
-        <property name="Server Name or IP" required="No">Proxy hostname</property>
-        <property name="Port Number" required="No">Proxy host port</property>
-        </properties>
-
-<note>
-Webservice Soap Sampler assumes that empty response means failure.
-</note>
 </component>
 
 <component name="LDAP Request" index="&sect-num;.1.7" width="621" height="462" screenshot="ldap_request.png">
@@ -5380,34 +5297,6 @@ Clever users will even determine that this modifier can be used to grab values t
 If using distributed testing, ensure you switch mode (see <code>jmeter.properties</code>) so that it's not a stripping one, see <bugzilla>56376</bugzilla>.
 </note>
 
-</component>
-
-<component name="HTML Parameter Mask (DEPRECATED)" index="&sect-num;.7.3" useinstead="Counter"  width="624" height="209" screenshot="parameter_mask.png">
-<description><p>The HTML Parameter Mask is used to generate unique values for HTML arguments.  By
-specifying the name of the parameter, a value prefix and suffix, and counter parameters, this
-modifier will generate values of the form "<code>name=prefixcountersuffix</code>".  Any HTTP
-Request that it modifies, it will replace any parameter with the same name or add the appropriate
-parameter to the requests list of arguments.</p>
-<note>The value of the argument in your HTTP Request must be a '<code>*</code>' in order for the HTML Parameter Mask
-Modifier to replace it.</note>
-<p>As an example, the username for a login script could be modified to send a series of values
-such as:<br></br>
-<code>user_1</code><br></br>
-<code>user_2</code><br></br>
-<code>user_3</code><br></br>
-<code>user_4</code>, etc.</p></description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name given to this element in the test tree.</property>
-        <property name="Name (second appearing)" required="Yes">The name of the parameter to
-        modify or add to the HTTP Request.</property>
-        <property name="ID Prefix" required="No">A string value to prefix to every generated value.</property>
-        <property name="Lower Bound" required="Yes">A number value to start the counter at.</property>
-        <property name="Upper Bound" required="Yes">A number value to end the counter, at which point it restarts
-        with the <code>Lower Bound</code> value.</property>
-        <property name="Increment" required="Yes">Value to increment the counter by each time through.</property>
-        <property name="ID Suffix" required="No">A string value to add as suffix to every generated value.</property>
-</properties>
 </component>
 
 <component name="User Parameters" index="&sect-num;.7.5"  width="703" height="303" screenshot="user_params.png">

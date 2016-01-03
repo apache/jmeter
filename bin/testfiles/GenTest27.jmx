@@ -758,28 +758,6 @@
             <stringProp name="ActionProcessor.duration"></stringProp>
           </TestAction>
           <hashTree/>
-          <WebServiceSampler guiclass="WebServiceSamplerGui" testclass="WebServiceSampler" testname="WebService(SOAP) Request" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <stringProp name="Soap.Action"></stringProp>
-            <stringProp name="HTTPSamper.xml_data"></stringProp>
-            <stringProp name="WebServiceSampler.xml_data_file"></stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
-            <stringProp name="WebserviceSampler.timeout"></stringProp>
-            <stringProp name="WebServiceSampler.memory_cache">true</stringProp>
-            <stringProp name="WebServiceSampler.read_response">false</stringProp>
-            <stringProp name="WebServiceSampler.use_proxy">false</stringProp>
-            <stringProp name="WebServiceSampler.proxy_host"></stringProp>
-            <stringProp name="WebServiceSampler.proxy_port"></stringProp>
-          </WebServiceSampler>
-          <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Post Processors" enabled="true"/>
         <hashTree>
