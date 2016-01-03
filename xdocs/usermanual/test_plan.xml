@@ -242,7 +242,7 @@ exists on the Test Plan tree at the same level as the Thread Group element.  It 
 from a Thread Group in that it is not executed unless it is 
 referenced by either a <complink name="Module Controller"/> or an <complink name="Include_Controller"/>.
 </p>
-<p>This element is purely for code re-use within Test Plans and was introduced in Version 2.5</p>
+<p>This element is purely for code re-use within Test Plans</p>
 </subsection>
 
 <subsection name="&sect-num;.3 Listeners" anchor="listeners">
