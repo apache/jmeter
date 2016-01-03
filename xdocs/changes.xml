@@ -249,6 +249,7 @@ Summary
     <li><bug>58685</bug>JDatefield : Make the modification of the date with up/down arrow work.Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>58693</bug>Fix "Cannot nest output folder 'jmeter/build/components' inside output folder 'jmeter/build' when setting up eclipse</li>
     <li><bug>58781</bug>Command line option "-?" shows Unknown option</li>
+    <li><bug>58795</bug>NPE may occur in GuiPackage#getTestElementCheckSum with some 3rd party plugins</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

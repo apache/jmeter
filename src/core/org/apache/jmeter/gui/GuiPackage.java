@@ -421,15 +421,23 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * choosing the new node.
      */
     public void updateCurrentNode() {
+        
         try {
             if (currentNode != null && !currentNodeUpdated) {
                 log.debug("Updating current node " + currentNode.getName());
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
                 TestElement el = currentNode.getTestElement();
-                int before = getTestElementCheckSum(el);
+                int before = 0;
+                int after = 0;
+                final boolean historyEnabled = undoHistory.isEnabled();
+                if(historyEnabled) {
+                    before = getTestElementCheckSum(el);
+                }
                 comp.modifyTestElement(el);
-                int after = getTestElementCheckSum(el);
-                if (before != after) {
+                if(historyEnabled) {
+                    after = getTestElementCheckSum(el);
+                }
+                if (!historyEnabled || (before != after)) {
                     currentNode.nameChanged(); // Bug 50221 - ensure label is updated
                 }
             }
@@ -844,7 +852,15 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                         .getElement());
             } else {
                 ret ^= obj.getName().hashCode();
-                ret ^= obj.getStringValue().hashCode();
+                String stringValue = obj.getStringValue();
+                if(stringValue != null) {
+                    ret ^= stringValue.hashCode();
+                } else {
+                    if(log.isDebugEnabled()) {
+                        log.debug("obj.getStringValue() returned null for test element:"
+                                +el.getName()+" at property:"+obj.getName());
+                    }
+                }
             }
         }
         return ret;
