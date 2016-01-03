@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
@@ -62,6 +63,10 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     private static final long serialVersionUID = -4436834972710248247L;
 
     private static final Logger logger = LoggingManager.getLoggerForClass();
+
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private JButton searchButton;
 
@@ -127,9 +132,9 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
-        Font font = new Font("SansSerif", Font.PLAIN, 10); // reduce font
-        isRegexpCB.setFont(font);
-        isCaseSensitiveCB.setFont(font);
+        
+        isRegexpCB.setFont(FONT_SMALL);
+        isCaseSensitiveCB.setFont(FONT_SMALL);
 
         JPanel searchCriterionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         searchCriterionPanel.add(isCaseSensitiveCB);

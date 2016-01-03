@@ -27,6 +27,7 @@ import java.awt.Paint;
 import java.math.BigDecimal;
 
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -79,7 +80,9 @@ public class AxisGraph extends JPanel {
 
     protected Font legendFont;
 
-    protected Font valueFont = new Font("SansSerif", Font.PLAIN, 8);
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+
+    protected Font valueFont = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.6));
 
     protected Color[] color = { Color.YELLOW };
 

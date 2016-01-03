@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -70,8 +71,10 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private static final int TAB_PARAMETERS = 0;
     
     private static final int TAB_RAW_BODY = 1;
+
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
     
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 12);
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private HTTPArgumentsPanel argsPanel;
 

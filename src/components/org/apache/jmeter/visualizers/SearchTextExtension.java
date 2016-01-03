@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -57,6 +58,10 @@ import org.apache.log.Logger;
 public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
@@ -168,8 +173,6 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      * @return Text find task pane
      */
     private JPanel createSearchTextPanel() {
-        Font font = new Font("SansSerif", Font.PLAIN, 10);
-
         // Search field
         searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
@@ -187,7 +190,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         // Buttons
         findButton = new JButton(JMeterUtils
                 .getResString("search_text_button_find")); // $NON-NLS-1$
-        findButton.setFont(font);
+        findButton.setFont(FONT_SMALL);
         findButton.setActionCommand(SEARCH_TEXT_COMMAND);
         findButton.addActionListener(this);
         searchPanel.add(findButton);
@@ -195,11 +198,11 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         // checkboxes
         caseChkBox = new JCheckBox(JMeterUtils
                 .getResString("search_text_chkbox_case"), false); // $NON-NLS-1$
-        caseChkBox.setFont(font);
+        caseChkBox.setFont(FONT_SMALL);
         searchPanel.add(caseChkBox);
         regexpChkBox = new JCheckBox(JMeterUtils
                 .getResString("search_text_chkbox_regexp"), false); // $NON-NLS-1$
-        regexpChkBox.setFont(font);
+        regexpChkBox.setFont(FONT_SMALL);
         searchPanel.add(regexpChkBox);
 
         // when Enter is pressed, search start
