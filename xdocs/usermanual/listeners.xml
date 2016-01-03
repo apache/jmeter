@@ -51,7 +51,7 @@ CSV files are much smaller than XML files, so use CSV if you are generating lots
 <p>
 The file name can be specified using either a relative or an absolute path name.
 Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
-Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+JMeter also supports paths relative to the directory containing the current test plan (JMX file).
 If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
 then the path is assumed to be relative to the JMX file location.
 </p>
@@ -168,7 +168,7 @@ The full set of properties that affect result file output is shown below.
 #sample_variables=SESSION_ID,REFERENCE
 # N.B. The current implementation saves the values in XML as attributes,
 # so the names must be valid XML names.
-# Versions of JMeter after 2.3.2 send the variable to all servers
+# JMeter sends the variable to all servers
 # to ensure that the correct data is available at the client.
 
 # Optional xml processing instruction for line 2 of the file:
@@ -250,9 +250,9 @@ jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
 <p>
 Note that JMeter logging messages are written to the file <code>jmeter.log</code> by default.
 This file is recreated each time, so if you want to keep the log files for each run,
-you will need to rename it using the <code>-j</code> option as above. The <code>-j</code> option was added in version 2.3.
+you will need to rename it using the <code>-j</code> option as above. 
 </p>
-<p>Versions of JMeter after 2.3.1 support variables in the log file name.
+<p>JMeter supports variables in the log file name.
 If the filename contains  paired single-quotes, then the name is processed
 as a <code>SimpleDateFormat</code> format applied to the current date, for example:
 <code>log_file='jmeter_'yyyyMMddHHmmss'.tmp'</code>.
@@ -440,7 +440,7 @@ The sample attributes have the following meaning:
 <tr><td> <code>t</code></td><td>Elapsed time (milliseconds)</td></tr>
 <tr><td><code>tn</code></td><td>Thread Name</td></tr>
 <tr><td><code>ts</code></td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
-<tr><td><code>varname</code></td><td>Value of the named variable (versions of JMeter after 2.3.1)</td></tr>
+<tr><td><code>varname</code></td><td>Value of the named variable</td></tr>
 </table>
 
 <note>
