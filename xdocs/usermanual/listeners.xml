@@ -35,7 +35,7 @@
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
 file. To view the contents of a response from any given sampler, add either of the Listeners "<code>View
 Results Tree</code>" or "<code>View Results in table</code>" to a test plan. To view the response time graphically, add
-graph results, spline results or distribution graph.
+graph results.
 The <complink name="listeners">Listeners</complink> 
 section of the components page has full descriptions of all the listeners.</p>
 
@@ -280,7 +280,6 @@ Less memory is now needed, especially if most samples only take a second or two 
 <ul>
 <li>Aggregate Report</li>
 <li>Aggregate Graph</li>
-<li>Distribution Graph</li>
 </ul>
 <p>To minimize the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 </section>
