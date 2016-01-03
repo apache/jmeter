@@ -56,6 +56,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -144,7 +145,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private final String TOTAL_ROW_LABEL =
         JMeterUtils.getResString("aggregate_report_total_label");       //$NON-NLS-1$
 
-    private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10); // $NON-NLS-1$
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     private JTable myJTable;
 
@@ -810,7 +813,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     private JPanel createGraphSelectionSubPane() {
-        Font font = new Font("SansSerif", Font.PLAIN, 10);
         // Search field
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
@@ -827,14 +829,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         searchPanel.add(Box.createRigidArea(new Dimension(5,0)));
 
         // Button
-        applyFilterBtn.setFont(font);
+        applyFilterBtn.setFont(FONT_SMALL);
         applyFilterBtn.addActionListener(this);
         searchPanel.add(applyFilterBtn);
 
         // checkboxes
-        caseChkBox.setFont(font);
+        caseChkBox.setFont(FONT_SMALL);
         searchPanel.add(caseChkBox);
-        regexpChkBox.setFont(font);
+        regexpChkBox.setFont(FONT_SMALL);
         searchPanel.add(regexpChkBox);
 
         return searchPanel;

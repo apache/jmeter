@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
@@ -66,7 +67,9 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
     private static final int MINIMAL_BOX_WIDTH = 500;
     private static final int MINIMAL_BOX_HEIGHT = 300;
     
-    private Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 10); // $NON-NLS-1$
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font"); //$NON-NLS-1$
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

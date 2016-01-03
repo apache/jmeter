@@ -30,6 +30,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -49,9 +50,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class HttpTestSampleGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
     
-    private static final Font FONT_VERY_SMALL = new Font("SansSerif", Font.PLAIN, 9);
-    
-    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, 12);
+    private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
+
+    private static final Font FONT_VERY_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.6));
+
+    private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private MultipartUrlConfigGui urlConfigGui;
 
