@@ -1464,7 +1464,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message:
   <dl>
-    <dt><code>From File</code></dt><dd>means the referenced file will be read and reused by all samples. If file name changes it is reloaded since JMeter 2.14</dd>
+    <dt><code>From File</code></dt><dd>means the referenced file will be read and reused by all samples. If file name changes it is reloaded since JMeter 3.0</dd>
     <dt><code>Random File from folder specified below</code></dt><dd>means a random file will be selected from folder specified below, this folder must contain either files with extension <code>.dat</code> for Bytes Messages, or files with extension <code>.txt</code> or <code>.obj</code> for Object or Text messages</dd>
     <dt><code>Text area</code></dt><dd>The Message to use either for Text or Object message</dd>
   </dl>

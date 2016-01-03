@@ -113,7 +113,7 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
 
 <subsection name="&sect-num;.5 Autosave process configuration" anchor="autosave">
 <description>
-    <p>Since JMeter 2.14, JMeter automatically saves up to ten backups of every saved jmx files. When enabled, just before the jmx file is saved,
+    <p>Since JMeter 3.0, JMeter automatically saves up to ten backups of every saved jmx files. When enabled, just before the jmx file is saved,
     it will be backed up to the <code>${JMETER_HOME}/backups</code> subfolder. Backup files are named after the saved jmx file and assigned a
     version number that is automatically incremented, ex: <code>test-plan-000001.jmx</code>, <code>test-plan-000002.jmx</code>, <code>test-plan-000003.jmx</code>, etc.
     To control auto-backup, add the following properties to <code>user.properties</code>.</p>
