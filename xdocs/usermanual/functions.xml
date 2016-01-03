@@ -85,7 +85,7 @@ For example if <code>UNDEF</code> is not defined as a variable, then the value o
 </b>
 Variables, functions (and properties) are all case-sensitive.
 <b>
-Versions of JMeter after 2.3.1 trim spaces from variable names before use, so for example
+JMeter trims spaces from variable names before use, so for example
 <code>${__Random(1,63, LOTTERY )}</code> will use the variable '<code>LOTTERY</code>' rather than '<code> LOTTERY </code>'.
 </b>
 </p>
@@ -153,8 +153,8 @@ matter to change a test to target a different server with the same test.
 </p>
 <p>
 Note that variables cannot currently be nested; i.e. <code>${Var${N}}</code> does not work.
-The <code>__V</code> (variable) function (versions after 2.2) can be used to do this: <code>${__V(Var${N})}</code>.
-In earlier JMeter versions one can use <code>${__BeanShell(vars.get("Var${N}")}</code>.
+The <code>__V</code> (variable) function can be used to do this: <code>${__V(Var${N})}</code>.
+You can also use <code>${__BeanShell(vars.get("Var${N}")}</code>.
 </p>
 <p>This type of replacement is possible without functions, but was less convenient and less intuitive.
 It required users to create default config elements that would fill in blank values of Samplers.
@@ -258,7 +258,7 @@ Backslashes before '<code>$</code>' or '<code>,</code>' or '<code>\</code>' are 
 The <code>__logn()</code> function reference can be used anywhere in the test plan after the variable has been defined.
 Alternatively, the Java Request sampler can be used to create a sample containing variable references;
 the output will be shown in the appropriate Listener.
-For versions of JMeter later than 2.3, there is a <complink name="Debug Sampler"/> 
+Note there is a <complink name="Debug Sampler"/> 
 that can be used to display the values of variables etc. in the Tree View Listener.
 </p>
 <note><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
@@ -381,8 +381,7 @@ Nor does it make sense to use it on the Test Plan.
 The intSum function can be used to compute the sum of two or more integer values.
 </p>
 <note>
-JMeter Versions 2.3.1 and earlier required the reference name to be present.
-The reference name is now optional, but it must not be a valid integer.
+The reference name is optional, but it must not be a valid integer.
 </note>
 </description>
 
@@ -613,8 +612,7 @@ the comma after <code>7</code> is escaped.</note>
 
 <component index="&sect-num;.5.8" name="__CSVRead">
 <description><p>The CSVRead function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
-    <p>NOTE: versions up to 1.9.1 only supported a single file. 
-        JMeter versions since 1.9.1 support multiple file names.
+    <p>NOTE: JMeter supports multiple file names.
     </p>
     <p><b>In most cases, the newer 
     <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
@@ -622,7 +620,7 @@ the comma after <code>7</code> is escaped.</note>
     <p>
     When a filename is first encountered, the file is opened and read into an internal
     array. If a blank line is detected, this is treated as end of file - this allows
-    trailing comments to be used (N.B. this feature was introduced in versions after 1.9.1)
+    trailing comments to be used.
     </p>
     <p>All subsequent references to the same file name use the same internal array.
     N.B. the filename case is significant to the function, even if the OS doesn't care,
@@ -930,7 +928,7 @@ If omitted, <code>,</code> is used. Note that <code>,</code> would need to be sp
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 <p>If the format string is omitted, then the function returns the current time in milliseconds since the epoch.
-In versions of JMeter after 2.7, if the format matches "<code>/ddd</code>" (where <code>ddd</code> are decimal digits),
+If the format matches "<code>/ddd</code>" (where <code>ddd</code> are decimal digits),
 then the function returns the current time in milliseconds divided by the value of <code>ddd</code>.
 For example, "<code>/1000</code>" returns the current time in seconds since the epoch.
 Otherwise, the current time is passed to SimpleDateFormat.
@@ -996,9 +994,7 @@ i= 5 / 2;
 i.intValue(); // or use i.longValue()
 </source>
     </p>
-    <note>Versions of JMeter after 2.3.2 allow the expression to contain multiple statements.
-    JMeter 2.3.2 and earlier only processed the first statement (if there were multiple statements a warning was logged).
-    </note>
+    <note>JMeter allows the expression to contain multiple statements.</note>
 </component>
 
 <component index="&sect-num;.5.19" name="__V">
