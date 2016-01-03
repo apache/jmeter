@@ -366,17 +366,6 @@
           <hashTree/>
           <AnchorModifier guiclass="AnchorModifierGui" testclass="AnchorModifier" testname="HTML Link Parser" enabled="true"/>
           <hashTree/>
-          <ParamModifier guiclass="ParamModifierGui" testclass="ParamModifier" testname="HTML Parameter Mask" enabled="true">
-            <elementProp name="ParamModifier.mask" elementType="ParamMask">
-              <stringProp name="ParamModifier.field_name">name</stringProp>
-              <stringProp name="ParamModifier.prefix">prefix</stringProp>
-              <longProp name="ParamModifier.lower_bound">11</longProp>
-              <longProp name="ParamModifier.upper_bound">100</longProp>
-              <longProp name="ParamModifier.increment">12</longProp>
-              <stringProp name="ParamModifier.suffix">suffix</stringProp>
-            </elementProp>
-          </ParamModifier>
-          <hashTree/>
           <URLRewritingModifier guiclass="URLRewritingModifierGui" testclass="URLRewritingModifier" testname="HTTP URL Re-writing Modifier" enabled="true">
             <stringProp name="argument_name">JSESSION</stringProp>
             <boolProp name="path_extension">false</boolProp>
@@ -485,28 +474,6 @@
             <stringProp name="SoapSampler.SEND_SOAP_ACTION">true</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
           </SoapSampler>
-          <hashTree/>
-          <WebServiceSampler guiclass="WebServiceSamplerGui" testclass="WebServiceSampler" testname="WebService(SOAP) Request" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain">server</stringProp>
-            <stringProp name="HTTPSampler.port">port</stringProp>
-            <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <stringProp name="HTTPSampler.path">path</stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url">wsdl</stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <stringProp name="Soap.Action">action</stringProp>
-            <stringProp name="HTTPSamper.xml_data">Data</stringProp>
-            <stringProp name="WebServiceSampler.xml_data_file">File</stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc">Folder</stringProp>
-            <stringProp name="WebserviceSampler.timeout">timeout</stringProp>
-            <stringProp name="WebServiceSampler.memory_cache">true</stringProp>
-            <stringProp name="WebServiceSampler.read_response">false</stringProp>
-            <stringProp name="WebServiceSampler.use_proxy">true</stringProp>
-            <stringProp name="WebServiceSampler.proxy_host">Host</stringProp>
-            <stringProp name="WebServiceSampler.proxy_port">9999</stringProp>
-          </WebServiceSampler>
           <hashTree/>
           <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Access Log Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
