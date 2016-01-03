@@ -44,8 +44,9 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * Distribution graphs are useful for standard benchmarks and viewing the
  * distribution of data points. Results tend to clump together.
  *
- * Created May 25, 2004
+ * @deprecated since 3.0
  */
+@Deprecated
 public class DistributionGraphVisualizer extends AbstractVisualizer implements ImageVisualizer, GraphListener,
         Clearable {
     private static final long serialVersionUID = 240L;
