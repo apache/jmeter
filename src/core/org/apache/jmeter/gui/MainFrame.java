@@ -157,8 +157,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /** An image which is displayed when a test is not currently running. */
     private final ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
 
+    private final String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+    
     /** An image which is displayed to indicate FATAL, ERROR or WARNING. */
-    private final ImageIcon warningIcon = JMeterUtils.getImage("warning.png");// $NON-NLS-1$
+    private final ImageIcon warningIcon = JMeterUtils.getImage("status/" + iconSize +"/pictogram-din-w000-general.png");// $NON-NLS-1$
 
     /** The button used to display the running/stopped image. */
     private JButton runningIndicator;
