@@ -114,6 +114,11 @@ public class JMeter implements JMeterPlugin {
     public static final String JMETER_REPORT_OUTPUT_DIR_PROPERTY = 
             "jmeter.reportgenerator.outputdir"; //$NON-NLS-1$
 
+    // Icons size in the JMeter tree
+    protected static final String TREE_ICON_SIZE = "jmeter.tree.icons.size"; //$NON-NLS-1$
+
+    protected static final String DEFAULT_TREE_ICON_SIZE = "19x19"; //$NON-NLS-1$
+
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
     // If the -j  or -l flag is set to LAST or LAST.log|LAST.jtl, then the last loaded file name is used to
@@ -1179,6 +1184,7 @@ public class JMeter implements JMeterPlugin {
     @Override
     public String[][] getIconMappings() {
         final String defaultIconProp = "org/apache/jmeter/images/icon.properties"; //$NON-NLS-1$
+        final String iconSize = JMeterUtils.getPropDefault(TREE_ICON_SIZE, DEFAULT_TREE_ICON_SIZE); 
         String iconProp = JMeterUtils.getPropDefault("jmeter.icons", defaultIconProp);//$NON-NLS-1$
         Properties p = JMeterUtils.loadProperties(iconProp);
         if (p == null && !iconProp.equals(defaultIconProp)) {
@@ -1198,9 +1204,9 @@ public class JMeter implements JMeterPlugin {
             String key = (String) pe.nextElement();
             String[] icons = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
             iconlist[i][0] = key;
-            iconlist[i][1] = icons[0];
+            iconlist[i][1] = icons[0].replace("<SIZE>", iconSize); //$NON-NLS-1$;
             if (icons.length > 1) {
-                iconlist[i][2] = icons[1];
+                iconlist[i][2] = icons[1].replace("<SIZE>", iconSize); //$NON-NLS-1$;
             }
             i++;
         }
