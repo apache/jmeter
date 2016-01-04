@@ -6419,7 +6419,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
              <li><code>Put each group in a new transaction controller</code> - create a new <complink name="Transaction Controller"/> for each group, and store all samplers for that group in it.</li>
            </ul>
            The property <code>proxy.pause</code> determines the minimum gap that JMeter needs between requests
-           to treat them as separate "clicks". The default is <code>1000</code> (milliseconds) i.e. 1 second.
+           to treat them as separate "clicks". The default is <code>5000</code> (milliseconds) i.e. 5 seconds.
            If you are using grouping, please ensure that you leave the required gap between clicks.
         </property>
         <!-- TODO:property name="Group Separation Interval">Inactivity time between two requests needed to consider them in two separate groups.</property-->
