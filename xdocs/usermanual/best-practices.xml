@@ -410,5 +410,13 @@ Note that in the documentation <code>jmeter.properties</code> is frequently ment
 <note><code>user.properties</code> file supersedes the properties defined in <code>jmeter.properties</code></note>
 </section>
 
+<section name="&sect-num;.15 Deprecated elements" anchor="deprecation">
+<p>It is advised not to use deprecated elements (marked as such in <a href="../changes.html">changes list</a> and in <a href="./component_reference.html">component reference</a>) 
+and to migrate to new advised elements if available or new way of doing the same thing. <br/>
+Deprecated elements are removed from menu in version N but can be enabled for migration by modifying <code>not_in_menu</code> property in <code>user.properties</code> file and removing the full class name 
+of the element from there.<br/></p>
+<note>Please note that deprecated elements in version N will be removed definitely in version N+1, so ensure your don't use them as soon as possible.</note>
+</section>
+
 </body>
 </document>
