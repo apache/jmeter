@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Sample {
 
-    private static final String ERROR_ON_SAMPLE = "Error on sample #";
+    private static final String ERROR_ON_SAMPLE = "Error in sample #";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
 
