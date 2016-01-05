@@ -50,7 +50,8 @@ public abstract class AbstractOverTimeGraphConsumer extends
      * @param granularity
      *            the granularity to set
      */
-    public void setGranularity(long granularity) {
+    // Must be final because called by ctor
+    public final void setGranularity(long granularity) {
         this.granularity = granularity;
         ((TimeStampKeysSelector) getKeysSelector()).setGranularity(granularity);
     }
