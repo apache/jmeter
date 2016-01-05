@@ -33,7 +33,7 @@ public class Sample {
 
     private static final String ERROR_ON_SAMPLE = "Error on sample #";
 
-    public static final String CONTROLLER_PATTERN = "Number of samples in transaction";
+    private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
 
     private boolean storesStartTimeStamp;
     private SampleMetadata metadata;
