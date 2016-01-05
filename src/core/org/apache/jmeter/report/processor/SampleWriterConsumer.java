@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SampleWriterConsumer extends AbstractSampleConsumer {
 
-    private static final Logger log = LoggerFactory.getLogger(SampleWriterConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SampleWriterConsumer.class);
 
     private File outputFile;
 
@@ -89,8 +89,8 @@ public class SampleWriterConsumer extends AbstractSampleConsumer {
         if (outputFile == null) {
             File wd = getWorkingDirectory();
             wd.mkdir();
-            if (log.isInfoEnabled()) {
-                log.info("startConsuming(): No output file set, writing to work directory :"
+            if (LOG.isInfoEnabled()) {
+                LOG.info("startConsuming(): No output file set, writing to work directory :"
                     + wd.getAbsolutePath());
             }
             outputFile = new File(wd, "samples.csv");
