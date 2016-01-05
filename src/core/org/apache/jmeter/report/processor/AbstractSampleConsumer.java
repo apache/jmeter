@@ -40,8 +40,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
         implements SampleConsumer, SampleProducer {
 
-    private static final Logger log = LoggerFactory
-            .getLogger(AbstractSampleConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractSampleConsumer.class);
 
     /** sample consumer name, used for logging */
     private String name;
@@ -174,7 +173,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.setSampleContext(context);
             } catch (Exception e) {
-                log.error(
+                LOG.error(
                         "produce(): Consumer failed with message :"
                                 + e.getMessage(), e);
                 throw new SampleException(e);
@@ -197,7 +196,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.setConsumedMetadata(metadata, channel);
             } catch (Exception e) {
-                log.error(
+                LOG.error(
                         "setProducedMetadata(): Consumer failed with message :"
                                 + e.getMessage(), e);
                 throw new SampleException(e);
@@ -220,7 +219,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.startConsuming();
             } catch (Exception e) {
-                log.error("startProducing(): Consumer failed with message :"
+                LOG.error("startProducing(): Consumer failed with message :"
                         + e.getMessage(), e);
                 throw new SampleException(e);
             }
@@ -234,7 +233,7 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
                 consumer.consume(s, channel);
                 producedSampleCount++;
             } catch (Exception e) {
-                log.error(
+                LOG.error(
                         "produce(): Consumer failed with message :"
                                 + e.getMessage(), e);
                 throw new SampleException(e);
@@ -248,14 +247,14 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.stopConsuming();
             } catch (Exception e) {
-                log.error(
+                LOG.error(
                         "stopProducing(): Consumer failed with message :"
                                 + e.getMessage(), e);
                 throw new SampleException(e);
             }
         }
-        if (log.isInfoEnabled()) {
-            log.info("stopProducing(): " + getName() + " produced "
+        if (LOG.isInfoEnabled()) {
+            LOG.info("stopProducing(): " + getName() + " produced "
                     + producedSampleCount + " samples");
         }
     }
