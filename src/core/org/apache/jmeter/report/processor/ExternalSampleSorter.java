@@ -91,7 +91,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private SampleComparator sampleComparator;
 
-    private BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
 
     private ThreadPoolExecutor pool;
 
@@ -99,9 +99,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private boolean parallelize;
 
-    private AtomicLong chunkedSampleCount = new AtomicLong();
+    private final AtomicLong chunkedSampleCount = new AtomicLong();
 
-    private AtomicLong inputSampleCount = new AtomicLong();
+    private final AtomicLong inputSampleCount = new AtomicLong();
 
     private LinkedList<File> chunks;
 
@@ -111,7 +111,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private boolean revertedSort;
     
-    private AtomicInteger sequence = new AtomicInteger();
+    private final AtomicInteger sequence = new AtomicInteger();
 
 
     public ExternalSampleSorter() {
