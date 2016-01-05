@@ -25,8 +25,7 @@
     <section name="Dashboard generator">
       <p>
         This document describes the architecture and operation of the
-        dashboard
-        generation engine.
+        dashboard generation engine.
       </p>
       <subsection name="1 Overview" anchor="overview">
         <subsection name="1.1 Architecture" anchor="overview_architecture">
@@ -34,8 +33,7 @@
             The dashboard generation engine is a modular feature based on
             samples operation processes.
             <br />
-            The processes can be represented by
-            the following diagram :
+            The processes can be represented by the following diagram :
           </p>
           <figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
           <p>
@@ -46,15 +44,12 @@
               </li>
               <li>
                 A chain of items, named consumers, that do operations
-                from
-                samples that go through the chain
-                (e.g. Filtering, sorting,
-                calculation, ...).
+                from samples that go through the chain
+                (e.g. Filtering, sorting, calculation, ...).
               </li>
               <li>
                 An execution context, named sample context, where the results
-                of
-                consumers calculations are stored.
+                of consumers calculations are stored.
               </li>
               <li>
                 A set of items, named exporters, that use the content of the
@@ -70,27 +65,22 @@
             context that will be used to store the consumers results.
           </p>
           <p>
-            Then a
-            chain of consumers is built using JMeter properties
+            Then a chain of consumers is built using JMeter properties
             (prefixed by
             <code>jmeter.reportgenerator</code>
             ) in order to enable the user to customize it.
           </p>
           <p>
-            When the source
-            emits a sample, it sends it to the first consumer
-            of
-            the chain.
+            When the source emits a sample, it sends it to the first consumer
+            of the chain.
             <br />
             The consumer can have different behaviors :
             <ul>
               <li>It can process the sample and sends it to the next
                 consumers.</li>
               <li>It cannot process the sample, so it stores it and
-                continues to
-                receive other samples. When it can process the
-                stored samples, it
-                does and sends the whole to the next
+                continues to receive other samples. When it can process the
+                stored samples, it does and sends the whole to the next
                 consumers (e.g. sorting).</li>
               <li>It can choose to discard the sample (e.g.
                 filtering).</li>
@@ -98,8 +88,7 @@
             When the source stops samples producing, consumers can publish a
             result in the sample context.
             <br />
-            The latter is send to the set of
-            exporters in order to create
+            The latter is send to the set of exporters in order to create
             results used by final user.
           </p>
         </subsection>
@@ -123,8 +112,7 @@
         </p>
         <p>
           At the same level a filter consumer keeps or
-          discards samples
-          depending on the
+          discards samples depending on the
           <code>jmeter.reportgenerator.sample_filter</code>
           property.
         </p>
@@ -135,8 +123,7 @@
           Depending on the property
           <code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.exclude_controllers</code>
           , the graph consumer matching the graph_id identifier will be
-          set at
-          position A or B.
+          set at position A or B.
         </p>
       </subsection>
 
@@ -150,18 +137,12 @@
           <li>
             <p>To add customized graph, users must extend the
               AbstractGraphConsumer or use one of the implementations provided
-              in
-              the package “org.apache.jmeter.report.processor.graph.impl”.
-              This
-              could be enhanced by making concrete the base class and give
-              public
-              access to additional properties (like selectors). But first
-              we have
-              to resolve the issue of shared properties (e.g. over time
-              graphs
-              must dispatch the same granularity property to the keys
-              selector
-              and time rate aggregator).</p>
+              in the package “org.apache.jmeter.report.processor.graph.impl”.
+              This could be enhanced by making concrete the base class and give
+              public access to additional properties (like selectors). But first
+              we have to resolve the issue of shared properties (e.g. over time
+              graphs must dispatch the same granularity property to the keys
+              selector and time rate aggregator).</p>
           </li>
           <li>
             <p>
@@ -180,16 +161,11 @@
             </p>
             <p>
               So we should enable the consumers to define the chain they
-              require
-              and provide a single chain builder that processes these
-              chain
-              requirements to instantiate needed consumers on demand. I.e.
-              for
-              the same chain requirement declaration, the same consumer
-              instances
-              are used. Otherwise if the declaration differs a new
-              branch of
-              consumers is created.
+              require and provide a single chain builder that processes these
+              chain requirements to instantiate needed consumers on demand. I.e.
+              for the same chain requirement declaration, the same consumer
+              instances are used. Otherwise if the declaration differs a new
+              branch of consumers is created.
             </p>
           </li>
           <li>
