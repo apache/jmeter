@@ -32,9 +32,9 @@
         <subsection name="1.1 Architecture" anchor="overview_architecture">
           <p>
             The dashboard generation engine is a modular feature based on
-            samples operation processus.
+            samples operation processes.
             <br />
-            The processus can be represented by
+            The processes can be represented by
             the following diagram :
           </p>
           <figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
@@ -42,14 +42,14 @@
             In this view, you can see :
             <ul>
               <li>
-                A source from where samples are produced (E.g: CSV file).
+                A source from where samples are produced (e.g. CSV file).
               </li>
               <li>
                 A chain of items, named consumers, that do operations
                 from
-                samples that go through the chain.
-                (E.g: Filtering, sorting,
-                calculation, ...)
+                samples that go through the chain
+                (e.g. Filtering, sorting,
+                calculation, ...).
               </li>
               <li>
                 An execution context, named sample context, where the results
@@ -58,8 +58,8 @@
               </li>
               <li>
                 A set of items, named exporters, that use the content of the
-                sample context to generate a final result to the user (E.g. :
-                Html page generation).
+                sample context to generate a final result to the user (e.g.
+                HTML page generation).
               </li>
             </ul>
           </p>
@@ -91,8 +91,8 @@
                 receive other samples. When it can process the
                 stored samples, it
                 does and sends the whole to the next
-                consumers (E.g: sorting).</li>
-              <li>It can choose to discard the sample (E.g:
+                consumers (e.g. sorting).</li>
+              <li>It can choose to discard the sample (e.g.
                 filtering).</li>
             </ul>
             When the source stops samples producing, consumers can publish a
@@ -157,7 +157,7 @@
               public
               access to additional properties (like selectors). But first
               we have
-              to resolve the issue of shared properties (E.g : over time
+              to resolve the issue of shared properties (e.g. over time
               graphs
               must dispatch the same granularity property to the keys
               selector
@@ -168,12 +168,12 @@
               The chain building is dispatched between the
               org.apache.jmeter.report.dashboard.ReporGenerator.generate method
               and the implementation of the consumers. So the code in charge of
-              the building is splitted and furthermore some consumers can be
-              redundants and harm the performance of report generation, not
+              the building is split and furthermore some consumers can be
+              redundant and harm the performance of report generation, not
               load testing.
             </p>
             <p>
-              E.g: Each LatencyVSRequestGraphConsumer and
+              E.g. Each LatencyVSRequestGraphConsumer and
               ResponseTimeVSRequestGraphConsumer instances use an embedded
               consumer that could be shared depending on granularity and
               exclude_controllers properties.
@@ -183,7 +183,7 @@
               require
               and provide a single chain builder that processes these
               chain
-              requirements to instantiate needed consumers on demand. I.e,
+              requirements to instantiate needed consumers on demand. I.e.
               for
               the same chain requirement declaration, the same consumer
               instances
@@ -195,7 +195,7 @@
           <li>
             <p>
               The graphs (DOM elements) in the generated html page should be
-              dynamicaly build in order to match the graphs defined in jmeter
+              dynamically build in order to match the graphs defined in JMeter
               properties.
             </p>
           </li>
@@ -207,7 +207,7 @@
                   navigation menu selection.</li>
                 <li>Adding a loading animation when graphs are build or
                   refreshed.</li>
-                <li>Let the user determine if a graph is zoomable using a jmeter
+                <li>Let the user determine if a graph is zoomable using a JMeter
                   property.</li>
                 <li>Using the jquery.plot.setData() method to handle series
                   activation/deactivation rather than rebuild the graph.</li>
