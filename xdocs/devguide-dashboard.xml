@@ -33,11 +33,11 @@
             The dashboard generation engine is a modular feature based on
             samples operation processes.
             <br />
-            The processes can be represented by the following diagram :
+            The processes can be represented by the following diagram:
           </p>
           <figure image="dashboard.png">Figure 1 - Dashboard generation overview</figure>
           <p>
-            In this view, you can see :
+            In this view, you can see:
             <ul>
               <li>
                 A source from where samples are produced (e.g. CSV file).
@@ -74,7 +74,7 @@
             When the source emits a sample, it sends it to the first consumer
             of the chain.
             <br />
-            The consumer can have different behaviors :
+            The consumer can have different behaviors:
             <ul>
               <li>It can process the sample and sends it to the next
                 consumers.</li>
@@ -102,7 +102,7 @@
         <p>
           The chain begins with a normalizer consumer in charge of
           standardizing the timestamp of each sample because JMeter allows
-          different timestamp formats (See :
+          different timestamp formats (See
           <code>jmeter.save.saveservice.timestamp_format</code>
           ).
         </p>
@@ -177,7 +177,7 @@
           </li>
           <li>
             <p>
-              Some improvements can be done on the generated html pages :
+              Some improvements can be done on the generated html pages:
               <ul>
                 <li>Using a single page, and hide graphs depending on the
                   navigation menu selection.</li>
