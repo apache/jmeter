@@ -67,7 +67,7 @@ import org.apache.log.Logger;
  * @since 2.14
  */
 public class ReportGenerator {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     private static final boolean CSV_OUTPUT_FORMAT = "csv"
             .equalsIgnoreCase(JMeterUtils.getPropDefault(
@@ -119,14 +119,14 @@ public class ReportGenerator {
                 throw new IllegalArgumentException(String.format(
                         "Invalid test results file : %s", file));
             }
-            log.info("Will only generate report from results file:"
+            LOG.info("Will only generate report from results file:"
                     + resultsFile);
         } else {
             if (file.exists() && file.length() > 0) {
                 throw new IllegalArgumentException("Results file:"
                         + resultsFile + " is not empty");
             }
-            log.info("Will generate report at end of test from  results file:"
+            LOG.info("Will generate report at end of test from  results file:"
                     + resultsFile);
         }
         this.resultCollector = resultCollector;
@@ -166,10 +166,10 @@ public class ReportGenerator {
     public void generate() throws GenerationException {
 
         if (resultCollector != null) {
-            log.info("Flushing result collector before report Generation");
+            LOG.info("Flushing result collector before report Generation");
             resultCollector.flushFile();
         }
-        log.debug("Start report generation");
+        LOG.debug("Start report generation");
 
         File tmpDir = configuration.getTempDirectory();
         boolean tmpDirCreated = createTempDir(tmpDir);
@@ -210,17 +210,17 @@ public class ReportGenerator {
         }
 
         // Generate data
-        log.debug("Start samples processing");
+        LOG.debug("Start samples processing");
         try {
             source.run();
         } catch (SampleException ex) {
             String message = "Error while processing samples";
-            log.error(message, ex);
+            LOG.error(message, ex);
             throw new GenerationException(message, ex);
         }
-        log.debug("End of samples processing");
+        LOG.debug("End of samples processing");
 
-        log.debug("Start data exporting");
+        LOG.debug("Start data exporting");
 
         // Process configuration to build data exporters
         for (Map.Entry<String, ExporterConfiguration> entry : configuration
@@ -228,11 +228,11 @@ public class ReportGenerator {
             exportData(sampleContext, entry.getKey(), entry.getValue());
         }
 
-        log.debug("End of data exporting");
+        LOG.debug("End of data exporting");
 
         removeTempDir(tmpDir, tmpDirCreated);
 
-        log.debug("End of report generation");
+        LOG.debug("End of report generation");
 
     }
 
@@ -241,7 +241,7 @@ public class ReportGenerator {
             try {
                 FileUtils.deleteDirectory(tmpDir);
             } catch (IOException ex) {
-                log.warn(String.format(
+                LOG.warn(String.format(
                         "Cannot delete created temporary directory \"%s\".",
                         tmpDir), ex);
             }
@@ -255,7 +255,7 @@ public class ReportGenerator {
             if (!tmpDirCreated) {
                 String message = String.format(
                         "Cannot create temporary directory \"%s\".", tmpDir);
-                log.error(message);
+                LOG.error(message);
                 throw new GenerationException(message);
             }
         }
@@ -297,7 +297,7 @@ public class ReportGenerator {
         } catch (ClassNotFoundException | IllegalAccessException
                 | InstantiationException | ClassCastException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
-            log.error(error, ex);
+            LOG.error(error, ex);
             throw new GenerationException(error, ex);
         }
     }
@@ -318,11 +318,11 @@ public class ReportGenerator {
         } catch (ClassNotFoundException | IllegalAccessException
                 | InstantiationException | ClassCastException ex) {
             String error = String.format(INVALID_CLASS_FMT, className);
-            log.error(error, ex);
+            LOG.error(error, ex);
             throw new GenerationException(error, ex);
         } catch (ExportException ex) {
             String error = String.format(INVALID_EXPORT_FMT, exporterName);
-            log.error(error, ex);
+            LOG.error(error, ex);
             throw new GenerationException(error, ex);
         }
     }
@@ -480,14 +480,14 @@ public class ReportGenerator {
                 }
                 i++;
             }
-            log.warn(String
+            LOG.warn(String
                         .format("\"%s\" is not a valid property for class \"%s\", skip it",
                                 propertyName, className));
         } catch (InvocationTargetException | ConvertException ex) {
             String message = String
                     .format("Cannot assign \"%s\" to property \"%s\" (mapped as \"%s\"), skip it",
                             propertyValue, propertyName, setterName);
-            log.error(message, ex);
+            LOG.error(message, ex);
             throw new GenerationException(message, ex);
         }
     }
