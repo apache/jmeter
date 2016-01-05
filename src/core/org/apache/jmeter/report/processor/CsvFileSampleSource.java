@@ -66,8 +66,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     /** File name whose sample are being produced on the channel */
     public static final String SOURCE_FILE_ATTRIBUTE = "samplesource.file";
 
-    private static final Logger log = LoggerFactory
-            .getLogger(CsvFileSampleSource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CsvFileSampleSource.class);
 
     /** input csv files to be produced */
     private File[] inputFiles;
@@ -193,8 +192,8 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 producer.stopProducing();
                 csvReader.close();
             }
-            if (log.isInfoEnabled()) {
-                log.info("produce(): " + sampleCount + " samples produced in "
+            if (LOG.isInfoEnabled()) {
+                LOG.info("produce(): " + sampleCount + " samples produced in "
                         + time(now() - start) + " on channel " + i);
             }
         }
@@ -284,7 +283,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.setSampleContext(context);
                 } catch (Exception e) {
-                    log.error(
+                    LOG.error(
                             "produce(): Consumer failed with message :"
                                     + e.getMessage(), e);
                     throw new SampleException(e);
@@ -298,7 +297,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.setConsumedMetadata(metadata, channel);
                 } catch (Exception e) {
-                    log.error(
+                    LOG.error(
                             "setProducedMetadata(): Consumer failed with message :"
                                     + e.getMessage(), e);
                     throw new SampleException(e);
@@ -314,7 +313,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.setChannelAttribute(channel, key, value);
                 } catch (Exception e) {
-                    log.error(
+                    LOG.error(
                             "setChannelAttribute(): Consumer failed with message :"
                                     + e.getMessage(), e);
                     throw new SampleException(e);
@@ -328,7 +327,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.startConsuming();
                 } catch (Exception e) {
-                    log.error(
+                    LOG.error(
                             "startProducing(): Consumer failed with message :"
                                     + e.getMessage(), e);
                     throw new SampleException(e);
@@ -342,7 +341,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.consume(s, channel);
                 } catch (Exception e) {
-                    log.error(
+                    LOG.error(
                             "produce(): Consumer failed with message :"
                                     + e.getMessage(), e);
                     throw new SampleException(e);
@@ -356,7 +355,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                 try {
                     consumer.stopConsuming();
                 } catch (Exception e) {
-                    log.error("stopProducing(): Consumer failed with message :"
+                    LOG.error("stopProducing(): Consumer failed with message :"
                             + e.getMessage(), e);
                     throw new SampleException(e);
                 }
