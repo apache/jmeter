@@ -89,7 +89,7 @@ then JMeter is running your test plan (or, at least, it thinks it is).</p>
 The numbers to the left of the green box are the number of active threads / total number of threads.
 These only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode.
 </p>
-<note>Using GUI mode in the way we described it here is reserved to Testing and debugging your Test Plan. To run the real load test, use NON-GUI mode.</note>
+<note>Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use NON-GUI mode.</note>
 </subsection>
 
 <subsection name="&sect-num;.6 Stopping a Test" anchor="stop">
