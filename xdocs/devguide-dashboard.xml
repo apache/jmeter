@@ -43,8 +43,8 @@
                 A source from where samples are produced (e.g. CSV file).
               </li>
               <li>
-                A chain of items, named consumers, that do operations
-                from samples that go through the chain
+                A chain of items, named consumers, that operate
+                on the samples that go through the chain
                 (e.g. Filtering, sorting, calculation, ...).
               </li>
               <li>
@@ -76,16 +76,16 @@
             <br />
             The consumer can have different behaviors:
             <ul>
-              <li>It can process the sample and sends it to the next
+              <li>It can process the sample and send it to the next
                 consumers.</li>
               <li>It cannot process the sample, so it stores it and
                 continues to receive other samples. When it can process the
-                stored samples, it does and sends the whole to the next
+                stored samples, it does so and sends the whole to the next
                 consumers (e.g. sorting).</li>
               <li>It can choose to discard the sample (e.g.
                 filtering).</li>
             </ul>
-            When the source stops samples producing, consumers can publish a
+            When the source stops producing samples, consumers can publish a
             result in the sample context.
             <br />
             The latter is send to the set of exporters in order to create
@@ -122,8 +122,8 @@
         <p>
           Depending on the property
           <code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.exclude_controllers</code>
-          , the graph consumer matching the graph_id identifier will be
-          set at position A or B.
+          , the graph consumer matching the <code>graph_id</code> identifier will be
+          set at position <code>A</code> or <code>B</code>.
         </p>
       </subsection>
 
@@ -136,8 +136,8 @@
           </li>
           <li>
             <p>To add customized graph, users must extend the
-              AbstractGraphConsumer or use one of the implementations provided
-              in the package “org.apache.jmeter.report.processor.graph.impl”.
+              <code>AbstractGraphConsumer</code> or use one of the implementations provided
+              in the package <code>org.apache.jmeter.report.processor.graph.impl</code>”.
               This could be enhanced by making concrete the base class and give
               public access to additional properties (like selectors). But first
               we have to resolve the issue of shared properties (e.g. over time
@@ -147,30 +147,30 @@
           <li>
             <p>
               The chain building is dispatched between the
-              org.apache.jmeter.report.dashboard.ReporGenerator.generate method
+              <code>org.apache.jmeter.report.dashboard.ReporGenerator.generate</code> method
               and the implementation of the consumers. So the code in charge of
               the building is split and furthermore some consumers can be
               redundant and harm the performance of report generation, not
               load testing.
             </p>
             <p>
-              E.g. Each LatencyVSRequestGraphConsumer and
-              ResponseTimeVSRequestGraphConsumer instances use an embedded
-              consumer that could be shared depending on granularity and
-              exclude_controllers properties.
+              E.g. Each <code>LatencyVSRequestGraphConsumer</code> and
+              <code>ResponseTimeVSRequestGraphConsumer</code> instances use an embedded
+              consumer that could be shared depending on <code>granularity</code> and
+              <code>exclude_controllers</code> properties.
             </p>
             <p>
               So we should enable the consumers to define the chain they
               require and provide a single chain builder that processes these
               chain requirements to instantiate needed consumers on demand. I.e.
               for the same chain requirement declaration, the same consumer
-              instances are used. Otherwise if the declaration differs a new
+              instances are used. Otherwise if the declaration differs, a new
               branch of consumers is created.
             </p>
           </li>
           <li>
             <p>
-              The graphs (DOM elements) in the generated html page should be
+              The graphs (DOM elements) in the generated HTML page should be
               dynamically build in order to match the graphs defined in JMeter
               properties.
             </p>
@@ -185,7 +185,7 @@
                   refreshed.</li>
                 <li>Let the user determine if a graph is zoomable using a JMeter
                   property.</li>
-                <li>Using the jquery.plot.setData() method to handle series
+                <li>Using the <code>jquery.plot.setData()</code> method to handle series
                   activation/deactivation rather than rebuild the graph.</li>
               </ul>
             </p>
