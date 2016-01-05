@@ -150,6 +150,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * 
      * @param sampleComparator comparator to define the ordering
      */
+    // final because called from ctor
     public final void setSampleComparator(SampleComparator sampleComparator) {
         this.sampleComparator = sampleComparator;
     }
@@ -601,6 +602,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      *            {@code false} uses the order of the configured
      *            {@link SampleComparator}
      */
+    // final because called from ctor
     public final void setRevertedSort(boolean revertedSort) {
         this.revertedSort = revertedSort;
     }
