@@ -82,8 +82,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
 
     private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
-    private static final Logger log = LoggerFactory
-            .getLogger(ExternalSampleSorter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExternalSampleSorter.class);
 
     private static final int DEFAULT_CHUNK_SIZE = 50000;
 
@@ -303,14 +302,14 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         if (!samples.isEmpty()) {
             chunks.add(sortAndDump(samples, sampleMetadata));
         }
-        if (log.isDebugEnabled()) {
-            log.debug("sort(): " + inputSampleCount.longValue()
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("sort(): " + inputSampleCount.longValue()
                     + " samples read from input, " + chunkedSampleCount.longValue()
                     + " samples written to chunk files");
             if (inputSampleCount.get() != chunkedSampleCount.get()) {
-                log.error("Failure! Number of samples read from input and written to chunk files differ");
+                LOG.error("Failure! Number of samples read from input and written to chunk files differ");
             } else {
-                log.info("dumping of samples chunk succeeded.");
+                LOG.info("dumping of samples chunk succeeded.");
             }
         }
         super.setProducedMetadata(sampleMetadata, 0);
@@ -326,8 +325,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
     private File sortAndDump(final List<Sample> samples,
             final SampleMetadata sampleMetadata) {
         long start = 0;
-        if (log.isDebugEnabled()) {
-            log.debug("sortAndDump(): Sorting " + samples.size()
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("sortAndDump(): Sorting " + samples.size()
                     + " samples...");
             start = System.currentTimeMillis();
         }
@@ -336,13 +335,13 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             throw new SampleException("sort failed ! " + sortedSamples.size()
                     + " != " + samples.size());
         }
-        if (log.isDebugEnabled()) {
-            log.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
                     + " s. Sorted  " + samples.size() + " samples.");
         }
         File out = getChunkFile();
-        if (log.isDebugEnabled()) {
-            log.debug("sortAndDump(): Dumping chunk " + out);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("sortAndDump(): Dumping chunk " + out);
             start = System.currentTimeMillis();
         }
         try (CsvSampleWriter csvWriter = new CsvSampleWriter(out, sampleMetadata)){
@@ -351,8 +350,8 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 chunkedSampleCount.incrementAndGet();
             }
         }
-        if (log.isDebugEnabled()) {
-            log.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("sortAndDump(): in " + (System.currentTimeMillis() - start) / 1000f
                     + " s : Dumped chunk " + out.getAbsolutePath());
         }
         return out;
