@@ -38,7 +38,7 @@ import jodd.props.Props;
  */
 public class ReportGeneratorConfiguration {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
@@ -123,7 +123,7 @@ public class ReportGeneratorConfiguration {
         public void initialize(String exportId,
                 ExporterConfiguration exportConfiguration)
                 throws ConfigurationException {
-            log.debug(String.format(LOAD_EXPORTER_FMT, exportId));
+            LOG.debug(String.format(LOAD_EXPORTER_FMT, exportId));
 
             // Get the property defining the class name
             String className = getRequiredProperty(
@@ -208,7 +208,7 @@ public class ReportGeneratorConfiguration {
         public void initialize(String graphId,
                 GraphConfiguration graphConfiguration)
                 throws ConfigurationException {
-            log.debug(String.format(LOAD_GRAPH_FMT, graphId));
+            LOG.debug(String.format(LOAD_GRAPH_FMT, graphId));
 
             // Get the property defining whether the graph have to
             // filter controller samples
@@ -460,7 +460,7 @@ public class ReportGeneratorConfiguration {
             throws ConfigurationException {
         String value = props.getValue(key);
         if (value == null) {
-            log.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
+            LOG.info(String.format(NOT_FOUND_PROPERTY_FMT, key,
                     defaultValue));
             return defaultValue;
         }
@@ -471,7 +471,7 @@ public class ReportGeneratorConfiguration {
             String key, Class<TProperty> clazz) throws ConfigurationException {
         TProperty property = getProperty(props, key, null, clazz);
         if (property != null) {
-            log.debug(String.format(OPTIONAL_PROPERTY_FMT, property, key));
+            LOG.debug(String.format(OPTIONAL_PROPERTY_FMT, property, key));
         }
         return property;
     }
@@ -480,7 +480,7 @@ public class ReportGeneratorConfiguration {
             String key, TProperty defaultValue, Class<TProperty> clazz)
             throws ConfigurationException {
         TProperty property = getProperty(props, key, defaultValue, clazz);
-        log.debug(String.format(REQUIRED_PROPERTY_FMT, property, key));
+        LOG.debug(String.format(REQUIRED_PROPERTY_FMT, property, key));
         return property;
     }
 
@@ -542,7 +542,7 @@ public class ReportGeneratorConfiguration {
                     subConfigurations.put(name, subConfiguration);
                 }
             } else {
-                log.warn(String.format(INVALID_KEY_FMT, key));
+                LOG.warn(String.format(INVALID_KEY_FMT, key));
             }
         }
 
@@ -581,7 +581,7 @@ public class ReportGeneratorConfiguration {
     public static ReportGeneratorConfiguration loadFromProperties(
             Properties properties) throws ConfigurationException {
 
-        log.debug(START_LOADING_MSG);
+        LOG.debug(START_LOADING_MSG);
 
         ReportGeneratorConfiguration configuration = new ReportGeneratorConfiguration();
 
@@ -622,7 +622,7 @@ public class ReportGeneratorConfiguration {
                 new GraphConfigurationFactory(props));
 
         if (graphConfigurations.isEmpty()) {
-            log.info("No graph configuration found.");
+            LOG.info("No graph configuration found.");
         }
 
         // Find exporter identifiers and load a configuration for each
@@ -633,10 +633,10 @@ public class ReportGeneratorConfiguration {
                 new ExporterConfigurationFactory(props));
 
         if (exportConfigurations.isEmpty()) {
-            log.warn("No export configuration found. None report will be generated.");
+            LOG.warn("No export configuration found. None report will be generated.");
         }
 
-        log.debug(END_LOADING_MSG);
+        LOG.debug(END_LOADING_MSG);
 
         return configuration;
     }
