@@ -149,7 +149,7 @@ public class ReportGenerator {
      */
     private static String getSetterName(String propertyKey) {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer(); // Unfortunately Matcher does not support StringBuilder
         while (matcher.find()) {
             matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
         }
