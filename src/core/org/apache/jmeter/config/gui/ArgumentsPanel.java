@@ -485,14 +485,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (String clipboardLine : clipboardLines) {
                 String[] clipboardCols = clipboardLine.split("\t");
                 if (clipboardCols.length > 0) {
-                    Argument argument = makeNewArgument();
-                    argument.setName(clipboardCols[0]);
-                    if (clipboardCols.length > 1) {
-                        argument.setValue(clipboardCols[1]);
-                        if (clipboardCols.length > 2) {
-                            argument.setDescription(clipboardCols[2]);
-                        }
-                    }
+                    Argument argument = createArgumentFromClipboard(clipboardCols);
                     tableModel.addRow(argument);
                 }
             }
@@ -513,6 +506,18 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                     "Could not add retrieve " + DataFlavor.stringFlavor.getHumanPresentableName()
                             + " from clipboard" + ufe.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    protected Argument createArgumentFromClipboard(String[] clipboardCols) {
+        Argument argument = makeNewArgument();
+        argument.setName(clipboardCols[0]);
+        if (clipboardCols.length > 1) {
+            argument.setValue(clipboardCols[1]);
+            if (clipboardCols.length > 2) {
+                argument.setDescription(clipboardCols[2]);
+            }
+        }
+        return argument;
     }
 
     /**

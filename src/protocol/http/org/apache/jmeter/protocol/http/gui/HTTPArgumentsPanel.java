@@ -22,6 +22,8 @@ import java.util.Iterator;
 
 import javax.swing.JTable;
 
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -135,4 +137,29 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         return arg.getMetaData() == null || arg.getMetaData().equals("=")
                 || (arg.getValue() != null && arg.getValue().length() > 0);
     }
+
+    @Override
+    protected Argument createArgumentFromClipboard(String[] clipboardCols) {
+        HTTPArgument argument = makeNewArgument();
+        argument.setName(clipboardCols[0]);
+        if (clipboardCols.length > 1) {
+            argument.setValue(clipboardCols[1]);
+            
+            if (clipboardCols.length > 2) {
+                
+                // default to false if the string is not a boolean
+                argument.setAlwaysEncoded(Boolean.parseBoolean(clipboardCols[2]));
+                
+                if (clipboardCols.length > 3) {
+                    Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3]);
+                    // default to true if the string is not a boolean
+                    argument.setUseEquals(useEqual!=null?useEqual.booleanValue():true);
+                }
+            }
+        }
+        
+        return argument;
+    }
+    
+    
 }
