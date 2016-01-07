@@ -40,11 +40,10 @@ import org.apache.log.Logger;
 public final class ActionRouter implements ActionListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Object LOCK = new Object();
+    // This is cheap, so no need to resort to IODH or lazy init
+    private static final ActionRouter INSTANCE = new ActionRouter();
 
-    private static volatile ActionRouter router;
-
-    private Map<String, Set<Command>> commands = new HashMap<>();
+    private final Map<String, Set<Command>> commands = new HashMap<>();
 
     private final Map<String, Set<ActionListener>> preActionListeners =
             new HashMap<>();
@@ -284,7 +283,13 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
-    private void populateCommandMap() {
+    /**
+     * Only for use by the JMeter.startGui
+     */
+    public void populateCommandMap() {
+        if (!commands.isEmpty()) {
+            return; // already done
+        }
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), // strPathsOrJars - pathnames or jarfiles to search for classes
@@ -295,7 +300,6 @@ public final class ActionRouter implements ActionListener {
                     // Ignore the classes which are specific to the reporting tool
                     "org.apache.jmeter.report.gui", // $NON-NLS-1$ // notContains - classname should not contain this string
                     false); // annotations - true if classnames are annotations
-            commands = new HashMap<>(listClasses.size());
             if (listClasses.isEmpty()) {
                 log.fatalError("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
@@ -325,14 +329,6 @@ public final class ActionRouter implements ActionListener {
      * @return The Instance value
      */
     public static ActionRouter getInstance() {
-        if (router == null) {
-            synchronized (LOCK) {
-                if(router == null) {
-                    router = new ActionRouter();
-                    router.populateCommandMap();
-                }
-            }
-        }
-        return router;
+        return INSTANCE;
     }
 }
