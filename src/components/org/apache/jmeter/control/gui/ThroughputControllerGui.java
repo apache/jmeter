@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.jmeter.control.ThroughputController;
+import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -169,6 +170,6 @@ public class ThroughputControllerGui extends AbstractControllerGui {
                 }
             }
         });
-        add(perthread);
+        add(CheckBoxPanel.wrap(perthread));
     }
 }

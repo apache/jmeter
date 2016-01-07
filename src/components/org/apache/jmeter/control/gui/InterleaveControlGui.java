@@ -21,6 +21,7 @@ package org.apache.jmeter.control.gui;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.InterleaveControl;
+import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -87,6 +88,6 @@ public class InterleaveControlGui extends AbstractControllerGui {
         add(makeTitlePanel());
 
         style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
-        add(style);
+        add(CheckBoxPanel.wrap(style));
     }
 }

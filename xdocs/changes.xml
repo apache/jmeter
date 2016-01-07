@@ -168,6 +168,7 @@ Summary
 <li><bug>58784</bug>Make JMeterUtils#runSafe sync/async awt invocation configurable and change the visualizers to use the async version.</li>
 <li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 <li><bug>58814</bug>JVM don't recognize option MaxLiveObjectEvacuationRatio; remove from comments</li>
+<li><bug>58810</bug>Config Element Counter (and others): Check Boxes Toggle Area Too Big</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
