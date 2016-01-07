@@ -71,6 +71,8 @@ PRGDIR=`dirname "$PRG"`
 # on Sun JVMs. Following is the analysis on which it is based. If it's total
 # gibberish to you, please study my article at
 # http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
+# Original page has disappeared, it is now only available at: 
+# https://web.archive.org/web/20060614151434/http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
 #
 # JMeter objects can generally be grouped into three life-length groups:
 #
@@ -108,13 +110,6 @@ HEAP="-Xms512m -Xmx512m"
 #
 TENURING="-XX:MaxTenuringThreshold=2"
 
-# This evacuation ratio is OK (see the comments for SURVIVOR) during test
-# runs -- not so sure about operations that bring a lot of long-lived information into
-# memory in a short period of time, such as loading tests or listener data files.
-# Increase it if you experience OutOfMemory problems during those operations
-# without having gone through a lot of Full GC-ing just before the OOM:
-# EVACUATION="-XX:MaxLiveObjectEvacuationRatio=20%"
-
 # Java 8 remove Permanent generation, don't settings the PermSize
 if [ $current_version -lt "8" ]; then
     # Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
@@ -131,6 +126,6 @@ DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $EVACUATION $PERM $CLASS_UNLOAD"
+ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $PERM $CLASS_UNLOAD"
 
 java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
