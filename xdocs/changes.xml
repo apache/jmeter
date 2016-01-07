@@ -166,6 +166,7 @@ Summary
 <li><bug>58782</bug>ThreadGroup : Improve ergonomy</li>
 <li><bug>58165</bug>Show the time elapsed since the start of the load test in GUI mode. Partly based on a contribution from Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 <li><bug>58784</bug>Make JMeterUtils#runSafe sync/async awt invocation configurable and change the visualizers to use the async version.</li>
+<li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>

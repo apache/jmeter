@@ -247,13 +247,15 @@ public class JMeter implements JMeterPlugin {
 
         JMeterTreeModel treeModel = new JMeterTreeModel();
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
-        treeLis.setActionHandler(ActionRouter.getInstance());
+        final ActionRouter instance = ActionRouter.getInstance();
+        instance.populateCommandMap();
+        treeLis.setActionHandler(instance);
         // NOTUSED: GuiPackage guiPack =
         GuiPackage.getInstance(treeLis, treeModel);
         MainFrame main = new MainFrame(treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
         main.setVisible(true);
-        ActionRouter.getInstance().actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
+        instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
         if (testFile != null) {
             try {
                 File f = new File(testFile);
