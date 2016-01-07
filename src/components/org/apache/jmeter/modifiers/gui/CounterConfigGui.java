@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
+import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.modifiers.CounterConfig;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -137,8 +138,8 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         add(endField);
         add(formatField);
         add(varNameField);
-        add(perUserField);
-        add(resetCounterOnEachThreadGroupIteration);
+        add(CheckBoxPanel.wrap(perUserField));
+        add(CheckBoxPanel.wrap(resetCounterOnEachThreadGroupIteration));
 
         perUserField.addActionListener(this);
     }
