@@ -21,6 +21,7 @@ package org.apache.jmeter.control.gui;
 import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.TransactionController;
+import org.apache.jmeter.gui.util.CheckBoxPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -82,8 +83,8 @@ public class TransactionControllerGui extends AbstractControllerGui {
         setBorder(makeBorder());
         add(makeTitlePanel());
         generateParentSample = new JCheckBox(JMeterUtils.getResString("transaction_controller_parent")); // $NON-NLS-1$
-        add(generateParentSample);
+        add(CheckBoxPanel.wrap(generateParentSample));
         includeTimers = new JCheckBox(JMeterUtils.getResString("transaction_controller_include_timers"), true); // $NON-NLS-1$
-        add(includeTimers);
+        add(CheckBoxPanel.wrap(includeTimers));
     }
 }
