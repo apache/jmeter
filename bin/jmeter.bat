@@ -73,7 +73,8 @@ set JMETER_CMD_LINE_ARGS=%*
 rem The following link describes the -XX options:
 rem http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
 rem http://java.sun.com/developer/TechTips/2000/tt1222.html has some more descriptions
-rem Unfortunately TechTips no longer seem to be available
+rem Unfortunately TechTips no longer seem to be available, except via:
+rem https://web.archive.org/web/20090614101951/http://java.sun.com/developer/TechTips/2000/tt1222.html
 
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
