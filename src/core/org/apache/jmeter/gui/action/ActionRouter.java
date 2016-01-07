@@ -284,7 +284,9 @@ public final class ActionRouter implements ActionListener {
     }
 
     /**
-     * Only for use by the JMeter.startGui
+     * Only for use by the JMeter.startGui.
+     * This method must not be called by getInstance() as was done previously.
+     * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58790">Bug 58790</a> 
      */
     public void populateCommandMap() {
         if (!commands.isEmpty()) {
