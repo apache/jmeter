@@ -18,9 +18,17 @@
 
 package org.apache.jmeter.util;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditorSupport;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
+import javax.swing.JCheckBox;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
@@ -35,7 +43,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         this(beanClass, languageTags, null);
     }
 
-    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] LANGUAGE_TAGS, ResourceBundle rb) {
+    protected ScriptingBeanInfoSupport(Class<? extends TestBean> beanClass, String[] languageTags, ResourceBundle rb) {
         super(beanClass);
         PropertyDescriptor p;
 
@@ -45,7 +53,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         if (rb != null) {
             p.setValue(RESOURCE_BUNDLE, rb);
         }
-        p.setValue(TAGS, LANGUAGE_TAGS);
+        p.setValue(TAGS, languageTags);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
                 new String[] { "scriptLanguage" }); // $NON-NLS-1$
@@ -92,7 +100,8 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
             p = property("cacheKey"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);
             p.setValue(DEFAULT, ""); // $NON-NLS-1$
-    
+            p.setPropertyEditorClass(JSR223ScriptCacheCheckboxEditor.class);
+            
             createPropertyGroup("cacheKey_group", // $NON-NLS-1$
                 new String[] { "cacheKey" }); // $NON-NLS-1$
         }
@@ -104,6 +113,92 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         createPropertyGroup("scripting", // $NON-NLS-1$
                 new String[] { "script" }); // $NON-NLS-1$
+        
+    }
+    
+    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener {
+
+        private final JCheckBox textField;
+
+        /**
+         * Value on which we started the editing.
+         */
+        private String initialValue = null;
+
+        public JSR223ScriptCacheCheckboxEditor() {
+            super();
+
+            textField = new JCheckBox();
+            textField.addActionListener(this);
+        }
+
+        @Override
+        public String getAsText() {
+            String value = null;
+            if(textField.isSelected()) {
+                if(initialValue != null) {
+                    value = initialValue;
+                }
+                else {
+                    // the value is unique -> if the script is opened with a previous version of jmeter
+                    // where the cache key is used as the key for the cache
+                    // in the current version the key is automatically generated from the script content
+                    value = UUID.randomUUID().toString();
+                }
+            }
+            
+            return value;
+        }
+
+        @Override
+        public void setAsText(String value) {
+            if(StringUtils.isNotBlank(value)) {
+                initialValue = value;                
+            }
+            textField.setSelected(initialValue!= null);
+        }
+
+        @Override
+        public Object getValue() {
+            return getAsText();
+        }
+
+        @Override
+        public void setValue(Object value) {
+            if (value instanceof String) {
+                setAsText((String) value);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        @Override
+        public Component getCustomEditor() {
+            return textField;
+        }
+
+        @Override
+        public void firePropertyChange() {
+            String newValue = getAsText();
+
+            if (initialValue != null && initialValue.equals(newValue)) {
+                return;
+            }
+            initialValue = newValue;
+
+            super.firePropertyChange();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            firePropertyChange();
+        }
+
+        @Override
+        public boolean supportsCustomEditor() {
+            return true;
+        }
+        
     }
 
 }
