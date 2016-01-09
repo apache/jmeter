@@ -27,7 +27,7 @@
        <item name="Overview"            href="/index.html"/>
        <item name="JMeter on Twitter"   href="http://twitter.com/ApacheJMeter" icon="twitter.png"/>
        <item name="Issue Tracking"      href="/issues.html"/>
-       <item name="Subscribe to What's New" href="http://projects.apache.org/feeds/rss/jmeter.xml"/>
+       <item name="Project info at Apache" href="https://projects.apache.org/project.html?jmeter"/>
        <item name="License"             href="http://www.apache.org/licenses/"/>
      </menu>
      <menu name="Download">
