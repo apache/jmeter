@@ -368,6 +368,9 @@ being executed.  These numbers are independent of ThreadGroup, meaning thread #1
 is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
 
 <p>There are no arguments for this function.</p>
+<p>Usage Example:
+<source>${__threadNum}</source> returns a number between 1 and the max number of running threads configured in the containing Thread Group
+</p>
 </description>
 <note>
 This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
@@ -394,10 +397,17 @@ The reference name is optional, but it must not be a valid integer.
                 be treated as another int value to be added.
         </property>
 </properties>
+
+<p>Examples:
+<source>${__intSum(2,5,MYVAR)}</source> will return 7 (2+5) and store the result in MYVAR variable. So <code>${MYVAR}</code> will be equal to 7. <br/>
+<source>${__intSum(2,5,7)}</source> will return 14 (2+5+7) and store the result in MYVAR variable. <br/>
+<source>${__intSum(1,2,5,${MYVAR})}</source> will return 16 if MYVAR value is equal to 8, 1+2+5+${MYVAR})<br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.4b" name="__longSum">
-<description><p>The longSum function can be used to compute the sum of two or more long values.
+<description><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenver you know your values will not 
+be in the interval -2147483648 to 2147483647.
 </p></description>
 
 <properties>
@@ -409,6 +419,12 @@ The reference name is optional, but it must not be a valid integer.
                 be treated as another long value to be added.
         </property>
 </properties>
+
+<p>Examples:
+<source>${__longSum(2,5,MYVAR)}</source> will return 7 (2+5) and store the result in MYVAR variable. So <code>${MYVAR}</code> will be equal to 7. <br/>
+<source>${__longSum(2,5,7)}</source> will return 14 (2+5+7) and store the result in MYVAR variable. <br/>
+<source>${__longSum(1,2,5,${MYVAR})}</source> will return 16 if MYVAR value is equal to 8, 1+2+5+${MYVAR})<br/>
+</p>
 </component>
 
 <!-- Alternate spelling -->
@@ -513,6 +529,10 @@ Here are a few format strings and the corresponding sequences they will generate
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+<p>Examples:
+<source>${__machineName()}</source> will return the host name of the machine<br/>
+<source>${__machineName}</source> will return the host name of the machine<br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.6b" name="__machineIP">
@@ -522,6 +542,11 @@ Here are a few format strings and the corresponding sequences they will generate
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+
+<p>Examples:
+<source>${__machineIP()}</source> will return the IP address of the machine<br/>
+<source>${__machineIP}</source> will return the IP address of the machine<br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.7" name="__javaScript">
@@ -578,6 +603,15 @@ the expression has commas, please make sure to escape them. For example in:
 ${__javaScript('${sp}'.slice(7\,99999))}
 </source>
 the comma after <code>7</code> is escaped.</note>
+
+<p>Examples:
+<source>${__javaScript(new Date())}</source> will return <code>Sat Jan 09 2016 16:22:15 GMT+0100 (CET)</code><br/>
+<source>${__javaScript(new Date(),MYDATE)}</source> will return <code>Sat Jan 09 2016 16:22:15 GMT+0100 (CET)</code> and store it under variable <code>MYDATE</code><br/> 
+<source>${__javaScript(Math.floor(Math.random()*(${maxRandom}+1)),MYRESULT)}</source> will use maxRandom variable, return a random value between 0 and maxRandom and store it in MYRESULT  
+<source>${__javaScript(${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1)),MYRESULT)}</source> will use <code>maxRandom</code> and <code>minRandom</code> variables, return a random value between <code>maxRandom</code> and <code>minRandom</code> and store it under variable <code>MYRESULT</code>
+<source>${__javaScript("${VAR}"=="abcd",MYRESULT)}</source> will compare the value of <code>VAR</code> variable with <code>abcd</code>, return <code>true</code> or <code>false</code> and store the result in MYRESULT
+</p>
+
 </component>
 
 <component index="&sect-num;.5.8" name="__Random">
@@ -589,6 +623,11 @@ the comma after <code>7</code> is escaped.</note>
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+
+<p>Examples:
+<source>${__Random(0,10)}</source> will return a random number between 0 and 10<br/>
+<source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in MYVAR. ${MYVAR} will contain the random number<br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.8" name="__RandomString">
@@ -600,6 +639,12 @@ the comma after <code>7</code> is escaped.</note>
         <property name="Variable Name" required="No">A reference name for reusing the value
                 computed by this function.</property>
 </properties>
+<p>Examples:
+<source>${__RandomString(5)}</source> will return a random string of 5 characters which can be readable or not<br/>
+<source>${__RandomString(10,abcdefg)}</source> will return a random string of 10 characters pcked from <code>abcdefg</code> set, like cdbgdbeebd or adbfeggfad...<br/>
+<source>${__RandomString(6,a12zeczclk, MYVAR)}</source> will return a random string of 6 characters pcked from <code>a12zeczclk</code> set and store the result in MYVAR, MYVAR will contain
+string like 2z22ak or z11kce...<br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.8" name="__UUID">
@@ -608,6 +653,9 @@ the comma after <code>7</code> is escaped.</note>
 </description>
 <properties>
 </properties>
+<p>Examples:
+<source>${UUID()}</source> will return UUIs with this format : c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd <br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.8" name="__CSVRead">
