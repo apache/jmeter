@@ -29,11 +29,11 @@ Before creating a new issue, please check whether the issue has already been rep
 It's also worth checking first on the JMeter user mailing list; others may already have a solution.
 </p>
 </section>
-<section name="Known Bugs">
+<section name="Known Bugs and enhancements">
 <ul>
 <li>
 <a href="http://bz.apache.org/bugzilla/buglist.cgi?query_format=specific&amp;order=relevance+desc&amp;bug_status=__open__&amp;product=JMeter&amp;content=">
-Bugzilla - All open bugs</a>
+Bugzilla - All open bugs and enhancements</a>
 </li>
 <li>
 <a href="http://bz.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_severity=Blocker&amp;bug_severity=Critical&amp;bug_severity=Major&amp;bug_severity=Normal&amp;bug_severity=Regression&amp;bug_severity=Minor&amp;bug_severity=Trivial&amp;product=JMeter&amp;cmdtype=doit&amp;order=Bug+Number">
@@ -80,7 +80,11 @@ main Bugzilla page: <a href="https://bz.apache.org/bugzilla/">https://bz.apache.
 Make sure you read and understand the information on the account creation page before signing up.
 </p>
 <p>
-Once logged in, click "<code>File a bug</code>" and select JMeter from the list.
+Once logged in you have 2 options:
+<ul>
+    <li>At the bottom left of the screen click '<code>File a new bug in the "JMeter" product</code>' link</li>
+    <li>At the top left of the screen, click "<code>New</code>" link and select JMeter from the list.</li>
+</ul>
 </p>
 </section>
 <section name="Required Information for bug reporting">
@@ -99,6 +103,8 @@ Use the checklist below to guide you.
 Does it happen every time?
 </li>
 <li>Add yourself in <code>CC</code> List to be notified when JMeter Team requires more information (in this case bug will be marked as <code>NEEDINFO</code>)</li>
+<li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if 
+no information is provided after team requires more information and bug is not reproductible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
 <li>Select accurately the IMPORTANCE level, <code>ENHANCEMENT</code> means it's not a BUG while others mean it's a BUG</li>
 <li>If you are providing a patch to fix a bug, please ensure it is in unified diff format.
 If using Eclipse, please set the patch root to "<code>Project</code>", not the default "<code>Workspace</code>" which is harder to apply.</li>
