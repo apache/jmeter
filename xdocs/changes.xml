@@ -132,6 +132,7 @@ Summary
   <li><bug>58698</bug>Correct parsing of auth-files in HTTP Authorization Manager.</li>
   <li><bug>58756</bug>CookieManager : Cookie Policy select box content must depend on Cookie implementation.</li>
   <li><bug>56358</bug>Cookie manager supports cross port cookies and RFC6265.</li>
+  <li><bug>58773</bug>TestCacheManager : Add tests for CacheManager that use HttpClient 4</li>
 </ul>
 
 <h3>Functions</h3>
