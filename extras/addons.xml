@@ -46,9 +46,9 @@
   <target name="compile" description="Compile JMeter addons classes.">
     <mkdir dir="${build.addons}"/>
     <javac srcdir="${src.addons}" destdir="${build.addons}" optimize="${optimize}" 
-    	includeantruntime="false"
-    	source="${target.java.version}"
-    	debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
+        includeantruntime="false"
+        source="${target.java.version}"
+        debug="on" target="${target.java.version}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath refid="classpath"/>
     </javac>
