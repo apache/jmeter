@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	You under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
-	language governing permissions and limitations under the License. -->
+    license agreements. See the NOTICE file distributed with this work for additional 
+    information regarding copyright ownership. The ASF licenses this file to 
+    You under the Apache License, Version 2.0 (the "License"); you may not use 
+    this file except in compliance with the License. You may obtain a copy of 
+    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+    by applicable law or agreed to in writing, software distributed under the 
+    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+    OF ANY KIND, either express or implied. See the License for the specific 
+    language governing permissions and limitations under the License. -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '16'>
@@ -17,590 +17,590 @@
 
 <document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
 
-	<properties>
-		<title>User's Manual: Generating Dashboard Report</title>
-	</properties>
+    <properties>
+        <title>User's Manual: Generating Dashboard Report</title>
+    </properties>
 
-	<body>
+    <body>
 
-		<section name="&sect-num;. Generating Report Dashboard" anchor="generation">
-			<p>
-				JMeter supports dashboard report generation to get graphs and
-				statistics from a test plan.
-				<br />
-				This chapter describes how to configure and use the generator.
-			</p>
+        <section name="&sect-num;. Generating Report Dashboard" anchor="generation">
+            <p>
+                JMeter supports dashboard report generation to get graphs and
+                statistics from a test plan.
+                <br />
+                This chapter describes how to configure and use the generator.
+            </p>
 
-			<subsection name="&sect-num;.1 Overview" anchor="overview">
-				<p>
-					The dashboard generator is a modular extension of JMeter. Its
-					default behavior is to read and process samples from CSV files to
-					generate Html files containing graph views.
-				</p>
+            <subsection name="&sect-num;.1 Overview" anchor="overview">
+                <p>
+                    The dashboard generator is a modular extension of JMeter. Its
+                    default behavior is to read and process samples from CSV files to
+                    generate Html files containing graph views.
+                </p>
 
-				<p>
-					It is designed to support different way of data exportation, if
-					Html files are not relevant.
-				</p>
-			</subsection>
+                <p>
+                    It is designed to support different way of data exportation, if
+                    Html files are not relevant.
+                </p>
+            </subsection>
 
-			<subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
-				<p>
-					Dashboard generation uses JMeter properties to customize the
-					report. Some properties are used
-					for general settings and others are
-					used to describe a graph
-					configuration or exporter configuration.
-				</p>
+            <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
+                <p>
+                    Dashboard generation uses JMeter properties to customize the
+                    report. Some properties are used
+                    for general settings and others are
+                    used to describe a graph
+                    configuration or exporter configuration.
+                </p>
 
-				<subsection name="&sect-num;.2.1 General settings" anchor="configure_general">
-					<note>
-						All properties must be prefixed with
-						<code>jmeter.reportgenerator.</code>
-					</note>
-					<table>
-						<thead>
-							<tr>
-								<th>Property</th>
-								<th>Description</th>
-								<th>Default value</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>apdex_statisfied_threshold</td>
-								<td>
-									Sets the satisfaction threshold for the APDEX calculation.
-									<br />
-									Specified in milliseconds
-								</td>
-								<td>500</td>
-							</tr>
-							<tr>
-								<td>apdex_tolerated_threshold</td>
-								<td>
-									Sets the tolerance threshold for the APDEX calculation.
-									<br />
-									Specified in milliseconds
-								</td>
-								<td>1500</td>
-							</tr>
-							<tr>
-								<td>sample_filter</td>
-								<td>
-									Sets the filter of samples to keep for graphs and
-									statistics
-									generation.
-									<br />
-									A comma separated list of samples names is expected
-								</td>
-								<td>"" (no filtering)</td>
-							</tr>
-							<tr>
-								<td>temp_dir</td>
-								<td>Sets the temporary directory used by the generation
-									processus if
-									it needs file I/O operations.</td>
-								<td>temp</td>
-							</tr>
-							<tr>
-								<td>statistic_window</td>
-								<td>
-									Sets the size of the sliding window used by percentile
-									evaluation.
-									<br />
-									Caution : higher value provides a better accurency but needs
-									more memory.
-								</td>
-								<td>200000</td>
-							</tr>
-						</tbody>
-					</table>
+                <subsection name="&sect-num;.2.1 General settings" anchor="configure_general">
+                    <note>
+                        All properties must be prefixed with
+                        <code>jmeter.reportgenerator.</code>
+                    </note>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Description</th>
+                                <th>Default value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>apdex_statisfied_threshold</td>
+                                <td>
+                                    Sets the satisfaction threshold for the APDEX calculation.
+                                    <br />
+                                    Specified in milliseconds
+                                </td>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>apdex_tolerated_threshold</td>
+                                <td>
+                                    Sets the tolerance threshold for the APDEX calculation.
+                                    <br />
+                                    Specified in milliseconds
+                                </td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td>sample_filter</td>
+                                <td>
+                                    Sets the filter of samples to keep for graphs and
+                                    statistics
+                                    generation.
+                                    <br />
+                                    A comma separated list of samples names is expected
+                                </td>
+                                <td>"" (no filtering)</td>
+                            </tr>
+                            <tr>
+                                <td>temp_dir</td>
+                                <td>Sets the temporary directory used by the generation
+                                    processus if
+                                    it needs file I/O operations.</td>
+                                <td>temp</td>
+                            </tr>
+                            <tr>
+                                <td>statistic_window</td>
+                                <td>
+                                    Sets the size of the sliding window used by percentile
+                                    evaluation.
+                                    <br />
+                                    Caution : higher value provides a better accurency but needs
+                                    more memory.
+                                </td>
+                                <td>200000</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-					<note>Relative paths are build from the JMeter working directory (default: bin).</note>
+                    <note>Relative paths are build from the JMeter working directory (default: bin).</note>
 
-					<note>
-						<p>
-							You can define some overall properties which are used by the
-							generator configuration.
-							These properties are freely named but you
-							should use the prefix
-							"jmeter.reportgenerator." in order to avoid
-							properties overlap.
-						</p>
-						<p>
-							E.g :
-							<br />
-							Property definition :
-							<code>jmeter.reportgenerator.overall_granularity=60000</code>
-							<br />
-							Property reference :
-							<br />
-							<code>jmeter.reportgenerator.graph.&lt;&hellip;&gt;=${jmeter.reportgenerator.overall_granularity}
-							</code>
-						</p>
-					</note>
-				</subsection>
+                    <note>
+                        <p>
+                            You can define some overall properties which are used by the
+                            generator configuration.
+                            These properties are freely named but you
+                            should use the prefix
+                            "jmeter.reportgenerator." in order to avoid
+                            properties overlap.
+                        </p>
+                        <p>
+                            E.g :
+                            <br />
+                            Property definition :
+                            <code>jmeter.reportgenerator.overall_granularity=60000</code>
+                            <br />
+                            Property reference :
+                            <br />
+                            <code>jmeter.reportgenerator.graph.&lt;&hellip;&gt;=${jmeter.reportgenerator.overall_granularity}
+                            </code>
+                        </p>
+                    </note>
+                </subsection>
 
-				<subsection name="&sect-num;.2.2 Graph settings" anchor="configure_graph">
-					<p>Each property describing a graph configuration must be prefixed
-						with "jmeter.reportgenerator.graph." followed by the graph
-						identifier.</p>
-					<note> The identifier is used to group properties by graph.</note>
+                <subsection name="&sect-num;.2.2 Graph settings" anchor="configure_graph">
+                    <p>Each property describing a graph configuration must be prefixed
+                        with "jmeter.reportgenerator.graph." followed by the graph
+                        identifier.</p>
+                    <note> The identifier is used to group properties by graph.</note>
 
-					<subsection name="&sect-num;.2.2.1 General properties" anchor="general_graph_properties">
-						<p>All graphs support these properties :</p>
-						<table>
-							<thead>
-								<tr>
-									<th>Property</th>
-									<th>Description</th>
-									<th>Default value</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>abscissa_max</td>
-									<td>
-										Sets the maximum abscissa of the graph. If this property is
-										not set, it will be defined during the generation.
-									</td>
-									<td>No default value</td>
-								</tr>
-								<tr>
-									<td>abscissa_min</td>
-									<td>
-										Sets the minimum abscissa of the graph. If this property is
-										not set, it will be defined during the generation.
-									</td>
-									<td>No default value</td>
-								</tr>
-								<tr>
-									<td>classname</td>
-									<td>
-										The fully qualified class name of the graph
-										<br />
-										This property is required.
-										<br />
-										The class of the graph must extend
-										org.apache.jmeter.report.processor.graph.AbstractGraphConsumer.
-										<br />
-										See
-										<a href="#default_graphs">Default graph section</a>
-										for more details.
-									</td>
-									<td>No default value</td>
-								</tr>
-								<tr>
-									<td>exclude_controllers</td>
-									<td>
-										Defines whether the graph discards controller samples.
-									</td>
-									<td>false</td>
-								</tr>
-								<tr>
-									<td>ordinate_max</td>
-									<td>
-										Sets the maximum ordinate of the graph. If this property is
-										not set, it will be defined during the generation.
-									</td>
-									<td>No default value</td>
-								</tr>
-								<tr>
-									<td>ordinate_min</td>
-									<td>
-										Sets the minimum ordinate of the graph. If this property is
-										not set, it will be defined during the generation.
-									</td>
-									<td>No default value</td>
-								</tr>
-								<tr>
-									<td>title</td>
-									<td>
-										Sets the title of the graph.
-									</td>
-									<td>""</td>
-								</tr>
-							</tbody>
-						</table>
-					</subsection>
+                    <subsection name="&sect-num;.2.2.1 General properties" anchor="general_graph_properties">
+                        <p>All graphs support these properties :</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Description</th>
+                                    <th>Default value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>abscissa_max</td>
+                                    <td>
+                                        Sets the maximum abscissa of the graph. If this property is
+                                        not set, it will be defined during the generation.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                                <tr>
+                                    <td>abscissa_min</td>
+                                    <td>
+                                        Sets the minimum abscissa of the graph. If this property is
+                                        not set, it will be defined during the generation.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                                <tr>
+                                    <td>classname</td>
+                                    <td>
+                                        The fully qualified class name of the graph
+                                        <br />
+                                        This property is required.
+                                        <br />
+                                        The class of the graph must extend
+                                        org.apache.jmeter.report.processor.graph.AbstractGraphConsumer.
+                                        <br />
+                                        See
+                                        <a href="#default_graphs">Default graph section</a>
+                                        for more details.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                                <tr>
+                                    <td>exclude_controllers</td>
+                                    <td>
+                                        Defines whether the graph discards controller samples.
+                                    </td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>ordinate_max</td>
+                                    <td>
+                                        Sets the maximum ordinate of the graph. If this property is
+                                        not set, it will be defined during the generation.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                                <tr>
+                                    <td>ordinate_min</td>
+                                    <td>
+                                        Sets the minimum ordinate of the graph. If this property is
+                                        not set, it will be defined during the generation.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                                <tr>
+                                    <td>title</td>
+                                    <td>
+                                        Sets the title of the graph.
+                                    </td>
+                                    <td>""</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </subsection>
 
-					<subsection name="&sect-num;.2.2.2 Specific properties" anchor="specific_graph_properties">
-						<p>
-							Specific graph properties must use the prefix
-							"jmeter.reportgenerator.graph.&lt;graph_id&gt;.property"
-							<br />
-							The name of the property will be mapped using camel case
-							transformation and the matching method of the class will be
-							called
-							with the property
-							value as argument.
-						</p>
-						<p>
-							E.g :
-							<br />
-							jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity
-							= 150 induces the call of the method setGranularity(150) on the
-							instance of the graph.
-						</p>
-					</subsection>
+                    <subsection name="&sect-num;.2.2.2 Specific properties" anchor="specific_graph_properties">
+                        <p>
+                            Specific graph properties must use the prefix
+                            "jmeter.reportgenerator.graph.&lt;graph_id&gt;.property"
+                            <br />
+                            The name of the property will be mapped using camel case
+                            transformation and the matching method of the class will be
+                            called
+                            with the property
+                            value as argument.
+                        </p>
+                        <p>
+                            E.g :
+                            <br />
+                            jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity
+                            = 150 induces the call of the method setGranularity(150) on the
+                            instance of the graph.
+                        </p>
+                    </subsection>
 
-				</subsection>
+                </subsection>
 
-				<subsection name="&sect-num;.2.3 Export settings" anchor="configure_export">
-					<p>
-						Each property describing an exporter configuration must be
-						prefixed
-						with "jmeter.reportgenerator.exporter"
-						followed by the
-						exporter identifier.
-					</p>
-					
-					<subsection name="&sect-num;.2.3.1 General properties" anchor="general_export_properties">
-						<table>
-							<thead>
-								<tr>
-									<th>Property</th>
-									<th>Description</th>
-									<th>Default value</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>classname</td>
-									<td>
-										The fully qualified class name of the exporter
-										<br />
-										This property is required.
-										<br />
-										The class of the exporter must implement
-										org.apache.jmeter.report.dashboard.DataExporter.
-									</td>
-									<td>No default value</td>
-								</tr>
-							</tbody>
-						</table>
-					</subsection>
+                <subsection name="&sect-num;.2.3 Export settings" anchor="configure_export">
+                    <p>
+                        Each property describing an exporter configuration must be
+                        prefixed
+                        with "jmeter.reportgenerator.exporter"
+                        followed by the
+                        exporter identifier.
+                    </p>
+                    
+                    <subsection name="&sect-num;.2.3.1 General properties" anchor="general_export_properties">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Description</th>
+                                    <th>Default value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>classname</td>
+                                    <td>
+                                        The fully qualified class name of the exporter
+                                        <br />
+                                        This property is required.
+                                        <br />
+                                        The class of the exporter must implement
+                                        org.apache.jmeter.report.dashboard.DataExporter.
+                                    </td>
+                                    <td>No default value</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </subsection>
 
-					<subsection name="&sect-num;.2.3.1 Specific properties for Html export" anchor="html_export_properties">
-						<p>
-							Specific exporter properties must use the prefix
-							"jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property"
-						</p>
-						<table>
-							<thead>
-								<tr>
-									<th>Property</th>
-									<th>Description</th>
-									<th>Default value</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>output_dir</td>
-									<td>
-										Sets the destination directory for generated html pages.
-									</td>
-									<td>report-output</td>
-								</tr>
-								<tr>
-									<td>template_dir</td>
-									<td>
-										Sets the source directory of templated files from which the
-										html pages are generated.
-									</td>
-									<td>report-template</td>
-								</tr>
-							</tbody>
-						</table>
-					</subsection>
+                    <subsection name="&sect-num;.2.3.1 Specific properties for Html export" anchor="html_export_properties">
+                        <p>
+                            Specific exporter properties must use the prefix
+                            "jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property"
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Description</th>
+                                    <th>Default value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>output_dir</td>
+                                    <td>
+                                        Sets the destination directory for generated html pages.
+                                    </td>
+                                    <td>report-output</td>
+                                </tr>
+                                <tr>
+                                    <td>template_dir</td>
+                                    <td>
+                                        Sets the source directory of templated files from which the
+                                        html pages are generated.
+                                    </td>
+                                    <td>report-template</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </subsection>
 
-				</subsection>
-			</subsection>
+                </subsection>
+            </subsection>
 
-			<subsection name="&sect-num;.3 Generating reports" anchor="report">
-				<p>
-					The report generation can be done as a stand alone process from a
-					sample log file or automatically after running load test.
-				</p>
+            <subsection name="&sect-num;.3 Generating reports" anchor="report">
+                <p>
+                    The report generation can be done as a stand alone process from a
+                    sample log file or automatically after running load test.
+                </p>
 
-				<subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
-					<p>
-						Use the following command :
-						<code>jmeter -n -g &lt;log file&gt;</code>
-					</p>
-				</subsection>
+                <subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
+                    <p>
+                        Use the following command :
+                        <code>jmeter -n -g &lt;log file&gt;</code>
+                    </p>
+                </subsection>
 
-				<subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
-					<p>
-						Use the following command :
-						<code>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt;</code>
-					</p>
-				</subsection>
-			</subsection>
+                <subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
+                    <p>
+                        Use the following command :
+                        <code>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt;</code>
+                    </p>
+                </subsection>
+            </subsection>
 
-			<subsection name="&sect-num;.4 Template processing" anchor="process_template">
-				<subsection name="&sect-num;.4.1 Overview" anchor="template_overview">
-					<p>
-						The default exporter of the generator use the template engine
-						<a href="http://freemarker.org/">freemarker</a>
-						to produce html pages.
-						<br />
-						Templated files are located in the template directory defined by
-						the JMeter property "jmeter.reportgenerator.template_dir" and have
-						the
-						extension ".fmkr".
-					</p>
-					<p>
-						The graph references in the templated files use the syntax :
-						${&lt;graph_id&gt;.&lt;value&gt;} where :
-						<ul>
-							<li>"graph_id" is the identifier of the graph matching the jmeter
-								properties definition</li>
-							<li>"value" is the name of the value where data are stored.</li>
-						</ul>
-					</p>
+            <subsection name="&sect-num;.4 Template processing" anchor="process_template">
+                <subsection name="&sect-num;.4.1 Overview" anchor="template_overview">
+                    <p>
+                        The default exporter of the generator use the template engine
+                        <a href="http://freemarker.org/">freemarker</a>
+                        to produce html pages.
+                        <br />
+                        Templated files are located in the template directory defined by
+                        the JMeter property "jmeter.reportgenerator.template_dir" and have
+                        the
+                        extension ".fmkr".
+                    </p>
+                    <p>
+                        The graph references in the templated files use the syntax :
+                        ${&lt;graph_id&gt;.&lt;value&gt;} where :
+                        <ul>
+                            <li>"graph_id" is the identifier of the graph matching the jmeter
+                                properties definition</li>
+                            <li>"value" is the name of the value where data are stored.</li>
+                        </ul>
+                    </p>
 
-					<p>
-						Each graph produces the following values :
-						<ul>
-							<li>
-								<p>
-									<code>maxX</code>
-									:
-									<br />
-									The maximum abscissa of the graph (double).
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>maxY</code>
-									:
-									<br />
-									The maximum ordinate of the graph (double).
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>minX</code>
-									:
-									<br />
-									The minimum abscissa of the graph (double).
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>minY</code>
-									:
-									<br />
-									The maximum ordinate of the graph (double).
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>title</code>
-									:
-									<br />
-									The title of the graph (string).
-								</p>
-							</li>
-							<li>
-								<p>
-									<code>values</code>
-									:
-									<br />
-									A json object representing the data of the graph series
-									(string).
-								</p>
-							</li>
-						</ul>
-					</p>
+                    <p>
+                        Each graph produces the following values :
+                        <ul>
+                            <li>
+                                <p>
+                                    <code>maxX</code>
+                                    :
+                                    <br />
+                                    The maximum abscissa of the graph (double).
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <code>maxY</code>
+                                    :
+                                    <br />
+                                    The maximum ordinate of the graph (double).
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <code>minX</code>
+                                    :
+                                    <br />
+                                    The minimum abscissa of the graph (double).
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <code>minY</code>
+                                    :
+                                    <br />
+                                    The maximum ordinate of the graph (double).
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <code>title</code>
+                                    :
+                                    <br />
+                                    The title of the graph (string).
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <code>values</code>
+                                    :
+                                    <br />
+                                    A json object representing the data of the graph series
+                                    (string).
+                                </p>
+                            </li>
+                        </ul>
+                    </p>
 
-					<note>
-						Graph can provide some other values, see
-						<a href="#default_graphs">Default graph section</a>
-						to get the list of these values for default graphs.
-					</note>
-				</subsection>
+                    <note>
+                        Graph can provide some other values, see
+                        <a href="#default_graphs">Default graph section</a>
+                        to get the list of these values for default graphs.
+                    </note>
+                </subsection>
 
-				<subsection name="&sect-num;.4.2 Customization" anchor="template_customization">
-					<p>You can customize the dashboard generation by modifying the
-						files in the template directory.
-					</p>
-					<p>
-						If you want to add a graph to the dahsboard, you have to
-						<a href="#configure_graph">declare
-							it among the JMeter properties</a>
-						and use its references in the templated files.
-					</p>
-					<p>If you want to remove a graph from the dashboard, you must
-						remove
-						all its references in the templated files and clear JMeter
-						properties.</p>
-				</subsection>
-			</subsection>
+                <subsection name="&sect-num;.4.2 Customization" anchor="template_customization">
+                    <p>You can customize the dashboard generation by modifying the
+                        files in the template directory.
+                    </p>
+                    <p>
+                        If you want to add a graph to the dahsboard, you have to
+                        <a href="#configure_graph">declare
+                            it among the JMeter properties</a>
+                        and use its references in the templated files.
+                    </p>
+                    <p>If you want to remove a graph from the dashboard, you must
+                        remove
+                        all its references in the templated files and clear JMeter
+                        properties.</p>
+                </subsection>
+            </subsection>
 
-			<subsection name="&sect-num;.5 Default graphs" anchor="default_graphs">
-				<note>Due to limitations of this early version, each default graph
-					must be declared among the JMeter properties. Otherwise, the graph
-					views will be empty.</note>
+            <subsection name="&sect-num;.5 Default graphs" anchor="default_graphs">
+                <note>Due to limitations of this early version, each default graph
+                    must be declared among the JMeter properties. Otherwise, the graph
+                    views will be empty.</note>
 
-				<p>The dashboard generator provides the following graph classes :</p>
-				<ul>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer</code>
-							:
-							<br />
-							This graph represents the number of active threads over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer</code>
-							:
-							<br />
-							This graph represents the troughput of received and sent data
-							over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer</code>
-							:
-							<br />
-							This graph represents the rate of response codes over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer</code>
-							:
-							<br />
-							This graph represents the rate of finished requests over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer</code>
-							:
-							<br />
-							This graph represents the average latency time over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer</code>
-							:
-							<br />
-							This graph represents the median and average latency time
-							depending on the number of current requests.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer</code>
-							:
-							<br />
-							This graph represents the distribution of the samples depending
-							on their elapsed time and name.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer</code>
-							:
-							<br />
-							This graph represents the average response time over time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>
-								org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer
-							</code>
-							:
-							<br />
-							This graph represents the percentiles of the elapsed time over
-							time.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>
-								org.apache.jmeter.report.processor.graph.impl.ResponseTimePerSampleGraphConsumer
-							</code>
-							:
-							<br />
-							This graph represents the median and average response time per
-							sample name.
-							<br />
-							Additional produced values : sampleNames (index of sample names).
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>
-								org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer
-							</code>
-							:
-							<br />
-							This graph represents the median and average response time
-							depending on the number of current requests.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer</code>
-							:
-							<br />
-							This graph represents the average response time depending on the
-							number of current active threads.
-							<br />
-							<!-- NOTE : Actually aggregated series are disabled -->
-							<!--<p> The *-aggregated series represent the average response time 
-								regardless of the number of current active threads. These series are represented 
-								by a sole point because the number of current active threads is aggregated 
-								to an average. So for these points : <ul> <li>The abscissa is the average 
-								of the number of current active threads when samples of the series finish.</li> 
-								<li>The ordinate is the average of the response time for the samples of the 
-								series regardless of the number of current active threads.</li> </ul> </p> -->
-						</p>
-					</li>
-					<li>
-						<p>
-							<code>org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer</code>
-							:
-							<br />
-							This graph represents the rate of transaction by sample name over
-							time.
-							<br />
-							Additional produced values : granularity.
-						</p>
-					</li>
-				</ul>
-			</subsection>
+                <p>The dashboard generator provides the following graph classes :</p>
+                <ul>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the number of active threads over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the troughput of received and sent data
+                            over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the rate of response codes over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the rate of finished requests over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the average latency time over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the median and average latency time
+                            depending on the number of current requests.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the distribution of the samples depending
+                            on their elapsed time and name.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the average response time over time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>
+                                org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer
+                            </code>
+                            :
+                            <br />
+                            This graph represents the percentiles of the elapsed time over
+                            time.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>
+                                org.apache.jmeter.report.processor.graph.impl.ResponseTimePerSampleGraphConsumer
+                            </code>
+                            :
+                            <br />
+                            This graph represents the median and average response time per
+                            sample name.
+                            <br />
+                            Additional produced values : sampleNames (index of sample names).
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>
+                                org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer
+                            </code>
+                            :
+                            <br />
+                            This graph represents the median and average response time
+                            depending on the number of current requests.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the average response time depending on the
+                            number of current active threads.
+                            <br />
+                            <!-- NOTE : Actually aggregated series are disabled -->
+                            <!--<p> The *-aggregated series represent the average response time 
+                                regardless of the number of current active threads. These series are represented 
+                                by a sole point because the number of current active threads is aggregated 
+                                to an average. So for these points : <ul> <li>The abscissa is the average 
+                                of the number of current active threads when samples of the series finish.</li> 
+                                <li>The ordinate is the average of the response time for the samples of the 
+                                series regardless of the number of current active threads.</li> </ul> </p> -->
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <code>org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer</code>
+                            :
+                            <br />
+                            This graph represents the rate of transaction by sample name over
+                            time.
+                            <br />
+                            Additional produced values : granularity.
+                        </p>
+                    </li>
+                </ul>
+            </subsection>
 
-		</section>
+        </section>
 
-	</body>
+    </body>
 </document>
 
