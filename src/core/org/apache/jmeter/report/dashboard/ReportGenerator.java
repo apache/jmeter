@@ -117,7 +117,7 @@ public class ReportGenerator {
         if (resultCollector == null) {
             if (!(file.isFile() && file.canRead())) {
                 throw new IllegalArgumentException(String.format(
-                        "Invalid test results file : %s", file));
+                        "Cannot read test results file : %s", file));
             }
             LOG.info("Will only generate report from results file:"
                     + resultsFile);
