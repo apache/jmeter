@@ -15,8 +15,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="regular_expressions.html" next="hints_and_tips.html"
-	id="$Id$">
+<document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
 
 	<properties>
 		<title>User's Manual: Generating Dashboard Report</title>
@@ -45,8 +44,7 @@
 				</p>
 			</subsection>
 
-			<subsection name="&sect-num;.2 Configuring Dashboard Generation"
-				anchor="configure">
+			<subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
 				<p>
 					Dashboard generation uses JMeter properties to customize the
 					report. Some properties are used
@@ -55,8 +53,7 @@
 					configuration or exporter configuration.
 				</p>
 
-				<subsection name="&sect-num;.2.1 General settings"
-					anchor="configure_general">
+				<subsection name="&sect-num;.2.1 General settings" anchor="configure_general">
 					<note>
 						All properties must be prefixed with
 						<code>jmeter.reportgenerator.</code>
@@ -120,8 +117,7 @@
 						</tbody>
 					</table>
 
-					<note>Relative paths are build from the JMeter working directory
-						(default: bin).</note>
+					<note>Relative paths are build from the JMeter working directory (default: bin).</note>
 
 					<note>
 						<p>
@@ -152,8 +148,7 @@
 						identifier.</p>
 					<note> The identifier is used to group properties by graph.</note>
 
-					<subsection name="&sect-num;.2.2.1 General properties"
-						anchor="general_graph_properties">
+					<subsection name="&sect-num;.2.2.1 General properties" anchor="general_graph_properties">
 						<p>All graphs support these properties :</p>
 						<table>
 							<thead>
@@ -230,8 +225,7 @@
 						</table>
 					</subsection>
 
-					<subsection name="&sect-num;.2.2.2 Specific properties"
-						anchor="specific_graph_properties">
+					<subsection name="&sect-num;.2.2.2 Specific properties" anchor="specific_graph_properties">
 						<p>
 							Specific graph properties must use the prefix
 							"jmeter.reportgenerator.graph.&lt;graph_id&gt;.property"
@@ -262,8 +256,7 @@
 						exporter identifier.
 					</p>
 					
-					<subsection name="&sect-num;.2.3.1 General properties"
-						anchor="general_export_properties">
+					<subsection name="&sect-num;.2.3.1 General properties" anchor="general_export_properties">
 						<table>
 							<thead>
 								<tr>
@@ -289,8 +282,7 @@
 						</table>
 					</subsection>
 
-					<subsection name="&sect-num;.2.3.1 Specific properties for Html export"
-						anchor="html_export_properties">
+					<subsection name="&sect-num;.2.3.1 Specific properties for Html export" anchor="html_export_properties">
 						<p>
 							Specific exporter properties must use the prefix
 							"jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property"
@@ -347,8 +339,7 @@
 				</subsection>
 			</subsection>
 
-			<subsection name="&sect-num;.4 Template processing"
-				anchor="process_template">
+			<subsection name="&sect-num;.4 Template processing" anchor="process_template">
 				<subsection name="&sect-num;.4.1 Overview" anchor="template_overview">
 					<p>
 						The default exporter of the generator use the template engine
