@@ -326,26 +326,23 @@
 				</subsection>
 			</subsection>
 
-			<subsection name="&sect-num;.3 Generating dashboard"
-				anchor="report_only">
+			<subsection name="&sect-num;.3 Generating reports" anchor="report">
 				<p>
 					The report generation can be done as a stand alone process from a
-					samples log file or after running load test.
+					sample log file or automatically after running load test.
 				</p>
 
-				<subsection name="&sect-num;.3.1 Generating from samples log file"
-					anchor="report_only">
+				<subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
 					<p>
 						Use the following command :
 						<code>jmeter -n -g &lt;log file&gt;</code>
 					</p>
 				</subsection>
 
-				<subsection name="&sect-num;.3.2 Generating after load test"
-					anchor="report_after_load_test">
+				<subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
 					<p>
 						Use the following command :
-						<code>jmeter -n -e -l &lt;test log file&gt;</code>
+						<code>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt;</code>
 					</p>
 				</subsection>
 			</subsection>
