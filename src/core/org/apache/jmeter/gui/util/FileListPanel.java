@@ -47,6 +47,11 @@ public class FileListPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
+    // HiDPI mode
+    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     private JTable files = null;
 
     private transient ObjectTableModel tableModel = null;
@@ -115,6 +120,10 @@ public class FileListPanel extends JPanel implements ActionListener {
 
         this.initializeTableModel();
         files = new JTable(tableModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            files.setRowHeight((int) Math.round(files.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         files.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         files.revalidate();
 

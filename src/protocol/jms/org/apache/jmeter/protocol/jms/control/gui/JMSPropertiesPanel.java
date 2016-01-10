@@ -54,6 +54,11 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // HiDPI mode
+    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
     private static final String DELETE_COMMAND = "Delete"; //$NON-NLS-1$
@@ -190,6 +195,10 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
     public JPanel createPropertiesPanel() {
         // create the JTable that holds JMSProperty per row
         jmsPropertiesTable = new JTable(tableModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            jmsPropertiesTable.setRowHeight((int) Math.round(jmsPropertiesTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         jmsPropertiesTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         jmsPropertiesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jmsPropertiesTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

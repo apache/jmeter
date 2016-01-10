@@ -64,6 +64,11 @@ import org.apache.jorphan.reflect.Functor;
  */
 public abstract class SamplerResultTab implements ResultRenderer {
 
+    // HiDPI mode
+    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     // N.B. these are not multi-threaded, so don't make it static
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // ISO format $NON-NLS-1$
 
@@ -403,7 +408,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
         paneRaw.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
         // Set up the 1st table Result with empty headers
-        tableResult = new JTable(resultModel);     
+        tableResult = new JTable(resultModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            tableResult.setRowHeight((int) Math.round(tableResult.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableResult.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResult.addMouseListener(new TextBoxDoubleClick(tableResult));
         setFirstColumnPreferredSize(tableResult);
@@ -411,6 +420,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 2nd table 
         tableResHeaders = new JTable(resHeadersModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            tableResHeaders.setRowHeight((int) Math.round(tableResHeaders.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResHeaders.addMouseListener(new TextBoxDoubleClick(tableResHeaders));
         setFirstColumnPreferredSize(tableResHeaders);
@@ -420,6 +433,10 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 3rd table 
         tableResFields = new JTable(resFieldsModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            tableResFields.setRowHeight((int) Math.round(tableResFields.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResFields.addMouseListener(new TextBoxDoubleClick(tableResFields));
         setFirstColumnPreferredSize(tableResFields);

@@ -367,7 +367,7 @@ public class AssertionGui extends AbstractAssertionGui {
         stringTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
 
         TextAreaCellRenderer renderer = new TextAreaCellRenderer();
-        stringTable.setRowHeight(renderer.getPreferredHeight());
+        stringTable.setRowHeight(renderer.getPreferredHeight()); // TODO: hipdi?
         stringTable.setDefaultRenderer(String.class, renderer);
         stringTable.setDefaultEditor(String.class, new TextAreaTableCellEditor());
         stringTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

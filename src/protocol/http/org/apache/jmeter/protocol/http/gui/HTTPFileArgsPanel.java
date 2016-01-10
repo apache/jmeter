@@ -61,6 +61,11 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 240L;
 
+    // HiDPI mode
+    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     /** The title label for this component. */
     @Deprecated
     private JLabel tableLabel;
@@ -344,6 +349,10 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
+        // HiDPI mode managment
+        if (HIDPI_MODE) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
