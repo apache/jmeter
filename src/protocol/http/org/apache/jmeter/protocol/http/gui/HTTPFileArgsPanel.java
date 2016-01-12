@@ -20,14 +20,18 @@ package org.apache.jmeter.protocol.http.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -35,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.gui.util.FileDialoger;
@@ -77,7 +82,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     /** A button for removing files from the table. */
     private JButton delete;
-
+    
     /** Command for adding a row to the table. */
     private static final String ADD = "add"; // $NON-NLS-1$
 
@@ -107,8 +112,34 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      *  the title for the component.
      */
     public HTTPFileArgsPanel(String label) {
-        tableLabel = new JLabel(label);
+        ImageIcon image = JMeterUtils.getImage("collapse-open.png");
+        tableLabel = new JLabel(label, image, SwingConstants.LEFT);
         init();
+        tableLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        tableLabel.setToolTipText(JMeterUtils.getResString("collapse_tooltip"));
+        tableLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                hideFileArgsMainPanel(null);
+            }
+        });
+    }
+    
+    private void hideFileArgsMainPanel(Boolean force) {
+        BorderLayout bl = (BorderLayout) this.getLayout();
+        
+        boolean result = false;
+        String[] borders = {BorderLayout.CENTER, BorderLayout.WEST, BorderLayout.SOUTH};
+        for (String border : borders) {
+            Component tableComponent = bl.getLayoutComponent(border);
+            if(tableComponent != null) {
+                boolean visible = force!=null?force.booleanValue():!tableComponent.isVisible();
+                tableComponent.setVisible(visible);
+                
+                result |= visible;
+            }
+        }
+        
+        tableLabel.setIcon(result?JMeterUtils.getImage("collapse-open.png"):JMeterUtils.getImage("collapse-close.png"));
     }
 
     /**
@@ -198,9 +229,11 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         if (tableModel.getRowCount() == 0) {
             browse.setEnabled(false);
             delete.setEnabled(false);
+            hideFileArgsMainPanel(Boolean.FALSE);
         } else {
             browse.setEnabled(true);
             delete.setEnabled(true);
+            hideFileArgsMainPanel(Boolean.TRUE);
         }
     }
 
@@ -344,7 +377,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * @return a panel containing the title label
      */
     private Component makeLabelPanel() {
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         labelPanel.add(tableLabel);
         return labelPanel;
     }
