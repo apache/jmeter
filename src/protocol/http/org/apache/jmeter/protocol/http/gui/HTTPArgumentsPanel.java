@@ -130,7 +130,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
                 tableModel.addRow(arg);
             }
         }
-        checkDeleteStatus();
+        checkButtonsStatus();
     }
 
     protected boolean isMetaDataNormal(HTTPArgument arg) {
