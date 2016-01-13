@@ -78,6 +78,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     private static final String MATCH_NUMBER = "RegexExtractor.match_number"; // $NON-NLS-1$
 
     private static final String DEFAULT = "RegexExtractor.default"; // $NON-NLS-1$
+    
+    private static final String DEFAULT_EMPTY_VALUE = "RegexExtractor.default_empty_value"; // $NON-NLS-1$
 
     private static final String TEMPLATE = "RegexExtractor.template"; // $NON-NLS-1$
 
@@ -109,9 +111,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         int matchNumber = getMatchNumber();
 
         final String defaultValue = getDefaultValue();
-        if (defaultValue.length() > 0){// Only replace default if it is provided
+        if (defaultValue.length() > 0 || isEmptyDefaultValue()) {// Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
+        
         Perl5Matcher matcher = JMeterUtils.getMatcher();
         String regex = getRegex();
         Pattern pattern = null;
@@ -439,6 +442,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     public void setDefaultValue(String defaultValue) {
         setProperty(DEFAULT, defaultValue);
     }
+    
+    public void setDefaultEmptyValue(boolean defaultEmptyValue) {
+        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue);
+    }
 
     /**
      * Get the default value for the variable, which should be used, if no
@@ -448,6 +455,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      */
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
+    }
+    
+    public boolean isEmptyDefaultValue() {
+        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE);
     }
 
     public void setTemplate(String template) {
