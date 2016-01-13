@@ -42,6 +42,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
@@ -56,7 +57,7 @@ import org.apache.log.Logger;
  * <li>property type Collection of {@link String}s, where there is a single header entry</li>
  * </ul>
  */
-public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener {
+public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** 
@@ -310,6 +311,11 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         {
             model.clearData();
         }
+    }
+
+    @Override
+    public void clearGui() {
+        this.model.clearData();
     }
 
 }
