@@ -134,6 +134,7 @@ Summary
   <li><bug>58756</bug>CookieManager : Cookie Policy select box content must depend on Cookie implementation.</li>
   <li><bug>56358</bug>Cookie manager supports cross port cookies and RFC6265.</li>
   <li><bug>58773</bug>TestCacheManager : Add tests for CacheManager that use HttpClient 4</li>
+  <li><bug>58848</bug>Argument Panel : when adding an argument (add button or from clipboard) scroll the table to the new line</li>
 </ul>
 
 <h3>Functions</h3>
