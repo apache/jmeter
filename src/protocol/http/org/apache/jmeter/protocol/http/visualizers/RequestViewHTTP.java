@@ -28,6 +28,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -41,6 +43,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RequestView;
 import org.apache.jmeter.visualizers.SamplerResultTab.RowResult;
+import org.apache.jmeter.visualizers.SearchTextExtension;
+import org.apache.jmeter.visualizers.SearchTextExtension.ISearchTextExtensionProvider;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
@@ -106,6 +110,8 @@ public class RequestViewHTTP implements RequestView {
             null, // Value
     };
 
+    private SearchTextExtension searchTextExtension;
+
     /**
      * Pane to view HTTP request sample in view results tree
      */
@@ -140,6 +146,13 @@ public class RequestViewHTTP implements RequestView {
     public void init() {
         paneParsed = new JPanel(new BorderLayout(0, 5));
         paneParsed.add(createRequestPane());
+        this.searchTextExtension = new SearchTextExtension();
+        this.searchTextExtension.init(paneParsed);
+        JPanel searchPanel = this.searchTextExtension.createSearchTextExtensionPane();
+        searchPanel.setBorder(null);
+        this.searchTextExtension.setSearchProvider(new RequestViewHttpSearchProvider());
+        searchPanel.setVisible(true);
+        paneParsed.add(searchPanel, BorderLayout.PAGE_END);
     }
 
     /* (non-Javadoc)
@@ -158,6 +171,7 @@ public class RequestViewHTTP implements RequestView {
     @Override
     public void setSamplerResult(Object objectResult) {
 
+        this.searchTextExtension.resetTextToFind();
         if (objectResult instanceof HTTPSampleResult) {
             HTTPSampleResult sampleResult = (HTTPSampleResult) objectResult;
 
@@ -348,5 +362,51 @@ public class RequestViewHTTP implements RequestView {
     @Override
     public String getLabel() {
         return JMeterUtils.getResString(KEY_LABEL);
+    }
+    
+    /**
+     * Search implementation for the http parameter table
+     */
+    private class RequestViewHttpSearchProvider implements ISearchTextExtensionProvider {
+
+        private int lastPosition = -1;
+        
+        @Override
+        public void resetTextToFind() {
+            lastPosition = -1;
+            if(tableParams != null) {
+                tableParams.clearSelection();
+            }
+        }
+
+        @Override
+        public boolean executeAndShowTextFind(Pattern pattern) {
+            boolean found =  false;
+            if(tableParams != null) {
+                tableParams.clearSelection();
+                outerloop:
+                for (int i = lastPosition+1; i < tableParams.getRowCount(); i++) {
+                    for (int j = 0; j < COLUMNS_PARAMS.length; j++) {
+                        Object o = tableParams.getModel().getValueAt(i, j);
+                        if(o instanceof String) {
+                            Matcher matcher = pattern.matcher((String) o);
+                            if ((matcher != null) && (matcher.find())) {
+                                found =  true;
+                                tableParams.setRowSelectionInterval(i, i);
+                                tableParams.scrollRectToVisible(tableParams.getCellRect(i, 0, true));
+                                lastPosition = i;
+                                break outerloop;
+                            }
+                        }
+                    }
+                }
+                
+                if(!found) {
+                    resetTextToFind();
+                }
+            }
+            return found;
+        }
+        
     }
 }
