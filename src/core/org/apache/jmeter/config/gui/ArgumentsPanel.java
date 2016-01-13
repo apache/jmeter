@@ -465,9 +465,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             up.setEnabled(true);
             down.setEnabled(true);
         }
-        // Highlight (select) the appropriate row.
+        
+        // Highlight (select) and scroll the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;
         table.setRowSelectionInterval(rowToSelect, rowToSelect);
+        table.scrollRectToVisible(table.getCellRect(rowToSelect, 0, true));
     }
 
     /**
@@ -493,9 +495,10 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 // Enable DELETE (which may already be enabled, but it won't hurt)
                 delete.setEnabled(true);
 
-                // Highlight (select) the appropriate rows.
+                // Highlight (select) and scroll to the appropriate rows.
                 int rowToSelect = tableModel.getRowCount() - 1;
                 table.setRowSelectionInterval(rowCount, rowToSelect);
+                table.scrollRectToVisible(table.getCellRect(rowCount, 0, true));
             }
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this,
