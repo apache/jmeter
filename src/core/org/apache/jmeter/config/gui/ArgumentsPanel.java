@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
@@ -258,7 +260,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 tableModel.addRow(arg);
             }
         }
-        checkDeleteStatus();
+        checkButtonsStatus();
     }
 
     /**
@@ -384,7 +386,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     private void moveDown() {
         //get the selected rows before stopping editing
-        // or the selected will be unselected
+        // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
         
@@ -397,6 +399,23 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
             }
+            
+            scrollToRowIfNotVisible(rowsSelected[0]+1);
+        }
+    }
+
+    
+    /**
+     * ensure that a row is visible in the viewport
+     * @param rowIndx row index
+     */
+    private void scrollToRowIfNotVisible(int rowIndx) {
+        if(table.getParent() instanceof JViewport) {
+            JViewport viewport = (JViewport) table.getParent();
+            Rectangle rect = table.getCellRect(rowIndx, 0, true ); 
+            if( !viewport.contains( rect.getLocation() ) ) {
+                table.scrollRectToVisible( rect ); 
+            }
         }
     }
 
@@ -405,7 +424,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     private void moveUp() {
         //get the selected rows before stopping editing
-        // or the selected will be unselected
+        // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
         
@@ -414,9 +433,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (int rowSelected : rowsSelected) {
                 tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
             }
+            
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
             }
+            
+            scrollToRowIfNotVisible(rowsSelected[0]-11);
         }
     }
 
