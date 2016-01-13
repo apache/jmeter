@@ -383,9 +383,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Move a row down
      */
     private void moveDown() {
-        cancelEditing();
-
+        //get the selected rows before stopping editing
+        // or the selected will be unselected
         int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+        
         if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
             table.clearSelection();
             for (int i = rowsSelected.length - 1; i >= 0; i--) {
@@ -402,9 +404,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      *  Move a row down
      */
     private void moveUp() {
-        cancelEditing();
-
+        //get the selected rows before stopping editing
+        // or the selected will be unselected
         int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+        
         if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
             table.clearSelection();
             for (int rowSelected : rowsSelected) {
@@ -420,9 +424,11 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Show Row Detail
      */
     private void showDetail() {
-        cancelEditing();
-
+        //get the selected rows before stopping editing
+        // or the selected will be unselected
         int[] rowsSelected = table.getSelectedRows();
+        GuiUtils.stopTableEditing(table);
+        
         if (rowsSelected.length == 1) {
             table.clearSelection();
             RowDetailDialog detailDialog = new RowDetailDialog(tableModel, rowsSelected[0]);
