@@ -60,7 +60,6 @@ public class ListenerNotifier {
      *            must not be null and must contain only SampleListener
      *            elements.
      */
-    @SuppressWarnings("deprecation") // TestBeanHelper.prepare() is OK
     public void notifyListeners(SampleEvent res, List<SampleListener> listeners) {
         for (SampleListener sampleListener : listeners) {
             try {
