@@ -520,6 +520,7 @@ public class TestCookieManager extends JMeterTestCase {
             List<org.apache.http.cookie.Cookie> c = 
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
                     CookieManager.ALLOW_VARIABLE_COOKIES);
+            assertNotNull(c); // Make sure variable is used
             // FIXME Enable when HTTPCLIENT 4.5.2 is available
             // see https://issues.apache.org/jira/browse/HTTPCLIENT-1704
             //assertEquals(0,c.size()); // Cookies again ignored
