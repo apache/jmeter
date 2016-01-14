@@ -102,7 +102,7 @@ import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -160,7 +160,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Special interceptor made to keep metrics when connection is released for some method like HEAD
-     * Otherwise calling directly ((HttpConnection) localContext.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
+     * Otherwise calling directly ((HttpConnection) localContext.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
      * would throw org.apache.http.impl.conn.ConnectionShutdownException
      * See https://bz.apache.org/jira/browse/HTTPCLIENT-1081
      */
@@ -168,7 +168,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
-            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
+            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
             context.setAttribute(CONTEXT_METRICS, metrics);
         }
     };
@@ -176,7 +176,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpRequest request, HttpContext context)
                 throws HttpException, IOException {
-            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getMetrics();
+            HttpConnectionMetrics metrics = ((HttpConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
             metrics.reset();
         }
     };
@@ -337,7 +337,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     executeRequest(httpClient, httpRequest, localContext, url);
 
             // Needs to be done after execute to pick up all the headers
-            final HttpRequest request = (HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+            final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
             final InetAddress localAddr = (InetAddress) httpRequest.getParams().getParameter(ConnRoutePNames.LOCAL_ADDRESS);
@@ -394,8 +394,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // If we redirected automatically, the URL may have changed
             if (getAutoRedirects()){
-                HttpUriRequest req = (HttpUriRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
-                HttpHost target = (HttpHost) localContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+                HttpUriRequest req = (HttpUriRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
+                HttpHost target = (HttpHost) localContext.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
                 URI redirectURI = req.getURI();
                 if (redirectURI.isAbsolute()){
                     res.setURL(redirectURI.toURL());
@@ -424,7 +424,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (res.getRequestHeaders() != null) {
                 log.debug("Overwriting request old headers: " + res.getRequestHeaders());
             }
-            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST)));
+            res.setRequestHeaders(getConnectionHeaders((HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST)));
             errorResult(e, res);
             return res;
         } catch (RuntimeException e) {
