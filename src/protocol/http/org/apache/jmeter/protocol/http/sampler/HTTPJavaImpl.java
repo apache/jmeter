@@ -179,7 +179,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             }
         }
 
-        // a well-bahaved browser is supposed to send 'Connection: close'
+        // a well-behaved browser is supposed to send 'Connection: close'
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
