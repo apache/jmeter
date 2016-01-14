@@ -38,8 +38,6 @@ import javax.swing.event.ChangeListener;
  * This component also has an efficient event handling mechanism for handling
  * the text changing in the Text Field. The registered change listeners are only
  * called when the text has changed.
- *
- * @version $Revision$
  */
 public class JLabeledTextField extends JPanel implements JLabeledField, FocusListener {
     private static final long serialVersionUID = 240L;
@@ -48,7 +46,6 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
 
     private JTextField mTextField;
 
-    // Maybe move to vector if MT problems occur
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
     // A temporary cache for the focus listener
