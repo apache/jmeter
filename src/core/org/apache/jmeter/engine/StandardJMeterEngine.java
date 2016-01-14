@@ -194,7 +194,6 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
-    @SuppressWarnings("deprecation") // Deliberate use of deprecated method
     private void notifyTestListenersOfStart(SearchByClass<TestStateListener> testListeners) {
         for (TestStateListener tl : testListeners.getSearchResults()) {
             if (tl instanceof TestBean) {
