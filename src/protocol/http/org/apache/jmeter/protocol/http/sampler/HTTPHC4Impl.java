@@ -72,7 +72,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
-import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
@@ -446,7 +446,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param localContext {@link HttpContext}
      */
     private final void extractClientContextAfterSample(HttpContext localContext) {
-        Object userToken = localContext.getAttribute(ClientContext.USER_TOKEN);
+        Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
             if(log.isDebugEnabled()) {
                 log.debug("Extracted from HttpContext user token:"+userToken+", storing it as JMeter variable:"+USER_TOKEN);
@@ -475,7 +475,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(log.isDebugEnabled()) {
                 log.debug("Found user token:"+userToken+" as JMeter variable:"+USER_TOKEN+", storing it in HttpContext");
             }
-            localContext.setAttribute(ClientContext.USER_TOKEN, userToken);
+            localContext.setAttribute(HttpClientContext.USER_TOKEN, userToken);
         } else {
             // It would be better to create a ClientSessionManager that would compute this value
             // for now it can be Thread.currentThread().getName() but must be changed when we would change 
@@ -484,7 +484,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(log.isDebugEnabled()) {
                 log.debug("Storing in HttpContext the user token:"+userId);
             }
-            localContext.setAttribute(ClientContext.USER_TOKEN, userId);
+            localContext.setAttribute(HttpClientContext.USER_TOKEN, userId);
         }
     }
 
