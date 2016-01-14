@@ -42,7 +42,6 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 
     private final JComboBox<String> choiceList;
 
-    // Maybe move to vector if MT problems occur
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
     private JButton delete, add;
