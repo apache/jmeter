@@ -87,15 +87,22 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
     private JTextPane stats;
 
-    private JPanel resultsPane; /** Response Data pane */
-    protected JScrollPane resultsScrollPane; /** Contains results; contained in resultsPane */
-    protected JEditorPane results; /** Response Data shown here */
+    /** Response Data pane */
+    private JPanel resultsPane;
+    
+    /** Contains results; contained in resultsPane */
+    protected JScrollPane resultsScrollPane;
+    
+    /** Response Data shown here */
+    protected JEditorPane results;
 
     private JLabel imageLabel;
 
-    private RequestPanel requestPanel; /** request pane content */
+    /** request pane content */
+    private RequestPanel requestPanel;
 
-    protected JTabbedPane rightSide; /** holds the tabbed panes */
+    /** holds the tabbed panes */
+    protected JTabbedPane rightSide;
 
     private int lastSelectedTab;
 

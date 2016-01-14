@@ -65,48 +65,34 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
-    private static volatile int LAST_POSITION_DEFAULT = 0;
-
-    private int lastPosition = LAST_POSITION_DEFAULT;
-
-    private static final Color HILIT_COLOR = Color.LIGHT_GRAY;
-
-    private Highlighter selection;
-
-    private Highlighter.HighlightPainter painter;
-
     private JLabel label;
 
     private JButton findButton;
 
     private JTextField textToFindField;
 
-    private  JCheckBox caseChkBox;
+    private JCheckBox caseChkBox;
 
     private JCheckBox regexpChkBox;
 
-    private String lastTextTofind;
-
-    private boolean newSearch = false;
-
-    private JEditorPane results;
-
     private JPanel searchPanel;
+    
+    private String lastTextTofind;
+    
+    private ISearchTextExtensionProvider searchProvider;
 
-
-    public void init(JPanel resultsPane) {
-    }
+    public void init(JPanel resultsPane) {}
 
     public void setResults(JEditorPane results) {
-        if (this.results != null) {
-            newSearch = true;
-            resetTextToFind();
+        setSearchProvider(new JEditorPaneSearchProvider(results));
+    }
+    
+    public void setSearchProvider(ISearchTextExtensionProvider searchProvider) {
+        if (this.searchProvider != null) {
+            this.searchProvider.resetTextToFind();
         }
-        this.results = results;
-        // prepare highlighter to show text find with search command
-        selection = new DefaultHighlighter();
-        painter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
-        results.setHighlighter(selection);
+        
+        this.searchProvider = searchProvider;
     }
 
     /**
@@ -114,55 +100,32 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      */
     private void executeAndShowTextFind() {
         String textToFind = textToFindField.getText();
-        if (results != null && results.getText().length() > 0
-                && textToFind.length() > 0) {
-
+        if (this.searchProvider != null) {
             // new search?
             if (lastTextTofind != null && !lastTextTofind.equals(textToFind)) {
-                lastPosition = LAST_POSITION_DEFAULT;
+                searchProvider.resetTextToFind();
             }
-
-            if (log.isDebugEnabled()) {
-                log.debug("lastPosition=" + lastPosition);
-            }
-            Matcher matcher = null;
+            
             try {
-                Pattern pattern = createPattern(textToFind);
-                Document contentDoc = results.getDocument();
-                String body = contentDoc.getText(lastPosition,
-                        (contentDoc.getLength() - lastPosition));
-                matcher = pattern.matcher(body);
-
-                if ((matcher != null) && (matcher.find())) {
-                    selection.removeAllHighlights();
-                    selection.addHighlight(lastPosition + matcher.start(),
-                            lastPosition + matcher.end(), painter);
-                    results.setCaretPosition(lastPosition + matcher.end());
-
-                    // save search position
-                    lastPosition = lastPosition + matcher.end();
-                    findButton.setText(JMeterUtils
-                            .getResString("search_text_button_next"));// $NON-NLS-1$
+                Pattern pattern = createPattern(textToFindField.getText());
+                boolean found = searchProvider.executeAndShowTextFind(pattern);
+                if(found) {
+                    findButton.setText(JMeterUtils.getResString("search_text_button_next"));// $NON-NLS-1$
                     lastTextTofind = textToFind;
-                    newSearch = true;
-                } else {
-                    // Display not found message and reset search
+                }
+                else {
+                    findButton.setText(JMeterUtils.getResString("search_text_button_find"));// $NON-NLS-1$
+                    // Display not found message
                     JOptionPane.showMessageDialog(null, JMeterUtils
                             .getResString("search_text_msg_not_found"),// $NON-NLS-1$
                             JMeterUtils.getResString("search_text_title_not_found"), // $NON-NLS-1$
                             JOptionPane.INFORMATION_MESSAGE);
-                    lastPosition = LAST_POSITION_DEFAULT;
-                    findButton.setText(JMeterUtils
-                            .getResString("search_text_button_find"));// $NON-NLS-1$
-                    results.setCaretPosition(0);
                 }
             } catch (PatternSyntaxException pse) {
                 JOptionPane.showMessageDialog(null, 
                         pse.toString(),// $NON-NLS-1$
                         JMeterUtils.getResString("error_title"), // $NON-NLS-1$
                         JOptionPane.WARNING_MESSAGE);
-            } catch (BadLocationException ble) {
-                log.error("Location exception in text find", ble);// $NON-NLS-1$
             }
         }
     }
@@ -217,7 +180,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         return searchPanel;
     }
 
-    JPanel createSearchTextExtensionPane() {
+    public JPanel createSearchTextExtensionPane() {
         JPanel pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
         pane.add(createSearchTextPanel());
@@ -228,8 +191,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      * Display the response as text or as rendered HTML. Change the text on the
      * button appropriate to the current display.
      *
-     * @param e
-     *            the ActionEvent being processed
+     * @param e the ActionEvent being processed
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -267,26 +229,24 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         resetTextToFind();
     }
 
-    void resetTextToFind() {
-        if (newSearch) {
-            log.debug("reset pass");
-            // Reset search
-            lastPosition = LAST_POSITION_DEFAULT;
-            lastTextTofind = null;
-            findButton.setText(JMeterUtils
-                    .getResString("search_text_button_find"));// $NON-NLS-1$
-            selection.removeAllHighlights();
-            results.setCaretPosition(0);
-            newSearch = false;
+    public void resetTextToFind() {
+        if (this.searchProvider != null) {
+            searchProvider.resetTextToFind();
         }
+        lastTextTofind = null;
+        findButton.setText(JMeterUtils.getResString("search_text_button_find"));// $NON-NLS-1$
     }
 
     private Pattern createPattern(String textToFind) {
-        // desactivate or not specials regexp char
-        String textToFindQ = Pattern.quote(textToFind);
+        String textToFindQ = null;
         if (regexpChkBox.isSelected()) {
             textToFindQ = textToFind;
         }
+        else {
+            // desactivate or not specials regexp char
+            textToFindQ = Pattern.quote(textToFind);
+        }
+        
         Pattern pattern = null;
         if (caseChkBox.isSelected()) {
             pattern = Pattern.compile(textToFindQ);
@@ -294,5 +254,94 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
             pattern = Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
         }
         return pattern;
+    }
+    
+    /**
+     * Search provider definition
+     * Allow the search extension to search on any component
+     */
+    public static interface ISearchTextExtensionProvider {
+        
+        /**
+         * reset the provider
+         */
+        void resetTextToFind();
+        
+        /**
+         * Launch find text engine on target component
+         * @return true if there was a match, false otherwise
+         */
+        boolean executeAndShowTextFind(Pattern pattern);
+    }
+    
+    /**
+     * JEditorPane search provider
+     * Should probably be moved in its on file
+     */
+    private static class JEditorPaneSearchProvider implements ISearchTextExtensionProvider {
+
+        private static volatile int LAST_POSITION_DEFAULT = 0;
+        private static final Color HILIT_COLOR = Color.LIGHT_GRAY;
+        private JEditorPane results;
+        private Highlighter selection;
+        private Highlighter.HighlightPainter painter;
+        private int lastPosition = LAST_POSITION_DEFAULT;
+        
+        public JEditorPaneSearchProvider(JEditorPane results) {
+            this.results = results;
+            
+            // prepare highlighter to show text find with search command
+            selection = new DefaultHighlighter();
+            painter = new DefaultHighlighter.DefaultHighlightPainter(HILIT_COLOR);
+            results.setHighlighter(selection);
+        }
+
+        @Override
+        public void resetTextToFind() {
+            // Reset search
+            lastPosition = LAST_POSITION_DEFAULT;
+            selection.removeAllHighlights();
+            results.setCaretPosition(0);
+        }
+
+        @Override
+        public boolean executeAndShowTextFind(Pattern pattern) {
+            boolean found = false;
+            if (results != null && results.getText().length() > 0
+                    && pattern != null) {
+
+                if (log.isDebugEnabled()) {
+                    log.debug("lastPosition=" + lastPosition);
+                }
+                
+                Matcher matcher = null;
+                try {
+                    Document contentDoc = results.getDocument();
+                    String body = contentDoc.getText(lastPosition, (contentDoc.getLength() - lastPosition));
+                    matcher = pattern.matcher(body);
+
+                    if ((matcher != null) && (matcher.find())) {
+                        selection.removeAllHighlights();
+                        selection.addHighlight(lastPosition + matcher.start(),
+                                lastPosition + matcher.end(), painter);
+                        results.setCaretPosition(lastPosition + matcher.end());
+
+                        // save search position
+                        lastPosition = lastPosition + matcher.end();
+                        found = true;
+                    }
+                    else {
+                        // reset search
+                        lastPosition = LAST_POSITION_DEFAULT;
+                        results.setCaretPosition(0);
+                    }
+                } catch (BadLocationException ble) {
+                    log.error("Location exception in text find", ble);// $NON-NLS-1$
+                }
+            }
+            
+            return found;
+        }
+        
     }
 }
