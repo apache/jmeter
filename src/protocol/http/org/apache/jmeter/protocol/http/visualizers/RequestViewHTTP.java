@@ -295,23 +295,23 @@ public class RequestViewHTTP implements RequestView {
         tableRequest.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableRequest.addMouseListener(new TextBoxDoubleClick(tableRequest));
         
-        setFirstColumnPreferredSize(tableRequest);
+        setFirstColumnPreferredAndMaxWidth(tableRequest);
         RendererUtils.applyRenderers(tableRequest, RENDERERS_REQUEST);
 
         // Set up the 2nd table 
         tableParams = new JTable(paramsModel);
         tableParams.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableParams.addMouseListener(new TextBoxDoubleClick(tableParams));
-        setFirstColumnPreferredSize(tableParams);
-        tableParams.getTableHeader().setDefaultRenderer(
-                new HeaderAsPropertyRenderer());
+        TableColumn column = tableParams.getColumnModel().getColumn(0);
+        column.setPreferredWidth(160);
+        tableParams.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         RendererUtils.applyRenderers(tableParams, RENDERERS_PARAMS);
 
         // Set up the 3rd table 
         tableHeaders = new JTable(headersModel);
         tableHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableHeaders.addMouseListener(new TextBoxDoubleClick(tableHeaders));
-        setFirstColumnPreferredSize(tableHeaders);
+        setFirstColumnPreferredAndMaxWidth(tableHeaders);
         tableHeaders.getTableHeader().setDefaultRenderer(
                 new HeaderAsPropertyRenderer());
         RendererUtils.applyRenderers(tableHeaders, RENDERERS_HEADERS);
@@ -336,7 +336,7 @@ public class RequestViewHTTP implements RequestView {
         return panel;
     }
 
-    private void setFirstColumnPreferredSize(JTable table) {
+    private void setFirstColumnPreferredAndMaxWidth(JTable table) {
         TableColumn column = table.getColumnModel().getColumn(0);
         column.setMaxWidth(300);
         column.setPreferredWidth(160);
