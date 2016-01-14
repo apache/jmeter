@@ -2850,8 +2850,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="excalibur-logger"/>
         <process_jarfile jarname="freemarker"/>
-    	<process_jarfile jarname="hamcrest-core"/>
-    	<process_jarfile jarname="htmllexer"/>
+        <process_jarfile jarname="hamcrest-core"/>
+        <process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
         <process_jarfile jarname="httpcore"/>
