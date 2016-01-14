@@ -13,13 +13,12 @@
 
   Ability to load and performance test many different server/protocol types:
    o  Web - HTTP, HTTPS
-   o  SOAP
+   o  SOAP / REST
    o  FTP
    o  Database via JDBC
    o  LDAP
-   o  Message-oriented middleware (MOM) via JMS
+   o  Message-oriented Middleware (MOM) via JMS
    o  Mail - SMTP(S), POP3(S) and IMAP(S)
-   o  MongoDB (NoSQL)
    o  Native commands or shell scripts
    o  TCP
 
@@ -48,7 +47,7 @@
 
    o  Java Interpreter:
 
-      A fully compliant Java 6 (or later) Runtime Environment is required 
+      A fully compliant Java 7 (or later) Runtime Environment is required 
       for Apache JMeter to execute.
 
    o  Optional jars:
@@ -82,7 +81,7 @@
   Change to the bin directory
   Run the jmeter (Un*x) or jmeter.bat (Windows) file.
   
-  For Windows (2K, XP etc), there are also some other scripts.
+  For Windows there are also some other scripts.
   Drag-drop a JMX file onto one of them: 
   
   jmeter-n.cmd - runs the file as a non-GUI test
@@ -155,7 +154,7 @@
   hosted on Sourceforge at http://htmlparser.sourceforge.net/
 
   The developers of Apache JMeter are grateful to the developers
-  of HTMLParser for re-releasing htmlparser under CPL V1.0
+  of HTMLParser for re-releasing htmlparser under CPL V1.0.
 
   HTMLParser was originally created by Somik Raha in 2000.
   Derrick Oswald is the current lead developer and was kind
