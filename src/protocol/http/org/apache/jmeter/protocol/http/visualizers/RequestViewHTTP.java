@@ -191,14 +191,18 @@ public class RequestViewHTTP implements RequestView {
                     }
                     queryGet += queryPost;
                 }
+                
                 queryGet = RequestViewHTTP.decodeQuery(queryGet);
                 if (queryGet != null) {
-                    Set<Entry<String, String>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
-                    for (Entry<String, String> entry : keys) {
-                        paramsModel.addRow(new RowResult(entry.getKey(),entry.getValue()));
+                    Set<Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
+                    for (Entry<String, String[]> entry : keys) {
+                        for (String value : entry.getValue()) {
+                            paramsModel.addRow(new RowResult(entry.getKey(), value));                            
+                        }
                     }
                 }
             }
+            
             // Display cookie in headers table (same location on http protocol)
             String cookie = sampleResult.getCookies();
             if (cookie != null && cookie.length() > 0) {
@@ -206,6 +210,7 @@ public class RequestViewHTTP implements RequestView {
                         JMeterUtils.getParsedLabel("view_results_table_request_http_cookie"), //$NON-NLS-1$
                         sampleResult.getCookies()));
             }
+            
             // Parsed request headers
             LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getRequestHeaders());
             for (Entry<String, String> entry : lhm.entrySet()) {
@@ -225,23 +230,25 @@ public class RequestViewHTTP implements RequestView {
      * @return Map params and Svalue
      */
     //TODO: move to utils class (JMeterUtils?)
-    public static Map<String, String> getQueryMap(String query) {
+    public static Map<String, String[]> getQueryMap(String query) {
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, String[]> map = new HashMap<>();
         if (query.trim().startsWith("<?")) { // $NON-NLS-1$
             // SOAP request (generally)
-            map.put(" ", query); //blank name // $NON-NLS-1$
+            map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
             return map;
         }
+        
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
             String[] paramSplit = param.split("="); // $NON-NLS-1$
             if (paramSplit.length > 2 ) {// detected invalid syntax (Bug 52491)
                 // Return as for SOAP above
                 map.clear();
-                map.put(" ", query); //blank name // $NON-NLS-1$
+                map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
                 return map;
             }
+            
             String name = null;
             if (paramSplit.length > 0) {
                 name = paramSplit[0];
@@ -251,7 +258,18 @@ public class RequestViewHTTP implements RequestView {
                 // We use substring to keep = sign (Bug 54055), we are sure = is present
                 value = param.substring(param.indexOf("=")+1); // $NON-NLS-1$
             }
-            map.put(name, value);
+            
+            String[] known = map.get(name);
+            if(known == null) {
+                known = new String[] {value};
+            }
+            else {
+                String[] tmp = new String[known.length+1];
+                tmp[tmp.length-1] = value;
+                System.arraycopy(known, 0, tmp, 0, known.length);
+                known = tmp;
+            }
+            map.put(name, known);
         }
         return map;
     }
