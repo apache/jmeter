@@ -19,7 +19,6 @@
    o  LDAP
    o  Message-oriented middleware (MOM) via JMS
    o  Mail - SMTP(S), POP3(S) and IMAP(S)
-   o  MongoDB (NoSQL)
    o  Native commands or shell scripts
    o  TCP
 
