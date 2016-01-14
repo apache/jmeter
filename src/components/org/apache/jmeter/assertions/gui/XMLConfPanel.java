@@ -51,7 +51,7 @@ public class XMLConfPanel extends JPanel {
         init();
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         quiet = new JCheckBox(JMeterUtils.getResString("xpath_tidy_quiet"),true);//$NON-NLS-1$
         reportErrors = new JCheckBox(JMeterUtils.getResString("xpath_tidy_report_errors"),true);//$NON-NLS-1$
         showWarnings = new JCheckBox(JMeterUtils.getResString("xpath_tidy_show_warnings"),true);//$NON-NLS-1$

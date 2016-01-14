@@ -45,7 +45,7 @@ public class IterationCounter extends AbstractFunction {
 
     private int globalCounter;//MAXINT = 2,147,483,647
 
-    private void init(){
+    private void init(){ // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
        synchronized(this){
            globalCounter=0;
        }

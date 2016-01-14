@@ -49,7 +49,7 @@ public class SamplingStatCalculator {
         init();
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         firstTime = Long.MAX_VALUE;
         calculator.clear();
         maxThroughput = Double.MIN_VALUE;

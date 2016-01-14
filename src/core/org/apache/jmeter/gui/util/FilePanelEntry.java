@@ -86,7 +86,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         listeners.add(l);
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         add(label);
         add(filename);
         filename.addActionListener(this);

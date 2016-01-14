@@ -74,7 +74,7 @@ public class SecuritySettingsPanel extends JPanel{
         init();
     }
 
-    public void init(){
+    private void init(){ // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.setLayout(new GridBagLayout());
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),

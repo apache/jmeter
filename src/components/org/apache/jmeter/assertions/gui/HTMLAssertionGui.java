@@ -198,7 +198,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
     /**
      * Inits the GUI.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
 
         setLayout(new BorderLayout(0, 10));
         setBorder(makeBorder());

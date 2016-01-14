@@ -50,7 +50,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
      * Initialize the component in the UI
      */
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
 

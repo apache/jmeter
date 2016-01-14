@@ -191,7 +191,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      * init() adds jndiICF to the mainPanel. The class reuses logic from
      * SOAPSampler, since it is common.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);

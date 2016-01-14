@@ -112,7 +112,7 @@ public class JLabeledTextField extends JPanel implements JLabeledField, FocusLis
     /**
      * Initialises all of the components on this panel.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
