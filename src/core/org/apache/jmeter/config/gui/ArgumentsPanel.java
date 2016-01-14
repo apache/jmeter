@@ -672,7 +672,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     /**
      * Initialize the components and layout of this component.
      */
-    private void init() {
+    protected void init() {
         JPanel p = this;
 
         if (standalone) {
