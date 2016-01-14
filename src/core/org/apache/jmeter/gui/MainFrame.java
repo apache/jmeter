@@ -490,7 +490,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     /**
      * Create the GUI components and layout.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         menuBar = new JMeterMenuBar();
         setJMenuBar(menuBar);
         JPanel all = new JPanel(new BorderLayout());

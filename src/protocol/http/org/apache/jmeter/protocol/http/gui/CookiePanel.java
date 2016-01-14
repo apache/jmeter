@@ -323,7 +323,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     /**
      * Shows the main cookie configuration panel.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         tableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses);
         clearEachIteration = 
             new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$

@@ -106,7 +106,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
     /**
      * Initialises all of the components on this panel.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
 
         mTextArea.setRows(4);

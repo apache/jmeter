@@ -99,7 +99,7 @@ public class ServerPanel extends JPanel {
         responseTimeOut.setText(value);
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
         // Target server panel
         JPanel webServerPanel = new HorizontalPanel();

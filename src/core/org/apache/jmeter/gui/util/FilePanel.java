@@ -54,7 +54,7 @@ public class FilePanel extends FilePanelEntry {
         init();
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setBorder(BorderFactory.createTitledBorder(title));
     }
 

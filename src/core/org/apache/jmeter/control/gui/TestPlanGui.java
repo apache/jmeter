@@ -172,7 +172,7 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
     /**
      * Initialize the components and layout of this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(10, 10));
         setBorder(makeBorder());
 

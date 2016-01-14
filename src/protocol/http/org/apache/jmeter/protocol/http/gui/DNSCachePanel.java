@@ -174,7 +174,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         dnsServersTableModel = new PowerTableModel(COLUMN_RESOURCE_NAMES, columnClasses);
 
         clearEachIteration = new JCheckBox(JMeterUtils.getResString("clear_cache_each_iteration"), true); //$NON-NLS-1$

@@ -101,7 +101,7 @@ public class FileListPanel extends JPanel implements ActionListener {
         listeners.add(l);
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.setLayout(new BorderLayout(0, 5));
         setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 5));
         JLabel jtitle = new JLabel(title);

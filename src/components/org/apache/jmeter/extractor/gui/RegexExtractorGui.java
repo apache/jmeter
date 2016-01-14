@@ -149,7 +149,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         matchNumberField.setText(""); //$NON-NLS-1$
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
 

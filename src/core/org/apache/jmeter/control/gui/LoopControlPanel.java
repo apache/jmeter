@@ -168,7 +168,7 @@ public class LoopControlPanel extends AbstractControllerGui implements ActionLis
     /**
      * Initialize the GUI components and layout for this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // The Loop Controller panel can be displayed standalone or inside
         // another panel. For standalone, we want to display the TITLE, NAME,
         // etc. (everything). However, if we want to display it within another

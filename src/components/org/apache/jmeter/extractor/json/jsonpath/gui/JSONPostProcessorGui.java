@@ -114,7 +114,7 @@ public class JSONPostProcessorGui extends AbstractPostProcessorGui {
         computeConcatenationField.setSelected(JSONPostProcessor.COMPUTE_CONCATENATION_DEFAULT_VALUE);
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         
         setLayout(new BorderLayout());
         setBorder(makeBorder());

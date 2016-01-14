@@ -77,7 +77,7 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
         return "comparison_visualizer_title"; //$NON-NLS-1$
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);

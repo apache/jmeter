@@ -123,7 +123,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         return rootPane;
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
         searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$

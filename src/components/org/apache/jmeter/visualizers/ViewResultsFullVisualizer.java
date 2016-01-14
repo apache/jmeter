@@ -217,7 +217,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     /**
      * Initialize this visualizer
      */
-    protected void init() {
+    private void init() {  // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         log.debug("init() - pass");
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());

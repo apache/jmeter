@@ -246,7 +246,7 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         duration.setText(""); // $NON-NLS-1$
     }
 
-   private void init() {
+   private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // THREAD PROPERTIES
         VerticalPanel threadPropsPanel = new VerticalPanel();
         threadPropsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),

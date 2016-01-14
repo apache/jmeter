@@ -78,7 +78,7 @@ public class ScopePanel extends JPanel implements ActionListener {
     /**
      * Initialize the GUI components and layout.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(5, 0));
         setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("sample_scope"))); //$NON-NLS-1$
 

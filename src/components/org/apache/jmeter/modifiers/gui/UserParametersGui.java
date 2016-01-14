@@ -179,7 +179,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         return USER_COL_RESOURCE+UNDERSCORE+user;
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setBorder(makeBorder());
         setLayout(new BorderLayout());
         JPanel vertPanel = new VerticalPanel();

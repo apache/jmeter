@@ -166,7 +166,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         this.setVisible(false);
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         templateList.setValues(TemplateManager.getInstance().getTemplateNames());            
         templateList.addChangeListener(this);
         reloadTemplateButton.addActionListener(this);

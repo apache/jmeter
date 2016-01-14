@@ -97,7 +97,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         return bshInterpreter;
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         parameters=""; // ensure variables are not null
         filename="";
         script="";

@@ -61,7 +61,7 @@ public class XPathPanel extends JPanel {
         init();
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         Box hbox = Box.createHorizontalBox();
         hbox.add(Box.createHorizontalGlue());
         hbox.add(new JTextScrollPane(getXPathField()));

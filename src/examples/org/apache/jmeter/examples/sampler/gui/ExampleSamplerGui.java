@@ -93,7 +93,7 @@ public class ExampleSamplerGui extends AbstractSamplerGui {
     /*
      * Helper method to set up the GUI screen
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // Standard setup
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());

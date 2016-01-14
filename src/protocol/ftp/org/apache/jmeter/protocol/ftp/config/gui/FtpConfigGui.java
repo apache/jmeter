@@ -220,7 +220,7 @@ public class FtpConfigGui extends AbstractConfigGui {
         optionsPanel.add(saveResponseData);
         return optionsPanel;
     }
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));
 
         if (displayName) {

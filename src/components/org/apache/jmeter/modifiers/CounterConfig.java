@@ -68,7 +68,7 @@ public class CounterConfig extends AbstractTestElement
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         perTheadNumber = new ThreadLocal<Long>() {
             @Override
             protected Long initialValue() {

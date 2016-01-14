@@ -121,7 +121,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         }
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setBorder(makeBorder());
         setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
