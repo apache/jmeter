@@ -18,11 +18,16 @@
 
 package org.apache.jmeter.protocol.http.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
@@ -160,6 +165,41 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         
         return argument;
     }
+
+    @Override
+    protected void init() {
+        super.init();
+        
+        // register the right click menu
+        JTable table = getTable();
+        final JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem variabilizeItem = new JMenuItem(JMeterUtils.getResString("transform_into_variable"));
+        variabilizeItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                transformNameIntoVariable();
+            }
+        });
+        popupMenu.add(variabilizeItem);
+        table.setComponentPopupMenu(popupMenu);
+    }
     
+    /** 
+     * replace the argument value of the selection with a variable 
+     * the variable name is derived from the parameter name 
+     */
+    private void transformNameIntoVariable() {
+        int[] rowsSelected = getTable().getSelectedRows();
+        for (int i = 0; i < rowsSelected.length; i++) {
+            String name = (String) tableModel.getValueAt(rowsSelected[i], 0);
+            if(StringUtils.isNotBlank(name)) {
+                name = name.trim();
+                name = name.replaceAll("\\$", "_");
+                name = name.replaceAll("\\{", "_");
+                name = name.replaceAll("\\}", "_");
+                tableModel.setValueAt("${"+name+"}", rowsSelected[i], 1);                
+            }
+        }
+    }
     
 }
