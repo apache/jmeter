@@ -93,7 +93,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
         return "ldap_testing_title"; // $NON-NLS-1$
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         // MAIN PANEL

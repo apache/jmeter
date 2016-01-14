@@ -142,7 +142,7 @@ public class IfControllerPanel extends AbstractControllerGui {
     /**
      * Initialize the GUI components and layout for this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         // Standalone
         if (displayName) {
             setLayout(new BorderLayout(0, 5));

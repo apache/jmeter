@@ -110,7 +110,7 @@ public class WhileControllerGui extends AbstractControllerGui {
     /**
      * Initialize the GUI components and layout for this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
         add(makeTitlePanel(), BorderLayout.NORTH);

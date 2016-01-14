@@ -49,7 +49,7 @@ public class SamplerCreatorFactory {
     /**
      * Initialize factory from classpath
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         try {
             List<String> listClasses = ClassFinder.findClassesThatExtend(
                     JMeterUtils.getSearchPaths(), 

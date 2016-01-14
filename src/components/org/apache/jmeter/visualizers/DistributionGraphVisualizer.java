@@ -139,7 +139,7 @@ public class DistributionGraphVisualizer extends AbstractVisualizer implements I
     /**
      * Initialize the GUI.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.setLayout(new BorderLayout());
 
         // MAIN PANEL

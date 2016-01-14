@@ -266,7 +266,7 @@ public class AssertionGui extends AbstractAssertionGui {
     /**
      * Initialize the GUI components and layout.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         Box box = Box.createVerticalBox();
         setBorder(makeBorder());

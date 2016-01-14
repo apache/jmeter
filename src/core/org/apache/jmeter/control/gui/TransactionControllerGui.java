@@ -78,7 +78,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
     /**
      * Initialize the GUI components and layout for this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
         setBorder(makeBorder());
         add(makeTitlePanel());

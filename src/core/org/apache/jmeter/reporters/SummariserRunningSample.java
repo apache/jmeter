@@ -78,7 +78,7 @@ class SummariserRunningSample {
         runningSum = src.runningSum;
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         counter = 0L;
         runningSum = 0L;
         max = Long.MIN_VALUE;

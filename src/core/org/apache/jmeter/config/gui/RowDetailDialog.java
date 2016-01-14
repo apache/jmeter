@@ -130,7 +130,7 @@ public class RowDetailDialog extends JDialog implements ActionListener, Document
         return rootPane;
     }
 
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.getContentPane().setLayout(new BorderLayout(10,10));
 
         nameLabel = new JLabel(JMeterUtils.getResString("name")); //$NON-NLS-1$

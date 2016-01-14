@@ -63,7 +63,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
         format = new PatternFormatter(LoggingManager.DEFAULT_PATTERN + "\n"); // $NON-NLS-1$
     }
 
-    private JTextArea init() {
+    private JTextArea init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         this.setLayout(new BorderLayout());
         final JScrollPane areaScrollPane;
         final JTextArea jTextArea;

@@ -415,7 +415,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     /**
      * Initialize the components and layout of this component.
      */
-    private void init() {
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         JPanel p = this;
 
         p.setLayout(new BorderLayout());
