@@ -95,6 +95,11 @@ excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 --------------------
 - LoggingManager
 
+hamcrest-core-1.3
+----------------------
+- unit tests, JUnit sampler
+https://github.com/hamcrest/JavaHamcrest
+
 freemarker-2.3.23.jar
 ----------------------
 - used by Report/Dashboard feature

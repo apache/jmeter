@@ -378,6 +378,7 @@
     <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
+    <include name="${lib.dir}/${hamcrest-core.jar}"/>
     <include name="${lib.dir}/${htmllexer.jar}"/>
     <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -451,6 +452,7 @@
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
+  	<pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${htmllexer.jar}"/>
     <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
@@ -2848,7 +2850,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="dnsjava"/>
         <process_jarfile jarname="excalibur-logger"/>
         <process_jarfile jarname="freemarker"/>
-        <process_jarfile jarname="htmllexer"/>
+    	<process_jarfile jarname="hamcrest-core"/>
+    	<process_jarfile jarname="htmllexer"/>
         <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
         <process_jarfile jarname="httpcore"/>
