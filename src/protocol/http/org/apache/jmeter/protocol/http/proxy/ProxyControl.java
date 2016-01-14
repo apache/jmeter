@@ -607,6 +607,7 @@ public class ProxyControl extends GenericController {
         // Iterate over subconfig elements searching for HeaderManager
         for (TestElement te : subConfigs) {
             if (te instanceof HeaderManager) {
+                @SuppressWarnings("unchecked") // headers should only contain the correct classes
                 List<TestElementProperty> headers = (ArrayList<TestElementProperty>) ((HeaderManager) te).getHeaders().getObjectValue();
                 for (Iterator<?> iterator = headers.iterator(); iterator.hasNext();) {
                     TestElementProperty tep = (TestElementProperty) iterator
