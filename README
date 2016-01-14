@@ -47,7 +47,7 @@
 
    o  Java Interpreter:
 
-      A fully compliant Java 6 (or later) Runtime Environment is required 
+      A fully compliant Java 7 (or later) Runtime Environment is required 
       for Apache JMeter to execute.
 
    o  Optional jars:
