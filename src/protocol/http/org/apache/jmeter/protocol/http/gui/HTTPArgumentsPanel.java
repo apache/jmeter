@@ -92,6 +92,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
 
     public HTTPArgumentsPanel() {
         super(JMeterUtils.getResString("paramtable")); //$NON-NLS-1$
+        init();
     }
 
     @Override
@@ -166,9 +167,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         return argument;
     }
 
-    @Override
-    protected void init() {
-        super.init();
+    private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         
         // register the right click menu
         JTable table = getTable();
