@@ -366,6 +366,12 @@ This is due to a known Java bug which fails to parse "px" units in row/col attri
 See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a> 
 The fix is to use JDK9 b65 or later.
 </li>
+
+<li>
+JTable selection with keyboard (SHIFT + up/down) is totally unusable with JAVA 7 on Mac OSX.
+This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a> 
+The fix is to use JDK 8 b132 or later.
+</li>
 </ul>
  
 </section> 
