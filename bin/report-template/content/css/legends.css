@@ -16,16 +16,15 @@
 */
 .legend {
     margin-left: -40px;
-	font-size: 12px;
-	display: inline;
-	font-family: 'Open Sans';
-	font-weight: bold;
+    font-size: 12px;
+    display: inline;
+    font-family: 'Open Sans';
+    font-weight: bold;
 }
 
 .panel-footer
 {
-	
-	
+
 }
 
 .subLegend
@@ -41,22 +40,22 @@
 
 .legend li label {
     margin-left: 1px;
-	margin-right: 10px;
-	color: black;
-	font-family: Open sans;
-	/*width: 200px;*/
+    margin-right: 10px;
+    color: black;
+    font-family: Open sans;
+    /*width: 200px;*/
 }
 li
 {
-	list-style-type:none;
-	display: inline-block;
+    list-style-type:none;
+    display: inline-block;
 }
 
 .nav-third-level
 {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .legend-disabled {
-	border-color: #818181 !important;
+    border-color: #818181 !important;
 }
