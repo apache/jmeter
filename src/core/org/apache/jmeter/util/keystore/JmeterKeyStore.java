@@ -178,7 +178,7 @@ public final class JmeterKeyStore {
         if(result != null) {
             return result;
         }
-        // API expects null not empty array, see http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509KeyManager.html
+        // API expects null not empty array, see http://docs.oracle.com/javase/7/docs/api/javax/net/ssl/X509KeyManager.html
         throw new IllegalArgumentException("No certificate found for alias:'"+alias+"'");
     }
 
