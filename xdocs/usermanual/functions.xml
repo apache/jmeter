@@ -1218,7 +1218,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
  <code>Word &quot;school&quot; is &quot;&eacute;cole&quot; in french</code>.
 </p>
     <p>
-    Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
+    Uses Java class <a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
     </p>
     </description>
 
@@ -1304,6 +1304,10 @@ A reference name - <code>refName</code> - for reusing the value created by this 
     The TestPlanName function returns the name of the current test plan (can be used in Including Plans to know the name of the calling test plan).
     </p>
 </description>
+
+<p>Example:
+<source>${__TestPlanName}</source> will return the file name of your test plan, for example if plan is in a file named Demo.jmx, it will return "<code>Demo.jmx</code><br/>
+</p>
 </component>
 
 <component index="&sect-num;.5.31" name="__escapeOroRegexpChars">
