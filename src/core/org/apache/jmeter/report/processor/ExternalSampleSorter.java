@@ -365,24 +365,14 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         int middle = sz / 2;
         final List<Sample> left = samples.subList(0, middle);
         final List<Sample> right = samples.subList(middle, sz);
-        Job<List<Sample>> jobLeft = new Job<List<Sample>>() {
-            @Override
-            protected List<Sample> exec() {
-                return sort(left);
-            }
-        };
-        Job<List<Sample>> jobRight = new Job<List<Sample>>() {
-            @Override
-            protected List<Sample> exec() {
-                return sort(right);
-            }
-        };
 
-        List<Sample> newLeft = null;
-        List<Sample> newRight = null;
-        workQueue.add(jobLeft);
-        workQueue.add(jobRight);
+        List<Sample> newLeft;
+        List<Sample> newRight;
+        Job<List<Sample>> jobLeft = createSortJob(left);
+        Job<List<Sample>> jobRight = createSortJob(right);
         if (parallelize) {
+            workQueue.add(jobLeft);
+            workQueue.add(jobRight);
             try {
                 newLeft = jobLeft.getResult();
                 newRight = jobRight.getResult();
@@ -390,10 +380,19 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 throw new SampleException("Unexpected interruption !", ie);
             }
         } else {
-            newLeft = sort(left);
-            newRight = sort(right);
+            newLeft = jobLeft.exec();
+            newRight = jobRight.exec();
         }
         return merge(newLeft, newRight);
+    }
+
+    private Job<List<Sample>> createSortJob(final List<Sample> samples) {
+        return new Job<List<Sample>>() {
+            @Override
+            protected List<Sample> exec() {
+                return sort(samples);
+            }
+        };
     }
 
     public List<Sample> sort(List<Sample> samples) {
@@ -448,20 +447,10 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             int middle = sz / 2;
             final List<File> left = chunks.subList(0, middle);
             final List<File> right = chunks.subList(middle, sz);
-            File leftFile = null;
-            File rightFile = null;
-            Job<File> leftJob = new Job<File>() {
-                @Override
-                protected File exec() {
-                    return mergeSortFiles(left, metadata);
-                }
-            };
-            Job<File> rightJob = new Job<File>() {
-                @Override
-                protected File exec() {
-                    return mergeSortFiles(right, metadata);
-                }
-            };
+            File leftFile;
+            File rightFile;
+            Job<File> leftJob = createMergeJob(left, metadata);
+            Job<File> rightJob = createMergeJob(right, metadata);
             if (parallelize) {
                 workQueue.add(leftJob);
                 workQueue.add(rightJob);
@@ -485,6 +474,16 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 }
             }
         }
+    }
+
+    private Job<File> createMergeJob(final List<File> chunks,
+            final SampleMetadata metadata) {
+        return new Job<File>() {
+            @Override
+            protected File exec() {
+                return mergeSortFiles(chunks, metadata);
+            }
+        };
     }
 
     private File mergeSortFiles(List<File> chunks, SampleMetadata metadata) {
