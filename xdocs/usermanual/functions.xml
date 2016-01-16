@@ -1239,7 +1239,7 @@ For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot
  <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</code>.
 </p>
     <p>
-    Uses Java class <a href="http://docs.oracle.com/javase/6/docs/api/java/net/URLEncoder.html">URLEncoder</a>.
+    Uses Java class <a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLEncoder.html">URLEncoder</a>.
     </p>
     </description>
 
