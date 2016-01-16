@@ -1337,12 +1337,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
             if(entityEntry.isRepeatable()) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                entityEntry.writeTo(bos);
-                bos.flush();
-                // We get the posted bytes using the charset that was used to create them
-                entityBody.append(new String(bos.toByteArray(), charset));
-                bos.close();
+                entityBody.append("<actual file content, not shown here>");
             }
             else { // this probably cannot happen
                 entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");

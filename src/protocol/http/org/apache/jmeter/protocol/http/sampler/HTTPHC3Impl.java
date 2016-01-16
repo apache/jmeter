@@ -1032,12 +1032,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             // If the request entity is repeatable, we can send it first to
             // our own stream, so we can return it
             if(put.getRequestEntity().isRepeatable()) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                put.getRequestEntity().writeRequest(bos);
-                bos.flush();
-                // We get the posted bytes using the charset that was used to create them
-                putBody.append(new String(bos.toByteArray(),put.getRequestCharSet()));
-                bos.close();
+                putBody.append("<actual file content, not shown here>");
             }
             else {
                 putBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
