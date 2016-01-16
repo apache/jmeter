@@ -195,7 +195,7 @@ sampleresult.timestamp.start=true
 </source>
 <p>
 The date format to be used for the <code>timestamp_format</code> is described in <a
-HREF="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">
+HREF="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">
 <b>SimpleDateFormat</b></a>.
 The timestamp format is used for both writing and reading files.
 If the format is set to "<code>ms</code>", and the column does not parse as a long integer,
