@@ -574,7 +574,7 @@ the additional variables for rows four, five and six will be removed.
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants when for example you use custom database types proposed by driver (<code>-10</code> for <code>OracleTypes.CURSOR</code> for example).<br/>
         These are defined as fields in the class <code>java.sql.Types</code>, see for example:<br/>
-        <a href="http://docs.oracle.com/javase/6/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
         [Note: JMeter will use whatever types are defined by the runtime JVM,
         so if you are running on a different JVM, be sure to check the appropriate document]<br/>
         <b>If the callable statement has <code>INOUT</code> or <code>OUT</code> parameters, then these must be indicated by prefixing the
@@ -3173,7 +3173,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
-        The syntax is the Java <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
+        The syntax is the Java <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
 </properties>
