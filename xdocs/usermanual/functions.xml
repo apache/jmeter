@@ -339,7 +339,7 @@ that is like counting the number of iterations through the test plan.  A global 
 counting how many times that request was run.
 </p>
 <p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
-<p>The counter function instances are now completely independent.  
+<p>The counter function instances are completely independent.  
 The global counter - "<code>FALSE</code>" - is separately maintained by each counter instance.
 </p>
 <p>
