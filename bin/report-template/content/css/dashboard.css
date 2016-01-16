@@ -16,33 +16,33 @@
 */
 #stats td, th
 {
-	
-	width: 9%;//140px;
-	height: 30px;
+
+    width: 9%;//140px;
+    height: 30px;
 }
 #stats td
 {
-	text-align: center;
+    text-align: center;
 }
 #stats th
 {
-	font-weight:bold;
+    font-weight:bold;
 }
 .blue
 {
-	background-color: #dff0d8;
+    background-color: #dff0d8;
 }
 #errors td, th
 {
-	text-align: center;
-	width: 400px;
-	height: 30px;
+    text-align: center;
+    width: 400px;
+    height: 30px;
 }
 #errors td
 {
-								
+
 }
 #errors th
 {
-	font-weight:bold;
+    font-weight:bold;
 }
