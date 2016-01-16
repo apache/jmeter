@@ -2465,6 +2465,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
        </classpath>
         <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
+       <sysproperty key="user.language" value="en"/>
+       <sysproperty key="user.region" value="US"/>
        <sysproperty key="java.awt.headless" value="false"/>
         <arg value="-ptestfiles/jmeter-batch.properties"/>
         <arg value="-n"/>
