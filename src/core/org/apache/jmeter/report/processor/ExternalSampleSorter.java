@@ -468,9 +468,9 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
         } else {
             File f = chunks.get(0);
             try (CsvSampleReader reader = new CsvSampleReader(f, metadata)) {
-                Sample s = null;
-                while ((s = reader.readSample()) != null) {
-                    out.produce(s, 0);
+                Sample sample;
+                while ((sample = reader.readSample()) != null) {
+                    out.produce(sample, 0);
                 }
             }
         }
