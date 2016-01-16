@@ -339,9 +339,7 @@ that is like counting the number of iterations through the test plan.  A global 
 counting how many times that request was run.
 </p>
 <p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
-<p>The counter function instances are now completely independent. 
-[JMeter 2.1.1 and earlier used a fixed thread variable to keep track of the per-user count, 
-so multiple counter functions operated on the same value.] 
+<p>The counter function instances are now completely independent.  
 The global counter - "<code>FALSE</code>" - is separately maintained by each counter instance.
 </p>
 <p>
@@ -358,7 +356,7 @@ If you want to have a count that increments for each sample, use the function in
 
 <property name="Second argument" required="No">A reference name for reusing the value created by this function.<br></br>
                 Stored values are of the form <code>${refName}</code>.  This allows you to keep one counter and refer to its value in
-                multiple places. [For JMeter 2.1.1 and earlier this parameter was required.]</property>
+                multiple places.</property>
 </properties>
 </component>
 
@@ -886,7 +884,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     and returns the original string. If any delimiters are adjacent, "<code>?</code>" is returned as the value.
     The split strings are returned in the variables <code>${VAR_1}</code>, <code>${VAR_2}</code> etc. 
     The count of variables is returned in <code>${VAR_n}</code>. 
-    From JMeter 2.1.2 onwards, a trailing delimiter is treated as a missing variable, and "<code>?</code>" is returned.
+    A trailing delimiter is treated as a missing variable, and "<code>?</code>" is returned.
     Also, to allow it to work better with the ForEach controller, 
     <code>__split</code> now deletes the first unused variable in case it was set by a previous split.
     </p>
@@ -899,7 +897,7 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     <br></br>
     This will return the contents of <code>VAR</code>, i.e. "<code>a||c|</code>" and set the following variables:
     <br></br>
-        <code>VAR_n</code>=<code>4</code> (<code>3</code> in JMeter 2.1.1 and earlier)
+        <code>VAR_n</code>=<code>4</code>
     <br></br>
         <code>VAR_1</code>=<code>a</code>
     <br></br>
@@ -907,9 +905,9 @@ Remember to include any necessary quotes for text strings and JMeter variables t
     <br></br>
         <code>VAR_3</code>=<code>c</code>
     <br></br>
-        <code>VAR_4</code>=<code>?</code> (<code>null</code> in JMeter 2.1.1 and earlier)
+        <code>VAR_4</code>=<code>?</code>
     <br></br>
-        <code>VAR_5</code>=<code>null</code> (in JMeter 2.1.2 and later)
+        <code>VAR_5</code>=<code>null</code>
 </description>
 
 <properties>
