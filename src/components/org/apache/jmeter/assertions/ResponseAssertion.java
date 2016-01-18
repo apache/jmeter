@@ -202,20 +202,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         return result;
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public String getTestField() {
         return getPropertyAsString(TEST_FIELD);
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public int getTestType() {
         JMeterProperty type = getProperty(TEST_TYPE);
         if (type instanceof NullProperty) {
@@ -224,11 +214,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         return type.getIntValue();
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public CollectionProperty getTestStrings() {
         return (CollectionProperty) getProperty(TEST_STRINGS);
     }
