@@ -19,6 +19,7 @@
 package org.apache.jmeter.junit;
 
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -129,12 +130,18 @@ public class JMeterTest extends JMeterTestCase {
      * Use a suite to allow the tests to be generated at run-time
      */
     public static Test suite() throws Exception {
+        TestSuite suite = new TestSuite("JMeterTest");
+        if(GraphicsEnvironment.isHeadless()) {
+            System.out.println("Skipping test:"+JMeterTest.class.getName()+", cannot run in Headless mode");
+            log.warn("Skipping test:"+JMeterTest.class.getName()+", cannot run in Headless mode");
+            return suite;
+        }
+
         // The Locale used to instantiate the GUI objects
         JMeterUtils.setLocale(TEST_LOCALE);
         Locale.setDefault(TEST_LOCALE);
         // Needs to be done before any GUI classes are instantiated
         
-        TestSuite suite = new TestSuite("JMeterTest");
         suite.addTest(new JMeterTest("readAliases"));
         suite.addTest(new JMeterTest("createTitleSet"));
         suite.addTest(new JMeterTest("createTagSet"));
