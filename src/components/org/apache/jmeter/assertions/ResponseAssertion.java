@@ -182,23 +182,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     @Override
     public AssertionResult getResult(SampleResult response) {
-        AssertionResult result;
-
-        // None of the other Assertions check the response status, so remove
-        // this check
-        // for the time being, at least...
-        // if (!response.isSuccessful())
-        // {
-        // result = new AssertionResult();
-        // result.setError(true);
-        // byte [] ba = response.getResponseData();
-        // result.setFailureMessage(
-        // ba == null ? "Unknown Error (responseData is empty)" : new String(ba)
-        // );
-        // return result;
-        // }
-
-        result = evaluateResponse(response);
+        AssertionResult result = evaluateResponse(response);
         return result;
     }
 
