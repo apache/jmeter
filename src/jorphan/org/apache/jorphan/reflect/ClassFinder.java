@@ -306,17 +306,7 @@ public final class ClassFinder {
             }
         }
 
-//        // Now keep only the required classes
-//        Set subClassList = findAllSubclasses(superClasses, listClasses, innerClasses);
-//        if (log.isDebugEnabled()) {
-//            log.debug("subClassList.size()="+subClassList.size());
-//            Iterator tIter = subClassList.iterator();
-//            while (tIter.hasNext()) {
-//                log.debug("subClassList : " + tIter.next());
-//            }
-//        }
-
-        return new ArrayList<>(listClasses);//subClassList);
+        return new ArrayList<>(listClasses);
     }
 
     /*
@@ -382,82 +372,6 @@ public final class ClassFinder {
         }
         return path;
     }
-
-    /*
-     * NOTUSED * Determine if the class implements the interface.
-     *
-     * @param theClass
-     *            the class to check
-     * @param theInterface
-     *            the interface to look for
-     * @return boolean true if it implements
-     *
-     * private static boolean classImplementsInterface( Class theClass, Class
-     * theInterface) { HashMap mapInterfaces = new HashMap(); String strKey =
-     * null; // pass in the map by reference since the method is recursive
-     * getAllInterfaces(theClass, mapInterfaces); Iterator iterInterfaces =
-     * mapInterfaces.keySet().iterator(); while (iterInterfaces.hasNext()) {
-     * strKey = (String) iterInterfaces.next(); if (mapInterfaces.get(strKey) ==
-     * theInterface) { return true; } } return false; }
-     */
-
-    /*
-     * Finds all classes that extend the classes in the listSuperClasses
-     * ArrayList, searching in the listAllClasses ArrayList.
-     *
-     * @param superClasses
-     *            the base classes to find subclasses for
-     * @param listAllClasses
-     *            the collection of classes to search in
-     * @param innerClasses
-     *            indicate whether to include inner classes in the search
-     * @return ArrayList of the subclasses
-     */
-//  private static Set findAllSubclasses(Class []superClasses, Set listAllClasses, boolean innerClasses) {
-//      Set listSubClasses = new TreeSet();
-//      for (int i=0; i< superClasses.length; i++) {
-//          findAllSubclassesOneClass(superClasses[i], listAllClasses, listSubClasses, innerClasses);
-//      }
-//      return listSubClasses;
-//  }
-
-    /*
-     * Finds all classes that extend the class, searching in the listAllClasses
-     * ArrayList.
-     *
-     * @param theClass
-     *            the parent class
-     * @param listAllClasses
-     *            the collection of classes to search in
-     * @param listSubClasses
-     *            the collection of discovered subclasses
-     * @param innerClasses
-     *            indicates whether inners classes should be included in the
-     *            search
-     */
-//  private static void findAllSubclassesOneClass(Class theClass, Set listAllClasses, Set listSubClasses,
-//          boolean innerClasses) {
-//        Iterator iterClasses = listAllClasses.iterator();
-//      while (iterClasses.hasNext()) {
-//            String strClassName = (String) iterClasses.next();
-//          // only check classes if they are not inner classes
-//          // or we intend to check for inner classes
-//          if ((strClassName.indexOf("$") == -1) || innerClasses) { // $NON-NLS-1$
-//              // might throw an exception, assume this is ignorable
-//              try {
-//                  Class c = Class.forName(strClassName, false, Thread.currentThread().getContextClassLoader());
-//
-//                  if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
-//                        if(theClass.isAssignableFrom(c)){
-//                            listSubClasses.add(strClassName);
-//                        }
-//                    }
-//              } catch (Throwable ignored) {
-//                    log.debug(ignored.getLocalizedMessage());
-//              }
-//          }
-//      }
-//  }
 
     /**
      *
