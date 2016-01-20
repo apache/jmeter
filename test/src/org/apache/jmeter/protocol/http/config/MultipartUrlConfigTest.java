@@ -18,19 +18,18 @@
 
 package org.apache.jmeter.protocol.http.config;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.protocol.http.util.HTTPFileArgs;
+import org.junit.Test;
 
-public class MultipartUrlConfigTest extends TestCase {
+public class MultipartUrlConfigTest {
 
-    public MultipartUrlConfigTest(String name) {
-        super(name);
-    }
 
+    @Test
     @SuppressWarnings("deprecation")
     public void testConstructors() {
         MultipartUrlConfig muc = new MultipartUrlConfig();
@@ -43,6 +42,7 @@ public class MultipartUrlConfigTest extends TestCase {
     }
 
     // TODO - should LF-only EOL be allowed? 
+    @Test
     public void testParseArgumentsLF() {
         String queryString
             = "Content-Disposition: form-data; name=\"aa\"\n"
@@ -91,6 +91,7 @@ public class MultipartUrlConfigTest extends TestCase {
         assertEquals("xyz  \nxyz  ", arg.getValue());
     }
 
+    @Test
     public void testParseArgumentsCRLF() {
         String queryString
             = "Content-Disposition: form-data; name=\"aa\"\r\n"

@@ -18,23 +18,25 @@
 
 package org.apache.jmeter.gui.action;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestSave extends junit.framework.TestCase {
+public class TestSave {
         private Save save;
 
-        public TestSave(String name) {
-            super(name);
-        }
 
-        @Override
+        @Before
         public void setUp() {
             save = new Save();
         }
 
+        @Test
         public void testTreeConversion() throws Exception {
             HashTree tree = new ListedHashTree();
             JMeterTreeNode root = new JMeterTreeNode(new Arguments(), null);

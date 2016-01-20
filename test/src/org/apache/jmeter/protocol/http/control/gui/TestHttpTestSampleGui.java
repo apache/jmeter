@@ -18,24 +18,21 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.GraphicsEnvironment;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestHttpTestSampleGui extends TestCase {
+public class TestHttpTestSampleGui {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private HttpTestSampleGui gui;
 
-        public TestHttpTestSampleGui(String name) {
-            super(name);
-        }
-
-        @Override
+        @Before
         public void setUp() {
             if(GraphicsEnvironment.isHeadless()) {
                 System.out.println("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
@@ -45,6 +42,7 @@ public class TestHttpTestSampleGui extends TestCase {
             gui = new HttpTestSampleGui();
         }
 
+        @Test
         public void testCloneSampler() throws Exception {
             if(GraphicsEnvironment.isHeadless()) {
                 System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");

@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.junit.Assert.assertFalse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -25,10 +27,9 @@ import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.samplers.SampleResult;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests for the SMIMEAssertion.
@@ -87,12 +88,12 @@ import org.apache.jmeter.samplers.SampleResult;
  * If a new signed email is generated, the signer key and certificate will
  * change, and thus the tests will have to be changed as well (serial number!).
  */
-public class SMIMEAssertionTest extends TestCase {
+public class SMIMEAssertionTest {
 
     private MimeMessage msg;
     private SampleResult parent;
 
-    @Override
+    @Before
     public void setUp() throws MessagingException, IOException {
         Session mailSession = Session.getDefaultInstance(new Properties());
         msg = new MimeMessage(mailSession, this.getClass().getResourceAsStream(
@@ -102,6 +103,7 @@ public class SMIMEAssertionTest extends TestCase {
         parent.addSubResult(createChildSample());
     }
 
+    @Test
     public void testSignature() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setVerifySignature(true);
@@ -112,6 +114,7 @@ public class SMIMEAssertionTest extends TestCase {
                 result.isFailure());
     }
 
+    @Test
     public void testSignerEmail() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
@@ -123,6 +126,7 @@ public class SMIMEAssertionTest extends TestCase {
                 result.isFailure());
     }
 
+    @Test
     public void testSignerSerial() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
@@ -134,6 +138,7 @@ public class SMIMEAssertionTest extends TestCase {
                 result.isFailure());
     }
 
+    @Test
     public void testSignerSignerDN() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
@@ -148,6 +153,7 @@ public class SMIMEAssertionTest extends TestCase {
                 result.isFailure());
     }
 
+    @Test
     public void testSignerIssuerDN() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
@@ -161,6 +167,7 @@ public class SMIMEAssertionTest extends TestCase {
                 result.isFailure());
     }
 
+    @Test
     public void testSignerCert() {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);

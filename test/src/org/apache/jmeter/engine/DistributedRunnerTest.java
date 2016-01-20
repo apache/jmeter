@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.engine;
 
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +37,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Test;
 
-public class DistributedRunnerTest extends junit.framework.TestCase {
+public class DistributedRunnerTest {
 
     public static void createJmeterEnv() throws IOException {
         File propsFile;
@@ -50,6 +53,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         JMeterUtils.setLocale(new Locale("ignoreResources"));
     }
 
+    @Test
     public void testSuccess() throws Exception {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
@@ -65,6 +69,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         obj.exit(hosts);
     }
 
+    @Test
     public void testFailure1() throws Exception {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "2");
@@ -91,6 +96,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         System.setOut(origSystemOut);
     }
 
+    @Test
     public void testFailure2() throws Exception {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");
@@ -101,6 +107,7 @@ public class DistributedRunnerTest extends junit.framework.TestCase {
         initRunner(obj, hosts);
     }
 
+    @Test
     public void testFailure3() throws Exception {
         createJmeterEnv();
         JMeterUtils.setProperty(DistributedRunner.RETRIES_NUMBER, "1");

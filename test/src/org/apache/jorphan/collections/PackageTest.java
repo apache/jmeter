@@ -18,19 +18,21 @@
 
 package org.apache.jorphan.collections;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collection;
-
-import junit.framework.TestCase;
-
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Test;
 
-public class PackageTest extends TestCase {
-        public PackageTest(String name) {
-            super(name);
-        }
-
+public class PackageTest {
+        
+        @Test
         public void testAdd1() throws Exception {
             Logger log = LoggingManager.getLoggerForClass();
             Collection<String> treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
@@ -43,6 +45,7 @@ public class PackageTest extends TestCase {
             assertEquals("value", tree.getArray(treePath)[0]);
         }
 
+        @Test
         public void testEqualsAndHashCode1() throws Exception {
             HashTree tree1 = new HashTree("abcd");
             HashTree tree2 = new HashTree("abcd");
@@ -89,6 +92,7 @@ public class PackageTest extends TestCase {
         }
 
 
+        @Test
         public void testAddObjectAndTree() throws Exception {
             ListedHashTree tree = new ListedHashTree("key");
             ListedHashTree newTree = new ListedHashTree("value");
@@ -101,6 +105,7 @@ public class PackageTest extends TestCase {
             assertNotNull(tree.getTree("key").get("value"));
         }
 
+        @Test
         public void testEqualsAndHashCode2() throws Exception {
             ListedHashTree tree1 = new ListedHashTree("abcd");
             ListedHashTree tree2 = new ListedHashTree("abcd");
@@ -160,6 +165,7 @@ public class PackageTest extends TestCase {
         }
 
 
+        @Test
         public void testSearch() throws Exception {
             ListedHashTree tree = new ListedHashTree();
             SearchByClass<Integer> searcher = new SearchByClass<>(Integer.class);

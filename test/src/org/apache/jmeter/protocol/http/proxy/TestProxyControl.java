@@ -18,22 +18,23 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.samplers.SampleResult;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 
-public class TestProxyControl  extends TestCase {
+public class TestProxyControl {
         private HTTPSamplerBase sampler;
 
         private ProxyControl control;
 
-        public TestProxyControl(String name) {
-            super(name);
-        }
 
-        @Override
+        @Before
         public void setUp() {
             control = new ProxyControl();
             control.addIncludedPattern(".*\\.jsp");
@@ -41,24 +42,28 @@ public class TestProxyControl  extends TestCase {
             sampler = new HTTPNullSampler();
         }
 
+        @Test
         public void testFilter1() throws Exception {
             sampler.setDomain("jakarta.org");
             sampler.setPath("index.jsp");
             assertTrue("Should find jakarta.org/index.jsp", control.filterUrl(sampler));
         }
 
+        @Test
         public void testFilter2() throws Exception {
             sampler.setPath("index.jsp");
             sampler.setDomain("www.apache.org");
             assertFalse("Should not match www.apache.org", control.filterUrl(sampler));
         }
 
+        @Test
         public void testFilter3() throws Exception {
             sampler.setPath("header.gif");
             sampler.setDomain("jakarta.org");
             assertFalse("Should not match header.gif", control.filterUrl(sampler));
         }
 
+        @Test
         public void testContentTypeNoFilters() throws Exception {
             SampleResult result = new SampleResult();
             // No filters
@@ -95,6 +100,7 @@ public class TestProxyControl  extends TestCase {
             assertFalse("Should not allow image/png", control.filterContentType(result));
         }
         
+        @Test
         public void testContentTypeInclude() throws Exception {
             SampleResult result = new SampleResult();
             control.setContentTypeInclude("text/html|text/ascii");
@@ -107,6 +113,7 @@ public class TestProxyControl  extends TestCase {
             assertFalse("Should not allow text/css", control.filterContentType(result));
         }
         
+        @Test
         public void testContentTypeExclude() throws Exception {
             SampleResult result = new SampleResult();
             control.setContentTypeExclude("text/css");
@@ -119,6 +126,7 @@ public class TestProxyControl  extends TestCase {
             assertFalse("Should not allow text/css", control.filterContentType(result));
         }
         
+        @Test
         public void testContentTypeIncludeAndExclude() throws Exception {
             SampleResult result = new SampleResult();
             // Simple inclusion and exclusion filter
