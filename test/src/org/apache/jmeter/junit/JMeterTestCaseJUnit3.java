@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.junit;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -33,13 +31,23 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+import junit.framework.TestCase;
+
 /*
  * Extend JUnit TestCase to provide common setup
  */
-public abstract class JMeterTestCase {
+@Deprecated
+public abstract class JMeterTestCaseJUnit3 extends TestCase {
     // Used by findTestFile
     private static final String filePrefix;
 
+    public JMeterTestCaseJUnit3() {
+        super();
+    }
+
+    public JMeterTestCaseJUnit3(String name) {
+        super(name);
+    }
 
     /*
      * If not running under AllTests.java, make sure that the properties (and

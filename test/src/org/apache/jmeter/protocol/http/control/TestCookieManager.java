@@ -18,6 +18,12 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
 import java.util.List;
 
@@ -31,25 +37,23 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestCookieManager extends JMeterTestCase {
         private CookieManager man = null;
 
-        public TestCookieManager(String name) {
-            super(name);
-        }
-
         private JMeterContext jmctx = null;
 
-        @Override
+        @Before
         public void setUp() throws Exception {
-            super.setUp();
             jmctx = JMeterContextService.getContext();
             man = new CookieManager();
             man.setThreadContext(jmctx);
             man.testStarted();// This is needed in order to set up the cookie policy
         }
 
+        @Test
         public void testRemoveCookie() throws Exception {
             man.setThreadContext(jmctx);
             Cookie c = new Cookie("id", "me", "127.0.0.1", "/", false, 0);
@@ -67,6 +71,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals(1, man.getCookieCount());
         }
 
+        @Test
         public void testSendCookie() throws Exception {
             man.add(new Cookie("id", "value", "jakarta.apache.org", "/", false, 9999999999L));
             HTTPSamplerBase sampler = new HTTPNullSampler();
@@ -76,6 +81,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertNotNull(man.getCookieHeaderForURL(sampler.getUrl()));
         }
 
+        @Test
         public void testSendCookie2() throws Exception {
             man.add(new Cookie("id", "value", ".apache.org", "/", false, 9999999999L));
             HTTPSamplerBase sampler = new HTTPNullSampler();
@@ -94,6 +100,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
             man.addCookieFromHeader("test=1;domain=.jakarta.apache.org", url);
@@ -103,6 +110,7 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * @throws Exception
          */
+        @Test
         public void testAddCookieFromHeaderWithWildcard() throws Exception {
             URL url = new URL("https://subdomain.bt.com/page");
             String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
@@ -135,6 +143,7 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * @throws Exception
          */
+        @Test
         public void testAddCookieFromHeaderWithNoWildcard() throws Exception {
             URL url = new URL("https://subdomain.bt.com/page");
             String headerLine = "SMTRYNO=1; path=/";
@@ -162,6 +171,7 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * @throws Exception
          */
+        @Test
         public void testAddCookieFromHeaderWithWildcard2() throws Exception {
             URL url = new URL("https://www.bt.com/page");
             String headerLine = "SMTRYNO=1; path=/; domain=.bt.com";
@@ -185,6 +195,7 @@ public class TestCookieManager extends JMeterTestCase {
         /**
          * @throws Exception
          */
+        @Test
         public void testBug56358() throws Exception {
             URL url = new URL("http://remote.com:10008/get/cookie");
             String headerLine = "test=value;Max-age=120;path=/;Version=1";
@@ -206,6 +217,7 @@ public class TestCookieManager extends JMeterTestCase {
             }
         }
         
+        @Test
         public void testCrossDomainHandling() throws Exception {
             URL url = new URL("http://jakarta.apache.org/");
             assertEquals(0,man.getCookieCount()); // starts empty
@@ -221,6 +233,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testSimilarHostNames() throws Exception {
             URL url = new URL("http://ache.org/");
             man.addCookieFromHeader("test=1", url);
@@ -229,6 +242,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Test session cookie is returned
+        @Test
         public void testSessionCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1", url);
@@ -238,6 +252,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Bug 2063
+        @Test
         public void testCookieWithEquals() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("NSCP_USER_LOGIN1_NEW=SHA=xxxxx", url);
@@ -250,6 +265,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Test Old cookie is not returned
+        @Test
         public void testOldCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-1990 00:00:00 GMT", url);
@@ -258,6 +274,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Test New cookie is returned
+        @Test
         public void testNewCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1; expires=Mon, 01-Jan-2990 00:00:00 GMT", url);
@@ -268,6 +285,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Test multi-cookie header handling
+        @Test
         public void testCookies1() throws Exception {
             URL url = new URL("http://a.b.c.d/testCookies1");
             man.addCookieFromHeader("test1=1; comment=\"how,now\", test2=2; version=1", url);
@@ -277,6 +295,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test1=1; test2=2", s);
         }
         
+        @Test
         public void testCookies2() throws Exception {
             URL url = new URL("https://a.b.c.d/testCookies2");
             //The cookie in question does not have a version attribute mandatory for
@@ -291,6 +310,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test1=1", s);
         }
         
+        @Test
         public void testCookies3() throws Exception {
             URL url = new URL("https://a.b.c.d/testCookies2");
             man.addCookieFromHeader("test1=1;secure, test2=2;secure; version=1", url);
@@ -301,6 +321,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
 
         // Test duplicate cookie handling
+        @Test
         public void testDuplicateCookie() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1", url);
@@ -312,6 +333,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=2", s);
         }
+        @Test
         public void testDuplicateCookie2() throws Exception {
             URL url = new URL("http://a.b.c/");
             man.addCookieFromHeader("test=1", url);
@@ -333,6 +355,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testMissingPath0() throws Exception {
             URL url = new URL("http://d.e.f/goo.html");
             man.addCookieFromHeader("test=moo", url);
@@ -346,6 +369,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testMissingPath1() throws Exception {
             URL url = new URL("http://d.e.f/moo.html");
             man.addCookieFromHeader("test=moo", url);
@@ -358,6 +382,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testRootPath0() throws Exception {
             URL url = new URL("http://d.e.f/goo.html");
             man.addCookieFromHeader("test=moo;path=/", url);
@@ -370,6 +395,7 @@ public class TestCookieManager extends JMeterTestCase {
          *
          * @throws Exception if something fails
          */
+        @Test
         public void testRootPath1() throws Exception {
             URL url = new URL("http://d.e.f/moo.html");
             man.addCookieFromHeader("test=moo;path=/", url);
@@ -379,6 +405,7 @@ public class TestCookieManager extends JMeterTestCase {
         }
         
         // Test cookie matching
+        @Test
         public void testCookieMatching() throws Exception {
             URL url = new URL("http://a.b.c:8080/TopDir/fred.jsp");
             man.addCookieFromHeader("ID=abcd; Path=/TopDir", url);
@@ -403,6 +430,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertNull(s);
         }
 
+        @Test
         public void testCookieOrdering1() throws Exception {
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;path=/", url);
@@ -419,6 +447,7 @@ public class TestCookieManager extends JMeterTestCase {
             // assertEquals("test2=moo2; test1=moo1; test2=moo3", s);
         }
 
+        @Test
         public void testCookieOrdering2() throws Exception {
             URL url = new URL("http://order.now/sub1/moo.html");
             man.addCookieFromHeader("test1=moo1;", url);
@@ -442,7 +471,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
         
-        @SuppressWarnings("deprecation") // TODO drop this test at some point
+        @Test
         public void testCookiePolicy2109() throws Exception {
             man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.RFC_2109);
             man.testStarted(); // ensure policy is picked up
@@ -469,6 +498,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("$Version=0; test1=moo1; test2=moo2; $Path=/sub1; test2=moo3; $Path=/", s);
         }
 
+        @Test
         public void testCookiePolicyNetscape() throws Exception {
             man.setCookiePolicy(CookieSpecs.NETSCAPE);
             man.testStarted(); // ensure policy is picked up
@@ -496,6 +526,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
 
+        @Test
         public void testCookiePolicyIgnore() throws Exception {
             man.setCookiePolicy(CookieSpecs.IGNORE_COOKIES);
             man.testStarted(); // ensure policy is picked up
@@ -528,6 +559,7 @@ public class TestCookieManager extends JMeterTestCase {
             System.out.println("Uncomment assertEquals(0,c.size()) when migrating to httpclient-4.5.2");
         }
 
+        @Test
         public void testLoad() throws Exception{
             assertEquals(0,man.getCookieCount());
             man.addFile(findTestPath("testfiles/cookies.txt"));

@@ -18,6 +18,10 @@
 
 package org.apache.jmeter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +40,8 @@ import java.util.regex.Pattern;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Check the eclipse and Maven version definitions against build.properties
@@ -57,14 +63,6 @@ public class JMeterVersionTest extends JMeterTestCase {
 
     private static final File JMETER_HOME = new File(JMeterUtils.getJMeterHome());
 
-    public JMeterVersionTest() {
-        super();
-    }
-
-    public JMeterVersionTest(String arg0) {
-        super(arg0);
-    }
-    
     /**
      * Versions of libraries mentioned in build.properties
      */
@@ -80,8 +78,8 @@ public class JMeterVersionTest extends JMeterTestCase {
 
     private Properties prop;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         final Properties buildProp = new Properties();
         final FileInputStream bp = new FileInputStream(getFileFromHome("build.properties"));
         buildProp.load(bp);
@@ -112,6 +110,7 @@ public class JMeterVersionTest extends JMeterTestCase {
      * Check eclipse.classpath contains the jars declared in build.properties
      * @throws Exception if something fails
      */
+    @Test
     public void testEclipse() throws Exception {
         final BufferedReader eclipse = new BufferedReader(
                 new FileReader(getFileFromHome("eclipse.classpath"))); // assume default charset is OK here
@@ -170,6 +169,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testMaven() throws Exception {
         final BufferedReader maven = new BufferedReader(
                 new FileReader(getFileFromHome("res/maven/ApacheJMeter_parent.pom"))); // assume default charset is OK here
@@ -199,6 +199,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         }
    }
 
+    @Test
     public void testLicences() {
         Set<String> liceNames = new HashSet<>();
         for (Map.Entry<String, String> me : versions.entrySet()) {
@@ -227,6 +228,7 @@ public class JMeterVersionTest extends JMeterTestCase {
     /**
      * Check that all downloads use Maven Central
      */
+    @Test
     public void testMavenDownload() {
         int fails = 0;
         for (Entry<Object, Object> entry : prop.entrySet()) {

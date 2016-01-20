@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.fail;
+
 import java.net.UnknownHostException;
 
 import org.apache.jmeter.junit.JMeterTestCase;

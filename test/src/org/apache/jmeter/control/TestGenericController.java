@@ -18,15 +18,16 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.junit.Test;
 
 public class TestGenericController extends JMeterTestCase {
-        public TestGenericController(String name) {
-            super(name);
-        }
 
+        @Test
         public void testProcessing() throws Exception {
             testLog.debug("Testing Generic Controller");
             GenericController controller = new GenericController();

@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -28,6 +33,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestTimeFunction extends JMeterTestCase {
         private Function variable;
@@ -42,11 +49,7 @@ public class TestTimeFunction extends JMeterTestCase {
 
         private String value;
         
-        public TestTimeFunction(String name) {
-            super(name);
-        }
-
-        @Override
+        @Before
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             vars = new JMeterVariables();
@@ -57,6 +60,7 @@ public class TestTimeFunction extends JMeterTestCase {
             variable = new TimeFunction();
         }
 
+        @Test
         public void testDefault() throws Exception {
             variable.setParameters(params);
             long before = System.currentTimeMillis();
@@ -66,6 +70,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertTrue(now >= before && now <= after);
         }
         
+        @Test
         public void testDefault1() throws Exception {
             params.add(new CompoundVariable());
             variable.setParameters(params);
@@ -76,6 +81,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertTrue(now >= before && now <= after);
         }
         
+        @Test
         public void testDefault2() throws Exception {
             params.add(new CompoundVariable());
             params.add(new CompoundVariable());
@@ -87,6 +93,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertTrue(now >= before && now <= after);
         }
         
+        @Test
         public void testDefaultNone() throws Exception {
             long before = System.currentTimeMillis();
             value = variable.execute(result, null);
@@ -95,6 +102,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertTrue(now >= before && now <= after);
         }
         
+        @Test
         public void testTooMany() throws Exception {
             params.add(new CompoundVariable("YMD"));
             params.add(new CompoundVariable("NAME"));
@@ -106,6 +114,7 @@ public class TestTimeFunction extends JMeterTestCase {
             }
         }
         
+        @Test
         public void testYMD() throws Exception {
             params.add(new CompoundVariable("YMD"));
             params.add(new CompoundVariable("NAME"));
@@ -115,6 +124,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals(value,vars.get("NAME"));
         }
 
+        @Test
         public void testYMDnoV() throws Exception {
             params.add(new CompoundVariable("YMD"));
             variable.setParameters(params);
@@ -123,6 +133,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertNull(vars.get("NAME"));
         }
 
+        @Test
         public void testHMS() throws Exception {
             params.add(new CompoundVariable("HMS"));
             variable.setParameters(params);
@@ -130,6 +141,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals(6,value.length());
         }
 
+        @Test
         public void testYMDHMS() throws Exception {
             params.add(new CompoundVariable("YMDHMS"));
             variable.setParameters(params);
@@ -137,6 +149,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals(15,value.length());
         }
 
+        @Test
         public void testUSER1() throws Exception {
             params.add(new CompoundVariable("USER1"));
             variable.setParameters(params);
@@ -144,6 +157,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals(0,value.length());
         }
 
+        @Test
         public void testUSER2() throws Exception {
             params.add(new CompoundVariable("USER2"));
             variable.setParameters(params);
@@ -151,6 +165,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals(0,value.length());
         }
 
+        @Test
         public void testFixed() throws Exception {
             params.add(new CompoundVariable("'Fixed text'"));
             variable.setParameters(params);
@@ -158,6 +173,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals("Fixed text",value);
         }
 
+        @Test
         public void testMixed() throws Exception {
             params.add(new CompoundVariable("G"));
             variable.setParameters(params);
@@ -168,6 +184,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertEquals("AD",value);
         }
 
+        @Test
         public void testDivisor() throws Exception {
             params.add(new CompoundVariable("/1000"));
             variable.setParameters(params);
@@ -178,6 +195,7 @@ public class TestTimeFunction extends JMeterTestCase {
             assertTrue(now >= before && now <= after);
         }
 
+        @Test
         public void testDivisorNoMatch() throws Exception {
             params.add(new CompoundVariable("/1000 ")); // trailing space
             variable.setParameters(params);

@@ -18,15 +18,16 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.junit.Test;
 
 public class TestOnceOnlyController extends JMeterTestCase {
-    public TestOnceOnlyController(String name) {
-        super(name);
-    }
 
+    @Test
     public void testProcessing() throws Exception {
         GenericController controller = new GenericController();
         GenericController sub_1 = new OnceOnlyController();
@@ -70,6 +71,7 @@ public class TestOnceOnlyController extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testProcessing2() throws Exception {
         GenericController controller = new GenericController();
         GenericController sub_1 = new OnceOnlyController();
@@ -114,6 +116,7 @@ public class TestOnceOnlyController extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testInOuterLoop() throws Exception {
         // Set up the test plan
         LoopController controller = new LoopController();
@@ -172,6 +175,7 @@ public class TestOnceOnlyController extends JMeterTestCase {
         assertEquals(expectedNoSamples, counter);
     }
 
+    @Test
     public void testInsideInnerLoop() throws Exception {
         // Test plan with OnlyOnceController inside inner loop
         // Set up the test plan

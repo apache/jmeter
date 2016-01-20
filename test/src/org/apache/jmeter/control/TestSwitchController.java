@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,16 +34,13 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Test;
 
 public class TestSwitchController extends JMeterTestCase {
 //      static {
 //           LoggingManager.setPriority("DEBUG","jmeter");
 //           LoggingManager.setTarget(new java.io.PrintWriter(System.out));
 //      }
-
-        public TestSwitchController(String name) {
-            super(name);
-        }
 
         // Get next sample and its name
         private String nextName(GenericController c) {
@@ -53,33 +53,40 @@ public class TestSwitchController extends JMeterTestCase {
             return n;
         }
 
+        @Test
         public void test() throws Exception {
             runSimpleTests("", "zero");
         }
 
+        @Test
         public void test0() throws Exception {
             runSimpleTests("0", "zero");
         }
 
+        @Test
         public void test1() throws Exception {
             runSimpleTests("1", "one");
             runSimpleTests("one", "one"); // Match by name
         }
 
+        @Test
         public void test2() throws Exception {
             runSimpleTests("2", "two");
             runSimpleTests("two", "two"); // Match by name
         }
 
+        @Test
         public void test3() throws Exception {
             runSimpleTests("3", "three");
             runSimpleTests("three", "three"); // Match by name
         }
 
+        @Test
         public void test4() throws Exception {
             runSimpleTests("4", "zero");
         }
 
+        @Test
         public void testX() throws Exception {
             runSimpleTests("X", null); // should not run any children
             runSimpleTest2("X", "one", "Default"); // should match the default entry
@@ -176,6 +183,7 @@ public class TestSwitchController extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testTest2() throws Exception {
             runTest2("", new String[] { "zero" });
             runTest2("0", new String[] { "zero" });
@@ -250,6 +258,7 @@ public class TestSwitchController extends JMeterTestCase {
          * N.B. Requires ApacheJMeter_functions.jar to be on the classpath,
          * otherwise the function cannot be resolved.
         */
+        @Test
         public void testFunction() throws Exception {
             JMeterContext jmctx = JMeterContextService.getContext();
             Map<String, String> variables = new HashMap<>();

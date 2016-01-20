@@ -61,7 +61,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
-public class JMeterTest extends JMeterTestCase {
+public class JMeterTest extends JMeterTestCaseJUnit3 {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static Map<String, Boolean> guiTitles;
