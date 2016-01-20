@@ -596,7 +596,17 @@ public class JMeterTest extends JMeterTestCase {
                 } catch (HeadlessException e) {
                     caught = e;
                     System.out.println("o.a.j.junit.JMeterTest Error creating "+n+" "+e.toString());
-                } catch (Exception e) {
+                } 
+                catch(ExceptionInInitializerError eiie) {
+                    caught = eiie;
+                    if(caught.getCause() instanceof HeadlessException) {
+                        System.out.println("o.a.j.junit.JMeterTest Error creating "+n+" "+eiie.toString());
+                    }
+                    else {
+                        throw new Exception("Error creating " + n, eiie);
+                    }
+                }
+                catch (Exception e) {
                     caught = e;
                     if (e instanceof RemoteException) { // not thrown, so need to check here
                         System.out.println("o.a.j.junit.JMeterTest WARN: " + "Error creating " + n + " " + e.toString());
