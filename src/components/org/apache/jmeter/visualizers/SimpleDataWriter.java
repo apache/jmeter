@@ -23,19 +23,16 @@ import java.awt.BorderLayout;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 
-/*******************************************************************************
+/**
  * This listener can record results to a file but not to the UI. It is meant to
  * provide an efficient means of recording data by eliminating GUI overhead.
- *
- ******************************************************************************/
-
+ */
 public class SimpleDataWriter extends AbstractVisualizer {
     private static final long serialVersionUID = 240L;
 
-    /***************************************************************************
+    /**
      * Create the SimpleDataWriter.
-     **************************************************************************/
-
+     */
     public SimpleDataWriter() {
         init();
         setName(getStaticLabel());
@@ -49,7 +46,6 @@ public class SimpleDataWriter extends AbstractVisualizer {
     /**
      * Initialize the component in the UI
      */
-
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout());
         setBorder(makeBorder());
@@ -60,7 +56,6 @@ public class SimpleDataWriter extends AbstractVisualizer {
     /**
      * Does nothing, but required by interface.
      */
-
     @Override
     public void clearData() {
     }
@@ -68,10 +63,8 @@ public class SimpleDataWriter extends AbstractVisualizer {
     /**
      * Does nothing, but required by interface.
      *
-     * @param sample
-     *            ignored
+     * @param sample ignored
      */
-
     @Override
     public void add(SampleResult sample) {
     }
