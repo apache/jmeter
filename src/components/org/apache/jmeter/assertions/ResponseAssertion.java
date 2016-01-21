@@ -182,40 +182,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     @Override
     public AssertionResult getResult(SampleResult response) {
-        AssertionResult result;
-
-        // None of the other Assertions check the response status, so remove
-        // this check
-        // for the time being, at least...
-        // if (!response.isSuccessful())
-        // {
-        // result = new AssertionResult();
-        // result.setError(true);
-        // byte [] ba = response.getResponseData();
-        // result.setFailureMessage(
-        // ba == null ? "Unknown Error (responseData is empty)" : new String(ba)
-        // );
-        // return result;
-        // }
-
-        result = evaluateResponse(response);
+        AssertionResult result = evaluateResponse(response);
         return result;
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public String getTestField() {
         return getPropertyAsString(TEST_FIELD);
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public int getTestType() {
         JMeterProperty type = getProperty(TEST_TYPE);
         if (type instanceof NullProperty) {
@@ -224,11 +198,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         return type.getIntValue();
     }
 
-    /***************************************************************************
-     * !ToDoo (Method description)
-     *
-     * @return !ToDo (Return description)
-     **************************************************************************/
     public CollectionProperty getTestStrings() {
         return (CollectionProperty) getProperty(TEST_STRINGS);
     }
