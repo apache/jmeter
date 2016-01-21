@@ -92,12 +92,6 @@ public abstract class JMeterTestCase {
             logprop("os.version");
             logprop("os.arch");
             logprop("java.class.path");
-            // String cp = System.getProperty("java.class.path");
-            // String cpe[]= JOrphanUtils.split(cp,File.pathSeparator);
-            // System.out.println("java.class.path=");
-            // for (int i=0;i<cpe.length;i++){
-            // System.out.println(cpe[i]);
-            // }
         } else {
             filePrefix = "";
         }
