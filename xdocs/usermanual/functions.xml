@@ -125,7 +125,8 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td><td>1.9</td></tr>
-        <tr><td>Scripting</td><td> <a href="#__jexl">jexl, jexl2</a></td><td>evaluate a Commons Jexl expression</td><td>jexl(2.2), jexl2(2.6)</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.6)</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td><td>2.0</td></tr>
         <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td><td>2.1</td></tr>
@@ -992,16 +993,16 @@ The following shorthand aliases are provided:
 </p>
 </component>
 
-<component index="&sect-num;.5.18" name="__jexl" tag="__jexl2">
+<component index="&sect-num;.5.18" name="__jexl2" >
 <description>
     <p>The jexl function returns the result of evaluating a 
     <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>. 
     See links below for more information on JEXL expressions.
     </p>
-    <p>The <code>__jexl</code> function uses Commons JEXL 1, and the <code>__jexl2</code> function uses Commons JEXL 2</p>
+    <p>The <code>__jexl2</code> function uses Commons JEXL 2</p>
     <ul>
-    <li><a href="http://commons.apache.org/jexl/reference/syntax.html">JEXL syntax description</a></li>
-    <li><a href="http://commons.apache.org/jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
     </ul>
     </description>
 
@@ -1043,7 +1044,58 @@ i.intValue(); // or use i.longValue()
     <note>JMeter allows the expression to contain multiple statements.</note>
 </component>
 
-<component index="&sect-num;.5.19" name="__V">
+<component index="&sect-num;.5.19" name="__jexl3" >
+<description>
+    <p>The jexl function returns the result of evaluating a 
+    <a href="http://commons.apache.org/proper/commons-jexl/">Commons JEXL expression</a>. 
+    See links below for more information on JEXL expressions.
+    </p>
+    <p>The <code>__jexl3</code> function uses Commons JEXL 3</p>
+    <ul>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
+    </ul>
+    </description>
+
+<properties>
+        <property name="Expression" required="Yes">
+        The expression to be evaluated. For example, <code>6*(5+2)</code>
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+</properties>
+<p>
+The following variables are made available to the script:
+</p>
+<ul>
+<li><code>log</code> - the logger for the function</li>
+<li><code>ctx</code> - JMeterContext object</li>
+<li><code>vars</code> - JMeterVariables object</li>
+<li><code>props</code> - JMeter Properties object</li>
+<li><code>threadName</code> - String containing the current thread name (in 2.3.2 it was misspelt as "<code>theadName</code>")</li>
+<li><code>sampler</code> - current Sampler object (if any)</li>
+<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
+</ul>
+    <p>
+    Jexl can also create classes and call methods on them, for example:
+    </p>
+    <p>
+    <source>
+Systemclass=log.class.forName("java.lang.System");
+now=Systemclass.currentTimeMillis();
+</source>
+    Note that the Jexl documentation on the web-site wrongly suggests that "<code>div</code>" does integer division.
+    In fact "<code>div</code>" and "<code>/</code>" both perform normal division. One can get the same effect
+    as follows:
+    <source>
+i= 5 / 2;
+i.intValue(); // or use i.longValue()
+</source>
+    </p>
+    <note>JMeter allows the expression to contain multiple statements.</note>
+</component>
+
+<component index="&sect-num;.5.20" name="__V">
 <description>
     <p>The V (variable) function returns the result of evaluating a variable name expression.
     This can be used to evaluate nested variable references (which are not currently supported).
@@ -1063,7 +1115,7 @@ i.intValue(); // or use i.longValue()
 </properties>
 </component>
 
-<component index="&sect-num;.5.20" name="__evalVar">
+<component index="&sect-num;.5.21" name="__evalVar">
 <description>
     <p>The eval function returns the result of evaluating an expression stored in a variable.
     </p>
@@ -1081,7 +1133,7 @@ i.intValue(); // or use i.longValue()
         </property>
 </properties>
 </component>
-<component index="&sect-num;.5.21" name="__eval">
+<component index="&sect-num;.5.22" name="__eval">
 <description>
     <p>The eval function returns the result of evaluating a string expression.
     </p>
@@ -1110,7 +1162,7 @@ i.intValue(); // or use i.longValue()
 </properties>
 </component>
 
-<component index="&sect-num;.5.22" name="__char">
+<component index="&sect-num;.5.23" name="__char">
 <description>
     <p>
     The char function returns the result of evaluating a list of numbers as Unicode characters.
@@ -1134,7 +1186,7 @@ i.intValue(); // or use i.longValue()
  </p>
 </component>
 
-<component index="&sect-num;.5.23" name="__unescape">
+<component index="&sect-num;.5.24" name="__unescape">
 <description>
     <p>
     The unescape function returns the result of evaluating a Java-escaped string. See also <code>__char()</code> above.
@@ -1157,7 +1209,7 @@ i.intValue(); // or use i.longValue()
  </p>
 </component>
 
-<component index="&sect-num;.5.24" name="__unescapeHtml">
+<component index="&sect-num;.5.25" name="__unescapeHtml">
 <description>
     <p>
 Function to unescape a string containing HTML entity escapes
@@ -1184,7 +1236,7 @@ e.g. <code>"&amp;gt;&amp;zzzz;x"</code> will become <code>"&gt;&amp;zzzz;x"</cod
 </properties>
 </component>
 
-<component index="&sect-num;.5.25" name="__escapeHtml">
+<component index="&sect-num;.5.26" name="__escapeHtml">
 <description>
     <p>
 Function which escapes the characters in a String using HTML entities.
@@ -1207,7 +1259,7 @@ becomes:
 </properties>
 </component>
 
-<component index="&sect-num;.5.26" name="__urldecode">
+<component index="&sect-num;.5.27" name="__urldecode">
 <description>
     <p>
 Function to decode a <code>application/x-www-form-urlencoded</code> string.
@@ -1229,7 +1281,7 @@ For example, the string <code>Word+%22school%22+is+%22%C3%A9cole%22+in+french</c
 </properties>
 </component>
 
-<component index="&sect-num;.5.27" name="__urlencode">
+<component index="&sect-num;.5.28" name="__urlencode">
 <description>
     <p>
 Function to encode a string to a <code>application/x-www-form-urlencoded</code> string.
@@ -1250,7 +1302,7 @@ For example, the string <code>Word &quot;school&quot; is &quot;&eacute;cole&quot
 </properties>
 </component>
 
-<component index="&sect-num;.5.28" name="__FileToString">
+<component index="&sect-num;.5.29" name="__FileToString">
 
 <description>
     <p>
@@ -1274,7 +1326,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 <p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p>
 </component>
 
-<component index="&sect-num;.5.29" name="__samplerName">
+<component index="&sect-num;.5.30" name="__samplerName">
 
 <description>
     <p>
@@ -1297,7 +1349,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 </properties>
 </component>
 
-<component index="&sect-num;.5.30" name="__TestPlanName">
+<component index="&sect-num;.5.31" name="__TestPlanName">
 
 <description>
     <p>
@@ -1310,7 +1362,7 @@ A reference name - <code>refName</code> - for reusing the value created by this 
 </p>
 </component>
 
-<component index="&sect-num;.5.31" name="__escapeOroRegexpChars">
+<component index="&sect-num;.5.32" name="__escapeOroRegexpChars">
 <description>
     <p>
 Function which escapes the ORO Regexp meta characters, it is the equivalent of <code>\Q</code> <code>\E</code> in Java Regexp Engine.
