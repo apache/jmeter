@@ -442,6 +442,7 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
         
+        @SuppressWarnings("deprecation") // TODO drop this test at some point
         public void testCookiePolicy2109() throws Exception {
             man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.RFC_2109);
             man.testStarted(); // ensure policy is picked up
