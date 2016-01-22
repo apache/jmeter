@@ -80,12 +80,17 @@ public class Close implements Command {
         GuiPackage guiPackage = GuiPackage.getInstance();
         if (guiPackage.isDirty()) {
             int response;
-            if ((response=JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+            if ((response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("cancel_new_to_save"), // $NON-NLS-1$
                     JMeterUtils.getResString("save?"),  // $NON-NLS-1$
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
                 ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SAVE));
+                // the use might cancel the file chooser dialog
+                // in this case we should not close the test plan
+                if (guiPackage.isDirty()) {
+                    return false;
+                }
             }
             if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.CANCEL_OPTION) {
                 return false; // Don't clear the plan
