@@ -29,7 +29,7 @@ $(document).ready(function() {
         refreshHitsPerSecond();
     } catch(e){}
     try{
-        refreshBytesThroughputOverTime();
+        refreshResponseTimeOverTime();
     } catch(e){}
     try{
         refreshResponseTimePercentiles();
@@ -1199,9 +1199,9 @@ function collapse(elem, collapsed){
         $(elem).parent().find(".fa-chevron-up").removeClass("fa-chevron-up").addClass("fa-chevron-down");
     } else {
         $(elem).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
-        if (elem.id == "bodyResponseTimeOverTime") {
+        if (elem.id == "bodyBytesThroughputOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshResponseTimeOverTime();
+                refreshBytesThroughputOverTime();
             }
             document.location.href="#responseTimesOverTime";
         } else if (elem.id == "bodyLantenciesOverTime") {
