@@ -21,11 +21,14 @@ package org.apache.jmeter.extractor.gui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -70,6 +73,8 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     private JRadioButton useMessage;
 
     private ButtonGroup group;
+    
+    private JCheckBox emptyDefaultValue;
 
     public RegexExtractorGui() {
         super();
@@ -98,6 +103,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             regexField.setText(re.getRegex());
             templateField.setText(re.getTemplate());
             defaultField.setText(re.getDefaultValue());
+            emptyDefaultValue.setSelected(re.isEmptyDefaultValue());
             matchNumberField.setText(re.getMatchNumberAsString());
             refNameField.setText(re.getRefName());
         }
@@ -129,6 +135,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
             regex.setRegex(regexField.getText());
             regex.setTemplate(templateField.getText());
             regex.setDefaultValue(defaultField.getText());
+            regex.setDefaultEmptyValue(emptyDefaultValue.isSelected());
             regex.setMatchNumber(matchNumberField.getText());
         }
     }
@@ -145,6 +152,7 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         regexField.setText(""); //$NON-NLS-1$
         templateField.setText(""); //$NON-NLS-1$
         defaultField.setText(""); //$NON-NLS-1$
+        emptyDefaultValue.setSelected(false);
         refNameField.setText(""); //$NON-NLS-1$
         matchNumberField.setText(""); //$NON-NLS-1$
     }
@@ -211,7 +219,6 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
     private JPanel makeParameterPanel() {
         regexField = new JLabeledTextField(JMeterUtils.getResString("regex_field")); //$NON-NLS-1$
         templateField = new JLabeledTextField(JMeterUtils.getResString("template_field")); //$NON-NLS-1$
-        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field")); //$NON-NLS-1$
         refNameField = new JLabeledTextField(JMeterUtils.getResString("ref_name_field")); //$NON-NLS-1$
         matchNumberField = new JLabeledTextField(JMeterUtils.getResString("match_num_field")); //$NON-NLS-1$
 
@@ -227,7 +234,31 @@ public class RegexExtractorGui extends AbstractPostProcessorGui {
         addField(panel, matchNumberField, gbc);
         resetContraints(gbc);
         gbc.weighty = 1;
-        addField(panel, defaultField, gbc);
+        
+        
+        defaultField = new JLabeledTextField(JMeterUtils.getResString("default_value_field")); //$NON-NLS-1$
+        List<JComponent> item = defaultField.getComponentList();
+        panel.add(item.get(0), gbc.clone());
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(item.get(1), BorderLayout.WEST);
+        emptyDefaultValue = new JCheckBox(JMeterUtils.getResString("assertion_regex_empty_default_value"));
+        emptyDefaultValue.addItemListener(new ItemListener() {
+            
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(emptyDefaultValue.isSelected()) {
+                    defaultField.setText("");
+                }
+                defaultField.setEnabled(!emptyDefaultValue.isSelected());
+            }
+        });
+        
+        p.add(emptyDefaultValue, BorderLayout.CENTER);
+        gbc.gridx++;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(p, gbc.clone());
+        
         return panel;
     }
 
