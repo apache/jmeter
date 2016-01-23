@@ -65,6 +65,24 @@ public class TestRegexExtractor extends TestCase {
             jmctx.setPreviousResult(result);
         }
 
+        public void testEmptyDefaultVariable() throws Exception {
+            extractor.setRegex("<value name=\"positioncount\">(.+?)</value>");
+            extractor.setTemplate("$1$");
+            extractor.setMatchNumber(1);
+            extractor.setDefaultEmptyValue(true);
+            extractor.process();
+            assertEquals("", vars.get("regVal"));
+        }
+        
+        public void testNotEmptyDefaultVariable() throws Exception {
+            extractor.setRegex("<value name=\"positioncount\">(.+?)</value>");
+            extractor.setTemplate("$1$");
+            extractor.setMatchNumber(1);
+            extractor.setDefaultEmptyValue(false);
+            extractor.process();
+            assertNull(vars.get("regVal"));
+        }
+        
         public void testVariableExtraction0() throws Exception {
             extractor.setRegex("<(value) field=\"");
             extractor.setTemplate("$1$");
