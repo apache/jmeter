@@ -232,9 +232,9 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 
     /**
      * Add values from the clipboard.
-     * The clipboard is first split into lines, and the lines are then split on ':'
+     * The clipboard is first split into lines, and the lines are then split on ':' or '\t'
      * to produce the header name and value.
-     * Lines without a ':' are ignored.
+     * Lines without a ':' are tested with '\t' and ignored if not found.
      */
     protected void addFromClipboard() {
         GuiUtils.stopTableEditing(this.headerTable);
@@ -247,6 +247,10 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             String[] clipboardLines = clipboardContent.split("\n"); // $NON-NLS-1$
             for (String clipboardLine : clipboardLines) {
                 int index = clipboardLine.indexOf(":"); // $NON-NLS-1$
+                if(index < 0) {
+                    // when pasting from another header panel the values are separated with '\t'
+                    index = clipboardLine.indexOf("\t");
+                }
                 if (index > 0) {
                     Header header = new Header(clipboardLine.substring(0, index), clipboardLine.substring(index+1));
                     headerManager.add(header);
