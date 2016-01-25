@@ -34,6 +34,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -66,8 +67,12 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     
     private static final long serialVersionUID = 233L;
 
-    private String cacheKey = ""; // If not empty then script in ScriptText will be compiled and cached
-
+    /** If not empty then script in ScriptText will be compiled and cached */
+    private String cacheKey = "";
+    
+    /** md5 of the script, used as an unique key for the cache */
+    private String scriptMd5 = null;
+    
     /**
      * Cache of compiled scripts
      */
@@ -182,21 +187,20 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             }  else {
                 throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
             }
-        } else if (!StringUtils.isEmpty(getScript())){
+        } else if (!StringUtils.isEmpty(getScript())) {
             if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
-                CompiledScript compiledScript = 
-                        compiledScriptsCache.get(cacheKey);
-                if (compiledScript==null) {
+                computeScriptMD5();
+                CompiledScript compiledScript = compiledScriptsCache.get(this.scriptMd5);
+                if (compiledScript == null) {
                     synchronized (compiledScriptsCache) {
-                        compiledScript = 
-                                compiledScriptsCache.get(cacheKey);
-                        if (compiledScript==null) {
-                            compiledScript = 
-                                    ((Compilable) scriptEngine).compile(getScript());
-                            compiledScriptsCache.put(cacheKey, compiledScript);
+                        compiledScript = compiledScriptsCache.get(this.scriptMd5);
+                        if (compiledScript == null) {
+                            compiledScript = ((Compilable) scriptEngine).compile(getScript());
+                            compiledScriptsCache.put(this.scriptMd5, compiledScript);
                         }
                     }
                 }
+                
                 return compiledScript.eval(bindings);
             } else {
                 return scriptEngine.eval(getScript(), bindings);
@@ -206,6 +210,15 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         }
     }
 
+    /**
+     * compute MD5 if it is null
+     */
+    private void computeScriptMD5() {
+        // compute the md5 of the script if needed
+        if(scriptMd5 == null) {
+            scriptMd5 = DigestUtils.md5Hex(getScript());
+        }
+    }
 
     /**
      * @return the cacheKey
@@ -251,7 +264,9 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     @Override
     public void testEnded(String host) {
         compiledScriptsCache.clear();
+        this.scriptMd5 = null;
     }
+    
     public String getScriptLanguage() {
         return scriptLanguage;
     }
