@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -407,12 +408,20 @@ public class AssertionGui extends AbstractAssertionGui {
     private class ClearPatternsListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            int index = stringTable.getSelectedRow();
-            if (index > -1) {
-                stringTable.getCellEditor(index, stringTable.getSelectedColumn()).cancelCellEditing();
-                tableModel.removeRow(index);
+            if (stringTable.isEditing()) {
+                TableCellEditor cellEditor = stringTable.getCellEditor(stringTable.getEditingRow(), stringTable.getEditingColumn());
+                cellEditor.cancelCellEditing();
+            }
+            
+            int[] rowsSelected = stringTable.getSelectedRows();
+            stringTable.clearSelection();
+            if (rowsSelected.length > 0) {
+                for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                    tableModel.removeRow(rowsSelected[i]);
+                }
                 tableModel.fireTableDataChanged();
             }
+
             if (stringTable.getModel().getRowCount() == 0) {
                 deletePattern.setEnabled(false);
             }
