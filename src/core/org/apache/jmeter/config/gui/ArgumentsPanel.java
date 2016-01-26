@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
@@ -258,7 +260,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 tableModel.addRow(arg);
             }
         }
-        checkDeleteStatus();
+        checkButtonsStatus();
     }
 
     /**
@@ -384,7 +386,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     private void moveDown() {
         //get the selected rows before stopping editing
-        // or the selected will be unselected
+        // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
         
@@ -397,7 +399,40 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
             }
+            
+            scrollToRowIfNotVisible(rowsSelected[0]+1);
         }
+    }
+
+    
+    /**
+     * ensure that a row is visible in the viewport
+     * @param rowIndx row index
+     */
+    private void scrollToRowIfNotVisible(int rowIndx) {
+        if(table.getParent() instanceof JViewport) {
+            Rectangle visibleRect = table.getVisibleRect();
+            final int cellIndex = 0;
+            Rectangle cellRect = table.getCellRect(rowIndx, cellIndex, false);
+            if (visibleRect.y > cellRect.y) {
+                table.scrollRectToVisible(cellRect);
+            } else {
+                Rectangle rect2 = table.getCellRect(rowIndx + getNumberOfVisibleRows(table), cellIndex, true);
+                int width = rect2.y - cellRect.y;
+                table.scrollRectToVisible(new Rectangle(cellRect.x, cellRect.y, cellRect.width, cellRect.height + width));
+            }
+        }
+    }
+    
+    /**
+     * @param table {@link JTable}
+     * @return number of visible rows
+     */
+    private static int getNumberOfVisibleRows(JTable table) {
+        Rectangle vr = table.getVisibleRect();
+        int first = table.rowAtPoint(vr.getLocation());
+        vr.translate(0, vr.height);
+        return table.rowAtPoint(vr.getLocation()) - first;
     }
 
     /**
@@ -405,7 +440,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     private void moveUp() {
         //get the selected rows before stopping editing
-        // or the selected will be unselected
+        // or the selected rows will be unselected
         int[] rowsSelected = table.getSelectedRows();
         GuiUtils.stopTableEditing(table);
         
@@ -414,9 +449,12 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
             for (int rowSelected : rowsSelected) {
                 tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
             }
+            
             for (int rowSelected : rowsSelected) {
                 table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
             }
+            
+            scrollToRowIfNotVisible(rowsSelected[0]-1);
         }
     }
 
