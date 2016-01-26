@@ -438,7 +438,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
             }
             
-            scrollToRowIfNotVisible(rowsSelected[0]-11);
+            scrollToRowIfNotVisible(rowsSelected[0]-1);
         }
     }
 
