@@ -18,10 +18,16 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.GraphicsEnvironment;
+
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 public final class TestMenuFactory extends JMeterTestCase {
 
+    private static final Logger log = LoggingManager.getLoggerForClass();
+    
         public TestMenuFactory() {
             super();
         }
@@ -35,6 +41,11 @@ public final class TestMenuFactory extends JMeterTestCase {
         }
 
         public void testMenu() throws Exception {
+            if(GraphicsEnvironment.isHeadless()) {
+                System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
+                log.warn("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
+                return;
+            }
             check("menumap", MenuFactory.menuMap_size());
 
             check("assertions", MenuFactory.assertions_size());
