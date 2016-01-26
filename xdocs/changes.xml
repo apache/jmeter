@@ -102,6 +102,7 @@ Summary
     <li><bug>58852</bug>Use less memory for <code>PUT</code> requests. The uploaded data will no longer be stored in the Sampler.
         This is the same behaviour as with <code>POST</code> requests.</li>
     <li><bug>58860</bug>HTTP Request : Add automatic variable generation in HTTP parameters table by right click. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>58923</bug>normalize URIs when downloading embedded resources.</li>
 </ul>
 
 <h3>Other samplers</h3>
