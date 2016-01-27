@@ -139,10 +139,9 @@
                                         <i class="fa fa-wrench"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-user">
-                                        <li><a href="#responseTimePercentiles" onClick="checkAll('choicesResponseTimePercentiles');">Display all samples</a>
-                                        </li>
-                                        <li><a href="#responseTimePercentiles" onClick="uncheckAll('choicesResponseTimePercentiles');">Hide all samples</a>
-                                        </li>
+                                        <li><a href="#responseTimePercentiles" onClick="checkAll('choicesResponseTimePercentiles');">Display all samples</a></li>
+                                        <li><a href="#responseTimePercentiles" onClick="uncheckAll('choicesResponseTimePercentiles');">Hide all samples</a></li>
+                                        <li><a href="#responseTimePercentiles" onclick="exportToPNG('flotResponseTimePercentiles', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePercentiles" aria-expanded="true" aria-controls="bodyResponseTimePercentiles">
                                         <i class="fa fa-chevron-up"></i>
@@ -190,6 +189,7 @@
                                         </li>
                                         <li><a href="#activeThreadsOverTime" onClick="uncheckAll('choicesActiveThreadsOverTime');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#activeThreadsOverTime" onclick="exportToPNG('flotActiveThreadsOverTime', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">
                                         <i class="fa fa-chevron-down"></i>
@@ -236,6 +236,7 @@
                                         </li>
                                         <li><a href="#timeVsThreads" onClick="uncheckAll('choicesTimeVsThreads');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#timeVsThreads" onclick="exportToPNG('flotTimeVsThreads', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyTimeVsThreads" aria-expanded="true" aria-controls="bodyTimeVsThreads">
                                         <i class="fa fa-chevron-down"></i>
@@ -280,6 +281,7 @@
                                         </li>
                                         <li><a href="#responseTimeDistribution" onClick="uncheckAll('choicesResponseTimeDistribution');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#responseTimeDistribution" onclick="exportToPNG('flotResponseTimeDistribution', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeDistribution" aria-expanded="true" aria-controls="bodyResponseTimeDistribution">
                                         <i class="fa fa-chevron-down"></i>
@@ -323,6 +325,7 @@
                                         </li>
                                         <li><a href="#responseTimePerSample" onClick="uncheckAll('choicesResponseTimePerSample');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#responseTimePerSample" onclick="exportToPNG('flotResponseTimePerSample', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimePerSample" aria-expanded="true" aria-controls="bodyResponseTimePerSample">
                                         <i class="fa fa-chevron-down"></i>
@@ -374,6 +377,7 @@
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.pie.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.resize.js"></script>
+    <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.canvas.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.navigate.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.time.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.selection.js"></script>
@@ -391,7 +395,6 @@
     <script src="../js/jquery.cookie.js"></script>
 
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.symbol.js"></script>
-
 </body>
 
 </html>
