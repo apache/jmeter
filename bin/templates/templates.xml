@@ -44,29 +44,6 @@
         ]]></description>
     </template>
     <template isTestPlan="true">
-        <name>Recording With Think Time</name>
-        <fileName>/bin/templates/recording-with-think-time.jmx</fileName>
-        <description><![CDATA[
-        <h1>Template showing how to record with think time</h1>
-        <h2>JMeter Configuration</h2>
-            <ul>
-                <li>JMeter Server Proxy port is set to 8888, you may want to change this</li>
-            </ul>
-        <h2>Browser Configuration</h2>
-        <p>Configure your browser so that it uses the JMeter proxy, set:
-            <ul>
-                <li>the host of the machine that runs JMeter</li>
-                <li>the port you setup in JMeter Server Proxy</li>
-            </ul>
-        </p>
-        <h2>Useful links</h2>
-            <ul>
-                <li><a href="http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf" >http://jmeter.apache.org/usermanual/jmeter_proxy_step_by_step.pdf</a></li>
-                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server" >http://jmeter.apache.org/usermanual/component_reference.html#HTTP_Proxy_Server</a></li>
-            </ul>       
-        ]]></description>
-    </template>
-    <template isTestPlan="true">
         <name>JDBC Load Test</name>
         <fileName>jdbc.jmx</fileName>
         <description>
@@ -105,7 +82,7 @@
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
         <h2>JMeter Configuration</h2>
             <ul>
-                <li>Download groovy from <a href="http://groovy-lang.org/download.html" >Groovy Download</a></li>
+                <li>Download groovy from <a href="http://groovy.codehaus.org/Download" >Groovy Download</a></li>
                 <li>Add the groovy-all-XXX.jar in jmeter/lib folder, it is usually located in embeddable folder</li>
                 <li>Restart JMeter</li>
                 <li>Configure the <b>Server address list</b>, and tune <b>MongoDB options</b> in MongoDB Source Config</li>
@@ -132,6 +109,23 @@
         <h2>Useful link</h2>
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-web-test-plan.html" >http://jmeter.apache.org/usermanual/build-web-test-plan.html</a></li>
+            </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="true">
+        <name>Building an Advanced Web Test Plan</name>
+        <fileName>/bin/templates/build-adv-web-test-plan.jmx</fileName>
+        <description><![CDATA[
+        <h1>Test plan from Building an advanced Web Test Plan section in user's manual</h1>
+        <h2>Configuration</h2>
+        <p>In order to run the login sample inside plan, create a CSV file following description in <b>loginData</b> sample and put it in a folder of your choice then test running JMeter with:<br/>
+            <ul>
+                <li><b>jmeter -Jresources_folder=FOLDER TO CHANGE</b></li>
+            </ul>
+        </p>
+        <h2>Useful link</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/build-adv-web-test-plan.html" >http://jmeter.apache.org/usermanual/build-adv-web-test-plan.html</a></li>
             </ul>       
         ]]></description>
     </template>
