@@ -56,13 +56,10 @@ public final class ClassFinder {
     }
 
     /**
-     * Filter updates to TreeSet by only storing classes
+     * Filter updates by only storing classes
      * that extend one of the parent classes
-     *
-     *
      */
-    private static class FilterTreeSet extends TreeSet<String>{
-        private static final long serialVersionUID = 234L;
+    private static class ExtendsClassFilter implements ClassFilter {
 
         private final Class<?>[] parents; // parent classes to check
         private final boolean inner; // are inner classes OK?
@@ -75,73 +72,50 @@ public final class ClassFinder {
         private final transient ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
 
-        FilterTreeSet(Class<?> []parents, boolean inner, String contains, String notContains){
-            super();
-            this.parents=parents;
-            this.inner=inner;
-            this.contains=contains;
-            this.notContains=notContains;
+        ExtendsClassFilter(Class<?> []parents, boolean inner, String contains, String notContains){
+            this.parents = parents;
+            this.inner = inner;
+            this.contains = contains;
+            this.notContains = notContains;
         }
 
-        /**
-         * Override the superclass so we only add classnames that
-         * meet the criteria.
-         *
-         * @param s - classname (must be a String)
-         * @return true if it is a new entry
-         *
-         * @see java.util.TreeSet#add(java.lang.Object)
-         */
         @Override
-        public boolean add(String s){
-            if (contains(s)) {
-                return false;// No need to check it again
-            }
-            if (contains!=null && s.indexOf(contains) == -1){
+        public boolean accept(String className) {
+            
+            if (contains!=null && className.indexOf(contains) == -1){
                 return false; // It does not contain a required string
             }
-            if (notContains!=null && s.indexOf(notContains) != -1){
+            if (notContains!=null && className.indexOf(notContains) != -1){
                 return false; // It contains a banned string
             }
-            if ((s.indexOf('$') == -1) || inner) { // $NON-NLS-1$
-                if (isChildOf(parents,s, contextClassLoader)) {
-                    return super.add(s);
+            if ((className.indexOf('$') == -1) || inner) { // $NON-NLS-1$
+                if (isChildOf(parents,className, contextClassLoader)) {
+                    return true;
                 }
             }
             return false;
         }
     }
 
-    private static class AnnoFilterTreeSet extends TreeSet<String>{
-        private static final long serialVersionUID = 240L;
-
+    
+    private static class AnnoClassFilter implements ClassFilter {
+        
         private final boolean inner; // are inner classes OK?
 
         private final Class<? extends Annotation>[] annotations; // annotation classes to check
         private final transient ClassLoader contextClassLoader
             = Thread.currentThread().getContextClassLoader(); // Potentially expensive; do it once
-        AnnoFilterTreeSet(Class<? extends Annotation> []annotations, boolean inner){
-            super();
+        
+        AnnoClassFilter(Class<? extends Annotation> []annotations, boolean inner){
             this.annotations = annotations;
-            this.inner=inner;
+            this.inner = inner;
         }
-        /**
-         * Override the superclass so we only add classnames that
-         * meet the criteria.
-         *
-         * @param s - classname (must be a String)
-         * @return true if it is a new entry
-         *
-         * @see java.util.TreeSet#add(java.lang.Object)
-         */
+        
         @Override
-        public boolean add(String s){
-            if (contains(s)) {
-                return false;// No need to check it again
-            }
-            if ((s.indexOf('$') == -1) || inner) { // $NON-NLS-1$
-                if (hasAnnotationOnMethod(annotations,s, contextClassLoader)) {
-                    return super.add(s);
+        public boolean accept(String className) {
+            if ((className.indexOf('$') == -1) || inner) { // $NON-NLS-1$
+                if (hasAnnotationOnMethod(annotations,className, contextClassLoader)) {
+                    return true;
                 }
             }
             return false;
@@ -276,12 +250,31 @@ public final class ClassFinder {
             log.debug("contains: " + contains + " notContains: " + notContains);
         }
 
+        
+        ClassFilter filter = null;
+        if(annotations) {
+            @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
+            final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
+            filter = new AnnoClassFilter(annoclassNames, innerClasses);
+        }
+        else {
+            filter = new ExtendsClassFilter(classNames, innerClasses, contains, notContains);
+        }
+        
+        return findClasses(searchPathsOrJars, filter);
+    }
+    
+    public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException  {
+        if (log.isDebugEnabled()) {
+            log.debug("searchPathsOrJars : " + Arrays.toString(searchPathsOrJars));
+        }
+    
         // Find all jars in the search path
         String[] strPathsOrJars = addJarsInPath(searchPathsOrJars);
         for (int k = 0; k < strPathsOrJars.length; k++) {
             strPathsOrJars[k] = fixPathEntry(strPathsOrJars[k]);
         }
-
+    
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
         if (log.isDebugEnabled()) {
@@ -289,16 +282,13 @@ public final class ClassFinder {
                 log.debug("listPaths : " + path);
             }
         }
-
-        @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
-        final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
-        Set<String> listClasses =
-            annotations ?
-                new AnnoFilterTreeSet(annoclassNames, innerClasses)
-                :
-                new FilterTreeSet(classNames, innerClasses, contains, notContains);
+    
+        Set<String> listClasses = new TreeSet<>();
         // first get all the classes
-        findClassesInPaths(listPaths, listClasses);
+        for (String path : listPaths) {
+            findClassesInOnePath(path, listClasses, filter);
+        }
+        
         if (log.isDebugEnabled()) {
             log.debug("listClasses.size()="+listClasses.size());
             for (String clazz : listClasses) {
@@ -440,10 +430,11 @@ public final class ClassFinder {
         return strClassName;
     }
 
-    private static void findClassesInOnePath(String strPath, Set<String> listClasses) throws IOException {
+    
+    private static void findClassesInOnePath(String strPath, Set<String> listClasses, ClassFilter filter) throws IOException {
         File file = new File(strPath);
         if (file.isDirectory()) {
-            findClassesInPathsDir(strPath, file, listClasses);
+            findClassesInPathsDir(strPath, file, listClasses, filter);
         } else if (file.exists()) {
             ZipFile zipFile = null;
             try {
@@ -452,7 +443,10 @@ public final class ClassFinder {
                 while (entries.hasMoreElements()) {
                     String strEntry = entries.nextElement().toString();
                     if (strEntry.endsWith(DOT_CLASS)) {
-                        listClasses.add(fixClassName(strEntry));
+                        String fixedClassName = fixClassName(strEntry);
+                        if(filter.accept(fixedClassName)) {
+                            listClasses.add(fixedClassName);
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -466,29 +460,30 @@ public final class ClassFinder {
         }
     }
 
-    private static void findClassesInPaths(List<String> listPaths, Set<String> listClasses) throws IOException {
-        for (String path : listPaths) {
-            findClassesInOnePath(path, listClasses);
-        }
-    }
 
-    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses) throws IOException {
+    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
         String[] list = dir.list();
-        if(list==null) {
+        if(list == null) {
             log.warn(dir.getAbsolutePath()+" is not a folder");
             return;
         }
+        
         for (String aList : list) {
             File file = new File(dir, aList);
             if (file.isDirectory()) {
                 // Recursive call
-                findClassesInPathsDir(strPathElement, file, listClasses);
-            } else if (aList.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
+                findClassesInPathsDir(strPathElement, file, listClasses, filter);
+            }
+            else if (aList.endsWith(DOT_CLASS) && file.exists() && (file.length() != 0)) {
                 final String path = file.getPath();
-                listClasses.add(path.substring(strPathElement.length() + 1,
+                String className = path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$
-                        .replace(File.separator.charAt(0), '.')); // $NON-NLS-1$
+                        .replace(File.separator.charAt(0), '.');// $NON-NLS-1$
+                if(filter.accept(className)) {
+                    listClasses.add(className);
+                }
             }
         }
     }
+    
 }
