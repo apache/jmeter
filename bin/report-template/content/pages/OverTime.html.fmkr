@@ -68,14 +68,13 @@
                                     <a href="OverTime.html">Over Time<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level in" id="submenu">
                                         <li>
-                                            <a href="OverTime.html#bytesThroughputOverTime" onclick="$('#bodyBytesThroughputOverTime').collapse('show');">
-                                                Bytes Throughput Over Time
-                                            </a>
-                                        </li>
-
-                                        <li>
                                             <a href="OverTime.html#responseTimesOverTime" onclick="$('#bodyResponseTimeOverTime').collapse('show');">
                                                 Response Times Over Time
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="OverTime.html#bytesThroughputOverTime" onclick="$('#bodyBytesThroughputOverTime').collapse('show');">
+                                                Bytes Throughput Over Time
                                             </a>
                                         </li>
                                         <li>
@@ -156,6 +155,7 @@
                                         </li>
                                         <li><a href="#bodyResponseTimeOverTime" onClick="uncheckAll('choicesResponseTimesOverTime');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#bodyResponseTimeOverTime" onclick="exportToPNG('flotResponseTimesOverTime', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyResponseTimeOverTime" aria-expanded="true" aria-controls="bodyResponseTimeOverTime">
                                         <i class="fa fa-chevron-up"></i>
@@ -202,6 +202,7 @@
                                         </li>
                                         <li><a href="#bytesThroughputOverTime" onClick="uncheckAll('choicesBytesThroughputOverTime');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#bytesThroughputOverTime" onclick="exportToPNG('flotBytesThroughputOverTime', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyBytesThroughputOverTime" aria-expanded="true" aria-controls="bodyBytesThroughputOverTime">
                                         <i class="fa fa-chevron-down"></i>
@@ -249,6 +250,7 @@
                                         </li>
                                         <li><a href="#latenciesOverTime" onClick="uncheckAll('choicesLatenciesOverTime');">Hide all samples</a>
                                         </li>
+                                        <li><a href="#latenciesOverTime" onclick="exportToPNG('flotLatenciesOverTime', this);">Save as PNG</a></li>
                                     </ul>
                                     <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">
                                         <i class="fa fa-chevron-down"></i>
@@ -302,6 +304,7 @@
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.pie.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.resize.js"></script>
+    <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.canvas.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.time.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.selection.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
