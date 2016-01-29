@@ -1366,8 +1366,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
             if (!escapedUrl.equals(url)) {
-                log.warn("Url '" + url + "' has been escaped to '" + escapedUrl
+                if(log.isDebugEnabled()) {
+                    log.debug("Url '" + url + "' has been escaped to '" + escapedUrl
                         + "'. Please corect your webpage.");
+                }
             }
             return escapedUrl;
         } catch (Exception e1) {
