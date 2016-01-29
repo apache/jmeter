@@ -37,22 +37,21 @@ import org.apache.jorphan.reflect.ClassFilter;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.junit.runner.JUnitCore;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestResult;
 import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 /**
- * Provides a quick and easy way to run all <a
- * href="http://junit.sourceforge.net">junit</a> unit tests in your java
- * project. It will find all unit test classes and run all their test methods.
+ * Provides a quick and easy way to run all <a href="http://http://junit.org">junit</a> 
+ * unit tests in your java project. 
+ * It will find all unit test classes and run all their test methods.
  * There is no need to configure it in any way to find these classes except to
  * give it a path to search.
  * <p>
  * Here is an example Ant target (See Ant at <a
- * href="http://jakarta.apache.org/ant">Apache</a>) that runs all your unit
+ * href="http://ant.apache.org">Apache Ant</a>) that runs all your unit
  * tests:
  * 
  * <pre>
@@ -188,14 +187,13 @@ public final class AllTests {
         logprop("java.awt.graphicsenv", true);
         
         System.out.println("------------");
-        System.out.println("Creating test suite");
-        TestSuite suite = suite(args[0]);
-       
-        int countTestCases = suite.countTestCases();
-        System.out.println("Starting test run, test count = "+countTestCases);
-        TestResult result = TestRunner.run(suite);
-        
-        System.exit(result.wasSuccessful() ? 0 : 1); // this is needed because the test may start the AWT EventQueue thread which is not a daemon.
+        try {
+            System.out.println("Searching junit tests in:"+args[0]);
+            List<String> tests = findJMeterJUnitTests(args[0]);
+            JUnitCore.main(tests.toArray(new String[0]));
+        } catch (IOException e) {
+            System.exit(1);
+        }
     }
 
     /**
@@ -258,6 +256,7 @@ public final class AllTests {
      * run directly under JUnit, rather than using the startup code in the rest
      * of the module. No parameters can be passed in, so it is less flexible.
      */
+    @Deprecated
     public static TestSuite suite() {
         String args[] = { "../lib/ext", "./testfiles/jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
 
@@ -270,6 +269,7 @@ public final class AllTests {
      * 
      * @return The test suite
      */
+    @Deprecated
     private static TestSuite suite(String searchPaths) {
         TestSuite suite = new TestSuite("All Tests");
         System.out.println("Scanning "+searchPaths+ " for test cases");
