@@ -1368,7 +1368,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if (!escapedUrl.equals(url)) {
                 if(log.isDebugEnabled()) {
                     log.debug("Url '" + url + "' has been escaped to '" + escapedUrl
-                        + "'. Please corect your webpage.");
+                        + "'. Please correct your webpage.");
                 }
             }
             return escapedUrl;
@@ -1414,7 +1414,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         if(!IGNORE_FAILED_EMBEDDED_RESOURCES) {
             res.setSuccessful(initialValue);
             if(!initialValue) {
-                res.setResponseMessage("Embedded resource download error"); //$NON-NLS-1$
+                StringBuilder detailedMessage = new StringBuilder(80);
+                detailedMessage.append("Embedded resource download error:"); //$NON-NLS-1$
+                for (SampleResult subResult : res.getSubResults()) {
+                    HTTPSampleResult httpSampleResult = (HTTPSampleResult) subResult;
+                    if(!httpSampleResult.isSuccessful()) {
+                        detailedMessage.append(httpSampleResult.getURL())
+                        .append(" code:") //$NON-NLS-1$
+                        .append(httpSampleResult.getResponseCode())
+                        .append(" message:") //$NON-NLS-1$
+                        .append(httpSampleResult.getResponseMessage())
+                        .append(", "); //$NON-NLS-1$
+                    }
+                }
+                res.setResponseMessage(detailedMessage.toString()); //$NON-NLS-1$
             }
         }
     }
