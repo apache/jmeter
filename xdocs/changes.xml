@@ -240,6 +240,7 @@ Summary
     <li><bug>58209</bug>JMeter hang when testing javasampler because HashMap.put() is called from multiple threads without sync.</li>
     <li><bug>58301</bug>Use typed methods such as setInt, setDouble, setDate ... for prepared statement #27</li>
     <li><bug>58851</bug>Add a dependency to hamcrest-core to allow JUnit tests with annotations to work</li>
+    <li><bug>58947</bug>Connect metric is wrong when ConnectException occurs</li>
 </ul>
 
 <h3>Controllers</h3>
