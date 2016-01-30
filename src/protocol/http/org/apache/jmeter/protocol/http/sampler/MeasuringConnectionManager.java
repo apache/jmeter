@@ -106,9 +106,12 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
         @Override
         public void open(HttpRoute route, HttpContext context, HttpParams params) throws IOException {
-            handler.open(route, context, params);
-            if (sample != null) {
-                sample.connectEnd();
+            try {
+                handler.open(route, context, params);
+            } finally {
+                if (sample != null) {
+                    sample.connectEnd();
+                }
             }
         }
 
