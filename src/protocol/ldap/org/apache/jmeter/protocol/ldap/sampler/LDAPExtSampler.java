@@ -192,7 +192,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      * @return The username
      **************************************************************************/
-
     public String getUserDN() {
         return getPropertyAsString(USERDN);
     }
@@ -203,7 +202,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * @param newUserDN
      *            distinguished name of the user
      **************************************************************************/
-
     public void setUserDN(String newUserDN) {
         setProperty(new StringProperty(USERDN, newUserDN));
     }
@@ -213,7 +211,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      * @return The password
      **************************************************************************/
-
     public String getUserPw() {
         return getPropertyAsString(USERPW);
     }
@@ -224,7 +221,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * @param newUserPw
      *            password of the user
      **************************************************************************/
-
     public void setUserPw(String newUserPw) {
         setProperty(new StringProperty(USERPW, newUserPw));
     }
@@ -264,7 +260,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      *
      * @return The Port value
      **************************************************************************/
-
     public String getPort() {
         return getPropertyAsString(PORT);
     }
