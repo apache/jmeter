@@ -288,36 +288,21 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      * This will create the servername panel in the LdapConfigGui.
      */
     private JPanel createServernamePanel() {
-        JPanel serverPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("servername")); // $NON-NLS-1$
-        label.setLabelFor(servername);
-        serverPanel.add(label, BorderLayout.WEST);
-        serverPanel.add(servername, BorderLayout.CENTER);
-        return serverPanel;
+        return createLabelPanel("servername", servername);
     }
 
     /**
      * This will create the port panel in the LdapConfigGui.
      */
     private JPanel createPortPanel() {
-        JPanel portPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
-        label.setLabelFor(port);
-        portPanel.add(label, BorderLayout.WEST);
-        portPanel.add(port, BorderLayout.CENTER);
-        return portPanel;
+        return createLabelPanel("port", port);
     }
 
     /**
      * This will create the Root distinguised name panel in the LdapConfigGui.
      */
     private JPanel createRootdnPanel() {
-        JPanel rootdnPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("dn")); // $NON-NLS-1$
-        label.setLabelFor(rootdn);
-        rootdnPanel.add(label, BorderLayout.WEST);
-        rootdnPanel.add(rootdn, BorderLayout.CENTER);
-        return rootdnPanel;
+        return createLabelPanel("dn", rootdn);
     }
 
     /**
@@ -325,18 +310,8 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     private JPanel createSearchPanel() {
         VerticalPanel searchPanel = new VerticalPanel();
-        JPanel searchBPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("search_base")); // $NON-NLS-1$
-        label.setLabelFor(searchbase);
-        searchBPanel.add(label, BorderLayout.WEST);
-        searchBPanel.add(searchbase, BorderLayout.CENTER);
-        JPanel searchFPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label2 = new JLabel(JMeterUtils.getResString("search_filter")); // $NON-NLS-1$
-        label2.setLabelFor(searchfilter);
-        searchFPanel.add(label2, BorderLayout.WEST);
-        searchFPanel.add(searchfilter, BorderLayout.CENTER);
-        searchPanel.add(searchBPanel);
-        searchPanel.add(searchFPanel);
+        searchPanel.add(createLabelPanel("search_base", searchbase));
+        searchPanel.add(createLabelPanel("search_filter", searchfilter));
         return searchPanel;
     }
 
@@ -345,12 +320,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     private JPanel createDeletePanel() {
         VerticalPanel panel = new VerticalPanel();
-        JPanel deletePanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("delete")); // $NON-NLS-1$
-        label.setLabelFor(delete);
-        deletePanel.add(label, BorderLayout.WEST);
-        deletePanel.add(delete, BorderLayout.CENTER);
-        panel.add(deletePanel);
+        panel.add(createLabelPanel("delete", delete));
         return panel;
     }
 
@@ -359,14 +329,28 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     private JPanel createAddPanel() {
         JPanel addPanel = new JPanel(new BorderLayout(5, 0));
-        JPanel addInnerPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("entry_dn")); // $NON-NLS-1$
-        label.setLabelFor(add);
-        addInnerPanel.add(label, BorderLayout.WEST);
-        addInnerPanel.add(add, BorderLayout.CENTER);
-        addPanel.add(addInnerPanel, BorderLayout.NORTH);
+        addPanel.add(createLabelPanel("entry_dn", add), BorderLayout.NORTH);
         addPanel.add(tableAddPanel, BorderLayout.CENTER);
         return addPanel;
+    }
+
+    /**
+     * Create a panel with the text field and a label
+     * 
+     * @param key
+     *            to look up the label by using
+     *            {@link JMeterUtils#getResString(String)}
+     * @param field
+     *            text field to display
+     * @return newly created panel
+     */
+    private JPanel createLabelPanel(String key, JTextField field) {
+        JPanel addInnerPanel = new JPanel(new BorderLayout(5, 0));
+        JLabel label = new JLabel(JMeterUtils.getResString(key)); // $NON-NLS-1$
+        label.setLabelFor(field);
+        addInnerPanel.add(label, BorderLayout.WEST);
+        addInnerPanel.add(field, BorderLayout.CENTER);
+        return addInnerPanel;
     }
 
     /**
@@ -374,12 +358,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     private JPanel createModifyPanel() {
         JPanel modifyPanel = new JPanel(new BorderLayout(5, 0));
-        JPanel modifyInnerPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("entry_dn")); // $NON-NLS-1$
-        label.setLabelFor(modify);
-        modifyInnerPanel.add(label, BorderLayout.WEST);
-        modifyInnerPanel.add(modify, BorderLayout.CENTER);
-        modifyPanel.add(modifyInnerPanel, BorderLayout.NORTH);
+        modifyPanel.add(createLabelPanel("entry_dn", modify), BorderLayout.NORTH);
         modifyPanel.add(tableModifyPanel, BorderLayout.CENTER);
         return modifyPanel;
     }
