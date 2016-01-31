@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
  *
  * author Michael Stover author Mark Walsh
  */
-
 public class LDAPArgument extends AbstractTestElement implements Serializable {
 
     private static final long serialVersionUID = 240L;
