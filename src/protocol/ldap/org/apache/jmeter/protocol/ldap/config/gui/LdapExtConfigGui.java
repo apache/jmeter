@@ -45,25 +45,18 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 
 /*******************************************************************************
+ * This class LdapConfigGui is user interface gui for getting all the
+ * configuration value from the user
+ *
  * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
  * company Siemens Netherlands N.V..
  *
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  ******************************************************************************/
-
-/*******************************************************************************
- * This class LdapConfigGui is user interface gui for getting all the
- * configuration value from the user
- ******************************************************************************/
-
 public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener {
 
     private static final long serialVersionUID = 240L;
-
-    // private static final String ROOTDN = "rootDn";
-    // private static final String TEST = "tesT";
-    // private static String testValue="NNNN";
 
     private JTextField rootdn = new JTextField(20);
 
@@ -177,10 +170,10 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     }
 
     /***************************************************************************
-     * !ToDo (Constructor description)
-     *
+     * Constructor for LdapExtConfigGui
+     * 
      * @param displayName
-     *            !ToDo (Parameter description)
+     *            flag, whether to show the display name of the component.
      **************************************************************************/
     public LdapExtConfigGui(boolean displayName) {
         this.displayName = displayName;
@@ -207,15 +200,15 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         servername.setText(element.getPropertyAsString(LDAPExtSampler.SERVERNAME));
         port.setText(element.getPropertyAsString(LDAPExtSampler.PORT));
         rootdn.setText(element.getPropertyAsString(LDAPExtSampler.ROOTDN));
-           scope.setSelectedIndex(element.getPropertyAsInt(LDAPExtSampler.SCOPE));
+        scope.setSelectedIndex(element.getPropertyAsInt(LDAPExtSampler.SCOPE));
         countlim.setText(element.getPropertyAsString(LDAPExtSampler.COUNTLIM));
         timelim.setText(element.getPropertyAsString(LDAPExtSampler.TIMELIM));
         attribs.setText(element.getPropertyAsString(LDAPExtSampler.ATTRIBS));
-           retobj.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.RETOBJ));
-           deref.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.DEREF));
+        retobj.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.RETOBJ));
+        deref.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.DEREF));
         connto.setText(element.getPropertyAsString(LDAPExtSampler.CONNTO));
-          parseflag.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.PARSEFLAG));
-           secure.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.SECURE));
+        parseflag.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.PARSEFLAG));
+        secure.setSelected(element.getPropertyAsBoolean(LDAPExtSampler.SECURE));
         userpw.setText(element.getPropertyAsString(LDAPExtSampler.USERPW));
         userdn.setText(element.getPropertyAsString(LDAPExtSampler.USERDN));
         comparedn.setText(element.getPropertyAsString(LDAPExtSampler.COMPAREDN));
@@ -452,26 +445,26 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
         bindPanel.add(createPortPanel());
         bindPanel.add(createRootdnPanel());
 
-        JPanel BPanel = new JPanel(new BorderLayout(5, 0));
-        JLabel Blabel0 = new JLabel(JMeterUtils.getResString("userdn")); // $NON-NLS-1$
-        Blabel0.setLabelFor(userdn);
-        BPanel.add(Blabel0, BorderLayout.WEST);
-        BPanel.add(userdn, BorderLayout.CENTER);
-        bindPanel.add(BPanel);
+        JPanel bPanel = new JPanel(new BorderLayout(5, 0));
+        JLabel blabel0 = new JLabel(JMeterUtils.getResString("userdn")); // $NON-NLS-1$
+        blabel0.setLabelFor(userdn);
+        bPanel.add(blabel0, BorderLayout.WEST);
+        bPanel.add(userdn, BorderLayout.CENTER);
+        bindPanel.add(bPanel);
 
-        JPanel B1Panel = new JPanel(new BorderLayout(5, 0));
-        JLabel Blabel1 = new JLabel(JMeterUtils.getResString("userpw")); // $NON-NLS-1$
-        Blabel1.setLabelFor(userpw);
-        B1Panel.add(Blabel1, BorderLayout.WEST);
-        B1Panel.add(userpw, BorderLayout.CENTER);
-        bindPanel.add(B1Panel);
+        JPanel b1Panel = new JPanel(new BorderLayout(5, 0));
+        JLabel blabel1 = new JLabel(JMeterUtils.getResString("userpw")); // $NON-NLS-1$
+        blabel1.setLabelFor(userpw);
+        b1Panel.add(blabel1, BorderLayout.WEST);
+        b1Panel.add(userpw, BorderLayout.CENTER);
+        bindPanel.add(b1Panel);
 
-        JPanel B2Panel = new JPanel(new BorderLayout(5, 0));
-        JLabel Blabel2 = new JLabel(JMeterUtils.getResString("ldap_connto")); // $NON-NLS-1$
-        Blabel2.setLabelFor(connto);
-        B2Panel.add(Blabel2, BorderLayout.WEST);
-        B2Panel.add(connto, BorderLayout.CENTER);
-        bindPanel.add(B2Panel);
+        JPanel b2Panel = new JPanel(new BorderLayout(5, 0));
+        JLabel blabel2 = new JLabel(JMeterUtils.getResString("ldap_connto")); // $NON-NLS-1$
+        blabel2.setLabelFor(connto);
+        b2Panel.add(blabel2, BorderLayout.WEST);
+        b2Panel.add(connto, BorderLayout.CENTER);
+        bindPanel.add(b2Panel);
 
         bindPanel.add(secure);
         return bindPanel;
@@ -503,36 +496,36 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
      * This will create the Search controls panel in the LdapConfigGui
      **************************************************************************/
     private JPanel createSCPanel() {
-        VerticalPanel SCPanel = new VerticalPanel();
+        VerticalPanel scPanel = new VerticalPanel();
 
-        SCPanel.add(scope);
+        scPanel.add(scope);
 
-        JPanel SC1Panel = new JPanel(new BorderLayout(5, 0));
+        JPanel sc1Panel = new JPanel(new BorderLayout(5, 0));
         JLabel label1 = new JLabel(JMeterUtils.getResString("countlim")); // $NON-NLS-1$
         label1.setLabelFor(countlim);
-        SC1Panel.add(label1, BorderLayout.WEST);
-        SC1Panel.add(countlim, BorderLayout.CENTER);
-        SCPanel.add(SC1Panel);
+        sc1Panel.add(label1, BorderLayout.WEST);
+        sc1Panel.add(countlim, BorderLayout.CENTER);
+        scPanel.add(sc1Panel);
 
-        JPanel SC2Panel = new JPanel(new BorderLayout(5, 0));
+        JPanel sc2Panel = new JPanel(new BorderLayout(5, 0));
         JLabel label2 = new JLabel(JMeterUtils.getResString("timelim")); // $NON-NLS-1$
         label2.setLabelFor(timelim);
-        SC2Panel.add(label2, BorderLayout.WEST);
-        SC2Panel.add(timelim, BorderLayout.CENTER);
-        SCPanel.add(SC2Panel);
+        sc2Panel.add(label2, BorderLayout.WEST);
+        sc2Panel.add(timelim, BorderLayout.CENTER);
+        scPanel.add(sc2Panel);
 
-        JPanel SC3Panel = new JPanel(new BorderLayout(5, 0));
+        JPanel sc3Panel = new JPanel(new BorderLayout(5, 0));
         JLabel label3 = new JLabel(JMeterUtils.getResString("attrs")); // $NON-NLS-1$
         label3.setLabelFor(attribs);
-        SC3Panel.add(label3, BorderLayout.WEST);
-        SC3Panel.add(attribs, BorderLayout.CENTER);
-        SCPanel.add(SC3Panel);
+        sc3Panel.add(label3, BorderLayout.WEST);
+        sc3Panel.add(attribs, BorderLayout.CENTER);
+        scPanel.add(sc3Panel);
 
-        SCPanel.add(retobj);
-        SCPanel.add(deref);
-        SCPanel.add(parseflag);
+        scPanel.add(retobj);
+        scPanel.add(deref);
+        scPanel.add(parseflag);
 
-        return SCPanel;
+        return scPanel;
     }
 
     /***************************************************************************
