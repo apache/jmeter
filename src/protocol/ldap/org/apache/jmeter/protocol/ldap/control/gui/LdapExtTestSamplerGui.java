@@ -36,14 +36,13 @@ import org.apache.jmeter.testelement.TestElement;
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  *
  ******************************************************************************/
-
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 
     private LdapExtConfigGui ldapDefaultPanel;
 
     /***************************************************************************
-     * !ToDo (Constructor description)
+     * Constructor that initialises the GUI components
      **************************************************************************/
     public LdapExtTestSamplerGui() {
         init();
