@@ -99,7 +99,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
     /**
      * Constructor which sets the displayName.
      *
-     * @param displayName name of the compnent
+     * @param displayName flag, whether to display the name of the component
      */
     public LdapConfigGui(boolean displayName) {
         this.displayName = displayName;
