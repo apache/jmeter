@@ -58,11 +58,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.XMLBuffer;
 import org.apache.log.Logger;
 
-/*******************************************************************************
+/**
  * Ldap Sampler class is main class for the LDAP test. This will control all the
  * test available in the LDAP Test.
- ******************************************************************************/
-
+ */
 public class LDAPExtSampler extends AbstractSampler implements TestStateListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -157,9 +156,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private static final int MAX_SORTED_RESULTS =
         JMeterUtils.getPropDefault("ldapsampler.max_sorted_results", 1000); // $NON-NLS-1$
 
-    /***************************************************************************
-     * !ToDo (Constructor description)
-     **************************************************************************/
     public LDAPExtSampler() {
     }
 
@@ -188,112 +184,111 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         setProperty(new StringProperty(PARSEFLAG, parseFlag));
     }
 
-    /***************************************************************************
+    /**
      * Gets the username attribute of the LDAP object
      *
      * @return The username
-     **************************************************************************/
-
+     */
     public String getUserDN() {
         return getPropertyAsString(USERDN);
     }
 
-    /***************************************************************************
+    /**
      * Sets the username attribute of the LDAP object
      *
      * @param newUserDN
      *            distinguished name of the user
-     **************************************************************************/
+     */
 
     public void setUserDN(String newUserDN) {
         setProperty(new StringProperty(USERDN, newUserDN));
     }
 
-    /***************************************************************************
+    /**
      * Gets the password attribute of the LDAP object
      *
      * @return The password
-     **************************************************************************/
+     */
 
     public String getUserPw() {
         return getPropertyAsString(USERPW);
     }
 
-    /***************************************************************************
+    /**
      * Sets the password attribute of the LDAP object
      *
      * @param newUserPw
      *            password of the user
-     **************************************************************************/
+     */
 
     public void setUserPw(String newUserPw) {
         setProperty(new StringProperty(USERPW, newUserPw));
     }
 
-    /***************************************************************************
+    /**
      * Sets the Servername attribute of the ServerConfig object
      *
      * @param servername
      *            The new servername value
-     **************************************************************************/
+     */
     public void setServername(String servername) {
         setProperty(new StringProperty(SERVERNAME, servername));
     }
 
-    /***************************************************************************
+    /**
      * Sets the Port attribute of the ServerConfig object
      *
      * @param port
      *            The new Port value
-     **************************************************************************/
+     */
     public void setPort(String port) {
         setProperty(new StringProperty(PORT, port));
     }
 
-    /***************************************************************************
+    /**
      * Gets the servername attribute of the LDAPSampler object
      *
      * @return The Servername value
-     **************************************************************************/
+     */
 
     public String getServername() {
         return getPropertyAsString(SERVERNAME);
     }
 
-    /***************************************************************************
+    /**
      * Gets the Port attribute of the LDAPSampler object
      *
      * @return The Port value
-     **************************************************************************/
+     */
 
     public String getPort() {
         return getPropertyAsString(PORT);
     }
 
-    /***************************************************************************
+    /**
      * Sets the Rootdn attribute of the LDAPSampler object
      *
      * @param newRootdn
      *            The new rootdn value
-     **************************************************************************/
+     */
     public void setRootdn(String newRootdn) {
         this.setProperty(ROOTDN, newRootdn);
     }
 
-    /***************************************************************************
+    /**
      * Gets the Rootdn attribute of the LDAPSampler object
      *
      * @return The Rootdn value
-     **************************************************************************/
+     */
     public String getRootdn() {
         return getPropertyAsString(ROOTDN);
     }
 
-    /***************************************************************************
+    /**
      * Gets the search scope attribute of the LDAPSampler object
      *
      * @return The scope value
-     **************************************************************************/
+     */
     public String getScope() {
         return getPropertyAsString(SCOPE);
     }
@@ -302,21 +297,21 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return getPropertyAsInt(SCOPE);
     }
 
-    /***************************************************************************
+    /**
      * Sets the search scope attribute of the LDAPSampler object
      *
      * @param newScope
      *            The new scope value
-     **************************************************************************/
+     */
     public void setScope(String newScope) {
         this.setProperty(SCOPE, newScope);
     }
 
-    /***************************************************************************
+    /**
      * Gets the size limit attribute of the LDAPSampler object
      *
      * @return The size limit
-     **************************************************************************/
+     */
     public String getCountlim() {
         return getPropertyAsString(COUNTLIM);
     }
@@ -325,21 +320,21 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return getPropertyAsLong(COUNTLIM);
     }
 
-    /***************************************************************************
+    /**
      * Sets the size limit attribute of the LDAPSampler object
      *
      * @param newClim
      *            The new size limit value
-     **************************************************************************/
+     */
     public void setCountlim(String newClim) {
         this.setProperty(COUNTLIM, newClim);
     }
 
-    /***************************************************************************
+    /**
      * Gets the time limit attribute of the LDAPSampler object
      *
      * @return The time limit
-     **************************************************************************/
+     */
     public String getTimelim() {
         return getPropertyAsString(TIMELIM);
     }
@@ -348,158 +343,158 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return getPropertyAsInt(TIMELIM);
     }
 
-    /***************************************************************************
+    /**
      * Sets the time limit attribute of the LDAPSampler object
      *
      * @param newTlim
      *            The new time limit value
-     **************************************************************************/
+     */
     public void setTimelim(String newTlim) {
         this.setProperty(TIMELIM, newTlim);
     }
 
-    /***************************************************************************
+    /**
      * Gets the return objects attribute of the LDAPSampler object
      *
      * @return if the object(s) are to be returned
-     **************************************************************************/
+     */
     public boolean isRetobj() {
         return getPropertyAsBoolean(RETOBJ);
     }
 
-    /***************************************************************************
+    /**
      * Sets the return objects attribute of the LDAPSampler object
      *
      * @param newRobj
      *            whether the objects should be returned
-     **************************************************************************/
+     */
     public void setRetobj(String newRobj) {
         this.setProperty(RETOBJ, newRobj);
     }
 
-    /***************************************************************************
+    /**
      * Gets the deref attribute of the LDAPSampler object
      *
      * @return if dereferencing is required
-     **************************************************************************/
+     */
     public boolean isDeref() {
         return getPropertyAsBoolean(DEREF);
     }
 
-    /***************************************************************************
+    /**
      * Sets the deref attribute of the LDAPSampler object
      *
      * @param newDref
      *            The new deref value
-     **************************************************************************/
+     */
     public void setDeref(String newDref) {
         this.setProperty(DEREF, newDref);
     }
 
-    /***************************************************************************
+    /**
      * Sets the Test attribute of the LdapConfig object
      *
      * @param newTest
      *            The new test value(Add,Modify,Delete and search)
-     **************************************************************************/
+     */
     public void setTest(String newTest) {
         this.setProperty(TEST, newTest);
     }
 
-    /***************************************************************************
+    /**
      * Gets the test attribute of the LDAPSampler object
      *
      * @return The test value (Add,Modify,Delete and search)
-     **************************************************************************/
+     */
     public String getTest() {
         return getPropertyAsString(TEST);
     }
 
-    /***************************************************************************
+    /**
      * Sets the attributes of the LdapConfig object
      *
      * @param newAttrs
      *            The new attributes value
-     **************************************************************************/
+     */
     public void setAttrs(String newAttrs) {
         this.setProperty(ATTRIBS, newAttrs);
     }
 
-    /***************************************************************************
+    /**
      * Gets the attributes of the LDAPSampler object
      *
      * @return The attributes
-     **************************************************************************/
+     */
     public String getAttrs() {
         return getPropertyAsString(ATTRIBS);
     }
 
-    /***************************************************************************
+    /**
      * Sets the Base Entry DN attribute of the LDAPSampler object
      *
      * @param newbaseentry
      *            The new Base entry DN value
-     **************************************************************************/
+     */
     public void setBaseEntryDN(String newbaseentry) {
         setProperty(new StringProperty(BASE_ENTRY_DN, newbaseentry));
     }
 
-    /***************************************************************************
+    /**
      * Gets the BaseEntryDN attribute of the LDAPSampler object
      *
      * @return The Base entry DN value
-     **************************************************************************/
+     */
     public String getBaseEntryDN() {
         return getPropertyAsString(BASE_ENTRY_DN);
     }
 
-    /***************************************************************************
+    /**
      * Sets the Arguments attribute of the LdapConfig object This will collect
      * values from the table for user defined test case
      *
      * @param value
      *            The arguments
-     **************************************************************************/
+     */
     public void setArguments(Arguments value) {
         setProperty(new TestElementProperty(ARGUMENTS, value));
     }
 
-    /***************************************************************************
+    /**
      * Gets the Arguments attribute of the LdapConfig object
      *
      * @return The arguments user defined test case
-     **************************************************************************/
+     */
     public Arguments getArguments() {
         return (Arguments) getProperty(ARGUMENTS).getObjectValue();
     }
 
-    /***************************************************************************
+    /**
      * Sets the Arguments attribute of the LdapConfig object This will collect
      * values from the table for user defined test case
      *
      * @param value
      *            The arguments
-     **************************************************************************/
+     */
     public void setLDAPArguments(LDAPArguments value) {
         setProperty(new TestElementProperty(LDAPARGUMENTS, value));
     }
 
-    /***************************************************************************
+    /**
      * Gets the LDAPArguments attribute of the LdapConfig object
      *
      * @return The LDAParguments user defined modify test case
-     **************************************************************************/
+     */
     public LDAPArguments getLDAPArguments() {
         return (LDAPArguments) getProperty(LDAPARGUMENTS).getObjectValue();
     }
 
-    /***************************************************************************
+    /**
      * Collect all the values from the table (Arguments), using this create the
      * Attributes, this will create the Attributes for the User
      * defined TestCase for Add Test
      *
      * @return The Attributes
-     **************************************************************************/
+     */
     private Attributes getUserAttributes() {
         Attributes attrs = new BasicAttributes(true);
         Attribute attr;
@@ -518,13 +513,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return attrs;
     }
 
-    /***************************************************************************
+    /**
      * Collect all the value from the table (Arguments), using this create the
      * basicAttributes This will create the Basic Attributes for the User
      * defined TestCase for Modify test
      *
      * @return The BasicAttributes
-     **************************************************************************/
+     */
     private ModificationItem[] getUserModAttributes() {
         ModificationItem[] mods = new ModificationItem[getLDAPArguments().getArguments().size()];
         BasicAttribute attr;
@@ -553,13 +548,13 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return mods;
     }
 
-    /***************************************************************************
+    /**
      * Collect all the value from the table (Arguments), using this create the
      * Attributes This will create the Basic Attributes for the User defined
      * TestCase for search test
      *
      * @return The BasicAttributes
-     **************************************************************************/
+     */
     private String[] getRequestAttributes(String reqAttr) {
         int index;
         String[] mods;
@@ -593,11 +588,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         return mods;
     }
 
-    /***************************************************************************
+    /**
      * This will create the Basic Attribute for the give name value pair
      *
      * @return The BasicAttribute
-     **************************************************************************/
+     */
     private BasicAttribute getBasicAttribute(String name, String value) {
         return new BasicAttribute(name, value);
     }
@@ -613,10 +608,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 + "/" + this.getRootdn());        //$NON-NLS-1$
     }
 
-    /***************************************************************************
+    /**
      * This will do the add test for the User defined TestCase
      *
-     **************************************************************************/
+     */
     private void addTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
@@ -627,10 +622,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    /***************************************************************************
+    /**
      * This will do the delete test for the User defined TestCase
      *
-     **************************************************************************/
+     */
     private void deleteTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
@@ -640,10 +635,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    /***************************************************************************
+    /**
      * This will do the modify test for the User defined TestCase
      *
-     **************************************************************************/
+     */
     private void modifyTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
@@ -653,11 +648,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    /***************************************************************************
+    /**
      * This will do the bind for the User defined Thread, this bind is used for
      * the whole context
      *
-     **************************************************************************/
+     */
     private void bindOp(SampleResult res) throws NamingException {
         DirContext ctx = ldapContexts.remove(getThreadName());
         if (ctx != null) {
@@ -673,10 +668,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         ldapContexts.put(getThreadName(), ctx);
     }
 
-    /***************************************************************************
+    /**
      * This will do the bind and unbind for the User defined TestCase
-     *
-     **************************************************************************/
+     */
     private void singleBindOp(SampleResult res) throws NamingException {
         try {
             res.sampleStart();
@@ -687,10 +681,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    /***************************************************************************
+    /**
      * This will do a moddn Opp for the User new DN defined
-     *
-     **************************************************************************/
+     */
     private void renameTest(DirContext dirContext, SampleResult res) throws NamingException {
         try {
             res.sampleStart();
@@ -700,11 +693,10 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
     }
 
-    /***************************************************************************
+    /**
      * This will do the unbind for the User defined TestCase as well as inbuilt
      * test case
-     *
-     **************************************************************************/
+     */
     private void unbindOp(DirContext dirContext, SampleResult res) {
         try {
             res.sampleStart();
@@ -716,13 +708,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         log.info("context and LdapExtClients removed");
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param e
-     *            !ToDo (Parameter description)
-     * @return !ToDo (Return description)
-     **************************************************************************/
     @Override
     public SampleResult sample(Entry e) {
         XMLBuffer xmlBuffer = new XMLBuffer();
@@ -845,9 +830,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             }
 
         } catch (NamingException ex) {
-            //log.warn("DEBUG",ex);
-// e.g. javax.naming.SizeLimitExceededException: [LDAP: error code 4 - Sizelimit Exceeded]; remaining name ''
-//                                                123456789012345678901
             // TODO: tidy this up
             String returnData = ex.toString();
             final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
@@ -920,16 +902,17 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
         xmlb.openTag("searchresult"); // $NON-NLS-1$
         xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
-         xmlb.tag("returnedattr",Integer.toString(size)); // $NON-NLS-1$
-         xmlb.openTag("attributes"); // $NON-NLS-1$
+        xmlb.tag("returnedattr",Integer.toString(size)); // $NON-NLS-1$
+        xmlb.openTag("attributes"); // $NON-NLS-1$
 
          try {
             for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore(); )
             {
-                final Attribute     attr = en.next();
+                final Attribute attr = en.next();
 
                 sortedAttrs.add(attr);
             }
+            
             sortAttributes(sortedAttrs);
             for (final Attribute attr : sortedAttrs) {
                 StringBuilder sb = new StringBuilder();
@@ -941,7 +924,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
                     for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore(); )
                     {
-                        final Object    value = getWriteValue(ven.next());
+                        final Object value = getWriteValue(ven.next());
                         sortedVals.add(value.toString());
                     }
 
@@ -971,8 +954,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             @Override
             public int compare(Attribute o1, Attribute o2)
             {
-                String      nm1 = o1.getID();
-                String      nm2 = o2.getID();
+                String nm1 = o1.getID();
+                String nm2 = o2.getID();
 
                 return nm1.compareTo(nm2);
             }
@@ -984,15 +967,15 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         {
             private int compareToReverse(final String s1, final String s2)
             {
-                int     len1 = s1.length();
-                int     len2 = s2.length();
-                int     s1i = len1 - 1;
-                int     s2i = len2 - 1;
+                int len1 = s1.length();
+                int len2 = s2.length();
+                int s1i = len1 - 1;
+                int s2i = len2 - 1;
 
                 for ( ; (s1i >= 0) && (s2i >= 0); s1i--, s2i--)
                 {
-                    char    c1 = s1.charAt(s1i);
-                    char    c2 = s2.charAt(s2i);
+                    char c1 = s1.charAt(s1i);
+                    char c2 = s2.charAt(s2i);
 
                     if (c1 != c2) {
                         return c1 - c2;
@@ -1004,8 +987,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             @Override
             public int compare(SearchResult o1, SearchResult o2)
             {
-                String      nm1 = o1.getName();
-                String      nm2 = o2.getName();
+                String nm1 = o1.getName();
+                String nm2 = o2.getName();
 
                 if (nm1 == null) {
                     nm1 = "";
@@ -1020,7 +1003,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     private String normaliseSearchDN(final SearchResult sr, final String searchBase, final String rootDn)
     {
-        String      srName = sr.getName();
+        String srName = sr.getName();
 
         if (!srName.endsWith(searchBase))
         {
@@ -1046,13 +1029,12 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             // assume it's senstive data
             return StringEscapeUtils.escapeXml10((String)value);
         }
+        
         if (value instanceof byte[]) {
-            try
-            {
+            try {
                 return StringEscapeUtils.escapeXml10(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
             }
-            catch (UnsupportedEncodingException e)
-            {
+            catch (UnsupportedEncodingException e) {
                 log.error("this can't happen: UTF-8 character encoding not supported", e);
             }
         }

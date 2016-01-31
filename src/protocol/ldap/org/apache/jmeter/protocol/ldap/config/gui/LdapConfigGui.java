@@ -69,7 +69,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
 
     private JTextField port = new JTextField(20);
 
-    private JCheckBox user_Defined = new JCheckBox(JMeterUtils.getResString("user_defined_test")); // $NON-NLS-1$
+    private JCheckBox userDefined = new JCheckBox(JMeterUtils.getResString("user_defined_test")); // $NON-NLS-1$
 
     private JRadioButton addTest = new JRadioButton(JMeterUtils.getResString("add_test")); // $NON-NLS-1$
 
@@ -94,6 +94,11 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
      */
     public LdapConfigGui() {
         this(true);
+    }
+    
+    public LdapConfigGui(boolean displayName) {
+        this.displayName = displayName;
+        init();
     }
 
     @Override
@@ -140,9 +145,9 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         }
 
         if (element.getPropertyAsBoolean(LDAPSampler.USER_DEFINED)) {
-            user_Defined.setSelected(true);
+            userDefined.setSelected(true);
         } else {
-            user_Defined.setSelected(false);
+            userDefined.setSelected(false);
             cl.show(cards, ""); // $NON-NLS-1$
         }
     }
@@ -167,7 +172,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         element.setProperty(LDAPSampler.SERVERNAME, servername.getText());
         element.setProperty(LDAPSampler.PORT, port.getText());
         element.setProperty(LDAPSampler.ROOTDN, rootdn.getText());
-        element.setProperty(new BooleanProperty(LDAPSampler.USER_DEFINED, user_Defined.isSelected()));
+        element.setProperty(new BooleanProperty(LDAPSampler.USER_DEFINED, userDefined.isSelected()));
 
         if (addTest.isSelected()) {
             element.setProperty(new StringProperty(LDAPSampler.TEST, LDAPSampler.ADD));
@@ -208,7 +213,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         modify.setText(""); //$NON-NLS-1$
         servername.setText(""); //$NON-NLS-1$
         port.setText(""); //$NON-NLS-1$
-        user_Defined.setSelected(false);
+        userDefined.setSelected(false);
         addTest.setSelected(true);
         modifyTest.setSelected(false);
         deleteTest.setSelected(false);
@@ -222,7 +227,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
     @Override
     public void itemStateChanged(ItemEvent ie) {
         CardLayout cl = (CardLayout) (cards.getLayout());
-        if (user_Defined.isSelected()) {
+        if (userDefined.isSelected()) {
             if (addTest.isSelected()) {
                 cl.show(cards, "Add");
                 tableModifyPanel.clear();
@@ -274,10 +279,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         }
     }
 
-    public LdapConfigGui(boolean displayName) {
-        this.displayName = displayName;
-        init();
-    }
+    
 
     /**
      * This will create the servername panel in the LdapConfigGui.
@@ -413,7 +415,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         rowPanel.add(modifyTest);
         bGroup.add(modifyTest);
         testPanel.add(rowPanel, BorderLayout.NORTH);
-        testPanel.add(user_Defined, BorderLayout.CENTER);
+        testPanel.add(userDefined, BorderLayout.CENTER);
         return testPanel;
     }
 
@@ -435,7 +437,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         mainPanel.add(testPanel());
         add(mainPanel, BorderLayout.CENTER);
 
-        user_Defined.addItemListener(this);
+        userDefined.addItemListener(this);
         addTest.addItemListener(this);
         modifyTest.addItemListener(this);
         deleteTest.addItemListener(this);

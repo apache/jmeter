@@ -27,7 +27,7 @@ import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 
-/*******************************************************************************
+/**
  *
  * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
  * company Siemens Netherlands N.V..
@@ -35,16 +35,12 @@ import org.apache.jmeter.testelement.TestElement;
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  *
- ******************************************************************************/
-
+ */
 public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     private static final long serialVersionUID = 240L;
 
     private LdapExtConfigGui ldapDefaultPanel;
 
-    /***************************************************************************
-     * !ToDo (Constructor description)
-     **************************************************************************/
     public LdapExtTestSamplerGui() {
         init();
     }

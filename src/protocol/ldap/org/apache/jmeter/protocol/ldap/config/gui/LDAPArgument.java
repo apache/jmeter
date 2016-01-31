@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/*******************************************************************************
+/**
  *
  * Class representing an argument. Each argument consists of a name/value and
  * opcode combination, as well as (optional) metadata.
@@ -35,7 +35,6 @@ import org.apache.jmeter.testelement.property.StringProperty;
  *
  * author Michael Stover author Mark Walsh
  */
-
 public class LDAPArgument extends AbstractTestElement implements Serializable {
 
     private static final long serialVersionUID = 240L;
