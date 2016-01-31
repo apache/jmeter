@@ -62,7 +62,6 @@ import org.apache.log.Logger;
  * Ldap Sampler class is main class for the LDAP test. This will control all the
  * test available in the LDAP Test.
  ******************************************************************************/
-
 public class LDAPExtSampler extends AbstractSampler implements TestStateListener {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -608,9 +607,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
      * @return a formatted string label describing this sampler
      */
     public String getLabel() {
-        return ("ldap://" + this.getServername()  //$NON-NLS-1$
+        return "ldap://" + this.getServername()  //$NON-NLS-1$
                 + ":" + getPort()                 //$NON-NLS-1$
-                + "/" + this.getRootdn());        //$NON-NLS-1$
+                + "/" + this.getRootdn();        //$NON-NLS-1$
     }
 
     /***************************************************************************
@@ -716,13 +715,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         log.info("context and LdapExtClients removed");
     }
 
-    /***************************************************************************
-     * !ToDo (Method description)
-     *
-     * @param e
-     *            !ToDo (Parameter description)
-     * @return !ToDo (Return description)
-     **************************************************************************/
     @Override
     public SampleResult sample(Entry e) {
         XMLBuffer xmlBuffer = new XMLBuffer();
@@ -799,8 +791,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 xmlBuffer.tag("newdn",getPropertyAsString(NEWDN)); // $NON-NLS-1$
                 renameTest(dirContext, res);
             } else if (testType.equals(SEARCH)) {
-                final String            scopeStr = getScope();
-                final int               scope = getScopeAsInt();
+                final String scopeStr = getScope();
+                final int scope = getScopeAsInt();
                 final String searchFilter = getPropertyAsString(SEARCHFILTER);
                 final String searchBase = getPropertyAsString(SEARCHBASE);
                 final String timeLimit = getTimelim();
@@ -845,9 +837,6 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             }
 
         } catch (NamingException ex) {
-            //log.warn("DEBUG",ex);
-// e.g. javax.naming.SizeLimitExceededException: [LDAP: error code 4 - Sizelimit Exceeded]; remaining name ''
-//                                                123456789012345678901
             // TODO: tidy this up
             String returnData = ex.toString();
             final int indexOfLDAPErrCode = returnData.indexOf("LDAP: error code");
@@ -881,14 +870,15 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             throws NamingException
     {
 
-        final ArrayList<SearchResult>     sortedResults = new ArrayList<>(MAX_SORTED_RESULTS);
-        final String        searchBase = getPropertyAsString(SEARCHBASE);
-        final String        rootDn = getRootdn();
+        final ArrayList<SearchResult> sortedResults = new ArrayList<>(
+                MAX_SORTED_RESULTS);
+        final String searchBase = getPropertyAsString(SEARCHBASE);
+        final String rootDn = getRootdn();
 
         // read all sortedResults into memory so we can guarantee ordering
         try {
             while (srch.hasMore() && (sortedResults.size() < MAX_SORTED_RESULTS)) {
-                final SearchResult    sr = srch.next();
+                final SearchResult sr = srch.next();
 
                     // must be done prior to sorting
                 normaliseSearchDN(sr, searchBase, rootDn);
@@ -904,7 +894,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         }
 
         while (srch.hasMore()) { // If there's anything left ...
-            final SearchResult    sr = srch.next();
+            final SearchResult sr = srch.next();
 
             normaliseSearchDN(sr, searchBase, rootDn);
             writeSearchResult(sr, xmlb);
@@ -914,20 +904,19 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private void writeSearchResult(final SearchResult sr, final XMLBuffer xmlb)
             throws NamingException
     {
-        final Attributes    attrs = sr.getAttributes();
-        final int           size = attrs.size();
-        final ArrayList<Attribute>     sortedAttrs = new ArrayList<>(size);
+        final Attributes attrs = sr.getAttributes();
+        final int size = attrs.size();
+        final ArrayList<Attribute> sortedAttrs = new ArrayList<>(size);
 
         xmlb.openTag("searchresult"); // $NON-NLS-1$
         xmlb.tag("dn", sr.getName()); // $NON-NLS-1$
-         xmlb.tag("returnedattr",Integer.toString(size)); // $NON-NLS-1$
-         xmlb.openTag("attributes"); // $NON-NLS-1$
+        xmlb.tag("returnedattr",Integer.toString(size)); // $NON-NLS-1$
+        xmlb.openTag("attributes"); // $NON-NLS-1$
 
-         try {
-            for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore(); )
+        try {
+            for (NamingEnumeration<? extends Attribute> en = attrs.getAll(); en.hasMore();)
             {
-                final Attribute     attr = en.next();
-
+                final Attribute attr = en.next();
                 sortedAttrs.add(attr);
             }
             sortAttributes(sortedAttrs);
@@ -939,9 +928,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                     final ArrayList<String> sortedVals = new ArrayList<>(attr.size());
                     boolean first = true;
 
-                    for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore(); )
+                    for (NamingEnumeration<?> ven = attr.getAll(); ven.hasMore();)
                     {
-                        final Object    value = getWriteValue(ven.next());
+                        final Object value = getWriteValue(ven.next());
                         sortedVals.add(value.toString());
                     }
 
@@ -960,7 +949,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
                 xmlb.tag(attr.getID(),sb);
             }
         } finally {
-             xmlb.closeTag("attributes"); // $NON-NLS-1$
+            xmlb.closeTag("attributes"); // $NON-NLS-1$
             xmlb.closeTag("searchresult"); // $NON-NLS-1$
         }
     }
@@ -971,8 +960,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             @Override
             public int compare(Attribute o1, Attribute o2)
             {
-                String      nm1 = o1.getID();
-                String      nm2 = o2.getID();
+                String nm1 = o1.getID();
+                String nm2 = o2.getID();
 
                 return nm1.compareTo(nm2);
             }
@@ -984,15 +973,15 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
         {
             private int compareToReverse(final String s1, final String s2)
             {
-                int     len1 = s1.length();
-                int     len2 = s2.length();
-                int     s1i = len1 - 1;
-                int     s2i = len2 - 1;
+                int len1 = s1.length();
+                int len2 = s2.length();
+                int s1i = len1 - 1;
+                int s2i = len2 - 1;
 
                 for ( ; (s1i >= 0) && (s2i >= 0); s1i--, s2i--)
                 {
-                    char    c1 = s1.charAt(s1i);
-                    char    c2 = s2.charAt(s2i);
+                    char c1 = s1.charAt(s1i);
+                    char c2 = s2.charAt(s2i);
 
                     if (c1 != c2) {
                         return c1 - c2;
@@ -1004,8 +993,8 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             @Override
             public int compare(SearchResult o1, SearchResult o2)
             {
-                String      nm1 = o1.getName();
-                String      nm2 = o2.getName();
+                String nm1 = o1.getName();
+                String nm2 = o2.getName();
 
                 if (nm1 == null) {
                     nm1 = "";
@@ -1020,7 +1009,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
 
     private String normaliseSearchDN(final SearchResult sr, final String searchBase, final String rootDn)
     {
-        String      srName = sr.getName();
+        String srName = sr.getName();
 
         if (!srName.endsWith(searchBase))
         {
