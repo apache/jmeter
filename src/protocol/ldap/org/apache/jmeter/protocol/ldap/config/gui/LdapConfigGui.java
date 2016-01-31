@@ -96,6 +96,16 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
         this(true);
     }
 
+    /**
+     * Constructor which sets the displayName.
+     *
+     * @param displayName name of the compnent
+     */
+    public LdapConfigGui(boolean displayName) {
+        this.displayName = displayName;
+        init();
+    }
+
     @Override
     public String getLabelResource() {
         return "ldap_sample_title"; // $NON-NLS-1$
@@ -272,11 +282,6 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
             searchfilter.setText(""); // $NON-NLS-1$
             delete.setText(""); // $NON-NLS-1$
         }
-    }
-
-    public LdapConfigGui(boolean displayName) {
-        this.displayName = displayName;
-        init();
     }
 
     /**
