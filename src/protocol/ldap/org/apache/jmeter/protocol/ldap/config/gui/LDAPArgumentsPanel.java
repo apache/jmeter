@@ -129,9 +129,8 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
-        LDAPArguments arguments = null;
         if (args instanceof LDAPArguments) {
-            arguments = (LDAPArguments) args;
+            LDAPArguments arguments = (LDAPArguments) args;
             arguments.clear();
             @SuppressWarnings("unchecked") // Only contains LDAPArgument entries
             Iterator<LDAPArgument> modelData = (Iterator<LDAPArgument>) tableModel.iterator();
