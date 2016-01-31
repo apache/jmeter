@@ -34,7 +34,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/*******************************************************************************
+/**
+ * Ldap Client class is main class to create ,modify, search and delete all the
+ * LDAP functionality available
  *
  * author Dolf Smits(Dolf.Smits@Siemens.com) created Aug 09 2003 11:00 AM
  * company Siemens Netherlands N.V..
@@ -42,12 +44,7 @@ import org.apache.log.Logger;
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
  * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  *
- ******************************************************************************/
-
-/*******************************************************************************
- * Ldap Client class is main class to create ,modify, search and delete all the
- * LDAP functionality available
- ******************************************************************************/
+ */
 public class LdapExtClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -131,7 +128,7 @@ public class LdapExtClient {
         }
     }
 
-    /***************************************************************************
+    /**
      * Filter the data in the ldap directory for the given search base
      * 
      * @param dirContext
@@ -161,7 +158,7 @@ public class LdapExtClient {
      * @return result of the search
      * @throws NamingException
      *             when searching fails
-     **************************************************************************/
+     */
     public static NamingEnumeration<SearchResult> searchTest(DirContext dirContext, String searchBase, String searchFilter, int scope, long countlim,
             int timelim, String[] attrs, boolean retobj, boolean deref) throws NamingException {
         if (dirContext == null) {
@@ -184,7 +181,7 @@ public class LdapExtClient {
         return dirContext.search(searchBase, searchFilter, searchcontrols);
     }
 
-    /***************************************************************************
+    /**
      * Filter the data in the ldap directory
      *
      * @param dirContext
@@ -196,7 +193,7 @@ public class LdapExtClient {
      * @return result of the search
      * @throws NamingException
      *             when searching fails
-     **************************************************************************/
+     */
     public static NamingEnumeration<SearchResult> compare(DirContext dirContext, String filter, String entrydn) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -205,7 +202,7 @@ public class LdapExtClient {
         return dirContext.search(entrydn, filter, searchcontrols);
     }
 
-    /***************************************************************************
+    /**
      * ModDN the data in the ldap directory for the given search base
      *
      * @param dirContext
@@ -217,7 +214,7 @@ public class LdapExtClient {
      * @throws NamingException
      *             when renaming fails
      *
-     **************************************************************************/
+     */
     public static void moddnOp(DirContext dirContext, String ddn, String newdn) throws NamingException {
         log.debug("ddn and newDn= " + ddn + "@@@@" + newdn);
         if (dirContext == null) {
@@ -226,7 +223,7 @@ public class LdapExtClient {
         dirContext.rename(ddn, newdn);
     }
 
-    /***************************************************************************
+    /**
      * Modify the attribute in the ldap directory for the given string
      *
      * @param dirContext
@@ -238,7 +235,7 @@ public class LdapExtClient {
      *            distinguished name of the object to modify
      * @throws NamingException
      *             when modification fails
-     **************************************************************************/
+     */
     public static void modifyTest(DirContext dirContext, ModificationItem[] mods, String string) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);
@@ -247,7 +244,7 @@ public class LdapExtClient {
 
     }
 
-    /***************************************************************************
+    /**
      * Create the entry in the ldap directory for the given string
      *
      * @param dirContext
@@ -259,7 +256,7 @@ public class LdapExtClient {
      * @return newly created subcontext
      * @throws NamingException
      *             when creating subcontext fails
-     **************************************************************************/
+     */
     public static DirContext createTest(DirContext dirContext, Attributes attributes, String string)
             throws NamingException {
         if (dirContext == null) {
@@ -268,7 +265,7 @@ public class LdapExtClient {
         return dirContext.createSubcontext(string, attributes);
     }
 
-    /***************************************************************************
+    /**
      * Delete the attribute from the ldap directory
      *
      * @param dirContext
@@ -277,7 +274,7 @@ public class LdapExtClient {
      *            distinguished name of the subcontext to destroy
      * @throws NamingException
      *             when destroying the subcontext fails
-     **************************************************************************/
+     */
     public static void deleteTest(DirContext dirContext, String string) throws NamingException {
         if (dirContext == null) {
             throw new NamingException(CONTEXT_IS_NULL);

@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 
-/*******************************************************************************
+/**
  *
  * Class representing an argument. Each argument consists of a name/value and
  * opcode combination, as well as (optional) metadata.

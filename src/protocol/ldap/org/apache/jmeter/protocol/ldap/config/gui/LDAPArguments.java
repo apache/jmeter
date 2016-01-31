@@ -71,8 +71,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
     /**
      * Set the list of arguments. Any existing arguments will be lost.
      *
-     * @param arguments
-     *            the new arguments
+     * @param arguments the new arguments
      */
     public void setArguments(List<Object> arguments) {
         setProperty(new CollectionProperty(ARGUMENTS, arguments));
@@ -113,8 +112,7 @@ public class LDAPArguments extends ConfigTestElement implements Serializable {
     /**
      * Add a new argument.
      *
-     * @param arg
-     *            the new argument
+     * @param arg the new argument
      */
     public void addArgument(LDAPArgument arg) {
         TestElementProperty newArg = new TestElementProperty(arg.getName(), arg);

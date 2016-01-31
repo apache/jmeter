@@ -55,9 +55,6 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
 
     private static final long serialVersionUID = 240L;
 
-    /** Logging. */
-    //private static final Logger log = LoggingManager.getLoggerForClass();
-
     /** The title label for this component. */
     private JLabel tableLabel;
 
@@ -93,8 +90,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /**
      * Create a new LDAPArgumentsPanel, using the specified title.
      *
-     * @param label
-     *            the title of the component
+     * @param label the title of the component
      */
     public LDAPArgumentsPanel(String label) {
         tableLabel = new JLabel(label);
@@ -154,8 +150,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * querying the Test Element object for the relevant information to display
      * in its GUI.
      *
-     * @param el
-     *            the TestElement to configure
+     * @param el the TestElement to configure
      */
     @Override
     public void configure(TestElement el) {
@@ -195,8 +190,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * Invoked when an action occurs. This implementation supports the add and
      * delete buttons.
      *
-     * @param e
-     *            the event that has occurred
+     * @param e the event that has occurred
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -287,24 +281,6 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         return instance.tableModel.checkFunctors(null,instance.getClass());
     }
 
-    /*
-     * protected void initializeTableModel() { tableModel = new
-     * ObjectTableModel( new String[] { ArgumentsPanel.COLUMN_NAMES_0,
-     * ArgumentsPanel.COLUMN_NAMES_1, ENCODE_OR_NOT, INCLUDE_EQUALS }, new
-     * Functor[] { new Functor("getName"), new Functor("getValue"), new
-     * Functor("isAlwaysEncoded"), new Functor("isUseEquals") }, new Functor[] {
-     * new Functor("setName"), new Functor("setValue"), new
-     * Functor("setAlwaysEncoded"), new Functor("setUseEquals") }, new Class[] {
-     * String.class, String.class, Boolean.class, Boolean.class }); }
-     */
-//    /**
-//     * Resize the table columns to appropriate widths.
-//     *
-//     * @param _table
-//     *            the table to resize columns for
-//     */
-//    private void sizeColumns(JTable _table) {
-//    }
 
     /**
      * Create the main GUI panel which contains the argument table.
@@ -336,7 +312,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
      * @return a GUI panel containing the buttons
      */
     private JPanel makeButtonPanel() {
-        /** A button for adding new arguments to the table. */
+        /* A button for adding new arguments to the table. */
         JButton add = new JButton(JMeterUtils.getResString("add")); //$NON-NLS-1$
         add.setActionCommand(ADD);
         add.setEnabled(true);
@@ -368,6 +344,5 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         add(makeButtonPanel(), BorderLayout.SOUTH);
 
         table.revalidate();
-        //sizeColumns(table);
     }
 }
