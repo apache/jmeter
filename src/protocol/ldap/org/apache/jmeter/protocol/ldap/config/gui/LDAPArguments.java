@@ -37,7 +37,6 @@ import org.apache.jmeter.config.ConfigTestElement;
  *
  * author Michael Stover author Mark Walsh
  */
-
 public class LDAPArguments extends ConfigTestElement implements Serializable {
     private static final long serialVersionUID = 240L;
 
