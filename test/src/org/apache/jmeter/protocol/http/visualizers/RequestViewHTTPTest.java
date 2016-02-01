@@ -47,6 +47,26 @@ public class RequestViewHTTPTest extends TestCase {
         Assert.assertEquals("Welcome&1", param2[0]);
     }
     
+    //http://www.foo.com/test/json/getXXXX.jsp?postalCode=59115&qrcode=
+    @Test
+    public void testGetQueryMapWithEmptyValue() {
+        String query = "postalCode=59115&qrcode=";
+        Map<String, String[]> params = RequestViewHTTP.getQueryMap(query);
+        
+        Assert.assertNotNull(params);
+        Assert.assertEquals(2, params.size());
+        
+        String[] param1 = params.get("postalCode");
+        Assert.assertNotNull(param1);
+        Assert.assertEquals(1, param1.length);
+        Assert.assertEquals("59115", param1[0]);
+        
+        String[] param2 = params.get("qrcode");
+        Assert.assertNotNull(param2);
+        Assert.assertEquals(1, param2.length);
+        Assert.assertEquals("", param2[0]);
+    }
+    
     @Test
     public void testGetQueryMapMultipleValues() {
         String query = "param2=15&param1=12&param2=baulpismuth";
