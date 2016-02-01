@@ -38,9 +38,13 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
+import org.apache.jmeter.protocol.http.config.MultipartUrlConfig;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.RequestView;
 import org.apache.jmeter.visualizers.SamplerResultTab.RowResult;
@@ -181,6 +185,12 @@ public class RequestViewHTTP implements RequestView {
                     JMeterUtils.getResString("view_results_table_request_http_method"), //$NON-NLS-1$
                     sampleResult.getHTTPMethod()));
 
+            // Parsed request headers
+            LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getRequestHeaders());
+            for (Entry<String, String> entry : lhm.entrySet()) {
+                headersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
+            }
+
             URL hUrl = sampleResult.getURL();
             if (hUrl != null){ // can be null - e.g. if URL was invalid
                 requestModel.addRow(new RowResult(JMeterUtils
@@ -198,11 +208,13 @@ public class RequestViewHTTP implements RequestView {
                         hUrl.getPath()));
     
                 String queryGet = hUrl.getQuery() == null ? "" : hUrl.getQuery(); //$NON-NLS-1$
+                boolean isMultipart = isMultipart(lhm);
+
                 // Concatenate query post if exists
                 String queryPost = sampleResult.getQueryString();
-                if (queryPost != null && queryPost.length() > 0) {
+                if (!isMultipart && StringUtils.isNotBlank(queryPost)) {
                     if (queryGet.length() > 0) {
-                        queryGet += PARAM_CONCATENATE; 
+                        queryGet += PARAM_CONCATENATE;
                     }
                     queryGet += queryPost;
                 }
@@ -211,8 +223,20 @@ public class RequestViewHTTP implements RequestView {
                     Set<Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
                     for (Entry<String, String[]> entry : keys) {
                         for (String value : entry.getValue()) {
-                            paramsModel.addRow(new RowResult(entry.getKey(), value));                            
+                            paramsModel.addRow(new RowResult(entry.getKey(), value));
                         }
+                    }
+                }
+
+                if(isMultipart && StringUtils.isNotBlank(queryPost)) {
+                    String contentType = lhm.get(HTTPConstants.HEADER_CONTENT_TYPE);
+                    String boundaryString = extractBoundary(contentType);
+                    MultipartUrlConfig urlconfig = new MultipartUrlConfig(boundaryString);
+                    urlconfig.parseArguments(queryPost);
+                    
+                    for(JMeterProperty prop : urlconfig.getArguments()) {
+                        Argument arg = (Argument) prop.getObjectValue();
+                        paramsModel.addRow(new RowResult(arg.getName(), arg.getValue()));
                     }
                 }
             }
@@ -224,18 +248,42 @@ public class RequestViewHTTP implements RequestView {
                         JMeterUtils.getParsedLabel("view_results_table_request_http_cookie"), //$NON-NLS-1$
                         sampleResult.getCookies()));
             }
-            
-            // Parsed request headers
-            LinkedHashMap<String, String> lhm = JMeterUtils.parseHeaders(sampleResult.getRequestHeaders());
-            for (Entry<String, String> entry : lhm.entrySet()) {
-                headersModel.addRow(new RowResult(entry.getKey(), entry.getValue()));
-            }
 
-        } else {
+        }
+        else {
             // add a message when no http sample
             requestModel.addRow(new RowResult("", //$NON-NLS-1$
                     JMeterUtils.getResString("view_results_table_request_http_nohttp"))); //$NON-NLS-1$
         }
+    }
+
+    /**
+     * Extract the multipart boundary
+     * @param contentType the content type header
+     * @return  the boundary string
+     */
+    private String extractBoundary(String contentType) {
+        // Get the boundary string for the multiparts from the content type
+        String boundaryString = contentType.substring(contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf("boundary=") + "boundary=".length());
+        //TODO check in the RFC if other char can be used as separator
+        String[] split = boundaryString.split(";");
+        if(split.length > 1) {
+            boundaryString = split[0];
+        }
+        return boundaryString;
+    }
+    
+    /**
+     * check if the request is multipart
+     * @param headers the http request headers
+     * @return true if the request is multipart
+     */
+    private boolean isMultipart(LinkedHashMap<String, String> headers) {
+        String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
+        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
+            return true;
+        }
+        return false;
     }
 
     /**
