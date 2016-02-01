@@ -65,7 +65,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new ElapsedTimeValueSelector(), false, false));
+                new ElapsedTimeValueSelector(), false, true));
 
         return groupInfos;
     }
