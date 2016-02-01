@@ -59,7 +59,6 @@ public class XPathAssertionTest extends JMeterTestCase {
         vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        //testLog.setPriority(org.apache.log.Priority.DEBUG);
     }
 
     private void setAlternateResponseData(){

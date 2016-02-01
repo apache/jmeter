@@ -35,8 +35,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
 
-//import org.apache.jorphan.logging.LoggingManager;
-
 public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     private XMLSchemaAssertion assertion;
@@ -56,7 +54,6 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         JMeterVariables vars = new JMeterVariables();
         jmctx.setVariables(vars);
         jmctx.setPreviousResult(result);
-        // LoggingManager.setPriority("DEBUG","jmeter");
     }
 
     private ByteArrayOutputStream readBA(String name) throws IOException {

@@ -122,9 +122,6 @@ public class TestHTMLParser extends JMeterTestCaseJUnit3 {
                 this.userAgent = userAgent;
             }
 
-//            private TestData(String f, String b, String s) {
-//                this(f, b, s, null);
-//            }
         }
         
         private static final String DEFAULT_JMETER_PARSER = 

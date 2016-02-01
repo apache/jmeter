@@ -26,6 +26,8 @@
  */
 package org.apache.jmeter.functions;
 
+import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
+
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -38,7 +40,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
 import junit.extensions.ActiveTestSuite;
@@ -75,25 +76,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         return cr;
     }
 
-    // Create the StringFromFile function and set its parameters.
-    private static StringFromFile SFFParams(String p1, String p2, String p3, String p4) throws Exception {
-        StringFromFile sff = new StringFromFile();
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        if (p1 != null) {
-            parms.add(new CompoundVariable(p1));
-        }
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        if (p3 != null) {
-            parms.add(new CompoundVariable(p3));
-        }
-        if (p4 != null) {
-            parms.add(new CompoundVariable(p4));
-        }
-        sff.setParameters(parms);
-        return sff;
-    }
 
     // Create the SplitFile function and set its parameters.
     private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
@@ -117,24 +99,12 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         return bsh;
     }
 
-    private static Collection<CompoundVariable> makeParams(String p1, String p2, String p3) {
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        if (p1 != null) {
-            parms.add(new CompoundVariable(p1));
-        }
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        if (p3 != null) {
-            parms.add(new CompoundVariable(p3));
-        }
-        return parms;
-    }
+    
 
     public static Test suite() throws Exception {
         TestSuite allsuites = new TestSuite("Function PackageTest");
 
-        if (!BeanShellInterpreter.isInterpreterPresent()){
+        if (!BeanShellInterpreter.isInterpreterPresent()) {
             final String msg = "BeanShell jar not present, tests ignored";
             log.warn(msg);
         } else {
@@ -160,14 +130,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         par.addTest(new PackageTest("CSVThread2"));
         allsuites.addTest(par);
 
-        TestSuite sff = new TestSuite("StringFromFile");
-        sff.addTest(new PackageTest("SFFTest1"));
-        sff.addTest(new PackageTest("SFFTest2"));
-        sff.addTest(new PackageTest("SFFTest3"));
-        sff.addTest(new PackageTest("SFFTest4"));
-        sff.addTest(new PackageTest("SFFTest5"));
-        allsuites.addTest(sff);
-
         TestSuite split = new TestSuite("SplitFunction");
         split.addTest(new PackageTest("splitTest1"));
         allsuites.addTest(split);
@@ -184,10 +146,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
         allsuites.addTest(xpath);
         
-        TestSuite random = new TestSuite("Random");
-        random.addTest(new PackageTest("randomTest1"));
-        allsuites.addTest(random);
-
         allsuites.addTest(new PackageTest("XPathSetup1"));
         TestSuite par2 = new ActiveTestSuite("ParallelXPath1");
         par2.addTest(new PackageTest("XPathThread1"));
@@ -199,19 +157,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         par3.addTest(new PackageTest("XPathThread1"));
         par3.addTest(new PackageTest("XPathThread2"));
         allsuites.addTest(par3);
-
-        TestSuite variable = new TestSuite("Variable");
-        variable.addTest(new PackageTest("variableTest1"));
-        allsuites.addTest(variable);
-        
-        TestSuite eval = new TestSuite("Eval");
-        eval.addTest(new PackageTest("evalTest1"));
-        eval.addTest(new PackageTest("evalTest2"));
-        allsuites.addTest(eval);
-
-        TestSuite intSum = new TestSuite("Sums");
-        intSum.addTest(new PackageTest("sumTest"));
-        allsuites.addTest(intSum);
 
         return allsuites;
     }
@@ -377,88 +322,9 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         assertEquals("c", vars.get("VAR5_3"));
         assertEquals("?", vars.get("VAR5_4"));
         assertNull(vars.get("VAR5_5"));
-
-}
-
-    public void SFFTest1() throws Exception {
-        StringFromFile sff1 = SFFParams("testfiles/SFFTest#'.'txt", "", "1", "3");
-        assertEquals("uno", sff1.execute());
-        assertEquals("dos", sff1.execute());
-        assertEquals("tres", sff1.execute());
-        assertEquals("cuatro", sff1.execute());
-        assertEquals("cinco", sff1.execute());
-        assertEquals("one", sff1.execute());
-        assertEquals("two", sff1.execute());
-        sff1.execute();
-        sff1.execute();
-        assertEquals("five", sff1.execute());
-        assertEquals("eins", sff1.execute());
-        sff1.execute();
-        sff1.execute();
-        sff1.execute();
-        assertEquals("fuenf", sff1.execute());
-        try {
-            sff1.execute();
-            fail("Should have thrown JMeterStopThreadException");
-        } catch (JMeterStopThreadException e) {
-            // expected
-        }
     }
 
-    public void SFFTest2() throws Exception {
-        StringFromFile sff = SFFParams("testfiles/SFFTest1.txt", "", null, null);
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute()); // Restarts
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-    }
-
-    public void SFFTest3() throws Exception {
-        StringFromFile sff = SFFParams("testfiles/SFFTest1.txt", "", "", "");
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute()); // Restarts
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-    }
-
-    public void SFFTest4() throws Exception {
-        StringFromFile sff = SFFParams("xxtestfiles/SFFTest1.txt", "", "", "");
-        assertEquals(StringFromFile.ERR_IND, sff.execute());
-        assertEquals(StringFromFile.ERR_IND, sff.execute());
-    }
-
-    // Test that only loops twice
-    public void SFFTest5() throws Exception {
-        StringFromFile sff = SFFParams("testfiles/SFFTest1.txt", "", "", "2");
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        assertEquals("uno", sff.execute());
-        assertEquals("dos", sff.execute());
-        assertEquals("tres", sff.execute());
-        assertEquals("cuatro", sff.execute());
-        assertEquals("cinco", sff.execute());
-        try {
-            sff.execute();
-            fail("Should have thrown JMeterStopThreadException");
-        } catch (JMeterStopThreadException e) {
-            // expected
-        }
-    }
+   
 
     // Function objects to be tested
     private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
@@ -696,7 +562,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
     public void XPathtestrowNum() throws Exception {
         XPathFileContainer f = new XPathFileContainer("../build.xml", "/project/target/@name");
         assertNotNull(f);
-        // assertEquals("Expected 4 lines",4,f.size());
 
         int myRow = f.nextRow();
         assertEquals(0, myRow);
@@ -709,15 +574,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         myRow = f.nextRow();
         assertEquals(2, myRow);
         assertEquals(3, f.getNextRow());
-
-        // myRow = f.nextRow();
-        // assertEquals(3,myRow);
-        // assertEquals(0,f.getNextRow());
-
-        // myRow = f.nextRow();
-        // assertEquals(0,myRow);
-        // assertEquals(1,f.getNextRow());
-
     }
 
     public void XPathtestColumns() throws Exception {
@@ -830,153 +686,5 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
         xp.setParameters(parms);
         return xp;        
     }
-    
 
-    
-    public void randomTest1() throws Exception {
-        Random r = new Random();
-        Collection<CompoundVariable> parms = makeParams("0","10000000000","VAR");
-        r.setParameters(parms);
-        String s = 
-            r.execute(null,null);
-        long l = Long.parseLong(s);
-        assertTrue(l>=0 && l<=10000000000L);
-        
-        
-        parms = makeParams("1","1","VAR");
-        r.setParameters(parms);
-        s = 
-            r.execute(null,null);
-        l = Long.parseLong(s);
-        assertTrue(l==1);
-
-    }
-
-    public void variableTest1() throws Exception {
-        Variable r = new Variable();
-        vars.put("A_1","a1");
-        vars.put("A_2","a2");
-        vars.put("one","1");
-        vars.put("two","2");
-        vars.put("V","A");
-        Collection<CompoundVariable> parms;
-        String s;
-        
-        parms = makeParams("V",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("A",s);
-        
-        parms = makeParams("X",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("X",s);
-        
-        parms = makeParams("A${X}",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("A${X}",s);
-        
-        parms = makeParams("A_1",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("a1",s);
-        
-        parms = makeParams("A_2",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("a2",s);
-        
-        parms = makeParams("A_${two}",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("a2",s);
-        
-        parms = makeParams("${V}_${one}",null,null);
-        r.setParameters(parms);
-        s = r.execute(null,null);
-        assertEquals("a1",s);
-    }        
-
-    public void evalTest1() throws Exception {
-        EvalFunction eval = new EvalFunction();
-        vars.put("query","select ${column} from ${table}");
-        vars.put("column","name");
-        vars.put("table","customers");
-        Collection<CompoundVariable> parms;
-        String s;
-        
-        parms = makeParams("${query}",null,null);
-        eval.setParameters(parms);
-        s = eval.execute(null,null);
-        assertEquals("select name from customers",s);
-        
-    }
-
-    public void evalTest2() throws Exception {
-        EvalVarFunction evalVar = new EvalVarFunction();
-        vars.put("query","select ${column} from ${table}");
-        vars.put("column","name");
-        vars.put("table","customers");
-        Collection<CompoundVariable> parms;
-        String s;
-        
-        parms = makeParams("query",null,null);
-        evalVar.setParameters(parms);
-        s = evalVar.execute(null,null);
-        assertEquals("select name from customers",s);
-    }
-    
-    public void sumTest() throws Exception {
-        String maxIntVal = Integer.toString(Integer.MAX_VALUE);
-        String minIntVal = Integer.toString(Integer.MIN_VALUE);
-
-        { // prevent accidental use of is below
-        IntSum is = new IntSum();
-        checkInvalidParameterCounts(is,2);
-        checkSum(is,"3", new String[]{"1","2"});
-        checkSumNoVar(is,"3", new String[]{"1","2"});
-        checkSum(is,"1", new String[]{"-1","1","1","1","-2","1"});
-        checkSumNoVar(is,"1", new String[]{"-1","1","1","1","-2","1"});
-        checkSumNoVar(is,"-1", new String[]{"-1","1","1","1","-2","-1"});
-        checkSum(is,maxIntVal, new String[]{maxIntVal,"0"});
-        checkSum(is,minIntVal, new String[]{maxIntVal,"1"}); // wrap-round check
-        }
-
-        LongSum ls = new LongSum();
-        checkInvalidParameterCounts(ls,2);
-        checkSum(ls,"3", new String[]{"1","2"});
-        checkSum(ls,"1", new String[]{"-1","1","1","1","-1","0"});
-        checkSumNoVar(ls,"3", new String[]{"1","2"});
-        checkSumNoVar(ls,"1", new String[]{"-1","1","1","1","-1","0"});
-        checkSumNoVar(ls,"0", new String[]{"-1","1","1","1","-1","-1"});
-        String maxIntVal_1 = Long.toString(1+(long)Integer.MAX_VALUE);
-        checkSum(ls,maxIntVal, new String[]{maxIntVal,"0"});
-        checkSum(ls,maxIntVal_1, new String[]{maxIntVal,"1"}); // no wrap-round check
-        String maxLongVal = Long.toString(Long.MAX_VALUE);
-        String minLongVal = Long.toString(Long.MIN_VALUE);
-        checkSum(ls,maxLongVal, new String[]{maxLongVal,"0"});
-        checkSum(ls,minLongVal, new String[]{maxLongVal,"1"}); // wrap-round check
-    }
-    
-    // Perform a sum and check the results
-    private void checkSum(AbstractFunction func, String value, String [] addends)  throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        for (int i=0; i< addends.length; i++){
-            parms.add(new CompoundVariable(addends[i]));
-        }
-        parms.add(new CompoundVariable("Result"));
-        func.setParameters(parms);
-        assertEquals(value,func.execute(null,null));
-        assertEquals(value,vars.getObject("Result"));       
-    }
-    // Perform a sum and check the results
-    private void checkSumNoVar(AbstractFunction func, String value, String [] addends)  throws Exception {
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        for (int i=0; i< addends.length; i++){
-            parms.add(new CompoundVariable(addends[i]));
-        }
-        func.setParameters(parms);
-        assertEquals(value,func.execute(null,null));
-    }
 }

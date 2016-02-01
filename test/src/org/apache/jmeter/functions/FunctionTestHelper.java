@@ -16,22 +16,26 @@
  * 
  */
 
-package org.apache.jmeter.gui.action;
+package org.apache.jmeter.functions;
 
-import junit.framework.TestCase;
+import java.util.Collection;
+import java.util.LinkedList;
 
-public class PackageTest extends TestCase {
+import org.apache.jmeter.engine.util.CompoundVariable;
 
-    public PackageTest(String arg0) {
-        super(arg0);
+public class FunctionTestHelper {
+
+    public static Collection<CompoundVariable> makeParams(String p1, String p2, String p3) {
+        Collection<CompoundVariable> parms = new LinkedList<>();
+        if (p1 != null) {
+            parms.add(new CompoundVariable(p1));
+        }
+        if (p2 != null) {
+            parms.add(new CompoundVariable(p2));
+        }
+        if (p3 != null) {
+            parms.add(new CompoundVariable(p3));
+        }
+        return parms;
     }
-
-    //TODO add tests for SaveGraphics
-    public void testSaveGraphics() throws Exception {
-    }
-    
-    //TODO add tests for ReportSaveGraphics
-    public void testReportSaveGraphics() throws Exception {
-    }
-    
 }
