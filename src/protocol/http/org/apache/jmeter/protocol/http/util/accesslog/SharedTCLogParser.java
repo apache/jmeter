@@ -95,9 +95,6 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
             }
             if (line == null) {
                 breader.closeFile(FILENAME);
-                // this.READER = new BufferedReader(new
-                // FileReader(this.SOURCE));
-                // parse(this.READER,el);
             }
         } catch (IOException ioe) {
             log.error("Error reading log file", ioe);
