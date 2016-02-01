@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
@@ -135,7 +136,8 @@ public final class AllTests {
             System.out.println("You must specify a comma-delimited list of paths to search " + "for unit tests");
             return;
         }
-        String home=new File(System.getProperty("user.dir")).getParent();
+        
+        String home = new File(System.getProperty("user.dir")).getParent();
         System.out.println("Setting JMeterHome: "+home);
         JMeterUtils.setJMeterHome(home);
         initializeLogging(args);
@@ -166,9 +168,9 @@ public final class AllTests {
         logprop("os.version", true);
         logprop("os.arch");
         logprop("java.class.version");
-        // logprop("java.class.path");
+        
         String cp = System.getProperty("java.class.path");
-        String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+        String[] cpe = JOrphanUtils.split(cp, java.io.File.pathSeparator);
         StringBuilder sb = new StringBuilder(3000);
         sb.append("java.class.path=");
         for (String path : cpe) {
@@ -188,7 +190,7 @@ public final class AllTests {
         
         System.out.println("------------");
         try {
-            System.out.println("Searching junit tests in:"+args[0]);
+            System.out.println("Searching junit tests in : "+args[0]);
             List<String> tests = findJMeterJUnitTests(args[0]);
             JUnitCore.main(tests.toArray(new String[0]));
         } catch (IOException e) {
@@ -344,9 +346,16 @@ public final class AllTests {
             try {
                 Class<?> c = Class.forName(className, false, contextClassLoader);
 
-                if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
+                if (!c.isAnnotation() 
+                        && !c.isEnum() 
+                        && !c.isInterface() 
+                        && !Modifier.isAbstract(c.getModifiers())) 
+                {
                     if (TestCase.class.isAssignableFrom(c)) {
                         isJunitTest =  true;
+                    }
+                    else {
+                        isJunitTest = checkForJUnitAnnotations(c);
                     }
                 }
             } catch (UnsupportedClassVersionError ignored) {
@@ -358,6 +367,32 @@ public final class AllTests {
             }
             
             return isJunitTest;
+        }
+        
+        private boolean checkForJUnitAnnotations(Class<?> clazz)
+        {
+            Class<?> classToCheck = clazz;
+            while(classToCheck != null) {
+                if( checkforTestAnnotationOnMethods(classToCheck)) {
+                    return true;
+                }
+                classToCheck = classToCheck.getSuperclass();
+            }
+            
+            return false;
+        }
+
+        private boolean checkforTestAnnotationOnMethods(Class<?> clazz)
+        {
+            for(Method method : clazz.getDeclaredMethods()) {
+                for(Annotation annotation : method.getAnnotations() ) {
+                    if (org.junit.Test.class.isAssignableFrom(annotation.annotationType())) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
         }
         
     }
