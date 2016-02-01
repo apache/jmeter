@@ -236,6 +236,10 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     private void addKeyData(MapResultData result, String group, String series,
             SeriesData seriesData, boolean aggregated) {
 
+        // Override series name when aggregated
+        if (aggregated) {
+            series = String.format(aggregatedKeysSeriesFormat, series);
+        }
         // Add to the result map
         ListResultData seriesList = (ListResultData) result
                 .getResult(RESULT_SERIES);
@@ -272,13 +276,12 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
         // Populate it with data from groupData
         Map<Double, Aggregator> aggInfo;
-        if (!aggregated) {
-            aggInfo = seriesData.getAggregatorInfo();
-        } else {
-            series = String.format(aggregatedKeysSeriesFormat, series);
+        if (aggregated) {
             aggInfo = new HashMap<>();
             aggInfo.put(Double.valueOf(seriesData.getKeysAggregator().getResult()),
                     seriesData.getValuesAggregator());
+        } else {
+            aggInfo = seriesData.getAggregatorInfo();
         }
         if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
