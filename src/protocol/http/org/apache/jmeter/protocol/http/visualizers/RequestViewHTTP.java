@@ -37,6 +37,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.TextBoxDialoger.TextBoxDoubleClick;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
@@ -206,8 +207,7 @@ public class RequestViewHTTP implements RequestView {
                     queryGet += queryPost;
                 }
                 
-                queryGet = RequestViewHTTP.decodeQuery(queryGet);
-                if (queryGet != null) {
+                if (StringUtils.isNotBlank(queryGet)) {
                     Set<Entry<String, String[]>> keys = RequestViewHTTP.getQueryMap(queryGet).entrySet();
                     for (Entry<String, String[]> entry : keys) {
                         for (String value : entry.getValue()) {
@@ -239,39 +239,33 @@ public class RequestViewHTTP implements RequestView {
     }
 
     /**
-     * @param query
-     *            query to parse for param and value pairs
-     * @return Map params and Svalue
+     * @param query query to parse for param and value pairs
+     * @return Map params and values
      */
     //TODO: move to utils class (JMeterUtils?)
     public static Map<String, String[]> getQueryMap(String query) {
 
         Map<String, String[]> map = new HashMap<>();
-        if (query.trim().startsWith("<?")) { // $NON-NLS-1$
-            // SOAP request (generally)
-            map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
-            return map;
-        }
-        
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
-            String[] paramSplit = param.split("="); // $NON-NLS-1$
-            if (paramSplit.length > 2 ) {// detected invalid syntax (Bug 52491)
-                // Return as for SOAP above
-                map.clear();
+            String[] paramSplit = param.split("=");
+            String name = paramSplit[0];
+            name = decodeQuery(name);
+            
+            // hack for SOAP request (generally)
+            if (name.trim().startsWith("<?")) { // $NON-NLS-1$
                 map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
                 return map;
             }
             
-            String name = null;
-            if (paramSplit.length > 0) {
-                name = paramSplit[0];
+            // the post payload is not key=value
+            if(paramSplit.length == 1 || paramSplit.length > 2) {
+                map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
+                return map;
             }
-            String value = ""; // empty init // $NON-NLS-1$
-            if (paramSplit.length > 1) {
-                // We use substring to keep = sign (Bug 54055), we are sure = is present
-                value = param.substring(param.indexOf("=")+1); // $NON-NLS-1$
-            }
+            
+            String value = paramSplit[1];
+            value = decodeQuery(value);
             
             String[] known = map.get(name);
             if(known == null) {
@@ -285,6 +279,7 @@ public class RequestViewHTTP implements RequestView {
             }
             map.put(name, known);
         }
+        
         return map;
     }
 
