@@ -259,13 +259,16 @@ public class RequestViewHTTP implements RequestView {
             }
             
             // the post payload is not key=value
-            if(paramSplit.length == 1 || paramSplit.length > 2) {
+            if((param.startsWith("=") && paramSplit.length == 1) || paramSplit.length > 2) {
                 map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
                 return map;
             }
-            
-            String value = paramSplit[1];
-            value = decodeQuery(value);
+
+            String value = "";
+            if(paramSplit.length>1) {
+                value = paramSplit[1];
+                value = decodeQuery(value);
+            }
             
             String[] known = map.get(name);
             if(known == null) {
