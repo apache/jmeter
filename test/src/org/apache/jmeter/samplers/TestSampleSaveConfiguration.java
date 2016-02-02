@@ -18,16 +18,21 @@
 
 package org.apache.jmeter.samplers;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.text.SimpleDateFormat;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.Test;
 
 // Extends JMeterTest case because it needs access to JMeter properties
 public class TestSampleSaveConfiguration extends JMeterTestCase {    
-    public TestSampleSaveConfiguration(String name) {
-        super(name);
-    }
 
+    @Test
     public void testClone() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration();
         a.setUrl(false);
@@ -62,6 +67,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertEquals(a.hashCode(), cloneA.hashCode());        
     }
     
+    @Test
     public void testEqualsAndHashCode() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration();
         a.setUrl(false);
@@ -94,6 +100,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertFalse(a.saveAssertions() == b.saveAssertions());
     }
 
+    @Test
     public void testFalse() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
@@ -102,6 +109,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertTrue("Objects should be equal",b.equals(a));
     }
 
+    @Test
     public void testTrue() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(true);
         SampleSaveConfiguration b = new SampleSaveConfiguration(true);
@@ -109,6 +117,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
     }
+    @Test
     public void testFalseTrue() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(true);
@@ -117,6 +126,7 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertFalse("Objects should not be equal",b.equals(a));
     }
 
+    @Test
     public void testFormatter() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
