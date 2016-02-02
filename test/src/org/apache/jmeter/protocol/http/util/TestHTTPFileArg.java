@@ -18,13 +18,13 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class TestHTTPFileArg extends TestCase {
-    public TestHTTPFileArg(String name) {
-        super(name);
-    }
+import org.junit.Test;
 
+public class TestHTTPFileArg {
+
+    @Test
     public void testConstructors() throws Exception {
         HTTPFileArg file = new HTTPFileArg();
         assertEquals("no parameter failure", "", file.getPath());
@@ -44,6 +44,7 @@ public class TestHTTPFileArg extends TestCase {
         assertEquals("copy constructor failure", "mimetype", file2.getMimeType());
     }
 
+    @Test
     public void testGettersSetters() throws Exception {
         HTTPFileArg file = new HTTPFileArg();
         assertEquals("", file.getPath());
@@ -59,6 +60,7 @@ public class TestHTTPFileArg extends TestCase {
         assertEquals("header", file.getHeader());
     }
 
+    @Test
     public void testToString() throws Exception {
         HTTPFileArg file = new HTTPFileArg("path1", "param1", "mimetype1");
         assertEquals("path:'path1'|param:'param1'|mimetype:'mimetype1'", file.toString());

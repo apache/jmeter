@@ -19,21 +19,22 @@
 package org.apache.jmeter.protocol.http.util;
 
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 import java.util.LinkedList;
-import junit.framework.TestCase;
-
 import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.junit.Test;
 
-public class TestHTTPFileArgs extends TestCase {
-    public TestHTTPFileArgs(String name) {
-        super(name);
-    }
+public class TestHTTPFileArgs {
 
+    @Test
     public void testConstructors() throws Exception {
         HTTPFileArgs files = new HTTPFileArgs();
         assertEquals(0, files.getHTTPFileArgCount());
     }
 
+    @Test
     public void testAdding() throws Exception {
         HTTPFileArgs files = new HTTPFileArgs();
         assertEquals(0, files.getHTTPFileArgCount());
@@ -54,6 +55,7 @@ public class TestHTTPFileArgs extends TestCase {
         assertEquals("", ((HTTPFileArg) iter.next().getObjectValue()).getPath());
     }
 
+    @Test
     public void testSetHTTPFileArgs() throws Exception {
         List<HTTPFileArg> newHTTPFileArgs = new LinkedList<>();
         newHTTPFileArgs.add(new HTTPFileArg("hede"));
@@ -63,6 +65,7 @@ public class TestHTTPFileArgs extends TestCase {
         assertEquals("hede", ((HTTPFileArg) files.iterator().next().getObjectValue()).getPath());
     }
 
+    @Test
     public void testRemoving() throws Exception {
         HTTPFileArgs files = new HTTPFileArgs();
         assertEquals(0, files.getHTTPFileArgCount());
@@ -108,6 +111,7 @@ public class TestHTTPFileArgs extends TestCase {
         assertEquals(0, files.getHTTPFileArgCount());
     }
 
+    @Test
     public void testToString() throws Exception {
         HTTPFileArgs files = new HTTPFileArgs();
         files.addHTTPFileArg("file1");

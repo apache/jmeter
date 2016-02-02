@@ -22,16 +22,18 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
-import junit.framework.TestCase;
-
 import org.apache.jorphan.util.JOrphanUtils;
+import org.junit.Test;
 
-public class BinaryTCPClientImplTest extends TestCase {
+public class BinaryTCPClientImplTest {
 
+    @Test
     public void testHexStringToByteArray() throws Exception {
         byte [] ba;
         ba = BinaryTCPClientImpl.hexStringToByteArray("");
@@ -63,10 +65,12 @@ public class BinaryTCPClientImplTest extends TestCase {
         }
     }
 
+    @Test
     public void testLoopBack() throws Exception {
         assertEquals("0f107f8081ff", JOrphanUtils.baToHexString(BinaryTCPClientImpl.hexStringToByteArray("0f107f8081ff")));      
     }
 
+    @Test
     public void testRoundTrip() throws Exception {
         BinaryTCPClientImpl bi = new BinaryTCPClientImpl();
         InputStream is = null;

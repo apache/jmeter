@@ -22,13 +22,16 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class LengthPrefixedBinaryTCPClientImplTest {
 
-public class LengthPrefixedBinaryTCPClientImplTest extends TestCase {
-
+    @Test
     public void testError() throws Exception {
         ByteArrayOutputStream os = null;
         ByteArrayInputStream is = null;
@@ -40,6 +43,7 @@ public class LengthPrefixedBinaryTCPClientImplTest extends TestCase {
         }
     }
 
+    @Test
     public void testValid() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         LengthPrefixedBinaryTCPClientImpl lp = new LengthPrefixedBinaryTCPClientImpl();

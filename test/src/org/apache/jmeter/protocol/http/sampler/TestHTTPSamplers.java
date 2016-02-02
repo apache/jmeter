@@ -18,19 +18,20 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestHTTPSamplers extends TestCase {
+public class TestHTTPSamplers {
 
-    public TestHTTPSamplers(String arg0) {
-        super(arg0);
-    }
 
     // Parse arguments singly
+    @Test
     public void testParseArguments(){
         HTTPSamplerBase sampler = new HTTPNullSampler();
         Arguments args;
@@ -74,6 +75,7 @@ public class TestHTTPSamplers extends TestCase {
     }
 
     // Parse arguments all at once
+    @Test
     public void testParseArguments2(){
         HTTPSamplerBase sampler = new HTTPNullSampler();
         Arguments args;
@@ -107,6 +109,7 @@ public class TestHTTPSamplers extends TestCase {
         assertEquals(0,sampler.getHTTPFileCount());
     }
 
+        @Test
         public void testArgumentWithoutEquals() throws Exception {
             HTTPSamplerBase sampler = new HTTPNullSampler();
             sampler.setProtocol("http");
@@ -116,6 +119,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://www.apache.org/index.html?pear", sampler.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -126,6 +130,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://www.apache.org/index.html?param1=value1", config.getUrl().toString());
         }
 
+        @Test
         public void testRedirect() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -150,6 +155,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl2() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -160,6 +166,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1=value1&p1=p2", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl3() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -173,6 +180,7 @@ public class TestHTTPSamplers extends TestCase {
         // test cases for making Url, and exercise method
         // addArgument(String name,String value,String metadata)
 
+        @Test
         public void testMakingUrl4() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -183,6 +191,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1=value1", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl5() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -193,6 +202,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1=", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl6() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -206,6 +216,7 @@ public class TestHTTPSamplers extends TestCase {
         // test cases for making Url, and exercise method
         // parseArguments(String queryString)
 
+        @Test
         public void testMakingUrl7() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -216,6 +227,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1=value1", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl8() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -226,6 +238,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1=", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl9() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -236,6 +249,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html?param1", config.getUrl().toString());
         }
 
+        @Test
         public void testMakingUrl10() throws Exception {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
@@ -246,6 +260,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals("http://192.168.0.1/index.html", config.getUrl().toString());
         }
         
+        @Test
         public void testFileList(){
             HTTPSamplerBase config = new HTTPNullSampler();
             HTTPFileArg[] arg;
@@ -314,6 +329,7 @@ public class TestHTTPSamplers extends TestCase {
             assertEquals(2,arg.length);
      }
 
+    @Test
     public void testSetAndGetFileField() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","param","")});
@@ -325,6 +341,7 @@ public class TestHTTPSamplers extends TestCase {
         assertEquals("param2", file.getParamName());
 }
 
+    @Test
     public void testSetAndGetFilename() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("name","","")});
@@ -336,6 +353,7 @@ public class TestHTTPSamplers extends TestCase {
         assertEquals("name2", file.getPath());
     }
 
+    @Test
     public void testSetAndGetMimetype() {
         HTTPSamplerBase sampler = new HTTPNullSampler();
         sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","mime")});
