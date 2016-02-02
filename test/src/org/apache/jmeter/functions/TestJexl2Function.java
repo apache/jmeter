@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -27,6 +29,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestJexl2Function extends JMeterTestCase {
     protected AbstractFunction function;
@@ -39,11 +43,7 @@ public class TestJexl2Function extends JMeterTestCase {
 
     private JMeterContext jmctx;
 
-    public TestJexl2Function(String name) {
-        super(name);
-    }
-
-    @Override
+    @Before
     public void setUp() {
         function = new Jexl2Function();
         result = new SampleResult();
@@ -56,10 +56,12 @@ public class TestJexl2Function extends JMeterTestCase {
         params = new LinkedList<>();
     }
 
+    @Test
     public void testParameterCount() throws Exception {
         checkInvalidParameterCounts(function, 1, 2);
     }
 
+    @Test
     public void testSum() throws Exception {
         params.add(new CompoundVariable("1+2+3"));
         function.setParameters(params);
@@ -67,6 +69,7 @@ public class TestJexl2Function extends JMeterTestCase {
         assertEquals("6", ret);
     }
 
+    @Test
     public void testSumVar() throws Exception {
         params.add(new CompoundVariable("1+2+3"));
         params.add(new CompoundVariable("TOTAL"));
@@ -76,6 +79,7 @@ public class TestJexl2Function extends JMeterTestCase {
         assertEquals("6", vars.get("TOTAL"));
     }
 
+    @Test
     public void testReplace1() throws Exception {
         params.add(new CompoundVariable(
                 "sampleResult.getResponseDataAsString().replaceAll('T','t')"));
@@ -84,6 +88,7 @@ public class TestJexl2Function extends JMeterTestCase {
         assertEquals("the quick brown fox", ret);
     }
     
+    @Test
     public void testReplace2() throws Exception {
         vars.put("URL", "/query.cgi?s1=1&amp;s2=2&amp;s3=3");
         params.add(new CompoundVariable("vars.get('URL').replaceAll('&amp;','&')"));

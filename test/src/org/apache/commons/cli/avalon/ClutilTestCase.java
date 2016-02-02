@@ -18,16 +18,19 @@
  */
 package org.apache.commons.cli.avalon;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 // Renamed from org.apache.avalon.excalibur.cli
 
 import java.util.List;
-
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * 
  */
-public final class ClutilTestCase extends TestCase {
+public final class ClutilTestCase {
     private static final String[] ARGLIST1 = new String[] { "--you", "are", "--all", "-cler", "kid" };
 
     private static final String[] ARGLIST2 = new String[] { "-Dstupid=idiot", "are", "--all", "here", "-d" };
@@ -119,17 +122,7 @@ public final class ClutilTestCase extends TestCase {
                     '2', "two parameters")
     };
 
-
-    
-
-    public ClutilTestCase() {
-        this("Command Line Interpreter Test Case");
-    }
-
-    public ClutilTestCase(String name) {
-        super(name);
-    }
-
+    @Test
     public void testOptionalArgWithSpace() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
@@ -157,6 +150,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option2.getArgument(0), null);
     }
 
+    @Test
     public void testOptionalArgLong() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
@@ -185,6 +179,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option2.getArgument(0), null);
     }
 
+    @Test
     public void testOptionalArgLongEquals() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
@@ -209,6 +204,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option2.getArgument(0), null);
     }
 
+    @Test
     public void testShortOptArgUnenteredBeforeOtherOpt() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
 
@@ -232,6 +228,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option1.getArgument(0), null);
     }
 
+    @Test
     public void testOptionalArgsWithArgShortBeforeOtherOpt() {
         // "-T3","-a"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
@@ -255,6 +252,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(null, option1.getArgument(0));
     }
 
+    @Test
     public void testOptionalArgsWithArgShortEqualsBeforeOtherOpt() {
         // "-T3","-a"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
@@ -278,6 +276,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(null, option1.getArgument(0));
     }
 
+    @Test
     public void testOptionalArgsNoArgShortBeforeOtherOpt() {
         // "-T","-a"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { ALL, TAINT };
@@ -301,6 +300,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(null, option1.getArgument(0));
     }
 
+    @Test
     public void testFullParse() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { YOU, ALL, CLEAR1, CLEAR2, CLEAR3, CLEAR5 };
 
@@ -322,6 +322,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions.get(7).getDescriptor().getId(), 0);
     }
 
+    @Test
     public void testDuplicateOptions() {
         // "-Dstupid=idiot","are","--all","--all","here"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE, ALL, CLEAR1 };
@@ -341,6 +342,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions.get(4).getDescriptor().getId(), 0);
     }
 
+    @Test
     public void testIncompatableOptions() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE, ALL, CLEAR1, BLEE };
 
@@ -359,6 +361,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions.get(4).getDescriptor().getId(), 0);
     }
 
+    @Test
     public void testSingleArg() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -374,6 +377,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions.get(0).getArgument(), "myfile.txt");
     }
 
+    @Test
     public void testSingleArg2() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -393,6 +397,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=,=-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg3() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -412,6 +417,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=,-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg4() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -427,6 +433,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("myfile.txt", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg5() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -442,6 +449,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("myfile.txt", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg6() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -457,6 +465,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg7() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -472,6 +481,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg8() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -487,6 +497,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testSingleArg9() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
 
@@ -502,6 +513,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-=-", clOptions.get(0).getArgument());
     }
 
+    @Test
     public void testCombinedArgs1() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT };
 
@@ -518,6 +530,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("rest", clOptions.get(2).getArgument());
     }
 
+    @Test
     public void testCombinedArgs2() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT, FILE };
 
@@ -534,6 +547,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("a", clOptions.get(2).getArgument());
     }
 
+    @Test
     public void testCombinedArgs3() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT, FILE };
 
@@ -555,6 +569,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-fa", clOptions.get(2).getArgument());
     }
 
+    @Test
     public void testCombinedArgs4() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT, FILE };
 
@@ -577,6 +592,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("a", clOptions.get(3).getArgument());
     }
 
+    @Test
     public void test2ArgsParse() {
         // "-Dstupid=idiot","are","--all","here"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE, ALL, CLEAR1, CASE_CHECK };
@@ -600,6 +616,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("idiot", option.getArgument(1));
     }
 
+    @Test
     public void test2ArgsParse2() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE };
 
@@ -624,6 +641,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("d-e,f", option.getArgument(1));
     }
 
+    @Test
     public void test2ArgsParse3() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE };
 
@@ -642,6 +660,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("G-e,f", option.getArgument(1));
     }
 
+    @Test
     public void test2ArgsParse4() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE_MANY };
 
@@ -676,6 +695,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("-4", option.getArgument(1));
     }
 
+    @Test
     public void testPartParse() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { YOU };
 
@@ -697,6 +717,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions.get(0).getDescriptor().getId(), YOU_OPT);
     }
 
+    @Test
     public void test2PartParse() {
         final CLOptionDescriptor[] options1 = new CLOptionDescriptor[] { YOU };
 
@@ -736,6 +757,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions2.get(6).getDescriptor().getId(), 0);
     }
 
+    @Test
     public void test2PartPartialParse() {
         final CLOptionDescriptor[] options1 = new CLOptionDescriptor[] { YOU, ALL, CLEAR1 };
 
@@ -775,6 +797,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(clOptions2.get(1).getDescriptor().getId(), 0);
     }
 
+    @Test
     public void testDuplicatesFail() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { YOU, ALL, CLEAR1, CLEAR2, CLEAR3, CLEAR5 };
 
@@ -783,6 +806,7 @@ public final class ClutilTestCase extends TestCase {
         assertNull(parser.getErrorString(), parser.getErrorString());
     }
 
+    @Test
     public void testIncomplete2Args() {
         // "-Dstupid="
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE };
@@ -801,6 +825,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option.getArgument(1), "");
     }
 
+    @Test
     public void testIncomplete2ArgsMixed() {
         // "-Dstupid=","-c"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE, CLEAR1 };
@@ -822,6 +847,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals(option.getArgument(1), "");
     }
 
+    @Test
     public void testIncomplete2ArgsMixedNoEq() {
         // "-Dstupid","-c"
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { DEFINE, CLEAR1 };
@@ -846,6 +872,7 @@ public final class ClutilTestCase extends TestCase {
     /**
      * Test the getArgumentById and getArgumentByName lookup methods.
      */
+    @Test
     public void testArgumentLookup() {
         final String[] args = { "-f", "testarg" };
         final CLOptionDescriptor[] options = { FILE };
@@ -867,6 +894,7 @@ public final class ClutilTestCase extends TestCase {
     /**
      * Test that you can have null long forms.
      */
+    @Test
     public void testNullLongForm() {
         final CLOptionDescriptor test = new CLOptionDescriptor(null, CLOptionDescriptor.ARGUMENT_DISALLOWED, 'n',
                 "test null long form");
@@ -888,6 +916,7 @@ public final class ClutilTestCase extends TestCase {
     /**
      * Test that you can have null descriptions.
      */
+    @Test
     public void testNullDescription() {
         final CLOptionDescriptor test = new CLOptionDescriptor("nulltest", CLOptionDescriptor.ARGUMENT_DISALLOWED, 'n',
                 null);
@@ -907,6 +936,7 @@ public final class ClutilTestCase extends TestCase {
         assertEquals("Testing display of null description", "\t-n, --nulltest" + lineSeparator, sb.toString());
     }
     
+    @Test
     public void testCombinations() throws Exception {
         check(new String [] {},"");    
         check(new String [] {"--none",

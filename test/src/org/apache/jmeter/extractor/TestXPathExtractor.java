@@ -19,16 +19,18 @@
 package org.apache.jmeter.extractor;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.io.UnsupportedEncodingException;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestXPathExtractor extends TestCase {
+public class TestXPathExtractor {
         private XPathExtractor extractor;
 
         private SampleResult result;
@@ -37,15 +39,13 @@ public class TestXPathExtractor extends TestCase {
         
         private JMeterVariables vars;
 
-        public TestXPathExtractor(String name) {
-            super(name);
-        }
 
         private JMeterContext jmctx;
 
         private static final String VAL_NAME = "value";
         private static final String VAL_NAME_NR = "value_matchNr";
-        @Override
+        
+        @Before
         public void setUp() throws UnsupportedEncodingException {
             jmctx = JMeterContextService.getContext();
             extractor = new XPathExtractor();
@@ -60,6 +60,7 @@ public class TestXPathExtractor extends TestCase {
             jmctx.setPreviousResult(result);
         }
 
+        @Test
         public void testAttributeExtraction() throws Exception {
             extractor.setXPathQuery("/book/preface/@title");
             extractor.process();
@@ -89,6 +90,7 @@ public class TestXPathExtractor extends TestCase {
             assertNull(vars.get(VAL_NAME+"_1"));
         }
         
+        @Test
         public void testVariableExtraction() throws Exception {
             extractor.setXPathQuery("/book/preface");
             extractor.process();
@@ -154,6 +156,7 @@ public class TestXPathExtractor extends TestCase {
             assertEquals("<a><b/></a>", vars.get(VAL_NAME));
         }
 
+        @Test
         public void testScope(){
             extractor.setXPathQuery("/book/preface");
             extractor.process();
@@ -204,6 +207,7 @@ public class TestXPathExtractor extends TestCase {
             
         }
 
+        @Test
         public void testInvalidXpath() throws Exception {
             extractor.setXPathQuery("<");
             extractor.process();
@@ -211,6 +215,7 @@ public class TestXPathExtractor extends TestCase {
             assertEquals("0", vars.get(VAL_NAME_NR));
         }
 
+        @Test
         public void testInvalidDocument() throws Exception {
             result.setResponseData("<z>", null);
             extractor.setXPathQuery("<");

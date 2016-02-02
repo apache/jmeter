@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -28,6 +32,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
 //import org.apache.jorphan.logging.LoggingManager;
 
@@ -39,13 +45,9 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
 
     private JMeterContext jmctx;
 
-    public XMLSchemaAssertionTest(String arg0) {
-        super(arg0);
-    }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         assertion = new XMLSchemaAssertion();
         assertion.setThreadContext(jmctx);// This would be done by the run
@@ -73,6 +75,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         return readBA(name).toByteArray();
     }
 
+    @Test
     public void testAssertionOK() throws Exception {
         result.setResponseData(readFile("testfiles/XMLSchematest.xml"));
         assertion.setXsdFileName(findTestPath("testfiles/XMLSchema-pass.xsd"));
@@ -83,6 +86,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure", res.isFailure());
     }
 
+    @Test
     public void testAssertionFail() throws Exception {
         result.setResponseData(readFile("testfiles/XMLSchematest.xml"));
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
@@ -93,6 +97,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testAssertionBadXSDFile() throws Exception {
         result.setResponseData(readFile("testfiles/XMLSchematest.xml"));
         assertion.setXsdFileName("xtestfiles/XMLSchema-fail.xsd");
@@ -104,6 +109,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testAssertionNoFile() throws Exception {
         result.setResponseData(readFile("testfiles/XMLSchematest.xml"));
         assertion.setXsdFileName("");
@@ -115,6 +121,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertTrue(res.isFailure());
     }
 
+    @Test
     public void testAssertionNoResult() throws Exception {
         // result.setResponseData - not set
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
@@ -126,6 +133,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertTrue(res.isFailure());
     }
 
+    @Test
     public void testAssertionEmptyResult() throws Exception {
         result.setResponseData("", null);
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
@@ -137,6 +145,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertTrue(res.isFailure());
     }
 
+    @Test
     public void testAssertionBlankResult() throws Exception {
         result.setResponseData(" ", null);
         assertion.setXsdFileName("testfiles/XMLSchema-fail.xsd");
@@ -148,6 +157,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testXMLTrailingContent() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write("extra".getBytes()); // TODO - charset?
@@ -161,6 +171,7 @@ public class XMLSchemaAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testXMLTrailingWhitespace() throws Exception {
         ByteArrayOutputStream baos = readBA("testfiles/XMLSchematest.xml");
         baos.write(" \t\n".getBytes()); // TODO - charset?

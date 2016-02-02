@@ -18,13 +18,11 @@
 
 package org.apache.jmeter.functions;
 
+import org.junit.Before;
 
 public class TestJexl3Function extends TestJexl2Function {
-    
-    public TestJexl3Function(String name) {
-        super(name);
-    }
 
+    @Before
     @Override
     public void setUp() {
         super.setUp();

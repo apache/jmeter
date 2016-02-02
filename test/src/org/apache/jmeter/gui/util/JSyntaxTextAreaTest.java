@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.gui.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.awt.HeadlessException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -27,9 +30,11 @@ import java.util.Properties;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.junit.Test;
 
 public class JSyntaxTextAreaTest extends JMeterTestCase {
 
+    @Test
     public void testSetLanguage() {
         try {
             JSyntaxTextArea textArea = new JSyntaxTextArea(30, 50, false);
@@ -40,6 +45,7 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
         }
     }
   
+    @Test
     public void testSyntaxNames() throws IllegalArgumentException,
             IllegalAccessException {
         HashSet<String> values = new HashSet<>();

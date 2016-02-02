@@ -18,28 +18,24 @@
 
 package org.apache.jmeter.gui.util;
 
+import static org.junit.Assert.assertFalse;
+
 import java.awt.GraphicsEnvironment;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Test;
 
 public final class TestMenuFactory extends JMeterTestCase {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-        public TestMenuFactory() {
-            super();
-        }
+    private static void check(String s, int i) throws Exception {
+        assertFalse("The number of " + s + " should not be 0", 0 == i);
+    }
 
-        public TestMenuFactory(String name) {
-            super(name);
-        }
-
-        private static void check(String s, int i) throws Exception {
-            assertFalse("The number of " + s + " should not be 0", 0 == i);
-        }
-
+        @Test
         public void testMenu() throws Exception {
             if(GraphicsEnvironment.isHeadless()) {
                 System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
@@ -59,6 +55,5 @@ public final class TestMenuFactory extends JMeterTestCase {
             check("timers", MenuFactory.timers_size());
 
             check("elementstoskip", MenuFactory.elementsToSkip_size());
-
         }
 }

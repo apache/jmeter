@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.engine;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.control.GenericController;
@@ -27,12 +31,11 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.junit.Test;
 
-public class TestTreeCloner extends junit.framework.TestCase {
-        public TestTreeCloner(String name) {
-            super(name);
-        }
-
+public class TestTreeCloner {
+        
+        @Test
         public void testCloning() throws Exception {
             ListedHashTree original = new ListedHashTree();
             GenericController controller = new GenericController();
