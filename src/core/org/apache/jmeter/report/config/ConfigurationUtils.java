@@ -17,6 +17,9 @@
  */
 package org.apache.jmeter.report.config;
 
+import org.apache.jmeter.report.core.ConvertException;
+import org.apache.jmeter.report.core.Converters;
+
 /**
  * The class ConfigurationUtils provides helper method for configuration
  * handling.
@@ -47,28 +50,12 @@ public class ConfigurationUtils {
      *             when unable to convert the string
      */
     public static <TProperty> TProperty convert(String value,
-        Class<TProperty> clazz) throws ConfigurationException {
-        TProperty result;
-        if (clazz.isAssignableFrom(String.class)) {
-            @SuppressWarnings("unchecked") // OK because checked above
-            TProperty temp = (TProperty) value;
-            result = temp;
-        } else {
-            StringConverter<TProperty> converter = Converters
-                    .getConverter(clazz);
-            if (converter == null) {
-                throw new ConfigurationException(String.format(
-                        NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
-            }
-
-            try {
-                result = converter.convert(value);
-            } catch (ConvertException ex) {
-                throw new ConfigurationException(String.format(
-                        NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()),
-                        ex);
-            }
-        }
-        return result;
+            Class<TProperty> clazz) throws ConfigurationException {
+	try {
+	    return Converters.convert(clazz, value);
+	} catch (ConvertException ex) {
+	    throw new ConfigurationException(String.format(
+	            NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
+	}
     }
 }

@@ -98,7 +98,7 @@ public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
         SampleMetadata metadata = builder.getMetadata();
         int colCount = metadata.getColumnCount();
         for (int i = 0; i < colCount - 1; i++) {
-            builder.add(sample.getString(i));
+            builder.add(sample.getData(i));
         }
         builder.add(String.valueOf(index));
         return builder.build();
