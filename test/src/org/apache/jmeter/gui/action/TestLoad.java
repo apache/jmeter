@@ -23,17 +23,17 @@ import java.io.FilenameFilter;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.TestSuite;
-
-import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jorphan.collections.HashTree;
+
+import junit.framework.TestSuite;
 
 /**
  * 
  * Test JMX files to check that they can be loaded OK.
  */
-public class TestLoad extends JMeterTestCase {
+public class TestLoad extends JMeterTestCaseJUnit3 {
 
     private static final String basedir = new File(System.getProperty("user.dir")).getParent();
     private static final File testfiledir = new File(basedir,"bin/testfiles");

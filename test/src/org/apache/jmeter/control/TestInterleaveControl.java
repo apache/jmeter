@@ -18,15 +18,16 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.junit.Test;
 
 public class TestInterleaveControl extends JMeterTestCase {
-        public TestInterleaveControl(String name) {
-            super(name);
-        }
 
+        @Test
         public void testProcessing() throws Exception {
             testLog.debug("Testing Interleave Controller 1");
             GenericController controller = new GenericController();
@@ -69,6 +70,7 @@ public class TestInterleaveControl extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testProcessing6() throws Exception {
             testLog.debug("Testing Interleave Controller 6");
             GenericController controller = new GenericController();
@@ -95,6 +97,7 @@ public class TestInterleaveControl extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testProcessing2() throws Exception {
             testLog.debug("Testing Interleave Controller 2");
             GenericController controller = new GenericController();
@@ -130,6 +133,7 @@ public class TestInterleaveControl extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testProcessing3() throws Exception {
             testLog.debug("Testing Interleave Controller 3");
             GenericController controller = new GenericController();
@@ -165,6 +169,7 @@ public class TestInterleaveControl extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testProcessing4() throws Exception {
             testLog.debug("Testing Interleave Controller 4");
             GenericController controller = new GenericController();
@@ -195,6 +200,7 @@ public class TestInterleaveControl extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testProcessing5() throws Exception {
             testLog.debug("Testing Interleave Controller 5");
             GenericController controller = new GenericController();

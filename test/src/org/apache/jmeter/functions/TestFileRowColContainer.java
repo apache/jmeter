@@ -18,9 +18,15 @@
 
 package org.apache.jmeter.functions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.FileNotFoundException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.Test;
 
 /**
  * File data container for CSV (and similar delimited) files Data is accessible
@@ -30,6 +36,7 @@ import org.apache.jmeter.junit.JMeterTestCase;
  */
 public class TestFileRowColContainer extends JMeterTestCase {
 
+    @Test
     public void testNull() throws Exception {
         try {
             new FileRowColContainer(findTestPath("testfiles/xyzxyz"));
@@ -38,6 +45,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testrowNum() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"));
         assertNotNull(f);
@@ -51,6 +59,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
 
     }
 
+    @Test
     public void testColumns() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"));
         assertNotNull(f);
@@ -72,6 +81,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
         assertEquals("c2", f.getColumn(myRow, 2));
     }
 
+    @Test
     public void testColumnsComma() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.csv"), ",");
         assertNotNull(f);
@@ -93,6 +103,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
         assertEquals("c2", f.getColumn(myRow, 2));
     }
 
+    @Test
     public void testColumnsTab() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/test.tsv"), "\t");
         assertNotNull(f);
@@ -114,6 +125,7 @@ public class TestFileRowColContainer extends JMeterTestCase {
         assertEquals("c2", f.getColumn(myRow, 2));
     }
 
+    @Test
     public void testEmptyCols() throws Exception {
         FileRowColContainer f = new FileRowColContainer(findTestPath("testfiles/testempty.csv"));
         assertNotNull(f);

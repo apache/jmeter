@@ -18,11 +18,18 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
 public class SizeAssertionTest extends JMeterTestCase{
 
@@ -32,7 +39,7 @@ public class SizeAssertionTest extends JMeterTestCase{
       private final String data1 = "response Data\n" +  "line 2\n\nEOF";
       private final int data1Len=data1.length();
       
-      @Override
+      @Before
     public void setUp() {
           JMeterContext jmctx = JMeterContextService.getContext();
           assertion = new SizeAssertion();
@@ -45,7 +52,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           sample1.setResponseData(data1, null);
       }
 
-      public void testSizeAssertionEquals() throws Exception{
+      @Test
+    public void testSizeAssertionEquals() throws Exception{
           assertion.setCompOper(SizeAssertion.EQUAL);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);
@@ -62,7 +70,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           assertFailed();
         }
       
-      public void testSizeAssertionNotEquals() throws Exception{
+      @Test
+    public void testSizeAssertionNotEquals() throws Exception{
           assertion.setCompOper(SizeAssertion.NOTEQUAL);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);
@@ -79,7 +88,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           assertPassed();
         }
 
-      public void testSizeAssertionGreaterThan() throws Exception{
+      @Test
+    public void testSizeAssertionGreaterThan() throws Exception{
           assertion.setCompOper(SizeAssertion.GREATERTHAN);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);
@@ -96,7 +106,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           assertFailed();
         }
       
-      public void testSizeAssertionGreaterThanEqual() throws Exception{
+      @Test
+    public void testSizeAssertionGreaterThanEqual() throws Exception{
           assertion.setCompOper(SizeAssertion.GREATERTHANEQUAL);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);
@@ -113,7 +124,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           assertFailed();
         }
       
-      public void testSizeAssertionLessThan() throws Exception{
+      @Test
+    public void testSizeAssertionLessThan() throws Exception{
           assertion.setCompOper(SizeAssertion.LESSTHAN);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);
@@ -130,7 +142,8 @@ public class SizeAssertionTest extends JMeterTestCase{
           assertPassed();
         }
 
-      public void testSizeAssertionLessThanEqual() throws Exception{
+      @Test
+    public void testSizeAssertionLessThanEqual() throws Exception{
           assertion.setCompOper(SizeAssertion.LESSTHANEQUAL);
           assertion.setAllowedSize(0);
           result = assertion.getResult(sample1);

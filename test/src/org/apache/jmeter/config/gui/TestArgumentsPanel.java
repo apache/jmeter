@@ -18,10 +18,11 @@
 
 package org.apache.jmeter.config.gui;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
+import org.junit.Test;
 
 /**
  * A GUI panel allowing the user to enter name-value argument pairs. These
@@ -29,16 +30,8 @@ import org.apache.jmeter.config.Arguments;
  * for some other component.
  * 
  */
-public class TestArgumentsPanel extends TestCase {
-        /**
-         * Create a new test.
-         * 
-         * @param name
-         *            the name of the test
-         */
-        public TestArgumentsPanel(String name) {
-            super(name);
-        }
+public class TestArgumentsPanel {
+        
 
         /**
          * Test that adding an argument to the table results in an appropriate
@@ -47,6 +40,7 @@ public class TestArgumentsPanel extends TestCase {
          * @throws Exception
          *             if an exception occurred during the test
          */
+        @Test
         public void testArgumentCreation() throws Exception {
             ArgumentsPanel gui = new ArgumentsPanel();
             gui.tableModel.addRow(new Argument());
