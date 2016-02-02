@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 /**
  * Class to inherit from so when in future when new controls are added clients
  * will no have to implement them.
