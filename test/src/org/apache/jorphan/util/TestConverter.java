@@ -18,20 +18,19 @@
 
 package org.apache.jorphan.util;
 
+import static org.junit.Assert.assertEquals;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 /**
  * Tests for {@link Converter}
  *
  */
-public class TestConverter extends TestCase {
+public class TestConverter {
 
     /**
      * Test {@link Converter#getCalendar(Object, Calendar)} with a given Date

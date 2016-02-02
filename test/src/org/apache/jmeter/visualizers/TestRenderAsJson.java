@@ -1,12 +1,12 @@
 package org.apache.jmeter.visualizers;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.reflect.Method;
-
-import junit.framework.TestCase;
-
+import org.junit.Before;
 import org.junit.Test;
 
-public class TestRenderAsJson extends TestCase {
+public class TestRenderAsJson {
 
     private Method prettyJSON;
     private final String TAB = ":   ";
@@ -15,9 +15,8 @@ public class TestRenderAsJson extends TestCase {
         return (String) prettyJSON.invoke(null, prettify);
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         prettyJSON = RenderAsJSON.class.getDeclaredMethod("prettyJSON",
                 String.class);
         prettyJSON.setAccessible(true);
