@@ -18,32 +18,36 @@
 
 package org.apache.jorphan;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.util.XMLBuffer;
+import org.junit.Test;
 
 public class TestXMLBuffer extends JMeterTestCase {
 
-    public TestXMLBuffer(String arg0) {
-        super(arg0);
-    }
-    
+    @Test
     public void test1() throws Exception{
         XMLBuffer xb = new XMLBuffer();
         xb.openTag("start");
         assertEquals("<start></start>\n",xb.toString());
     }
     
+    @Test
     public void test2() throws Exception{
         XMLBuffer xb = new XMLBuffer();
         xb.tag("start","now");
         assertEquals("<start>now</start>\n",xb.toString());
     }
+    @Test
     public void test3() throws Exception{
         XMLBuffer xb = new XMLBuffer();
         xb.openTag("abc");
         xb.closeTag("abc");
         assertEquals("<abc></abc>\n",xb.toString());
     }
+    @Test
     public void test4() throws Exception{
         XMLBuffer xb = new XMLBuffer();
         xb.openTag("abc");

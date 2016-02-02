@@ -18,12 +18,17 @@
 
 package org.apache.jorphan.reflect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
+import org.junit.Before;
+import org.junit.Test;
 
 /*
  * Unit tests for classes that use Functors
@@ -85,15 +90,12 @@ public class TestFunctor extends JMeterTestCase {
         }
     }
     
-    public TestFunctor(String arg0) {
-        super(arg0);
-    }
-    
-    @Override
+    @Before
     public void setUp(){
         LoggingManager.setPriority("FATAL_ERROR",LoggingManager.removePrefix(Functor.class.getName()));     
     }
 
+    @Test
     public void testName() throws Exception{
         Functor f1 = new Functor("getName");
         Functor f2 = new Functor("getName");
@@ -124,6 +126,7 @@ public class TestFunctor extends JMeterTestCase {
         //assertEquals("1a:aa.",f1.invoke());// N.B. returns different result from before
     }
     
+    @Test
     public void testNameTypes() throws Exception{
         Functor f = new Functor("getString",new Class[]{String.class});
         Functor f2 = new Functor("getString");// Args will be provided later
@@ -141,6 +144,7 @@ public class TestFunctor extends JMeterTestCase {
         } catch (JMeterError ok){
         }
     }
+    @Test
     public void testObjectName() throws Exception{
         Test1 t1 = new Test1("t1");
         Test2 t2 = new Test2("t2");
@@ -150,6 +154,7 @@ public class TestFunctor extends JMeterTestCase {
     }
     
     // Check how Class definition behaves
+    @Test
     public void testClass() throws Exception{
         Test1 t1 = new Test1("t1");
         Test1 t1a = new Test1a("t1a");
@@ -184,6 +189,7 @@ public class TestFunctor extends JMeterTestCase {
         assertEquals("Value",fv.invoke(o));
     }
     
+    @Test
     public void testBadParameters() throws Exception{
         try {
             new Functor(null);
@@ -214,6 +220,7 @@ public class TestFunctor extends JMeterTestCase {
             fail("should have generated IllegalArgumentException;");
         } catch (IllegalArgumentException ok){}
     }
+    @Test
     public void testIllegalState() throws Exception{
         Functor f = new Functor("method");
         try {

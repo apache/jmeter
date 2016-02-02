@@ -22,23 +22,19 @@
      
 package org.apache.jmeter.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class TestJMeterUtils extends TestCase {
+import org.junit.Test;
 
-    public TestJMeterUtils() {
-        super();
-    }
+public class TestJMeterUtils {
 
-    public TestJMeterUtils(String arg0) {
-        super(arg0);
-    }
-
+    @Test
     public void testGetResourceFileAsText() throws Exception{
         String sep = System.getProperty("line.separator");
         assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
     }
     
+    @Test
     public void testGetResourceFileAsTextWithMisingResource() throws Exception{
         assertEquals("", JMeterUtils.getResourceFileAsText("not_existant_resourcefile.txt"));
     }

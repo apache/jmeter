@@ -17,7 +17,8 @@
  */
 package org.apache.jorphan.reflect;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.jorphan.util.JMeterException;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import org.junit.Test;
 /**
  * Test various aspects of the {@link ClassTools} class
  */
-public class TestClassTools extends TestCase {
+public class TestClassTools {
 
     /**
      * Test that a class can be constructed using the default constructor

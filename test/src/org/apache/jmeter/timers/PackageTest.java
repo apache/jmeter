@@ -18,21 +18,22 @@
 
 package org.apache.jmeter.timers;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Test;
 
 public class PackageTest extends JMeterTestCase {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
 
+    @Test
     public void testTimer1() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         assertEquals(0,timer.getCalcMode());// Assume this thread only
@@ -43,6 +44,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("Expected delay of approx 500",500, timer.delay(), 50);
     }
 
+    @Test
     public void testTimer2() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         assertEquals(0,timer.getCalcMode());// Assume this thread only
@@ -52,6 +54,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals(1,timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
     }
 
+    @Test
     public void testTimer3() throws Exception {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         timer.setMode(ConstantThroughputTimer.Mode.AllActiveThreads); //$NON-NLS-1$ - all threads
@@ -72,6 +75,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals(1,timer.calculateCurrentTarget(0)); // Should delay for 1 milli-second
     }
 
+    @Test
     public void testTimerBSH() throws Exception {
         if (!BeanShellInterpreter.isInterpreterPresent()){
             final String msg = "BeanShell jar not present, test ignored";
