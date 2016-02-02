@@ -19,15 +19,13 @@ package org.apache.jmeter.report.processor;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleComparator;
-import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
 
 /**
  * @since 2.14
  */
 public class FieldSampleComparator implements SampleComparator {
-    private static final String METADATA_EXCEPTION_MSG_FMT = "No <%s> data found in sample metadata <%s>";
-
+    
     private int index;
 
     private final String fieldName;
@@ -38,11 +36,7 @@ public class FieldSampleComparator implements SampleComparator {
 
     @Override
     public final void initialize(SampleMetadata metadata) {
-        index = metadata.indexOf(fieldName);
-        if (index < 0) {
-            throw new SampleException(String.format(METADATA_EXCEPTION_MSG_FMT,
-                    fieldName, metadata));
-        }
+        index = metadata.ensureIndexOf(fieldName);
     }
 
     /*
@@ -54,6 +48,6 @@ public class FieldSampleComparator implements SampleComparator {
      */
     @Override
     public long compare(Sample s1, Sample s2) {
-        return Long.compare(s1.getLong(index), s2.getLong(index));
+        return Long.compare(s1.getData(long.class, index), s2.getData(long.class, index));
     }
 }
