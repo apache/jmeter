@@ -16,11 +16,11 @@
  */
 package org.apache.jmeter.testbeans.gui;
 
+import static org.junit.Assert.assertEquals;
 
-public class TestFieldStringEditor extends junit.framework.TestCase {
-        public TestFieldStringEditor(String name) {
-            super(name);
-        }
+import org.junit.Test;
+
+public class TestFieldStringEditor {
 
         private void testSetGet(ComboStringEditor e, Object value) throws Exception {
             e.setValue(value);
@@ -32,6 +32,7 @@ public class TestFieldStringEditor extends junit.framework.TestCase {
             assertEquals(text, e.getAsText());
         }
 
+        @Test
         public void testSetGet() throws Exception {
             @SuppressWarnings("deprecation") // test code, intentional
             ComboStringEditor e = new ComboStringEditor();
@@ -41,6 +42,7 @@ public class TestFieldStringEditor extends junit.framework.TestCase {
             testSetGet(e, "${var}");
         }
 
+        @Test
         public void testSetGetAsText() throws Exception {
             @SuppressWarnings("deprecation") // test code, intentional
             ComboStringEditor e = new ComboStringEditor();

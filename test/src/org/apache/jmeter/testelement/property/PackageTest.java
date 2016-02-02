@@ -18,19 +18,20 @@
 
 package org.apache.jmeter.testelement.property;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import org.apache.jmeter.config.LoginConfig;
+import org.junit.Test;
 
 /**
  * Class for testing the property package.
  */
-public class PackageTest extends TestCase {
+public class PackageTest {
 
-    public PackageTest(String name) {
-        super(name);
-    }
 
+    @Test
     public void testStringProperty() throws Exception {
         StringProperty prop = new StringProperty("name", "value");
         prop.setRunningVersion(true);
@@ -45,6 +46,7 @@ public class PackageTest extends TestCase {
         assertEquals("value", prop.getStringValue());
     }
 
+    @Test
     public void testElementProperty() throws Exception {
         LoginConfig config = new LoginConfig();
         config.setUsername("username");
@@ -88,6 +90,7 @@ public class PackageTest extends TestCase {
         // do not check hashcodes; unequal objects may have equal hashcodes
     }
 
+    @Test
     public void testBooleanEquality() throws Exception {
         BooleanProperty jpn1 = new BooleanProperty();
         BooleanProperty jpn2 = new BooleanProperty();
@@ -104,6 +107,7 @@ public class PackageTest extends TestCase {
         checkNotEquals(jp3, jp4);
     }
 
+    @Test
     public void testDoubleEquality() throws Exception {
         DoubleProperty jpn1 = new DoubleProperty();
         DoubleProperty jpn2 = new DoubleProperty();
@@ -145,6 +149,7 @@ public class PackageTest extends TestCase {
         checkEquals(jp16, jp17);
     }
 
+    @Test
     public void testFloatEquality() throws Exception {
         FloatProperty jp1 = new FloatProperty("name1", 123.4f);
         FloatProperty jp2 = new FloatProperty("name1", 123.4f);
@@ -181,6 +186,7 @@ public class PackageTest extends TestCase {
         checkEquals(jp16, jp17);
     }
 
+    @Test
     public void testIntegerEquality() throws Exception {
         IntegerProperty jp1 = new IntegerProperty("name1", 123);
         IntegerProperty jp2 = new IntegerProperty("name1", 123);
@@ -215,6 +221,7 @@ public class PackageTest extends TestCase {
         }
     }
 
+    @Test
     public void testLongEquality() throws Exception {
         LongProperty jp1 = new LongProperty("name1", 123);
         LongProperty jp2 = new LongProperty("name1", 123);
@@ -244,6 +251,7 @@ public class PackageTest extends TestCase {
         }
     }
 
+    @Test
     public void testMapEquality() throws Exception {
         try {
             new MapProperty(null, null);
@@ -253,6 +261,7 @@ public class PackageTest extends TestCase {
 
     }
 
+    @Test
     public void testNullEquality() throws Exception {
         NullProperty jpn1 = new NullProperty();
         NullProperty jpn2 = new NullProperty();
@@ -273,6 +282,7 @@ public class PackageTest extends TestCase {
         checkEquals(jp3, jp4);
     }
 
+    @Test
     public void testStringEquality() throws Exception {
         StringProperty jpn1 = new StringProperty();
         StringProperty jpn2 = new StringProperty();
@@ -304,6 +314,7 @@ public class PackageTest extends TestCase {
         }
 
     }
+    @Test
     public void testAddingProperties() throws Exception {
         CollectionProperty coll = new CollectionProperty();
         coll.addItem("joe");

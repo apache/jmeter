@@ -18,14 +18,13 @@
 
 package org.apache.jmeter.threads;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class TestJMeterContextService extends TestCase {
+import org.junit.Test;
 
-    public TestJMeterContextService(String name) {
-        super(name);
-    }
+public class TestJMeterContextService {
 
+    @Test
     public void testCounts(){
         assertEquals(0,JMeterContextService.getNumberOfThreads());
         assertEquals(0,JMeterContextService.getTotalThreads());

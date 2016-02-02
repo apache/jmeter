@@ -17,20 +17,20 @@
  */
 package org.apache.jmeter.report.processor;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
+import org.junit.Before;
 import org.junit.Test;
 
-public class FieldSampleComparatorTest extends TestCase {
+public class FieldSampleComparatorTest {
 
     private SampleMetadata sampleMetadata;
     private FieldSampleComparator comparator;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         sampleMetadata = new SampleMetadata(',', "test");
         comparator = new FieldSampleComparator("test");
         comparator.initialize(sampleMetadata);
