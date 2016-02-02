@@ -30,12 +30,8 @@ import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import junit.extensions.ActiveTestSuite;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -45,10 +41,14 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.log.Logger;
 
+import junit.extensions.ActiveTestSuite;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 /**
  * Test cases for Functions
  */
-public class PackageTest extends JMeterTestCase {
+public class PackageTest extends JMeterTestCaseJUnit3 {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 

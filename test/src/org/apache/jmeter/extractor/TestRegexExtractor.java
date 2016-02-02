@@ -19,29 +19,31 @@
 package org.apache.jmeter.extractor;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestRegexExtractor extends TestCase {
+public class TestRegexExtractor {
+    
         private RegexExtractor extractor;
 
         private SampleResult result;
 
         private JMeterVariables vars;
 
-        public TestRegexExtractor(String name) {
-            super(name);
-        }
-
         private JMeterContext jmctx;
 
-        @Override
+        @Before
         public void setUp() {
             jmctx = JMeterContextService.getContext();
             extractor = new RegexExtractor();
@@ -65,6 +67,7 @@ public class TestRegexExtractor extends TestCase {
             jmctx.setPreviousResult(result);
         }
 
+        @Test
         public void testEmptyDefaultVariable() throws Exception {
             extractor.setRegex("<value name=\"positioncount\">(.+?)</value>");
             extractor.setTemplate("$1$");
@@ -74,6 +77,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("", vars.get("regVal"));
         }
         
+        @Test
         public void testNotEmptyDefaultVariable() throws Exception {
             extractor.setRegex("<value name=\"positioncount\">(.+?)</value>");
             extractor.setTemplate("$1$");
@@ -83,6 +87,7 @@ public class TestRegexExtractor extends TestCase {
             assertNull(vars.get("regVal"));
         }
         
+        @Test
         public void testVariableExtraction0() throws Exception {
             extractor.setRegex("<(value) field=\"");
             extractor.setTemplate("$1$");
@@ -91,6 +96,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("value", vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -111,6 +117,7 @@ public class TestRegexExtractor extends TestCase {
             rex.process();
         }
 
+        @Test
         public void testTemplate1() throws Exception {
             templateSetup(extractor, "");
             assertEquals("<company-xmlext-query-ret>", vars.get("regVal_g0"));
@@ -121,36 +128,43 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("3",vars.get("regVal_g"));
         }
 
+        @Test
         public void testTemplate2() throws Exception {
             templateSetup(extractor, "ABC");
             assertEquals("ABC", vars.get("regVal"));
         }
 
+        @Test
         public void testTemplate3() throws Exception {
             templateSetup(extractor, "$2$");
             assertEquals("query", vars.get("regVal"));
         }
 
+        @Test
         public void testTemplate4() throws Exception {
             templateSetup(extractor, "PRE$2$");
             assertEquals("PREquery", vars.get("regVal"));
         }
 
+        @Test
         public void testTemplate5() throws Exception {
             templateSetup(extractor, "$2$POST");
             assertEquals("queryPOST", vars.get("regVal"));
         }
 
+        @Test
         public void testTemplate6() throws Exception {
             templateSetup(extractor, "$2$$1$");
             assertEquals("queryxmlext", vars.get("regVal"));
         }
 
+        @Test
         public void testTemplate7() throws Exception {
             templateSetup(extractor, "$2$MID$1$");
             assertEquals("queryMIDxmlext", vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction2() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$1$");
@@ -159,6 +173,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("pinposition3", vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction6() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -168,6 +183,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("default", vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction3() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("_$1$");
@@ -176,6 +192,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("_pinposition2", vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction5() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$1$");
@@ -233,6 +250,7 @@ public class TestRegexExtractor extends TestCase {
             assertNull("Unused variables should be null", vars.get("regVal_1_g2"));
         }
 
+        @Test
         public void testVariableExtraction7() throws Exception {
             extractor.setRegex("Header1: (\\S+)");
             extractor.setTemplate("$1$");
@@ -256,6 +274,7 @@ public class TestRegexExtractor extends TestCase {
             assertTrue("useURL should be true", extractor.useUrl());
         }
 
+        @Test
         public void testVariableExtraction8() throws Exception {
             extractor.setRegex("http://jakarta\\.apache\\.org/(\\w+)");
             extractor.setTemplate("$1$");
@@ -271,6 +290,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("index",vars.get("regVal"));
         }
 
+        @Test
         public void testVariableExtraction9() throws Exception {
             extractor.setRegex("(\\w+)");
             extractor.setTemplate("$1$");
@@ -294,6 +314,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("brown",vars.get("regVal"));
         }
 
+        @Test
         public void testNoDefault() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -305,6 +326,7 @@ public class TestRegexExtractor extends TestCase {
             assertEquals("initial", vars.get("regVal"));
         }
 
+        @Test
         public void testDefault() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -318,6 +340,7 @@ public class TestRegexExtractor extends TestCase {
             assertNull(vars.get("regVal_g1"));
         }
 
+        @Test
         public void testStaleVariables() throws Exception {
             extractor.setRegex("<value field=\"(pinposition\\d+)\">(\\d+)</value>");
             extractor.setTemplate("$2$");
@@ -338,6 +361,7 @@ public class TestRegexExtractor extends TestCase {
             assertNull(vars.get("regVal_g"));
         }
 
+    @Test
     public void testScope1() throws Exception {
         result.setResponseData("<title>ONE</title>", "ISO-8859-1");
         extractor.setScopeParent();
@@ -355,6 +379,7 @@ public class TestRegexExtractor extends TestCase {
         assertEquals("NOTFOUND", vars.get("regVal"));
     }
 
+    @Test
     public void testScope2() throws Exception {
         result.sampleStart();
         result.setResponseData("<title>PARENT</title>", "ISO-8859-1");

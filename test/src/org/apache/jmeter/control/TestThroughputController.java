@@ -18,9 +18,14 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
+import org.junit.Test;
 
 /**
  * This class represents a controller that can controll the number of times that
@@ -30,10 +35,8 @@ import org.apache.jmeter.testelement.TestElement;
  * 
  */
 public class TestThroughputController extends JMeterTestCase {
-        public TestThroughputController(String name) {
-            super(name);
-        }
 
+        @Test
         public void testByNumber() throws Exception {
             ThroughputController sub_1 = new ThroughputController();
             sub_1.setStyle(ThroughputController.BYNUMBER);
@@ -69,6 +72,7 @@ public class TestThroughputController extends JMeterTestCase {
             sub_1.testEnded();
         }
 
+        @Test
         public void testByNumberZero() throws Exception {
             ThroughputController sub_1 = new ThroughputController();
             sub_1.setStyle(ThroughputController.BYNUMBER);
@@ -102,6 +106,7 @@ public class TestThroughputController extends JMeterTestCase {
             sub_1.testEnded();
         }
 
+        @Test
         public void testByPercent33() throws Exception {
             ThroughputController sub_1 = new ThroughputController();
             sub_1.setStyle(ThroughputController.BYPERCENT);
@@ -150,6 +155,7 @@ public class TestThroughputController extends JMeterTestCase {
             sub_1.testEnded();
         }
 
+        @Test
         public void testByPercentZero() throws Exception {
             ThroughputController sub_1 = new ThroughputController();
             sub_1.setStyle(ThroughputController.BYPERCENT);
@@ -182,6 +188,7 @@ public class TestThroughputController extends JMeterTestCase {
             sub_1.testEnded();
         }
 
+        @Test
         public void testByPercent100() throws Exception {
             ThroughputController sub_1 = new ThroughputController();
             sub_1.setStyle(ThroughputController.BYPERCENT);

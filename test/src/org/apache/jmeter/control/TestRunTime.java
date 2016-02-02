@@ -18,18 +18,19 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.samplers.Sampler;
-
+import org.junit.Test;
 /**
  * @version $Revision$
  */
 public class TestRunTime extends JMeterTestCase {
-        public TestRunTime(String name) {
-            super(name);
-        }
 
+    @Test
         public void testProcessing() throws Exception {
 
             RunTime controller = new RunTime();

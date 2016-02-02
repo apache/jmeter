@@ -21,6 +21,9 @@
  */
 package org.apache.jmeter.engine.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +34,8 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
 /*
  * To run this test stand-alone, ensure that ApacheJMeter_functions.jar is on the classpath,
@@ -39,13 +44,10 @@ import org.apache.jmeter.threads.JMeterVariables;
 public class PackageTest extends JMeterTestCase {
     private ReplaceStringWithFunctions transformer;
 
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
 
     private JMeterContext jmctx = null;
 
-    @Override
+    @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
         Map<String, String> variables = new HashMap<>();
@@ -61,6 +63,7 @@ public class PackageTest extends JMeterTestCase {
         jmctx.getVariables().put("my_regex", ".*");
     }
 
+    @Test
     public void testFunctionParse1() throws Exception {
         StringProperty prop = new StringProperty("date", "${__javaScript((new Date().getDate() / 100).toString()."
                 + "substr(${__javaScript(1+1,d\\,ay)}\\,2),heute)}");
@@ -72,6 +75,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("2", jmctx.getVariables().getObject("d,ay"));
     }
 
+    @Test
     public void testParseExample1() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(.*)</html>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -80,6 +84,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("hello world", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample2() throws Exception {
         StringProperty prop = new StringProperty("html", "It should say:\\${${__regexFunction(<html>(.*)</html>,$1$)}}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -88,6 +93,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("It should say:${hello world}", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample3() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(.*)</html>,$1$)}"
                 + "${__regexFunction(<html>(.*o)(.*o)(.*)</html>," + "$1$$3$)}");
@@ -97,6 +103,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("hello worldhellorld", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample4() throws Exception {
         StringProperty prop = new StringProperty("html", "${non-existing function}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -105,6 +112,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("${non-existing function}", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample6() throws Exception {
         StringProperty prop = new StringProperty("html", "${server}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -113,6 +121,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("jakarta.apache.org", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample5() throws Exception {
         StringProperty prop = new StringProperty("html", "");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -121,6 +130,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample7() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(\\<([a-z]*)\\>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -129,6 +139,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("html", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample8() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction((\\\\$\\d+\\.\\d+),$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -137,6 +148,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("$3.47", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample9() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(([$]\\d+\\.\\d+),$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -145,6 +157,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("$3.47", newProp.getStringValue());
     }
 
+    @Test
     public void testParseExample10() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(\\ "
                 + "(\\\\\\$\\d+\\.\\d+\\,\\\\$\\d+\\.\\d+),$1$)}");
@@ -155,6 +168,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     // Escaped dollar commma and backslash with no variable reference
+    @Test
     public void testParseExample11() throws Exception {
         StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ \\x \\ jakarta.apache.org");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -168,6 +182,7 @@ public class PackageTest extends JMeterTestCase {
     // so document the current behaviour with some more tests.
     
     // Escaped dollar commma and backslash with variable reference
+    @Test
     public void testParseExample12() throws Exception {
         StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ \\x \\ ${server} \\$b \\, \\\\ cd");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -177,6 +192,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     // Escaped dollar commma and backslash with missing variable reference
+    @Test
     public void testParseExample13() throws Exception {
         StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ \\x \\ ${missing} \\$b \\, \\\\ cd");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -186,6 +202,7 @@ public class PackageTest extends JMeterTestCase {
     }
 
     // Escaped dollar commma and backslash with missing function reference
+    @Test
     public void testParseExample14() throws Exception {
         StringProperty prop = new StringProperty("html", "\\$a \\, \\\\ \\x \\ ${__missing(a)} \\$b \\, \\\\ cd");
         JMeterProperty newProp = transformer.transformValue(prop);
@@ -194,6 +211,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("$a , \\ \\x \\ ${__missing(a)} $b , \\ cd", newProp.getStringValue());
     }
 
+    @Test
     public void testNestedExample1() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(${my_regex})</html>,"
                 + "$1$)}${__regexFunction(<html>(.*o)(.*o)(.*)" + "</html>,$1$$3$)}");
@@ -203,6 +221,7 @@ public class PackageTest extends JMeterTestCase {
         assertEquals("hello worldhellorld", newProp.getStringValue());
     }
 
+    @Test
     public void testNestedExample2() throws Exception {
         StringProperty prop = new StringProperty("html", "${__regexFunction(<html>(${my_regex})</html>,$1$)}");
         JMeterProperty newProp = transformer.transformValue(prop);

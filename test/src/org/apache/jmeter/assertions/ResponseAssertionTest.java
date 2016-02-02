@@ -18,19 +18,24 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ResponseAssertionTest  extends TestCase {
+public class ResponseAssertionTest {
 
     public ResponseAssertionTest() {
     }
@@ -39,7 +44,7 @@ public class ResponseAssertionTest  extends TestCase {
     private SampleResult sample;
     private AssertionResult result;
     
-    @Override
+    @Before
     public void setUp() throws MalformedURLException {
         JMeterContext jmctx = JMeterContextService.getContext();
         assertion = new ResponseAssertion();
@@ -54,6 +59,7 @@ public class ResponseAssertionTest  extends TestCase {
         sample.setResponseHeaders("X-Header: abcd");
     }
 
+    @Test
     public void testResponseAssertionEquals() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();
@@ -71,6 +77,7 @@ public class ResponseAssertionTest  extends TestCase {
         assertPassed();
     }
     
+    @Test
     public void testResponseAssertionHeaders() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();
@@ -86,6 +93,7 @@ public class ResponseAssertionTest  extends TestCase {
         assertPassed();
     }
     
+    @Test
     public void testResponseAssertionContains() throws Exception{
         assertion.unsetNotType();
         assertion.setToContainsType();
@@ -130,6 +138,7 @@ public class ResponseAssertionTest  extends TestCase {
     }
 
     // Bug 46831 - check can match dollars
+    @Test
     public void testResponseAssertionContainsDollar() throws Exception {
         sample.setResponseData("value=\"${ID}\" Group$ctl00$drpEmails", null);
         assertion.unsetNotType();
@@ -141,6 +150,7 @@ public class ResponseAssertionTest  extends TestCase {
         assertPassed();        
     }
     
+    @Test
     public void testResponseAssertionSubstring() throws Exception{
         assertion.unsetNotType();
         assertion.setToSubstringType();
@@ -202,6 +212,7 @@ public class ResponseAssertionTest  extends TestCase {
     }
     private AtomicInteger failed;
 
+    @Test
     public void testThreadSafety() throws Exception {
         Thread[] threads = new Thread[100];
         CountDownLatch latch = new CountDownLatch(threads.length);

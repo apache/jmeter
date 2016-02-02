@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.assertions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -30,6 +34,8 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 public class XPathAssertionTest extends JMeterTestCase {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -42,13 +48,9 @@ public class XPathAssertionTest extends JMeterTestCase {
 
     private JMeterContext jmctx;
 
-    public XPathAssertionTest(String arg0) {
-        super(arg0);
-    }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         jmctx = JMeterContextService.getContext();
         assertion = new XPathAssertion();
         assertion.setThreadContext(jmctx);// This would be done by the run command
@@ -87,6 +89,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         return readBA(name).toByteArray();
     }
 
+    @Test
     public void testAssertionOK() throws Exception {
         assertion.setXPathString("/");
         AssertionResult res = assertion.getResult(result);
@@ -96,6 +99,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure", res.isFailure());
     }
 
+    @Test
     public void testAssertionFail() throws Exception {
         assertion.setXPathString("//x");
         AssertionResult res = assertion.getResult(result);
@@ -105,6 +109,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionPath1() throws Exception {
         assertion.setXPathString("//*[code=1]");
         AssertionResult res = assertion.getResult(result);
@@ -114,6 +119,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionPath2() throws Exception {
         assertion.setXPathString("//*[code=2]"); // Not present
         AssertionResult res = assertion.getResult(result);
@@ -123,6 +129,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionBool1() throws Exception {
         assertion.setXPathString("count(//error)=2");
         AssertionResult res = assertion.getResult(result);
@@ -132,6 +139,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionBool2() throws Exception {
         assertion.setXPathString("count(//*[code=1])=1");
         AssertionResult res = assertion.getResult(result);
@@ -141,6 +149,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionBool3() throws Exception {
         assertion.setXPathString("count(//error)=1"); // wrong
         AssertionResult res = assertion.getResult(result);
@@ -150,6 +159,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionBool4() throws Exception {
         assertion.setXPathString("count(//*[code=2])=1"); //Wrong
         AssertionResult res = assertion.getResult(result);
@@ -159,6 +169,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionNumber() throws Exception {
         assertion.setXPathString("count(//error)");// not yet handled
         AssertionResult res = assertion.getResult(result);
@@ -168,6 +179,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionNoResult() throws Exception {
         // result.setResponseData - not set
         result = new SampleResult();
@@ -179,6 +191,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionEmptyResult() throws Exception {
         result.setResponseData("", null);
         AssertionResult res = assertion.getResult(result);
@@ -189,6 +202,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertTrue("Should be a failure",res.isFailure());
     }
 
+    @Test
     public void testAssertionBlankResult() throws Exception {
         result.setResponseData(" ", null);
         AssertionResult res = assertion.getResult(result);
@@ -199,6 +213,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse("Should not be a failure", res.isFailure());
     }
 
+    @Test
     public void testNoTolerance() throws Exception {
         String data = "<html><head><title>testtitle</title></head>" + "<body>"
                 + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";
@@ -216,6 +231,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testAssertion() throws Exception {
         setAlternateResponseData();
         assertion.setXPathString("//row/value[@field = 'alias']");
@@ -226,6 +242,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testNegateAssertion() throws Exception {
         setAlternateResponseData();
         assertion.setXPathString("//row/value[@field = 'noalias']");
@@ -238,6 +255,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testValidationFailure() throws Exception {
         setAlternateResponseData();
         assertion.setXPathString("//row/value[@field = 'alias']");
@@ -249,6 +267,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testValidationSuccess() throws Exception {
         String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
                 + "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
@@ -275,6 +294,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testValidationFailureWithDTD() throws Exception {
         String data = "<?xml version=\"1.0\"?>" + "<!DOCTYPE BOOK [" + "<!ELEMENT p (#PCDATA)>"
                 + "<!ELEMENT BOOK         (OPENER,SUBTITLE?,INTRODUCTION?,(SECTION | PART)+)>"
@@ -302,6 +322,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertFalse(res.isFailure());
     }
 
+    @Test
     public void testTolerance() throws Exception {
         String data = "<html><head><title>testtitle</title></head>" + "<body>"
                 + "<p><i><b>invalid tag nesting</i></b><hr>" + "</body></html>";

@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,12 +36,11 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Test;
 
 public class TestLoopController extends JMeterTestCase {
-        public TestLoopController(String name) {
-            super(name);
-        }
 
+        @Test
         public void testProcessing() throws Exception {
             GenericController controller = new GenericController();
             GenericController sub_1 = new GenericController();
@@ -72,6 +75,7 @@ public class TestLoopController extends JMeterTestCase {
             }
         }
 
+        @Test
         public void testLoopZeroTimes() throws Exception {
             LoopController loop = new LoopController();
             loop.setLoops(0);
@@ -80,6 +84,7 @@ public class TestLoopController extends JMeterTestCase {
             assertNull(loop.next());
         }
 
+        @Test
         public void testInfiniteLoop() throws Exception {
             LoopController loop = new LoopController();
             loop.setLoops(LoopController.INFINITE_LOOP_COUNT);
@@ -91,6 +96,7 @@ public class TestLoopController extends JMeterTestCase {
             }
         }
             
+        @Test
         public void testBug54467() throws Exception {
             JMeterContext jmctx = JMeterContextService.getContext();
             LoopController loop = new LoopController();

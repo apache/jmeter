@@ -22,6 +22,10 @@
      
 package org.apache.jmeter.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -30,16 +34,16 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jorphan.util.JMeterStopThreadException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestCVSDataSet extends JMeterTestCase {
 
     private JMeterVariables threadVars;
     
-    public TestCVSDataSet(String arg0) {
-        super(arg0);
-    }
 
-    @Override
+    @Before
     public void setUp(){
         JMeterContext jmcx = JMeterContextService.getContext();
         jmcx.setVariables(new JMeterVariables());
@@ -47,11 +51,12 @@ public class TestCVSDataSet extends JMeterTestCase {
         threadVars.put("b", "value");
     }
 
-    @Override
+    @After
     public void tearDown() throws IOException{
         FileServer.getFileServer().closeFiles();
     }
     
+    @Test
     public void testopen() throws Exception {
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename("No.such.filename");
@@ -94,6 +99,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         assertEquals("c1",threadVars.get("c"));
     }
     
+    @Test
     public void testutf8() throws Exception {
 
         CSVDataSet csv = new CSVDataSet();
@@ -129,6 +135,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
 
     // Test CSV file with a header line
+    @Test
     public void testHeaderOpen(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testheader.csv"));
@@ -149,6 +156,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
     
     // Test CSV file with a header line and recycle is true
+    @Test
     public void testHeaderOpenAndRecycle(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testheader.csv"));
@@ -168,6 +176,7 @@ public class TestCVSDataSet extends JMeterTestCase {
     }
     
     // Test CSV file with a header line
+    @Test
     public void testHeaderQuotes(){
         CSVDataSet csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testquoted.csv"));
@@ -210,6 +219,7 @@ public class TestCVSDataSet extends JMeterTestCase {
         return csv;
     }
 
+    @Test
     public void testShareMode(){
         
         new CSVDataSetBeanInfo(); // needs to be initialised
