@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 /**
  * Token handles tokenizing the CLI arguments
  *
@@ -31,9 +29,9 @@ class Token {
     /** Type for a text token */
     public static final int TOKEN_STRING = 1;
 
-    private final int m_type;
+    private final int type;
 
-    private final String m_value;
+    private final String value;
 
     /**
      * New Token object with a type and value
@@ -44,8 +42,8 @@ class Token {
      *            value of the token
      */
     Token(final int type, final String value) {
-        m_type = type;
-        m_value = value;
+        this.type = type;
+        this.value = value;
     }
 
     /**
@@ -54,7 +52,7 @@ class Token {
      * @return value of the token
      */
     final String getValue() {
-        return m_value;
+        return this.value;
     }
 
     /**
@@ -63,7 +61,7 @@ class Token {
      * @return type of the token
      */
     final int getType() {
-        return m_type;
+        return this.type;
     }
 
     /**
@@ -72,9 +70,9 @@ class Token {
     @Override
     public final String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append(m_type);
+        sb.append(this.type);
         sb.append(":");
-        sb.append(m_value);
+        sb.append(this.value);
         return sb.toString();
     }
 }

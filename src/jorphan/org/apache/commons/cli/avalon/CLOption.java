@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 import java.util.Arrays;
 
 /**
@@ -39,9 +37,9 @@ public final class CLOption {
     private static final CLOptionDescriptor TEXT_ARGUMENT_DESCRIPTOR = new CLOptionDescriptor(null,
             CLOptionDescriptor.ARGUMENT_OPTIONAL, TEXT_ARGUMENT, null);
 
-    private String[] m_arguments;
+    private String[] arguments;
 
-    private CLOptionDescriptor m_descriptor = TEXT_ARGUMENT_DESCRIPTOR;
+    private CLOptionDescriptor descriptor = TEXT_ARGUMENT_DESCRIPTOR;
 
     /**
      * Retrieve argument to option if it takes arguments.
@@ -60,15 +58,15 @@ public final class CLOption {
      * @return the argument
      */
     public final String getArgument(final int index) {
-        if (null == m_arguments || index < 0 || index >= m_arguments.length) {
+        if (null == this.arguments || index < 0 || index >= this.arguments.length) {
             return null;
         } else {
-            return m_arguments[index];
+            return this.arguments[index];
         }
     }
 
     public final CLOptionDescriptor getDescriptor() {
-        return m_descriptor;
+        return this.descriptor;
     }
 
     /**
@@ -80,7 +78,7 @@ public final class CLOption {
      */
     public CLOption(final CLOptionDescriptor descriptor) {
         if (descriptor != null) {
-            m_descriptor = descriptor;
+            this.descriptor = descriptor;
         }
     }
 
@@ -102,13 +100,13 @@ public final class CLOption {
      *            the argument
      */
     public final void addArgument(final String argument) {
-        if (null == m_arguments) {
-            m_arguments = new String[] { argument };
+        if (null == this.arguments) {
+            this.arguments = new String[] { argument };
         } else {
-            final String[] arguments = new String[m_arguments.length + 1];
-            System.arraycopy(m_arguments, 0, arguments, 0, m_arguments.length);
-            arguments[m_arguments.length] = argument;
-            m_arguments = arguments;
+            final String[] arguments = new String[this.arguments.length + 1];
+            System.arraycopy(this.arguments, 0, arguments, 0, this.arguments.length);
+            arguments[this.arguments.length] = argument;
+            this.arguments = arguments;
         }
     }
 
@@ -118,10 +116,10 @@ public final class CLOption {
      * @return the number of arguments
      */
     public final int getArgumentCount() {
-        if (null == m_arguments) {
+        if (null == this.arguments) {
             return 0;
         } else {
-            return m_arguments.length;
+            return this.arguments.length;
         }
     }
 
@@ -134,7 +132,7 @@ public final class CLOption {
     public final String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("[");
-        final char id = (char) m_descriptor.getId();
+        final char id = (char) this.descriptor.getId();
         if (id == TEXT_ARGUMENT) {
             sb.append("TEXT ");
         } else {
@@ -142,9 +140,9 @@ public final class CLOption {
             sb.append(id);
         }
 
-        if (null != m_arguments) {
+        if (null != this.arguments) {
             sb.append(", ");
-            sb.append(Arrays.asList(m_arguments));
+            sb.append(Arrays.asList(this.arguments));
         }
 
         sb.append(" ]");
@@ -159,17 +157,17 @@ public final class CLOption {
      */
     final String toShortString() {
         final StringBuilder sb = new StringBuilder();
-        final char id = (char) m_descriptor.getId();
+        final char id = (char) this.descriptor.getId();
         if (id != TEXT_ARGUMENT) {
             sb.append("-");
             sb.append(id);
         }
 
-        if (null != m_arguments) {
+        if (null != this.arguments) {
             if (id != TEXT_ARGUMENT) {
                 sb.append("=");
             }
-            sb.append(Arrays.asList(m_arguments));
+            sb.append(Arrays.asList(this.arguments));
         }
         return sb.toString();
     }
