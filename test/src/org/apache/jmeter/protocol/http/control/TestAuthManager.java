@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -25,20 +29,21 @@ import java.nio.file.Files;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.junit.Test;
 
 public class TestAuthManager extends JMeterTestCase {
-        public TestAuthManager(String name) {
-            super(name);
-        }
 
+        @Test
         public void testHttp() throws Exception {
             assertTrue(AuthManager.isSupportedProtocol(new URL("http:")));
         }
 
+        @Test
         public void testHttps() throws Exception {
             assertTrue(AuthManager.isSupportedProtocol(new URL("https:")));
         }
 
+        @Test
         public void testFile() throws Exception {
             AuthManager am = new AuthManager();
             CollectionProperty ao = am.getAuthObjects();
@@ -81,6 +86,7 @@ public class TestAuthManager extends JMeterTestCase {
             assertEquals("pass", at.getPass());
         }
 
+        @Test
         public void testAddFileWithoutDomainAndRealmWithMechanism() throws IOException {
             File authFile = File.createTempFile("auth", ".txt");
             Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\t\t\tBASIC_DIGEST".getBytes());
@@ -90,6 +96,7 @@ public class TestAuthManager extends JMeterTestCase {
             assertEquals("password", authForURL.getPass());
         }
 
+        @Test
         public void testAddFileWithDomainAndRealmAndDefaultMechanism() throws IOException {
             File authFile = File.createTempFile("auth", ".txt");
             Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tBASIC_DIGEST".getBytes());
@@ -100,6 +107,7 @@ public class TestAuthManager extends JMeterTestCase {
             assertEquals("domain", authForURL.getDomain());
         }
 
+        @Test
         public void testAddFileWithDomainAndRealmAndMechanism() throws IOException {
             File authFile = File.createTempFile("auth", ".txt");
             Files.write(authFile.toPath(), "http://example.com\tuser\tpassword\tdomain\tEXAMPLE.COM\tKERBEROS".getBytes());

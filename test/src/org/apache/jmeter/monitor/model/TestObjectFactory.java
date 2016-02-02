@@ -16,10 +16,16 @@
  */
 package org.apache.jmeter.monitor.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestObjectFactory extends JMeterTestCase {
 
@@ -27,28 +33,32 @@ public class TestObjectFactory extends JMeterTestCase {
     
     private Status status;
 
-    @Override
+    @Before
     public void setUp(){
         of = ObjectFactory.getInstance();
     }
 
 
+    @Test
     public void testStatus() throws Exception {
         status = of.parseString("<status></status>");
         assertNotNull(status);
     }
 
+    @Test
     public void testNoStatus() throws Exception {
         status = of.parseString("<a></a>");
         assertNull(status);
     }
 
+    @Test
     public void testFileData() throws Exception {
         byte[] bytes= FileUtils.readFileToByteArray(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseBytes(bytes);
         checkResult();
     }
     
+    @Test
     public void testStringData() throws Exception {
         String content = FileUtils.readFileToString(findTestFile("testfiles/monitorStatus.xml"));
         status = of.parseString(content);
