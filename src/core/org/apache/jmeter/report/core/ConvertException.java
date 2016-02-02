@@ -15,13 +15,13 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.report.config;
+package org.apache.jmeter.report.core;
 
 /**
  * The class ConvertException provides an exception when
  * ConvertStringMethod.execute fails.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ConvertException extends Exception {
 

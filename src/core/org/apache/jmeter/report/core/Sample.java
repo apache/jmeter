@@ -19,6 +19,7 @@ package org.apache.jmeter.report.core;
 
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents a sample read from a CSV source.
@@ -35,10 +36,10 @@ public class Sample {
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
 
-    private boolean storesStartTimeStamp;
-    private SampleMetadata metadata;
-    private String[] data;
-    private long row;
+    private final boolean storesStartTimeStamp;
+    private final SampleMetadata metadata;
+    private final String[] data;
+    private final long row;
 
     /**
      * Build a sample from a string array
@@ -52,245 +53,73 @@ public class Sample {
      *            The sample data as a string array
      */
     public Sample(long row, SampleMetadata metadata, String... data) {
-        this.row = row;
-        this.metadata = metadata;
-        this.data = data;
-        this.storesStartTimeStamp = JMeterUtils.getPropDefault(
-                "sampleresult.timestamp.start", false);
+	this.row = row;
+	this.metadata = metadata;
+	this.data = data;
+	this.storesStartTimeStamp = JMeterUtils
+	        .getPropDefault("sampleresult.timestamp.start", false);
     }
 
     /**
-     * @return the row number from the CSV source from which this sample has been
-     * built.
+     * @return the row number from the CSV source from which this sample has
+     *         been built.
      */
     public long getSampleRow() {
-        return row;
+	return row;
     }
 
     /**
-     * Get the data whose column name is provided as a string. The use of this
-     * method should be avoided because of its inefficiency.
+     * Gets the data stored in the column with the specified rank.
+     * 
+     * @param index
+     *            the rank of the column
+     * @return the data of the column
+     */
+    public String getData(int index) {
+	return data[index];
+    }
+
+    /**
+     * Gets the data stored in the column with the specified name.
      * 
      * @param name
-     *            The data name from the sample metadata
-     * @return The data value
+     *            the name of the column
+     * @return the data of the column
      */
-    public String getString(String name) {
-        return data[metadata.indexOf(name)];
+    public String getData(String name) {
+	return data[metadata.ensureIndexOf(name)];
     }
 
     /**
-     * Get the data of the ith column as a string. Very fast because it is a
-     * single array access.
+     * Gets the data of the column matching the specified rank and converts it
+     * to an alternative type.
      * 
-     * @param i
-     *            The column number (0 based) of the data to be returned
-     * @return The data as a string
+     * @param clazz
+     *            the target class of the data
+     * @param index
+     *            the rank of the column
+     * @return the converted value of the data
      */
-    public String getString(int i) {
-        return data[i];
+    public <TData> TData getData(Class<TData> clazz, int index) {
+	try {
+	    return Converters.convert(clazz, data[index]);
+	} catch (ConvertException ex) {
+	    throw new SampleException(ERROR_ON_SAMPLE + row, ex);
+	}
     }
 
     /**
-     * Return the sample data whose column is specified as parameter. Use of
-     * this method should be avoided beacause of its einneficiency
+     * Gets the data of the column matching the specified name and converts it
+     * to an alternative type.
      * 
+     * @param clazz
+     *            the target class of the data
      * @param name
-     *            The data colum name
-     * @return The data as an integer
+     *            the name of the column
+     * @return the converted value of the data
      */
-    public int getInt(String name) {
-        try {
-            return Integer.parseInt(data[metadata.indexOf(name)]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data at the ith column as an integer.
-     * 
-     * @param i
-     *            the column number (zero based) of the data to be returned
-     * @return The ith column data an an integer
-     * @throws NumberFormatException
-     *             if the data could not be parsed as an integer
-     */
-    public int getInt(int i) {
-        try {
-            return Integer.parseInt(data[i]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data whose column name is specified as a long. Use of
-     * this method should be avoided because of it inefficiency.
-     * 
-     * @param name
-     *            The column data name.
-     * @return The data of the specified column as a long
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a long
-     */
-    public long getLong(String name) {
-        try {
-            return Long.parseLong(data[metadata.indexOf(name)]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data at the ith column as a long.
-     * 
-     * @param i
-     *            The column number (zero based) of the data to be returned as
-     *            an integer
-     * @return The ith column data as a long
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a long
-     */
-    public long getLong(int i) {
-        try {
-            return Long.parseLong(data[i]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data whose column name is specified as a float. Use of
-     * this method should be avoided because of it inefficiency.
-     * 
-     * @param name
-     *            The column data name.
-     * @return The data of the specified column as a float
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a float
-     */
-    public float getFloat(String name) {
-        try {
-            return Float.parseFloat(data[metadata.indexOf(name)]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data at the ith column as a float.
-     * 
-     * @param i
-     *            The column number (zero based) of the data to be returned
-     * @return The ith column data as a float
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a float
-     */
-    public float getFloat(int i) {
-        try {
-            return Float.parseFloat(data[i]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data whose column name is specified as a double. Use of
-     * this method should be avoided because of it inefficiency.
-     * 
-     * @param name
-     *            The column data name.
-     * @return The data of the specified column as a double
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a double
-     */
-    public Double getDouble(String name) {
-        try {
-            return Double.valueOf(data[metadata.indexOf(name)]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data at the ith column as a double.
-     * 
-     * @param id
-     *            The column number (zero based) of the data to be returned as a
-     *            double
-     * @return The ith column data as a double
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a double
-     */
-    public double getDouble(int id) {
-        try {
-            return Double.parseDouble(data[id]);
-        } catch (NumberFormatException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-        }
-    }
-
-    /**
-     * Return the sample data whose column name is specified as a char. Use of
-     * this method should be avoided because of it inefficiency.
-     * 
-     * @param name
-     *            The column data name.
-     * @return The data of the specified column as a char
-     * @throws IndexOutOfBoundsException
-     *             if the data for this column is an empty string
-     */
-    public char getChar(String name) {
-        return data[metadata.indexOf(name)].charAt(0);
-    }
-
-    /**
-     * Return the sample data at the ith column as a char.
-     * 
-     * @param id
-     *            The column number (zero based) of the data to be returned as a
-     *            char
-     * @return The ith column data as a char
-     * @throws IndexOutOfBoundsException
-     *             if the data for this column is an empty string
-     */
-    public char getChar(int id) {
-        return data[id].charAt(0);
-    }
-
-    /**
-     * Return the sample data whose column name is specified as a boolean. Use
-     * of this method should be avoided because of it inefficiency.
-     * <p>
-     * The boolean is assumed to be {@code true} if and only if the data string is
-     * "true", in any other cases this method returns {@code false}
-     * </p>
-     * 
-     * @param name
-     *            The column data name.
-     * @return The data of the specified column as a boolean
-     */
-    public boolean getBoolean(String name) {
-        return Boolean.parseBoolean(data[metadata.indexOf(name)]);
-    }
-
-    /**
-     * Return the sample data at the ith column as a boolean.
-     * <p>
-     * The boolean is assumed to be {@code true} if and only if the data string is
-     * "true", in any other cases this method returns {@code false}
-     * </p>
-     * 
-     * @param id
-     *            The column number (zero based) of the data to be returned as a
-     *            boolean
-     * @return The ith column data as a boolean
-     * @throws NumberFormatException
-     *             if the data could not be parsed as a boolean
-     */
-    public boolean getBoolean(int id) {
-        return Boolean.parseBoolean(data[id]);
+    public <TData> TData getData(Class<TData> clazz, String name) {
+	return getData(clazz, metadata.ensureIndexOf(name));
     }
 
     /*
@@ -300,14 +129,7 @@ public class Sample {
      */
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder();
-        for (int i = 0; i < data.length; i++) {
-            out.append(data[i]);
-            if (i < data.length - 1) {
-                out.append(metadata.getSeparator());
-            }
-        }
-        return out.toString();
+	return StringUtils.join(data, metadata.getSeparator());
     }
 
     /**
@@ -316,7 +138,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-        return getLong(metadata.indexOf(CSVSaveService.TIME_STAMP));
+	return getData(long.class, CSVSaveService.TIME_STAMP);
     }
 
     /**
@@ -325,7 +147,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-        return getLong(metadata.indexOf(CSVSaveService.CSV_ELAPSED));
+	return getData(long.class, CSVSaveService.CSV_ELAPSED);
     }
 
     /**
@@ -345,8 +167,8 @@ public class Sample {
      * @return the start time
      */
     public long getStartTime() {
-        return storesStartTimeStamp ? getTimestamp() : getTimestamp()
-                - getElapsedTime();
+	return storesStartTimeStamp ? getTimestamp()
+	        : getTimestamp() - getElapsedTime();
     }
 
     /**
@@ -367,8 +189,8 @@ public class Sample {
      * @return the end time
      */
     public long getEndTime() {
-        return storesStartTimeStamp ? getTimestamp() + getElapsedTime()
-                : getTimestamp();
+	return storesStartTimeStamp ? getTimestamp() + getElapsedTime()
+	        : getTimestamp();
     }
 
     /**
@@ -377,7 +199,7 @@ public class Sample {
      * @return the response code stored in the sample
      */
     public String getResponseCode() {
-        return getString(metadata.indexOf(CSVSaveService.RESPONSE_CODE));
+	return getData(CSVSaveService.RESPONSE_CODE);
     }
 
     /**
@@ -386,7 +208,7 @@ public class Sample {
      * @return the failure message stored in the sample
      */
     public String getFailureMessage() {
-        return getString(metadata.indexOf(CSVSaveService.FAILURE_MESSAGE));
+	return getData(CSVSaveService.FAILURE_MESSAGE);
     }
 
     /**
@@ -395,7 +217,7 @@ public class Sample {
      * @return the name stored in the sample
      */
     public String getName() {
-        return getString(metadata.indexOf(CSVSaveService.LABEL));
+	return getData(CSVSaveService.LABEL);
     }
 
     /**
@@ -404,7 +226,7 @@ public class Sample {
      * @return the response message stored in the sample
      */
     public String getResponseMessage() {
-        return getString(metadata.indexOf(CSVSaveService.RESPONSE_MESSAGE));
+	return getData(CSVSaveService.RESPONSE_MESSAGE);
     }
 
     /**
@@ -413,7 +235,7 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-        return getLong(metadata.indexOf(CSVSaveService.CSV_LATENCY));
+	return getData(long.class, CSVSaveService.CSV_LATENCY);
     }
 
     /**
@@ -422,7 +244,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-        return getBoolean(metadata.indexOf(CSVSaveService.SUCCESSFUL));
+	return getData(boolean.class, CSVSaveService.SUCCESSFUL);
     }
 
     /**
@@ -431,7 +253,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-        return getInt(metadata.indexOf(CSVSaveService.CSV_BYTES));
+	return getData(int.class, CSVSaveService.CSV_BYTES);
     }
 
     /**
@@ -440,7 +262,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-        return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT1));
+	return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1);
     }
 
     /**
@@ -449,7 +271,7 @@ public class Sample {
      * @return the overall number of threads
      */
     public int getAllThreads() {
-        return getInt(metadata.indexOf(CSVSaveService.CSV_THREAD_COUNT2));
+	return getData(int.class, CSVSaveService.CSV_THREAD_COUNT2);
     }
 
     /**
@@ -458,16 +280,17 @@ public class Sample {
      * @return the thread name stored in the sample
      */
     public String getThreadName() {
-        return getString(metadata.indexOf(CSVSaveService.THREAD_NAME));
+	return getData(CSVSaveService.THREAD_NAME);
     }
 
     /**
      * Checks if this sample is a controller.
      *
-     * @return {@code true}, if this sample is a controller; otherwise {@code false}
+     * @return {@code true}, if this sample is a controller; otherwise
+     *         {@code false}
      */
     public boolean isController() {
-        String message = getResponseMessage();
-        return message != null && message.startsWith(CONTROLLER_PATTERN);
+	String message = getResponseMessage();
+	return message != null && message.startsWith(CONTROLLER_PATTERN);
     }
 }
