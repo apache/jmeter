@@ -61,7 +61,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     /**
      *  Translates integer codes to request header names
      */
-    private static final String []headerTransArray = {
+    private static final String[] HEADER_TRANS_ARRAY = {
         "accept",               //$NON-NLS-1$
         "accept-charset",       //$NON-NLS-1$
         "accept-encoding",      //$NON-NLS-1$
@@ -338,8 +338,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
     }
 
     private int translateHeader(String n) {
-        for(int i=0; i < headerTransArray.length; i++) {
-            if(headerTransArray[i].equalsIgnoreCase(n)) {
+        for(int i=0; i < HEADER_TRANS_ARRAY.length; i++) {
+            if(HEADER_TRANS_ARRAY[i].equalsIgnoreCase(n)) {
                 return i+1;
             }
         }
@@ -445,7 +445,7 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             String name;
             int thn = peekInt();
             if((thn & 0xff00) == AJP_HEADER_BASE) {
-                name = headerTransArray[(thn&0xff)-1];
+                name = HEADER_TRANS_ARRAY[(thn&0xff)-1];
                 getInt(); // we need to use up the int now
             } else {
                 name = getString();
@@ -475,7 +475,6 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
             channel = null;
             throw new IOException("Connection Closed: "+nr);
         }
-    //int mark =
         getInt();
         int len = getInt();
         int toRead = len;

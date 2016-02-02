@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 /**
  * Basic class describing an type of option. Typically, one creates a static
  * array of <code>CLOptionDescriptor</code>s, and passes it to
@@ -44,15 +42,15 @@ public final class CLOptionDescriptor {
     /** Flag to say this option may be repeated on the command line */
     public static final int DUPLICATES_ALLOWED = 1 << 5;
 
-    private final int m_id;
+    private final int id;
 
-    private final int m_flags;
+    private final int flags;
 
-    private final String m_name;
+    private final String name;
 
-    private final String m_description;
+    private final String description;
 
-    private final int[] m_incompatible;
+    private final int[] incompatible;
 
     /**
      * Constructor.
@@ -70,11 +68,11 @@ public final class CLOptionDescriptor {
 
         checkFlags(flags);
 
-        m_id = id;
-        m_name = name;
-        m_flags = flags;
-        m_description = description;
-        m_incompatible = ((flags & DUPLICATES_ALLOWED) != 0) ? new int[0] : new int[] { id };
+        this.id = id;
+        this.name = name;
+        this.flags = flags;
+        this.description = description;
+        this.incompatible = ((flags & DUPLICATES_ALLOWED) != 0) ? new int[0] : new int[] { id };
     }
 
 
@@ -97,14 +95,14 @@ public final class CLOptionDescriptor {
 
         checkFlags(flags);
 
-        m_id = id;
-        m_name = name;
-        m_flags = flags;
-        m_description = description;
+        this.id = id;
+        this.name = name;
+        this.flags = flags;
+        this.description = description;
 
-        m_incompatible = new int[incompatible.length];
+        this.incompatible = new int[incompatible.length];
         for (int i = 0; i < incompatible.length; i++) {
-            m_incompatible[i] = incompatible[i].getId();
+            this.incompatible[i] = incompatible[i].getId();
         }
     }
 
@@ -138,7 +136,7 @@ public final class CLOptionDescriptor {
      * @return the array of incompatible option ids
      */
     protected final int[] getIncompatible() {
-        return m_incompatible;
+        return this.incompatible;
     }
 
     /**
@@ -147,7 +145,7 @@ public final class CLOptionDescriptor {
      * @return the description
      */
     public final String getDescription() {
-        return m_description;
+        return this.description;
     }
 
     /**
@@ -157,7 +155,7 @@ public final class CLOptionDescriptor {
      * @return the flags
      */
     public final int getFlags() {
-        return m_flags;
+        return this.flags;
     }
 
     /**
@@ -167,7 +165,7 @@ public final class CLOptionDescriptor {
      * @return the id
      */
     public final int getId() {
-        return m_id;
+        return this.id;
     }
 
     /**
@@ -176,7 +174,7 @@ public final class CLOptionDescriptor {
      * @return name/long option
      */
     public final String getName() {
-        return m_name;
+        return this.name;
     }
 
     /**
@@ -188,13 +186,13 @@ public final class CLOptionDescriptor {
     public final String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("[OptionDescriptor ");
-        sb.append(m_name);
+        sb.append(this.name);
         sb.append(", ");
-        sb.append(m_id);
+        sb.append(this.id);
         sb.append(", ");
-        sb.append(m_flags);
+        sb.append(this.flags);
         sb.append(", ");
-        sb.append(m_description);
+        sb.append(this.description);
         sb.append(" ]");
         return sb.toString();
     }
