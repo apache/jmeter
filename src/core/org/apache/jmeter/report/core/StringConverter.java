@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.report.config;
+package org.apache.jmeter.report.core;
 
 /**
  * The interface StringConverter represents a converter from a string to another

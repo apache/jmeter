@@ -51,7 +51,7 @@ public class LatencyVSRequestGraphConsumer extends
             @Override
             public Double select(Sample sample) {
                 return sample
-                        .getDouble(AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
+                        .getData(Double.class, AbstractVersusRequestsGraphConsumer.TIME_INTERVAL_LABEL);
             }
         };
     }
