@@ -18,23 +18,22 @@
 
 package org.apache.jmeter.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class PackageTest extends TestCase {
+import org.junit.Test;
 
-    public PackageTest() {
-        super();
-    }
+public class PackageTest {
 
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
 
+    @Test
     public void testServer() throws Exception {
         BeanShellServer bshs = new BeanShellServer(9876, "");
         assertNotNull(bshs);
         // Not sure we can test anything else here
     }
+    
+    @Test
     public void testSub1() throws Exception {
         String input = "http://jakarta.apache.org/jmeter/index.html";
         String pattern = "jakarta.apache.org";
@@ -42,6 +41,7 @@ public class PackageTest extends TestCase {
         assertEquals("http://${server}/jmeter/index.html", StringUtilities.substitute(input, pattern, sub));
     }
 
+    @Test
     public void testSub2() throws Exception {
         String input = "arg1=param1;param1";
         String pattern = "param1";
@@ -49,6 +49,7 @@ public class PackageTest extends TestCase {
         assertEquals("arg1=${value};${value}", StringUtilities.substitute(input, pattern, sub));
     }
 
+    @Test
     public void testSub3() throws Exception {
         String input = "jakarta.apache.org";
         String pattern = "jakarta.apache.org";
@@ -56,6 +57,7 @@ public class PackageTest extends TestCase {
         assertEquals("${server}", StringUtilities.substitute(input, pattern, sub));
     }
 
+    @Test
     public void testSub4() throws Exception {
         String input = "//a///b////c";
         String pattern = "//";

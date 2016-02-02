@@ -18,6 +18,8 @@
 
 package org.apache.jorphan;
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
@@ -26,6 +28,7 @@ import org.apache.jmeter.visualizers.StatGraphVisualizer;
 import org.apache.jmeter.visualizers.StatVisualizer;
 import org.apache.jmeter.visualizers.SummaryReport;
 import org.apache.jmeter.visualizers.TableVisualizer;
+import org.junit.Test;
 
 /*
  * Unit tests for classes that use Functors
@@ -33,36 +36,39 @@ import org.apache.jmeter.visualizers.TableVisualizer;
  */
 public class TestFunctorUsers extends JMeterTestCase {
 
-    public TestFunctorUsers(String arg0) {
-        super(arg0);
-    }
-    
+    @Test
     @SuppressWarnings("deprecation")
     public void testSummaryReport() throws Exception{
         assertTrue("SummaryReport Functor",SummaryReport.testFunctors());
     }
     
+    @Test
     public void testTableVisualizer() throws Exception{
         assertTrue("TableVisualizer Functor",TableVisualizer.testFunctors());
     }
     
+    @Test
     public void testStatGraphVisualizer() throws Exception{
         assertTrue("StatGraphVisualizer Functor",StatGraphVisualizer.testFunctors());
     }
     
+    @Test
     @SuppressWarnings("deprecation")
     public void testStatVisualizer() throws Exception{
         assertTrue("StatVisualizer Functor",StatVisualizer.testFunctors());
     }
     
+    @Test
     public void testArgumentsPanel() throws Exception{
         assertTrue("ArgumentsPanel Functor",ArgumentsPanel.testFunctors());
     }
     
+    @Test
     public void testHTTPArgumentsPanel() throws Exception{
         assertTrue("HTTPArgumentsPanel Functor",HTTPArgumentsPanel.testFunctors());
     }
     
+    @Test
     public void testLDAPArgumentsPanel() throws Exception{
         assertTrue("LDAPArgumentsPanel Functor",LDAPArgumentsPanel.testFunctors());
     }
