@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.report.config;
+package org.apache.jmeter.report.core;
 
 /**
  * The class ConvertException provides an exception when

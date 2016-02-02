@@ -38,6 +38,8 @@ import org.apache.jmeter.save.CSVSaveService;
  */
 public class SampleMetadata {
 
+    private static final String METADATA_EXCEPTION_MSG_FMT = "No <%s> data found in sample metadata <%s>";
+
     /** The column list : accessed by CSVSampleWriter */
     List<String> columns;
 
@@ -56,8 +58,8 @@ public class SampleMetadata {
      *            The list of columns names (must not be {@code null})
      */
     public SampleMetadata(char separator, String... columns) {
-        Validate.notNull(columns, "columns must not be null");
-        initialize(separator, Arrays.asList(columns));
+	Validate.notNull(columns, "columns must not be null");
+	initialize(separator, Arrays.asList(columns));
     }
 
     /**
@@ -68,90 +70,90 @@ public class SampleMetadata {
      *            {@code null})
      */
     public SampleMetadata(SampleSaveConfiguration saveConfig) {
-        List<String> configuredColumns = new ArrayList<>();
-        if (saveConfig.saveTimestamp()) {
-            configuredColumns.add(CSVSaveService.TIME_STAMP);
-        }
-        if (saveConfig.saveTime()) {
-            configuredColumns.add(CSVSaveService.CSV_ELAPSED);
-        }
-        if (saveConfig.saveLabel()) {
-            configuredColumns.add(CSVSaveService.LABEL);
-        }
-        if (saveConfig.saveCode()) {
-            configuredColumns.add(CSVSaveService.RESPONSE_CODE);
-        }
-        if (saveConfig.saveMessage()) {
-            configuredColumns.add(CSVSaveService.RESPONSE_MESSAGE);
-        }
-        if (saveConfig.saveThreadName()) {
-            configuredColumns.add(CSVSaveService.THREAD_NAME);
-        }
-        if (saveConfig.saveDataType()) {
-            configuredColumns.add(CSVSaveService.DATA_TYPE);
-        }
-        if (saveConfig.saveSuccess()) {
-            configuredColumns.add(CSVSaveService.SUCCESSFUL);
-        }
-        if (saveConfig.saveAssertionResultsFailureMessage()) {
-            configuredColumns.add(CSVSaveService.FAILURE_MESSAGE);
-        }
-        if (saveConfig.saveBytes()) {
-            configuredColumns.add(CSVSaveService.CSV_BYTES);
-        }
-        if (saveConfig.saveThreadCounts()) {
-            configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT1);
-            configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT2);
-        }
-        if (saveConfig.saveUrl()) {
-            configuredColumns.add(CSVSaveService.CSV_URL);
-        }
-        if (saveConfig.saveFileName()) {
-            configuredColumns.add(CSVSaveService.CSV_FILENAME);
-        }
-        if (saveConfig.saveLatency()) {
-            configuredColumns.add(CSVSaveService.CSV_LATENCY);
-        }
-        if (saveConfig.saveEncoding()) {
-            configuredColumns.add(CSVSaveService.CSV_ENCODING);
-        }
-        if (saveConfig.saveSampleCount()) {
-            configuredColumns.add(CSVSaveService.CSV_SAMPLE_COUNT);
-            configuredColumns.add(CSVSaveService.CSV_ERROR_COUNT);
-        }
-        if (saveConfig.saveHostname()) {
-            configuredColumns.add(CSVSaveService.CSV_HOSTNAME);
-        }
-        if (saveConfig.saveIdleTime()) {
-            configuredColumns.add(CSVSaveService.CSV_IDLETIME);
-        }
-        if (saveConfig.saveConnectTime()) {
-            configuredColumns.add(CSVSaveService.CSV_CONNECT_TIME);
-        }
-        initialize(saveConfig.getDelimiter().charAt(0), configuredColumns);
+	List<String> configuredColumns = new ArrayList<>();
+	if (saveConfig.saveTimestamp()) {
+	    configuredColumns.add(CSVSaveService.TIME_STAMP);
+	}
+	if (saveConfig.saveTime()) {
+	    configuredColumns.add(CSVSaveService.CSV_ELAPSED);
+	}
+	if (saveConfig.saveLabel()) {
+	    configuredColumns.add(CSVSaveService.LABEL);
+	}
+	if (saveConfig.saveCode()) {
+	    configuredColumns.add(CSVSaveService.RESPONSE_CODE);
+	}
+	if (saveConfig.saveMessage()) {
+	    configuredColumns.add(CSVSaveService.RESPONSE_MESSAGE);
+	}
+	if (saveConfig.saveThreadName()) {
+	    configuredColumns.add(CSVSaveService.THREAD_NAME);
+	}
+	if (saveConfig.saveDataType()) {
+	    configuredColumns.add(CSVSaveService.DATA_TYPE);
+	}
+	if (saveConfig.saveSuccess()) {
+	    configuredColumns.add(CSVSaveService.SUCCESSFUL);
+	}
+	if (saveConfig.saveAssertionResultsFailureMessage()) {
+	    configuredColumns.add(CSVSaveService.FAILURE_MESSAGE);
+	}
+	if (saveConfig.saveBytes()) {
+	    configuredColumns.add(CSVSaveService.CSV_BYTES);
+	}
+	if (saveConfig.saveThreadCounts()) {
+	    configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT1);
+	    configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT2);
+	}
+	if (saveConfig.saveUrl()) {
+	    configuredColumns.add(CSVSaveService.CSV_URL);
+	}
+	if (saveConfig.saveFileName()) {
+	    configuredColumns.add(CSVSaveService.CSV_FILENAME);
+	}
+	if (saveConfig.saveLatency()) {
+	    configuredColumns.add(CSVSaveService.CSV_LATENCY);
+	}
+	if (saveConfig.saveEncoding()) {
+	    configuredColumns.add(CSVSaveService.CSV_ENCODING);
+	}
+	if (saveConfig.saveSampleCount()) {
+	    configuredColumns.add(CSVSaveService.CSV_SAMPLE_COUNT);
+	    configuredColumns.add(CSVSaveService.CSV_ERROR_COUNT);
+	}
+	if (saveConfig.saveHostname()) {
+	    configuredColumns.add(CSVSaveService.CSV_HOSTNAME);
+	}
+	if (saveConfig.saveIdleTime()) {
+	    configuredColumns.add(CSVSaveService.CSV_IDLETIME);
+	}
+	if (saveConfig.saveConnectTime()) {
+	    configuredColumns.add(CSVSaveService.CSV_CONNECT_TIME);
+	}
+	initialize(saveConfig.getDelimiter().charAt(0), configuredColumns);
     }
 
     private void initialize(char separator, List<String> columns) {
-        this.separator = separator;
-        this.columns = columns;
-        int size = columns.size();
-        for (int i = 0; i < size; i++) {
-            index.put(this.columns.get(i).trim(), Integer.valueOf(i));
-        }
+	this.separator = separator;
+	this.columns = columns;
+	int size = columns.size();
+	for (int i = 0; i < size; i++) {
+	    index.put(this.columns.get(i).trim(), Integer.valueOf(i));
+	}
     }
 
     /**
      * @return the character used for separating columns
      */
     public char getSeparator() {
-        return separator;
+	return separator;
     }
 
     /**
      * @return the number of columns in the metadata
      */
     public int getColumnCount() {
-        return columns.size();
+	return columns.size();
     }
 
     /**
@@ -166,7 +168,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(int i) {
-        return columns.get(i);
+	return columns.get(i);
     }
 
     /**
@@ -181,7 +183,7 @@ public class SampleMetadata {
      *             <code>getColumnCount()</code>)
      */
     public String getColumnName(Integer i) {
-        return columns.get(i.intValue());
+	return columns.get(i.intValue());
     }
 
     /**
@@ -193,8 +195,26 @@ public class SampleMetadata {
      *         does not exist in this metadata
      */
     public int indexOf(String col) {
-        Integer out = index.get(col);
-        return out == null ? -1 : out.intValue();
+	Integer out = index.get(col);
+	return out == null ? -1 : out.intValue();
+    }
+
+    /**
+     * Returns the index of the column with the specified name.
+     * 
+     * @param col
+     *            the column name for which the index is requested
+     * @return The index of the requested column
+     * @throws SampleException
+     *             when the column with the specified name is not found
+     */
+    public int ensureIndexOf(String col) {
+	int index = indexOf(col);
+	if (index < 0) {
+	    throw new SampleException(
+	            String.format(METADATA_EXCEPTION_MSG_FMT, col, toString()));
+	}
+	return index;
     }
 
     /*
@@ -204,6 +224,6 @@ public class SampleMetadata {
      */
     @Override
     public String toString() {
-        return StringUtils.join(columns, separator);
+	return StringUtils.join(columns, separator);
     }
 }

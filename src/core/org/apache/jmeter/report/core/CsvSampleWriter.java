@@ -151,7 +151,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
         char[] specials = new char[] { separator,
                 CSVSaveService.QUOTING_CHAR, CharUtils.CR, CharUtils.LF };
         for (int i = 0; i < columnCount; i++) {
-            String data = sample.getString(i);
+            String data = sample.getData(i);
             row.append(CSVSaveService.quoteDelimiters(data, specials))
                     .append(separator);
         }

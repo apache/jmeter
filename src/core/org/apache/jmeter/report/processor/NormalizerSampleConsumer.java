@@ -52,7 +52,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
     @Override
     public void startConsuming() {
         sampleMetadata = getConsumedMetadata(0);
-        timestamp = sampleMetadata.indexOf(CSVSaveService.TIME_STAMP);
+        timestamp = sampleMetadata.ensureIndexOf(CSVSaveService.TIME_STAMP);
         super.setProducedMetadata(sampleMetadata, 0);
         startProducing();
     }
@@ -61,7 +61,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
     public void consume(Sample s, int channel) {
         Date date = null;
         try {
-            String tStr = s.getString(timestamp);
+            String tStr = s.getData(timestamp);
             try {
                 // Try to parse the timestamp assuming is a long
                 date = new Date(Long.parseLong(tStr));
@@ -71,7 +71,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
             }
         } catch (Exception e) {
             throw new SampleException(String.format(
-                    PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getString(timestamp),
+                    PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getData(timestamp),
                     s.toString()), e);
         }
         long time = date.getTime();
@@ -81,7 +81,7 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
             if (i == timestamp) {
                 data[i] = Long.toString(time);
             } else {
-                data[i] = s.getString(i);
+                data[i] = s.getData(i);
             }
         }
         Sample rewrited = new Sample(s.getSampleRow(), sampleMetadata, data);
