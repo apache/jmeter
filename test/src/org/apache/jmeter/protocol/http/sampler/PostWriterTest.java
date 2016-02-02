@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,9 +34,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -41,8 +41,11 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class PostWriterTest extends TestCase {
+public class PostWriterTest {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -56,8 +59,9 @@ public class PostWriterTest extends TestCase {
     private File temporaryFile;
     
     private PostWriter postWriter;
-    @Override
-    protected void setUp() throws Exception {
+    
+    @Before
+    public void setUp() throws Exception {
         establishConnection();
         sampler = new HTTPSampler();// This must be the original (Java) HTTP sampler
         postWriter=new PostWriter();
@@ -78,8 +82,8 @@ public class PostWriterTest extends TestCase {
         }
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         // delete temporay file
         if(!temporaryFile.delete()) {
             fail("Could not delete file:"+temporaryFile.getAbsolutePath());
@@ -90,6 +94,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending a request which contains both formdata and file content
      */
+    @Test
     public void testSendPostData() throws IOException {
         sampler.setMethod(HTTPConstants.POST);
         setupFilepart(sampler);
@@ -155,6 +160,7 @@ public class PostWriterTest extends TestCase {
      * This method test sending a HTTPSampler with form parameters, and only
      * the filename of a file.
      */
+    @Test
     public void testSendPostData_NoFilename() throws IOException {
         setupNoFilename(sampler);
         String titleValue = "mytitle";
@@ -197,6 +203,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending file content as the only content of the post body
      */
+    @Test
     public void testSendPostData_FileAsBody() throws IOException {
         setupFilepart(sampler, "", temporaryFile, "");
         
@@ -248,6 +255,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a file multipart.
      */
+    @Test
     public void testSendFileData_Multipart() throws IOException {
         sampler.setMethod(HTTPConstants.POST);
         String fileField = "upload";
@@ -302,6 +310,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a formdata, as a multipart/form-data request.
      */
+    @Test
     public void testSendFormData_Multipart() throws IOException {
         sampler.setMethod(HTTPConstants.POST);
         String titleField = "title";
@@ -391,6 +400,7 @@ public class PostWriterTest extends TestCase {
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.sendPostData(URLConnection, HTTPSampler)'
      * This method test sending only a formdata, as urlencoded data
      */
+    @Test
     public void testSendFormData_Urlencoded() throws IOException {
         String titleValue = "mytitle";
         String descriptionValue = "mydescription";
@@ -559,6 +569,7 @@ public class PostWriterTest extends TestCase {
     /*
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
+    @Test
     public void testSetHeaders() throws IOException {
         sampler.setMethod(HTTPConstants.POST);
         setupFilepart(sampler);
@@ -571,6 +582,7 @@ public class PostWriterTest extends TestCase {
     /*
      * Test method for 'org.apache.jmeter.protocol.http.sampler.postWriter.setHeaders(URLConnection, HTTPSampler)'
      */
+    @Test
     public void testSetHeaders_NoFilename() throws IOException {
         setupNoFilename(sampler);
         setupFormData(sampler);

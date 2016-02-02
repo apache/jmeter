@@ -18,31 +18,36 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
+import org.junit.Before;
+import org.junit.Test;
 
 // TODO: need more tests
 public final class TestHtmlParsingUtils extends JMeterTestCase {
 
-        public TestHtmlParsingUtils(String name) {
-            super(name);
+
+        @Before
+        public void setUp() {
         }
 
-        @Override
-        protected void setUp() {
-        }
-
+        @Test
         public void testGetParser() throws Exception {
             HtmlParsingUtils.getParser();
         }
 
+        @Test
         public void testGetDom() throws Exception {
             HtmlParsingUtils.getDOM("<HTML></HTML>");
             HtmlParsingUtils.getDOM("");
         }
 
+        @Test
         public void testIsArgumentMatched() throws Exception {
             Argument arg = new Argument();
             Argument argp = new Argument();
@@ -57,6 +62,7 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
             assertFalse(HtmlParsingUtils.isArgumentMatched(arg, argp));
         }
         
+        @Test
         public void testIsAnchorMatched() throws Exception {
             HTTPSamplerBase target=new HTTPNullSampler();
             HTTPSamplerBase pattern=new HTTPNullSampler();
@@ -91,6 +97,7 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
             assertTrue(HtmlParsingUtils.isAnchorMatched(target, pattern));
         }
         
+        @Test
         public void testisEqualOrMatches() throws Exception {
             assertTrue(HtmlParsingUtils.isEqualOrMatches("http:","http:"));
             assertFalse(HtmlParsingUtils.isEqualOrMatches("http:","htTp:"));
@@ -98,6 +105,7 @@ public final class TestHtmlParsingUtils extends JMeterTestCase {
             assertFalse(HtmlParsingUtils.isEqualOrMatches("ht+p:","http:"));
         }
 
+        @Test
         public void testisEqualOrMatchesCaseBlind() throws Exception {
             assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","http:"));
             assertTrue(HtmlParsingUtils.isEqualOrMatchesCaseBlind("http:","htTp:"));

@@ -18,16 +18,15 @@
 
 package org.apache.jmeter.protocol.http.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.testelement.property.CollectionProperty;
+import org.junit.Test;
 
-public class TestHTTPArgument extends TestCase {
-        public TestHTTPArgument(String name) {
-            super(name);
-        }
+public class TestHTTPArgument {
 
+        @Test
         public void testCloning() throws Exception {
             HTTPArgument arg = new HTTPArgument("name.?", "value_ here");
             assertEquals("name.?", arg.getName());
@@ -41,6 +40,7 @@ public class TestHTTPArgument extends TestCase {
             assertEquals("value_ here", clone.getValue());
         }
 
+        @Test
         public void testConversion() throws Exception {
             Arguments args = new Arguments();
             args.addArgument("name.?", "value_ here");
@@ -55,6 +55,7 @@ public class TestHTTPArgument extends TestCase {
             assertEquals("value_.%2B", httpArg.getEncodedValue());
         }
         
+        @Test
         public void testEncoding() throws Exception {
             HTTPArgument arg;
             arg = new HTTPArgument("name.?", "value_ here", false);

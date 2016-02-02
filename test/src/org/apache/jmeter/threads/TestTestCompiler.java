@@ -18,17 +18,18 @@
 
 package org.apache.jmeter.threads;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.control.GenericController;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.collections.ListedHashTree;
+import org.junit.Test;
 
-public class TestTestCompiler extends junit.framework.TestCase {
-        public TestTestCompiler(String name) {
-            super(name);
-        }
+public class TestTestCompiler {
 
+        @Test
         public void testConfigGathering() throws Exception {
             ListedHashTree testing = new ListedHashTree();
             GenericController controller = new GenericController();

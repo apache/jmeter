@@ -18,6 +18,9 @@
 
 package org.apache.jmeter.protocol.http.config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -26,6 +29,8 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.junit.Before;
+import org.junit.Test;
 
 public class UrlConfigTest extends JMeterTestCase {
     private HTTPSamplerBase config;
@@ -34,12 +39,8 @@ public class UrlConfigTest extends JMeterTestCase {
 
     private HTTPSamplerBase partialConfig;
 
-    public UrlConfigTest(String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         Arguments args = new Arguments();
         args.addArgument("username", "mstover");
         args.addArgument("password", "pass");
@@ -59,11 +60,13 @@ public class UrlConfigTest extends JMeterTestCase {
         partialConfig.setProperty(HTTPSamplerBase.METHOD, HTTPConstants.GET);
     }
 
+    @Test
     public void testSimpleConfig() {
         assertEquals("Full Config", config.getName());
         assertEquals("www.lazer.com", config.getDomain());
     }
 
+    @Test
     public void testOverRide() {
         JMeterProperty jmp = partialConfig.getProperty(HTTPSamplerBase.DOMAIN);
         assertTrue(jmp instanceof NullProperty);

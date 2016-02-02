@@ -18,19 +18,12 @@
 
 package org.apache.jmeter.protocol.ldap.config.gui;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class PackageTest extends TestCase {
-        /**
-         * Create a new test.
-         * 
-         * @param name
-         *            the name of the test
-         */
-        public PackageTest(String name) {
-            super(name);
-        }
+import org.junit.Test;
 
+public class PackageTest {
+        
         /**
          * Test that adding an argument to the table results in an appropriate
          * TestElement being created.
@@ -38,6 +31,7 @@ public class PackageTest extends TestCase {
          * @throws Exception
          *             if an exception occurred during the test
          */
+        @Test
         public void testLDAPArgumentCreation() throws Exception {
             LDAPArgumentsPanel gui = new LDAPArgumentsPanel();
             gui.tableModel.addRow(new LDAPArgument());
