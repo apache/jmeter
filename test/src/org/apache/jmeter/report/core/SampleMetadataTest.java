@@ -17,10 +17,13 @@
  */
 package org.apache.jmeter.report.core;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class SampleMetadataTest extends TestCase {
+import org.junit.Test;
 
+public class SampleMetadataTest {
+
+    @Test
     public void testToString() {
         assertEquals("a,b", new SampleMetadata(',', "a", "b").toString());
     }

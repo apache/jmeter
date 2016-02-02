@@ -18,23 +18,25 @@
 
 package org.apache.jmeter.samplers;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.StringWriter;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.util.Calculator;
 import org.apache.log.LogTarget;
 import org.apache.log.format.Formatter;
 import org.apache.log.format.RawFormatter;
 import org.apache.log.output.io.WriterTarget;
+import org.junit.Test;
 
 // TODO need more tests - particularly for the new functions
 
-public class TestSampleResult extends TestCase {
-        public TestSampleResult(String name) {
-            super(name);
-        }
+public class TestSampleResult {
 
+        @Test
         public void testElapsedTrue() throws Exception {
             SampleResult res = new SampleResult(true);
 
@@ -48,6 +50,7 @@ public class TestSampleResult extends TestCase {
             }
         }
 
+        @Test
         public void testElapsedFalse() throws Exception {
             SampleResult res = new SampleResult(false);
 
@@ -61,6 +64,7 @@ public class TestSampleResult extends TestCase {
             }
         }
 
+        @Test
         public void testPauseFalse() throws Exception {
             SampleResult res = new SampleResult(false);
             // Check sample increments OK
@@ -80,6 +84,7 @@ public class TestSampleResult extends TestCase {
             }
         }
 
+        @Test
         public void testPauseTrue() throws Exception {
             SampleResult res = new SampleResult(true);
             // Check sample increments OK
@@ -109,6 +114,7 @@ public class TestSampleResult extends TestCase {
             SampleResult.log.setLogTargets(lt);
         }
 
+        @Test
         public void testPause2True() throws Exception {
             divertLog();
             SampleResult res = new SampleResult(true);
@@ -119,6 +125,7 @@ public class TestSampleResult extends TestCase {
             assertFalse(wr.toString().length() == 0);
         }
 
+        @Test
         public void testPause2False() throws Exception {
             divertLog();
             SampleResult res = new SampleResult(false);
@@ -129,6 +136,7 @@ public class TestSampleResult extends TestCase {
             assertFalse(wr.toString().length() == 0);
         }
         
+        @Test
         public void testByteCount() throws Exception {
             SampleResult res = new SampleResult();
             
@@ -140,34 +148,42 @@ public class TestSampleResult extends TestCase {
             assertEquals("sample of size 100 bytes", res.getSampleLabel());
         }
 
+        @Test
         public void testSubResultsTrue() throws Exception {
             testSubResults(true, 0);
         }
 
+        @Test
         public void testSubResultsTrueThread() throws Exception {
             testSubResults(true, 500L, 0);
         }
 
+        @Test
         public void testSubResultsFalse() throws Exception {
             testSubResults(false, 0);
         }
 
+        @Test
         public void testSubResultsFalseThread() throws Exception {
             testSubResults(false, 500L, 0);
         }
 
+        @Test
         public void testSubResultsTruePause() throws Exception {
             testSubResults(true, 100);
         }
 
+        @Test
         public void testSubResultsTruePauseThread() throws Exception {
             testSubResults(true, 500L, 100);
         }
 
+        @Test
         public void testSubResultsFalsePause() throws Exception {
             testSubResults(false, 100);
         }
 
+        @Test
         public void testSubResultsFalsePauseThread() throws Exception {
             testSubResults(false, 500L, 100);
         }
@@ -293,6 +309,7 @@ public class TestSampleResult extends TestCase {
 
         // TODO some more invalid sequence tests needed
         
+        @Test
         public void testEncodingAndType() throws Exception {
             // check default
             SampleResult res = new SampleResult();

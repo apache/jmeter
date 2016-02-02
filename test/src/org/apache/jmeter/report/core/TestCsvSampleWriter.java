@@ -17,23 +17,26 @@
  */
 package org.apache.jmeter.report.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.StringWriter;
 import java.io.Writer;
-
-import junit.framework.TestCase;
-
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestCsvSampleWriter extends TestCase {
+public class TestCsvSampleWriter {
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         // We have to initialize JMeterUtils
         JMeterUtils.loadJMeterProperties("jmeter.properties");
     }
 
     SampleMetadata metadata = new SampleMetadata(',', "a", "b");
 
+    @Test
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
         try {
             CsvSampleWriter dummy = new CsvSampleWriter(null);
@@ -45,6 +48,7 @@ public class TestCsvSampleWriter extends TestCase {
         }
     }
 
+    @Test
     public void testCsvSampleWriterConstructorWithWriter() throws Exception {
         try (Writer writer = new StringWriter();
                 CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
@@ -55,6 +59,7 @@ public class TestCsvSampleWriter extends TestCase {
         }
     }
 
+    @Test
     public void testWriteWithoutWriter() throws Exception {
         try (CsvSampleWriter csvWriter = new CsvSampleWriter(metadata)) {
             Sample sample = new SampleBuilder(metadata).add("a1").add("b1")
@@ -68,6 +73,7 @@ public class TestCsvSampleWriter extends TestCase {
         }
     }
 
+    @Test
     public void testWriteWithoutSample() throws Exception {
         try (Writer writer = new StringWriter();
                 CsvSampleWriter csvWriter = new CsvSampleWriter(writer,
@@ -81,6 +87,7 @@ public class TestCsvSampleWriter extends TestCase {
         }
     }
 
+    @Test
     public void testWrite() throws Exception {
         try (Writer writer = new StringWriter();
                 CsvSampleWriter csvWriter = new CsvSampleWriter(writer,

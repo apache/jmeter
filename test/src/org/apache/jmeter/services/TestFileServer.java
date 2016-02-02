@@ -22,33 +22,36 @@
      
 package org.apache.jmeter.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestFileServer extends JMeterTestCase {
 
     private static final FileServer FS = FileServer.getFileServer();
     
-    public TestFileServer() {
-        super();
-    }
 
-    public TestFileServer(String arg0) {
-        super(arg0);
-    }
-
-    @Override
+    @Before
     public void setUp() throws IOException {
         FS.resetBase();        
     }
 
-    @Override
+    @After
     public void tearDown() throws IOException{
         FS.closeFiles();
     }
     
+    @Test
     public void testopen() throws Exception {
         try {
             FS.readLine("test");
@@ -103,6 +106,7 @@ public class TestFileServer extends JMeterTestCase {
         FS.closeFiles();
     }
     
+    @Test
     public void testRelative() throws Exception {
         final String base = FileServer.getDefaultBase();
         final File basefile = new File(base);
@@ -117,6 +121,7 @@ public class TestFileServer extends JMeterTestCase {
         assertEquals("abcd",FS.getBaseDirRelative().toString());
     }
 
+    @Test
     public void testHeaderMissingFile() throws Exception {
         final String missing = "no-such-file";
         final String alias = "missing";
@@ -137,6 +142,7 @@ public class TestFileServer extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testHeaderEmptyFile() throws Exception {
         final String empty = findTestPath("testfiles/empty.csv");
         final String alias = "empty";
@@ -157,6 +163,7 @@ public class TestFileServer extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testResolvingPaths() {
         final File anchor = new File(findTestPath("testfiles/empty.csv"));
 

@@ -18,6 +18,11 @@
 
 package org.apache.jmeter.save;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,6 +35,7 @@ import java.util.List;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
+import org.junit.Test;
 
 public class TestSaveService extends JMeterTestCase {
     
@@ -71,22 +77,23 @@ public class TestSaveService extends JMeterTestCase {
 
     private static final boolean saveOut = JMeterUtils.getPropDefault("testsaveservice.saveout", false);
 
-    public TestSaveService(String name) {
-        super(name);
-    }
 
+    @Test
     public void testPropfile1() throws Exception {
         assertEquals("Property Version mismatch, ensure you update SaveService#PROPVERSION field with _version property value from saveservice.properties", SaveService.PROPVERSION, SaveService.getPropertyVersion());            
     }
 
+    @Test
     public void testPropfile2() throws Exception {
         assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with revision id of saveservice.properties", SaveService.FILEVERSION, SaveService.getFileVersion());
     }
     
+    @Test
     public void testVersions() throws Exception {
         assertTrue("Unexpected version found", SaveService.checkVersions());
     }
 
+    @Test
     public void testLoadAndSave() throws Exception {
         boolean failed = false; // Did a test fail?
 
@@ -182,6 +189,7 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
 
+    @Test
     public void testLoad() throws Exception {
         for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
             File file = findTestFile("testfiles/" + FILES_LOAD_ONLY[i]);
@@ -196,6 +204,7 @@ public class TestSaveService extends JMeterTestCase {
 
     }
 
+    @Test
     public void testClasses(){
         List<String> missingClasses = SaveService.checkClasses();
         if(missingClasses.size()>0) {

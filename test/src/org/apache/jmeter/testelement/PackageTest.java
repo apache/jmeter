@@ -22,7 +22,9 @@
  */
 package org.apache.jmeter.testelement;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -34,11 +36,9 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.junit.Test;
 
-public class PackageTest extends TestCase {
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
+public class PackageTest {
 
     // Test needs to run in this package in order to give access to AbstractTestElement.addProperty() 
     public void DISABLEDtestBug50799() throws Exception {
@@ -70,6 +70,7 @@ public class PackageTest extends TestCase {
         assertEquals(new Header("2ndLevelTestHeader", "testValue2"), headerManager2.get(0));
     }
 
+    @Test
     public void testRecovery() throws Exception {
         ConfigTestElement config = new ConfigTestElement();
         config.addProperty(new StringProperty("name", "config"));
@@ -87,6 +88,7 @@ public class PackageTest extends TestCase {
         assertEquals(new NullProperty("login"), config.getProperty("login"));
     }
 
+    @Test
     public void testArguments() throws Exception {
         Arguments args = new Arguments();
         args.addArgument("arg1", "val1", "=");
