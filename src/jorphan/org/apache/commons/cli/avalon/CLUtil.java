@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 /**
  * CLUtil offers basic utility operations for use both internal and external to
  * package.

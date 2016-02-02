@@ -18,8 +18,6 @@
  */
 package org.apache.commons.cli.avalon;
 
-// Renamed from org.apache.avalon.excalibur.cli
-
 /**
  * ParserControl is used to control particular behaviour of the parser.
  *
