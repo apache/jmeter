@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.apache.jmeter.report.config;
+package org.apache.jmeter.report.core;
 
 /**
  * The interface StringConverter represents a converter from a string to another
@@ -23,7 +23,7 @@ package org.apache.jmeter.report.config;
  *
  * @param <TDest>
  *            the generic type
- * @since 2.14
+ * @since 3.0
  */
 public interface StringConverter<TDest> {
 
