@@ -18,16 +18,16 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.net.URI;
 import java.net.URL;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class TestHTTPUtils {
 
-public class TestHTTPUtils extends TestCase {
-    public TestHTTPUtils(String name) {
-        super(name);
-    }
-
+    @Test
     public void testgetEncoding() throws Exception {
         assertNull(ConversionUtils.getEncodingFromContentType("xyx"));
         assertEquals("utf8",ConversionUtils.getEncodingFromContentType("charset=utf8"));
@@ -39,6 +39,7 @@ public class TestHTTPUtils extends TestCase {
         assertNull(ConversionUtils.getEncodingFromContentType(";charset=no-such-charset;"));
     }
     
+    @Test
     public void testMakeRelativeURL() throws Exception {
         URL base = new URL("http://192.168.0.1/a/b/c"); // Trailing file
         assertEquals(new URL("http://192.168.0.1/a/b/d"),ConversionUtils.makeRelativeURL(base,"d"));
@@ -50,6 +51,7 @@ public class TestHTTPUtils extends TestCase {
         assertEquals(new URL("http://192.168.0.1/a/b/d"),ConversionUtils.makeRelativeURL(base,"./d"));
     }
 
+    @Test
     public void testMakeRelativeURL2() throws Exception {
         URL base = new URL("http://192.168.0.1/a/b/c/"); // Trailing directory
         assertEquals(new URL("http://192.168.0.1/a/b/c/d"),ConversionUtils.makeRelativeURL(base,"d"));
@@ -62,6 +64,7 @@ public class TestHTTPUtils extends TestCase {
     }
 
     // Test that location urls with a protocol are passed unchanged
+    @Test
     public void testMakeRelativeURL3() throws Exception {
         URL base = new URL("http://ahost.invalid/a/b/c");
         assertEquals(new URL("http://host.invalid/e"),ConversionUtils.makeRelativeURL(base ,"http://host.invalid/e"));
@@ -70,6 +73,7 @@ public class TestHTTPUtils extends TestCase {
         assertEquals(new URL("https://host.invalid:8081/e"),ConversionUtils.makeRelativeURL(base ,"https://host.invalid:8081/e"));
     }
 
+    @Test
     public void testRemoveSlashDotDot()
     {
         assertEquals("/path/", ConversionUtils.removeSlashDotDot("/path/"));
@@ -91,6 +95,7 @@ public class TestHTTPUtils extends TestCase {
         assertEquals("http://host/../abc", ConversionUtils.removeSlashDotDot("http://host/../abc"));
     }
     
+    @Test
     public void testsanitizeUrl() throws Exception {
         testSanitizeUrl("http://localhost/", "http://localhost/"); // normal, no encoding needed
         testSanitizeUrl("http://localhost/a/b/c%7Cd", "http://localhost/a/b/c|d"); // pipe needs encoding

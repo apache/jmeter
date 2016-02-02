@@ -22,11 +22,15 @@
  */
 package org.apache.jmeter.protocol.tcp.sampler;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class TCPClientDecoratorTest extends TestCase {
+import org.junit.Test;
+
+public class TCPClientDecoratorTest {
 
     
+    @Test
     public void testIntToByteArray() throws Exception {
         byte[] ba;
         int len = 2;
@@ -166,6 +170,7 @@ public class TCPClientDecoratorTest extends TestCase {
         }
     }
 
+    @Test
     public void testByteArrayToInt() throws Exception {
         byte[] ba;
 
@@ -238,6 +243,7 @@ public class TCPClientDecoratorTest extends TestCase {
     }
 
     
+    @Test
     public void testLoopBack() throws Exception {
         assertEquals(Short.MIN_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MIN_VALUE, 2)));      
         assertEquals(Short.MAX_VALUE, TCPClientDecorator.byteArrayToInt(TCPClientDecorator.intToByteArray(Short.MAX_VALUE, 2)));      

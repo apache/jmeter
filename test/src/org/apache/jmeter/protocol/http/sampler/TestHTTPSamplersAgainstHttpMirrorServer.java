@@ -24,12 +24,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 import org.apache.jmeter.engine.util.ValueReplacer;
-import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jmeter.protocol.http.control.HttpMirrorServer;
 import org.apache.jmeter.protocol.http.control.TestHTTPMirrorThread;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
@@ -47,16 +47,16 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 import org.junit.Assert;
 
+import junit.extensions.TestSetup;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.extensions.TestSetup;
 
 /**
  * Class for performing actual samples for HTTPSampler and HTTPSampler2.
  * The samples are executed against the HttpMirrorServer, which is 
  * started when the unit tests are executed.
  */
-public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCase {
+public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit3 {
     private static final int HTTP_SAMPLER = 0;
     private static final int HTTP_SAMPLER2 = 1;
     private static final int HTTP_SAMPLER3 = 2;

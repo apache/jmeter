@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.protocol.http.proxy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -33,12 +37,11 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.junit.Test;
 
-public class TestHttpRequestHdr  extends JMeterTestCase {
-    public TestHttpRequestHdr(String name) {
-        super(name);
-    }
+public class TestHttpRequestHdr extends JMeterTestCase {
 
+    @Test
     public void testRepeatedArguments() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP GET request
@@ -172,18 +175,20 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(0), "", postBody, postBody, contentEncoding, false);
     }
 
+    @Test
     public void testEncodedArguments() throws Exception {
         String url = "http://localhost/matrix.html";
         testEncodedArguments(url);
     }
      
     
+    @Test
     public void testEncodedArgumentsIPv6() throws Exception {
         String url = "http://[::1]:8080/matrix.html";
         testEncodedArguments(url);
     }
 
-    public void testEncodedArguments(String url) throws Exception {
+    private void testEncodedArguments(String url) throws Exception {
         // A HTTP GET request, with encoding not known 
         String contentEncoding = "";
         String queryString = "abc%3FSPACE=a+b&space=a%20b&query=What%3F"; 
@@ -273,15 +278,17 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(2), "query", "What?", "What%3F", contentEncoding, true);
     }
     
+    @Test
     public void testGetRequestEncodings() throws Exception {
         testGetRequestEncodings("http://localhost/matrix.html");
     }
     
+    @Test
     public void testGetRequestEncodingsIPv6() throws Exception {
         testGetRequestEncodings("http://[::1]:8080/matrix.html");
     }
     
-    public void testGetRequestEncodings(String url) throws Exception {
+    private void testGetRequestEncodings(String url) throws Exception {
         // A HTTP GET request, with encoding not known
         String contentEncoding = "";
         String param1Value = "yes";
@@ -340,6 +347,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2Value, param2ValueEncoded, contentEncoding, true);
     }
 
+    @Test
     public void testPostRequestEncodings() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP POST request, with encoding not known
@@ -415,6 +423,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(1), "param2", param2Value, param2ValueEncoded, contentEncoding, true);
     }
 
+    @Test
     public void testPostMultipartFormData() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP POST request, multipart/form-data, simple values,
@@ -498,6 +507,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         checkArgument((HTTPArgument)arguments.getArgument(1), "description", descriptionValue, descriptionValue, contentEncoding, false);
     }
 
+    @Test
     public void testParse1() throws Exception {// no space after :
         HttpRequestHdr req = new HttpRequestHdr();
         ByteArrayInputStream bis = null;
@@ -513,6 +523,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
     }
     
 
+    @Test
     public void testParse2() throws Exception {// spaces after :
         HttpRequestHdr req = new HttpRequestHdr();
         ByteArrayInputStream bis = null;
@@ -527,6 +538,7 @@ public class TestHttpRequestHdr  extends JMeterTestCase {
         assertEquals("value",header.getValue());
     }
 
+    @Test
     public void testPostMultipartFileUpload() throws Exception {
         String url = "http://localhost/matrix.html";
         // A HTTP POST request, multipart/form-data, simple values,
