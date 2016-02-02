@@ -18,18 +18,17 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.net.URLConnection;
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
+import java.net.URLConnection;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
+import org.junit.Test;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 
-public class PutWriterTest extends TestCase {
+public class PutWriterTest {
 
-    public PutWriterTest(String name) {
-        super(name);
-    }
 
+    @Test
     public void testSetHeaders() throws Exception {
         URLConnection uc = new NullURLConnection();
         HTTPSampler sampler = new HTTPSampler();

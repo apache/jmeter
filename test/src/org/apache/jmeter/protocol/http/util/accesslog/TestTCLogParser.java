@@ -18,12 +18,18 @@
 
 package org.apache.jmeter.protocol.http.util.accesslog;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
+import org.junit.Test;
 
 // TODO - more tests needed
 
-public class TestTCLogParser  extends JMeterTestCase {
+public class TestTCLogParser extends JMeterTestCase {
         private static final TCLogParser tclp = new TCLogParser();
 
         private static final String URL1 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"GET /addrbook/ HTTP/1.1\" 200 1981";
@@ -32,6 +38,7 @@ public class TestTCLogParser  extends JMeterTestCase {
 
         private static final String TEST3 = "127.0.0.1 - - [08/Jan/2003:07:03:54 -0500] \"HEAD /addrbook/ HTTP/1.1\" 200 1981";
 
+        @Test
         public void testConstruct() throws Exception {
             TCLogParser tcp;
             tcp = new TCLogParser();
@@ -42,17 +49,20 @@ public class TestTCLogParser  extends JMeterTestCase {
             assertEquals("Filename should have been saved", file, tcp.FILENAME);
         }
 
+        @Test
         public void testcleanURL() throws Exception {
             String res = tclp.cleanURL(URL1);
             assertEquals("/addrbook/", res);
             assertNull(tclp.stripFile(res, new HTTPNullSampler()));
         }
 
+        @Test
         public void testcheckURL() throws Exception {
             assertFalse("URL does not have a query", tclp.checkURL(URL1));
             assertTrue("URL is a query", tclp.checkURL(URL2));
         }
 
+        @Test
         public void testHEAD() throws Exception {
             String res = tclp.cleanURL(TEST3);
             assertEquals("/addrbook/", res);
