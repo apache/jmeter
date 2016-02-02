@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
@@ -263,6 +264,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             templateCfg.setDirectoryForTemplateLoading(templateDirectory);
             templateCfg
                     .setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            LOG.info("Report will be generated in:"+outputDir.getAbsolutePath()+", creating folder structure");
+            FileUtils.forceMkdir(outputDir);
             TemplateVisitor visitor = new TemplateVisitor(
                     templateDirectory.toPath(), outputDir.toPath(),
                     templateCfg, dataContext);
