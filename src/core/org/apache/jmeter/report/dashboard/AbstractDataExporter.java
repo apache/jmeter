@@ -17,6 +17,11 @@
  */
 package org.apache.jmeter.report.dashboard;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.report.processor.MapResultData;
+import org.apache.jmeter.report.processor.ResultData;
+import org.apache.jmeter.report.processor.ValueResultData;
+
 /**
  * The Class AbstractDataExporter provides a base class for DataExporter.
  */
@@ -28,6 +33,66 @@ public abstract class AbstractDataExporter implements DataExporter {
      * Instantiates a new abstract data exporter.
      */
     protected AbstractDataExporter() {
+    }
+
+    /**
+     * Finds a value matching the specified data name in a ResultData tree.
+     * Supports only MapResultData walking.
+     * 
+     * @param clazz
+     *            the type of the value
+     * @param data
+     *            the name of the data containing the value
+     * @param root
+     *            the root of the tree
+     * @return the value matching the data name
+     */
+    protected static <TValue> TValue findValue(Class<TValue> clazz, String data,
+            ResultData root) {
+        TValue value = null;
+        ResultData result = findData(data, root);
+        if (result instanceof ValueResultData) {
+            ValueResultData valueResult = (ValueResultData) result;
+            Object object = valueResult.getValue();
+            if (object != null && clazz.isAssignableFrom(object.getClass())) {
+                value = clazz.cast(object);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * Finds a inner ResultData matching the specified data name in a ResultData
+     * tree. Supports only MapResultData walking.
+     * 
+     * @param data
+     *            the name of the data containing the value
+     * @param root
+     *            the root of the tree
+     * @return the ResultData matching the data name
+     */
+    protected static ResultData findData(String data, ResultData root) {
+        ResultData result = null;
+        String[] pathItems = StringUtils.split(data, '.');
+        if (pathItems != null) {
+            if (root instanceof MapResultData) {
+                int count = pathItems.length;
+                int index = 0;
+                MapResultData map = (MapResultData) root;
+                while (map != null && index < count && result == null) {
+                    ResultData current = map.getResult(pathItems[index]);
+                    if (index == count - 1) {
+                        result = current;
+                    } else {
+                        if (current instanceof MapResultData) {
+                            map = (MapResultData) current;
+                            index++;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /*
