@@ -290,6 +290,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
+            } else if (method.equals(HTTPConstants.GET)) {
+                httpRequest = new HttpGet(uri);
             } else if (method.equals(HTTPConstants.PUT)) {
                 httpRequest = new HttpPut(uri);
             } else if (method.equals(HTTPConstants.HEAD)) {
@@ -300,8 +302,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 httpRequest = new HttpOptions(uri);
             } else if (method.equals(HTTPConstants.DELETE)) {
                 httpRequest = new HttpDelete(uri);
-            } else if (method.equals(HTTPConstants.GET)) {
-                httpRequest = new HttpGet(uri);
             } else if (method.equals(HTTPConstants.PATCH)) {
                 httpRequest = new HttpPatch(uri);
             } else if (HttpWebdav.isWebdavMethod(method)) {

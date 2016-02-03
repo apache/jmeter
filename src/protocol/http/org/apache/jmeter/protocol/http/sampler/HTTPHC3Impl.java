@@ -213,6 +213,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             // May generate IllegalArgumentException
             if (method.equals(HTTPConstants.POST)) {
                 httpMethod = new PostMethod(urlStr);
+            } else if (method.equals(HTTPConstants.GET)){
+                httpMethod = new GetMethod(urlStr);
             } else if (method.equals(HTTPConstants.PUT)){
                 httpMethod = new PutMethod(urlStr);
             } else if (method.equals(HTTPConstants.HEAD)){
@@ -228,8 +230,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                         return HTTPConstants.DELETE;
                     }
                 };
-            } else if (method.equals(HTTPConstants.GET)){
-                httpMethod = new GetMethod(urlStr);
             } else if (method.equals(HTTPConstants.PATCH)){
                 httpMethod = new EntityEnclosingMethod(urlStr) {
                     @Override
