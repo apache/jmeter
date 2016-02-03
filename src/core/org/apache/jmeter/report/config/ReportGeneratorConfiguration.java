@@ -79,7 +79,7 @@ public class ReportGeneratorConfiguration {
 
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
-    public static final String GRAPH_KEY_TITLE_DEFAULT = "Generic graph title";
+    public static final String GRAPH_KEY_TITLE_DEFAULT = "";
 
     // Required exporter properties
     // Filters only sample series ?
