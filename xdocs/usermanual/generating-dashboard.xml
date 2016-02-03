@@ -160,22 +160,6 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>abscissa_max</td>
-                                    <td>
-                                        Sets the maximum abscissa of the graph. If this property is
-                                        not set, it will be defined during the generation.
-                                    </td>
-                                    <td>No default value</td>
-                                </tr>
-                                <tr>
-                                    <td>abscissa_min</td>
-                                    <td>
-                                        Sets the minimum abscissa of the graph. If this property is
-                                        not set, it will be defined during the generation.
-                                    </td>
-                                    <td>No default value</td>
-                                </tr>
-                                <tr>
                                     <td>classname</td>
                                     <td>
                                         The fully qualified class name of the graph
@@ -197,22 +181,6 @@
                                         Defines whether the graph discards controller samples.
                                     </td>
                                     <td>false</td>
-                                </tr>
-                                <tr>
-                                    <td>ordinate_max</td>
-                                    <td>
-                                        Sets the maximum ordinate of the graph. If this property is
-                                        not set, it will be defined during the generation.
-                                    </td>
-                                    <td>No default value</td>
-                                </tr>
-                                <tr>
-                                    <td>ordinate_min</td>
-                                    <td>
-                                        Sets the minimum ordinate of the graph. If this property is
-                                        not set, it will be defined during the generation.
-                                    </td>
-                                    <td>No default value</td>
                                 </tr>
                                 <tr>
                                     <td>title</td>
