@@ -160,4 +160,8 @@ public abstract class JMeterTestCase {
         } catch (InvalidVariableException ignored) {
         }
     }
+
+    public static void assertPrimitiveEquals(boolean expected, boolean actual) {
+        org.junit.Assert.assertEquals(Boolean.valueOf(expected), Boolean.valueOf(actual));
+    }
 }

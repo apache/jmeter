@@ -87,10 +87,10 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertTrue(a.equals(b));
         assertTrue(b.equals(a));
         assertEquals(a.hashCode(), b.hashCode());
-        assertEquals(a.saveUrl(), b.saveUrl());
-        assertEquals(a.saveAssertions(), b.saveAssertions());
+        assertPrimitiveEquals(a.saveUrl(), b.saveUrl());
+        assertPrimitiveEquals(a.saveAssertions(), b.saveAssertions());
         assertEquals(a.getDelimiter(), b.getDelimiter());
-        assertEquals(a.saveDataType(), b.saveDataType());
+        assertPrimitiveEquals(a.saveDataType(), b.saveDataType());
         
         a.setAssertions(false);
         // a and b should not be equal
