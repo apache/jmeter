@@ -70,18 +70,17 @@ public class TestLoad extends JMeterTestCaseJUnit3 {
     }
 
     public static TestSuite suite(){
-        TestSuite suite=new TestSuite("Load Test");
-        //suite.addTest(new TestLoad("checkGuiPackage"));
-        scanFiles(suite,testfiledir);
-        scanFiles(suite,demofiledir);
+        TestSuite suite = new TestSuite("Load Test");
+        scanFiles(suite, testfiledir);
+        scanFiles(suite, demofiledir);
         return suite;
     }
 
     private static void scanFiles(TestSuite suite, File parent) {
-        File testFiles[]=parent.listFiles(jmxFilter);
         String dir = parent.getName();
-        for (int i=0; i<testFiles.length; i++){
-            suite.addTest(new TestLoad("checkTestFile",testFiles[i],dir));
+        File[] testFiles = parent.listFiles(jmxFilter);
+        for (File file : testFiles) {
+            suite.addTest(new TestLoad("checkTestFile", file, dir));
         }
     }
     
