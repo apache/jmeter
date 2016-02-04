@@ -100,7 +100,6 @@ public class TestStatCalculator {
     }
     
     @Test
-    @SuppressWarnings("boxing")
     public void testBug52125_1(){ // No duplicates when adding
         calc.addValue(1L);
         calc.addValue(2L);
@@ -126,7 +125,6 @@ public class TestStatCalculator {
     }
 
     @Test
-    @SuppressWarnings("boxing")
     public void testBug52125_2A(){ // as above, but with aggregate sample instead
         calc.addValue(1L);
         calc.addValue(2L);
@@ -138,7 +136,6 @@ public class TestStatCalculator {
     }
 
     @Test
-    @SuppressWarnings("boxing")
     public void testBug52125_3(){ // add duplicates as per bug
         calc.addValue(1L);
         calc.addValue(2L);
