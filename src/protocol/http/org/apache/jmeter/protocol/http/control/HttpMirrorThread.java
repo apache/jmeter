@@ -124,9 +124,9 @@ public class HttpMirrorThread implements Runnable {
                         query=requestPath.substring(querypos+1);
                     }
                     if (query != null) {
-                        String params[] = query.split("&");
+                        String[] params = query.split("&");
                         for(String param : params) {
-                            String parts[] = param.split("=",2);
+                            String[] parts = param.split("=",2);
                             if (parts.length==2) {
                                 parameters.put(parts[0], parts[1]);
                             } else { // allow for parameter name only

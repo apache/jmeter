@@ -571,7 +571,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
      */
     protected String getResponseHeaders(HttpMethod method) {
         StringBuilder headerBuf = new StringBuilder();
-        org.apache.commons.httpclient.Header rh[] = method.getResponseHeaders();
+        org.apache.commons.httpclient.Header[] rh = method.getResponseHeaders();
         headerBuf.append(method.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
 
@@ -738,7 +738,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
     private String sendPostData(PostMethod post) throws IOException {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
-        HTTPFileArg files[] = getHTTPFiles();
+        HTTPFileArg[] files = getHTTPFiles();
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request
         if(getUseMultipartForPost()) {
@@ -979,7 +979,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         // This allows the user to specify his own content-type for a POST request
         Header contentTypeHeader = put.getRequestHeader(HTTPConstants.HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.getValue() != null && contentTypeHeader.getValue().length() > 0;
-        HTTPFileArg files[] = getHTTPFiles();
+        HTTPFileArg[] files = getHTTPFiles();
 
         // If there are no arguments, we can send a file as the body of the request
 
@@ -1095,7 +1095,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
      */
     protected void saveConnectionCookies(HttpMethod method, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
-            Header hdr[] = method.getResponseHeaders(HTTPConstants.HEADER_SET_COOKIE);
+            Header[] hdr = method.getResponseHeaders(HTTPConstants.HEADER_SET_COOKIE);
             for (Header responseHeader : hdr) {
                 cookieManager.addCookieFromHeader(responseHeader.getValue(), u);
             }

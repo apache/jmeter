@@ -1444,7 +1444,7 @@ public class ProxyControl extends GenericController {
     }
 
     private boolean isValid(String subject) {
-        String parts[] = subject.split("\\.");
+        String[] parts = subject.split("\\.");
         if (!parts[0].endsWith("*")) { // not a wildcard
             return true;
         }

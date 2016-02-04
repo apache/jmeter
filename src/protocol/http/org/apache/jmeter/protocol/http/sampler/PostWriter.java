@@ -91,7 +91,7 @@ public class PostWriter {
         // Buffer to hold the post body, except file content
         StringBuilder postedBody = new StringBuilder(1000);
 
-        HTTPFileArg files[] = sampler.getHTTPFiles();
+        HTTPFileArg[] files = sampler.getHTTPFiles();
 
         String contentEncoding = sampler.getContentEncoding();
         if(contentEncoding == null || contentEncoding.length() == 0) {
@@ -175,7 +175,7 @@ public class PostWriter {
             contentEncoding = ENCODING;
         }
         long contentLength = 0L;
-        HTTPFileArg files[] = sampler.getHTTPFiles();
+        HTTPFileArg[] files = sampler.getHTTPFiles();
 
         // Check if we should do a multipart/form-data or an
         // application/x-www-form-urlencoded post request

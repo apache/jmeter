@@ -59,7 +59,7 @@ public class SocketOutputStreamPoolFactory
     /**
      */
     @Override
-    public boolean validateObject(SocketConnectionInfos HostAndPort, PooledObject<SocketOutputStream> socketOutputStream) {
+    public boolean validateObject(SocketConnectionInfos hostAndPort, PooledObject<SocketOutputStream> socketOutputStream) {
         Socket socket = socketOutputStream.getObject().getSocket();
         return socket.isConnected()
                 && socket.isBound()

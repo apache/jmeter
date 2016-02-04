@@ -325,8 +325,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         }
 
         @Override
-        public Object invoke(Object p_invokee) {
-            Boolean success = (Boolean)super.invoke(p_invokee);
+        public Object invoke(Object pInvokee) {
+            Boolean success = (Boolean) super.invoke(pInvokee);
 
             if(success != null) {
                 if(success.booleanValue()) {

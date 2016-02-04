@@ -720,9 +720,9 @@ public class JMeter implements JMeterPlugin {
             }
         }
 
-        String sample_variables = (String) jmeterProps.get(SampleEvent.SAMPLE_VARIABLES);
-        if (sample_variables != null){
-            remoteProps.put(SampleEvent.SAMPLE_VARIABLES, sample_variables);
+        String sampleVariables = (String) jmeterProps.get(SampleEvent.SAMPLE_VARIABLES);
+        if (sampleVariables != null){
+            remoteProps.put(SampleEvent.SAMPLE_VARIABLES, sampleVariables);
         }
         jmeterProps.put("jmeter.version", JMeterUtils.getJMeterVersion());
     }
@@ -753,11 +753,11 @@ public class JMeter implements JMeterPlugin {
         driver.parent = this;
         PluginManager.install(this, false);
 
-        String remote_hosts_string = null;
+        String remoteHostsString = null;
         if (remoteStart != null) {
-            remote_hosts_string = remoteStart.getArgument();
-            if (remote_hosts_string == null) {
-                remote_hosts_string = JMeterUtils.getPropDefault(
+            remoteHostsString = remoteStart.getArgument();
+            if (remoteHostsString == null) {
+                remoteHostsString = JMeterUtils.getPropDefault(
                         "remote_hosts", //$NON-NLS-1$
                         "127.0.0.1");//$NON-NLS-1$
             }
@@ -765,7 +765,7 @@ public class JMeter implements JMeterPlugin {
         if (testFile == null) {
             throw new IllegalUserActionException("Non-GUI runs require a test plan");
         }
-        driver.runNonGui(testFile, logFile, remoteStart != null, remote_hosts_string, generateReportDashboard);
+        driver.runNonGui(testFile, logFile, remoteStart != null, remoteHostsString, generateReportDashboard);
     }
 
     // run test in batch mode
