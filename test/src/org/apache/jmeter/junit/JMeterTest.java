@@ -37,9 +37,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
@@ -60,6 +57,9 @@ import org.apache.log.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class JMeterTest extends JMeterTestCaseJUnit3 {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -653,8 +653,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         PropertyIterator iter2 = item.propertyIterator();
         while (iter2.hasNext()) {
             JMeterProperty item2 = iter2.next();
-            // [sebb] assertEquals(item2,
-            // clonedItem.getProperty(item2.getName()));
             assertEquals(item2.getStringValue(), clonedItem.getProperty(item2.getName()).getStringValue());
             assertTrue(item2 != clonedItem.getProperty(item2.getName()));
         }
