@@ -19,6 +19,7 @@ package org.apache.jorphan.reflect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jorphan.util.JMeterException;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class TestClassTools {
             IllegalArgumentException, JMeterException {
         Dummy dummy = new Dummy();
         ClassTools.invoke(dummy, "callMe");
-        assertEquals(dummy.wasCalled(), true);
+        assertTrue(dummy.wasCalled());
     }
 
     /**
