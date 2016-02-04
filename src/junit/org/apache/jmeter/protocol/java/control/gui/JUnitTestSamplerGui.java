@@ -74,10 +74,10 @@ implements ChangeListener, ActionListener, ItemListener
     private static final String[] SPATHS;
 
     static {
-        String paths[];
+        String[] paths;
         String ucp = JMeterUtils.getProperty("user.classpath");
         if (ucp!=null){
-            String parts[] = ucp.split(File.pathSeparator);
+            String[] parts = ucp.split(File.pathSeparator);
             paths = new String[parts.length+1];
             paths[0] = JMeterUtils.getJMeterHome() + "/lib/junit/"; //$NON-NLS-1$
             System.arraycopy(parts, 0, paths, 1, parts.length);

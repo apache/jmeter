@@ -32,7 +32,7 @@ public class ProxyAuthenticator extends Authenticator {
     private final String userName;
 
     /** The password to authenticate with. */
-    private final char password[];
+    private final char[] password;
 
     /**
      * Create a ProxyAuthenticator with the specified username and password.

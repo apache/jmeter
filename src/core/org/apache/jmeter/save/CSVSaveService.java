@@ -101,7 +101,7 @@ public final class CSVSaveService {
             .staticConfig();
 
     // Date formats to try if the time format does not parse as milliseconds
-    private static final String DATE_FORMAT_STRINGS[] = {
+    private static final String[] DATE_FORMAT_STRINGS = {
         "yyyy/MM/dd HH:mm:ss.SSS",  // $NON-NLS-1$
         "yyyy/MM/dd HH:mm:ss",  // $NON-NLS-1$
         "yyyy-MM-dd HH:mm:ss.SSS",  // $NON-NLS-1$
@@ -618,7 +618,7 @@ public final class CSVSaveService {
     }
 
     private static String[] splitHeader(String headerLine, String delim) {
-        String parts[] = headerLine.split("\\Q" + delim);// $NON-NLS-1$
+        String[] parts = headerLine.split("\\Q" + delim);// $NON-NLS-1$
         int previous = -1;
         // Check if the line is a header
         for (int i = 0; i < parts.length; i++) {
@@ -689,9 +689,9 @@ public final class CSVSaveService {
      *             when writing to <code>writer</code> fails
      */
     public static void saveCSVStats(List<?> data, FileWriter writer,
-            String headers[]) throws IOException {
+            String[] headers) throws IOException {
         final char DELIM = ',';
-        final char SPECIALS[] = new char[] { DELIM, QUOTING_CHAR };
+        final char[] SPECIALS = new char[] { DELIM, QUOTING_CHAR };
         if (headers != null) {
             for (int i = 0; i < headers.length; i++) {
                 if (i > 0) {
@@ -748,7 +748,7 @@ public final class CSVSaveService {
     public static void saveCSVStats(DefaultTableModel model, FileWriter writer,
             boolean saveHeaders) throws IOException {
         final char DELIM = ',';
-        final char SPECIALS[] = new char[] { DELIM, QUOTING_CHAR };
+        final char[] SPECIALS = new char[] { DELIM, QUOTING_CHAR };
         final int columns = model.getColumnCount();
         final int rows = model.getRowCount();
         if (saveHeaders) {
