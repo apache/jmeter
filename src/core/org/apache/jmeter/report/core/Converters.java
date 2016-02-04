@@ -19,6 +19,7 @@ package org.apache.jmeter.report.core;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The class Converters provides converters of string.
@@ -27,7 +28,7 @@ import java.util.HashMap;
  */
 public final class Converters {
 
-    private static HashMap<Class<?>, StringConverter<?>> converters = new HashMap<>();
+    private static final Map<Class<?>, StringConverter<?>> CONVERTER_MAP = new HashMap<>();
 
     static {
 
@@ -43,8 +44,8 @@ public final class Converters {
                 }
             }
         };
-        converters.put(Character.class, characterConverter);
-        converters.put(char.class, characterConverter);
+        CONVERTER_MAP.put(Character.class, characterConverter);
+        CONVERTER_MAP.put(char.class, characterConverter);
 
         StringConverter<Double> doubleConverter = new StringConverter<Double>() {
 
@@ -58,8 +59,8 @@ public final class Converters {
                 }
             }
         };
-        converters.put(Double.class, doubleConverter);
-        converters.put(double.class, doubleConverter);
+        CONVERTER_MAP.put(Double.class, doubleConverter);
+        CONVERTER_MAP.put(double.class, doubleConverter);
 
         StringConverter<Float> floatConverter = new StringConverter<Float>() {
 
@@ -73,8 +74,8 @@ public final class Converters {
                 }
             }
         };
-        converters.put(Float.class, floatConverter);
-        converters.put(float.class, floatConverter);
+        CONVERTER_MAP.put(Float.class, floatConverter);
+        CONVERTER_MAP.put(float.class, floatConverter);
 
         StringConverter<Integer> integerConverter = new StringConverter<Integer>() {
 
@@ -88,8 +89,8 @@ public final class Converters {
                 }
             }
         };
-        converters.put(Integer.class, integerConverter);
-        converters.put(int.class, integerConverter);
+        CONVERTER_MAP.put(Integer.class, integerConverter);
+        CONVERTER_MAP.put(int.class, integerConverter);
 
         StringConverter<Long> longConverter = new StringConverter<Long>() {
 
@@ -102,8 +103,8 @@ public final class Converters {
                 }
             }
         };
-        converters.put(Long.class, longConverter);
-        converters.put(long.class, longConverter);
+        CONVERTER_MAP.put(Long.class, longConverter);
+        CONVERTER_MAP.put(long.class, longConverter);
 
         StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
 
@@ -112,16 +113,20 @@ public final class Converters {
                 return Boolean.valueOf(value);
             }
         };
-        converters.put(Boolean.class, booleanConverter);
-        converters.put(boolean.class, booleanConverter);
+        CONVERTER_MAP.put(Boolean.class, booleanConverter);
+        CONVERTER_MAP.put(boolean.class, booleanConverter);
 
-        converters.put(File.class, new StringConverter<File>() {
+        CONVERTER_MAP.put(File.class, new StringConverter<File>() {
 
             @Override
             public File convert(String value) throws ConvertException {
                 return new File(value);
             }
         });
+    }
+    
+    private Converters() {
+        // OK, we don't want anyone to instantiate this class.
     }
 
     /**
@@ -136,7 +141,7 @@ public final class Converters {
     @SuppressWarnings("unchecked")
     public static <TDest> StringConverter<TDest> getConverter(
             Class<TDest> clazz) {
-        return (StringConverter<TDest>) converters.get(clazz);
+        return (StringConverter<TDest>) CONVERTER_MAP.get(clazz);
     }
 
     /**
