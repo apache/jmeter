@@ -36,12 +36,15 @@ import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PackageTest {
 
-    // Test needs to run in this package in order to give access to AbstractTestElement.addProperty() 
-    public void DISABLEDtestBug50799() throws Exception {
+    // Test needs to run in this package in order to give access to AbstractTestElement.addProperty()
+    @Ignore
+    @Test
+    public void testBug50799() throws Exception {
         HeaderManager headerManager = new HeaderManager();
         headerManager.add(new Header("1stLevelTestHeader", "testValue1"));
         HeaderManager headerManager2 = new HeaderManager();
