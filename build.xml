@@ -3005,6 +3005,10 @@ run JMeter unless all the JMeter jars are added.
     <!-- Need to define config_loc for use by Eclipse -->
     <property name="config_loc" value="."/>
     <target name="checkstyle">
+    	<available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
+        <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
+
+    	<antcall target="_process_checkstyle_jars"></antcall>
         <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
                  classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
         <checkstyle config="checkstyle.xml">
