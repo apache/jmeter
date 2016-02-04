@@ -25,6 +25,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.StringWriter;
+
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.Calculator;
 import org.apache.log.LogTarget;
 import org.apache.log.format.Formatter;
@@ -208,7 +210,7 @@ public class TestSampleResult {
             // Sample that will get two sub results, simulates a web page load 
             SampleResult parent = new SampleResult(nanoTime, nanoThreadSleep);            
 
-            assertEquals(nanoTime, parent.useNanoTime);
+            JMeterTestCase.assertPrimitiveEquals(nanoTime, parent.useNanoTime);
             assertEquals(nanoThreadSleep, parent.nanoThreadSleep);
 
             long beginTest = parent.currentTimeInMillis();
