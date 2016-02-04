@@ -121,7 +121,7 @@ public class ProxyControl extends GenericController {
 
     private static final String AUTH_MANAGER = AuthManager.class.getName();
 
-    public static final int DEFAULT_PORT = 8080;
+    public static final int DEFAULT_PORT = 8888;
 
     // and as a string
     public static final String DEFAULT_PORT_S =
