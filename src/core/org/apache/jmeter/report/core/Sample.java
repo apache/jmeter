@@ -53,11 +53,10 @@ public class Sample {
      *            The sample data as a string array
      */
     public Sample(long row, SampleMetadata metadata, String... data) {
-	this.row = row;
-	this.metadata = metadata;
-	this.data = data;
-	this.storesStartTimeStamp = JMeterUtils
-	        .getPropDefault("sampleresult.timestamp.start", false);
+        this.row = row;
+        this.metadata = metadata;
+        this.data = data;
+        this.storesStartTimeStamp = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);
     }
 
     /**
@@ -65,7 +64,7 @@ public class Sample {
      *         been built.
      */
     public long getSampleRow() {
-	return row;
+        return row;
     }
 
     /**
@@ -76,7 +75,7 @@ public class Sample {
      * @return the data of the column
      */
     public String getData(int index) {
-	return data[index];
+        return data[index];
     }
 
     /**
@@ -87,7 +86,7 @@ public class Sample {
      * @return the data of the column
      */
     public String getData(String name) {
-	return data[metadata.ensureIndexOf(name)];
+        return data[metadata.ensureIndexOf(name)];
     }
 
     /**
@@ -101,11 +100,11 @@ public class Sample {
      * @return the converted value of the data
      */
     public <TData> TData getData(Class<TData> clazz, int index) {
-	try {
-	    return Converters.convert(clazz, data[index]);
-	} catch (ConvertException ex) {
-	    throw new SampleException(ERROR_ON_SAMPLE + row, ex);
-	}
+        try {
+            return Converters.convert(clazz, data[index]);
+        } catch (ConvertException ex) {
+            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
+        }
     }
 
     /**
@@ -119,7 +118,7 @@ public class Sample {
      * @return the converted value of the data
      */
     public <TData> TData getData(Class<TData> clazz, String name) {
-	return getData(clazz, metadata.ensureIndexOf(name));
+        return getData(clazz, metadata.ensureIndexOf(name));
     }
 
     /*
@@ -129,7 +128,7 @@ public class Sample {
      */
     @Override
     public String toString() {
-	return StringUtils.join(data, metadata.getSeparator());
+        return StringUtils.join(data, metadata.getSeparator());
     }
 
     /**
@@ -138,7 +137,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-	return getData(long.class, CSVSaveService.TIME_STAMP);
+        return getData(long.class, CSVSaveService.TIME_STAMP);
     }
 
     /**
@@ -147,7 +146,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-	return getData(long.class, CSVSaveService.CSV_ELAPSED);
+        return getData(long.class, CSVSaveService.CSV_ELAPSED);
     }
 
     /**
@@ -167,8 +166,7 @@ public class Sample {
      * @return the start time
      */
     public long getStartTime() {
-	return storesStartTimeStamp ? getTimestamp()
-	        : getTimestamp() - getElapsedTime();
+        return storesStartTimeStamp ? getTimestamp() : getTimestamp() - getElapsedTime();
     }
 
     /**
@@ -189,8 +187,7 @@ public class Sample {
      * @return the end time
      */
     public long getEndTime() {
-	return storesStartTimeStamp ? getTimestamp() + getElapsedTime()
-	        : getTimestamp();
+        return storesStartTimeStamp ? getTimestamp() + getElapsedTime() : getTimestamp();
     }
 
     /**
@@ -199,7 +196,7 @@ public class Sample {
      * @return the response code stored in the sample
      */
     public String getResponseCode() {
-	return getData(CSVSaveService.RESPONSE_CODE);
+        return getData(CSVSaveService.RESPONSE_CODE);
     }
 
     /**
@@ -208,7 +205,7 @@ public class Sample {
      * @return the failure message stored in the sample
      */
     public String getFailureMessage() {
-	return getData(CSVSaveService.FAILURE_MESSAGE);
+        return getData(CSVSaveService.FAILURE_MESSAGE);
     }
 
     /**
@@ -217,7 +214,7 @@ public class Sample {
      * @return the name stored in the sample
      */
     public String getName() {
-	return getData(CSVSaveService.LABEL);
+        return getData(CSVSaveService.LABEL);
     }
 
     /**
@@ -226,7 +223,7 @@ public class Sample {
      * @return the response message stored in the sample
      */
     public String getResponseMessage() {
-	return getData(CSVSaveService.RESPONSE_MESSAGE);
+        return getData(CSVSaveService.RESPONSE_MESSAGE);
     }
 
     /**
@@ -235,7 +232,7 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-	return getData(long.class, CSVSaveService.CSV_LATENCY);
+        return getData(long.class, CSVSaveService.CSV_LATENCY);
     }
 
     /**
@@ -244,7 +241,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-	return getData(boolean.class, CSVSaveService.SUCCESSFUL);
+        return getData(boolean.class, CSVSaveService.SUCCESSFUL);
     }
 
     /**
@@ -253,7 +250,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-	return getData(int.class, CSVSaveService.CSV_BYTES);
+        return getData(int.class, CSVSaveService.CSV_BYTES);
     }
 
     /**
@@ -262,7 +259,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-	return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1);
+        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1);
     }
 
     /**
@@ -271,7 +268,7 @@ public class Sample {
      * @return the overall number of threads
      */
     public int getAllThreads() {
-	return getData(int.class, CSVSaveService.CSV_THREAD_COUNT2);
+        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT2);
     }
 
     /**
@@ -280,7 +277,7 @@ public class Sample {
      * @return the thread name stored in the sample
      */
     public String getThreadName() {
-	return getData(CSVSaveService.THREAD_NAME);
+        return getData(CSVSaveService.THREAD_NAME);
     }
 
     /**
@@ -290,7 +287,7 @@ public class Sample {
      *         {@code false}
      */
     public boolean isController() {
-	String message = getResponseMessage();
-	return message != null && message.startsWith(CONTROLLER_PATTERN);
+        String message = getResponseMessage();
+        return message != null && message.startsWith(CONTROLLER_PATTERN);
     }
 }
