@@ -137,7 +137,7 @@ public class Sample {
      * @return the time stamp
      */
     public long getTimestamp() {
-        return getData(long.class, CSVSaveService.TIME_STAMP);
+        return getData(long.class, CSVSaveService.TIME_STAMP).longValue();
     }
 
     /**
@@ -146,7 +146,7 @@ public class Sample {
      * @return the elapsed time stored in the sample
      */
     public long getElapsedTime() {
-        return getData(long.class, CSVSaveService.CSV_ELAPSED);
+        return getData(long.class, CSVSaveService.CSV_ELAPSED).longValue();
     }
 
     /**
@@ -232,7 +232,7 @@ public class Sample {
      * @return the latency stored in the sample
      */
     public long getLatency() {
-        return getData(long.class, CSVSaveService.CSV_LATENCY);
+        return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
 
     /**
@@ -241,7 +241,7 @@ public class Sample {
      * @return the success status stored in the sample
      */
     public boolean getSuccess() {
-        return getData(boolean.class, CSVSaveService.SUCCESSFUL);
+        return getData(boolean.class, CSVSaveService.SUCCESSFUL).booleanValue();
     }
 
     /**
@@ -250,7 +250,7 @@ public class Sample {
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-        return getData(int.class, CSVSaveService.CSV_BYTES);
+        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
     }
 
     /**
@@ -259,7 +259,7 @@ public class Sample {
      * @return the number of threads in the group of this sample
      */
     public int getGroupThreads() {
-        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1);
+        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT1).intValue();
     }
 
     /**
@@ -268,7 +268,7 @@ public class Sample {
      * @return the overall number of threads
      */
     public int getAllThreads() {
-        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT2);
+        return getData(int.class, CSVSaveService.CSV_THREAD_COUNT2).intValue();
     }
 
     /**
