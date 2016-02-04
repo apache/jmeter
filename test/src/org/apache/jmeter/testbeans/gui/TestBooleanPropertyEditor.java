@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+
 import org.junit.Test;
 
 /**
@@ -29,7 +30,7 @@ import org.junit.Test;
  *
  * Also checks that BooleanPropertyEditor behaves in the same way.
  */
-public class TestBooleanPropertyEditor extends junit.framework.TestCase {
+public class TestBooleanPropertyEditor {
  
     /*
      * N.B.

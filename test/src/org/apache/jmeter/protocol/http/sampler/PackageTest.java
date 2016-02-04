@@ -21,9 +21,9 @@
  */
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.awt.HeadlessException;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.TestCase;
+import java.awt.GraphicsEnvironment;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -32,22 +32,21 @@ import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.junit.Test;
 
-public class PackageTest extends TestCase {
+public class PackageTest {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    public PackageTest(String arg0) {
-        super(arg0);
-    }
-
+    @Test
     public void testConfiguring() throws Exception {
-        try {
-            HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
-            configure(sampler);
-        } catch (HeadlessException e) {
-            System.out.println("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
-            log.warn("o.a.j.junit.JMeterTest Error running testConfiguring due to Headless mode, "+e.toString());
+        if(GraphicsEnvironment.isHeadless()) {
+            System.out.println("Skipping test:"+getClass().getName()+"#testConfiguring"+", cannot run in Headless mode");
+            log.warn("Skipping test:"+getClass().getName()+"#testConfiguring"+", cannot run in Headless mode");
+            return;
         }
+        
+        HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
+        configure(sampler);
     }
 
     private void configure(HTTPSamplerBase sampler) throws Exception {

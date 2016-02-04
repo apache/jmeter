@@ -117,7 +117,6 @@ public class TestValueReplacer extends JMeterTestCase {
             TestElement element = new ConfigTestElement();
             element.setProperty(new StringProperty("domain", "${server}"));
             replacer.replaceValues(element);
-            //log.debug("domain property = " + element.getProperty("domain"));
             element.setRunningVersion(true);
             assertEquals("jakarta.apache.org", element.getPropertyAsString("domain"));
         }
@@ -130,7 +129,6 @@ public class TestValueReplacer extends JMeterTestCase {
             String input = "\\${server} \\ \\\\ \\\\\\ \\, ";
             element.setProperty(new StringProperty("domain", input));
             replacer.replaceValues(element);
-            //log.debug("domain property = " + element.getProperty("domain"));
             element.setRunningVersion(true);
             assertEquals(input, element.getPropertyAsString("domain"));
         }
@@ -150,7 +148,6 @@ public class TestValueReplacer extends JMeterTestCase {
             String input = "${server} \\ \\\\ \\\\\\ \\, ";
             element.setProperty(new StringProperty("domain", input));
             replacer.replaceValues(element);
-            //log.debug("domain property = " + element.getProperty("domain"));
             element.setRunningVersion(true);
             assertEquals("jakarta.apache.org \\ \\ \\\\ , ", element.getPropertyAsString("domain"));
         }

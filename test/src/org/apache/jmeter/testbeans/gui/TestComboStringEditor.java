@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-public class TestComboStringEditor extends junit.framework.TestCase {
+public class TestComboStringEditor {
 
         private void testSetGet(ComboStringEditor e, Object value) throws Exception {
             e.setValue(value);
