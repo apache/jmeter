@@ -102,9 +102,9 @@ import org.apache.http.params.DefaultedHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -150,9 +150,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
             long duration = super.getKeepAliveDuration(response, context);
             if (duration <= 0 && IDLE_TIMEOUT > 0) {// none found by the superclass
-                log.debug("Setting keepalive to " + IDLE_TIMEOUT);
+                if(log.isDebugEnabled()) {
+                    log.debug("Setting keepalive to " + IDLE_TIMEOUT);
+                }
                 return IDLE_TIMEOUT;
-            }
+            } 
             return duration; // return the super-class value
         }
         
@@ -290,6 +292,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
+            } else if (method.equals(HTTPConstants.GET)) {
+                httpRequest = new HttpGet(uri);
             } else if (method.equals(HTTPConstants.PUT)) {
                 httpRequest = new HttpPut(uri);
             } else if (method.equals(HTTPConstants.HEAD)) {
@@ -300,8 +304,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 httpRequest = new HttpOptions(uri);
             } else if (method.equals(HTTPConstants.DELETE)) {
                 httpRequest = new HttpDelete(uri);
-            } else if (method.equals(HTTPConstants.GET)) {
-                httpRequest = new HttpGet(uri);
             } else if (method.equals(HTTPConstants.PATCH)) {
                 httpRequest = new HttpPatch(uri);
             } else if (HttpWebdav.isWebdavMethod(method)) {
@@ -716,13 +718,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 resolver = new SystemDefaultDnsResolver();
             }
             ClientConnectionManager connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
-
+            
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
                     return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count
                 }
             };
+            
             if (IDLE_TIMEOUT > 0) {
                 ((AbstractHttpClient) httpClient).setKeepAliveStrategy(IDLE_STRATEGY );
             }
@@ -1409,7 +1412,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if ( mapHttpClientPerHttpClientKey != null ) {
             for ( HttpClient cl : mapHttpClientPerHttpClientKey.values() ) {
                 ((AbstractHttpClient) cl).clearRequestInterceptors(); 
-                ((AbstractHttpClient) cl).clearResponseInterceptors(); 
+                ((AbstractHttpClient) cl).clearResponseInterceptors();
+                ((AbstractHttpClient) cl).close();
                 cl.getConnectionManager().shutdown();
             }
             mapHttpClientPerHttpClientKey.clear();
