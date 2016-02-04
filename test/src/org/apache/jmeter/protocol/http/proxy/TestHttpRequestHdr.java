@@ -659,7 +659,7 @@ public class TestHttpRequestHdr extends JMeterTestCase {
             // Most browsers use ISO-8859-1 as default encoding, even if spec says UTF-8
             assertEquals(expectedEncodedValue, arg.getEncodedValue("ISO-8859-1"));
         }
-        assertEquals(expectedEncoded, arg.isAlwaysEncoded());
+        assertPrimitiveEquals(expectedEncoded, arg.isAlwaysEncoded());
     }
     
     private int getBodyLength(String postBody, String contentEncoding) throws IOException {
