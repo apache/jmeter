@@ -38,7 +38,7 @@ public final class Converters {
                 try {
                     return Character.valueOf(value.charAt(0));
                 } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Double.class.getName(),
+                    throw new ConvertException(value, Character.class.getName(),
                             ex);
                 }
             }
@@ -68,7 +68,7 @@ public final class Converters {
                 try {
                     return Float.valueOf(value);
                 } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Double.class.getName(),
+                    throw new ConvertException(value, Float.class.getName(),
                             ex);
                 }
             }
@@ -83,7 +83,7 @@ public final class Converters {
                 try {
                     return Integer.valueOf(value);
                 } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Double.class.getName(),
+                    throw new ConvertException(value, Integer.class.getName(),
                             ex);
                 }
             }
