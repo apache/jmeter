@@ -203,7 +203,6 @@ public class TestURLRewritingModifier extends JMeterTestCase {
             context.setCurrentSampler(sampler);
             context.setPreviousResult(response);
             mod.process();
-            // Arguments args = sampler.getArguments();
             assertEquals("index.html;%24sid%24KQNq3AAADQZoEQAxlkX8uQV5bjqVBPbT", sampler.getPath());
         }
 

@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-// @see PackageTest for unit tests
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;

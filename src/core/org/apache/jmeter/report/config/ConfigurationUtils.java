@@ -51,11 +51,11 @@ public class ConfigurationUtils {
      */
     public static <TProperty> TProperty convert(String value,
             Class<TProperty> clazz) throws ConfigurationException {
-	try {
-	    return Converters.convert(clazz, value);
-	} catch (ConvertException ex) {
-	    throw new ConfigurationException(String.format(
-	            NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
-	}
+        try {
+            return Converters.convert(clazz, value);
+        } catch (ConvertException ex) {
+            throw new ConfigurationException(String.format(
+                NOT_SUPPORTED_CONVERTION_FMT, value, clazz.getName()));
+        }
     }
 }
