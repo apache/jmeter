@@ -18,6 +18,7 @@
 
 package org.apache.jorphan.test;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,18 +32,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.jmeter.junit.categories.ExcludeCategoryFilter;
+import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFilter;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.junit.internal.RealSystem;
+import org.junit.internal.TextListener;
+import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Request;
+import org.junit.runner.Result;
+import org.junit.runner.notification.RunListener;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Provides a quick and easy way to run all <a href="http://http://junit.org">junit</a> 
@@ -192,10 +198,35 @@ public final class AllTests {
         try {
             System.out.println("Searching junit tests in : "+args[0]);
             List<String> tests = findJMeterJUnitTests(args[0]);
-            JUnitCore.main(tests.toArray(new String[0]));
-        } catch (IOException e) {
+            Class<?>[] classes = asClasses(tests);
+            JUnitCore jUnitCore = new JUnitCore();
+            
+            // this listener is in the internal junit package
+            // if it breaks, replace it with a custom text listener
+            RunListener listener = new TextListener(new RealSystem());
+            jUnitCore.addListener(listener);
+            
+            Request request = Request.classes(new Computer(), classes);
+            if(GraphicsEnvironment.isHeadless()) {
+                request = request.filterWith(new ExcludeCategoryFilter(NeedGuiTests.class));                
+            }
+            Result result = jUnitCore.run(request);
+            
+            System.exit(result.wasSuccessful() ? 0 : 1);
+        } catch (Exception e) {
+            e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    private static Class<?>[] asClasses(List<String> tests) throws ClassNotFoundException {
+        Class<?>[] classes = new Class<?>[tests.size()];
+        for (int i = 0; i < classes.length; i++) {
+            String test = tests.get(i);
+            classes[i] = Class.forName(test, true, Thread.currentThread().getContextClassLoader());
+        }
+        
+        return classes;
     }
 
     /**
@@ -251,79 +282,6 @@ public final class AllTests {
                 e.printStackTrace();
             }
         }
-    }
-
-    /*
-     * Externally callable suite() method for use by JUnit Allows tests to be
-     * run directly under JUnit, rather than using the startup code in the rest
-     * of the module. No parameters can be passed in, so it is less flexible.
-     */
-    @Deprecated
-    public static TestSuite suite() {
-        String args[] = { "../lib/ext", "./testfiles/jmetertest.properties", "org.apache.jmeter.util.JMeterUtils" };
-
-        initializeManager(args);
-        return suite(args[0]);
-    }
-
-    /**
-     * A unit test suite for JUnit.
-     * 
-     * @return The test suite
-     */
-    @Deprecated
-    private static TestSuite suite(String searchPaths) {
-        TestSuite suite = new TestSuite("All Tests");
-        System.out.println("Scanning "+searchPaths+ " for test cases");
-        int tests=0;
-        int suites=0;
-        try {
-            log.info("ClassFinder(TestCase)");
-            List<String> classList = findJMeterJUnitTests(searchPaths);
-            int sz=classList.size();
-            log.info("ClassFinder(TestCase) found: "+sz+ " TestCase classes");
-            System.out.println("ClassFinder found: "+sz+ " TestCase classes");
-            for (String name : classList) {
-                try {
-                    /*
-                     * TestSuite only finds testXXX() methods, and does not look
-                     * for suite() methods.
-                     * 
-                     * To provide more compatibilty with stand-alone tests,
-                     * where JUnit does look for a suite() method, check for it
-                     * first here.
-                     * 
-                     */
-
-                    Class<?> clazz = Class.forName(name);
-                    Test t = null;
-                    try {
-                        Method m = clazz.getMethod("suite", new Class[0]);
-                        t = (Test) m.invoke(clazz, (Object[])null);
-                        suites++;
-                    } catch (NoSuchMethodException e) {
-                    } // this is not an error, the others are
-                    // catch (SecurityException e) {}
-                    // catch (IllegalAccessException e) {}
-                    // catch (IllegalArgumentException e) {}
-                    // catch (InvocationTargetException e) {}
-
-                    if (t == null) {
-                        t = new TestSuite(clazz);
-                    }
-
-                    tests++;
-                    suite.addTest(t);
-                } catch (Exception ex) {
-                    System.out.println("ERROR: (see logfile) could not add test for class " + name + " " + ExceptionUtils.getStackTrace(ex));
-                    log.error("error adding test :", ex);
-                }
-            }
-        } catch (IOException e) {
-            log.error("", e);
-        }
-        System.out.println("Created: "+tests+" tests including "+suites+" suites");
-        return suite;
     }
 
     private static List<String> findJMeterJUnitTests(String searchPaths)  throws IOException {

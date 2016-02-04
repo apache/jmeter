@@ -23,28 +23,20 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.GraphicsEnvironment;
-
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui;
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(NeedGuiTests.class)
 public class PackageTest {
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     @Test
     public void testConfiguring() throws Exception {
-        if(GraphicsEnvironment.isHeadless()) {
-            System.out.println("Skipping test:"+getClass().getName()+"#testConfiguring"+", cannot run in Headless mode");
-            log.warn("Skipping test:"+getClass().getName()+"#testConfiguring"+", cannot run in Headless mode");
-            return;
-        }
-        
         HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
         configure(sampler);
     }

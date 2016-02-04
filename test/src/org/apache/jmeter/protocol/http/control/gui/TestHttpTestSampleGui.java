@@ -20,41 +20,30 @@ package org.apache.jmeter.protocol.http.control.gui;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.GraphicsEnvironment;
+import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(NeedGuiTests.class)
 public class TestHttpTestSampleGui {
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     private HttpTestSampleGui gui;
 
-        @Before
-        public void setUp() {
-            if(GraphicsEnvironment.isHeadless()) {
-                System.out.println("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
-                log.warn("Skipping test:"+getClass().getName()+", cannot run in Headless mode");
-                return;
-            }
-            gui = new HttpTestSampleGui();
-        }
+    @Before
+    public void setUp() {
+        gui = new HttpTestSampleGui();
+    }
 
-        @Test
-        public void testCloneSampler() throws Exception {
-            if(GraphicsEnvironment.isHeadless()) {
-                System.out.println("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
-                log.warn("Skipping test:"+getClass().getName()+"#testCloneSampler"+", cannot run in Headless mode");
-                return;
-            }
-            HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
-            sampler.addArgument("param", "value");
-            HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
-            clonedSampler.setRunningVersion(true);
-            sampler.getArguments().getArgument(0).setValue("new value");
-            assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
-                    .getValue());
-        }
+    @Test
+    public void testCloneSampler() throws Exception {
+        HTTPSamplerBase sampler = (HTTPSamplerBase) gui.createTestElement();
+        sampler.addArgument("param", "value");
+        HTTPSamplerBase clonedSampler = (HTTPSamplerBase) sampler.clone();
+        clonedSampler.setRunningVersion(true);
+        sampler.getArguments().getArgument(0).setValue("new value");
+        assertEquals("Sampler didn't clone correctly", "new value", sampler.getArguments().getArgument(0)
+                .getValue());
+    }
 }
