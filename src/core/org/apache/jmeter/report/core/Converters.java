@@ -132,22 +132,22 @@ public final class Converters {
     /**
      * Gets the converter for the specified class.
      *
-     * @param <TDest>
+     * @param <T>
      *            the target type
      * @param clazz
      *            the target class
      * @return the converter
      */
     @SuppressWarnings("unchecked")
-    public static <TDest> StringConverter<TDest> getConverter(
-            Class<TDest> clazz) {
-        return (StringConverter<TDest>) CONVERTER_MAP.get(clazz);
+    public static <T> StringConverter<T> getConverter(
+            Class<T> clazz) {
+        return (StringConverter<T>) CONVERTER_MAP.get(clazz);
     }
 
     /**
      * Converts the specified value to the destination type
      * 
-     * @param <TDest>
+     * @param <T>
      *            the target type
      * @param clazz
      *            the target class
@@ -157,15 +157,15 @@ public final class Converters {
      * @throws ConvertException
      *             when the conversion failed
      */
-    public static <TDest> TDest convert(Class<TDest> clazz, String value)
+    public static <T> T convert(Class<T> clazz, String value)
             throws ConvertException {
-        TDest result;
+        T result;
         if (clazz.isAssignableFrom(String.class)) {
             @SuppressWarnings("unchecked") // OK because checked above
-            TDest temp = (TDest) value;
+            T temp = (T) value;
             result = temp;
         } else {
-            StringConverter<TDest> converter = Converters.getConverter(clazz);
+            StringConverter<T> converter = Converters.getConverter(clazz);
             if (converter == null) {
                 throw new ConvertException(value, clazz.getName());
             }
