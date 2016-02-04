@@ -33,6 +33,7 @@ import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.TimeHelper;
+import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ResultData;
 import org.apache.jmeter.report.processor.ResultDataVisitor;
@@ -52,6 +53,15 @@ import freemarker.template.TemplateExceptionHandler;
  * processes template files using freemarker.
  * 
  * @since 2.14
+ */
+
+/**
+ * @author fsabbe
+ *
+ */
+/**
+ * @author fsabbe
+ *
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
 
@@ -79,7 +89,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
-    private static final File TEMPLATE_DIR_DEFAULT = new File("report-template");
+    private static final File TEMPLATE_DIR_DEFAULT = new File(
+            "report-template");
 
     // Output directory
     private static final String OUTPUT_DIR = "output_dir";
@@ -92,12 +103,169 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         context.put(key, value);
     }
 
+    /**
+     * This class allows to customize data before exporting them
+     *
+     */
     private interface ResultCustomizer {
         ResultData customizeResult(ResultData result);
     }
 
+    /**
+     * This class allows to inject graph_options properties to the exported data
+     *
+     */
+    private class ExtraOptionsResultCustomizer implements ResultCustomizer {
+        private SubConfiguration extraOptions;
+
+        /**
+         * Sets the extra options to inject in the result data
+         * 
+         * @param extraOptions
+         */
+        public final void setExtraOptions(SubConfiguration extraOptions) {
+            this.extraOptions = extraOptions;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.apache.jmeter.report.dashboard.HtmlTemplateExporter.
+         * ResultCustomizer#customizeResult(org.apache.jmeter.report.processor.
+         * ResultData)
+         */
+        @Override
+        public ResultData customizeResult(ResultData result) {
+            MapResultData customizedResult = new MapResultData();
+            customizedResult.setResult(DATA_CTX_RESULT, result);
+            if (extraOptions != null) {
+                MapResultData extraResult = new MapResultData();
+                for (Map.Entry<String, String> extraEntry : extraOptions
+                        .getProperties().entrySet()) {
+                    extraResult.setResult(extraEntry.getKey(),
+                            new ValueResultData(extraEntry.getValue()));
+                }
+                customizedResult.setResult(DATA_CTX_EXTRA_OPTIONS, extraResult);
+            }
+            return customizedResult;
+        }
+
+    }
+
+    /**
+     * This class allows to check exported data
+     *
+     */
     private interface ResultChecker {
         void checkResult(ResultData result);
+    }
+
+    /**
+     * This class allows to detect empty graphs
+     *
+     */
+    private class EmptyGraphChecker implements ResultChecker {
+
+        private final boolean filtersOnlySampleSeries;
+        private final boolean showControllerSeriesOnly;
+        private final Pattern filterPattern;
+
+        private boolean excludesControllers;
+        private String graphId;
+
+        public final void setExcludesControllers(boolean excludesControllers) {
+            this.excludesControllers = excludesControllers;
+        }
+
+        public final void setGraphId(String graphId) {
+            this.graphId = graphId;
+        }
+
+        /**
+         * 
+         */
+        public EmptyGraphChecker(boolean filtersOnlySampleSeries,
+                boolean showControllerSeriesOnly, Pattern filterPattern) {
+            this.filtersOnlySampleSeries = filtersOnlySampleSeries;
+            this.showControllerSeriesOnly = showControllerSeriesOnly;
+            this.filterPattern = filterPattern;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.apache.jmeter.report.dashboard.HtmlTemplateExporter.ResultChecker
+         * #checkResult(org.apache.jmeter.report.processor.ResultData)
+         */
+        @Override
+        public void checkResult(ResultData result) {
+            Boolean supportsControllerDiscrimination = findValue(Boolean.class,
+                    AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+                    result);
+
+            String message = null;
+            if (supportsControllerDiscrimination && showControllerSeriesOnly
+                    && excludesControllers) {
+                // Exporter shows controller series only
+                // whereas the current graph support controller
+                // discrimination and excludes
+                // controllers
+                message = ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
+                        + " is set while the graph excludes controllers.";
+            } else {
+                if (filterPattern != null) {
+                    // Detect whether none series matches
+                    // the series filter.
+                    ResultData seriesResult = findData(
+                            AbstractGraphConsumer.RESULT_SERIES, result);
+                    if (seriesResult instanceof ListResultData) {
+
+                        // Try to find at least one pattern matching
+                        ListResultData seriesList = (ListResultData) seriesResult;
+                        int count = seriesList.getSize();
+                        int index = 0;
+                        boolean matches = false;
+                        while (index < count && !matches) {
+                            ResultData currentResult = seriesList.get(index);
+                            if (currentResult instanceof MapResultData) {
+                                MapResultData seriesData = (MapResultData) currentResult;
+                                String name = findValue(String.class,
+                                        AbstractGraphConsumer.RESULT_SERIES_NAME,
+                                        seriesData);
+
+                                // Is the current series a controller series ?
+                                boolean isController = findValue(Boolean.class,
+                                        AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
+                                        seriesData).booleanValue();
+
+                                // Is the pattern machting discarded by the
+                                // other filtering properties ?
+                                boolean discarded = filtersOnlySampleSeries
+                                        && supportsControllerDiscrimination
+                                        && !isController
+                                        && showControllerSeriesOnly;
+
+                                matches = filterPattern.matcher(name).matches()
+                                        && !discarded;
+
+                            }
+                            index++;
+                        }
+                        if (!matches) {
+                            // None series matches the pattern
+                            message = "None series matches the "
+                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER;
+                        }
+                    }
+                }
+            }
+
+            // Log empty graph when needed.
+            if (message != null) {
+                LOG.warn(String.format(EMPTY_GRAPH_FMT, graphId, message));
+            }
+        }
     }
 
     private <TVisit> void addResultToContext(String resultKey,
@@ -135,12 +303,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     private <TProperty> TProperty getPropertyFromConfig(SubConfiguration cfg,
             String property, TProperty defaultValue, Class<TProperty> clazz)
-            throws ExportException {
+                    throws ExportException {
         try {
             return cfg.getProperty(property, defaultValue, clazz);
         } catch (ConfigurationException ex) {
-            throw new ExportException(String.format(
-                    INVALID_PROPERTY_CONFIG_FMT, property, getName()), ex);
+            throw new ExportException(String.format(INVALID_PROPERTY_CONFIG_FMT,
+                    property, getName()), ex);
         }
     }
 
@@ -192,9 +360,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Add the series filter to the context
         final String seriesFilter = exportCfg.getSeriesFilter();
+        Pattern filterPattern = null;
         if (StringUtils.isNotBlank(seriesFilter)) {
             try {
-                Pattern.compile(seriesFilter);
+                filterPattern = Pattern.compile(seriesFilter);
             } catch (PatternSyntaxException ex) {
                 LOG.error(String.format("Invalid series filter: \"%s\", %s",
                         seriesFilter, ex.getDescription()));
@@ -237,6 +406,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Collect graph results from sample context and transform them into
         // Json strings to inject in the data context
+        ExtraOptionsResultCustomizer customizer = new ExtraOptionsResultCustomizer();
+        EmptyGraphChecker checker = new EmptyGraphChecker(
+                filtersOnlySampleSeries, showControllerSeriesOnly,
+                filterPattern);
         for (Map.Entry<String, GraphConfiguration> graphEntry : configuration
                 .getGraphConfigurations().entrySet()) {
             final String graphId = graphEntry.getKey();
@@ -244,66 +417,15 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             final SubConfiguration extraOptions = exportCfg
                     .getGraphExtraConfigurations().get(graphId);
 
+            // Initialize customizer and checker
+            customizer.setExtraOptions(extraOptions);
+            checker.setExcludesControllers(
+                    graphConfiguration.excludesControllers());
+            checker.setGraphId(graphId);
+
+            // Export graph data
             addResultToContext(graphId, storedData, dataContext, jsonizer,
-                    new ResultCustomizer() {
-
-                        @Override
-                        public ResultData customizeResult(ResultData result) {
-                            MapResultData customizedResult = new MapResultData();
-                            customizedResult.setResult(DATA_CTX_RESULT, result);
-                            if (extraOptions != null) {
-                                MapResultData extraResult = new MapResultData();
-                                for (Map.Entry<String, String> extraEntry : extraOptions
-                                        .getProperties().entrySet()) {
-                                    extraResult.setResult(extraEntry.getKey(),
-                                            new ValueResultData(
-                                                    extraEntry.getValue()));
-                                }
-                                customizedResult.setResult(
-                                        DATA_CTX_EXTRA_OPTIONS, extraResult);
-                            }
-                            return customizedResult;
-                        }
-                    }, new ResultChecker() {
-
-                        /*
-                         * (non-Javadoc)
-                         * 
-                         * @see org.apache.jmeter.report.dashboard.
-                         * HtmlTemplateExporter.ResultChecker#checkResult(org.
-                         * apache.jmeter.report.processor.ResultData)
-                         */
-                        @Override
-                        public void checkResult(ResultData result) {
-
-                            Boolean supportsControllerDiscrimination = findValue(
-                                    Boolean.class,
-                                    AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                                    result);
-
-                            String message = null;
-                            if (supportsControllerDiscrimination
-                                    && showControllerSeriesOnly
-                                    && graphConfiguration
-                                            .excludesControllers()) {
-                                // Exporter shows controller series only
-                                // whereas the current graph support controller
-                                // discrimination and excludes
-                                // controllers
-                                message = ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
-                                        + " is set while the graph excludes controllers.";
-                            }
-                            
-                            //TODO: detect other filtering issues
-                            
-                            // Log empty graph when needed.
-                            if (message != null) {
-                                LOG.warn(String.format(EMPTY_GRAPH_FMT, graphId,
-                                        message));
-                            }
-
-                        }
-                    });
+                    customizer, checker);
         }
 
         // Replace the begin date with its formatted string and store the old
