@@ -1,22 +1,15 @@
 <?xml version="1.0"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	You under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
-	language governing permissions and limitations under the License. -->
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to You 
+	under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed 
+	to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations 
+	under the License. -->
 
 <!DOCTYPE document[
 <!ENTITY sect-num '16'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="regular_expressions.html" next="hints_and_tips.html"
-	id="$Id$">
+<document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
 
 	<properties>
 		<title>User's Manual: Generating Dashboard Report</title>
@@ -24,8 +17,7 @@
 
 	<body>
 
-		<section name="&sect-num;. Generating Report Dashboard"
-			anchor="generation">
+		<section name="&sect-num;. Generating Report Dashboard" anchor="generation">
 			<p>
 				JMeter supports dashboard report generation to get graphs and
 				statistics from a test plan.
@@ -37,47 +29,13 @@
 				<p>
 					The dashboard generator is a modular extension of JMeter. Its
 					default behavior is to read and process samples from CSV files to
-					generate Html files containing graph views.
+					generate Html files
+					containing graph views.
 				</p>
-
-				<p>
-					To enable the generator to operate, the input CSV file must include
-					required data.
-					Check that your jmeter configuration follows these
-					settings :
-					<ul>
-						<li>jmeter.save.saveservice.bytes = true</li>
-						<li>jmeter.save.saveservice.label = true</li>
-						<li>jmeter.save.saveservice.latency = true</li>
-						<li>jmeter.save.saveservice.response_code = true</li>
-						<li>jmeter.save.saveservice.response_message = true</li>
-						<li>jmeter.save.saveservice.successful = true</li>
-						<li>jmeter.save.saveservice.thread_counts = true</li>
-						<li>jmeter.save.saveservice.thread_name = true</li>
-						<li>jmeter.save.saveservice.time = true</li>
-						<li>jmeter.save.saveservice.timestamp_format != none</li>
-					</ul>
-
-					<note>
-						The "Errors" summary table shows more accurate data if these
-						settings are fulfilled :
-						<ul>
-							<li>jmeter.save.saveservice.assertion_results_failure_message =
-								true</li>
-							<li>
-								If you use a transaction controller, check the box
-								<code>Generate parent sample</code>
-								<figure image="transactioncontroller.png"></figure>
-							</li>
-						</ul>
-					</note>
-				</p>
-				<!-- <p> It is designed to support different way of data exportation, 
-					if Html files are not relevant. </p> -->
+				<!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
 			</subsection>
 
-			<subsection name="&sect-num;.2 Configuring Dashboard Generation"
-				anchor="configure">
+			<subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
 				<p>
 					Dashboard generation uses JMeter properties to customize the
 					report. Some properties are used
@@ -86,8 +44,44 @@
 					configuration or exporter configuration.
 				</p>
 
-				<subsection name="&sect-num;.2.1 General settings"
-					anchor="configure_general">
+				<subsection name="&sect-num;.2.1 Requirements" anchor="configure_requirements">
+					<p>
+						To enable the generator to operate, the input CSV files must
+						include
+						required data.
+						Check that your jmeter configuration follows
+						these
+						settings :
+						<ul>
+							<li>jmeter.save.saveservice.bytes = true</li>
+							<li>jmeter.save.saveservice.label = true</li>
+							<li>jmeter.save.saveservice.latency = true</li>
+							<li>jmeter.save.saveservice.response_code = true</li>
+							<li>jmeter.save.saveservice.response_message = true</li>
+							<li>jmeter.save.saveservice.successful = true</li>
+							<li>jmeter.save.saveservice.thread_counts = true</li>
+							<li>jmeter.save.saveservice.thread_name = true</li>
+							<li>jmeter.save.saveservice.time = true</li>
+							<li>jmeter.save.saveservice.timestamp_format != none</li>
+						</ul>
+
+						<note>
+							The "Errors" summary table shows more accurate data if these
+							settings are fulfilled :
+							<ul>
+								<li>jmeter.save.saveservice.assertion_results_failure_message =
+									true</li>
+								<li>
+									If you use a transaction controller, check the box
+									<code>Generate parent sample</code>
+									<figure image="transactioncontroller.png"></figure>
+								</li>
+							</ul>
+						</note>
+					</p>
+				</subsection>
+
+				<subsection name="&sect-num;.2.2 General settings" anchor="configure_general">
 					<note>
 						All properties must be prefixed with
 						<code>jmeter.reportgenerator.</code>
@@ -109,7 +103,8 @@
 							Sets the filter
 							of samples to keep for generating
 							graphs and statistics. An empty
-							value deactivates the filtering.
+							value deactivates the
+							filtering.
 							Format: comma separated list of
 							sample names. Default: ""
 						</property>
@@ -123,7 +118,8 @@
 							Sets the size
 							of the sliding window used by percentile
 							evaluation. Caution :
-							higher value provides a better accurency
+							higher value provides a
+							better accurency
 							but needs more memory.
 							Default: 200000
 						</property>
@@ -155,7 +151,7 @@
 					</note>
 				</subsection>
 
-				<subsection name="&sect-num;.2.2 Graph settings" anchor="configure_graph">
+				<subsection name="&sect-num;.2.3 Graph settings" anchor="configure_graph">
 					<p>
 						Each property describing a graph configuration must be prefixed
 						with
@@ -165,8 +161,7 @@
 					</p>
 					<!-- <note> The identifier is used to group properties by graph.</note> -->
 
-					<subsection name="&sect-num;.2.2.1 General properties"
-						anchor="general_graph_properties">
+					<subsection name="&sect-num;.2.3.1 General properties" anchor="general_graph_properties">
 						<p>All graphs support these properties :</p>
 						<properties>
 							<property name="classname" required="Yes">
@@ -187,8 +182,7 @@
 						</properties>
 					</subsection>
 
-					<subsection name="&sect-num;.2.2.2 Specific properties"
-						anchor="specific_graph_properties">
+					<subsection name="&sect-num;.2.3.2 Specific properties" anchor="specific_graph_properties">
 						<p>
 							Specific graph properties must use the prefix
 							<code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property</code>
@@ -197,7 +191,8 @@
 							transformation and the matching method of the class will be
 							called
 							with the property
-							value as argument.
+							value as
+							argument.
 						</p>
 						<p>
 							E.g :
@@ -210,7 +205,7 @@
 
 				</subsection>
 
-				<subsection name="&sect-num;.2.3 Export settings" anchor="configure_export">
+				<subsection name="&sect-num;.2.4 Export settings" anchor="configure_export">
 					<p>
 						Each property describing an exporter configuration must be
 						prefixed with
@@ -218,8 +213,7 @@
 						followed by the exporter identifier.
 					</p>
 
-					<subsection name="&sect-num;.2.3.1 General properties"
-						anchor="general_export_properties">
+					<subsection name="&sect-num;.2.4.1 General properties" anchor="general_export_properties">
 						<p>All exporters support these properties :</p>
 						<properties>
 							<property name="classname" required="Yes">
@@ -234,14 +228,14 @@
 								Default: false</property>
 							<property name="series_filter" required="No">Sets the filter
 								of series. An empty value deactivates the filtering. Format:
-								regular expression. Default: ""</property>
+								regular expression. Default:
+								""</property>
 							<property name="show_controllers_only" required="No">Defines
 								whether only controller series are shown. Default: false</property>
 						</properties>
 					</subsection>
 
-					<subsection name="&sect-num;.2.3.2 Specific properties"
-						anchor="specific_export_properties">
+					<subsection name="&sect-num;.2.4.2 Specific properties" anchor="specific_export_properties">
 						<p>
 							Specific exporter properties must use the prefix
 							<code>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property</code>
@@ -257,7 +251,8 @@
 												report-output</property>
 											<property name="template_dir" required="No">Sets the
 												source directory of templated files from which the html
-												pages are generated. Default: report-template</property>
+												pages are generated. Default:
+												report-template</property>
 										</properties>
 									</td>
 								</tr>
@@ -265,8 +260,7 @@
 						</table>
 					</subsection>
 
-					<subsection name="&sect-num;.2.3.3 Graph properties"
-						anchor="graph_export_properties">
+					<subsection name="&sect-num;.2.4.3 Graph properties" anchor="graph_export_properties">
 						<p>
 							Graph properties allow exporters to overwrite some graph data.
 							<br />
@@ -294,8 +288,7 @@
 						</table>
 					</subsection>
 
-					<subsection name="&sect-num;.2.3.4 Filtering mechanisms"
-						anchor="export_filtering">
+					<subsection name="&sect-num;.2.4.4 Filtering mechanisms" anchor="export_filtering">
 						<p>
 							Unlike the filtering in the section
 							<a href="#configure_general">General properties</a>
@@ -310,93 +303,129 @@
 							<code>series_filter</code>
 							allows to filter which series of a graph (resp. rows of a summary
 							table) using regular expression that matches the name of the
-							series (resp. of the row). However, even if the name of the
-							series (resp. row) matches the filter, the setting of the other
-							filtering properties can lead to its discarding.
+							series (resp. of the row).
+							However, even if the name of the
+							series (resp. row) matches the filter, the setting
+							of the other
+							filtering properties can lead to its discarding. Conversely if there is no matching, the other properties can allow to keep it.
 						</p>
 						<p>
-							The following table shows how the setting of filtering
+							The following tables show how the setting of filtering
 							properties
 							works.
 						</p>
-						<table>
-							<thead>
-								<tr>
-									<th>filter_only_sample_series</th>
-									<th>Graph/Summary supports controllers discrimination</th>
-									<th>The current series is a controller series</th>
-									<th>show_controllers_only</th>
-									<th>Discarded</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td style="border-bottom:1px solid black" rowspan="8">False</td>
-									<td style="border-bottom:1px solid black" rowspan="4">False</td>
-									<td style="border-bottom:1px solid black" rowspan="2">-</td>
-									<td style="border-bottom:1px solid black">False</td>
-									<td style="border-bottom:1px solid black" rowspan="13">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black" rowspan="2">-</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black" rowspan="4">True</td>
-									<td style="border-bottom:1px solid black" rowspan="2">False</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black" rowspan="2">True</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td rowspan="8">True</td>
-									<td style="border-bottom:1px solid black" rowspan="4">False</td>
-									<td style="border-bottom:1px solid black" rowspan="2">-</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black" rowspan="2">-</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td rowspan="4">True</td>
-									<td style="border-bottom:1px solid black" rowspan="2">False</td>
-									<td style="border-bottom:1px solid black">False</td>
-								</tr>
-								<tr>
-									<td style="border-bottom:1px solid black">True</td>
-									<td style="border-bottom:1px solid black">True</td>
-								</tr>
-								<tr>
-									<td rowspan="2">True</td>
-									<td style="border-bottom:1px solid black">False</td>
-									<td rowspan="2">False</td>
-								</tr>
-								<tr>
-									<td>True</td>
-								</tr>
-							</tbody>
-						</table>
+						<p>
+							<table>
+								<caption>Cases of discarding when there is pattern matching</caption>
+								<thead>
+									<tr>
+										<th>filter_only_sample_series</th>
+										<th>Graph/Summary supports controllers discrimination</th>
+										<th>The current series is a controller series</th>
+										<th>show_controllers_only</th>
+										<th>Discarded</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="8">False</td>
+										<td style="border-bottom:1px solid black" rowspan="4">False</td>
+										<td style="border-bottom:1px solid black" rowspan="2">-</td>
+										<td style="border-bottom:1px solid black">False</td>
+										<td style="border-bottom:1px solid black" rowspan="13">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="2">-</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="4">True</td>
+										<td style="border-bottom:1px solid black" rowspan="2">False</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="2">True</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td rowspan="8">True</td>
+										<td style="border-bottom:1px solid black" rowspan="4">False</td>
+										<td style="border-bottom:1px solid black" rowspan="2">-</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="2">-</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td rowspan="4">True</td>
+										<td style="border-bottom:1px solid black" rowspan="2">False</td>
+										<td style="border-bottom:1px solid black">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td rowspan="2">True</td>
+										<td style="border-bottom:1px solid black">False</td>
+										<td rowspan="2">False</td>
+									</tr>
+									<tr>
+										<td>True</td>
+									</tr>
+								</tbody>
+							</table>
+						</p>
+						<p>
+							<table>
+								<caption>Cases of retention when there is no pattern matching</caption>
+								<thead>
+									<tr>
+										<th>filter_only_sample_series</th>
+										<th>Graph/Summary supports controllers discrimination</th>
+										<th>Kept</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="border-bottom:1px solid black" rowspan="2">False</td>
+										<td style="border-bottom:1px solid black">False</td>
+										<td style="border-bottom:1px solid black" rowspan="2">False</td>
+									</tr>
+									<tr>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td rowspan="2">True</td>
+										<td style="border-bottom:1px solid black">False</td>
+										<td style="border-bottom:1px solid black">True</td>
+									</tr>
+									<tr>
+										<td>True</td>
+										<td>False</td>
+									</tr>
+								</tbody>
+							</table>
+						</p>
 						<note>
 							A wrong filtering configuration can lead to generate empty
 							graphs/summary tables:
@@ -416,8 +445,50 @@
 
 						</note>
 					</subsection>
-
 				</subsection>
+
+				<subsection name="&sect-num;.2.5 Sample configuration" anchor="sample_configuration">
+					<p>You can copy the following configuration in your user.properties
+						file in order to test the report generator.</p>
+					<source>
+# Change this parameter if you want to change the granularity of over time graphs.
+jmeter.reportgenerator.overall_granularity=60000
+
+# Change this parameter if you want to override the APDEX satisfaction threshold.
+jmeter.reportgenerator.apdex_statisfied_threshold=1500
+
+# Change this parameter if you want to override the APDEX tolerance threshold.
+jmeter.reportgenerator.apdex_tolerated_threshold=3000
+
+# Sets the destination directory for generated
+html pages.
+jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
+
+# Indicates which graph series are filtered (regular expression)
+jmeter.reportgenerator.exporter.html.series_filter=^((s0)|(s1)).*$
+
+# Indicates whether
+series filter apply only on sample series
+jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
+					</source>
+					<note>
+						Adapt the parameter
+						<code>output_dir</code>
+						to your environment.
+					</note>
+					<p>
+						This configuration allows to generate a report where :
+						<ul>
+							<li>Over time graphs have a time granularity equals to 1 minute.</li>
+							<li>The satisfaction threshold for ADPEX calculation is 1 second and half.</li>
+							<li>The tolerance threshold for ADPEX calculation is 3 seconds.</li>
+							<li>The HTML files are generated in the directory /tmp/test-report.</li>
+							<li>Only series which the name begins with "s0" or "s1" are shown.</li>
+							<li>The previous filter only applies to graphs (resp. summary tables) where the series (resp. rows) match samples</li>
+						</ul>
+					</p>
+				</subsection>
+
 			</subsection>
 
 			<subsection name="&sect-num;.3 Generating reports" anchor="report">
@@ -426,17 +497,14 @@
 					sample log file or automatically after running load test.
 				</p>
 
-				<subsection
-					name="&sect-num;.3.1 Generation from an existing sample log file"
-					anchor="report_only">
+				<subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
 					<p>
 						Use the following command :
 						<code>jmeter -n -g &lt;log file&gt;</code>
 					</p>
 				</subsection>
 
-				<subsection name="&sect-num;.3.2 Generation after load test"
-					anchor="report_after_load_test">
+				<subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
 					<p>
 						Use the following command :
 						<code>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log
@@ -536,10 +604,12 @@
 									The *-aggregated series represent the average response time
 									regardless of the number of current active threads. These
 									series are represented
-									by a sole point because the number of
+									by a sole
+									point because the number of
 									current active threads is
 									aggregated
-									to an average. So for these
+									to an average. So for
+									these
 									points :
 									<ul>
 										<li>The abscissa is the average
