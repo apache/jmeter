@@ -40,6 +40,38 @@
 					generate Html files containing graph views.
 				</p>
 
+				<p>
+					To enable the generator to operate, the input CSV file must include
+					required data.
+					Check that your jmeter configuration follows these
+					settings :
+					<ul>
+						<li>jmeter.save.saveservice.bytes = true</li>
+						<li>jmeter.save.saveservice.label = true</li>
+						<li>jmeter.save.saveservice.latency = true</li>
+						<li>jmeter.save.saveservice.response_code = true</li>
+						<li>jmeter.save.saveservice.response_message = true</li>
+						<li>jmeter.save.saveservice.successful = true</li>
+						<li>jmeter.save.saveservice.thread_counts = true</li>
+						<li>jmeter.save.saveservice.thread_name = true</li>
+						<li>jmeter.save.saveservice.time = true</li>
+						<li>jmeter.save.saveservice.timestamp_format != none</li>
+					</ul>
+
+					<note>
+						The "Errors" summary table shows more accurate data if these
+						settings are fulfilled :
+						<ul>
+							<li>jmeter.save.saveservice.assertion_results_failure_message =
+								true</li>
+							<li>
+								If you use a transaction controller, check the box
+								<code>Generate parent sample</code>
+								<figure image="transactioncontroller.png"></figure>
+							</li>
+						</ul>
+					</note>
+				</p>
 				<!-- <p> It is designed to support different way of data exportation, 
 					if Html files are not relevant. </p> -->
 			</subsection>
@@ -504,16 +536,20 @@
 									The *-aggregated series represent the average response time
 									regardless of the number of current active threads. These
 									series are represented
-									by a sole point because the number of current active threads is
+									by a sole point because the number of
+									current active threads is
 									aggregated
-									to an average. So for these points :
+									to an average. So for these
+									points :
 									<ul>
 										<li>The abscissa is the average
-											of the number of current active threads when samples of the
+											of the number of current active
+											threads when samples of the
 											series finish.</li>
 										<li>The ordinate is the average of the response time for the
 											samples of the
-											series regardless of the number of current active threads.</li>
+											series regardless of the number of current
+											active threads.</li>
 									</ul>
 								</p>
 							</td>
