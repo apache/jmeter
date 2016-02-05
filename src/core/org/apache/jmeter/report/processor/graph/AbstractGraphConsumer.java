@@ -116,7 +116,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the group information
      */
     protected final HashMap<String, GroupInfo> getGroupInfos() {
-	return groupInfos;
+        return groupInfos;
     }
 
     /**
@@ -125,7 +125,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the revertKeysAndValues
      */
     protected final boolean revertsKeysAndValues() {
-	return revertsKeysAndValues;
+        return revertsKeysAndValues;
     }
 
     /**
@@ -135,7 +135,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the reverts keys and values
      */
     protected final void setRevertKeysAndValues(boolean revertsKeysAndValues) {
-	this.revertsKeysAndValues = revertsKeysAndValues;
+        this.revertsKeysAndValues = revertsKeysAndValues;
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return true if percentiles are rendered; false otherwise
      */
     public final boolean rendersPercentiles() {
-	return renderPercentiles;
+        return renderPercentiles;
     }
 
     /**
@@ -154,7 +154,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the render mode to set
      */
     public final void setRenderPercentiles(boolean renderPercentiles) {
-	this.renderPercentiles = renderPercentiles;
+        this.renderPercentiles = renderPercentiles;
     }
 
     /**
@@ -163,7 +163,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the keys selector
      */
     protected final GraphKeysSelector getKeysSelector() {
-	return keysSelector;
+        return keysSelector;
     }
 
     /**
@@ -172,7 +172,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the format of the "overall" seriesData name
      */
     public final String getOverallSeriesFormat() {
-	return overallSeriesFormat;
+        return overallSeriesFormat;
     }
 
     /**
@@ -182,7 +182,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the name of "overall" seriesData to set
      */
     public final void setOverallSeriesFormat(String overallSeriesFormat) {
-	this.overallSeriesFormat = overallSeriesFormat;
+        this.overallSeriesFormat = overallSeriesFormat;
     }
 
     /**
@@ -191,7 +191,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the format for the name of aggregated keys seriesData
      */
     public final String getAggregatedKeysSeriesFormat() {
-	return aggregatedKeysSeriesFormat;
+        return aggregatedKeysSeriesFormat;
     }
 
     /**
@@ -202,7 +202,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     public final void setAggregatedKeysSeriesFormat(
             String aggregatedKeysSeriesFormat) {
-	this.aggregatedKeysSeriesFormat = aggregatedKeysSeriesFormat;
+        this.aggregatedKeysSeriesFormat = aggregatedKeysSeriesFormat;
     }
 
     /**
@@ -211,7 +211,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      * @return the title of the graph
      */
     public final String getTitle() {
-	return title;
+        return title;
     }
 
     /**
@@ -221,15 +221,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      *            the title to set
      */
     public final void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     /**
      * Instantiates a new abstract graph consumer.
      */
     protected AbstractGraphConsumer() {
-	keysSelector = createKeysSelector();
-	groupInfos = new HashMap<>(createGroupInfos());
+        keysSelector = createKeysSelector();
+        groupInfos = new HashMap<>(createGroupInfos());
     }
 
     protected abstract GraphKeysSelector createKeysSelector();
@@ -237,17 +237,17 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     protected abstract Map<String, GroupInfo> createGroupInfos();
 
     private void setMinResult(MapResultData result, String name, Double value) {
-	ValueResultData valueResult = (ValueResultData) result.getResult(name);
-	valueResult.setValue(Double.valueOf(
-	        Math.min(((Double) valueResult.getValue()).doubleValue(),
-	                value.doubleValue())));
+        ValueResultData valueResult = (ValueResultData) result.getResult(name);
+        valueResult.setValue(Double.valueOf(
+                Math.min(((Double) valueResult.getValue()).doubleValue(),
+                        value.doubleValue())));
     }
 
     private void setMaxResult(MapResultData result, String name, Double value) {
-	ValueResultData valueResult = (ValueResultData) result.getResult(name);
-	valueResult.setValue(Double.valueOf(
-	        Math.max(((Double) valueResult.getValue()).doubleValue(),
-	                value.doubleValue())));
+        ValueResultData valueResult = (ValueResultData) result.getResult(name);
+        valueResult.setValue(Double.valueOf(
+                Math.max(((Double) valueResult.getValue()).doubleValue(),
+                        value.doubleValue())));
     }
 
     /**
@@ -261,128 +261,128 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     private void addKeyData(MapResultData result, String group, String series,
             SeriesData seriesData, boolean aggregated) {
 
-	// Override series name when aggregated
-	if (aggregated) {
-	    series = String.format(aggregatedKeysSeriesFormat, series);
-	}
-	// Add to the result map
-	ListResultData seriesList = (ListResultData) result
-	        .getResult(RESULT_SERIES);
+        // Override series name when aggregated
+        if (aggregated) {
+            series = String.format(aggregatedKeysSeriesFormat, series);
+        }
+        // Add to the result map
+        ListResultData seriesList = (ListResultData) result
+                .getResult(RESULT_SERIES);
 
-	// Looks for series result using its name
-	MapResultData seriesResult = null;
-	int index = 0;
-	int size = seriesList.getSize();
-	while (seriesResult == null && index < size) {
-	    MapResultData currSeries = (MapResultData) seriesList.get(index);
-	    String name = String.valueOf(
-	            ((ValueResultData) currSeries.getResult(RESULT_SERIES_NAME))
-	                    .getValue());
-	    if (Objects.equals(name, series)) {
-		seriesResult = currSeries;
-	    }
-	    index++;
-	}
+        // Looks for series result using its name
+        MapResultData seriesResult = null;
+        int index = 0;
+        int size = seriesList.getSize();
+        while (seriesResult == null && index < size) {
+            MapResultData currSeries = (MapResultData) seriesList.get(index);
+            String name = String.valueOf(
+                    ((ValueResultData) currSeries.getResult(RESULT_SERIES_NAME))
+                            .getValue());
+            if (Objects.equals(name, series)) {
+                seriesResult = currSeries;
+            }
+            index++;
+        }
 
-	// Create series result if not found
-	if (seriesResult == null) {
-	    seriesResult = new MapResultData();
-	    seriesResult.setResult(RESULT_SERIES_NAME,
-	            new ValueResultData(series));
-	    seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
-	            new ValueResultData(
-	                    Boolean.valueOf(seriesData.isControllersSeries())));
-	    seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
-	            new ValueResultData(
-	                    Boolean.valueOf(seriesData.isOverallSeries())));
-	    seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
-	    seriesList.addResult(seriesResult);
-	}
+        // Create series result if not found
+        if (seriesResult == null) {
+            seriesResult = new MapResultData();
+            seriesResult.setResult(RESULT_SERIES_NAME,
+                    new ValueResultData(series));
+            seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
+                    new ValueResultData(
+                            Boolean.valueOf(seriesData.isControllersSeries())));
+            seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
+                    new ValueResultData(
+                            Boolean.valueOf(seriesData.isOverallSeries())));
+            seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
+            seriesList.addResult(seriesResult);
+        }
 
-	ListResultData dataResult = (ListResultData) seriesResult
-	        .getResult(RESULT_SERIES_DATA);
+        ListResultData dataResult = (ListResultData) seriesResult
+                .getResult(RESULT_SERIES_DATA);
 
-	// Populate it with data from groupData
-	Map<Double, Aggregator> aggInfo;
-	if (aggregated) {
-	    aggInfo = new HashMap<>();
-	    aggInfo.put(
-	            Double.valueOf(seriesData.getKeysAggregator().getResult()),
-	            seriesData.getValuesAggregator());
-	} else {
-	    aggInfo = seriesData.getAggregatorInfo();
-	}
-	if (!renderPercentiles) {
-	    for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
-		// Init key and value depending on revertsKeysAndValues property
-		Double key = entry.getKey();
-		Double value = Double.valueOf(entry.getValue().getResult());
+        // Populate it with data from groupData
+        Map<Double, Aggregator> aggInfo;
+        if (aggregated) {
+            aggInfo = new HashMap<>();
+            aggInfo.put(
+                    Double.valueOf(seriesData.getKeysAggregator().getResult()),
+                    seriesData.getValuesAggregator());
+        } else {
+            aggInfo = seriesData.getAggregatorInfo();
+        }
+        if (!renderPercentiles) {
+            for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
+                // Init key and value depending on revertsKeysAndValues property
+                Double key = entry.getKey();
+                Double value = Double.valueOf(entry.getValue().getResult());
 
-		// Create result storage for coordinates
-		ListResultData coordResult = new ListResultData();
+                // Create result storage for coordinates
+                ListResultData coordResult = new ListResultData();
 
-		if (!revertsKeysAndValues) {
-		    key = entry.getKey();
-		    value = Double.valueOf(entry.getValue().getResult());
-		} else {
-		    key = Double.valueOf(entry.getValue().getResult());
-		    value = entry.getKey();
-		}
-		coordResult.addResult(new ValueResultData(key));
-		coordResult.addResult(new ValueResultData(value));
-		dataResult.addResult(coordResult);
-		setMinResult(result, RESULT_MIN_X, key);
-		setMaxResult(result, RESULT_MAX_X, key);
-		setMinResult(result, RESULT_MIN_Y, value);
-		setMaxResult(result, RESULT_MAX_Y, value);
-	    }
-	} else {
-	    long count = seriesData.getCount();
-	    int rank = 0;
-	    double percent = 0;
-	    TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
-	    if (!revertsKeysAndValues) {
-		for (Map.Entry<Double, Aggregator> entry : sortedInfo
-		        .entrySet()) {
-		    Double value = entry.getKey();
-		    percent += (double) 100 * entry.getValue().getCount()
-		            / count;
-		    double percentile = (double) rank / 10;
-		    while (percentile < percent) {
-			ListResultData coordResult = new ListResultData();
-			coordResult.addResult(new ValueResultData(
-			        Double.valueOf(percentile)));
-			coordResult.addResult(new ValueResultData(value));
-			dataResult.addResult(coordResult);
-			percentile = (double) ++rank / 10;
-		    }
-		    setMinResult(result, RESULT_MIN_Y, value);
-		    setMaxResult(result, RESULT_MAX_Y, value);
-		}
-		setMinResult(result, RESULT_MIN_X, Double.valueOf(0d));
-		setMaxResult(result, RESULT_MAX_X, Double.valueOf(100d));
-	    } else {
-		for (Map.Entry<Double, Aggregator> entry : sortedInfo
-		        .entrySet()) {
-		    Double value = entry.getKey();
-		    percent += (double) 100 * entry.getValue().getCount()
-		            / count;
-		    double percentile = (double) rank / 10;
-		    while (percentile < percent) {
-			ListResultData coordResult = new ListResultData();
-			coordResult.addResult(new ValueResultData(value));
-			coordResult.addResult(new ValueResultData(
-			        Double.valueOf(percentile)));
-			dataResult.addResult(coordResult);
-			percentile = (double) ++rank / 10;
-		    }
-		    setMinResult(result, RESULT_MIN_X, value);
-		    setMaxResult(result, RESULT_MAX_X, value);
-		}
-		setMinResult(result, RESULT_MIN_Y, Double.valueOf(0d));
-		setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
-	    }
-	}
+                if (!revertsKeysAndValues) {
+                    key = entry.getKey();
+                    value = Double.valueOf(entry.getValue().getResult());
+                } else {
+                    key = Double.valueOf(entry.getValue().getResult());
+                    value = entry.getKey();
+                }
+                coordResult.addResult(new ValueResultData(key));
+                coordResult.addResult(new ValueResultData(value));
+                dataResult.addResult(coordResult);
+                setMinResult(result, RESULT_MIN_X, key);
+                setMaxResult(result, RESULT_MAX_X, key);
+                setMinResult(result, RESULT_MIN_Y, value);
+                setMaxResult(result, RESULT_MAX_Y, value);
+            }
+        } else {
+            long count = seriesData.getCount();
+            int rank = 0;
+            double percent = 0;
+            TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
+            if (!revertsKeysAndValues) {
+                for (Map.Entry<Double, Aggregator> entry : sortedInfo
+                        .entrySet()) {
+                    Double value = entry.getKey();
+                    percent += (double) 100 * entry.getValue().getCount()
+                            / count;
+                    double percentile = (double) rank / 10;
+                    while (percentile < percent) {
+                        ListResultData coordResult = new ListResultData();
+                        coordResult.addResult(new ValueResultData(
+                                Double.valueOf(percentile)));
+                        coordResult.addResult(new ValueResultData(value));
+                        dataResult.addResult(coordResult);
+                        percentile = (double) ++rank / 10;
+                    }
+                    setMinResult(result, RESULT_MIN_Y, value);
+                    setMaxResult(result, RESULT_MAX_Y, value);
+                }
+                setMinResult(result, RESULT_MIN_X, Double.valueOf(0d));
+                setMaxResult(result, RESULT_MAX_X, Double.valueOf(100d));
+            } else {
+                for (Map.Entry<Double, Aggregator> entry : sortedInfo
+                        .entrySet()) {
+                    Double value = entry.getKey();
+                    percent += (double) 100 * entry.getValue().getCount()
+                            / count;
+                    double percentile = (double) rank / 10;
+                    while (percentile < percent) {
+                        ListResultData coordResult = new ListResultData();
+                        coordResult.addResult(new ValueResultData(value));
+                        coordResult.addResult(new ValueResultData(
+                                Double.valueOf(percentile)));
+                        dataResult.addResult(coordResult);
+                        percentile = (double) ++rank / 10;
+                    }
+                    setMinResult(result, RESULT_MIN_X, value);
+                    setMaxResult(result, RESULT_MAX_X, value);
+                }
+                setMinResult(result, RESULT_MIN_Y, Double.valueOf(0d));
+                setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
+            }
+        }
     }
 
     /**
@@ -397,59 +397,59 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     private void aggregateValue(AggregatorFactory factory, SeriesData data,
             Double key, double value) {
-	Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
+        Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
-	// Get or create aggregator
-	Aggregator aggregator = aggInfo.get(key);
-	if (aggregator == null) {
-	    aggregator = factory.createValueAggregator();
-	    aggInfo.put(key, aggregator);
-	}
+        // Get or create aggregator
+        Aggregator aggregator = aggInfo.get(key);
+        if (aggregator == null) {
+            aggregator = factory.createValueAggregator();
+            aggInfo.put(key, aggregator);
+        }
 
-	// Add the value to the aggregator
-	aggregator.addValue(value);
+        // Add the value to the aggregator
+        aggregator.addValue(value);
 
-	// Increment the count of sample for this series
-	data.incrementCount();
+        // Increment the count of sample for this series
+        data.incrementCount();
 
-	// Aggregate keys if needed (if aggregated keys series is set)
-	Aggregator keysAgg = data.getKeysAggregator();
-	if (keysAgg != null) {
-	    keysAgg.addValue(key.doubleValue());
-	}
+        // Aggregate keys if needed (if aggregated keys series is set)
+        Aggregator keysAgg = data.getKeysAggregator();
+        if (keysAgg != null) {
+            keysAgg.addValue(key.doubleValue());
+        }
 
-	// Aggregate values if needed (if aggregated keys series is set)
-	Aggregator valuesAgg = data.getValuesAggregator();
-	if (valuesAgg != null) {
-	    valuesAgg.addValue(value);
-	}
+        // Aggregate values if needed (if aggregated keys series is set)
+        Aggregator valuesAgg = data.getValuesAggregator();
+        if (valuesAgg != null) {
+            valuesAgg.addValue(value);
+        }
     }
 
     private MapResultData createResult() {
-	MapResultData result = new MapResultData();
-	result.setResult(RESULT_MIN_X,
-	        new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
-	result.setResult(RESULT_MAX_X,
-	        new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
-	result.setResult(RESULT_MIN_Y,
-	        new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
-	result.setResult(RESULT_MAX_Y,
-	        new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
-	result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
-	result.setResult(RESULT_SERIES, new ListResultData());
+        MapResultData result = new MapResultData();
+        result.setResult(RESULT_MIN_X,
+                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_X,
+                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_MIN_Y,
+                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_Y,
+                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
+        result.setResult(RESULT_SERIES, new ListResultData());
 
-	boolean supportsControllersDiscrimination = true;
-	Iterator<GroupInfo> it = groupInfos.values().iterator();
-	while (supportsControllersDiscrimination && it.hasNext()) {
-	    supportsControllersDiscrimination &= it.next().getSeriesSelector()
-	            .allowsControllersDiscrimination();
-	}
-	result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-	        new ValueResultData(
-	                Boolean.valueOf(supportsControllersDiscrimination)));
+        boolean supportsControllersDiscrimination = true;
+        Iterator<GroupInfo> it = groupInfos.values().iterator();
+        while (supportsControllersDiscrimination && it.hasNext()) {
+            supportsControllersDiscrimination &= it.next().getSeriesSelector()
+                    .allowsControllersDiscrimination();
+        }
+        result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+                new ValueResultData(
+                        Boolean.valueOf(supportsControllersDiscrimination)));
 
-	initializeExtraResults(result);
-	return result;
+        initializeExtraResults(result);
+        return result;
     }
 
     /**
@@ -469,13 +469,13 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     @Override
     public void startConsuming() {
 
-	// Broadcast metadata to consumes for each channel
-	int channelCount = getConsumedChannelCount();
-	for (int i = 0; i < channelCount; i++) {
-	    super.setProducedMetadata(getConsumedMetadata(i), i);
-	}
+        // Broadcast metadata to consumes for each channel
+        int channelCount = getConsumedChannelCount();
+        for (int i = 0; i < channelCount; i++) {
+            super.setProducedMetadata(getConsumedMetadata(i), i);
+        }
 
-	super.startProducing();
+        super.startProducing();
     }
 
     /*
@@ -488,45 +488,45 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     @Override
     public void consume(Sample sample, int channel) {
 
-	// Get key from sample
-	Double key = keysSelector.select(sample);
+        // Get key from sample
+        Double key = keysSelector.select(sample);
 
-	// Build groupData maps
-	for (Map.Entry<String, GroupInfo> entryGroup : groupInfos.entrySet()) {
-	    GroupInfo groupInfo = entryGroup.getValue();
-	    GroupData groupData = groupInfo.getGroupData();
-	    AggregatorFactory factory = groupInfo.getAggregatorFactory();
-	    boolean overallSeries = groupInfo.enablesOverallSeries();
-	    boolean aggregatedKeysSeries = groupInfo
-	            .enablesAggregatedKeysSeries();
+        // Build groupData maps
+        for (Map.Entry<String, GroupInfo> entryGroup : groupInfos.entrySet()) {
+            GroupInfo groupInfo = entryGroup.getValue();
+            GroupData groupData = groupInfo.getGroupData();
+            AggregatorFactory factory = groupInfo.getAggregatorFactory();
+            boolean overallSeries = groupInfo.enablesOverallSeries();
+            boolean aggregatedKeysSeries = groupInfo
+                    .enablesAggregatedKeysSeries();
 
-	    for (String seriesName : groupInfo.getSeriesSelector()
-	            .select(sample)) {
-		Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
-		SeriesData seriesData = seriesInfo.get(seriesName);
-		if (seriesData == null) {
-		    seriesData = new SeriesData(factory, aggregatedKeysSeries,
-		            groupInfo.getSeriesSelector()
-		                    .allowsControllersDiscrimination()
-		                            ? sample.isController() : false,
-		            false);
-		    seriesInfo.put(seriesName, seriesData);
-		}
+            for (String seriesName : groupInfo.getSeriesSelector()
+                    .select(sample)) {
+                Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
+                SeriesData seriesData = seriesInfo.get(seriesName);
+                if (seriesData == null) {
+                    seriesData = new SeriesData(factory, aggregatedKeysSeries,
+                            groupInfo.getSeriesSelector()
+                                    .allowsControllersDiscrimination()
+                                            ? sample.isController() : false,
+                            false);
+                    seriesInfo.put(seriesName, seriesData);
+                }
 
-		// Get the value to aggregate and dispatch it to the groupData
-		double value = groupInfo.getValueSelector().select(seriesName,
-		        sample);
+                // Get the value to aggregate and dispatch it to the groupData
+                double value = groupInfo.getValueSelector().select(seriesName,
+                        sample);
 
-		aggregateValue(factory, seriesData, key, value);
-		if (overallSeries) {
-		    SeriesData overallData = groupData.getOverallSeries();
-		    aggregateValue(factory, overallData, key, value);
-		}
+                aggregateValue(factory, seriesData, key, value);
+                if (overallSeries) {
+                    SeriesData overallData = groupData.getOverallSeries();
+                    aggregateValue(factory, overallData, key, value);
+                }
 
-	    }
-	}
+            }
+        }
 
-	super.produce(sample, channel);
+        super.produce(sample, channel);
     }
 
     /*
@@ -543,49 +543,49 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void stopConsuming() {
-	super.stopProducing();
+        super.stopProducing();
 
-	MapResultData result = createResult();
+        MapResultData result = createResult();
 
-	// Get the aggregate results from the map
-	for (Map.Entry<String, GroupInfo> groupEntry : groupInfos.entrySet()) {
-	    String groupName = groupEntry.getKey();
-	    GroupInfo groupInfo = groupEntry.getValue();
-	    GroupData groupData = groupInfo.getGroupData();
-	    boolean overallSeries = groupInfo.enablesOverallSeries();
-	    boolean aggregatedKeysSeries = groupInfo
-	            .enablesAggregatedKeysSeries();
+        // Get the aggregate results from the map
+        for (Map.Entry<String, GroupInfo> groupEntry : groupInfos.entrySet()) {
+            String groupName = groupEntry.getKey();
+            GroupInfo groupInfo = groupEntry.getValue();
+            GroupData groupData = groupInfo.getGroupData();
+            boolean overallSeries = groupInfo.enablesOverallSeries();
+            boolean aggregatedKeysSeries = groupInfo
+                    .enablesAggregatedKeysSeries();
 
-	    for (Map.Entry<String, SeriesData> seriesEntry : groupData
-	            .getSeriesInfo().entrySet()) {
-		String seriesName = seriesEntry.getKey();
-		SeriesData seriesData = seriesEntry.getValue();
-		addKeyData(result, groupName, seriesName, seriesData, false);
-		if (aggregatedKeysSeries) {
-		    addKeyData(result, groupName, seriesName, seriesData, true);
-		}
-	    }
+            for (Map.Entry<String, SeriesData> seriesEntry : groupData
+                    .getSeriesInfo().entrySet()) {
+                String seriesName = seriesEntry.getKey();
+                SeriesData seriesData = seriesEntry.getValue();
+                addKeyData(result, groupName, seriesName, seriesData, false);
+                if (aggregatedKeysSeries) {
+                    addKeyData(result, groupName, seriesName, seriesData, true);
+                }
+            }
 
-	    // Add overall values if needed
-	    if (overallSeries) {
-		SeriesData overallData = groupData.getOverallSeries();
-		String overallSeriesName = String.format(overallSeriesFormat,
-		        groupName);
-		addKeyData(result, groupName, overallSeriesName, overallData,
-		        false);
-		if (aggregatedKeysSeries) {
-		    addKeyData(result, groupName, overallSeriesName,
-		            overallData, true);
-		}
-	    }
-	}
+            // Add overall values if needed
+            if (overallSeries) {
+                SeriesData overallData = groupData.getOverallSeries();
+                String overallSeriesName = String.format(overallSeriesFormat,
+                        groupName);
+                addKeyData(result, groupName, overallSeriesName, overallData,
+                        false);
+                if (aggregatedKeysSeries) {
+                    addKeyData(result, groupName, overallSeriesName,
+                            overallData, true);
+                }
+            }
+        }
 
-	// Store the result
-	setDataToContext(getName(), result);
+        // Store the result
+        setDataToContext(getName(), result);
 
-	for (GroupInfo groupInfo : groupInfos.values()) {
-	    groupInfo.getGroupData().clear();
-	}
+        for (GroupInfo groupInfo : groupInfos.values()) {
+            groupInfo.getGroupData().clear();
+        }
     }
 
 }
