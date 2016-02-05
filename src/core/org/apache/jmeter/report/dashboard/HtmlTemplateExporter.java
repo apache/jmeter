@@ -182,7 +182,11 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         }
 
         /**
+         * Instantiates a new EmptyGraphChecker.
          * 
+         * @param filtersOnlySampleSeries
+         * @param showControllerSeriesOnly
+         * @param filterPattern
          */
         public EmptyGraphChecker(boolean filtersOnlySampleSeries,
                 boolean showControllerSeriesOnly, Pattern filterPattern) {
@@ -239,16 +243,20 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                                         AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
                                         seriesData).booleanValue();
 
-                                // Is the pattern machting discarded by the
-                                // other filtering properties ?
-                                boolean discarded = filtersOnlySampleSeries
-                                        && supportsControllerDiscrimination
-                                        && !isController
-                                        && showControllerSeriesOnly;
-
-                                matches = filterPattern.matcher(name).matches()
-                                        && !discarded;
-
+                                matches = filterPattern.matcher(name).matches();
+                                if (matches) {
+                                    // If the name matches pattern, other
+                                    // properties can discard the series
+                                    matches = !filtersOnlySampleSeries
+                                            || !supportsControllerDiscrimination
+                                            || isController
+                                            || !showControllerSeriesOnly;
+                                } else {
+                                    // If the name does not match the pattern,
+                                    // other properties can hold the series
+                                    matches = filtersOnlySampleSeries
+                                            && !supportsControllerDiscrimination;
+                                }
                             }
                             index++;
                         }
