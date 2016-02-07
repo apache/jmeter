@@ -180,12 +180,11 @@ private static class GraphPanel extends JPanel {
     public float getMax() {
         float maxValue = 0;
 
-        for (int t = 0; t < keys.size(); t++) {
-            String key = keys.get(t);
+        for (String key : keys) {
             List<Integer> temp = data.get(key);
 
-            for (int j = 0; j < temp.size(); j++) {
-                float f = temp.get(j).intValue();
+            for (Integer t : temp) {
+                float f = t.intValue();
 
                 maxValue = Math.max(f, maxValue);
             }
@@ -201,12 +200,11 @@ private static class GraphPanel extends JPanel {
     public float getMin() {
         float minValue = 9999999;
 
-        for (int t = 0; t < keys.size(); t++) {
-            String key = keys.get(t);
+        for (String key : keys) {
             List<Integer> temp = data.get(key);
 
-            for (int j = 0; j < temp.size(); j++) {
-                float f = temp.get(j).intValue();
+            for (Integer t : temp) {
+                float f = t.intValue();
 
                 minValue = Math.min(f, minValue);
             }
@@ -261,12 +259,11 @@ private static class GraphPanel extends JPanel {
         float maxValue = 0;
         float minValue = 999999;
 
-        for (int t = 0; t < keys.size(); t++) {
-            String key = keys.get(t);
+        for (String key : keys) {
             List<Integer> temp = data.get(key);
 
-            for (int j = 0; j < temp.size(); j++) {
-                float f = temp.get(j).intValue();
+            for (Integer t : temp) {
+                float f = t.intValue();
 
                 minValue = Math.min(f, minValue);
                 maxValue = Math.max(f, maxValue);
@@ -321,8 +318,7 @@ private static class GraphPanel extends JPanel {
     public int getDataWidth() {
         int size = 0;
 
-        for (int t = 0; t < keys.size(); t++) {
-            String key = keys.get(t);
+        for (String key : keys) {
             size = Math.max(size, data.get(key).size());
         }
         return size;

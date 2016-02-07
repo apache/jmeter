@@ -50,6 +50,7 @@ import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -497,10 +498,9 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private Attributes getUserAttributes() {
         Attributes attrs = new BasicAttributes(true);
         Attribute attr;
-        PropertyIterator iter = getArguments().iterator();
 
-        while (iter.hasNext()) {
-            Argument item = (Argument) iter.next().getObjectValue();
+        for (JMeterProperty jMeterProperty : getArguments()) {
+            Argument item = (Argument) jMeterProperty.getObjectValue();
             attr = attrs.get(item.getName());
             if (attr == null) {
                 attr = getBasicAttribute(item.getName(), item.getValue());

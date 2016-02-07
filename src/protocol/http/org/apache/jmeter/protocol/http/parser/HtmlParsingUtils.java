@@ -31,7 +31,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -104,9 +104,8 @@ public final class HtmlParsingUtils {
             return false;
         }
 
-        PropertyIterator iter = arguments.iterator();
-        while (iter.hasNext()) {
-            Argument item = (Argument) iter.next().getObjectValue();
+        for (JMeterProperty argument : arguments) {
+            Argument item = (Argument) argument.getObjectValue();
             final String name = item.getName();
             if (!query.contains(name + "=")) { // $NON-NLS-1$
                 if (!(matcher.contains(query, patternCache.getPattern(name, Perl5Compiler.READ_ONLY_MASK)))) {

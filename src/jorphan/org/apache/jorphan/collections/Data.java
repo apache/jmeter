@@ -92,8 +92,8 @@ public class Data implements Serializable {
         if (headers.length != dHeaders.length) {
             valid = false;
         } else {
-            for (int count = 0; count < dHeaders.length; count++) {
-                if (!header.contains(dHeaders[count])) {
+            for (String dHeader : dHeaders) {
+                if (!header.contains(dHeader)) {
                     valid = false;
                     break;
                 }
@@ -104,8 +104,8 @@ public class Data implements Serializable {
             currentPos = size;
             d.reset();
             while (d.next()) {
-                for (int count = 0; count < headers.length; count++) {
-                    addColumnValue(headers[count], d.getColumnValue(headers[count]));
+                for (String aHeader : headers) {
+                    addColumnValue(aHeader, d.getColumnValue(aHeader));
                 }
             }
         }
@@ -192,9 +192,8 @@ public class Data implements Serializable {
     private void swapRows(int row1, int row2) {
         List<Object> temp;
         Object o;
-        Iterator<String> it = data.keySet().iterator();
-        while (it.hasNext()) {
-            temp = data.get(it.next());
+        for (String s : data.keySet()) {
+            temp = data.get(s);
             o = temp.get(row1);
             temp.set(row1, temp.get(row2));
             temp.set(row2, o);
@@ -685,13 +684,13 @@ public class Data implements Serializable {
         String[] contents = getDataAsText();
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for (int x = 0; x < contents.length; x++) {
+        for (String content : contents) {
             if (!first) {
                 sb.append("\n");
             } else {
                 first = false;
             }
-            sb.append(contents[x]);
+            sb.append(content);
         }
         return sb.toString();
     }

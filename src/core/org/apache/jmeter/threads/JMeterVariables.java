@@ -49,11 +49,10 @@ public class JMeterVariables {
     }
 
     private void preloadVariables(){
-        for (int i = 0; i < PRE_LOAD.length; i++){
-            String property=PRE_LOAD[i];
-            String value=JMeterUtils.getProperty(property);
-            if (value != null){
-                variables.put(property,value);
+        for (String property : PRE_LOAD) {
+            String value = JMeterUtils.getProperty(property);
+            if (value != null) {
+                variables.put(property, value);
             }
         }
     }

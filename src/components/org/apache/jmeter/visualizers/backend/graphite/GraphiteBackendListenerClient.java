@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.visualizers.backend.graphite;
 
+import java.util.Collections;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -233,23 +234,26 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
-        DecimalFormat format = new DecimalFormat("0.##");
-        for (int i = 0; i < percentilesStringArray.length; i++) {
-            if(!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+        for (String percentilesString : percentilesStringArray) {
+            if (!StringUtils.isEmpty(percentilesString.trim())) {
                 try {
-                    Float percentileValue = Float.valueOf(percentilesStringArray[i].trim());
+                    Float percentileValue = Float.valueOf(percentilesString.trim());
+                    String sanitizedFormattedPercentile =
+                            AbstractGraphiteMetricsSender.sanitizeString(
+                                    decimalFormat.format(percentileValue));
                     okPercentiles.put(
-                            METRIC_OK_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
+                            METRIC_OK_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
                             percentileValue);
                     koPercentiles.put(
-                            METRIC_KO_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
+                            METRIC_KO_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
                             percentileValue);
                     allPercentiles.put(
-                            METRIC_ALL_PERCENTILE_PREFIX+AbstractGraphiteMetricsSender.sanitizeString(format.format(percentileValue)),
+                            METRIC_ALL_PERCENTILE_PREFIX + sanitizedFormattedPercentile,
                             percentileValue);
 
-                } catch(Exception e) {
-                    LOGGER.error("Error parsing percentile:'"+percentilesStringArray[i]+"'", e);
+                } catch (Exception e) {
+                    LOGGER.error("Error parsing percentile:'" + percentilesString + "'", e);
                 }
             }
         }
@@ -258,9 +262,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
         String[] samplers = samplersList.split(SEPARATOR);
         samplersToFilter = new HashSet<>();
-        for (String samplerName : samplers) {
-            samplersToFilter.add(samplerName);
-        }
+        Collections.addAll(samplersToFilter, samplers);
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
         this.timerHandle = scheduler.scheduleAtFixedRate(this, ONE_SECOND, ONE_SECOND, TimeUnit.SECONDS);

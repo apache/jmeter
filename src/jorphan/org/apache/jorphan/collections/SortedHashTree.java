@@ -73,15 +73,15 @@ public class SortedHashTree extends HashTree implements Serializable {
 
     public SortedHashTree(Object[] keys) {
         this();
-        for (int x = 0; x < keys.length; x++) {
-            data.put(keys[x], new SortedHashTree());
+        for (Object key : keys) {
+            data.put(key, new SortedHashTree());
         }
     }
 
     public SortedHashTree(Object[] keys, Comparator<? super Object> comper) {
         this(comper);
-        for (int x = 0; x < keys.length; x++) {
-            data.put(keys[x], new SortedHashTree(comper));
+        for (Object key : keys) {
+            data.put(key, new SortedHashTree(comper));
         }
     }
 

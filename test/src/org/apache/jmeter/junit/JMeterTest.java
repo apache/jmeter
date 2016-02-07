@@ -178,14 +178,13 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         Element body = root.getChild("body");
         @SuppressWarnings("unchecked")
         List<Element> sections = body.getChildren("section");
-        for (int i = 0; i < sections.size(); i++) {
+        for (Element section : sections) {
             @SuppressWarnings("unchecked")
-            List<Element> components = sections.get(i).getChildren("component");
-            for (int j = 0; j < components.size(); j++) {
-                Element comp = components.get(j);
-                String nm=comp.getAttributeValue("name");
-                if (!nm.equals("SSL Manager")){// Not a true GUI component
-                    guiTitles.put(nm.replace(' ','_'), Boolean.FALSE);
+            List<Element> components = section.getChildren("component");
+            for (Element comp : components) {
+                String nm = comp.getAttributeValue("name");
+                if (!nm.equals("SSL Manager")) {// Not a true GUI component
+                    guiTitles.put(nm.replace(' ', '_'), Boolean.FALSE);
                 }
             }
         }
@@ -208,11 +207,10 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         Element body = root.getChild("body");
         @SuppressWarnings("unchecked")
         List<Element> sections = body.getChildren("section");
-        for (int i = 0; i < sections.size(); i++) {
+        for (Element section : sections) {
             @SuppressWarnings("unchecked")
-            List<Element> components = sections.get(i).getChildren("component");
-            for (int j = 0; j < components.size(); j++) {
-                Element comp = components.get(j);
+            List<Element> components = section.getChildren("component");
+            for (Element comp : components) {
                 guiTags.put(comp.getAttributeValue("tag"), Boolean.FALSE);
             }
         }
@@ -232,16 +230,15 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         Element body = root.getChild("body");
         Element section = body.getChild("section");
         @SuppressWarnings("unchecked")
-        List<Element> sections = section.getChildren("subsection");
-        for (int i = 0; i < sections.size(); i++) {
+        List<Element> subSections = section.getChildren("subsection");
+        for (Element subSection : subSections) {
             @SuppressWarnings("unchecked")
-            List<Element> components = sections.get(i).getChildren("component");
-            for (int j = 0; j < components.size(); j++) {
-                Element comp = components.get(j);
+            List<Element> components = subSection.getChildren("component");
+            for (Element comp : components) {
                 funcTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
                 String tag = comp.getAttributeValue("tag");
-                if (tag != null){
-                    funcTitles.put(tag, Boolean.FALSE);                    
+                if (tag != null) {
+                    funcTitles.put(tag, Boolean.FALSE);
                 }
             }
         }
@@ -253,9 +250,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         if (s.size() == 0) {
             return 0;
         }
-        Iterator<String> i = s.iterator();
-        while (i.hasNext()) {
-            String key = i.next();
+        for (String key : s) {
             if (!m.get(key).equals(Boolean.TRUE)) {
                 if (unseen == 0)// first time
                 {
@@ -283,14 +278,13 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteGUIComponents() throws Exception {
         TestSuite suite = new TestSuite("GuiComponents");
-        Iterator<Object> iter = getObjects(JMeterGUIComponent.class).iterator();
-        while (iter.hasNext()) {
-            JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
+        for (Object o : getObjects(JMeterGUIComponent.class)) {
+            JMeterGUIComponent item = (JMeterGUIComponent) o;
             if (item instanceof JMeterTreeNode) {
                 System.out.println("o.a.j.junit.JMeterTest INFO: JMeterGUIComponent: skipping all tests  " + item.getClass().getName());
                 continue;
             }
-            if (item instanceof ObsoleteGui){
+            if (item instanceof ObsoleteGui) {
                 continue;
             }
             TestSuite ts = new TestSuite(item.getClass().getName());
@@ -311,9 +305,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteFunctions() throws Exception {
         TestSuite suite = new TestSuite("Functions");
-        Iterator<Object> iter = getObjects(Function.class).iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : getObjects(Function.class)) {
             if (item.getClass().equals(CompoundVariable.class)) {
                 continue;
             }
@@ -330,9 +322,8 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteBeanComponents() throws Exception {
         TestSuite suite = new TestSuite("BeanComponents");
-        Iterator<Object> iter = getObjects(TestBean.class).iterator();
-        while (iter.hasNext()) {
-            Class<? extends Object> c = iter.next().getClass();
+        for (Object o : getObjects(TestBean.class)) {
+            Class<? extends Object> c = o.getClass();
             try {
                 JMeterGUIComponent item = new TestBeanGUI(c);
                 // JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
@@ -407,9 +398,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {
-        Iterator<?> i = funcItem.getArgumentDesc().iterator();
-        while (i.hasNext()) {
-            Object o = i.next();
+        for (Object o : funcItem.getArgumentDesc()) {
             assertTrue("Description must be a String", o instanceof String);
             assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
         }
@@ -479,9 +468,8 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteSerializableElements() throws Exception {
         TestSuite suite = new TestSuite("SerializableElements");
-        Iterator<Object> iter = getObjects(Serializable.class).iterator();
-        while (iter.hasNext()) {
-            Serializable serObj = (Serializable) iter.next();
+        for (Object o : getObjects(Serializable.class)) {
+            Serializable serObj = (Serializable) o;
             if (serObj.getClass().getName().endsWith("_Stub")) {
                 continue;
             }
@@ -518,9 +506,8 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteTestElements() throws Exception {
         TestSuite suite = new TestSuite("TestElements");
-        Iterator<Object> iter = getObjects(TestElement.class).iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+        for (Object o : getObjects(TestElement.class)) {
+            TestElement item = (TestElement) o;
             TestSuite ts = new TestSuite(item.getClass().getName());
             ts.addTest(new JMeterTest("runTestElement", item));
             suite.addTest(ts);
@@ -625,15 +612,15 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
             System.out.println("No classes found that extend " + exName + ". Check the following:");
             System.out.println("Search paths are:");
             String ss[] = JMeterUtils.getSearchPaths();
-            for (int i = 0; i < ss.length; i++) {
-                System.out.println(ss[i]);
+            for (String s : ss) {
+                System.out.println(s);
             }
             if (!classPathShown) {// Only dump it once
                 System.out.println("Class path is:");
                 String cp = System.getProperty("java.class.path");
-                String cpe[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
-                for (int i = 0; i < cpe.length; i++) {
-                    System.out.println(cpe[i]);
+                String classPathElements[] = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+                for (String classPathElement : classPathElements) {
+                    System.out.println(classPathElement);
                 }
                 classPathShown = true;
             }

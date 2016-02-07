@@ -50,6 +50,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
@@ -270,12 +271,11 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     private static String computePostBody(Arguments arguments, boolean crlfToLF) {
         StringBuilder postBody = new StringBuilder();
-        PropertyIterator args = arguments.iterator();
-        while (args.hasNext()) {
-            HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+        for (JMeterProperty argument : arguments) {
+            HTTPArgument arg = (HTTPArgument) argument.getObjectValue();
             String value = arg.getValue();
             if (crlfToLF) {
-                value=value.replaceAll("\r\n", "\n"); // See modifyTestElement
+                value = value.replaceAll("\r\n", "\n"); // See modifyTestElement
             }
             postBody.append(value);
         }

@@ -64,7 +64,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private SampleSaveConfiguration saveConfig;
 
-    public SavePropertyDialog(){
+    public SavePropertyDialog() {
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
     /**
@@ -82,10 +82,10 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         initDialog();
     }
 
-    private int countMethods(Method[] m) {
+    private int countMethods(Method[] methods) {
         int count = 0;
-        for (int i = 0; i < m.length; i++) {
-            if (m[i].getName().startsWith(NAME_SAVE_PFX)) {
+        for (Method method : methods) {
+            if (method.getName().startsWith(NAME_SAVE_PFX)) {
                 count++;
             }
         }
@@ -98,14 +98,14 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         int x = (countMethods(methods) / 3) + 1;
         log.debug("grid panel is " + 3 + " by " + x);
         JPanel checkPanel = new JPanel(new GridLayout(x, 3));
-        for (int i = 0; i < methods.length; i++) {
-            String name = methods[i].getName();
-            if (name.startsWith(NAME_SAVE_PFX) && methods[i].getParameterTypes().length == 0) {
+        for (Method method : methods) {
+            String name = method.getName();
+            if (name.startsWith(NAME_SAVE_PFX) && method.getParameterTypes().length == 0) {
                 try {
                     name = name.substring(NAME_SAVE_PFX_LEN);
                     JCheckBox check = new JCheckBox(
-                            JMeterUtils.getResString(RESOURCE_PREFIX + name)
-                            ,((Boolean) methods[i].invoke(saveConfig, new Object[0])).booleanValue());
+                            JMeterUtils.getResString(RESOURCE_PREFIX + name),
+                            (Boolean) method.invoke(saveConfig, new Object[0]));
                     checkPanel.add(check, BorderLayout.NORTH);
                     check.addActionListener(this);
                     String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$

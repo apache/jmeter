@@ -64,9 +64,9 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
 
     public ListedHashTree(Object[] keys) {
         this();
-        for (int x = 0; x < keys.length; x++) {
-            data.put(keys[x], new ListedHashTree());
-            order.add(keys[x]);
+        for (Object key : keys) {
+            data.put(key, new ListedHashTree());
+            order.add(key);
         }
     }
 

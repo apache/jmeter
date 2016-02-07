@@ -56,8 +56,8 @@ public class LookAndFeelCommand implements Command {
 
     static {
         UIManager.LookAndFeelInfo[] lfs = JMeterMenuBar.getAllLAFs();
-        for (int i = 0; i < lfs.length; i++) {
-            commands.add(ActionNames.LAF_PREFIX + lfs[i].getClassName());
+        for (UIManager.LookAndFeelInfo lf : lfs) {
+            commands.add(ActionNames.LAF_PREFIX + lf.getClassName());
         }
         String jMeterLaf = getJMeterLaf();
         if (log.isInfoEnabled()) {

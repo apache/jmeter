@@ -177,8 +177,8 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         if (tags == null) {
             return false;
         }
-        for (int i = 0; i < tags.length; i++) {
-            if (tags[i].equals(text)) {
+        for (String tag : tags) {
+            if (tag.equals(text)) {
                 return true;
             }
         }

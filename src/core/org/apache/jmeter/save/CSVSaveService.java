@@ -595,13 +595,12 @@ public final class CSVSaveService {
         SampleSaveConfiguration saveConfig = new SampleSaveConfiguration(false);
 
         int varCount = 0;
-        for (int i = 0; i < parts.length; i++) {
-            String label = parts[i];
+        for (String label : parts) {
             if (isVariableName(label)) {
                 varCount++;
             } else {
                 Functor set = (Functor) headerLabelMethods.get(label);
-                set.invoke(saveConfig, new Boolean[] { Boolean.TRUE });
+                set.invoke(saveConfig, new Boolean[]{Boolean.TRUE});
             }
         }
 
@@ -701,8 +700,8 @@ public final class CSVSaveService {
             }
             writer.write(LINE_SEP);
         }
-        for (int idx = 0; idx < data.size(); idx++) {
-            List<?> row = (List<?>) data.get(idx);
+        for (Object o : data) {
+            List<?> row = (List<?>) o;
             for (int idy = 0; idy < row.size(); idy++) {
                 if (idy > 0) {
                     writer.write(DELIM);
@@ -905,8 +904,8 @@ public final class CSVSaveService {
 
             if (results != null) {
                 // Find the first non-null message
-                for (int i = 0; i < results.length; i++) {
-                    message = results[i].getFailureMessage();
+                for (AssertionResult result : results) {
+                    message = result.getFailureMessage();
                     if (message != null) {
                         break;
                     }

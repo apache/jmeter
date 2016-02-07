@@ -47,6 +47,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
@@ -254,9 +255,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         super.configure(el);
         if (el instanceof Arguments) {
             tableModel.clearData();
-            PropertyIterator iter = ((Arguments) el).iterator();
-            while (iter.hasNext()) {
-                Argument arg = (Argument) iter.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : ((Arguments) el)) {
+                Argument arg = (Argument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }
         }
