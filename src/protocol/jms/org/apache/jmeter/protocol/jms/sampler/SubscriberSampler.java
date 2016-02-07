@@ -197,11 +197,14 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         if (read == 0) {
             result.setResponseCode("404"); // Not found
             result.setSuccessful(false);
-        } else { // TODO set different status if not enough messages found?
+        } else if (read < loop) { // Not enough messages found
+	    result.setResponseCode("404");
+	    result.setSuccessful(false);
+	} else {
             result.setResponseCodeOK();
             result.setSuccessful(true);
         }
-        result.setResponseMessage(read + " message(s) received successfully");
+        result.setResponseMessage(read + " message(s) received successfully of " + loop + " expected");
         result.setSamplerData(loop + " messages expected");
         result.setSampleCount(read);
         
