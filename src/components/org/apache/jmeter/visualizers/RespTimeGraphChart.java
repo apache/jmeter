@@ -365,9 +365,7 @@ public class RespTimeGraphChart extends JPanel {
                     legendProperties, _width, _height );
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
-        } catch (ChartDataException e) {
-            log.warn("", e);
-        } catch (PropertyException e) {
+        } catch (ChartDataException | PropertyException e) {
             log.warn("", e);
         }
     }

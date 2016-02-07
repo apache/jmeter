@@ -70,16 +70,7 @@ public class AddToTree implements Command {
             JMeterTreeNode parentNode = guiPackage.getCurrentNode();
             JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
-        }
-        catch (IllegalUserActionException err) {
-            log.error("", err); // $NON-NLS-1$
-            String msg = err.getMessage();
-            if (msg == null) {
-                msg = err.toString();
-            }
-            JMeterUtils.reportErrorToUser(msg);
-        }
-        catch (Exception err) {
+        } catch (Exception err) {
             log.error("", err); // $NON-NLS-1$
             String msg = err.getMessage();
             if (msg == null) {

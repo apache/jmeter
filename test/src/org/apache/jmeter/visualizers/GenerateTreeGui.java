@@ -220,9 +220,7 @@ public class GenerateTreeGui extends AbstractConfigGui implements
         } else {
             try {
                 SwingUtilities.invokeAndWait(runnable);
-            } catch (InterruptedException e) {
-                throw new Error(e);
-            } catch (InvocationTargetException e) {
+            } catch (InterruptedException | InvocationTargetException e) {
                 throw new Error(e);
             }
         }

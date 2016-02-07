@@ -273,9 +273,7 @@ public class HttpMirrorThread implements Runnable {
             }
             log.debug("Flush");
             out.flush();
-        } catch (IOException e) {
-            log.error("", e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             log.error("", e);
         } finally {
             JOrphanUtils.closeQuietly(out);

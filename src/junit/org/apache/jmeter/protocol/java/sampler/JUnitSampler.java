@@ -413,9 +413,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 } else {
                     tr.addError(theClazz, e);
                 }
-            } catch (IllegalAccessException e) {
-                tr.addError(theClazz, e);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalAccessException | IllegalArgumentException e) {
                 tr.addError(theClazz, e);
             }
             if ( !tr.wasSuccessful() ){
@@ -535,11 +533,8 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     } else {
                         log.error("No empty constructor nor string constructor found for class:"+theclazz);
                     }
-                } catch (InvocationTargetException e) {
-                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
-                } catch (InstantiationException e) {
-                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
-                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException | IllegalAccessException
+                        | InstantiationException e) {
                     log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
                 }
             }

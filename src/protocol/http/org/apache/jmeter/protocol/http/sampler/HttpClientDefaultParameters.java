@@ -150,8 +150,6 @@ public class HttpClientDefaultParameters {
                     log.error("Error in property: "+key+"="+value+" "+e.toString());
                 }
             }
-        } catch (FileNotFoundException e) {
-            log.error("Problem loading properties "+e.toString());
         } catch (IOException e) {
             log.error("Problem loading properties "+e.toString());
         } finally {

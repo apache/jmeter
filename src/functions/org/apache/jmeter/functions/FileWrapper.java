@@ -101,8 +101,6 @@ public final class FileWrapper {
                 frcc = getFile(file, alias);
                 log.info("Stored " + file + " as " + alias);
                 m.put(alias, new FileWrapper(frcc));
-            } catch (FileNotFoundException e) {
-                // Already logged
             } catch (IOException e) {
                 // Already logged
             }

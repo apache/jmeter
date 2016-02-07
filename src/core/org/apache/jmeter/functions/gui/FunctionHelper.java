@@ -142,8 +142,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             this.pack();
             this.validate();
             this.repaint();
-        } catch (InstantiationException e) {
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
         }
     }
 

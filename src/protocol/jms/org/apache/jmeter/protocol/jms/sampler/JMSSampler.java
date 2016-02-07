@@ -386,10 +386,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Connection started");
             }
-        } catch (Exception e) {
-            thrown = e;
-            LOGGER.error(e.getLocalizedMessage(), e);
-        } catch (NoClassDefFoundError e) {
+        } catch (Exception | NoClassDefFoundError e) {
             thrown = e;
             LOGGER.error(e.getLocalizedMessage(), e);
         }
