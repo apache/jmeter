@@ -74,6 +74,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     public static final String RESULT_MAX_X = "maxX";
     public static final String RESULT_MIN_Y = "minY";
     public static final String RESULT_MAX_Y = "maxY";
+    public static final String RESULT_TITLE = "title";
     public static final String RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION = "supportsControllersDiscrimination";
 
     public static final String RESULT_SERIES = "series";
@@ -105,6 +106,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /** Renders percentiles in the results. */
     private boolean renderPercentiles;
+
+    /** The title of the graph. */
+    private String title;
 
     /**
      * Gets the group information.
@@ -202,6 +206,25 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
+     * Gets the title of the graph.
+     * 
+     * @return the title of the graph
+     */
+    public final String getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets the title of the graph.
+     * 
+     * @param title
+     *            the title to set
+     */
+    public final void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
      * Instantiates a new abstract graph consumer.
      */
     protected AbstractGraphConsumer() {
@@ -215,14 +238,16 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private void setMinResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Double.valueOf(Math.min(((Double) valueResult.getValue()).doubleValue(), 
-                value.doubleValue())));
+        valueResult.setValue(Double.valueOf(
+                Math.min(((Double) valueResult.getValue()).doubleValue(),
+                        value.doubleValue())));
     }
 
     private void setMaxResult(MapResultData result, String name, Double value) {
         ValueResultData valueResult = (ValueResultData) result.getResult(name);
-        valueResult.setValue(Double.valueOf(Math.max(((Double) valueResult.getValue()).doubleValue(), 
-                value.doubleValue())));
+        valueResult.setValue(Double.valueOf(
+                Math.max(((Double) valueResult.getValue()).doubleValue(),
+                        value.doubleValue())));
     }
 
     /**
@@ -250,8 +275,9 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         int size = seriesList.getSize();
         while (seriesResult == null && index < size) {
             MapResultData currSeries = (MapResultData) seriesList.get(index);
-            String name = String.valueOf(((ValueResultData) currSeries
-                    .getResult(RESULT_SERIES_NAME)).getValue());
+            String name = String.valueOf(
+                    ((ValueResultData) currSeries.getResult(RESULT_SERIES_NAME))
+                            .getValue());
             if (Objects.equals(name, series)) {
                 seriesResult = currSeries;
             }
@@ -261,12 +287,14 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         // Create series result if not found
         if (seriesResult == null) {
             seriesResult = new MapResultData();
-            seriesResult.setResult(RESULT_SERIES_NAME, new ValueResultData(
-                    series));
+            seriesResult.setResult(RESULT_SERIES_NAME,
+                    new ValueResultData(series));
             seriesResult.setResult(RESULT_SERIES_IS_CONTROLLER,
-                    new ValueResultData(Boolean.valueOf(seriesData.isControllersSeries())));
+                    new ValueResultData(
+                            Boolean.valueOf(seriesData.isControllersSeries())));
             seriesResult.setResult(RESULT_SERIES_IS_OVERALL,
-                    new ValueResultData(Boolean.valueOf(seriesData.isOverallSeries())));
+                    new ValueResultData(
+                            Boolean.valueOf(seriesData.isOverallSeries())));
             seriesResult.setResult(RESULT_SERIES_DATA, new ListResultData());
             seriesList.addResult(seriesResult);
         }
@@ -278,7 +306,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         Map<Double, Aggregator> aggInfo;
         if (aggregated) {
             aggInfo = new HashMap<>();
-            aggInfo.put(Double.valueOf(seriesData.getKeysAggregator().getResult()),
+            aggInfo.put(
+                    Double.valueOf(seriesData.getKeysAggregator().getResult()),
                     seriesData.getValuesAggregator());
         } else {
             aggInfo = seriesData.getAggregatorInfo();
@@ -321,7 +350,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     double percentile = (double) rank / 10;
                     while (percentile < percent) {
                         ListResultData coordResult = new ListResultData();
-                        coordResult.addResult(new ValueResultData(Double.valueOf(percentile)));
+                        coordResult.addResult(new ValueResultData(
+                                Double.valueOf(percentile)));
                         coordResult.addResult(new ValueResultData(value));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
@@ -341,7 +371,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     while (percentile < percent) {
                         ListResultData coordResult = new ListResultData();
                         coordResult.addResult(new ValueResultData(value));
-                        coordResult.addResult(new ValueResultData(Double.valueOf(percentile)));
+                        coordResult.addResult(new ValueResultData(
+                                Double.valueOf(percentile)));
                         dataResult.addResult(coordResult);
                         percentile = (double) ++rank / 10;
                     }
@@ -396,10 +427,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     private MapResultData createResult() {
         MapResultData result = new MapResultData();
-        result.setResult(RESULT_MIN_X, new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
-        result.setResult(RESULT_MAX_X, new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
-        result.setResult(RESULT_MIN_Y, new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
-        result.setResult(RESULT_MAX_Y, new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_MIN_X,
+                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_X,
+                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_MIN_Y,
+                new ValueResultData(Double.valueOf(Double.MAX_VALUE)));
+        result.setResult(RESULT_MAX_Y,
+                new ValueResultData(Double.valueOf(Double.MIN_VALUE)));
+        result.setResult(RESULT_TITLE, new ValueResultData(getTitle()));
         result.setResult(RESULT_SERIES, new ListResultData());
 
         boolean supportsControllersDiscrimination = true;
@@ -409,7 +445,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                     .allowsControllersDiscrimination();
         }
         result.setResult(RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
-                new ValueResultData(Boolean.valueOf(supportsControllersDiscrimination)));
+                new ValueResultData(
+                        Boolean.valueOf(supportsControllersDiscrimination)));
 
         initializeExtraResults(result);
         return result;
@@ -463,20 +500,22 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             boolean aggregatedKeysSeries = groupInfo
                     .enablesAggregatedKeysSeries();
 
-            for (String seriesName : groupInfo.getSeriesSelector().select(
-                    sample)) {
+            for (String seriesName : groupInfo.getSeriesSelector()
+                    .select(sample)) {
                 Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
                 SeriesData seriesData = seriesInfo.get(seriesName);
                 if (seriesData == null) {
                     seriesData = new SeriesData(factory, aggregatedKeysSeries,
                             groupInfo.getSeriesSelector()
-                                    .allowsControllersDiscrimination() ? sample
-                                    .isController() : false, false);
+                                    .allowsControllersDiscrimination()
+                                            ? sample.isController() : false,
+                            false);
                     seriesInfo.put(seriesName, seriesData);
                 }
 
                 // Get the value to aggregate and dispatch it to the groupData
-                double value = groupInfo.getValueSelector().select(seriesName, sample);
+                double value = groupInfo.getValueSelector().select(seriesName,
+                        sample);
 
                 aggregateValue(factory, seriesData, key, value);
                 if (overallSeries) {
