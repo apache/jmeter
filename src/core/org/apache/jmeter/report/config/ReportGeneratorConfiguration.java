@@ -79,7 +79,7 @@ public class ReportGeneratorConfiguration {
 
     // Title
     public static final String GRAPH_KEY_TITLE = "title";
-    public static final String GRAPH_KEY_TITLE_DEFAULT = "Generic graph title";
+    public static final String GRAPH_KEY_TITLE_DEFAULT = "";
 
     // Required exporter properties
     // Filters only sample series ?
@@ -91,8 +91,8 @@ public class ReportGeneratorConfiguration {
     public static final String EXPORTER_KEY_SERIES_FILTER_DEFAULT = "";
 
     // Show controllers only
-    private static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
-    private static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = Boolean.FALSE;
+    public static final String EXPORTER_KEY_SHOW_CONTROLLERS_ONLY = "show_controllers_only";
+    public static final Boolean EXPORTER_KEY_SHOW_CONTROLLERS_ONLY_DEFAULT = Boolean.FALSE;
 
     // Optional exporter properties
     public static final String EXPORTER_KEY_GRAPH_EXTRA_OPTIONS = "graph_options";

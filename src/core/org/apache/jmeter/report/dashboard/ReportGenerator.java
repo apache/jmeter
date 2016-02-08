@@ -276,6 +276,9 @@ public class ReportGenerator {
             Object obj = clazz.newInstance();
             AbstractGraphConsumer graph = (AbstractGraphConsumer) obj;
             graph.setName(graphName);
+            
+            // Set the graph title
+            graph.setTitle(graphConfiguration.getTitle());
 
             // Set graph properties using reflection
             Method[] methods = clazz.getMethods();
