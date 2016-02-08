@@ -24,20 +24,26 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
+import org.apache.jmeter.report.config.GraphConfiguration;
 import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.TimeHelper;
+import org.apache.jmeter.report.processor.ListResultData;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.ResultData;
 import org.apache.jmeter.report.processor.ResultDataVisitor;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.ValueResultData;
+import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -70,10 +76,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String TIMESTAMP_FORMAT_MS = "ms";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
     private static final String INVALID_PROPERTY_CONFIG_FMT = "Wrong property \"%s\" in \"%s\" export configuration";
+    private static final String EMPTY_GRAPH_FMT = "The graph \"%s\" will be empty : %s";
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
-    private static final File TEMPLATE_DIR_DEFAULT = new File("report-template");
+    private static final File TEMPLATE_DIR_DEFAULT = new File(
+            "report-template");
 
     // Output directory
     private static final String OUTPUT_DIR = "output_dir";
@@ -86,22 +94,196 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         context.put(key, value);
     }
 
+    /**
+     * This class allows to customize data before exporting them
+     *
+     */
     private interface ResultCustomizer {
         ResultData customizeResult(ResultData result);
+    }
+
+    /**
+     * This class allows to inject graph_options properties to the exported data
+     *
+     */
+    private class ExtraOptionsResultCustomizer implements ResultCustomizer {
+        private SubConfiguration extraOptions;
+
+        /**
+         * Sets the extra options to inject in the result data
+         * 
+         * @param extraOptions
+         */
+        public final void setExtraOptions(SubConfiguration extraOptions) {
+            this.extraOptions = extraOptions;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.apache.jmeter.report.dashboard.HtmlTemplateExporter.
+         * ResultCustomizer#customizeResult(org.apache.jmeter.report.processor.
+         * ResultData)
+         */
+        @Override
+        public ResultData customizeResult(ResultData result) {
+            MapResultData customizedResult = new MapResultData();
+            customizedResult.setResult(DATA_CTX_RESULT, result);
+            if (extraOptions != null) {
+                MapResultData extraResult = new MapResultData();
+                for (Map.Entry<String, String> extraEntry : extraOptions
+                        .getProperties().entrySet()) {
+                    extraResult.setResult(extraEntry.getKey(),
+                            new ValueResultData(extraEntry.getValue()));
+                }
+                customizedResult.setResult(DATA_CTX_EXTRA_OPTIONS, extraResult);
+            }
+            return customizedResult;
+        }
+
+    }
+
+    /**
+     * This class allows to check exported data
+     *
+     */
+    private interface ResultChecker {
+        void checkResult(ResultData result);
+    }
+
+    /**
+     * This class allows to detect empty graphs
+     *
+     */
+    private class EmptyGraphChecker implements ResultChecker {
+
+        private final boolean filtersOnlySampleSeries;
+        private final boolean showControllerSeriesOnly;
+        private final Pattern filterPattern;
+
+        private boolean excludesControllers;
+        private String graphId;
+
+        public final void setExcludesControllers(boolean excludesControllers) {
+            this.excludesControllers = excludesControllers;
+        }
+
+        public final void setGraphId(String graphId) {
+            this.graphId = graphId;
+        }
+
+        /**
+         * Instantiates a new EmptyGraphChecker.
+         * 
+         * @param filtersOnlySampleSeries
+         * @param showControllerSeriesOnly
+         * @param filterPattern
+         */
+        public EmptyGraphChecker(boolean filtersOnlySampleSeries,
+                boolean showControllerSeriesOnly, Pattern filterPattern) {
+            this.filtersOnlySampleSeries = filtersOnlySampleSeries;
+            this.showControllerSeriesOnly = showControllerSeriesOnly;
+            this.filterPattern = filterPattern;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.apache.jmeter.report.dashboard.HtmlTemplateExporter.ResultChecker
+         * #checkResult(org.apache.jmeter.report.processor.ResultData)
+         */
+        @Override
+        public void checkResult(ResultData result) {
+            Boolean supportsControllerDiscrimination = findValue(Boolean.class,
+                    AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
+                    result);
+
+            String message = null;
+            if (supportsControllerDiscrimination && showControllerSeriesOnly
+                    && excludesControllers) {
+                // Exporter shows controller series only
+                // whereas the current graph support controller
+                // discrimination and excludes
+                // controllers
+                message = ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
+                        + " is set while the graph excludes controllers.";
+            } else {
+                if (filterPattern != null) {
+                    // Detect whether none series matches
+                    // the series filter.
+                    ResultData seriesResult = findData(
+                            AbstractGraphConsumer.RESULT_SERIES, result);
+                    if (seriesResult instanceof ListResultData) {
+
+                        // Try to find at least one pattern matching
+                        ListResultData seriesList = (ListResultData) seriesResult;
+                        int count = seriesList.getSize();
+                        int index = 0;
+                        boolean matches = false;
+                        while (index < count && !matches) {
+                            ResultData currentResult = seriesList.get(index);
+                            if (currentResult instanceof MapResultData) {
+                                MapResultData seriesData = (MapResultData) currentResult;
+                                String name = findValue(String.class,
+                                        AbstractGraphConsumer.RESULT_SERIES_NAME,
+                                        seriesData);
+
+                                // Is the current series a controller series ?
+                                boolean isController = findValue(Boolean.class,
+                                        AbstractGraphConsumer.RESULT_SERIES_IS_CONTROLLER,
+                                        seriesData).booleanValue();
+
+                                matches = filterPattern.matcher(name).matches();
+                                if (matches) {
+                                    // If the name matches pattern, other
+                                    // properties can discard the series
+                                    matches = !filtersOnlySampleSeries
+                                            || !supportsControllerDiscrimination
+                                            || isController
+                                            || !showControllerSeriesOnly;
+                                } else {
+                                    // If the name does not match the pattern,
+                                    // other properties can hold the series
+                                    matches = filtersOnlySampleSeries
+                                            && !supportsControllerDiscrimination;
+                                }
+                            }
+                            index++;
+                        }
+                        if (!matches) {
+                            // None series matches the pattern
+                            message = "None series matches the "
+                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER;
+                        }
+                    }
+                }
+            }
+
+            // Log empty graph when needed.
+            if (message != null) {
+                LOG.warn(String.format(EMPTY_GRAPH_FMT, graphId, message));
+            }
+        }
     }
 
     private <TVisit> void addResultToContext(String resultKey,
             Map<String, Object> storage, DataContext dataContext,
             ResultDataVisitor<TVisit> visitor) {
-        addResultToContext(resultKey, storage, dataContext, visitor, null);
+        addResultToContext(resultKey, storage, dataContext, visitor, null,
+                null);
     }
 
     private <TVisit> void addResultToContext(String resultKey,
             Map<String, Object> storage, DataContext dataContext,
-            ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer) {
+            ResultDataVisitor<TVisit> visitor, ResultCustomizer customizer,
+            ResultChecker checker) {
         Object data = storage.get(resultKey);
         if (data instanceof ResultData) {
             ResultData result = (ResultData) data;
+            if (checker != null) {
+                checker.checkResult(result);
+            }
             if (customizer != null) {
                 result = customizer.customizeResult(result);
             }
@@ -120,12 +302,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     private <TProperty> TProperty getPropertyFromConfig(SubConfiguration cfg,
             String property, TProperty defaultValue, Class<TProperty> clazz)
-            throws ExportException {
+                    throws ExportException {
         try {
             return cfg.getProperty(property, defaultValue, clazz);
         } catch (ConfigurationException ex) {
-            throw new ExportException(String.format(
-                    INVALID_PROPERTY_CONFIG_FMT, property, getName()), ex);
+            throw new ExportException(String.format(INVALID_PROPERTY_CONFIG_FMT,
+                    property, getName()), ex);
         }
     }
 
@@ -170,23 +352,36 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Add the flag defining whether only sample series are filtered to the
         // context
+        final boolean filtersOnlySampleSeries = exportCfg
+                .filtersOnlySampleSeries();
         addToContext(DATA_CTX_FILTERS_ONLY_SAMPLE_SERIES,
-                Boolean.valueOf(exportCfg.filtersOnlySampleSeries()), dataContext);
+                Boolean.valueOf(filtersOnlySampleSeries), dataContext);
 
         // Add the series filter to the context
-        addToContext(DATA_CTX_SERIES_FILTER, exportCfg.getSeriesFilter(),
-                dataContext);
+        final String seriesFilter = exportCfg.getSeriesFilter();
+        Pattern filterPattern = null;
+        if (StringUtils.isNotBlank(seriesFilter)) {
+            try {
+                filterPattern = Pattern.compile(seriesFilter);
+            } catch (PatternSyntaxException ex) {
+                LOG.error(String.format("Invalid series filter: \"%s\", %s",
+                        seriesFilter, ex.getDescription()));
+            }
+        }
+        addToContext(DATA_CTX_SERIES_FILTER, seriesFilter, dataContext);
 
         // Add the flag defining whether only controller series are displayed
+        final boolean showControllerSeriesOnly = exportCfg
+                .showControllerSeriesOnly();
         addToContext(DATA_CTX_SHOW_CONTROLLERS_ONLY,
-                Boolean.valueOf(exportCfg.showControllerSeriesOnly()), dataContext);
+                Boolean.valueOf(showControllerSeriesOnly), dataContext);
 
         JsonizerVisitor jsonizer = new JsonizerVisitor();
         Map<String, Object> storedData = context.getData();
 
         // Add begin date consumer result to the data context
-        addResultToContext(ReportGenerator.BEGIN_DATE_CONSUMER_NAME,
-                storedData, dataContext, jsonizer);
+        addResultToContext(ReportGenerator.BEGIN_DATE_CONSUMER_NAME, storedData,
+                dataContext, jsonizer);
 
         // Add end date summary consumer result to the data context
         addResultToContext(ReportGenerator.END_DATE_CONSUMER_NAME, storedData,
@@ -210,31 +405,26 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Collect graph results from sample context and transform them into
         // Json strings to inject in the data context
-        for (String graphId : configuration.getGraphConfigurations().keySet()) {
+        ExtraOptionsResultCustomizer customizer = new ExtraOptionsResultCustomizer();
+        EmptyGraphChecker checker = new EmptyGraphChecker(
+                filtersOnlySampleSeries, showControllerSeriesOnly,
+                filterPattern);
+        for (Map.Entry<String, GraphConfiguration> graphEntry : configuration
+                .getGraphConfigurations().entrySet()) {
+            final String graphId = graphEntry.getKey();
+            final GraphConfiguration graphConfiguration = graphEntry.getValue();
             final SubConfiguration extraOptions = exportCfg
                     .getGraphExtraConfigurations().get(graphId);
-            addResultToContext(graphId, storedData, dataContext, jsonizer,
-                    new ResultCustomizer() {
 
-                        @Override
-                        public ResultData customizeResult(ResultData result) {
-                            MapResultData customizedResult = new MapResultData();
-                            customizedResult.setResult(DATA_CTX_RESULT,result);
-                            if (extraOptions != null) {
-                                MapResultData extraResult = new MapResultData();
-                                for (Map.Entry<String, String> extraEntry : extraOptions
-                                        .getProperties().entrySet()) {
-                                    extraResult.setResult(
-                                            extraEntry.getKey(),
-                                            new ValueResultData(extraEntry
-                                                    .getValue()));
-                                }
-                                customizedResult.setResult(
-                                        DATA_CTX_EXTRA_OPTIONS, extraResult);
-                            }
-                            return customizedResult;
-                        }
-                    });
+            // Initialize customizer and checker
+            customizer.setExtraOptions(extraOptions);
+            checker.setExcludesControllers(
+                    graphConfiguration.excludesControllers());
+            checker.setGraphId(graphId);
+
+            // Export graph data
+            addResultToContext(graphId, storedData, dataContext, jsonizer,
+                    customizer, checker);
         }
 
         // Replace the begin date with its formatted string and store the old
@@ -262,13 +452,15 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 Configuration.getVersion());
         try {
             templateCfg.setDirectoryForTemplateLoading(templateDirectory);
-            templateCfg
-                    .setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-            LOG.info("Report will be generated in:"+outputDir.getAbsolutePath()+", creating folder structure");
+            templateCfg.setTemplateExceptionHandler(
+                    TemplateExceptionHandler.RETHROW_HANDLER);
+            LOG.info(
+                    "Report will be generated in:" + outputDir.getAbsolutePath()
+                            + ", creating folder structure");
             FileUtils.forceMkdir(outputDir);
             TemplateVisitor visitor = new TemplateVisitor(
-                    templateDirectory.toPath(), outputDir.toPath(),
-                    templateCfg, dataContext);
+                    templateDirectory.toPath(), outputDir.toPath(), templateCfg,
+                    dataContext);
             Files.walkFileTree(templateDirectory.toPath(), visitor);
         } catch (IOException ex) {
             throw new ExportException("Unable to process template files.", ex);

@@ -119,21 +119,17 @@ function prepareOptions(options, data) {
         var xOffset = options.xaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
         var yOffset = options.yaxis.mode === "time" ? ${(timeZoneOffset?c)!0} : 0;
 
-        var minX = extraOptions.minX;
-        if(minX !== undefined)
-            options.xaxis.min = minX + xOffset;
-
-        var maxX = extraOptions.maxX;
-        if(maxX !== undefined)
-            options.xaxis.max = maxX + xOffset;
-
-        var minY = extraOptions.minY;
-        if(minY !== undefined)
-            options.yaxis.min = minY + yOffset;
-
-        var maxY = extraOptions.maxY;
-        if(maxY !== undefined)
-            options.yaxis.max = maxY + yOffset;
+        if(!isNaN(extraOptions.minX))
+        	options.xaxis.min = parseFloat(extraOptions.minX) + xOffset;
+        
+        if(!isNaN(extraOptions.maxX))
+        	options.xaxis.max = parseFloat(extraOptions.maxX) + xOffset;
+        
+        if(!isNaN(extraOptions.minY))
+        	options.yaxis.min = parseFloat(extraOptions.minY) + yOffset;
+        
+        if(!isNaN(extraOptions.maxY))
+        	options.yaxis.max = parseFloat(extraOptions.maxY) + yOffset;
     }
 }
 
