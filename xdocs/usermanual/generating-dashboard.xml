@@ -10,69 +10,52 @@
 ]>
 
 <document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
-
 	<properties>
 		<title>User's Manual: Generating Dashboard Report</title>
 	</properties>
-
 	<body>
-
 		<section name="&sect-num;. Generating Report Dashboard" anchor="generation">
-			<p>
-				JMeter supports dashboard report generation to get graphs and
-				statistics from a test plan.
-				<br />
-				This chapter describes how to configure and use the generator.
-			</p>
-
+			<p>JMeter supports dashboard report generation to get graphs and statistics from a test plan.<br />
+            This chapter describes how to configure and use the generator.</p>
 			<subsection name="&sect-num;.1 Overview" anchor="overview">
-				<p>
-					The dashboard generator is a modular extension of JMeter. Its
-					default behavior is to read and process samples from CSV files to
-					generate Html files
-					containing graph views.
+				<p>The dashboard generator is a modular extension of JMeter. Its default behavior is to read and process samples from CSV files to
+					generate HTML files containing graph views. It can generate the report at end of a load test or on demand.
 				</p>
 				<!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
 			</subsection>
-
 			<subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
 				<p>
 					Dashboard generation uses JMeter properties to customize the
 					report. Some properties are used
 					for general settings and others are
-					used to describe a graph
+					used for a particular graph
 					configuration or exporter configuration.
 				</p>
-
 				<subsection name="&sect-num;.2.1 Requirements" anchor="configure_requirements">
 					<p>
-						To enable the generator to operate, the input CSV files must
-						include
-						required data.
-						Check that your jmeter configuration follows
-						these
-						settings :
-						<ul>
-							<li>jmeter.save.saveservice.bytes = true</li>
-							<li>jmeter.save.saveservice.label = true</li>
-							<li>jmeter.save.saveservice.latency = true</li>
-							<li>jmeter.save.saveservice.response_code = true</li>
-							<li>jmeter.save.saveservice.response_message = true</li>
-							<li>jmeter.save.saveservice.successful = true</li>
-							<li>jmeter.save.saveservice.thread_counts = true</li>
-							<li>jmeter.save.saveservice.thread_name = true</li>
-							<li>jmeter.save.saveservice.time = true</li>
-							<li>jmeter.save.saveservice.timestamp_format != none</li>
-						</ul>
-
+						To enable the generator to operate, the input CSV files must include required data.
+						Check that your jmeter configuration follows these settings :
+						<source>
+jmeter.save.saveservice.bytes = true
+jmeter.save.saveservice.label = true
+jmeter.save.saveservice.latency = true
+jmeter.save.saveservice.response_code = true
+jmeter.save.saveservice.response_message = true
+jmeter.save.saveservice.successful = true
+jmeter.save.saveservice.thread_counts = true
+jmeter.save.saveservice.thread_name = true
+jmeter.save.saveservice.time = true
+jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other format
+						</source>
+                        <note>
+                            Property <code>jmeter.save.saveservice.timestamp_format</code> must be set                        
+                        </note>
 						<note>
-							The "Errors" summary table shows more accurate data if these
-							settings are fulfilled :
+							The "Errors" summary table shows more accurate data if these settings are fulfilled :
 							<ul>
-								<li>jmeter.save.saveservice.assertion_results_failure_message =
-									true</li>
+								<li><code>jmeter.save.saveservice.assertion_results_failure_message = true</code></li>
 								<li>
-									If you use a transaction controller, check the box
+									If you use a transaction controller, uncheck the box
 									<code>Generate parent sample</code>
 									<figure image="transactioncontroller.png"></figure>
 								</li>
@@ -125,7 +108,7 @@
 						</property>
 					</properties>
 
-					<note>Relative paths are build from the JMeter working directory
+					<note>Relative paths are built from the JMeter working directory
 						(default: bin).</note>
 
 					<note>
@@ -500,15 +483,14 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
 				<subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
 					<p>
 						Use the following command :
-						<code>jmeter -n -g &lt;log file&gt;</code>
+						<source>jmeter -n -g &lt;log file&gt;</source>
 					</p>
 				</subsection>
 
 				<subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
 					<p>
 						Use the following command :
-						<code>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log
-							file&gt;</code>
+						<source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt;</source>
 					</p>
 				</subsection>
 			</subsection>
