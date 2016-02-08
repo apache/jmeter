@@ -54,15 +54,6 @@ import freemarker.template.TemplateExceptionHandler;
  * 
  * @since 2.14
  */
-
-/**
- * @author fsabbe
- *
- */
-/**
- * @author fsabbe
- *
- */
 public class HtmlTemplateExporter extends AbstractDataExporter {
 
     /** Format used for non null check of parameters. */
