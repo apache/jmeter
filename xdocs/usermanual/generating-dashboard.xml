@@ -616,6 +616,10 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
 					</tbody>
 				</table>
 			</subsection>
+            <subsection name="&sect-num;.5  Want to improve Report Dashboard" anchor="development">
+            If you want to contribute new graphs or improve current ones, you can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
+            Read this <a href="../building.html" >documentation</a> on contributing.
+            </subsection>
 
 		</section>
 
