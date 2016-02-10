@@ -55,9 +55,7 @@ public abstract class ParserImpl implements Parser {
             SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             parser = parserFactory.newSAXParser();
             handler = new MonitorHandler(this.FACTORY);
-        } catch (SAXException e) {
-            log.error("Failed to create the parser",e);
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             log.error("Failed to create the parser",e);
         }
         PARSER = parser;

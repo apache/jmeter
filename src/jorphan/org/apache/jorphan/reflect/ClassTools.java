@@ -42,11 +42,8 @@ public class ClassTools {
         Object instance = null;
         try {
             instance = ClassUtils.getClass(className).newInstance();
-        } catch (ClassNotFoundException e) {
-            throw new JMeterException(e);
-        } catch (InstantiationException e) {
-            throw new JMeterException(e);
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | IllegalAccessException
+                | InstantiationException e) {
             throw new JMeterException(e);
         }
         return instance;
@@ -66,19 +63,10 @@ public class ClassTools {
             Class<?> clazz = ClassUtils.getClass(className);
             Constructor<?> constructor = clazz.getConstructor(Integer.TYPE);
             instance = constructor.newInstance(Integer.valueOf(parameter));
-        } catch (ClassNotFoundException e) {
-            throw new JMeterException(e);
-        } catch (InstantiationException e) {
-            throw new JMeterException(e);
-        } catch (IllegalAccessException e) {
-            throw new JMeterException(e);
-        } catch (SecurityException e) {
-            throw new JMeterException(e);
-        } catch (NoSuchMethodException e) {
-            throw new JMeterException(e);
-        } catch (IllegalArgumentException e) {
-            throw new JMeterException(e);
-        } catch (InvocationTargetException e) {
+        } catch (ClassNotFoundException | InvocationTargetException
+                | IllegalArgumentException | NoSuchMethodException
+                | SecurityException | IllegalAccessException
+                | InstantiationException e) {
             throw new JMeterException(e);
         }
         return instance;
@@ -98,17 +86,9 @@ public class ClassTools {
             Class<?> clazz = Class.forName(className);
             Constructor<?> constructor = clazz.getConstructor(String.class);
             instance = constructor.newInstance(parameter);
-        } catch (ClassNotFoundException e) {
-            throw new JMeterException(e);
-        } catch (InstantiationException e) {
-            throw new JMeterException(e);
-        } catch (IllegalAccessException e) {
-            throw new JMeterException(e);
-        } catch (NoSuchMethodException e) {
-            throw new JMeterException(e);
-        } catch (IllegalArgumentException e) {
-            throw new JMeterException(e);
-        } catch (InvocationTargetException e) {
+        } catch (ClassNotFoundException | InvocationTargetException
+                | IllegalArgumentException | NoSuchMethodException
+                | IllegalAccessException | InstantiationException e) {
             throw new JMeterException(e);
         }
         return instance;
@@ -136,11 +116,7 @@ public class ClassTools {
         try {
             m = ClassUtils.getPublicMethod(instance.getClass(), methodName, new Class [] {});
             m.invoke(instance, (Object [])null);
-        } catch (NoSuchMethodException e) {
-            throw new JMeterException(e);
-        } catch (IllegalAccessException e) {
-            throw new JMeterException(e);
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new JMeterException(e);
         }
     }
