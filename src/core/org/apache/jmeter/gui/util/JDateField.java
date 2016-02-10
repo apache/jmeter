@@ -56,7 +56,7 @@ public class JDateField extends JTextField {
      * Current format: MM/DD/YYYY HH:MM:SS 01234567890123456789 ^buffer
      * positions
      */
-    private static final int fieldPositions[] = {
+    private static final int[] FIELD_POSITIONS = {
             Calendar.YEAR, // Y
             Calendar.YEAR, // Y
             Calendar.YEAR, // Y
@@ -126,10 +126,10 @@ public class JDateField extends JTextField {
      * is true for getCaretPosition())
      */
     private static int posToField(int pos) {
-        if (pos >= fieldPositions.length) { // if beyond the end
-            pos = fieldPositions.length - 1; // then set to the end
+        if (pos >= FIELD_POSITIONS.length) { // if beyond the end
+            pos = FIELD_POSITIONS.length - 1; // then set to the end
         }
-        return fieldPositions[pos];
+        return FIELD_POSITIONS[pos];
     }
 
     /**
