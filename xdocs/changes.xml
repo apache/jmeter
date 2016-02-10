@@ -198,6 +198,7 @@ Summary
 <li><bug>58968</bug>Add a new template to allow to record script with think time included. Contributed by Antonio Gomes Rodrigues</li>
 <li><bug>58978</bug>Settings defaults : Switch "jmeter.save.saveservice.assertion_results_failure_message" to true (after 2.13)</li>
 <li><bug>58991</bug>Settings defaults : Switch "jmeter.save.saveservice.print_field_names" to true (after 2.13)</li>
+<li><bug>58987</bug>Report/Dashboard: Improve error reporting.</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>

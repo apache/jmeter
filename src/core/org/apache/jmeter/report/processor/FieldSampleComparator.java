@@ -48,6 +48,6 @@ public class FieldSampleComparator implements SampleComparator {
      */
     @Override
     public long compare(Sample s1, Sample s2) {
-        return s1.getData(long.class, index).compareTo(s2.getData(long.class, index));
+        return s1.getData(long.class, index, fieldName).compareTo(s2.getData(long.class, index, fieldName));
     }
 }
