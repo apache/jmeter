@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Sample {
 
-    private static final String ERROR_ON_SAMPLE = "Error in sample #";
+    private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
 
@@ -97,13 +97,14 @@ public class Sample {
      *            the target class of the data
      * @param index
      *            the rank of the column
+     * @param fieldName Field name
      * @return the converted value of the data
      */
-    public <TData> TData getData(Class<TData> clazz, int index) {
+    public <TData> TData getData(Class<TData> clazz, int index, String fieldName) {
         try {
             return Converters.convert(clazz, data[index]);
         } catch (ConvertException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + row, ex);
+            throw new SampleException(ERROR_ON_SAMPLE + (row+1) + " converting field:"+fieldName+" to:"+clazz.getName()+", fieldValue:'"+data[index]+"'", ex);
         }
     }
 
@@ -118,7 +119,7 @@ public class Sample {
      * @return the converted value of the data
      */
     public <TData> TData getData(Class<TData> clazz, String name) {
-        return getData(clazz, metadata.ensureIndexOf(name));
+        return getData(clazz, metadata.ensureIndexOf(name), name);
     }
 
     /*

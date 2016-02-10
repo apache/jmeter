@@ -29,7 +29,9 @@ import java.io.UnsupportedEncodingException;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.apache.log.Logger;
 
 /**
  * Reader class for reading CSV files.<reader>
@@ -41,6 +43,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class CsvSampleReader implements Closeable{
 
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
     private static final int BUF_SIZE = 10000;
 
     private static final String CHARSET = "ISO8859-1";
@@ -127,6 +130,10 @@ public class CsvSampleReader implements Closeable{
                     && CSVSaveService.getSampleSaveConfiguration(line,
                             file.getAbsolutePath()) == null) {
                 // Build metadata from default save config
+                LOG.warn("File '"+file.getAbsolutePath()+"' does not contain any header, it is usually better to have it, "
+                        + "otherwise ensure you use the same jmeter.properties/user.properties when generating the CSV file and generating the report");
+                System.err.println("File '"+file.getAbsolutePath()+"' does not contain any header, it is usually better to have it, "
+                        + "otherwise ensure you use the same jmeter.properties/user.properties when generating the CSV file and generating the report");
                 result = new SampleMetadata(
                         SampleSaveConfiguration.staticConfig());
 
