@@ -140,7 +140,8 @@ public final class LoggingManager {
             Context ctx = new DefaultContext();
             manager.contextualize(ctx);
             manager.configure(c);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ContextException
+                | IOException | SAXException | ConfigurationException e) {
             // This happens if the default log-target id-ref specifies a non-existent target
             System.out.println("Error processing logging config " + cfg);
             System.out.println(e.toString());
@@ -148,18 +149,6 @@ public final class LoggingManager {
             // This can happen if a log-target id-ref specifies a non-existent target
             System.out.println("Error processing logging config " + cfg);
             System.out.println("Perhaps a log target is missing?");
-        } catch (ConfigurationException e) {
-            System.out.println("Error processing logging config " + cfg);
-            System.out.println(e.toString());
-        } catch (SAXException e) {
-            System.out.println("Error processing logging config " + cfg);
-            System.out.println(e.toString());
-        } catch (IOException e) {
-            System.out.println("Error processing logging config " + cfg);
-            System.out.println(e.toString());
-        } catch (ContextException e) {
-            System.out.println("Error processing logging config " + cfg);
-            System.out.println(e.toString());
         }
     }
 
