@@ -244,8 +244,6 @@ public final class AllTests {
                 inputStream = new FileInputStream(args[1]);
                 props.load(inputStream);
                 LoggingManager.initializeLogging(props);
-            } catch (FileNotFoundException e) {
-                System.out.println(e.getLocalizedMessage());
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
             } finally {
@@ -271,13 +269,8 @@ public final class AllTests {
                 UnitTestManager um = (UnitTestManager) Class.forName(args[2]).newInstance();
                 System.out.println("Setting up initial properties using: " + args[1]);
                 um.initializeProperties(args[1]);
-            } catch (ClassNotFoundException e) {
-                System.out.println("Couldn't create: " + args[2]);
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                System.out.println("Couldn't create: " + args[2]);
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (ClassNotFoundException | IllegalAccessException
+                    | InstantiationException e) {
                 System.out.println("Couldn't create: " + args[2]);
                 e.printStackTrace();
             }
@@ -316,14 +309,11 @@ public final class AllTests {
                         isJunitTest = checkForJUnitAnnotations(c);
                     }
                 }
-            } catch (UnsupportedClassVersionError ignored) {
-                log.debug(ignored.getLocalizedMessage());
-            } catch (NoClassDefFoundError ignored) {
-                log.debug(ignored.getLocalizedMessage());
-            } catch (ClassNotFoundException ignored) {
-                log.debug(ignored.getLocalizedMessage());
+            } catch (UnsupportedClassVersionError | ClassNotFoundException
+                    | NoClassDefFoundError e) {
+                log.debug(e.getLocalizedMessage());
             }
-            
+
             return isJunitTest;
         }
         
