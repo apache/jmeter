@@ -209,11 +209,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
                         log.error("No log file specified");
                     }
                 }
-            } catch (InstantiationException e) {
-                log.error("", e);
-            } catch (IllegalAccessException e) {
-                log.error("", e);
-            } catch (ClassNotFoundException e) {
+            } catch (InstantiationException | ClassNotFoundException
+                    | IllegalAccessException e) {
                 log.error("", e);
             }
         }
