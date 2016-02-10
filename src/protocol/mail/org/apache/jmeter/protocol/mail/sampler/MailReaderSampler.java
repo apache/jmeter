@@ -289,7 +289,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             parent.setResponseCodeOK();
             parent.setResponseMessageOK();
             isOK = true;
-        } catch (NoClassDefFoundError ex) {
+        } catch (NoClassDefFoundError | IOException ex) {
             log.debug("",ex);// No need to log normally, as we set the status
             parent.setResponseCode("500"); // $NON-NLS-1$
             parent.setResponseMessage(ex.toString());
@@ -297,10 +297,6 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             log.debug("", ex);// No need to log normally, as we set the status
             parent.setResponseCode("500"); // $NON-NLS-1$
             parent.setResponseMessage(ex.toString() + "\n" + samplerString); // $NON-NLS-1$
-        } catch (IOException ex) {
-            log.debug("", ex);// No need to log normally, as we set the status
-            parent.setResponseCode("500"); // $NON-NLS-1$
-            parent.setResponseMessage(ex.toString());
         } finally {
             busy = false;
         }

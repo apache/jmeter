@@ -299,9 +299,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     if (!stopBetweenSamples){ // Don't start yet if stop between samples
                         SUBSCRIBER.start();
                     }
-                } catch (NamingException e) {
-                    exceptionDuringInit = e;
-                } catch (JMSException e) {
+                } catch (NamingException | JMSException e) {
                     exceptionDuringInit = e;
                 }
             } else {
@@ -310,9 +308,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     if (!stopBetweenSamples){ // Don't start yet if stop between samples
                         SUBSCRIBER.start();
                     }
-                } catch (JMSException e) {
-                    exceptionDuringInit = e;
-                } catch (NamingException e) {
+                } catch (JMSException | NamingException e) {
                     exceptionDuringInit = e;
                 }
             }
