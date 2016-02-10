@@ -76,7 +76,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     private String getAssertionResult(SampleResult res) {
         if (res != null) {
             StringBuilder display = new StringBuilder();
-            AssertionResult assertionResults[] = res.getAssertionResults();
+            AssertionResult[] assertionResults = res.getAssertionResults();
             for (AssertionResult item : assertionResults) {
                 if (item.isFailure() || item.isError()) {
                     display.append("\n\t"); // $NON-NLS-1$

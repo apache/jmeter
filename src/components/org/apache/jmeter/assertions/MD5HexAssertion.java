@@ -95,7 +95,7 @@ public class MD5HexAssertion extends AbstractTestElement implements Serializable
     }
 
     // package protected so can be accessed by test class
-    static String baMD5Hex(byte ba[]) {
+    static String baMD5Hex(byte[] ba) {
         byte[] md5Result = {};
 
         try {
