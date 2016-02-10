@@ -46,7 +46,7 @@ public final class IconToolbarBean {
         if (strToSplit == null) {
             throw new IllegalArgumentException("Icon definition must not be null"); //$NON-NLS-1$
         }
-        final String tmp[] = strToSplit.split(ICON_FIELD_SEP);
+        final String[] tmp = strToSplit.split(ICON_FIELD_SEP);
         if (tmp.length > 2) {
             this.i18nKey = tmp[0];
             this.actionName = tmp[1];
