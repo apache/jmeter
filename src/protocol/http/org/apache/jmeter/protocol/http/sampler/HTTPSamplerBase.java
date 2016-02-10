@@ -1539,11 +1539,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     // Last url was in cache so tempRes is null
                     break;
                 }
-            } catch (MalformedURLException e) {
-                errorResult(e, lastRes);
-                // The redirect URL we got was not a valid URL
-                invalidRedirectUrl = true;
-            } catch (URISyntaxException e) {
+            } catch (MalformedURLException | URISyntaxException e) {
                 errorResult(e, lastRes);
                 // The redirect URL we got was not a valid URL
                 invalidRedirectUrl = true;

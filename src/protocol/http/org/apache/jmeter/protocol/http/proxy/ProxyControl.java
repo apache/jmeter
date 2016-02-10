@@ -947,12 +947,8 @@ public class ProxyControl extends GenericController {
                     try {
                         replacer.undoReverseReplace(timer);
                         model.addComponent(timer, node);
-                    } catch (InvalidVariableException e) {
-                        // Not 100% sure, but I believe this can't happen, so
-                        // I'll log and throw an error:
-                        log.error("Program error", e);
-                        throw new Error(e);
-                    } catch (IllegalUserActionException e) {
+                    } catch (InvalidVariableException
+                            | IllegalUserActionException e) {
                         // Not 100% sure, but I believe this can't happen, so
                         // I'll log and throw an error:
                         log.error("Program error", e);
