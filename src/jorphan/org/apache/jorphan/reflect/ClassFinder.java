@@ -384,12 +384,9 @@ public final class ClassFinder {
                         }
                     }
                 }
-            } catch (UnsupportedClassVersionError ignored) {
-                log.debug(ignored.getLocalizedMessage());
-            } catch (NoClassDefFoundError ignored) {
-                log.debug(ignored.getLocalizedMessage());
-            } catch (ClassNotFoundException ignored) {
-                log.debug(ignored.getLocalizedMessage());
+            } catch (UnsupportedClassVersionError | ClassNotFoundException
+                    | NoClassDefFoundError e) {
+                log.debug(e.getLocalizedMessage());
             }
         return false;
     }
@@ -405,9 +402,7 @@ public final class ClassFinder {
                     }
                 }
             }
-        } catch (NoClassDefFoundError ignored) {
-            log.debug(ignored.getLocalizedMessage());
-        } catch (ClassNotFoundException ignored) {
+        } catch (NoClassDefFoundError | ClassNotFoundException ignored) {
             log.debug(ignored.getLocalizedMessage());
         }
         return false;
