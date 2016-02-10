@@ -250,11 +250,8 @@ public class WSDLHelper {
             this.connect();
             this.buildDocument();
             SOAPOPS = this.getOperations();
-        } catch (IOException exception) {
-            throw (new WSDLException(exception));
-        } catch (SAXException exception) {
-            throw (new WSDLException(exception));
-        } catch (ParserConfigurationException exception) {
+        } catch (IOException | ParserConfigurationException
+                | SAXException exception) {
             throw (new WSDLException(exception));
         } finally {
             this.close();

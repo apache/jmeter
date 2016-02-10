@@ -104,11 +104,8 @@ public abstract class HTMLParser {
             } else {
                 throw new HTMLParseError(new ClassCastException(htmlParserClassName));
             }
-        } catch (InstantiationException e) {
-            throw new HTMLParseError(e);
-        } catch (IllegalAccessException e) {
-            throw new HTMLParseError(e);
-        } catch (ClassNotFoundException e) {
+        } catch (InstantiationException | ClassNotFoundException
+                | IllegalAccessException e) {
             throw new HTMLParseError(e);
         }
         log.info("Created " + htmlParserClassName);

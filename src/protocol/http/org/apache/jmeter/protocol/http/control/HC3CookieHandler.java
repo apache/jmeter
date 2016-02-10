@@ -159,9 +159,7 @@ public class HC3CookieHandler implements CookieHandler {
         org.apache.commons.httpclient.Cookie[] cookies= null;
         try {
             cookies = cookieSpec.parse(host, port, path, isSecure, cookieHeader);
-        } catch (MalformedCookieException e) {
-            log.warn(cookieHeader+e.getLocalizedMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (MalformedCookieException | IllegalArgumentException e) {
             log.warn(cookieHeader+e.getLocalizedMessage());
         }
         if (cookies == null) {

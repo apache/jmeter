@@ -194,9 +194,8 @@ class RegexpHTMLParser extends HTMLParser {
                 }
             }
             return urls.iterator();
-        } catch (UnsupportedEncodingException e) {
-            throw new HTMLParseException(e.getMessage(), e);
-        } catch (MalformedCachePatternException e) {
+        } catch (UnsupportedEncodingException
+                | MalformedCachePatternException e) {
             throw new HTMLParseException(e.getMessage(), e);
         } finally {
             JMeterUtils.clearMatcherMemory(matcher, pattern);
