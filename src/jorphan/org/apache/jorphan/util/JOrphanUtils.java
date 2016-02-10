@@ -414,7 +414,7 @@ public final class JOrphanUtils {
      * @param ba input binary byte array
      * @return hex representation of binary input
      */
-    public static String baToHexString(byte ba[]) {
+    public static String baToHexString(byte[] ba) {
         StringBuilder sb = new StringBuilder(ba.length*2);
         for (byte b : ba) {
             int j = b & 0xff;
@@ -433,7 +433,7 @@ public final class JOrphanUtils {
      * @param separator the separator to be added between pairs of hex digits
      * @return hex representation of binary input
      */
-    public static String baToHexString(byte ba[], char separator) {
+    public static String baToHexString(byte[] ba, char separator) {
         StringBuilder sb = new StringBuilder(ba.length*2);
         for (int i = 0; i < ba.length; i++) {
             if (i > 0 && separator != 0) {
@@ -454,7 +454,7 @@ public final class JOrphanUtils {
      * @param ba input binary byte array
      * @return hex representation of binary input
      */
-    public static byte[] baToHexBytes(byte ba[]) {
+    public static byte[] baToHexBytes(byte[] ba) {
         byte[] hb = new byte[ba.length*2];
         for (int i = 0; i < ba.length; i++) {
             byte upper = (byte) ((ba[i] & 0xf0) >> 4);
