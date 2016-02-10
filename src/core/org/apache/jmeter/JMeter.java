@@ -356,7 +356,7 @@ public class JMeter implements JMeterPlugin {
             if (log.isDebugEnabled())
             {
                 String jcp=System.getProperty("java.class.path");// $NON-NLS-1$
-                String bits[] =jcp.split(File.pathSeparator);
+                String[] bits = jcp.split(File.pathSeparator);
                 log.debug("ClassPath");
                 for(String bit : bits){
                     log.debug(bit);
@@ -1109,7 +1109,7 @@ public class JMeter implements JMeterPlugin {
         int i = 0;
         while (pe.hasMoreElements()) {
             String key = (String) pe.nextElement();
-            String icons[] = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
+            String[] icons = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
             iconlist[i][0] = key;
             iconlist[i][1] = icons[0];
             if (icons.length > 1) {
