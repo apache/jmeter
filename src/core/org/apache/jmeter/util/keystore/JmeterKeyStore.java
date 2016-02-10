@@ -112,7 +112,7 @@ public final class JmeterKeyStore {
      *             happen here, either)
      */
     public void load(InputStream is, String pword) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
-        char pw[] = pword==null ? null : pword.toCharArray();
+        char[] pw = pword==null ? null : pword.toCharArray();
         store.load(is, pw);
     
         List<String> v_names = new ArrayList<>();

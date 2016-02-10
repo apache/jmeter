@@ -769,7 +769,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                     ((ClearGui) propertyEditor).clearGui();
                 } else if (propertyEditor instanceof WrapperEditor){
                     WrapperEditor we = (WrapperEditor) propertyEditor;
-                    String tags[]=we.getTags();
+                    String[] tags = we.getTags();
                     if (tags != null && tags.length > 0) {
                         we.setAsText(tags[0]);
                     } else {

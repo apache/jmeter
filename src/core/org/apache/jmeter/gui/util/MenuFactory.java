@@ -597,7 +597,7 @@ public final class MenuFactory {
      *            - array of nodes that are to be added
      * @return whether it is OK to add the dragged nodes to this parent
      */
-    public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode nodes[]) {
+    public static boolean canAddTo(JMeterTreeNode parentNode, JMeterTreeNode[] nodes) {
         if (null == parentNode) {
             return false;
         }
@@ -647,7 +647,7 @@ public final class MenuFactory {
     }
 
     // Is any node an instance of one of the classes?
-    private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[]){
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes) {
         for (JMeterTreeNode node : nodes) {
             for (Class<?> aClass : classes) {
                 if (aClass.isInstance(node.getUserObject())) {
@@ -659,7 +659,7 @@ public final class MenuFactory {
     }
 
     // Is any node an instance of one of the classes, but not an exception?
-    private static boolean foundClass(JMeterTreeNode nodes[],Class<?> classes[], Class<?> except){
+    private static boolean foundClass(JMeterTreeNode[] nodes, Class<?>[] classes, Class<?> except) {
         for (JMeterTreeNode node : nodes) {
             Object userObject = node.getUserObject();
             if (!except.isInstance(userObject)) {

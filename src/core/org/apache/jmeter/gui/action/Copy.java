@@ -112,7 +112,7 @@ public class Copy extends AbstractAction {
         return nodes.toArray(new JMeterTreeNode[nodes.size()]);
     }
 
-    public static void setCopiedNodes(JMeterTreeNode nodes[]) {
+    public static void setCopiedNodes(JMeterTreeNode[] nodes) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         try {
             JMeterTreeNodeTransferable transferable = new JMeterTreeNodeTransferable();
@@ -126,8 +126,8 @@ public class Copy extends AbstractAction {
         }
     }
 
-    public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode nodes[]) {
-        JMeterTreeNode treeNodes[] = new JMeterTreeNode[nodes.length];
+    public static JMeterTreeNode[] cloneTreeNodes(JMeterTreeNode[] nodes) {
+        JMeterTreeNode[] treeNodes = new JMeterTreeNode[nodes.length];
         for (int i = 0; i < nodes.length; i++) {
             treeNodes[i] = cloneTreeNode(nodes[i]);
         }

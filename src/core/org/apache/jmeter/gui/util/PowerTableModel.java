@@ -103,7 +103,7 @@ public class PowerTableModel extends DefaultTableModel {
     }
 
     @Override
-    public void addRow(Object data[]) {
+    public void addRow(Object[] data) {
         if (data.length != model.getHeaderCount()){
             throw new IllegalArgumentException("Incorrect number of data items");
         }

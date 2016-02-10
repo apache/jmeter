@@ -59,7 +59,7 @@ public class Paste extends AbstractAction {
      */
     @Override
     public void doAction(ActionEvent e) {
-        JMeterTreeNode draggedNodes[] = Copy.getCopiedNodes();
+        JMeterTreeNode[] draggedNodes = Copy.getCopiedNodes();
         if (draggedNodes == null) {
             Toolkit.getDefaultToolkit().beep();
             return;
