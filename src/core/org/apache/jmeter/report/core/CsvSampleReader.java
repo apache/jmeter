@@ -132,7 +132,7 @@ public class CsvSampleReader implements Closeable{
                 // Build metadata from default save config
                 LOG.warn("File '"+file.getAbsolutePath()+"' does not contain the field names header, "
                         + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly");
-                System.err.println("File '"+file.getAbsolutePath()+"' does not contain the field names header,"
+                System.err.println("File '"+file.getAbsolutePath()+"' does not contain the field names header, "
                         + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly");
                 result = new SampleMetadata(
                         SampleSaveConfiguration.staticConfig());
