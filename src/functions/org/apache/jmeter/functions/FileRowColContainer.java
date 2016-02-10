@@ -86,10 +86,6 @@ public class FileRowColContainer {
                 fileData.add(splitLine(line, delimiter));
                 line = myBread.readLine();
             }
-        } catch (FileNotFoundException e) {
-            fileData.clear();
-            log.warn(e.toString());
-            throw e;
         } catch (IOException e) {
             fileData.clear();
             log.warn(e.toString());

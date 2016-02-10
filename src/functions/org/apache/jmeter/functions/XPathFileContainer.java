@@ -81,19 +81,8 @@ public class XPathFileContainer {
             if(log.isDebugEnabled()) {
                 log.debug("found " + nl.getLength());
             }
-        } catch (FileNotFoundException e) {
-            log.warn(e.toString());
-            throw e;
-        } catch (IOException e) {
-            log.warn(e.toString());
-            throw e;
-        } catch (ParserConfigurationException e) {
-            log.warn(e.toString());
-            throw e;
-        } catch (SAXException e) {
-            log.warn(e.toString());
-            throw e;
-        } catch (TransformerException e) {
+        } catch (TransformerException | SAXException
+                | ParserConfigurationException | IOException e) {
             log.warn(e.toString());
             throw e;
         } finally {

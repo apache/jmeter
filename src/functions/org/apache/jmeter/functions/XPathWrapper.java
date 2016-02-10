@@ -71,15 +71,8 @@ final class XPathWrapper {
         XPathFileContainer frcc=null;
         try {
             frcc = new XPathFileContainer(file, xpathString);
-        } catch (FileNotFoundException e) {
-            log.warn(e.getLocalizedMessage());
-        } catch (IOException e) {
-            log.warn(e.getLocalizedMessage());
-        } catch (ParserConfigurationException e) {
-            log.warn(e.getLocalizedMessage());
-        } catch (SAXException e) {
-            log.warn(e.getLocalizedMessage());
-        } catch (TransformerException e) {
+        } catch (TransformerException | SAXException
+                | ParserConfigurationException | IOException e) {
             log.warn(e.getLocalizedMessage());
         }
         return frcc;
