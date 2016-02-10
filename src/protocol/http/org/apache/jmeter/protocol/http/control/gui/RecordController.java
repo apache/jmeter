@@ -18,13 +18,39 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import org.apache.jmeter.control.gui.LogicControllerGui;
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.tree.JMeterTreeModel;
+import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
-public class RecordController extends LogicControllerGui {
+public class RecordController extends LogicControllerGui implements ActionListener {
     private static final long serialVersionUID = 240L;
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
+    /**
+     * Clear the recorded samples
+     */
+    private JButton clearButton;
+    
+    public RecordController() {
+        super();
+        init();
+    }
+    
     @Override
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$
@@ -35,5 +61,42 @@ public class RecordController extends LogicControllerGui {
         RecordingController con = new RecordingController();
         this.configureTestElement(con);
         return con;
+    }
+    
+    private void init() {
+       
+        JPanel panel = new JPanel();
+        
+        clearButton = new JButton(JMeterUtils.getResString("record_controller_clear_samples")); //$NON-NLS-1$
+        clearButton.addActionListener(this);
+        panel.add(clearButton);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        add(panel);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == clearButton) {
+            GuiPackage guiPackage = GuiPackage.getInstance();
+            JMeterTreeNode currentNode = guiPackage.getTreeListener().getCurrentNode();
+            if (!(currentNode.getUserObject() instanceof org.apache.jmeter.protocol.http.control.RecordingController)) {
+                Toolkit.getDefaultToolkit().beep();
+                return;
+            }
+            
+            try {
+                guiPackage.updateCurrentNode();
+                JMeterTreeModel treeModel = guiPackage.getTreeModel();
+                int childCount = currentNode.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    JMeterTreeNode node = (JMeterTreeNode) currentNode.getChildAt(0);
+                    treeModel.removeNodeFromParent(node);
+                }
+            } catch (Exception err) {
+                Toolkit.getDefaultToolkit().beep();
+                log.error("Error while removing recorded samples", err);
+            }
+        }
     }
 }
