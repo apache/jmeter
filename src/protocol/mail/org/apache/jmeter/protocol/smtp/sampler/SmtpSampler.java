@@ -219,10 +219,7 @@ public class SmtpSampler extends AbstractSampler {
         try {
             res.setRequestHeaders(getRequestHeaders(message));
             res.setSamplerData(getSamplerData(message));
-        } catch (MessagingException e1) {
-            res.setSamplerData("Error occurred trying to save request info: "+e1);
-            log.warn("Error occurred trying to save request info",e1);
-        } catch (IOException e1) {
+        } catch (MessagingException | IOException e1) {
             res.setSamplerData("Error occurred trying to save request info: "+e1);
             log.warn("Error occurred trying to save request info",e1);
         }
@@ -293,9 +290,7 @@ public class SmtpSampler extends AbstractSampler {
             }
             // TODO - charset?
             res.setResponseData(sb.toString().getBytes()); // TODO this should really be request data, but there is none
-        } catch (IOException ex) {
-            log.warn("",ex);
-        } catch (MessagingException ex) {
+        } catch (IOException | MessagingException ex) {
             log.warn("",ex);
         }
 
