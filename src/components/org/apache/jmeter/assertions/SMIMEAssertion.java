@@ -86,12 +86,16 @@ class SMIMEAssertion {
             MimeMessage msg = null;
             final int msgPos = testElement.getSpecificMessagePositionAsInt();
             if (msgPos < 0){ // means counting from end
-                SampleResult subResults[] = response.getSubResults();
+                SampleResult[] subResults = response.getSubResults();
                 final int pos = subResults.length + msgPos;
-                log.debug("Getting message number: "+pos+" of "+subResults.length);
+                if (log.isDebugEnabled()) {
+                    log.debug("Getting message number: "+pos+" of "+subResults.length);
+                }
                 msg = getMessageFromResponse(response,pos);
             } else {
-                log.debug("Getting message number: "+msgPos);
+                if (log.isDebugEnabled()) {
+                    log.debug("Getting message number: "+msgPos);
+                }
                 msg = getMessageFromResponse(response, msgPos);
             }
             
@@ -290,7 +294,7 @@ class SMIMEAssertion {
      */
     private static MimeMessage getMessageFromResponse(SampleResult response,
             int messageNumber) throws MessagingException {
-        SampleResult subResults[] = response.getSubResults();
+        SampleResult[] subResults = response.getSubResults();
 
         if (messageNumber >= subResults.length || messageNumber < 0) {
             throw new MessagingException("Message number not present in results: "+messageNumber);
