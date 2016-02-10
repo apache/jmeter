@@ -402,7 +402,7 @@ public class RespTimeGraphChart extends JPanel {
      * @param datas array of positive or NaN doubles
      * @return double
      */
-    private double findMax(double datas[][]) {
+    private double findMax(double[][] datas) {
         double max = 0;
         for (int i = 0; i < datas.length; i++) {
             for (int j = 0; j < datas[i].length; j++) {

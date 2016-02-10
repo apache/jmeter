@@ -318,7 +318,7 @@ public class AxisGraph extends JPanel {
         }
     }
 
-    private double findMax(double _data[][]) {
+    private double findMax(double[][] _data) {
         double max = _data[0][0];
         for (double[] dArray : _data) {
             for (double d : dArray) {

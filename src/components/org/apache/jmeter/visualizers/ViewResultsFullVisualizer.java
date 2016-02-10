@@ -148,7 +148,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
         addSubResults(currNode, res);
         // Add any assertion that failed as children of the sample node
-        AssertionResult assertionResults[] = res.getAssertionResults();
+        AssertionResult[] assertionResults = res.getAssertionResults();
         int assertionIndex = currNode.getChildCount();
         for (int j = 0; j < assertionResults.length; j++) {
             AssertionResult item = assertionResults[j];
@@ -184,7 +184,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
             addSubResults(leafNode, child);
             // Add any assertion that failed as children of the sample node
-            AssertionResult assertionResults[] = child.getAssertionResults();
+            AssertionResult[] assertionResults = child.getAssertionResults();
             int assertionIndex = leafNode.getChildCount();
             for (int j = 0; j < assertionResults.length; j++) {
                 AssertionResult item = assertionResults[j];
