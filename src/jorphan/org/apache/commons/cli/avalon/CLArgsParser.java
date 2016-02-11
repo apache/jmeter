@@ -149,7 +149,7 @@ public final class CLArgsParser {
      *            the id
      * @return the descriptor
      */
-    private final CLOptionDescriptor getDescriptorFor(final int id) {
+    private CLOptionDescriptor getDescriptorFor(final int id) {
         for (CLOptionDescriptor optionDescriptor : this.optionDescriptors) {
             if (optionDescriptor.getId() == id) {
                 return optionDescriptor;
@@ -166,7 +166,7 @@ public final class CLArgsParser {
      *            the name
      * @return the descriptor
      */
-    private final CLOptionDescriptor getDescriptorFor(final String name) {
+    private CLOptionDescriptor getDescriptorFor(final String name) {
         for (CLOptionDescriptor optionDescriptor : this.optionDescriptors) {
             if (optionDescriptor.getName().equals(name)) {
                 return optionDescriptor;
@@ -192,7 +192,7 @@ public final class CLArgsParser {
      *            the Option Descriptor
      * @return the state
      */
-    private final int getStateFor(final CLOptionDescriptor descriptor) {
+    private int getStateFor(final CLOptionDescriptor descriptor) {
         final int flags = descriptor.getFlags();
         if ((flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2) {
             return STATE_REQUIRE_2ARGS;
@@ -238,7 +238,7 @@ public final class CLArgsParser {
      * @param arguments
      *            the arguments
      */
-    private final void checkIncompatibilities(final Vector<CLOption> arguments) throws ParseException {
+    private void checkIncompatibilities(final Vector<CLOption> arguments) throws ParseException {
         final int size = arguments.size();
 
         for (int i = 0; i < size; i++) {
@@ -258,7 +258,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final void checkIncompatible(final Vector<CLOption> arguments, final int[] incompatible, final int original)
+    private void checkIncompatible(final Vector<CLOption> arguments, final int[] incompatible, final int original)
             throws ParseException {
         final int size = arguments.size();
 
@@ -289,7 +289,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final String describeDualOption(final int id) {
+    private String describeDualOption(final int id) {
         final CLOptionDescriptor descriptor = getDescriptorFor(id);
         if (null == descriptor) {
             return "<parameter>";
@@ -341,7 +341,7 @@ public final class CLArgsParser {
      *            the cut-point in element of array
      * @return the result array
      */
-    private final String[] subArray(final String[] array, final int index, final int charIndex) {
+    private String[] subArray(final String[] array, final int index, final int charIndex) {
         final int remaining = array.length - index;
         final String[] result = new String[remaining];
 
@@ -357,7 +357,7 @@ public final class CLArgsParser {
     /**
      * Actually parse arguments
      */
-    private final void parse() throws ParseException {
+    private void parse() throws ParseException {
         if (0 == this.args.length) {
             return;
         }
@@ -419,7 +419,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final String getOptionDescription(final CLOptionDescriptor descriptor) {
+    private String getOptionDescription(final CLOptionDescriptor descriptor) {
         if (this.isLong) {
             return "--" + descriptor.getName();
         } else {
@@ -427,14 +427,14 @@ public final class CLArgsParser {
         }
     }
 
-    private final char peekAtChar() {
+    private char peekAtChar() {
         if (INVALID == this.lastChar) {
             this.lastChar = readChar();
         }
         return (char) this.lastChar;
     }
 
-    private final char getChar() {
+    private char getChar() {
         if (INVALID != this.lastChar) {
             final char result = (char) this.lastChar;
             this.lastChar = INVALID;
@@ -444,7 +444,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final char readChar() {
+    private char readChar() {
         if (this.stringIndex >= this.stringLength) {
             this.argIndex++;
             this.stringIndex = 0;
@@ -467,7 +467,7 @@ public final class CLArgsParser {
 
     private char tokesep; // Keep track of token separator
 
-    private final Token nextToken(final char[] separators) {
+    private Token nextToken(final char[] separators) {
         this.ch = getChar();
 
         if (isSeparator(this.ch, separators)) {
@@ -487,7 +487,7 @@ public final class CLArgsParser {
         return new Token(TOKEN_STRING, sb.toString());
     }
 
-    private final boolean isSeparator(final char ch, final char[] separators) {
+    private boolean isSeparator(final char ch, final char[] separators) {
         for (char separator : separators) {
             if (ch == separator) {
                 return true;
@@ -497,13 +497,13 @@ public final class CLArgsParser {
         return false;
     }
 
-    private final void addOption(final CLOption option) {
+    private void addOption(final CLOption option) {
         this.options.addElement(option);
         this.lastOptionId = option.getDescriptor().getId();
         this.option = null;
     }
 
-    private final void parseOption(final CLOptionDescriptor descriptor, final String optionString)
+    private void parseOption(final CLOptionDescriptor descriptor, final String optionString)
             throws ParseException {
         if (null == descriptor) {
             throw new ParseException("Unknown option " + optionString, 0);
@@ -517,7 +517,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final void parseShortOption() throws ParseException {
+    private void parseShortOption() throws ParseException {
         this.ch = getChar();
         final CLOptionDescriptor descriptor = getDescriptorFor(this.ch);
         this.isLong = false;
@@ -528,7 +528,7 @@ public final class CLArgsParser {
         }
     }
 
-    private final void parseArguments() throws ParseException {
+    private void parseArguments() throws ParseException {
         if (STATE_REQUIRE_ARG == this.state) {
             if ('=' == this.ch || 0 == this.ch) {
                 getChar();
@@ -617,7 +617,7 @@ public final class CLArgsParser {
     /**
      * Parse Options from Normal mode.
      */
-    private final void parseNormal() throws ParseException {
+    private void parseNormal() throws ParseException {
         if ('-' != this.ch) {
             // Parse the arguments that are not options
             final String argument = nextToken(NULL_SEPARATORS).getValue();
@@ -657,7 +657,7 @@ public final class CLArgsParser {
     /**
      * Build the this.optionIndex lookup map for the parsed options.
      */
-    private final void buildOptionIndex() {
+    private void buildOptionIndex() {
         final int size = this.options.size();
         this.optionIndex = new Hashtable<>(size * 2);
 

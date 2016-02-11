@@ -447,7 +447,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
      * @param localContext {@link HttpContext}
      */
-    private final void extractClientContextAfterSample(HttpContext localContext) {
+    private void extractClientContextAfterSample(HttpContext localContext) {
         Object userToken = localContext.getAttribute(HttpClientContext.USER_TOKEN);
         if(userToken != null) {
             if(log.isDebugEnabled()) {
@@ -466,7 +466,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
      * @param localContext {@link HttpContext}
      */
-    private final void setupClientContextBeforeSample(HttpContext localContext) {
+    private void setupClientContextBeforeSample(HttpContext localContext) {
         Object userToken = null;
         // During recording JMeterContextService.getContext().getVariables() is null
         JMeterVariables jMeterVariables = JMeterContextService.getContext().getVariables();

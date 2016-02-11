@@ -145,7 +145,7 @@ class PickleGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
     /**
      * See: http://readthedocs.org/docs/graphite/en/1.0/feeding-carbon.html
      */
-    private static final String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
+    private static String convertMetricsToPickleFormat(List<MetricTuple> metrics) {
         StringBuilder pickled = new StringBuilder(metrics.size()*75);
         pickled.append(MARK).append(LIST);
 
