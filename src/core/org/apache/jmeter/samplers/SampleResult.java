@@ -101,8 +101,8 @@ public class SampleResult implements Serializable, Cloneable {
     private static final boolean GETBYTES_HEADERS_SIZE = 
         JMeterUtils.getPropDefault("sampleresult.getbytes.headers_size", true); // $NON-NLS-1$
     
-    private static final boolean GETBYTES_NETWORK_SIZE = 
-        GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE ? true : false;
+    private static final boolean GETBYTES_NETWORK_SIZE =
+            GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE;
 
     private SampleSaveConfiguration saveConfig;
 

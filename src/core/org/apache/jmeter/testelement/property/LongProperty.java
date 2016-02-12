@@ -107,7 +107,7 @@ public class LongProperty extends NumberProperty {
      */
     @Override
     public boolean getBooleanValue() {
-        return getLongValue() > 0 ? true : false;
+        return getLongValue() > 0;
     }
 
     /**
