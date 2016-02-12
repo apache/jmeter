@@ -242,7 +242,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ActionListener {
      * @param className String class name
      * @return boolean
      */
-    private static final boolean checkContainsClassName(ComboBoxModel<String> model, String className) {
+    private static boolean checkContainsClassName(ComboBoxModel<String> model, String className) {
         int size = model.getSize();
         Set<String> set = new HashSet<>(size);
         for (int i = 0; i < size; i++) {
