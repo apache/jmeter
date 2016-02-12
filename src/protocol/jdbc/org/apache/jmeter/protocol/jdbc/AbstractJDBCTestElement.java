@@ -297,7 +297,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @return number of rows in resultSet
      * @throws SQLException
      */
-    private static final int countRows(ResultSet resultSet) throws SQLException {
+    private static int countRows(ResultSet resultSet) throws SQLException {
         return resultSet.last() ? resultSet.getRow() : 0;
     }
 
@@ -759,7 +759,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     /**
      * Clean cache of PreparedStatements
      */
-    private static final void cleanCache() {
+    private static void cleanCache() {
         for (Map<String, PreparedStatement> element : perConnCache.values()) {
             closeAllStatements(element.values());
         }

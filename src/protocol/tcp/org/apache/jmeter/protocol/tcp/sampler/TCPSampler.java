@@ -213,7 +213,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /**
      * @return String socket key in cache Map
      */
-    private final String getSocketKey() {
+    private String getSocketKey() {
         return TCPKEY+"#"+getServer()+"#"+getPort()+"#"+getUsername()+"#"+getPassword();
     }
 
