@@ -65,7 +65,7 @@ public class JsoupBasedHtmlParser extends HTMLParser {
             this.baseUrl = baseUrl;
         }
 
-        private final void extractAttribute(Element tag, String attributeName) {
+        private void extractAttribute(Element tag, String attributeName) {
             String url = tag.attr(attributeName);
             if (!StringUtils.isEmpty(url)) {
                 urls.addURL(url, baseUrl.url);

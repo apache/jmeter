@@ -258,7 +258,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @param arguments {@link Arguments}
      * @return {@link String}
      */
-    private static final String computePostBody(Arguments arguments) {
+    private static String computePostBody(Arguments arguments) {
         return computePostBody(arguments, false);
     }
 
@@ -268,7 +268,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @param crlfToLF whether to convert CRLF to LF
      * @return {@link String}
      */
-    private static final String computePostBody(Arguments arguments, boolean crlfToLF) {
+    private static String computePostBody(Arguments arguments, boolean crlfToLF) {
         StringBuilder postBody = new StringBuilder();
         PropertyIterator args = arguments.iterator();
         while (args.hasNext()) {

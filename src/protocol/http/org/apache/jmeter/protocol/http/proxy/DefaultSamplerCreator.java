@@ -224,7 +224,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
      * @param postData String
      * @return boolean
      */
-    private static final boolean isPotentialXml(String postData) {
+    private static boolean isPotentialXml(String postData) {
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser saxParser = spf.newSAXParser();

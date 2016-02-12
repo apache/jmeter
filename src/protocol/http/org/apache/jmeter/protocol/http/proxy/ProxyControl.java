@@ -769,7 +769,7 @@ public class ProxyControl extends GenericController {
      * @param sampleContentType
      * @return boolean true if Matching expression
      */
-    private final boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
+    private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
         if(expression != null && expression.length() > 0) {
             if(log.isDebugEnabled()) {
                 log.debug("Testing Expression : " + expression + " on sampleContentType:"+sampleContentType+", expected to match:"+expectedToMatch);
