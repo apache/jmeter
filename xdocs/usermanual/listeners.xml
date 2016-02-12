@@ -115,7 +115,7 @@ The full set of properties that affect result file output is shown below.
 # true when field should be saved; false otherwise
 
 # assertion_results_failure_message only affects CSV output
-#jmeter.save.saveservice.assertion_results_failure_message=false
+#jmeter.save.saveservice.assertion_results_failure_message=true
 #
 # legitimate values: none, first, all
 #jmeter.save.saveservice.assertion_results=none
