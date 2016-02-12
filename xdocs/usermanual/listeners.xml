@@ -161,7 +161,7 @@ The full set of properties that affect result file output is shown below.
 
 # Only applies to CSV format files:
 # Print field names as first line in CSV
-#jmeter.save.saveservice.print_field_names=false
+#jmeter.save.saveservice.print_field_names=true
 
 # Optional list of JMeter variable names whose values are to be saved in the result data files.
 # Use commas to separate the names. For example:
