@@ -78,7 +78,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             this.ieVersion = ieVersion;
         }
 
-        private final void extractAttribute(Tag tag, String attributeName) {
+        private void extractAttribute(Tag tag, String attributeName) {
             CharSequence url = tag.getAttributeValue(attributeName);
             if (!StringUtils.isEmpty(url)) {
                 urls.addURL(url.toString(), baseUrl.url);
