@@ -89,7 +89,7 @@ public class DoubleProperty extends NumberProperty {
      */
     @Override
     public boolean getBooleanValue() {
-        return value > 0 ? true : false;
+        return value > 0;
     }
 
     /**

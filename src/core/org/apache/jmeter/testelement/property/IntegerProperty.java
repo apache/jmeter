@@ -111,7 +111,7 @@ public class IntegerProperty extends NumberProperty {
      */
     @Override
     public boolean getBooleanValue() {
-        return getIntValue() > 0 ? true : false;
+        return getIntValue() > 0;
     }
 
     /**
