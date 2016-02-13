@@ -200,7 +200,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                     result);
 
             String message = null;
-            if (supportsControllerDiscrimination && showControllerSeriesOnly
+            if (supportsControllerDiscrimination.booleanValue() && showControllerSeriesOnly
                     && excludesControllers) {
                 // Exporter shows controller series only
                 // whereas the current graph support controller
@@ -239,14 +239,14 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                                     // If the name matches pattern, other
                                     // properties can discard the series
                                     matches = !filtersOnlySampleSeries
-                                            || !supportsControllerDiscrimination
+                                            || !supportsControllerDiscrimination.booleanValue()
                                             || isController
                                             || !showControllerSeriesOnly;
                                 } else {
                                     // If the name does not match the pattern,
                                     // other properties can hold the series
                                     matches = filtersOnlySampleSeries
-                                            && !supportsControllerDiscrimination;
+                                            && !supportsControllerDiscrimination.booleanValue();
                                 }
                             }
                             index++;
