@@ -78,25 +78,25 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
     // Labels - don't make these static, else language change will not work
 
-    private final String ServerTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
+    private final String serverTypeLabel = JMeterUtils.getResString("mail_reader_server_type");// $NON-NLS-1$
 
-    private final String ServerLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
+    private final String serverLabel = JMeterUtils.getResString("mail_reader_server");// $NON-NLS-1$
 
-    private final String PortLabel = JMeterUtils.getResString("mail_reader_port");// $NON-NLS-1$
+    private final String portLabel = JMeterUtils.getResString("mail_reader_port");// $NON-NLS-1$
 
-    private final String AccountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
+    private final String accountLabel = JMeterUtils.getResString("mail_reader_account");// $NON-NLS-1$
 
-    private final String PasswordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
+    private final String passwordLabel = JMeterUtils.getResString("mail_reader_password");// $NON-NLS-1$
 
-    private final String NumMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
+    private final String numMessagesLabel = JMeterUtils.getResString("mail_reader_num_messages");// $NON-NLS-1$
 
-    private final String AllMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
+    private final String allMessagesLabel = JMeterUtils.getResString("mail_reader_all_messages");// $NON-NLS-1$
 
-    private final String DeleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
+    private final String deleteLabel = JMeterUtils.getResString("mail_reader_delete");// $NON-NLS-1$
 
-    private final String FolderLabel = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
+    private final String folderLabelStr = JMeterUtils.getResString("mail_reader_folder");// $NON-NLS-1$
 
-    private final String STOREMIME = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
+    private final String storeMime = JMeterUtils.getResString("mail_reader_storemime");// $NON-NLS-1$
 
     private final String headerOnlyLabel = JMeterUtils.getResString("mail_reader_header_only");// $NON-NLS-1$
 
@@ -191,28 +191,28 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         serverTypeBox = new JTextField(20);
         serverTypeBox.addActionListener(this);
         serverTypeBox.addFocusListener(this);
-        addField(settingsPanel, ServerTypeLabel, serverTypeBox, gbc);
+        addField(settingsPanel, serverTypeLabel, serverTypeBox, gbc);
         
         serverBox = new JTextField(20);
-        addField(settingsPanel, ServerLabel, serverBox, gbc);
+        addField(settingsPanel, serverLabel, serverBox, gbc);
 
         portBox = new JTextField(20);
-        addField(settingsPanel, PortLabel, portBox, gbc);
+        addField(settingsPanel, portLabel, portBox, gbc);
 
         usernameBox = new JTextField(20);
-        addField(settingsPanel, AccountLabel, usernameBox, gbc);
+        addField(settingsPanel, accountLabel, usernameBox, gbc);
 
         passwordBox = new JPasswordField(20);
-        addField(settingsPanel, PasswordLabel, passwordBox, gbc);
+        addField(settingsPanel, passwordLabel, passwordBox, gbc);
 
-        folderLabel = new JLabel(FolderLabel);
+        folderLabel = new JLabel(folderLabelStr);
         folderBox = new JTextField(INBOX, 20);
         addField(settingsPanel, folderLabel, folderBox, gbc);
 
         HorizontalPanel numMessagesPanel = new HorizontalPanel();
-        numMessagesPanel.add(new JLabel(NumMessagesLabel));
+        numMessagesPanel.add(new JLabel(numMessagesLabel));
         ButtonGroup nmbg = new ButtonGroup();
-        allMessagesButton = new JRadioButton(AllMessagesLabel);
+        allMessagesButton = new JRadioButton(allMessagesLabel);
         allMessagesButton.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -240,9 +240,9 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
 
         headerOnlyBox = new JCheckBox(headerOnlyLabel);
 
-        deleteBox = new JCheckBox(DeleteLabel);
+        deleteBox = new JCheckBox(deleteLabel);
 
-        storeMimeMessageBox = new JCheckBox(STOREMIME);
+        storeMimeMessageBox = new JCheckBox(storeMime);
         
         securitySettingsPanel = new SecuritySettingsPanel();
         
