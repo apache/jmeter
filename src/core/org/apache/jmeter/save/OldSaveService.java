@@ -336,17 +336,17 @@ public final class OldSaveService {
 
         String testClass = config.getAttribute("class"); // $NON-NLS-1$
 
-        String gui_class=""; // $NON-NLS-1$
+        String guiClass=""; // $NON-NLS-1$
         Configuration[] children = config.getChildren();
         for (int i = 0; i < children.length; i++) {
             if (children[i].getName().equals("property")) { // $NON-NLS-1$
                 if (children[i].getAttribute("name").equals(TestElement.GUI_CLASS)){ // $NON-NLS-1$
-                    gui_class=children[i].getValue();
+                    guiClass=children[i].getValue();
                 }
             }
         }
 
-        String newClass = NameUpdater.getCurrentTestName(testClass,gui_class);
+        String newClass = NameUpdater.getCurrentTestName(testClass,guiClass);
 
         element = (TestElement) Class.forName(newClass).newInstance();
 
