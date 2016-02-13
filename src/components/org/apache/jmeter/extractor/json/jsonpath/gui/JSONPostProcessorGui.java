@@ -37,7 +37,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 /**
  * GUI for {@link JSONPostProcessor}
- * @since 2.14
+ * @since 3.0
  */
 public class JSONPostProcessorGui extends AbstractPostProcessorGui {
 
