@@ -673,8 +673,8 @@ public final class ClutilTestCase {
         final int size = clOptions.size();
 
         assertEquals(4, size);
-        for (int i = 0; i < size; i++) {
-            assertEquals(DEFINE_OPT, clOptions.get(i).getDescriptor().getId());
+        for (CLOption clOption : clOptions) {
+            assertEquals(DEFINE_OPT, clOption.getDescriptor().getId());
         }
 
         CLOption option;

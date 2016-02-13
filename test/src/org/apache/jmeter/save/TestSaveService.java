@@ -97,13 +97,11 @@ public class TestSaveService extends JMeterTestCase {
     public void testLoadAndSave() throws Exception {
         boolean failed = false; // Did a test fail?
 
-        for (int i = 0; i < FILES.length; i++) {
-            final String fileName = FILES[i];
+        for (final String fileName : FILES) {
             final File testFile = findTestFile("testfiles/" + fileName);
             failed |= loadAndSave(testFile, fileName, true);
         }
-        for (int i = 0; i < FILES_LINES.length; i++) {
-            final String fileName = FILES_LINES[i];
+        for (final String fileName : FILES_LINES) {
             final File testFile = findTestFile("testfiles/" + fileName);
             failed |= loadAndSave(testFile, fileName, false);
         }
@@ -191,23 +189,21 @@ public class TestSaveService extends JMeterTestCase {
 
     @Test
     public void testLoad() throws Exception {
-        for (int i = 0; i < FILES_LOAD_ONLY.length; i++) {
-            File file = findTestFile("testfiles/" + FILES_LOAD_ONLY[i]);
+        for (String fileName : FILES_LOAD_ONLY) {
+            File file = findTestFile("testfiles/" + fileName);
             try {
-                HashTree tree =SaveService.loadTree(file);
+                HashTree tree = SaveService.loadTree(file);
                 assertNotNull(tree);
-            } catch(IllegalArgumentException ex) {
-                fail("Exception loading "+file.getAbsolutePath());
+            } catch (IllegalArgumentException ex) {
+                fail("Exception loading " + file.getAbsolutePath());
             }
-            
         }
-
     }
 
     @Test
     public void testClasses(){
         List<String> missingClasses = SaveService.checkClasses();
-        if(missingClasses.size()>0) {
+        if (missingClasses.size() > 0) {
             fail("One or more classes not found:"+missingClasses);
         }
     }

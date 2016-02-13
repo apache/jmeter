@@ -219,11 +219,11 @@ public class RegexFunction extends AbstractFunction {
     private String generateResult(MatchResult match, String namep, Object[] template, JMeterVariables vars) {
         saveGroups(match, namep, vars);
         StringBuilder result = new StringBuilder();
-        for (int a = 0; a < template.length; a++) {
-            if (template[a] instanceof String) {
-                result.append(template[a]);
+        for (Object t : template) {
+            if (t instanceof String) {
+                result.append(t);
             } else {
-                result.append(match.group(((Integer) template[a]).intValue()));
+                result.append(match.group(((Integer) t).intValue()));
             }
         }
         if (namep.length() > 0){

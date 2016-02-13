@@ -184,8 +184,7 @@ public class PackageTest extends TestCase {
 
         // Look for duplicate keys in the file
         String last = "";
-        for (int i = 0; i < alf.size(); i++) {
-            String curr = alf.get(i);
+        for (String curr : alf) {
             if (curr.equals(last)) {
                 subTestFailures++;
                 System.out.println("\nDuplicate key =" + curr + " in " + res);
@@ -361,9 +360,8 @@ public class PackageTest extends TestCase {
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(languageBundle);
         if(inputStream == null) {
             Map<String, String> messagesAsProperties = new HashMap<>();
-            for (Iterator<Map.Entry<Object, Object>> iterator = messages.entrySet().iterator(); iterator.hasNext();) {
-                Map.Entry<Object, Object> entry = iterator.next();
-                messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue()); 
+            for (Map.Entry<Object, Object> entry : messages.entrySet()) {
+                messagesAsProperties.put((String) entry.getKey(), (String) entry.getValue());
             }
             missingLabelsPerBundle.put(languageBundle, messagesAsProperties);
             return;
@@ -371,22 +369,21 @@ public class PackageTest extends TestCase {
         messagesFr.load(inputStream);
     
         Map<String, String> missingLabels = new TreeMap<>();
-        for (Iterator<Map.Entry<Object,Object>> iterator =  messages.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry<Object,Object> entry = iterator.next();
-            String key = (String)entry.getKey();
+        for (Map.Entry<Object, Object> entry : messages.entrySet()) {
+            String key = (String) entry.getKey();
             final String I18NString = "[\\d% ]+";// numeric, space and % don't need translation
-            if(!messagesFr.containsKey(key)) {
+            if (!messagesFr.containsKey(key)) {
                 String value = (String) entry.getValue();
                 // TODO improve check of values that don't need translation
                 if (value.matches(I18NString)) {
                     // System.out.println("Ignoring missing "+key+"="+value+" in "+languageBundle); // TODO convert to list and display at end
                 } else {
-                    missingLabels.put(key,(String) entry.getValue());
+                    missingLabels.put(key, (String) entry.getValue());
                 }
             } else {
                 String value = (String) entry.getValue();
                 if (value.matches(I18NString)) {
-                    System.out.println("Unnecessary entry "+key+"="+value+" in "+languageBundle);
+                    System.out.println("Unnecessary entry " + key + "=" + value + " in " + languageBundle);
                 }
             }
         }
@@ -402,12 +399,10 @@ public class PackageTest extends TestCase {
      */
     private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
         StringBuilder builder = new StringBuilder();
-        for (Iterator<Map.Entry<String,Map<String, String>>> iterator =  missingLabelsPerBundle.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry<String,Map<String, String>> entry = iterator.next();
-            builder.append("Missing labels in bundle:"+entry.getKey()+"\r\n");
-            for (Iterator<Map.Entry<String,String>> it2 =  entry.getValue().entrySet().iterator(); it2.hasNext();) {
-                Map.Entry<String,String> entry2 = it2.next();
-                builder.append(entry2.getKey()+"="+entry2.getValue()+"\r\n");
+        for (Map.Entry<String, Map<String, String>> entry : missingLabelsPerBundle.entrySet()) {
+            builder.append("Missing labels in bundle:" + entry.getKey() + "\r\n");
+            for (Map.Entry<String, String> entry2 : entry.getValue().entrySet()) {
+                builder.append(entry2.getKey() + "=" + entry2.getValue() + "\r\n");
             }
             builder.append("======================================================\r\n");
         }

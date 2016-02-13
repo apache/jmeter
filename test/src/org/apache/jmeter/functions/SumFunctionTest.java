@@ -79,8 +79,8 @@ public class SumFunctionTest extends JMeterTestCase {
     // Perform a sum and check the results
     private void checkSum(AbstractFunction func, String value, String [] addends)  throws Exception {
         Collection<CompoundVariable> parms = new LinkedList<>();
-        for (int i=0; i< addends.length; i++){
-            parms.add(new CompoundVariable(addends[i]));
+        for (String addend : addends) {
+            parms.add(new CompoundVariable(addend));
         }
         parms.add(new CompoundVariable("Result"));
         func.setParameters(parms);
@@ -91,8 +91,8 @@ public class SumFunctionTest extends JMeterTestCase {
     // Perform a sum and check the results
     private void checkSumNoVar(AbstractFunction func, String value, String [] addends)  throws Exception {
         Collection<CompoundVariable> parms = new LinkedList<>();
-        for (int i=0; i< addends.length; i++){
-            parms.add(new CompoundVariable(addends[i]));
+        for (String addend : addends) {
+            parms.add(new CompoundVariable(addend));
         }
         func.setParameters(parms);
         assertEquals(value,func.execute(null,null));
