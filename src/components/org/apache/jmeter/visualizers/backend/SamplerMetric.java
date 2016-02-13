@@ -79,8 +79,8 @@ public class SamplerMetric {
         if (!TransactionController.isFromTransactionController(res)) {
             hits += 1;                 
         }
-        for (int i = 0; i < subResults.length; i++) {            
-            addHits(subResults[i]);
+        for (SampleResult subResult : subResults) {
+            addHits(subResult);
         }
     }
     

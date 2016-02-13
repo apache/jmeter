@@ -150,11 +150,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         // Add any assertion that failed as children of the sample node
         AssertionResult[] assertionResults = res.getAssertionResults();
         int assertionIndex = currNode.getChildCount();
-        for (int j = 0; j < assertionResults.length; j++) {
-            AssertionResult item = assertionResults[j];
-
-            if (item.isFailure() || item.isError()) {
-                DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(item);
+        for (AssertionResult assertionResult : assertionResults) {
+            if (assertionResult.isFailure() || assertionResult.isError()) {
+                DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(assertionResult);
                 treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
             }
         }
@@ -173,9 +171,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
         int leafIndex = 0;
 
-        for (int i = 0; i < subResults.length; i++) {
-            SampleResult child = subResults[i];
-
+        for (SampleResult child : subResults) {
             if (log.isDebugEnabled()) {
                 log.debug("updateGui1 : child sample result - " + child);
             }
@@ -186,9 +182,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             // Add any assertion that failed as children of the sample node
             AssertionResult[] assertionResults = child.getAssertionResults();
             int assertionIndex = leafNode.getChildCount();
-            for (int j = 0; j < assertionResults.length; j++) {
-                AssertionResult item = assertionResults[j];
-
+            for (AssertionResult item : assertionResults) {
                 if (item.isFailure() || item.isError()) {
                     DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(item);
                     treeModel.insertNodeInto(assertionNode, leafNode, assertionIndex++);
