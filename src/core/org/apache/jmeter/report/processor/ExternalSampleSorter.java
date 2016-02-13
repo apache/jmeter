@@ -76,7 +76,7 @@ import org.slf4j.LoggerFactory;
  * Meanwhile, it is equally important to set a {@link SampleComparator} to
  * define sample ordering </>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ExternalSampleSorter extends AbstractSampleConsumer {
 

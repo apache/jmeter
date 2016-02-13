@@ -24,7 +24,7 @@ package org.apache.jmeter.report.processor;
  * 
  * @param <T>
  *            The result type
- * @since 2.14
+ * @since 3.0
  */
 abstract class Job<T> implements Runnable {
 

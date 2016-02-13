@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The interface Aggregator represents an aggregator used by graph consumers.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface Aggregator {
 

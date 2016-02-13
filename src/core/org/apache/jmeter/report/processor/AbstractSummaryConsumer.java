@@ -28,7 +28,7 @@ import org.apache.jmeter.report.core.Sample;
  *
  * @param <TData>
  *            the type of data to process
- * @since 2.14
+ * @since 3.0
  */
 public abstract class AbstractSummaryConsumer<TData> extends
         AbstractSampleConsumer {
