@@ -134,8 +134,7 @@ public class Daemon extends Thread implements Stoppable {
                         thd.configure(clientSocket, target, pageEncodings, formEncodings);
                         thd.start();
                     }
-                } catch (InterruptedIOException e) {
-                    continue;
+                } catch (InterruptedIOException ignored) {
                     // Timeout occurred. Ignore, and keep looping until we're
                     // told to stop running.
                 }

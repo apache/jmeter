@@ -594,7 +594,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     @Override
     public JComponent getPrintableComponent() {
-        if (saveGraphToFile == true) {
+        if (saveGraphToFile) {
             saveGraphToFile = false;
             graphPanel.setBounds(graphPanel.getLocation().x,graphPanel.getLocation().y,
                     graphPanel.width,graphPanel.height);
