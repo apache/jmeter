@@ -56,7 +56,7 @@ public class PutWriter extends PostWriter {
         String contentTypeHeader = connection.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE);
         boolean hasContentTypeHeader = contentTypeHeader != null && contentTypeHeader.length() > 0;
 
-        HTTPFileArg files[] = sampler.getHTTPFiles();
+        HTTPFileArg[] files = sampler.getHTTPFiles();
 
         // If there are no arguments, we can send a file as the body of the request
          if(sampler.getArguments() != null && sampler.getArguments().getArgumentCount() == 0 && sampler.getSendFileAsPostBody()) {
