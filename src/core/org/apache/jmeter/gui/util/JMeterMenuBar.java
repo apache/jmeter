@@ -492,8 +492,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         // FILE MENU
         fileMenu = makeMenuRes("file",'F'); //$NON-NLS-1$
 
-        JMenuItem file_save = makeMenuItemRes("save", 'S', ActionNames.SAVE, KeyStrokes.SAVE); //$NON-NLS-1$
-        file_save.setEnabled(true);
+        JMenuItem fileSave = makeMenuItemRes("save", 'S', ActionNames.SAVE, KeyStrokes.SAVE); //$NON-NLS-1$
+        fileSave.setEnabled(true);
 
         fileSaveAs = makeMenuItemRes("save_all_as", 'A', ActionNames.SAVE_ALL_AS, KeyStrokes.SAVE_ALL_AS); //$NON-NLS-1$
         fileSaveAs.setEnabled(true);
@@ -531,7 +531,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileMenu.add(templates);
         fileMenu.add(fileMerge);
         fileMenu.addSeparator();
-        fileMenu.add(file_save);
+        fileMenu.add(fileSave);
         fileMenu.add(fileSaveAs);
         fileMenu.add(fileSelectionAs);
         fileMenu.add(fileSelectionAsTestFragment);

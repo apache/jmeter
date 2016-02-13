@@ -57,7 +57,7 @@ public class LoopController extends GenericController implements Serializable {
     private transient Integer nbLoops;
 
     public LoopController() {
-        setContinueForever_private(true);
+        setContinueForeverPrivate(true);
     }
 
     public void setLoops(int loops) {
@@ -98,10 +98,10 @@ public class LoopController extends GenericController implements Serializable {
      *            true if the loop must be reset after ending a run
      */
     public void setContinueForever(boolean forever) {
-        setContinueForever_private(forever);
+        setContinueForeverPrivate(forever);
     }
 
-    private void setContinueForever_private(boolean forever) {
+    private void setContinueForeverPrivate(boolean forever) {
         setProperty(new BooleanProperty(CONTINUE_FOREVER, forever));
     }
 

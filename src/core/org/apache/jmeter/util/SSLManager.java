@@ -72,7 +72,7 @@ public abstract class SSLManager {
     /** Cache the TrustStore instance - null if no truststore name was provided */
     private KeyStore trustStore = null;
     // Have we yet tried to load the truststore?
-    private volatile boolean truststore_loaded=false;
+    private volatile boolean truststoreLoaded=false;
 
     /** Have the password available */
     protected String defaultpw = System.getProperty(KEY_STORE_PASSWORD);
@@ -197,9 +197,9 @@ public abstract class SSLManager {
      *
      */
     protected KeyStore getTrustStore() {
-        if (!truststore_loaded) {
+        if (!truststoreLoaded) {
 
-            truststore_loaded=true;// we've tried ...
+            truststoreLoaded=true;// we've tried ...
 
             String fileName = System.getProperty(SSL_TRUST_STORE);
             if (fileName == null) {
