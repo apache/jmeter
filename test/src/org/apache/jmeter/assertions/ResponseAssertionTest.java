@@ -220,8 +220,8 @@ public class ResponseAssertionTest {
             threads[i] = new TestThread(latch);
         }
         failed = new AtomicInteger(0);
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
+        for (Thread thread : threads) {
+            thread.start();
         }
         latch.await();
         assertEquals(failed.get(), 0);
