@@ -50,7 +50,7 @@ import org.apache.log.Logger;
 
 /**
  * Implement ResultsRender for JSON Path tester
- * @since 2.14
+ * @since 3.0
  */
 public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
