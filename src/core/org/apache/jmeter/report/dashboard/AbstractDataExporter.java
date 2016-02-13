@@ -79,7 +79,7 @@ public abstract class AbstractDataExporter implements DataExporter {
                 int count = pathItems.length;
                 int index = 0;
                 MapResultData map = (MapResultData) root;
-                while (map != null && index < count && result == null) {
+                while (index < count && result == null) {
                     ResultData current = map.getResult(pathItems[index]);
                     if (index == count - 1) {
                         result = current;
