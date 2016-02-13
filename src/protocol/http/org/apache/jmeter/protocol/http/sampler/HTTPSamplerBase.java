@@ -956,7 +956,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // encoded in UTF-8, which is what the HTTP spec says
             String queryString = getQueryString(getContentEncoding());
             if(queryString.length() > 0) {
-                if (path.indexOf(QRY_PFX) > -1) {// Already contains a prefix
+                if (path.contains(QRY_PFX)) {// Already contains a prefix
                     pathAndQuery.append(QRY_SEP);
                 } else {
                     pathAndQuery.append(QRY_PFX);
