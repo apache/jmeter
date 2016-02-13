@@ -220,7 +220,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
             }
 
             // Get directory
-            Message messages[] = folder.getMessages(1,n);
+            Message[] messages = folder.getMessages(1,n);
             StringBuilder pdata = new StringBuilder();
             pdata.append(messages.length);
             pdata.append(" messages found\n");
@@ -479,21 +479,21 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     }
 
     /**
-     * @param num_messages -
+     * @param numMessages -
      *            The number of messages to retrieve from the mail server. Set
      *            this value to -1 to retrieve all messages.
      */
-    public void setNumMessages(int num_messages) {
-        setProperty(new IntegerProperty(NUM_MESSAGES, num_messages));
+    public void setNumMessages(int numMessages) {
+        setProperty(new IntegerProperty(NUM_MESSAGES, numMessages));
     }
 
     /**
-     * @param num_messages -
+     * @param numMessages -
      *            The number of messages to retrieve from the mail server. Set
      *            this value to -1 to retrieve all messages.
      */
-    public void setNumMessages(String num_messages) {
-        setProperty(new StringProperty(NUM_MESSAGES, num_messages));
+    public void setNumMessages(String numMessages) {
+        setProperty(new StringProperty(NUM_MESSAGES, numMessages));
     }
 
     /**

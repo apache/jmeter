@@ -83,7 +83,7 @@ public class TCPClientImpl extends AbstractTCPClient {
      */
     @Override
     public void write(OutputStream os, InputStream is) throws IOException{
-        byte buff[]=new byte[512];
+        byte[] buff = new byte[512];
         while(is.read(buff) > 0){
             if(log.isDebugEnabled()) {
                 log.debug("WriteIS: " + showEOL(new String(buff, charset)));

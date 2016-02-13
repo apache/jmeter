@@ -172,7 +172,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 }
             } else if (CALLABLE.equals(_queryType)) {
                 CallableStatement cstmt = getCallableStatement(conn);
-                int out[]=setArguments(cstmt);
+                int[] out = setArguments(cstmt);
                 // A CallableStatement can return more than 1 ResultSets
                 // plus a number of update counts.
                 boolean hasResultSet = cstmt.execute();
@@ -262,7 +262,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     sb.append("\n");
                 }
             }
-            String varnames[] = getVariableNames().split(COMMA);
+            String[] varnames = getVariableNames().split(COMMA);
             if(varnames.length > 0) {
             JMeterVariables jmvars = getThreadContext().getVariables();
                 for(int i = 0; i < varnames.length && i < outputValues.size(); i++) {
@@ -492,7 +492,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         
 
         JMeterVariables jmvars = getThreadContext().getVariables();
-        String varNames[] = getVariableNames().split(COMMA);
+        String[] varNames = getVariableNames().split(COMMA);
         String resultVariable = getResultVariable().trim();
         List<Map<String, Object> > results = null;
         if(resultVariable.length() > 0) {
