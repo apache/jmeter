@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * field.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ApdexSummaryConsumer extends
         AbstractSummaryConsumer<ApdexSummaryData> {
