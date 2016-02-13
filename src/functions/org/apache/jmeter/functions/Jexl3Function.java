@@ -125,7 +125,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
          * that arithmetic class avoiding to re-discover the operator overloads
          * (Uberspect) on each execution. So, no, this method is not called; it is just
          * meant as a workaround of the bug.
-         * @see https://issues.apache.org/jira/browse/JEXL-186
+         * @see <a href="https://issues.apache.org/jira/browse/JEXL-186">JEXL-186</a>
          * @param jma an improbable parameter class
          * @return 1
          */
