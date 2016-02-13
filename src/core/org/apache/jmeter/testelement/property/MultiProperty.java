@@ -61,9 +61,8 @@ public abstract class MultiProperty extends AbstractProperty implements Iterable
     @Override
     public void setRunningVersion(boolean running) {
         super.setRunningVersion(running);
-        PropertyIterator iter = iterator();
-        while (iter.hasNext()) {
-            iter.next().setRunningVersion(running);
+        for (JMeterProperty jMeterProperty : this) {
+            jMeterProperty.setRunningVersion(running);
         }
     }
 
@@ -86,9 +85,7 @@ public abstract class MultiProperty extends AbstractProperty implements Iterable
         }
         log.debug("merging in " + prop.getClass());
         if (prop instanceof MultiProperty) {
-            PropertyIterator iter = ((MultiProperty) prop).iterator();
-            while (iter.hasNext()) {
-                JMeterProperty item = iter.next();
+            for (JMeterProperty item : ((MultiProperty) prop)) {
                 addProperty(item);
             }
         } else {

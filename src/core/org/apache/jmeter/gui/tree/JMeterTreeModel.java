@@ -101,9 +101,8 @@ public class JMeterTreeModel extends DefaultTreeModel {
      *             <code>subTree</code>
      */
     public HashTree addSubTree(HashTree subTree, JMeterTreeNode current) throws IllegalUserActionException {
-        Iterator<Object> iter = subTree.list().iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+        for (Object o : subTree.list()) {
+            TestElement item = (TestElement) o;
             if (item instanceof TestPlan) {
                 TestPlan tp = (TestPlan) item;
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(0);

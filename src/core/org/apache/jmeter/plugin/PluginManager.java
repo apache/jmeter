@@ -52,19 +52,19 @@ public final class PluginManager {
         String[][] icons = plugin.getIconMappings();
         ClassLoader classloader = plugin.getClass().getClassLoader();
 
-        for (int i = 0; i < icons.length; i++) {
-            URL resource = classloader.getResource(icons[i][1].trim());
+        for (String[] icon : icons) {
+            URL resource = classloader.getResource(icon[1].trim());
 
             if (resource == null) {
-                log.warn("Can't find icon for " + icons[i][0] + " - " + icons[i][1]);
+                log.warn("Can't find icon for " + icon[0] + " - " + icon[1]);
             } else {
-                GUIFactory.registerIcon(icons[i][0], new ImageIcon(resource));
-                if (icons[i].length > 2 && icons[i][2] != null) {
-                    URL resource2 = classloader.getResource(icons[i][2].trim());
+                GUIFactory.registerIcon(icon[0], new ImageIcon(resource));
+                if (icon.length > 2 && icon[2] != null) {
+                    URL resource2 = classloader.getResource(icon[2].trim());
                     if (resource2 == null) {
-                        log.info("Can't find disabled icon for " + icons[i][0] + " - " + icons[i][2]);
+                        log.info("Can't find disabled icon for " + icon[0] + " - " + icon[2]);
                     } else {
-                        GUIFactory.registerDisabledIcon(icons[i][0], new ImageIcon(resource2));
+                        GUIFactory.registerDisabledIcon(icon[0], new ImageIcon(resource2));
                     }
                 }
             }

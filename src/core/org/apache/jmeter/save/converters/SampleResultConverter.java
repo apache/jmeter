@@ -241,9 +241,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             SampleSaveConfiguration save) {
         if (save.saveSubresults()) {
             SampleResult[] subResults = res.getSubResults();
-            for (int i = 0; i < subResults.length; i++) {
-                subResults[i].setSaveConfig(save);
-                writeItem(subResults[i], context, writer);
+            for (SampleResult subResult : subResults) {
+                subResult.setSaveConfig(save);
+                writeItem(subResult, context, writer);
             }
         }
     }
@@ -264,8 +264,8 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             SampleSaveConfiguration save) {
         if (save.saveAssertions()) {
             AssertionResult[] assertionResults = res.getAssertionResults();
-            for (int i = 0; i < assertionResults.length; i++) {
-                writeItem(assertionResults[i], context, writer);
+            for (AssertionResult assertionResult : assertionResults) {
+                writeItem(assertionResult, context, writer);
             }
         }
     }

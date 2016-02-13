@@ -52,6 +52,7 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
+import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
@@ -146,10 +147,10 @@ public class Save implements Command {
                 TestElement element = GuiPackage.getInstance().createTestElement(TestFragmentControllerGui.class.getName());
                 HashTree hashTree = new ListedHashTree();
                 HashTree tfTree = hashTree.add(new JMeterTreeNode(element, null));
-                for (int i = 0; i < nodes.length; i++) {
+                for (JMeterTreeNode node : nodes) {
                     // Clone deeply current node
                     TreeCloner cloner = new TreeCloner(false);
-                    GuiPackage.getInstance().getTreeModel().getCurrentSubTree(nodes[i]).traverse(cloner);
+                    GuiPackage.getInstance().getTreeModel().getCurrentSubTree(node).traverse(cloner);
                     // Add clone to tfTree
                     tfTree.add(cloner.getClonedTree());
                 }
@@ -408,9 +409,9 @@ public class Save implements Command {
      * @param nodes
      */
     private static final boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
-        for (int i = 0; i < nodes.length; i++) {
-            Object userObject = nodes[i].getUserObject();
-            if(userObject instanceof org.apache.jmeter.threads.ThreadGroup ||
+        for (JMeterTreeNode node : nodes) {
+            Object userObject = node.getUserObject();
+            if (userObject instanceof ThreadGroup ||
                     userObject instanceof TestPlan) {
                 return false;
             }
@@ -420,9 +421,8 @@ public class Save implements Command {
 
     // package protected to allow access from test code
     void convertSubTree(HashTree tree) {
-        Iterator<Object> iter = new LinkedList<>(tree.list()).iterator();
-        while (iter.hasNext()) {
-            JMeterTreeNode item = (JMeterTreeNode) iter.next();
+        for (Object o : new LinkedList<>(tree.list())) {
+            JMeterTreeNode item = (JMeterTreeNode) o;
             convertSubTree(tree.getTree(item));
             TestElement testElement = item.getTestElement(); // requires JMeterTreeNode
             tree.replaceKey(item, testElement);

@@ -147,11 +147,11 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     * @param c sample counter
     */
    private void processSample(SampleResult s, Counter c) {
-        saveSample(s, c.num++);
-        SampleResult[] sr = s.getSubResults();
-        for (int i = 0; i < sr.length; i++) {
-            processSample(sr[i], c);
-        }
+       saveSample(s, c.num++);
+       SampleResult[] sampleResults = s.getSubResults();
+       for (SampleResult sampleResult : sampleResults) {
+           processSample(sampleResult, c);
+       }
     }
 
     /**
