@@ -92,7 +92,7 @@ public class Start extends AbstractAction {
 
     /**
      * Start JMeter engine
-     * @param noTimer ignore timers 
+     * @param ignoreTimer flag to ignore timers
      */
     private void startEngine(boolean ignoreTimer) {
         GuiPackage gui = GuiPackage.getInstance();

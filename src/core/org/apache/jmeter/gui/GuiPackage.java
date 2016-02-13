@@ -377,8 +377,6 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * @throws IllegalAccessException
      *             if access rights do not allow the default constructor to be
      *             called
-     * @throws ClassNotFoundException
-     *             if the specified GUI class cannot be found
      */
     private JMeterGUIComponent getGuiFromCache(Class<?> guiClass, Class<?> testClass) throws InstantiationException,
             IllegalAccessException {
