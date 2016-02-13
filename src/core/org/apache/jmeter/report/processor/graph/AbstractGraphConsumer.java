@@ -64,7 +64,7 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * valueSelector.
  * </p>
  *
- * @since 2.14
+ * @since 3.0
  */
 public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 

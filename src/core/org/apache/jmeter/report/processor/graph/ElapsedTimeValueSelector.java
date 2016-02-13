@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class ElapsedTimeValueSelector provides a projection from a sample to its
  * elapsed time.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ElapsedTimeValueSelector implements GraphValueSelector {
 
