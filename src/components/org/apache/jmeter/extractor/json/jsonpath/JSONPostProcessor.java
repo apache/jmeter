@@ -35,7 +35,7 @@ import org.apache.log.Logger;
 
 /**
  * JSON-PATH based extractor
- * @since 2.14
+ * @since 3.0
  */
 public class JSONPostProcessor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener{
 
