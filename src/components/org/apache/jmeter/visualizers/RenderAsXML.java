@@ -133,10 +133,10 @@ public class RenderAsXML extends SamplerResultTab
         }
 
         /**
-         * Skip all DTD nodes, all prolog nodes. They dont support in tree view
-         * We let user to insert them however in DOMTreeView, we dont display it
+         * Skip all DTD nodes, all prolog nodes. They are not supported in tree view
+         * We let user insert them however in DOMTreeView, we don't display them.
          *
-         * @param root
+         * @param parent {@link Node}
          * @return
          */
         private Node getFirstElement(Node parent) {
