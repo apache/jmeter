@@ -66,14 +66,13 @@ class FunctionParser {
                     if (reader.read(current) == 0) {
                         break;
                     }
-                    // Keep the '\' unless it is one of the escapable chars '$' ',' or '\'
+                    // Keep '\' unless it is one of the escapable chars '$' ',' or '\'
                     // N.B. This method is used to parse function parameters, so must treat ',' as special
                     if (current[0] != '$' && current[0] != ',' && current[0] != '\\') {
                         buffer.append(previous); // i.e. '\\'
                     }
                     previous = ' ';
                     buffer.append(current[0]);
-                    continue;
                 } else if (current[0] == '{' && previous == '$') {// found "${"
                     buffer.deleteCharAt(buffer.length() - 1);
                     if (buffer.length() > 0) {// save leading text
@@ -87,6 +86,7 @@ class FunctionParser {
                     previous = current[0];
                 }
             }
+
             if (buffer.length() > 0) {
                 result.add(buffer.toString());
             }
@@ -127,7 +127,6 @@ class FunctionParser {
                     }
                     previous = ' ';
                     buffer.append(current[0]);
-                    continue;
                 } else if (current[0] == '(' && previous != ' ') {
                     String funcName = buffer.toString();
                     function = CompoundVariable.getNamedFunction(funcName);
@@ -147,7 +146,6 @@ class FunctionParser {
                     } else { // Function does not exist, so treat as per missing variable
                         buffer.append(current[0]);
                     }
-                    continue;
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     if (function instanceof Function){// ensure that setParameters() is called.
@@ -198,7 +196,6 @@ class FunctionParser {
                     }
                     previous = ' ';
                     buffer.append(current[0]); // store the following character
-                    continue;
                 } else if (current[0] == ',' && functionRecursion == 0) {
                     CompoundVariable param = new CompoundVariable();
                     param.setParameters(buffer.toString());
