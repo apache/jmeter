@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Consume samples whose timestamp format is HH:mm and reproduce them as a long
  * value (for faster treatment later in the consuming chain).
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 

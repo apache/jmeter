@@ -22,7 +22,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 /**
  * The class MeanAggregator is used to get mean from samples.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class MeanAggregator implements Aggregator {
 

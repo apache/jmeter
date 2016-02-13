@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * A factory for creating PercentileAggregator objects.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
 

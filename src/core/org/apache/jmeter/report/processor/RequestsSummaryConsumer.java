@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.Sample;
  * samples.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class RequestsSummaryConsumer extends AbstractSampleConsumer {
 
