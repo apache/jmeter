@@ -26,7 +26,7 @@ import org.apache.jmeter.report.processor.AggregatorFactory;
 /**
  * The class SeriesData helps to store series data in a graph.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SeriesData {
 

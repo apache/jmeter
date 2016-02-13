@@ -27,7 +27,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class IndexedNameSelector provides a projection from a sample to its name
  * and maintains an index of the projected names.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class IndexedNameSelector implements GraphKeysSelector {
 

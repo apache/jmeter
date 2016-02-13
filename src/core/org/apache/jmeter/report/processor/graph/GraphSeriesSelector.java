@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.SampleSelector;
  * The interface GraphSeriesSelector provides a projection from a sample to the
  * series it belongs in a graph.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface GraphSeriesSelector extends SampleSelector<Iterable<String>> {
     

@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  * The class AbstractOverTimeGraphConsumer provides a base class for over time
  * graphs.
  *
- * @since 2.14
+ * @since 3.0
  */
 public abstract class AbstractVersusRequestsGraphConsumer extends
         AbstractGraphConsumer {

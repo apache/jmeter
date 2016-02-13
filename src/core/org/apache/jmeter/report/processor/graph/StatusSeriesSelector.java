@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class StatusSeriesSelector provides a projection from a sample to a
  * string that defines its status (success or failure).
  *
- * @since 2.14
+ * @since 3.0
  */
 public class StatusSeriesSelector extends AbstractSeriesSelector {
 

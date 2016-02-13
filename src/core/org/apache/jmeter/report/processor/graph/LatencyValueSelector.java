@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class LatencyValueSelector provides a projection from a sample to its
  * latency.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class LatencyValueSelector implements GraphValueSelector {
 
