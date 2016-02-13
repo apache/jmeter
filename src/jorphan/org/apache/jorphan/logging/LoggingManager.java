@@ -25,7 +25,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.avalon.excalibur.logger.LogKitLoggerManager;
