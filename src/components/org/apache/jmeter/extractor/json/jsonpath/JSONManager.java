@@ -28,7 +28,7 @@ import com.jayway.jsonpath.JsonPath;
 /**
  * Handles the extractions
  * https://github.com/jayway/JsonPath/blob/master/json-path/src/test/java/com/jayway/jsonpath/ComplianceTest.java
- * @since 2.14
+ * @since 3.0
  */
 public class JSONManager {
     /**
