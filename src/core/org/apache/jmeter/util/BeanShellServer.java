@@ -72,15 +72,15 @@ public class BeanShellServer implements Runnable {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         try {
-            Class<?> Interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
-            Object instance = Interpreter.newInstance();
+            Class<?> interpreter = loader.loadClass("bsh.Interpreter");//$NON-NLS-1$
+            Object instance = interpreter.newInstance();
             Class<String> string = String.class;
             Class<Object> object = Object.class;
 
-            Method eval = Interpreter.getMethod("eval", new Class[] { string });//$NON-NLS-1$
-            Method setObj = Interpreter.getMethod("set", new Class[] { string, object });//$NON-NLS-1$
-            Method setInt = Interpreter.getMethod("set", new Class[] { string, int.class });//$NON-NLS-1$
-            Method source = Interpreter.getMethod("source", new Class[] { string });//$NON-NLS-1$
+            Method eval = interpreter.getMethod("eval", new Class[] { string });//$NON-NLS-1$
+            Method setObj = interpreter.getMethod("set", new Class[] { string, object });//$NON-NLS-1$
+            Method setInt = interpreter.getMethod("set", new Class[] { string, int.class });//$NON-NLS-1$
+            Method source = interpreter.getMethod("source", new Class[] { string });//$NON-NLS-1$
 
             setObj.invoke(instance, new Object[] { "t", this });//$NON-NLS-1$
             setInt.invoke(instance, new Object[] { "portnum", Integer.valueOf(serverport) });//$NON-NLS-1$
