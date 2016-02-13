@@ -203,9 +203,8 @@ public final class LoggingManager {
      *            {@link LoggingManager#LOG_FILE LOG_FILE} prefixed entries
      */
     public static void setLoggingLevels(Properties appProperties) {
-        Iterator<?> props = appProperties.keySet().iterator();
-        while (props.hasNext()) {
-            String prop = (String) props.next();
+        for (Object o : appProperties.keySet()) {
+            String prop = (String) o;
             if (prop.startsWith(LOG_PRIORITY + ".")) //$NON_NLS-1$
             // don't match the empty category
             {

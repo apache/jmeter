@@ -230,8 +230,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      */
     public HashTree(Object[] keys) {
         data = new HashMap<>();
-        for (int x = 0; x < keys.length; x++) {
-            data.put(keys[x], new HashTree());
+        for (Object key : keys) {
+            data.put(key, new HashTree());
         }
     }
 
@@ -432,8 +432,8 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      *            Array of Keys to be added to HashTree.
      */
     public void add(Object[] keys) {
-        for (int x = 0; x < keys.length; x++) {
-            add(keys[x]);
+        for (Object key : keys) {
+            add(key);
         }
     }
 
@@ -859,13 +859,12 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
 
     protected HashTree getTreePath(Collection<?> treePath) {
         HashTree tree = this;
-        Iterator<?> iter = treePath.iterator();
-        while (iter.hasNext()) {
+        for (Object aTreePath : treePath) {
+            // Fixme why is this check here ?
             if (tree == null) {
                 return null;
             }
-            Object temp = iter.next();
-            tree = tree.getTree(temp);
+            tree = tree.getTree(aTreePath);
         }
         return tree;
     }

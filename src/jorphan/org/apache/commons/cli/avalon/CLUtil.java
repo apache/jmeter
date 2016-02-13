@@ -46,11 +46,11 @@ public final class CLUtil {
         final String lSep = System.getProperty("line.separator");
         final StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < options.length; i++) {
-            final char ch = (char) options[i].getId();
-            final String name = options[i].getName();
-            String description = options[i].getDescription();
-            int flags = options[i].getFlags();
+        for (CLOptionDescriptor option : options) {
+            final char ch = (char) option.getId();
+            final String name = option.getName();
+            String description = option.getDescription();
+            int flags = option.getFlags();
             boolean argumentOptional = ((flags & CLOptionDescriptor.ARGUMENT_OPTIONAL) == CLOptionDescriptor.ARGUMENT_OPTIONAL);
             boolean argumentRequired = ((flags & CLOptionDescriptor.ARGUMENT_REQUIRED) == CLOptionDescriptor.ARGUMENT_REQUIRED);
             boolean twoArgumentsRequired = ((flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2);
