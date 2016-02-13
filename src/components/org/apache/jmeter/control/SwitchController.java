@@ -106,18 +106,18 @@ public class SwitchController extends GenericController implements Serializable 
 
     private int scanControllerNames(String sel){
         int i = 0;
-        int default_pos = Integer.MAX_VALUE;
+        int defaultPos = Integer.MAX_VALUE;
         for(TestElement el : getSubControllers()) {
             String name=el.getName();
             if (name.equals(sel)) {
                 return i;
             }
              if (name.equalsIgnoreCase("default")) {  //$NON-NLS-1$
-                 default_pos = i;
+                 defaultPos = i;
              }
             i++;
         }
-        return default_pos;
+        return defaultPos;
     }
 
     public String getSelection() {

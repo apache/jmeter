@@ -49,7 +49,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
 
     private SamplingStatCalculator model;
 
-    private static final int xborder = 30;
+    private static final int X_BORDER = 30;
 
     /**
      * Constructor for the Graph object.
@@ -149,7 +149,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
         }
     }
 
-    private void drawSample(SamplingStatCalculator p_model, Graphics g) {
+    private void drawSample(SamplingStatCalculator pModel, Graphics g) {
         int width = getWidth();
         double height = getHeight() - 1.0;
 
@@ -157,26 +157,26 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
         for (int y = 0; y < 4; y++) {
             int q1 = (int) (height - (height * 0.25 * y));
             g.setColor(Color.lightGray);
-            g.drawLine(xborder, q1, width, q1);
+            g.drawLine(X_BORDER, q1, width, q1);
             g.setColor(Color.black);
             g.drawString(String.valueOf((25 * y) + "%"), 0, q1);
         }
         g.setColor(Color.black);
         // draw the X axis
-        g.drawLine(xborder, (int) height, width, (int) height);
+        g.drawLine(X_BORDER, (int) height, width, (int) height);
         // draw the Y axis
-        g.drawLine(xborder, 0, xborder, (int) height);
+        g.drawLine(X_BORDER, 0, X_BORDER, (int) height);
         // the test plan has to have more than 200 samples
         // for it to generate half way decent distribution
         // graph. the larger the sample, the better the
         // results.
-        if (p_model != null && p_model.getCount() > 50) {
+        if (pModel != null && pModel.getCount() > 50) {
             // now draw the bar chart
-            Number ninety = p_model.getPercentPoint(0.90);
-            Number fifty = p_model.getPercentPoint(0.50);
+            Number ninety = pModel.getPercentPoint(0.90);
+            Number fifty = pModel.getPercentPoint(0.50);
 
-            long total = p_model.getCount();
-            Collection<Number[]> values = p_model.getDistribution().values();
+            long total = pModel.getCount();
+            Collection<Number[]> values = pModel.getDistribution().values();
             Number[][] objval = values.toArray(new Number[values.size()][]);
             // we sort the objects
             Arrays.sort(objval, new NumberComparator());
@@ -191,7 +191,7 @@ public class DistributionGraph extends JComponent implements Scrollable, Clearab
                 if (iheight < 1) {
                     iheight = 1.0;
                 }
-                int ix = (count * 4) + xborder + 5;
+                int ix = (count * 4) + X_BORDER + 5;
                 int dheight = (int) (height - iheight);
                 g.setColor(Color.blue);
                 g.drawLine(ix - 1, (int) height, ix - 1, dheight);
