@@ -32,7 +32,7 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 /**
  * The Class ResponseTimePercentilesGraphConsumer.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer {
 
