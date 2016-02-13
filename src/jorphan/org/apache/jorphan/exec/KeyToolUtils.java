@@ -208,20 +208,20 @@ public class KeyToolUtils {
      *
      * @throws IOException if keytool was not configured, running keytool application failed or copying the keys failed
      */
-    public static void generateProxyCA(File keystore, String password,  int validity) throws IOException {
-        File caCert_crt = new File(ROOT_CACERT_CRT);
-        File caCert_usr = new File(ROOT_CACERT_USR);
+    public static void generateProxyCA(File keystore, String password, int validity) throws IOException {
+        File caCertCrt = new File(ROOT_CACERT_CRT);
+        File caCertUsr = new File(ROOT_CACERT_USR);
         boolean fileExists = false;
         if (!keystore.delete() && keystore.exists()) {
             log.warn("Problem deleting the keystore '" + keystore + "'");
             fileExists = true;
         }
-        if (!caCert_crt.delete() && caCert_crt.exists()) {
-            log.warn("Problem deleting the certificate file '" + caCert_crt + "'");
+        if (!caCertCrt.delete() && caCertCrt.exists()) {
+            log.warn("Problem deleting the certificate file '" + caCertCrt + "'");
             fileExists = true;
         }
-        if (!caCert_usr.delete() && caCert_usr.exists()) {
-            log.warn("Problem deleting the certificate file '" + caCert_usr + "'");
+        if (!caCertUsr.delete() && caCertUsr.exists()) {
+            log.warn("Problem deleting the certificate file '" + caCertUsr + "'");
             fileExists = true;
         }
         if (fileExists) {
@@ -248,10 +248,10 @@ public class KeyToolUtils {
         // Export the Root CA for Firefox/Chrome/IE
         KeyToolUtils.keytool("-exportcert", keystore, password, ROOTCA_ALIAS, null, null, "-rfc", "-file", ROOT_CACERT_CRT);
         // Copy for Opera
-        if(caCert_crt.exists() && caCert_crt.canRead()) {
-            FileUtils.copyFile(caCert_crt, caCert_usr);            
+        if(caCertCrt.exists() && caCertCrt.canRead()) {
+            FileUtils.copyFile(caCertCrt, caCertUsr);            
         } else {
-            log.warn("Failed creating "+caCert_crt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
+            log.warn("Failed creating "+caCertCrt.getAbsolutePath()+", check 'keytool' utility in path is available and points to a JDK >= 7");
         }
     }
 
