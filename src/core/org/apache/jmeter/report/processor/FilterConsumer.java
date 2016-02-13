@@ -36,7 +36,7 @@ import org.apache.jmeter.report.processor.AbstractSampleConsumer;
  * and samples match the predicate.</li>
  * </ul>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class FilterConsumer extends AbstractSampleConsumer {
     private SamplePredicate samplePredicate;

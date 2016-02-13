@@ -22,7 +22,7 @@ import org.apache.jmeter.report.core.SampleComparator;
 import org.apache.jmeter.report.core.SampleMetadata;
 
 /**
- * @since 2.14
+ * @since 3.0
  */
 public class FieldSampleComparator implements SampleComparator {
     

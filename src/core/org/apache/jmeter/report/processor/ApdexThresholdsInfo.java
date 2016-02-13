@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor;
  * The class ApdexThresholdsInfo provides a container for APDEX threshold
  * information.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ApdexThresholdsInfo {
     private long satisfiedThreshold;

@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  * channel 0.</li><br>
  * <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class CsvFileSampleSource extends AbstractSampleSource {
 

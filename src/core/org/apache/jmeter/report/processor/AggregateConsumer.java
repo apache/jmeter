@@ -25,7 +25,7 @@ import org.apache.jmeter.report.core.SampleSelector;
  * The Class AggregateConsumer provides a consumer that can aggregate samples to
  * provide a result
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class AggregateConsumer extends AbstractSampleConsumer {
 

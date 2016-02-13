@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Implements basic logic for setting sample context and handling channel
  * attributes. <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class AbstractSampleProcessor implements SampleProcessor {
 
