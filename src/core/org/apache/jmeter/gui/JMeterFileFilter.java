@@ -92,8 +92,8 @@ public class JMeterFileFilter extends javax.swing.filechooser.FileFilter impleme
             return true;
         }
 
-        for (int i = 0; i < exts.length; i++) {
-            if (filename.endsWith(exts[i])) {
+        for (String ext : exts) {
+            if (filename.endsWith(ext)) {
                 return true;
             }
         }
