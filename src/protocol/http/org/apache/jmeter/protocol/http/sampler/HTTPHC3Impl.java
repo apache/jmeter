@@ -754,11 +754,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             List<PartBase> partlist = new ArrayList<>();
             // Create the parts
             // Add any parameters
-            PropertyIterator args = getArguments().iterator();
-            while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
-                if (arg.isSkippable(parameterName)){
+                if (arg.isSkippable(parameterName)) {
                     continue;
                 }
                 StringPart part = new StringPart(arg.getName(), arg.getValue(), contentEncoding);
@@ -881,11 +880,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBody = new StringBuilder();
-                    PropertyIterator args = getArguments().iterator();
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : getArguments()) {
+                        HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         String value;
-                        if (haveContentEncoding){
+                        if (haveContentEncoding) {
                             value = arg.getEncodedValue(contentEncoding);
                         } else {
                             value = arg.getEncodedValue();
@@ -903,24 +901,23 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                         post.setRequestHeader(HTTPConstants.HEADER_CONTENT_TYPE, HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                     }
                     // Add the parameters
-                    PropertyIterator args = getArguments().iterator();
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : getArguments()) {
+                        HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         // The HTTPClient always urlencodes both name and value,
                         // so if the argument is already encoded, we have to decode
                         // it before adding it to the post request
                         String parameterName = arg.getName();
-                        if (arg.isSkippable(parameterName)){
+                        if (arg.isSkippable(parameterName)) {
                             continue;
                         }
                         String parameterValue = arg.getValue();
-                        if(!arg.isAlwaysEncoded()) {
+                        if (!arg.isAlwaysEncoded()) {
                             // The value is already encoded by the user
                             // Must decode the value now, so that when the
                             // httpclient encodes it, we end up with the same value
                             // as the user had entered.
                             String urlContentEncoding = contentEncoding;
-                            if(urlContentEncoding == null || urlContentEncoding.length() == 0) {
+                            if (urlContentEncoding == null || urlContentEncoding.length() == 0) {
                                 // Use the default encoding for urls
                                 urlContentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
                             }
@@ -1009,11 +1006,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             // Just append all the parameter values, and use that as the post body
             StringBuilder putBodyContent = new StringBuilder();
-            PropertyIterator args = getArguments().iterator();
-            while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String value = null;
-                if (haveContentEncoding){
+                if (haveContentEncoding) {
                     value = arg.getEncodedValue(contentEncoding);
                 } else {
                     value = arg.getEncodedValue();

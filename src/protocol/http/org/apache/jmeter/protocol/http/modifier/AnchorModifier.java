@@ -37,6 +37,7 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jorphan.logging.LoggingManager;
@@ -96,9 +97,8 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             sampler.setDomain(url.getDomain());
             sampler.setPath(url.getPath());
             if (url.getMethod().equals(HTTPConstants.POST)) {
-                PropertyIterator iter = sampler.getArguments().iterator();
-                while (iter.hasNext()) {
-                    Argument arg = (Argument) iter.next().getObjectValue();
+                for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+                    Argument arg = (Argument) jMeterProperty.getObjectValue();
                     modifyArgument(arg, url.getArguments());
                 }
             } else {
