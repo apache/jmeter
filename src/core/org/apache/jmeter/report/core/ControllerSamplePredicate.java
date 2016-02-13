@@ -21,7 +21,7 @@ package org.apache.jmeter.report.core;
  * The class ControllerSamplePredicate provides a way to define whether a sample
  * is a controller.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ControllerSamplePredicate implements SamplePredicate {
     /*

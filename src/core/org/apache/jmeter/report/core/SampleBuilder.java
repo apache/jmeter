@@ -35,7 +35,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * <code>"#########0.00#"</code>
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleBuilder {
 

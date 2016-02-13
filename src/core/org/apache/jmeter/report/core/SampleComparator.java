@@ -20,7 +20,7 @@ package org.apache.jmeter.report.core;
 /**
  * Defines a comparator for {@link Sample} instances
  * 
- * @since 2.14
+ * @since 3.0
  */
 public interface SampleComparator {
 

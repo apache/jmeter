@@ -20,7 +20,7 @@ package org.apache.jmeter.report.config;
 /**
  * The class GraphConfiguration describes a configuration of a graph.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class GraphConfiguration extends InstanceConfiguration {
 

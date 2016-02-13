@@ -34,7 +34,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * </p>
  * <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleMetadata {
 

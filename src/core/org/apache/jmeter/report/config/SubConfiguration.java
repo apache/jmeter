@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * The class SubConfiguration describes a sub configuration item
  *
- * @since 2.14
+ * @since 3.0
  */
 public class SubConfiguration {
 

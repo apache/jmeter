@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  * Handles {@link SampleMetadata} reading and sample extraction.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class CsvSampleReader implements Closeable{
 

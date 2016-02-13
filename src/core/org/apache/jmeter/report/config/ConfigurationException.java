@@ -21,7 +21,7 @@ package org.apache.jmeter.report.config;
  * The class ConfigurationException provides an exception when configuration
  * properties loading fails.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ConfigurationException extends Exception {
 
