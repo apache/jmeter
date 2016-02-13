@@ -1275,7 +1275,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
                     setParentSampleSuccess(res, false);
-                    continue;
                 }
             }
             // IF for download concurrent embedded resources
@@ -1562,7 +1561,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
         if (redirect >= MAX_REDIRECTS) {
-            lastRes = errorResult(new IOException("Exceeeded maximum number of redirects: " + MAX_REDIRECTS), new HTTPSampleResult(lastRes));
+            lastRes = errorResult(new IOException("Exceeded maximum number of redirects: " + MAX_REDIRECTS), new HTTPSampleResult(lastRes));
             totalRes.addSubResult(lastRes);
         }
 
