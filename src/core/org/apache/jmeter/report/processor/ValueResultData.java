@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class ValueResultData provides a value result from samples processing.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ValueResultData implements ResultData {
 

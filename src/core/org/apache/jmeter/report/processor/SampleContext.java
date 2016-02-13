@@ -25,7 +25,7 @@ import java.util.Map;
  * Defines the context in which {@link SampleConsumer}, {@link SampleProducer}
  * will operate
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleContext {
 

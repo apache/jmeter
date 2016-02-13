@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor;
  * The interface ThresholdSelector represents a projection from the samplers
  * with the same name to APDEX threshold information.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface ThresholdSelector {
 

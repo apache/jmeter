@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * The interface SampleSource represents a source of samples for sample consumers.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface SampleSource extends Runnable {
 

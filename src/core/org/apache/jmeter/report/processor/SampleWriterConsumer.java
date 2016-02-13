@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * Sample consumed byt this consumer are written to a file<br>
  * <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleWriterConsumer extends AbstractSampleConsumer {
 
