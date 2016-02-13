@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The interface ResultData represents a result from samples processing.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public interface ResultData {
 

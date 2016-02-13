@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class MinAggregator is used to get minimum from samples.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class MinAggregator implements Aggregator {
 

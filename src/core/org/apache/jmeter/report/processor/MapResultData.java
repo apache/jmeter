@@ -26,7 +26,7 @@ import java.util.Set;
  * The class MapResultData provides a hash map of results from samples
  * processing.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class MapResultData implements ResultData {
 
