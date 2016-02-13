@@ -260,7 +260,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
      * @see org.apache.jmeter.samplers.SampleResult#setSampleLabel(String)
      * @see org.apache.jmeter.samplers.SampleResult#setResponseCode(String)
      * @see org.apache.jmeter.samplers.SampleResult#setResponseMessage(String)
-     * @see org.apache.jmeter.samplers.SampleResult#setResponseData(byte [])
+     * @see org.apache.jmeter.samplers.SampleResult#setResponseData(byte[])
      * @see org.apache.jmeter.samplers.SampleResult#setDataType(String)
      *
      * @param context

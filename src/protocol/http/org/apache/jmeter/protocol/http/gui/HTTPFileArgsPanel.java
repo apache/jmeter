@@ -263,13 +263,11 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * runs specified command on currently selected file.
+     * Runs specified command on currently selected file.
      *
      * @param command specifies which process will be done on selected
-     * file. it's coming from action command currently catched by
+     * file. it's coming from action command currently caught by
      * action listener.
-     *
-     * @see runCommandOnRow
      */
     private void runCommandOnSelectedFile(String command) {
         // If a table cell is being edited, we must cancel the editing before
@@ -300,7 +298,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * runs specified command on currently selected table row.
      *
      * @param command specifies which process will be done on selected
-     * file. it's coming from action command currently catched by
+     * file. it's coming from action command currently caught by
      * action listener.
      *
      * @param rowSelected index of selected row.

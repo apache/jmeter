@@ -68,7 +68,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
     /**
      * init root
      *
-     * @param root
+     * @param xmlRoot
      * @throws SAXException
      */
     private void initRoot(Node xmlRoot) throws SAXException {
