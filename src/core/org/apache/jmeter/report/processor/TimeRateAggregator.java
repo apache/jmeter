@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class TimeRateAggregator is used to get samples rate by second.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class TimeRateAggregator implements Aggregator {
 

@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class SumAggregator is used to get sum from samples.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SumAggregator implements Aggregator {
 

@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor;
  * The class ApdexSummaryData provides information for
  * StatisticsSummaryConsumer.
  * 
- * @since 2.14
+ * @since 3.0
  *
  */
 public class StatisticsSummaryData {

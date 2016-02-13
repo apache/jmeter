@@ -26,7 +26,7 @@ package org.apache.jmeter.report.processor;
  * samples</li> <li>SampleProducer : sample producers are sample processors
  * meant to produce samples</li> <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public interface SampleProcessor {
 
