@@ -23,7 +23,7 @@ package org.apache.jmeter.report.processor;
  *
  * @param <TVisit>
  *            the type returned by visit methods
- * @since 2.14
+ * @since 3.0
  */
 public interface ResultDataVisitor<TVisit> {
 

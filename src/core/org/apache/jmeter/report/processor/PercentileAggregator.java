@@ -24,7 +24,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * The class PercentileAggregator is used to get percentile from samples.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class PercentileAggregator implements Aggregator {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault(

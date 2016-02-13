@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * The class ListResultData provides a list of results from sample processing.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ListResultData implements ResultData, Iterable<ResultData> {
 

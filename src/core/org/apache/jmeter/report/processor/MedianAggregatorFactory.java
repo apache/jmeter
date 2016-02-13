@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor;
  * A factory for creating PercentileAggregator with index of percentile fixed to
  * value 50.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class MedianAggregatorFactory extends AbstractAggregatorFactory {
 

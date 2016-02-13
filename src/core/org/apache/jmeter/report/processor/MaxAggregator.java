@@ -20,7 +20,7 @@ package org.apache.jmeter.report.processor;
 /**
  * The class MaxAggregator is used to get maximum from samples.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class MaxAggregator implements Aggregator {
 
