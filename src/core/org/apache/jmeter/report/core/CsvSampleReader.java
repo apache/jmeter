@@ -162,14 +162,9 @@ public class CsvSampleReader implements Closeable{
             data = CSVSaveService.csvReadFile(reader, separator);
             Sample sample = null;
             if (data.length > 0) {
-                // TODO is it correct to use a filler ?
                 if (data.length < columnCount) {
-                    String[] filler = new String[columnCount];
-                    System.arraycopy(data, 0, filler, 0, data.length);
-                    for (int i = data.length; i < columnCount; i++) {
-                        filler[i] = "";
-                    }
-                    data = filler;
+                    throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
+                            ", check your jmeter.save.saveservice.* configuration");
                 }
                 sample = new Sample(row, metadata, data);
             }
