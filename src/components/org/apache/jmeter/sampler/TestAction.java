@@ -107,20 +107,20 @@ public class TestAction extends AbstractSampler implements Interruptible {
         return null; // This means no sample is saved
     }
 
-    private void pause(String mili_s) {
-        long milis;
+    private void pause(String timeInMillis) {
+        long millis;
         try {
-            milis=Long.parseLong(mili_s);
+            millis=Long.parseLong(timeInMillis);
         } catch (NumberFormatException e){
-            log.warn("Could not create number from "+mili_s);
-            milis=0;
+            log.warn("Could not create number from "+timeInMillis);
+            millis=0;
         }
         try {
             pauseThread = Thread.currentThread();
-            if(milis>0) {
-                TimeUnit.MILLISECONDS.sleep(milis);
-            } else if(milis<0) {
-                throw new IllegalArgumentException("Configured sleep is negative:"+milis);
+            if(millis>0) {
+                TimeUnit.MILLISECONDS.sleep(millis);
+            } else if(millis<0) {
+                throw new IllegalArgumentException("Configured sleep is negative:"+millis);
             } // else == 0 we do nothing
         } catch (InterruptedException e) {
             // NOOP
