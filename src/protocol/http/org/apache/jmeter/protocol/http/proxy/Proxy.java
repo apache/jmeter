@@ -518,37 +518,37 @@ public class Proxy extends Thread {
      */
     private String messageResponseHeaders(SampleResult res) {
         String headers = res.getResponseHeaders();
-        String [] headerLines=headers.split(NEW_LINE, 0); // drop empty trailing content
-        int contentLengthIndex=-1;
+        String[] headerLines = headers.split(NEW_LINE, 0); // drop empty trailing content
+        int contentLengthIndex = -1;
         boolean fixContentLength = false;
-        for (int i=0;i<headerLines.length;i++){
-            String line=headerLines[i];
-            String[] parts=line.split(":\\s+",2); // $NON-NLS-1$
-            if (parts.length==2){
-                if (HTTPConstants.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])){
-                    headerLines[i]=null; // We don't want this passed on to browser
+        for (int i = 0; i < headerLines.length; i++) {
+            String line = headerLines[i];
+            String[] parts = line.split(":\\s+", 2); // $NON-NLS-1$
+            if (parts.length == 2) {
+                if (HTTPConstants.TRANSFER_ENCODING.equalsIgnoreCase(parts[0])) {
+                    headerLines[i] = null; // We don't want this passed on to browser
                     continue;
                 }
                 if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
                     &&
                     HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
                 ){
-                    headerLines[i]=null; // We don't want this passed on to browser
+                    headerLines[i] = null; // We don't want this passed on to browser
                     fixContentLength = true;
                     continue;
                 }
                 if (HTTPConstants.HEADER_CONTENT_LENGTH.equalsIgnoreCase(parts[0])){
-                    contentLengthIndex=i;
-                    continue;
+                    contentLengthIndex = i;
                 }
             }
         }
         if (fixContentLength && contentLengthIndex>=0){// Fix the content length
-            headerLines[contentLengthIndex]=HTTPConstants.HEADER_CONTENT_LENGTH+": "+res.getResponseData().length;
+            headerLines[contentLengthIndex] =
+                    HTTPConstants.HEADER_CONTENT_LENGTH + ": " + res.getResponseData().length;
         }
         StringBuilder sb = new StringBuilder(headers.length());
         for (String line : headerLines) {
-            if (line != null){
+            if (line != null) {
                 sb.append(line).append(CRLF_STRING);
             }
         }
@@ -586,7 +586,7 @@ public class Proxy extends Thread {
         } catch(IllegalCharsetNameException ex) {
             log.warn("Unsupported charset detected in contentType:'"+result.getContentType()+"', will continue processing with default charset", ex);
         }
-        if(pageEncoding != null) {
+        if (pageEncoding != null) {
             String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
             synchronized(pageEncodings) {
                 pageEncodings.put(urlWithoutQuery, pageEncoding);
