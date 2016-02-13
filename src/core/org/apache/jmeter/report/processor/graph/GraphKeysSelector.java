@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.SampleSelector;
  * The interface GraphKeySelector represents a projection from a sample to the
  * keys that compound its series.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface GraphKeysSelector extends SampleSelector<Double> {
 

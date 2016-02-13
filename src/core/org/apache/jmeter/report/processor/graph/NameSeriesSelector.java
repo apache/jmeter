@@ -24,7 +24,7 @@ import org.apache.jmeter.report.core.Sample;
 /**
  * The class NameSerieSelector provides a projection of a sample to its name.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class NameSeriesSelector extends AbstractSeriesSelector {
 

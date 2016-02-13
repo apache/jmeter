@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
  * The class TimeStampKeysSelector provides a projection from a sample to its
  * begin or end time.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class TimeStampKeysSelector implements GraphKeysSelector {
 

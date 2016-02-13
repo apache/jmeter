@@ -21,7 +21,7 @@ package org.apache.jmeter.report.processor.graph;
  * The class AbstractSeriesSelector provide an abstract base class for
  * GraphSeriesSelector.
  *
- * @since 2.14
+ * @since 3.0
  */
 public abstract class AbstractSeriesSelector implements GraphSeriesSelector {
 

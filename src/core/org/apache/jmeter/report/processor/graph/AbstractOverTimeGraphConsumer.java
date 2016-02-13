@@ -26,7 +26,7 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * The class AbstractOverTimeGraphConsumer provides a base class for over time
  * graphs.
  *
- * @since 2.14
+ * @since 3.0
  */
 public abstract class AbstractOverTimeGraphConsumer extends
         AbstractGraphConsumer {

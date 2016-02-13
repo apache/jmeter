@@ -23,7 +23,7 @@ import org.apache.jmeter.report.core.Sample;
  * The interface GraphValueSelector represents a projection from a sample to the
  * value to aggregate for graph series.
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface GraphValueSelector {
 
