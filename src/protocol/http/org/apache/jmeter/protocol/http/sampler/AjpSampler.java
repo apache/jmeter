@@ -280,10 +280,8 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                 setString(HTTPConstants.APPLICATION_X_WWW_FORM_URLENCODED);
                 StringBuilder sb = new StringBuilder();
                 boolean first = true;
-                PropertyIterator args = getArguments().iterator();
-                while(args.hasNext()) {
-                    JMeterProperty arg = args.next();
-                    if(first) {
+                for (JMeterProperty arg : getArguments()) {
+                    if (first) {
                         first = false;
                     } else {
                         sb.append('&');
