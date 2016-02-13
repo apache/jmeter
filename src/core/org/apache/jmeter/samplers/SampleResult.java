@@ -846,8 +846,8 @@ public class SampleResult implements Serializable, Cloneable {
                 return false;
             }
         }
-        for (int i = 0; i < BINARY_TYPES.length; i++){
-            if (ct.startsWith(BINARY_TYPES[i])){
+        for (String binaryType : BINARY_TYPES) {
+            if (ct.startsWith(binaryType)) {
                 return true;
             }
         }
