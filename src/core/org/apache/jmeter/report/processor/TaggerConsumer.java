@@ -32,7 +32,7 @@ import org.apache.jmeter.report.processor.AbstractSampleConsumer;
  * @param <TIndex>
  *            the generic type
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
 

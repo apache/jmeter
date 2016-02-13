@@ -26,7 +26,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * statistics.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 // TODO Add support of "TOTAL" statistics line
 public class StatisticsSummaryConsumer extends
