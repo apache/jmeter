@@ -158,8 +158,8 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
     /**
      * Send POST data from <code>Entry</code> to the open connection.
      *
-     * @param post
-     * @throws IOException if an I/O exception occurs
+     * @param post POST request to send
+     * @param length the length of the content
      */
     private String sendPostData(PostMethod post, final int length) {
         // Buffer to hold the post body, except file content
