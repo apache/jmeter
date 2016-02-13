@@ -214,9 +214,7 @@ public class ReportGenerator {
         try {
             source.run();
         } catch (SampleException ex) {
-            String message = "Error while processing samples";
-            LOG.error(message, ex);
-            throw new GenerationException(message, ex);
+            throw new GenerationException("Error while processing samples:"+ex.getMessage(), ex);
         }
         LOG.debug("End of samples processing");
 
