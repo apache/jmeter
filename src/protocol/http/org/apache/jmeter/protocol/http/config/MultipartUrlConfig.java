@@ -112,7 +112,7 @@ public class MultipartUrlConfig implements Serializable {
             String contentDisposition = getHeaderValue("Content-disposition", part); //$NON-NLS-1$
             String contentType = getHeaderValue("Content-type", part); //$NON-NLS-1$
             // Check if it is form data
-            if (contentDisposition != null && contentDisposition.indexOf("form-data") > -1) { //$NON-NLS-1$
+            if (contentDisposition != null && contentDisposition.contains("form-data")) { //$NON-NLS-1$
                 // Get the form field name
                 final String namePrefix = "name=\""; //$NON-NLS-1$
                 int index = contentDisposition.indexOf(namePrefix) + namePrefix.length();
@@ -120,7 +120,7 @@ public class MultipartUrlConfig implements Serializable {
 
                 // Check if it is a file being uploaded
                 final String filenamePrefix = "filename=\""; //$NON-NLS-1$
-                if (contentDisposition.indexOf(filenamePrefix) > -1) {
+                if (contentDisposition.contains(filenamePrefix)) {
                     // Get the filename
                     index = contentDisposition.indexOf(filenamePrefix) + filenamePrefix.length();
                     String path = contentDisposition.substring(index, contentDisposition.indexOf('\"', index)); //$NON-NLS-1$

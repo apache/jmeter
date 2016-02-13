@@ -421,7 +421,7 @@ public class HttpRequestHdr {
      * @return String Protocol (http or https)
      */
     public String getProtocol(HTTPSamplerBase sampler) {
-        if (url.indexOf("//") > -1) {
+        if (url.contains("//")) {
             String protocol = url.substring(0, url.indexOf(':'));
             if (log.isDebugEnabled()) {
                 log.debug("Proxy: setting protocol to : " + protocol);

@@ -149,7 +149,7 @@ public final class JOrphanUtils {
         while (tokens.hasMoreTokens()) {
             String tok=tokens.nextToken();
             if (   tok.length()==1 // we have a single character; could be a token
-                && delims.indexOf(tok)!=-1) // it is a token
+                && delims.contains(tok)) // it is a token
             {
                 if (lastWasDelim) {// we saw a delimiter last time
                     strList.add(def);// so add the default

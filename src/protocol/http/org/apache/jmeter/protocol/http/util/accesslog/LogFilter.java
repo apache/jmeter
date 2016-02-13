@@ -271,7 +271,7 @@ public class LogFilter implements Filter, Serializable {
         // matches.
         this.USEFILE = false;
         for (String includeFile : this.INCFILE) {
-            if (text.indexOf(includeFile) > -1) {
+            if (text.contains(includeFile)) {
                 this.USEFILE = true;
                 break;
             }
@@ -296,7 +296,7 @@ public class LogFilter implements Filter, Serializable {
         this.USEFILE = true;
         boolean exc = false;
         for (String excludeFile : this.EXCFILE) {
-            if (text.indexOf(excludeFile) > -1) {
+            if (text.contains(excludeFile)) {
                 exc = true;
                 this.USEFILE = false;
                 break;
