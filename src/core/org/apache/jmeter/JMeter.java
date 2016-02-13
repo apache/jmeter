@@ -435,7 +435,7 @@ public class JMeter implements JMeterPlugin {
             System.out.println("Incorrect Usage");
             System.out.println(CLUtil.describeOptions(options).toString());
         } catch (Throwable e) {
-            log.fatalError("An error occurred: ",e);
+            log.fatalError("An error occurred: "+e.getMessage(),e);
             System.out.println("An error occurred: " + e.getMessage());
             System.exit(1); // TODO - could this be return?
         }
