@@ -21,7 +21,7 @@ package org.apache.jmeter.report.config;
  * The class InstanceConfiguration describe the configuration of an item that
  * can be instantiated by its class name.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class InstanceConfiguration extends SubConfiguration {
 

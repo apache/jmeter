@@ -27,7 +27,7 @@ import org.apache.jmeter.report.core.Sample;
  * Basically a sample writer is able to write samples to an unknown destination
  * and close itself. <br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 abstract public class SampleWriter implements Closeable {
 

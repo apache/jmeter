@@ -39,7 +39,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * closed before beeing replaced by the new one.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 abstract public class AbstractSampleWriter extends SampleWriter {
 
