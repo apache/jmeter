@@ -274,7 +274,7 @@ public class TestCompiler implements HashTreeTraverser {
 
     /**
      * @param controllers
-     * @param i
+     * @param maybeController
      */
     private void addDirectParentControllers(List<Controller> controllers, TestElement maybeController) {
         if (maybeController instanceof Controller) {

@@ -158,7 +158,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * Get a readable time as hours, minutes and seconds from the specified time
      * in milliseconds
      * 
-     * @returns A readable string that displays the time provided as
+     * @return A readable string that displays the time provided as
      *          milliseconds
      */
     private final String time(long t) {
