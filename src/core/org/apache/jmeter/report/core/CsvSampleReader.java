@@ -162,7 +162,7 @@ public class CsvSampleReader implements Closeable{
             data = CSVSaveService.csvReadFile(reader, separator);
             Sample sample = null;
             if (data.length > 0) {
-                if (data.length < columnCount) {
+                if (data.length != columnCount) {
                     throw new SampleException("Mismatch between expected number of columns:"+columnCount+" and columns in CSV file:"+data.length+
                             ", check your jmeter.save.saveservice.* configuration");
                 }
