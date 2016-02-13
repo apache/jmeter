@@ -33,7 +33,7 @@ import org.apache.jmeter.save.CSVSaveService;
  * method. This method has to be called by user for the header to be written.
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class CsvSampleWriter extends AbstractSampleWriter {
 

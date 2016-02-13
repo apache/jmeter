@@ -34,7 +34,7 @@ import jodd.props.Props;
  * The class ReportGeneratorConfiguration describes the configuration of the
  * report generator.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ReportGeneratorConfiguration {
 

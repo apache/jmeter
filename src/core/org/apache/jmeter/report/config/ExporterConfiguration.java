@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * The class ExporterConfiguration describes the configuration of an exporter.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ExporterConfiguration extends InstanceConfiguration {
 

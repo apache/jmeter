@@ -20,7 +20,7 @@ package org.apache.jmeter.report.core;
 /**
  * Thrown when some sample processing occured
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleException extends RuntimeException {
 

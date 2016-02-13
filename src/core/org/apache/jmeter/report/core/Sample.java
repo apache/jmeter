@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
  * avoided as they are inefficient
  * </p>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class Sample {
 

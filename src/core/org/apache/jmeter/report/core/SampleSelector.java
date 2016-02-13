@@ -23,7 +23,7 @@ package org.apache.jmeter.report.core;
  * @param <TSelection>
  *            the type of the projection
  *
- * @since 2.14
+ * @since 3.0
  */
 public interface SampleSelector<TSelection> {
 

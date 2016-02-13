@@ -22,7 +22,7 @@ import org.apache.jmeter.report.core.SampleMetadata;
 /**
  * Simple parser to get a {@link SampleMetadata} instance<br>
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class SampleMetaDataParser {
 
