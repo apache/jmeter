@@ -77,7 +77,6 @@ public class JoddExtractor implements Extractor {
             nodeSelector = new NodeSelector(doc);
         }
         List<Node> elements = nodeSelector.select(expression);
-        int size = elements.size();
         for (Node element : elements) {
             if (matchNumber <= 0 || found != matchNumber) {
                 result.add(extractValue(attribute, element));
