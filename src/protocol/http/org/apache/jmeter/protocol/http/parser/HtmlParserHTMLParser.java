@@ -105,9 +105,9 @@ class HtmlParserHTMLParser extends HTMLParser {
 
     /**
      * Recursively parse all nodes to pick up all URL s.
-     * @see e the nodes to be parsed
-     * @see baseUrl Base URL from which the HTML code was obtained
-     * @see urls URLCollection
+     * @param e the nodes to be parsed
+     * @param baseUrl Base URL from which the HTML code was obtained
+     * @param urls URLCollection
      */
     private void parseNodes(final NodeIterator e,
             final URLPointer baseUrl, final URLCollection urls)
