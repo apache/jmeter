@@ -329,7 +329,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 } else if (equals) {
                     found = toCheck.equals(stringPattern);
                 } else if (substring) {
-                    found = toCheck.indexOf(stringPattern) != -1;
+                    found = toCheck.contains(stringPattern);
                 } else {
                     found = localMatcher.matches(toCheck, pattern);
                 }

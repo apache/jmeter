@@ -411,13 +411,13 @@ public class TCLogParser implements LogParser {
      * @return <code>true</code> if method is supported, <code>false</code> otherwise
      */
     public boolean checkMethod(String text) {
-        if (text.indexOf("GET") > -1) {
+        if (text.contains("GET")) {
             this.RMETHOD = GET;
             return true;
-        } else if (text.indexOf("POST") > -1) {
+        } else if (text.contains("POST")) {
             this.RMETHOD = POST;
             return true;
-        } else if (text.indexOf("HEAD") > -1) {
+        } else if (text.contains("HEAD")) {
             this.RMETHOD = HEAD;
             return true;
         } else {

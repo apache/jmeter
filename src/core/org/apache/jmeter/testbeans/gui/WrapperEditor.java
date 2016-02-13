@@ -256,7 +256,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * true for "${}".
      */
     private final boolean isExpression(String text) {
-        return text.indexOf("${") != -1;//$NON-NLS-1$
+        return text.contains("${");//$NON-NLS-1$
     }
 
     /**
