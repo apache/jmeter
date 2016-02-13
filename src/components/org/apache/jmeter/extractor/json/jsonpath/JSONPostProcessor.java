@@ -65,11 +65,11 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
     public void process() {
         JMeterContext context = getThreadContext();
         JMeterVariables vars = context.getVariables();
-        String jsonResponse = "";
-        if (isScopeVariable()){ 
+        String jsonResponse;
+        if (isScopeVariable()) {
             jsonResponse = vars.get(getVariableName());
-            if(log.isDebugEnabled()) {
-                log.debug("JSON Extractor is using variable:"+getVariableName()+" which content is:"+jsonResponse);
+            if (log.isDebugEnabled()) {
+                log.debug("JSON Extractor is using variable:" + getVariableName() + " which content is:" + jsonResponse);
             }
         } else {
             SampleResult previousResult = context.getPreviousResult();
@@ -77,101 +77,102 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                 return;
             }
             jsonResponse = previousResult.getResponseDataAsString();
-            if(log.isDebugEnabled()) {
-                log.debug("JSON Extractor "+getName()+" working on Response:"+jsonResponse);
+            if (log.isDebugEnabled()) {
+                log.debug("JSON Extractor " + getName() + " working on Response:" + jsonResponse);
             }
         }
         String[] refNames = getRefNames().split(SEPARATOR);
-        String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR); 
+        String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
         String[] defaultValues = getDefaultValues().split(SEPARATOR);
         int[] matchNumbers = getMatchNumbersAsInt(defaultValues.length);
 
         //jsonResponse = jsonResponse.replaceAll("'", "\""); // $NON-NLS-1$  $NON-NLS-2$
 
-        if (refNames.length != jsonPathExpressions.length || 
+        if (refNames.length != jsonPathExpressions.length ||
                 refNames.length != defaultValues.length) {
             log.error("Number of JSON Path variables must match number of default values and json-path expressions, check you use separator ';' if you have many values"); // $NON-NLS-1$
-            throw new IllegalArgumentException(JMeterUtils.getResString("jsonpp_error_number_arguments_mismatch_error")); // $NON-NLS-1$
-        } else {
-            for (int i = 0; i < jsonPathExpressions.length; i++) {
-                int matchNumber = matchNumbers[i];
-                String currentRefName = refNames[i].trim();
-                String currentJsonPath = jsonPathExpressions[i].trim();
-                try {
-                    if(jsonResponse.isEmpty()) {
+            throw new IllegalArgumentException(JMeterUtils
+                    .getResString("jsonpp_error_number_arguments_mismatch_error")); // $NON-NLS-1$
+        }
+
+        for (int i = 0; i < jsonPathExpressions.length; i++) {
+            int matchNumber = matchNumbers[i];
+            String currentRefName = refNames[i].trim();
+            String currentJsonPath = jsonPathExpressions[i].trim();
+            try {
+                if (jsonResponse.isEmpty()) {
+                    vars.put(currentRefName, defaultValues[i]);
+                } else {
+
+                    List<String> extractedValues = localMatcher.get()
+                            .extractWithJsonPath(jsonResponse, currentJsonPath);
+                    // if no values extracted, default value added
+                    if (extractedValues.isEmpty()) {
                         vars.put(currentRefName, defaultValues[i]);
+                        vars.put(currentRefName + REF_MATCH_NR, "0"); //$NON-NLS-1$
+                        if (matchNumber < 0 && getComputeConcatenation()) {
+                            log.debug("No value extracted, storing empty in:" //$NON-NLS-1$
+                                    + currentRefName + ALL_SUFFIX);
+                            vars.put(currentRefName + ALL_SUFFIX, "");
+                        }
                     } else {
-                        
-                        List<String> extractedValues = localMatcher.get().extractWithJsonPath(jsonResponse, currentJsonPath);
-                        // if no values extracted, default value added
-                        if (extractedValues.isEmpty()) {
-                            vars.put(currentRefName, defaultValues[i]);
-                            vars.put(currentRefName+REF_MATCH_NR, "0"); //$NON-NLS-1$
-                            if(matchNumber<0 && getComputeConcatenation()) {
-                                log.debug("No value extracted, storing empty in :"+currentRefName + ALL_SUFFIX); //$NON-NLS-1$
-                                vars.put(currentRefName + ALL_SUFFIX, "");
+                        // if more than one value extracted, suffix with "_index"
+                        if (extractedValues.size() > 1) {
+                            if (matchNumber < 0) {
+                                // Extract all
+                                int index = 1;
+                                StringBuilder concat =
+                                        new StringBuilder(getComputeConcatenation()
+                                                ? extractedValues.size() * 20
+                                                : 1);
+                                for (String stringExtracted : extractedValues) {
+                                    vars.put(currentRefName + "_" + index, stringExtracted);
+                                    if (getComputeConcatenation()) {
+                                        concat.append(stringExtracted)
+                                                .append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
+                                    }
+                                    index++;
+                                }
+                                if (getComputeConcatenation()) {
+                                    concat.setLength(concat.length() - 1);
+                                    vars.put(currentRefName + ALL_SUFFIX, concat.toString());
+                                }
+                            } else if (matchNumber == 0) {
+                                // Random extraction
+                                int matchSize = extractedValues.size();
+                                vars.put(currentRefName, extractedValues.get(JMeterUtils.getRandomInt(matchSize)));
+                            } else {
+                                // extract at position
+                                if (matchNumber > extractedValues.size()) {
+                                    if (log.isDebugEnabled()) {
+                                        log.debug("matchNumber(" + matchNumber
+                                                + ") exceeds number of items found("
+                                                + extractedValues.size()
+                                                + "), default value will be used");
+                                    }
+                                    vars.put(currentRefName, defaultValues[i]);
+                                } else {
+                                    vars.put(currentRefName, extractedValues.get(matchNumber - 1));
+                                }
                             }
                         } else {
-                            // if more than one value extracted, suffix with
-                            // "_index"
-                            if (extractedValues.size() > 1) {
-                                if(matchNumber<0) {
-                                    // Extract all
-                                    int index = 1;
-                                    StringBuilder concat = new StringBuilder(getComputeConcatenation()?extractedValues.size()*20:1);
-                                    for (String stringExtracted : extractedValues) {
-                                        vars.put(currentRefName + "_" + index, stringExtracted);
-                                        if(getComputeConcatenation()) {
-                                            concat.append(stringExtracted).append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
-                                        }
-                                        index++;
-                                    }
-                                    if(getComputeConcatenation()) {
-                                        concat.setLength(concat.length()-1);
-                                        vars.put(currentRefName + ALL_SUFFIX, concat.toString());
-                                    }
-                                } else if (matchNumber == 0) {
-                                    // Random extraction
-                                    int matchSize = extractedValues.size();
-                                    vars.put(currentRefName, extractedValues.get(JMeterUtils.getRandomInt(matchSize)));
-                                } else {
-                                    // extract at position
-                                    if(matchNumber>extractedValues.size()) {
-                                        if(log.isDebugEnabled()) {
-                                            log.debug("matchNumber("+matchNumber + ") exceeds number of items found("+extractedValues.size()+"), default value will be used");
-                                        }
-                                        vars.put(currentRefName, defaultValues[i]);
-                                    } else {
-                                        vars.put(currentRefName, extractedValues.get(matchNumber-1));
-                                    }
-                                }
+                            // else just one value extracted
+                            vars.put(currentRefName, extractedValues.get(0));
+                            if (matchNumber < 0 && getComputeConcatenation()) {
+                                vars.put(currentRefName + ALL_SUFFIX, extractedValues.get(0));
                             }
-                            else {
-                                // else just one value extracted
-                                vars.put(currentRefName, extractedValues.get(0));
-                                if(matchNumber<0 && getComputeConcatenation()) {
-                                    vars.put(currentRefName + ALL_SUFFIX, extractedValues.get(0)); 
-                                }
-                            }
-                            vars.put(currentRefName+REF_MATCH_NR, Integer.toString(extractedValues.size()));
                         }
+                        vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
                     }
-                } catch (Exception e) {
-                    // if something wrong, default value added
-                    if (log.isDebugEnabled()) {
-                        log.error("Error processing JSON content in "+ getName()+", message:"+e.getLocalizedMessage(),e);
-                    } else {
-                        log.error("Error processing JSON content in "+ getName()+", message:"+e.getLocalizedMessage());
-                        
-                    }
-                    vars.put(currentRefName, defaultValues[i]);
-                    continue;
                 }
+            } catch (Exception e) {
+                // if something wrong, default value added
+                log.error("Error processing JSON content in " + getName() + ", message:" + e.getLocalizedMessage(), e);
+                vars.put(currentRefName, defaultValues[i]);
             }
         }
     }
 
-    
     public String getJsonPathExpressions() {
         return getPropertyAsString(JSON_PATH_EXPRESSIONS);
     }
@@ -196,7 +197,6 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         setProperty(DEFAULT_VALUES, defaultValue, ""); // $NON-NLS-1$
     }
 
-
     public boolean getComputeConcatenation() {
         return getPropertyAsBoolean(COMPUTE_CONCATENATION, COMPUTE_CONCATENATION_DEFAULT_VALUE);
     }
@@ -215,7 +215,6 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         localMatcher.get().reset();
     }
 
-
     public void setMatchNumbers(String matchNumber) {
         setProperty(MATCH_NUMBERS, matchNumber);
     }
@@ -228,7 +227,7 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         
         String matchNumbersAsString = getMatchNumbers();
         int[] result = new int[arraySize];
-        if(JOrphanUtils.isBlank(matchNumbersAsString)) {
+        if (JOrphanUtils.isBlank(matchNumbersAsString)) {
             Arrays.fill(result, 0);
         } else {
             String[] matchNumbersAsStringArray = 

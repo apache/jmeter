@@ -472,9 +472,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         try {
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
-            int retry;
+            int retry = 0;
             // Start with 0 so tries at least once, and retries at most MAX_CONN_RETRIES times
-            for (retry = 0; retry <= MAX_CONN_RETRIES; retry++) {
+            for (; retry <= MAX_CONN_RETRIES; retry++) {
                 try {
                     conn = setupConnection(url, method, res);
                     // Attempt the connection:
@@ -492,7 +492,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                         conn.disconnect();
                     }
                     setUseKeepAlive(false);
-                    continue; // try again
                 } catch (IOException e) {
                     log.debug("Connection failed, giving up");
                     throw e;
@@ -506,8 +505,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 String postBody = sendPostData(conn);
                 res.setQueryString(postBody);
-            }
-            else if (method.equals(HTTPConstants.PUT)) {
+            } else if (method.equals(HTTPConstants.PUT)) {
                 String putBody = sendPutData(conn);
                 res.setQueryString(putBody);
             }
