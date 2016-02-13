@@ -246,8 +246,8 @@ public class TestSwitchController extends JMeterTestCase {
             controller.initialize();
             for (int i = 1; i <= 3; i++) {
                 assertEquals("Loop:" + i, "before", nextName(controller));
-                for (int j = 0; j < exp.length; j++) {
-                    assertEquals("Loop:" + i, exp[j], nextName(controller));
+                for (String anExp : exp) {
+                    assertEquals("Loop:" + i, anExp, nextName(controller));
                 }
                 assertEquals("Loop:" + i, "after", nextName(controller));
             }
