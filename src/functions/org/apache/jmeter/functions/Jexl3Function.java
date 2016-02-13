@@ -129,6 +129,7 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
          * @param jma an improbable parameter class
          * @return 1
          */
+        @SuppressWarnings("unused")
         public int size(JMeterArithmetic jma) {
             return 1;
         }
