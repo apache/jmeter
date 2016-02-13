@@ -367,7 +367,6 @@ public final class ClassFinder {
      *
      * @param parentClasses list of classes to check for
      * @param strClassName name of class to be checked
-     * @param innerClasses should we allow inner classes?
      * @param contextClassLoader the classloader to use
      * @return true if the class is a non-abstract, non-interface instance of at least one of the parent classes
      */
