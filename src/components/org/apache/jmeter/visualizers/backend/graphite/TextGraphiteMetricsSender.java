@@ -42,15 +42,16 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
 
     private SocketConnectionInfos socketConnectionInfos;
 
+
+    TextGraphiteMetricsSender() {
+        super();
+    }
+
     /**
      * @param graphiteHost Graphite Host
      * @param graphitePort Graphite Port
      * @param prefix Common Metrics prefix
      */
-    TextGraphiteMetricsSender() {
-        super();
-    }
-    
     @Override
     public void setup(String graphiteHost, int graphitePort, String prefix) {
         this.prefix = prefix;

@@ -186,7 +186,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
     /**
      * Writes the output of tidy to file.
      * 
-     * @param inOutput
+     * @param inOutput The String to write to file
      */
     private void writeOutput(String inOutput) {
         String lFilename = getFilename();
