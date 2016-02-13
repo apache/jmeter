@@ -596,7 +596,6 @@ public class PostWriterTest {
      * setup commons parts of HTTPSampler with a no filename.
      *  
      * @param httpSampler
-     * @throws IOException
      */
     private void setupNoFilename(HTTPSampler httpSampler) {
         setupFilepart(sampler, "upload", null, "application/octet-stream");

@@ -645,8 +645,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
      * @param descriptor
      * @return the group String.
      */
-    private static String group(PropertyDescriptor d) {
-        String group = (String) d.getValue(GROUP);
+    private static String group(PropertyDescriptor descriptor) {
+        String group = (String) descriptor.getValue(GROUP);
         if (group == null){
             group = DEFAULT_GROUP;
         }
