@@ -41,7 +41,7 @@ import freemarker.template.TemplateException;
  * The class TemplateVisitor visits files in a template directory to copy
  * regular files and process templated ones.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class TemplateVisitor extends SimpleFileVisitor<Path> {
 

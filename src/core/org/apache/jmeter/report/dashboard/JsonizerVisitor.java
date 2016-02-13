@@ -31,7 +31,7 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * The class JsonizerVisitor provides a visitor that can get json-like string
  * from ResultData.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class JsonizerVisitor implements ResultDataVisitor<String> {
 
