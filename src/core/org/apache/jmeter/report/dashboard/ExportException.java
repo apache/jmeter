@@ -20,7 +20,7 @@ package org.apache.jmeter.report.dashboard;
 /**
  * The class ExportException provides an exception when data export fails.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ExportException extends Exception {
 

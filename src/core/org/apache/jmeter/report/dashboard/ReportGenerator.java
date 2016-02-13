@@ -64,7 +64,7 @@ import org.apache.log.Logger;
  * The class ReportGenerator provides a way to generate all the templated files
  * of the plugin.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class ReportGenerator {
     private static final Logger LOG = LoggingManager.getLoggerForClass();

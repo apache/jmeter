@@ -52,7 +52,7 @@ import freemarker.template.TemplateExceptionHandler;
  * The class HtmlTemplateExporter provides a data exporter that generates and
  * processes template files using freemarker.
  * 
- * @since 2.14
+ * @since 3.0
  */
 public class HtmlTemplateExporter extends AbstractDataExporter {
 

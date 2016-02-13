@@ -21,7 +21,7 @@ package org.apache.jmeter.report.dashboard;
  * The class GenerationException provides an exception when report generation
  * fails.
  *
- * @since 2.14
+ * @since 3.0
  */
 public class GenerationException extends Exception {
 
