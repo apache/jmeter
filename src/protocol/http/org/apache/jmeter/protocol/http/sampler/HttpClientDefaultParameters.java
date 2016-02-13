@@ -92,7 +92,7 @@ public class HttpClientDefaultParameters {
 
                     @Override
                     public void setVersion(String name, String value) {
-                        String parts[] = value.split("\\.");
+                        String[] parts = value.split("\\.");
                         if (parts.length != 2){
                             throw new IllegalArgumentException("Version must have form m.n");
                         }

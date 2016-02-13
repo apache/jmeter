@@ -1288,7 +1288,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         StringBuilder entityBody = new StringBuilder(1000);
         boolean hasEntityBody = false;
 
-        final HTTPFileArg files[] = getHTTPFiles();
+        final HTTPFileArg[] files = getHTTPFiles();
         // Allow the mimetype of the file to control the content type
         // This is not obvious in GUI if you are not uploading any files,
         // but just sending the content of nameless parameters

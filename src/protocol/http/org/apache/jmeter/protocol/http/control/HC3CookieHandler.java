@@ -89,7 +89,7 @@ public class HC3CookieHandler implements CookieHandler {
             CollectionProperty cookiesCP,
             URL url, 
             boolean allowVariableCookie){
-        org.apache.commons.httpclient.Cookie cookies[]=
+        org.apache.commons.httpclient.Cookie[] cookies =
             new org.apache.commons.httpclient.Cookie[cookiesCP.size()];
         int i = 0;
         for (JMeterProperty jMeterProperty : cookiesCP) {
