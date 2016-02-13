@@ -35,7 +35,7 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
  * The class ResponseTimeDistributionGraphConsumer provides a graph to visualize
  * the distribution of the average response time per sample
  *
- * @since 2.14
+ * @since 3.0
  */
 public class ResponseTimeDistributionGraphConsumer extends
         AbstractGraphConsumer {
