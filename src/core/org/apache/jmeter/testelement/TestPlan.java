@@ -256,9 +256,9 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         }
         // we set the classpath
         String[] paths = this.getTestPlanClasspathArray();
-        for (int idx=0; idx < paths.length; idx++) {
-            NewDriver.addURL(paths[idx]);
-            log.info("add " + paths[idx] + " to classpath");
+        for (String path : paths) {
+            NewDriver.addURL(path);
+            log.info("add " + path + " to classpath");
         }
     }
 

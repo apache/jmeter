@@ -33,6 +33,7 @@ import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
@@ -130,9 +131,8 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         if (el instanceof Arguments) {
             tableModel.clearData();
             HTTPArgument.convertArgumentsToHTTP((Arguments) el);
-            PropertyIterator iter = ((Arguments) el).getArguments().iterator();
-            while (iter.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) iter.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : ((Arguments) el).getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }
         }
@@ -189,14 +189,14 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
      */
     private void transformNameIntoVariable() {
         int[] rowsSelected = getTable().getSelectedRows();
-        for (int i = 0; i < rowsSelected.length; i++) {
-            String name = (String) tableModel.getValueAt(rowsSelected[i], 0);
-            if(StringUtils.isNotBlank(name)) {
+        for (int selectedRow : rowsSelected) {
+            String name = (String) tableModel.getValueAt(selectedRow, 0);
+            if (StringUtils.isNotBlank(name)) {
                 name = name.trim();
                 name = name.replaceAll("\\$", "_");
                 name = name.replaceAll("\\{", "_");
                 name = name.replaceAll("\\}", "_");
-                tableModel.setValueAt("${"+name+"}", rowsSelected[i], 1);                
+                tableModel.setValueAt("${" + name + "}", selectedRow, 1);
             }
         }
     }

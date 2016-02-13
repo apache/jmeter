@@ -134,28 +134,28 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
 
         // Check for property- and group-related texts:
         PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
-        for (int i = 0; i < descriptors.length; i++) {
+        for (PropertyDescriptor descriptor : descriptors) {
             // Skip non-editable properties, that is:
             // Ignore hidden, read-only, and write-only properties
-            if (descriptors[i].isHidden() || descriptors[i].getReadMethod() == null
-                    || descriptors[i].getWriteMethod() == null) {
+            if (descriptor.isHidden() || descriptor.getReadMethod() == null
+                    || descriptor.getWriteMethod() == null) {
                 continue;
             }
             // Ignore TestElement properties which don't have an explicit
             // editor:
-            if (TestElement.class.isAssignableFrom(descriptors[i].getPropertyType())
-                    && descriptors[i].getPropertyEditorClass() == null) {
+            if (TestElement.class.isAssignableFrom(descriptor.getPropertyType())
+                    && descriptor.getPropertyEditorClass() == null) {
                 continue;
             }
             // Done -- we're working with an editable property.
 
-            String name = descriptors[i].getName();
+            String name = descriptor.getName();
 
             bundle.getString(name + ".displayName");
 
-            String group = (String) descriptors[i].getValue(GenericTestBeanCustomizer.GROUP);
+            String group = (String) descriptor.getValue(GenericTestBeanCustomizer.GROUP);
             if (group != null) {
-                bundle.getString( group + ".displayName");
+                bundle.getString(group + ".displayName");
             }
         }
     }

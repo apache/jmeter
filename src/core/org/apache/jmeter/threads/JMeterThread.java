@@ -709,9 +709,9 @@ public class JMeterThread implements Runnable, Interruptible {
                 if (scopedAssertion.isScopeChildren(scope) || scopedAssertion.isScopeAll(scope)){
                     SampleResult[] children = parent.getSubResults();
                     boolean childError = false;
-                    for (int i=0;i <children.length; i++){
-                        processAssertion(children[i], assertion);
-                        if (!children[i].isSuccessful()){
+                    for (SampleResult childSampleResult : children) {
+                        processAssertion(childSampleResult, assertion);
+                        if (!childSampleResult.isSuccessful()) {
                             childError = true;
                         }
                     }

@@ -226,11 +226,8 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             Scriptable bsf = Context.toObject(new BSFFunctions(mgr, this), global);
             global.put("bsf", global, bsf);
 
-            for(
-                @SuppressWarnings("unchecked")
-                Iterator<BSFDeclaredBean> it = declaredBeans.iterator();
-                it.hasNext();) {
-                declareBean(it.next());
+            for (BSFDeclaredBean declaredBean : (Iterable<BSFDeclaredBean>) declaredBeans) {
+                declareBean(declaredBean);
             }
         }
         catch (Throwable t) {

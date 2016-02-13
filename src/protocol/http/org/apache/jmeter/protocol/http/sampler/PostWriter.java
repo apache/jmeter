@@ -32,6 +32,7 @@ import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jorphan.util.JOrphanUtils;
 
@@ -191,11 +192,10 @@ public class PostWriter {
             // First the multipart start divider
             bos.write(getMultipartDivider());
             // Add any parameters
-            PropertyIterator args = sampler.getArguments().iterator();
-            while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 String parameterName = arg.getName();
-                if (arg.isSkippable(parameterName)){
+                if (arg.isSkippable(parameterName)) {
                     continue;
                 }
                 // End the previous multipart
@@ -307,9 +307,8 @@ public class PostWriter {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBodyBuffer = new StringBuilder();
-                    PropertyIterator args = sampler.getArguments().iterator();
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : sampler.getArguments()) {
+                        HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         postBodyBuffer.append(arg.getEncodedValue(contentEncoding));
                     }
                     postBody = postBodyBuffer.toString();

@@ -229,8 +229,7 @@ public class MonitorAccumModel implements Clearable, Serializable {
      *            the {@link MonitorModel} that should be sent to the listeners
      */
     public void notifyListeners(MonitorModel model) {
-        for (int idx = 0; idx < listeners.size(); idx++) {
-            MonitorListener ml = listeners.get(idx);
+        for (MonitorListener ml : listeners) {
             ml.addSample(model);
         }
     }
