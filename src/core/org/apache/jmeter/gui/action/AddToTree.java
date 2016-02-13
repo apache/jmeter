@@ -26,7 +26,6 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.tree.TreePath;
 
-import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;

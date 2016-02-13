@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.util;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.apache.bsf.BSFDeclaredBean;
