@@ -203,7 +203,7 @@ public class TCLogParser implements LogParser {
         } catch (Exception exception) {
             log.error("Problem creating samples", exception);
         }
-        return -1;// indicate that an error occured
+        return -1;// indicate that an error occurred
     }
 
     private static BufferedReader getReader(File file) throws IOException {
@@ -215,12 +215,9 @@ public class TCLogParser implements LogParser {
     }
 
     private static boolean isGZIP(File file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
-        try {
+        try (FileInputStream in = new FileInputStream(file)) {
             return in.read() == (GZIPInputStream.GZIP_MAGIC & 0xFF)
                 && in.read() == (GZIPInputStream.GZIP_MAGIC >> 8);
-        } finally {
-            in.close();
         }
     }
 
