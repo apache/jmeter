@@ -316,7 +316,7 @@ public class MonitorHandler extends DefaultHandler {
      * @see org.xml.sax.ContentHandler#characters
      */
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
     }
 
     /**
