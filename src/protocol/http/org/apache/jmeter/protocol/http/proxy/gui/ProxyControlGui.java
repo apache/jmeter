@@ -286,8 +286,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         element.setExcludeList(excludeList);
     }
 
-    private List<String> getDataList(PowerTableModel p_model, String colName) {
-        String[] dataArray = p_model.getData().getColumn(colName);
+    private List<String> getDataList(PowerTableModel pModel, String colName) {
+        String[] dataArray = pModel.getData().getColumn(colName);
         List<String> list = new LinkedList<>();
         for (int i = 0; i < dataArray.length; i++) {
             list.add(dataArray[i]);
@@ -336,12 +336,12 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         repaint();
     }
 
-    private void populateTable(PowerTableModel p_model, PropertyIterator iter) {
-        p_model.clearData();
+    private void populateTable(PowerTableModel pModel, PropertyIterator iter) {
+        pModel.clearData();
         while (iter.hasNext()) {
-            p_model.addRow(new Object[] { iter.next().getStringValue() });
+            pModel.addRow(new Object[] { iter.next().getStringValue() });
         }
-        p_model.fireTableDataChanged();
+        pModel.fireTableDataChanged();
     }
 
     /*
@@ -509,7 +509,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             stop.setEnabled(true);
             restart.setEnabled(false);
             if (ProxyControl.isDynamicMode()) {
-                String details[] = model.getCertificateDetails();
+                String[] details = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
                 sb.append(JMeterUtils.getResString("proxy_daemon_msg_rootca_cert"))  // $NON-NLS-1$
                         .append(SPACE).append(KeyToolUtils.ROOT_CACERT_CRT_PFX)
@@ -944,7 +944,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         log.debug("Reinitialization complete");
     }
 
-    private void buildNodesModel(JMeterTreeNode node, String parent_name, int level) {
+    private void buildNodesModel(JMeterTreeNode node, String parentName, int level) {
         String separator = " > ";
         if (node != null) {
             for (int i = 0; i < node.getChildCount(); i++) {
@@ -961,7 +961,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                  * buildNodesModel(cur, name.toString(), level); } else
                  */
                 if (te instanceof Controller) {
-                    name.append(parent_name);
+                    name.append(parentName);
                     name.append(cur.getName());
                     TreeNodeWrapper tnw = new TreeNodeWrapper(cur, name.toString());
                     targetNodesModel.addElement(tnw);

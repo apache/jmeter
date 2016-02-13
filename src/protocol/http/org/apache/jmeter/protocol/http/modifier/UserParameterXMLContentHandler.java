@@ -116,12 +116,12 @@ public class UserParameterXMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
         contents.write(ch, start, length);
     }
 
     @Override
-    public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
     }
 
     @Override

@@ -391,7 +391,7 @@ public class Proxy extends Thread {
         if (keyStore.containsAlias(host)) {
             return host;
         }
-        String parts[] = host.split("\\."); // get the component parts
+        String[] parts = host.split("\\."); // get the component parts
         // Assume domains must have at least 2 parts, e.g. apache.org
         // Replace the first part with "*" 
         StringBuilder sb = new StringBuilder("*"); // $NON-NLS-1$
