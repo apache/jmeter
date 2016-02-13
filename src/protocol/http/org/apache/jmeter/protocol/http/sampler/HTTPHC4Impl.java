@@ -1088,16 +1088,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             null, charset);
             // Create the parts
             // Add any parameters
-            PropertyIterator args = getArguments().iterator();
-            while (args.hasNext()) {
-               HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
-               String parameterName = arg.getName();
-               if (arg.isSkippable(parameterName)){
-                   continue;
-               }
-               StringBody stringBody = new StringBody(arg.getValue(), charset);
-               FormBodyPart formPart = new FormBodyPart(arg.getName(), stringBody);                   
-               multiPart.addPart(formPart);
+            for (JMeterProperty jMeterProperty : getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
+                String parameterName = arg.getName();
+                if (arg.isSkippable(parameterName)) {
+                    continue;
+                }
+                StringBody stringBody = new StringBody(arg.getValue(), charset);
+                FormBodyPart formPart = new FormBodyPart(arg.getName(), stringBody);
+                multiPart.addPart(formPart);
             }
 
             // Add any files
@@ -1191,12 +1190,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
                     // Just append all the parameter values, and use that as the post body
                     StringBuilder postBody = new StringBuilder();
-                    PropertyIterator args = getArguments().iterator();
-                    while (args.hasNext()) {
-                        HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+                    for (JMeterProperty jMeterProperty : getArguments()) {
+                        HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                         // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
                         if (haveContentEncoding) {
-                            postBody.append(arg.getEncodedValue(contentEncoding));                    
+                            postBody.append(arg.getEncodedValue(contentEncoding));
                         } else {
                             postBody.append(arg.getEncodedValue());
                         }
@@ -1321,12 +1319,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             // Just append all the parameter values, and use that as the entity body
             StringBuilder entityBodyContent = new StringBuilder();
-            PropertyIterator args = getArguments().iterator();
-            while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
-                if (charset!= null) {
-                    entityBodyContent.append(arg.getEncodedValue(charset));                    
+                if (charset != null) {
+                    entityBodyContent.append(arg.getEncodedValue(charset));
                 } else {
                     entityBodyContent.append(arg.getEncodedValue());
                 }
