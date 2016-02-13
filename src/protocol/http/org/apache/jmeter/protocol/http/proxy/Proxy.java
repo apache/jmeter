@@ -309,7 +309,6 @@ public class Proxy extends Thread {
      *
      * @param host
      * @return a ssl socket factory, or null if keystore could not be opened/processed
-     * @throws IOException
      */
     private SSLSocketFactory getSSLSocketFactory(String host) {
         if (keyStore == null) {
@@ -433,7 +432,7 @@ public class Proxy extends Thread {
      * @param sock socket in
      * @param host
      * @return a new client socket over ssl
-     * @throws Exception if negotiation failed
+     * @throws IOException if negotiation failed
      */
     private Socket startSSL(Socket sock, String host) throws IOException {
         SSLSocketFactory sslFactory = getSSLSocketFactory(host);
@@ -478,11 +477,10 @@ public class Proxy extends Thread {
     /**
      * Write output to the output stream, then flush and close the stream.
      *
-     * @param inBytes
-     *            the bytes to write
+     * @param res
+     *            the SampleResult to write
      * @param out
      *            the output stream to write to
-     * @param forcedHTTPS if we changed the protocol to https
      * @throws IOException
      *             if an IOException occurs while writing
      */
