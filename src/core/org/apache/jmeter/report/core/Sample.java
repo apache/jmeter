@@ -104,7 +104,7 @@ public class Sample {
         try {
             return Converters.convert(clazz, data[index]);
         } catch (ConvertException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + (row+1) + " converting field:"+fieldName+" to:"+clazz.getName()+", fieldValue:'"+data[index]+"'", ex);
+            throw new SampleException(ERROR_ON_SAMPLE + (row+1) + " converting field:"+fieldName+" at column:"+index+" to:"+clazz.getName()+", fieldValue:'"+data[index]+"'", ex);
         }
     }
 

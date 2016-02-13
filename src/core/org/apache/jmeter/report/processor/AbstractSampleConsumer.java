@@ -173,10 +173,8 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.setSampleContext(context);
             } catch (Exception e) {
-                LOG.error(
-                        "produce(): Consumer failed with message :"
-                                + e.getMessage(), e);
-                throw new SampleException(e);
+                throw new SampleException("Consumer failed with message :"
+                        + e.getMessage(), e);
             }
         }
     }
@@ -196,10 +194,8 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.setConsumedMetadata(metadata, channel);
             } catch (Exception e) {
-                LOG.error(
-                        "setProducedMetadata(): Consumer failed with message :"
-                                + e.getMessage(), e);
-                throw new SampleException(e);
+                throw new SampleException("Consumer failed with message :"
+                        + e.getMessage(), e);
             }
         }
     }
@@ -219,9 +215,8 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.startConsuming();
             } catch (Exception e) {
-                LOG.error("startProducing(): Consumer failed with message :"
+                throw new SampleException("Consumer failed with message :"
                         + e.getMessage(), e);
-                throw new SampleException(e);
             }
         }
     }
@@ -233,10 +228,8 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
                 consumer.consume(s, channel);
                 producedSampleCount++;
             } catch (Exception e) {
-                LOG.error(
-                        "produce(): Consumer failed with message :"
-                                + e.getMessage(), e);
-                throw new SampleException(e);
+                throw new SampleException("Consumer failed with message :"
+                        + e.getMessage(), e);
             }
         }
     }
@@ -247,14 +240,12 @@ public abstract class AbstractSampleConsumer extends AbstractSampleProcessor
             try {
                 consumer.stopConsuming();
             } catch (Exception e) {
-                LOG.error(
-                        "stopProducing(): Consumer failed with message :"
-                                + e.getMessage(), e);
-                throw new SampleException(e);
+                throw new SampleException("Consumer failed with message :"
+                        + e.getMessage(), e);
             }
         }
         if (LOG.isInfoEnabled()) {
-            LOG.info("stopProducing(): " + getName() + " produced "
+            LOG.info(getClass()+"#stopProducing(): " + getName() + " produced "
                     + producedSampleCount + " samples");
         }
     }
