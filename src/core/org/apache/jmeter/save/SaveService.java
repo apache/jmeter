@@ -549,7 +549,8 @@ public class SaveService {
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
      */
-    private static final HashTree readTree(InputStream reader, File file) throws IOException {
+    private static HashTree readTree(InputStream reader, File file)
+            throws IOException {
         if (!reader.markSupported()) {
             reader = new BufferedInputStream(reader);
         }

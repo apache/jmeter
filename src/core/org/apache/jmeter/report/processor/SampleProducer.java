@@ -58,13 +58,13 @@ public interface SampleProducer extends SampleProcessor {
      * @param channel
      *            The channel whoses metadata are beeing associated wih
      */
-    public void setProducedMetadata(SampleMetadata metadata, int channel);
+    void setProducedMetadata(SampleMetadata metadata, int channel);
 
     /**
      * Start producing samples, must be invoked before any call to
      * <code>produce()</code>
      */
-    public void startProducing();
+    void startProducing();
 
     /**
      * Produce a single sample on the specified channel
@@ -74,12 +74,12 @@ public interface SampleProducer extends SampleProcessor {
      * @param channel
      *            The channel on which is produced the sample
      */
-    public void produce(Sample s, int channel);
+    void produce(Sample s, int channel);
 
     /**
      * Stop producing samples, no <code>produce()</code> call should occur after
      * this service has been called.
      */
-    public void stopProducing();
+    void stopProducing();
 
 }

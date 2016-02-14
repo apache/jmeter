@@ -99,7 +99,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
     private static final boolean STRIP_PORT = JMeterUtils.getPropDefault("kerberos.spnego.strip_port", true);
 
     public enum Mechanism {
-        BASIC_DIGEST, KERBEROS;
+        BASIC_DIGEST, KERBEROS
     }
 
     private static final class NullCredentials implements Credentials {

@@ -64,7 +64,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * @return Byte array containing binary representation of input hex-encoded string
      * @throws IllegalArgumentException if string is not an even number of hex digits
      */
-    public static final byte[] hexStringToByteArray(String hexEncodedBinary) {
+    public static byte[] hexStringToByteArray(String hexEncodedBinary) {
         if (hexEncodedBinary.length() % 2 == 0) {
             char[] sc = hexEncodedBinary.toCharArray();
             byte[] ba = new byte[sc.length / 2];

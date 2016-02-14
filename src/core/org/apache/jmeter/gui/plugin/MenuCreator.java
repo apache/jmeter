@@ -26,7 +26,7 @@ import javax.swing.MenuElement;
  * @since 2.10
  */
 public interface MenuCreator {
-    public enum MENU_LOCATION {
+    enum MENU_LOCATION {
         FILE,
         EDIT,
         RUN,

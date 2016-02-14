@@ -255,9 +255,10 @@ public class TransactionController extends GenericController implements SampleLi
      * @param res {@link SampleResult}
      * @return true if res is the ParentSampler transactions
      */
-    public static final boolean isFromTransactionController(SampleResult res) {
+    public static boolean isFromTransactionController(SampleResult res) {
         return res.getResponseMessage() != null && 
-                res.getResponseMessage().startsWith(TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX);
+                res.getResponseMessage().startsWith(
+                        TransactionController.NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX);
     }
 
     /**

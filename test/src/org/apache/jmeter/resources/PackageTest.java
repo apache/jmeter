@@ -90,20 +90,21 @@ public class PackageTest extends TestCase {
     // Read resource into ResourceBundle and store in List
     private PropertyResourceBundle getRAS(String res) throws Exception {
         InputStream ras = this.getClass().getResourceAsStream(res);
-        if (ras == null){
+        if (ras == null) {
             return null;
         }
         return new PropertyResourceBundle(ras);
     }
 
-    private static final Object[] DUMMY_PARAMS = new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+    private static final Object[] DUMMY_PARAMS =
+            new Object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
     // Read resource file saving the keys
     private int readRF(String res, List<String> l) throws Exception {
         int fails = 0;
         InputStream ras = this.getClass().getResourceAsStream(res);
-        if (ras==null){
-            if (MESSAGES.equals(resourcePrefix)|| lang.length() == 0 ){
+        if (ras == null){
+            if (MESSAGES.equals(resourcePrefix)|| lang.length() == 0 ) {
                 throw new IOException("Cannot open resource file "+res);
             } else {
                 return 0;
@@ -232,26 +233,25 @@ public class PackageTest extends TestCase {
 
     /**
      * Find I18N resources in classpath
-     * @param srcFiledir directory in which the files reside
+     * @param srcFileDir directory in which the files reside
      * @return list of properties files subject to I18N
      */
-    public static final String[] getResources(File srcFiledir) {
+    public static String[] getResources(File srcFileDir) {
         Set<String> set = new TreeSet<>();
-        findFile(srcFiledir, set, new FilenameFilter() {
+        findFile(srcFileDir, set, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return new File(dir, name).isDirectory() 
-                        || (
-                                name.equals("messages.properties") ||
-                                (name.endsWith("Resources.properties")
-                                && !name.matches("Example\\d+Resources\\.properties")));
+                return (name.equals("messages.properties") ||
+                        (name.endsWith("Resources.properties")
+                                && !name.matches("Example\\d+Resources\\.properties")))
+                        || new File(dir, name).isDirectory();
             }
         });
         return set.toArray(new String[set.size()]);
     }
-    
+
     /**
-     * Find resources matching filenamefiler and adds them to set removing
+     * Find resources matching filenameFiler and adds them to set removing
      * everything before "/org"
      * 
      * @param file
@@ -267,7 +267,7 @@ public class PackageTest extends TestCase {
         File[] foundFiles = file.listFiles(filenameFilter);
         assertNotNull("Not a directory: "+file, foundFiles);
         for (File file2 : foundFiles) {
-            if(file2.isDirectory()) {
+            if (file2.isDirectory()) {
                 findFile(file2, set, filenameFilter);
             } else {
                 String absPath2 = file2.getAbsolutePath().replace('\\', '/'); // Fix up Windows paths
@@ -386,22 +386,28 @@ public class PackageTest extends TestCase {
                 }
             }
         }
-        if(!missingLabels.isEmpty()) {
+        if (!missingLabels.isEmpty()) {
             missingLabelsPerBundle.put(languageBundle, missingLabels);
         }
     }
 
     /**
-     * Build message with misssing labels per bundle
+     * Build message with missing labels per bundle.
+     *
      * @param missingLabelsPerBundle
      * @return String
      */
     private String printLabels(Map<String, Map<String, String>> missingLabelsPerBundle) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, Map<String, String>> entry : missingLabelsPerBundle.entrySet()) {
-            builder.append("Missing labels in bundle:" + entry.getKey() + "\r\n");
+            builder.append("Missing labels in bundle:")
+                    .append(entry.getKey())
+                    .append("\r\n");
             for (Map.Entry<String, String> entry2 : entry.getValue().entrySet()) {
-                builder.append(entry2.getKey() + "=" + entry2.getValue() + "\r\n");
+                builder.append(entry2.getKey())
+                        .append("=")
+                        .append(entry2.getValue())
+                        .append("\r\n");
             }
             builder.append("======================================================\r\n");
         }

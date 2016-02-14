@@ -85,7 +85,7 @@ public class TreeCloner implements HashTreeTraverser {
      * add node to objects LinkedList
      * @param node Object
      */
-    private final void addLast(Object node) {
+    private void addLast(Object node) {
         objects.addLast(node);
     }
 

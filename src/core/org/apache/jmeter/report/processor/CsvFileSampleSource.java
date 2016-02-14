@@ -150,7 +150,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
     /**
      * Get the current time in milliseconds
      */
-    private final long now() {
+    private long now() {
         return System.currentTimeMillis();
     }
 
@@ -161,7 +161,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
      * @return A readable string that displays the time provided as
      *          milliseconds
      */
-    private final String time(long t) {
+    private String time(long t) {
         return TimeHelper.time(t);
     }
 
