@@ -88,7 +88,7 @@ public class JexlEngine extends BSFEngineImpl {
             return null;
         }
         try {
-            Script jExpr = null;
+            Script jExpr;
             if (expr instanceof File) {
                 jExpr = ScriptFactory.createScript((File) expr);
             } else if (expr instanceof URL) {
@@ -106,22 +106,7 @@ public class JexlEngine extends BSFEngineImpl {
     @Override
     public void exec(String fileName, int lineNo, int colNo, Object script)
             throws BSFException {
-        if (script == null) {
-            return;
-        }
-        try {
-            Script jExpr = null;
-            if (script instanceof File) {
-                jExpr = ScriptFactory.createScript((File) script);
-            } else if (script instanceof URL) {
-                jExpr = ScriptFactory.createScript((URL) script);
-            } else {
-                jExpr = ScriptFactory.createScript((String) script);
-            }
-            jExpr.execute(jc);
-        } catch (Exception e) {
-            throw new BSFException(BSFException.REASON_OTHER_ERROR, e.getMessage(), e);
-        }
+        eval(fileName, lineNo, colNo, script);
     }
 
     /** {@inheritDoc} */
