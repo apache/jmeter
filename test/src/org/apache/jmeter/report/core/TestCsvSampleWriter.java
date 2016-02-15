@@ -36,16 +36,11 @@ public class TestCsvSampleWriter {
 
     SampleMetadata metadata = new SampleMetadata(',', "a", "b");
 
-    @Test
+    @Test(expected=NullPointerException.class)
     public void testCsvSampleWriterConstructorWithNull() throws Exception {
-        try {
-            CsvSampleWriter dummy = new CsvSampleWriter(null);
-            dummy.close(); // We should never get here, but it would be a
-                           // writer, so close it
-            fail("NPE expected");
-        } catch (NullPointerException e) {
-            // OK, we should land here
-        }
+        CsvSampleWriter dummy = new CsvSampleWriter(null);
+        dummy.close(); // We should never get here, but it would be a
+                       // writer, so close it
     }
 
     @Test

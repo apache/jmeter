@@ -16,14 +16,6 @@
  * 
  */
 
-/*
- * Package to test functions
- * 
- * Functions are created and parameters set up in one thread.
- * 
- * They are then tested in another thread, or two threads running in parallel
- * 
- */
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
@@ -53,11 +45,6 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-//  static {
-//       LoggingManager.setPriority("DEBUG","jmeter");
-//       LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-//  }
-
     public PackageTest(String arg0) {
         super(arg0);
     }
@@ -77,29 +64,12 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
     }
 
 
-    // Create the SplitFile function and set its parameters.
-    private static SplitFunction splitParams(String p1, String p2, String p3) throws Exception {
-        SplitFunction split = new SplitFunction();
-        Collection<CompoundVariable> parms = new LinkedList<>();
-        parms.add(new CompoundVariable(p1));
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        if (p3 != null) {
-            parms.add(new CompoundVariable(p3));
-        }
-        split.setParameters(parms);
-        return split;
-    }
-
     // Create the BeanShell function and set its parameters.
     private static BeanShell BSHFParams(String p1, String p2, String p3) throws Exception {
         BeanShell bsh = new BeanShell();
         bsh.setParameters(makeParams(p1, p2, p3));
         return bsh;
     }
-
-    
 
     public static Test suite() throws Exception {
         TestSuite allsuites = new TestSuite("Function PackageTest");
@@ -113,26 +83,13 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
             allsuites.addTest(bsh);
         }
 
-        TestSuite suite = new TestSuite("SingleThreaded");
-        suite.addTest(new PackageTest("CSVParams"));
-        suite.addTest(new PackageTest("CSVNoFile"));
-        suite.addTest(new PackageTest("CSVSetup"));
-        suite.addTest(new PackageTest("CSVRun"));
-
-        suite.addTest(new PackageTest("CSValias"));
-        suite.addTest(new PackageTest("CSVBlankLine"));
-        allsuites.addTest(suite);
 
         // Reset files
-        suite.addTest(new PackageTest("CSVSetup"));
+        allsuites.addTest(new PackageTest("CSVSetup"));
         TestSuite par = new ActiveTestSuite("Parallel");
         par.addTest(new PackageTest("CSVThread1"));
         par.addTest(new PackageTest("CSVThread2"));
         allsuites.addTest(par);
-
-        TestSuite split = new TestSuite("SplitFunction");
-        split.addTest(new PackageTest("splitTest1"));
-        allsuites.addTest(split);
 
         TestSuite xpath = new TestSuite("XPath");
         xpath.addTest(new PackageTest("XPathtestColumns"));
@@ -244,117 +201,31 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
     }
 
-    public void splitTest1() throws Exception {
-        String src = "";
-
-        try {
-            splitParams("a,b,c", null, null);
-            fail("Expected InvalidVariableException (wrong number of parameters)");
-        } catch (InvalidVariableException e) {
-            // OK
-        }
-        src = "a,b,c";
-        SplitFunction split;
-        split = splitParams(src, "VAR1", null);
-        assertEquals(src, split.execute());
-        assertEquals(src, vars.get("VAR1"));
-        assertEquals("3", vars.get("VAR1_n"));
-        assertEquals("a", vars.get("VAR1_1"));
-        assertEquals("b", vars.get("VAR1_2"));
-        assertEquals("c", vars.get("VAR1_3"));
-        assertNull(vars.get("VAR1_4"));
-
-        split = splitParams(src, "VAR2", ",");
-        assertEquals(src, split.execute());
-        assertEquals(src, vars.get("VAR2"));
-        assertEquals("3", vars.get("VAR2_n"));
-        assertEquals("a", vars.get("VAR2_1"));
-        assertEquals("b", vars.get("VAR2_2"));
-        assertEquals("c", vars.get("VAR2_3"));
-        assertNull(vars.get("VAR2_4"));
-
-        src = "a|b|c";
-        split = splitParams(src, "VAR3", "|");
-        assertEquals(src, split.execute());
-        assertEquals(src, vars.get("VAR3"));
-        assertEquals("3", vars.get("VAR3_n"));
-        assertEquals("a", vars.get("VAR3_1"));
-        assertEquals("b", vars.get("VAR3_2"));
-        assertEquals("c", vars.get("VAR3_3"));
-        assertNull(vars.get("VAR3_4"));
-
-        src = "a|b||";
-        split = splitParams(src, "VAR4", "|");
-        assertEquals(src, split.execute());
-        assertEquals(src, vars.get("VAR4"));
-        assertEquals("4", vars.get("VAR4_n"));
-        assertEquals("a", vars.get("VAR4_1"));
-        assertEquals("b", vars.get("VAR4_2"));
-        assertEquals("?", vars.get("VAR4_3"));
-        assertNull(vars.get("VAR4_5"));
-
-        src = "a,,c";
-        vars.put("VAR", src);
-        split = splitParams("${VAR}", "VAR", null);
-        assertEquals(src, split.execute());
-        assertEquals("3", vars.get("VAR_n"));
-        assertEquals("a", vars.get("VAR_1"));
-        assertEquals("?", vars.get("VAR_2"));
-        assertEquals("c", vars.get("VAR_3"));
-        assertNull(vars.get("VAR_4"));
-
-        src = "a,b";
-        vars.put("VAR", src);
-        split = splitParams("${VAR}", "VAR", null);
-        assertEquals(src, split.execute());
-        assertEquals("2", vars.get("VAR_n"));
-        assertEquals("a", vars.get("VAR_1"));
-        assertEquals("b", vars.get("VAR_2"));
-        assertNull(vars.get("VAR_3"));
-
-        src = "a,,c,";
-        vars.put("VAR", src);
-        split = splitParams("${VAR}", "VAR5", null);
-        assertEquals(src, split.execute());
-        assertEquals("4", vars.get("VAR5_n"));
-        assertEquals("a", vars.get("VAR5_1"));
-        assertEquals("?", vars.get("VAR5_2"));
-        assertEquals("c", vars.get("VAR5_3"));
-        assertEquals("?", vars.get("VAR5_4"));
-        assertNull(vars.get("VAR5_5"));
-    }
-
-   
-
     // Function objects to be tested
-    private static CSVRead cr1, cr2, cr3, cr4, cr5, cr6;
+    private static CSVRead cr1, cr4;
 
     // Helper class used to implement co-routine between two threads
     private static class Baton {
         void pass() {
             done();
             try {
-                // System.out.println(">wait:"+Thread.currentThread().getName());
                 wait(1000);
             } catch (InterruptedException e) {
                 System.out.println(e);
             }
-            // System.out.println("<wait:"+Thread.currentThread().getName());
-
         }
 
         void done() {
-            // System.out.println(">done:"+Thread.currentThread().getName());
             notifyAll();
         }
 
     }
 
-    private static final Baton baton = new Baton();
+    private static final Baton BATON = new Baton();
 
     public void CSVThread1() throws Exception {
         Thread.currentThread().setName("One");
-        synchronized (baton) {
+        synchronized (BATON) {
 
             assertEquals("b1", cr1.execute(null, null));
 
@@ -362,7 +233,7 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
             assertEquals("b2", cr1.execute(null, null));
 
-            baton.pass();
+            BATON.pass();
 
             assertEquals("", cr4.execute(null, null));
 
@@ -370,26 +241,26 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
             assertEquals("", cr4.execute(null, null));
 
-            baton.pass();
+            BATON.pass();
 
             assertEquals("b3", cr1.execute(null, null));
 
             assertEquals("", cr4.execute(null, null));
 
-            baton.done();
+            BATON.done();
         }
     }
 
     public void CSVThread2() throws Exception {
         Thread.currentThread().setName("Two");
         Thread.sleep(500);// Allow other thread to start
-        synchronized (baton) {
+        synchronized (BATON) {
 
             assertEquals("b3", cr1.execute(null, null));
 
             assertEquals("", cr4.execute(null, null));
 
-            baton.pass();
+            BATON.pass();
 
             assertEquals("b1", cr1.execute(null, null));
 
@@ -397,157 +268,22 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
             assertEquals("b2", cr1.execute(null, null));
 
-            baton.pass();
+            BATON.pass();
 
             assertEquals("", cr4.execute(null, null));
 
             assertEquals("b4", cr1.execute(null, null));
 
-            baton.done();
+            BATON.done();
         }
     }
 
-    public void CSVRun() throws Exception {
-        assertEquals("b1", cr1.execute(null, null));
-        assertEquals("c1", cr2.execute(null, null));
-        assertEquals("d1", cr3.execute(null, null));
-
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b2", cr1.execute(null, null));
-        assertEquals("c2", cr2.execute(null, null));
-        assertEquals("d2", cr3.execute(null, null));
-
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b3", cr1.execute(null, null));
-        assertEquals("c3", cr2.execute(null, null));
-        assertEquals("d3", cr3.execute(null, null));
-
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b4", cr1.execute(null, null));
-        assertEquals("c4", cr2.execute(null, null));
-        assertEquals("d4", cr3.execute(null, null));
-
-        assertEquals("", cr4.execute(null, null));
-        assertEquals("b1", cr1.execute(null, null));
-        assertEquals("c1", cr2.execute(null, null));
-        assertEquals("d1", cr3.execute(null, null));
-
-        assertEquals("a1", cr5.execute(null, null));
-        assertEquals("", cr6.execute(null, null));
-        assertEquals("a2", cr5.execute(null, null));
-
-    }
-
-    public void CSVParams() throws Exception {
-        try {
-            setCSVReadParams(null, null);
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
-        try {
-            setCSVReadParams(null, "");
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
-        try {
-            setCSVReadParams("", null);
-            fail("Should have failed");
-        } catch (InvalidVariableException e) {
-        }
-    }
 
     public void CSVSetup() throws Exception {
         cr1 = setCSVReadParams("testfiles/test.csv", "1");
-        cr2 = setCSVReadParams("testfiles/test.csv", "2");
-        cr3 = setCSVReadParams("testfiles/test.csv", "3");
         cr4 = setCSVReadParams("testfiles/test.csv", "next");
-        cr5 = setCSVReadParams("", "0");
-        cr6 = setCSVReadParams("", "next");
     }
 
-    public void CSValias() throws Exception {
-        cr1 = setCSVReadParams("testfiles/test.csv", "*A");
-        cr2 = setCSVReadParams("*A", "1");
-        cr3 = setCSVReadParams("*A", "next");
-
-        cr4 = setCSVReadParams("testfiles/test.csv", "*B");
-        cr5 = setCSVReadParams("*B", "2");
-        cr6 = setCSVReadParams("*B", "next");
-
-        String s;
-
-        s = cr1.execute(null, null); // open as *A
-        assertEquals("", s);
-        s = cr2.execute(null, null); // col 1, line 1, *A
-        assertEquals("b1", s);
-
-        s = cr4.execute(null, null);// open as *B
-        assertEquals("", s);
-        s = cr5.execute(null, null);// col2 line 1
-        assertEquals("c1", s);
-
-        s = cr3.execute(null, null);// *A next
-        assertEquals("", s);
-        s = cr2.execute(null, null);// col 1, line 2, *A
-        assertEquals("b2", s);
-
-        s = cr5.execute(null, null);// col2, line 1, *B
-        assertEquals("c1", s);
-
-        s = cr6.execute(null, null);// *B next
-        assertEquals("", s);
-
-        s = cr5.execute(null, null);// col2, line 2, *B
-        assertEquals("c2", s);
-
-    }
-
-    public void CSVNoFile() throws Exception {
-        String s;
-
-        cr1 = setCSVReadParams("xtestfiles/test.csv", "1");
-        log.info("Expecting file not found");
-        s = cr1.execute(null, null);
-        assertEquals("", s);
-
-        cr2 = setCSVReadParams("xtestfiles/test.csv", "next");
-        log.info("Expecting no entry for file");
-        s = cr2.execute(null, null);
-        assertEquals("", s);
-
-        cr3 = setCSVReadParams("xtestfiles/test.csv", "*ABC");
-        log.info("Expecting file not found");
-        s = cr3.execute(null, null);
-        assertEquals("", s);
-
-        cr4 = setCSVReadParams("*ABC", "1");
-        log.info("Expecting cannot open file");
-        s = cr4.execute(null, null);
-        assertEquals("", s);
-    }
-
-    // Check blank lines are treated as EOF
-    public void CSVBlankLine() throws Exception {
-        CSVRead csv1 = setCSVReadParams("testfiles/testblank.csv", "1");
-        CSVRead csv2 = setCSVReadParams("testfiles/testblank.csv", "next");
-
-        String s;
-
-        for (int i = 1; i <= 2; i++) {
-            s = csv1.execute(null, null);
-            assertEquals("b1", s);
-
-            s = csv2.execute(null, null);
-            assertEquals("", s);
-
-            s = csv1.execute(null, null);
-            assertEquals("b2", s);
-
-            s = csv2.execute(null, null);
-            assertEquals("", s);
-        }
-
-    }
 
     // XPathFileContainer tests
     
@@ -653,28 +389,28 @@ public class PackageTest extends JMeterTestCaseJUnit3 {
 
     public void XPathThread1() throws Exception {
         Thread.currentThread().setName("XPathOne");
-        synchronized (baton) {
+        synchronized (BATON) {
             assertEquals("u1",sxp1.execute());
             assertEquals("u2",sxp1.execute());
-            baton.pass();
+            BATON.pass();
             assertEquals("u5",sxp1.execute());
-            baton.pass();
+            BATON.pass();
             assertEquals("u2",sxp1.execute());
-            baton.done();
+            BATON.done();
         }
     }
 
     public void XPathThread2() throws Exception {
         Thread.currentThread().setName("XPathTwo");
         Thread.sleep(500);
-        synchronized (baton) {
+        synchronized (BATON) {
             assertEquals("u3",sxp2.execute());
             assertEquals("u4",sxp2.execute());
-            baton.pass();
+            BATON.pass();
             assertEquals("u1",sxp2.execute());
-            baton.pass();
+            BATON.pass();
             assertEquals("u3",sxp2.execute());
-            baton.done();
+            BATON.done();
         }
     }
 
