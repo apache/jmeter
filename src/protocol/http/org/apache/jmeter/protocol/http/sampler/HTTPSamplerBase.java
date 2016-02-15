@@ -96,7 +96,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public abstract class HTTPSamplerBase extends AbstractSampler
     implements TestStateListener, TestIterationListener, ThreadListener, HTTPConstantsInterface {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -241,7 +241,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         HTTPConstants.LOCK,
         HTTPConstants.UNLOCK,
         HTTPConstants.REPORT,
-        HTTPConstants.MKCALENDAR
+        HTTPConstants.MKCALENDAR,
+        HTTPConstants.SEARCH
         };
 
     private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
