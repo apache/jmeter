@@ -47,9 +47,7 @@ public class TestKeyToolUtils {
             if (status == 0 || status ==1) {
                 fail("Unexpected status " + status);
             }
-//            System.out.println("testCheckKeytool:status="+status);
         } catch (IOException expected) {
-//            System.out.println("testCheckKeytool:Exception="+e);
         }
     }
 }

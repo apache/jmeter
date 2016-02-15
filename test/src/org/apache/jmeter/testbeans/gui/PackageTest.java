@@ -163,11 +163,11 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("Bean Resource Test Suite");
 
-        List<String> testBaeanclassNames = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class });
+        List<String> testBeanClassNames = ClassFinder.findClassesThatExtend(JMeterUtils.getSearchPaths(), new Class[] { TestBean.class });
 
         boolean errorDetected = false;
         JMeterUtils.setLocale(defaultLocale);
-        for (String className : testBaeanclassNames) {
+        for (String className : testBeanClassNames) {
             Class<?> testBeanClass = Class.forName(className);
             ResourceBundle defaultBundle = null;
             try {
