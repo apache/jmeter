@@ -6401,7 +6401,7 @@ Both Chrome and Internet Explorer use the same trust store for certificates.
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  <code>8080</code> is the default, but you can change it.</property>
+        <property name="Port" required="Yes">The port that the HTTP(S) Test Script Recorder listens to.  <code>8888</code> is the default, but you can change it.</property>
         <property name="HTTPS Domains" required="No">List of domain (or host) names for HTTPS. Use this to pre-generate certificates for all servers you wish to record.
         <br/>
         For example, <code>*.example.com,*.subdomain.example.com</code>
