@@ -38,8 +38,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.jmeter.config.gui.ObsoleteGui;
-import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -47,8 +45,6 @@ import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
@@ -67,8 +63,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
     private static Map<String, Boolean> guiTitles;
 
     private static Map<String, Boolean> guiTags;
-
-    private static Map<String, Boolean> funcTitles;
 
     private static Properties nameMap;
     
@@ -92,14 +86,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      * which was saved by the constructor.
      * 
      */
-    // Constructor for TestElement tests
-    private TestElement testItem;
-
-    public JMeterTest(String testName, TestElement te) {
-        super(testName);// Save the method name
-        testItem = te;
-    }
-
+    
     // Constructor for Serializable tests
     private Serializable serObj;
 
@@ -116,15 +103,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         guiItem = gc;
     }
 
-    // Constructor for Function tests
-    private Function funcItem;
-
     private static volatile boolean classPathShown = false;// Only show classpath once
-
-    public JMeterTest(String testName, Function fi) {
-        super(testName);// Save the method name
-        funcItem = fi;
-    }
 
     /*
      * Use a suite to allow the tests to be generated at run-time
@@ -147,12 +126,8 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         suite.addTest(new JMeterTest("createTagSet"));
         suite.addTest(suiteGUIComponents());
         suite.addTest(suiteSerializableElements());
-        suite.addTest(suiteTestElements());
         suite.addTest(suiteBeanComponents());
-        suite.addTest(new JMeterTest("createFunctionSet"));
-        suite.addTest(suiteFunctions());
         suite.addTest(new JMeterTest("checkGuiSet"));
-        suite.addTest(new JMeterTest("checkFunctionSet"));
         
         suite.addTest(new JMeterTest("resetLocale")); // revert
         return suite;
@@ -172,8 +147,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
-        Document doc;
-        doc = bldr.build(compref);
+        Document doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
         @SuppressWarnings("unchecked")
@@ -189,7 +163,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
             }
         }
         // Add titles that don't need to be documented
-        //guiTitles.put("Root", Boolean.FALSE);
         guiTitles.put("Example Sampler", Boolean.FALSE);
     }
 
@@ -201,8 +174,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
 
         String compref = "../xdocs/usermanual/component_reference.xml";
         SAXBuilder bldr = new SAXBuilder();
-        Document doc;
-        doc = bldr.build(compref);
+        Document doc = bldr.build(compref);
         Element root = doc.getRootElement();
         Element body = root.getChild("body");
         @SuppressWarnings("unchecked")
@@ -216,40 +188,14 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         }
     }
 
-    /*
-     * Extract titles from functions.xml
-     */
-    public void createFunctionSet() throws Exception {
-        funcTitles = new HashMap<>(20);
 
-        String compref = "../xdocs/usermanual/functions.xml";
-        SAXBuilder bldr = new SAXBuilder();
-        Document doc;
-        doc = bldr.build(compref);
-        Element root = doc.getRootElement();
-        Element body = root.getChild("body");
-        Element section = body.getChild("section");
-        @SuppressWarnings("unchecked")
-        List<Element> subSections = section.getChildren("subsection");
-        for (Element subSection : subSections) {
-            @SuppressWarnings("unchecked")
-            List<Element> components = subSection.getChildren("component");
-            for (Element comp : components) {
-                funcTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
-                String tag = comp.getAttributeValue("tag");
-                if (tag != null) {
-                    funcTitles.put(tag, Boolean.FALSE);
-                }
-            }
-        }
-    }
-
-    private int scanprintMap(Map<String, Boolean> m, String t) {
+    public static int scanprintMap(Map<String, Boolean> m, String t) {
         Set<String> s = m.keySet();
-        int unseen = 0;
-        if (s.size() == 0) {
+        if (s.isEmpty()) {
             return 0;
         }
+
+        int unseen = 0;
         for (String key : s) {
             if (!m.get(key).equals(Boolean.TRUE)) {
                 if (unseen == 0)// first time
@@ -269,9 +215,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         assertEquals("Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component", 0, scanprintMap(guiTitles, "GUI"));
     }
 
-    public void checkFunctionSet() throws Exception {
-        assertEquals("Should not have any names left over", 0, scanprintMap(funcTitles, "Function"));
-    }
+    
 
     /*
      * Test GUI elements - create the suite of tests
@@ -300,22 +244,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         return suite;
     }
 
-    /*
-     * Test Functions - create the suite of tests
-     */
-    private static Test suiteFunctions() throws Exception {
-        TestSuite suite = new TestSuite("Functions");
-        for (Object item : getObjects(Function.class)) {
-            if (item.getClass().equals(CompoundVariable.class)) {
-                continue;
-            }
-            TestSuite ts = new TestSuite(item.getClass().getName());
-            ts.addTest(new JMeterTest("runFunction", (Function) item));
-            ts.addTest(new JMeterTest("runFunction2", (Function) item));
-            suite.addTest(ts);
-        }
-        return suite;
-    }
 
     /*
      * Test GUI elements - create the suite of tests
@@ -326,7 +254,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
             Class<? extends Object> c = o.getClass();
             try {
                 JMeterGUIComponent item = new TestBeanGUI(c);
-                // JMeterGUIComponent item = (JMeterGUIComponent) iter.next();
                 TestSuite ts = new TestSuite(item.getClass().getName());
                 ts.addTest(new JMeterTest("GUIComponents2", item));
                 ts.addTest(new JMeterTest("runGUITitle", item));
@@ -366,44 +293,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         }
     }
 
-    /*
-     * run the function test
-     */
-    public void runFunction() throws Exception {
-        if (funcTitles.size() > 0) {
-            String title = funcItem.getReferenceKey();
-            boolean ct = funcTitles.containsKey(title);
-            if (ct) {
-                funcTitles.put(title, Boolean.TRUE);// For detecting extra entries
-            }
-            if (// Is this a work in progress ?
-            title.indexOf("(ALPHA") == -1 && title.indexOf("(EXPERIMENTAL") == -1) {// No,
-                                                                                    // not
-                                                                                    // a
-                                                                                    // work
-                                                                                    // in
-                                                                                    // progress
-                                                                                    // ...
-                String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
-                if (!ct) {
-                    log.warn(s); // Record in log as well
-                }
-                assertTrue(s, ct);
-            }
-        }
-    }
     
-
-    /*
-     * Check that function descriptions are OK
-     */
-    public void runFunction2() throws Exception {
-        for (Object o : funcItem.getArgumentDesc()) {
-            assertTrue("Description must be a String", o instanceof String);
-            assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
-        }
-    }
-
     /*
      * Test GUI elements - run for all components
      */
@@ -501,39 +391,9 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         }
     }
 
-    /*
-     * Test TestElements - create the suite
-     */
-    private static Test suiteTestElements() throws Exception {
-        TestSuite suite = new TestSuite("TestElements");
-        for (Object o : getObjects(TestElement.class)) {
-            TestElement item = (TestElement) o;
-            TestSuite ts = new TestSuite(item.getClass().getName());
-            ts.addTest(new JMeterTest("runTestElement", item));
-            suite.addTest(ts);
-        }
-        return suite;
-    }
-
-    /*
-     * Test TestElements - implement the test case
-     */
-    public void runTestElement() throws Exception {
-        checkElementCloning(testItem);
-        String name = testItem.getClass().getName();
-        assertTrue(name + " must implement Serializable", testItem instanceof Serializable);
-        if (name.startsWith("org.apache.jmeter.examples.")){
-            return;
-        }
-        if (name.equals("org.apache.jmeter.control.TransactionSampler")){
-            return; // Not a real sampler
-        }
-            
-        checkElementAlias(testItem);
-    }
 
     public void readAliases() throws Exception {
-        nameMap = SaveService.loadProperties();        
+        nameMap = SaveService.loadProperties();
         assertNotNull("SaveService nameMap (saveservice.properties) should not be null",nameMap);
     }
     
@@ -541,12 +401,11 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         String name=item.getClass().getName();
         boolean contains = nameMap.values().contains(name);
         if (!contains){
-            //System.out.println(name.substring(name.lastIndexOf('.')+1)+"="+name);
             fail("SaveService nameMap (saveservice.properties) should contain "+name);
         }
     }
 
-    private static Collection<Object> getObjects(Class<?> extendsClass) throws Exception {
+    public static Collection<Object> getObjects(Class<?> extendsClass) throws Exception {
         String exName = extendsClass.getName();
         Object myThis = "";
         Iterator<String> classes = ClassFinder
@@ -570,7 +429,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
                         objects.add(c.newInstance());
                     } catch (InstantiationException e) {
                         caught = e;
-                        // System.out.println(e.toString());
                         try {
                             // Events often have this constructor
                             objects.add(c.getConstructor(new Class[] { Object.class }).newInstance(
@@ -608,7 +466,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
             }
         }
 
-        if (objects.size() == 0) {
+        if (objects.isEmpty()) {
             System.out.println("No classes found that extend " + exName + ". Check the following:");
             System.out.println("Search paths are:");
             String ss[] = JMeterUtils.getSearchPaths();
@@ -627,21 +485,5 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         }
         return objects;
     }
-
-    private static void cloneTesting(TestElement item, TestElement clonedItem) {
-        assertTrue(item != clonedItem);
-        assertEquals("CLONE-SAME-CLASS: testing " + item.getClass().getName(), item.getClass().getName(), clonedItem
-                .getClass().getName());
-    }
-
-    private static void checkElementCloning(TestElement item) {
-        TestElement clonedItem = (TestElement) item.clone();
-        cloneTesting(item, clonedItem);
-        PropertyIterator iter2 = item.propertyIterator();
-        while (iter2.hasNext()) {
-            JMeterProperty item2 = iter2.next();
-            assertEquals(item2.getStringValue(), clonedItem.getProperty(item2.getName()).getStringValue());
-            assertTrue(item2 != clonedItem.getProperty(item2.getName()));
-        }
-    }
+    
 }
