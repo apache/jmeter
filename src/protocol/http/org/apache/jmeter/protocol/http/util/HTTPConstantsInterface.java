@@ -49,6 +49,7 @@ public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
     String CONNECT = "CONNECT"; // $NON-NLS-1$
     String REPORT = "REPORT"; // $NON-NLS-1$
     String MKCALENDAR = "MKCALENDAR"; // $NON-NLS-1$
+    String SEARCH = "SEARCH"; // $NON-NLS-1$
     String HEADER_AUTHORIZATION = "Authorization"; // $NON-NLS-1$
     String HEADER_COOKIE = "Cookie"; // $NON-NLS-1$
     String HEADER_CONNECTION = "Connection"; // $NON-NLS-1$
