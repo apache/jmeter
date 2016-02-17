@@ -218,20 +218,18 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
      * Init the state of buttons
      */
     public void initButtonsState() {
-        final boolean started = false;
         Map<String, Boolean> buttonStates = new HashMap<>();
-        buttonStates.put(ActionNames.ACTION_START, Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.ACTION_STOP, Boolean.valueOf(started));
-        buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.ACTION_START, Boolean.TRUE);
+        buttonStates.put(ActionNames.ACTION_START_NO_TIMERS, Boolean.TRUE);
+        buttonStates.put(ActionNames.ACTION_STOP, Boolean.FALSE);
+        buttonStates.put(ActionNames.ACTION_SHUTDOWN, Boolean.FALSE);
         buttonStates.put(ActionNames.UNDO, Boolean.FALSE);
         buttonStates.put(ActionNames.REDO, Boolean.FALSE);
-        buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.valueOf(!started));
-        buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.valueOf(started));
-        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.valueOf(started));
+        buttonStates.put(ActionNames.REMOTE_START_ALL, Boolean.TRUE);
+        buttonStates.put(ActionNames.REMOTE_STOP_ALL, Boolean.FALSE);
+        buttonStates.put(ActionNames.REMOTE_SHUT_ALL, Boolean.FALSE);
         updateButtons(buttonStates);
     }
-    
     
     /**
      * Change state of buttons on local test
