@@ -196,6 +196,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES = 
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
 
+    private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA = 
+            JMeterUtils.getPropDefault("httpsampler.ignore_embedded_resources_data", false); // $NON-NLS-1$ // default value: false
+
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
 
     public static enum SourceType {
@@ -1953,7 +1956,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             if(cookieManager != null) {
                 CookieManager clonedCookieManager = (CookieManager) cookieManager.clone();
                 this.sampler.setCookieManagerProperty(clonedCookieManager);
-            } 
+            }
+            this.sampler.setMD5(this.sampler.useMD5() || IGNORE_EMBEDDED_RESOURCES_DATA);
             this.jmeterContextOfParentThread = JMeterContextService.getContext();
         }
 
@@ -1972,7 +1976,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
     
     /**
-     * Custom thread implementation that 
+     * Custom thread implementation
      *
      */
     private static class CleanerThread extends Thread {
