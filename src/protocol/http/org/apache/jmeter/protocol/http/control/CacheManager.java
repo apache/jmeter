@@ -16,8 +16,6 @@
  *
  */
 
-// For unit tests @see TestCookieManager
-
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
@@ -77,12 +75,22 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     private static final int DEFAULT_MAX_SIZE = 5000;
 
     private static final long ONE_YEAR_MS = 365*24*60*60*1000L;
+    
+    /** used to share the cache between 2 cache manager
+     * @see CacheManager#createCacheManagerProxy() 
+     * @since 3.0 */
+    private transient Map<String, CacheEntry> localCache;
 
     public CacheManager() {
         setProperty(new BooleanProperty(CLEAR, false));
         setProperty(new BooleanProperty(USE_EXPIRES, false));
         clearCache();
         useExpires = false;
+    }
+    
+    CacheManager(Map<String, CacheEntry> localCache, boolean useExpires) {
+        this.localCache = localCache;
+        this.useExpires = useExpires;
     }
 
     /*
@@ -225,7 +233,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 }
             }
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
-            if(cacheControl != null && !cacheControl.contains("no-cache")) {    
+            if(cacheControl != null && !cacheControl.contains("no-cache")) {
                 // the max-age directive overrides the Expires header,
                 if(cacheControl.contains(MAX_AGE)) {
                     long maxAgeInSecs = Long.parseLong(
@@ -255,11 +263,11 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                                     + date);
                             }
                             // TODO Can't see anything in SPEC
-                            expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);                      
+                            expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);
                         }
                     } else {
                         // TODO Can't see anything in SPEC
-                        expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);                      
+                        expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);
                     }
                 }  
                 // else expiresDate computed in (expires!=null) condition is used
@@ -418,8 +426,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return false;
     }
 
-    private Map<String, CacheEntry> getCache(){
-        return threadCache.get();
+    private Map<String, CacheEntry> getCache() {
+        return localCache != null?localCache:threadCache.get();
     }
 
     public boolean getClearEachIteration() {
@@ -471,6 +479,17 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             }
         };
     }
+    
+    /**
+     * create a cache manager that share the underlying cache of the current one
+     * it allows to use the same cache in different threads which does not inherit from each other
+     * @return a cache manager that share the underlying cache of the current one
+     * @since 3.0
+     */
+    public CacheManager createCacheManagerProxy() {
+        CacheManager cm = new CacheManager(getCache(), this.useExpires);
+        return cm;
+    }
 
     @Override
     public void testStarted() {
@@ -493,7 +512,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         if (getClearEachIteration()) {
             clearCache();
         }
-        useExpires=getUseExpires(); // cache the value
+        useExpires = getUseExpires(); // cache the value
     }
 
 }

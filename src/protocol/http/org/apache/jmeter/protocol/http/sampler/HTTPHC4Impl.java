@@ -204,6 +204,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
     static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
+    
+    private static final String HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
 
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
@@ -420,6 +422,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return res;
         } finally {
             currentRequest = null;
+            JMeterContextService.getContext().getSamplerContext().remove(HTTPCLIENT_TOKEN);
         }
         return res;
     }
@@ -686,7 +689,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Lookup key - must agree with all the values used to create the HttpClient.
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
         
-        HttpClient httpClient = mapHttpClientPerHttpClientKey.get(key);
+        HttpClient httpClient = null;
+        if(this.testElement.isConcurrentDwn()) {
+            httpClient = (HttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
+        }
+        
+        if (httpClient == null) {
+            httpClient = mapHttpClientPerHttpClientKey.get(key);
+        }
 
         if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
             ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
@@ -768,6 +778,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
+        }
+
+        if(this.testElement.isConcurrentDwn()) {
+            JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
         }
 
         // TODO - should this be done when the client is created?
