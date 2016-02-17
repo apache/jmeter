@@ -31,6 +31,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.conn.ClientConnectionOperator;
 import org.apache.http.conn.ClientConnectionRequest;
 import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.conn.DnsResolver;
@@ -61,6 +62,17 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
         ClientConnectionRequest res = super.requestConnection(route, state);
         this.measuredConnection = new MeasuringConnectionRequest(res, this.sample);
         return this.measuredConnection;
+    }
+    
+    /**
+     * Overriden to use {@link JMeterClientConnectionOperator} and fix SNI issue 
+     * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=57935
+     * @see org.apache.http.impl.conn.PoolingClientConnectionManager#createConnectionOperator(org.apache.http.conn.scheme.SchemeRegistry)
+     */
+    @Override
+    protected ClientConnectionOperator createConnectionOperator(
+            SchemeRegistry schreg) {
+        return new JMeterClientConnectionOperator(schreg);
     }
 
     public void setSample(SampleResult sample) {
