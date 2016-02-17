@@ -98,14 +98,14 @@ public class JMeterClientConnectionOperator extends
      */
     private static class HostNameSetter {
 
-        private static final AtomicReference<HostNameSetter> CURRENT = new AtomicReference<HostNameSetter>();
+        private static final AtomicReference<HostNameSetter> CURRENT = new AtomicReference<>();
 
         private final WeakReference<Class<?>> cls;
         private final WeakReference<Method> setter;
 
         private HostNameSetter(Class<?> clazz, Method setter) {
             this.cls = new WeakReference<Class<?>>(clazz);
-            this.setter = setter == null ? null : new WeakReference<Method>(setter);
+            this.setter = setter == null ? null : new WeakReference<>(setter);
         }
 
         private static Method init(Class<?> cls) {
