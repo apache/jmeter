@@ -25,8 +25,9 @@ import org.apache.jmeter.util.JsseSSLManager;
 
 /**
  * Apache HttpClient protocol factory to generate "slow" SSL sockets for emulating dial-up modems
+ * @deprecated Useless since 3.0
  */
-
+@Deprecated
 public class SlowHC4SSLSocketFactory extends HC4TrustAllSSLSocketFactory {
 
     /**

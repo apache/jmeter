@@ -28,7 +28,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
@@ -78,6 +77,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.ContentType;
@@ -92,7 +92,6 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.conn.SchemeRegistryFactory;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -110,11 +109,9 @@ import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
-import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.protocol.http.util.SlowHC4SSLSocketFactory;
 import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
@@ -197,9 +194,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
     
-    // We always want to override the HTTPS scheme, because we want to trust all certificates and hosts
-    private static final Scheme HTTPS_SCHEME;
-
     /*
      * Create a set of default parameters from the ones initially created.
      * This allows the defaults to be overridden if necessary from the properties file.
@@ -229,24 +223,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             SLOW_HTTP = null;
         }
         
-        // We always want to override the HTTPS scheme
-        Scheme https = null;
-        if (CPS_HTTPS > 0) {
-            log.info("Setting up HTTPS SlowProtocol, cps="+CPS_HTTPS);
-            try {
-                https = new Scheme(HTTPConstants.PROTOCOL_HTTPS, HTTPConstants.DEFAULT_HTTPS_PORT, new SlowHC4SSLSocketFactory(CPS_HTTPS));
-            } catch (GeneralSecurityException e) {
-                log.warn("Failed to initialise SLOW_HTTPS scheme, cps="+CPS_HTTPS, e);
-            }
-        } else {
-            log.info("Setting up HTTPS TrustAll scheme");
-            try {
-                https = new Scheme(HTTPConstants.PROTOCOL_HTTPS, HTTPConstants.DEFAULT_HTTPS_PORT, new HC4TrustAllSSLSocketFactory());
-            } catch (GeneralSecurityException e) {
-                log.warn("Failed to initialise HTTPS TrustAll scheme", e);
-            }
-        }
-        HTTPS_SCHEME = https;
         if (localAddress != null){
             DEFAULT_HTTP_PARAMS.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
         }
@@ -726,7 +702,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = new SystemDefaultDnsResolver();
             }
-            ClientConnectionManager connManager = new MeasuringConnectionManager(SchemeRegistryFactory.createDefault(), resolver);
+            ClientConnectionManager connManager = new MeasuringConnectionManager(createSchemeRegistry(), resolver);
             
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
@@ -749,10 +725,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             if (SLOW_HTTP != null){
                 schemeRegistry.register(SLOW_HTTP);
-            }
-
-            if (HTTPS_SCHEME != null){
-                schemeRegistry.register(HTTPS_SCHEME);
             }
 
             // Set up proxy details
@@ -790,6 +762,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         setConnectionAuthorization(httpClient, url, getAuthManager(), key);
 
         return httpClient;
+    }
+
+    /**
+     * Setup LazySchemeSocketFactory
+     * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=58099
+     */
+    private static SchemeRegistry createSchemeRegistry() {
+        final SchemeRegistry registry = new SchemeRegistry();
+        registry.register(
+                new Scheme("http", 80, PlainSocketFactory.getSocketFactory())); //$NON-NLS-1$
+        registry.register(
+                new Scheme("https", 443, new LazySchemeSocketFactory())); //$NON-NLS-1$
+        return registry;
     }
 
     /**
