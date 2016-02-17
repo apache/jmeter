@@ -199,7 +199,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
 
     private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA = 
-            JMeterUtils.getPropDefault("httpsampler.ignore_embedded_resources_data", false); // $NON-NLS-1$ // default value: false
+            JMeterUtils.getPropDefault("httpsampler.embedded_resources_use_md5", false); // $NON-NLS-1$ // default value: false
 
     public static enum SourceType {
         HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
