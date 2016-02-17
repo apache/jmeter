@@ -180,7 +180,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
     public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
-    private static final String CONCURRENT_POOL_DEFAULT = "6"; // default for concurrent pool (do not change)
+    public static final int CONCURRENT_POOL_SIZE = 6; // Default concurrent pool size for download embedded resources
+
+    private static final String CONCURRENT_POOL_DEFAULT = Integer.toString(CONCURRENT_POOL_SIZE); // default for concurrent pool
     
     private static final String USER_AGENT = "User-Agent"; // $NON-NLS-1$
 
@@ -195,8 +197,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES = 
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
-
-    public static final int CONCURRENT_POOL_SIZE = 4; // Default concurrent pool size for download embedded resources
 
     private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA = 
             JMeterUtils.getPropDefault("httpsampler.embedded_resources_use_md5", false); // $NON-NLS-1$ // default value: false
