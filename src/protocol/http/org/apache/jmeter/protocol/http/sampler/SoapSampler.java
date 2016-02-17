@@ -354,12 +354,8 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
             log.debug("End : sample");
             httpMethod.releaseConnection();
             return res;
-        } catch (IllegalArgumentException e)// e.g. some kinds of invalid URL
+        } catch (IllegalArgumentException | IOException e)// e.g. some kinds of invalid URL
         {
-            res.sampleEnd();
-            errorResult(e, res);
-            return res;
-        } catch (IOException e) {
             res.sampleEnd();
             errorResult(e, res);
             return res;
