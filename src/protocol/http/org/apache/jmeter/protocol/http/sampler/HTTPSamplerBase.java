@@ -180,7 +180,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     
     public static final String CONCURRENT_POOL = "HTTPSampler.concurrentPool"; // $NON-NLS-1$
 
-    private static final String CONCURRENT_POOL_DEFAULT = "4"; // default for concurrent pool (do not change)
+    private static final String CONCURRENT_POOL_DEFAULT = "6"; // default for concurrent pool (do not change)
     
     private static final String USER_AGENT = "User-Agent"; // $NON-NLS-1$
 
