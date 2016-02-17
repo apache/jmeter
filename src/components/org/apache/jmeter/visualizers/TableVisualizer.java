@@ -328,15 +328,13 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         public Object invoke(Object pInvokee) {
             Boolean success = (Boolean) super.invoke(pInvokee);
 
-            if(success != null) {
-                if(success.booleanValue()) {
+            if (success != null) {
+                if (success.booleanValue()) {
                     return imageSuccess;
-                }
-                else {
+                } else {
                     return imageFailure;
                 }
-            }
-            else {
+            } else {
                 return null;
             }
         }

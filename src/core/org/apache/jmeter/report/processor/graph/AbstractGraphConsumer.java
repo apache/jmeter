@@ -33,32 +33,32 @@ import org.apache.jmeter.report.processor.ValueResultData;
 
 /**
  * <p>
- * The class AbstractGraphConsumer provides a consumer that build a sorted map
+ * The class AbstractGraphConsumer provides a consumer that builds a sorted map
  * from samples. It uses a projection to define the key (x-axis coordinate) and
  * an aggregator to define the value (y-axis coordinate).
  * </p>
  * 
  * <p>
- * <b>About the seriesData :</b><br>
+ * <strong>About the seriesData:</strong><br>
  * Series are defined by the seriesSelector, so they can be static or dynamic
  * (sample linked) depending on the implementation of the selector.
  * </p>
  * 
  * <p>
- * <b>About the groupData :</b><br>
- * The grapher build an aggregator for each seriesData/key pair using an
+ * <strong>About the groupData:</strong><br>
+ * The grapher builds an aggregator for each seriesData/key pair using an
  * external factory. All groupData from a series do the same aggregate
  * calculation.
  * <p>
  * 
  * <p>
- * <b>About the keys (x-axis coordinates) :</b><br>
+ * <strong>About the keys (x-axis coordinates):</strong><br>
  * Keys are defined by the keysSelector for each seriesData, so the keys can be
- * different depending on the seriesData
+ * different depending on the seriesData.
  * <p>
  * 
  * <p>
- * <b>About the values (y-axis coordinates) :</b><br>
+ * <strong>About the values (y-axis coordinates):</strong><br>
  * Values are defined by the result aggregate produced by each aggregator.
  * During consumption, values to add to the groupData are defined by the
  * valueSelector.
@@ -101,8 +101,8 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     /** The aggregated keys seriesData format. */
     private String aggregatedKeysSeriesFormat = DEFAULT_AGGREGATED_KEYS_SERIES_FORMAT;
 
-    /** reverts keys and values in the result. */
-    private boolean revertsKeysAndValues;
+    /** Reverse keys and values in the result. */
+    private boolean reverseKeysAndValues;
 
     /** Renders percentiles in the results. */
     private boolean renderPercentiles;
@@ -120,22 +120,22 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
     }
 
     /**
-     * Reverts keys and values.
+     * Reverse keys and values.
      *
-     * @return the revertKeysAndValues
+     * @return the reverseKeysAndValues
      */
-    protected final boolean revertsKeysAndValues() {
-        return revertsKeysAndValues;
+    protected final boolean reverseKeysAndValues() {
+        return reverseKeysAndValues;
     }
 
     /**
-     * Reverts keys and values.
+     * Reverse keys and values.
      *
-     * @param revertsKeysAndValues
-     *            the reverts keys and values
+     * @param reverseKeysAndValues
+     *            the reverse keys and values
      */
-    protected final void setRevertKeysAndValues(boolean revertsKeysAndValues) {
-        this.revertsKeysAndValues = revertsKeysAndValues;
+    protected final void setReverseKeysAndValues(boolean reverseKeysAndValues) {
+        this.reverseKeysAndValues = reverseKeysAndValues;
     }
 
     /**
@@ -314,23 +314,20 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         }
         if (!renderPercentiles) {
             for (Map.Entry<Double, Aggregator> entry : aggInfo.entrySet()) {
-                // Init key and value depending on revertsKeysAndValues property
+                // Init key and value depending on reverseKeysAndValues property
                 Double key = entry.getKey();
                 Double value = Double.valueOf(entry.getValue().getResult());
+                if (reverseKeysAndValues) {
+                    key = entry.getValue().getResult();
+                    value = entry.getKey();
+                }
 
                 // Create result storage for coordinates
                 ListResultData coordResult = new ListResultData();
-
-                if (!revertsKeysAndValues) {
-                    key = entry.getKey();
-                    value = Double.valueOf(entry.getValue().getResult());
-                } else {
-                    key = Double.valueOf(entry.getValue().getResult());
-                    value = entry.getKey();
-                }
                 coordResult.addResult(new ValueResultData(key));
                 coordResult.addResult(new ValueResultData(value));
                 dataResult.addResult(coordResult);
+
                 setMinResult(result, RESULT_MIN_X, key);
                 setMaxResult(result, RESULT_MAX_X, key);
                 setMinResult(result, RESULT_MIN_Y, value);
@@ -341,44 +338,26 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             int rank = 0;
             double percent = 0;
             TreeMap<Double, Aggregator> sortedInfo = new TreeMap<>(aggInfo);
-            if (!revertsKeysAndValues) {
-                for (Map.Entry<Double, Aggregator> entry : sortedInfo
-                        .entrySet()) {
-                    Double value = entry.getKey();
-                    percent += (double) 100 * entry.getValue().getCount()
-                            / count;
-                    double percentile = (double) rank / 10;
-                    while (percentile < percent) {
-                        ListResultData coordResult = new ListResultData();
-                        coordResult.addResult(new ValueResultData(
-                                Double.valueOf(percentile)));
-                        coordResult.addResult(new ValueResultData(value));
-                        dataResult.addResult(coordResult);
-                        percentile = (double) ++rank / 10;
-                    }
-                    setMinResult(result, RESULT_MIN_Y, value);
-                    setMaxResult(result, RESULT_MAX_Y, value);
+            for (Map.Entry<Double, Aggregator> entry : sortedInfo.entrySet()) {
+                Double value = entry.getKey();
+                percent += (double) 100 * entry.getValue().getCount() / count;
+                double percentile = (double) rank / 10;
+                while (percentile < percent) {
+                    ListResultData coordResult = new ListResultData();
+                    coordResult.addResult(new ValueResultData(
+                            Double.valueOf(percentile)));
+                    coordResult.addResult(new ValueResultData(value));
+                    dataResult.addResult(coordResult);
+                    percentile = (double) ++rank / 10;
                 }
+                setMinResult(result, RESULT_MIN_Y, value);
+                setMaxResult(result, RESULT_MAX_Y, value);
+            }
+
+            if (!reverseKeysAndValues) {
                 setMinResult(result, RESULT_MIN_X, Double.valueOf(0d));
                 setMaxResult(result, RESULT_MAX_X, Double.valueOf(100d));
             } else {
-                for (Map.Entry<Double, Aggregator> entry : sortedInfo
-                        .entrySet()) {
-                    Double value = entry.getKey();
-                    percent += (double) 100 * entry.getValue().getCount()
-                            / count;
-                    double percentile = (double) rank / 10;
-                    while (percentile < percent) {
-                        ListResultData coordResult = new ListResultData();
-                        coordResult.addResult(new ValueResultData(value));
-                        coordResult.addResult(new ValueResultData(
-                                Double.valueOf(percentile)));
-                        dataResult.addResult(coordResult);
-                        percentile = (double) ++rank / 10;
-                    }
-                    setMinResult(result, RESULT_MIN_X, value);
-                    setMaxResult(result, RESULT_MAX_X, value);
-                }
                 setMinResult(result, RESULT_MIN_Y, Double.valueOf(0d));
                 setMaxResult(result, RESULT_MAX_Y, Double.valueOf(100d));
             }
@@ -497,32 +476,32 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             GroupData groupData = groupInfo.getGroupData();
             AggregatorFactory factory = groupInfo.getAggregatorFactory();
             boolean overallSeries = groupInfo.enablesOverallSeries();
-            boolean aggregatedKeysSeries = groupInfo
-                    .enablesAggregatedKeysSeries();
+            boolean aggregatedKeysSeries = groupInfo.enablesAggregatedKeysSeries();
 
-            for (String seriesName : groupInfo.getSeriesSelector()
-                    .select(sample)) {
+            GraphSeriesSelector seriesSelector = groupInfo.getSeriesSelector();
+            for (String seriesName : seriesSelector.select(sample)) {
                 Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
                 SeriesData seriesData = seriesInfo.get(seriesName);
                 if (seriesData == null) {
-                    seriesData = new SeriesData(factory, aggregatedKeysSeries,
-                            groupInfo.getSeriesSelector()
-                                    .allowsControllersDiscrimination()
-                                            ? sample.isController() : false,
+                    boolean isControllersSeries = sample.isController()
+                            && seriesSelector.allowsControllersDiscrimination();
+
+                    seriesData = new SeriesData(
+                            factory,
+                            aggregatedKeysSeries,
+                            isControllersSeries,
                             false);
                     seriesInfo.put(seriesName, seriesData);
                 }
 
                 // Get the value to aggregate and dispatch it to the groupData
-                double value = groupInfo.getValueSelector().select(seriesName,
-                        sample);
+                double value = groupInfo.getValueSelector().select(seriesName, sample);
 
                 aggregateValue(factory, seriesData, key, value);
                 if (overallSeries) {
                     SeriesData overallData = groupData.getOverallSeries();
                     aggregateValue(factory, overallData, key, value);
                 }
-
             }
         }
 
