@@ -63,7 +63,7 @@ public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
      */
     protected HC4TrustAllSSLSocketFactory(javax.net.ssl.SSLSocketFactory factory) throws GeneralSecurityException {
         super(TRUSTALL, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        this.factory = new HttpSSLProtocolSocketFactory((JsseSSLManager)JsseSSLManager.getInstance(), JsseSSLManager.CPS);
+        this.factory = factory;
     }
 
     /* (non-Javadoc)
