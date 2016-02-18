@@ -46,10 +46,10 @@ import org.apache.jmeter.util.JMeterUtils;
  * Base class for HTTP implementations used by the HTTPSamplerProxy sampler.
  */
 public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsInterface {
-    private static enum CachedResourceMode {
+    private enum CachedResourceMode {
         RETURN_200_CACHE(),
         RETURN_NO_SAMPLE(),
-        RETURN_CUSTOM_STATUS();
+        RETURN_CUSTOM_STATUS()
     }
 
     /**
