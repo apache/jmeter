@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
 import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.scheme.SchemeSocketFactory;
+import org.apache.http.conn.scheme.SchemeLayeredSocketFactory;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.params.HttpParams;
@@ -37,10 +37,10 @@ import org.apache.log.Logger;
  * Lazy SchemeSocketFactory that lazily initializes HTTPS Socket Factory
  * @since 3.0
  */
-public final class LazySchemeSocketFactory implements SchemeSocketFactory{
+public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory{
     private static final Logger LOG = LoggingManager.getLoggerForClass();
     
-    private volatile SchemeSocketFactory adaptee;
+    private volatile SchemeLayeredSocketFactory adaptee;
     
     /**
      * 
@@ -109,5 +109,18 @@ public final class LazySchemeSocketFactory implements SchemeSocketFactory{
     public boolean isSecure(Socket sock) throws IllegalArgumentException {
         checkAndInit();
         return adaptee.isSecure(sock);
+    }
+
+    /**
+     * @param socket {@link Socket}
+     * @param target 
+     * @param port 
+     * @param params {@link HttpParams}
+     */
+    @Override
+    public Socket createLayeredSocket(Socket socket, String target, int port,
+            HttpParams params) throws IOException, UnknownHostException {
+        checkAndInit();
+        return adaptee.createLayeredSocket(socket, target, port, params);
     }
 }
