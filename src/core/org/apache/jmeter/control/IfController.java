@@ -193,7 +193,8 @@ public class IfController extends GenericController implements Serializable, Thr
      * @return boolean
      * @throws Exception
      */
-    private static final boolean computeResultFromString(String condition, String resultStr) throws Exception {
+    private static boolean computeResultFromString(
+            String condition, String resultStr) throws Exception {
         boolean result;
         switch(resultStr) {
             case "false":
@@ -205,7 +206,7 @@ public class IfController extends GenericController implements Serializable, Thr
             default:
                 throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("    >> evaluate Condition -  [ " + condition + "] results is  [" + result + "]");
         }
         return result;
