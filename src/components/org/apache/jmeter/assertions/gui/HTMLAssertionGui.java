@@ -272,16 +272,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
         String errorThresholdString = errorThresholdField.getText();
         if (errorThresholdString != null) {
-            boolean isInvalid = false;
-            try {
-                long errorThreshold = Long.parseLong(errorThresholdString);
-                if (errorThreshold < 0) {
-                    isInvalid = true;
-                }
-            } catch (NumberFormatException ex) {
-                isInvalid = true;
-            }
-            if (isInvalid) {
+            if (!isThresholdValid(errorThresholdString)) {
                 log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
                 JOptionPane.showMessageDialog(null, "Threshold for errors is invalid", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -290,21 +281,28 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
         String warningThresholdString = warningThresholdField.getText();
         if (warningThresholdString != null) {
-            boolean isInvalid = false;
-            try {
-                long warningThreshold = Long.parseLong(warningThresholdString);
-                if (warningThreshold < 0) {
-                    isInvalid = true;
-                }
-            } catch (NumberFormatException ex) {
-                isInvalid = true;
-            }
-            if (isInvalid) {
-                log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
+            if (!isThresholdValid(warningThresholdString)) {
+                log.warn("HTMLAssertionGui: Warning threshold Not a valid number!");
                 JOptionPane.showMessageDialog(null, "Threshold for warnings is invalid", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    /**
+     * @param errorThresholdString Threshold as String
+     * @return boolean
+     */
+    private boolean isThresholdValid(String errorThresholdString) {
+        boolean isValid = true;
+        try {
+            if (Long.parseLong(errorThresholdString) < 0) {
+                isValid = false;
+            }
+        } catch (NumberFormatException ex) {
+            isValid = false;
+        }
+        return isValid;
     }
 
     /**

@@ -847,11 +847,18 @@ public class ProxyControl extends GenericController {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName("-------------------"); // $NON-NLS-1$
+        safelyAddComponent(model, node, sc);
+    }
+
+    private void safelyAddComponent(
+            final JMeterTreeModel model,
+            final JMeterTreeNode node,
+            final GenericController controller) {
         JMeterUtils.runSafe(true, new Runnable() {
             @Override
             public void run() {
                 try {
-                    model.addComponent(sc, node);
+                    model.addComponent(controller, node);
                 } catch (IllegalUserActionException e) {
                     log.error("Program error", e);
                     throw new Error(e);
@@ -877,17 +884,7 @@ public class ProxyControl extends GenericController {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
-        JMeterUtils.runSafe(true, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    model.addComponent(sc, node);
-                } catch (IllegalUserActionException e) {
-                     log.error("Program error", e);
-                     throw new Error(e);
-                }
-            }
-        });
+        safelyAddComponent(model, node, sc);
     }
 
     /**
@@ -908,21 +905,11 @@ public class ProxyControl extends GenericController {
         sc.setIncludeTimers(false);
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);
         sc.setName(name);
-        JMeterUtils.runSafe(true, new Runnable() {
-            @Override
-            public void run() {
-                 try {
-                    model.addComponent(sc, node);
-                } catch (IllegalUserActionException e) {
-                    log.error("Program error", e);
-                    throw new Error(e);
-                }
-            }
-        });
+        safelyAddComponent(model, node, sc);
     }
     /**
-     * Helpler method to replicate any timers found within the Proxy Controller
-     * into the provided sampler, while replacing any occurences of string _T_
+     * Helper method to replicate any timers found within the Proxy Controller
+     * into the provided sampler, while replacing any occurrences of string _T_
      * in the timer's configuration with the provided deltaT.
      * Called from AWT Event thread
      * @param model
@@ -1224,9 +1211,9 @@ public class ProxyControl extends GenericController {
     private boolean matchesPatterns(String url, CollectionProperty patterns) {
         for (JMeterProperty jMeterProperty : patterns) {
             String item = jMeterProperty.getStringValue();
-            Pattern pattern = null;
             try {
-                pattern = JMeterUtils.getPatternCache().getPattern(item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+                Pattern pattern = JMeterUtils.getPatternCache().getPattern(
+                        item, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
                 if (JMeterUtils.getMatcher().matches(url, pattern)) {
                     return true;
                 }
@@ -1278,7 +1265,7 @@ public class ProxyControl extends GenericController {
 
     /**
      * This will notify sample listeners directly within the Proxy of the
-     * sampling that just occured -- so that we have a means to record the
+     * sampling that just occurred -- so that we have a means to record the
      * server's responses as we go.
      *
      * @param event
@@ -1445,10 +1432,9 @@ public class ProxyControl extends GenericController {
 
     private boolean isValid(String subject) {
         String[] parts = subject.split("\\.");
-        if (!parts[0].endsWith("*")) { // not a wildcard
-            return true;
-        }
-        return parts.length >= 3 && AbstractVerifier.acceptableCountryWildcard(subject);
+        return !parts[0].endsWith("*") // not a wildcard
+                || parts.length >= 3
+                && AbstractVerifier.acceptableCountryWildcard(subject);
     }
 
     // This should only be called for a specific host
