@@ -33,7 +33,7 @@ import org.apache.log.Logger;
 /**
  * This is an implementation of a full-fledged property editor, providing both
  * object-text transformation and an editor GUI (a custom editor component),
- * from two simpler property editors providing only one of these functionalities
+ * from two simpler property editors providing only one of these functions
  * each, namely:
  * <dl>
  * <dt>typeEditor
@@ -44,11 +44,11 @@ import org.apache.log.Logger;
  * <dt>guiEditor</dt>
  * <dd>Provides a suitable GUI for the property, but works on [possibly null]
  * String values. That is: it supportsCustomEditor, but get/setAsText and
- * get/setValue are indentical.</dd>
+ * get/setValue are identical.</dd>
  * </dl>
  * <p>
  * The resulting editor provides optional support for null values (you can
- * choose whether <b>null</b> is to be a valid property value). It also
+ * choose whether <strong>null</strong> is to be a valid property value). It also
  * provides optional support for JMeter 'expressions' (you can choose whether
  * they make valid property values).
  *
@@ -56,32 +56,22 @@ import org.apache.log.Logger;
 class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /**
-     * The type's property editor.
-     */
+    /** The type's property editor. */
     private final PropertyEditor typeEditor;
 
-    /**
-     * The gui property editor
-     */
+    /** The gui property editor */
     private final PropertyEditor guiEditor;
 
-    /**
-     * Whether to allow <b>null</b> as a property value.
-     */
+    /** Whether to allow <b>null</b> as a property value. */
     private final boolean acceptsNull;
 
-    /**
-     * Whether to allow JMeter 'expressions' as property values.
-     */
+    /** Whether to allow JMeter 'expressions' as property values. */
     private final boolean acceptsExpressions;
 
-    /**
-     * Whether to allow any constant values different from the provided tags.
-     */
+    /** Whether to allow any constant values different from the provided tags. */
     private final boolean acceptsOther;
 
-    /** Default value to be used to (re-)initialiase the field */
+    /** Default value to be used to (re-)initialise the field */
     private final Object defaultValue;
 
     /**
@@ -93,8 +83,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     /**
      * Constructor for use when a PropertyEditor is delegating to us.
      */
-    WrapperEditor(Object source, PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull,
-            boolean acceptsExpressions, boolean acceptsOther, Object defaultValue) {
+    WrapperEditor(
+            Object source, PropertyEditor typeEditor, PropertyEditor guiEditor,
+            boolean acceptsNull, boolean acceptsExpressions,
+            boolean acceptsOther, Object defaultValue) {
         super();
         if (source != null) {
             super.setSource(source);
@@ -111,12 +103,14 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     /**
      * Constructor for use for regular instantiation and by subclasses.
      */
-    WrapperEditor(PropertyEditor typeEditor, PropertyEditor guiEditor, boolean acceptsNull, boolean acceptsExpressions,
+    WrapperEditor(
+            PropertyEditor typeEditor, PropertyEditor guiEditor,
+            boolean acceptsNull, boolean acceptsExpressions,
             boolean acceptsOther, Object defaultValue) {
         this(null, typeEditor, guiEditor, acceptsNull, acceptsExpressions,  acceptsOther, defaultValue);
     }
 
-    final void resetValue(){
+    final void resetValue() {
         setValue(defaultValue);
         lastValidValue = getAsText();        
     }
@@ -126,11 +120,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         resetValue();
 
         if (guiEditor instanceof ComboStringEditor) {
-            String[] tags = ((ComboStringEditor) guiEditor).getTags();
+            String[] tags = guiEditor.getTags();
 
-            // Provide an initial edit value if necessary -- this is an
-            // heuristic that tries to provide the most convenient
-            // initial edit value:
+            // Provide an initial edit value if necessary -- this is a heuristic
+            // that tries to provide the most convenient initial edit value:
 
             String v;
             if (!acceptsOther) {
@@ -167,10 +160,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
     }
 
     /**
-     * Determine wheter a string is one of the known tags.
+     * Determine whether a string is one of the known tags.
      *
-     * @param text
-     * @return true iif text equals one of the getTags()
+     * @param text the value to be checked
+     * @return true if text equals one of the getTags()
      */
     private boolean isATag(String text) {
         String[] tags = getTags();
@@ -207,6 +200,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         if (isATag(text)) {
             return true;
         }
+
         // Was not a tag, so if we can't accept other values...
         if (!acceptsOther) {
             return false;
@@ -216,8 +210,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         try {
             typeEditor.setAsText(text);
         } catch (IllegalArgumentException e1) {
-            // setAsText failed: not valid
-            return false;
+            return false; // setAsText failed: not valid
         }
         // setAsText succeeded: valid
         return true;
@@ -232,7 +225,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws an error.
      */
-    private final void shouldNeverHappen(String msg) throws Error {
+    private void shouldNeverHappen(String msg) throws Error {
         throw new Error(msg); // Programming error: bail out.
     }
 
@@ -244,7 +237,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * @throws Error
      *             always throws one.
      */
-    private final void shouldNeverHappen(Exception e) throws Error {
+    private void shouldNeverHappen(Exception e) throws Error {
         throw new Error(e.toString()); // Programming error: bail out.
     }
 
@@ -252,10 +245,10 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * Check if a string is a valid JMeter 'expression'.
      * <p>
      * The current implementation is very basic: it just accepts any string
-     * containing "${" as a valid expression. TODO: improve, but keep returning
-     * true for "${}".
+     * containing "${" as a valid expression.
+     * TODO: improve, but keep returning true for "${}".
      */
-    private final boolean isExpression(String text) {
+    private boolean isExpression(String text) {
         return text.contains("${");//$NON-NLS-1$
     }
 
@@ -263,9 +256,9 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      * Same as isExpression(String).
      *
      * @param text
-     * @return true iif text is a String and isExpression(text).
+     * @return true if text is a String and isExpression(text).
      */
-    private final boolean isExpression(Object text) {
+    private boolean isExpression(Object text) {
         return text instanceof String && isExpression((String) text);
     }
 
@@ -300,8 +293,8 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
                     try {
                         typeEditor.setAsText(text);
                     } catch (NumberFormatException e) {
-                        if (text.length()==0){
-                            text="0";//$NON-NLS-1$
+                        if (text.length() == 0){
+                            text = "0";//$NON-NLS-1$
                             typeEditor.setAsText(text);
                         } else {
                             shouldNeverHappen(e);
@@ -354,7 +347,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
      */
     private String fixGetAsTextBug(String asText) {
         if (asText == null){
-            return asText;
+            return null;
         }
         if (asText.equals("true")){
             log.debug("true=>True");// so we can detect it

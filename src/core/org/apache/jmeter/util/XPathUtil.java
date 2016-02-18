@@ -433,14 +433,14 @@ public class XPathUtil {
      * @param xml string to format
      * @return String formatted XML
      */
-    public static final String formatXml(String xml){
+    public static String formatXml(String xml){
         try {
             Transformer serializer= TransformerFactory.newInstance().newTransformer();
             serializer.setOutputProperty(OutputKeys.INDENT, "yes");
             serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            Source xmlSource=new SAXSource(new InputSource(new StringReader(xml)));
+            Source xmlSource = new SAXSource(new InputSource(new StringReader(xml)));
             StringWriter stringWriter = new StringWriter();
-            StreamResult res =  new StreamResult(stringWriter);            
+            StreamResult res = new StreamResult(stringWriter);
             serializer.transform(xmlSource, res);
             return stringWriter.toString();
         } catch (Exception e) {

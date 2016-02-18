@@ -150,7 +150,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /** TextEditor property */
     public static final String TEXT_LANGUAGE = "textLanguage"; //$NON-NLS-1$
 
-    public static final String ORDER(String group) {
+    public static String ORDER(String group) {
         return "group." + group + ".order";
     }
 

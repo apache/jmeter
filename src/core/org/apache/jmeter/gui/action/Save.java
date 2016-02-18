@@ -407,7 +407,7 @@ public class Save implements Command {
      * Check nodes does not contain a node of type TestPlan or ThreadGroup
      * @param nodes
      */
-    private static final boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
+    private static boolean checkAcceptableForTestFragment(JMeterTreeNode[] nodes) {
         for (JMeterTreeNode node : nodes) {
             Object userObject = node.getUserObject();
             if (userObject instanceof ThreadGroup ||

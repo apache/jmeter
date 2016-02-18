@@ -35,7 +35,7 @@ public interface SampleProcessor {
      *
      * @return the sample context
      */
-    public SampleContext getSampleContext();
+    SampleContext getSampleContext();
 
     /**
      * Set sample context that this consumer should rely on.
@@ -43,7 +43,7 @@ public interface SampleProcessor {
      * @param ctx
      *            the new sample context
      */
-    public void setSampleContext(SampleContext ctx);
+    void setSampleContext(SampleContext ctx);
 
     /**
      * Associate an attribute to the specified channel for this sample processor<br>
@@ -56,7 +56,7 @@ public interface SampleProcessor {
      * @param value
      *            The attribute value to be set
      */
-    public void setChannelAttribute(int channel, String key, Object value);
+    void setChannelAttribute(int channel, String key, Object value);
 
     /**
      * Return an attribute value associated on a channel on this sample
@@ -69,6 +69,6 @@ public interface SampleProcessor {
      * @return The attribute value or null if none is found for the specified
      *         key
      */
-    public Object getChannelAttribute(int channel, String key);
+    Object getChannelAttribute(int channel, String key);
 
 }
