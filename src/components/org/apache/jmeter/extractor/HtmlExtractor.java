@@ -208,7 +208,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
      * @param impl Extractor implementation
      * @return Extractor
      */
-    public static final Extractor getExtractorImpl(String impl) {
+    public static Extractor getExtractorImpl(String impl) {
         boolean useDefaultExtractor = DEFAULT_EXTRACTOR.equals(impl);
         if (useDefaultExtractor || EXTRACTOR_JSOUP.equals(impl)) {
             return new JSoupExtractor();

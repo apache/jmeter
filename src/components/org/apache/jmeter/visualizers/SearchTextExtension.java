@@ -260,7 +260,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
      * Search provider definition
      * Allow the search extension to search on any component
      */
-    public static interface ISearchTextExtensionProvider {
+    public interface ISearchTextExtensionProvider {
         
         /**
          * reset the provider
