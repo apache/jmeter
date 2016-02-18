@@ -107,6 +107,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     {
         JPanel p = new JPanel(new BorderLayout());
         JScrollPane scroller = new JScrollPane(table);
+        scroller.setMinimumSize(new Dimension(100, 70));
         scroller.setPreferredSize(scroller.getMinimumSize());
         p.add(scroller,BorderLayout.CENTER);
         JPanel south = new JPanel();
