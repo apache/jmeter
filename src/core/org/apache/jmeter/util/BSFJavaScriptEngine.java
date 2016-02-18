@@ -224,7 +224,9 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             global = new ImporterTopLevel(cx);
             Scriptable bsf = Context.toObject(new BSFFunctions(mgr, this), global);
             global.put("bsf", global, bsf);
-            for (BSFDeclaredBean declaredBean : (Iterable<BSFDeclaredBean>) declaredBeans) {
+            @SuppressWarnings("unchecked") // superclass does not support types
+            final Vector<BSFDeclaredBean> beans = declaredBeans;
+            for (BSFDeclaredBean declaredBean : beans) {
                 declareBean(declaredBean);
             }
         }
