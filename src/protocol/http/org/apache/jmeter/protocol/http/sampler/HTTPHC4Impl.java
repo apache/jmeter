@@ -700,7 +700,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
             DnsResolver resolver = this.testElement.getDNSResolver();
             if (resolver == null) {
-                resolver = new SystemDefaultDnsResolver();
+                resolver = SystemDefaultDnsResolver.INSTANCE;
             }
             ClientConnectionManager connManager = new MeasuringConnectionManager(createSchemeRegistry(), resolver);
             
