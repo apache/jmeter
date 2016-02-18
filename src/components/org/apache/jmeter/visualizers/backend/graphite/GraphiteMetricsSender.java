@@ -22,8 +22,8 @@ package org.apache.jmeter.visualizers.backend.graphite;
  * @since 2.13
  */
 interface GraphiteMetricsSender {
-    final int SOCKET_CONNECT_TIMEOUT_MS = 1000;
-    final int SOCKET_TIMEOUT = 1000;
+    int SOCKET_CONNECT_TIMEOUT_MS = 1000;
+    int SOCKET_TIMEOUT = 1000;
 
 
     String CHARSET_NAME = "UTF-8"; //$NON-NLS-1$

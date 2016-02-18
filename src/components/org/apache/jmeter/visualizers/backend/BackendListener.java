@@ -259,8 +259,9 @@ public class BackendListener extends AbstractTestElement
      * @param context {@link BackendListenerContext}
      * @param sampleResults List of {@link SampleResult}
      */
-    static final void sendToListener(final BackendListenerClient backendListenerClient, 
-            final BackendListenerContext context, 
+    static void sendToListener(
+            final BackendListenerClient backendListenerClient,
+            final BackendListenerContext context,
             final List<SampleResult> sampleResults) {
         if (sampleResults.size() > 0) {
             backendListenerClient.handleSampleResults(sampleResults, context);
