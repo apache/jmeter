@@ -138,9 +138,9 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
         size.setText(assertion.getAllowedSize());
         setState(assertion.getCompOper());
         showScopeSettings(assertion, true);
-        
+
         if (assertion.isTestFieldResponseHeaders()) {
-        responseHeadersButton.setSelected(true);
+            responseHeadersButton.setSelected(true);
         } else if (assertion.isTestFieldResponseBody()) {
             responseBodyButton.setSelected(true);
         } else if (assertion.isTestFieldResponseCode()) {

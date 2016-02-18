@@ -101,7 +101,8 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         if (msg.length() > 0) {
             result.setFailure(true);
             Object[] arguments = { Long.valueOf(resultSize), msg, Long.valueOf(getAllowedSize()) };
-            String message = MessageFormat.format(JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
+            String message = MessageFormat.format(
+                    JMeterUtils.getResString("size_assertion_failure"), arguments); //$NON-NLS-1$
             result.setFailureMessage(message);
         }
         return result;
