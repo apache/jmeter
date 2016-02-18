@@ -213,17 +213,17 @@ public class Data implements Serializable {
      */
     private void sortData(String column, int start, int end) {
         int x = start, y = end - 1;
-        String basis = ((List<?>) data.get(column)).get((x + y) / 2).toString();
+        String basis = data.get(column).get((x + y) / 2).toString();
         if (x == y) {
             return;
         }
 
         while (x <= y) {
-            while (x < end && ((List<?>) data.get(column)).get(x).toString().compareTo(basis) < 0) {
+            while (x < end && data.get(column).get(x).toString().compareTo(basis) < 0) {
                 x++;
             }
 
-            while (y >= (start - 1) && ((List<?>) data.get(column)).get(y).toString().compareTo(basis) > 0) {
+            while (y >= (start - 1) && data.get(column).get(y).toString().compareTo(basis) > 0) {
                 y--;
             }
 
@@ -416,7 +416,7 @@ public class Data implements Serializable {
     public Object getColumnValue(String column) {
         try {
             if (currentPos < size) {
-                return ((List<?>) data.get(column)).get(currentPos);
+                return data.get(column).get(currentPos);
             } else {
                 return null;
             }
@@ -434,15 +434,7 @@ public class Data implements Serializable {
      */
     public Object getColumnValue(int column) {
         String columnName = header.get(column);
-        try {
-            if (currentPos < size) {
-                return ((List<?>) data.get(columnName)).get(currentPos);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
+        return getColumnValue(columnName);
     }
 
     public Object getColumnValue(int column, int row) {
