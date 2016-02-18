@@ -251,7 +251,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
     private static Test suiteBeanComponents() throws Exception {
         TestSuite suite = new TestSuite("BeanComponents");
         for (Object o : getObjects(TestBean.class)) {
-            Class<? extends Object> c = o.getClass();
+            Class<?> c = o.getClass();
             try {
                 JMeterGUIComponent item = new TestBeanGUI(c);
                 TestSuite ts = new TestSuite(item.getClass().getName());
@@ -279,8 +279,8 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
             String name = guiItem.getClass().getName();
             if (// Is this a work in progress or an internal GUI component?
                 (title != null && title.length() > 0) // Will be "" for internal components
-                && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(ALPHA") == -1) 
-                && (title.toUpperCase(java.util.Locale.ENGLISH).indexOf("(BETA") == -1)
+                && (!title.toUpperCase(Locale.ENGLISH).contains("(ALPHA"))
+                && (!title.toUpperCase(Locale.ENGLISH).contains("(BETA"))
                 && (!title.matches("Example\\d+")) // Skip the example samplers ...
                 && (!name.startsWith("org.apache.jmeter.examples."))) 
             {// No, not a work in progress ...
@@ -293,7 +293,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         }
     }
 
-    
     /*
      * Test GUI elements - run for all components
      */

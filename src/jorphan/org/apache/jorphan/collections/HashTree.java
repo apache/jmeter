@@ -113,7 +113,7 @@ public class HashTree implements Serializable, Map<Object, HashTree>, Cloneable 
      * @see java.util.Map#putAll(Map)
      */
     @Override
-    public void putAll(Map<? extends Object, ? extends HashTree> map) {
+    public void putAll(Map<?, ? extends HashTree> map) {
         if (map instanceof HashTree) {
             this.add((HashTree) map);
         } else {

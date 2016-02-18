@@ -42,7 +42,7 @@ public final class CLUtil {
      *            the option descriptors
      * @return the formatted description/help for options
      */
-    public static final StringBuilder describeOptions(final CLOptionDescriptor[] options) {
+    public static StringBuilder describeOptions(final CLOptionDescriptor[] options) {
         final String lSep = System.getProperty("line.separator");
         final StringBuilder sb = new StringBuilder();
 
