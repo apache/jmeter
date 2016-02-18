@@ -186,7 +186,7 @@ public class LagartoBasedHtmlParser extends HTMLParser {
                 }
                 String expressionString = expression.toString().trim();
                 enabled.push(Boolean.valueOf(htmlCCommentExpressionMatcher.match(ieVersion.floatValue(),
-                        expressionString)));                
+                        expressionString)));
             }
         }
 

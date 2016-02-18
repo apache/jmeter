@@ -75,9 +75,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             result = (HTTPSampleResult) res;
         }
         List<HTTPSamplerBase> potentialLinks = new ArrayList<>();
-        String responseText = ""; // $NON-NLS-1$
-        responseText = result.getResponseDataAsString();
-        Document html;
+        String responseText = result.getResponseDataAsString();
         int index = responseText.indexOf('<'); // $NON-NLS-1$
         if (index == -1) {
             index = 0;
@@ -85,7 +83,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         if (log.isDebugEnabled()) {
             log.debug("Check for matches against: "+sampler.toString());
         }
-        html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
+        Document html = (Document) HtmlParsingUtils.getDOM(responseText.substring(index));
         addAnchorUrls(html, result, sampler, potentialLinks);
         addFormUrls(html, result, sampler, potentialLinks);
         addFramesetUrls(html, result, sampler, potentialLinks);
@@ -106,11 +104,9 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
                 // config.parseArguments(url.getQueryString());
             }
             sampler.setProtocol(url.getProtocol());
-            return;
         } else {
             log.debug("No matches found");
         }
-        return;
     }
 
     private void modifyArgument(Argument arg, Arguments args) {
