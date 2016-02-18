@@ -226,7 +226,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
     }
 
     /**
-     * This itemStateChanged listener for changing the card layout for based on\
+     * This itemStateChanged listener for changing the card layout for based on
      * the test selected in the User defined test case.
      */
     @Override
@@ -263,25 +263,22 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
                 searchfilter.setText(""); // $NON-NLS-1$
                 delete.setText("");
             } else {
-                cl.show(cards, ""); // $NON-NLS-1$
-                tableAddPanel.clear();
-                add.setText(""); // $NON-NLS-1$
-                tableModifyPanel.clear();
-                modify.setText(""); // $NON-NLS-1$
-                searchbase.setText(""); // $NON-NLS-1$
-                searchfilter.setText(""); // $NON-NLS-1$
-                delete.setText(""); // $NON-NLS-1$
+                resetCardLayout(cl);
             }
         } else {
-            cl.show(cards, ""); // $NON-NLS-1$
-            tableAddPanel.clear();
-            add.setText(""); // $NON-NLS-1$
-            tableModifyPanel.clear();
-            modify.setText(""); // $NON-NLS-1$
-            searchbase.setText(""); // $NON-NLS-1$
-            searchfilter.setText(""); // $NON-NLS-1$
-            delete.setText(""); // $NON-NLS-1$
+            resetCardLayout(cl);
         }
+    }
+
+    private void resetCardLayout(CardLayout cl) {
+        cl.show(cards, ""); // $NON-NLS-1$
+        tableAddPanel.clear();
+        add.setText(""); // $NON-NLS-1$
+        tableModifyPanel.clear();
+        modify.setText(""); // $NON-NLS-1$
+        searchbase.setText(""); // $NON-NLS-1$
+        searchfilter.setText(""); // $NON-NLS-1$
+        delete.setText(""); // $NON-NLS-1$
     }
 
     /**
