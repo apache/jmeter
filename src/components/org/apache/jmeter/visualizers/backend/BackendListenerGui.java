@@ -241,7 +241,8 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * @param className String class name
      * @return boolean true if model contains className
      */
-    private static final boolean checkContainsClassName(ComboBoxModel<?> model, String className) {
+    private static boolean checkContainsClassName(
+            ComboBoxModel<?> model, String className) {
         int size = model.getSize();
         Set<String> set = new HashSet<>(size);
         for (int i = 0; i < size; i++) {

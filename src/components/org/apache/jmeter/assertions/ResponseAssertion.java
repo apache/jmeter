@@ -75,7 +75,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
      * are mutually exclusive
      */
-    private static final int MATCH = 1 << 0;
+    private static final int MATCH = 1; // 1 << 0;
 
     private static final int CONTAINS = 1 << 1;
 

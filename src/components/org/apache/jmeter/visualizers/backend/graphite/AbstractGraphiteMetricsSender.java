@@ -63,7 +63,7 @@ abstract class AbstractGraphiteMetricsSender implements GraphiteMetricsSender {
      *            text to be sanitized
      * @return the sanitized text
      */
-    static final String sanitizeString(String s) {
+    static String sanitizeString(String s) {
         // String#replace uses regexp
         return StringUtils.replaceChars(s, "\\ .", "--_");
     }    
