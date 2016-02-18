@@ -64,13 +64,13 @@ public interface SampleConsumer extends SampleProcessor {
      * @param channel
      *            The channel whose sample metadata are beeing defined
      */
-    public void setConsumedMetadata(SampleMetadata sampleMetadata, int channel);
+    void setConsumedMetadata(SampleMetadata sampleMetadata, int channel);
 
     /**
      * Start the sample consuming. This step is used be consumer to intialize
      * their process.
      */
-    public void startConsuming();
+    void startConsuming();
 
     /**
      * Consumes the specified sample ton the specified channel.
@@ -80,12 +80,12 @@ public interface SampleConsumer extends SampleProcessor {
      * @param channel
      *            The channel on which the sample is consumed
      */
-    public void consume(Sample s, int channel);
+    void consume(Sample s, int channel);
 
     /**
      * Stops the consuming process. No sample will be processed after this
      * service has been called.
      */
-    public void stopConsuming();
+    void stopConsuming();
 
 }

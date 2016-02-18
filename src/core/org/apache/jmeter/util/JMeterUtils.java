@@ -1305,7 +1305,7 @@ public class JMeterUtils implements UnitTestManager {
      * otherwise runs call {@link SwingUtilities#invokeAndWait(Runnable)}
      * @param runnable {@link Runnable}
      */
-    public static final void runSafe(Runnable runnable) {
+    public static void runSafe(Runnable runnable) {
         runSafe(true, runnable);
     }
 
@@ -1315,7 +1315,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param synchronous flag, whether we will wait for the AWT Thread to finish its job.
      * @param runnable {@link Runnable}
      */
-    public static final void runSafe(boolean synchronous, Runnable runnable) {
+    public static void runSafe(boolean synchronous, Runnable runnable) {
         if(SwingUtilities.isEventDispatchThread()) {
             runnable.run();
         } else {
@@ -1337,7 +1337,7 @@ public class JMeterUtils implements UnitTestManager {
     /**
      * Help GC by triggering GC and finalization
      */
-    public static final void helpGC() {
+    public static void helpGC() {
         System.gc();
         System.runFinalization();
     }
@@ -1348,9 +1348,9 @@ public class JMeterUtils implements UnitTestManager {
      * @param matcher {@link Perl5Matcher}
      * @param pattern Pattern
      */
-    public static final void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
+    public static void clearMatcherMemory(Perl5Matcher matcher, Pattern pattern) {
         try {
-            if(pattern != null) {
+            if (pattern != null) {
                 matcher.matches("", pattern); // $NON-NLS-1$
             }
         } catch (Exception e) {

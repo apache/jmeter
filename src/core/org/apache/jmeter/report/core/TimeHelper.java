@@ -29,9 +29,10 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class TimeHelper {
 
-    private static final String TIMESTAMP_FORMAT_PROPERTY = "jmeter.save.saveservice.timestamp_format";
+    private static final String TIMESTAMP_FORMAT_PROPERTY =
+            "jmeter.save.saveservice.timestamp_format";
 
-    public static final String time(long t) {
+    public static String time(long t) {
         long h = t / 3600000;
         t %= 3600000;
         long m = t / 60000;
@@ -61,7 +62,7 @@ public class TimeHelper {
      *            the time stamp
      * @return the string
      */
-    public static final String formatTimeStamp(long timeStamp) {
+    public static String formatTimeStamp(long timeStamp) {
         return formatTimeStamp(timeStamp,
                 JMeterUtils.getProperty(TIMESTAMP_FORMAT_PROPERTY));
     }
@@ -75,7 +76,7 @@ public class TimeHelper {
      *            the format
      * @return the string
      */
-    public static final String formatTimeStamp(long timeStamp, String format) {
+    public static String formatTimeStamp(long timeStamp, String format) {
         SimpleDateFormat dateFormat = format != null ? new SimpleDateFormat(
                 format) : new SimpleDateFormat();
         return dateFormat.format(new Date(timeStamp));

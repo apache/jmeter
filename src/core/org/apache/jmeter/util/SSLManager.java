@@ -250,7 +250,7 @@ public abstract class SSLManager {
      *
      * @return the singleton {@link SSLManager}
      */
-    public static final synchronized SSLManager getInstance() {
+    public static synchronized SSLManager getInstance() {
         if (null == SSLManager.manager) {
             SSLManager.manager = new JsseSSLManager(null);
         }
@@ -263,7 +263,7 @@ public abstract class SSLManager {
      *
      * @return flag whether SSL is supported
      */
-    public static final boolean isSSLSupported() {
+    public static boolean isSSLSupported() {
         return SSLManager.isSSLSupported;
     }
 
