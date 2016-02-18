@@ -97,7 +97,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
+    private static final Set<String> APPLICABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList(
                     "org.apache.jmeter.config.gui.LoginConfigGui",
                     "org.apache.jmeter.protocol.http.config.gui.HttpDefaultsGui",
@@ -171,7 +171,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final String DO_MULTIPART_POST = "HTTPSampler.DO_MULTIPART_POST"; // $NON-NLS-1$
 
-    public static final String BROWSER_COMPATIBLE_MULTIPART  = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
+    public static final String BROWSER_COMPATIBLE_MULTIPART = "HTTPSampler.BROWSER_COMPATIBLE_MULTIPART"; // $NON-NLS-1$
 
     public static final String CONCURRENT_DWN = "HTTPSampler.concurrentDwn"; // $NON-NLS-1$
 
@@ -200,6 +200,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         DEVICE_IPV6("web_testing_source_ip_device_ipv6"); //$NON-NLS-1$
 
         public final String propertyName;
+
         SourceType(String propertyName) {
             this.propertyName = propertyName;
         }
@@ -211,7 +212,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static String[] getSourceTypeList() {
         final SourceType[] types = SourceType.values();
         final String[] displayStrings = new String[types.length];
-        for(int i = 0; i < types.length; i++) {
+        for (int i = 0; i < types.length; i++) {
             displayStrings[i] = JMeterUtils.getResString(types[i].propertyName);
         }
         return displayStrings;
@@ -309,7 +310,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
     static {
-        String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
+        String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " ", true);// returns empty array for null
         for (final String parser : parsers) {
             String classname = JMeterUtils.getProperty(parser + ".className");//$NON-NLS-1$
             if (classname == null) {
@@ -325,8 +326,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
             } else {
                 log.warn("Cannot find .types property for " + parser
-                        + ", as a consequence parser will not be used, to make it usable, define property:'"
-                        + parser + ".types'");
+                        + ", as a consequence parser will not be used, to make it usable, define property:'"+parser+".types'");
             }
         }
     }
@@ -371,9 +371,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return true;
         } else {
             boolean noArgumentsHasName = true;
-            PropertyIterator args = getArguments().iterator();
-            while (args.hasNext()) {
-                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
+            for (JMeterProperty jMeterProperty : getArguments()) {
+                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 if (arg.getName() != null && arg.getName().length() > 0) {
                     noArgumentsHasName = false;
                     break;
@@ -392,9 +391,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean getUseMultipartForPost() {
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
-        HTTPFileArg[] files = getHTTPFiles();
         return HTTPConstants.POST.equals(getMethod())
-                && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()));
+                && (getDoMultipartPost() || (getHTTPFiles().length > 0 && !getSendFileAsPostBody()));
     }
 
     public void setProtocol(String value) {
@@ -437,9 +435,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            The encoding used for the querystring parameter values
      */
     public void setPath(String path, String contentEncoding) {
-        boolean fullUrl = path.startsWith(HTTP_PREFIX) || path.startsWith(HTTPS_PREFIX);
         boolean getOrDelete = HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod());
-        if (!fullUrl && getOrDelete) {
+        boolean fullHttpUrl = path.startsWith(HTTP_PREFIX) || path.startsWith(HTTPS_PREFIX);
+        if (getOrDelete && !fullHttpUrl) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
@@ -666,7 +664,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param port number from {@link URL#getPort()}
      * @return the default port for the protocol
      */
-    public static int getDefaultPort(String protocol, int port) {
+    public static int getDefaultPort(String protocol,int port){
         if (port == URL_UNSPECIFIED_PORT) {
             if (protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP)) {
                 return HTTPConstants.DEFAULT_HTTP_PORT;
@@ -699,15 +697,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean isProtocolDefaultPort() {
         final int port = getPortIfSpecified();
         final String protocol = getProtocol();
-        boolean isDefaultHTTPPort = HTTPConstants.PROTOCOL_HTTP
-                .equalsIgnoreCase(protocol)
-                && port == HTTPConstants.DEFAULT_HTTP_PORT;
-        boolean isDefaultHTTPSPort = HTTPConstants.PROTOCOL_HTTPS
-                .equalsIgnoreCase(protocol)
-                && port == HTTPConstants.DEFAULT_HTTPS_PORT;
         return port == UNSPECIFIED_PORT ||
-                isDefaultHTTPPort ||
-                isDefaultHTTPSPort;
+                (HTTPConstants.PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTP_PORT) ||
+                (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTPS_PORT);
     }
 
     /**
@@ -907,15 +899,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         ByteArrayOutputStream text = new ByteArrayOutputStream(200);
         e.printStackTrace(new PrintStream(text));
         res.setResponseData(text.toByteArray());
-        res.setResponseCode(NON_HTTP_RESPONSE_CODE+": " + e.getClass().getName());
-        res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": " + e.getMessage());
+        res.setResponseCode(NON_HTTP_RESPONSE_CODE + ": " + e.getClass().getName());
+        res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE + ": " + e.getMessage());
         res.setSuccessful(false);
         res.setMonitor(this.isMonitor());
         return res;
     }
 
-    private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP+"://"; // $NON-NLS-1$
-    private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
+    private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP + "://"; // $NON-NLS-1$
+    private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS + "://"; // $NON-NLS-1$
 
     // Bug 51939
     private static final boolean SEPARATE_CONTAINER =
@@ -953,7 +945,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         pathAndQuery.append(path);
 
         // Add the query string if it is a HTTP GET or DELETE request
-        if (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod())) {
+        if (HTTPConstants.GET.equals(getMethod())
+                || HTTPConstants.DELETE.equals(getMethod())) {
             // Get the query string encoded in specified encoding
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
@@ -1002,7 +995,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         PropertyIterator iter = getArguments().iterator();
         boolean first = true;
         while (iter.hasNext()) {
-            HTTPArgument item = null;
             /*
              * N.B. Revision 323346 introduced the ClassCast check, but then used iter.next()
              * to fetch the item to be cast, thus skipping the element that did not cast.
@@ -1010,6 +1002,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
              * Added a warning message so can track whether it is necessary
              */
             Object objectValue = iter.next().getObjectValue();
+            HTTPArgument item;
             try {
                 item = (HTTPArgument) objectValue;
             } catch (ClassCastException e) {
@@ -1035,7 +1028,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // Encode the parameter value in the specified content encoding
             try {
                 buf.append(item.getEncodedValue(contentEncoding));
-            } catch(UnsupportedEncodingException e) {
+            } catch (UnsupportedEncodingException e) {
                 log.warn("Unable to encode parameter in encoding " + contentEncoding + ", parameter value not included in query string");
             }
         }
@@ -1044,6 +1037,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     // Mark Walsh 2002-08-03, modified to also parse a parameter name value
     // string, where string contains only the parameter name and no equal sign.
+
     /**
      * This method allows a proxy server to send over the raw text from a
      * browser's output stream to be parsed and stored correctly into the
@@ -1113,7 +1107,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             StringBuilder stringBuffer = new StringBuilder();
             stringBuffer.append(this.getUrl().toString());
             // Append body if it is a post or put
-            if (HTTPConstants.POST.equals(getMethod()) || HTTPConstants.PUT.equals(getMethod())) {
+            if (HTTPConstants.POST.equals(getMethod())
+                    || HTTPConstants.PUT.equals(getMethod())) {
                 stringBuffer.append("\nQuery Data: ");
                 stringBuffer.append(getQueryString());
             }
@@ -1141,7 +1136,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return results of the sampling
      */
     public SampleResult sample() {
-        SampleResult res = null;
+        SampleResult res;
         try {
             res = sample(getUrl(), getMethod(), false, 0);
             if (res != null) {
@@ -1172,8 +1167,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            prevent infinite recursion.
      * @return results of the sampling, can be null if u is in CacheManager
      */
-    protected abstract HTTPSampleResult sample(URL u,
-            String method, boolean areFollowingRedirect, int depth);
+    protected abstract HTTPSampleResult sample(
+            URL u, String method, boolean areFollowingRedirect, int depth);
 
     /**
      * Download the resources of an HTML page.
@@ -1241,7 +1236,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 // if the user choose a number of parallel downloads of 1
                 // no need to use another thread, do the sample on the current thread
                 if (maxConcurrentDownloads == 1) {
-                    log.warn("Number of parallel downloads set to 1, (sampler name=" + getName()+")");
+                    log.warn("Number of parallel downloads set to 1, (sampler name=" + getName() + ")");
                     isConcurrentDwn = false;
                 }
             }
@@ -1285,7 +1280,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             res.addSubResult(binRes);
                             setParentSampleSuccess(res, res.isSuccessful() && (binRes == null || binRes.isSuccessful()));
                         }
-
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
@@ -1305,8 +1299,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     CookieManager cookieManager = getCookieManager();
                     // add result to main sampleResult
                     for (Future<AsynSamplerResultHolder> future : retExec) {
-                        // this call will not block as the futures return by invokeAllAndAwaitTermination
-                        //   are either done or cancelled
+                        // this call will not block as the futures return by
+                        // invokeAllAndAwaitTermination are either done or cancelled
                         AsynSamplerResultHolder binRes = future.get();
                         if (cookieManager != null) {
                             CollectionProperty cookies = binRes.getCookies();
@@ -1355,9 +1349,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
-            if (!escapedUrl.equals(url) && log.isDebugEnabled()) {
-                log.debug("Url '" + url + "' has been escaped to '"
-                        + escapedUrl + "'. Please correct your webpage.");
+            if (!escapedUrl.equals(url)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Url '" + url + "' has been escaped to '" + escapedUrl
+                            + "'. Please correct your webpage.");
+                }
             }
             return escapedUrl;
         } catch (Exception e1) {
@@ -1379,11 +1375,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // see HTTPHC4Impl#getConnectionHeaders
             // see HTTPJavaImpl#getConnectionHeaders
             //': ' is used by JMeter to fill-in requestHeaders, see getConnectionHeaders
-            final String userAgentPrefix = USER_AGENT+": ";
+            final String userAgentPrefix = USER_AGENT + ": ";
             String userAgentHdr = res.substring(
-                    index+userAgentPrefix.length(),
+                    index + userAgentPrefix.length(),
                     res.indexOf('\n',// '\n' is used by JMeter to fill-in requestHeaders, see getConnectionHeaders
-                            index+userAgentPrefix.length()+1));
+                            index + userAgentPrefix.length() + 1));
             return userAgentHdr.trim();
         } else {
             if (log.isInfoEnabled()) {
@@ -1637,7 +1633,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return whether in range 200-399 or not
      */
     protected boolean isSuccessCode(int code) {
-        return code >= 200 && code <= 399;
+        return (code >= 200 && code <= 399);
     }
 
     /*
@@ -1672,12 +1668,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public HTTPFileArg[] getHTTPFiles() {
         final HTTPFileArgs fileArgs = getHTTPFileArgs();
-        return fileArgs == null ? new HTTPFileArg[] {} : fileArgs.asArray();
+        return fileArgs == null ? new HTTPFileArg[]{} : fileArgs.asArray();
     }
 
     public int getHTTPFileCount() {
         return getHTTPFiles().length;
     }
+
     /**
      * Saves the list of files.
      * The first file is saved in the Filename/field/mimetype properties.
@@ -1760,7 +1757,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
             }
             ByteArrayOutputStream w = new ByteArrayOutputStream(bufferSize);
-            int bytesRead = 0;
+            int bytesRead;
             int totalBytes = 0;
             boolean first = true;
             while ((bytesRead = in.read(readBuffer)) > -1) {
@@ -1905,7 +1902,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         setProperty(CONCURRENT_POOL, poolSize, CONCURRENT_POOL_DEFAULT);
     }
 
-
     /**
      * Callable class to sample asynchronously resources embedded
      *
@@ -1918,8 +1914,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         private final HTTPSamplerBase sampler;
         private final JMeterContext jmeterContextOfParentThread;
 
-        ASyncSample(URL url, String method,
-                boolean areFollowingRedirect, int depth,  CookieManager cookieManager, HTTPSamplerBase base) {
+        ASyncSample(
+                URL url, String method, boolean areFollowingRedirect, int depth,
+                CookieManager cookieManager, HTTPSamplerBase base) {
             this.url = url;
             this.method = method;
             this.areFollowingRedirect = areFollowingRedirect;
@@ -1958,6 +1955,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     @Override
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
-        return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+        return APPLICABLE_CONFIG_CLASSES.contains(guiClass);
     }
 }
