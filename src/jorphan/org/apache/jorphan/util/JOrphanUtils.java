@@ -570,9 +570,10 @@ public final class JOrphanUtils {
 
     /**
      * @param elapsedSec long elapsed time in seconds
-     * @return String formated with format HH:mm:ss
+     * @return String formatted with format HH:mm:ss
      */
     public static String formatDuration(long elapsedSec) {
-        return String.format("%02d:%02d:%02d", Long.valueOf(elapsedSec / 3600), Long.valueOf((elapsedSec % 3600) / 60), Long.valueOf(elapsedSec % 60));
+        return String.format("%02d:%02d:%02d",
+                elapsedSec / 3600, (elapsedSec % 3600) / 60, elapsedSec % 60);
     }
 }

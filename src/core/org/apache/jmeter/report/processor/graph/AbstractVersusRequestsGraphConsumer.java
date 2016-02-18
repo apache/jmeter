@@ -280,11 +280,10 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     File tmpFile = File.createTempFile(parent.getName(), "-"
                             + String.valueOf(i), workDir);
                     tmpFile.deleteOnExit();
-                    fileInfos
-                            .add(new FileInfo(tmpFile, getConsumedMetadata(i)));
+                    fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
                     String message = String.format(
-                            "Cannot create temporary file for channel #%s", Integer.toString(i));
+                            "Cannot create temporary file for channel #%d", i);
                     log.error(message, ex);
                     throw new SampleException(message, ex);
                 }
