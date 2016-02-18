@@ -1640,19 +1640,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return code >= 200 && code <= 399;
     }
 
-    protected static String encodeBackSlashes(String value) {
-        StringBuilder newValue = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            char charAt = value.charAt(i);
-            if (charAt == '\\') { // $NON-NLS-1$
-                newValue.append("\\\\"); // $NON-NLS-1$
-            } else {
-                newValue.append(charAt);
-            }
-        }
-        return newValue.toString();
-    }
-
     /*
      * Method to set files list to be uploaded.
      *
