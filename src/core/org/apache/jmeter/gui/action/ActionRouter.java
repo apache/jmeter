@@ -186,14 +186,7 @@ public final class ActionRouter implements ActionListener {
      *            the ActionListener to receive the notifications
      */
     public void addPreActionListener(Class<?> action, ActionListener listener) {
-        if (action != null) {
-            Set<ActionListener> set = preActionListeners.get(action.getName());
-            if (set == null) {
-                set = new HashSet<>();
-            }
-            set.add(listener);
-            preActionListeners.put(action.getName(), set);
-        }
+        addActionListener(action, listener, preActionListeners);
     }
 
     /**
@@ -208,11 +201,15 @@ public final class ActionRouter implements ActionListener {
      *            the ActionListener to receive the notifications
      */
     public void removePreActionListener(Class<?> action, ActionListener listener) {
+        removeActionListener(action, listener, preActionListeners);
+    }
+
+    private void removeActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
-            Set<ActionListener> set = preActionListeners.get(action.getName());
+            Set<ActionListener> set = actionListeners.get(action.getName());
             if (set != null) {
                 set.remove(listener);
-                preActionListeners.put(action.getName(), set);
+                actionListeners.put(action.getName(), set);
             }
         }
     }
@@ -229,13 +226,17 @@ public final class ActionRouter implements ActionListener {
      *            The {@link ActionListener} to be registered
      */
     public void addPostActionListener(Class<?> action, ActionListener listener) {
+        addActionListener(action, listener, postActionListeners);
+    }
+
+    private void addActionListener(Class<?> action, ActionListener listener, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
-            Set<ActionListener> set = postActionListeners.get(action.getName());
+            Set<ActionListener> set = actionListeners.get(action.getName());
             if (set == null) {
                 set = new HashSet<>();
             }
             set.add(listener);
-            postActionListeners.put(action.getName(), set);
+            actionListeners.put(action.getName(), set);
         }
     }
 
@@ -250,30 +251,20 @@ public final class ActionRouter implements ActionListener {
      * @param listener The {@link ActionListener} that should be deregistered
      */
     public void removePostActionListener(Class<?> action, ActionListener listener) {
-        if (action != null) {
-            Set<ActionListener> set = postActionListeners.get(action.getName());
-            if (set != null) {
-                set.remove(listener);
-                postActionListeners.put(action.getName(), set);
-            }
-        }
+        removeActionListener(action, listener, postActionListeners);
     }
 
     protected void preActionPerformed(Class<? extends Command> action, ActionEvent e) {
-        if (action != null) {
-            Set<ActionListener> listenerSet = preActionListeners.get(action.getName());
-            if (listenerSet != null && listenerSet.size() > 0) {
-                ActionListener[] listeners = listenerSet.toArray(new ActionListener[listenerSet.size()]);
-                for (ActionListener listener : listeners) {
-                    listener.actionPerformed(e);
-                }
-            }
-        }
+        actionPerformed(action, e, preActionListeners);
     }
 
     protected void postActionPerformed(Class<? extends Command> action, ActionEvent e) {
+        actionPerformed(action, e, postActionListeners);
+    }
+
+    private void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
-            Set<ActionListener> listenerSet = postActionListeners.get(action.getName());
+            Set<ActionListener> listenerSet = actionListeners.get(action.getName());
             if (listenerSet != null && listenerSet.size() > 0) {
                 ActionListener[] listeners = listenerSet.toArray(new ActionListener[listenerSet.size()]);
                 for (ActionListener listener : listeners) {

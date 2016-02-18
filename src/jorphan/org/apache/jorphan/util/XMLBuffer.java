@@ -32,24 +32,24 @@ public class XMLBuffer{
 
     private final ArrayStack tags = new ArrayStack(); // opened tags
 
-    public XMLBuffer(){
+    public XMLBuffer() {
 
     }
 
-    private void startTag(String t){
+    private void startTag(String t) {
         sb.append("<");
         sb.append(t);
         sb.append(">");
     }
 
-    private void endTag(String t){
+    private void endTag(String t) {
         sb.append("</");
         sb.append(t);
         sb.append(">");
         sb.append("\n");
     }
 
-    private void emptyTag(String t){
+    private void emptyTag(String t) {
         sb.append("<");
         sb.append(t);
         sb.append("/>");
@@ -59,28 +59,29 @@ public class XMLBuffer{
     /**
      * Open a tag; save on stack.
      *
-     * @param tagname name of the tag
+     * @param tagName name of the tag
      * @return this
      */
-    public XMLBuffer openTag(String tagname){
-        tags.push(tagname);
-        startTag(tagname);
+    public XMLBuffer openTag(String tagName) {
+        tags.push(tagName);
+        startTag(tagName);
         return this;
     }
 
     /**
      * Close top tag from stack.
      *
-     * @param tagname name of the tag to close
+     * @param tagName name of the tag to close
      *
      * @return this
      *
      * @throws IllegalArgumentException if the tag names do not match
      */
-    public XMLBuffer closeTag(String tagname){
+    public XMLBuffer closeTag(String tagName) {
         String tag = (String) tags.pop();
-        if (!tag.equals(tagname)) {
-            throw new IllegalArgumentException("Trying to close tag: "+tagname+" ; should be "+tag);
+        if (!tag.equals(tagName)) {
+            throw new IllegalArgumentException(
+                    "Trying to close tag: " + tagName + " ; should be " + tag);
         }
         endTag(tag);
         return this;
@@ -89,35 +90,17 @@ public class XMLBuffer{
     /**
      * Add a complete tag with content.
      *
-     * @param tagname name of the tag
+     * @param tagName name of the tag
      * @param content content to put in tag, or empty content, if an empty tag should be used
      * @return this
      */
-    public XMLBuffer tag(String tagname, String content){
+    public XMLBuffer tag(String tagName, CharSequence content) {
         if (content.length() == 0) {
-            emptyTag(tagname);
+            emptyTag(tagName);
         } else {
-            startTag(tagname);
+            startTag(tagName);
             sb.append(content);
-            endTag(tagname);
-        }
-        return this;
-    }
-
-    /**
-     * Add a complete tag with content.
-     *
-     * @param tagname name of the tag
-     * @param content content to put in tag, or empty content, if an empty tag should be used
-     * @return this
-     */
-    public XMLBuffer tag(String tagname,StringBuilder content){
-        if (content.length() == 0) {
-            emptyTag(tagname);
-        } else {
-            startTag(tagname);
-            sb.append(content);
-            endTag(tagname);
+            endTag(tagName);
         }
         return this;
     }
@@ -126,9 +109,9 @@ public class XMLBuffer{
      * Convert the buffer to a string, closing any open tags
      */
     @Override
-    public String toString(){
-        while(!tags.isEmpty()){
-            endTag((String)tags.pop());
+    public String toString() {
+        while (!tags.isEmpty()) {
+            endTag((String) tags.pop());
         }
         return sb.toString();
     }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -183,15 +184,15 @@ public class KeyToolUtils {
             if (quote) {
                 builder.append("\"");
             }
-            builder.append(redact? "{redacted}" : string);
+            builder.append(redact ? "{redacted}" : string);
             if (quote) {
                 builder.append("\"");
             }
             builder.append(" ");
             redact = string.equals("-storepass") || string.equals("-keypass");
         }
-        if(arguments.size()>0) {
-            builder.setLength(builder.length()-1); // trim trailing space
+        if (arguments.size() > 0) {
+            builder.setLength(builder.length() - 1); // trim trailing space
         }
         return builder.toString();
     }
@@ -289,7 +290,7 @@ public class KeyToolUtils {
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
         KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
 
-        // inport the certificate
+        // import the certificate
         InputStream certIn = new ByteArrayInputStream(certOut.toByteArray());
         KeyToolUtils.keytool("-importcert", keystore, password, alias, certIn, null, "-noprompt");
     }
@@ -318,6 +319,11 @@ public class KeyToolUtils {
         arguments.add(keystore.getName());
         arguments.add("-storepass"); // $NON-NLS-1$
         arguments.add(storePass);
+        runNativeCommand(nativeCommand, arguments);
+        return nativeCommand.getOutResult();
+    }
+
+    private static void runNativeCommand(SystemCommand nativeCommand, List<String> arguments) throws IOException {
         try {
             int exitVal = nativeCommand.run(arguments);
             if (exitVal != 0) {
@@ -326,7 +332,6 @@ public class KeyToolUtils {
         } catch (InterruptedException e) {
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
-        return nativeCommand.getOutResult();
     }
 
     /**
@@ -371,7 +376,8 @@ public class KeyToolUtils {
             InputStream input, OutputStream output, String ... parameters)
             throws IOException {
         final File workingDir = keystore.getParentFile();
-        final SystemCommand nativeCommand = new SystemCommand(workingDir, 0L, 0, null, input, output, null);
+        final SystemCommand nativeCommand =
+                new SystemCommand(workingDir, 0L, 0, null, input, output, null);
         final List<String> arguments = new ArrayList<>();
         arguments.add(getKeyToolPath());
         arguments.add(command);
@@ -383,18 +389,9 @@ public class KeyToolUtils {
         arguments.add(password);
         arguments.add("-alias"); // $NON-NLS-1$
         arguments.add(alias);
-        for (String parameter : parameters) {
-            arguments.add(parameter);
-        }
+        Collections.addAll(arguments, parameters);
 
-        try {
-            int exitVal = nativeCommand.run(arguments);
-            if (exitVal != 0) {
-                throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
-            }
-        } catch (InterruptedException e) {
-            throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
-        }
+        runNativeCommand(nativeCommand, arguments);
     }
 
     /**
