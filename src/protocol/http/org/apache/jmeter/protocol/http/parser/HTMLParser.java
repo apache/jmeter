@@ -84,11 +84,11 @@ public abstract class HTMLParser {
     protected HTMLParser() {
     }
 
-    public static final HTMLParser getParser() {
+    public static HTMLParser getParser() {
         return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME, DEFAULT_PARSER));
     }
 
-    public static final HTMLParser getParser(String htmlParserClassName) {
+    public static HTMLParser getParser(String htmlParserClassName) {
 
         // Is there a cached parser?
         HTMLParser pars = parsers.get(htmlParserClassName);

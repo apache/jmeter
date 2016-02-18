@@ -141,7 +141,7 @@ public class ConversionUtils {
      * @return URI which has been encoded as necessary
      * @throws URISyntaxException if parts of the url form a non valid URI
      */
-    public static final URI sanitizeUrl(URL url) throws URISyntaxException {
+    public static URI sanitizeUrl(URL url) throws URISyntaxException {
         try {
             return url.toURI(); // Assume the URL is already encoded
         } catch (URISyntaxException e) { // it's not, so encode it
