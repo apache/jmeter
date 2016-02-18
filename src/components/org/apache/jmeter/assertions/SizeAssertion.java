@@ -178,7 +178,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private String compareSize(long resultSize) {
         String comparatorErrorMessage;
         long allowedSize = Long.parseLong(getAllowedSize());
-        boolean result = false;
+        boolean result;
         int comp = getCompOper();
         switch (comp) {
         case EQUAL:
