@@ -135,7 +135,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             if(tableComponent != null) {
                 boolean visible = force!=null?force.booleanValue():!tableComponent.isVisible();
                 tableComponent.setVisible(visible);
-                
+
                 result |= visible;
             }
         }

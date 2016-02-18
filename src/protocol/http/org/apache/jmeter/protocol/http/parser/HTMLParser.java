@@ -137,7 +137,8 @@ public abstract class HTMLParser {
      * @return an Iterator for the resource URLs
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
-    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(
+            String userAgent, byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
         // The Set is used to ignore duplicated binary files.
         // Using a LinkedHashSet to avoid unnecessary overhead in iterating
         // the elements in the set later on. As a side-effect, this will keep
@@ -187,7 +188,8 @@ public abstract class HTMLParser {
      * @return an Iterator for the resource URLs
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
-    public abstract Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection coll, String encoding)
+    public abstract Iterator<URL> getEmbeddedResourceURLs(
+            String userAgent, byte[] html, URL baseUrl, URLCollection coll, String encoding)
             throws HTMLParseException;
 
     /**
@@ -210,7 +212,8 @@ public abstract class HTMLParser {
      * @return an Iterator for the resource URLs
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
-    public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
+    public Iterator<URL> getEmbeddedResourceURLs(
+            String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
         return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(coll), encoding);
     }
 
@@ -230,12 +233,9 @@ public abstract class HTMLParser {
      * @return true if IE version &lt; IE v10
      */
     protected final boolean isEnableConditionalComments(Float ieVersion) {
-        if(ieVersion == null) {
-            return false;
-        }
-        // Conditionnal comment have been dropped in IE10
+        // Conditional comment have been dropped in IE10
         // http://msdn.microsoft.com/en-us/library/ie/hh801214%28v=vs.85%29.aspx
-        return ieVersion.floatValue() < IE_10;
+        return ieVersion != null && ieVersion.floatValue() < IE_10;
     }
     
     /**
@@ -244,21 +244,20 @@ public abstract class HTMLParser {
      * @return version null if not IE or the version after MSIE
      */
     protected Float extractIEVersion(String userAgent) {
-        if(StringUtils.isEmpty(userAgent)) {
+        if (StringUtils.isEmpty(userAgent)) {
             log.info("userAgent is null");
             return null;
         }
         Matcher matcher = IE_UA_PATTERN.matcher(userAgent);
         String ieVersion = null;
-        while (matcher.find()) {
+        if (matcher.find()) {
             if (matcher.groupCount() > 0) {
                 ieVersion = matcher.group(1);
             } else {
                 ieVersion = matcher.group();
             }
-            break;
         }
-        if(ieVersion != null) {
+        if (ieVersion != null) {
             return Float.valueOf(ieVersion);
         } else {
             return null;
