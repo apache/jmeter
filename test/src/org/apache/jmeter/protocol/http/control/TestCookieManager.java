@@ -547,7 +547,15 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("/sub1",man.get(1).getPath());
             assertEquals("/",man.get(2).getPath());
             String s = man.getCookieHeaderForURL(url);
+            
+            // FIXME Enable when HTTPCLIENT 4.5.2 is available
+            // With ignore policy, s is null as no match will occur, 
+            // getCookieHeaderForURL will return null 
+            //assertNull(s);
+            
+            // Remove this when HTTPCLIENT 4.5.2 is available
             assertTrue(s.length()==0);
+
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
             List<org.apache.http.cookie.Cookie> c = 
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
