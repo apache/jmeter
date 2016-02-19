@@ -39,8 +39,27 @@ import org.apache.log.Logger;
  */
 public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory{
     private static final Logger LOG = LoggingManager.getLoggerForClass();
-    
-    private volatile SchemeLayeredSocketFactory adaptee;
+
+    private static class AdapteeHolder { // IODH idiom
+        private static final SchemeLayeredSocketFactory ADAPTEE = checkAndInit();  
+
+        /**
+         * @throws SSLInitializationException
+         */
+        private static SchemeLayeredSocketFactory checkAndInit() throws SSLInitializationException {
+            LOG.info("Setting up HTTPS TrustAll Socket Factory");
+            try {
+                return new HC4TrustAllSSLSocketFactory();
+            } catch (GeneralSecurityException e) {
+                LOG.warn("Failed to initialise HTTPS HC4TrustAllSSLSocketFactory", e);
+                return SSLSocketFactory.getSocketFactory();
+            }
+        }
+
+        static SchemeLayeredSocketFactory getINSTANCE() {
+            return ADAPTEE;
+        }
+    }
     
     /**
      * 
@@ -57,27 +76,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
      */
     @Override
     public Socket createSocket(HttpParams params) throws IOException {
-        checkAndInit();
-        return adaptee.createSocket(params);
-    }
-    
-    /**
-     * @throws SSLInitializationException
-     */
-    private void checkAndInit() throws SSLInitializationException {
-        if(adaptee == null) {
-            synchronized (this) {
-                if(adaptee==null) {
-                    LOG.info("Setting up HTTPS TrustAll Socket Factory");
-                    try {
-                        adaptee = new HC4TrustAllSSLSocketFactory();
-                    } catch (GeneralSecurityException e) {
-                        LOG.warn("Failed to initialise HTTPS HC4TrustAllSSLSocketFactory", e);
-                        adaptee = SSLSocketFactory.getSocketFactory();
-                    }
-                }
-            }
-        }
+        return AdapteeHolder.getINSTANCE().createSocket(params);
     }
     
     /**
@@ -95,8 +94,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     public Socket connectSocket(Socket sock, InetSocketAddress remoteAddress,
             InetSocketAddress localAddress, HttpParams params)
             throws IOException, UnknownHostException, ConnectTimeoutException {
-        checkAndInit();
-        return adaptee.connectSocket(sock, remoteAddress, localAddress, params);
+        return AdapteeHolder.getINSTANCE().connectSocket(sock, remoteAddress, localAddress, params);
     }
     
     /**
@@ -107,8 +105,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
      */
     @Override
     public boolean isSecure(Socket sock) throws IllegalArgumentException {
-        checkAndInit();
-        return adaptee.isSecure(sock);
+        return AdapteeHolder.getINSTANCE().isSecure(sock);
     }
 
     /**
@@ -120,7 +117,6 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     @Override
     public Socket createLayeredSocket(Socket socket, String target, int port,
             HttpParams params) throws IOException, UnknownHostException {
-        checkAndInit();
-        return adaptee.createLayeredSocket(socket, target, port, params);
+        return AdapteeHolder.getINSTANCE().createLayeredSocket(socket, target, port, params);
     }
 }
