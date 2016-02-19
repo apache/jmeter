@@ -20,17 +20,15 @@ package org.apache.jmeter.protocol.http.proxy;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.protocol.http.parser.HTMLParseException;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.apache.jmeter.protocol.http.parser.HTMLParseException;
-import org.htmlparser.Node;
-import org.htmlparser.Parser;
-import org.htmlparser.Tag;
-import org.htmlparser.tags.CompositeTag;
-import org.htmlparser.tags.FormTag;
-import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.ParserException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * A parser for html, to find the form tags, and their accept-charset value
@@ -38,10 +36,6 @@ import org.htmlparser.util.ParserException;
 // made public see Bug 49976
 public class FormCharSetFinder {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    static {
-        log.info("Using htmlparser version: "+Parser.getVersion());
-    }
 
     public FormCharSetFinder() {
         super();
@@ -61,75 +55,32 @@ public class FormCharSetFinder {
             log.debug("Parsing html of: " + html);
         }
 
-        Parser htmlParser = null;
-        try {
-            htmlParser = new Parser();
-            htmlParser.setInputHTML(html);
-        } catch (Exception e) {
-            throw new HTMLParseException(e);
-        }
-
-        // Now parse the DOM tree
-        try {
-            // we start to iterate through the elements
-            parseNodes(htmlParser.elements(), formEncodings, pageEncoding);
-            log.debug("End   : parseNodes");
-        } catch (ParserException e) {
-            throw new HTMLParseException(e);
-        }
-    }
-
-    /**
-     * Recursively parse all nodes to pick up all form encodings
-     *
-     * @param e the nodes to be parsed
-     * @param formEncodings the Map where we should add form encodings found
-     * @param pageEncoding the encoding used for the page where the nodes are present
-     */
-    private void parseNodes(final NodeIterator e, Map<String, String> formEncodings, String pageEncoding)
-        throws HTMLParseException, ParserException {
-        while(e.hasMoreNodes()) {
-            Node node = e.nextNode();
-            // a url is always in a Tag.
-            if (!(node instanceof Tag)) {
-                continue;
-            }
-            Tag tag = (Tag) node;
-
-            // Only check form tags
-            if (tag instanceof FormTag) {
-                // Find the action / form url
-                String action = tag.getAttribute("action");
-                String acceptCharSet = tag.getAttribute("accept-charset");
-                if(action != null && action.length() > 0) {
-                    // We use the page encoding where the form resides, as the
-                    // default encoding for the form
-                    String formCharSet = pageEncoding;
-                    // Check if we found an accept-charset attribute on the form
-                    if(acceptCharSet != null) {
-                        String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
-                        // Just use the first one of the possible many charsets
-                        if(charSets.length > 0) {
-                            formCharSet = charSets[0].trim();
-                            if(formCharSet.length() == 0) {
-                                formCharSet = null;
-                            }
-                        }
-                    }
-                    if(formCharSet != null) {
-                        synchronized (formEncodings) {
-                            formEncodings.put(action, formCharSet);
+        Document document = Jsoup.parse(html);
+        Elements forms = document.select("form");
+        for (Element element : forms) {
+            String action = element.attr("action");
+            if( !(StringUtils.isEmpty(action)) ) {
+                // We use the page encoding where the form resides, as the
+                // default encoding for the form
+                String formCharSet = pageEncoding;
+                String acceptCharSet = element.attr("accept-charset");
+                // Check if we found an accept-charset attribute on the form
+                if(acceptCharSet != null) {
+                    String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
+                    // Just use the first one of the possible many charsets
+                    if(charSets.length > 0) {
+                        formCharSet = charSets[0].trim();
+                        if(formCharSet.length() == 0) {
+                            formCharSet = null;
                         }
                     }
                 }
-            }
-
-            // second, if the tag was a composite tag,
-            // recursively parse its children.
-            if (tag instanceof CompositeTag) {
-                CompositeTag composite = (CompositeTag) tag;
-                parseNodes(composite.elements(), formEncodings, pageEncoding);
-            }
+                if(formCharSet != null) {
+                    synchronized (formEncodings) {
+                        formEncodings.put(action, formCharSet);
+                    }
+                }
+            }      
         }
     }
 }
