@@ -439,10 +439,12 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
                     }
                 } catch (NoClassDefFoundError e) {
                     // no luck. Ignore this class
-                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoClassDefFoundError " + n);
+                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": NoClassDefFoundError " + n + ":" + e.getMessage());
+                    e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     caught = e;
-                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": IllegalAccessException " + n);
+                    System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": IllegalAccessException " + n + ":" + e.getMessage());
+                    e.printStackTrace();
                     // We won't test restricted-access classes.
                 } catch (HeadlessException e) {
                     caught = e;
