@@ -18,7 +18,10 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Font;
 import java.util.Properties;
+
+import javax.swing.UIManager;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -39,6 +42,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private static final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
     private static final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
+    private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", JSyntaxTextArea.getDefaultFont().getName());
+    private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", JSyntaxTextArea.getDefaultFont().getSize());
 
     @Deprecated
     public JSyntaxTextArea() {
@@ -90,6 +95,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
         this.disableUndo = disableUndo;
+        setFont(new Font(USER_FONT_FAMILY, Font.PLAIN, USER_FONT_SIZE));
         if(disableUndo) {
             // We need to do this to force recreation of undoManager which
             // will use the disableUndo otherwise it would always be false
