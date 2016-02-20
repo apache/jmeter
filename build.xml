@@ -380,8 +380,6 @@
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
-    <include name="${lib.dir}/${htmllexer.jar}"/>
-    <include name="${lib.dir}/${htmlparser.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
     <include name="${lib.dir}/${httpmime.jar}"/>
@@ -455,8 +453,6 @@
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
   	<pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
-    <pathelement location="${lib.dir}/${htmllexer.jar}"/>
-    <pathelement location="${lib.dir}/${htmlparser.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
     <pathelement location="${lib.dir}/${httpmime.jar}"/>
@@ -1155,7 +1151,6 @@ run JMeter unless all the JMeter jars are added.
       <and>
           <!-- No need to check all jars; just check a few -->
           <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
-          <available classpathref="classpath" classname="org.htmlparser.Parser"/>
           <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
       </and>
     </condition>
@@ -2860,8 +2855,6 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="excalibur-logger"/>
         <process_jarfile jarname="freemarker"/>
         <process_jarfile jarname="hamcrest-core"/>
-        <process_jarfile jarname="htmllexer"/>
-        <process_jarfile jarname="htmlparser"/>
         <process_jarfile jarname="httpclient"/>
         <process_jarfile jarname="httpcore"/>
         <process_jarfile jarname="httpmime"/>
