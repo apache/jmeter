@@ -104,12 +104,6 @@ freemarker-2.3.23.jar
 ----------------------
 - used by Report/Dashboard feature
 
-htmlparser-2.1
-htmllexer-2.1
-----------------------
-http://htmlparser.sourceforge.net/
-- http: parsing html
-
 jCharts-0.7.5 (org.jCharts)
 -------------
 http://jcharts.sourceforge.net/downloads.html

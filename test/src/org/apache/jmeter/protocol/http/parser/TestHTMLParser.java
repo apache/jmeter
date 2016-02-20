@@ -129,7 +129,6 @@ public class TestHTMLParser extends JMeterTestCaseJUnit3 {
         
         // List of parsers to test. Should probably be derived automatically
         private static final String[] PARSERS = { 
-            "org.apache.jmeter.protocol.http.parser.HtmlParserHTMLParser",
             "org.apache.jmeter.protocol.http.parser.JTidyHTMLParser",
             "org.apache.jmeter.protocol.http.parser.RegexpHTMLParser",
             DEFAULT_JMETER_PARSER,
