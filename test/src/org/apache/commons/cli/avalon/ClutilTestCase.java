@@ -498,22 +498,6 @@ public final class ClutilTestCase {
     }
 
     @Test
-    public void testSingleArg9() {
-        final CLOptionDescriptor[] options = new CLOptionDescriptor[] { FILE };
-
-        final CLArgsParser parser = new CLArgsParser(new String[] { "--file", "-=-" }, options);
-
-        assertNull(parser.getErrorString(), parser.getErrorString());
-
-        final List<CLOption> clOptions = parser.getArguments();
-        final int size = clOptions.size();
-
-        assertEquals(1, size);
-        assertEquals(FILE_OPT, clOptions.get(0).getDescriptor().getId());
-        assertEquals("-=-", clOptions.get(0).getArgument());
-    }
-
-    @Test
     public void testCombinedArgs1() {
         final CLOptionDescriptor[] options = new CLOptionDescriptor[] { BLEE, TAINT };
 
