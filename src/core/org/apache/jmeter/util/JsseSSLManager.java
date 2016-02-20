@@ -412,8 +412,8 @@ public class JsseSSLManager extends SSLManager {
          * @see javax.net.ssl.X509KeyManager#chooseServerAlias(String, Principal[], Socket)
          */
         @Override
-        public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
-            return this.manager.chooseServerAlias(arg0, arg1, arg2);
+        public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
+            return this.manager.chooseServerAlias(keyType, issuers, socket);
         }
     }
 }

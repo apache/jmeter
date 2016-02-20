@@ -1352,19 +1352,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    /**
-     * If contentEncoding is not set by user, then Platform encoding will be used to convert to String
-     * @param putParams {@link HttpParams}
-     * @return String charset
-     */
-    protected String getCharsetWithDefault(HttpParams putParams) {
-        String charset =(String) putParams.getParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET);
-        if(StringUtils.isEmpty(charset)) {
-            charset = Charset.defaultCharset().name();
-        }
-        return charset;
-    }
-
     private void saveConnectionCookies(HttpResponse method, URL u, CookieManager cookieManager) {
         if (cookieManager != null) {
             Header[] hdrs = method.getHeaders(HTTPConstants.HEADER_SET_COOKIE);
