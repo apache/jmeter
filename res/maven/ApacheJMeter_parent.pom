@@ -87,7 +87,7 @@ under the License.
       <json-path.version>2.1.0</json-path.version>
       <json-smart.version>2.2.1</json-smart.version>
       <jsoup.version>1.8.3</jsoup.version>
-      <rhino.version>1.7.7</rhino.version>
+      <rhino.version>1.7.7.1</rhino.version>
       <junit.version>4.12</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
