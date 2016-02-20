@@ -238,6 +238,7 @@ Summary
 <li><bug>58949</bug>Cleanup of ldap code. Based on a patch by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58897</bug>Improve JUnit Test code. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58967</bug>Use junit categories to exclude tests that need a gui. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>59003</bug>ClutilTestCase testSingleArg8 and testSingleArg9 are identical</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
