@@ -54,7 +54,6 @@ public class JMeterVersionTest extends JMeterTestCase {
         JAR_TO_BUILD_PROP.put("bsf", "apache-bsf");
         JAR_TO_BUILD_PROP.put("bsh", "beanshell");
         JAR_TO_BUILD_PROP.put("geronimo-jms_1.1_spec", "jms");
-        JAR_TO_BUILD_PROP.put("htmllexer", "htmlparser"); // two jars same version
         JAR_TO_BUILD_PROP.put("httpmime", "httpclient"); // two jars same version
         JAR_TO_BUILD_PROP.put("mail", "javamail");
         JAR_TO_BUILD_PROP.put("oro", "jakarta-oro");
@@ -205,9 +204,6 @@ public class JMeterVersionTest extends JMeterTestCase {
         for (Map.Entry<String, String> me : versions.entrySet()) {
         final String key = me.getKey();
             liceNames.add(key+"-"+me.getValue()+".txt");
-            if (key.equals("htmlparser")) {
-                liceNames.add("htmllexer"+"-"+me.getValue()+".txt");
-            }
         }
         File licencesDir = getFileFromHome("licenses/bin");
         String [] lice = licencesDir.list(new FilenameFilter() {

@@ -1,1 +1,0 @@
-htmllexer-2.1 is part of htmlparser-2.1; please see the file htmlparser-2.1.txt

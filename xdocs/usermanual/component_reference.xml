@@ -117,8 +117,8 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
         <li>background sound</li>
         </ul>
         <p>
-        The default parser is htmlparser.
-        This can be changed by using the property "<code>htmlparser.classname</code>" - see <code>jmeter.properties</code> for details.
+        The default parser is <code>org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</code>.
+        This can be changed by using the property "<code>htmlparser.className</code>" - see <code>jmeter.properties</code> for details.
         </p>
         <p>If you are going to send multiple requests to the same web server, consider
         using an <complink name="HTTP Request Defaults"/>
@@ -419,9 +419,7 @@ defaults then nothing is sent.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 The <code>GET</code> and <code>DELETE</code> request methods work similarly to each other.
 </p>
-<p>Up to and including JMeter 2.1.1, only responses with the content-type "<code>text/html</code>" were scanned for
-embedded resources. Other content-types were assumed to be something other than HTML.
-JMeter 2.1.2 introduces the new property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
+<p>JMeter scan responses from embedded resources. It uses the property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
  e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
  <ul>
  <li><code>id.types</code> - a list of content types</li>
