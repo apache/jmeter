@@ -55,6 +55,8 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
     public MeasuringConnectionManager(SchemeRegistry schemeRegistry, DnsResolver resolver) {
         super(schemeRegistry, resolver);
+        // FIXME Make this depend on HttpRequest configuration
+        setDefaultMaxPerRoute(10);
     }
 
     @Override
