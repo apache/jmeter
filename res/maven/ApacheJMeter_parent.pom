@@ -96,8 +96,8 @@ under the License.
       <slf4j-nop.version>1.7.13</slf4j-nop.version>
       <soap.version>2.3.1</soap.version>
       <jtidy.version>r938</jtidy.version>
-      <tika-core.version>1.11</tika-core.version>
-      <tika-parsers.version>1.11</tika-parsers.version>
+      <tika-core.version>1.12</tika-core.version>
+      <tika-parsers.version>1.12</tika-parsers.version>
       <xstream.version>1.4.8</xstream.version>
       <xalan.version>2.7.2</xalan.version>
       <serializer.version>2.7.2</serializer.version>
