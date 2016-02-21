@@ -42,7 +42,7 @@ import org.apache.http.impl.conn.DefaultClientConnectionOperator;
 
 /**
  * Custom implementation of {@link DefaultClientConnectionOperator} to fix SNI Issue
- * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=57935
+ * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=57935"
  * @since 3.0
  * TODO Remove it when full upgrade to 4.5.X is done and cleanup is made in the Socket Factory of JMeter that handles client certificates and Slow socket
  */
