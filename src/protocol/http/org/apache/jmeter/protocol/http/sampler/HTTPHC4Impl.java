@@ -184,7 +184,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
-        new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
+        new InheritableThreadLocal<Map<HttpClientKey, HttpClient>>(){
         @Override
         protected Map<HttpClientKey, HttpClient> initialValue() {
             return new HashMap<>();
