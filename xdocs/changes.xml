@@ -211,6 +211,7 @@ Summary
 <li><bug>58870</bug>TableEditor: minimum size is too small. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>59037</bug>Drop HtmlParserHTMLParser and dependencies on htmlparser and htmllexer</li>
 <li><bug>58933</bug>JSyntaxTextArea : Ability to set font.  Contributed by Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
+<li><bug>58793</bug>Create developers page explaining how to build and contribute</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
