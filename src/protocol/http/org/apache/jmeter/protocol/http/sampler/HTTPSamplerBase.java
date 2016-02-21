@@ -1221,7 +1221,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             res = container;
 
             // Get the URL matcher
-            String re=getEmbeddedUrlRE();
+            String re = getEmbeddedUrlRE();
             Perl5Matcher localMatcher = null;
             Pattern pattern = null;
             if (re.length()>0){
@@ -1234,8 +1234,27 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             
             // For concurrent get resources
-            final List<Callable<AsynSamplerResultHolder>> liste = new ArrayList<>();
+            final List<Callable<AsynSamplerResultHolder>> list = new ArrayList<>();
 
+            int maxConcurrentDownloads = CONCURRENT_POOL_SIZE; // init with default value
+            boolean isConcurrentDwn = isConcurrentDwn();
+            if(isConcurrentDwn) {
+                
+                try {
+                    maxConcurrentDownloads = Integer.parseInt(getConcurrentPool());
+                } catch (NumberFormatException nfe) {
+                    log.warn("Concurrent download resources selected, "// $NON-NLS-1$
+                            + "but pool size value is bad. Use default value");// $NON-NLS-1$
+                }
+                
+                // if the user choose a number of parallel downloads of 1
+                // no need to use another thread, do the sample on the current thread
+                if(maxConcurrentDownloads == 1) {
+                    log.warn("Number of parallel downloads set to 1, (sampler name="+getName()+")");
+                    isConcurrentDwn = false;
+                }
+            }
+            
             while (urls.hasNext()) {
                 Object binURL = urls.next(); // See catch clause below
                 try {
@@ -1265,9 +1284,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             setParentSampleSuccess(res, false);
                             continue;
                         }
-                        if (isConcurrentDwn()) {
+                        if (isConcurrentDwn) {
                             // if concurrent download emb. resources, add to a list for async gets later
-                            liste.add(new ASyncSample(url, HTTPConstants.GET, false, frameDepth + 1, getCookieManager(), this));
+                            list.add(new ASyncSample(url, HTTPConstants.GET, false, frameDepth + 1, getCookieManager(), this));
                         } else {
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, HTTPConstants.GET, false, frameDepth + 1);
@@ -1281,20 +1300,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     setParentSampleSuccess(res, false);
                 }
             }
+            
             // IF for download concurrent embedded resources
-            if (isConcurrentDwn()) {
-                int poolSize = CONCURRENT_POOL_SIZE; // init with default value
-                try {
-                    poolSize = Integer.parseInt(getConcurrentPool());
-                } catch (NumberFormatException nfe) {
-                    log.warn("Concurrent download resources selected, "// $NON-NLS-1$
-                            + "but pool size value is bad. Use default value");// $NON-NLS-1$
-                }
+            if (isConcurrentDwn && !list.isEmpty()) {
+                
                 final String parentThreadName = Thread.currentThread().getName();
                 // Thread pool Executor to get resources 
                 // use a LinkedBlockingQueue, note: max pool size doesn't effect
                 final ThreadPoolExecutor exec = new ThreadPoolExecutor(
-                        poolSize, poolSize, KEEPALIVETIME, TimeUnit.SECONDS,
+                        maxConcurrentDownloads, maxConcurrentDownloads, KEEPALIVETIME, TimeUnit.SECONDS,
                         new LinkedBlockingQueue<Runnable>(),
                         new ThreadFactory() {
                             @Override
@@ -1318,7 +1332,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 boolean tasksCompleted = false;
                 try {
                     // sample all resources with threadpool
-                    final List<Future<AsynSamplerResultHolder>> retExec = exec.invokeAll(liste);
+                    final List<Future<AsynSamplerResultHolder>> retExec = exec.invokeAll(list);
                     // call normal shutdown (wait ending all tasks)
                     exec.shutdown();
                     // put a timeout if tasks couldn't terminate
@@ -1333,7 +1347,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                                 CollectionProperty cookies = binRes.getCookies();
                                 for (JMeterProperty jMeterProperty : cookies) {
                                     Cookie cookie = (Cookie) jMeterProperty.getObjectValue();
-                                    cookieManager.add(cookie) ;
+                                    cookieManager.add(cookie);
                                 }
                             }
                             res.addSubResult(binRes.getResult());
@@ -1344,7 +1358,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     }
                     tasksCompleted = exec.awaitTermination(1, TimeUnit.MILLISECONDS); // did all the tasks finish?
                 } catch (InterruptedException ie) {
-                    log.warn("Interruped fetching embedded resources", ie); // $NON-NLS-1$
+                    log.warn("Interrupted fetching embedded resources", ie); // $NON-NLS-1$
                 } catch (ExecutionException ee) {
                     log.warn("Execution issue when fetching embedded resources", ee); // $NON-NLS-1$
                 } finally {
@@ -1964,7 +1978,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         @Override
         public AsynSamplerResultHolder call() {
             JMeterContextService.replaceContext(jmeterContextOfParentThread);
-            ((CleanerThread) Thread.currentThread()).registerSamplerForEndNotification(sampler);
             HTTPSampleResult httpSampleResult = sampler.sample(url, method, areFollowingRedirect, depth);
             if(sampler.getCookieManager() != null) {
                 CollectionProperty cookies = sampler.getCookieManager().getCookies();

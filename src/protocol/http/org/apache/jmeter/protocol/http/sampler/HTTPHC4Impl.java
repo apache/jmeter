@@ -184,7 +184,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
-        new ThreadLocal<Map<HttpClientKey, HttpClient>>(){
+        new InheritableThreadLocal<Map<HttpClientKey, HttpClient>>(){
         @Override
         protected Map<HttpClientKey, HttpClient> initialValue() {
             return new HashMap<>();
@@ -702,7 +702,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = SystemDefaultDnsResolver.INSTANCE;
             }
-            ClientConnectionManager connManager = new MeasuringConnectionManager(createSchemeRegistry(), resolver);
+            MeasuringConnectionManager connManager = new MeasuringConnectionManager(createSchemeRegistry(), resolver);
+            
+            // Modern browsers use more connections per host than the current httpclient default (2)
+            // when using parallel download the httpclient and connection manager are shared by the downloads threads
+            // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
+            if(this.testElement.isConcurrentDwn()) {
+                try {
+                    int maxConcurrentDownloads = Integer.parseInt(this.testElement.getConcurrentPool());
+                    connManager.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, connManager.getDefaultMaxPerRoute()));                
+                } catch (NumberFormatException nfe) {
+                   // no need to log -> will be done by the sampler
+                }
+            }
             
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
