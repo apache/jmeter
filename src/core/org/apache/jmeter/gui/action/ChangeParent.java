@@ -24,11 +24,18 @@ import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -73,6 +80,16 @@ public class ChangeParent implements Command {
     }
 
     private void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {
+        
+        // keep the old name if it was not the default one
+        Controller currentController = (Controller) currentNode.getUserObject();
+        JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
+        String defaultName = JMeterUtils.getResString(currentGui.getLabelResource());
+        if(StringUtils.isNotBlank(currentController.getName()) 
+                && !currentController.getName().equals(defaultName)){
+            newParent.setName(currentController.getName());            
+        }
+        
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
         JMeterTreeNode newNode = new JMeterTreeNode(newParent, treeModel);
         JMeterTreeNode parentNode = (JMeterTreeNode) currentNode.getParent();
@@ -86,6 +103,11 @@ public class ChangeParent implements Command {
             treeModel.removeNodeFromParent(node);
             treeModel.insertNodeInto(node, newNode, newNode.getChildCount());
         }
+        
+        // select the node
+        TreeNode[] nodes = treeModel.getPathToRoot(newNode);
+        JTree tree = guiPackage.getTreeListener().getJTree();
+        tree.setSelectionPath(new TreePath(nodes));
     }
 
 }
