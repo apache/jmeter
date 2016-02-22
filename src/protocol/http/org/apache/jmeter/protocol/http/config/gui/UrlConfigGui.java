@@ -48,6 +48,7 @@ import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
+import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -598,6 +599,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         if (notConfigOnly){
             method = new JLabeledChoice(JMeterUtils.getResString("method"), // $NON-NLS-1$
                     HTTPSamplerBase.getValidMethodsAsArray());
+            method.addChangeListener(this);
         }
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -736,10 +738,15 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                 followRedirects.setSelected(false);
             }
         }
-        if (e.getSource() == followRedirects){
+        else if (e.getSource() == followRedirects){
             if (followRedirects.isSelected()) {
                 autoRedirects.setSelected(false);
             }
+        }
+        // disable the multi-part if not a post request
+        else if(e.getSource() == method) {
+            boolean isPostMethod = HTTPConstants.POST.equals(method.getText());
+            useMultipartForPost.setEnabled(isPostMethod);    
         }
     }
 
