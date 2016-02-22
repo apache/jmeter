@@ -56,7 +56,9 @@ public class HttpClientDefaultParameters {
      * 
      * @param file the file to load
      * @param params Commons HttpClient parameter instance
+     * @deprecated HC3.1 will be dropped in upcoming version
      */
+    @Deprecated
     public static void load(String file, 
             final org.apache.commons.httpclient.params.HttpParams params){
         load(file, 
