@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,8 +31,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
-import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
+import org.apache.jmeter.report.config.SubConfiguration;
 import org.apache.jmeter.report.core.DataContext;
 import org.apache.jmeter.report.core.TimeHelper;
 import org.apache.jmeter.report.processor.ListResultData;
@@ -40,10 +42,9 @@ import org.apache.jmeter.report.processor.ResultDataVisitor;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -80,8 +81,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
-    private static final File TEMPLATE_DIR_DEFAULT = new File(
-            "report-template");
+    private static final String TEMPLATE_DIR_NAME_DEFAULT = "report-template";
 
     // Output directory
     private static final String OUTPUT_DIR = "output_dir";
@@ -337,10 +337,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Get template directory property value
         File templateDirectory = getPropertyFromConfig(exportCfg, TEMPLATE_DIR,
-                TEMPLATE_DIR_DEFAULT, File.class);
+                new File(JMeterUtils.getJMeterBinDir(), TEMPLATE_DIR_NAME_DEFAULT), File.class);
         if (!templateDirectory.isDirectory()) {
             String message = String.format(INVALID_TEMPLATE_DIRECTORY_FMT,
-                    templateDirectory);
+                    templateDirectory.getAbsolutePath());
             LOG.error(message);
             throw new ExportException(message);
         }
