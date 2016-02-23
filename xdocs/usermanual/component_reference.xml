@@ -4039,6 +4039,7 @@ instead. (see figures 12 and 13).</p>
      Otherwise each thread gets its own connection.
      The connection configuration name is used by the JDBC Sampler to select the appropriate
      connection.
+     The used pool is DBCP, see <a href="https://commons.apache.org/proper/commons-dbcp/configuration.html" >BasicDataSource Configuration Parameters</a>
     </description>
     <properties>
         <property name="Name" required="No">Descriptive name for the connection configuration that is shown in the tree.</property>
@@ -4057,15 +4058,18 @@ instead. (see figures 12 and 13).</p>
         If you really want to use shared pooling (why?), then set the max count to the same as the number of threads
         to ensure threads don't wait on each other.
         </property>
-        <property name="Pool timeout" required="Yes">Pool throws an error if the timeout period is exceeded in the 
-        process of trying to retrieve a connection</property>
-        <property name="Idle Cleanup Interval (ms)" required="Yes">This is used to specify how long idle connections will be maintained in the pool before being closed. (Defaults to "<code>60000</code>", 1 minute)</property>
+        <property name="Max Wait (ms)" required="Yes">Pool throws an error if the timeout period is exceeded in the 
+        process of trying to retrieve a connection, see <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getMaxWaitMillis--" >BasicDataSource.html#getMaxWaitMillis</a></property>
+        <property name="Time Between Eviction Runs (ms)" required="Yes">The number of milliseconds to sleep between runs of the idle object evictor thread. When non-positive, no idle object evictor thread will be run. (Defaults to "<code>60000</code>", 1 minute).
+        See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTimeBetweenEvictionRunsMillis--" >BasicDataSource.html#getTimeBetweenEvictionRunsMillis</a></property>
         <property name="Auto Commit" required="Yes">Turn auto commit on or off for the connections.</property>
-        <property name="Keep-alive" required="Yes">The keep-alive is used enable a mechanism to monitor the health of connections. If a connection has not been used for Max Connection Age (ms) then before returning the connection from a call to <code>getConnection()</code>, the connection is first used to ping the database to make sure that it is still alive. 
-        Setting the age allows the 5 second age to be overridden. Validation Query will be used to test it.</property>
-        <property name="Max Connection Age (ms)" required="Yes">Controls the age mentioned in "<code>Keep-Alive</code>" property. It means connections not used for more than Max Connection Age will be tested</property>
-        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still
-        responding.</property>
+        <property name="Test While Idle" required="Yes">Test idle connections of the pool, see <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getTestWhileIdle--">BasicDataSource.html#getTestWhileIdle</a>. 
+        Validation Query will be used to test it.</property>
+        <property name="Soft Min Evictable Idle Time(ms)" required="Yes">Minimum amount of time a connection may sit idle in the pool before it is eligible for eviction by the idle object evictor, with the extra condition that at least <code>minIdle</code> connections remain in the pool.
+        See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getSoftMinEvictableIdleTimeMillis--">BasicDataSource.html#getSoftMinEvictableIdleTimeMillis</a>.
+        Defaults to 5000 (5 seconds)
+        </property>
+        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.</property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
         JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).</property>
