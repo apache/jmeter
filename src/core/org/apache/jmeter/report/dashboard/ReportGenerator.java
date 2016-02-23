@@ -73,6 +73,9 @@ public class ReportGenerator {
             .equalsIgnoreCase(JMeterUtils.getPropDefault(
                     "jmeter.save.saveservice.output_format", "csv"));
 
+    private static final char CSV_DEFAULT_SEPARATOR =
+            JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
+
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
     private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
@@ -112,6 +115,8 @@ public class ReportGenerator {
             throw new IllegalArgumentException(
                     "Report generation requires csv output format, check 'jmeter.save.saveservice.output_format' property");
         }
+
+        LOG.info("ReportGenerator will use for Parsing the separator:'"+CSV_DEFAULT_SEPARATOR+"'");
 
         File file = new File(resultsFile);
         if (resultCollector == null) {
@@ -223,6 +228,8 @@ public class ReportGenerator {
         // Process configuration to build data exporters
         for (Map.Entry<String, ExporterConfiguration> entry : configuration
                 .getExportConfigurations().entrySet()) {
+            LOG.info("Exporting data using exporter:'"
+                +entry.getKey()+"' of className:'"+entry.getValue().getClassName()+"'");
             exportData(sampleContext, entry.getKey(), entry.getValue());
         }
 
