@@ -131,6 +131,9 @@ public class ReportGeneratorConfiguration {
                     getExporterPropertyKey(exportId,
                             SUBCONF_KEY_CLASSNAME), "",
                     String.class);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("Using class:'"+className+"'"+" for exporter:'"+exportId+"'");
+            }
             exportConfiguration.setClassName(className);
 
             // Get the property defining whether only sample series
@@ -233,6 +236,9 @@ public class ReportGeneratorConfiguration {
                     getGraphPropertyKey(graphId,
                             SUBCONF_KEY_CLASSNAME), "",
                     String.class);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("Using class:'"+className+"' for graph:'"+title+"' with id:'"+graphId+"'");
+            }
             graphConfiguration.setClassName(className);
 
         }
@@ -587,6 +593,9 @@ public class ReportGeneratorConfiguration {
 
         // Use jodd.Props to ease property handling
         final Props props = new Props();
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Loading properties:\r\n"+properties);
+        }
         props.load(properties);
 
         // Load temporary directory property
@@ -633,7 +642,7 @@ public class ReportGeneratorConfiguration {
                 new ExporterConfigurationFactory(props));
 
         if (exportConfigurations.isEmpty()) {
-            LOG.warn("No export configuration found. None report will be generated.");
+            LOG.warn("No export configuration found. No report will be generated.");
         }
 
         LOG.debug(END_LOADING_MSG);
