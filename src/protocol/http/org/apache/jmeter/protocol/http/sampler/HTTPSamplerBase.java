@@ -1634,7 +1634,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         if (isImageParser() && (SampleResult.TEXT).equals(res.getDataType()) && res.isSuccessful()) {
             if (frameDepth > MAX_FRAME_DEPTH) {
-                res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), new HTTPSampleResult(res)));
+                HTTPSampleResult errSubResult = new HTTPSampleResult(res);
+                errSubResult.removeSubResults();
+                res.addSubResult(errorResult(new Exception("Maximum frame/iframe nesting depth exceeded."), errSubResult));
             } else {
                 // Only download page resources if we were not redirected.
                 // If we were redirected, the page resources have already been

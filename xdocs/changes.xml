@@ -264,6 +264,7 @@ Summary
     <li><bug>58861</bug>When clicking on up, down or detail while in a cell of the argument panel, newly added content is lost. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>57935</bug>SSL SNI extension not supported by HttpClient 4.2.6</li>
     <li><bug>59044</bug>Http Sampler : It should not be possible to select the multipart encoding if the method is not POST. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>59008</bug>Http Sampler: Infinite recursion SampleResult on frame depth limit reached</li>
 </ul>
 
 <h3>Other Samplers</h3>
