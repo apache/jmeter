@@ -210,7 +210,7 @@ public class DataSourceElement extends AbstractTestElement
         if(isKeepAlive()) {
             dataSource.setTestWhileIdle(true);
             dataSource.setValidationQuery(getCheckQuery());
-            dataSource.setMaxConnLifetimeMillis(Long.parseLong(getConnectionAge()));            
+            dataSource.setSoftMinEvictableIdleTimeMillis(Long.parseLong(getConnectionAge()));
             dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(getTrimInterval()));
         }
 
