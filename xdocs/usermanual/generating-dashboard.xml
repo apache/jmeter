@@ -23,15 +23,16 @@
                 </p>
                 <!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
             </subsection>
-            <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configure">
+            <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configuration">
                 <p>
                     Dashboard generation uses JMeter properties to customize the
                     report. Some properties are used
                     for general settings and others are
                     used for a particular graph
                     configuration or exporter configuration.
+                    <note>All these properties should be set in <code>user.properties</code> file.</note>
                 </p>
-                <subsection name="&sect-num;.2.1 Requirements" anchor="configure_requirements">
+                <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
                         To enable the generator to operate, the input CSV files must include required data.
                         Check that your jmeter configuration follows these settings :
@@ -45,7 +46,7 @@ jmeter.save.saveservice.successful = true
 jmeter.save.saveservice.thread_counts = true
 jmeter.save.saveservice.thread_name = true
 jmeter.save.saveservice.time = true
-jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other format
+jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other format)
                         </source>
                         <note>
                             Property <code>jmeter.save.saveservice.timestamp_format</code> must be set                        
@@ -53,7 +54,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                         <note>
                             The "Errors" summary table shows more accurate data if these settings are fulfilled :
                             <ul>
-                                <li><code>jmeter.save.saveservice.assertion_results_failure_message = true</code></li>
+                                <li><source>jmeter.save.saveservice.assertion_results_failure_message = true</source></li>
                                 <li>
                                     If you use a transaction controller, uncheck the box
                                     <code>Generate parent sample</code>
@@ -64,15 +65,15 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                     </p>
                 </subsection>
 
-                <subsection name="&sect-num;.2.2 General settings" anchor="configure_general">
+                <subsection name="&sect-num;.2.2 General settings" anchor="configuration_general">
                     <note>
                         All properties must be prefixed with
-                        <code>jmeter.reportgenerator.</code>
+                        <source>jmeter.reportgenerator.</source>
                     </note>
                     <properties>
                         <property name="apdex_statisfied_threshold" required="No">
                             Sets
-                            the satisfaction threshold for the APDEX
+                            the satisfaction threshold for the <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
                             calculation (in ms).
                             Default: 500
                         </property>
@@ -117,7 +118,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                             generator configuration.
                             These properties are freely named but you
                             should use the prefix
-                            <code>jmeter.reportgenerator.</code>
+                            <source>jmeter.reportgenerator.</source>
                             in order to avoid
                             properties overlap.
                         </p>
@@ -125,11 +126,10 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                             E.g :
                             <br />
                             Property definition :
-                            <code>jmeter.reportgenerator.overall_granularity=60000</code>
+                            <source>jmeter.reportgenerator.overall_granularity=60000</source>
                             <br />
                             Property reference :
-                            <code>${jmeter.reportgenerator.overall_granularity}
-                            </code>
+                            <source>${jmeter.reportgenerator.overall_granularity}</source>
                         </p>
                     </note>
                 </subsection>
@@ -138,7 +138,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                     <p>
                         Each property describing a graph configuration must be prefixed
                         with
-                        <code>jmeter.reportgenerator.graph.</code>
+                        <source>jmeter.reportgenerator.graph.</source>
                         followed by the graph
                         identifier.
                     </p>
@@ -167,8 +167,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
 
                     <subsection name="&sect-num;.2.3.2 Specific properties" anchor="specific_graph_properties">
                         <p>
-                            Specific graph properties must use the prefix
-                            <code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property</code>
+                            Specific graph properties must use the prefix:<br/>
+                            <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property</source>
                             <br />
                             The name of the property will be mapped using camel case
                             transformation and the matching method of the class will be
@@ -180,7 +180,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                         <p>
                             E.g :
                             <br />
-                            <code>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity=150</code>
+                            <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity=150</source>
                             induces the call of the method setGranularity(150) on the
                             instance of the graph.
                         </p>
@@ -192,7 +192,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                     <p>
                         Each property describing an exporter configuration must be
                         prefixed with
-                        <code>jmeter.reportgenerator.exporter</code>
+                        <source>jmeter.reportgenerator.exporter</source>
                         followed by the exporter identifier.
                     </p>
 
@@ -221,7 +221,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                     <subsection name="&sect-num;.2.4.2 Specific properties" anchor="specific_export_properties">
                         <p>
                             Specific exporter properties must use the prefix
-                            <code>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property</code>
+                            <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property</source>
                         </p>
                         <table>
                             <caption>Specific properties for HTML exporter</caption>
@@ -247,8 +247,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss.SSS or any other 
                         <p>
                             Graph properties allow exporters to overwrite some graph data.
                             <br />
-                            They must use the prefix
-                            <code>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.graph_options.&lt;graph_id&gt;</code>
+                            They must use the prefix:
+                            <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.graph_options.&lt;graph_id&gt;</source>
                         </p>
                         <table>
                             <caption>Supported graph properties by HTML exporter</caption>
@@ -443,15 +443,13 @@ jmeter.reportgenerator.apdex_statisfied_threshold=1500
 # Change this parameter if you want to override the APDEX tolerance threshold.
 jmeter.reportgenerator.apdex_tolerated_threshold=3000
 
-# Sets the destination directory for generated
-html pages.
-jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
+# Sets the destination directory for generated html pages, it is better to change it for every generation
+# jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
 
 # Indicates which graph series are filtered (regular expression)
 jmeter.reportgenerator.exporter.html.series_filter=^((s0)|(s1)).*$
 
-# Indicates whether
-series filter apply only on sample series
+# Indicates whether series filter apply only on sample series
 jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     </source>
                     <note>
@@ -483,14 +481,14 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                 <subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
                     <p>
                         Use the following command :
-                        <source>jmeter -n -g &lt;log file&gt;</source>
+                        <source>jmeter -n -g &lt;log file&gt; -Jjmeter.reportgenerator.exporter.html.property.output_dir=&lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
 
                 <subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
                     <p>
                         Use the following command :
-                        <source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt;</source>
+                        <source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt; -Jjmeter.reportgenerator.exporter.html.property.output_dir=&lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
             </subsection>
