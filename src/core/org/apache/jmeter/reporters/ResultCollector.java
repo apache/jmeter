@@ -631,7 +631,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      */
     public void flushFile() {
         if (out != null) {
-            log.info("forced flush through ResultCollecto#flushFile");
+            log.info("forced flush through ResultCollector#flushFile");
             out.flush();
         }
     }
