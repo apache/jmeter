@@ -49,4 +49,9 @@ public interface CookieHandler {
     String getCookieHeaderForURL(CollectionProperty cookiesCP, URL url,
             boolean allowVariableCookie);
 
+    /**
+     * @return Cookie default policy name
+     */
+    String getDefaultPolicy();
+
 }

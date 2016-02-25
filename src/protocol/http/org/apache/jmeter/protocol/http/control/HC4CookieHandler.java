@@ -53,17 +53,19 @@ import org.apache.log.Logger;
 
 public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
+    static String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; 
+
     public static final String[] AVAILABLE_POLICIES = new String[]{
-        CookieSpecs.DEFAULT,
-        CookieSpecs.STANDARD,
+        DEFAULT_POLICY_NAME,
         CookieSpecs.STANDARD_STRICT,
         CookieSpecs.IGNORE_COOKIES,
-        CookieSpecs.BEST_MATCH,
-        CookieSpecs.BROWSER_COMPATIBILITY,
+        CookieSpecs.NETSCAPE,
+        CookieSpecs.DEFAULT,
         "rfc2109",
         "rfc2965",
-        CookieSpecs.NETSCAPE
+        CookieSpecs.BEST_MATCH,
+        CookieSpecs.BROWSER_COMPATIBILITY
     };
 
     private final transient CookieSpec cookieSpec;
@@ -241,5 +243,10 @@ public class HC4CookieHandler implements CookieHandler {
             ret.setAttribute(ClientCookie.PATH_ATTR, jmc.getPath());
         }
         return ret;
+    }
+    
+    @Override
+    public String getDefaultPolicy() {
+        return DEFAULT_POLICY_NAME; 
     }
 }
