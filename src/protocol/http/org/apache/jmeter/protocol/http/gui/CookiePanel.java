@@ -278,7 +278,6 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         tableModel.clearData();
         clearEachIteration.setSelected(false);
-        policy.setText(CookieManager.DEFAULT_POLICY);
         selectHandlerPanel.setSelectedItem(CookieManager.DEFAULT_IMPLEMENTATION
                 .substring(CookieManager.DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
         deleteButton.setEnabled(false);
@@ -332,7 +331,6 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         policy = new JLabeledChoice(
                 JMeterUtils.getResString("cookie_manager_policy"), //$NON-NLS-1$
                 getPolicies(CookieManager.DEFAULT_IMPLEMENTATION));
-        policy.setText(CookieManager.DEFAULT_POLICY);
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         JPanel northPanel = new JPanel();

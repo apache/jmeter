@@ -101,8 +101,6 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     private transient CookieHandler cookieHandler;
 
     private transient CollectionProperty initialCookies;
-
-    public static final String DEFAULT_POLICY = CookieSpecs.DEFAULT;
     
     public static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
@@ -121,11 +119,11 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     public String getPolicy() {
-        return getPropertyAsString(POLICY, DEFAULT_POLICY);
+        return getPropertyAsString(POLICY);
     }
 
     public void setCookiePolicy(String policy){
-        setProperty(POLICY, policy, DEFAULT_POLICY);
+        setProperty(POLICY, policy);
     }
 
     public CollectionProperty getCookies() {
@@ -145,11 +143,11 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     public String getImplementation() {
-        return getPropertyAsString(IMPLEMENTATION, DEFAULT_IMPLEMENTATION);
+        return getPropertyAsString(IMPLEMENTATION);
     }
 
     public void setImplementation(String implementation){
-        setProperty(IMPLEMENTATION, implementation, DEFAULT_IMPLEMENTATION);
+        setProperty(IMPLEMENTATION, implementation);
     }
 
     /**
