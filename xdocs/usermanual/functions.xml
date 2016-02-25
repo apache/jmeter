@@ -22,6 +22,7 @@
 <!ENTITY ccedil   "&#x000E7;" >
 <!ENTITY eacute   "&#x000E9;" >
 <!ENTITY hellip   "&#x02026;" >
+<!ENTITY nbsp     "&#x000A0;" >
 <!ENTITY yen      "&#x000A5;" >
 ]>
 
@@ -86,7 +87,7 @@ For example if <code>UNDEF</code> is not defined as a variable, then the value o
 Variables, functions (and properties) are all case-sensitive.
 <b>
 JMeter trims spaces from variable names before use, so for example
-<code>${__Random(1,63, LOTTERY )}</code> will use the variable '<code>LOTTERY</code>' rather than '<code> LOTTERY </code>'.
+<code>${__Random(1,63,&nbsp;LOTTERY&nbsp;)}</code> will use the variable '<code>LOTTERY</code>' rather than '<code>&nbsp;LOTTERY&nbsp;</code>'.
 </b>
 </p>
 <note>
