@@ -222,7 +222,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 JMeterUtils.reportErrorToUser(ex.getMessage(), "Error saving cookies");
             }
         } else if (action.equals(HANDLER_COMMAND)) {
+            String currentPolicy = policy.getText();
             policy.setValues(getPolicies(handlerMap.get(selectHandlerPanel.getSelectedItem())));
+            policy.setText(currentPolicy);
          }
     }
 
