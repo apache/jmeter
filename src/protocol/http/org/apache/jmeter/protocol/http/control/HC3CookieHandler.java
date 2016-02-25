@@ -36,9 +36,10 @@ import org.apache.log.Logger;
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
+   private static final String DEFAULT_POLICY_NAME = "compatibility";
    public static final String[] AVAILABLE_POLICIES = new String[] {
+       DEFAULT_POLICY_NAME,
        "default",
-       "compatibility",
        "rfc2109",
        "rfc2965",
        "ignorecookies",
@@ -203,5 +204,10 @@ public class HC3CookieHandler implements CookieHandler {
             }
         }
 
+    }
+
+    @Override
+    public String getDefaultPolicy() {
+        return DEFAULT_POLICY_NAME; 
     }
 }
