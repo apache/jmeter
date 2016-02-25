@@ -17,6 +17,7 @@
 -->
 <!DOCTYPE document [
   <!ENTITY hellip "&#x02026;">
+  <!ENTITY nbsp   "&#x000A0;">
   <!ENTITY oacute "&#x000F3;">
   <!ENTITY THORN  "&#x000DE;">
   <!ENTITY rarr   "&#x02192;">
@@ -4168,7 +4169,7 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 </li>
 <li>
 Leading and trailing spaces are trimmed from variable names in function calls.
-For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '.
+For example, ${__Random(1,63,&nbsp;LOTTERY&nbsp;)} will use the variable 'LOTTERY' rather than '&nbsp;LOTTERY&nbsp;'.
 </li>
 <li>
 Synchronization has been removed from the RunningSample class (it was not fully threadsafe anyway).
@@ -4263,7 +4264,7 @@ To skip EOL checking, set tcp.eolByte=1000 (or some other value which is not a v
 <li>JUnit sampler GUI now also finds Test classes defined in user.classpath</li>
 <li>
 Leading and trailing spaces are trimmed from variable names in function calls.
-For example, ${__Random(1,63, LOTTERY )} will use the variable 'LOTTERY' rather than ' LOTTERY '
+For example, ${__Random(1,63,&nbsp;LOTTERY&nbsp;)} will use the variable 'LOTTERY' rather than '&nbsp;LOTTERY&nbsp;'
 </li>
 <li>Webservice(SOAP) Sampler can now load local WSDL files using the file: protocol</li>
 <li><bugzilla>44872</bugzilla> - Add "All Files" filter to Open File dialogs</li>
