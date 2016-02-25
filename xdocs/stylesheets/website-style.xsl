@@ -74,8 +74,8 @@
           </xsl:comment>
           <div>
             <a href="http://www.apache.org">
-              <img title="Apache Software Foundation" width="290"
-                height="75" src="{$imgdir}/asf-logo.png" alt="Logo ASF" />
+              <img title="Apache Software Foundation" width="215"
+                height="88" src="{$imgdir}/asf-logo.png" alt="Logo ASF" />
             </a>
           </div>
           <xsl:if test="$project/logo">
