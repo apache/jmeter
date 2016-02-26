@@ -308,14 +308,25 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param threadContext 
      */
     private void triggerEndOfLoopOnParentControllers(Sampler sam, JMeterContext threadContext) {
-        // Find parent controllers of current sampler
-        FindTestElementsUpToRootTraverser pathToRootTraverser = null;
+        
         TransactionSampler transactionSampler = null;
         if(sam instanceof TransactionSampler) {
             transactionSampler = (TransactionSampler) sam;
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser(transactionSampler.getTransactionController());
+        }
+
+        // Bug 59067
+        // the Sampler provided is not always the "real" one, but it can be a TransactionSampler, 
+        //   if there are some other controllers (SimpleController) between this TransactionSampler and the real sampler, 
+        //   triggerEndOfLoop will not be called for those controllers.
+        // the following method will try to find the sampler that really generate an error
+        Sampler realSampler = findRealSampler(sam);
+        
+        // Find parent controllers of current sampler
+        FindTestElementsUpToRootTraverser pathToRootTraverser = null;
+        if(realSampler instanceof TransactionSampler) {
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser(((TransactionSampler) realSampler).getTransactionController());
         } else {
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
+            pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
         }
         testTree.traverse(pathToRootTraverser);
         
@@ -338,6 +349,16 @@ public class JMeterThread implements Runnable, Interruptible {
             SamplePackage transactionPack = compiler.configureTransactionSampler(transactionSampler);
             doEndTransactionSampler(transactionSampler, null, transactionPack, threadContext);
         }
+    }
+
+    private Sampler findRealSampler(Sampler sam) {
+        Sampler realSampler = sam;
+
+        while(realSampler instanceof TransactionSampler) {
+            realSampler = ((TransactionSampler) realSampler).getSubSampler();
+        }
+       
+        return realSampler;
     }
 
     /**
