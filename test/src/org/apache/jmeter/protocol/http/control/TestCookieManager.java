@@ -552,23 +552,17 @@ public class TestCookieManager extends JMeterTestCase {
             assertEquals("/",man.get(2).getPath());
             String s = man.getCookieHeaderForURL(url);
             
-            // FIXME Enable when HTTPCLIENT 4.5.2 is available
             // With ignore policy, s is null as no match will occur, 
             // getCookieHeaderForURL will return null 
-            //assertNull(s);
+            assertNull(s);
             
-            // Remove this when HTTPCLIENT 4.5.2 is available
-            assertTrue(s.length()==0);
-
             HC4CookieHandler cookieHandler = (HC4CookieHandler) man.getCookieHandler();
             List<org.apache.http.cookie.Cookie> c = 
                     cookieHandler.getCookiesForUrl(man.getCookies(), url, 
                     CookieManager.ALLOW_VARIABLE_COOKIES);
             assertNotNull(c); // Make sure variable is used
-            // FIXME Enable when HTTPCLIENT 4.5.2 is available
             // see https://issues.apache.org/jira/browse/HTTPCLIENT-1704
-            //assertEquals(0,c.size()); // Cookies again ignored
-            System.out.println("Uncomment assertEquals(0,c.size()) when migrating to httpclient-4.5.2");
+            assertEquals(0,c.size()); // Cookies again ignored
         }
 
         @Test

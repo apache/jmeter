@@ -150,10 +150,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     public void testPostRequest_FormMultipart3() throws Exception {
-        // FIXME Requires HTTPCLIENT 4.5.2
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        //testPostRequest_FormMultipart(HTTP_SAMPLER3, US_ASCII);
-        System.out.println("Uncomment testPostRequest_FormMultipart3() when migrating to HTTPCLIENT 4.5.2");
+        testPostRequest_FormMultipart(HTTP_SAMPLER3, US_ASCII);
     }
 
     public void testPostRequest_FileUpload() throws Exception {
@@ -165,10 +163,8 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     }
 
     public void testPostRequest_FileUpload3() throws Exception {        
-        // FIXME Requires HTTPCLIENT 4.5.2
         // see https://issues.apache.org/jira/browse/HTTPCLIENT-1665
-        //testPostRequest_FileUpload(HTTP_SAMPLER3, US_ASCII);
-        System.out.println("Uncomment testPostRequest_FileUpload3() when migrating to HTTPCLIENT 4.5.2");
+        testPostRequest_FileUpload(HTTP_SAMPLER3, US_ASCII);
     }
 
     public void testPostRequest_BodyFromParameterValues() throws Exception {
