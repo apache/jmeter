@@ -272,6 +272,7 @@ Summary
     <li><bug>59069</bug>CookieManager : Selected Cookie Policy is always reset to default when saving or switching to another TestElement (nightly build 25th feb 2016)</li>
     <li><bug>58881</bug>HTTP Request : HTTPHC4Impl shows exception when server uses "deflate" compression</li>
     <li><bug>58583</bug>HTTP client fails to close connection if server misbehaves by not sending "connection: close", violating HTTP RFC 2616 / RFC 7230</li>
+    <li><bug>58950</bug>NoHttpResponseException when Pause between samplers exceeds keepalive sent by server</li>
 </ul>
 
 <h3>Other Samplers</h3>
