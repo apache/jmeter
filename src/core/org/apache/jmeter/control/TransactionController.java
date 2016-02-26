@@ -283,7 +283,6 @@ public class TransactionController extends GenericController implements SampleLi
             // update them with SubSamplerResult
             if(subSampler instanceof TransactionSampler) {
                 TransactionSampler tc = (TransactionSampler) subSampler;
-                tc.getTransactionController().triggerEndOfLoop();
                 transactionSampler.addSubSamplerResult(tc.getTransactionResult());
             }
             transactionSampler.setTransactionDone();
