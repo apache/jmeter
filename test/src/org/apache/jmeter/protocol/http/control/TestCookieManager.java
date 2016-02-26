@@ -287,6 +287,8 @@ public class TestCookieManager extends JMeterTestCase {
         // Test multi-cookie header handling
         @Test
         public void testCookies1() throws Exception {
+            man.setCookiePolicy(CookieSpecs.DEFAULT);
+            man.testStarted(); // ensure policy is picked up
             URL url = new URL("http://a.b.c.d/testCookies1");
             man.addCookieFromHeader("test1=1; comment=\"how,now\", test2=2; version=1", url);
             assertEquals(2,man.getCookieCount());
@@ -312,6 +314,8 @@ public class TestCookieManager extends JMeterTestCase {
         
         @Test
         public void testCookies3() throws Exception {
+            man.setCookiePolicy(CookieSpecs.DEFAULT);
+            man.testStarted(); // ensure policy is picked up
             URL url = new URL("https://a.b.c.d/testCookies2");
             man.addCookieFromHeader("test1=1;secure, test2=2;secure; version=1", url);
             assertEquals(2,man.getCookieCount());
