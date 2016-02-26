@@ -20,9 +20,9 @@ commons-net-3.4.jar
 commons-pool2-2.4.2.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-httpclient-4.5.1.jar
+httpclient-4.5.2.jar
 httpcore-4.4.4.jar
-httpmime-4.5.1.jar
+httpmime-4.5.2.jar
 jorphan.jar (part of JMeter)
 logkit-2.0.jar
 oro-2.0.8.jar

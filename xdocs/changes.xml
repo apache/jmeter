@@ -157,7 +157,7 @@ Summary
   <li><bug>58515</bug>New JSON related components : JSON-PATH Extractor and JSON-PATH Renderer in View Results Tree. Donated by Ubik Load Pack (support at ubikloadpack.com).</li>
   <li><bug>58698</bug>Correct parsing of auth-files in HTTP Authorization Manager.</li>
   <li><bug>58756</bug>CookieManager : Cookie Policy select box content must depend on Cookie implementation.</li>
-  <li><bug>56358</bug>Cookie manager supports cross port cookies and RFC6265.</li>
+  <li><bug>56358</bug>Cookie manager supports cross port cookies and RFC6265. Thanks to Oleg Kalnichevski (olegk at apache.org)</li>
   <li><bug>58773</bug>TestCacheManager : Add tests for CacheManager that use HttpClient 4</li>
   <li><bug>58742</bug>CompareAssertion : Reset data in TableEditor when switching between different CompareAssertions in gui.
       Based on a patch by Vincent Herilier (vherilier at gmail.com)</li>
@@ -193,7 +193,7 @@ Summary
 <li><bug>58699</bug>Workbench changes neither saved nor prompted for saving upon close. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58726</bug>Remove the <code>jmeterthread.startearlier</code> parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58728</bug>Drop old behavioural properties</li>
-<li><bug>57319</bug>Upgrade to HttpClient 4.5.X. With the big help from Oleg Kalnichevski.</li>
+<li><bug>57319</bug>Upgrade to HttpClient 4.5.2. With the big help from Oleg Kalnichevski (olegk at apache.org) and Gary Gregory (ggregory at apache.org).</li>
 <li><bug>58772</bug>Deprecate MongoDB related elements</li>
 <li><bug>58782</bug>ThreadGroup : Improve ergonomy</li>
 <li><bug>58165</bug>Show the time elapsed since the start of the load test in GUI mode. Partly based on a contribution from Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
@@ -219,6 +219,7 @@ Summary
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
+<li>Updated to httpclient, httpmime 4.5.2 (from 4.2.6)</li>
 <li>Updated to tika-core and tika-parsers 1.12 (from 1.7)</li>
 <li>Updated to commons-math3 3.5 (from 3.4.1)</li>
 <li>Updated to commons-pool2 2.4.2 (from 2.3)</li>
@@ -269,6 +270,8 @@ Summary
     <li><bug>59044</bug>Http Sampler : It should not be possible to select the multipart encoding if the method is not POST. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>59008</bug>Http Sampler: Infinite recursion SampleResult on frame depth limit reached</li>
     <li><bug>59069</bug>CookieManager : Selected Cookie Policy is always reset to default when saving or switching to another TestElement (nightly build 25th feb 2016)</li>
+    <li><bug>58881</bug>HTTP Request : HTTPHC4Impl shows exception when server uses "deflate" compression</li>
+    <li><bug>58583</bug>HTTP client fails to close connection if server misbehaves by not sending "connection: close", violating HTTP RFC 2616 / RFC 7230</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -355,6 +358,7 @@ Summary
 <li>Harrison Termotto (harrison dot termotto at stonybrook.edu</li>
 <li>Vincent Herilier (vherilier at gmail.com)</li>
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
+<li>Gary Gregory (ggregory at apache.org)</li>
 </ul>
 
 <br/>
