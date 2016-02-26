@@ -308,15 +308,17 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param threadContext 
      */
     private void triggerEndOfLoopOnParentControllers(Sampler sam, JMeterContext threadContext) {
-        // Find parent controllers of current sampler
-        FindTestElementsUpToRootTraverser pathToRootTraverser = null;
         TransactionSampler transactionSampler = null;
         if(sam instanceof TransactionSampler) {
             transactionSampler = (TransactionSampler) sam;
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser(transactionSampler.getTransactionController());
-        } else {
-            pathToRootTraverser = new FindTestElementsUpToRootTraverser(sam);
         }
+
+        Sampler realSampler = findRealSampler(sam);
+        if(realSampler == null) {
+            throw new IllegalStateException("Got null subSampler calling findRealSampler for:"+sam.getName()+", sam:"+sam);
+        }
+        // Find parent controllers of current sampler
+        FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
         testTree.traverse(pathToRootTraverser);
         
         // Trigger end of loop condition on all parent controllers of current sampler
@@ -338,6 +340,23 @@ public class JMeterThread implements Runnable, Interruptible {
             SamplePackage transactionPack = compiler.configureTransactionSampler(transactionSampler);
             doEndTransactionSampler(transactionSampler, null, transactionPack, threadContext);
         }
+    }
+
+    /**
+     * Find the Real sampler (Not TransactionSampler) that really generated an error
+     * The Sampler provided is not always the "real" one, it can be a TransactionSampler, 
+     * if there are some other controllers (SimpleController or other implementations) between this TransactionSampler and the real sampler, 
+     * triggerEndOfLoop will not be called for those controllers leaving them in "ugly" state.
+     * the following method will try to find the sampler that really generate an error
+     * @param sampler
+     * @return {@link Sampler}
+     */
+    private Sampler findRealSampler(Sampler sampler) {
+        Sampler realSampler = sampler;
+        while(realSampler instanceof TransactionSampler) {
+            realSampler = ((TransactionSampler) realSampler).getSubSampler();
+        }
+        return realSampler;
     }
 
     /**
