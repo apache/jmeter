@@ -428,7 +428,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     }
 
     /**
-     * Alternate constructor for use by OldSaveService
+     * Alternate constructor for use by CsvSaveService
      *
      * @param value initial setting for boolean fields used in Config dialogue
      */
@@ -790,8 +790,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     ///////////////// End of standard field accessors /////////////////////
 
     /**
-     * Only intended for use by OldSaveService (and test cases)
-     * 
+     * Intended for use by CsvSaveService (and test cases)
      * @param fmt
      *            format of the date to be saved. If <code>null</code>
      *            milliseconds since epoch will be printed

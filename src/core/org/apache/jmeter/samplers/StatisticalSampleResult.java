@@ -39,7 +39,7 @@ public class StatisticalSampleResult extends SampleResult implements
     }
 
     /**
-     * Allow OldSaveService to generate a suitable result when sample/error counts have been saved.
+     * Allow CsvSaveService to generate a suitable result when sample/error counts have been saved.
      *
      * @deprecated Needs to be replaced when multiple sample results are sorted out
      *
