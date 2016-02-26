@@ -28,6 +28,10 @@ import org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * @deprecated since 3.0 will be removed in the next version 3.1
+ */
+@Deprecated
 public class MultipartUrlConfigGui extends UrlConfigGui {
 
     private static final long serialVersionUID = 240L;
