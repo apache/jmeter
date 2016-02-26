@@ -34,7 +34,7 @@ import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
-import org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui;
+import org.apache.jmeter.protocol.http.config.gui.UrlConfigGui;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -56,7 +56,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
-    private MultipartUrlConfigGui urlConfigGui;
+    private UrlConfigGui urlConfigGui;
 
     private JCheckBox getImages;
     
@@ -158,7 +158,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         // URL CONFIG
-        urlConfigGui = new MultipartUrlConfigGui(true, !isAJP);
+        urlConfigGui = new UrlConfigGui(true, !isAJP, true, true);
         add(urlConfigGui, BorderLayout.CENTER);
 
         // Bottom (embedded resources, source address and optional tasks)

@@ -45,6 +45,7 @@ import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
+import org.apache.jmeter.protocol.http.gui.HTTPFileArgsPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -71,13 +72,17 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
     private static final int TAB_PARAMETERS = 0;
     
-    private static final int TAB_RAW_BODY = 1;
+    private int tabRawBodyIndex = 1;
+    
+    private int tabFileUploadIndex = 2;
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
     
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private HTTPArgumentsPanel argsPanel;
+    
+    private HTTPFileArgsPanel filesPanel;
 
     private JTextField domain;
 
@@ -115,8 +120,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     
     private JLabeledChoice httpImplementation;
 
-    private final boolean notConfigOnly;
     // set this false to suppress some items for use in HTTP Request defaults
+    private final boolean notConfigOnly;
     
     private final boolean showImplementation; // Set false for AJP
 
@@ -127,6 +132,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     private ValidationTabbedPane postContentTabbedPane;
 
     private boolean showRawBodyPane;
+    private boolean showFileUploadPane;
 
     /**
      * Constructor which is setup to show HTTP implementation, raw body pane and
@@ -155,9 +161,23 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      *            flag whether the raw body pane should be shown
      */
     public UrlConfigGui(boolean showSamplerFields, boolean showImplementation, boolean showRawBodyPane) {
-        notConfigOnly=showSamplerFields;
+        this(showSamplerFields, showImplementation, showRawBodyPane, false);
+    }
+    
+    /**
+     * @param showSamplerFields
+     *            flag whether sampler fields should be shown
+     * @param showImplementation
+     *            Show HTTP Implementation
+     * @param showRawBodyPane
+     *            flag whether the raw body pane should be shown
+     * @param showFileUploadPane flag whether the file upload pane should be shown
+     */
+    public UrlConfigGui(boolean showSamplerFields, boolean showImplementation, boolean showRawBodyPane, boolean showFileUploadPane) {
+        this.notConfigOnly = showSamplerFields;
         this.showImplementation = showImplementation;
         this.showRawBodyPane = showRawBodyPane;
+        this.showFileUploadPane = showFileUploadPane;
         init();
     }
 
@@ -185,6 +205,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         protocol.setText(""); // $NON-NLS-1$
         contentEncoding.setText(""); // $NON-NLS-1$
         argsPanel.clear();
+        if(showFileUploadPane) {
+            filesPanel.clear();
+        }
         if(showRawBodyPane) {
             postBodyContent.setInitialText("");// $NON-NLS-1$
         }
@@ -207,7 +230,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @param element {@link TestElement} to modify
      */
     public void modifyTestElement(TestElement element) {
-        boolean useRaw = postContentTabbedPane.getSelectedIndex()==TAB_RAW_BODY;
+        boolean useRaw = postContentTabbedPane.getSelectedIndex()==tabRawBodyIndex;
         Arguments args;
         if(useRaw) {
             args = new Arguments();
@@ -225,6 +248,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         } else {
             args = (Arguments) argsPanel.createTestElement();
             HTTPArgument.convertArgumentsToHTTP(args);
+            if(showFileUploadPane) {
+                filesPanel.modifyTestElement(element);
+            }
         }
         element.setProperty(HTTPSamplerBase.POST_BODY_RAW, useRaw, HTTPSamplerBase.POST_BODY_RAW_DEFAULT);
         element.setProperty(new TestElementProperty(HTTPSamplerBase.ARGUMENTS, args));
@@ -297,10 +323,13 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             String postBody = computePostBody(arguments, true); // Convert CRLF to CR, see modifyTestElement
             postBodyContent.setInitialText(postBody); 
             postBodyContent.setCaretPosition(0);
-            postContentTabbedPane.setSelectedIndex(TAB_RAW_BODY, false);
+            postContentTabbedPane.setSelectedIndex(tabRawBodyIndex, false);
         } else {
             argsPanel.configure(arguments);
             postContentTabbedPane.setSelectedIndex(TAB_PARAMETERS, false);
+            if(showFileUploadPane) {
+                filesPanel.configure(el);                
+            }
         }
 
         domain.setText(el.getPropertyAsString(HTTPSamplerBase.DOMAIN));
@@ -580,12 +609,12 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     protected JPanel getProtocolAndMethodPanel() {
 
         // Implementation
-        
         if (showImplementation) {
             httpImplementation = new JLabeledChoice(JMeterUtils.getResString("http_implementation"), // $NON-NLS-1$
                     HTTPSamplerFactory.getImplementations());
             httpImplementation.addValue("");
         }
+        
         // PROTOCOL
         protocol = new JTextField(4);
         JLabel protocolLabel = new JLabel(JMeterUtils.getResString("protocol")); // $NON-NLS-1$
@@ -627,9 +656,18 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         postContentTabbedPane = new ValidationTabbedPane();
         argsPanel = new HTTPArgumentsPanel();
         postContentTabbedPane.add(JMeterUtils.getResString("post_as_parameters"), argsPanel);// $NON-NLS-1$
+        
+        int indx = TAB_PARAMETERS;
         if(showRawBodyPane) {
+            tabRawBodyIndex = ++indx;
             postBodyContent = new JSyntaxTextArea(30, 50);// $NON-NLS-1$
             postContentTabbedPane.add(JMeterUtils.getResString("post_body"), new JTextScrollPane(postBodyContent));// $NON-NLS-1$
+        }
+        
+        if(showFileUploadPane) {
+            tabFileUploadIndex = ++indx;
+            filesPanel = new HTTPFileArgsPanel();
+            postContentTabbedPane.add(JMeterUtils.getResString("post_files_upload"), filesPanel);            
         }
         return postContentTabbedPane;
     }
@@ -637,16 +675,14 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     /**
      * 
      */
-    class ValidationTabbedPane extends JTabbedPane{
+    class ValidationTabbedPane extends JTabbedPane {
 
         /**
          * 
          */
         private static final long serialVersionUID = 7014311238367882880L;
 
-        /* (non-Javadoc)
-         * @see javax.swing.JTabbedPane#setSelectedIndex(int)
-         */
+        
         @Override
         public void setSelectedIndex(int index) {
             setSelectedIndex(index, true);
@@ -662,23 +698,32 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
          *            index
          */
         public void setSelectedIndex(int index, boolean check) {
-            int oldSelectedIndex = getSelectedIndex();
-            if(!check || oldSelectedIndex==-1) {
+            int oldSelectedIndex = this.getSelectedIndex();
+            if(!check || oldSelectedIndex == -1) {
                 super.setSelectedIndex(index);
             }
-            else if(index != this.getSelectedIndex())
+            else if(index != oldSelectedIndex)
             {
-                if(noData(getSelectedIndex())) {
-                    // If there is no data, then switching between Parameters and Raw should be
-                    // allowed with no further user interaction.
+                // If there is no data, then switching between Parameters/file upload and Raw should be
+                // allowed with no further user interaction.
+                if(noData(oldSelectedIndex)) {
                     argsPanel.clear();
                     postBodyContent.setInitialText("");
+                    if(showFileUploadPane) {
+                        filesPanel.clear();
+                    }
                     super.setSelectedIndex(index);
                 }
-                else { 
-                    if(oldSelectedIndex == TAB_RAW_BODY) {
+                else {
+                    boolean filePanelHasData = false;
+                    if(showFileUploadPane) {
+                        filePanelHasData = filesPanel.hasData();
+                    }
+                    
+                    if(oldSelectedIndex == tabRawBodyIndex) {
+                        
                         // If RAW data and Parameters match we allow switching
-                        if(postBodyContent.getText().equals(computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
+                        if(index == TAB_PARAMETERS && postBodyContent.getText().equals(computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
                             super.setSelectedIndex(index);
                         }
                         else {
@@ -693,9 +738,18 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                         }
                     }
                     else {
-                        // If the Parameter data can be converted (i.e. no names), we 
-                        // warn the user that the Parameter data will be lost.
-                        if(canConvertParameters()) {
+                        // can switch from parameter to fileupload
+                        if((oldSelectedIndex == TAB_PARAMETERS
+                                && index == tabFileUploadIndex)
+                             || (oldSelectedIndex == tabFileUploadIndex
+                                     && index == TAB_PARAMETERS)) {
+                            super.setSelectedIndex(index);
+                            return;
+                        }
+                        
+                        // If the Parameter data can be converted (i.e. no names) and there is no data in file upload
+                        // we warn the user that the Parameter data will be lost.
+                        if(oldSelectedIndex == TAB_PARAMETERS && !filePanelHasData && canConvertParameters()) {
                             Object[] options = {
                                     JMeterUtils.getResString("confirm"), // $NON-NLS-1$
                                     JMeterUtils.getResString("cancel")}; // $NON-NLS-1$
@@ -718,8 +772,9 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
                         else {
                             // If the Parameter data cannot be converted to Raw, then the user should be
                             // prevented from doing so raise an error dialog
+                            String messageKey = filePanelHasData?"web_cannot_switch_tab":"web_cannot_convert_parameters_to_raw";
                             JOptionPane.showConfirmDialog(this,
-                                    JMeterUtils.getResString("web_cannot_convert_parameters_to_raw"), // $NON-NLS-1$
+                                    JMeterUtils.getResString(messageKey), // $NON-NLS-1$
                                     JMeterUtils.getResString("warning"), // $NON-NLS-1$
                                     JOptionPane.DEFAULT_OPTION, 
                                     JOptionPane.ERROR_MESSAGE);
@@ -764,7 +819,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @return true if no argument has a name
      */
     boolean canConvertParameters() {
-        Arguments arguments = (Arguments)argsPanel.createTestElement();
+        Arguments arguments = (Arguments) argsPanel.createTestElement();
         for (int i = 0; i < arguments.getArgumentCount(); i++) {
             if(!StringUtils.isEmpty(arguments.getArgument(i).getName())) {
                 return false;
@@ -776,17 +831,22 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
     /**
      * Checks if no data is available in the selected tab
      *
-     * @param oldSelectedIndex
-     *            the tab to check for data
+     * @param oldSelectedIndex the tab to check for data
      * @return true if neither Parameters tab nor Raw Body tab contain data
      */
     boolean noData(int oldSelectedIndex) {
-        if(oldSelectedIndex == TAB_RAW_BODY) {
+        if(oldSelectedIndex == tabRawBodyIndex) {
             return StringUtils.isEmpty(postBodyContent.getText().trim());
         }
         else {
-            Arguments element = (Arguments)argsPanel.createTestElement();
-            return StringUtils.isEmpty(computePostBody(element));
+            boolean noData = true;
+            Arguments element = (Arguments) argsPanel.createTestElement();
+            
+            if(showFileUploadPane) {
+                noData &= !filesPanel.hasData();
+            }
+            
+            return noData && StringUtils.isEmpty(computePostBody(element));
         }
     }
 }
