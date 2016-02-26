@@ -400,7 +400,7 @@ public class SampleResult implements Serializable, Cloneable {
      * Allow users to create a sample with specific timestamp and elapsed times
      * for cloning purposes, but don't allow the times to be changed later
      *
-     * Currently used by OldSaveService, CSVSaveService and
+     * Currently used by CSVSaveService and
      * StatisticalSampleResult
      *
      * @param stamp

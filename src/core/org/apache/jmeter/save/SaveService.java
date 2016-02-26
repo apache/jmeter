@@ -567,11 +567,6 @@ public class SaveService {
             }
             return wrapper.testPlan;
         } catch (CannotResolveClassException e) {
-            if (e.getMessage().startsWith("node")) {
-                log.info("Problem loading XML, trying Avalon format");
-                reader.reset();
-                return OldSaveService.loadSubTree(reader);                
-            }
             if(file != null) {
                 throw new IllegalArgumentException("Problem loading XML from:'"+file.getAbsolutePath()+"', cannot determine class for element: " + e, e);
             } else {
