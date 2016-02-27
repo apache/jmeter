@@ -54,6 +54,16 @@ public class CsvFile extends File {
         this.separator = separator;
     }
 
+    /**
+     * DO NOT USE - UNIT TEST ONLY
+     * @deprecated
+     */
+    @Deprecated // only for use by unit tests
+    public CsvFile() {
+        super("");
+        this.separator = 0;
+    }
+
     public char getSeparator() {
         return separator;
     }
