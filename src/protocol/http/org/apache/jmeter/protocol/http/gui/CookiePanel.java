@@ -84,6 +84,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private static final String HANDLER_COMMAND = "Handler"; // $NON-NLS-1$
     //--
 
+    private static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
+
     private JTable cookieTable;
 
     private PowerTableModel tableModel;
@@ -278,8 +280,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         tableModel.clearData();
         clearEachIteration.setSelected(false);
-        selectHandlerPanel.setSelectedItem(CookieManager.DEFAULT_IMPLEMENTATION
-                .substring(CookieManager.DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
+        policy.setText(HC4CookieHandler.DEFAULT_POLICY_NAME);
+        selectHandlerPanel.setSelectedItem(DEFAULT_IMPLEMENTATION
+                .substring(DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
     }
