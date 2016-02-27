@@ -319,9 +319,10 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         CookieManager cookieManager = (CookieManager) el;
         populateTable(cookieManager);
         clearEachIteration.setSelected((cookieManager).getClearEachIteration());
-        policy.setText(cookieManager.getPolicy());
         String fullImpl = cookieManager.getImplementation();
         selectHandlerPanel.setSelectedItem(fullImpl.substring(fullImpl.lastIndexOf('.') + 1));
+        // must set policy after setting handler (which may change the policy)
+        policy.setText(cookieManager.getPolicy());
     }
 
     /**
