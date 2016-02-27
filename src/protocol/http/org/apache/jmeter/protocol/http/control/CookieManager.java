@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
@@ -113,6 +114,14 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     // see issues with Bug 58756
     public static final String IMPLEMENTATION_FOR_BACKWARD_COMPATIBILITY = HC3CookieHandler.class.getName();
 
+    /**
+     * Default policy is {@link HC4CookieHandler#DEFAULT_POLICY_NAME} since version 3.0 of JMeter
+     */
+    public static final String DEFAULT_POLICY = HC4CookieHandler.DEFAULT_POLICY_NAME;
+
+    /**
+     * Default CookieHandler implementation is {@link HC4CookieHandler} since version 3.0 of JMeter
+     */
     public static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
     public CookieManager() {
