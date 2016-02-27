@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
-   private static final String DEFAULT_POLICY_NAME = "compatibility";
+   static final String DEFAULT_POLICY_NAME = "compatibility";
    public static final String[] AVAILABLE_POLICIES = new String[] {
        DEFAULT_POLICY_NAME,
        "default",
