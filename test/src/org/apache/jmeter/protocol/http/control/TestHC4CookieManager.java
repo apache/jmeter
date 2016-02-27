@@ -40,7 +40,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestCookieManager extends JMeterTestCase {
+/**
+ * HC4CookieHandler tests
+ */
+public class TestHC4CookieManager extends JMeterTestCase {
         private CookieManager man = null;
 
         private JMeterContext jmctx = null;
@@ -49,6 +52,9 @@ public class TestCookieManager extends JMeterTestCase {
         public void setUp() throws Exception {
             jmctx = JMeterContextService.getContext();
             man = new CookieManager();
+            // Ensure we use the new GUI defaults
+            man.setImplementation(HC4CookieHandler.class.getName());
+            man.setCookiePolicy(HC4CookieHandler.DEFAULT_POLICY_NAME);
             man.setThreadContext(jmctx);
             man.testStarted();// This is needed in order to set up the cookie policy
         }
