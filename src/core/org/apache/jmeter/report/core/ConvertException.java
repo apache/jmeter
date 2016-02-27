@@ -55,4 +55,12 @@ public class ConvertException extends Exception {
         super(String.format(MESSAGE_FORMAT, value, type), cause);
     }
 
+    /**
+     * DO NOT USE - UNIT TEST ONLY
+     * @deprecated
+     */
+    @Deprecated // only for use by unit tests
+    public ConvertException() {
+        
+    }
 }
