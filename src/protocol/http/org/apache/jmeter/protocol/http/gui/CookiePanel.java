@@ -333,7 +333,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
             new JCheckBox(JMeterUtils.getResString("clear_cookies_per_iter"), false); //$NON-NLS-1$
         policy = new JLabeledChoice(
                 JMeterUtils.getResString("cookie_manager_policy"), //$NON-NLS-1$
-                getPolicies(CookieManager.DEFAULT_IMPLEMENTATION));
+                getPolicies(DEFAULT_IMPLEMENTATION));
         setLayout(new BorderLayout());
         setBorder(makeBorder());
         JPanel northPanel = new JPanel();
