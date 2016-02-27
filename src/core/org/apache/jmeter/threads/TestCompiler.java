@@ -179,10 +179,10 @@ public class TestCompiler implements HashTreeTraverser {
         }
     }
 
-    private void trackIterationListeners(LinkedList<TestElement> p_stack) {
-        TestElement child = p_stack.getLast();
+    private void trackIterationListeners(LinkedList<TestElement> pStack) {
+        TestElement child = pStack.getLast();
         if (child instanceof LoopIterationListener) {
-            ListIterator<TestElement> iter = p_stack.listIterator(p_stack.size());
+            ListIterator<TestElement> iter = pStack.listIterator(pStack.size());
             while (iter.hasPrevious()) {
                 TestElement item = iter.previous();
                 if (item == child) {
