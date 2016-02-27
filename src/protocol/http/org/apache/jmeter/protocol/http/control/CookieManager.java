@@ -30,7 +30,6 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
-import org.apache.http.client.config.CookieSpecs;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.testelement.TestIterationListener;
@@ -102,12 +101,19 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     private transient CollectionProperty initialCookies;
 
-    // MUST NOT BE CHANGED
-    @SuppressWarnings("deprecation") // cannot be changed
-    public static final String DEFAULT_POLICY = CookieSpecs.BROWSER_COMPATIBILITY;
+    // MUST NOT BE CHANGED because as defaults are not saved, 
+    // when a Test Plan was loaded from an N-1 version and if defaults changed,
+    // you end up changing the previously set policy
+    // see issues with Bug 58756
+    public static final String POLICY_FOR_BACKWARD_COMPATIBILITY = "compatibility";
     
-    // MUST NOT BE CHANGED
-    public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
+    // MUST NOT BE CHANGED because as defaults are not saved, 
+    // when a Test Plan was loaded from an N-1 version and if defaults changed,
+    // you end up changing the previously set policy
+    // see issues with Bug 58756
+    public static final String IMPLEMENTATION_FOR_BACKWARD_COMPATIBILITY = HC3CookieHandler.class.getName();
+
+    public static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available
@@ -124,11 +130,13 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     public String getPolicy() {
-        return getPropertyAsString(POLICY, DEFAULT_POLICY);
+        return getPropertyAsString(POLICY, POLICY_FOR_BACKWARD_COMPATIBILITY);
     }
 
     public void setCookiePolicy(String policy){
-        setProperty(POLICY, policy, DEFAULT_POLICY);
+        // we must explicitely save the policy
+        // not use a default implementation
+        setProperty(POLICY, policy);
     }
 
     public CollectionProperty getCookies() {
@@ -148,11 +156,13 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     public String getImplementation() {
-        return getPropertyAsString(IMPLEMENTATION, DEFAULT_IMPLEMENTATION);
+        return getPropertyAsString(IMPLEMENTATION, IMPLEMENTATION_FOR_BACKWARD_COMPATIBILITY);
     }
 
     public void setImplementation(String implementation){
-        setProperty(IMPLEMENTATION, implementation, DEFAULT_IMPLEMENTATION);
+        // we must explicitely save the policy
+        // not use a default implementation
+        setProperty(IMPLEMENTATION, implementation);
     }
 
     /**
