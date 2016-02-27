@@ -101,8 +101,13 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     private transient CookieHandler cookieHandler;
 
     private transient CollectionProperty initialCookies;
+
+    // MUST NOT BE CHANGED
+    @SuppressWarnings("deprecation") // cannot be changed
+    public static final String DEFAULT_POLICY = CookieSpecs.BROWSER_COMPATIBILITY;
     
-    public static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
+    // MUST NOT BE CHANGED
+    public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available
@@ -119,11 +124,11 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
     }
 
     public String getPolicy() {
-        return getPropertyAsString(POLICY, HC4CookieHandler.DEFAULT_POLICY_NAME);
+        return getPropertyAsString(POLICY, DEFAULT_POLICY);
     }
 
     public void setCookiePolicy(String policy){
-        setProperty(POLICY, policy, HC4CookieHandler.DEFAULT_POLICY_NAME);
+        setProperty(POLICY, policy, DEFAULT_POLICY);
     }
 
     public CollectionProperty getCookies() {
