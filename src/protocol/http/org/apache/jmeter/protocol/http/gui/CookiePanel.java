@@ -84,7 +84,15 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private static final String HANDLER_COMMAND = "Handler"; // $NON-NLS-1$
     //--
 
+    /**
+     * The default implementation that is used when creating a new CookieManager
+     */
     private static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
+
+    /**
+     * The default policy that is used when creating a new CookieManager
+     */
+    private static final String DEFAULT_POLICY = HC4CookieHandler.DEFAULT_POLICY_NAME;
 
     private JTable cookieTable;
 
@@ -282,7 +290,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         clearEachIteration.setSelected(false);
         selectHandlerPanel.setSelectedItem(DEFAULT_IMPLEMENTATION
                 .substring(DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
-        policy.setText(HC4CookieHandler.DEFAULT_POLICY_NAME);
+        policy.setText(DEFAULT_POLICY);
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
     }
