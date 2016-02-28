@@ -134,6 +134,9 @@
                 }
             })(document, 'script', 'twitter-wjs');]]>
               </script>
+<a href="https://github.com/apache/jmeter"><img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=default" /></a>
+<a href="https://github.com/apache/jmeter/fork"><img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=default" /></a>
+<a href="http://search.maven.org/#artifactdetails|org.apache.jmeter|ApacheJMeter|2.13|"><img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.png?style=plastic"></img></a>              
             </div>
           </div>
           <div class="banner">
