@@ -1431,7 +1431,7 @@ run JMeter unless all the JMeter jars are added.
     -->
     <target
         name="nightly"
-        depends="distribution"
+        depends="init-version, distribution"
         description="Build JMeter for nightly dir"/>
 
     <target name="_eolcheck">
