@@ -381,7 +381,7 @@ then the parameter is ignored. This allows the use of optional parameters define
 (versions of JMeter after 2.3)
 </p>
 <br/>
-<p>Since JMeter 2.6, you have the option to switch to Post Body when a request has only unnamed parameters
+<p>You have the option to switch to Post Body when a request has only unnamed parameters
 (or no parameters at all).
 This option is useful in the following cases (amongst others):</p>
 <ul>
@@ -630,7 +630,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>Since JMeter 2.8, if the method <code>teardownTest</code> is not overriden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overriden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -1111,7 +1111,7 @@ props.put("PROP1","1234");</source></li>
             <li><code>IsSuccess</code> - <code>true</code> or <code>false</code></li>
             </ul>
             <p>The SampleResult ResponseData is set from the return value of the script.
-            Since version 2.1.2, if the script returns null, it can set the response directly, by using the method 
+            If the script returns null, it can set the response directly, by using the method 
             <code>SampleResult.setResponseData(data)</code>, where data is either a String or a byte array.
             The data type defaults to "<code>text</code>", but can be set to binary by using the method
             <code>SampleResult.setDataType(SampleResult.BINARY)</code>.
@@ -1128,7 +1128,7 @@ if (bsh.args[0].equalsIgnoreCase("StopThread")) {
     SampleResult.setStopThread(true);
 }
 return "Data from sample with Label "+Label;
-//or, since version 2.1.2
+//or
 SampleResult.setResponseData("My data");
 return null;
 </source>
@@ -1243,7 +1243,7 @@ To benefit from this feature:
 </p>
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
-    <li>Or Use Script Text and fill in script cache key property, ensure it is unique across Test Plan as JMeter will use it to cache result of compilation.
+    <li>Or Use Script Text and check <code>Compilation cache key</code> property.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
@@ -1252,7 +1252,7 @@ Cache size is controlled by the following jmeter property (<code>jmeter.properti
 <source>jsr223.compiled_scripts_cache_size=100</source>
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
-Since JMeter 2.8, JSR223 Test Elements using Script file or Script text + cache key are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+JSR223 Test Elements using Script file or Script text + checked <code>Compilation cache key</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 </note>
 </description>
 <note>
@@ -1274,7 +1274,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Compilation cache key" required="No">If checked (advised) and the language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
@@ -1499,7 +1499,7 @@ size,Integer,1234
 </source>
 This is a very simple implementation; it is not intended to support all possible object types.
 <note> 
-The Object message is implemented since 2.7 and works as follow:
+The Object message is implemented and works as follow:
 <ul>
 <li>Put the JAR that contains your object and its dependencies in <code>jmeter_home/lib/</code> folder</li>
 <li>Serialize your object as XML using XStream</li>
@@ -3889,7 +3889,7 @@ If enabled, the value of a cookie with the name <code>TEST</code> can be referre
 the cookie will be shared by all JMeter threads.</p>
 <p>Note that such Cookies are created with an Expiration time far in the future</p>
 <p>
-Since version 2.0.3, cookies with <code>null</code> values are ignored by default.
+Cookies with <code>null</code> values are ignored by default.
 This can be changed by setting the JMeter property: <code>CookieManager.delete_null_cookies=false</code>.
 Note that this also applies to manually defined cookies - any such cookies will be removed from the display when it is updated.
 Note also that the cookie name must be unique - if a second cookie is defined with the same name, it will replace the first.
@@ -4565,7 +4565,7 @@ user) is marked as a failed response.</p></description>
 <component name="Size Assertion" index="&sect-num;.5.3"  width="732" height="358" screenshot="size_assertion.png">
 <description><p>The Size Assertion tests that each response contains the right number of bytes in it.  You can specify that
 the size be equal to, greater than, less than, or not equal to a given number of bytes.</p>
-<note>Since JMeter 2.3RC3, an empty response is treated as being 0 bytes rather than reported as an error.</note>
+<note>An empty response is treated as being 0 bytes rather than reported as an error.</note>
 </description>
 
 <properties>
@@ -6672,7 +6672,7 @@ The HTTP Mirror Server is a very simple HTTP server - it simply mirrors the data
 This is useful for checking the content of HTTP requests.
 </p>
 <p>
-It uses default port <code>8081</code> since 2.6.
+It uses default port <code>8081</code>.
 </p>
 </description>
 <properties>
