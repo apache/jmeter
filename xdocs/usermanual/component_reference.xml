@@ -72,7 +72,7 @@ using a <complink name="FTP Request Defaults"/> Configuration
 Element so you do not have to enter the same information for each FTP Request Generative
 Controller. When downloading a file, it can be stored on disk (Local File) or in the Response Data, or both.
 <p>
-Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
+Latency is set to the time it takes to login.
 </p>
 </description>
 <properties>
@@ -171,15 +171,13 @@ Latency is set to the time it takes to login (versions of JMeter after 2.3.1).
          If the page uses HTTP, you can use the JMeter Proxy to capture the login sequence.
         </p>
         <p>
-        In versions of JMeter up to 2.2, only a single SSL context was used for all threads and samplers.
-        This did not generate the proper load for multiple users.
-        A separate SSL context is now used for each thread.
-        To revert to the original behaviour, set the JMeter property:</p>
+        A separate SSL context is used for each thread.
+        If you want to use a single SSL context (not the standard behaviour of browsers), set the JMeter property:</p>
 <source>
 https.sessioncontext.shared=true
 </source>
         By default, the SSL context is retained for the duration of the test.
-        In versions of JMeter from 2.5.1, the SSL session can be optionally reset for each test iteration.
+        The SSL session can be optionally reset for each test iteration.
         To enable this, set the JMeter property:
 <source>
 https.use.cached.ssl.context=false
@@ -211,7 +209,7 @@ https.default.protocol=SSLv3
         <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
         <property name="Server" required="Yes, unless provided by HTTP Request Defaults">
             Domain name or IP address of the web server, e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.]
-            Note: in JMeter 2.5 (and later) if the "<code>Host</code>" header is defined in a Header Manager, then this will be used
+            Note: If the "<code>Host</code>" header is defined in a Header Manager, then this will be used
             as the virtual host name.
         </property>
         <property name="Port" required="No">Port the web server is listening to. Default: <code>80</code></property>
@@ -252,12 +250,12 @@ https.default.protocol=SSLv3
         The initial redirect and further responses will appear as additional samples.
         The URL and data fields of the parent sample will be taken from the final (non-redirected)
         sample, but the parent byte count and elapsed time include all samples.
-        The latency is taken from the initial response (versions of JMeter after 2.3.4 - previously it was zero).
+        The latency is taken from the initial response.
         Note that the HttpClient sampler may log the following message:
         <source>"Redirect requested but followRedirects is disabled"</source>
         This can be ignored.
         <br/>
-        In versions after 2.3.4, JMeter will collapse paths of the form '<code>/../segment</code>' in
+        JMeter will collapse paths of the form '<code>/../segment</code>' in
         both absolute and relative redirect URLs. For example <code>http://host/one/../two</code> will be collapsed into <code>http://host/two</code>.
         If necessary, this behaviour can be suppressed by setting the JMeter property
         <code>httpsampler.redirect.removeslashdotdot=false</code>
@@ -307,8 +305,8 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         <p>
         If it is a <code>POST</code> or <code>PUT</code> or <code>PATCH</code> request and there is a single file whose 'Parameter name' attribute (below) is omitted, 
         then the file is sent as the entire body
-        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests
-        after version 2.2, and also for <code>PUT</code> requests after version 2.3.
+        of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests, 
+        and also for <code>PUT</code> requests.
         <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
@@ -373,12 +371,11 @@ then the body is created by concatenating all the value(s) of the parameters.
 Note that the values are concatenated without adding any end-of-line characters.
 These can be added by using the <code>__char()</code> function in the value fields.
 This allows arbitrary bodies to be sent.
-The values are encoded if the encoding flag is set (versions of JMeter after 2.3).
+The values are encoded if the encoding flag is set.
 See also the MIME Type above how you can control the <code>content-type</code> request header that is sent.
 <br></br>
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
-(versions of JMeter after 2.3)
 </p>
 <br/>
 <p>You have the option to switch to Post Body when a request has only unnamed parameters
@@ -443,18 +440,17 @@ Optional properties to allow change the method to get response size:<br></br></p
 <source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
-The <code>Java</code> and <code>HttpClient3</code> inplementations do not include transport overhead such as
+The <code>Java</code> and <code>HttpClient3</code> implementations do not include transport overhead such as
 chunk headers in the response body size.<br></br>
 The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
 </note>
 
-<note>Versions of JMeter before 2.5 returns only data response size (uncompressed if request uses gzip/deflate mode).
-<br></br>To return to settings before version 2.5, set the two properties to <code>false</code>.</note>
+<note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-In version 2.5 of JMeter, the HttpClient4 and Commons HttpClient 3.1 samplers used the default retry count, which was <code>3</code>.
-In later versions, the retry count has been set to <code>1</code>, which is what the Java implementation appears to do.
+For HttpClient4 and Commons HttpClient 3.1 samplers, the retry count has been set to <code>0</code>, meaning not retry is attempted. 
+Note that the Java implementation appears to retry 1 time.
 The retry count can be overridden by setting the relevant JMeter property, for example:
 </p>
 <source>
@@ -581,8 +577,8 @@ the additional variables for rows four, five and six will be removed.
         appropriate parameter types, e.g. instead of "<code>INTEGER</code>", use "<code>INOUT INTEGER</code>".</b> <br/>
         If not specified, "<code>IN</code>" is assumed, i.e. "<code>DATE</code>" is the same as "<code>IN DATE</code>".
         <br></br>
-        If the type is not one of the fields found in <code>java.sql.Types</code>, versions of JMeter after 2.3.2 also
-        accept the corresponding integer number, e.g. since <code>OracleTypes.CURSOR == -10</code>, you can use "<code>INOUT -10</code>".
+        If the type is not one of the fields found in <code>java.sql.Types</code>, JMeter also
+        accepts the corresponding integer number, e.g. since <code>OracleTypes.CURSOR == -10</code>, you can use "<code>INOUT -10</code>".
         <br></br>
         There must be as many types as there are placeholders in the statement.
         </property>
@@ -608,7 +604,7 @@ the additional variables for rows four, five and six will be removed.
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
-<note>Versions of JMeter after 2.3.2 use UTF-8 as the character encoding. Previously the platform default was used.</note>
+<note>Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</note>
 <note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
@@ -681,7 +677,7 @@ If a SOAP action is specified, that will override any <code>SOAPaction</code> in
 The primary difference between the soap sampler and
 webservice sampler, is the soap sampler uses raw post and does not require conformance to
 SOAP 1.1.</p>
-<note>For versions of JMeter later than 2.2, the sampler no longer uses chunked encoding by default.<br/>
+<note>The sampler no longer uses chunked encoding by default.<br/>
 For screen input, it now always uses the size of the data.<br/>
 File input uses the file length as determined by Java.<br/>
 On some OSes this may not work for all files, in which case add a child <complink name="HTTP Header Manager"/>
@@ -1033,7 +1029,7 @@ These must be defined in the initialisation file.
 See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </p>
 <p>
-From JMeter version 2.5.1, the BeanShell sampler also supports the <code>Interruptible</code> interface.
+The BeanShell sampler also supports the <code>Interruptible</code> interface.
 The <code>interrupt()</code> method can be defined in the script or the init file.
 </p>
     </description>
@@ -1159,7 +1155,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         <p>By default, JMeter supports the following languages:</p>
         <ul>
         <li>javascript</li>
-        <li>jexl (JMeter version 2.3.2 and later)</li>
+        <li>jexl</li>
         <li>xslt</li>
         </ul>
         <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
@@ -1585,11 +1581,6 @@ The following table shows some values which may be useful when configuring JMS:
   Note that <code>\n</code>, <code>\r</code>, <code>\t</code> are accepted.
   </property>
 </properties>
-<note>
-<b>NOTE:</b> JMeter 2.3.4 and earlier used a different strategy for the <code>MessageConsumer.receive()</code> client. 
-Previously this started a background thread which polled for messages. This thread continued when the sampler
-completed, so the net effect was similar to the <code>MessageListener.onMessage()</code> strategy.
-</note>
 </component>
 
 <component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="882" height="804" screenshot="jms/JMS_Point-to-Point.png">
@@ -1604,7 +1595,7 @@ completed, so the net effect was similar to the <code>MessageListener.onMessage(
         <code>Request Response</code> will be used when you want to test response time of a JMS service that processes messages sent to the Request Queue as this mode will wait for the response on the Reply queue sent by this service.<br></br>
         </p>
         <p>
-        Versions of JMeter after 2.3.2 use the properties <code>java.naming.security.[principal|credentials]</code> - if present -
+        JMeter use the properties <code>java.naming.security.[principal|credentials]</code> - if present -
         when creating the Queue Connection. If this behaviour is not desired, set the JMeter property
         <code>JMSSampler.useSecurity.properties=false</code>
         </p>
@@ -1714,7 +1705,7 @@ includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</co
 <ul>
 <li>rather than use Jmeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
 <li>JUnit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
-In versions of JMeter after 2.3.1, you can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
+You can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
 <li>JUnit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
 <li>The sampler measures the elapsed time only for the test method and does not include <code>setUp</code> and <code>tearDown</code>.</li>
 <li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
@@ -1833,7 +1824,7 @@ Relative paths are resolved against the current directory.
 </properties>
 <p>
 Messages are stored as subsamples of the main sampler.
-In versions of JMeter after 2.3.4, multipart message parts are stored as subsamples of the message.
+Multipart message parts are stored as subsamples of the message.
 </p>
 <p>
 <b>Special handling for "<code>file</code>" protocol:</b><br></br>
@@ -2263,13 +2254,10 @@ setting is reset when a parent Loop Controller restarts.
     <description>
         <p>The If Controller allows the user to control whether the test elements below it (its children) are run or not.</p>
         <p>
-        Prior to JMeter 2.3RC3, the condition was evaluated for every runnable element contained in the controller.
-        This sometimes caused unexpected behaviour, so 2.3RC3 was changed to evaluate the condition only once on initial entry.
-        However, the original behaviour is also useful, so versions of JMeter after 2.3RC4 have an additional
-        option to select the original behaviour.
+        By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        Versions of JMeter after 2.3.2 allow the script to be processed as a variable expression, rather than requiring Javascript.
+        The script can be processed as a variable expression, rather than requiring Javascript.
         It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
         now this can be done without the overhead of using Javascript as well. For example, previously one could use the condition:
         <code>${__jexl(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to Javascript
@@ -2372,7 +2360,7 @@ in that it runs one of the subordinate elements on each iteration, but rather th
 run them in sequence, the controller runs the element defined by the switch value.
 </p>
 <note>
-Note: In versions of JMeter after 2.3.1, the switch value can also be a name.
+The switch value can also be a name.
 </note>
 <p>If the switch value is out of range, it will run the zeroth element, 
 which therefore acts as the default for the numeric case.
@@ -2531,7 +2519,7 @@ When using Include Controller and including the same JMX file, ensure you name t
 </note>
 <p>
 If the file cannot be found at the location given by <code>prefix</code>+<code>Filename</code>, then the controller
-attempts to open the <code>Filename</code> relative to the JMX launch directory (versions of JMeter after 2.3.4).
+attempts to open the <code>Filename</code> relative to the JMX launch directory.
 </p>
 </description>
 <properties>
@@ -2550,7 +2538,7 @@ attempts to open the <code>Filename</code> relative to the JMX launch directory 
         the time includes all processing within the controller scope, not just the samples.
         </note>
         <p>
-        For JMeter versions after 2.3, there are two modes of operation:
+        There are two modes of operation:
         </p>
         <ul>
         <li>additional sample is added after the nested samples</li>
@@ -2585,7 +2573,7 @@ attempts to open the <code>Filename</code> relative to the JMX launch directory 
     </property>
     <property name="Include duration of timer and pre-post processors in generated sample" required="Yes">
     Whether to include timer, pre- and post-processing delays in the generated sample.
-    Default is <code>false</code> (since JMeter 2.11, in previous versions the default value is <code>true</code>).
+    Default is <code>false</code>
     </property>
 </properties>
 </component>
@@ -2657,9 +2645,7 @@ Listener.
 To read existing results and display them, use the file panel Browse button to open the file.
 </note>
 <p>
-Versions of JMeter up to 2.3.2 <b>used to clear any current data</b> before loading the new file.<br></br>
-This is no longer done, thus <b>allowing files to be merged</b>.
-If the previous behaviour is required, use the menu item
+If you want to clear any current data before loading a new file, use the menu item
 <menuchoice>
   <guimenuitem>Run</guimenuitem>
   <guimenuitem>Clear</guimenuitem>
@@ -2707,7 +2693,7 @@ Less memory is now needed, especially if most samples only take a second or two 
 </ul>
 <p>To minimise the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
 <note>
-Versions of JMeter after 2.3.1 allow JMeter variables to be saved to the output files.
+JMeter variables can be saved to the output files.
 This can only be specified using a property.
 See the <a href="listeners.html#sample_variables">Listener Sample Variables</a> for details
 </note>
@@ -2732,7 +2718,7 @@ by using the <code>-l</code> command-line flag.
         <property name="Filename" required="No">Name of the file containing sample results.
         The file name can be specified using either a relative or an absolute path name.
         Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
-        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        JMeter also support paths relative to the directory containing the current test plan (JMX file).
         If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. 
         </property>
@@ -3045,7 +3031,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 Like the <complink name="View Results Tree"/>, this visualizer uses a lot of memory.
 <p>
 By default, it only displays the main (parent) samples; it does not display the sub-samples (child samples).
-Versions of JMeter after 2.5.1 have a "<code>Child Samples?</code>" check-box.
+JMeter has a "<code>Child Samples?</code>" check-box.
 If this is selected, then the sub-samples are displayed instead of the main samples.  
 </p>
 </description>
@@ -3285,7 +3271,7 @@ When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as <code>0.5</code>.
 </li>
 <li><code>Kb/sec</code> - The throughput measured in Kilobytes per second</li>
-<li><code>Avg. Bytes</code> - average size of the sample response in bytes. (in JMeter 2.2 it wrongly showed the value in kB)</li>
+<li><code>Avg. Bytes</code> - average size of the sample response in bytes.</li>
 </ul>
 <p>Times are in milliseconds.</p>
 </description>
@@ -3323,7 +3309,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
  <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
  <property name="Filename Prefix" required="Yes">Prefix for the generated file names; this can include a directory name.
         Relative paths are resolved relative to the current working directory (which defaults to the <code>bin/</code> directory).
-        Versions of JMeter after 2.4 also support paths relative to the directory containing the current test plan (JMX file).
+        JMeter also supports paths relative to the directory containing the current test plan (JMX file).
         If the path name begins with "<code>~/</code>" (or whatever is in the <code>jmeter.save.saveservice.base_prefix</code> JMeter property),
         then the path is assumed to be relative to the JMX file location. 
  </property>
@@ -3572,8 +3558,7 @@ By default, a Graphite implementation is provided.
     much cheaper than generating everything at run-time.
     </p>
     <p>
-    Versions of JMeter after 2.3.1 allow values to be quoted; this allows the value to contain a delimiter.
-    Previously it was necessary to choose a delimiter that was not used in any values.
+    JMeter allows values to be quoted; this allows the value to contain a delimiter.
     If "<code>allow quoted data</code>" is enabled, a value may be enclosed in double-quotes.
     These are removed. To include double-quotes within a quoted field, use two double-quotes.
     For example:
@@ -3585,11 +3570,11 @@ By default, a Graphite implementation is provided.
 4"5
 </source>
     <p>
-    Versions of JMeter after 2.3.4 support CSV files which have a header line defining the column names.
+    JMeter supports CSV files which have a header line defining the column names.
     To enable this, leave the "<code>Variable Names</code>" field empty. The correct delimiter must be provided.
     </p>
     <p>
-    Versions of JMeter after 2.7 support CSV files with quoted data that includes new-lines.
+    JMeter supports CSV files with quoted data that includes new-lines.
     </p>
     <p>
     By default, the file is only opened once, and each thread will use a different line from the file.
@@ -3599,7 +3584,7 @@ By default, a Graphite implementation is provided.
     The file name and mode are resolved in the first iteration.
     </p>
     <p>
-    See the description of the Share mode below for additional options (JMeter 2.3.2+).
+    See the description of the Share mode below for additional options.
     If you want each thread to have its own set of values, then you will need to create a set of files,
     one for each thread. For example <code>test1.csv</code>, <code>test2.csv</code>, &hellip;, <code>test<em>n</em>.csv</code>. Use the filename 
     <code>test${__threadNum}.csv</code> and set the "<code>Sharing mode</code>" to "<code>Current thread</code>".
@@ -3637,7 +3622,7 @@ By default, a Graphite implementation is provided.
   </property>
   <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
   <property name="Variable Names" required="Yes">List of variable names (comma-delimited).
-  Versions of JMeter after 2.3.4 support CSV header lines:
+  JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
   The names must be separated by the delimiter character. They can be quoted using double-quotes.
   </property>
@@ -3705,11 +3690,11 @@ The Authorization headers may not be shown in the Tree View Listener "<code>Requ
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
 The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
-The HttpComponents implementation does not do pre-emptive auth 
+The HttpComponents (HC 4.5.X) implementation does not do pre-emptive auth 
 (it is supported by the library but JMeter does not enable it)
 </p>
 <p>
-In versions of JMeter after 2.2, the HttpClient sampler defaults to pre-emptive authentication
+The HttpClient3.1 implementation defaults to pre-emptive authentication
 if the setting has not been defined. To disable this, set the values as below, in which case
 authentication will only be performed in response to a challenge.
 </p>
@@ -3718,7 +3703,7 @@ In the file <code>jmeter.properties</code> set <code>httpclient.parameters.file=
 and in <code>httpclient.parameters</code> set <code>http.authentication.preemptive$Boolean=false</code>
 </p>
 <note>
-Note: the above settings only apply to the HttpClient sampler (and the SOAP samplers, which use Httpclient).
+Note: the above settings only apply to the HttpClient sampler.
 </note>
 <note>
 When looking for a match against a URL, JMeter checks each entry in turn, and stops when it finds the first match.
@@ -3753,9 +3738,6 @@ information for the user named, "<code>jmeter</code>".</property>
 </properties>
 <note>
 The Realm only applies to the HttpClient sampler.
-In JMeter 2.2, the <code>domain</code> and <code>realm</code> did not have separate columns, and were encoded as part of
-the user name in the form: <code>[domain\]username[@realm]</code>.
-This was an experimental feature and has been removed.
 </note>
 <br></br>
 <b>Kerberos Configuration:</b>
@@ -3872,14 +3854,12 @@ Note that such cookies do not appear on the Cookie Manager display, but they can
 the <complink name="View Results Tree"/> Listener.
 </p>
 <p>
-JMeter version 2.3.2 and earlier did not check that received cookies were valid for the URL.
-This meant that cross-domain cookies were stored, and might be used later.
-This has been fixed in later versions.
-To revert to the earlier behaviour, define the JMeter property "<code>CookieManager.check.cookies=false</code>".
+JMeter checks that received cookies are valid for the URL.
+This means that cross-domain cookies are not stored.
+If you have bugged behaviour or want Cross-Domain cookies to be used, define the JMeter property "<code>CookieManager.check.cookies=false</code>".
 </p>
 <p>
-Received Cookies can be stored as JMeter thread variables
-(versions of JMeter after 2.3.2 no longer do this by default).
+Received Cookies can be stored as JMeter thread variables.
 To save cookies as variables, define the property "<code>CookieManager.save.cookies=true</code>".
 Also, cookies names are prefixed with "<code>COOKIE_</code>" before they are stored (this avoids accidental corruption of local variables)
 To revert to the original behaviour, define the property "<code>CookieManager.name.prefix= </code>" (one or more spaces).
@@ -3898,15 +3878,19 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
   <property name="Clear Cookies each Iteration" required="Yes">If selected, all server-defined cookies are cleared each time the main Thread Group loop is executed.
-  In JMeter versions after 2.3, any cookies defined in the GUI are not cleared.</property>
+  Any cookie defined in the GUI are not cleared.</property>
   <property name="Cookie Policy" required="Yes">The cookie policy that will be used to manage the cookies. 
-  "<code>compatibility</code>" is the default, and should work in most cases.
+  "<code>standard</code>" is the default since 3.0, and should work in most cases. 
+  See <a href="https://hc.apache.org/httpcomponents-client-ga/tutorial/html/statemgmt.html#d5e515">Cookie specifications</a> and 
+  <a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/cookie/CookieSpec.html">CookieSpec implementations</a>
+  [Note: "<code>ignoreCookies</code>" is equivalent to omitting the CookieManager.]
+  
+  If you still use HC3CookieHandler, default Cookie Policy is "<code>compatibility</code>", and should work in most cases.
   See <a href="http://hc.apache.org/httpclient-3.x/cookies.html">http://hc.apache.org/httpclient-3.x/cookies.html</a> and 
   <a href="http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html">http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html</a>
-  [Note: "<code>ignoreCookies</code>" is equivalent to omitting the CookieManager.]
     </property>
- <property name="Implementation" required="Yes"><code>HC3CookieHandler</code> (HttpClient 3.1 API) or <code>HC4CookieHandler</code> (HttpClient 4 API). 
-  Default is <code>HC3CookieHandler</code>.
+ <property name="Implementation" required="Yes"><code>HC4CookieHandler</code> (HttpClient 4.5.X API) or <code>HC3CookieHandler (deprecated)</code> (HttpClient 3 API). 
+  Default is <code>HC4CookieHandler</code> since 3.0.
   <br></br>
   <i>[Note: If you have a website to test with IPv6 address, choose <code>HC4CookieHandler</code> (IPv6 compliant)]</i></property>
   <property name="User-Defined Cookies" required="No (discouraged, unless you know what you're doing)">This
@@ -3933,8 +3917,7 @@ you could add a single HTTP Request Defaults element with the "<code>Server Name
 you add the 25 HTTP Request controllers, leave the "<code>Server Name or IP</code>" field empty.  The controllers will inherit
 this field value from the HTTP Request Defaults element.</p>
 <note>
-In JMeter 2.2 and earlier, port 80 was treated specially - it was ignored if the sampler used the https protocol.
-JMeter 2.3 and later treat all port values equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
+All port values are treated equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
 </note>
 </description>
 
@@ -3990,10 +3973,6 @@ but if the button is on, a later element cannot set it off.
 <description>
 <p>The Header Manager lets you add or override HTTP request headers.</p>
 <p>
-Versions of JMeter up to 2.3.2 supported only one Header Manager per sampler;
-if there were more in scope, then only the last one would be used.
-</p>
-<p>
 <b>JMeter now supports multiple Header Managers</b>. The header entries are merged to form the list for the sampler.
 If an entry to be merged matches an existing header name, it replaces the previous entry,
 unless the entry value is empty, in which case any existing entry is removed.
@@ -4047,7 +4026,7 @@ instead. (see figures 12 and 13).</p>
         Multiple connections can be used, each tied to a different variable, allowing JDBC Samplers
         to select the appropriate connection.
         <note>Each name must be different. If there are two configuration elements using the same name,
-        only one will be saved. JMeter versions after 2.3 log a message if a duplicate name is detected.</note>
+        only one will be saved. JMeter logs a message if a duplicate name is detected.</note>
         </property>
         <property name="Max Number of Connections" required="Yes">
         Maximum number of connections allowed in the pool.
@@ -4273,7 +4252,7 @@ however the <code>minimum</code> and <code>maximum</code> values can be any <cod
 in the Thread Group.  The counter config lets the user configure a starting point, a maximum,
 and the increment.  The counter will loop from the start to the max, and then start over
 with the start, continuing on like that until the test is ended.  </p>
-<p>From version 2.1.2, the counter now uses a long to store the value, so the range is from <code>-2^63</code> to <code>2^63-1</code>.</p>
+<p>The counter uses a long to store the value, so the range is from <code>-2^63</code> to <code>2^63-1</code>.</p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -4282,7 +4261,7 @@ with the start, continuing on like that until the test is ended.  </p>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
         <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the <code>Start</code> value.
-        For versions after 2.2 the default is <code>Long.MAX_VALUE</code> (previously it was <code>0</code>).
+        Default is <code>Long.MAX_VALUE</code>
         </property>
         <property name="Format" required="No">Optional format, e.g. <code>000</code> will format as <code>001</code>, <code>002</code>, etc. 
         This is passed to <code>DecimalFormat</code>, so any valid formats can be used.
@@ -4420,8 +4399,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     The array will be empty if there are none.
     </note>
     <p>
-    Versions of JMeter after 2.3.2 include the option to apply certain assertions
-    to either the main sample, the sub-samples or both. 
+    Assertions can be applied to either the main sample, the sub-samples or both. 
     The default is to apply the assertion to the main sample only.
     If the Assertion supports this option, then there will be an entry on the GUI which looks like the following:
     </p>
@@ -5704,7 +5682,7 @@ extracting the node as text or attribute value and store the result into the giv
         For match number > <code>0</code>, matching will stop as soon as enough matches have been found.
         </property>
         <property name="CSS/JQuery extractor Implementation" required="False">
-        As of JMeter 2.9, 2 implementations for CSS/JQuery based syntax are supported:
+        2 Implementations for CSS/JQuery based syntax are supported:
         <ul>
                 <li><a href="http://jsoup.org/" >JSoup</a></li>
                 <li><a href="http://jodd.org/doc/lagarto/index.html" >Jodd-Lagarto (CSSelly)</a></li>
@@ -5886,7 +5864,7 @@ extracting the node as text or attribute value and store the result into the giv
 <p>
 The BeanShell PreProcessor allows arbitrary code to be applied after taking a sample.
 </p>
-<p>For JMeter versions after 2.2 the BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
+<p>BeanShell Post-Processor no longer ignores samples with zero-length result data</p>
 <p>
 <b>For full details on using BeanShell, please see the <a href="http://www.beanshell.org/">BeanShell website.</a></b>
 </p>
@@ -6277,7 +6255,7 @@ JMeter needs to use its own certificate to enable it to intercept the HTTPS conn
 the browser. Effectively JMeter has to pretend to be the target server.
 </p>
 <p>
-For versions of JMeter from 2.10, JMeter will generate its own certificate(s).
+JMeter will generate its own certificate(s).
 These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 7 days, and random passwords.
 If JMeter detects that it is running under Java 7 or later, it will generate certificates for each target server as necessary (dynamic mode)
 unless the following property is defined: <code>proxy.cert.dynamic_keys=false</code>.
@@ -6289,7 +6267,7 @@ This has the advantage that even embedded HTTPS resources can be intercepted, an
 </p>
 <p>Unless a keystore is provided (and you define the property <code>proxy.cert.alias</code>),
 JMeter needs to use the keytool application to create the keystore entries. 
-Versions of JMeter after 2.10 include code to check that keytool is available by looking in various standard places.
+JMeter includes code to check that keytool is available by looking in various standard places.
 If JMeter is unable to find the keytool application, it will report an error.
 If necessary, the system property <code>keytool.directory</code> can be used to tell JMeter where to find keytool.
 This should be defined in the file <code>system.properties</code>.
@@ -6305,8 +6283,6 @@ This certificate needs to be installed by the browser in order for it to accept 
 If necessary, you can force JMeter to regenerate the keystore (and the exported certificates - <code>ApacheJMeterTemporaryRootCA[.usr|.crt]</code>) by deleting the keystore file <code>proxyserver.jks</code> from the JMeter directory.
 </p>
 <p>
-With versions of JMeter up to 2.9, it used a single certificate for all target servers.
-[Likewise if JMeter is not being run under Java 7 or later]
 This certificate is not one of the certificates that browsers normally trust, and will not be for the
 correct host.<br/>
 As a consequence: 
@@ -6330,7 +6306,7 @@ Check in <code>jmeter.log</code> for secure domains that you need to register ce
 </li>
 </ul>
 <p>
-Versions of JMeter from 2.10 onwards still support this method, and will continue to do so if the you define the following property:
+Versions of JMeter from 2.10 onwards still support this method, and will continue to do so if you define the following property:
 <code>proxy.cert.alias</code>
 The following properties can be used to change the certificate that is used:
 </p>
@@ -6513,7 +6489,7 @@ N.B. the string that is matched by the regular expression must be the same as th
 
 <h4>Capturing binary POST data</h4>
 <p>
-Versions of JMeter from 2.3.2 are able to capture binary POST data.
+JMeter is able to capture binary POST data.
 To configure which <code>content-types</code> are treated as binary, update the JMeter property <code>proxy.binary.types</code>.
 The default settings are as follows:
 </p>
