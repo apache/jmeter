@@ -1420,7 +1420,7 @@ run JMeter unless all the JMeter jars are added.
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
                 substring='VERSION = "${jmeter.version}";'/>
         </condition>
-        <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
+        <fail message="jmeter.version (${jmeter.version) must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
 
 	<!--
