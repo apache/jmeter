@@ -48,28 +48,19 @@
     </p>
     <h2>What do they consist of?</h2>
 <p>
-JMeter is distributed as a set of zip (or tar-gz) archive files.
-
-The files are called:
+JMeter is distributed as a set of zip (or tar-gz) archive files as are the released versions.
+You can find the bundles:
 <ul>
-<li>apache-jmeter-{version}_bin.zip - JMeter binaries</li>
-<li>apache-jmeter-{version}_lib.zip - 3rd party jar files (rarely changes)</li>
-<li>apache-jmeter-{version}_src.zip - JMeter source</li>
-<li>apache-jmeter-{version}_api.zip - JMeter Javadoc (if available)</li>
-</ul>
-<h2>Installing JMeter runtime</h2>
-Download the _bin and _lib files
-<br/>
-Unpack the archives into the same directory structure
-<br/>
-The other archives are not needed to run JMeter.
+<li>apache-jmeter-{SVN revision}.zip - Bundle in ZIP format</li>
+<li>apache-jmeter-{SVN revision}.tgz - Bundle in TAR GZIP format</li>
+<li>apache-jmeter-{SVN revision}_src.zip - Sources in ZIP format</li>
+<li>apache-jmeter-{SVN revision}_src.tgz - Sources in TAR GZIP format</li>
 
-<h2>Building JMeter</h2>
-Download the _src, _bin and _lib files
-<br/>
-Unpack all the archives into the <b>same directory structure</b>.
-<br/>
+For each file you will also find a hash (MD5, SHA) that allows you to test its integrity.
 </p>
+
+<h2>Using the nightly builds</h2>
+<p>Just unzip the bundle and use it as you would use any release.</p>
 
 <h2>Warning - please note!</h2>
 <note>
@@ -79,7 +70,7 @@ Unpack all the archives into the <b>same directory structure</b>.
 </note>
 <p>
     If there is a problem with a particular version, 
-    it may be worth reporting this on the JMeter-dev mailing list and/or trying again in a day or two.
+    it is worth reporting this on the JMeter-dev mailing list and/or open a bug and/or trying again in a day or two.
 </p>
 </section> 
 </body> 
