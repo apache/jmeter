@@ -1423,10 +1423,16 @@ run JMeter unless all the JMeter jars are added.
         <fail message="jmeter.version must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
 
+	<!--
     <target
         name="nightly"
         depends="init-svnVersion,package,docs-printable,pack-nightly"
         description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
+    -->
+    <target
+        name="nightly"
+        depends="distribution"
+        description="Build JMeter for nightly dir"/>
 
     <target name="_eolcheck">
         <!-- Determine if the native format is CRLF or LF (or neither) -->
