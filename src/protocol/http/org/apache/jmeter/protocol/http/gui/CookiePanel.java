@@ -421,7 +421,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         String tmpName = null;
         for (String clazz : classesToAdd) {
             String shortClazz = clazz.substring(clazz.lastIndexOf('.') + 1);
-            if (CookieManager.DEFAULT_IMPLEMENTATION.equals(clazz)) {
+            if (DEFAULT_IMPLEMENTATION.equals(clazz)) {
                 tmpName = shortClazz;
             }
             selectHandlerPanel.addItem(shortClazz);
