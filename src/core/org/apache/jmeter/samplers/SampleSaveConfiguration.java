@@ -400,7 +400,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
         _sampleCount=TRUE.equalsIgnoreCase(props.getProperty(SAVE_SAMPLE_COUNT, FALSE));
 
-        _idleTime=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, FALSE));
+        _idleTime=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, TRUE));
     }
 
     // Don't save this, as not settable via GUI
