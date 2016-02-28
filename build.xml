@@ -1420,7 +1420,7 @@ run JMeter unless all the JMeter jars are added.
             <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
                 substring='VERSION = "${jmeter.version}";'/>
         </condition>
-        <fail message="jmeter.version (${jmeter.version) must be same as JMeterVersion.VERSION" unless="version.match"/>
+        <fail message="jmeter.version (${jmeter.version}) must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
 
 	<!--
@@ -1429,9 +1429,14 @@ run JMeter unless all the JMeter jars are added.
         depends="init-svnVersion,package,docs-printable,pack-nightly"
         description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
     -->
+	<target
+	        name="nightly-disable-checks"
+	        description="Disables some checks">
+		<property name="disable-check-versions" value="true" />
+	</target>
     <target
         name="nightly"
-        depends="init-version, distribution"
+        depends="nightly-disable-checks,distribution"
         description="Build JMeter for nightly dir"/>
 
     <target name="_eolcheck">
