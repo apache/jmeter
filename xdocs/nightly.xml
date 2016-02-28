@@ -55,7 +55,7 @@ You can find the bundles:
 <li>apache-jmeter-{SVN revision}.tgz - Bundle in TAR GZIP format</li>
 <li>apache-jmeter-{SVN revision}_src.zip - Sources in ZIP format</li>
 <li>apache-jmeter-{SVN revision}_src.tgz - Sources in TAR GZIP format</li>
-
+</ul>
 For each file you will also find a hash (MD5, SHA) that allows you to test its integrity.
 </p>
 
