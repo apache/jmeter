@@ -1429,17 +1429,14 @@ run JMeter unless all the JMeter jars are added.
         depends="init-svnVersion,package,docs-printable,pack-nightly"
         description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
     -->
-	<!-- TO BE REMOVED -->
-	<!--
 	<target
 	        name="nightly-disable-checks"
 	        description="Disables some checks">
 		<property name="disable-check-versions" value="true" />
 	</target>
-	-->
     <target
         name="nightly"
-        depends="svnCheck,clean,install,docs-printable,docs-api,docs-site,test,_distribution"
+        depends="nightly-disable-checks,svnCheck,clean,install,docs-printable,docs-api,docs-site,test,_distribution"
         description="Build JMeter for nightly distribution (include docs)"/>
 
     <target name="_eolcheck">
