@@ -280,9 +280,9 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
         tableModel.clearData();
         clearEachIteration.setSelected(false);
+        policy.setText(HC4CookieHandler.DEFAULT_POLICY_NAME);
         selectHandlerPanel.setSelectedItem(DEFAULT_IMPLEMENTATION
                 .substring(DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
-        policy.setText(HC4CookieHandler.DEFAULT_POLICY_NAME);
         deleteButton.setEnabled(false);
         saveButton.setEnabled(false);
     }
