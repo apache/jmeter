@@ -110,6 +110,9 @@ public class JMeter implements JMeterPlugin {
     public static final String HTTP_PROXY_USER = "http.proxyUser"; // $NON-NLS-1$
 
     public static final String JMETER_NON_GUI = "JMeter.NonGui"; // $NON-NLS-1$
+    
+    public static final String JMETER_REPORT_OUTPUT_DIR_PROPERTY = 
+            "jmeter.reportgenerator.outputdir"; //$NON-NLS-1$
 
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
@@ -134,6 +137,7 @@ public class JMeter implements JMeterPlugin {
     private static final int VERSION_OPT        = 'v';// $NON-NLS-1$
     private static final int REPORT_GENERATING_OPT  = 'g';// $NON-NLS-1$
     private static final int REPORT_AT_END_OPT      = 'e';// $NON-NLS-1$
+    private static final int REPORT_OUTPUT_FOLDER_OPT      = 'o';// $NON-NLS-1$
     
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
@@ -217,7 +221,10 @@ public class JMeter implements JMeterPlugin {
                     "generate report dashboard only"),
             new CLOptionDescriptor("reportatendofloadtests",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, REPORT_AT_END_OPT,
-                    "generate report dashboard after load test")
+                    "generate report dashboard after load test"),
+            new CLOptionDescriptor("reportoutputfolder",
+                    CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_OUTPUT_FOLDER_OPT,
+                    "output folder for report dashboard"),
     };
 
     public JMeter() {
@@ -400,6 +407,31 @@ public class JMeter implements JMeterPlugin {
                     startGui(testFile);
                     startOptionalServers();
                 } else {
+                    CLOption reportOutputFolderOpt = parser
+                            .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
+                    if(reportOutputFolderOpt != null) {
+                        String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
+                        File reportOutputFolderAsFile = new File(reportOutputFolder);
+                        // We check folder does not exist or it is empty
+                        if(!reportOutputFolderAsFile.exists() || 
+                                // folder exists but is empty
+                                (reportOutputFolderAsFile.isDirectory() && reportOutputFolderAsFile.listFiles().length == 0)) {
+                            if(!reportOutputFolderAsFile.exists()) {
+                                // Report folder does not exist, we check we can create it 
+                                if(!reportOutputFolderAsFile.mkdirs()) {
+                                    throw new IllegalArgumentException("Cannot create output report to:'"
+                                            +reportOutputFolderAsFile.getAbsolutePath()+"' as I was not able to create it");
+                                }
+                            }
+                            log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
+                            JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
+                                    reportOutputFolderAsFile.getAbsolutePath());                        
+                        } else {
+                            throw new IllegalArgumentException("Cannot output report to:'"
+                                    +reportOutputFolderAsFile.getAbsolutePath()+"' as it would overwrite existing non empty folder");
+                        }
+                    }
+                    
                     CLOption testReportOpt = parser
                             .getArgumentById(REPORT_GENERATING_OPT);
 

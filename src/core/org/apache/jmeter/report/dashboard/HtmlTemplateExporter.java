@@ -28,6 +28,7 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.report.config.ConfigurationException;
 import org.apache.jmeter.report.config.ExporterConfiguration;
 import org.apache.jmeter.report.config.GraphConfiguration;
@@ -85,7 +86,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     // Output directory
     private static final String OUTPUT_DIR = "output_dir";
-    private static final File OUTPUT_DIR_DEFAULT = new File("report-output");
+    // Default output folder name
+    private static final String OUTPUT_DIR_NAME_DEFAULT = "report-output";
 
     private void addToContext(String key, Object value, DataContext context) {
         if (value instanceof String) {
@@ -347,7 +349,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Get output directory property value
         File outputDir = getPropertyFromConfig(exportCfg, OUTPUT_DIR,
-                OUTPUT_DIR_DEFAULT, File.class);
+                getReportOutputFolder(), File.class);
         LOG.info("Will generate dashboard in folder:" + outputDir);
 
         // Add the flag defining whether only sample series are filtered to the
@@ -468,5 +470,17 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         LOG.debug("End of template processing");
 
+    }
+
+    /**
+     * @return {@link File} the folder where to output HTML report
+     */
+    private File getReportOutputFolder() {
+        String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
+        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
+            return new File(globallyDefinedOutputDir);
+        } else {
+            return new File(JMeterUtils.getJMeterBinDir(), OUTPUT_DIR_NAME_DEFAULT);
+        }
     }
 }
