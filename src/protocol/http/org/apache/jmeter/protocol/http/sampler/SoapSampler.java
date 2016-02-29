@@ -46,7 +46,9 @@ import org.apache.log.Logger;
 
 /**
  * Commons HTTPClient based soap sampler
+ * @deprecated since 3.0, will be removed in next version
  */
+@Deprecated
 public class SoapSampler extends HTTPSampler2 implements Interruptible { // Implemented by parent class
     private static final Logger log = LoggingManager.getLoggerForClass();
 

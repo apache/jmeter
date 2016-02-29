@@ -30,8 +30,9 @@ import org.apache.jmeter.util.SlowSocket;
 
 /**
  * Commons HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
+ * @deprecated since 3.0, will be removed in next version
  */
-
+@Deprecated
 public class SlowHttpClientSocketFactory implements ProtocolSocketFactory {
 
     private final int CPS; // Characters per second to emulate

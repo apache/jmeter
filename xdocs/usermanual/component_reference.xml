@@ -139,8 +139,8 @@ Latency is set to the time it takes to login.
           <dl>
             <dt><code>Java</code></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt><code>HTTPClient3.1</code></dt><dd>uses Apache Commons HttpClient 3.1.
-            This is no longer being developed, and support for this may be dropped in a future JMeter release.</dd>
+            <dt><code>HTTPClient3.1</code></dt><dd>(DEPRECATED SINCE 3.0) uses Apache Commons HttpClient 3.1.
+            This is no longer being developed, and support for this will be dropped in a future JMeter release.</dd>
             <dt><code>HTTPClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
           </dl>
@@ -223,7 +223,7 @@ https.default.protocol=SSLv3
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1</code>, <code>HttpClient4</code>.
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1 (DEPRECATED SINCE 3.0)</code>, <code>HttpClient4</code>.
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the HttpClient4 implementation is used.</property>
         <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
@@ -3885,7 +3885,7 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   <a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/cookie/CookieSpec.html">CookieSpec implementations</a>
   [Note: "<code>ignoreCookies</code>" is equivalent to omitting the CookieManager.]
   
-  If you still use HC3CookieHandler, default Cookie Policy is "<code>compatibility</code>", and should work in most cases.
+  If you still use HC3CookieHandler (which is DEPRECATED as of 3.0 version, so migration is highly advised), default Cookie Policy is "<code>compatibility</code>", and should work in most cases.
   See <a href="http://hc.apache.org/httpclient-3.x/cookies.html">http://hc.apache.org/httpclient-3.x/cookies.html</a> and 
   <a href="http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html">http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html</a>
     </property>
@@ -3927,7 +3927,7 @@ All port values are treated equally; a sampler that does not specify a port will
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1</code>, <code>HttpClient4</code>. 
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1 (DEPRECATED SINCE 3.0)</code>, <code>HttpClient4</code>. 
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
@@ -4109,7 +4109,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
 To make JMeter use more than one certificate you need to ensure that:
 <ul>
 <li><code>https.use.cached.ssl.context=false</code> is set in <code>jmeter.properties</code> or <code>user.properties</code></li>
-<li>You use either HTTPClient 3.1 or 4 implementations for HTTP Request</li>
+<li>You use either HTTPClient 4 (ADVISED) or HTTPClient 3.1 (DEPRECATED SINCE 3.0) implementations for HTTP Request</li>
 </ul>
 </note>
 </component>
