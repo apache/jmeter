@@ -627,7 +627,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
 
         if (notConfigOnly){
             method = new JLabeledChoice(JMeterUtils.getResString("method"), // $NON-NLS-1$
-                    HTTPSamplerBase.getValidMethodsAsArray());
+                    HTTPSamplerBase.getValidMethodsAsArray(), true);
             method.addChangeListener(this);
         }
 
