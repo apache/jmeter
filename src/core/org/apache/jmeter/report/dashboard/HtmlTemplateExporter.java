@@ -349,8 +349,13 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
         // Get output directory property value
         File outputDir = getPropertyFromConfig(exportCfg, OUTPUT_DIR,
-                getReportOutputFolder(), File.class);
-        LOG.info("Will generate dashboard in folder:" + outputDir);
+                new File(JMeterUtils.getJMeterBinDir(), OUTPUT_DIR_NAME_DEFAULT), File.class);
+        String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
+        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
+            outputDir = new File(globallyDefinedOutputDir);
+        }
+
+        LOG.info("Will generate dashboard in folder:" + outputDir.getAbsolutePath());
 
         // Add the flag defining whether only sample series are filtered to the
         // context
