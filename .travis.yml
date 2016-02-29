@@ -1,0 +1,7 @@
+language: java
+install: ant download_jars install
+script: ant test
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
