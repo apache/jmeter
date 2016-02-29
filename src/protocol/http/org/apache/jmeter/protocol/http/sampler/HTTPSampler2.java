@@ -31,8 +31,9 @@ import org.apache.jmeter.samplers.Interruptible;
  * A sampler which understands all the parts necessary to read statistics about
  * HTTP requests, including cookies and authentication.
  * This sampler uses HttpClient 3.1.
- *
+ * @deprecated since 3.0, will be removed in next version
  */
+@Deprecated
 public class HTTPSampler2 extends HTTPSamplerBase implements Interruptible {
 
     private static final long serialVersionUID = 240L;

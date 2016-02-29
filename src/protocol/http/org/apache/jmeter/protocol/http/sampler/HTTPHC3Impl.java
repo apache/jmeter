@@ -88,7 +88,9 @@ import org.apache.log.Logger;
 
 /**
  * HTTP sampler using Apache (Jakarta) Commons HttpClient 3.1.
+ * @deprecated since 3.0, will be removed in next version
  */
+@Deprecated
 public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
