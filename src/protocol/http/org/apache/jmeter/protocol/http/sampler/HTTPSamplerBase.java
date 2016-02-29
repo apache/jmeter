@@ -226,36 +226,29 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
+    // Supported methods:
+    private static final String [] METHODS = {
+        DEFAULT_METHOD, // i.e. GET
+        HTTPConstants.POST,
+        HTTPConstants.HEAD,
+        HTTPConstants.PUT,
+        HTTPConstants.OPTIONS,
+        HTTPConstants.TRACE,
+        HTTPConstants.DELETE,
+        HTTPConstants.PATCH,
+        HTTPConstants.PROPFIND,
+        HTTPConstants.PROPPATCH,
+        HTTPConstants.MKCOL,
+        HTTPConstants.COPY,
+        HTTPConstants.MOVE,
+        HTTPConstants.LOCK,
+        HTTPConstants.UNLOCK,
+        HTTPConstants.REPORT,
+        HTTPConstants.MKCALENDAR,
+        HTTPConstants.SEARCH
+        };
 
-    private static final List<String> METHODLIST;
-    static {
-        List<String> defaultMethods = new ArrayList<>(Arrays.asList(
-            DEFAULT_METHOD, // i.e. GET
-            HTTPConstants.POST,
-            HTTPConstants.HEAD,
-            HTTPConstants.PUT,
-            HTTPConstants.OPTIONS,
-            HTTPConstants.TRACE,
-            HTTPConstants.DELETE,
-            HTTPConstants.PATCH,
-            HTTPConstants.PROPFIND,
-            HTTPConstants.PROPPATCH,
-            HTTPConstants.MKCOL,
-            HTTPConstants.COPY,
-            HTTPConstants.MOVE,
-            HTTPConstants.LOCK,
-            HTTPConstants.UNLOCK,
-            HTTPConstants.REPORT,
-            HTTPConstants.MKCALENDAR,
-            HTTPConstants.SEARCH
-        ));
-        String userDefinedMethods = JMeterUtils.getPropDefault(
-                "httpsampler.user_defined_methods", "");
-        if (StringUtils.isNotBlank(userDefinedMethods)) {
-            defaultMethods.addAll(Arrays.asList(userDefinedMethods.split("\\s*,\\s*")));
-        }
-        METHODLIST = Collections.unmodifiableList(defaultMethods);
-    }
+    private static final List<String> METHODLIST = Collections.unmodifiableList(Arrays.asList(METHODS));
 
     // @see mergeFileProperties
     // Must be private, as the file list needs special handling
