@@ -294,6 +294,7 @@ Summary
     <li><bug>58947</bug>Connect metric is wrong when ConnectException occurs</li>
     <li><bug>58980</bug>JMS Subscriber will return successful as long as 1 message is received. Contributed by Harrison Termotto (harrison dot termotto at stonybrook.edu)</li>
     <li><bug>59051</bug>JDBC Request : Connection is closed by pool if it exceeds the configured lifetime (affects nightly build as of 23 fev 2016).</li>
+    <li><bug>59075</bug>JMS Publisher: NumberFormatException is thrown is priority or expiration fields are empty</li>
 </ul>
 
 <h3>Controllers</h3>
