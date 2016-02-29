@@ -444,6 +444,7 @@ jmeter.reportgenerator.apdex_statisfied_threshold=1500
 jmeter.reportgenerator.apdex_tolerated_threshold=3000
 
 # Sets the destination directory for generated html pages, it is better to change it for every generation
+# This will override the value set through -o command line option
 # jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
 
 # Indicates which graph series are filtered (regular expression)
@@ -481,14 +482,14 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                 <subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
                     <p>
                         Use the following command :
-                        <source>jmeter -n -g &lt;log file&gt; -Jjmeter.reportgenerator.exporter.html.property.output_dir=&lt;Path to output folder&gt;</source>
+                        <source>jmeter -n -g &lt;log file&gt; -o &lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
 
                 <subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
                     <p>
                         Use the following command :
-                        <source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt; -Jjmeter.reportgenerator.exporter.html.property.output_dir=&lt;Path to output folder&gt;</source>
+                        <source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt; -o &lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
             </subsection>

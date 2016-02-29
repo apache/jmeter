@@ -344,6 +344,7 @@ Summary
     <li><bug>58931</bug>New Report/Dashboard : Getting font errors under Firefox and Chrome (not Safari)</li>
     <li><bug>58932</bug>Report / Dashboard: Document clearly and log what report are not generated when saveservice options are not correct. Developed by Florent Sabbe (f dot sabbe at ubik-ingenierie.com) and contributed by Ubik-Ingenierie</li>
     <li><bug>59055</bug>JMeter report generator : When generation is not launched from jmeter/bin folder report-template is not found</li>
+    <li><bug>58986</bug>Report/Dashboard reuses the same output directory</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
