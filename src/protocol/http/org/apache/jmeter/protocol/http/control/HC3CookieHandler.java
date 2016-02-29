@@ -32,7 +32,9 @@ import org.apache.log.Logger;
 
 /**
  * HTTPClient 3.1 implementation
+ * @deprecated since 3.0, will be removed in next version
  */
+@Deprecated
 public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 

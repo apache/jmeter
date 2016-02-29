@@ -34,8 +34,9 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 /**
  * Commons HttpClient protocol factory to generate Loopback HTTP sockets
+  * @deprecated since 3.0, will be removed in next version
  */
-
+@Deprecated
 public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
 
     public LoopbackHttpClientSocketFactory() {
