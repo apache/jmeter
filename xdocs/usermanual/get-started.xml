@@ -346,6 +346,7 @@ the following command options:</p>
 <dt><code>-R</code></dt><dd>[list of remote servers] Run the test in the specified remote servers</dd>
 <dt><code>-g</code></dt><dd>[path to CSV file] generate report dashboard only</dd>
 <dt><code>-e</code></dt><dd>generate report dashboard after load test</dd>
+<dt><code>-o</code></dt><dd>output folder where to generate the report dashboard after load test. Folder must not exist or be empty</dd>
 </dl>
 <p>The script also lets you specify the optional firewall/proxy server information:</p>
 <dl>
@@ -516,6 +517,8 @@ These are shown below.</p>
         generate report dashboard only
     -e, --reportatendofloadtests
         generate report dashboard after load test
+    -o, --reportoutputfolder
+        output folder for report dashboard
 </source>
 <p>
 Note: the JMeter log file name is formatted as a SimpleDateFormat (applied to the current date) 
