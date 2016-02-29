@@ -490,11 +490,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if (method.equals(HTTPConstants.POST)) {
             String postBody = sendPostData((HttpPost)httpRequest);
             result.setQueryString(postBody);
-        } else if (method.equals(HTTPConstants.PUT)
-                || method.equals(HTTPConstants.PATCH)
-                || method.equals(HTTPConstants.DELETE)
-                || HttpWebdav.isWebdavMethod(method)) {
-            String entityBody = sendEntityData((HttpEntityEnclosingRequestBase) httpRequest);
+        } else if (method.equals(HTTPConstants.PUT) || method.equals(HTTPConstants.PATCH)
+                || HttpWebdav.isWebdavMethod(method)
+                || method.equals(HTTPConstants.DELETE)) {
+            String entityBody = sendEntityData(( HttpEntityEnclosingRequestBase)httpRequest);
             result.setQueryString(entityBody);
         }
     }
