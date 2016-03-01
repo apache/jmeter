@@ -31,7 +31,6 @@ import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.threads.TestCompiler;
 import org.apache.jmeter.threads.TestCompilerHelper;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -57,8 +56,7 @@ public class GenericController extends AbstractTestElement implements Controller
     private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
 
     // Only create the map if it is required
-    private transient ConcurrentMap<TestElement, Object> children = 
-            TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+    private transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<TestElement, Object>();
 
     private static final Object DUMMY = new Object();
 
@@ -422,7 +420,7 @@ public class GenericController extends AbstractTestElement implements Controller
     
     protected Object readResolve(){
         iterationListeners = new LinkedList<>();
-        children = TestCompiler.IS_USE_STATIC_SET ? null : new ConcurrentHashMap<TestElement, Object>();
+        children = new ConcurrentHashMap<TestElement, Object>();
         subControllersAndSamplers = new ArrayList<>();
 
         return this;
