@@ -161,70 +161,126 @@ public class JMeter implements JMeterPlugin {
      * <li>A description of the option.</li>
      * </ul>
      */
-    private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
+    private static final CLOptionDescriptor D_OPTIONS_OPT =
             new CLOptionDescriptor("?", CLOptionDescriptor.ARGUMENT_DISALLOWED, OPTIONS_OPT,
-                "print command line options and exit"),
+                "print command line options and exit");
+    private static final CLOptionDescriptor D_HELP_OPT =
             new CLOptionDescriptor("help", CLOptionDescriptor.ARGUMENT_DISALLOWED, HELP_OPT,
-                    "print usage information and exit"),
+                    "print usage information and exit");
+    private static final CLOptionDescriptor D_VERSION_OPT =
             new CLOptionDescriptor("version", CLOptionDescriptor.ARGUMENT_DISALLOWED, VERSION_OPT,
-                    "print the version information and exit"),
+                    "print the version information and exit");
+    private static final CLOptionDescriptor D_PROPFILE_OPT =
             new CLOptionDescriptor("propfile", CLOptionDescriptor.ARGUMENT_REQUIRED, PROPFILE_OPT,
-                    "the jmeter property file to use"),
+                    "the jmeter property file to use");
+    private static final CLOptionDescriptor D_PROPFILE2_OPT =
             new CLOptionDescriptor("addprop", CLOptionDescriptor.ARGUMENT_REQUIRED
                     | CLOptionDescriptor.DUPLICATES_ALLOWED, PROPFILE2_OPT,
-                    "additional JMeter property file(s)"),
+                    "additional JMeter property file(s)");
+    private static final CLOptionDescriptor D_TESTFILE_OPT =
             new CLOptionDescriptor("testfile", CLOptionDescriptor.ARGUMENT_REQUIRED, TESTFILE_OPT,
-                    "the jmeter test(.jmx) file to run"),
+                    "the jmeter test(.jmx) file to run");
+    private static final CLOptionDescriptor D_LOGFILE_OPT =
             new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
-                    "the file to log samples to"),
+                    "the file to log samples to");
+    private static final CLOptionDescriptor D_JMLOGFILE_OPT =
             new CLOptionDescriptor("jmeterlogfile", CLOptionDescriptor.ARGUMENT_REQUIRED, JMLOGFILE_OPT,
-                    "jmeter run log file (jmeter.log)"),
+                    "jmeter run log file (jmeter.log)");
+    private static final CLOptionDescriptor D_NONGUI_OPT =
             new CLOptionDescriptor("nongui", CLOptionDescriptor.ARGUMENT_DISALLOWED, NONGUI_OPT,
-                    "run JMeter in nongui mode"),
+                    "run JMeter in nongui mode");
+    private static final CLOptionDescriptor D_SERVER_OPT =
             new CLOptionDescriptor("server", CLOptionDescriptor.ARGUMENT_DISALLOWED, SERVER_OPT,
-                    "run the JMeter server"),
+                    "run the JMeter server");
+    private static final CLOptionDescriptor D_PROXY_HOST =
             new CLOptionDescriptor("proxyHost", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_HOST,
-                    "Set a proxy server for JMeter to use"),
+                    "Set a proxy server for JMeter to use");
+    private static final CLOptionDescriptor D_PROXY_PORT =
             new CLOptionDescriptor("proxyPort", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PORT,
-                    "Set proxy server port for JMeter to use"),
+                    "Set proxy server port for JMeter to use");
+    private static final CLOptionDescriptor D_NONPROXY_HOSTS =
             new CLOptionDescriptor("nonProxyHosts", CLOptionDescriptor.ARGUMENT_REQUIRED, NONPROXY_HOSTS,
-                    "Set nonproxy host list (e.g. *.apache.org|localhost)"),
+                    "Set nonproxy host list (e.g. *.apache.org|localhost)");
+    private static final CLOptionDescriptor D_PROXY_USERNAME =
             new CLOptionDescriptor("username", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_USERNAME,
-                    "Set username for proxy server that JMeter is to use"),
+                    "Set username for proxy server that JMeter is to use");
+    private static final CLOptionDescriptor D_PROXY_PASSWORD =
             new CLOptionDescriptor("password", CLOptionDescriptor.ARGUMENT_REQUIRED, PROXY_PASSWORD,
-                    "Set password for proxy server that JMeter is to use"),
+                    "Set password for proxy server that JMeter is to use");
+    private static final CLOptionDescriptor D_JMETER_PROPERTY =
             new CLOptionDescriptor("jmeterproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_PROPERTY,
-                    "Define additional JMeter properties"),
+                    "Define additional JMeter properties");
+    private static final CLOptionDescriptor D_JMETER_GLOBAL_PROP =
             new CLOptionDescriptor("globalproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, JMETER_GLOBAL_PROP,
-                    "Define Global properties (sent to servers)\n\t\te.g. -Gport=123 or -Gglobal.properties"),
+                    "Define Global properties (sent to servers)\n\t\te.g. -Gport=123 or -Gglobal.properties");
+    private static final CLOptionDescriptor D_SYSTEM_PROPERTY =
             new CLOptionDescriptor("systemproperty", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, SYSTEM_PROPERTY,
-                    "Define additional system properties"),
+                    "Define additional system properties");
+    private static final CLOptionDescriptor D_SYSTEM_PROPFILE =
             new CLOptionDescriptor("systemPropertyFile", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENT_REQUIRED, SYSTEM_PROPFILE,
-                    "additional system property file(s)"),
+                    "additional system property file(s)");
+    private static final CLOptionDescriptor D_LOGLEVEL =
             new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
-                    "[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG"),
+                    "[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG");
+    private static final CLOptionDescriptor D_REMOTE_OPT =
             new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
-                    "Start remote servers (as defined in remote_hosts)"),
+                    "Start remote servers (as defined in remote_hosts)");
+    private static final CLOptionDescriptor D_REMOTE_OPT_PARAM =
             new CLOptionDescriptor("remotestart", CLOptionDescriptor.ARGUMENT_REQUIRED, REMOTE_OPT_PARAM,
-                    "Start these remote servers (overrides remote_hosts)"),
+                    "Start these remote servers (overrides remote_hosts)");
+    private static final CLOptionDescriptor D_JMETER_HOME_OPT =
             new CLOptionDescriptor("homedir", CLOptionDescriptor.ARGUMENT_REQUIRED, JMETER_HOME_OPT,
-                    "the jmeter home directory to use"),
+                    "the jmeter home directory to use");
+    private static final CLOptionDescriptor D_REMOTE_STOP =
             new CLOptionDescriptor("remoteexit", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_STOP,
-                    "Exit the remote servers at end of test (non-GUI)"),
+                    "Exit the remote servers at end of test (non-GUI)");
+    private static final CLOptionDescriptor D_REPORT_GENERATING_OPT =
             new CLOptionDescriptor("reportonly",
                     CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_GENERATING_OPT,
-                    "generate report dashboard only"),
+                    "generate report dashboard only",
+                    new CLOptionDescriptor[]{ D_REMOTE_OPT, D_REMOTE_OPT_PARAM, D_LOGFILE_OPT }); // disallowed
+    private static final CLOptionDescriptor D_REPORT_AT_END_OPT =
             new CLOptionDescriptor("reportatendofloadtests",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, REPORT_AT_END_OPT,
-                    "generate report dashboard after load test"),
+                    "generate report dashboard after load test");
+    private static final CLOptionDescriptor D_REPORT_OUTPUT_FOLDER_OPT =
             new CLOptionDescriptor("reportoutputfolder",
                     CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_OUTPUT_FOLDER_OPT,
-                    "output folder for report dashboard"),
+                    "output folder for report dashboard");
+
+    private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
+            D_OPTIONS_OPT,
+            D_HELP_OPT,
+            D_VERSION_OPT,
+            D_PROPFILE_OPT,
+            D_PROPFILE2_OPT,
+            D_TESTFILE_OPT,
+            D_LOGFILE_OPT,
+            D_JMLOGFILE_OPT,
+            D_NONGUI_OPT,
+            D_SERVER_OPT,
+            D_PROXY_HOST,
+            D_PROXY_PORT,
+            D_NONPROXY_HOSTS,
+            D_PROXY_USERNAME,
+            D_PROXY_PASSWORD,
+            D_JMETER_PROPERTY,
+            D_JMETER_GLOBAL_PROP,
+            D_SYSTEM_PROPERTY,
+            D_SYSTEM_PROPFILE,
+            D_LOGLEVEL,
+            D_REMOTE_OPT,
+            D_REMOTE_OPT_PARAM,
+            D_JMETER_HOME_OPT,
+            D_REMOTE_STOP,
+            D_REPORT_GENERATING_OPT,
+            D_REPORT_AT_END_OPT,
+            D_REPORT_OUTPUT_FOLDER_OPT,
     };
 
     public JMeter() {
