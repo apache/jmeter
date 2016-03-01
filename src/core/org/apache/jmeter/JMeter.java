@@ -369,6 +369,8 @@ public class JMeter implements JMeterPlugin {
             System.err.println("Error: " + error);
             System.out.println("Usage");
             System.out.println(CLUtil.describeOptions(options).toString());
+            // repeat the error so no need to scroll back past the usage to see it
+            System.out.println("Error: " + error);
             return;
         }
         try {
