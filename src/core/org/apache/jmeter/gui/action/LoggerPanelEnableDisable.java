@@ -58,14 +58,13 @@ public class LoggerPanelEnableDisable implements Command {
     /**
      * This method performs the actual command processing.
      *
-     * @param e
-     *            the generic UI action event
+     * @param e the generic UI action event
      */
     @Override
     public void doAction(ActionEvent e) {
-        GuiPackage guiInstance = GuiPackage.getInstance();
-        JSplitPane splitPane = ((JSplitPane)guiInstance.getLoggerPanel().getParent());
         if (ActionNames.LOGGER_PANEL_ENABLE_DISABLE.equals(e.getActionCommand())) {
+            GuiPackage guiInstance = GuiPackage.getInstance();
+            JSplitPane splitPane = ((JSplitPane) guiInstance.getLoggerPanel().getParent());
             if (!guiInstance.getLoggerPanel().isVisible()) {
                 splitPane.setDividerSize(UIManager.getInt("SplitPane.dividerSize"));
                 guiInstance.getLoggerPanel().setVisible(true);
