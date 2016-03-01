@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -45,6 +46,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
+import javax.swing.border.Border;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -79,6 +81,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     public static final Color CLIENT_ERROR_COLOR = Color.blue;
 
     public static final Color REDIRECT_COLOR = Color.green;
+    
+    private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
+    
+    private static final Border BLUE_BORDER = BorderFactory.createLineBorder(Color.blue);
 
     private  JSplitPane mainSplit;
 
@@ -144,7 +150,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      */
     private synchronized void updateGui(SampleResult res) {
         // Add sample
-        DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(res);
+        DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
         addSubResults(currNode, res);
         // Add any assertion that failed as children of the sample node
@@ -152,7 +158,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         int assertionIndex = currNode.getChildCount();
         for (AssertionResult assertionResult : assertionResults) {
             if (assertionResult.isFailure() || assertionResult.isError()) {
-                DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(assertionResult);
+                DefaultMutableTreeNode assertionNode = new SearchableTreeNode(assertionResult, treeModel);
                 treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
             }
         }
@@ -175,7 +181,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             if (log.isDebugEnabled()) {
                 log.debug("updateGui1 : child sample result - " + child);
             }
-            DefaultMutableTreeNode leafNode = new DefaultMutableTreeNode(child);
+            DefaultMutableTreeNode leafNode = new SearchableTreeNode(child, treeModel);
 
             treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
             addSubResults(leafNode, child);
@@ -184,7 +190,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             int assertionIndex = leafNode.getChildCount();
             for (AssertionResult item : assertionResults) {
                 if (item.isFailure() || item.isError()) {
-                    DefaultMutableTreeNode assertionNode = new DefaultMutableTreeNode(item);
+                    DefaultMutableTreeNode assertionNode = new SearchableTreeNode(item, treeModel);
                     treeModel.insertNodeInto(assertionNode, leafNode, assertionIndex++);
                 }
             }
@@ -223,7 +229,12 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
         // Create the split pane
         mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSide, rightSide);
-        add(mainSplit, BorderLayout.CENTER);
+        mainSplit.setOneTouchExpandable(true);
+
+        JSplitPane searchAndMainSP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+                new SearchTreePanel(root), mainSplit);
+        searchAndMainSP.setOneTouchExpandable(true);
+        add(searchAndMainSP, BorderLayout.CENTER);
         // init right side with first render
         resultsRender.setRightSide(rightSide);
         resultsRender.init();
@@ -274,7 +285,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         SampleResult rootSampleResult = new SampleResult();
         rootSampleResult.setSampleLabel("Root");
         rootSampleResult.setSuccessful(true);
-        root = new DefaultMutableTreeNode(rootSampleResult);
+        root = new SearchableTreeNode(rootSampleResult, null);
 
         treeModel = new DefaultTreeModel(root);
         jTree = new JTree(treeModel);
@@ -430,6 +441,16 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 this.setIcon(imageFailure);
             } else {
                 this.setIcon(imageSuccess);
+            }
+            
+            // Handle search related rendering
+            SearchableTreeNode node = (SearchableTreeNode) value;
+            if(node.isNodeHasMatched()) {
+                setBorder(RED_BORDER);
+            } else if (node.isChildrenNodesHaveMatched()) {
+                setBorder(BLUE_BORDER);
+            } else {
+                setBorder(null);
             }
             return this;
         }

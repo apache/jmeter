@@ -19,11 +19,15 @@
 package org.apache.jmeter.assertions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.jmeter.gui.Searchable;
 
 /**
  * Implements Response Assertion checking.
  */
-public class AssertionResult implements Serializable {
+public class AssertionResult implements Serializable, Searchable {
     public static final String RESPONSE_WAS_NULL = "Response was null"; // $NON-NLS-1$
 
     private static final long serialVersionUID = 240L;
@@ -161,5 +165,13 @@ public class AssertionResult implements Serializable {
     @Override
     public String toString() {
         return getName() != null ? getName() : super.toString();
+    }
+    
+    @Override
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> datasToSearch = new ArrayList<>(2);
+        datasToSearch.add(getName());
+        datasToSearch.add(getFailureMessage());
+        return datasToSearch;
     }
 }
