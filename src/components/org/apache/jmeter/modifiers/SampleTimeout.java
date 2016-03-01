@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 /**
  * 
  * Sample timeout implementation using Executor threads
- *
+ * @since 3.0
  */
 public class SampleTimeout extends AbstractTestElement implements Serializable, ThreadListener, SampleMonitor {
 
@@ -48,8 +48,6 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     private static final String TIMEOUT = "InterruptTimer.timeout"; //$NON-NLS-1$
-
-    private final boolean useRunnable = JMeterUtils.getPropDefault("InterruptTimer.useRunnable", false);
 
     private static class TPOOLHolder {
         static final ScheduledExecutorService EXEC_SERVICE =
@@ -78,7 +76,6 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
      * No-arg constructor.
      */
     public SampleTimeout() {
-//        LOG.setPriority(org.apache.log.Priority.DEBUG); // for local debugging when enabled
         debug = LOG.isDebugEnabled();
         execService = getExecutorService();
         if (debug) {
@@ -128,46 +125,25 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
             return; // Cannot time out in this case
         }
         final Interruptible sampler = (Interruptible) samp;
-        
-        if (useRunnable) {
-            Runnable run=new Runnable() {
-                @Override
-                public void run() {
-                    long start = System.nanoTime();
-                    boolean interrupted = sampler.interrupt();
-                    String elapsed = Double.toString((double)(System.nanoTime()-start)/ 1000000000)+" secs";
-                    if (interrupted) {
-                        LOG.warn("Run Done interrupting " + getInfo(samp) + " took " + elapsed);
-                    } else {
-                        if (debug) {
-                            LOG.debug("Run Didn't interrupt: " + getInfo(samp) + " took " + elapsed);
-                        }
+
+        Callable<Object> call = new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                long start = System.nanoTime();
+                boolean interrupted = sampler.interrupt();
+                String elapsed = Double.toString((double)(System.nanoTime()-start)/ 1000000000)+" secs";
+                if (interrupted) {
+                    LOG.warn("Call Done interrupting " + getInfo(samp) + " took " + elapsed);
+                } else {
+                    if (debug) {
+                        LOG.debug("Call Didn't interrupt: " + getInfo(samp) + " took " + elapsed);
                     }
                 }
-            };
-            // schedule the interrupt to occur and save for possible cancellation 
-            future = execService.schedule(run, timeout, TimeUnit.MILLISECONDS);
-        } else {
-            Callable<Object> call = new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    long start = System.nanoTime();
-                    boolean interrupted = sampler.interrupt();
-                    String elapsed = Double.toString((double)(System.nanoTime()-start)/ 1000000000)+" secs";
-                    if (interrupted) {
-                        LOG.warn("Call Done interrupting " + getInfo(samp) + " took " + elapsed);
-                    } else {
-                        if (debug) {
-                            LOG.debug("Call Didn't interrupt: " + getInfo(samp) + " took " + elapsed);
-                        }
-                    }
-                    return null;
-                }
-                
-            };
-            // schedule the interrupt to occur and save for possible cancellation 
-            future = execService.schedule(call, timeout, TimeUnit.MILLISECONDS);
-        }
+                return null;
+            }
+        };
+        // schedule the interrupt to occur and save for possible cancellation 
+        future = execService.schedule(call, timeout, TimeUnit.MILLISECONDS);
         if (debug) {
             LOG.debug("Scheduled timer: @" + System.identityHashCode(future) + " " + getInfo(samp));
         }
