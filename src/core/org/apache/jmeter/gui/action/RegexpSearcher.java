@@ -44,7 +44,7 @@ public class RegexpSearcher implements Searcher {
         if(caseSensitive) {
             pattern = Pattern.compile(newRegexp);
         } else {
-            pattern = Pattern.compile(newRegexp.toLowerCase());
+            pattern = Pattern.compile(newRegexp, Pattern.CASE_INSENSITIVE);
         }
     }
 
