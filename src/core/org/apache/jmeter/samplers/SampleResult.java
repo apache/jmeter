@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.assertions.AssertionResult;
+import org.apache.jmeter.gui.Searchable;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -42,7 +43,7 @@ import org.apache.log.Logger;
  * sample of an entry.
  *
  */
-public class SampleResult implements Serializable, Cloneable {
+public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private static final long serialVersionUID = 241L;
 
@@ -1432,5 +1433,15 @@ public class SampleResult implements Serializable, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new IllegalStateException("This should not happen");
         }
+    }
+
+    @Override
+    public List<String> getSearchableTokens() throws Exception {
+        List<String> datasToSearch = new ArrayList<>(4);
+        datasToSearch.add(getSampleLabel());
+        datasToSearch.add(getDataEncodingNoDefault());
+        datasToSearch.add(getRequestHeaders());
+        datasToSearch.add(getResponseHeaders());
+        return datasToSearch;
     }
 }
