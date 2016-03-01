@@ -1,7 +1,9 @@
 language: java
 install: ant download_jars install
-script: ant test
+script: ant -Djava.awt.headless=true test
 jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
+addons:
+  hostname: short-hostname
