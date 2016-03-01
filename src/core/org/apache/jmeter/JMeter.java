@@ -223,14 +223,14 @@ public class JMeter implements JMeterPlugin {
     public JMeter() {
     }
 
-    // Hack to allow automated tests to find when test has ended
-    //transient boolean testEnded = false;
-
+    
     private JMeter parent;
 
-    private Properties remoteProps; // Properties to be sent to remote servers
+    /** Properties to be sent to remote servers */
+    private Properties remoteProps; 
 
-    private boolean remoteStop; // should remote engines be stopped at end of non-GUI test?
+    /** should remote engines be stopped at end of non-GUI test? */
+    private boolean remoteStop; 
 
     /**
      * Starts up JMeter in GUI mode
@@ -490,7 +490,7 @@ public class JMeter implements JMeterPlugin {
         if (bshinit != null){
             log.info("Run Beanshell on file: "+bshinit);
             try {
-                BeanShellInterpreter bsi = new BeanShellInterpreter();//bshinit,log);
+                BeanShellInterpreter bsi = new BeanShellInterpreter();
                 bsi.source(bshinit);
             } catch (ClassNotFoundException e) {
                 log.warn("Could not start Beanshell: "+e.getLocalizedMessage());
@@ -856,7 +856,8 @@ public class JMeter implements JMeterPlugin {
     }
 
     /**
-     * Refactored from AbstractAction.java
+     * Remove disabled elements
+     * Replace the ReplaceableController with the target subtree
      *
      * @param tree The {@link HashTree} to convert
      */
@@ -942,8 +943,6 @@ public class JMeter implements JMeterPlugin {
     private static class ListenToTest implements TestStateListener, Runnable, Remoteable {
         private final AtomicInteger started = new AtomicInteger(0); // keep track of remote tests
 
-        //NOT YET USED private JMeter _parent;
-
         private final List<JMeterEngine> engines;
 
         private ReportGenerator reportGenerator;
@@ -954,7 +953,6 @@ public class JMeter implements JMeterPlugin {
          * @param reportGenerator {@link ReportGenerator}
          */
         public ListenToTest(JMeter unused, List<JMeterEngine> engines, ReportGenerator reportGenerator) {
-            //_parent = unused;
             this.engines=engines;
             this.reportGenerator = reportGenerator;
         }
