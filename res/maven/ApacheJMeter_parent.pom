@@ -94,7 +94,6 @@ under the License.
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.13</slf4j-api.version>
       <slf4j-nop.version>1.7.13</slf4j-nop.version>
-      <soap.version>2.3.1</soap.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.12</tika-core.version>
       <tika-parsers.version>1.12</tika-parsers.version>
@@ -266,11 +265,6 @@ under the License.
         <groupId>logkit</groupId>
         <artifactId>logkit</artifactId>
         <version>${logkit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>soap</groupId>
-        <artifactId>soap</artifactId>
-        <version>${soap.version}</version>
       </dependency>
       <dependency>
         <groupId>net.sf.jtidy</groupId>
