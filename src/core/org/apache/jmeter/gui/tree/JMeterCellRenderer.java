@@ -24,13 +24,16 @@ import java.awt.Component;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
+import javax.swing.border.Border;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  * Class to render the test tree - sets the enabled/disabled versions of the icons
  */
 public class JMeterCellRenderer extends DefaultTreeCellRenderer {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
+
+    private static final Border RED_BORDER = BorderFactory.createLineBorder(Color.red);
 
     public JMeterCellRenderer() {
     }
@@ -62,7 +65,7 @@ public class JMeterCellRenderer extends DefaultTreeCellRenderer {
         }
         this.setEnabled(enabled);
         if(node.isMarkedBySearch()) {
-            setBorder(BorderFactory.createLineBorder(Color.red));
+            setBorder(RED_BORDER);
         }
         else {
             setBorder(null);
