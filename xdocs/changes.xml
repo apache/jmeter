@@ -94,6 +94,7 @@ Summary
         <li><code>org.apache.jmeter.protocol.http.util.WSDLException</code></li>
         <li><code>org.apache.jmeter.protocol.http.util.WSDLHelper</code></li>
         <li>Property <code>soap.document_cache</code></li>
+        <li>JAR soap-2.3.1 has been also removed</li>
     </ul>
     </li>
     <li>org.apache.jmeter.protocol.http.visualizers.RequestViewHTTP.getQueryMap signature has changed, if you use it ensure you update your code. See <bugzilla>58845</bugzilla></li>

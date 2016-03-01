@@ -205,10 +205,6 @@ slf4j-api-1.7.13, slf4j-nop-1.7.13
 http://www.slf4j.org/
 - jodd-core
 
-soap-2.3.1
-----------
-- WebServiceSampler ONLY
-
 tika-1.12
 --------------
 http://tika.apache.org/
