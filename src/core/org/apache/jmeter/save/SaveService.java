@@ -127,45 +127,8 @@ public class SaveService {
     // Property name used to define file name
     private static final String SAVESERVICE_PROPERTIES = "saveservice_properties"; // $NON-NLS-1$
 
-    // Define file format property names
-    private static final String FILE_FORMAT = "file_format"; // $NON-NLS-1$
-    private static final String FILE_FORMAT_TESTPLAN = "file_format.testplan"; // $NON-NLS-1$
-    private static final String FILE_FORMAT_TESTLOG = "file_format.testlog"; // $NON-NLS-1$
-
     // Define file format versions
     private static final String VERSION_2_2 = "2.2";  // $NON-NLS-1$
-
-    // Default to overall format, and then to version 2.2
-    public static final String TESTPLAN_FORMAT
-        = JMeterUtils.getPropDefault(FILE_FORMAT_TESTPLAN
-        , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
-
-    public static final String TESTLOG_FORMAT
-        = JMeterUtils.getPropDefault(FILE_FORMAT_TESTLOG
-        , JMeterUtils.getPropDefault(FILE_FORMAT, VERSION_2_2));
-
-    private static boolean validateFormat(String format){
-        if ("2.2".equals(format)) {
-            return true;
-        }
-        if ("2.1".equals(format)) {
-            return true;
-        }
-        return false;
-    }
-
-    static{
-        if (!validateFormat(TESTPLAN_FORMAT)){
-            log.error("Invalid test plan format: "+TESTPLAN_FORMAT);
-        }
-        if (!validateFormat(TESTLOG_FORMAT)){
-            log.error("Invalid test log format: "+TESTLOG_FORMAT);
-        }
-    }
-
-    /** New XStream format - more compressed class names */
-    public static final boolean IS_TESTPLAN_FORMAT_22
-        = VERSION_2_2.equals(TESTPLAN_FORMAT);
 
     // Holds the mappings from the saveservice properties file
     // Key: alias Entry: full class name
@@ -197,7 +160,7 @@ public class SaveService {
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
     static {
-        log.info("Testplan (JMX) version: "+TESTPLAN_FORMAT+". Testlog (JTL) version: "+TESTLOG_FORMAT);
+        log.info("Testplan (JMX) version: "+VERSION_2_2+". Testlog (JTL) version: "+VERSION_2_2);
         initProps();
         checkVersions();
     }

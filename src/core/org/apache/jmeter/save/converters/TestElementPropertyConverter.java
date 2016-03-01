@@ -19,7 +19,6 @@
 package org.apache.jmeter.save.converters;
 
 import org.apache.jmeter.config.ConfigTestElement;
-import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
@@ -62,15 +61,12 @@ public class TestElementPropertyConverter extends AbstractCollectionConverter {
         writer.addAttribute(ConversionHelp.ATT_NAME, ConversionHelp.encode(prop.getName()));
         Class<?> clazz = prop.getObjectValue().getClass();
         writer.addAttribute(ConversionHelp.ATT_ELEMENT_TYPE,
-                SaveService.IS_TESTPLAN_FORMAT_22 ?  mapper().serializedClass(clazz) : clazz.getName());
-        if (SaveService.IS_TESTPLAN_FORMAT_22){
-            TestElement te = (TestElement)prop.getObjectValue();
-            ConversionHelp.saveSpecialProperties(te,writer);
-        }
-        
+                mapper().serializedClass(clazz));
+        TestElement te = (TestElement)prop.getObjectValue();
+        ConversionHelp.saveSpecialProperties(te,writer);
         for (JMeterProperty jmp : prop) {
             // Skip special properties if required
-            if (!SaveService.IS_TESTPLAN_FORMAT_22 || !ConversionHelp.isSpecialProperty(jmp.getName()))
+            if (!ConversionHelp.isSpecialProperty(jmp.getName()))
             {
                 // Don't save empty comments
                 if (!(TestElement.COMMENTS.equals(jmp.getName())
