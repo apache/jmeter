@@ -102,11 +102,28 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
 
     private transient CollectionProperty initialCookies;
 
-    // MUST NOT BE CHANGED
-    @SuppressWarnings("deprecation") // cannot be changed
+    /**
+     * Defines the policy that is assumed when the JMX file does not contain an entry for it
+     * MUST NOT BE CHANGED otherwise JMX files will not be correctly interpreted
+     * <p>
+     * The default policy for new CookieManager elements is defined by 
+     * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_POLICY CookiePanel#DEFAULT_POLICY}
+     *
+     * @deprecated not intended for use outside this class (should have been created private)
+     */
+    @Deprecated
     public static final String DEFAULT_POLICY = CookieSpecs.BROWSER_COMPATIBILITY;
     
-    // MUST NOT BE CHANGED
+    /**
+     * Defines the implementation that is assumed when the JMX file does not contain an entry for it
+     * MUST NOT BE CHANGED otherwise JMX files will not be correctly interpreted
+     * <p>
+     * The default implementation for new CookieManager elements is defined by 
+     * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_IMPLEMENTATION CookiePanel#DEFAULT_IMPLEMENTATION}
+     *
+     * @deprecated not intended for use outside this class (should have been created private)
+     */
+    @Deprecated
     public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
 
     public CookieManager() {
