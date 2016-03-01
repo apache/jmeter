@@ -638,6 +638,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return The Timers value
      */
+    @Deprecated
     public static Vector<Object> getTimers(Properties properties) {
         return instantiate(getVector(properties, "timer."), // $NON-NLS-1$
                 "org.apache.jmeter.timers.Timer"); // $NON-NLS-1$
@@ -650,6 +651,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return The Visualizers value
      */
+    @Deprecated
     public static Vector<Object> getVisualizers(Properties properties) {
         return instantiate(getVector(properties, "visualizer."), // $NON-NLS-1$
                 "org.apache.jmeter.visualizers.Visualizer"); // $NON-NLS-1$
@@ -663,6 +665,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return The Controllers value
      */
     // TODO - does not appear to be called directly
+    @Deprecated
     public static Vector<Object> getControllers(Properties properties) {
         String name = "controller."; // $NON-NLS-1$
         Vector<Object> v = new Vector<>();
@@ -687,6 +690,7 @@ public class JMeterUtils implements UnitTestManager {
      *            The name of the sampler controller.
      * @return The TestSamples value
      */
+    @Deprecated
     public static String[] getTestSamples(Properties properties, String name) {
         Vector<String> vector = getVector(properties, name + ".testsample"); // $NON-NLS-1$
         return vector.toArray(new String[vector.size()]);
@@ -698,6 +702,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return The XMLParser value
      */
     // TODO only called by UserParameterXMLParser.getXMLParameters which is a deprecated class
+    @Deprecated
     public static XMLReader getXMLParser() {
         final String parserName = getPropDefault("xml.parser", // $NON-NLS-1$
                 "org.apache.xerces.parsers.SAXParser");  // $NON-NLS-1$
@@ -717,6 +722,7 @@ public class JMeterUtils implements UnitTestManager {
      *            the input values
      * @return The Alias value
      */
+    @Deprecated
     public static Hashtable<String, String> getAlias(Properties properties) {
         return getHashtable(properties, "alias."); // $NON-NLS-1$
     }
@@ -763,6 +769,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return a Hashtable where the keys are the original matching keys with
      *         the prefix removed
      */
+    @Deprecated
     public static Hashtable<String, String> getHashtable(Properties properties, String prefix) {
         Hashtable<String, String> t = new Hashtable<>();
         Enumeration<?> names = properties.keys();
@@ -907,6 +914,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param namVec List of names, which are displayed in <code>combo</code>
      * @param name Name, that is to be selected. It has to be in <code>namVec</code>
      */
+    @Deprecated
     public static void selJComboBoxItem(Properties properties, JComboBox<?> combo, Vector<?> namVec, String name) {
         int idx = namVec.indexOf(name);
         combo.setSelectedIndex(idx);
@@ -924,6 +932,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return an instance of the class, or null if instantiation failed or the class did not implement/extend as required 
      */
     // TODO probably not needed
+    @Deprecated
     public static Object instantiate(String className, String impls) {
         if (className != null) {
             className = className.trim();
@@ -966,6 +975,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return Description of the Returned Value
      */
+    @Deprecated
     public static Vector<Object> instantiate(Vector<String> v, String className) {
         Vector<Object> i = new Vector<>();
         try {
@@ -1003,6 +1013,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return Description of the Returned Value
      */
+    @Deprecated
     public static JButton createButton(String name, ActionListener listener) {
         JButton button = new JButton(getImage(name + ".on.gif")); // $NON-NLS-1$
         button.setDisabledIcon(getImage(name + ".off.gif")); // $NON-NLS-1$
@@ -1027,6 +1038,7 @@ public class JMeterUtils implements UnitTestManager {
      *            Description of Parameter
      * @return Description of the Returned Value
      */
+    @Deprecated
     public static JButton createSimpleButton(String name, ActionListener listener) {
         JButton button = new JButton(getImage(name + ".gif")); // $NON-NLS-1$
         button.setActionCommand(name);
@@ -1084,6 +1096,7 @@ public class JMeterUtils implements UnitTestManager {
      * @return Index of value in array, or -1 if not in array.
      */
     //TODO - move to JOrphanUtils?
+    @Deprecated
     public static int findInArray(String[] array, String value) {
         int count = -1;
         int index = -1;
