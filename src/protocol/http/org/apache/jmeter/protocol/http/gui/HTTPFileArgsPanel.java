@@ -37,6 +37,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
@@ -284,7 +285,9 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
             tableModel.removeRow(rowSelected);
         } else if (BROWSE.equals(command)) {
             String path = browseAndGetFilePath();
-            tableModel.setValueAt(path, rowSelected, 0);
+            if(StringUtils.isNotBlank(path)) {
+                tableModel.setValueAt(path, rowSelected, 0);                
+            }
         }
     }
 

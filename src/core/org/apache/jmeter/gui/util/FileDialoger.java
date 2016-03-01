@@ -111,7 +111,6 @@ public final class FileDialoger {
      *         finished using it - null if no file was chosen
      */
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
-        // JFileChooser jfc = null;
         if(!StringUtils.isEmpty(existingFileName)) {
             File existingFileStart = new File(existingFileName);
             if(existingFileStart.exists() && existingFileStart.canRead()) {
