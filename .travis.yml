@@ -1,5 +1,6 @@
 language: java
-install: ant download_jars install
+install: ant download_jars install; cat /etc/hosts
+before_script: echo "127.0.0.1 "`hostname` | sudo tee /etc/hosts
 script: ant -Djava.awt.headless=true test
 jdk:
   - openjdk7
