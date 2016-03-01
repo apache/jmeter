@@ -1270,7 +1270,7 @@ public class JMeterUtils implements UnitTestManager {
         try {
             localHost = InetAddress.getLocalHost();
         } catch (UnknownHostException e1) {
-            log.error("Unable to get local host IP address.");
+            log.error("Unable to get local host IP address.", e1);
             return; // TODO - perhaps this should be a fatal error?
         }
         localHostIP=localHost.getHostAddress();
