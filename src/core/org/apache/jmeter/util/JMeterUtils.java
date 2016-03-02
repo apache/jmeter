@@ -637,6 +637,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param properties
      *            Description of Parameter
      * @return The Timers value
+     * @deprecated (3.0) not used + pre-java 1.2 collection
      */
     @Deprecated
     public static Vector<Object> getTimers(Properties properties) {
@@ -650,6 +651,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param properties
      *            Description of Parameter
      * @return The Visualizers value
+     * @deprecated (3.0) not used + pre-java 1.2 collection
      */
     @Deprecated
     public static Vector<Object> getVisualizers(Properties properties) {
@@ -663,6 +665,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param properties
      *            The properties with information about the samplers
      * @return The Controllers value
+     * @deprecated (3.0) not used + pre-java 1.2 collection
      */
     // TODO - does not appear to be called directly
     @Deprecated
@@ -689,6 +692,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param name
      *            The name of the sampler controller.
      * @return The TestSamples value
+     * @deprecated (3.0) not used
      */
     @Deprecated
     public static String[] getTestSamples(Properties properties, String name) {
@@ -700,8 +704,8 @@ public class JMeterUtils implements UnitTestManager {
      * Create an instance of an org.xml.sax.Parser based on the default props.
      *
      * @return The XMLParser value
+     * @deprecated (3.0) was only called by UserParameterXMLParser.getXMLParameters which is a deprecated class
      */
-    // TODO only called by UserParameterXMLParser.getXMLParameters which is a deprecated class
     @Deprecated
     public static XMLReader getXMLParser() {
         final String parserName = getPropDefault("xml.parser", // $NON-NLS-1$
@@ -721,6 +725,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param properties
      *            the input values
      * @return The Alias value
+     * @deprecated (3.0) not used
      */
     @Deprecated
     public static Hashtable<String, String> getAlias(Properties properties) {
@@ -768,6 +773,7 @@ public class JMeterUtils implements UnitTestManager {
      *            to match against properties
      * @return a Hashtable where the keys are the original matching keys with
      *         the prefix removed
+     * @deprecated (3.0) not used
      */
     @Deprecated
     public static Hashtable<String, String> getHashtable(Properties properties, String prefix) {
@@ -929,7 +935,8 @@ public class JMeterUtils implements UnitTestManager {
      *            The name of the class to instantiate.
      * @param impls
      *            The name of the class it must be an instance of
-     * @return an instance of the class, or null if instantiation failed or the class did not implement/extend as required 
+     * @return an instance of the class, or null if instantiation failed or the class did not implement/extend as required
+     * @deprecated (3.0) not used out of this class
      */
     // TODO probably not needed
     @Deprecated
@@ -974,6 +981,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param className
      *            Description of Parameter
      * @return Description of the Returned Value
+     * @deprecated (3.0) not used out of this class
      */
     @Deprecated
     public static Vector<Object> instantiate(Vector<String> v, String className) {
@@ -1012,6 +1020,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param listener
      *            Description of Parameter
      * @return Description of the Returned Value
+     * @deprecated (3.0) not used
      */
     @Deprecated
     public static JButton createButton(String name, ActionListener listener) {
@@ -1037,6 +1046,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param listener
      *            Description of Parameter
      * @return Description of the Returned Value
+     * @deprecated (3.0) not used
      */
     @Deprecated
     public static JButton createSimpleButton(String name, ActionListener listener) {
@@ -1094,6 +1104,7 @@ public class JMeterUtils implements UnitTestManager {
      * @param value
      *            String to compare to array values.
      * @return Index of value in array, or -1 if not in array.
+     * @deprecated (3.0) not used
      */
     //TODO - move to JOrphanUtils?
     @Deprecated
