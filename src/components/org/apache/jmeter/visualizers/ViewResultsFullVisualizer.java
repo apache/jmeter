@@ -113,8 +113,9 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     "icon_warning_sml.gif")); //$NON-NLS-1$
 
     // Maximum size that we will display
+    // Default limited to 10 megabytes
     private static final int MAX_DISPLAY_SIZE =
-        JMeterUtils.getPropDefault("view.results.tree.max_size", 200 * 1024); // $NON-NLS-1$
+        JMeterUtils.getPropDefault("view.results.tree.max_size", 10485760); // $NON-NLS-1$
 
     // default display order
     private static final String VIEWERS_ORDER =
