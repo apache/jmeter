@@ -3525,7 +3525,8 @@ By default, a Graphite implementation is provided.
         <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to <code>2003</code>. Note <code>PickleGraphiteMetricsSender</code> (port <code>2004</code>) can only talk to Graphite server.</property>
         <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "<code>jmeter</code>."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
-        <property name="samplersList" required="Yes">Semicolon separated list of samplers for which you want to report metrics to backend.</property>
+        <property name="samplersList" required="Yes">Semicolon separated list of samplers if <code>useRegexpForSamplersList=false</code> or a regular expression for which you want to report metrics to backend if <code>useRegexpForSamplersList=true</code>.</property>
+        <property name="useRegexpForSamplersList" required="Yes">Consider samplersList as a regular expression to select the samplers for which you want to report metrics to backend. Defaults to <code>false</code>.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
     </properties>
     <p>Read <a href="realtime-results.html" >this</a> for more details.</p>
