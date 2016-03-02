@@ -59,7 +59,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     private static final int MAX_CONN_RETRIES =
         JMeterUtils.getPropDefault("http.java.sampler.retries" // $NON-NLS-1$
-                ,10); // Maximum connection retries
+                ,0); // Maximum connection retries
 
     static {
         log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
@@ -472,9 +472,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         try {
             // Sampling proper - establish the connection and read the response:
             // Repeatedly try to connect:
-            int retry = 0;
-            // Start with 0 so tries at least once, and retries at most MAX_CONN_RETRIES times
-            for (; retry <= MAX_CONN_RETRIES; retry++) {
+            int retry = -1;
+            // Start with -1 so tries at least once, and retries at most MAX_CONN_RETRIES times
+            for (; retry < MAX_CONN_RETRIES; retry++) {
                 try {
                     conn = setupConnection(url, method, res);
                     // Attempt the connection:

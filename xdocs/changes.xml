@@ -102,7 +102,8 @@ Summary
     <li>JMS Subscriber will consider sample in error if number of received messages is not equals to expected number of messages. It previously considerer sample OK if only 1 message was received. See <bugzilla>58980</bugzilla></li>
     <li>Since version 3.0, HTTP(S) Test Script recorder uses default port 8888 as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
     <li>Since version 3.0, the parser for embedded ressources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped as long as its dependencies.</li>
-    <li>Since version 3.0, the support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>     
+    <li>Since version 3.0, the support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>
+    <li>Since version 3.0, default property's value <code>http.java.sampler.retries</code> has been switched to 0 to avoid any retry by default to align it on HttpClient4 default value and behaviour. See <bugzilla>59103</bugzilla></li>     
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -128,6 +129,7 @@ Summary
     <li><bug>59036</bug>FormCharSetFinder : Use JSoup instead of deprecated HTMLParser</li>
     <li><bug>59034</bug>Parallel downloads connection management is not realistic. Contributed by Benoit Wiart (benoit dot wiart at gmail.com) and Philippe Mouawad</li>
     <li><bug>59060</bug>HTTP Request GUI : Move File Upload to a new Tab to have more space for parameters and prevent incoherent configuration. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>59103</bug>HTTP Request Java Implementation: Change default "http.java.sampler.retries" to align it on HttpClient behaviour and make it meaningful</li>
 </ul>
 
 <h3>Other samplers</h3>
