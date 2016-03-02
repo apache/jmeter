@@ -162,7 +162,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * @deprecated
+     * @deprecated HC3.1 will be dropped in upcoming version
      */
     @Deprecated
     private boolean hasVaryHeader(HttpMethod method) {

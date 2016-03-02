@@ -57,7 +57,7 @@ public class ConvertException extends Exception {
 
     /**
      * DO NOT USE - UNIT TEST ONLY
-     * @deprecated
+     * @deprecated UNIT TEST ONLY
      */
     @Deprecated // only for use by unit tests
     public ConvertException() {
