@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.visualizers.backend.graphite;
 
-import java.util.Collections;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +29,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
@@ -99,6 +101,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private boolean summaryOnly;
     private String rootMetricsPrefix;
     private String samplersList = ""; //$NON-NLS-1$
+    private boolean useRegexpForSamplersList;
     private Set<String> samplersToFilter;
     private Map<String, Float> okPercentiles;
     private Map<String, Float> koPercentiles;
@@ -110,6 +113,8 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> timerHandle;
     
+    private Pattern pattern;
+
     public GraphiteBackendListenerClient() {
         super();
     }    
@@ -207,12 +212,22 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void handleSampleResults(List<SampleResult> sampleResults,
             BackendListenerContext context) {
+    	boolean samplersToFilterMatch;
         synchronized (LOCK) {
             for (SampleResult sampleResult : sampleResults) {
                 getUserMetrics().add(sampleResult);
-                if(!summaryOnly && samplersToFilter.contains(sampleResult.getSampleLabel())) {
-                    SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
-                    samplerMetric.add(sampleResult);
+                
+                if(!summaryOnly) {
+                    if (useRegexpForSamplersList) {
+                    	Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
+                    	samplersToFilterMatch = matcher.matches();
+                    } else {
+                    	samplersToFilterMatch = samplersToFilter.contains(sampleResult.getSampleLabel()); 
+                    }
+                    if (samplersToFilterMatch) {
+                        SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
+                        samplerMetric.add(sampleResult);
+                    }
                 }
                 SamplerMetric cumulatedMetrics = getSamplerMetric(CUMULATED_METRICS);
                 cumulatedMetrics.add(sampleResult);                    
@@ -228,6 +243,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         graphitePort = context.getIntParameter("graphitePort", DEFAULT_PLAINTEXT_PROTOCOL_PORT);
         summaryOnly = context.getBooleanParameter("summaryOnly", true);
         samplersList = context.getParameter("samplersList", "");
+        useRegexpForSamplersList = context.getBooleanParameter("useRegexpForSamplersList", false);
         rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         String percentilesAsString = context.getParameter("percentiles", DEFAULT_METRICS_PREFIX);
         String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
@@ -260,9 +276,13 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         Class<?> clazz = Class.forName(graphiteMetricsSenderClass);
         this.graphiteMetricsManager = (GraphiteMetricsSender) clazz.newInstance();
         graphiteMetricsManager.setup(graphiteHost, graphitePort, rootMetricsPrefix);
-        String[] samplers = samplersList.split(SEPARATOR);
-        samplersToFilter = new HashSet<>();
-        Collections.addAll(samplersToFilter, samplers);
+        if (useRegexpForSamplersList) {
+            pattern = Pattern.compile(samplersList);
+        } else {
+            String[] samplers = samplersList.split(SEPARATOR);
+            samplersToFilter = new HashSet<>();
+            Collections.addAll(samplersToFilter, samplers);
+        }
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
         this.timerHandle = scheduler.scheduleAtFixedRate(this, ONE_SECOND, ONE_SECOND, TimeUnit.SECONDS);
@@ -297,6 +317,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         arguments.addArgument("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
         arguments.addArgument("summaryOnly", "true");
         arguments.addArgument("samplersList", "");
+        arguments.addArgument("useRegexpForSamplersList", "false");
         arguments.addArgument("percentiles", DEFAULT_PERCENTILES);
         return arguments;
     }
