@@ -66,7 +66,7 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
     
     /**
      * Overriden to use {@link JMeterClientConnectionOperator} and fix SNI issue 
-     * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=57935
+     * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=57935"
      * @see org.apache.http.impl.conn.PoolingClientConnectionManager#createConnectionOperator(org.apache.http.conn.scheme.SchemeRegistry)
      */
     @Override

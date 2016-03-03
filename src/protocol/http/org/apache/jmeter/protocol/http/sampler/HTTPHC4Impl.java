@@ -778,7 +778,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Setup LazySchemeSocketFactory
-     * @see https://bz.apache.org/bugzilla/show_bug.cgi?id=58099
+     * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=58099"
      */
     private static SchemeRegistry createSchemeRegistry() {
         final SchemeRegistry registry = new SchemeRegistry();
