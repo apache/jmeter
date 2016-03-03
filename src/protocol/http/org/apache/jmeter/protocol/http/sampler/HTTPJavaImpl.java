@@ -519,7 +519,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
             res.setResponseData(responseData);
 
-            @SuppressWarnings("null") // Cannot be null here
             int errorLevel = conn.getResponseCode();
             String respMsg = conn.getResponseMessage();
             String hdr=conn.getHeaderField(0);
