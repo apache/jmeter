@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * <code>SampleConsumer</code>s.<br>
  * If there is several other source files with the same root name then those
  * files are produced on their corresponding channels.<br>
- * 
+ *
  * The root name of the files is determined by the source file name and is made
  * of its name without the file extension :<br>
  * <b>Example:</b> If <code>results.csv</code> is the source file name then
@@ -46,19 +46,20 @@ import org.slf4j.LoggerFactory;
  * <br>
  * The <code>CsvFileSampleSource</code> looks for all the files in the same
  * directory of the main source file that have the same root file name<br>
- * <b>Example</b> : if the directory contains results.csv, results-1.csv,
- * results-2.csv etc. then all these files will be read and produced on their
- * corresponding channels.<br>
+ * <b>Example</b> : if the directory contains <code>results.csv</code>,
+ * <code>results-1.csv</code>, <code>results-2.csv</code>, etc. then all
+ * these files will be read and produced on their corresponding channels.<br>
  * The channel on which an input file will be produce is determined by its
  * suffix<br>
- * <li>If the input file is named results-1.csv then it will be produced on the
- * channel 1.</li><br>
- * <li>If the input file is named results-2.csv then it will be produced on the
- * channel 2.</li><br>
- * <li>If the input file is named results.csv then it will be produced on the
- * channel 0.</li><br>
- * <br>
- * 
+ * <ul>
+ * <li>If the input file is named <code>results-1.csv</code> then it will
+ * be produced on the channel 1.</li>
+ * <li>If the input file is named <code>results-2.csv</code> then it will
+ * be produced on the channel 2.</li>
+ * <li>If the input file is named <code>results.csv</code> then it will
+ * be produced on the channel 0.</li>
+ * </ul>
+ *
  * @since 3.0
  */
 public class CsvFileSampleSource extends AbstractSampleSource {

@@ -37,28 +37,28 @@ import org.apache.jmeter.report.processor.ValueResultData;
  * from samples. It uses a projection to define the key (x-axis coordinate) and
  * an aggregator to define the value (y-axis coordinate).
  * </p>
- * 
+ *
+ * <b>About the seriesData :</b>
  * <p>
- * <b>About the seriesData :</b><br>
  * Series are defined by the seriesSelector, so they can be static or dynamic
  * (sample linked) depending on the implementation of the selector.
  * </p>
- * 
+ *
+ * <b>About the groupData :</b>
  * <p>
- * <b>About the groupData :</b><br>
  * The grapher build an aggregator for each seriesData/key pair using an
  * external factory. All groupData from a series do the same aggregate
  * calculation.
+ * </p>
+ *
+ * <b>About the keys (x-axis coordinates) :</b>
  * <p>
- * 
- * <p>
- * <b>About the keys (x-axis coordinates) :</b><br>
  * Keys are defined by the keysSelector for each seriesData, so the keys can be
  * different depending on the seriesData
+ * </p>
+ *
+ * <b>About the values (y-axis coordinates) :</b>
  * <p>
- * 
- * <p>
- * <b>About the values (y-axis coordinates) :</b><br>
  * Values are defined by the result aggregate produced by each aggregator.
  * During consumption, values to add to the groupData are defined by the
  * valueSelector.

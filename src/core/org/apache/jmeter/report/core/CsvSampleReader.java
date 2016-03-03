@@ -34,7 +34,7 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
- * Reader class for reading CSV files.<reader>
+ * Reader class for reading CSV files.
  * <p>
  * Handles {@link SampleMetadata} reading and sample extraction.
  * </p>

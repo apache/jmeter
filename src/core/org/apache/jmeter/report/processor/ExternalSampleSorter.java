@@ -42,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * R-way external sample sorter.<br>
+ * R-way external sample sorter.
  * <p>
  * This SampleConsumer should be used to sort samples base on a
  * {@link SampleComparator}
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Samples are sorted with the external sort algorithm. Thus, samples are not
  * all stored in memory to be sorted. Instead, they are sorted by chunk in
- * memory and then written to the disk before being merged at the end.<br>
+ * memory and then written to the disk before being merged at the end.
  * </p>
  * <p>
  * This sorter makes it possible to sort any number of samples with a fixed
@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * <p>
  * Meanwhile, it is equally important to set a {@link SampleComparator} to
- * define sample ordering </>
+ * define sample ordering </p>
  * 
  * @since 3.0
  */

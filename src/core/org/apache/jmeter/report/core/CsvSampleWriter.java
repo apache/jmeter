@@ -50,7 +50,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     private long sampleCount;
 
     /**
-     * Constructor for a CsvSampleWriter.<br/>
+     * Constructor for a CsvSampleWriter.<br>
      * The newly created instance has to be supplied with a Writer to work
      * properly.
      * 
