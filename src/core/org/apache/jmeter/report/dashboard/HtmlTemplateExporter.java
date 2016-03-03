@@ -477,15 +477,4 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     }
 
-    /**
-     * @return {@link File} the folder where to output HTML report
-     */
-    private File getReportOutputFolder() {
-        String globallyDefinedOutputDir = JMeterUtils.getProperty(JMeter.JMETER_REPORT_OUTPUT_DIR_PROPERTY);
-        if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
-            return new File(globallyDefinedOutputDir);
-        } else {
-            return new File(JMeterUtils.getJMeterBinDir(), OUTPUT_DIR_NAME_DEFAULT);
-        }
-    }
 }
