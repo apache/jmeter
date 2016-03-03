@@ -103,7 +103,9 @@ Summary
     <li>Since version 3.0, HTTP(S) Test Script recorder uses default port 8888 as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
     <li>Since version 3.0, the parser for embedded ressources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped as long as its dependencies.</li>
     <li>Since version 3.0, the support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>
-    <li>Since version 3.0, default property's value <code>http.java.sampler.retries</code> has been switched to 0 to avoid any retry by default to align it on HttpClient4 default value and behaviour. See <bugzilla>59103</bugzilla></li>     
+    <li>Since version 3.0, default property's value <code>http.java.sampler.retries</code> has been switched to 0 (no retry by default) to align it on HttpClient4's behaviour. 
+    Note also that its meaning has changed, before 3.0, <code>http.java.sampler.retries=1</code> meant No Retry, since 3.0 it is more litteral, <code>http.java.sampler.retries=1</code> means 1 retry.
+    See <bugzilla>59103</bugzilla></li>     
 </ul>
 
 <!-- =================== Improvements =================== -->
