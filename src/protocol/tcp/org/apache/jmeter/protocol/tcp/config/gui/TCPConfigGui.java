@@ -53,8 +53,6 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JCheckBox reUseConnection;
 
-    // NOTUSED yet private JTextField filename;
-
     private TristateCheckBox setNoDelay;
 
     private TristateCheckBox closeConnection;
@@ -90,15 +88,12 @@ public class TCPConfigGui extends AbstractConfigGui {
         // Default to original behaviour, i.e. re-use connection
         reUseConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.RE_USE_CONNECTION, TCPSampler.RE_USE_CONNECTION_DEFAULT));
         serverPanel.setPort(element.getPropertyAsString(TCPSampler.PORT));
-        // filename.setText(element.getPropertyAsString(TCPSampler.FILENAME));
         serverPanel.setResponseTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT));
         serverPanel.setConnectTimeout(element.getPropertyAsString(TCPSampler.TIMEOUT_CONNECT));
         setNoDelay.setTristateFromProperty(element, TCPSampler.NODELAY);
-//        setNoDelay.setSelected(element.getPropertyAsBoolean(TCPSampler.NODELAY));
         requestData.setInitialText(element.getPropertyAsString(TCPSampler.REQUEST));
         requestData.setCaretPosition(0);
         closeConnection.setTristateFromProperty(element, TCPSampler.CLOSE_CONNECTION);
-//        closeConnection.setSelected(element.getPropertyAsBoolean(TCPSampler.CLOSE_CONNECTION, TCPSampler.CLOSE_CONNECTION_DEFAULT));
         soLinger.setText(element.getPropertyAsString(TCPSampler.SO_LINGER));
         eolByte.setText(element.getPropertyAsString(TCPSampler.EOL_BYTE));
     }
@@ -123,14 +118,11 @@ public class TCPConfigGui extends AbstractConfigGui {
         element.setProperty(TCPSampler.SERVER, serverPanel.getServer());
         element.setProperty(TCPSampler.RE_USE_CONNECTION, reUseConnection.isSelected());
         element.setProperty(TCPSampler.PORT, serverPanel.getPort());
-        // element.setProperty(TCPSampler.FILENAME, filename.getText());
         setNoDelay.setPropertyFromTristate(element, TCPSampler.NODELAY);
-//        element.setProperty(TCPSampler.NODELAY, setNoDelay.isSelected());
         element.setProperty(TCPSampler.TIMEOUT, serverPanel.getResponseTimeout());
         element.setProperty(TCPSampler.TIMEOUT_CONNECT, serverPanel.getConnectTimeout(),"");
         element.setProperty(TCPSampler.REQUEST, requestData.getText());
         closeConnection.setPropertyFromTristate(element, TCPSampler.CLOSE_CONNECTION); // Don't use default for saving tristates
-//        element.setProperty(TCPSampler.CLOSE_CONNECTION, closeConnection.isSelected(), TCPSampler.CLOSE_CONNECTION_DEFAULT);
         element.setProperty(TCPSampler.SO_LINGER, soLinger.getText(), "");
         element.setProperty(TCPSampler.EOL_BYTE, eolByte.getText(), "");
     }
@@ -239,21 +231,6 @@ public class TCPConfigGui extends AbstractConfigGui {
         return reqDataPanel;
     }
 
-    // private JPanel createFilenamePanel()//Not used yet
-    // {
-    //
-    // JLabel label = new JLabel(JMeterUtils.getResString("file_to_retrieve")); // $NON-NLS-1$
-    //
-    // filename = new JTextField(10);
-    // filename.setName(FILENAME);
-    // label.setLabelFor(filename);
-    //
-    // JPanel filenamePanel = new JPanel(new BorderLayout(5, 0));
-    // filenamePanel.add(label, BorderLayout.WEST);
-    // filenamePanel.add(filename, BorderLayout.CENTER);
-    // return filenamePanel;
-    // }
-
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));
 
@@ -279,7 +256,6 @@ public class TCPConfigGui extends AbstractConfigGui {
         mainPanel.add(optionsPanel);
         mainPanel.add(createRequestPanel());
 
-        // mainPanel.add(createFilenamePanel());
         add(mainPanel, BorderLayout.CENTER);
     }
 }

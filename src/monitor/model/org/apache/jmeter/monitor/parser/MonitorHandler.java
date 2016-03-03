@@ -35,8 +35,7 @@ import org.apache.jmeter.monitor.model.Workers;
 import org.apache.jmeter.monitor.model.WorkersImpl;
 
 public class MonitorHandler extends DefaultHandler {
-    // private boolean startDoc = false;
-    // private boolean endDoc = false;
+  
     private final ObjectFactory factory;
 
     private Stack<Object> stacktree;
@@ -57,8 +56,6 @@ public class MonitorHandler extends DefaultHandler {
 
     private Workers workers;
 
-    // private List workerslist;
-
     /**
      * @param factory {@link ObjectFactory} to use
      */
@@ -69,7 +66,6 @@ public class MonitorHandler extends DefaultHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        // this.startDoc = true;
         // Reset all work variables so reusing the instance starts afresh.
         this.stacktree = new Stack<>();
         this.status = null;
@@ -85,8 +81,6 @@ public class MonitorHandler extends DefaultHandler {
     /** {@inheritDoc} */
     @Override
     public void endDocument() throws SAXException {
-        // this.startDoc = false;
-        // this.endDoc = true;
     }
 
     /**

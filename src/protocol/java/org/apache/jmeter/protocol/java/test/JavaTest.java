@@ -101,8 +101,6 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
     /** The label to store in the sample result. */
     private String label;
 
-    /** The default value of the Label parameter. */
-    // private static final String LABEL_DEFAULT = "JavaTest";
     /** The name used to store the Label parameter. */
     private static final String LABEL_NAME = "Label";
 
