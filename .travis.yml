@@ -1,5 +1,5 @@
 language: java
-install: ant download_jars install
+install: ant clean download_checkstyle download_jars install
 script: ant -Djava.awt.headless=true checkstyle test
 jdk:
   - oraclejdk7
