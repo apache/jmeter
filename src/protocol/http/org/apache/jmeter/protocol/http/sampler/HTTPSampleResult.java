@@ -22,7 +22,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
@@ -34,6 +37,12 @@ import org.apache.jmeter.samplers.SampleResult;
 public class HTTPSampleResult extends SampleResult {
 
     private static final long serialVersionUID = 240L;
+
+    /** Set of all HTTP methods, that have no body */
+    private static final Set<String> METHODS_WITHOUT_BODY = new HashSet<>(
+            Arrays.asList(HTTPConstants.GET, HTTPConstants.HEAD,
+                    HTTPConstants.OPTIONS, HTTPConstants.DELETE,
+                    HTTPConstants.TRACE));
 
     private String cookies = ""; // never null
 
@@ -138,10 +147,7 @@ public class HTTPSampleResult extends SampleResult {
             sb.append(u.toString());
             sb.append("\n");
             // Include request body if it is a post or put or patch
-            if (HTTPConstants.POST.equals(method) || HTTPConstants.PUT.equals(method) 
-                    || HTTPConstants.PATCH.equals(method)
-                    || HttpWebdav.isWebdavMethod(method)
-                    || HTTPConstants.DELETE.equals(method)) {
+            if (!METHODS_WITHOUT_BODY.contains(method)) {
                 sb.append("\n"+method+" data:\n");
                 sb.append(queryString);
                 sb.append("\n");
