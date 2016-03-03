@@ -239,6 +239,7 @@ Summary
 <li><bug>59094</bug> - Drop support of old JMX file format</li>
 <li><bug>59082</bug>Remove the "TestCompiler.useStaticSet" parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59093</bug>Option parsing error message can be 'lost'</li>
+<li><bug>58715</bug>Feature request: Bundle groovy-all with JMeter</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
