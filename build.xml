@@ -527,10 +527,7 @@
     <echo level="info">implementation.version = ${implementation.version}</echo>
   </target>
 
-  <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
-  <property name="docversion" value="${jmeter.version}"/>
-
-    <!-- Get version from SVN status -->
+  <!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
     <fail message="Could not get SVN revision" unless="svn.revision"/>
     <property name="jmeter.version" value="r${svn.revision}"/>
@@ -2209,6 +2206,10 @@ run JMeter unless all the JMeter jars are added.
       <!-- Used to ensure end-year is up to date -->
       <format property="THISYEAR" pattern="yyyy"/>
     </tstamp>
+
+    <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
+    <property name="docversion" value="${jmeter.version}"/>
+
     <mkdir dir="${dest.docs.api}"/>
     <delete quiet="true">
         <fileset dir="${dest.docs.api}" includes="**/*.html"/>
