@@ -156,14 +156,14 @@ public class Sample {
      * </p>
      * <p>
      * Start time depends on sampleresult.timestamp.start property :
+     * </p>
      * <ul>
      * <li>If the property is true, this method returns the time stamp stored in
      * the sample.</li>
      * <li>If the property is false, this method returns the time stamp stored
      * in the sample minus the elapsed time.</li>
      * </ul>
-     * </p>
-     * 
+     *
      * @return the start time
      */
     public long getStartTime() {
@@ -174,16 +174,15 @@ public class Sample {
      * <p>
      * Gets the end time of the sample.
      * </p>
-     * 
      * <p>
      * End time depends on jmeter.timestamp.start property :
+     * </p>
      * <ul>
      * <li>If the property is true, this method returns the time stamp recorded
      * in the sample plus the elapsed time.</li>
      * <li>If the property is false, this method returns the time stamp
      * recorded.</li>
      * </ul>
-     * </p>
      * 
      * @return the end time
      */

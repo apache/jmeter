@@ -21,31 +21,28 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleMetadata;
 
 /**
- * Defines a sample producer<br>
+ * Defines a sample producer
  * <p>
  * A sample producer is able to produce sample on different channels.
  * </p>
- * <br>
  * <p>
  * Typically, a {@link SampleProducer} can be connected to
  * {@link SampleConsumer} where it will produced sample that will be consumed by
  * the sample consumer.
  * </p>
- * <br>
  * <p>
  * A sample producer can produce samples of different metadata for reach
  * channel/
  * </p>
- * <br>
  * <p>
- * The following production sequence must be observed:<br>
- * <li>Call <code>setProducedMetadata()</code> for each produced channel</li><br>
- * <li>Call <code>startProducing()</code></li><br>
+ * The following production sequence must be observed:
+ * </p><ul>
+ * <li>Call <code>setProducedMetadata()</code> for each produced channel</li>
+ * <li>Call <code>startProducing()</code></li>
  * <li>Call <code>produce()</code> for each sample to produce for every channel</li>
- * <li>Call <code>stopProducing()</code></li><br>
- * </p>
- * <br>
- * 
+ * <li>Call <code>stopProducing()</code></li>
+ * </ul>
+ *
  * @since 3.0
  */
 public interface SampleProducer extends SampleProcessor {

@@ -35,21 +35,21 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * </p>
  * <p>
  * Sample metadata must be provided to the consumer before
- * <code>startConsuming()</code> is called.<br>
+ * <code>startConsuming()</code> is called.
  * </p>
- * <br>
  * <p>
- * The following sequence must be observed when consuming samples :<br>
- * <li>Call <code>setConsumedMetadata()</code> for each channel that wil consume
- * samples</li><br>
- * <li>Call <code>startConsuming()</code> before any call to
- * <code>consume()</code></li><br>
- * <li>Call <code>consume()</code> for each sample to be consumed by the
- * consumer, specify the channel on which to consume</li><br>
- * <li>Call <code>stopConsuming()</code> after evry sample has been consumed</li>
+ * The following sequence must be observed when consuming samples :
  * </p>
- * <br>
- * 
+ * <ul>
+ * <li>Call <code>setConsumedMetadata()</code> for each channel that wil consume
+ * samples</li>
+ * <li>Call <code>startConsuming()</code> before any call to
+ * <code>consume()</code></li>
+ * <li>Call <code>consume()</code> for each sample to be consumed by the
+ * consumer, specify the channel on which to consume</li>
+ * <li>Call <code>stopConsuming()</code> after evry sample has been consumed</li>
+ * </ul>
+ *
  * @since 3.0
  */
 public interface SampleConsumer extends SampleProcessor {
