@@ -212,17 +212,17 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void handleSampleResults(List<SampleResult> sampleResults,
             BackendListenerContext context) {
-    	boolean samplersToFilterMatch;
+        boolean samplersToFilterMatch;
         synchronized (LOCK) {
             for (SampleResult sampleResult : sampleResults) {
                 getUserMetrics().add(sampleResult);
                 
                 if(!summaryOnly) {
                     if (useRegexpForSamplersList) {
-                    	Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
-                    	samplersToFilterMatch = matcher.matches();
+                        Matcher matcher = pattern.matcher(sampleResult.getSampleLabel());
+                        samplersToFilterMatch = matcher.matches();
                     } else {
-                    	samplersToFilterMatch = samplersToFilter.contains(sampleResult.getSampleLabel()); 
+                        samplersToFilterMatch = samplersToFilter.contains(sampleResult.getSampleLabel()); 
                     }
                     if (samplersToFilterMatch) {
                         SamplerMetric samplerMetric = getSamplerMetric(sampleResult.getSampleLabel());
