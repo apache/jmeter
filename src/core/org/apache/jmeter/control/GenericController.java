@@ -56,7 +56,7 @@ public class GenericController extends AbstractTestElement implements Controller
     private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
 
     // Only create the map if it is required
-    private transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<TestElement, Object>();
+    private transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
 
     private static final Object DUMMY = new Object();
 
@@ -420,7 +420,7 @@ public class GenericController extends AbstractTestElement implements Controller
     
     protected Object readResolve(){
         iterationListeners = new LinkedList<>();
-        children = new ConcurrentHashMap<TestElement, Object>();
+        children = new ConcurrentHashMap<>();
         subControllersAndSamplers = new ArrayList<>();
 
         return this;
