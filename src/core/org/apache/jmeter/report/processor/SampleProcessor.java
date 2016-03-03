@@ -18,13 +18,14 @@
 package org.apache.jmeter.report.processor;
 
 /**
- * Defines a sample processor.<br>
- * <br>
+ * Defines a sample processor.
+ * <p>
  * Basically a sample processor is meant to process samples. There is currently
- * 2 kinds of sample processors :<br>
+ * 2 kinds of sample processors :</p>
+ * <ul>
  * <li>SampleConsumer : sample consumers are sample processors meant to consume
  * samples</li> <li>SampleProducer : sample producers are sample processors
- * meant to produce samples</li> <br>
+ * meant to produce samples</li> </ul>
  * 
  * @since 3.0
  */

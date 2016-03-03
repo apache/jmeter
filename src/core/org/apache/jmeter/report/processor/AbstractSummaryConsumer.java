@@ -153,7 +153,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
     }
 
     /**
-     * Gets the identifier key from sample.<br />
+     * Gets the identifier key from sample.<br>
      * This key is use identify the SummaryInfo linked with the sample
      *
      * @param sample
@@ -163,7 +163,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
     protected abstract String getKeyFromSample(Sample sample);
 
     /**
-     * Creates a result item for information identified by the specified key.<br/>
+     * Creates a result item for information identified by the specified key.
      *
      * @param key
      *            the key

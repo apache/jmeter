@@ -95,7 +95,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
         /*
          * Get round problems parsing <META http-equiv='content-type'
          * content='text/html; charset=utf-8'> See
-         * http://bz.apache.org/bugzilla/show_bug.cgi?id=23315
+         * <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=23315">Bug 23315</a>
          *
          * Is this due to a bug in Java?
          */

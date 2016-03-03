@@ -25,14 +25,15 @@ package org.apache.jmeter.report.core;
 public interface SampleComparator {
 
     /**
-     * Compares to sample<br>
+     * Compares to sample
      * <p>
      * Must return an long integer that define the relational order of the 2
-     * compared samples :<br>
+     * compared samples :</p>
+     * <ul>
      * <li>Negative long integer : s1 is lower than s2</li>
      * <li>Zero long integer : s1 is strictly equal to s2</li>
      * <li>Positive long integer : s1 is greater than s2</li>
-     * </p>
+     * </ul>
      * 
      * @param s1
      *            The first sample to be compared
@@ -51,7 +52,6 @@ public interface SampleComparator {
      * service.
      * </p>
      * <p>
-     * <br>
      * Not that this function is the place to get sample column indexes for
      * better performance
      * </p>
