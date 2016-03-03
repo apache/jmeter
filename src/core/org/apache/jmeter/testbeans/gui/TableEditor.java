@@ -60,7 +60,7 @@ import org.apache.log.Logger;
  * </ul>
  */
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     /** 
      * attribute name for class name of a table row;
@@ -294,7 +294,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                 model.addRow(clazz.newInstance());
             }catch(Exception err)
             {
-                log.error("The class type given to TableEditor was not instantiable. ",err);
+                LOG.error("The class type given to TableEditor was not instantiable. ",err);
             }
         }
     }
