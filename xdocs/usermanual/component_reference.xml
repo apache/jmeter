@@ -232,7 +232,10 @@ https.default.protocol=SSLv3
           <code>JAVA</code> implementation). With <code>HttpClient4</code>, the following methods related to WebDav are
           also allowed: <code>COPY</code>, <code>LOCK</code>, <code>MKCOL</code>, <code>MOVE</code>,
           <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>, <code>MKCALENDAR</code>,
-          <code>SEARCH</code>.</property>
+          <code>SEARCH</code>.
+          <p>More methods can be pre-defined for the HttpClient4 by using the JMeter property
+            <code>httpsampler.user_defined_methods</code>.</p>
+        </property>
         <property name="Content Encoding" required="No">
         Content encoding to be used (for <code>POST</code>, <code>PUT</code>, <code>PATCH</code> and <code>FILE</code>).
         This is the character encoding to be used, and is not related to the Content-Encoding HTTP header.
