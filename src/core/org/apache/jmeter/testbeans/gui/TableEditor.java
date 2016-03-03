@@ -80,11 +80,13 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private ObjectTableModel model;
     private Class<?> clazz;
     private PropertyDescriptor descriptor;
-    private final JButton addButton,removeButton,clearButton;
+    private final JButton addButton, clipButton, removeButton, clearButton;
 
     public TableEditor() {
         addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
         addButton.addActionListener(new AddListener());
+        clipButton = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
+        clipButton.addActionListener(new ClipListener());
         removeButton = new JButton(JMeterUtils.getResString("remove")); // $NON-NLS-1$
         removeButton.addActionListener(new RemoveListener());
         clearButton = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
@@ -114,6 +116,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         p.add(scroller,BorderLayout.CENTER);
         JPanel south = new JPanel();
         south.add(addButton);
+        south.add(clipButton);
         south.add(removeButton);
         south.add(clearButton);
         p.add(south,BorderLayout.SOUTH);
@@ -291,6 +294,31 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
             }catch(Exception err)
             {
                 log.error("The class type given to TableEditor was not instantiable. ",err);
+            }
+        }
+    }
+    
+    private class ClipListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                String clipboardContent = GuiUtils.getPastedText();
+                if(clipboardContent == null) {
+                    return;
+                }
+                
+                String[] clipboardLines = clipboardContent.split("\n"); // $NON-NLS-1$
+                for (String clipboardLine : clipboardLines) {
+                    String[] columns = clipboardLine.split("\t"); // $NON-NLS-1$
+
+                    model.addRow(clazz.newInstance());
+                    
+                    for (int i=0; i < columns.length; i++) {
+                        model.setValueAt(columns[i], model.getRowCount() - 1, i);
+                    }
+                }
+            } catch (Exception err) {
+                LOG.error("The class type given to TableEditor was not instantiable. ", err);
             }
         }
     }
