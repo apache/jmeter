@@ -283,7 +283,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     fileInfos.add(new FileInfo(tmpFile, getConsumedMetadata(i)));
                 } catch (IOException ex) {
                     String message = String.format(
-                            "Cannot create temporary file for channel #%d", i);
+                            "Cannot create temporary file for channel #%d", Integer.valueOf(i));
                     log.error(message, ex);
                     throw new SampleException(message, ex);
                 }

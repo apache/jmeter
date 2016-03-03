@@ -572,6 +572,7 @@ public final class JOrphanUtils {
      * @param elapsedSec long elapsed time in seconds
      * @return String formatted with format HH:mm:ss
      */
+    @SuppressWarnings("boxing")
     public static String formatDuration(long elapsedSec) {
         return String.format("%02d:%02d:%02d",
                 elapsedSec / 3600, (elapsedSec % 3600) / 60, elapsedSec % 60);
