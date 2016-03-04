@@ -151,6 +151,8 @@ public class ProxyControl extends GenericController {
     private static final String USE_KEEPALIVE = "ProxyControlGui.use_keepalive"; // $NON-NLS-1$
 
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
+    
+    private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
 
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
@@ -358,6 +360,10 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(SAMPLER_DOWNLOAD_IMAGES, b));
     }
 
+    public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
+    	setProperty(PREFIX_HTTP_SAMPLER_NAME, prefixHTTPSampleName);
+    }
+
     public void setNotifyChildSamplerListenerOfFilteredSamplers(boolean b) {
         notifyChildSamplerListenersOfFilteredSamples = b;
         setProperty(new BooleanProperty(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, b));
@@ -438,6 +444,10 @@ public class ProxyControl extends GenericController {
 
     public boolean getSamplerDownloadImages() {
         return getPropertyAsBoolean(SAMPLER_DOWNLOAD_IMAGES, false);
+    }
+    
+    public String getPrefixHTTPSampleName() {
+    	return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
     }
 
     public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
@@ -569,7 +579,8 @@ public class ProxyControl extends GenericController {
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
                 sampler.setImageParser(samplerDownloadImages);
-
+                sampler.setName(getPrefixHTTPSampleName()+sampler.getName());
+                
                 Authorization authorization = createAuthorization(subConfigs, sampler);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
