@@ -932,6 +932,7 @@ public class ProxyControl extends GenericController {
                 if (template instanceof Timer) {
                     TestElement timer = (TestElement) template.clone();
                     try {
+                        timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
                         replacer.undoReverseReplace(timer);
                         model.addComponent(timer, node);
                     } catch (InvalidVariableException

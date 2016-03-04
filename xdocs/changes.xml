@@ -133,6 +133,7 @@ Summary
     <li><bug>59060</bug>HTTP Request GUI : Move File Upload to a new Tab to have more space for parameters and prevent incoherent configuration. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>59103</bug>HTTP Request Java Implementation: Change default "http.java.sampler.retries" to align it on HttpClient behaviour and make it meaningful</li>
     <li><bug>59083</bug>HTTP Request : Make Method field editable so that additional methods (Webdav) can be added easily</li>
+    <li><bug>59118</bug>Add comment in recorded think time by proxy recorder. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
