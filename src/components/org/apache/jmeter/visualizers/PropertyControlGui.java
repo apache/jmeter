@@ -62,11 +62,6 @@ public class PropertyControlGui extends AbstractConfigGui implements
 
     private static final String COLUMN_NAMES_1 = "value"; // $NON-NLS-1$
 
-    // TODO: add and delete not currently supported
-    private static final String ADD = "add"; // $NON-NLS-1$
-
-    private static final String DELETE = "delete"; // $NON-NLS-1$
-
     private static final String SYSTEM = "system"; // $NON-NLS-1$
 
     private static final String JMETER = "jmeter"; // $NON-NLS-1$
@@ -82,12 +77,6 @@ public class PropertyControlGui extends AbstractConfigGui implements
 
     /** The model for the arguments table. */
     protected transient ObjectTableModel tableModel;
-
-//    /** A button for adding new arguments to the table. */
-//    private JButton add;
-//
-//    /** A button for removing arguments from the table. */
-//    private JButton delete;
 
     public PropertyControlGui() {
         super();
@@ -107,17 +96,12 @@ public class PropertyControlGui extends AbstractConfigGui implements
     @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
-        if (ADD.equals(command)){
-            return;
-        }
-        if (DELETE.equals(command)){
-            return;
-        }
+        
         if (SYSTEM.equals(command)){
             setUpData();
             return;
         }
-        if (JMETER.equals(command)){
+        else if (JMETER.equals(command)){
             setUpData();
             return;
         }
@@ -130,6 +114,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         modifyTestElement(el);
         return el;
     }
+    
     @Override
     public void configure(TestElement element) {
         super.configure(element);
@@ -200,27 +185,6 @@ public class PropertyControlGui extends AbstractConfigGui implements
         return labelPanel;
     }
 
-//    /**
-//     * Create a panel containing the add and delete buttons.
-//     *
-//     * @return a GUI panel containing the buttons
-//     */
-//    private JPanel makeButtonPanel() {// Not currently used
-//        add = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
-//        add.setActionCommand(ADD);
-//        add.setEnabled(true);
-//
-//        delete = new JButton(JMeterUtils.getResString("delete")); // $NON-NLS-1$
-//        delete.setActionCommand(DELETE);
-//
-//        JPanel buttonPanel = new JPanel();
-//        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-//         add.addActionListener(this);
-//        delete.addActionListener(this);
-//        buttonPanel.add(add);
-//        buttonPanel.add(delete);
-//        return buttonPanel;
-//    }
 
     /**
      * Initialize the components and layout of this component.
@@ -240,6 +204,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         add(p, BorderLayout.CENTER);
         table.revalidate();
     }
+    
     private void initializeTableModel() {
         tableModel = new ObjectTableModel(new String[] { COLUMN_NAMES_0, COLUMN_NAMES_1 },
                 new Functor[] {
@@ -247,7 +212,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
                     new Functor(Map.Entry.class, "getValue") // $NON-NLS-1$
                 },
                 new Functor[] {
-                    null, //new Functor("setName"), // $NON-NLS-1$
+                    null, // $NON-NLS-1$
                     new Functor(Map.Entry.class,"setValue", new Class[] { Object.class }) // $NON-NLS-1$
                 },
                 new Class[] { String.class, String.class });

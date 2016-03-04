@@ -23,8 +23,6 @@ import javax.mail.event.TransportEvent;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger; // this comes out of logkit.jar and not
 
-// commons-logger
-
 /**
  * This class implements a listener for SMTP events and a monitor for all
  * threads sending mail. The main purpose is to synchronize the send action with

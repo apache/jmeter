@@ -320,14 +320,11 @@ public class SplineVisualizer extends AbstractVisualizer implements ImageVisuali
                 return;
             }
 
-            // boolean resized = true;
 
             if (width == lastWidth && height == lastHeight) {
                 // dimension of the SplineGraph is the same
-                // resized = false;
             } else {
                 // dimension changed
-                // resized = true;
                 lastWidth = width;
                 lastHeight = height;
             }
