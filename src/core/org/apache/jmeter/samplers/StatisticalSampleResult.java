@@ -68,18 +68,6 @@ public class StatisticalSampleResult extends SampleResult implements
         elapsed = 0;
     }
 
-    /**
-     * Create a statistical sample result from an ordinary sample result.
-     * 
-     * @param res the sample result 
-     * @param unused no longer used
-     * @deprecated no longer necessary; use {@link #StatisticalSampleResult(SampleResult)} instead
-     */
-    @Deprecated
-    public StatisticalSampleResult(SampleResult res, boolean unused) {
-        this(res);
-    }
-
     public void add(SampleResult res) {
         // Add Sample Counter
         setSampleCount(getSampleCount() + res.getSampleCount());
