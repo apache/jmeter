@@ -70,18 +70,6 @@ public class Calculator {
     }
 
     /**
-     * Add the value for a single sample.
-     * 
-     * @param newValue the value for the new sample
-     * 
-     * @deprecated Use {@link #addSample(SampleResult)} instead
-     */
-    @Deprecated
-    public void addValue(long newValue) {
-        addValue(newValue, 1);
-    }
-
-    /**
      * Add the value for (possibly multiple) samples.
      * Updates the count, sum, min, max, sumOfSqaures, mean and deviation.
      * 
