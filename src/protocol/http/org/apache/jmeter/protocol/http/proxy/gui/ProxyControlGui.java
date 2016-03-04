@@ -151,6 +151,11 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JCheckBox samplerDownloadImages;
 
     /**
+     * Add a prefix to HTTP sample name recorded
+     */
+    private JTextField prefixHTTPSampleName;
+
+    /**
      * Regular expression to include results based on content type
      */
     private JTextField contentTypeInclude;
@@ -209,6 +214,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ADD_TO_EXCLUDE_FROM_CLIPBOARD = "exclude_clipboard"; // $NON-NLS-1$
 
     private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
+
+    private static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
     //- action names
 
     // Resource names for column headers
@@ -263,6 +270,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             model.setSamplerFollowRedirects(samplerFollowRedirects.isSelected());
             model.setUseKeepAlive(useKeepAlive.isSelected());
             model.setSamplerDownloadImages(samplerDownloadImages.isSelected());
+            model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
             model.setNotifyChildSamplerListenerOfFilteredSamplers(notifyChildSamplerListenerOfFilteredSamplersCB.isSelected());
             model.setRegexMatch(regexMatch.isSelected());
             model.setContentTypeInclude(contentTypeInclude.getText());
@@ -323,6 +331,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerFollowRedirects.setSelected(model.getSamplerFollowRedirects());
         useKeepAlive.setSelected(model.getUseKeepalive());
         samplerDownloadImages.setSelected(model.getSamplerDownloadImages());
+        prefixHTTPSampleName.setText(model.getPrefixHTTPSampleName());
         notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(model.getNotifyChildSamplerListenerOfFilteredSamplers());
         regexMatch.setSelected(model.getRegexMatch());
         contentTypeInclude.setText(model.getContentTypeInclude());
@@ -586,6 +595,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             enableRestart();
         } else if (fieldName.equals(ENABLE_RESTART)){
             enableRestart();
+        } else if(fieldName.equals(PREFIX_HTTP_SAMPLER_NAME)) {
+            model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
         }
     }
 
@@ -739,11 +750,21 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerDownloadImages.addActionListener(this);
         samplerDownloadImages.setActionCommand(ENABLE_RESTART);
 
+        prefixHTTPSampleName = new JTextField(4);
+        prefixHTTPSampleName.addKeyListener(this);
+        prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
+        // TODO Not sure this is needed
+        prefixHTTPSampleName.setActionCommand(ENABLE_RESTART);
+        JLabel labelPrefix = new JLabel(JMeterUtils.getResString("proxy_prefix_http_sampler_name")); // $NON-NLS-1$
+        labelPrefix.setLabelFor(prefixHTTPSampleName);
+
         HorizontalPanel panel = new HorizontalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
         panel.add(label2);
         panel.add(samplerTypeName);
+        panel.add(labelPrefix);
+        panel.add(prefixHTTPSampleName);
         panel.add(samplerRedirectAutomatically);
         panel.add(samplerFollowRedirects);
         panel.add(useKeepAlive);
