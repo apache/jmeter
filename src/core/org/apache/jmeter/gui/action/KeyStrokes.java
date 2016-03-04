@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
 
-/*
+/**
  * Collect all the keystrokes together in one place.
  * This helps to ensure that there are no duplicates.
  */

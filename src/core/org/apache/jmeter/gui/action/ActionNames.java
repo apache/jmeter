@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.gui.action;
 
-/*
+/**
  * Collect all the action names together in one place.
  * This helps to ensure that there are no duplicates
  * 

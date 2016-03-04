@@ -69,7 +69,6 @@ public class ObjectProperty extends AbstractProperty {
      */
     public ObjectProperty() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
