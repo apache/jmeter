@@ -35,8 +35,6 @@ public abstract class AbstractProperty implements JMeterProperty {
 
     private transient boolean runningVersion = false;
 
-    // private static StringProperty defaultProperty = new StringProperty();
-
     public AbstractProperty(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
