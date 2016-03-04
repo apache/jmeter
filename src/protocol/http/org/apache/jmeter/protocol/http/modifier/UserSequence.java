@@ -31,8 +31,9 @@ import org.apache.log.Logger;
  * This module controls the Sequence in which user details are returned. This
  * module uses round robin allocation of users.
  *
- * @version $Revision$
+ * @deprecated No replacement as not used anymore in JMeter, will be dropped in next version after 3.0
  */
+@Deprecated
 public class UserSequence implements Serializable {
     private static final long serialVersionUID = 233L;
 
