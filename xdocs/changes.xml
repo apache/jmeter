@@ -308,6 +308,7 @@ Summary
     <li><bug>58583</bug>HTTP client fails to close connection if server misbehaves by not sending "connection: close", violating HTTP RFC 2616 / RFC 7230</li>
     <li><bug>58950</bug>NoHttpResponseException when Pause between samplers exceeds keepalive sent by server</li>
     <li><bug>59085</bug>Http file panel : data lost on browse cancellation. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>56141</bug>Application does not behave correctly when using HTTP Recorder. With the help of Dan (java.junkee at yahoo.com)</li>
 </ul>
 
 <h3>Other Samplers</h3>
