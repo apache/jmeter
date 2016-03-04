@@ -75,7 +75,7 @@ public class JMeterThread implements Runnable, Interruptible {
     private static final int RAMPUP_GRANULARITY =
             JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
 
-    private final Controller controller;
+    private final Controller threadGroupLoopController;
 
     private final HashTree testTree;
 
@@ -140,7 +140,7 @@ public class JMeterThread implements Runnable, Interruptible {
         threadVars = new JMeterVariables();
         testTree = test;
         compiler = new TestCompiler(testTree);
-        controller = (Controller) testTree.getArray()[0];
+        threadGroupLoopController = (Controller) testTree.getArray()[0];
         SearchByClass<TestIterationListener> threadListenerSearcher = new SearchByClass<>(TestIterationListener.class); // TL - IS
         test.traverse(threadListenerSearcher);
         testIterationStartListeners = threadListenerSearcher.getSearchResults();
@@ -235,7 +235,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
         try {
             iterationListener = initRun(threadContext);
-            Sampler sam = controller.next();
+            Sampler sam = threadGroupLoopController.next();
             while (running && sam != null) {
                 processSampler(sam, null, threadContext);
                 threadContext.cleanAfterSample();
@@ -261,12 +261,12 @@ public class JMeterThread implements Runnable, Interruptible {
                     sam = null;
                 }
                 
-                if (sam == null && controller.isDone()) {
+                if (sam == null && threadGroupLoopController.isDone()) {
                     running = false;
                     log.info("Thread is done: " + threadName);
                 }
                 else {
-                    sam = controller.next();
+                    sam = threadGroupLoopController.next();
                 }
             }
         }
@@ -367,7 +367,6 @@ public class JMeterThread implements Runnable, Interruptible {
      * @param threadContext
      * @return SampleResult if a transaction was processed
      */
-    
     private SampleResult processSampler(Sampler current, Sampler parent, JMeterContext threadContext) {
         SampleResult transactionResult = null;
         try {
@@ -432,7 +431,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     /*
      * Execute the sampler with its pre/post processors, timers, assertions
-     * Brodcast the result to the sample listeners
+     * Broadcast the result to the sample listeners
      */
     private void executeSamplePackage(Sampler current,
             TransactionSampler transactionSampler,
@@ -597,9 +596,9 @@ public class JMeterThread implements Runnable, Interruptible {
          */
         threadContext.setSamplingStarted(true);
         
-        controller.initialize();
+        threadGroupLoopController.initialize();
         IterationListener iterationListener = new IterationListener();
-        controller.addIterationListener(iterationListener);
+        threadGroupLoopController.addIterationListener(iterationListener);
 
         threadStarted();
         return iterationListener;
@@ -626,7 +625,7 @@ public class JMeterThread implements Runnable, Interruptible {
             gp.getMainFrame().updateCounts();
         }
         if (iterationListener != null) { // probably not possible, but check anyway
-            controller.removeIterationListener(iterationListener);
+            threadGroupLoopController.removeIterationListener(iterationListener);
         }
     }
 
@@ -806,10 +805,10 @@ public class JMeterThread implements Runnable, Interruptible {
         threadVars.incIteration();
         for (TestIterationListener listener : testIterationStartListeners) {
             if (listener instanceof TestElement) {
-                listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
+                listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
                 ((TestElement) listener).recoverRunningVersion();
             } else {
-                listener.testIterationStart(new LoopIterationEvent(controller, threadVars.getIteration()));
+                listener.testIterationStart(new LoopIterationEvent(threadGroupLoopController, threadVars.getIteration()));
             }
         }
     }
