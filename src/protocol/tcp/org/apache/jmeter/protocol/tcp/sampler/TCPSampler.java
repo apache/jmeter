@@ -98,12 +98,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     private static final String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
 
-    // If set, this is the regex that is used to extract the status from the
-    // response
-    // NOT implemented yet private static final String STATUS_REGEX =
-    // JMeterUtils.getPropDefault("tcp.status.regex","");
-
-    // Otherwise, the response is scanned for these strings
+    // the response is scanned for these strings
     private static final String STATUS_PREFIX = JMeterUtils.getPropDefault("tcp.status.prefix", ""); //$NON-NLS-1$
 
     private static final String STATUS_SUFFIX = JMeterUtils.getPropDefault("tcp.status.suffix", ""); //$NON-NLS-1$
