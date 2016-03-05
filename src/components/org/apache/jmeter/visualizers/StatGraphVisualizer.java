@@ -414,8 +414,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         myJTable = new JTable(model);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         // Fix centering of titles
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(COLUMNS_MSG_PARAMETERS));

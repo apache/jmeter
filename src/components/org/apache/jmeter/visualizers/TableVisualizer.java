@@ -238,8 +238,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Set up the table itself
         table = new JTable(model);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         // table.getTableHeader().setReorderingAllowed(false);

@@ -291,8 +291,8 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
         initializeTableModel();
         table = new JTable(tableModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

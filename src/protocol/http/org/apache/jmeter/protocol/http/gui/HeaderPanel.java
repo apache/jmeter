@@ -280,8 +280,8 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         // create the JTable that holds header per row
         headerTable = new JTable(tableModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            headerTable.setRowHeight((int) Math.round(headerTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            headerTable.setRowHeight((int) Math.round(headerTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         headerTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
