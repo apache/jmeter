@@ -861,6 +861,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JPanel createIncludePanel() {
         includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
         includeTable = new JTable(includeModel);
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            includeTable.setRowHeight((int) Math.round(includeTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         includeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
@@ -877,6 +881,10 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private JPanel createExcludePanel() {
         excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
         excludeTable = new JTable(excludeModel);
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            excludeTable.setRowHeight((int) Math.round(excludeTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         excludeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 

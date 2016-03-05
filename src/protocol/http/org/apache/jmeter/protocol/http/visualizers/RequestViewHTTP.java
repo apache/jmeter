@@ -65,6 +65,11 @@ public class RequestViewHTTP implements RequestView {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    // HiDPI mode
+    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
     
     private static final String CHARSET_DECODE = "ISO-8859-1"; //$NON-NLS-1$
@@ -370,6 +375,10 @@ public class RequestViewHTTP implements RequestView {
     private Component createRequestPane() {
         // Set up the 1st table Result with empty headers
         tableRequest = new JTable(requestModel);
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            tableRequest.setRowHeight((int) Math.round(tableRequest.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableRequest.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableRequest.addMouseListener(new TextBoxDoubleClick(tableRequest));
         
@@ -378,6 +387,10 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 2nd table 
         tableParams = new JTable(paramsModel);
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            tableParams.setRowHeight((int) Math.round(tableParams.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableParams.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableParams.addMouseListener(new TextBoxDoubleClick(tableParams));
         TableColumn column = tableParams.getColumnModel().getColumn(0);
@@ -387,6 +400,10 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 3rd table 
         tableHeaders = new JTable(headersModel);
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            tableHeaders.setRowHeight((int) Math.round(tableHeaders.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
         tableHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableHeaders.addMouseListener(new TextBoxDoubleClick(tableHeaders));
         setFirstColumnPreferredAndMaxWidth(tableHeaders);
