@@ -135,7 +135,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
         // Set default parameters as needed
         HttpParams params = DefaultHttpParams.getDefaultParams();
-
+        params.setIntParameter("http.protocol.max-redirects", HTTPSamplerBase.MAX_REDIRECTS); //$NON-NLS-1$
         // Process Commons HttpClient parameters file
         String file=JMeterUtils.getProperty("httpclient.parameters.file"); // $NON-NLS-1$
         if (file != null) {
