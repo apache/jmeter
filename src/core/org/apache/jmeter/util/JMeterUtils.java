@@ -1357,4 +1357,20 @@ public class JMeterUtils implements UnitTestManager {
             // NOOP
         }
     }
+    
+    /*
+     * HiDPI mode
+     */
+    public static boolean getHiDPIMode() {
+        return JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    }
+
+    /*
+     * HiDPI scale factor
+     */
+    public static double getHiDPIScaleFactor() {
+        return Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
+    }
+
 }

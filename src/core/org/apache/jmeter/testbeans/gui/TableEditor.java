@@ -61,11 +61,6 @@ import org.apache.log.Logger;
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // HiDPI mode
-    public static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    public static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
-
     /** 
      * attribute name for class name of a table row;
      * value must be java.lang.String, or a class which supports set and get/is methods for the property name.
@@ -221,8 +216,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         model.addTableModelListener(this);
         table = new JTable(model);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addFocusListener(this);

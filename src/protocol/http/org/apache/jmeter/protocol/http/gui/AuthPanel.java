@@ -270,8 +270,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         // create the JTable that holds auth per row
         authTable = new JTable(tableModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            authTable.setRowHeight((int) Math.round(authTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            authTable.setRowHeight((int) Math.round(authTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         authTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
