@@ -60,11 +60,6 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
     /** Logging */
     private static final Logger log = LoggingManager.getLoggerForClass();
     
-    // HiDPI mode
-    public static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    public static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
-
     /** Flag indicating whether or not this component is enabled. */
     private boolean enabled = true;
 

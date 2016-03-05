@@ -44,6 +44,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
@@ -60,11 +61,6 @@ import org.apache.jorphan.reflect.Functor;
 public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 240L;
-
-    // HiDPI mode
-    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
 
     /** The title label for this component. */
     @Deprecated
@@ -349,10 +345,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(table);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);

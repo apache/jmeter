@@ -40,6 +40,7 @@ import org.apache.jmeter.protocol.http.control.DNSCacheManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 
@@ -199,10 +200,8 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     public JPanel createDnsServersTablePanel() {
         // create the JTable that holds header per row
         dnsServersTable = new JTable(dnsServersTableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            dnsServersTable.setRowHeight((int) Math.round(dnsServersTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(dnsServersTable);
+        
         dnsServersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         dnsServersTable.setPreferredScrollableViewportSize(new Dimension(400, 100));
 

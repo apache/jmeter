@@ -44,6 +44,7 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -279,10 +280,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     public JPanel createHeaderTablePanel() {
         // create the JTable that holds header per row
         headerTable = new JTable(tableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            headerTable.setRowHeight((int) Math.round(headerTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(headerTable);
         headerTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

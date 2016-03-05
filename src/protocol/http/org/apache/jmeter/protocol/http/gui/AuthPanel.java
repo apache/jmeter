@@ -51,6 +51,7 @@ import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
 import org.apache.jorphan.logging.LoggingManager;
@@ -269,10 +270,8 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public JPanel createAuthTablePanel() {
         // create the JTable that holds auth per row
         authTable = new JTable(tableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            authTable.setRowHeight((int) Math.round(authTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(authTable);
+        
         authTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         authTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

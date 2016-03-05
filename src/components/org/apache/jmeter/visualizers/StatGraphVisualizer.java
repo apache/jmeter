@@ -76,6 +76,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
 import org.apache.jorphan.gui.NumberRenderer;
@@ -413,10 +414,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(myJTable);
+        
         // Fix centering of titles
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(COLUMNS_MSG_PARAMETERS));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));

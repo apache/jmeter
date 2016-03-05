@@ -46,6 +46,7 @@ import javax.swing.event.TableModelListener;
 import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
@@ -60,11 +61,6 @@ import org.apache.log.Logger;
  */
 public class TableEditor extends PropertyEditorSupport implements FocusListener,TestBeanPropertyEditor,TableModelListener, ClearGui {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    // HiDPI mode
-    public static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    public static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
 
     /** 
      * attribute name for class name of a table row;
@@ -220,10 +216,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         }
         model.addTableModelListener(this);
         table = new JTable(model);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(table);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addFocusListener(this);
     }

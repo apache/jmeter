@@ -44,6 +44,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
@@ -237,10 +238,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(table);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         // table.getTableHeader().setReorderingAllowed(false);
         RendererUtils.applyRenderers(table, RENDERERS);
