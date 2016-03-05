@@ -152,10 +152,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private JTree tree;
 
     /** An image which is displayed when a test is running. */
-    private final ImageIcon runningIcon = JMeterUtils.getImage("thread.enabled.gif");// $NON-NLS-1$
+    private final ImageIcon runningIcon = JMeterUtils.getImage("status/user-online-2.png");// $NON-NLS-1$
 
     /** An image which is displayed when a test is not currently running. */
-    private final ImageIcon stoppedIcon = JMeterUtils.getImage("thread.disabled.gif");// $NON-NLS-1$
+    private final ImageIcon stoppedIcon = JMeterUtils.getImage("status/user-offline-2.png");// $NON-NLS-1$
 
     /** An image which is displayed to indicate FATAL, ERROR or WARNING. */
     private final ImageIcon warningIcon = JMeterUtils.getImage("warning.png");// $NON-NLS-1$
@@ -212,8 +212,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         // TODO: Make the running indicator its own class instead of a JButton
         runningIndicator = new JButton(stoppedIcon);
+        runningIndicator.setFocusable(false);
+        runningIndicator.setBorderPainted(false);
         runningIndicator.setMargin(new Insets(0, 0, 0, 0));
-        runningIndicator.setBorder(BorderFactory.createEmptyBorder());
 
         testTimeDuration = new JLabel("00:00:00"); //$NON-NLS-1$
 
