@@ -36,6 +36,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -61,16 +62,18 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private static final long serialVersionUID = 240L;
 
+    private static final String iconSize = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+
     // Note: the resource string won't respond to locale-changes,
     // however this does not matter as it is only used when pasting to the clipboard
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-                                       "icon_success_sml.gif"),    //$NON-NLS-1$
+                                       "vrt/" + iconSize + "/security-high-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
             JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-                                       "icon_warning_sml.gif"),    //$NON-NLS-1$
+                                       "vrt/" + iconSize + "/security-low-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
             JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
 
     private static final String[] COLUMNS = new String[] {

@@ -115,9 +115,9 @@ public class JMeter implements JMeterPlugin {
             "jmeter.reportgenerator.outputdir"; //$NON-NLS-1$
 
     // Icons size in the JMeter tree
-    protected static final String TREE_ICON_SIZE = "jmeter.tree.icons.size"; //$NON-NLS-1$
+    public static final String TREE_ICON_SIZE = "jmeter.tree.icons.size"; //$NON-NLS-1$
 
-    protected static final String DEFAULT_TREE_ICON_SIZE = "19x19"; //$NON-NLS-1$
+    public static final String DEFAULT_TREE_ICON_SIZE = "19x19"; //$NON-NLS-1$
 
     protected static final String KEY_SIZE = "<SIZE>"; //$NON-NLS-1$
 
