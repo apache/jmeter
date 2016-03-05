@@ -370,7 +370,7 @@
     <include name="${lib.dir}/${commons-io.jar}"/>
     <include name="${lib.dir}/${commons-jexl.jar}"/>
     <include name="${lib.dir}/${commons-jexl2.jar}"/>
-  	<include name="${lib.dir}/${commons-jexl3.jar}"/>
+    <include name="${lib.dir}/${commons-jexl3.jar}"/>
     <include name="${lib.dir}/${commons-lang3.jar}"/>
     <include name="${lib.dir}/${commons-logging.jar}"/>
     <include name="${lib.dir}/${commons-math3.jar}"/>
@@ -379,7 +379,7 @@
     <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
-  	<include name="${lib.dir}/${groovy-all.jar}"/>
+    <include name="${lib.dir}/${groovy-all.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
@@ -443,7 +443,7 @@
     <pathelement location="${lib.dir}/${commons-io.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl2.jar}"/>
-  	<pathelement location="${lib.dir}/${commons-jexl3.jar}"/>
+    <pathelement location="${lib.dir}/${commons-jexl3.jar}"/>
     <pathelement location="${lib.dir}/${commons-lang3.jar}"/>
     <pathelement location="${lib.dir}/${commons-logging.jar}"/>
     <pathelement location="${lib.dir}/${commons-math3.jar}"/>
@@ -452,8 +452,8 @@
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
-  	<pathelement location="${lib.dir}/${groovy-all.jar}"/>
-  	<pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
+    <pathelement location="${lib.dir}/${groovy-all.jar}"/>
+    <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
     <pathelement location="${lib.dir}/${httpmime.jar}"/>
@@ -1420,19 +1420,19 @@ run JMeter unless all the JMeter jars are added.
         <fail message="jmeter.version (${jmeter.version}) must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
 
-	<!--
+    <!--
     <target
         name="nightly"
         depends="init-svnVersion,package,docs-printable,pack-nightly"
         description="Build JMeter for nightly dir (package docs-printable pack-nightly)"/>
     -->
-	<target
-	        name="nightly-setup"
-	        description="Disables some checks"
-		    depends="clean-docs,clean-docs-images,clean-apidocs,clean-dist">
-		<property name="disable-check-versions" value="true" />
-		<property name="docs.force" value="true" />
-	</target>
+   <target
+        name="nightly-setup"
+        description="Disables some checks"
+        depends="clean-docs,clean-docs-images,clean-apidocs,clean-dist">
+        <property name="disable-check-versions" value="true" />
+        <property name="docs.force" value="true" />
+    </target>
     <target
         name="nightly"
         depends="nightly-setup,svnCheck,clean,install,docs-printable,docs-api,docs-site,test,_distribution"
@@ -2859,7 +2859,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="commons-io"/>
         <process_jarfile jarname="commons-jexl"/>
         <process_jarfile jarname="commons-jexl2"/>
-    	<process_jarfile jarname="commons-jexl3"/>
+        <process_jarfile jarname="commons-jexl3"/>
         <process_jarfile jarname="commons-lang3"/>
         <process_jarfile jarname="commons-logging"/>
         <process_jarfile jarname="commons-math3"/>
@@ -3016,10 +3016,10 @@ run JMeter unless all the JMeter jars are added.
     <!-- Need to define config_loc for use by Eclipse -->
     <property name="config_loc" value="."/>
     <target name="checkstyle">
-    	<available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
+        <available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
         <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
 
-    	<antcall target="_process_checkstyle_jars"></antcall>
+        <antcall target="_process_checkstyle_jars"></antcall>
         <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
                  classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
         <checkstyle config="checkstyle.xml">
@@ -3029,7 +3029,7 @@ run JMeter unless all the JMeter jars are added.
         </checkstyle>
 
     </target>
-  
+
     <target name="sign_dist"
       description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
       <scriptdef name="gpg" language="beanshell">
