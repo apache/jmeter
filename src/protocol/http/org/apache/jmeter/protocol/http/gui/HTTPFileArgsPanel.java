@@ -344,10 +344,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(table);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);

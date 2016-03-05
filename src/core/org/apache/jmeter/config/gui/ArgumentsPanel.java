@@ -644,10 +644,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         if (this.background != null) {
             table.setBackground(this.background);
         }
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(table);
         return makeScrollPane(table);
     }
 

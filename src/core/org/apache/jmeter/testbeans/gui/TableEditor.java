@@ -215,10 +215,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         }
         model.addTableModelListener(this);
         table = new JTable(model);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(table);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addFocusListener(this);
     }

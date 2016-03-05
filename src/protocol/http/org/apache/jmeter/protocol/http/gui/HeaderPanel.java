@@ -279,10 +279,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     public JPanel createHeaderTablePanel() {
         // create the JTable that holds header per row
         headerTable = new JTable(tableModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            headerTable.setRowHeight((int) Math.round(headerTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(headerTable);
         headerTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

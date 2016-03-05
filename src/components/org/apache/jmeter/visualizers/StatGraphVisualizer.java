@@ -413,10 +413,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(COLUMNS_MSG_PARAMETERS));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));

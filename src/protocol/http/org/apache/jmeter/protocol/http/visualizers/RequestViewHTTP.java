@@ -370,10 +370,7 @@ public class RequestViewHTTP implements RequestView {
     private Component createRequestPane() {
         // Set up the 1st table Result with empty headers
         tableRequest = new JTable(requestModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableRequest.setRowHeight((int) Math.round(tableRequest.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableRequest);
         tableRequest.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableRequest.addMouseListener(new TextBoxDoubleClick(tableRequest));
         
@@ -382,10 +379,7 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 2nd table 
         tableParams = new JTable(paramsModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableParams.setRowHeight((int) Math.round(tableParams.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableParams);
         tableParams.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableParams.addMouseListener(new TextBoxDoubleClick(tableParams));
         TableColumn column = tableParams.getColumnModel().getColumn(0);
@@ -395,10 +389,7 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 3rd table 
         tableHeaders = new JTable(headersModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableHeaders.setRowHeight((int) Math.round(tableHeaders.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableHeaders);
         tableHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableHeaders.addMouseListener(new TextBoxDoubleClick(tableHeaders));
         setFirstColumnPreferredAndMaxWidth(tableHeaders);
