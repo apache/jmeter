@@ -56,6 +56,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.Clearable;
@@ -104,13 +105,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     protected static final String COMBO_CHANGE_COMMAND = "change_combo"; // $NON-NLS-1$
 
+    private static final String iconSize = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-                    "icon_success_sml.gif")); //$NON-NLS-1$
+                    "vrt/" + iconSize + "/security-high-2.png")); //$NON-NLS-1$ $NON-NLS-2$
 
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-                    "icon_warning_sml.gif")); //$NON-NLS-1$
+                    "vrt/" + iconSize + "/security-low-2.png")); //$NON-NLS-1$ $NON-NLS-2$
 
     // Maximum size that we will display
     // Default limited to 10 megabytes
