@@ -404,10 +404,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 1st table Result with empty headers
         tableResult = new JTable(resultModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableResult.setRowHeight((int) Math.round(tableResult.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableResult);
         tableResult.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResult.addMouseListener(new TextBoxDoubleClick(tableResult));
         setFirstColumnPreferredSize(tableResult);
@@ -415,10 +412,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 2nd table 
         tableResHeaders = new JTable(resHeadersModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableResHeaders.setRowHeight((int) Math.round(tableResHeaders.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableResHeaders);
         tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResHeaders.addMouseListener(new TextBoxDoubleClick(tableResHeaders));
         setFirstColumnPreferredSize(tableResHeaders);
@@ -428,10 +422,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 3rd table 
         tableResFields = new JTable(resFieldsModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            tableResFields.setRowHeight((int) Math.round(tableResFields.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(tableResFields);
         tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResFields.addMouseListener(new TextBoxDoubleClick(tableResFields));
         setFirstColumnPreferredSize(tableResFields);

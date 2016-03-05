@@ -206,10 +206,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         // paramTable.setCellSelectionEnabled(true);
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
         // 70));
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            paramTable.setRowHeight((int) Math.round(paramTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(paramTable);
 
         paramPanel = new JPanel(new BorderLayout());
         paramPanel.add(tableLabel, BorderLayout.NORTH);

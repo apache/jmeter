@@ -46,6 +46,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.IOUtils;
@@ -1370,7 +1371,15 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static double getHiDPIScaleFactor() {
         return Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
-
+    }
+    
+    /*
+     * HiDPI mode management
+     */
+    public static void applyHiDPI(JTable table) {
+        if (JMeterUtils.getHiDPIMode()) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
+        }
     }
 
 }
