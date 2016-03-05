@@ -94,7 +94,7 @@ public class JMeterClientConnectionOperator extends
     /**
      * Uses the underlying implementation to support Server Name Indication (SNI).
      * @author Michael Locher <cmbntr@gmail.com>
-     * @see https://issues.apache.org/jira/browse/HTTPCLIENT-1119
+     * @see <a href="https://issues.apache.org/jira/browse/HTTPCLIENT-1119">HTTPCLIENT-1119</a>
      */
     private static class HostNameSetter {
 

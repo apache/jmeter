@@ -161,7 +161,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * Special interceptor made to keep metrics when connection is released for some method like HEAD
      * Otherwise calling directly ((HttpConnection) localContext.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getMetrics();
      * would throw org.apache.http.impl.conn.ConnectionShutdownException
-     * See https://bz.apache.org/jira/browse/HTTPCLIENT-1081
+     * See <a href="https://bz.apache.org/jira/browse/HTTPCLIENT-1081">HTTPCLIENT-1081</a>
      */
     private static final HttpResponseInterceptor METRICS_SAVER = new HttpResponseInterceptor(){
         @Override
@@ -420,7 +420,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Store in JMeter Variables the UserToken so that the SSL context is reused
-     * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
+     * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=57804">Bug 57804</a>
      * @param localContext {@link HttpContext}
      */
     private void extractClientContextAfterSample(HttpContext localContext) {
@@ -439,7 +439,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /**
      * Configure the UserToken so that the SSL context is reused
-     * See https://bz.apache.org/bugzilla/show_bug.cgi?id=57804
+     * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=57804">Bug 57804</a>
      * @param localContext {@link HttpContext}
      */
     private void setupClientContextBeforeSample(HttpContext localContext) {
