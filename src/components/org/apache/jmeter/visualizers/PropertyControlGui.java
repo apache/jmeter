@@ -160,10 +160,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         table = new JTable(tableModel);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(table);
         return makeScrollPane(table);
     }
 

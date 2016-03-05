@@ -115,10 +115,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
         this.initializeTableModel();
         files = new JTable(tableModel);
-        // HiDPI mode management
-        if (JMeterUtils.getHiDPIMode()) {
-            files.setRowHeight((int) Math.round(files.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
-        }
+        JMeterUtils.applyHiDPI(files);
         files.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         files.revalidate();
 
