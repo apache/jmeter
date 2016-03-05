@@ -119,6 +119,8 @@ public class JMeter implements JMeterPlugin {
 
     protected static final String DEFAULT_TREE_ICON_SIZE = "19x19"; //$NON-NLS-1$
 
+    protected static final String KEY_SIZE = "<SIZE>"; //$NON-NLS-1$
+
     // If the -t flag is to "LAST", then the last loaded file (if any) is used
     private static final String USE_LAST_JMX = "LAST";
     // If the -j  or -l flag is set to LAST or LAST.log|LAST.jtl, then the last loaded file name is used to
@@ -1204,9 +1206,9 @@ public class JMeter implements JMeterPlugin {
             String key = (String) pe.nextElement();
             String[] icons = JOrphanUtils.split(p.getProperty(key), " ");//$NON-NLS-1$
             iconlist[i][0] = key;
-            iconlist[i][1] = icons[0].replace("<SIZE>", iconSize); //$NON-NLS-1$;
+            iconlist[i][1] = icons[0].replace(KEY_SIZE, iconSize);
             if (icons.length > 1) {
-                iconlist[i][2] = icons[1].replace("<SIZE>", iconSize); //$NON-NLS-1$;
+                iconlist[i][2] = icons[1].replace(KEY_SIZE, iconSize);
             }
             i++;
         }
