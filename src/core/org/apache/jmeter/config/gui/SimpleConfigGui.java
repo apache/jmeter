@@ -203,7 +203,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
                 new Class[] { String.class, String.class });
 
         table = new JTable(tableModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

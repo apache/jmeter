@@ -269,7 +269,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     public JPanel createAuthTablePanel() {
         // create the JTable that holds auth per row
         authTable = new JTable(tableModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             authTable.setRowHeight((int) Math.round(authTable.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

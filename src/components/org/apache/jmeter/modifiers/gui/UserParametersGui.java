@@ -206,7 +206,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         // paramTable.setCellSelectionEnabled(true);
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
         // 70));
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             paramTable.setRowHeight((int) Math.round(paramTable.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

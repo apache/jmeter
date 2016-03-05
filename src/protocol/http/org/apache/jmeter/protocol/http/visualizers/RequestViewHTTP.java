@@ -375,7 +375,7 @@ public class RequestViewHTTP implements RequestView {
     private Component createRequestPane() {
         // Set up the 1st table Result with empty headers
         tableRequest = new JTable(requestModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableRequest.setRowHeight((int) Math.round(tableRequest.getRowHeight() * HIDPI_SCALE_FACTOR));
         }
@@ -387,7 +387,7 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 2nd table 
         tableParams = new JTable(paramsModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableParams.setRowHeight((int) Math.round(tableParams.getRowHeight() * HIDPI_SCALE_FACTOR));
         }
@@ -400,7 +400,7 @@ public class RequestViewHTTP implements RequestView {
 
         // Set up the 3rd table 
         tableHeaders = new JTable(headersModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableHeaders.setRowHeight((int) Math.round(tableHeaders.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

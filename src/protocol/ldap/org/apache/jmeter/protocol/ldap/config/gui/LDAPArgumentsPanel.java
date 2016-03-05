@@ -290,7 +290,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

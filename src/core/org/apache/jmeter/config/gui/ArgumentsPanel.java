@@ -649,7 +649,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         if (this.background != null) {
             table.setBackground(this.background);
         }
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

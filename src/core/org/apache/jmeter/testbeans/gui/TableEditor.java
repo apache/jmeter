@@ -220,7 +220,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         }
         model.addTableModelListener(this);
         table = new JTable(model);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

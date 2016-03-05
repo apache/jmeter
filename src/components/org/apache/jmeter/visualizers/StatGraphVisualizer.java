@@ -413,7 +413,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

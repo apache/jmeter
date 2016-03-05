@@ -409,7 +409,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 1st table Result with empty headers
         tableResult = new JTable(resultModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableResult.setRowHeight((int) Math.round(tableResult.getRowHeight() * HIDPI_SCALE_FACTOR));
         }
@@ -420,7 +420,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 2nd table 
         tableResHeaders = new JTable(resHeadersModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableResHeaders.setRowHeight((int) Math.round(tableResHeaders.getRowHeight() * HIDPI_SCALE_FACTOR));
         }
@@ -433,7 +433,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
 
         // Set up the 3rd table 
         tableResFields = new JTable(resFieldsModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             tableResFields.setRowHeight((int) Math.round(tableResFields.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

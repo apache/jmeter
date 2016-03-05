@@ -234,7 +234,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

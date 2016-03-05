@@ -195,7 +195,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
     public JPanel createPropertiesPanel() {
         // create the JTable that holds JMSProperty per row
         jmsPropertiesTable = new JTable(tableModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             jmsPropertiesTable.setRowHeight((int) Math.round(jmsPropertiesTable.getRowHeight() * HIDPI_SCALE_FACTOR));
         }

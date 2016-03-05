@@ -120,7 +120,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
         this.initializeTableModel();
         files = new JTable(tableModel);
-        // HiDPI mode managment
+        // HiDPI mode management
         if (HIDPI_MODE) {
             files.setRowHeight((int) Math.round(files.getRowHeight() * HIDPI_SCALE_FACTOR));
         }
