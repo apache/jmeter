@@ -1334,7 +1334,7 @@ public class JMeterUtils implements UnitTestManager {
             }
         }
     }
-    
+
     /**
      * Help GC by triggering GC and finalization
      */
@@ -1342,7 +1342,7 @@ public class JMeterUtils implements UnitTestManager {
         System.gc();
         System.runFinalization();
     }
-    
+
     /**
      * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
      * the unzipped page size
@@ -1358,23 +1358,26 @@ public class JMeterUtils implements UnitTestManager {
             // NOOP
         }
     }
-    
-    /*
-     * HiDPI mode
+
+    /**
+     * Provide info, whether we run in HiDPI mode
+     * @return {@code true} if we run in HiDPI mode, {@code false} otherwise
      */
     public static boolean getHiDPIMode() {
         return JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
     }
 
-    /*
-     * HiDPI scale factor
+    /**
+     * Provide info about the HiDPI scale factor
+     * @return the factor by which we should scale elements for HiDPI mode
      */
     public static double getHiDPIScaleFactor() {
         return Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
     }
-    
-    /*
-     * HiDPI mode management
+
+    /**
+     * Apply HiDPI mode management to {@link JTable}
+     * @param table the {@link JTable} which should be adapted for HiDPI mode
      */
     public static void applyHiDPI(JTable table) {
         if (JMeterUtils.getHiDPIMode()) {
