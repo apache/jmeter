@@ -200,8 +200,8 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
         // create the JTable that holds header per row
         dnsServersTable = new JTable(dnsServersTableModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            dnsServersTable.setRowHeight((int) Math.round(dnsServersTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            dnsServersTable.setRowHeight((int) Math.round(dnsServersTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         dnsServersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         dnsServersTable.setPreferredScrollableViewportSize(new Dimension(400, 100));

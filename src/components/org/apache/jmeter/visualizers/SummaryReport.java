@@ -235,8 +235,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
         myJTable = new JTable(model);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));

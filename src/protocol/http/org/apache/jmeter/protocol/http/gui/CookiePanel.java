@@ -369,8 +369,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         // create the JTable that holds one cookie per row
         cookieTable = new JTable(tableModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            cookieTable.setRowHeight((int) Math.round(cookieTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            cookieTable.setRowHeight((int) Math.round(cookieTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         cookieTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         cookieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

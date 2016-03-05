@@ -174,8 +174,8 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            myJTable.setRowHeight((int) Math.round(myJTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.COLUMNS_MSG_PARAMETERS));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));

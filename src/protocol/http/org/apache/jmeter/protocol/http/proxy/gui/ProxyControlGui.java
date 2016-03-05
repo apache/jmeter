@@ -862,8 +862,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
         includeTable = new JTable(includeModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            includeTable.setRowHeight((int) Math.round(includeTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            includeTable.setRowHeight((int) Math.round(includeTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         includeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
@@ -882,8 +882,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
         excludeTable = new JTable(excludeModel);
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            excludeTable.setRowHeight((int) Math.round(excludeTable.getRowHeight() * HIDPI_SCALE_FACTOR));
+        if (JMeterUtils.getHiDPIMode()) {
+            excludeTable.setRowHeight((int) Math.round(excludeTable.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
         excludeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
