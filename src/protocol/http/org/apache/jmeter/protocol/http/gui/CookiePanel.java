@@ -53,6 +53,7 @@ import org.apache.jmeter.protocol.http.control.HC4CookieHandler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -368,10 +369,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     public JPanel createCookieTablePanel() {
         // create the JTable that holds one cookie per row
         cookieTable = new JTable(tableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            cookieTable.setRowHeight((int) Math.round(cookieTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(cookieTable);
+        
         cookieTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
         cookieTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         cookieTable.setPreferredScrollableViewportSize(new Dimension(100, 70));

@@ -40,17 +40,13 @@ import javax.swing.event.ChangeListener;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
 
 public class FileListPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-
-    // HiDPI mode
-    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
 
     private JTable files = null;
 
@@ -120,10 +116,7 @@ public class FileListPanel extends JPanel implements ActionListener {
 
         this.initializeTableModel();
         files = new JTable(tableModel);
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            files.setRowHeight((int) Math.round(files.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(files);
         files.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         files.revalidate();
 

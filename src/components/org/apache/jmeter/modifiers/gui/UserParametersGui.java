@@ -51,6 +51,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -207,9 +208,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
         // 70));
         // HiDPI mode management
-        if (HIDPI_MODE) {
-            paramTable.setRowHeight((int) Math.round(paramTable.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(paramTable);
 
         paramPanel = new JPanel(new BorderLayout());
         paramPanel.add(tableLabel, BorderLayout.NORTH);

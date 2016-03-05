@@ -49,6 +49,7 @@ import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.reflect.Functor;
@@ -62,11 +63,6 @@ import org.apache.jorphan.reflect.Functor;
 public class ArgumentsPanel extends AbstractConfigGui implements ActionListener {
 
     private static final long serialVersionUID = 240L;
-
-    // HiDPI mode
-    private static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
-    // HiDPI mode
-    private static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
 
     /** The title label for this component. */
     private JLabel tableLabel;
@@ -649,10 +645,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         if (this.background != null) {
             table.setBackground(this.background);
         }
-        // HiDPI mode management
-        if (HIDPI_MODE) {
-            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
-        }
+        ComponentUtil.applyHDPI(table);
+
         return makeScrollPane(table);
     }
 

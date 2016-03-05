@@ -21,6 +21,10 @@ package org.apache.jorphan.gui;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.JTable;
+
+import org.apache.jmeter.util.JMeterUtils;
+
 /**
  * This class is a Util for awt Component and could be used to place them in
  * center of an other.
@@ -28,6 +32,12 @@ import java.awt.Dimension;
  * @version $Revision$
  */
 public final class ComponentUtil {
+    
+    // HiDPI mode
+    public static final boolean HIDPI_MODE = JMeterUtils.getPropDefault("jmeter.hidpi.mode", false);  // $NON-NLS-1$
+    // HiDPI mode
+    public static final double HIDPI_SCALE_FACTOR = Double.valueOf(JMeterUtils.getPropDefault("jmeter.hidpi.scale.factor", "1.0"));  // $NON-NLS-1$  $NON-NLS-2$
+
     /**
      * Use this static method if you want to center and set its position
      * compared to the size of the current users screen size. Valid percent is
@@ -85,6 +95,18 @@ public final class ComponentUtil {
 
         toBeCentered.validate();
         toBeCentered.repaint();
+    }
+    
+    /**
+     * apply hdpi ui on a jtable
+     * @param table the jtable
+     * @since 3.0
+     */
+    public static void applyHDPI(JTable table) {
+        // HiDPI mode management
+        if (HIDPI_MODE) {
+            table.setRowHeight((int) Math.round(table.getRowHeight() * HIDPI_SCALE_FACTOR));
+        }
     }
 
     /**
