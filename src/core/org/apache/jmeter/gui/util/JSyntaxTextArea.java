@@ -125,7 +125,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     /**
      * Override UndoManager to allow disabling if feature causes issues
-     * See https://github.com/bobbylight/RSyntaxTextArea/issues/19
+     * See <a href="https://github.com/bobbylight/RSyntaxTextArea/issues/19">Issue 19 on RSyntaxTextArea</a>
      */
     @Override
     protected RUndoManager createUndoManager() {

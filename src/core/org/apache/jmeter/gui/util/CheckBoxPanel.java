@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
 /**
  * Utility class to wrap a JCheckBox in a horizontal box.
  * This limits the clickable area to the label only, and not the width of its container.
- * See https://bz.apache.org/bugzilla/show_bug.cgi?id=58810
+ * See <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58810">Bug 58810</a><br>
  * Note: using a JPanel affects the alignment within the container
  */
 public class CheckBoxPanel {
