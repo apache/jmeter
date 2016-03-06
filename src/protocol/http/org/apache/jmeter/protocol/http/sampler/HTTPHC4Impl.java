@@ -83,8 +83,9 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.FormBodyPart;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.FormBodyPartBuilder;
+import org.apache.http.entity.mime.MIME;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.AbstractHttpClient;
@@ -1076,12 +1077,24 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             Charset charset = null;
             if(haveContentEncoding) {
                 charset = Charset.forName(contentEncoding);
+            } else {
+                charset = MIME.DEFAULT_CHARSET;
             }
-
+            
+            if(log.isDebugEnabled()) {
+                log.debug("Building multipart with:getDoBrowserCompatibleMultipart():"+
+                        getDoBrowserCompatibleMultipart()+
+                        ", with charset:"+charset+
+                        ", haveContentEncoding:"+haveContentEncoding);
+            }
             // Write the request to our own stream
-            MultipartEntity multiPart = new MultipartEntity(
-                    getDoBrowserCompatibleMultipart() ? HttpMultipartMode.BROWSER_COMPATIBLE : HttpMultipartMode.STRICT,
-                            null, charset);
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create()
+                    .setCharset(charset);
+            if(getDoBrowserCompatibleMultipart()) {
+                multipartEntityBuilder.setLaxMode();
+            } else {
+                multipartEntityBuilder.setStrictMode();
+            }
             // Create the parts
             // Add any parameters
             for (JMeterProperty jMeterProperty : getArguments()) {
@@ -1090,9 +1103,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                StringBody stringBody = new StringBody(arg.getValue(), charset);
-                FormBodyPart formPart = new FormBodyPart(arg.getName(), stringBody);
-                multiPart.addPart(formPart);
+                StringBody stringBody = new StringBody(arg.getValue(), ContentType.create("text/plain", charset));
+                FormBodyPart formPart = FormBodyPartBuilder.create(
+                        parameterName, stringBody).build();
+                multipartEntityBuilder.addPart(formPart);
             }
 
             // Add any files
@@ -1103,17 +1117,18 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 
                 File reservedFile = FileServer.getFileServer().getResolvedFile(file.getPath());
                 fileBodies[i] = new ViewableFileBody(reservedFile, file.getMimeType());
-                multiPart.addPart(file.getParamName(),fileBodies[i]);
+                multipartEntityBuilder.addPart(file.getParamName(), fileBodies[i] );
             }
 
-            post.setEntity(multiPart);
+            HttpEntity entity = multipartEntityBuilder.build();
+            post.setEntity(entity);
 
-            if (multiPart.isRepeatable()){
+            if (entity.isRepeatable()){
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 for(ViewableFileBody fileBody : fileBodies){
                     fileBody.hideFileData = true;
                 }
-                multiPart.writeTo(bos);
+                entity.writeTo(bos);
                 for(ViewableFileBody fileBody : fileBodies){
                     fileBody.hideFileData = false;
                 }
