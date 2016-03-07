@@ -229,16 +229,4 @@ public class LagartoBasedHtmlParser extends HTMLParser {
             throw new HTMLParseException(e);
         }
     }
-
-    
-
-
-
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.protocol.http.parser.HTMLParser#isReusable()
-     */
-    @Override
-    protected boolean isReusable() {
-        return true;
-    }
 }

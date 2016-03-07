@@ -56,8 +56,9 @@ import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.DNSCacheManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
-import org.apache.jmeter.protocol.http.parser.HTMLParseException;
-import org.apache.jmeter.protocol.http.parser.HTMLParser;
+import org.apache.jmeter.protocol.http.parser.BaseParser;
+import org.apache.jmeter.protocol.http.parser.LinkExtractorParseException;
+import org.apache.jmeter.protocol.http.parser.LinkExtractorParser;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -310,36 +311,32 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
 
     // Derive the mapping of content types to parsers
-    private static final Map<String, String> parsersForType = new HashMap<>();
+    private static final Map<String, String> PARSERS_FOR_CONTENT_TYPE = new HashMap<>();
     // Not synch, but it is not modified after creation
 
     private static final String RESPONSE_PARSERS= // list of parsers
         JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
     static{
-        String []parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
+        String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
         for (final String parser : parsers) {
             String classname = JMeterUtils.getProperty(parser + ".className");//$NON-NLS-1$
             if (classname == null) {
-                log.info("Cannot find .className property for " + parser + ", using default");
-                classname = "";
+                log.error("Cannot find .className property for " + parser+", ensure you set property:'"+parser+".className'");
+                continue;
             }
             String typelist = JMeterUtils.getProperty(parser + ".types");//$NON-NLS-1$
             if (typelist != null) {
                 String[] types = JOrphanUtils.split(typelist, " ", true);
                 for (final String type : types) {
                     log.info("Parser for " + type + " is " + classname);
-                    parsersForType.put(type, classname);
+                    PARSERS_FOR_CONTENT_TYPE.put(type, classname);
                 }
             } else {
-                log.warn("Cannot find .types property for " + parser);
+                log.warn("Cannot find .types property for " + parser 
+                        + ", as a consequence parser will not be used, to make it usable, define property:'"+parser+".types'");
             }
         }
-        if (parsers.length==0){ // revert to previous behaviour
-            parsersForType.put("text/html", ""); //$NON-NLS-1$ //$NON-NLS-2$
-            log.info("No response parsers defined: text/html only will be scanned for embedded resources");
-        }
-        
     }
 
     // Bug 49083
@@ -1201,19 +1198,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         try {
             final byte[] responseData = res.getResponseData();
             if (responseData.length > 0){  // Bug 39205
-                String parserName = getParserClass(res);
-                if(parserName != null)
-                {
-                    final HTMLParser parser =
-                        parserName.length() > 0 ? // we have a name
-                        HTMLParser.getParser(parserName)
-                        :
-                        HTMLParser.getParser(); // we don't; use the default parser
+                final LinkExtractorParser parser = getParser(res);
+                if(parser != null) {
                     String userAgent = getUserAgent(res);
                     urls = parser.getEmbeddedResourceURLs(userAgent, responseData, res.getURL(), res.getDataEncodingWithDefault());
                 }
             }
-        } catch (HTMLParseException e) {
+        } catch (LinkExtractorParseException e) {
             // Don't break the world just because this failed:
             res.addSubResult(errorResult(e, new HTTPSampleResult(res)));
             setParentSampleSuccess(res, false);
@@ -1379,6 +1370,23 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
     
     /**
+     * Gets parser from {@link HTTPSampleResult#getMediaType()}.
+     * Returns null if no parser defined for it
+     * @param res {@link HTTPSampleResult}
+     * @return {@link LinkExtractorParser}
+     * @throws LinkExtractorParseException
+     */
+    private LinkExtractorParser getParser(HTTPSampleResult res) 
+            throws LinkExtractorParseException {
+        String parserClassName = 
+                PARSERS_FOR_CONTENT_TYPE.get(res.getMediaType());
+        if( !StringUtils.isEmpty(parserClassName) ) {
+            return BaseParser.getParser(parserClassName);
+        }
+        return null;
+    }
+
+    /**
      * @param url URL to escape
      * @return escaped url
      */
@@ -1453,15 +1461,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 res.setResponseMessage(detailedMessage.toString()); //$NON-NLS-1$
             }
         }
-    }
-
-    /*
-     * @param res HTTPSampleResult to check
-     * @return parser class name (may be "") or null if entry does not exist
-     */
-    private String getParserClass(HTTPSampleResult res) {
-        final String ct = res.getMediaType();
-        return parsersForType.get(ct);
     }
 
     // TODO: make static?
