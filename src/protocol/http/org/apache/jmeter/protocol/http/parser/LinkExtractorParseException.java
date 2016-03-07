@@ -15,31 +15,55 @@
  * limitations under the License.
  *
  */
+
 package org.apache.jmeter.protocol.http.parser;
 
 /**
- * Exception class for use with {@link HTMLParser} classes.
+ * Exception used with {@link LinkExtractorParser}
+ * @since 3.0
  */
-public class HTMLParseException extends LinkExtractorParseException {
-    private static final long serialVersionUID = 241L;
+public class LinkExtractorParseException extends Exception {
 
-    public HTMLParseException() {
-        super();
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 6816968619973437826L;
+
+    /**
+     * 
+     */
+    public LinkExtractorParseException() {
     }
 
-    public HTMLParseException(String message) {
+    /**
+     * @param message
+     */
+    public LinkExtractorParseException(String message) {
         super(message);
     }
 
-    public HTMLParseException(Throwable cause) {
+    /**
+     * @param cause
+     */
+    public LinkExtractorParseException(Throwable cause) {
         super(cause);
     }
 
-    public HTMLParseException(String message, Throwable cause) {
+    /**
+     * @param message
+     * @param cause
+     */
+    public LinkExtractorParseException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HTMLParseException(String message, Throwable cause,
+    /**
+     * @param message
+     * @param cause
+     * @param enableSuppression
+     * @param writableStackTrace
+     */
+    public LinkExtractorParseException(String message, Throwable cause,
             boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }

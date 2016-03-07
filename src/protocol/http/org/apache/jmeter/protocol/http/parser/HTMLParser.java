@@ -23,21 +23,18 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * HtmlParsers can parse HTML content to obtain URLs.
+ * {@link HTMLParser} subclasses can parse HTML content to obtain URLs.
  *
  */
-public abstract class HTMLParser {
+public abstract class HTMLParser extends BaseParser {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -69,9 +66,6 @@ public abstract class HTMLParser {
     protected static final Pattern IE_UA_PATTERN    = Pattern.compile(IE_UA);
     private   static final float IE_10                = 10.0f;
 
-    // Cache of parsers - parsers must be re-usable
-    private static final Map<String, HTMLParser> parsers = new ConcurrentHashMap<>(4);
-
     public static final String PARSER_CLASSNAME = "htmlParser.className"; // $NON-NLS-1$
 
     public static final String DEFAULT_PARSER =
@@ -82,38 +76,6 @@ public abstract class HTMLParser {
      * subclasses.
      */
     protected HTMLParser() {
-    }
-
-    public static HTMLParser getParser() {
-        return getParser(JMeterUtils.getPropDefault(PARSER_CLASSNAME, DEFAULT_PARSER));
-    }
-
-    public static HTMLParser getParser(String htmlParserClassName) {
-
-        // Is there a cached parser?
-        HTMLParser pars = parsers.get(htmlParserClassName);
-        if (pars != null) {
-            log.debug("Fetched " + htmlParserClassName);
-            return pars;
-        }
-
-        try {
-            Object clazz = Class.forName(htmlParserClassName).newInstance();
-            if (clazz instanceof HTMLParser) {
-                pars = (HTMLParser) clazz;
-            } else {
-                throw new HTMLParseError(new ClassCastException(htmlParserClassName));
-            }
-        } catch (InstantiationException | ClassNotFoundException
-                | IllegalAccessException e) {
-            throw new HTMLParseError(e);
-        }
-        log.info("Created " + htmlParserClassName);
-        if (pars.isReusable()) {
-            parsers.put(htmlParserClassName, pars);// cache the parser
-        }
-
-        return pars;
     }
 
     /**
@@ -137,6 +99,7 @@ public abstract class HTMLParser {
      * @return an Iterator for the resource URLs
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
+    @Override
     public Iterator<URL> getEmbeddedResourceURLs(
             String userAgent, byte[] html, URL baseUrl, String encoding) throws HTMLParseException {
         // The Set is used to ignore duplicated binary files.
@@ -213,18 +176,9 @@ public abstract class HTMLParser {
      * @throws HTMLParseException when parsing the <code>html</code> fails
      */
     public Iterator<URL> getEmbeddedResourceURLs(
-            String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) throws HTMLParseException {
+            String userAgent, byte[] html, URL baseUrl, Collection<URLString> coll, String encoding) 
+                    throws HTMLParseException {
         return getEmbeddedResourceURLs(userAgent, html, baseUrl, new URLCollection(coll), encoding);
-    }
-
-    /**
-     * Parsers should over-ride this method if the parser class is re-usable, in
-     * which case the class will be cached for the next getParser() call.
-     *
-     * @return true if the Parser is reusable
-     */
-    protected boolean isReusable() {
-        return false;
     }
     
     /**

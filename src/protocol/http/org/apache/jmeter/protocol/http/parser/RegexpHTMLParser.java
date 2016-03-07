@@ -125,14 +125,6 @@ class RegexpHTMLParser extends HTMLParser {
     };
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isReusable() {
-        return true;
-    }
-
-    /**
      * Make sure to compile the regular expression upon instantiation:
      */
     protected RegexpHTMLParser() {
