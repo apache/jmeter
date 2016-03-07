@@ -45,11 +45,6 @@ class JTidyHTMLParser extends HTMLParser {
         super();
     }
 
-    @Override
-    protected boolean isReusable() {
-        return true;
-    }
-
     /**
      * {@inheritDoc}
      */
