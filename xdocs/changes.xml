@@ -144,6 +144,7 @@ Summary
     <li><bug>59116</bug>Add the possibility to setup a prefix to sampler name recorded by proxy. Partly based on a patch by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>59129</bug>HTTP Request : Simplify GUI with simple/advanced Tabs</li>
     <li><bug>59033</bug>Parallel Download : Rework Parser classes hierarchy to allow pluging parsers for different mime types</li>
+    <li><bug>59146</bug>MeasuringConnectionManager is not Thread Safe (nightly before 3.0)</li>
 </ul>
 
 <h3>Other samplers</h3>

@@ -202,6 +202,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final HttpParams DEFAULT_HTTP_PARAMS;
 
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
+    
+    static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
 
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
@@ -312,6 +314,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         try {
             currentRequest = httpRequest;
             handleMethod(method, res, httpRequest, localContext);
+            // store the SampleResult in LocalContext to compute connect time
+            localContext.setAttribute(SAMPLER_RESULT_TOKEN, res);
             // perform the sample
             HttpResponse httpResponse = 
                     executeRequest(httpClient, httpRequest, localContext, url);
@@ -765,9 +769,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
         }
-
-        MeasuringConnectionManager connectionManager = (MeasuringConnectionManager) httpClient.getConnectionManager();
-        connectionManager.setSample(res);
 
         // TODO - should this be done when the client is created?
         // If so, then the details need to be added as part of HttpClientKey
