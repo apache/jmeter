@@ -50,9 +50,6 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class MeasuringConnectionManager extends PoolingClientConnectionManager {
 
-    private MeasuringConnectionRequest measuredConnection;
-    private SampleResult sample;
-
     public MeasuringConnectionManager(SchemeRegistry schemeRegistry, DnsResolver resolver) {
         super(schemeRegistry, resolver);
     }
@@ -60,8 +57,8 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
     @Override
     public ClientConnectionRequest requestConnection(final HttpRoute route, final Object state) {
         ClientConnectionRequest res = super.requestConnection(route, state);
-        this.measuredConnection = new MeasuringConnectionRequest(res, this.sample);
-        return this.measuredConnection;
+        MeasuringConnectionRequest measuredConnection = new MeasuringConnectionRequest(res);
+        return measuredConnection;
     }
     
     /**
@@ -75,26 +72,20 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
         return new JMeterClientConnectionOperator(schreg);
     }
 
-    public void setSample(SampleResult sample) {
-        this.sample = sample;
-    }
 
     /**
      * An adapter class to pass {@link SampleResult} into {@link MeasuredConnection}
      */
     private static class MeasuringConnectionRequest implements ClientConnectionRequest {
         private final ClientConnectionRequest handler;
-        private final SampleResult sample;
-
-        public MeasuringConnectionRequest(ClientConnectionRequest res, SampleResult sample) {
+        public MeasuringConnectionRequest(ClientConnectionRequest res) {
             handler = res;
-            this.sample = sample;
         }
 
         @Override
         public ManagedClientConnection getConnection(long timeout, TimeUnit tunit) throws InterruptedException, ConnectionPoolTimeoutException {
             ManagedClientConnection res = handler.getConnection(timeout, tunit);
-            return new MeasuredConnection(res, this.sample);
+            return new MeasuredConnection(res);
         }
 
         @Override
@@ -109,11 +100,9 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
      */
     private static class MeasuredConnection implements ManagedClientConnection {
         private final ManagedClientConnection handler;
-        private final SampleResult sample;
 
-        public MeasuredConnection(ManagedClientConnection res, SampleResult sample) {
+        public MeasuredConnection(ManagedClientConnection res) {
             handler = res;
-            this.sample = sample;
         }
 
         @Override
@@ -121,6 +110,8 @@ public class MeasuringConnectionManager extends PoolingClientConnectionManager {
             try {
                 handler.open(route, context, params);
             } finally {
+                SampleResult sample = 
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.SAMPLER_RESULT_TOKEN);
                 if (sample != null) {
                     sample.connectEnd();
                 }
