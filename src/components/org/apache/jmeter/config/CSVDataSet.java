@@ -146,6 +146,8 @@ public class CSVDataSet extends ConfigTestElement
 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
+        String _fileName = getFilename();
+        if (!_fileName.isEmpty()) {
         FileServer server = FileServer.getFileServer();
         final JMeterContext context = getThreadContext();
         String delim = getDelimiter();
@@ -156,7 +158,6 @@ public class CSVDataSet extends ConfigTestElement
             delim=",";
         }
         if (vars == null) {
-            String _fileName = getFilename();
             String mode = getShareMode();
             int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
             switch(modeInt){
@@ -211,6 +212,7 @@ public class CSVDataSet extends ConfigTestElement
             for (String var :vars) {
                 threadVars.put(var, EOFVALUE);
             }
+        }
         }
     }
 
