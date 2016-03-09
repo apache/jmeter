@@ -115,6 +115,7 @@ Summary
     </ul>
     </li>
     <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
+    <li>For Thread Group Test Element, the property "Action to be taken after a Sample Error" value has been switched from "Continue" to "Start Next thread loop". See <bugzilla>59152</bugzilla></li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -258,6 +259,7 @@ Summary
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated 8 years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58426</bug>Use DPI scaling of interface for high resolution devices (HiDPI support for Windows/Linux) - <i>BETA</i> see hidpi properties in bin/jmeter.properties</li>
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
+<li><bug>59152</bug>Thread Group: Change "Action to be taken after a Sample Error" value from "Continue" to "Start Next thread loop". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
