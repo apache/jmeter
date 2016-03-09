@@ -1435,7 +1435,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
     <target
         name="nightly"
-        depends="nightly-setup,svnCheck,install,docs-printable,docs-api,test,_distribution"
+        depends="nightly-setup,init-svnVersion,install,docs-printable,docs-api,test,_distribution"
         description="Build JMeter for nightly distribution (include docs)"/>
 
     <target name="_eolcheck">
