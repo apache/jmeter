@@ -73,6 +73,7 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
+    <li>Since version 3.0, Groovy-2.4.6 is bundled with JMeter (lib folder), ensure you remove old version or referenced versions through properties <code>search_paths</code> or <code>user.classpath</code></li>
     <li>Since version 3.0, <code>jmeter.save.saveservice.assertion_results_failure_message</code> property value is true, meaning CSV file for results will contain an additional column containing assertion result response message, see <bugzilla>58978</bugzilla></li>
     <li>Since version 3.0, <code>jmeter.save.saveservice.print_field_names</code> property value is true, meaning CSV file for results will contain field names as first line in CSV, see <bugzilla>58991</bugzilla></li>
     <li>Since version 3.0, <code>jmeter.save.saveservice.idle_time</code> property value is true, meaning CSV/XML result files will contain an additional column containing idle time between samplers, see <bugzilla>57182</bugzilla></li>
