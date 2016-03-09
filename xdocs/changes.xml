@@ -257,6 +257,7 @@ Summary
 <li><bug>58715</bug>Feature request: Bundle groovy-all with JMeter</li>
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated 8 years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58426</bug>Use DPI scaling of interface for high resolution devices (HiDPI support for Windows/Linux) - <i>BETA</i> see hidpi properties in bin/jmeter.properties</li>
+<li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
@@ -404,7 +405,6 @@ Summary
 <li>Florent Sabbe (f dot sabbe at ubik-ingenierie.com)</li>
 <li>Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li>Harrison Termotto (harrison dot termotto at stonybrook.edu</li>
-<li>Vincent Herilier (vherilier at gmail.com)</li>
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li>Gary Gregory (ggregory at apache.org)</li>
 </ul>
