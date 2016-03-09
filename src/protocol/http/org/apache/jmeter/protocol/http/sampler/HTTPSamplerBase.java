@@ -38,11 +38,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +54,7 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.parser.BaseParser;
 import org.apache.jmeter.protocol.http.parser.LinkExtractorParseException;
 import org.apache.jmeter.protocol.http.parser.LinkExtractorParser;
+import org.apache.jmeter.protocol.http.sampler.ResourcesDownloader.AsynSamplerResultHolder;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
@@ -190,11 +186,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     //- JMX names
 
     public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
-    
-    private static final long KEEPALIVETIME = 0; // for Thread Pool for resources but no need to use a special value?
-    
-    private static final long AWAIT_TERMINATION_TIMEOUT = 
-        JMeterUtils.getPropDefault("httpsampler.await_termination_timeout", 60); // $NON-NLS-1$ // default value: 60 secs 
     
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES = 
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
@@ -1237,7 +1228,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             int maxConcurrentDownloads = CONCURRENT_POOL_SIZE; // init with default value
             boolean isConcurrentDwn = isConcurrentDwn();
             if(isConcurrentDwn) {
-                
                 try {
                     maxConcurrentDownloads = Integer.parseInt(getConcurrentPool());
                 } catch (NumberFormatException nfe) {
@@ -1261,7 +1251,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                         log.warn("Null URL detected (should not happen)");
                     } else {
                         String urlstr = url.toString();
-                        String urlStrEnc=escapeIllegalURLCharacters(encodeSpaces(urlstr));
+                        String urlStrEnc = escapeIllegalURLCharacters(encodeSpaces(urlstr));
                         if (!urlstr.equals(urlStrEnc)){// There were some spaces in the URL
                             try {
                                 url = new URL(urlStrEnc);
@@ -1282,6 +1272,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             setParentSampleSuccess(res, false);
                             continue;
                         }
+
                         if (isConcurrentDwn) {
                             // if concurrent download emb. resources, add to a list for async gets later
                             list.add(new ASyncSample(url, HTTPConstants.GET, false, frameDepth + 1, getCookieManager(), this));
@@ -1302,67 +1293,31 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // IF for download concurrent embedded resources
             if (isConcurrentDwn && !list.isEmpty()) {
 
-                final String parentThreadName = Thread.currentThread().getName();
-                // Thread pool Executor to get resources 
-                // use a LinkedBlockingQueue, note: max pool size doesn't effect
-                final ThreadPoolExecutor exec = new ThreadPoolExecutor(
-                        maxConcurrentDownloads, maxConcurrentDownloads, KEEPALIVETIME, TimeUnit.SECONDS,
-                        new LinkedBlockingQueue<Runnable>(),
-                        new ThreadFactory() {
-                            @Override
-                            public Thread newThread(final Runnable r) {
-                                Thread t = new CleanerThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            r.run();
-                                        } finally {
-                                            ((CleanerThread)Thread.currentThread()).notifyThreadEnd();
-                                        }
-                                    }
-                                });
-                                t.setName(parentThreadName+"-ResDownload-" + t.getName()); //$NON-NLS-1$
-                                t.setDaemon(true);
-                                return t;
-                            }
-                        });
+                ResourcesDownloader resourcesDownloader = ResourcesDownloader.getInstance();
 
-                boolean tasksCompleted = false;
                 try {
-                    // sample all resources with threadpool
-                    final List<Future<AsynSamplerResultHolder>> retExec = exec.invokeAll(list);
-                    // call normal shutdown (wait ending all tasks)
-                    exec.shutdown();
-                    // put a timeout if tasks couldn't terminate
-                    exec.awaitTermination(AWAIT_TERMINATION_TIMEOUT, TimeUnit.SECONDS);
+                    // sample all resources
+                    final List<Future<AsynSamplerResultHolder>> retExec = resourcesDownloader.invokeAllAndAwaitTermination(maxConcurrentDownloads, list);
                     CookieManager cookieManager = getCookieManager();
                     // add result to main sampleResult
                     for (Future<AsynSamplerResultHolder> future : retExec) {
-                        AsynSamplerResultHolder binRes;
-                        try {
-                            binRes = future.get(1, TimeUnit.MILLISECONDS);
-                            if(cookieManager != null) {
-                                CollectionProperty cookies = binRes.getCookies();
-                                for (JMeterProperty jMeterProperty : cookies) {
-                                    Cookie cookie = (Cookie) jMeterProperty.getObjectValue();
-                                    cookieManager.add(cookie);
-                                }
+                        // this call will not block as the futures return by invokeAllAndAwaitTermination 
+                        //   are either done or cancelled
+                        AsynSamplerResultHolder binRes = future.get();
+                        if(cookieManager != null) {
+                            CollectionProperty cookies = binRes.getCookies();
+                            for (JMeterProperty jMeterProperty : cookies) {
+                                Cookie cookie = (Cookie) jMeterProperty.getObjectValue();
+                                cookieManager.add(cookie);
                             }
-                            res.addSubResult(binRes.getResult());
-                            setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() != null ? binRes.getResult().isSuccessful():true));
-                        } catch (TimeoutException e) {
-                            errorResult(e, res);
                         }
+                        res.addSubResult(binRes.getResult());
+                        setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() != null ? binRes.getResult().isSuccessful():true));
                     }
-                    tasksCompleted = exec.awaitTermination(1, TimeUnit.MILLISECONDS); // did all the tasks finish?
                 } catch (InterruptedException ie) {
                     log.warn("Interrupted fetching embedded resources", ie); // $NON-NLS-1$
                 } catch (ExecutionException ee) {
                     log.warn("Execution issue when fetching embedded resources", ee); // $NON-NLS-1$
-                } finally {
-                    if (!tasksCompleted) {
-                        exec.shutdownNow(); // kill any remaining tasks
-                    }
                 }
             }
         }
@@ -1972,7 +1927,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // We don't want to use CacheManager clone but the parent one, and CacheManager is Thread Safe
             CacheManager cacheManager = base.getCacheManager();
             if (cacheManager != null) {
-                this.sampler.setCacheManagerProperty(cacheManager);
+                this.sampler.setCacheManagerProperty(cacheManager.createCacheManagerProxy());
             }
             
             if(cookieManager != null) {
@@ -1993,67 +1948,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             } else {
                 return new AsynSamplerResultHolder(httpSampleResult, new CollectionProperty());
             }
-        }
-    }
-    
-    /**
-     * Custom thread implementation that allows notification of threadEnd
-     *
-     */
-    private static class CleanerThread extends Thread {
-        private final List<HTTPSamplerBase> samplersToNotify = new ArrayList<>();
-        /**
-         * @param runnable Runnable
-         */
-        public CleanerThread(Runnable runnable) {
-           super(runnable);
-        }
-        
-        /**
-         * Notify of thread end
-         */
-        public void notifyThreadEnd() {
-            for (HTTPSamplerBase samplerBase : samplersToNotify) {
-                samplerBase.threadFinished();
-            }
-            samplersToNotify.clear();
-        }
-
-        /**
-         * Register sampler to be notify at end of thread
-         * @param sampler {@link HTTPSamplerBase}
-         */
-        public void registerSamplerForEndNotification(HTTPSamplerBase sampler) {
-            this.samplersToNotify.add(sampler);
-        }
-    }
-    
-    /**
-     * Holder of AsynSampler result
-     */
-    private static class AsynSamplerResultHolder {
-        private final HTTPSampleResult result;
-        private final CollectionProperty cookies;
-        /**
-         * @param result {@link HTTPSampleResult} to hold
-         * @param cookies cookies to hold
-         */
-        public AsynSamplerResultHolder(HTTPSampleResult result, CollectionProperty cookies) {
-            super();
-            this.result = result;
-            this.cookies = cookies;
-        }
-        /**
-         * @return the result
-         */
-        public HTTPSampleResult getResult() {
-            return result;
-        }
-        /**
-         * @return the cookies
-         */
-        public CollectionProperty getCookies() {
-            return cookies;
         }
     }
     
