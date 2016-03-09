@@ -105,7 +105,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     }
     
     private void initGui() {
-        continueBox.setSelected(true);
+        startNextLoop.setSelected(true);
     }
 
     private JPanel createOnErrorPanel() {
