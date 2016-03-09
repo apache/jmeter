@@ -140,6 +140,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /** Idle timeout to be applied to connections if no Keep-Alive header is sent by the server (default 0 = disable) */
     private static final int IDLE_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.idletimeout", 0);
+    
+    private static final int VALIDITY_AFTER_INACTIVITY_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.validate_after_inactivity", 2000);
+    
+    private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
 
@@ -204,6 +208,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
     static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
+    
+    private static final String HTTPCLIENT_TOKEN = "__jmeter.HTTPCLIENT_TOKEN__";
 
     static {
         log.info("HTTP request retry count = "+RETRY_COUNT);
@@ -420,6 +426,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             return res;
         } finally {
             currentRequest = null;
+            JMeterContextService.getContext().getSamplerContext().remove(HTTPCLIENT_TOKEN);
         }
         return res;
     }
@@ -686,7 +693,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Lookup key - must agree with all the values used to create the HttpClient.
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
         
-        HttpClient httpClient = mapHttpClientPerHttpClientKey.get(key);
+        HttpClient httpClient = null;
+        if(this.testElement.isConcurrentDwn()) {
+            httpClient = (HttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
+        }
+        
+        if (httpClient == null) {
+            httpClient = mapHttpClientPerHttpClientKey.get(key);
+        }
 
         if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
             ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
@@ -706,7 +720,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (resolver == null) {
                 resolver = SystemDefaultDnsResolver.INSTANCE;
             }
-            MeasuringConnectionManager connManager = new MeasuringConnectionManager(createSchemeRegistry(), resolver);
+            MeasuringConnectionManager connManager = new MeasuringConnectionManager(
+                    createSchemeRegistry(), 
+                    resolver, 
+                    TIME_TO_LIVE,
+                    VALIDITY_AFTER_INACTIVITY_TIMEOUT);
             
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
@@ -768,6 +786,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (log.isDebugEnabled()) {
                 log.debug("Reusing the HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
+        }
+
+        if(this.testElement.isConcurrentDwn()) {
+            JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
         }
 
         // TODO - should this be done when the client is created?
