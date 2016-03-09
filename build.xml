@@ -1429,7 +1429,7 @@ run JMeter unless all the JMeter jars are added.
    <target
         name="nightly-setup"
         description="Disables some checks"
-        depends="clean-docs,clean-docs-images,clean-apidocs,clean-dist">
+        depends="clean-docs,clean-apidocs,clean-dist">
         <property name="disable-check-versions" value="true" />
         <property name="docs.force" value="true" />
     </target>
