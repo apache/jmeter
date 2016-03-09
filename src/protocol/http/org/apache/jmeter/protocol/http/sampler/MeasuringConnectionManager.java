@@ -38,6 +38,7 @@ import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.ManagedClientConnection;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.conn.JMeterPoolingClientConnectionManager;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
@@ -48,10 +49,14 @@ import org.apache.jmeter.samplers.SampleResult;
  * that wraps all connection requests into time-measured implementation a private
  * MeasuringConnectionRequest
  */
-public class MeasuringConnectionManager extends PoolingClientConnectionManager {
+public class MeasuringConnectionManager extends JMeterPoolingClientConnectionManager {
 
-    public MeasuringConnectionManager(SchemeRegistry schemeRegistry, DnsResolver resolver) {
-        super(schemeRegistry, resolver);
+    
+    public MeasuringConnectionManager(SchemeRegistry schemeRegistry, 
+            DnsResolver resolver, 
+            int timeToLiveMs,
+            int validateAfterInactivityMs) {
+        super(schemeRegistry, timeToLiveMs, TimeUnit.MILLISECONDS, resolver, validateAfterInactivityMs);
     }
 
     @Override
