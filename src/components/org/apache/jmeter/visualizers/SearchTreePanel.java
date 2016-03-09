@@ -72,6 +72,14 @@ public class SearchTreePanel extends JPanel implements ActionListener {
         this.defaultMutableTreeNode = defaultMutableTreeNode;
     }
 
+    /**
+     * @deprecated only for use by test code
+     */
+    @Deprecated
+    public SearchTreePanel(){
+//        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(10,10));
 
