@@ -41,6 +41,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     private final JLabel mLabel = new JLabel();
 
     private final JComboBox<String> choiceList;
+    
+    private final boolean withButtons;
 
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
@@ -52,6 +54,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     public JLabeledChoice() {
         super();
         choiceList = new JComboBox<>();
+        withButtons = false;
         init();
     }
 
@@ -60,6 +63,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         choiceList = new JComboBox<>();
         mLabel.setText(pLabel);
         choiceList.setEditable(editable);
+        withButtons = false;
         init();
     }
 
@@ -82,10 +86,24 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
      *
      */
     public JLabeledChoice(String pLabel, String[] items, boolean editable) {
+        this(pLabel, items, editable, editable);
+    }
+
+    /**
+     * Constructs a combo-box with the label displaying the passed text.
+     *
+     * @param pLabel - the text to display in the label.
+     * @param items - the items to display in the Combo box
+     * @param editable - the box is made editable
+     * @param withButtons - if true, then Add and Delete buttons are created.
+     *
+     */
+    public JLabeledChoice(String pLabel, String[] items, boolean editable, boolean withButtons) {
         super();
         mLabel.setText(pLabel);
         choiceList = new JComboBox<>(items);
         choiceList.setEditable(editable);
+        this.withButtons = withButtons;
         init();
     }
 
@@ -141,7 +159,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         // Add the sub components
         this.add(mLabel);
         this.add(choiceList);
-        if (choiceList.isEditable()) {
+        if (withButtons) {
             add = new JButton("Add");
             add.setMargin(new Insets(1, 1, 1, 1));
             add.addActionListener(new AddListener());
