@@ -114,6 +114,7 @@ Summary
         <li>org.apache.jmeter.protocol.http.modifier.UserParameterXMLParser</li>
     </ul>
     </li>
+    <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
