@@ -148,71 +148,73 @@ public class CSVDataSet extends ConfigTestElement
     public void iterationStart(LoopIterationEvent iterEvent) {
         String _fileName = getFilename();
         if (!_fileName.isEmpty()) {
-        FileServer server = FileServer.getFileServer();
-        final JMeterContext context = getThreadContext();
-        String delim = getDelimiter();
-        if (delim.equals("\\t")) { // $NON-NLS-1$
-            delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
-        } else if (delim.length()==0){
-            log.warn("Empty delimiter converted to ','");
-            delim=",";
-        }
-        if (vars == null) {
-            String mode = getShareMode();
-            int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
-            switch(modeInt){
-                case CSVDataSetBeanInfo.SHARE_ALL:
-                    alias = _fileName;
-                    break;
-                case CSVDataSetBeanInfo.SHARE_GROUP:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
-                    break;
-                case CSVDataSetBeanInfo.SHARE_THREAD:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThread());
-                    break;
-                default:
-                    alias = _fileName+"@"+mode; // user-specified key
-                    break;
+            FileServer server = FileServer.getFileServer();
+            final JMeterContext context = getThreadContext();
+            String delim = getDelimiter();
+            if (delim.equals("\\t")) { // $NON-NLS-1$
+                delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
+            } else if (delim.length()==0){
+                log.warn("Empty delimiter converted to ','");
+                delim=",";
             }
-            final String names = getVariableNames();
-            if (names == null || names.length()==0) {
-                String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);
-                try {
-                    vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
-                    firstLineIsNames = true;
-                } catch (IOException e) {
-                    log.warn("Could not split CSV header line",e);
+            if (vars == null) {
+                String mode = getShareMode();
+                int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
+                switch(modeInt){
+                    case CSVDataSetBeanInfo.SHARE_ALL:
+                        alias = _fileName;
+                        break;
+                    case CSVDataSetBeanInfo.SHARE_GROUP:
+                        alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
+                        break;
+                    case CSVDataSetBeanInfo.SHARE_THREAD:
+                        alias = _fileName+"@"+System.identityHashCode(context.getThread());
+                        break;
+                    default:
+                        alias = _fileName+"@"+mode; // user-specified key
+                        break;
                 }
-            } else {
-                server.reserveFile(_fileName, getFileEncoding(), alias);
-                vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
+                final String names = getVariableNames();
+                if (names == null || names.length()==0) {
+                    String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);
+                    try {
+                        vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
+                        firstLineIsNames = true;
+                    } catch (IOException e) {
+                        log.warn("Could not split CSV header line",e);
+                    }
+                } else {
+                    server.reserveFile(_fileName, getFileEncoding(), alias);
+                    vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
+                }
             }
-        }
-           
-        // TODO: fetch this once as per vars above?
-        JMeterVariables threadVars = context.getVariables();
-        String[] lineValues = {};
-        try {
-            if (getQuotedData()) {
-                lineValues = server.getParsedLine(alias, recycle, firstLineIsNames, delim.charAt(0));
-            } else {
-                String line = server.readLine(alias, recycle, firstLineIsNames);
-                lineValues = JOrphanUtils.split(line, delim, false);
+               
+            // TODO: fetch this once as per vars above?
+            JMeterVariables threadVars = context.getVariables();
+            String[] lineValues = {};
+            try {
+                if (getQuotedData()) {
+                    lineValues = server.getParsedLine(alias, recycle, firstLineIsNames, delim.charAt(0));
+                } else {
+                    String line = server.readLine(alias, recycle, firstLineIsNames);
+                    lineValues = JOrphanUtils.split(line, delim, false);
+                }
+                for (int a = 0; a < vars.length && a < lineValues.length; a++) {
+                    threadVars.put(vars[a], lineValues[a]);
+                }
+            } catch (IOException e) { // treat the same as EOF
+                log.error(e.toString());
             }
-            for (int a = 0; a < vars.length && a < lineValues.length; a++) {
-                threadVars.put(vars[a], lineValues[a]);
+            if (lineValues.length == 0) {// i.e. EOF
+                if (getStopThread()) {
+                    throw new JMeterStopThreadException("End of file detected");
+                }
+                for (String var :vars) {
+                    threadVars.put(var, EOFVALUE);
+                }
             }
-        } catch (IOException e) { // treat the same as EOF
-            log.error(e.toString());
-        }
-        if (lineValues.length == 0) {// i.e. EOF
-            if (getStopThread()) {
-                throw new JMeterStopThreadException("End of file detected");
-            }
-            for (String var :vars) {
-                threadVars.put(var, EOFVALUE);
-            }
-        }
+        } else {
+            log.warn("No filename setup in CSV Data Set Config: "+this.getName());
         }
     }
 
