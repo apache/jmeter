@@ -40,8 +40,8 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private static final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
     private static final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
-    private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", JSyntaxTextArea.getDefaultFont().getName());
-    private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", JSyntaxTextArea.getDefaultFont().getSize());
+    private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", RSyntaxTextArea.getDefaultFont().getName());
+    private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", RSyntaxTextArea.getDefaultFont().getSize());
 
     @Deprecated
     public JSyntaxTextArea() {
