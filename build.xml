@@ -2675,6 +2675,8 @@ run JMeter unless all the JMeter jars are added.
   <formatter type="${test.format}" usefile="yes"/>
   <formatter type="xml"/>
   <jvmarg value="-Dfile.encoding=${test.encoding}"/>
+  <!-- Allow headless to be passed in -->
+  <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
