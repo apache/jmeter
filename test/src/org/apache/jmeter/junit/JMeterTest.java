@@ -446,7 +446,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
                     System.out.println("o.a.j.junit.JMeterTest WARN: " + exName + ": IllegalAccessException " + n + ":" + e.getMessage());
                     e.printStackTrace();
                     // We won't test restricted-access classes.
-                } catch (HeadlessException e) {
+                } catch (HeadlessException|ExceptionInInitializerError e) {// EIIE can be caused by Headless
                     caught = e;
                     System.out.println("o.a.j.junit.JMeterTest Error creating "+n+" "+e.toString());
                 } catch (Exception e) {
