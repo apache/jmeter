@@ -38,7 +38,6 @@ import org.junit.Test;
 public class PackageTest {
 
     // Test needs to run in this package in order to give access to AbstractTestElement.addProperty()
-    @Ignore
     @Test
     public void testBug50799() throws Exception {
         HeaderManager headerManager = new HeaderManager();
