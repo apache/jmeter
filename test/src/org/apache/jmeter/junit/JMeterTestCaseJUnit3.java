@@ -94,6 +94,7 @@ public abstract class JMeterTestCaseJUnit3 extends TestCase {
             logprop("user.variant");
             System.out.println("Locale="+Locale.getDefault().toString());
             logprop("java.class.version");
+            logprop("java.awt.headless");
             logprop("os.name");
             logprop("os.version");
             logprop("os.arch");
