@@ -42,7 +42,7 @@ public final class KeyStrokes {
             mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
         } catch (java.awt.HeadlessException e) {
             // suppress the error if we are deliberately running headless
-            if (!"true".equals(System.getProperty("java.awt.headless"))) {
+            if (!"true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
                 throw e;
             }
         }
