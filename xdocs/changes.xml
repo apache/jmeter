@@ -291,6 +291,7 @@ Summary
 <li><bug>58967</bug>Use junit categories to exclude tests that need a gui. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59003</bug>ClutilTestCase testSingleArg8 and testSingleArg9 are identical</li>
 <li><bug>59064</bug>Remove OldSaveService which supported very old Avalon format JTL (result) files</li>
+<li><bug>59165</bug>RSyntaxTextArea not compatible with headless testing</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
