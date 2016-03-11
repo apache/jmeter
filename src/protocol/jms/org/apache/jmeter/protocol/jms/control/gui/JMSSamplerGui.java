@@ -64,7 +64,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
 
-    private JSyntaxTextArea messageContent = new JSyntaxTextArea(10, 50); //$NON-NLS-1$
+    private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); //$NON-NLS-1$
 
     private JLabeledTextField initialContextFactory = new JLabeledTextField(
             JMeterUtils.getResString("jms_initial_context_factory")); //$NON-NLS-1$
@@ -257,7 +257,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel messageContentPanel = new JPanel(new BorderLayout());
         messageContentPanel.add(new JLabel(JMeterUtils.getResString("jms_msg_content")), BorderLayout.NORTH);
-        messageContentPanel.add(new JTextScrollPane(messageContent), BorderLayout.CENTER);
+        messageContentPanel.add(JTextScrollPane.getInstance(messageContent), BorderLayout.CENTER);
         messagePanel.add(messageContentPanel, BorderLayout.CENTER);
 
         jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$

@@ -59,8 +59,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      */
     public TextAreaEditor() {
         super();
-        textUI = new JSyntaxTextArea(20, 20);
-        scroller = new JTextScrollPane(textUI, true);
+        textUI = JSyntaxTextArea.getInstance(20, 20);
+        scroller = JTextScrollPane.getInstance(textUI, true);
         init();
     }
 
@@ -70,8 +70,8 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
     // TODO is this ever used?
     public TextAreaEditor(Object source) {
         super(source);
-        textUI = new JSyntaxTextArea(20, 20);
-        scroller = new JTextScrollPane(textUI, true);
+        textUI = JSyntaxTextArea.getInstance(20, 20);
+        scroller = JTextScrollPane.getInstance(textUI, true);
         init();
         setValue(source);
     }
@@ -84,9 +84,9 @@ public class TextAreaEditor extends PropertyEditorSupport implements FocusListen
      *            to be used for the editor. Must not be <code>null</code>
      */
     public TextAreaEditor(PropertyDescriptor descriptor) {
-        textUI = new JSyntaxTextArea(20, 20);
+        textUI = JSyntaxTextArea.getInstance(20, 20);
         textUI.setLanguage((String) descriptor.getValue(GenericTestBeanCustomizer.TEXT_LANGUAGE));
-        scroller = new JTextScrollPane(textUI, true);
+        scroller = JTextScrollPane.getInstance(textUI, true);
         init();
     }
 

@@ -219,7 +219,7 @@ public class TCPConfigGui extends AbstractConfigGui {
 
     private JPanel createRequestPanel() {
         JLabel reqLabel = new JLabel(JMeterUtils.getResString("tcp_request_data")); // $NON-NLS-1$
-        requestData = new JSyntaxTextArea(15, 80);
+        requestData = JSyntaxTextArea.getInstance(15, 80);
         requestData.setLanguage("text"); //$NON-NLS-1$
         reqLabel.setLabelFor(requestData);
 
@@ -227,7 +227,7 @@ public class TCPConfigGui extends AbstractConfigGui {
         reqDataPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder()));
 
         reqDataPanel.add(reqLabel, BorderLayout.WEST);
-        reqDataPanel.add(new JTextScrollPane(requestData), BorderLayout.CENTER);
+        reqDataPanel.add(JTextScrollPane.getInstance(requestData), BorderLayout.CENTER);
         return reqDataPanel;
     }
 

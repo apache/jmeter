@@ -660,8 +660,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         int indx = TAB_PARAMETERS;
         if(showRawBodyPane) {
             tabRawBodyIndex = ++indx;
-            postBodyContent = new JSyntaxTextArea(30, 50);// $NON-NLS-1$
-            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), new JTextScrollPane(postBodyContent));// $NON-NLS-1$
+            postBodyContent = JSyntaxTextArea.getInstance(30, 50);// $NON-NLS-1$
+            postContentTabbedPane.add(JMeterUtils.getResString("post_body"), JTextScrollPane.getInstance(postBodyContent));// $NON-NLS-1$
         }
         
         if(showFileUploadPane) {

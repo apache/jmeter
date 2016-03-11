@@ -64,7 +64,7 @@ public class XPathPanel extends JPanel {
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         Box hbox = Box.createHorizontalBox();
         hbox.add(Box.createHorizontalGlue());
-        hbox.add(new JTextScrollPane(getXPathField()));
+        hbox.add(JTextScrollPane.getInstance(getXPathField()));
         hbox.add(Box.createHorizontalGlue());
         hbox.add(getCheckXPathButton());
 
@@ -161,7 +161,7 @@ public class XPathPanel extends JPanel {
      */
     public JSyntaxTextArea getXPathField() {
         if (xpath == null) {
-            xpath = new JSyntaxTextArea(20, 80);
+            xpath = JSyntaxTextArea.getInstance(20, 80);
             xpath.setLanguage("xpath"); //$NON-NLS-1$
         }
         return xpath;
