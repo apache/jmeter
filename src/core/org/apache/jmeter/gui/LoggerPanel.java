@@ -70,7 +70,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
 
         if (JMeterUtils.getPropDefault("loggerpanel.usejsyntaxtext", true)) {
             // JSyntax Text Area
-            JSyntaxTextArea jSyntaxTextArea = new JSyntaxTextArea(15, 80, true);
+            JSyntaxTextArea jSyntaxTextArea = JSyntaxTextArea.getInstance(15, 80, true);
             jSyntaxTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
             jSyntaxTextArea.setCodeFoldingEnabled(false);
             jSyntaxTextArea.setAntiAliasingEnabled(false);
@@ -78,7 +78,7 @@ public class LoggerPanel extends JPanel implements LogTarget {
             jSyntaxTextArea.setLineWrap(false);
             jSyntaxTextArea.setLanguage("text");
             jSyntaxTextArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
-            areaScrollPane = new JTextScrollPane(jSyntaxTextArea);
+            areaScrollPane = JTextScrollPane.getInstance(jSyntaxTextArea);
             jTextArea = jSyntaxTextArea;
         } else {
             // Plain text area
