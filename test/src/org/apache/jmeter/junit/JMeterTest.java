@@ -19,7 +19,6 @@
 package org.apache.jmeter.junit;
 
 import java.awt.Component;
-import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
