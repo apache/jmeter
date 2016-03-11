@@ -110,11 +110,6 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      */
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("JMeterTest");
-        if(GraphicsEnvironment.isHeadless()) {
-            System.out.println("Skipping test:"+JMeterTest.class.getName()+", cannot run in Headless mode");
-            log.warn("Skipping test:"+JMeterTest.class.getName()+", cannot run in Headless mode");
-            return suite;
-        }
 
         // The Locale used to instantiate the GUI objects
         JMeterUtils.setLocale(TEST_LOCALE);
