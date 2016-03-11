@@ -34,7 +34,20 @@ public final class KeyStrokes {
     }
 
     // Bug 47064 - fixes for Mac LAF
-    private static final int CONTROL_MASK =Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    private static final int CONTROL_MASK;
+    // Allow tests to work under headless mode
+    static {
+        int mask = KeyEvent.CTRL_DOWN_MASK; // This is better than nothing...
+        try {
+            mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+        } catch (java.awt.HeadlessException e) {
+            // suppress the error if we are deliberately running headless
+            if (!"true".equals(System.getProperty("java.awt.headless"))) {
+                throw e;
+            }
+        }
+        CONTROL_MASK = mask;
+    }
 
     public static final KeyStroke COPY              = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK);
     public static final KeyStroke DUPLICATE         = KeyStroke.getKeyStroke(KeyEvent.VK_C, CONTROL_MASK | InputEvent.SHIFT_DOWN_MASK);
