@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
@@ -28,6 +29,8 @@ import org.fife.ui.rtextarea.RUndoManager;
 
 /**
  * Utility class to handle RSyntaxTextArea code
+ * It's not currently possible to instantiate the RSyntaxTextArea class when running headless.
+ * So we use getInstance methods to create the class and allow for headless testing.
  */
 public class JSyntaxTextArea extends RSyntaxTextArea {
 
@@ -43,10 +46,55 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", RSyntaxTextArea.getDefaultFont().getName());
     private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", RSyntaxTextArea.getDefaultFont().getSize());
 
-    @Deprecated
-    public JSyntaxTextArea() {
-        // For use by test code only
-        this(30, 50, false);
+    /**
+     * Creates the default syntax highlighting text area. The following are set:
+     * <ul>
+     * <li>setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA)</li>
+     * <li>setCodeFoldingEnabled(true)</li>
+     * <li>setAntiAliasingEnabled(true)</li>
+     * <li>setLineWrap(true)</li>
+     * <li>setWrapStyleWord(true)</li>
+     * </ul>
+     * 
+     * @param rows
+     *            The number of rows for the text area
+     * @param cols
+     *            The number of columns for the text area
+     * @param disableUndo
+     *            true to disable undo manager
+     */
+    public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
+        try {
+            return new JSyntaxTextArea(rows, cols, disableUndo);
+        } catch (HeadlessException e) {
+            // Allow override for unit testing only
+            if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
+                return new JSyntaxTextArea(disableUndo) {
+                    private static final long serialVersionUID = 1L;
+                    @Override
+                    protected void init() {
+                        try {
+                            super.init();
+                        } catch (HeadlessException|NullPointerException e) {
+                            // ignored
+                        }
+                    }
+                    // Override methods that would fail
+                    @Override
+                    public void setCodeFoldingEnabled(boolean b) {  }
+                    @Override
+                    public void setCaretPosition(int b) { }
+                    @Override
+                    public void discardAllEdits() { }
+                    @Override
+                    public void setText(String t) { }
+                    @Override
+                    public boolean isCodeFoldingEnabled(){ return true; }
+                };
+            } else {
+                throw e;
+            }
+        }
     }
 
     /**
@@ -64,6 +112,38 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      * @param cols
      *            The number of columns for the text area
      */
+    public static JSyntaxTextArea getInstance(int rows, int cols) {
+        return getInstance(rows, cols, false);
+    }
+
+    @Deprecated
+    public JSyntaxTextArea() {
+        // For use by test code only
+        this(30, 50, false);
+    }
+
+    // for use by headless tests only
+    private JSyntaxTextArea(boolean dummy) {
+        disableUndo = dummy;
+    }
+
+    /**
+     * Creates the default syntax highlighting text area. The following are set:
+     * <ul>
+     * <li>setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA)</li>
+     * <li>setCodeFoldingEnabled(true)</li>
+     * <li>setAntiAliasingEnabled(true)</li>
+     * <li>setLineWrap(true)</li>
+     * <li>setWrapStyleWord(true)</li>
+     * </ul>
+     * 
+     * @param rows
+     *            The number of rows for the text area
+     * @param cols
+     *            The number of columns for the text area
+     * @deprecated use {@link #getInstance(int, int)} instead
+     */
+    @Deprecated
     public JSyntaxTextArea(int rows, int cols) {
         this(rows, cols, false);
     }
@@ -84,7 +164,9 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of columns for the text area
      * @param disableUndo
      *            true to disable undo manager, defaults to false
+     * @deprecated use {@link #getInstance(int, int, boolean)} instead
      */
+    @Deprecated
     public JSyntaxTextArea(int rows, int cols, boolean disableUndo) {
         super(rows, cols);
         super.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
