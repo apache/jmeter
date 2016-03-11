@@ -214,7 +214,8 @@ public class CSVDataSet extends ConfigTestElement
                 }
             }
         } else {
-            log.warn("No filename setup in CSV Data Set Config: "+this.getName());
+            log.error("No filename setup in CSV Data Set Config: "+this.getName());
+            throw new JMeterStopThreadException("No filename setup in CSV Data Set Config: "+this.getName());
         }
     }
 
