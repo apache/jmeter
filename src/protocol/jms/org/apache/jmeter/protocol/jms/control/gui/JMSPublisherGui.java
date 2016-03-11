@@ -106,7 +106,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
 
-    private final JSyntaxTextArea textMessage = new JSyntaxTextArea(10, 50); // $NON-NLS-1$
+    private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
@@ -220,7 +220,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
         JPanel messageContentPanel = new JPanel(new BorderLayout());
         messageContentPanel.add(new JLabel(JMeterUtils.getResString("jms_text_area")), BorderLayout.NORTH);
-        messageContentPanel.add(new JTextScrollPane(textMessage), BorderLayout.CENTER);
+        messageContentPanel.add(JTextScrollPane.getInstance(textMessage), BorderLayout.CENTER);
 
         mainPanel.add(messageContentPanel);
         useProperties.addChangeListener(this);

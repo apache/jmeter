@@ -155,14 +155,14 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     }
 
     private JPanel createScriptPanel() {
-        scriptField = new JSyntaxTextArea(20, 20);
+        scriptField = JSyntaxTextArea.getInstance(20, 20);
 
         JLabel label = new JLabel(JMeterUtils.getResString("bsh_script")); // $NON-NLS-1$
         label.setLabelFor(scriptField);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(label, BorderLayout.NORTH);
-        panel.add(new JTextScrollPane(scriptField), BorderLayout.CENTER);
+        panel.add(JTextScrollPane.getInstance(scriptField), BorderLayout.CENTER);
 
         JTextArea explain = new JTextArea(JMeterUtils.getResString("bsh_script_variables")); //$NON-NLS-1$
         explain.setLineWrap(true);
