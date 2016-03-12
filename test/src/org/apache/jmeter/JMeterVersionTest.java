@@ -96,6 +96,7 @@ public class JMeterVersionTest extends JMeterTestCase {
             }
         }
         // remove docs-only jars
+        propNames.remove("jdom");
         propNames.remove("velocity");
         propNames.remove("commons-lang");
         // remove optional checkstyle name
