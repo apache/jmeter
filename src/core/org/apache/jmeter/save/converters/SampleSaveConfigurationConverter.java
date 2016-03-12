@@ -138,7 +138,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         createNode(writer, prop.saveConnectTime(), NODE_CONNECT_TIME);
     }
 
-    // Helper method to simplify marshall routine. Save if true.
+    // Helper method to simplify marshall routine. Save if and only if true.
     private void createNode(HierarchicalStreamWriter writer, boolean save, String node) {
         if (!save) {
             return;
