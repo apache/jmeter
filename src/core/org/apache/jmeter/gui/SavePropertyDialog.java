@@ -28,7 +28,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -98,6 +102,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         int x = (countMethods(methods) / 3) + 1;
         log.debug("grid panel is " + 3 + " by " + x);
         JPanel checkPanel = new JPanel(new GridLayout(x, 3));
+        List<JCheckBox> checks = new ArrayList<>();
         for (Method method : methods) {
             String name = method.getName();
             if (name.startsWith(NAME_SAVE_PFX) && method.getParameterTypes().length == 0) {
@@ -106,7 +111,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
                     JCheckBox check = new JCheckBox(
                             JMeterUtils.getResString(RESOURCE_PREFIX + name),
                             ((Boolean) method.invoke(saveConfig, new Object[0])).booleanValue());
-                    checkPanel.add(check, BorderLayout.NORTH);
+                    checks.add(check);
                     check.addActionListener(this);
                     String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
                     check.setActionCommand(actionCommand);
@@ -117,6 +122,22 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
                     log.warn("Problem creating save config dialog", e);
                 }
             }
+        }
+        // sortOrder is a temporary hack to allow easy testing of sort alternatives (Bug 59171)
+        final String sortOrder = JMeterUtils.getPropDefault("saveconfig.sort", "");
+        if (sortOrder.length() > 0) {
+            Collections.sort(checks, new Comparator<JCheckBox>(){
+                @Override
+                public int compare(JCheckBox o1, JCheckBox o2) {
+                    if ("text".equals(sortOrder)) {
+                        return o1.getText().compareToIgnoreCase(o2.getText()); // depends on language
+                    } else {
+                        return o1.getActionCommand().compareToIgnoreCase(o2.getActionCommand()); // propName
+                    }
+                }});            
+        }
+        for(JCheckBox check : checks) {
+            checkPanel.add(check, BorderLayout.NORTH);
         }
         getContentPane().add(checkPanel, BorderLayout.NORTH);
         JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
