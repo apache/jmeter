@@ -42,6 +42,7 @@ import org.apache.log.Logger;
  * - setXyz(boolean)
  * - saveXyz()
  * - update SampleSaveConfigurationConverter to add new fields to marshall() and shouldSerialiseMember()
+ * - update ctor SampleSaveConfiguration(boolean value) to set the value if it is a boolean property
  * - update SampleResultConverter and/or HTTPSampleConverter
  * - update CSVSaveService: CSV_XXXX, makeResultFromDelimitedString, printableFieldNamesToString, static{}
  * - update messages.properties to add save_xyz entry
@@ -436,26 +437,27 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         assertions = value;
         bytes = value;
         code = value;
+        connectTime = value;
         dataType = value;
         encoding = value;
         fieldNames = value;
         fileName = value;
         hostname = value;
+        idleTime = value;
         label = value;
         latency = value;
-        connectTime = value;
         message = value;
         printMilliseconds = _printMilliseconds;//is derived from properties only
         requestHeaders = value;
         responseData = value;
         responseDataOnError = value;
         responseHeaders = value;
+        sampleCount = value;
         samplerData = value;
         saveAssertionResultsFailureMessage = value;
         subresults = value;
         success = value;
         threadCounts = value;
-        sampleCount = value;
         threadName = value;
         time = value;
         timestamp = value;
