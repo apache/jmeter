@@ -387,7 +387,6 @@
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
     <include name="${lib.dir}/${jcharts.jar}"/>
-    <include name="${lib.dir}/${jdom.jar}"/>
     <include name="${lib.dir}/${jms.jar}"/>
     <include name="${lib.dir}/${rhino.jar}"/>
     <include name="${lib.dir}/${jodd-core.jar}"/>
@@ -460,7 +459,6 @@
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
-    <pathelement location="${lib.dir}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
     <pathelement location="${lib.dir}/${rhino.jar}"/>
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
@@ -496,7 +494,7 @@
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${lib.doc}/${velocity.jar}"/>
-    <pathelement location="${lib.dir}/${jdom.jar}"/>
+    <pathelement location="${lib.doc}/${jdom.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
     <pathelement location="${lib.doc}/${commons-lang.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
@@ -2880,7 +2878,7 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="jakarta-oro"/>
         <process_jarfile jarname="javamail"/>
         <process_jarfile jarname="jcharts"/>
-        <process_jarfile jarname="jdom"/>
+        <process_jarfile jarname="jdom" dest.dir="${lib.doc}"/>
         <process_jarfile jarname="jms"/>
         <process_jarfile jarname="rhino"/>
         <process_jarfile jarname="jodd-core"/>
@@ -2912,7 +2910,7 @@ run JMeter unless all the JMeter jars are added.
     <target name="_process_doc_jars">
       <process_jarfile jarname="commons-collections"/>
       <process_jarfile jarname="commons-lang"   dest.dir="${lib.doc}"/>
-      <process_jarfile jarname="jdom"/>
+      <process_jarfile jarname="jdom"           dest.dir="${lib.doc}"/>
       <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
     </target>
 

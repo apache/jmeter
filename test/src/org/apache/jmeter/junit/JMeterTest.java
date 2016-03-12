@@ -22,6 +22,10 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -36,6 +40,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.UnsharedComponent;
@@ -49,12 +61,11 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class JMeterTest extends JMeterTestCaseJUnit3 {
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -140,24 +151,43 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         guiTitles = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
-        SAXBuilder bldr = new SAXBuilder();
-        Document doc = bldr.build(compref);
-        Element root = doc.getRootElement();
-        Element body = root.getChild("body");
-        @SuppressWarnings("unchecked")
-        List<Element> sections = body.getChildren("section");
-        for (Element section : sections) {
-            @SuppressWarnings("unchecked")
-            List<Element> components = section.getChildren("component");
-            for (Element comp : components) {
-                String nm = comp.getAttributeValue("name");
-                if (!nm.equals("SSL Manager")) {// Not a true GUI component
-                    guiTitles.put(nm.replace(' ', '_'), Boolean.FALSE);
+        try (InputStream stream = new FileInputStream(compref)) {
+            org.w3c.dom.Element body = getBodyFromXMLDocument(stream);
+            NodeList sections = body.getElementsByTagName("section");
+            for (int i = 0; i < sections.getLength(); i++) {
+                org.w3c.dom.Element section = (org.w3c.dom.Element) sections.item(i);
+                NodeList components = section.getElementsByTagName("component");
+                for (int j = 0; j < components.getLength(); j++) {
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                            components.item(j);
+                    String nm = comp.getAttribute("name");
+                    if (!nm.equals("SSL Manager")) {// Not a true GUI component
+                        guiTitles.put(nm.replace(' ', '_'), Boolean.FALSE);
+                    }
                 }
             }
         }
         // Add titles that don't need to be documented
         guiTitles.put("Example Sampler", Boolean.FALSE);
+    }
+
+    /**
+     * @return
+     * @throws ParserConfigurationException
+     * @throws IOException 
+     * @throws SAXException 
+     * @throws FileNotFoundException 
+     */
+    private Element getBodyFromXMLDocument(InputStream stream)
+            throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setIgnoringElementContentWhitespace(true);
+        dbf.setIgnoringComments(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(new InputSource(stream));
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        org.w3c.dom.Element body = (org.w3c.dom.Element) root.getElementsByTagName("body").item(0);
+        return body;
     }
 
     /*
@@ -167,17 +197,21 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         guiTags = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
-        SAXBuilder bldr = new SAXBuilder();
-        Document doc = bldr.build(compref);
-        Element root = doc.getRootElement();
-        Element body = root.getChild("body");
-        @SuppressWarnings("unchecked")
-        List<Element> sections = body.getChildren("section");
-        for (Element section : sections) {
-            @SuppressWarnings("unchecked")
-            List<Element> components = section.getChildren("component");
-            for (Element comp : components) {
-                guiTags.put(comp.getAttributeValue("tag"), Boolean.FALSE);
+        try (InputStream stream = new FileInputStream(compref)) {
+            org.w3c.dom.Element body = getBodyFromXMLDocument(stream);
+            NodeList sections = body.getElementsByTagName("section");
+            
+            for (int i = 0; i < sections.getLength(); i++) {
+                org.w3c.dom.Element section = (org.w3c.dom.Element) sections.item(i);
+                NodeList components = section.getElementsByTagName("component");
+                for (int j = 0; j < components.getLength(); j++) {
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                            components.item(j);
+                    String tag = comp.getAttribute("tag");
+                    if (!StringUtils.isEmpty(tag)){
+                        guiTags.put(tag, Boolean.FALSE);
+                    }
+                }
             }
         }
     }
