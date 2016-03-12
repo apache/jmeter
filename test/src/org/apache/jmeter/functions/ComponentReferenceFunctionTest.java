@@ -18,22 +18,32 @@
 
 package org.apache.jmeter.functions;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
 
@@ -72,29 +82,38 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
         return suite;
     }
     
+    private Element getBodyFromXMLDocument(InputStream stream)
+            throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setIgnoringElementContentWhitespace(true);
+        dbf.setIgnoringComments(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(new InputSource(stream));
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        org.w3c.dom.Element body = (org.w3c.dom.Element) root.getElementsByTagName("body").item(0);
+        return body;
+    }
+    
     /*
      * Extract titles from functions.xml
      */
     public void createFunctionSet() throws Exception {
         funcTitles = new HashMap<>(20);
-
         String compref = "../xdocs/usermanual/functions.xml";
-        SAXBuilder bldr = new SAXBuilder();
-        Document doc = bldr.build(compref);
-        Element root = doc.getRootElement();
-        Element body = root.getChild("body");
-        Element section = body.getChild("section");
-        @SuppressWarnings("unchecked")
-        List<Element> sections = section.getChildren("subsection");
-        for (int i = 0; i < sections.size(); i++) {
-            @SuppressWarnings("unchecked")
-            List<Element> components = sections.get(i).getChildren("component");
-            for (int j = 0; j < components.size(); j++) {
-                Element comp = components.get(j);
-                funcTitles.put(comp.getAttributeValue("name"), Boolean.FALSE);
-                String tag = comp.getAttributeValue("tag");
-                if (tag != null){
-                    funcTitles.put(tag, Boolean.FALSE);                    
+        try (InputStream stream = new FileInputStream(compref)) {
+            Element body = getBodyFromXMLDocument(stream);
+            Element section = (Element) body.getElementsByTagName("section").item(0);
+            NodeList subSections = section.getElementsByTagName("subsection");
+            for (int i = 0; i < subSections.getLength(); i++) {
+                NodeList components = ((Element)subSections.item(i)).getElementsByTagName("component");
+                for (int j = 0; j < components.getLength(); j++) {
+                    org.w3c.dom.Element comp = (org.w3c.dom.Element) 
+                            components.item(j);
+                    funcTitles.put(comp.getAttribute("name"), Boolean.FALSE);
+                    String tag = comp.getAttribute("tag");
+                    if (!StringUtils.isEmpty(tag)){
+                        funcTitles.put(tag, Boolean.FALSE);                    
+                    }
                 }
             }
         }
