@@ -156,8 +156,9 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         if (requiredType != thisClass) {
             throw new IllegalArgumentException("Unexpected class: "+requiredType.getName());
         }
-        SampleSaveConfiguration result = new SampleSaveConfiguration();
-        result.setBytes(false); // Maintain backward compatibility (bytes was not in the JMX file)
+        // The default for missing tags is false, so preset all the fields accordingly
+        SampleSaveConfiguration result = new SampleSaveConfiguration(false);
+        // Now pick up any tags from the input file
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String nn = reader.getNodeName();
