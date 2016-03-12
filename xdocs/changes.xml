@@ -116,6 +116,21 @@ Summary
     </li>
     <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
     <li>For Thread Group Test Element, the property "Action to be taken after a Sample Error" value has been switched from "Continue" to "Start Next thread loop". See <bugzilla>59152</bugzilla></li>
+    <li>The following jars have been removed:
+    <ul>
+        <li>excalibur-datasource-2.1.jar (see <bugzilla>59156</bugzilla>)</li>
+        <li>excalibur-instrument-1.0.jar (see <bugzilla>58786</bugzilla>)</li>
+        <li>excalibur-pool-api-2.1.jar (see <bugzilla>58786</bugzilla>)</li>
+        <li>excalibur-pool-impl-2.1.jar (see <bugzilla>58786</bugzilla>)</li>
+        <li>excalibur-pool-instrumented-2.1.jar (see <bugzilla>58786</bugzilla>)</li>
+        <li>htmllexer-2.1.jar (see <bugzilla>59037</bugzilla>)</li>
+        <li>htmlparser-2.1.jar (see <bugzilla>59037</bugzilla>)</li>
+        <li>soap-2.3.1.jar</li>
+        <li>xmlpull-1.1.3.1.jar (see <bugzilla>58679</bugzilla>)</li>
+        <li>xpp3_min-1.1.4c.jar (see <bugzilla>58679</bugzilla>)</li>
+        <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
+    </ul>
+    </li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -197,6 +212,7 @@ Summary
       Based on a patch by Vincent Herilier (vherilier at gmail.com)</li>
   <li><bug>58848</bug>Argument Panel : when adding an argument (add button or from clipboard) scroll the table to the new line. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
   <li><bug>58865</bug>Allow empty default value in the Regular Expression Extractor. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+  <li><bug>59156</bug>XMLAssertion : drop jdom dependency by using XMLReader</li>
 </ul>
 
 <h3>Functions</h3>

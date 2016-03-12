@@ -27,23 +27,30 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * Checks if the result is a well-formed XML content using jdom
+ * Checks if the result is a well-formed XML content using {@link XMLReader}
  * 
  */
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     // one builder for all requests in a thread
-    private static final ThreadLocal<SAXBuilder> myBuilder = new ThreadLocal<SAXBuilder>() {
+    private static final ThreadLocal<XMLReader> XML_READER = new ThreadLocal<XMLReader>() {
         @Override
-        protected SAXBuilder initialValue() {
-            return new SAXBuilder();
+        protected XMLReader initialValue() {
+            try {
+                return XMLReaderFactory.createXMLReader();
+            } catch (SAXException e) {
+                LOG.error("Error initializing XMLReader in XMLAssertion", e); 
+                return null;
+            }
         }
     };
 
@@ -62,18 +69,17 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
             return result.setResultForNull();
         }
         result.setFailure(false);
-        SAXBuilder builder = myBuilder.get();
-
-        try {
-            builder.build(new StringReader(resultData));
-        } catch (JDOMException e) {
-            log.debug("Cannot parse result content", e); // may well happen
-            result.setFailure(true);
-            result.setFailureMessage(e.getMessage());
-        } catch (IOException e) {
-            log.error("Cannot read result content", e); // should never happen
+        XMLReader builder = XML_READER.get();
+        if(XML_READER!=null) {
+            try {
+                builder.parse(new InputSource(new StringReader(resultData)));
+            } catch (SAXException | IOException e) {
+                result.setError(true);
+                result.setFailureMessage(e.getMessage());
+            }
+        } else {
             result.setError(true);
-            result.setFailureMessage(e.getMessage());
+            result.setFailureMessage("Cannot initialize XMLReader in element:"+getName()+", check jmeter.log file");
         }
 
         return result;
@@ -85,6 +91,6 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
 
     @Override
     public void threadFinished() {
-        myBuilder.set(null);
+        XML_READER.set(null);
     }
 }

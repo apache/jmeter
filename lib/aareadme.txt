@@ -116,7 +116,6 @@ http://jcharts.sourceforge.net/downloads.html
 jdom-1.1.3
 --------
 http://www.jdom.org/downloads/index.html
-- XMLAssertion, JMeterTest ONLY
 - Anakia
 
 jodd-core-3.6.7
