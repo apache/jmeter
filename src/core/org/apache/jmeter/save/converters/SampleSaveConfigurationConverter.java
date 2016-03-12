@@ -82,6 +82,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
                 String fieldName) {
             if (SampleSaveConfiguration.class != definedIn) { return true; }
             // These are new fields; not saved unless true
+            // This list MUST agree with the list in the marshall() method below
             if (fieldName.equals(NODE_BYTES)) { return false; }
             if (fieldName.equals(NODE_URL)) { return false; }
             if (fieldName.equals(NODE_FILENAME)) { return false; }
@@ -125,7 +126,8 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
 
         SampleSaveConfiguration prop = (SampleSaveConfiguration) obj;
 
-        // Save the new fields - but only if they are not the default
+        // Save the new fields - but only if they are true
+        // This list MUST agree with the list in MyWrapper#shouldSerializeMember()
         createNode(writer,prop.saveBytes(),NODE_BYTES);
         createNode(writer,prop.saveUrl(),NODE_URL);
         createNode(writer,prop.saveFileName(),NODE_FILENAME);
@@ -136,7 +138,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         createNode(writer, prop.saveConnectTime(), NODE_CONNECT_TIME);
     }
 
-    // Helper method to simplify marshall routine
+    // Helper method to simplify marshall routine. Save iff true.
     private void createNode(HierarchicalStreamWriter writer, boolean save, String node) {
         if (!save) {
             return;
