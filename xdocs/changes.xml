@@ -273,7 +273,7 @@ Summary
 <li><bug>59093</bug>Option parsing error message can be 'lost'</li>
 <li><bug>58715</bug>Feature request: Bundle groovy-all with JMeter</li>
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated 8 years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-<li><bug>58426</bug>Improve display of JMeter on Big screen resolutions (part 1 of future enhancement)</li>
+<li><bug>58426</bug>Improve display of JMeter on high resolution devices (HiDPI) (part 1 of enhancement)</li>
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>59152</bug>Thread Group: Change "Action to be taken after a Sample Error" value from "Continue" to "Start Next thread loop". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
