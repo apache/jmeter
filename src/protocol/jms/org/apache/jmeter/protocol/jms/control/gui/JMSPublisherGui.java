@@ -164,7 +164,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
      * @param sampler {@link PublisherSampler} instance
      */
     private void setupSamplerProperties(final PublisherSampler sampler) {
-      this.configureTestElement(sampler);
+      super.configureTestElement(sampler);
       sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
       sampler.setJNDIIntialContextFactory(jndiICF.getText());
       sampler.setProviderUrl(urlField.getText());

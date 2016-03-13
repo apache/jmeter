@@ -87,7 +87,7 @@ public class SampleTimeoutGui extends AbstractPreProcessorGui {
      */
     @Override
     public void modifyTestElement(TestElement timer) {
-        this.configureTestElement(timer);
+        super.configureTestElement(timer);
         ((SampleTimeout) timer).setTimeout(timeoutField.getText());
     }
 
