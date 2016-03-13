@@ -207,8 +207,6 @@ public interface TestElement extends Cloneable {
      * Clear the TestElement of all data.
      */
     void clear();
-    // TODO - yet another ambiguous name - does it need changing?
-    // See also: Clearable, JMeterGUIComponent
 
     /**
      * Return a property as a string value.
