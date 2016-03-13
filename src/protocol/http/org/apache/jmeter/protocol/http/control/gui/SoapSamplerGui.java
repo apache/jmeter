@@ -73,7 +73,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
      */
     @Override
     public void modifyTestElement(TestElement s) {
-        this.configureTestElement(s);
+        super.configureTestElement(s);
         if (s instanceof SoapSampler) {
             SoapSampler sampler = (SoapSampler) s;
             sampler.setURLData(urlField.getText());

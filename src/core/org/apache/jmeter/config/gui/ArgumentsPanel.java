@@ -238,7 +238,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
                 arguments.addArgument(arg);
             }
         }
-        this.configureTestElement(args);
+        super.configureTestElement(args);
     }
 
     /**

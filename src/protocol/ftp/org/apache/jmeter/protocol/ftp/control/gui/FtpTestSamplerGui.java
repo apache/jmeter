@@ -65,7 +65,7 @@ public class FtpTestSamplerGui extends AbstractSamplerGui {
         sampler.clear();
         ftpDefaultPanel.modifyTestElement(sampler);
         loginPanel.modifyTestElement(sampler);
-        this.configureTestElement(sampler);
+        super.configureTestElement(sampler);
     }
 
     /**

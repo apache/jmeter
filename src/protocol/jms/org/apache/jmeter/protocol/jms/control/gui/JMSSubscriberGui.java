@@ -142,7 +142,7 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     @Override
     public void modifyTestElement(TestElement s) {
         SubscriberSampler sampler = (SubscriberSampler) s;
-        this.configureTestElement(sampler);
+        super.configureTestElement(sampler);
         sampler.setUseJNDIProperties(String.valueOf(useProperties.isSelected()));
         sampler.setJNDIIntialContextFactory(jndiICF.getText());
         sampler.setProviderUrl(urlField.getText());

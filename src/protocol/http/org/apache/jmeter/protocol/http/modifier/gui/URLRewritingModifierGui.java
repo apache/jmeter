@@ -101,7 +101,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
      */
     @Override
     public void modifyTestElement(TestElement modifier) {
-        this.configureTestElement(modifier);
+        super.configureTestElement(modifier);
         URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);
         rewritingModifier.setArgumentName(argumentName.getText());
         rewritingModifier.setPathExtension(pathExt.isSelected());

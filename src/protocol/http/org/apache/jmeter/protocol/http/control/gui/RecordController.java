@@ -59,7 +59,7 @@ public class RecordController extends LogicControllerGui implements ActionListen
     @Override
     public TestElement createTestElement() {
         RecordingController con = new RecordingController();
-        this.configureTestElement(con);
+        super.configureTestElement(con);
         return con;
     }
     

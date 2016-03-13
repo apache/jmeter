@@ -140,7 +140,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
                 arguments.addArgument(arg);
             }
         }
-        this.configureTestElement(args);
+        super.configureTestElement(args);
     }
 
     /**
