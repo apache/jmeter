@@ -133,7 +133,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             samplerBase.setIpSource(sourceIpAddr.getText());
             samplerBase.setIpSourceType(sourceIpType.getSelectedIndex());
         }
-        this.configureTestElement(sampler);
+        super.configureTestElement(sampler);
     }
 
     /**

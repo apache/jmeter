@@ -88,7 +88,7 @@ public class ConstantTimerGui extends AbstractTimerGui {
      */
     @Override
     public void modifyTestElement(TestElement timer) {
-        this.configureTestElement(timer);
+        super.configureTestElement(timer);
         ((ConstantTimer) timer).setDelay(delayField.getText());
     }
 

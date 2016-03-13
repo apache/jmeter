@@ -91,7 +91,7 @@ public abstract class AbstractRandomTimerGui extends AbstractTimerGui {
      */
     @Override
     public void modifyTestElement(TestElement timer) {
-        this.configureTestElement(timer);
+        super.configureTestElement(timer);
         ((RandomTimer) timer).setDelay(delayField.getText());
         ((RandomTimer) timer).setRange(rangeField.getText());
     }

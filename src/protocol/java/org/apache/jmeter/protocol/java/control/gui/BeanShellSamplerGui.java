@@ -76,7 +76,7 @@ public class BeanShellSamplerGui extends AbstractSamplerGui {
     @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
-        this.configureTestElement(te);
+        super.configureTestElement(te);
         te.setProperty(BeanShellSampler.SCRIPT, scriptField.getText());
         te.setProperty(BeanShellSampler.FILENAME, filename.getText());
         te.setProperty(BeanShellSampler.PARAMETERS, parameters.getText());

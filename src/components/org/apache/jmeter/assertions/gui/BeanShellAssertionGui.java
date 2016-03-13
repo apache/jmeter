@@ -75,7 +75,7 @@ public class BeanShellAssertionGui extends AbstractAssertionGui {
     @Override
     public void modifyTestElement(TestElement te) {
         te.clear();
-        this.configureTestElement(te);
+        super.configureTestElement(te);
         te.setProperty(BeanShellAssertion.SCRIPT, scriptField.getText());
         te.setProperty(BeanShellAssertion.FILENAME, filename.getText());
         te.setProperty(BeanShellAssertion.PARAMETERS, parameters.getText());

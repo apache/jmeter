@@ -114,7 +114,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public TestElement createTestElement() {
         JMSSampler sampler = new JMSSampler();
-        this.configureTestElement(sampler);
+        super.configureTestElement(sampler);
         transfer(sampler);
         return sampler;
     }
@@ -152,7 +152,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
      */
     @Override
     public void modifyTestElement(TestElement element) {
-        this.configureTestElement(element);
+        super.configureTestElement(element);
         if (!(element instanceof JMSSampler)) { return; }
         JMSSampler sampler = (JMSSampler) element;
         transfer(sampler);

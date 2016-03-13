@@ -74,7 +74,7 @@ public class LdapTestSamplerGui extends AbstractSamplerGui {
         sampler.clear();
         ((LDAPSampler) sampler).addTestElement(ldapDefaultPanel.createTestElement());
         ((LDAPSampler) sampler).addTestElement(loginPanel.createTestElement());
-        this.configureTestElement(sampler);
+        super.configureTestElement(sampler);
     }
 
     /**
