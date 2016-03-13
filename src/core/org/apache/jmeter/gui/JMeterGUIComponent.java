@@ -107,6 +107,16 @@ public interface JMeterGUIComponent extends ClearGui {
      * the model class that it knows how to display, and this method is called
      * when new test elements are created.
      *
+     * <p>
+     * The canonical implementation looks like this:
+     * <pre>
+     * public TestElement createTestElement() {
+     *     TestElementXYZ el = new TestElementXYZ();
+     *     modifyTestElement(el);
+     *     return el;
+     * }
+     * </pre>
+     *
      * @return the Test Element object that the GUI component represents.
      */
     TestElement createTestElement();
@@ -117,6 +127,23 @@ public interface JMeterGUIComponent extends ClearGui {
      * overwrite whatever data is currently in the TestElement as it is called
      * after a user has filled out the form elements in the gui with new
      * information.
+     *
+     * <p>
+     * The canonical implementation looks like this:
+     * <pre>
+     * public void modifyTestElement(TestElement element) {
+     *     configureTestElement(element);
+     *     // Using the element setters (preferred):
+     *     TestElementXYZ xyz = (TestElementXYZ) element;
+     *     xyz.setState(guiState.getText());
+     *     xyz.setCode(guiCode.getText());
+     *     ... other GUI fields ...
+     *     // or directly (do not use unless there is no setter for the field):
+     *     element.setProperty(TestElementXYZ.STATE, guiState.getText())
+     *     element.setProperty(TestElementXYZ.CODE, guiCode.getText())
+     *     ... other GUI fields ...
+     * }
+     * </pre>
      *
      * @param element
      *            the TestElement to modify
@@ -154,6 +181,23 @@ public interface JMeterGUIComponent extends ClearGui {
      * The GUI must be able to extract the data from the TestElement and update
      * all GUI fields to represent those data. This method is called to allow
      * JMeter to show the user the GUI that represents the test element's data.
+     *
+     * <p>
+     * The canonical implementation looks like this:
+     * <pre>
+     * public void configure(TestElement element) {
+     *     super.configure(element);
+     *     // Using the element getter (preferred):
+     *     TestElementXYZ xyz = (TestElementXYZ) element;
+     *     guiState.setText(xyz.getState());
+     *     guiCode.setText(xyz.getCode());
+     *     ... other GUI fields ...
+     *     // or using the element property names directly (do not use unless there is no getter for the field)
+     *     guiState.setText(element.getPropertyAsString(TestElementXYZ.STATE));
+     *     guiCode.setText(element.getPropertyAsString(TestElementXYZ.CODE));
+     *     ... other GUI fields ...
+     * }
+     * </pre>
      *
      * @param element
      *            the TestElement to configure
