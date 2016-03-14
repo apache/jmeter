@@ -120,7 +120,9 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         JPanel south = new JPanel();
         south.add(addButton);
         south.add(clipButton);
+        removeButton.setEnabled(false);
         south.add(removeButton);
+        clearButton.setEnabled(false);
         south.add(clearButton);
         p.add(south,BorderLayout.SOUTH);
         return p;
@@ -143,6 +145,15 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         } else {
             model.clearData();
         }
+        
+        if(model.getRowCount()>0) {
+            removeButton.setEnabled(true);
+            clearButton.setEnabled(true);
+        } else {
+            removeButton.setEnabled(false);
+            clearButton.setEnabled(false);
+        }
+        
         this.firePropertyChange();
     }
 
@@ -273,6 +284,9 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         public void actionPerformed(ActionEvent e) {
             try {
                 model.addRow(clazz.newInstance());
+                
+                removeButton.setEnabled(true);
+                clearButton.setEnabled(true);
             } catch(Exception err) {
                 LOG.error("The class type given to TableEditor was not instantiable. ", err);
             }
