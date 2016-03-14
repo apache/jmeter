@@ -85,6 +85,8 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private final JButton clipButton;
     private final JButton removeButton;
     private final JButton clearButton;
+    private final JButton upButton;
+    private final JButton downButton;
 
     public TableEditor() {
         addButton = new JButton(JMeterUtils.getResString("add")); // $NON-NLS-1$
@@ -95,6 +97,10 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         removeButton.addActionListener(new RemoveListener());
         clearButton = new JButton(JMeterUtils.getResString("clear")); // $NON-NLS-1$
         clearButton.addActionListener(new ClearListener());
+        upButton = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
+        upButton.addActionListener(new UpListener());
+        downButton = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
+        downButton.addActionListener(new DownListener());
     }
 
     @Override
@@ -124,6 +130,10 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         south.add(removeButton);
         clearButton.setEnabled(false);
         south.add(clearButton);
+        upButton.setEnabled(false);
+        south.add(upButton);
+        downButton.setEnabled(false);
+        south.add(downButton);
         p.add(south,BorderLayout.SOUTH);
         return p;
     }
@@ -152,6 +162,14 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         } else {
             removeButton.setEnabled(false);
             clearButton.setEnabled(false);
+        }
+        
+        if(model.getRowCount()>1) {
+            upButton.setEnabled(true);
+            downButton.setEnabled(true);
+        } else {
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
         }
         
         this.firePropertyChange();
@@ -312,6 +330,14 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
                         model.setValueAt(columns[i], model.getRowCount() - 1, i);
                     }
                 }
+
+                if(model.getRowCount()>1) {
+                    upButton.setEnabled(true);
+                    downButton.setEnabled(true);
+                } else {
+                    upButton.setEnabled(false);
+                    downButton.setEnabled(false);
+                }
             } catch (Exception err) {
                 LOG.error("The class type given to TableEditor was not instantiable. ", err);
             }
@@ -322,8 +348,16 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         @Override
         public void actionPerformed(ActionEvent e) {
             int[] rows = table.getSelectedRows();
-            for(int i=0;i<rows.length;i++){
+            for(int i=0; i<rows.length; i++){
               model.removeRow(rows[i]-i);
+            }
+            
+            if(model.getRowCount()>1) {
+                upButton.setEnabled(true);
+                downButton.setEnabled(true);
+            } else {
+                upButton.setEnabled(false);
+                downButton.setEnabled(false);
             }
         }
     }
@@ -332,12 +366,64 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         @Override
         public void actionPerformed(ActionEvent e) {
             model.clearData();
+            
+            upButton.setEnabled(false);
+            downButton.setEnabled(false);
+        }
+    }
+    
+    private class UpListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cancelEditing();
+
+            int[] rowsSelected = table.getSelectedRows();
+            if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
+                table.clearSelection();
+                for (int rowSelected : rowsSelected) {
+                    model.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
+                }
+                for (int rowSelected : rowsSelected) {
+                    table.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
+                }
+            }            
+        }
+    }
+    
+    private class DownListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            cancelEditing();
+            
+            int[] rowsSelected = table.getSelectedRows();
+            if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
+                table.clearSelection();
+                for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                    int rowSelected = rowsSelected[i];
+                    model.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
+                }
+                for (int rowSelected : rowsSelected) {
+                    table.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
+                }
+            }
         }
     }
 
     @Override
     public void clearGui() {
         this.model.clearData();
+    }
+    
+    /**
+     * Cancel cell editing if it is being edited
+     */
+    private void cancelEditing() {
+        // If a table cell is being edited, we must cancel the editing before
+        // deleting the row
+        if (table.isEditing()) {
+            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+            cellEditor.cancelCellEditing();
+        }
     }
 
 }
