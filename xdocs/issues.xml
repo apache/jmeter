@@ -29,6 +29,13 @@ Before creating a new issue, please check whether the issue has already been rep
 It's also worth checking first on the JMeter user mailing list; others may already have a solution.
 </p>
 </section>
+<section name="Support Questions">
+<p>
+Please do not use Bugzilla for asking questions. It is not a support forum.
+Instead, please <a href="mail2.html">subscribe</a> to the JMeter user mailing list and ask there.
+The user mailing list has a bigger audience and you are more likely to get an answer quickly.
+</p>
+</section>
 <section name="Known Bugs and enhancements">
 <ul>
 <li>
