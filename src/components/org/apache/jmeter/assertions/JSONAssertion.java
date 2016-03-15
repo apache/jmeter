@@ -192,20 +192,24 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
             return false;
         }
         int start = col;
-        if (c == '-') nextCharacter();
+        if (c == '-') {
+            nextCharacter();
+        }
         if (c == '0') {
             nextCharacter();
         } else if (Character.isDigit(c)) {
-            while (Character.isDigit(c))
+            while (Character.isDigit(c)){
                 nextCharacter();
+            }
         } else {
             return error("number", start);
         }
         if (c == '.') {
             nextCharacter();
             if (Character.isDigit(c)) {
-                while (Character.isDigit(c))
+                while (Character.isDigit(c)){
                     nextCharacter();
+                }
             } else {
                 return error("number", start);
             }
@@ -217,8 +221,9 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
                 nextCharacter();
             }
             if (Character.isDigit(c)) {
-                while (Character.isDigit(c))
+                while (Character.isDigit(c)){
                     nextCharacter();
+                }
             } else {
                 return error("number", start);
             }
