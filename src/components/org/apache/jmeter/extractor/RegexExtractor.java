@@ -46,7 +46,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 public class RegexExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -86,6 +86,8 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     private static final String REF_MATCH_NR = "_matchNr"; // $NON-NLS-1$
 
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
+
+    private static final boolean DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE = false;
 
     private transient List<Object> template;
 
@@ -449,7 +451,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * @param defaultEmptyValue The default value for the variable
      */
     public void setDefaultEmptyValue(boolean defaultEmptyValue) {
-        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue);
+        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
     }
 
     /**
@@ -466,7 +468,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
      * Do we set default value to "" value when if it's empty
      */
     public boolean isEmptyDefaultValue() {
-        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE);
+        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);
     }
 
     public void setTemplate(String template) {
