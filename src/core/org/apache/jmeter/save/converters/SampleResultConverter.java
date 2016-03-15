@@ -23,11 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.assertions.AssertionResult;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
@@ -455,24 +453,20 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     protected void readFile(String resultFileName, SampleResult res) {
-        File in = null;
-        InputStream fis = null;
-        try {
-            in = new File(resultFileName);
-            fis = new BufferedInputStream(new FileInputStream(in));
+        File in = new File(resultFileName);
+        try (FileInputStream fis = new FileInputStream(in);
+                BufferedInputStream bis = new BufferedInputStream(fis)){
             ByteArrayOutputStream outstream = new ByteArrayOutputStream(res.getBytes());
             byte[] buffer = new byte[4096];
             int len;
-            while ((len = fis.read(buffer)) > 0) {
+            while ((len = bis.read(buffer)) > 0) {
                 outstream.write(buffer, 0, len);
             }
             outstream.close();
             res.setResponseData(outstream.toByteArray());
         } catch (IOException e) {
             log.warn(e.getLocalizedMessage());
-        } finally {
-            IOUtils.closeQuietly(fis);
-        }
+        } 
     }
 
 
