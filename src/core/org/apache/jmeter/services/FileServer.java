@@ -250,17 +250,17 @@ public class FileServer {
      * Creates an association between a filename and a File inputOutputObject,
      * and stores it for later use - unless it is already stored.
      *
-     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param filename - relative (to base) or absolute file name (must not be null or empty)
      * @param charsetName - the character set encoding to use for the file (may be null)
      * @param alias - the name to be used to access the object (must not be null)
      * @param hasHeader true if the file has a header line describing the contents
      * @return the header line; may be null
      * @throws EOFException if eof reached
-     * @throws IllegalArgumentException if header could not be read
+     * @throws IllegalArgumentException if header could not be read or filename is null or empty
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
-        if (filename == null){
-            throw new IllegalArgumentException("Filename must not be null");
+        if (filename == null || filename.isEmpty()){
+            throw new IllegalArgumentException("Filename must not be null or empty");
         }
         if (alias == null){
             throw new IllegalArgumentException("Alias must not be null");
@@ -418,6 +418,7 @@ public class FileServer {
     }
 
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
+        if (fileEntry.file.exists() && fileEntry.file.canRead() && fileEntry.file.isFile()) {
         FileInputStream fis = new FileInputStream(fileEntry.file);
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
@@ -428,6 +429,9 @@ public class FileServer {
             isr = new InputStreamReader(fis);
         }
         return new BufferedReader(isr);
+        } else {
+            throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
+        }
     }
 
     public synchronized void write(String filename, String value) throws IOException {
