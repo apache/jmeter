@@ -24,9 +24,9 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class JSONAssertionGui extends AbstractAssertionGui {
    
-	private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 240L;
 
-	/**
+    /**
      * The constructor.
      */
     public JSONAssertionGui() {

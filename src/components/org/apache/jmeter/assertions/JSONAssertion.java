@@ -28,14 +28,13 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-
 /**
  * Checks if the result is a well-formed JSON content 
  * 
  */
 public class JSONAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
     private static final Logger log = LoggingManager.getLoggerForClass();
-
+    
     private static final long serialVersionUID = 240L;
 
     /**
@@ -53,23 +52,24 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
         if (resultData.length()==0) {
             return result.setResultForNull();
         }else{
-        	if(!validate(resultData)){
-        		result.setFailure(true);
+            if(!validate(resultData)){
+                result.setFailure(true);
                 result.setFailureMessage("ResultData is not Json");
-        	}
+            }
         }
         return result;
-
     }
 
     @Override
     public void threadStarted() {
+
     }
 
     @Override
     public void threadFinished() {
+
     }
-    
+
     private CharacterIterator it ;
     private char c;
     private int col;
@@ -84,10 +84,15 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
         input = input.trim();
         boolean ret = valid(input);
         return ret;
+
     }
 
+
+
     private boolean valid(String input) {
-        if ("".equals(input)) return true;
+        if ("".equals(input)) {
+            return true;
+        }
 
         boolean ret = true;
         it = new StringCharacterIterator(input);
@@ -101,8 +106,8 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
                 ret = error("end", col);
             }
         }
-
         return ret;
+
     }
 
     private boolean value() {
@@ -112,7 +117,10 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
     private boolean literal(String text) {
         CharacterIterator ci = new StringCharacterIterator(text);
         char t = ci.first();
-        if (c != t) return false;
+
+        if (c != t) {
+            return false;
+        }
 
         int start = col;
         boolean ret = true;
@@ -123,7 +131,9 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
             }
         }
         nextCharacter();
-        if (!ret) error("literal " + text, start);
+        if (!ret) {
+            error("literal " + text, start);
+        }
         return ret;
     }
 
@@ -136,7 +146,9 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
     }
 
     private boolean aggregate(char entryCharacter, char exitCharacter, boolean prefix) {
-        if (c != entryCharacter) return false;
+        if (c != entryCharacter) {
+            return false;
+        }
         nextCharacter();
         skipWhiteSpace();
         if (c == exitCharacter) {
@@ -147,9 +159,13 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
         for (;;) {
             if (prefix) {
                 int start = col;
-                if (!string()) return error("string", start);
+                if (!string()) {
+                    return error("string", start);
+                }
                 skipWhiteSpace();
-                if (c != ':') return error("colon", col);
+                if (c != ':') {
+                    return error("colon", col);
+                }
                 nextCharacter();
                 skipWhiteSpace();
             }
@@ -167,13 +183,14 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
             }
             skipWhiteSpace();
         }
-
         nextCharacter();
         return true;
     }
 
     private boolean number() {
-        if (!Character.isDigit(c) && c != '-') return false;
+        if (!Character.isDigit(c) && c != '-') {
+            return false;
+        }
         int start = col;
         if (c == '-') nextCharacter();
         if (c == '0') {
@@ -193,6 +210,7 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
                 return error("number", start);
             }
         }
+
         if (c == 'e' || c == 'E') {
             nextCharacter();
             if (c == '+' || c == '-') {
@@ -208,8 +226,12 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
         return true;
     }
 
+
+
     private boolean string() {
-        if (c != '"') return false;
+        if (c != '"') {
+            return false;
+        }
 
         int start = col;
         boolean escaped = false;
@@ -266,3 +288,5 @@ public class JSONAssertion extends AbstractTestElement implements Serializable, 
     }
 
 }
+
+
