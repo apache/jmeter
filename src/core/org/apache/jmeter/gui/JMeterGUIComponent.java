@@ -132,6 +132,7 @@ public interface JMeterGUIComponent extends ClearGui {
      * The canonical implementation looks like this:
      * <pre>
      * public void modifyTestElement(TestElement element) {
+     *     element.clear(); // many implementations use this
      *     configureTestElement(element);
      *     // Using the element setters (preferred):
      *     TestElementXYZ xyz = (TestElementXYZ) element;
