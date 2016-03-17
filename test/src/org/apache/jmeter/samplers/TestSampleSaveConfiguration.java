@@ -24,7 +24,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.Test;
@@ -143,6 +146,33 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
+    }
+
+    @Test
+    // Checks that all the saveXX() and setXXX(boolean) methods are in the list
+    public void testSaveConfigNames() throws Exception {
+        List<String> saveMethodNames = new ArrayList<>();
+        List<String> setMethodNames = new ArrayList<>();
+        Method[] methods = SampleSaveConfiguration.class.getMethods();
+        for(Method method : methods) {
+            String name = method.getName();
+            final String SAVE = "save";
+            if (name.startsWith(SAVE) && method.getParameterTypes().length == 0) {
+                name = name.substring(SAVE.length());
+                saveMethodNames.add(name);
+                assertTrue("SAVE_CONFIG_NAMES should contain save" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
+            }
+            final String SET = "set";
+            if (name.startsWith(SET) && method.getParameterTypes().length == 1 && boolean.class.equals(method.getParameterTypes()[0])) {
+                name = name.substring(SET.length());
+                setMethodNames.add(name);
+                assertTrue("SAVE_CONFIG_NAMES should contain set" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
+            }
+        }
+        for (String name : SampleSaveConfiguration.SAVE_CONFIG_NAMES) {
+            assertTrue("SAVE_CONFIG_NAMES should NOT contain save" + name, saveMethodNames.contains(name));
+            assertTrue("SAVE_CONFIG_NAMES should NOT contain set" + name, setMethodNames.contains(name));
+        }
     }
 
  }
