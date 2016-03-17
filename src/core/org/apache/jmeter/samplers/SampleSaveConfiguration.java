@@ -429,6 +429,32 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         return _static;
     }
 
+    // for test code only
+    static final String CONFIG_GETTER_PREFIX = "save";  // $NON-NLS-1$
+
+    /**
+     * Convert a config name to the method name of the getter.
+     * The getter method returns a boolean.
+     * @param configName
+     * @return the getter method name
+     */
+    public static final String getterName(String configName) {
+        return CONFIG_GETTER_PREFIX + configName;
+    }
+
+    // for test code only
+    static final String CONFIG_SETTER_PREFIX = "set";  // $NON-NLS-1$
+
+    /**
+     * Convert a config name to the method name of the setter
+     * The setter method requires a boolean parameter.
+     * @param configName
+     * @return the setter method name
+     */
+    public static final String setterName(String configName) {
+        return CONFIG_SETTER_PREFIX + configName;
+    }
+
     /**
      * List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
      * New method names should be added at the end so that existing layouts are not affected.
