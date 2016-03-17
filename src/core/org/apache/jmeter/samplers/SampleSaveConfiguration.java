@@ -24,6 +24,9 @@ package org.apache.jmeter.samplers;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.CharUtils;
@@ -41,6 +44,7 @@ import org.apache.log.Logger;
  * - clone s.xyz = xyz (perhaps)
  * - setXyz(boolean)
  * - saveXyz()
+ * - add Xyz to SAVE_CONFIG_NAMES list
  * - update SampleSaveConfigurationConverter to add new fields to marshall() and shouldSerialiseMember()
  * - update ctor SampleSaveConfiguration(boolean value) to set the value if it is a boolean property
  * - update SampleResultConverter and/or HTTPSampleConverter
@@ -425,6 +429,42 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         return _static;
     }
 
+    /**
+     * List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
+     * New method names should be added at the end so that existing layouts are not affected.
+     */
+    // The current order is derived from http://jmeter.apache.org/usermanual/listeners.html#sample_configuration
+    // TODO this is not a particularly sensible order; fix and update the screenshot(s)
+    public static final List<String> SAVE_CONFIG_NAMES = Collections.unmodifiableList(Arrays.asList(new String[]{
+        "AsXml",
+        "FieldNames", // CSV
+        "AssertionResultsFailureMessage",
+        "ResponseHeaders", // XML
+        "RequestHeaders", // XML
+        "Assertions", // XML
+        "Code",
+        "DataType",
+        "Encoding",
+        "Label",
+        "Latency",
+        "Message",
+        "ResponseData", // XML
+        "SamplerData", // XML
+        "Subresults", // XML
+        "Success",
+        "ThreadName",
+        "Time",
+        "Timestamp",
+        "Url",
+        "Bytes",
+        "FileName",
+        "ThreadCounts",
+        "SampleCount",
+        "Hostname",
+        "IdleTime",
+        "ConnectTime",
+    }));
+    
     public SampleSaveConfiguration() {
     }
 
