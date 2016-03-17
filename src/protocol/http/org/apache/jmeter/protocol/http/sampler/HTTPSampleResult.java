@@ -113,7 +113,9 @@ public class HTTPSampleResult extends SampleResult {
          * 305 = Use Proxy
          * 306 = (Unused)
          */
-        final String[] REDIRECT_CODES = { "301", "302", "303" };
+        final String[] REDIRECT_CODES = { HTTPConstants.SC_MOVED_PERMANENTLY,
+                HTTPConstants.SC_MOVED_TEMPORARILY,
+                HTTPConstants.SC_SEE_OTHER };
         String code = getResponseCode();
         for (String redirectCode : REDIRECT_CODES) {
             if (redirectCode.equals(code)) {
@@ -125,7 +127,7 @@ public class HTTPSampleResult extends SampleResult {
         // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
         // since this might change the conditions under which the request was issued.
         // See Bug 54119
-        if ("307".equals(code) && 
+        if (HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) && 
                 (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()))) {
             return true;
         }
