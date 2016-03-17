@@ -418,20 +418,20 @@ public class FileServer {
     }
 
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
-        if (fileEntry.file.exists() && fileEntry.file.canRead() && fileEntry.file.isFile()) {
-        FileInputStream fis = new FileInputStream(fileEntry.file);
-        InputStreamReader isr = null;
-        // If file encoding is specified, read using that encoding, otherwise use default platform encoding
-        String charsetName = fileEntry.charSetEncoding;
-        if(!JOrphanUtils.isBlank(charsetName)) {
-            isr = new InputStreamReader(fis, charsetName);
-        } else {
-            isr = new InputStreamReader(fis);
-        }
-        return new BufferedReader(isr);
-        } else {
+        if (!fileEntry.file.exists() || !fileEntry.file.canRead() || !fileEntry.file.isFile()) {
             throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
-        }
+        } else {
+            FileInputStream fis = new FileInputStream(fileEntry.file);
+            InputStreamReader isr = null;
+            // If file encoding is specified, read using that encoding, otherwise use default platform encoding
+            String charsetName = fileEntry.charSetEncoding;
+            if(!JOrphanUtils.isBlank(charsetName)) {
+                isr = new InputStreamReader(fis, charsetName);
+            } else {
+                isr = new InputStreamReader(fis);
+            }
+            return new BufferedReader(isr);
+            }
     }
 
     public synchronized void write(String filename, String value) throws IOException {
