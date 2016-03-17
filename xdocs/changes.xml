@@ -406,6 +406,7 @@ Summary
     <li><bug>58986</bug>Report/Dashboard reuses the same output directory</li>
     <li><bug>59096</bug>Search Feature : Case insensitive search is not really case insensitive</li>
     <li><bug>59133</bug>Regression in custom Thread Group in nightly build before 3.0 (6 march 2016). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>59193</bug>ant run_gui fails with  java.lang.ClassNotFoundException or java.lang.IllegalAccessError when accessing classes from dependencies not loaded through Thread.currentThread().getContextClassLoader()</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
