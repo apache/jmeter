@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.Option;
 
 /**
  * Handles the extractions
@@ -59,9 +61,10 @@ public class JSONManager {
      * @return List of String extracted data
      * @throws ParseException
      */
-    public List<String> extractWithJsonPath(String jsonString, String jsonPath)
+    public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
-        return jsonPathParser.read(jsonString);
+        Configuration cfg = Configuration.defaultConfiguration().addOptions(Option.ALWAYS_RETURN_LIST);
+        return jsonPathParser.read(jsonString, cfg);
     }
 }

@@ -119,14 +119,14 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
     private String process(String textToParse) {
         try {
-            List<String> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
+            List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
             if (matchStrings.size() == 0) {
                 return "NO MATCH"; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
-                for (String text : matchStrings) {
-                    builder.append("Result[").append(i++).append("]=").append(text).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+                for (Object text : matchStrings) {
+                    builder.append("Result[").append(i++).append("]=").append("" + text).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
                 }
 
                 return builder.toString();
@@ -136,7 +136,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         }
     }
     
-    private List<String> extractWithJSonPath(String textToParse, String expression) throws ParseException {
+    private List<Object> extractWithJSonPath(String textToParse, String expression) throws ParseException {
         JSONManager jsonManager = new JSONManager();
         return jsonManager.extractWithJsonPath(textToParse, expression);
     }
