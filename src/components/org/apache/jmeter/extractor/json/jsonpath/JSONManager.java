@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 
 /**
  * Handles the extractions
@@ -31,6 +33,8 @@ import com.jayway.jsonpath.JsonPath;
  * @since 3.0
  */
 public class JSONManager {
+    private static final Configuration DEFAULT_CONFIGURATION =
+            Configuration.defaultConfiguration().addOptions(Option.ALWAYS_RETURN_LIST);
     /**
      * This Map can hardly grow above 10 elements as it is used within JSONPostProcessor to 
      * store the computed JsonPath for the set of JSON Path Expressions.
@@ -59,9 +63,10 @@ public class JSONManager {
      * @return List of String extracted data
      * @throws ParseException
      */
-    public List<String> extractWithJsonPath(String jsonString, String jsonPath)
+    public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
-        return jsonPathParser.read(jsonString);
+        return jsonPathParser.read(jsonString, 
+                DEFAULT_CONFIGURATION);
     }
 }
