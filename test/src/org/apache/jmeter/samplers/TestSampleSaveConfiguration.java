@@ -151,26 +151,24 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     @Test
     // Checks that all the saveXX() and setXXX(boolean) methods are in the list
     public void testSaveConfigNames() throws Exception {
-        List<String> saveMethodNames = new ArrayList<>();
+        List<String> getMethodNames = new ArrayList<>();
         List<String> setMethodNames = new ArrayList<>();
         Method[] methods = SampleSaveConfiguration.class.getMethods();
         for(Method method : methods) {
             String name = method.getName();
-            final String SAVE = "save";
-            if (name.startsWith(SAVE) && method.getParameterTypes().length == 0) {
-                name = name.substring(SAVE.length());
-                saveMethodNames.add(name);
+            if (name.startsWith(SampleSaveConfiguration.CONFIG_GETTER_PREFIX) && method.getParameterTypes().length == 0) {
+                name = name.substring(SampleSaveConfiguration.CONFIG_GETTER_PREFIX.length());
+                getMethodNames.add(name);
                 assertTrue("SAVE_CONFIG_NAMES should contain save" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
             }
-            final String SET = "set";
-            if (name.startsWith(SET) && method.getParameterTypes().length == 1 && boolean.class.equals(method.getParameterTypes()[0])) {
-                name = name.substring(SET.length());
+            if (name.startsWith(SampleSaveConfiguration.CONFIG_SETTER_PREFIX) && method.getParameterTypes().length == 1 && boolean.class.equals(method.getParameterTypes()[0])) {
+                name = name.substring(SampleSaveConfiguration.CONFIG_SETTER_PREFIX.length());
                 setMethodNames.add(name);
                 assertTrue("SAVE_CONFIG_NAMES should contain set" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
             }
         }
         for (String name : SampleSaveConfiguration.SAVE_CONFIG_NAMES) {
-            assertTrue("SAVE_CONFIG_NAMES should NOT contain save" + name, saveMethodNames.contains(name));
+            assertTrue("SAVE_CONFIG_NAMES should NOT contain save" + name, getMethodNames.contains(name));
             assertTrue("SAVE_CONFIG_NAMES should NOT contain set" + name, setMethodNames.contains(name));
         }
     }

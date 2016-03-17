@@ -57,8 +57,6 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private static final Map<String, Functor> functors = new HashMap<>();
 
-    private static final String NAME_SAVE_PFX   = "save";  // $NON-NLS-1$ i.e. boolean saveXXX()
-    private static final String NAME_SET_PREFIX = "set";   // $NON-NLS-1$ i.e. void setXXX(boolean)
     private static final String RESOURCE_PREFIX = "save_"; // $NON-NLS-1$ e.g. save_XXX property
 
     private SampleSaveConfiguration saveConfig;
@@ -94,9 +92,9 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
             try {
                 JCheckBox check = new JCheckBox(
                         JMeterUtils.getResString(RESOURCE_PREFIX + name),
-                        getSaveState(NAME_SAVE_PFX + name));
+                        getSaveState(SampleSaveConfiguration.getterName(name)));
                 check.addActionListener(this);
-                final String actionCommand = NAME_SET_PREFIX + name; // $NON-NLS-1$
+                final String actionCommand = SampleSaveConfiguration.setterName(name); // $NON-NLS-1$
                 check.setActionCommand(actionCommand);
                 if (!functors.containsKey(actionCommand)) {
                     functors.put(actionCommand, new Functor(actionCommand));
