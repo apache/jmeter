@@ -13,6 +13,14 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
+asm-5.1 (org.ow2.asm)
+----------------------
+- JSON Path extractor
+
+accessors-smart-1.1 (net.minidev)
+----------------------
+- JSON Path extractor
+
 avalon-framework-4.1.4 (org.apache.avalon.framework)
 ----------------------
 - LogKit (LoggingManager)
@@ -144,7 +152,7 @@ https://github.com/jayway/JsonPath
 - JSON Path Extractor
 - JSON Path Renderer
 
-json-smart-2.2.1
+json-smart-2.2.1 (net.minidev)
 --------
 https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
