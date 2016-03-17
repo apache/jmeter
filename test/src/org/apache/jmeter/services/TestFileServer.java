@@ -130,15 +130,13 @@ public class TestFileServer extends JMeterTestCase {
         try {
             FS.reserveFile(missing,charsetName,alias,true);
             fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertTrue("Expected FNF", e.getCause() instanceof java.io.FileNotFoundException);
+        } catch (IllegalArgumentException ignored) {
         }
         // Ensure second invocation gets same behaviour
         try {
             FS.reserveFile(missing,charsetName,alias,true);
             fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertTrue("Expected FNF", e.getCause() instanceof java.io.FileNotFoundException);
+        } catch (IllegalArgumentException ignored) {
         }
     }
 

@@ -62,10 +62,12 @@ public class TestCVSDataSet extends JMeterTestCase {
         csv.setFilename("No.such.filename");
         csv.setVariableNames("a,b,c");
         csv.setDelimiter(",");
-        csv.iterationStart(null);
-        assertEquals("<EOF>",threadVars.get("a"));
-        assertEquals("<EOF>",threadVars.get("b"));
-        assertEquals("<EOF>",threadVars.get("c"));
+        try {
+            csv.iterationStart(null);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException ignored) {
+        }
+
 
         csv = new CSVDataSet();
         csv.setFilename(findTestPath("testfiles/testempty.csv"));
