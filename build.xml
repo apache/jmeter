@@ -853,7 +853,6 @@
     <java classname="org.apache.jmeter.NewDriver" fork="true">
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
-        <path refid="classpath"/>
       </classpath>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
