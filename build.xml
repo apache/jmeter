@@ -360,7 +360,9 @@
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
+  	<include name="${lib.dir}/${accessors-smart}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
+    <include name="${lib.dir}/${asm.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
     <include name="${lib.dir}/${beanshell.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
@@ -432,7 +434,9 @@
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
     <!-- Externally produced jars -->
+  	<pathelement location="${lib.dir}/${accessors-smart.jar}"/>
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
+    <pathelement location="${lib.dir}/${asm.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
@@ -2848,7 +2852,9 @@ run JMeter unless all the JMeter jars are added.
     conditional execution (it would be a lot easier if antcall supported if/unless).
     -->
     <target name="_process_all_jars">
-        <process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="accessors-smart"/>    	
+    	<process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="asm"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
         <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
