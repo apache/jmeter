@@ -46,8 +46,7 @@
                                 A chain of items, named consumers, that operate
                                 on the samples
                                 that go through the chain
-                                (e.g. Filtering, sorting, calculation,
-                                ...).
+                                (e.g. Filtering, sorting, calculation, &hellip;).
                             </li>
                             <li>
                                 An execution context, named sample context, where the results
@@ -149,20 +148,20 @@
                         Templated files are located in the template
                         directory defined by
                         the JMeter property
-                        "jmeter.reportgenerator.template_dir"
+                        "<code>jmeter.reportgenerator.template_dir</code>"
                         and have
-                        the extension ".fmkr".
+                        the extension "<code>.fmkr</code>".
                     </p>
                     <p>
                         The graph references in the templated
                         files use the syntax :
-                        ${&lt;graph_id&gt;.&lt;value&gt;} where :
+                        <code>${&lt;graph_id&gt;.&lt;value&gt;}</code> where :
                         <ul>
-                            <li>"graph_id"
+                            <li>"<code>graph_id</code>"
                                 is the identifier of the graph matching the jmeter
                                 properties
                                 definition</li>
-                            <li>"value" is the name of the value where data are stored.</li>
+                            <li>"<code>value</code>" is the name of the value where data are stored.</li>
                         </ul>
                     </p>
                     <p>
@@ -263,7 +262,7 @@
                             or use one of the implementations provided
                             in the package
                             <code>org.apache.jmeter.report.processor.graph.impl</code>
-                            ”.
+                            .
                             This could be enhanced by making concrete the base class and
                             give
                             public access to additional properties (like selectors). But
