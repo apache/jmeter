@@ -63,6 +63,10 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
 
     private SampleSaveConfiguration saveConfig;
 
+    /**
+     * @deprecated Constructor only intended for use in testing
+     */
+    @Deprecated // Constructor only intended for use in testing
     public SavePropertyDialog() {
         log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
