@@ -374,6 +374,7 @@ Summary
 <li><bug>58079</bug>Do not cache HTTP samples that have a Vary header when using a HTTP CacheManager.</li>
 <li><bug>58912</bug>Response assertion gui : Deleting more than 1 selected row deletes only one row. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59187</bug>JSON Post Processor : java.lang.NoClassDefFoundError: net/minidev/asm/FieldFilter at net.minidev.json.reader.JsonWriter.(JsonWriter.java:157) (affects nightly build before 3.0 release)</li>
+<li><bug>59188</bug>JSON Post Processor: Error processing JSON content ..., message:java.lang.String cannot be cast to java.util.List (affects nightly build before 3.0). Based on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
