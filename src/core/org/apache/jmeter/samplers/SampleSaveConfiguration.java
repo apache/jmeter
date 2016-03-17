@@ -433,36 +433,36 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
      * New method names should be added at the end so that existing layouts are not affected.
      */
-    // The current order is derived from http://jmeter.apache.org/usermanual/listeners.html#sample_configuration
-    // TODO this is not a particularly sensible order; fix and update the screenshot(s)
+    // The current order is derived from http://jmeter.apache.org/usermanual/listeners.html#csvlogformat
+    // TODO this may not be the ideal order; fix further and update the screenshot(s)
     public static final List<String> SAVE_CONFIG_NAMES = Collections.unmodifiableList(Arrays.asList(new String[]{
         "AsXml",
         "FieldNames", // CSV
-        "AssertionResultsFailureMessage",
-        "ResponseHeaders", // XML
-        "RequestHeaders", // XML
-        "Assertions", // XML
-        "Code",
-        "DataType",
-        "Encoding",
-        "Label",
-        "Latency",
-        "Message",
-        "ResponseData", // XML
-        "SamplerData", // XML
-        "Subresults", // XML
-        "Success",
-        "ThreadName",
-        "Time",
         "Timestamp",
-        "Url",
+        "Time", // elapsed
+        "Label",
+        "Code", // Response Code
+        "Message", // Response Message
+        "ThreadName",
+        "DataType",
+        "Success",
+        "AssertionResultsFailureMessage",
         "Bytes",
+        "ThreadCounts", // grpThreads and allThreads
+        "Url",
         "FileName",
-        "ThreadCounts",
-        "SampleCount",
+        "Latency",
+        "ConnectTime",
+        "Encoding",
+        "SampleCount", // Sample and Error Count
         "Hostname",
         "IdleTime",
-        "ConnectTime",
+        "RequestHeaders", // XML
+        "SamplerData", // XML
+        "ResponseHeaders", // XML
+        "ResponseData", // XML
+        "Subresults", // XML
+        "Assertions", // XML
     }));
     
     public SampleSaveConfiguration() {
