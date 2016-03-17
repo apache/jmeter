@@ -104,7 +104,7 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                     vars.put(currentRefName, defaultValues[i]);
                 } else {
 
-                    List<String> extractedValues = localMatcher.get()
+                    List<Object> extractedValues = localMatcher.get()
                             .extractWithJsonPath(jsonResponse, currentJsonPath);
                     // if no values extracted, default value added
                     if (extractedValues.isEmpty()) {
@@ -125,8 +125,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                                         new StringBuilder(getComputeConcatenation()
                                                 ? extractedValues.size() * 20
                                                 : 1);
-                                for (String stringExtracted : extractedValues) {
-                                    vars.put(currentRefName + "_" + index, stringExtracted);
+                                for (Object stringExtracted : extractedValues) {
+                                    vars.put(currentRefName + "_" + index, 
+                                            stringExtracted != null ? stringExtracted.toString() : ""); //$NON-NLS-1$
                                     if (getComputeConcatenation()) {
                                         concat.append(stringExtracted)
                                                 .append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
@@ -140,7 +141,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                             } else if (matchNumber == 0) {
                                 // Random extraction
                                 int matchSize = extractedValues.size();
-                                vars.put(currentRefName, extractedValues.get(JMeterUtils.getRandomInt(matchSize)));
+                                Object obj = extractedValues.get(JMeterUtils.getRandomInt(matchSize));
+                                vars.put(currentRefName, 
+                                        obj != null ? obj.toString() : ""); //$NON-NLS-1$
                             } else {
                                 // extract at position
                                 if (matchNumber > extractedValues.size()) {
@@ -152,14 +155,20 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                                     }
                                     vars.put(currentRefName, defaultValues[i]);
                                 } else {
-                                    vars.put(currentRefName, extractedValues.get(matchNumber - 1));
+                                    Object obj = extractedValues.get(matchNumber - 1);
+                                    vars.put(currentRefName, 
+                                            obj != null ? obj.toString() : ""); //$NON-NLS-1$
                                 }
                             }
                         } else {
                             // else just one value extracted
-                            vars.put(currentRefName, extractedValues.get(0));
+                            Object obj = extractedValues.get(0);
+                            String objAsString = 
+                                    obj != null ? obj.toString() : ""; //$NON-NLS-1$
+                            vars.put(currentRefName, 
+                                    objAsString); 
                             if (matchNumber < 0 && getComputeConcatenation()) {
-                                vars.put(currentRefName + ALL_SUFFIX, extractedValues.get(0));
+                                vars.put(currentRefName + ALL_SUFFIX, objAsString);
                             }
                         }
                         vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
