@@ -431,7 +431,7 @@ public class FileServer {
             isr = new InputStreamReader(fis);
         }
         return new BufferedReader(isr);
-        }
+    }
 
     public synchronized void write(String filename, String value) throws IOException {
         FileEntry fileEntry = files.get(filename);
