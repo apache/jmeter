@@ -99,9 +99,11 @@ public final class ActionNames {
     public static final String QUICK_COMPONENT  = "quick_component"; // $NON-NLS-1$
     public static final String COLLAPSE         = "collapse"; // $NON-NLS-1$
     public static final String EXPAND           = "expand"; // $NON-NLS-1$
+    /**@since 3.0.0*/
+    public static final String RUN_TG           = "run_tg"; // $NON-NLS-1$
+    /**@since 3.0.0*/
+    public static final String RUN_TG_NO_TIMERS = "run_tg_no_timers"; // $NON-NLS-1$
 
     // Prevent instantiation
-    private ActionNames(){
-        
-    }
+    private ActionNames() {}
 }
