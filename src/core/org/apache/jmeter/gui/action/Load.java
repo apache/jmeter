@@ -51,15 +51,15 @@ import com.thoughtworks.xstream.converters.ConversionException;
  *
  */
 public class Load implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.OPEN);
-        commands.add(ActionNames.MERGE);
+        COMMANDS.add(ActionNames.OPEN);
+        COMMANDS.add(ActionNames.MERGE);
     }
 
     public Load() {
@@ -68,7 +68,7 @@ public class Load implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
@@ -118,9 +118,9 @@ public class Load implements Command {
         if (f != null) {
             try {
                 if (merging) {
-                    log.info("Merging file: " + f);
+                    LOGGER.info("Merging file: " + f);
                 } else {
-                    log.info("Loading file: " + f);
+                    LOGGER.info("Loading file: " + f);
                     // TODO should this be done even if not a full test plan?
                     // and what if load fails?
                     if (setDetails) {
@@ -139,7 +139,7 @@ public class Load implements Command {
             } catch (NoClassDefFoundError ex) {// Allow for missing optional jars
                 reportError("Missing jar file", ex, true);
             } catch (ConversionException ex) {
-                log.warn("Could not convert file "+ex);
+                LOGGER.warn("Could not convert file "+ex);
                 JMeterUtils.reportErrorToUser(SaveService.CEtoString(ex));
             } catch (IOException ex) {
                 reportError("Error reading file: ", ex, false);
@@ -232,9 +232,9 @@ public class Load implements Command {
     // Helper method to simplify code
     private static void reportError(final String reason, final Throwable ex, final boolean stackTrace) {
         if (stackTrace) {
-            log.warn(reason, ex);
+            LOGGER.warn(reason, ex);
         } else {
-            log.warn(reason + ex);
+            LOGGER.warn(reason + ex);
         }
         String msg = ex.getMessage();
         if (msg == null) {

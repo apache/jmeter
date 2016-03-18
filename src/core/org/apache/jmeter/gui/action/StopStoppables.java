@@ -32,10 +32,10 @@ import org.apache.jmeter.gui.Stoppable;
  * @since 2.5.1
  */
 public class StopStoppables extends AbstractAction implements ActionListener {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.STOP_THREAD);
+        COMMANDS.add(ActionNames.STOP_THREAD);
     }
     
     /**
@@ -50,7 +50,7 @@ public class StopStoppables extends AbstractAction implements ActionListener {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /* (non-Javadoc)

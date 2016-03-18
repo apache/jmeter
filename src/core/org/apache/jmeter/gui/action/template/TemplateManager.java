@@ -46,7 +46,7 @@ public class TemplateManager {
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
     
     private static final TemplateManager SINGLETON = new TemplateManager();
     
@@ -111,7 +111,7 @@ public class TemplateManager {
                 final File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
                     if(f.exists() && f.canRead()) {
-                        log.info("Reading templates from:"+f.getAbsolutePath());
+                        LOGGER.info("Reading templates from:"+f.getAbsolutePath());
                         final File parent = f.getParentFile();
                         final LinkedHashMap<String, Template> templates = ((Templates) xstream.fromXML(f)).templates;
                         for(Template t : templates.values()) {
@@ -121,10 +121,10 @@ public class TemplateManager {
                         }
                         temps.putAll(templates);
                     } else {
-                        log.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
+                        LOGGER.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
                     }
                 } catch(Exception ex) {                    
-                    log.warn("Ignoring template file:'"+f.getAbsolutePath()+"', an error occured parsing the file", ex);
+                    LOGGER.warn("Ignoring template file:'"+f.getAbsolutePath()+"', an error occured parsing the file", ex);
                 } 
             }
         }

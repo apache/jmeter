@@ -33,10 +33,10 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  */
 public class ResetSearchCommand extends AbstractAction {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.SEARCH_RESET);
+        COMMANDS.add(ActionNames.SEARCH_RESET);
     }
 
     /**
@@ -63,6 +63,6 @@ public class ResetSearchCommand extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

@@ -36,14 +36,14 @@ import org.apache.log.Logger;
  * - Reset (Clear GUI)
  */
 public class Clear implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CLEAR);
-        commands.add(ActionNames.CLEAR_ALL);
-        commands.add(ActionNames.RESET_GUI);
+        COMMANDS.add(ActionNames.CLEAR);
+        COMMANDS.add(ActionNames.CLEAR_ALL);
+        COMMANDS.add(ActionNames.RESET_GUI);
     }
 
     public Clear() {
@@ -51,7 +51,7 @@ public class Clear implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Clear implements Command {
                     try {
                         item.clearData();
                     } catch (Exception ex) {
-                        log.error("Can't clear: "+node+" "+guiComp, ex);
+                        LOGGER.error("Can't clear: "+node+" "+guiComp, ex);
                     }
                 }
             }

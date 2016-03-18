@@ -38,12 +38,12 @@ import org.apache.log.Logger;
  */
 public class Paste extends AbstractAction {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.PASTE);
+        COMMANDS.add(ActionNames.PASTE);
     }
 
     /**
@@ -51,7 +51,7 @@ public class Paste extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Paste extends AbstractAction {
             }
         }
         catch (IllegalUserActionException iuae) {
-            log.error("", iuae); // $NON-NLS-1$
+            LOGGER.error("", iuae); // $NON-NLS-1$
             JMeterUtils.reportErrorToUser(iuae.getMessage());
         }
     }

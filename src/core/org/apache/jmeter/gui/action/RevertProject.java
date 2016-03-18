@@ -32,10 +32,10 @@ import org.apache.jmeter.util.JMeterUtils;
  *
  */
 public class RevertProject implements Command {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.REVERT_PROJECT);
+        COMMANDS.add(ActionNames.REVERT_PROJECT);
     }
 
     public RevertProject() {
@@ -44,7 +44,7 @@ public class RevertProject implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override

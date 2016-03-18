@@ -40,7 +40,7 @@ import org.apache.log.Logger;
  *
  */
 public class CheckDirty extends AbstractAction implements HashTreeTraverser, ActionListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private final Map<JMeterTreeNode, TestElement> previousGuiItems;
 
@@ -50,15 +50,15 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
 
     private boolean dirty = false;
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CHECK_DIRTY);
-        commands.add(ActionNames.SUB_TREE_SAVED);
-        commands.add(ActionNames.SUB_TREE_MERGED);
-        commands.add(ActionNames.SUB_TREE_LOADED);
-        commands.add(ActionNames.ADD_ALL);
-        commands.add(ActionNames.CHECK_REMOVE);
+        COMMANDS.add(ActionNames.CHECK_DIRTY);
+        COMMANDS.add(ActionNames.SUB_TREE_SAVED);
+        COMMANDS.add(ActionNames.SUB_TREE_MERGED);
+        COMMANDS.add(ActionNames.SUB_TREE_LOADED);
+        COMMANDS.add(ActionNames.ADD_ALL);
+        COMMANDS.add(ActionNames.CHECK_REMOVE);
     }
 
     public CheckDirty() {
@@ -143,7 +143,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
      */
     @Override
     public void addNode(Object node, HashTree subTree) {
-        log.debug("Node is class:" + node.getClass());
+        LOGGER.debug("Node is class:" + node.getClass());
         JMeterTreeNode treeNode = (JMeterTreeNode) node;
         if (checkMode) {
             // Only check if we have not found any differences so far
@@ -186,6 +186,6 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

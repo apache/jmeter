@@ -33,10 +33,10 @@ import org.apache.jmeter.gui.GuiPackage;
  */
 public class LoggerPanelEnableDisable implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.LOGGER_PANEL_ENABLE_DISABLE);
+        COMMANDS.add(ActionNames.LOGGER_PANEL_ENABLE_DISABLE);
     }
 
     /**
@@ -52,7 +52,7 @@ public class LoggerPanelEnableDisable implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

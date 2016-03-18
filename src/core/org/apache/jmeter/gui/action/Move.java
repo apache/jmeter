@@ -36,13 +36,13 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.WorkBench;
 
 public class Move extends AbstractAction {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.MOVE_DOWN);
-        commands.add(ActionNames.MOVE_UP);
-        commands.add(ActionNames.MOVE_LEFT);
-        commands.add(ActionNames.MOVE_RIGHT);
+        COMMANDS.add(ActionNames.MOVE_DOWN);
+        COMMANDS.add(ActionNames.MOVE_UP);
+        COMMANDS.add(ActionNames.MOVE_LEFT);
+        COMMANDS.add(ActionNames.MOVE_RIGHT);
     }
 
     /**
@@ -151,6 +151,6 @@ public class Move extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

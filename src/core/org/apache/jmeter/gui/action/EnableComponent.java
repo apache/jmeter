@@ -31,14 +31,14 @@ import org.apache.log.Logger;
  * Implements the Enable menu item.
  */
 public class EnableComponent implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.ENABLE);
-        commands.add(ActionNames.DISABLE);
-        commands.add(ActionNames.TOGGLE);
+        COMMANDS.add(ActionNames.ENABLE);
+        COMMANDS.add(ActionNames.DISABLE);
+        COMMANDS.add(ActionNames.TOGGLE);
     }
 
     /**
@@ -49,13 +49,13 @@ public class EnableComponent implements Command {
         JMeterTreeNode[] nodes = GuiPackage.getInstance().getTreeListener().getSelectedNodes();
 
         if (e.getActionCommand().equals(ActionNames.ENABLE)) {
-            log.debug("enabling currently selected gui objects");
+            LOGGER.debug("enabling currently selected gui objects");
             enableComponents(nodes, true);
         } else if (e.getActionCommand().equals(ActionNames.DISABLE)) {
-            log.debug("disabling currently selected gui objects");
+            LOGGER.debug("disabling currently selected gui objects");
             enableComponents(nodes, false);
         } else if (e.getActionCommand().equals(ActionNames.TOGGLE)) {
-            log.debug("toggling currently selected gui objects");
+            LOGGER.debug("toggling currently selected gui objects");
             toggleComponents(nodes);
         }
     }
@@ -82,6 +82,6 @@ public class EnableComponent implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }
