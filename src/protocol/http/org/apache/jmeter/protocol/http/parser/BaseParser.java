@@ -75,7 +75,12 @@ public abstract class BaseParser implements LinkExtractorParser {
         }
         LOG.info("Created " + parserClassName);
         if (parser.isReusable()) {
-            PARSERS.put(parserClassName, parser);// cache the parser
+            LinkExtractorParser currentParser = PARSERS.putIfAbsent(
+                    parserClassName, parser);// cache the parser if not alread
+                                             // done by another thread
+            if (currentParser != null) {
+                return currentParser;
+            }
         }
 
         return parser;
