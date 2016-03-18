@@ -15,27 +15,29 @@
     </properties>
     <body>
         <section name="&sect-num;. Generating Report Dashboard" anchor="generation">
-            <p>JMeter supports dashboard report generation to get graphs and statistics from a test plan.<br />
+            <p>JMeter supports dashboard report generation to get graphs and
+            statistics from a test plan.<br />
             This chapter describes how to configure and use the generator.</p>
             <subsection name="&sect-num;.1 Overview" anchor="overview">
-                <p>The dashboard generator is a modular extension of JMeter. Its default behavior is to read and process samples from CSV files to
-                    generate HTML files containing graph views. It can generate the report at end of a load test or on demand.
+                <p>The dashboard generator is a modular extension of JMeter.
+                    Its default behavior is to read and process samples from
+                    CSV files to generate HTML files containing graph views.
+                    It can generate the report at end of a load test or on demand.
                 </p>
                 <!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
             </subsection>
             <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configuration">
                 <p>
                     Dashboard generation uses JMeter properties to customize the
-                    report. Some properties are used
-                    for general settings and others are
-                    used for a particular graph
-                    configuration or exporter configuration.
+                    report. Some properties are used for general settings and others are
+                    used for a particular graph configuration or exporter configuration.
                     <note>All these properties should be set in <code>user.properties</code> file.</note>
                 </p>
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
-                        To enable the generator to operate, the input CSV files must include required data.
-                        Check that your JMeter configuration follows these settings:
+                        To enable the generator to operate, the input CSV files
+                        must include required data. Check that your JMeter
+                        configuration follows these settings:
                         <source>
 jmeter.save.saveservice.bytes = true
 jmeter.save.saveservice.label = true
@@ -52,7 +54,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             Property <code>jmeter.save.saveservice.timestamp_format</code> must be set
                         </note>
                         <note>
-                            The "<code>Errors</code>" summary table shows more accurate data if these settings are fulfilled:
+                            The "<code>Errors</code>" summary table shows more
+                            accurate data if these settings are fulfilled:
                             <ul>
                                 <li><source>jmeter.save.saveservice.assertion_results_failure_message = true</source></li>
                                 <li>
@@ -72,39 +75,32 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                     </note>
                     <properties>
                         <property name="apdex_statisfied_threshold" required="No">
-                            Sets
-                            the satisfaction threshold for the <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
+                            Sets the satisfaction threshold for the
+                            <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
                             calculation (in ms).
                             Default: <code>500</code>
                         </property>
                         <property name="apdex_tolerated_threshold" required="No">
-                            Sets
-                            the tolerance threshold for the APDEX calculation
+                            Sets the tolerance threshold for the APDEX calculation
                             (in ms).
                             Default: <code>1500</code>
                         </property>
                         <property name="sample_filter" required="No">
-                            Sets the filter
-                            of samples to keep for generating
-                            graphs and statistics. An empty
-                            value deactivates the
+                            Sets the filter of samples to keep for generating
+                            graphs and statistics. An empty value deactivates the
                             filtering.
                             Format: comma separated list of
                             sample names. Default: ""
                         </property>
                         <property name="temp_dir" required="No">
-                            Sets the temporary
-                            directory used by the generation
+                            Sets the temporary directory used by the generation
                             process if it needs file I/O
                             operations. Default: <code>temp</code>
                         </property>
                         <property name="statistic_window" required="No">
-                            Sets the size
-                            of the sliding window used by percentile
-                            evaluation. Caution:
-                            higher value provides a
-                            better accuracy
-                            but needs more memory.
+                            Sets the size of the sliding window used by percentile
+                            evaluation. Caution: higher value provides a
+                            better accuracy but needs more memory.
                             Default: <code>200000</code>
                         </property>
                     </properties>
@@ -115,12 +111,10 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                     <note>
                         <p>
                             You can define some overall properties which are used by the
-                            generator configuration.
-                            These properties are freely named but you
-                            should use the prefix
+                            generator configuration.  These properties are freely named
+                            but you should use the prefix
                             <source>jmeter.reportgenerator.</source>
-                            in order to avoid
-                            properties overlap.
+                            in order to avoid properties overlap.
                         </p>
                         <p>
                             E.g.:
@@ -139,8 +133,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                         Each property describing a graph configuration must be prefixed
                         with
                         <source>jmeter.reportgenerator.graph.</source>
-                        followed by the graph
-                        identifier.
+                        followed by the graph identifier.
                     </p>
                     <!-- <note> The identifier is used to group properties by graph.</note> -->
 
@@ -151,31 +144,30 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                 The fully qualified class name of the graph
                                 <br />
                                 The class of the graph must extend
-                                <code>org.apache.jmeter.report.processor.graph.AbstractGraphConsumer</code>
-                                .
+                                <code>org.apache.jmeter.report.processor.graph.AbstractGraphConsumer</code>.
                                 <br />
                                 See
                                 <a href="#default_graphs">Default graph section</a>
                                 for more details.
                             </property>
                             <property name="exclude_controllers" required="No">Defines
-                                whether the graph discards controller samples. Default: <code>false</code></property>
+                                whether the graph discards controller samples.
+                                Default: <code>false</code>
+                            </property>
                             <property name="title" required="No">Sets the title of the
-                                graph. Default: ""</property>
+                                graph.
+                                Default: ""
+                            </property>
                         </properties>
                     </subsection>
 
                     <subsection name="&sect-num;.2.3.2 Specific properties" anchor="specific_graph_properties">
                         <p>
-                            Specific graph properties must use the prefix:<br/>
+                            Specific graph properties must use the prefix:
                             <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property</source>
-                            <br />
                             The name of the property will be mapped using camel case
                             transformation and the matching method of the class will be
-                            called
-                            with the property
-                            value as
-                            argument.
+                            called with the property value as argument.
                         </p>
                         <p>
                             E.g.:
@@ -205,15 +197,19 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                 <code>org.apache.jmeter.report.dashboard.DataExporter</code>
                                 .
                             </property>
-                            <property name="filters_only_sample_series" required="No">Defines
-                                whether <code>series_filter</code> (see below) apply only on sample series.
+                            <property name="filters_only_sample_series" required="No">
+                                Defines whether <code>series_filter</code> (see below)
+                                apply only on sample series.
                                 Default: <code>false</code></property>
                             <property name="series_filter" required="No">Sets the filter
-                                of series. An empty value deactivates the filtering. Format:
-                                regular expression. Default:
-                                ""</property>
-                            <property name="show_controllers_only" required="No">Defines
-                                whether only controller series are shown. Default: <code>false</code></property>
+                                of series. An empty value deactivates the filtering.
+                                Format: regular expression.
+                                Default: ""
+                            </property>
+                            <property name="show_controllers_only" required="No">
+                                Defines whether only controller series are shown.
+                                Default: <code>false</code>
+                            </property>
                         </properties>
                     </subsection>
 
@@ -274,27 +270,24 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                         <p>
                             Unlike the filtering in the section
                             <a href="#configure_general">General properties</a>
-                            which discards data
-                            before calculations, here the filtering is
-                            performed after the
-                            calculations and serves to lighten the final
-                            report.
+                            which discards data before calculations, here the
+                            filtering is performed after the calculations and serves
+                            to lighten the final report.
                         </p>
                         <p>
-                            The property
-                            <code>series_filter</code>
-                            allows to filter which series of a graph (resp. rows of a summary
-                            table) using regular expression that matches the name of the
-                            series (resp. of the row).
+                            The property <code>series_filter</code>
+                            allows to filter which series of a graph (resp. rows of
+                            a summary table) using regular expression that matches
+                            the name of the series (resp. of the row).
                             However, even if the name of the
                             series (resp. row) matches the filter, the setting
-                            of the other
-                            filtering properties can lead to its discarding. Conversely if there is no matching, the other properties can allow to keep it.
+                            of the other filtering properties can lead to its
+                            discarding. Conversely if there is no matching, the
+                            other properties can allow to keep it.
                         </p>
                         <p>
                             The following tables show how the setting of filtering
-                            properties
-                            works.
+                            properties works.
                         </p>
                         <p>
                             <table>
@@ -415,8 +408,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                 <li>
                                     If you set the property
                                     <code>show_controllers_only</code>
-                                    whereas the
-                                    graph is configured to exclude controllers.
+                                    whereas the graph is configured to exclude
+                                    controllers.
                                 </li>
                                 <li>
                                     If the property
@@ -578,26 +571,22 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                         <tr>
                             <td>TimeVSThreadGraphConsumer</td>
                             <td>
-                                This graph represents the average response time depending on the
-                                number of current active threads.
+                                This graph represents the average response time
+                                depending on the number of current active threads.
                                 <p>
-                                    The *-aggregated series represent the average response time
-                                    regardless of the number of current active threads. These
-                                    series are represented
-                                    by a sole
-                                    point because the number of
-                                    current active threads is
-                                    aggregated
-                                    to an average. So for
-                                    these
-                                    points:
+                                    The *-aggregated series represent the average
+                                    response time regardless of the number of
+                                    current active threads. These series are
+                                    represented by a sole point because the number of
+                                    current active threads is aggregated
+                                    to an average. So for these points:
                                     <ul>
                                         <li>The abscissa is the average
                                             of the number of current active
                                             threads when samples of the
                                             series finish.</li>
-                                        <li>The ordinate is the average of the response time for the
-                                            samples of the
+                                        <li>The ordinate is the average of the
+                                            response time for the samples of the
                                             series regardless of the number of current
                                             active threads.</li>
                                     </ul>
@@ -607,15 +596,16 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                         </tr>
                         <tr>
                             <td>TransactionsPerSecondGraphConsumer</td>
-                            <td>This graph represents the rate of transaction by sample name
-                                over time.</td>
+                            <td>This graph represents the rate of transaction by
+                                sample name over time.</td>
                             <td>True</td>
                         </tr>
                     </tbody>
                 </table>
             </subsection>
             <subsection name="&sect-num;.5  Want to improve Report Dashboard" anchor="development">
-            If you want to contribute new graphs or improve current ones, you can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
+            If you want to contribute new graphs or improve current ones, you
+            can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
             Read this <a href="../building.html" >documentation</a> on contributing.
             </subsection>
 
