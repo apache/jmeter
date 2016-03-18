@@ -360,7 +360,7 @@
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
-  	<include name="${lib.dir}/${accessors-smart}"/>
+  	<include name="${lib.dir}/${accessors-smart.jar}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${asm.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
