@@ -35,11 +35,11 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * Processes the collapse and expand of a tree branch
  */
 public class CollapseExpandTreeBranch extends AbstractAction {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.COLLAPSE);
-        commands.add(ActionNames.EXPAND);
+        COMMANDS.add(ActionNames.COLLAPSE);
+        COMMANDS.add(ActionNames.EXPAND);
     }
 
     /**
@@ -54,7 +54,7 @@ public class CollapseExpandTreeBranch extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

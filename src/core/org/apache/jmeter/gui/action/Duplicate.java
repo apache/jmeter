@@ -37,10 +37,10 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  */
 public class Duplicate extends AbstractAction {
 
-    private static final HashSet<String> commands = new HashSet<>();
+    private static final HashSet<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.DUPLICATE);
+        COMMANDS.add(ActionNames.DUPLICATE);
     }
 
     /*
@@ -48,7 +48,7 @@ public class Duplicate extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override

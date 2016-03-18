@@ -35,13 +35,13 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Remove implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     // Whether to skip the delete confirmation dialogue
     private static final boolean SKIP_CONFIRM = JMeterUtils.getPropDefault("confirm.delete.skip", false); // $NON-NLS-1$
 
     static {
-        commands.add(ActionNames.REMOVE);
+        COMMANDS.add(ActionNames.REMOVE);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Remove implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override

@@ -34,7 +34,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class AddToTree implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commandSet;
 
@@ -70,7 +70,7 @@ public class AddToTree implements Command {
             JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
         } catch (Exception err) {
-            log.error("", err); // $NON-NLS-1$
+            LOGGER.error("", err); // $NON-NLS-1$
             String msg = err.getMessage();
             if (msg == null) {
                 msg = err.toString();

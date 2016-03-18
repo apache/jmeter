@@ -38,15 +38,15 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public class Start extends AbstractAction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.ACTION_START);
-        commands.add(ActionNames.ACTION_START_NO_TIMERS);
-        commands.add(ActionNames.ACTION_STOP);
-        commands.add(ActionNames.ACTION_SHUTDOWN);
+        COMMANDS.add(ActionNames.ACTION_START);
+        COMMANDS.add(ActionNames.ACTION_START_NO_TIMERS);
+        COMMANDS.add(ActionNames.ACTION_STOP);
+        COMMANDS.add(ActionNames.ACTION_SHUTDOWN);
     }
 
     private StandardJMeterEngine engine;
@@ -64,7 +64,7 @@ public class Start extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
@@ -77,13 +77,13 @@ public class Start extends AbstractAction {
             startEngine(true);
         } else if (e.getActionCommand().equals(ActionNames.ACTION_STOP)) {
             if (engine != null) {
-                log.info("Stopping test");
+                LOGGER.info("Stopping test");
                 GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
                 engine.stopTest();
             }
         } else if (e.getActionCommand().equals(ActionNames.ACTION_SHUTDOWN)) {
             if (engine != null) {
-                log.info("Shutting test down");
+                LOGGER.info("Shutting test down");
                 GuiPackage.getInstance().getMainFrame().showStoppingMessage("");
                 engine.askThreadsToStop();
             }
@@ -99,7 +99,7 @@ public class Start extends AbstractAction {
         HashTree testTree = gui.getTreeModel().getTestPlan();
         JMeter.convertSubTree(testTree);
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
-        log.debug("test plan before cloning is running version: "
+        LOGGER.debug("test plan before cloning is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
         TreeCloner cloner = cloneTree(testTree, ignoreTimer);
         engine = new StandardJMeterEngine();
@@ -110,7 +110,7 @@ public class Start extends AbstractAction {
             JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), 
                     JMeterUtils.getResString("error_occurred"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
         }
-        log.debug("test plan after cloning and running test is running version: "
+        LOGGER.debug("test plan after cloning and running test is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
     }
     

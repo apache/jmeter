@@ -33,12 +33,12 @@ import org.apache.log.Logger;
  * Implements the Add Parent menu command
  */
 public class AddParent implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.ADD_PARENT);
+        COMMANDS.add(ActionNames.ADD_PARENT);
     }
 
     public AddParent() {
@@ -53,14 +53,14 @@ public class AddParent implements Command {
             TestElement controller = guiPackage.createTestElement(name);
             addParentToTree(controller);
         } catch (Exception err) {
-            log.error("", err);
+            LOGGER.error("", err);
         }
 
     }
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     protected void addParentToTree(TestElement newParent) {

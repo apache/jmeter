@@ -42,11 +42,11 @@ import org.apache.log.Logger;
  */
 public class LookAndFeelCommand implements Command {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     private static final Preferences PREFS = Preferences.userNodeForPackage(LookAndFeelCommand.class);
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
@@ -57,10 +57,10 @@ public class LookAndFeelCommand implements Command {
     static {
         UIManager.LookAndFeelInfo[] lfs = JMeterMenuBar.getAllLAFs();
         for (UIManager.LookAndFeelInfo lf : lfs) {
-            commands.add(ActionNames.LAF_PREFIX + lf.getClassName());
+            COMMANDS.add(ActionNames.LAF_PREFIX + lf.getClassName());
         }
         String jMeterLaf = getJMeterLaf();
-        if (log.isInfoEnabled()) {
+        if (LOGGER.isInfoEnabled()) {
             List<String> names = new ArrayList<>();
             for(UIManager.LookAndFeelInfo laf : lfs) {
                 if (laf.getClassName().equals(jMeterLaf)) {
@@ -68,9 +68,9 @@ public class LookAndFeelCommand implements Command {
                 }
             }
             if (names.size() > 0) {
-                log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
+                LOGGER.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
             } else {
-                log.info("Using look and feel: "+jMeterLaf);
+                LOGGER.info("Using look and feel: "+jMeterLaf);
             }
         }
     }
@@ -147,6 +147,6 @@ public class LookAndFeelCommand implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

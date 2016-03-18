@@ -30,10 +30,10 @@ import org.apache.jmeter.gui.GuiPackage;
  */
 public class ToolBar implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.TOOLBAR);
+        COMMANDS.add(ActionNames.TOOLBAR);
     }
 
     /**
@@ -49,7 +49,7 @@ public class ToolBar implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

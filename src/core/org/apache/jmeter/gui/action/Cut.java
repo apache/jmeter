@@ -29,10 +29,10 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
  * Implements the Cut menu item command
  */
 public class Cut extends AbstractAction {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CUT);
+        COMMANDS.add(ActionNames.CUT);
     }
 
     /**
@@ -40,7 +40,7 @@ public class Cut extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

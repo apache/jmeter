@@ -71,7 +71,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$;
 
@@ -237,7 +237,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                 try {
                     java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
                 } catch (Exception ex) {
-                    log.error("Error opening URL in browser:"+e.getURL());
+                    LOGGER.error("Error opening URL in browser:"+e.getURL());
                 } 
             }
         }

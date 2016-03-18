@@ -41,17 +41,17 @@ public class RemoteStart extends AbstractAction {
 
     private static final String REMOTE_HOSTS_SEPARATOR = ","; // $NON-NLS-1$
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.REMOTE_START);
-        commands.add(ActionNames.REMOTE_STOP);
-        commands.add(ActionNames.REMOTE_SHUT);
-        commands.add(ActionNames.REMOTE_START_ALL);
-        commands.add(ActionNames.REMOTE_STOP_ALL);
-        commands.add(ActionNames.REMOTE_SHUT_ALL);
-        commands.add(ActionNames.REMOTE_EXIT);
-        commands.add(ActionNames.REMOTE_EXIT_ALL);
+        COMMANDS.add(ActionNames.REMOTE_START);
+        COMMANDS.add(ActionNames.REMOTE_STOP);
+        COMMANDS.add(ActionNames.REMOTE_SHUT);
+        COMMANDS.add(ActionNames.REMOTE_START_ALL);
+        COMMANDS.add(ActionNames.REMOTE_STOP_ALL);
+        COMMANDS.add(ActionNames.REMOTE_SHUT_ALL);
+        COMMANDS.add(ActionNames.REMOTE_EXIT);
+        COMMANDS.add(ActionNames.REMOTE_EXIT_ALL);
     }
 
     private DistributedRunner distributedRunner = new DistributedRunner();
@@ -103,7 +103,7 @@ public class RemoteStart extends AbstractAction {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     private HashTree getTestTree() {

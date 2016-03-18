@@ -30,10 +30,10 @@ import org.apache.jmeter.reporters.FileReporter;
 import org.apache.jmeter.util.JMeterUtils;
 
 public class Analyze implements Command {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.ANALYZE_FILE);
+        COMMANDS.add(ActionNames.ANALYZE_FILE);
     }
 
     public Analyze() {
@@ -41,7 +41,7 @@ public class Analyze implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override

@@ -33,12 +33,12 @@ import org.apache.log.Logger;
  * @version $Revision$
  */
 public class ChangeLanguage implements Command {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     static {
-        commands.add(ActionNames.CHANGE_LANGUAGE);
+        COMMANDS.add(ActionNames.CHANGE_LANGUAGE);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ChangeLanguage implements Command {
         } else {
             loc = new Locale(locale, "");
         }
-        log.debug("Changing locale to " + loc.toString());
+        LOGGER.debug("Changing locale to " + loc.toString());
         try {
             JMeterUtils.setLocale(loc);
         } catch (JMeterError err) {
@@ -68,6 +68,6 @@ public class ChangeLanguage implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

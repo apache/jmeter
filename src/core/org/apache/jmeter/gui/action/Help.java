@@ -40,9 +40,9 @@ import org.apache.log.Logger;
  * Implements the Help menu item.
  */
 public class Help implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     private static final String HELP_DOCS = "file:///"  // $NON-NLS-1$
         + JMeterUtils.getJMeterHome()
@@ -59,7 +59,7 @@ public class Help implements Command {
     private static final JScrollPane scroller;
 
     static {
-        commands.add(ActionNames.HELP);
+        COMMANDS.add(ActionNames.HELP);
         helpDoc = new HtmlPane();
         scroller = new JScrollPane(helpDoc);
         helpDoc.setEditable(false);
@@ -98,7 +98,7 @@ public class Help implements Command {
         try {
             helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
         } catch (IOException ioe) {
-            log.error(ioe.toString());
+            LOGGER.error(ioe.toString());
             JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
         }
     }
@@ -108,6 +108,6 @@ public class Help implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

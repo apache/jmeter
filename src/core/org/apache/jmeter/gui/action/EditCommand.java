@@ -30,10 +30,10 @@ import org.apache.jmeter.gui.NamePanel;
  * Implements the Edit menu item.
  */
 public class EditCommand implements Command {
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.EDIT);
+        COMMANDS.add(ActionNames.EDIT);
     }
 
     public EditCommand() {
@@ -59,6 +59,6 @@ public class EditCommand implements Command {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

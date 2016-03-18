@@ -36,10 +36,10 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class Close implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CLOSE);
+        COMMANDS.add(ActionNames.CLOSE);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Close implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

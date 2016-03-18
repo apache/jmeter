@@ -43,12 +43,12 @@ import org.apache.log.Logger;
  * Implements the Add Parent menu command
  */
 public class ChangeParent implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.CHANGE_PARENT);
+        COMMANDS.add(ActionNames.CHANGE_PARENT);
     }
 
     public ChangeParent() {
@@ -69,14 +69,14 @@ public class ChangeParent implements Command {
             changeParent(controller, guiPackage, currentNode);
         } catch (Exception err) {
             Toolkit.getDefaultToolkit().beep();
-            log.error("Failed to change parent", err);
+            LOGGER.error("Failed to change parent", err);
         }
 
     }
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     private void changeParent(TestElement newParent, GuiPackage guiPackage, JMeterTreeNode currentNode) {

@@ -45,11 +45,11 @@ import org.apache.jmeter.visualizers.Printable;
  */
 public class SaveGraphics implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.SAVE_GRAPHICS);
-        commands.add(ActionNames.SAVE_GRAPHICS_ALL);
+        COMMANDS.add(ActionNames.SAVE_GRAPHICS);
+        COMMANDS.add(ActionNames.SAVE_GRAPHICS_ALL);
     }
 
     private static final String[] extensions
@@ -68,12 +68,12 @@ public class SaveGraphics implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-        if (!commands.contains(e.getActionCommand())) {
+        if (!COMMANDS.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
         }
         if (e.getActionCommand().equals(ActionNames.SAVE_GRAPHICS)) {

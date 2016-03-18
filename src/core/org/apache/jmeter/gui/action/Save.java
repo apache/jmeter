@@ -66,7 +66,7 @@ import org.apache.log.Logger;
  * Save (Selection) As
  */
 public class Save implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();
     
@@ -97,13 +97,13 @@ public class Save implements Command {
     // NumberFormat to format version number in backup file names
     private static final DecimalFormat BACKUP_VERSION_FORMATER = new DecimalFormat("000000"); //$NON-NLS-1$
     
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.SAVE_AS); // Save (Selection) As
-        commands.add(ActionNames.SAVE_AS_TEST_FRAGMENT); // Save as Test Fragment
-        commands.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
-        commands.add(ActionNames.SAVE); // Save
+        COMMANDS.add(ActionNames.SAVE_AS); // Save (Selection) As
+        COMMANDS.add(ActionNames.SAVE_AS_TEST_FRAGMENT); // Save as Test Fragment
+        COMMANDS.add(ActionNames.SAVE_ALL_AS); // Save TestPlan As
+        COMMANDS.add(ActionNames.SAVE); // Save
     }
 
     /**
@@ -118,14 +118,14 @@ public class Save implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
         HashTree subTree = null;
         boolean fullSave = false; // are we saving the whole tree?
-        if (!commands.contains(e.getActionCommand())) {
+        if (!COMMANDS.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
         }
         if (e.getActionCommand().equals(ActionNames.SAVE_AS)) {
@@ -210,13 +210,13 @@ public class Save implements Command {
         try {
             expiredBackupFiles = createBackupFile(fileToBackup);
         } catch (Exception ex) {
-            log.error("Failed to create a backup for " + fileToBackup.getName(), ex); //$NON-NLS-1$
+            LOGGER.error("Failed to create a backup for " + fileToBackup.getName(), ex); //$NON-NLS-1$
         }
         
         try {
             convertSubTree(subTree);
         } catch (Exception err) {
-            log.warn("Error converting subtree "+err);
+            LOGGER.warn("Error converting subtree "+err);
         }
 
         FileOutputStream ostream = null;
@@ -238,11 +238,11 @@ public class Save implements Command {
                 try {
                     FileUtils.deleteQuietly(expiredBackupFile);
                 } catch (Exception ex) {
-                    log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
+                    LOGGER.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
                 }
             }
         } catch (Throwable ex) {
-            log.error("Error saving tree:", ex);
+            LOGGER.error("Error saving tree:", ex);
             if (ex instanceof Error){
                 throw (Error) ex;
             }
@@ -328,7 +328,7 @@ public class Save implements Command {
         File backupDir = new File(BACKUP_DIRECTORY);
         backupDir.mkdirs();
         if (!backupDir.isDirectory()) {
-            log.error("Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <" + backupDir.getAbsolutePath() + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+            LOGGER.error("Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <" + backupDir.getAbsolutePath() + ">"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // select files matching
@@ -380,7 +380,7 @@ public class Save implements Command {
         try {
             FileUtils.copyFile(fileToBackup, backupFile);
         } catch (IOException e) {
-            log.error("Failed to backup file :" + fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
+            LOGGER.error("Failed to backup file :" + fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
             return EMPTY_FILE_LIST;
         }
         // add the fresh new backup file (list is still sorted here)

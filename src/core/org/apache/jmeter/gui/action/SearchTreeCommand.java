@@ -28,10 +28,10 @@ import java.util.Set;
  */
 public class SearchTreeCommand extends AbstractAction {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.SEARCH_TREE);
+        COMMANDS.add(ActionNames.SEARCH_TREE);
     }
 
     private SearchTreeDialog dialog = new SearchTreeDialog();
@@ -49,6 +49,6 @@ public class SearchTreeCommand extends AbstractAction {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 }

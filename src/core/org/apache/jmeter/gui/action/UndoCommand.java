@@ -33,11 +33,11 @@ import org.apache.jorphan.collections.HashTree;
  */
 public class UndoCommand implements Command {
 
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.UNDO);
-        commands.add(ActionNames.REDO);
+        COMMANDS.add(ActionNames.UNDO);
+        COMMANDS.add(ActionNames.REDO);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UndoCommand implements Command {
      */
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     /**

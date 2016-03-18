@@ -40,10 +40,10 @@ public class LoadRecentProject extends Load {
     private static final String USER_PREFS_KEY = "recent_file_"; //$NON-NLS-1$
     /** The number of menu items used for recent files */
     private static final int NUMBER_OF_MENU_ITEMS = 9;
-    private static final Set<String> commands = new HashSet<>();
+    private static final Set<String> COMMANDS = new HashSet<>();
 
     static {
-        commands.add(ActionNames.OPEN_RECENT);
+        COMMANDS.add(ActionNames.OPEN_RECENT);
     }
 
     private static final Preferences prefs = Preferences.userNodeForPackage(LoadRecentProject.class);
@@ -55,7 +55,7 @@ public class LoadRecentProject extends Load {
 
     @Override
     public Set<String> getActionNames() {
-        return commands;
+        return COMMANDS;
     }
 
     @Override

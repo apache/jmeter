@@ -29,7 +29,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 public abstract class AbstractAction implements Command {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
 
     /**
      * @see Command#doAction(ActionEvent)
@@ -48,7 +48,7 @@ public abstract class AbstractAction implements Command {
      * @param e the event that led to the call of this method
      */
     protected void popupShouldSave(ActionEvent e) {
-        log.debug("popupShouldSave");
+        LOGGER.debug("popupShouldSave");
         if (GuiPackage.getInstance().getTestPlanFile() == null) {
             if (JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
                     JMeterUtils.getResString("should_save"),  //$NON-NLS-1$
