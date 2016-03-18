@@ -30,9 +30,9 @@ import org.apache.log.Logger;
  * @since 3.0
  */
 public abstract class BaseParser implements LinkExtractorParser {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
     // Cache of parsers - parsers must be re-usable
-    private static final Map<String, LinkExtractorParser> parsers = new ConcurrentHashMap<>(5);
+    private static final Map<String, LinkExtractorParser> PARSERS = new ConcurrentHashMap<>(5);
 
     /**
      * 
@@ -50,9 +50,9 @@ public abstract class BaseParser implements LinkExtractorParser {
             throws LinkExtractorParseException {
 
         // Is there a cached parser?
-        LinkExtractorParser parser = parsers.get(parserClassName);
+        LinkExtractorParser parser = PARSERS.get(parserClassName);
         if (parser != null) {
-            log.debug("Fetched " + parserClassName);
+            LOG.debug("Fetched " + parserClassName);
             return parser;
         }
 
@@ -67,9 +67,9 @@ public abstract class BaseParser implements LinkExtractorParser {
                 | IllegalAccessException e) {
             throw new LinkExtractorParseException(e);
         }
-        log.info("Created " + parserClassName);
+        LOG.info("Created " + parserClassName);
         if (parser.isReusable()) {
-            parsers.put(parserClassName, parser);// cache the parser
+            PARSERS.put(parserClassName, parser);// cache the parser
         }
 
         return parser;
