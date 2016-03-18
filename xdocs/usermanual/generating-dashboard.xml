@@ -35,7 +35,7 @@
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
                         To enable the generator to operate, the input CSV files must include required data.
-                        Check that your jmeter configuration follows these settings :
+                        Check that your jmeter configuration follows these settings:
                         <source>
 jmeter.save.saveservice.bytes = true
 jmeter.save.saveservice.label = true
@@ -49,10 +49,10 @@ jmeter.save.saveservice.time = true
 jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other format)
                         </source>
                         <note>
-                            Property <code>jmeter.save.saveservice.timestamp_format</code> must be set                        
+                            Property <code>jmeter.save.saveservice.timestamp_format</code> must be set
                         </note>
                         <note>
-                            The "Errors" summary table shows more accurate data if these settings are fulfilled :
+                            The "<code>Errors</code>" summary table shows more accurate data if these settings are fulfilled:
                             <ul>
                                 <li><source>jmeter.save.saveservice.assertion_results_failure_message = true</source></li>
                                 <li>
@@ -75,13 +75,13 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             Sets
                             the satisfaction threshold for the <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
                             calculation (in ms).
-                            Default: 500
+                            Default: <code>500</code>
                         </property>
                         <property name="apdex_tolerated_threshold" required="No">
                             Sets
                             the tolerance threshold for the APDEX calculation
                             (in ms).
-                            Default: 1500
+                            Default: <code>1500</code>
                         </property>
                         <property name="sample_filter" required="No">
                             Sets the filter
@@ -96,21 +96,21 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             Sets the temporary
                             directory used by the generation
                             processus if it needs file I/O
-                            operations. Default: temp
+                            operations. Default: <code>temp</code>
                         </property>
                         <property name="statistic_window" required="No">
                             Sets the size
                             of the sliding window used by percentile
-                            evaluation. Caution :
+                            evaluation. Caution:
                             higher value provides a
                             better accurency
                             but needs more memory.
-                            Default: 200000
+                            Default: <code>200000</code>
                         </property>
                     </properties>
 
                     <note>Relative paths are built from the JMeter working directory
-                        (default: bin).</note>
+                        (default: <code>bin</code>).</note>
 
                     <note>
                         <p>
@@ -123,14 +123,14 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             properties overlap.
                         </p>
                         <p>
-                            E.g :
-                            <br />
-                            Property definition :
-                            <source>jmeter.reportgenerator.overall_granularity=60000</source>
-                            <br />
-                            Property reference :
-                            <source>${jmeter.reportgenerator.overall_granularity}</source>
+                            E.g.:
                         </p>
+                        <dl>
+                            <dt>Property definition:</dt>
+                            <dd><source>jmeter.reportgenerator.overall_granularity=60000</source></dd>
+                            <dt>Property reference:</dt>
+                            <dd><source>${jmeter.reportgenerator.overall_granularity}</source></dd>
+                        </dl>
                     </note>
                 </subsection>
 
@@ -145,7 +145,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                     <!-- <note> The identifier is used to group properties by graph.</note> -->
 
                     <subsection name="&sect-num;.2.3.1 General properties" anchor="general_graph_properties">
-                        <p>All graphs support these properties :</p>
+                        <p>All graphs support these properties:</p>
                         <properties>
                             <property name="classname" required="Yes">
                                 The fully qualified class name of the graph
@@ -159,7 +159,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                 for more details.
                             </property>
                             <property name="exclude_controllers" required="No">Defines
-                                whether the graph discards controller samples. Default: false</property>
+                                whether the graph discards controller samples. Default: <code>false</code></property>
                             <property name="title" required="No">Sets the title of the
                                 graph. Default: ""</property>
                         </properties>
@@ -178,10 +178,9 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             argument.
                         </p>
                         <p>
-                            E.g :
-                            <br />
+                            E.g.:
                             <source>jmeter.reportgenerator.graph.&lt;graph_id&gt;.property.set_granularity=150</source>
-                            induces the call of the method setGranularity(150) on the
+                            induces the call of the method <code>setGranularity(150)</code> on the
                             instance of the graph.
                         </p>
                     </subsection>
@@ -197,7 +196,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                     </p>
 
                     <subsection name="&sect-num;.2.4.1 General properties" anchor="general_export_properties">
-                        <p>All exporters support these properties :</p>
+                        <p>All exporters support these properties:</p>
                         <properties>
                             <property name="classname" required="Yes">
                                 The fully qualified class name of the exporter
@@ -207,14 +206,14 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                 .
                             </property>
                             <property name="filters_only_sample_series" required="No">Defines
-                                whether series_filter (see below) apply only on sample series.
-                                Default: false</property>
+                                whether <code>series_filter</code> (see below) apply only on sample series.
+                                Default: <code>false</code></property>
                             <property name="series_filter" required="No">Sets the filter
                                 of series. An empty value deactivates the filtering. Format:
                                 regular expression. Default:
                                 ""</property>
                             <property name="show_controllers_only" required="No">Defines
-                                whether only controller series are shown. Default: false</property>
+                                whether only controller series are shown. Default: <code>false</code></property>
                         </properties>
                     </subsection>
 
@@ -231,11 +230,11 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                         <properties>
                                             <property name="output_dir" required="No">Sets the
                                                 destination directory for generated html pages. Default:
-                                                report-output</property>
+                                                <code>report-output</code></property>
                                             <property name="template_dir" required="No">Sets the
                                                 source directory of templated files from which the html
                                                 pages are generated. Default:
-                                                report-template</property>
+                                                <code>report-template</code></property>
                                         </properties>
                                     </td>
                                 </tr>
@@ -459,13 +458,13 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                         to your environment.
                     </note>
                     <p>
-                        This configuration allows to generate a report where :
+                        This configuration allows to generate a report where:
                         <ul>
                             <li>Over time graphs have a time granularity equals to 1 minute.</li>
                             <li>The satisfaction threshold for ADPEX calculation is 1 second and half.</li>
                             <li>The tolerance threshold for ADPEX calculation is 3 seconds.</li>
-                            <li>The HTML files are generated in the directory /tmp/test-report.</li>
-                            <li>Only series which the name begins with "s0" or "s1" are shown.</li>
+                            <li>The HTML files are generated in the directory <code>/tmp/test-report</code>.</li>
+                            <li>Only series which the name begins with "<code>s0</code>" or "<code>s1</code>" are shown.</li>
                             <li>The previous filter only applies to graphs (resp. summary tables) where the series (resp. rows) match samples</li>
                         </ul>
                     </p>
@@ -481,14 +480,14 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
 
                 <subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
                     <p>
-                        Use the following command :
+                        Use the following command:
                         <source>jmeter -n -g &lt;log file&gt; -o &lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
 
                 <subsection name="&sect-num;.3.2 Generation after load test" anchor="report_after_load_test">
                     <p>
-                        Use the following command :
+                        Use the following command:
                         <source>jmeter -n -t &lt;test JMX file&gt; -e -l &lt;test log file&gt; -o &lt;Path to output folder&gt;</source>
                     </p>
                 </subsection>
@@ -504,7 +503,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     package
                     <code>org.apache.jmeter.report.processor.graph.impl</code>
                 </p>
-                <p>The dashboard generator provides the following graph classes :</p>
+                <p>The dashboard generator provides the following graph classes:</p>
                 <table>
                     <thead>
                         <tr>
@@ -591,7 +590,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                                     aggregated
                                     to an average. So for
                                     these
-                                    points :
+                                    points:
                                     <ul>
                                         <li>The abscissa is the average
                                             of the number of current active
