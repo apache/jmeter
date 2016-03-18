@@ -218,24 +218,17 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             Specific exporter properties must use the prefix
                             <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.property</source>
                         </p>
-                        <table>
-                            <caption>Specific properties for HTML exporter</caption>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <properties>
-                                            <property name="output_dir" required="No">Sets the
-                                                destination directory for generated html pages. Default:
-                                                <code>report-output</code></property>
-                                            <property name="template_dir" required="No">Sets the
-                                                source directory of template files from which the html
-                                                pages are generated. Default:
-                                                <code>report-template</code></property>
-                                        </properties>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <properties>
+                            <property name="output_dir" required="No">
+                                Sets the destination directory for generated html pages.
+                                Default: <code>report-output</code>
+                            </property>
+                            <property name="template_dir" required="No">
+                                Sets the source directory of template files from
+                                which the html pages are generated.
+                                Default: <code>report-template</code>
+                            </property>
+                        </properties>
                     </subsection>
 
                     <subsection name="&sect-num;.2.4.3 Graph properties" anchor="graph_export_properties">
@@ -245,25 +238,16 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             They must use the prefix:
                             <source>jmeter.reportgenerator.exporter.&lt;exporter_id&gt;.graph_options.&lt;graph_id&gt;</source>
                         </p>
-                        <table>
-                            <caption>Supported graph properties by HTML exporter</caption>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <properties>
-                                            <property name="minX" required="No">Sets the minimum
-                                                abscissa for the graph.</property>
-                                            <property name="maxX" required="No">Sets the maximum
-                                                abscissa for the graph.</property>
-                                            <property name="minY" required="No">Sets the minimum
-                                                ordinate for the graph.</property>
-                                            <property name="maxY" required="No">Sets the maximum
-                                                ordinate for the graph.</property>
-                                        </properties>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <properties>
+                            <property name="minX" required="No">Sets the minimum
+                                abscissa for the graph.</property>
+                            <property name="maxX" required="No">Sets the maximum
+                                abscissa for the graph.</property>
+                            <property name="minY" required="No">Sets the minimum
+                                ordinate for the graph.</property>
+                            <property name="maxY" required="No">Sets the maximum
+                                ordinate for the graph.</property>
+                        </properties>
                     </subsection>
 
                     <subsection name="&sect-num;.2.4.4 Filtering mechanisms" anchor="export_filtering">
