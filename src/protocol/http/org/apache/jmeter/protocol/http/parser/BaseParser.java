@@ -18,8 +18,8 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -32,7 +32,7 @@ import org.apache.log.Logger;
 public abstract class BaseParser implements LinkExtractorParser {
     private static final Logger LOG = LoggingManager.getLoggerForClass();
     // Cache of parsers - parsers must be re-usable
-    private static final Map<String, LinkExtractorParser> PARSERS = new ConcurrentHashMap<>(5);
+    private static final ConcurrentMap<String, LinkExtractorParser> PARSERS = new ConcurrentHashMap<>(5);
 
     /**
      * Constructor for BaseParser
