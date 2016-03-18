@@ -35,7 +35,7 @@
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
                         To enable the generator to operate, the input CSV files must include required data.
-                        Check that your jmeter configuration follows these settings:
+                        Check that your JMeter configuration follows these settings:
                         <source>
 jmeter.save.saveservice.bytes = true
 jmeter.save.saveservice.label = true
@@ -95,7 +95,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                         <property name="temp_dir" required="No">
                             Sets the temporary
                             directory used by the generation
-                            processus if it needs file I/O
+                            process if it needs file I/O
                             operations. Default: <code>temp</code>
                         </property>
                         <property name="statistic_window" required="No">
@@ -103,7 +103,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             of the sliding window used by percentile
                             evaluation. Caution:
                             higher value provides a
-                            better accurency
+                            better accuracy
                             but needs more memory.
                             Default: <code>200000</code>
                         </property>
@@ -232,7 +232,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                                                 destination directory for generated html pages. Default:
                                                 <code>report-output</code></property>
                                             <property name="template_dir" required="No">Sets the
-                                                source directory of templated files from which the html
+                                                source directory of template files from which the html
                                                 pages are generated. Default:
                                                 <code>report-template</code></property>
                                         </properties>
@@ -520,7 +520,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                         </tr>
                         <tr>
                             <td>BytesThroughputGraphConsumer</td>
-                            <td>This graph represents the troughput of received and sent data
+                            <td>This graph represents the throughput of received and sent data
                                 over time.</td>
                             <td>False</td>
                         </tr>
