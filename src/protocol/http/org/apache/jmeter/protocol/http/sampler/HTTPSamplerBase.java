@@ -1501,9 +1501,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             // Change all but HEAD into GET (Bug 55450)
             String method = lastRes.getHTTPMethod();
-            if (!HTTPConstants.HEAD.equalsIgnoreCase(method)) {
-                method = HTTPConstants.GET;
-            }
+            method = computeMethodForRedirect(method, res.getResponseCode());
+
             try {
                 URL url = ConversionUtils.makeRelativeURL(lastRes.getURL(), location);
                 url = ConversionUtils.sanitizeUrl(url).toURL();
@@ -1565,6 +1564,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         totalRes.setContentType(lastRes.getContentType());
         totalRes.setDataEncoding(lastRes.getDataEncodingNoDefault());
         return totalRes;
+    }
+
+    /**
+     * See <a href="http://tools.ietf.org/html/rfc2616#section-10.3">RFC2616#section-10.3</a>
+     * JMeter conforms currently to HttpClient 4.5.2 supported RFC
+     * TODO Update when migrating to HttpClient 5.X
+     * @param initialMethod the initial HTTP Method
+     * @param responseCode String response code
+     * @return the new HTTP Method as per RFC
+     */
+    private String computeMethodForRedirect(String initialMethod, String responseCode) {
+        if (!HTTPConstants.HEAD.equalsIgnoreCase(initialMethod)) {
+            return HTTPConstants.GET;
+        }
+        return initialMethod;
     }
 
     /**
