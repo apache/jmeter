@@ -35,16 +35,22 @@ public abstract class BaseParser implements LinkExtractorParser {
     private static final Map<String, LinkExtractorParser> PARSERS = new ConcurrentHashMap<>(5);
 
     /**
-     * 
+     * Constructor for BaseParser
      */
     public BaseParser() {
     }
 
     /**
-     * Factory method of parsers
+     * Factory method of parsers. Instances might get cached, when
+     * {@link LinkExtractorParser#isReusable()} on the newly created instance
+     * equals {@code true}.
+     * 
      * @param parserClassName
-     * @return {@link LinkExtractorParser}
+     *            name of the class that should be used to create new parsers
+     * @return a possibly cached instance of the wanted
+     *         {@link LinkExtractorParser}
      * @throws LinkExtractorParseException
+     *             when a new instance could not be instantiated
      */
     public static LinkExtractorParser getParser(String parserClassName) 
             throws LinkExtractorParseException {
@@ -79,7 +85,7 @@ public abstract class BaseParser implements LinkExtractorParser {
      * Parsers should over-ride this method if the parser class is re-usable, in
      * which case the class will be cached for the next getParser() call.
      *
-     * @return true if the Parser is reusable
+     * @return {@code true} if the Parser is reusable
      */
     @Override
     public boolean isReusable() {
