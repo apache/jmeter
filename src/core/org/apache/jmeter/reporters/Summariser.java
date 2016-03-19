@@ -199,22 +199,12 @@ public class Summariser extends AbstractTestElement
         if (reportNow) {
             String str;
             str = format(myName, myDelta, "+");
-            if (TOLOG) {
-                log.info(str);
-            }
-            if (TOOUT) {
-                System.out.println(str);
-            }
+            writeToLog(str);
 
             // Only if we have updated them
             if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) {
                 str = format(myName, myTotal, "=");
-                if (TOLOG) {
-                    log.info(str);
-                }
-                if (TOOUT) {
-                    System.out.println(str);
-                }
+                writeToLog(str);
             }
         }
     }
@@ -368,21 +358,20 @@ public class Summariser extends AbstractTestElement
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
                 str = format(name, total.delta, "+");
-                if (TOLOG) {
-                    log.info(str);
-                }
-                if (TOOUT) {
-                    System.out.println(str);
-                }
+                writeToLog(str);
             }
             total.moveDelta(); // This will update the total endTime
             str = format(name, total.total, "=");
-            if (TOLOG) {
-                log.info(str);
-            }
-            if (TOOUT) {
-                System.out.println(str);
-            }
+            writeToLog(str);
+        }
+    }
+
+    private void writeToLog(String str) {
+        if (TOLOG) {
+            log.info(str);
+        }
+        if (TOOUT) {
+            System.out.println(str);
         }
     }
 
