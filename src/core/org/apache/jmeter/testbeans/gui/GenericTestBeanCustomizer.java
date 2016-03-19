@@ -141,6 +141,9 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = "default"; //$NON-NLS-1$
 
+    /** Default value is not saved; only non-defaults are saved */
+    public static final String DEFAULT_NOT_SAVED = "defaultNoSave"; //$NON-NLS-1$
+
     /** Pointer to the resource bundle, if any (will generally be null) */
     public static final String RESOURCE_BUNDLE = "resourceBundle"; //$NON-NLS-1$
 
@@ -326,7 +329,10 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         if (deflt == null) {
             if (notNull(pd)) {
                 log.warn(getDetails(pd) + " requires a value but does not provide a default.");
-            }            
+            }
+            if (noSaveDefault(pd)) {
+                log.warn(getDetails(pd) + " specifies DEFAULT_NO_SAVE but does not provide a default.");                
+            }
         } else {
             final Class<?> defltClass = deflt.getClass(); // the DEFAULT class
             // Convert int to Integer etc:
@@ -448,6 +454,17 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
     static boolean notNull(PropertyDescriptor descriptor) {
         boolean notNull = Boolean.TRUE.equals(descriptor.getValue(NOT_UNDEFINED));
         return notNull;
+    }
+
+    /**
+     * Returns true if the property default value is not saved
+     * 
+     * @param descriptor the property descriptor
+     * @return true if the attribute {@link #DEFAULT_NOT_SAVED} is defined and equal to Boolean.TRUE;
+     *  otherwise the default is false
+     */
+    static boolean noSaveDefault(PropertyDescriptor descriptor) {
+        return Boolean.TRUE.equals(descriptor.getValue(DEFAULT_NOT_SAVED));
     }
 
     /**
