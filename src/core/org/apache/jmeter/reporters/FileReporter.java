@@ -365,7 +365,7 @@ private static class GraphPanel extends JPanel {
         float incrementValue = (maxValue - minValue) / (10 - 1);
 
         for (int t = 0; t < 10; t++) {
-            g.drawString(Integer.valueOf(Math.round(minValue + (t * incrementValue))).toString(), 2, height - t
+            g.drawString(Integer.toString(Math.round(minValue + (t * incrementValue))), 2, height - t
                     * yIncrement - 2 - base);
         }
         // draw data lines
