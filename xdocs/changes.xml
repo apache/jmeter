@@ -309,6 +309,7 @@ Summary
 <li><bug>59003</bug>ClutilTestCase testSingleArg8 and testSingleArg9 are identical</li>
 <li><bug>59064</bug>Remove OldSaveService which supported very old Avalon format JTL (result) files</li>
 <li><bug>59165</bug>RSyntaxTextArea not compatible with headless testing</li>
+<li><bug>59021</bug>Use Double#compare instead of reimplementing it in NumberProperty#compareTo</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
