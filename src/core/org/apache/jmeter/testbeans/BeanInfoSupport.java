@@ -82,6 +82,9 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
     /** Default value, must be provided if {@link #NOT_UNDEFINED} is TRUE */
     public static final String DEFAULT = GenericTestBeanCustomizer.DEFAULT;
 
+    /** Default value is not saved; only non-defaults are saved */
+    public static final String DEFAULT_NOT_SAVED = GenericTestBeanCustomizer.DEFAULT_NOT_SAVED;
+
     /** Pointer to the resource bundle, if any (will generally be null) */
     public static final String RESOURCE_BUNDLE = GenericTestBeanCustomizer.RESOURCE_BUNDLE;
 
