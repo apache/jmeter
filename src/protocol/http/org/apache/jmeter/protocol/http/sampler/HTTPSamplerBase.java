@@ -1069,7 +1069,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // - string contains name
             // - empty string
 
-            String metaData; // records the existance of an equal sign
+            String metaData; // records the existence of an equal sign
             String name;
             String value;
             int length = arg.length();
