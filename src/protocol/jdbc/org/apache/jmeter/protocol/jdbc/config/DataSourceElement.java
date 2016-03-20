@@ -274,7 +274,7 @@ public class DataSourceElement extends AbstractTestElement
 
         /**
          * @return Connection
-         * @throws SQLException
+         * @throws SQLException if database access error occurrs
          */
         public Connection getConnection() throws SQLException {
             Connection conn = null;
