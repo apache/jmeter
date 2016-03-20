@@ -1924,10 +1924,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *
      */
     private static class ASyncSample implements Callable<AsynSamplerResultHolder> {
-        final private URL url;
-        final private String method;
-        final private boolean areFollowingRedirect;
-        final private int depth;
+        private final URL url;
+        private final String method;
+        private final boolean areFollowingRedirect;
+        private final int depth;
         private final HTTPSamplerBase sampler;
         private final JMeterContext jmeterContextOfParentThread;
 
