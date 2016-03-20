@@ -316,9 +316,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 log.error("Cannot find .className property for " + parser+", ensure you set property:'" + parser + ".className'");
                 continue;
             }
-            String typelist = JMeterUtils.getProperty(parser + ".types");//$NON-NLS-1$
-            if (typelist != null) {
-                String[] types = JOrphanUtils.split(typelist, " ", true);
+            String typeList = JMeterUtils.getProperty(parser + ".types");//$NON-NLS-1$
+            if (typeList != null) {
+                String[] types = JOrphanUtils.split(typeList, " ", true);
                 for (final String type : types) {
                     log.info("Parser for " + type + " is " + classname);
                     PARSERS_FOR_CONTENT_TYPE.put(type, classname);
