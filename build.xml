@@ -360,7 +360,7 @@
 
   <!-- Jars for binary release -->
   <patternset id="external.jars">
-  	<include name="${lib.dir}/${accessors-smart.jar}"/>
+    <include name="${lib.dir}/${accessors-smart.jar}"/>
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${asm.jar}"/>
     <include name="${lib.dir}/${avalon-framework.jar}"/>
@@ -434,7 +434,7 @@
   <!-- Build classpath (includes the optional jar directory) -->
   <path id="classpath">
     <!-- Externally produced jars -->
-  	<pathelement location="${lib.dir}/${accessors-smart.jar}"/>
+    <pathelement location="${lib.dir}/${accessors-smart.jar}"/>
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
     <pathelement location="${lib.dir}/${asm.jar}"/>
     <pathelement location="${lib.dir}/${avalon-framework.jar}"/>
