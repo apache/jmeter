@@ -771,7 +771,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         return getPropertyAsString(PROXYPASS);
     }
 
-    public void setArguments(Arguments value) {
+    // gets called from ctor, so has to be final
+    public final void setArguments(Arguments value) {
         setProperty(new TestElementProperty(ARGUMENTS, value));
     }
 
