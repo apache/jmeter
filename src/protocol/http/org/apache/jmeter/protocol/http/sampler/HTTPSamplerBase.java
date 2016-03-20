@@ -1310,7 +1310,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             }
                         }
                         res.addSubResult(binRes.getResult());
-                        setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() != null ? binRes.getResult().isSuccessful():true));
+                        setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() == null || binRes.getResult().isSuccessful()));
                     }
                 } catch (InterruptedException ie) {
                     log.warn("Interrupted fetching embedded resources", ie); // $NON-NLS-1$
@@ -1683,16 +1683,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @param files list of files to save
      */
     public void setHTTPFiles(HTTPFileArg[] files) {
-        HTTPFileArgs fileArgs = new HTTPFileArgs();
+        HTTPFileArgs nonEmptyFileArgs = new HTTPFileArgs();
         // Weed out the empty files
-        if (files.length > 0) {
-            for (HTTPFileArg file : files) {
-                if (file.isNotEmpty()) {
-                    fileArgs.addHTTPFileArg(file);
-                }
+        for (HTTPFileArg file : files) {
+            if (file.isNotEmpty()) {
+                nonEmptyFileArgs.addHTTPFileArg(file);
             }
         }
-        setHTTPFileArgs(fileArgs);
+        setHTTPFileArgs(nonEmptyFileArgs);
     }
 
     public static String[] getValidMethodsAsArray() {
