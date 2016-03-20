@@ -393,10 +393,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         // We use multipart if we have been told so, or files are present
         // and the files should not be send as the post body
         HTTPFileArg[] files = getHTTPFiles();
-        if (HTTPConstants.POST.equals(getMethod()) && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()))) {
-            return true;
-        }
-        return false;
+        return HTTPConstants.POST.equals(getMethod())
+                && (getDoMultipartPost() || (files.length > 0 && !getSendFileAsPostBody()));
     }
 
     public void setProtocol(String value) {
@@ -440,7 +438,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public void setPath(String path, String contentEncoding) {
         boolean fullUrl = path.startsWith(HTTP_PREFIX) || path.startsWith(HTTPS_PREFIX);
-        if (!fullUrl && (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod()))) {
+        boolean getOrDelete = HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod());
+        if (!fullUrl && getOrDelete) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
@@ -669,10 +668,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public static int getDefaultPort(String protocol, int port) {
         if (port == URL_UNSPECIFIED_PORT) {
-            return
-                protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP)  ? HTTPConstants.DEFAULT_HTTP_PORT :
-                protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTPS) ? HTTPConstants.DEFAULT_HTTPS_PORT :
-                    port;
+            if (protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTP)) {
+                return HTTPConstants.DEFAULT_HTTP_PORT;
+            } else if (protocol.equalsIgnoreCase(HTTPConstants.PROTOCOL_HTTPS)) {
+                return HTTPConstants.DEFAULT_HTTPS_PORT;
+            }
         }
         return port;
     }
@@ -699,12 +699,15 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean isProtocolDefaultPort() {
         final int port = getPortIfSpecified();
         final String protocol = getProtocol();
-        if (port == UNSPECIFIED_PORT ||
-                (HTTPConstants.PROTOCOL_HTTP.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTP_PORT) ||
-                (HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(protocol) && port == HTTPConstants.DEFAULT_HTTPS_PORT)) {
-            return true;
-        }
-        return false;
+        boolean isDefaultHTTPPort = HTTPConstants.PROTOCOL_HTTP
+                .equalsIgnoreCase(protocol)
+                && port == HTTPConstants.DEFAULT_HTTP_PORT;
+        boolean isDefaultHTTPSPort = HTTPConstants.PROTOCOL_HTTPS
+                .equalsIgnoreCase(protocol)
+                && port == HTTPConstants.DEFAULT_HTTPS_PORT;
+        return port == UNSPECIFIED_PORT ||
+                isDefaultHTTPPort ||
+                isDefaultHTTPSPort;
     }
 
     /**
@@ -1279,7 +1282,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             // default: serial download embedded resources
                             HTTPSampleResult binRes = sample(url, HTTPConstants.GET, false, frameDepth + 1);
                             res.addSubResult(binRes);
-                            setParentSampleSuccess(res, res.isSuccessful() && (binRes != null ? binRes.isSuccessful() : true));
+                            setParentSampleSuccess(res, res.isSuccessful() && (binRes == null || binRes.isSuccessful()));
                         }
 
                     }
