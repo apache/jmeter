@@ -578,7 +578,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             log.debug("adding argument: name: " + name + " value: " + value + " metaData: " + metaData + " contentEncoding: " + contentEncoding);
         }
 
-        HTTPArgument arg = null;
+        HTTPArgument arg;
         final boolean nonEmptyEncoding = !StringUtils.isEmpty(contentEncoding);
         if (nonEmptyEncoding) {
             arg = new HTTPArgument(name, value, metaData, true, contentEncoding);
@@ -587,7 +587,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
 
         // Check if there are any difference between name and value and their encoded name and value
-        String valueEncoded = null;
+        String valueEncoded;
         if (nonEmptyEncoding) {
             try {
                 valueEncoded = arg.getEncodedValue(contentEncoding);
