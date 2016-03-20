@@ -477,24 +477,11 @@ public class JMeter implements JMeterPlugin {
                     if(reportOutputFolderOpt != null) {
                         String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
                         File reportOutputFolderAsFile = new File(reportOutputFolder);
-                        // We check folder does not exist or it is empty
-                        if(!reportOutputFolderAsFile.exists() || 
-                                // folder exists but is empty
-                                (reportOutputFolderAsFile.isDirectory() && reportOutputFolderAsFile.listFiles().length == 0)) {
-                            if(!reportOutputFolderAsFile.exists()) {
-                                // Report folder does not exist, we check we can create it 
-                                if(!reportOutputFolderAsFile.mkdirs()) {
-                                    throw new IllegalArgumentException("Cannot create output report to:'"
-                                            +reportOutputFolderAsFile.getAbsolutePath()+"' as I was not able to create it");
-                                }
-                            }
-                            log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
-                            JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
-                                    reportOutputFolderAsFile.getAbsolutePath());                        
-                        } else {
-                            throw new IllegalArgumentException("Cannot output report to:'"
-                                    +reportOutputFolderAsFile.getAbsolutePath()+"' as it would overwrite existing non empty folder");
-                        }
+
+                        JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
+                        log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
+                        JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
+                                reportOutputFolderAsFile.getAbsolutePath());                        
                     }
                     
                     CLOption testReportOpt = parser
