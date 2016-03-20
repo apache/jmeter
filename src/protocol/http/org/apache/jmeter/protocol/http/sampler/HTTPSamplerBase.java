@@ -1355,11 +1355,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
-            if (!escapedUrl.equals(url)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Url '" + url + "' has been escaped to '" + escapedUrl
-                            + "'. Please correct your webpage.");
-                }
+            if (!escapedUrl.equals(url) && log.isDebugEnabled()) {
+                log.debug("Url '" + url + "' has been escaped to '"
+                        + escapedUrl + "'. Please correct your webpage.");
             }
             return escapedUrl;
         } catch (Exception e1) {
@@ -1600,15 +1598,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
         boolean wasRedirected = false;
-        if (!areFollowingRedirect) {
-            if (res.isRedirect()) {
-                log.debug("Location set to - " + res.getRedirectLocation());
+        if (!areFollowingRedirect && res.isRedirect()) {
+            log.debug("Location set to - " + res.getRedirectLocation());
 
-                if (getFollowRedirects()) {
-                    res = followRedirects(res, frameDepth);
-                    areFollowingRedirect = true;
-                    wasRedirected = true;
-                }
+            if (getFollowRedirects()) {
+                res = followRedirects(res, frameDepth);
+                areFollowingRedirect = true;
+                wasRedirected = true;
             }
         }
         if (isImageParser() && (SampleResult.TEXT).equals(res.getDataType()) && res.isSuccessful()) {
