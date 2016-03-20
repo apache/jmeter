@@ -1637,7 +1637,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return whether in range 200-399 or not
      */
     protected boolean isSuccessCode(int code) {
-        return (code >= 200 && code <= 399);
+        return code >= 200 && code <= 399;
     }
 
     protected static String encodeBackSlashes(String value) {
