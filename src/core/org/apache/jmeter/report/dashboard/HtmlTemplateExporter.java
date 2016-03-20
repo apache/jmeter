@@ -45,6 +45,7 @@ import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 import freemarker.template.Configuration;
@@ -354,6 +355,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         if(!StringUtils.isEmpty(globallyDefinedOutputDir)) {
             outputDir = new File(globallyDefinedOutputDir);
         }
+        
+        JOrphanUtils.canSafelyWriteToFolder(outputDir);
 
         LOG.info("Will generate dashboard in folder:" + outputDir.getAbsolutePath());
 
