@@ -47,6 +47,18 @@ import org.apache.log.Logger;
  * @since 2.13
  */
 public class GraphiteBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
+
+    //+ Argument names
+    private static final String GRAPHITE_METRICS_SENDER = "graphiteMetricsSender"; //$NON-NLS-1$
+    private static final String GRAPHITE_HOST = "graphiteHost"; //$NON-NLS-1$
+    private static final String GRAPHITE_PORT = "graphitePort"; //$NON-NLS-1$
+    private static final String ROOT_METRICS_PREFIX = "rootMetricsPrefix"; //$NON-NLS-1$
+    private static final String PERCENTILES = "percentiles"; //$NON-NLS-1$
+    private static final String SAMPLERS_LIST = "samplersList"; //$NON-NLS-1$
+    private static final String USE_REGEXP_FOR_SAMPLERS_LIST = "useRegexpForSamplersList"; //$NON-NLS-1$
+    private static final String SUMMARY_ONLY = "summaryOnly"; //$NON-NLS-1$
+    //- Argument names
+
     private static final int DEFAULT_PLAINTEXT_PROTOCOL_PORT = 2003;
     private static final String TEST_CONTEXT_NAME = "test";
     private static final String ALL_CONTEXT_NAME = "all";
@@ -237,15 +249,15 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
-        String graphiteMetricsSenderClass = context.getParameter("graphiteMetricsSender");
+        String graphiteMetricsSenderClass = context.getParameter(GRAPHITE_METRICS_SENDER);
         
-        graphiteHost = context.getParameter("graphiteHost");
-        graphitePort = context.getIntParameter("graphitePort", DEFAULT_PLAINTEXT_PROTOCOL_PORT);
-        summaryOnly = context.getBooleanParameter("summaryOnly", true);
-        samplersList = context.getParameter("samplersList", "");
-        useRegexpForSamplersList = context.getBooleanParameter("useRegexpForSamplersList", false);
-        rootMetricsPrefix = context.getParameter("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
-        String percentilesAsString = context.getParameter("percentiles", DEFAULT_METRICS_PREFIX);
+        graphiteHost = context.getParameter(GRAPHITE_HOST);
+        graphitePort = context.getIntParameter(GRAPHITE_PORT, DEFAULT_PLAINTEXT_PROTOCOL_PORT);
+        summaryOnly = context.getBooleanParameter(SUMMARY_ONLY, true);
+        samplersList = context.getParameter(SAMPLERS_LIST, "");
+        useRegexpForSamplersList = context.getBooleanParameter(USE_REGEXP_FOR_SAMPLERS_LIST, false);
+        rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
+        String percentilesAsString = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX);
         String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
@@ -311,14 +323,14 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
-        arguments.addArgument("graphiteMetricsSender", TextGraphiteMetricsSender.class.getName());
-        arguments.addArgument("graphiteHost", "");
-        arguments.addArgument("graphitePort", Integer.toString(DEFAULT_PLAINTEXT_PROTOCOL_PORT));
-        arguments.addArgument("rootMetricsPrefix", DEFAULT_METRICS_PREFIX);
-        arguments.addArgument("summaryOnly", "true");
-        arguments.addArgument("samplersList", "");
-        arguments.addArgument("useRegexpForSamplersList", "false");
-        arguments.addArgument("percentiles", DEFAULT_PERCENTILES);
+        arguments.addArgument(GRAPHITE_METRICS_SENDER, TextGraphiteMetricsSender.class.getName());
+        arguments.addArgument(GRAPHITE_HOST, "");
+        arguments.addArgument(GRAPHITE_PORT, Integer.toString(DEFAULT_PLAINTEXT_PROTOCOL_PORT));
+        arguments.addArgument(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
+        arguments.addArgument(SUMMARY_ONLY, "true");
+        arguments.addArgument(SAMPLERS_LIST, "");
+        arguments.addArgument(USE_REGEXP_FOR_SAMPLERS_LIST, "false");
+        arguments.addArgument(PERCENTILES, DEFAULT_PERCENTILES);
         return arguments;
     }
 }
