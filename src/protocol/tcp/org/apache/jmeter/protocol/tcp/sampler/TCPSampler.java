@@ -393,6 +393,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         res.sampleStart();
         try {
             Socket sock = getSocket(socketKey);
+            res.connectEnd();
             if (sock == null) {
                 res.setResponseCode("500"); //$NON-NLS-1$
                 res.setResponseMessage(getError());
