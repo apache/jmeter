@@ -629,6 +629,7 @@ public final class CSVSaveService {
             }
             int current = headerLabelMethods.indexOf(label);
             if (current == -1) {
+                log.warn("Unknown column name " + label);
                 return null; // unknown column name
             }
             if (current <= previous) {
