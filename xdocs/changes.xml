@@ -171,6 +171,7 @@ Summary
     <li><bug>58300</bug> Make existing Java Samplers implement Interruptible</li>
     <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>58786</bug>JDBC Sampler : Replace Excalibur DataSource by more up to date library commons-dbcp2</li>
+    <li><bug>59205</bug>TCP Sampler: Set connect time in sampler when connection is established.</li>
 </ul>
 
 <h3>Controllers</h3>
