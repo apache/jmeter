@@ -250,7 +250,7 @@ public class JMeter implements JMeterPlugin {
             new CLOptionDescriptor("reportonly",
                     CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_GENERATING_OPT,
                     "generate report dashboard only",
-                    new CLOptionDescriptor[]{ D_REMOTE_OPT, D_REMOTE_OPT_PARAM, D_LOGFILE_OPT }); // disallowed
+                    new CLOptionDescriptor[]{ D_NONGUI_OPT, D_REMOTE_OPT, D_REMOTE_OPT_PARAM, D_LOGFILE_OPT }); // disallowed
     private static final CLOptionDescriptor D_REPORT_AT_END_OPT =
             new CLOptionDescriptor("reportatendofloadtests",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, REPORT_AT_END_OPT,
@@ -468,10 +468,15 @@ public class JMeter implements JMeterPlugin {
                         testFile = LoadRecentProject.getRecentFile(0);// most recent
                     }
                 }
-                if (parser.getArgumentById(NONGUI_OPT) == null) {
+                CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
+                if (testReportOpt != null) { // generate report from existing file
+                    String reportFile = testReportOpt.getArgument();
+                    ReportGenerator generator = new ReportGenerator(reportFile, null);
+                    generator.generate();
+                } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     startGui(testFile);
                     startOptionalServers();
-                } else {
+                } else { // NON-GUI must be true
                     CLOption reportOutputFolderOpt = parser
                             .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
                     if(reportOutputFolderOpt != null) {
@@ -484,33 +489,23 @@ public class JMeter implements JMeterPlugin {
                                 reportOutputFolderAsFile.getAbsolutePath());                        
                     }
                     
-                    CLOption testReportOpt = parser
-                            .getArgumentById(REPORT_GENERATING_OPT);
-
-                    if (testReportOpt != null) {
-                        String reportFile = testReportOpt.getArgument();
-                        ReportGenerator generator = new ReportGenerator(
-                                reportFile, null);
-                        generator.generate();
-                    } else {
-                        CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
-                        if (rem == null) {
-                            rem = parser.getArgumentById(REMOTE_OPT);
-                        }
-                        CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
-                        String jtlFile = null;
-                        if (jtl != null) {
-                            jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
-                        }
-                        CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END_OPT);
-                        if(reportAtEndOpt != null) {
-                            if(jtlFile == null) {
-                                throw new IllegalUserActionException("Option -"+REPORT_AT_END_OPT+" requires -"+LOGFILE_OPT + " option");
-                            }
-                        }
-                        startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
-                        startOptionalServers();
+                    CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
+                    if (rem == null) {
+                        rem = parser.getArgumentById(REMOTE_OPT);
                     }
+                    CLOption jtl = parser.getArgumentById(LOGFILE_OPT);
+                    String jtlFile = null;
+                    if (jtl != null) {
+                        jtlFile = processLAST(jtl.getArgument(), ".jtl"); // $NON-NLS-1$
+                    }
+                    CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END_OPT);
+                    if(reportAtEndOpt != null) {
+                        if(jtlFile == null) {
+                            throw new IllegalUserActionException("Option -"+REPORT_AT_END_OPT+" requires -"+LOGFILE_OPT + " option");
+                        }
+                    }
+                    startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
+                    startOptionalServers();
                 }
             }
         } catch (IllegalUserActionException e) {
