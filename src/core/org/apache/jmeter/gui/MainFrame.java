@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -844,6 +845,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        errorsOrFatalsLabel.setForeground(Color.RED);
                         errorsOrFatalsLabel.setText(Integer.toString(newValue));
                     }
                 });
@@ -856,6 +858,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    errorsOrFatalsLabel.setForeground(Color.BLACK);
                     errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
                 }
             });

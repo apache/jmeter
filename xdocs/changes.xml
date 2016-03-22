@@ -278,6 +278,7 @@ Summary
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>59152</bug>Thread Group: Change "Action to be taken after a Sample Error" value from "Continue" to "Start Next thread loop". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>59197</bug>Thread Group : it should be possible to only run a single threadgroup or a selection of threadgroups with a popup menu. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>59207</bug>Change the font color of errorsOrFatalsLabel to red when an error occurs. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
