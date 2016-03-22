@@ -49,13 +49,15 @@ import org.apache.log.Logger;
 public class GraphiteBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
     //+ Argument names
+    // These are stored in the JMX file, so DO NOT CHANGE ANY VALUES 
     private static final String GRAPHITE_METRICS_SENDER = "graphiteMetricsSender"; //$NON-NLS-1$
     private static final String GRAPHITE_HOST = "graphiteHost"; //$NON-NLS-1$
     private static final String GRAPHITE_PORT = "graphitePort"; //$NON-NLS-1$
     private static final String ROOT_METRICS_PREFIX = "rootMetricsPrefix"; //$NON-NLS-1$
     private static final String PERCENTILES = "percentiles"; //$NON-NLS-1$
     private static final String SAMPLERS_LIST = "samplersList"; //$NON-NLS-1$
-    private static final String USE_REGEXP_FOR_SAMPLERS_LIST = "useRegexpForSamplersList"; //$NON-NLS-1$
+    public static final String USE_REGEXP_FOR_SAMPLERS_LIST = "useRegexpForSamplersList"; //$NON-NLS-1$
+    public static final String USE_REGEXP_FOR_SAMPLERS_LIST_DEFAULT = "false";
     private static final String SUMMARY_ONLY = "summaryOnly"; //$NON-NLS-1$
     //- Argument names
 
@@ -329,7 +331,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         arguments.addArgument(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
         arguments.addArgument(SUMMARY_ONLY, "true");
         arguments.addArgument(SAMPLERS_LIST, "");
-        arguments.addArgument(USE_REGEXP_FOR_SAMPLERS_LIST, "false");
+        arguments.addArgument(USE_REGEXP_FOR_SAMPLERS_LIST, USE_REGEXP_FOR_SAMPLERS_LIST_DEFAULT);
         arguments.addArgument(PERCENTILES, DEFAULT_PERCENTILES);
         return arguments;
     }
