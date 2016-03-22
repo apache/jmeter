@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.visualizers.backend.graphite.GraphiteBackendListenerClient;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -434,6 +435,9 @@ public class BackendListener extends AbstractTestElement
      *            the new arguments. These replace any existing arguments.
      */
     public void setArguments(Arguments args) {
+        // Bug 59173 - don't save new default argument
+        args.removeArgument(GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST, 
+                GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST_DEFAULT);
         setProperty(new TestElementProperty(ARGUMENTS, args));
     }
 
