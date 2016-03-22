@@ -218,6 +218,23 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
     }
 
     /**
+     * Remove the argument with the specified name and value.
+     *
+     * @param argName
+     *            the name of the argument to remove
+     * @param argValue the value to compare - must not be null
+     */
+    public void removeArgument(String argName, String argValue) {
+        PropertyIterator iter = getArguments().iterator();
+        while (iter.hasNext()) {
+            Argument arg = (Argument) iter.next().getObjectValue();
+            if (arg.getName().equals(argName) && argValue.equals(arg.getValue())) {
+                iter.remove();
+            }
+        }
+    }
+
+    /**
      * Remove all arguments from the list.
      */
     public void removeAllArguments() {
