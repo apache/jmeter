@@ -740,6 +740,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     public JComponent getPrintableComponent() {
         if (saveGraphToFile) {
             saveGraphToFile = false;
+            
+            // (re)draw the graph first to take settings into account (Bug 58329)
+            if (model.getRowCount() > 1) {
+                makeGraph();
+            }
             graphPanel.setBounds(graphPanel.getLocation().x,graphPanel.getLocation().y,
                     graphPanel.width,graphPanel.height);
             return graphPanel;
