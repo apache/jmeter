@@ -372,6 +372,7 @@ Summary
 <li><bug>58845</bug>Request http view doesn't display all the parameters. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58413</bug>ViewResultsTree : Request HTTP Renderer does not show correctly parameters that contain ampersand (&amp;). Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59172</bug>SampleResult SaveConfig does not allow some fields to be disabled</li>
+<li><bug>58329</bug>Response Time Graph and Aggregate Graph : Save graph to file does not take into account the settings changed since last click on Graph. Contributed by David Coppens (d.l.coppens at gmail.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -438,6 +439,7 @@ Summary
 <li>Harrison Termotto (harrison dot termotto at stonybrook.edu</li>
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li>Gary Gregory (ggregory at apache.org)</li>
+<li>David Coppens (d.l.coppens at gmail.com)</li>
 </ul>
 
 <br/>
