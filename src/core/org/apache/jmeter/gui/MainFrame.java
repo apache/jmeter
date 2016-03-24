@@ -217,6 +217,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setFocusable(false);
         runningIndicator.setBorderPainted(false);
+        runningIndicator.setContentAreaFilled(false);
         runningIndicator.setMargin(new Insets(0, 0, 0, 0));
 
         testTimeDuration = new JLabel("00:00:00"); //$NON-NLS-1$
