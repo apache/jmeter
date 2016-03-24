@@ -94,6 +94,12 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
             runTgNotimers.addActionListener(ActionRouter.getInstance());
             runTgNotimers.setActionCommand(ActionNames.RUN_TG_NO_TIMERS);
             pop.add(runTgNotimers);
+
+            JMenuItem validateTg = new JMenuItem(JMeterUtils.getResString("validate_threadgroup"));
+            validateTg.setName("validate_threadgroup");
+            validateTg.addActionListener(ActionRouter.getInstance());
+            validateTg.setActionCommand(ActionNames.VALIDATE_TG);
+            pop.add(validateTg);
         }
         
         MenuFactory.addEditMenu(pop, true);
