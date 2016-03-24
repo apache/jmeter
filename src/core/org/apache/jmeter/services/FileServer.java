@@ -255,6 +255,8 @@ public class FileServer {
      * @param alias - the name to be used to access the object (must not be null)
      * @param hasHeader true if the file has a header line describing the contents
      * @return the header line; may be null
+     * @throws EOFException if eof reached
+     * @throws IllegalArgumentException if header could not be read
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
         if (filename == null){

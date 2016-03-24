@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ public class FileReporter extends JPanel {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final Map<String, List<Integer>> data = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, List<Integer>> data = new ConcurrentHashMap<>();
 
     /**
      * Initialize a file reporter from a file
@@ -99,7 +100,10 @@ public class FileReporter extends JPanel {
 
                     if (v == null) {
                         v = Collections.synchronizedList(new ArrayList<Integer>());
-                        this.data.put(key, v);
+                        List<Integer> currentList = this.data.putIfAbsent(key, v);
+                        if (currentList != null) {
+                            v = currentList;
+                        }
                     }
                     v.add(value);
                 } catch (NumberFormatException nfe) {
@@ -361,7 +365,7 @@ private static class GraphPanel extends JPanel {
         float incrementValue = (maxValue - minValue) / (10 - 1);
 
         for (int t = 0; t < 10; t++) {
-            g.drawString(Integer.valueOf(Math.round(minValue + (t * incrementValue))).toString(), 2, height - t
+            g.drawString(Integer.toString(Math.round(minValue + (t * incrementValue))), 2, height - t
                     * yIncrement - 2 - base);
         }
         // draw data lines

@@ -52,7 +52,9 @@ under the License.
 
     <properties>
       <!-- these must agree with the definitions in build.properties -->
+      <accessors-smart.version>1.1</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
+      <asm.version>5.1</asm.version>
       <avalon-framework.version>4.1.4</avalon-framework.version>
       <beanshell.version>2.0b5</beanshell.version>
       <bcmail.version>1.49</bcmail.version>
@@ -68,7 +70,7 @@ under the License.
       <commons-jexl3.version>3.0</commons-jexl3.version>
       <commons-lang3.version>3.4</commons-lang3.version>
       <commons-logging.version>1.2</commons-logging.version>
-      <commons-math3.version>3.5</commons-math3.version>
+      <commons-math3.version>3.6.1</commons-math3.version>
       <commons-net.version>3.4</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
       <dnsjava.version>2.1.7</dnsjava.version>
@@ -108,6 +110,16 @@ under the License.
     </properties>
 
     <dependencies>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.minidev</groupId>
+        <artifactId>accessors-smart</artifactId>
+        <version>${accessors-smart.version}</version>
+      </dependency>
       <dependency>
         <groupId>bsf</groupId>
         <artifactId>bsf</artifactId>

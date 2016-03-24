@@ -19,6 +19,7 @@
 package org.apache.jorphan.util;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -576,5 +577,36 @@ public final class JOrphanUtils {
     public static String formatDuration(long elapsedSec) {
         return String.format("%02d:%02d:%02d",
                 elapsedSec / 3600, (elapsedSec % 3600) / 60, elapsedSec % 60);
+    }
+
+    /**
+     * Throw {@link IllegalArgumentException} if folder cannot be written to either:
+     * <ul>
+     *  <li>Because it exists but is not a folder</li>
+     *  <li>Because it exists but is not empty</li>
+     *  <li>Because it does not exist but cannot be created</li>
+     * </ul>
+     * @param folder {@link File}
+     * @throws IllegalArgumentException
+     */
+    public static void canSafelyWriteToFolder(File folder)
+            throws IllegalArgumentException {
+        if(folder.exists()) {
+            if (folder.isFile()) {
+                throw new IllegalArgumentException("Cannot write to '"
+                        +folder.getAbsolutePath()+"' as it is an existing file");
+            } else {
+                if(folder.listFiles().length > 0) {
+                    throw new IllegalArgumentException("Cannot write to '"
+                            +folder.getAbsolutePath()+"' as folder is not empty");
+                }
+            }
+        } else {
+            // check we can create it
+            if(!folder.getParentFile().canWrite()) {
+                throw new IllegalArgumentException("Cannot write to '"
+                        +folder.getAbsolutePath()+"' as folder does not exist and parent folder is not writable");
+            }
+        }
     }
 }

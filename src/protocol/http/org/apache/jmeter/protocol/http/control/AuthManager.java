@@ -39,7 +39,6 @@ import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.impl.auth.SPNegoSchemeFactory;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.config.ConfigTestElement;
@@ -469,7 +468,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                 log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
             }
             if (Mechanism.KERBEROS.equals(auth.getMechanism())) {
-                ((AbstractHttpClient) client).getAuthSchemes().register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory(isStripPort(url)));
+                ((AbstractHttpClient) client).getAuthSchemes().register(
+                        AuthSchemes.SPNEGO,
+                        new FixedSPNegoSchemeFactory(isStripPort(url)));
                 credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
             } else {
                 credentialsProvider.setCredentials(

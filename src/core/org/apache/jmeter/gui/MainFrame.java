@@ -19,6 +19,7 @@
 package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -216,9 +217,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         runningIndicator = new JButton(stoppedIcon);
         runningIndicator.setFocusable(false);
         runningIndicator.setBorderPainted(false);
+        runningIndicator.setContentAreaFilled(false);
         runningIndicator.setMargin(new Insets(0, 0, 0, 0));
 
         testTimeDuration = new JLabel("00:00:00"); //$NON-NLS-1$
+        testTimeDuration.setToolTipText(JMeterUtils.getResString("duration_tooltip")); //$NON-NLS-1$
+        testTimeDuration.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         totalThreads = new JLabel("0"); // $NON-NLS-1$
         totalThreads.setToolTipText(JMeterUtils.getResString("total_threads_tooltip")); // $NON-NLS-1$
@@ -844,6 +848,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        errorsOrFatalsLabel.setForeground(Color.RED);
                         errorsOrFatalsLabel.setText(Integer.toString(newValue));
                     }
                 });
@@ -856,6 +861,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    errorsOrFatalsLabel.setForeground(Color.BLACK);
                     errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
                 }
             });

@@ -479,7 +479,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             }
         };
     }
-    
+
     /**
      * create a cache manager that share the underlying cache of the current one
      * it allows to use the same cache in different threads which does not inherit from each other
@@ -487,8 +487,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @since 3.0
      */
     public CacheManager createCacheManagerProxy() {
-        CacheManager cm = new CacheManager(getCache(), this.useExpires);
-        return cm;
+        return new CacheManager(getCache(), this.useExpires);
     }
 
     @Override

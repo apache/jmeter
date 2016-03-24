@@ -156,9 +156,7 @@ Latency is set to the time it takes to login.
          See Java bugs 6226610 and 6208335.
          </li>
          <li>It does not support virtual hosts.</li>
-         <li>It does not support the following methods: <code>COPY</code>, <code>LOCK</code>, <code>MKCOL</code>, <code>MOVE</code>,
-             <code>PATCH</code>, <code>PROPFIND</code>, <code>PROPPATCH</code>, <code>UNLOCK</code>, <code>REPORT</code>,
-             <code>MKCALENDAR</code>, <code>SEARCH</code>.</li>
+         <li>It supports only the following methods: <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PUT</code>, <code>DELETE</code> and <code>TRACE</code></li>
          <li>It does not support client based certificate testing with Keystore Config.</li>
          </ul>
          <note>Note: the <code>FILE</code> protocol is intended for testing purposes only.
@@ -2200,6 +2198,7 @@ what results any given interaction will give</note>
 </description>
 <properties>
         <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
+        <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
 </properties>
 
 </component>

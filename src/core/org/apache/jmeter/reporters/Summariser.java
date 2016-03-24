@@ -197,24 +197,11 @@ public class Summariser extends AbstractTestElement
             }
         }
         if (reportNow) {
-            String str;
-            str = format(myName, myDelta, "+");
-            if (TOLOG) {
-                log.info(str);
-            }
-            if (TOOUT) {
-                System.out.println(str);
-            }
+            writeToLog(format(myName, myDelta, "+"));
 
             // Only if we have updated them
             if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) {
-                str = format(myName, myTotal, "=");
-                if (TOLOG) {
-                    log.info(str);
-                }
-                if (TOOUT) {
-                    System.out.println(str);
-                }
+                writeToLog(format(myName, myTotal, "="));
             }
         }
     }
@@ -360,29 +347,25 @@ public class Summariser extends AbstractTestElement
             return;
         }
         for(Map.Entry<String, Totals> entry : totals){
-            String str;
             String name = entry.getKey();
             Totals total = entry.getValue();
             total.delta.setEndTime(); // ensure delta has correct end time
             // Only print final delta if there were some samples in the delta
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
-                str = format(name, total.delta, "+");
-                if (TOLOG) {
-                    log.info(str);
-                }
-                if (TOOUT) {
-                    System.out.println(str);
-                }
+                writeToLog(format(name, total.delta, "+"));
             }
             total.moveDelta(); // This will update the total endTime
-            str = format(name, total.total, "=");
-            if (TOLOG) {
-                log.info(str);
-            }
-            if (TOOUT) {
-                System.out.println(str);
-            }
+            writeToLog(format(name, total.total, "="));
+        }
+    }
+
+    private void writeToLog(String str) {
+        if (TOLOG) {
+            log.info(str);
+        }
+        if (TOOUT) {
+            System.out.println(str);
         }
     }
 

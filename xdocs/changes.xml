@@ -162,6 +162,7 @@ Summary
     <li><bug>59129</bug>HTTP Request : Simplify GUI with simple/advanced Tabs</li>
     <li><bug>59033</bug>Parallel Download : Rework Parser classes hierarchy to allow pluging parsers for different mime types</li>
     <li><bug>52073</bug>Embedded Resources Parallel download : Improve performances by avoiding shutdown of ThreadPoolExecutor at each sample. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>59190</bug>HTTP(S) Test Script Recorder : Suggested excludes should ignore case. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -170,6 +171,7 @@ Summary
     <li><bug>58300</bug> Make existing Java Samplers implement Interruptible</li>
     <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>58786</bug>JDBC Sampler : Replace Excalibur DataSource by more up to date library commons-dbcp2</li>
+    <li><bug>59205</bug>TCP Sampler: Set connect time in sampler when connection is established.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -208,6 +210,7 @@ Summary
   <li><bug>58773</bug>TestCacheManager : Add tests for CacheManager that use HttpClient 4</li>
   <li><bug>58742</bug>CompareAssertion : Reset data in TableEditor when switching between different CompareAssertions in gui.
       Based on a patch by Vincent Herilier (vherilier at gmail.com)</li>
+  <li><bug>59108</bug>TableEditor: Allow rows to be moved up and down. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
   <li><bug>58848</bug>Argument Panel : when adding an argument (add button or from clipboard) scroll the table to the new line. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
   <li><bug>58865</bug>Allow empty default value in the Regular Expression Extractor. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
   <li><bug>59156</bug>XMLAssertion : drop jdom dependency by using XMLReader</li>
@@ -274,12 +277,14 @@ Summary
 <li><bug>58426</bug>Improve display of JMeter on high resolution devices (HiDPI) (part 1 of enhancement)</li>
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>59152</bug>Thread Group: Change "Action to be taken after a Sample Error" value from "Continue" to "Start Next thread loop". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+<li><bug>59197</bug>Thread Group : it should be possible to only run a single threadgroup or a selection of threadgroups with a popup menu. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>59207</bug>Change the font color of errorsOrFatalsLabel to red when an error occurs. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
 <li>Updated to httpclient, httpmime 4.5.2 (from 4.2.6)</li>
 <li>Updated to tika-core and tika-parsers 1.12 (from 1.7)</li>
-<li>Updated to commons-math3 3.5 (from 3.4.1)</li>
+<li>Updated to commons-math3 3.6.1 (from 3.4.1)</li>
 <li>Updated to commons-pool2 2.4.2 (from 2.3)</li>
 <li>Updated to commons-lang 3.4 (from 3.3.2)</li>
 <li>Updated to rhino-1.7.7.1 (from 1.7R5)</li>
@@ -306,6 +311,7 @@ Summary
 <li><bug>59003</bug>ClutilTestCase testSingleArg8 and testSingleArg9 are identical</li>
 <li><bug>59064</bug>Remove OldSaveService which supported very old Avalon format JTL (result) files</li>
 <li><bug>59165</bug>RSyntaxTextArea not compatible with headless testing</li>
+<li><bug>59021</bug>Use Double#compare instead of reimplementing it in NumberProperty#compareTo</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
@@ -366,12 +372,15 @@ Summary
 <li><bug>58845</bug>Request http view doesn't display all the parameters. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58413</bug>ViewResultsTree : Request HTTP Renderer does not show correctly parameters that contain ampersand (&amp;). Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59172</bug>SampleResult SaveConfig does not allow some fields to be disabled</li>
+<li><bug>58329</bug>Response Time Graph and Aggregate Graph : Save graph to file does not take into account the settings changed since last click on Graph. Contributed by David Coppens (d.l.coppens at gmail.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
 <li><bug>58079</bug>Do not cache HTTP samples that have a Vary header when using a HTTP CacheManager.</li>
 <li><bug>58912</bug>Response assertion gui : Deleting more than 1 selected row deletes only one row. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>59187</bug>JSON Post Processor : java.lang.NoClassDefFoundError: net/minidev/asm/FieldFilter at net.minidev.json.reader.JsonWriter.(JsonWriter.java:157) (affects nightly build before 3.0 release)</li>
+<li><bug>59188</bug>JSON Post Processor: Error processing JSON content ..., message:java.lang.String cannot be cast to java.util.List (affects nightly build before 3.0). Based mainly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -402,6 +411,9 @@ Summary
     <li><bug>59055</bug>JMeter report generator : When generation is not launched from jmeter/bin folder report-template is not found</li>
     <li><bug>58986</bug>Report/Dashboard reuses the same output directory</li>
     <li><bug>59096</bug>Search Feature : Case insensitive search is not really case insensitive</li>
+    <li><bug>59133</bug>Regression in custom Thread Group in nightly build before 3.0 (6 march 2016). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>59193</bug>ant run_gui fails with  java.lang.ClassNotFoundException or java.lang.IllegalAccessError when accessing classes from dependencies not loaded through Thread.currentThread().getContextClassLoader()</li>
+    <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -428,6 +440,7 @@ Summary
 <li>Harrison Termotto (harrison dot termotto at stonybrook.edu</li>
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li>Gary Gregory (ggregory at apache.org)</li>
+<li>David Coppens (d.l.coppens at gmail.com)</li>
 </ul>
 
 <br/>

@@ -534,11 +534,19 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
     
     public void setPriority(String s) {
-        setProperty(JMS_PRIORITY, s, Utils.DEFAULT_PRIORITY_4);
+        // Bug 59173
+        if (Utils.DEFAULT_PRIORITY_4.equals(s)) {
+            s = ""; // $NON-NLS-1$ make sure the default is not saved explicitly
+        }
+        setProperty(JMS_PRIORITY, s); // always need to save the field
     }
     
     public void setExpiration(String s) {
-        setProperty(JMS_EXPIRATION, s, Utils.DEFAULT_NO_EXPIRY);
+        // Bug 59173
+        if (Utils.DEFAULT_NO_EXPIRY.equals(s)) {
+            s = ""; // $NON-NLS-1$ make sure the default is not saved explicitly
+        }
+        setProperty(JMS_EXPIRATION, s); // always need to save the field
     }
     
     /**

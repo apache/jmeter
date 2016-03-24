@@ -24,7 +24,11 @@ package org.apache.jmeter.protocol.http.util;
  */
 
 public interface HTTPConstantsInterface { // CHECKSTYLE IGNORE InterfaceIsType
-
+    String SC_MOVED_PERMANENTLY = "301";
+    String SC_MOVED_TEMPORARILY = "302";
+    String SC_SEE_OTHER = "303";
+    String SC_TEMPORARY_REDIRECT = "307";
+            
     int DEFAULT_HTTPS_PORT = 443;
     String DEFAULT_HTTPS_PORT_STRING = "443"; // $NON-NLS-1$
     int    DEFAULT_HTTP_PORT = 80;
