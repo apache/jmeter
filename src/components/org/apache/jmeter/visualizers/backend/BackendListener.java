@@ -137,13 +137,14 @@ public class BackendListener extends AbstractTestElement
         return clone;
     }
 
-    private void initClass() {
+    private Class<?> initClass() {
         String name = getClassname().trim();
         try {
-            clientClass = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             LOGGER.error(whoAmI() + "\tException initialising: " + name, e);
         }
+        return null;
     }
 
     /**
@@ -319,7 +320,7 @@ public class BackendListener extends AbstractTestElement
             if (listenerClientData == null){
                 // We need to do this to ensure in Distributed testing 
                 // that only 1 instance of BackendListenerClient is used
-                initClass();
+                clientClass = initClass(); // may be null
                 BackendListenerClient backendListenerClient = createBackendListenerClientImpl(clientClass);
                 BackendListenerContext context = new BackendListenerContext((Arguments)getArguments().clone());
 
