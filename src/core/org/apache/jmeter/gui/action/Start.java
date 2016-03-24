@@ -33,6 +33,7 @@ import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.engine.TreeCloner;
 import org.apache.jmeter.engine.TreeClonerNoTimer;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.action.validation.TreeClonerForValidation;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
@@ -45,11 +46,32 @@ import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * Set of Actions to:
+ * <ul>
+ *      <li>Start a Test Plan</li>
+ *      <li>Start a Test Plan without sleeping on the timers</li>
+ *      <li>Stop a Test Plan</li>
+ *      <li>Shutdown a Test plan</li>
+ *      <li>Run a set of Thread Groups</li>
+ *      <li>Run a set of Thread Groups without sleeping on the timers</li>
+ *      <li>Validate a set of Thread Groups with/without sleeping on the timers depending on jmeter properties</li>
+ * </ul>
+ */
 public class Start extends AbstractAction {
     
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();
+
+    private static final String VALIDATION_CLONER_CLASS_PROPERTY_NAME = 
+            "testplan_validation.tree_cloner_class"; //$NON-NLS-1$
+    /**
+     * Implementation of {@link TreeCloner} used to clone the tree before running validation
+     */
+    private static final String CLONER_FOR_VALIDATION_CLASS_NAME = 
+            JMeterUtils.getPropDefault(VALIDATION_CLONER_CLASS_PROPERTY_NAME, //$NON-NLS-1$ 
+                    TreeClonerForValidation.class.getName());
 
     static {
         commands.add(ActionNames.ACTION_START);
@@ -58,6 +80,7 @@ public class Start extends AbstractAction {
         commands.add(ActionNames.ACTION_SHUTDOWN);
         commands.add(ActionNames.RUN_TG);
         commands.add(ActionNames.RUN_TG_NO_TIMERS);
+        commands.add(ActionNames.VALIDATE_TG);
     }
 
     private StandardJMeterEngine engine;
@@ -99,15 +122,18 @@ public class Start extends AbstractAction {
                 engine.askThreadsToStop();
             }
         } else if (e.getActionCommand().equals(ActionNames.RUN_TG) 
-                || e.getActionCommand().equals(ActionNames.RUN_TG_NO_TIMERS)) {
+                || e.getActionCommand().equals(ActionNames.RUN_TG_NO_TIMERS)
+                || e.getActionCommand().equals(ActionNames.VALIDATE_TG)) {
             popupShouldSave(e);
             boolean noTimers = e.getActionCommand().equals(ActionNames.RUN_TG_NO_TIMERS);
+            boolean isValidation = e.getActionCommand().equals(ActionNames.VALIDATE_TG);
+            
             JMeterTreeListener treeListener = GuiPackage.getInstance().getTreeListener();
             JMeterTreeNode[] nodes = treeListener.getSelectedNodes();
             nodes = Copy.keepOnlyAncestors(nodes);
             AbstractThreadGroup[] tg = keepOnlyThreadGroups(nodes);
             if(nodes.length > 0) {
-                startEngine(noTimers, tg);
+                startEngine(noTimers, isValidation, tg);
             }
             else {
                 LOG.warn("No thread group selected the test will not be started");
@@ -143,7 +169,20 @@ public class Start extends AbstractAction {
      * @param ignoreTimer flag to ignore timers
      * @param threadGroupsToRun Array of AbstractThreadGroup to run
      */
-    private void startEngine(boolean ignoreTimer, AbstractThreadGroup[] threadGroupsToRun) {
+    private void startEngine(boolean ignoreTimer, 
+            AbstractThreadGroup[] threadGroupsToRun) {
+        startEngine(ignoreTimer, false, threadGroupsToRun);
+    }
+    
+    /**
+     * Start JMeter engine
+     * @param ignoreTimer flag to ignore timers
+     * @param isValidationShot 
+     * @param threadGroupsToRun Array of AbstractThreadGroup to run
+     */
+    private void startEngine(boolean ignoreTimer, 
+            boolean isValidationShot,
+            AbstractThreadGroup[] threadGroupsToRun) {
         GuiPackage gui = GuiPackage.getInstance();
         HashTree testTree = gui.getTreeModel().getTestPlan();
         
@@ -151,14 +190,19 @@ public class Start extends AbstractAction {
         if(threadGroupsToRun != null && threadGroupsToRun.length>0) {
             removeThreadGroupsFromHashTree(testTree, threadGroupsToRun);
         }
-        
         testTree.add(testTree.getArray()[0], gui.getMainFrame());
         LOG.debug("test plan before cloning is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
-        
-        TreeCloner cloner = cloneTree(testTree, ignoreTimer);
-        
-        ListedHashTree clonedTree = cloner.getClonedTree();
+
+        ListedHashTree clonedTree = null;
+        if(isValidationShot) {
+            TreeCloner cloner = createTreeClonerForValidation();
+            testTree.traverse(cloner);
+            clonedTree = cloner.getClonedTree();
+        } else {
+            TreeCloner cloner = cloneTree(testTree, ignoreTimer);      
+            clonedTree = cloner.getClonedTree();
+        }
         engine = new StandardJMeterEngine();
         engine.configure(clonedTree);
         try {
@@ -169,6 +213,23 @@ public class Start extends AbstractAction {
         }
         LOG.debug("test plan after cloning and running test is running version: "
                 + ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+    }
+
+    /**
+     * 
+     * @return {@link TreeCloner}
+     */
+    private static TreeCloner createTreeClonerForValidation() {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(CLONER_FOR_VALIDATION_CLASS_NAME, true, Thread.currentThread().getContextClassLoader());
+            return (TreeCloner) clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+            LOG.error("Error instanciating class:'"
+                    +CLONER_FOR_VALIDATION_CLASS_NAME+"' defined in property :'"
+                    +VALIDATION_CLONER_CLASS_PROPERTY_NAME+"'", ex);
+            return new TreeClonerForValidation();
+        }
     }
 
     /**
