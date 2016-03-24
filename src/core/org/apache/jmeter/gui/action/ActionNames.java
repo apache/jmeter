@@ -101,6 +101,7 @@ public final class ActionNames {
     public static final String EXPAND           = "expand"; // $NON-NLS-1$
     public static final String RUN_TG           = "run_tg"; // $NON-NLS-1$
     public static final String RUN_TG_NO_TIMERS = "run_tg_no_timers"; // $NON-NLS-1$
+    public static final String VALIDATE_TG      = "validate_tg"; //$NON-NLS-1$
 
     // Prevent instantiation
     private ActionNames() {}
