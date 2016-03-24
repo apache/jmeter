@@ -223,9 +223,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
-        Arguments arguments = null;
         if (args instanceof Arguments) {
-            arguments = (Arguments) args;
+            Arguments arguments = (Arguments) args;
             arguments.clear();
             @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
