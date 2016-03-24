@@ -413,6 +413,7 @@ Summary
     <li><bug>59096</bug>Search Feature : Case insensitive search is not really case insensitive</li>
     <li><bug>59133</bug>Regression in custom Thread Group in nightly build before 3.0 (6 march 2016). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>59193</bug>ant run_gui fails with  java.lang.ClassNotFoundException or java.lang.IllegalAccessError when accessing classes from dependencies not loaded through Thread.currentThread().getContextClassLoader()</li>
+    <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
