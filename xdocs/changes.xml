@@ -85,7 +85,9 @@ Summary
     <li>org.apache.jmeter.gui.util.ButtonPanel has been removed, if you use it in your 3rd party plugin or custom development ensure you update your code. See <bugzilla>58687</bugzilla></li>
     <li>Property <code>jmeterthread.startearlier</code> has been removed. See <bugzilla>58726</bugzilla></li>   
     <li>Property <code>jmeterengine.startlistenerslater</code> has been removed. See <bugzilla>58728</bugzilla></li>   
-    <li>Property <code>jmeterthread.reversePostProcessors</code> has been removed. See <bugzilla>58728</bugzilla></li>  
+    <li>Property <code>jmeterthread.reversePostProcessors</code> has been removed. See <bugzilla>58728</bugzilla></li>
+    <li>Property <code>jmeter.toolbar.display</code> has been removed, toolbar is now always displayed. See <bugzilla>59236</bugzilla></li>
+    <li>Property <code>jmeter.errorscounter.display</code> has been removed, errors/warnings counter is now always displayed. See <bugzilla>59236</bugzilla></li>  
     <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in next version of jmeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
     <li>Summariser listener now outputs a formated duration in HH:mm:ss (Hour:Minute:Second), it previously outputed seconds. See <bugzilla>58776</bugzilla></li>
     <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
@@ -280,6 +282,7 @@ Summary
 <li><bug>59197</bug>Thread Group : it should be possible to only run a single threadgroup or a selection of threadgroups with a popup menu. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59207</bug>Change the font color of errorsOrFatalsLabel to red when an error occurs. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>58941</bug>Create a new Starter that runs thread groups in validation mode (1 thread only, 1 iteration, no pause all customizable)</li>
+<li><bug>59236</bug>JMeter Properties : Make some cleanup</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>

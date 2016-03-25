@@ -123,17 +123,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private static final String DEFAULT_TITLE = DEFAULT_APP_NAME +
             " (" + JMeterUtils.getJMeterVersion() + ")"; // $NON-NLS-1$ $NON-NLS-2$
 
-    // Allow display/hide toolbar
-    private static final boolean DISPLAY_TOOLBAR =
-            JMeterUtils.getPropDefault("jmeter.toolbar.display", true); // $NON-NLS-1$
-
     // Allow display/hide LoggerPanel
     private static final boolean DISPLAY_LOGGER_PANEL =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.display", false); // $NON-NLS-1$
-
-    // Allow display/hide Log Error/Fatal counter
-    private static final boolean DISPLAY_ERROR_FATAL_COUNTER =
-            JMeterUtils.getPropDefault("jmeter.errorscounter.display", true); // $NON-NLS-1$
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -520,17 +512,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         mainPanel = createMainPanel();
 
         logPanel = createLoggerPanel();
-        if (DISPLAY_ERROR_FATAL_COUNTER) {
-            errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
-            LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
+        errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
+        LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
                 logPanel,
                 errorsAndFatalsCounterLogTarget
-                 });
-        } else {
-            LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
-                    logPanel
-                     });
-        }
+        });
 
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);
@@ -582,10 +568,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private Component createToolBar() {
         Box toolPanel = new Box(BoxLayout.X_AXIS);
         // add the toolbar
-        this.toolbar = JMeterToolBar.createToolbar(DISPLAY_TOOLBAR);
+        this.toolbar = JMeterToolBar.createToolbar(true);
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setMainToolbar(toolbar);
-        guiInstance.getMenuItemToolbar().getModel().setSelected(DISPLAY_TOOLBAR);
+        guiInstance.getMenuItemToolbar().getModel().setSelected(true);
         toolPanel.add(toolbar);
 
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
@@ -594,11 +580,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         toolPanel.add(testTimeDuration);
         toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
 
-        if (DISPLAY_ERROR_FATAL_COUNTER) {
-            toolPanel.add(errorsOrFatalsLabel);
-            toolPanel.add(warnIndicator);
-            toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
-        }
+        toolPanel.add(errorsOrFatalsLabel);
+        toolPanel.add(warnIndicator);
+        toolPanel.add(Box.createRigidArea(new Dimension(20, 15)));
+
         toolPanel.add(activeThreads);
         toolPanel.add(new JLabel(" / "));
         toolPanel.add(totalThreads);
@@ -872,9 +857,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     @Override
     public void clearData() {
         logPanel.clear();
-        if (DISPLAY_ERROR_FATAL_COUNTER) {
-            errorsAndFatalsCounterLogTarget.clearData();
-        }
+        errorsAndFatalsCounterLogTarget.clearData();
     }
 
     /**
