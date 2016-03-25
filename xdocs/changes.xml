@@ -55,19 +55,86 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
-<!-- <ch_category>Improvements</ch_category> -->
-<!-- <ch_title>Sample title</ch_title>
+<ch_category>Test plan creation and debugging improvements</ch_category>
+<ch_title>New Search Feature in View Results Tree to allow searching for text / regexp in Request/Responses/Headers/Cookies... This will ease correlation and Test plans creation</ch_title>
+<figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
+
+<ch_title>New JSON Post Processor to better extract data from JSON content using user friendly JSON-PATH syntax</ch_title>
+<ch_title>New validation feature, in one click run a selection of Thread Groups with 1 user, no pause and 1 iteration</ch_title>
+<ch_title>JSR223 Test Element do not require a Cache Compilation Key anymore, just check cache checkbox </ch_title>
+<ch_title>Nashorn can now be used as Javascript engine providing better performances and easier usage</ch_title>
+<ch_title>Jexl3 has been integrated. It provides new Scripting features and much better documentation</ch_title>
+<ch_title>Simplified HTTP Request UI</ch_title>
+<ch_title>Module Controller has been highly improved</ch_title>
+
+<ch_category>Reporting improvements</ch_category>
+
+<ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
+<ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
+<ch_title>Summariser displays a more readable duration</ch_title>
+<ch_title>BackendListener now allows to define sampler list as a regular expression</ch_title>
+
+<ch_category>Protocols and Load Testing improvements</ch_category>
+<ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
+
+<ch_title>Cookies : Support of RFC6265</ch_title>
+<ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
 <p>
 <ul>
-<li>Sample text</li>
+<li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes. Gain increases as number of threads increases</li>
+<li>Rework of Connections management for Parallel Download : for 15 Threads 135% more sampling in 5 minutes.</li>
+<li>Reuse of ThreadPool</li>
+<li>Total of 750% more throughput</li>
+</ul>
+</p>
+<ch_title>Introduction of Sampler Timeout feature</ch_title>
+
+<ch_title>JDBC request now uses DBCP2 pool</ch_title>
+
+<ch_category>UX Improvements:</ch_category>
+
+<ch_title>Better display in HiDPI screens</ch_title>
+<ch_title>New Icon look and Logo</ch_title>
+<ch_title>Lots of fixes to annoying little bugs</ch_title>
+<ch_title>Improved Thread Group UI and related actions (Start, Start No Timers, Validate)</ch_title>
+<ch_title>New shortcuts</ch_title>
+<p>
+<ul>
+<li>Add most used elements (CTRL+0 ....9 ), configurable through gui.quick_XXX properties</li>
+<li>Shortcuts to expand nodes</li>
 </ul>
 </p>
 
-<ch_title>Sample title</ch_title>
-<p>Sample text</p>
-<figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
- -->
+<ch_category>Configuration simplification:</ch_category>
+<ch_title>Better defaults</ch_title>
+<ch_title>Groovy bundled with JMeter</ch_title>
+<ch_title>Luxurious properties removed</ch_title>
+<ch_title>Old properties removed</ch_title>
 
+
+<ch_category>Core improvements</ch_category>
+
+<ch_title>Migration to Java7 source code and use of its syntax sugar</ch_title>
+<ch_title>Full review of documentation and improvement both in content and presentation</ch_title>
+<ch_title>Major code cleanups</ch_title>
+<ch_title>Improvements of tests</ch_title>
+<p>
+<ul>
+<li>Migration to JUnit 4 of many tests</li>
+<li>Better management of Headless tests</li>
+<li>More Unit Testing</li>
+</ul>
+</p>
+<ch_title>Dependencies refresh</ch_title>
+<p>
+Deprecated Libraries dropped or replaced by up to date ones:
+<ul>
+<li>Excalibur replaced by commons-dbcp</li>
+<li>htmllexer, htmlparser removed</li>
+<li>soap removed</li>
+<li>jdom removed</li>
+</ul>
+</p>
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
@@ -171,7 +238,7 @@ Summary
 <h3>Other samplers</h3>
 <ul>
     <li><bug>57928</bug>Add ability to define protocol (http/https) to AccessLogSampler GUI. Contributed by Jérémie Lesage (jeremie.lesage at jeci.fr)</li>
-    <li><bug>58300</bug> Make existing Java Samplers implement Interruptible</li>
+    <li><bug>58300</bug>Make existing Java Samplers implement Interruptible</li>
     <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>58786</bug>JDBC Sampler : Replace Excalibur DataSource by more up to date library commons-dbcp2</li>
     <li><bug>59205</bug>TCP Sampler: Set connect time in sampler when connection is established.</li>
@@ -237,22 +304,16 @@ Summary
     <keycombo><keysym>Ctrl</keysym><keysym>9</keysym></keycombo>) to quick add elements into test plan.
     Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 <li><bug>58100</bug>Performance enhancements : Replace Random by ThreadLocalRandom.</li>
-<li><bug>58465</bug>JMS Read response field is badly named and documented</li>
-<li><bug>58601</bug>Change check for modification of <code>saveservice.properties</code> from <code>SVN Revision ID</code> to sha1 sum of the file itself.</li>
 <li><bug>58677</bug>TestSaveService#testLoadAndSave use the wrong set of files. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-<li><bug>58679</bug>Replace the xpp pull parser in xstream with a java6+ standard solution. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58689</bug>Add shortcuts to expand / collapse a part of the tree. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58696</bug>Create Ant task to setup Eclipse project</li>
 <li><bug>58653</bug>New JMeter Dashboard/Report with Dynamic Graphs, Tables to help analyzing load test results. Developed by Ubik-Ingenierie and contributed by Decathlon S.A. and Ubik-Ingenierie / UbikLoadPack</li>
 <li><bug>58699</bug>Workbench changes neither saved nor prompted for saving upon close. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-<li><bug>58726</bug>Remove the <code>jmeterthread.startearlier</code> parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58728</bug>Drop old behavioural properties</li>
 <li><bug>57319</bug>Upgrade to HttpClient 4.5.2. With the big help from Oleg Kalnichevski (olegk at apache.org) and Gary Gregory (ggregory at apache.org).</li>
 <li><bug>58772</bug>Deprecate MongoDB related elements</li>
 <li><bug>58782</bug>ThreadGroup : Improve ergonomy</li>
 <li><bug>58165</bug>Show the time elapsed since the start of the load test in GUI mode. Partly based on a contribution from Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
-<li><bug>58784</bug>Make JMeterUtils#runSafe sync/async awt invocation configurable and change the visualizers to use the async version.</li>
-<li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 <li><bug>58814</bug>JVM don't recognize option MaxLiveObjectEvacuationRatio; remove from comments</li>
 <li><bug>58810</bug>Config Element Counter (and others): Check Boxes Toggle Area Too Big</li>
 <li><bug>56554</bug>JSR223 Test Element : Generate compilation cache key automatically. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
@@ -267,7 +328,6 @@ Summary
 <li><bug>57182</bug>Settings defaults : Switch "jmeter.save.saveservice.idle_time" to true (after 2.13)</li>
 <li><bug>58987</bug>Report/Dashboard: Improve error reporting.</li>
 <li><bug>58870</bug>TableEditor: minimum size is too small. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
-<li><bug>59037</bug>Drop HtmlParserHTMLParser and dependencies on htmlparser and htmllexer</li>
 <li><bug>58933</bug>JSyntaxTextArea : Ability to set font.  Contributed by Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li><bug>58793</bug>Create developers page explaining how to build and contribute</li>
 <li><bug>59046</bug>JMeter Gui Replace controller should keep the name and the selection. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
@@ -276,7 +336,6 @@ Summary
 <li><bug>59082</bug>Remove the "TestCompiler.useStaticSet" parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59093</bug>Option parsing error message can be 'lost'</li>
 <li><bug>58715</bug>Feature request: Bundle groovy-all with JMeter</li>
-<li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated 8 years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58426</bug>Improve display of JMeter on high resolution devices (HiDPI) (part 1 of enhancement)</li>
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>59152</bug>Thread Group: Change "Action to be taken after a Sample Error" value from "Continue" to "Start Next thread loop". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
@@ -317,6 +376,14 @@ Summary
 <li><bug>59064</bug>Remove OldSaveService which supported very old Avalon format JTL (result) files</li>
 <li><bug>59165</bug>RSyntaxTextArea not compatible with headless testing</li>
 <li><bug>59021</bug>Use Double#compare instead of reimplementing it in NumberProperty#compareTo</li>
+<li><bug>59037</bug>Drop HtmlParserHTMLParser and dependencies on htmlparser and htmllexer</li>
+<li><bug>58465</bug>JMS Read response field is badly named and documented</li>
+<li><bug>58601</bug>Change check for modification of <code>saveservice.properties</code> from <code>SVN Revision ID</code> to sha1 sum of the file itself.</li>
+<li><bug>58679</bug>Replace the xpp pull parser in xstream with a java6+ standard solution. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>58726</bug>Remove the <code>jmeterthread.startearlier</code> parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>58784</bug>Make JMeterUtils#runSafe sync/async awt invocation configurable and change the visualizers to use the async version.</li>
+<li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
+<li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated 8 years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
