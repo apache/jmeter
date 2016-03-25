@@ -108,13 +108,13 @@ Summary
 <ch_category>Configuration simplification:</ch_category>
 <ch_title>Better defaults</ch_title>
 <ch_title>Groovy bundled with JMeter</ch_title>
-<ch_title>Luxurious properties removed</ch_title>
+<ch_title>Superflous properties removed</ch_title>
 <ch_title>Old properties removed</ch_title>
 
 
 <ch_category>Core improvements</ch_category>
 
-<ch_title>Migration to Java7 source code and use of its syntax sugar</ch_title>
+<ch_title>Migration to Java7 source code and use of its syntactic sugar</ch_title>
 <ch_title>Full review of documentation and improvement both in content and presentation</ch_title>
 <ch_title>Major code cleanups</ch_title>
 <ch_title>Improvements of tests</ch_title>
