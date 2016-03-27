@@ -39,6 +39,7 @@ import com.helger.css.decl.visit.DefaultCSSUrlVisitor;
 import com.helger.css.handler.LoggingCSSParseExceptionCallback;
 import com.helger.css.parser.ParseException;
 import com.helger.css.reader.CSSReader;
+import com.helger.css.reader.CSSReaderSettings;
 import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 /**
@@ -49,6 +50,31 @@ public class CssParser implements LinkExtractorParser {
     private static final boolean IGNORE_UNRECOVERABLE_PARSING_ERROR = JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resource", false); //$NON-NLS-1$
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
+    private static final class CustomLoggingCSSParseExceptionCallback extends LoggingCSSParseExceptionCallback {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -9111232037888068394L;
+        private URL cssUrl;
+
+        /**
+         * @param cssUrl {@link URL}
+         */
+        public CustomLoggingCSSParseExceptionCallback(URL cssUrl) {
+            this.cssUrl = cssUrl;
+        }
+        /**
+         * @see com.helger.css.handler.LoggingCSSParseExceptionCallback#onException(com.helger.css.parser.ParseException)
+         */
+        @Override
+        public void onException(ParseException ex) {
+            if(IGNORE_UNRECOVERABLE_PARSING_ERROR) {   
+                LOG.warn("Failed to parse CSS: " + cssUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+            } else {
+                throw new IllegalStateException("Failed to parse CSS: " + cssUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+            }
+        }
+    }
     /**
      * 
      */
@@ -67,32 +93,13 @@ public class CssParser implements LinkExtractorParser {
             final URL baseUrl, String encoding) throws LinkExtractorParseException {
         try {
             String cssContent = new String(data, encoding);
-            final CascadingStyleSheet aCSS = CSSReader.readFromString(
-                    cssContent, 
-                    Charset.forName(encoding),
-                    ECSSVersion.CSS30,
-                    new LoggingCSSParseErrorHandler(),
-                    new LoggingCSSParseExceptionCallback(){
-
-                        /**
-                         * 
-                         */
-                        private static final long serialVersionUID = -9111232037888068394L;
-
-                        /**
-                         * @see com.helger.css.handler.LoggingCSSParseExceptionCallback#onException(com.helger.css.parser.ParseException)
-                         */
-                        @Override
-                        public void onException(ParseException ex) {
-                            if(IGNORE_UNRECOVERABLE_PARSING_ERROR) {   
-                                LOG.warn("Failed to parse CSS: " + baseUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
-                            } else {
-                                throw new IllegalStateException("Failed to parse CSS: " + baseUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
-                            }
-                        }
-                        
-                    }
-                    );
+            final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
+                        new CSSReaderSettings()
+                            .setBrowserCompliantMode(true)
+                            .setFallbackCharset(Charset.forName(encoding))
+                            .setCSSVersion (ECSSVersion.CSS30)
+                            .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
+                            .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
             final List<URLString> list = new ArrayList<URLString>();
             final URLCollection urlCollection = new URLCollection(list);
             if(aCSS != null) {
@@ -117,8 +124,8 @@ public class CssParser implements LinkExtractorParser {
             }
             if(LOG.isDebugEnabled()) {
                 StringBuilder builder = new StringBuilder();
-                for (Iterator iterator = urlCollection.iterator(); iterator.hasNext();) {
-                    URL urlString = (URL) iterator.next();
+                for (Iterator<URL> iterator = urlCollection.iterator(); iterator.hasNext();) {
+                    URL urlString = iterator.next();
                     builder.append(urlString).append(",");
                 }
                 LOG.debug("Parsed:"+baseUrl+", got:"+builder.toString());
