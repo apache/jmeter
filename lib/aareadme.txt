@@ -163,6 +163,16 @@ jsoup-1.8.3
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
+ph-css-4.1.0
+--------
+https://github.com/phax/ph-css
+- CssParser
+
+ph-commons-6.2.4
+--------
+https://github.com/phax/ph-commons
+- CssParser
+
 rhino-1.7.7.1
 --------
 http://www.mozilla.org/rhino/download.html
