@@ -571,7 +571,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         this.toolbar = JMeterToolBar.createToolbar(true);
         GuiPackage guiInstance = GuiPackage.getInstance();
         guiInstance.setMainToolbar(toolbar);
-        guiInstance.getMenuItemToolbar().getModel().setSelected(true);
         toolPanel.add(toolbar);
 
         toolPanel.add(Box.createRigidArea(new Dimension(10, 15)));
