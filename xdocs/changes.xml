@@ -490,6 +490,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59133</bug>Regression in custom Thread Group in nightly build before 3.0 (6 march 2016). Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>59193</bug>ant run_gui fails with  java.lang.ClassNotFoundException or java.lang.IllegalAccessError when accessing classes from dependencies not loaded through Thread.currentThread().getContextClassLoader()</li>
     <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+    <li><bug>59173</bug>New fields/changed defaults cause earlier test plans to be marked as changed (affects nightly build before 3.0)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
