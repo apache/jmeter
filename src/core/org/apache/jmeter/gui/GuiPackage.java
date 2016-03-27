@@ -113,9 +113,6 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** The main JMeter toolbar. */
     private JToolBar toolbar;
 
-    /** The menu item toolbar. */
-    private JCheckBoxMenuItem menuToolBar;
-
     /**
      * The LoggerPanel menu item
      */
@@ -578,24 +575,6 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         return toolbar;
     }
 
-    /**
-     * Set the menu item toolbar.
-     *
-     * @param newMenuToolBar
-     *            the new menu item toolbar
-     */
-    public void setMenuItemToolbar(JCheckBoxMenuItem newMenuToolBar) {
-        menuToolBar = newMenuToolBar;
-    }
-
-    /**
-     * Get the menu item  toolbar.
-     *
-     * @return the menu item toolbar
-     */
-    public JCheckBoxMenuItem getMenuItemToolbar() {
-        return menuToolBar;
-    }
 
     /**
      * Display the specified popup menu with the source component and location
