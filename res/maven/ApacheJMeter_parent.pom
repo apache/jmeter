@@ -95,7 +95,6 @@ under the License.
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.13</slf4j-api.version>
-      <slf4j-nop.version>1.7.13</slf4j-nop.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.12</tika-core.version>
       <tika-parsers.version>1.12</tika-parsers.version>
@@ -374,11 +373,6 @@ under the License.
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-nop</artifactId>
-        <version>${slf4j-nop.version}</version>
       </dependency>
       <dependency>
         <groupId>org.freemarker</groupId>

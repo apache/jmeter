@@ -211,10 +211,11 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.13, slf4j-nop-1.7.13
+slf4j-api-1.7.13
 ----------------
 http://www.slf4j.org/
 - jodd-core
+- json-path
 
 tika-1.12
 --------------
