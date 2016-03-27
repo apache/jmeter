@@ -81,6 +81,7 @@ Summary
 <ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
 <p>
 <ul>
+<li>Parsing of CSS imported (CSS) or embedded resources (images)</li>
 <li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes. Gain increases as number of threads increases</li>
 <li>Rework of Connections management for Parallel Download : for 15 Threads 135% more sampling in 5 minutes.</li>
 <li>Reuse of ThreadPool</li>
@@ -234,6 +235,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59033</bug>Parallel Download : Rework Parser classes hierarchy to allow pluging parsers for different mime types</li>
     <li><bug>52073</bug>Embedded Resources Parallel download : Improve performances by avoiding shutdown of ThreadPoolExecutor at each sample. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>59190</bug>HTTP(S) Test Script Recorder : Suggested excludes should ignore case. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+    <li><bug>59140</bug>Parallel Download : Add CSS Parsing to extract links from CSS files</li>
 </ul>
 
 <h3>Other samplers</h3>
