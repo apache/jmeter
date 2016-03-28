@@ -27,17 +27,17 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * Implementation of {@link ILoggerFactory} for Logback
+ * Implementation of {@link ILoggerFactory} for Logkit
  * @since 3.0
  */
-public class LogbackLoggerFactory implements ILoggerFactory {
+public class LogkitLoggerFactory implements ILoggerFactory {
     // key: name (String), value: a Log4jLoggerAdapter;
     Map<String, Logger> loggerMap;
 
     /**
      * 
      */
-    public LogbackLoggerFactory() {
+    public LogkitLoggerFactory() {
         loggerMap = new HashMap<String, Logger>();
     }
 
@@ -52,17 +52,16 @@ public class LogbackLoggerFactory implements ILoggerFactory {
         synchronized (this) {
             slf4jLogger = loggerMap.get(name);
             if (slf4jLogger == null) {
-                org.apache.log.Logger logbackLogger;
+                org.apache.log.Logger logkitLogger;
                 if (name.equalsIgnoreCase(Logger.ROOT_LOGGER_NAME)) {
-                    logbackLogger = Hierarchy.getDefaultHierarchy().getRootLogger();
+                    logkitLogger = Hierarchy.getDefaultHierarchy().getRootLogger();
                 } else {
-                    logbackLogger = LoggingManager.getLoggerFor(name);
+                    logkitLogger = LoggingManager.getLoggerFor(name);
                 }
-                slf4jLogger = new LogbackLoggerAdapter(logbackLogger);
+                slf4jLogger = new LogkitLoggerAdapter(logkitLogger);
                 loggerMap.put(name, slf4jLogger);
             }
         }
         return slf4jLogger;
     }
-
 }
