@@ -18,7 +18,7 @@
 
 package org.slf4j.impl;
 
-import org.apache.jmeter.logging.LogbackLoggerFactory;
+import org.apache.jmeter.logging.LogkitLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
@@ -53,7 +53,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     // to avoid constant folding by the compiler, this field must *not* be final
     public static String REQUESTED_API_VERSION = "1.7"; // !final
 
-    private static final String loggerFactoryClassStr = LogbackLoggerFactory.class
+    private static final String loggerFactoryClassStr = LogkitLoggerFactory.class
             .getName();
 
     /**
@@ -63,7 +63,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     private final ILoggerFactory loggerFactory;
 
     private StaticLoggerBinder() {
-        loggerFactory = new LogbackLoggerFactory();
+        loggerFactory = new LogkitLoggerFactory();
     }
 
     @Override
