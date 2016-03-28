@@ -27,10 +27,10 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
 /**
- * Logback adapter for slf4j 
+ * Logkit adapter for slf4j 
  * @since 3.0
  */
-public class LogbackLoggerAdapter extends MarkerIgnoringBase implements Serializable {
+public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializable {
 
     final transient Logger logger;
     /**
@@ -38,8 +38,8 @@ public class LogbackLoggerAdapter extends MarkerIgnoringBase implements Serializ
      */
     private static final long serialVersionUID = -122848886791823355L;
 
-    LogbackLoggerAdapter(org.apache.log.Logger logbackLogger) {
-        this.logger = logbackLogger;
+    LogkitLoggerAdapter(org.apache.log.Logger logkitLogger) {
+        this.logger = logkitLogger;
     }
 
     /* (non-Javadoc)
