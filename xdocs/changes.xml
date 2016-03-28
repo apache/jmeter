@@ -81,7 +81,7 @@ Summary
 <ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
 <p>
 <ul>
-<li>Parsing of CSS imported (CSS) or embedded resources (images)</li>
+<li>Parsing of CSS imported (imported CSS files through @import) or embedded resources (background images)</li>
 <li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes. Gain increases as number of threads increases</li>
 <li>Rework of Connections management for Parallel Download : for 15 Threads 135% more sampling in 5 minutes.</li>
 <li>Reuse of ThreadPool</li>
