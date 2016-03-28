@@ -57,14 +57,31 @@ Summary
 
 <ch_category>Test plan creation and debugging improvements</ch_category>
 <ch_title>New Search Feature in View Results Tree to allow searching for text / regexp in Request/Responses/Headers/Cookies... This will ease correlation and Test plans creation</ch_title>
-<figure width="691" height="215" image="changes/2.10/18_https_test_script_recorder.png"></figure>
-
+<figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure>
 <ch_title>New JSON Post Processor to better extract data from JSON content using user friendly JSON-PATH syntax</ch_title>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with 1 user, no pause and 1 iteration</ch_title>
+<figure width="295" height="629" image="changes/3.0/view_results_tree_search_feature.png"></figure>
 <ch_title>JSR223 Test Element do not require a Cache Compilation Key anymore, just check cache checkbox </ch_title>
+
+<figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
 <ch_title>Nashorn can now be used as Javascript engine providing better performances and easier usage</ch_title>
+To enable it you need to set in user.properties:
+<source>javascript.use_rhino=false</source>
+<p>Nashorn can be used with Java 8 in the following elements:
+<ul>
+<li>IfController</li>
+<li>JSR223 Test elements with <code>javascript</code> language selected</li>
+<li><code>__javaScript</code> function</li>
+</ul>
+</p>
 <ch_title>Jexl3 has been integrated. It provides new Scripting features and much better documentation</ch_title>
+<a href="http://commons.apache.org/proper/commons-jexl/" target="_blank">JEXL3</a> can now be used thanks to a new function <code>__jexl3</code>.
+JEXL is a language very similar to JSTL. 
 <ch_title>Simplified HTTP Request UI</ch_title>
+<p>A new "Advanced" tab has been added to HTTP Request to simplify its configuration. Files upload feature has been moved into a dedicated tab.
+This increased the size available for parameters in UI.</p>
+<figure width="895" height="674" image="changes/3.0/http_request_basic.png"></figure>
+<figure width="880" height="299" image="changes/3.0/http_request_advanced.png"></figure>
 <ch_title>Module Controller has been highly improved</ch_title>
 
 <ch_category>Reporting improvements</ch_category>
