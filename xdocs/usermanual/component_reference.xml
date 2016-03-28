@@ -6106,6 +6106,25 @@ When using the scheduler, JMeter runs the thread group until either the number o
 Note that the condition is only checked between samples; when the end condition is reached, that thread will stop.
 JMeter does not interrupt samplers which are waiting for a response, so the end time may be delayed arbitrarily.
 </p>
+<p>
+Since JMeter 3.0, you can run a selection of Thread Group by selecting them and right clicking. A popup menu will appear:
+<figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
+
+Notice you have 3 options to run the selection of Thread Groups:
+<ul>
+<li>Start : Start the selected thread groups only</li>
+<li>Start no pauses : Start the selected thread groups only but without running the timers</li>
+<li>Validate : Start the selected thread groups only using validation mode. Per default this runs the Thread Group in validation mode (see below)</li>
+</ul> 
+
+<b>Validation Mode:</b><br></br>
+This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration and no timers:
+<ul>
+<li><code>testplan_validation.nb_threads_per_thread_group</code> : Number of threads to use to validate a Thread Group, by default 1</li>
+<li><code>testplan_validation.ignore_timers</code> : Ignore timers when validating the thread group of plan, by default 1</li>
+<li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
+</ul> 
+</p>
 </description>
 
 <properties>
