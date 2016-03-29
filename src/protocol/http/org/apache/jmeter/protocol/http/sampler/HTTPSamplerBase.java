@@ -205,7 +205,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
     }
 
-    private static final int SOURCE_TYPE_DEFAULT = HTTPSamplerBase.SourceType.HOSTNAME.ordinal();
+    public static final int SOURCE_TYPE_DEFAULT = HTTPSamplerBase.SourceType.HOSTNAME.ordinal();
 
     // Use for ComboBox Source Address Type. Preserve order (specially with localization)
     public static String[] getSourceTypeList() {
@@ -271,7 +271,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final String MONITOR = "HTTPSampler.monitor"; // $NON-NLS-1$
 
     // Store MD5 hash instead of storing response
-    private static final String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
+    public static final String MD5 = "HTTPSampler.md5"; // $NON-NLS-1$
 
     /** A number to indicate that the port has not been set. */
     public static final int UNSPECIFIED_PORT = 0;
