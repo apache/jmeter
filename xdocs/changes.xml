@@ -252,6 +252,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>52073</bug>Embedded Resources Parallel download : Improve performances by avoiding shutdown of ThreadPoolExecutor at each sample. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
     <li><bug>59190</bug>HTTP(S) Test Script Recorder : Suggested excludes should ignore case. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>59140</bug>Parallel Download : Add CSS Parsing to extract links from CSS files</li>
+    <li><bug>59249</bug>Http Request Defaults : Add "Source address" and "Save responses as MD5"</li>
 </ul>
 
 <h3>Other samplers</h3>
