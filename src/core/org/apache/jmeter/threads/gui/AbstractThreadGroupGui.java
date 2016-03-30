@@ -38,6 +38,7 @@ import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 
 public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent {
@@ -81,7 +82,9 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
                 JMeterUtils.getResString("add"), // $NON-NLS-1$
                 ActionNames.ADD));
         
-        if(this.isEnabled()) {
+        if(this.isEnabled() && 
+                // Check test is not started already
+                JMeterContextService.getTestStartTime()==0) {
             pop.addSeparator();
             JMenuItem runTg = new JMenuItem(JMeterUtils.getResString("run_threadgroup"));
             runTg.setName("run_threadgroup");
@@ -94,6 +97,12 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
             runTgNotimers.addActionListener(ActionRouter.getInstance());
             runTgNotimers.setActionCommand(ActionNames.RUN_TG_NO_TIMERS);
             pop.add(runTgNotimers);
+
+            JMenuItem validateTg = new JMenuItem(JMeterUtils.getResString("validate_threadgroup"));
+            validateTg.setName("validate_threadgroup");
+            validateTg.addActionListener(ActionRouter.getInstance());
+            validateTg.setActionCommand(ActionNames.VALIDATE_TG);
+            pop.add(validateTg);
         }
         
         MenuFactory.addEditMenu(pop, true);

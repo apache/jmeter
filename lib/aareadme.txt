@@ -146,7 +146,7 @@ jodd-props-3.6.7
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
 
-json-path-2.1.0
+json-path-2.2.0
 --------
 https://github.com/jayway/JsonPath
 - JSON Path Extractor
@@ -162,6 +162,16 @@ jsoup-1.8.3
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
+
+ph-css-4.1.0
+--------
+https://github.com/phax/ph-css
+- CssParser
+
+ph-commons-6.2.4
+--------
+https://github.com/phax/ph-commons
+- CssParser
 
 rhino-1.7.7.1
 --------
@@ -211,10 +221,11 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.13, slf4j-nop-1.7.13
+slf4j-api-1.7.13
 ----------------
 http://www.slf4j.org/
 - jodd-core
+- json-path
 
 tika-1.12
 --------------

@@ -86,16 +86,17 @@ under the License.
       <jodd-lagarto.version>3.6.7</jodd-lagarto.version>
       <jodd-log.version>3.6.7</jodd-log.version>
       <jodd-props.version>3.6.7</jodd-props.version>
-      <json-path.version>2.1.0</json-path.version>
+      <json-path.version>2.2.0</json-path.version>
       <json-smart.version>2.2.1</json-smart.version>
       <jsoup.version>1.8.3</jsoup.version>
       <rhino.version>1.7.7.1</rhino.version>
       <junit.version>4.12</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
+      <ph-css.version>4.1.0</ph-css.version>
+      <ph-commons.version>6.2.4</ph-commons.version>
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.13</slf4j-api.version>
-      <slf4j-nop.version>1.7.13</slf4j-nop.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.12</tika-core.version>
       <tika-parsers.version>1.12</tika-parsers.version>
@@ -366,6 +367,16 @@ under the License.
         <version>${mongo-java-driver.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-css</artifactId>
+        <version>${ph-css.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-commons</artifactId>
+        <version>${ph-commons.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.fifesoft</groupId>
         <artifactId>rsyntaxtextarea</artifactId>
         <version>${rsyntaxtextarea.version}</version>
@@ -374,11 +385,6 @@ under the License.
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-nop</artifactId>
-        <version>${slf4j-nop.version}</version>
       </dependency>
       <dependency>
         <groupId>org.freemarker</groupId>
