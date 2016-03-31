@@ -100,7 +100,7 @@ public class CssParser implements LinkExtractorParser {
                             .setCSSVersion (ECSSVersion.CSS30)
                             .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
                             .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
-            final List<URLString> list = new ArrayList<URLString>();
+            final List<URLString> list = new ArrayList<>();
             final URLCollection urlCollection = new URLCollection(list);
             if(aCSS != null) {
                 CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
