@@ -186,7 +186,7 @@ public class Argument extends AbstractTestElement implements Serializable {
 
     @Override
     public String toString() {
-        return getName() + getMetaData() + getValue();
+        return getName() + getMetaData() + getValue() + " //" + getDescription();
     }
 
     /**
