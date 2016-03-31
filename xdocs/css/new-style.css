@@ -38,6 +38,10 @@ img {
   height: auto;
 }
 
+img.logo {
+  max-height: 88px;
+}
+
 .menu, h1, h2, h3, h4, h5, .go-top, .title {
   font-family: "Merriweather";
 }
@@ -386,7 +390,17 @@ table {
   display: block;
   background: white;
 }
- .main {
+
+.social > div {
+  display: inline-block;
+  margin-right: 0.2em;
+}
+
+.social div img {
+  vertical-align: inherit !important;
+}
+
+.main {
  width: auto;
  max-width: 95%;
  margin: 0.5rem;
