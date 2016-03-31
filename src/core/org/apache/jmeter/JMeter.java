@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
@@ -50,6 +51,8 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
@@ -360,7 +363,13 @@ public class JMeter implements JMeterPlugin {
      * @param args The arguments for JMeter
      */
     public void start(String[] args) {
-
+        
+        try (InputStream inputStream = getClass().getResourceAsStream("/org/apache/jmeter/jmeter_as_ascii_art.txt")) {
+            String text = IOUtils.toString(inputStream);
+            System.out.println(text);
+        } catch (IOException e1) {
+            // NOP
+        }
         CLArgsParser parser = new CLArgsParser(args, options);
         String error = parser.getErrorString();
         if (error == null){// Check option combinations

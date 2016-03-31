@@ -876,7 +876,7 @@
       <fileset dir="${res.dir}/META-INF" >
         <include name="*.license" />
         <include name="*.notice" />
-      </fileset>
+      </fileset>      
     </copy>
     <fixcrlf encoding="${encoding}" srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
   </target>
@@ -928,7 +928,7 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- JMeter launch jar -->
     <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar"
-        includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class"
+        includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class,**/jmeter_as_ascii_art.txt"
         basedir="${build.core}"
         manifest="${build.dir}/MANIFEST_BIN.MF">
         <manifest>
