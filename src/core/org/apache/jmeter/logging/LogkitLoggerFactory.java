@@ -31,14 +31,14 @@ import org.slf4j.Logger;
  * @since 3.0
  */
 public class LogkitLoggerFactory implements ILoggerFactory {
-    // key: name (String), value: a Log4jLoggerAdapter;
-    Map<String, Logger> loggerMap;
+    // key: name (String), value: a Log4jLogger;
+    private final Map<String, Logger> loggerMap;
 
     /**
      * 
      */
     public LogkitLoggerFactory() {
-        loggerMap = new HashMap<String, Logger>();
+        loggerMap = new HashMap<>();
     }
 
     /**
