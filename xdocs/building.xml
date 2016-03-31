@@ -15,6 +15,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+<!DOCTYPE document
+[
+<!ENTITY hellip   "&#x02026;" >
+]>
 <document>
   <properties>
     <title>Building and Contributing to JMeter</title>
@@ -32,7 +36,12 @@ Once you have downloaded the sources using git or svn, you can setup the Eclipse
 
 <source>ant setup-eclipse-project</source>
 
-You can then import the project using  "File &gt; Import &gt; Existing projects into Workspace" and select the folder containing jmeter sources.
+You can then import the project using 
+<menuchoice>
+    <guimenuitem>File</guimenuitem>
+    <guimenuitem>Import</guimenuitem>
+    <guimenuitem>Existing projects into Workspace</guimenuitem>
+</menuchoice> and select the folder containing jmeter sources.
 
 <h4>Option 2 : Setting up Eclipse project manually</h4> 
 The first step is to download dependencies by running the Ant command:</p>
@@ -67,7 +76,7 @@ The basic command is:</p>
 <source>
 ant [install]
 </source>
-See build.xml (or call <code>ant -p</code>) for the other targets that can be used.
+See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used.
 
 </section>
 
@@ -107,7 +116,11 @@ Check that patch does not break JUnit tests by running:
     <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
     <li>Checkout Apache JMeter source</li>
     <li>Code your fix</li>
-    <li>Create your patch by Right clicking on Eclipse project and select "Team" > "Create Patch ..."</li>
+    <li>Create your patch by Right clicking on Eclipse project and select 
+        <menuchoice>
+            <guimenuitem>Team</guimenuitem>
+            <guimenuitem>Create Patch &hellip;</guimenuitem>
+        </menuchoice></li>
     <li>Attach your patch to the bugzilla issue</li>
 </ul>
 </section>
