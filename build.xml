@@ -511,7 +511,7 @@
     <format property="year" pattern="yyyy" locale="en"/>
   </tstamp>
 
-  <filterset id="version.filters">
+  <filterset id="year.filters">
     <filter token="YEAR" value="${year}"/>
   </filterset>
 
@@ -531,6 +531,9 @@
     <echo level="info">jmeter.version = ${jmeter.version}</echo>
     <echo level="info">display.version = ${display.version}</echo>
     <echo level="info">implementation.version = ${implementation.version}</echo>
+    <filterset id="version.filters">
+      <filter token="VERSION" value="${display.version}"/>
+    </filterset>
   </target>
 
     <!-- Get version from SVN status -->
@@ -872,10 +875,12 @@
    <mkdir dir="${resources.meta-inf}" />
     <copy todir="${resources.meta-inf}" overwrite="yes" filtering="yes"
         encoding="${encoding}">
-      <filterset refid="version.filters"/>
+      <filterset refid="year.filters"/>
+      <filterset refid="version.filters" />
       <fileset dir="${res.dir}/META-INF" >
         <include name="*.license" />
         <include name="*.notice" />
+      	<include name="jmeter_as_ascii_art.txt" />
       </fileset>      
     </copy>
     <fixcrlf encoding="${encoding}" srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
@@ -928,7 +933,7 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- JMeter launch jar -->
     <jar jarfile="${dest.jar.jmeter}/ApacheJMeter.jar"
-        includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class,**/jmeter_as_ascii_art.txt"
+        includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class"
         basedir="${build.core}"
         manifest="${build.dir}/MANIFEST_BIN.MF">
         <manifest>
@@ -938,6 +943,8 @@ run JMeter unless all the JMeter jars are added.
           fullpath="META-INF/NOTICE" />
         <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
+        <zipfileset file="${resources.meta-inf}/jmeter_as_ascii_art.txt"
+          fullpath="org/apache/jmeter/jmeter_as_ascii_art.txt" />
     </jar>
 
     <!-- core -->
