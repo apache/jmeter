@@ -106,8 +106,6 @@
           </div>
         </div>
         <div class="nav">
-          <xsl:apply-templates select="$project/body/menu" />
-
           <div class="social menu">
               <div>
                 <a href="https://twitter.com/share" class="twitter-share-button"
@@ -161,6 +159,7 @@
                   </a>
               </div>
           </div>
+            <xsl:apply-templates select="$project/body/menu" />
         </div>
         <div class="main" id="content">
           <xsl:call-template name="pagelinks" />
