@@ -362,14 +362,11 @@ public class JMeter implements JMeterPlugin {
      * @param args The arguments for JMeter
      */
     public void start(String[] args) {
-        
-        System.out.println(Thread.currentThread().getContextClassLoader().getResourceAsStream("jmeter_as_ascii_art.txt"));
-        System.out.println(Thread.currentThread().getContextClassLoader().getResourceAsStream("/org/apache/jmeter/jmeter_as_ascii_art.txt"));
-        System.out.println(JMeter.class.getResourceAsStream("/org/apache/jmeter/jmeter_as_ascii_art.txt"));
-        System.out.println(getClass().getResourceAsStream("/org/apache/jmeter/jmeter_as_ascii_art.txt"));
         try (InputStream inputStream = JMeter.class.getResourceAsStream("jmeter_as_ascii_art.txt")) {
-            String text = IOUtils.toString(inputStream);
-            System.out.println(text);
+            if(inputStream != null) {
+                String text = IOUtils.toString(inputStream);
+                System.out.println(text);
+            }
         } catch (IOException e1) {
             // NOP
         }
