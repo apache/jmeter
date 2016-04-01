@@ -363,7 +363,7 @@ public class JMeter implements JMeterPlugin {
      */
     public void start(String[] args) {
         
-        try (InputStream inputStream = JMeter.class.getResourceAsStream("/org/apache/jmeter/jmeter_as_ascii_art.txt")) {
+        try (InputStream inputStream = JMeter.class.getResourceAsStream("jmeter_as_ascii_art.txt")) {
             String text = IOUtils.toString(inputStream);
             System.out.println(text);
         } catch (IOException e1) {
