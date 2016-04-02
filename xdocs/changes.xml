@@ -463,6 +463,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>58784</bug>Make <code>JMeterUtils#runSafe</code> sync/async awt invocation configurable and change the visualizers to use the async version.</li>
 <li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated eight years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+<li><bug>59262</bug>Add list of binary jars to LICENSE; use that for unit tests</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
