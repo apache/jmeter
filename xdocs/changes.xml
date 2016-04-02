@@ -59,6 +59,10 @@ Summary
 <ch_title>New Search Feature in View Results Tree to allow searching for text / regexp in Request/Responses/Headers/Cookies... This will ease correlation and Test plans creation</ch_title>
 <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure>
 <ch_title>New JSON Post Processor to better extract data from JSON content using user friendly JSON-PATH syntax</ch_title>
+<p>JSON is now a first class citizen in JMeter with the introduction of a new <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath</a> post processor. 
+This post processor is very similar to Regular Expression Post Processor but is well suited for JSON code.
+It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> 
+<figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure></p>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with 1 user, no pause and 1 iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/view_results_tree_search_feature.png"></figure>
 <ch_title>JSR223 Test Element do not require a Cache Compilation Key anymore, just check cache checkbox </ch_title>
