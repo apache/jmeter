@@ -132,8 +132,8 @@ Use parameter:<code>useRegexpForSamplersList=true</code> and put a regex in para
 <li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes for HTTP only tests. Gain increases as number of threads increases</li>
 <li>Rework of Connection management for Parallel Download : This now reproduces nowadays browsers behaviour and improved throughput. For 15 Threads 135% extra samples in 5 minutes.</li>
 <li>Reuse of Threads used for Parallel downloads through a ThreadPool: This improves throughput and increases JMeter scalability for such tests</li>
-<li>Total of 750% more throughput found on test with 15 threads, the more threads you have the higher the gain</li>
-<li>You can now only compute MD5 of embedded resources instead of holding them in memory, this can be done by setting <code>httpsampler.embedded_resources_use_md5=true</code> property</li>
+<li>Total of 750% more throughput found on test with 15 threads, the more threads you have the more the gain</li>
+<li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting <code>httpsampler.embedded_resources_use_md5=true</code> property</li>
 </ul>
 </p>
 <ch_title>Introduction of Sample Timeout feature</ch_title>
