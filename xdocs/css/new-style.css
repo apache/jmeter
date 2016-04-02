@@ -391,6 +391,10 @@ table {
   background: white;
 }
 
+.social {
+  display: block;
+}
+
 .social > div {
   display: inline-block;
   margin-right: 0.2em;
