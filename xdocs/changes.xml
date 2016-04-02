@@ -421,6 +421,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>58941</bug>Create a new Starter that runs thread groups in validation mode (<code>1</code> thread only, <code>1</code> iteration, no pause all customizable)</li>
 <li><bug>59236</bug>JMeter Properties : Make some cleanup</li>
 <li><bug>59240</bug>Introduce a slf4j adapter for Logkit (this allows using slf4j within plugins and core code)</li>
+<li><bug>59153</bug>Stop test if accessing non-existing file (e.g. empty filename in CSVDataSet)</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
