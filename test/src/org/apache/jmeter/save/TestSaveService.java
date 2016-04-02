@@ -58,6 +58,7 @@ public class TestSaveService extends JMeterTestCase {
         "GenTest27.jmx", // 2.7
         "GenTest210.jmx", // 2.10
         "GenTest2_13.jmx", // 2.13
+        "GenTest3_0.jmx", // 3.0
         };
 
     // Test files for testLoadAndSave; output will generally be different in size but same number of lines
