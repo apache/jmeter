@@ -289,15 +289,6 @@ public class FileServer {
             throw new IllegalArgumentException("Could not read file header line for file " + filename,
                     fileEntry.exception);
         }
-        if (fileEntry.exception != null) {
-            Throwable exception = fileEntry.exception;
-            if (exception instanceof RuntimeException) {
-                throw (RuntimeException) exception;
-            }
-            // Note: previous exception message should be clear enough, so
-            // no additional information like "file name" needs to be added here
-            throw new IllegalStateException(exception.getMessage(), exception);
-        }
         return fileEntry.headerLine;
     }
 
