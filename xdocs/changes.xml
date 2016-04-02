@@ -82,6 +82,11 @@ JEXL is a language very similar to JSTL.
 This has increased the size available for parameters in UI.</p>
 <figure width="895" height="674" image="changes/3.0/http_request_basic.png"></figure>
 <figure width="880" height="299" image="changes/3.0/http_request_advanced.png"></figure>
+
+<ch_title>HTTP Request Defaults improvements</ch_title>
+<p>You can now configure Source Address (IP Spoofing like feature) and "Save response as MD5 hash" in Advanced Tab
+<figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
+</p>
 <ch_title>Module Controller has been much improved</ch_title>
 
 <ch_category>Reporting improvements</ch_category>
@@ -89,20 +94,45 @@ This has increased the size available for parameters in UI.</p>
 <ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
 <ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
 <ch_title>Summariser displays a more readable duration</ch_title>
+Now duration are display in the format <code>hours:minutes:seconds</code>
+<source>
+Generate Summary Results +      1 in 00:00:01 =    1.7/s Avg:     1 Min:     1 Max:     1 Err:     0 (0.00%) Active: 1 Started: 1 Finished: 0
+Generate Summary Results +    138 in 00:00:09 =   16.2/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 9 Started: 9 Finished: 0
+Generate Summary Results =    139 in 00:00:09 =   15.3/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
+Generate Summary Results +    467 in 00:00:10 =   47.0/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 19 Started: 19 Finished: 0
+Generate Summary Results =    606 in 00:00:19 =   31.9/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
+...
+Generate Summary Results +   1662 in 00:00:10 =  166.1/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 50 Started: 50 Finished: 0
+Generate Summary Results =  28932 in 00:03:19 =  145.4/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
+Generate Summary Results +   1664 in 00:00:10 =  166.4/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 50 Started: 50 Finished: 0
+Generate Summary Results =  30596 in 00:03:29 =  146.4/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
+Generate Summary Results +   1661 in 00:00:10 =  166.1/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 50 Started: 50 Finished: 0
+Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
+</source>
 <ch_title>BackendListener now allows one to define sampler list as a regular expression</ch_title>
-
+<p>You can now use a regular expression to select the samplers you want to filter. 
+Use parameter:<code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
+<figure width="815" height="395" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
+</p>
 <ch_category>Protocols and Load Testing improvements</ch_category>
 <ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
-
-<ch_title>Cookies : Support of RFC6265</ch_title>
+<p>Migration to HttpClient 4.5.2 improves the following fields of JMeter:
+<ul>
+<li>Support of recent RFC like <a href="https://tools.ietf.org/html/rfc6265" target="_blank">HTTP State Management Mechanism RFC-6265 for Cookies</a>, you should use now <code>HC4CookieHandler</code> in HTTP Cookie Manager component</li>
+<li><a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank">Server Name Indication (SNI)</a> support for HttpClient4 implementation</li>
+<li>Improved and better performing validation mechanism for Stale connections and Keep-Alive management, see properties <code>httpclient4.validate_after_inactivity</code> and <code>httpclient4.time_to_live</code></li>
+<li>Many bug fixes since previous version 4.2.6 used in JMeter 2.13, see <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES-4.5.x.txt" target="_blank">HttpClient 4.5.X release notes</a></li>
+<li>Better support of HTTP RFC 2616 / RFC 7230 and fixes to issues with <code>deflate</code> compression management</li>
+</ul>
+</p>
 <ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
 <p>
 <ul>
-<li>Parsing of CSS imported (imported CSS files through @import) or embedded resources (background images)</li>
-<li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes. Gain increases as number of threads increases</li>
-<li>Rework of Connection management for Parallel Download : for 15 Threads 135% extra samples in 5 minutes.</li>
-<li>Reuse of ThreadPool</li>
-<li>Total of 750% more throughput</li>
+<li>Parsing of CSS imported files (through @import) or embedded resources (background images...)</li>
+<li>Lazy initialization of SSL context : For 15 Threads 138% more sampling in 5 minutes for HTTP only tests. Gain increases as number of threads increases</li>
+<li>Rework of Connection management for Parallel Download : This now reproduces nowadays browsers behaviour and improved throughput. For 15 Threads 135% extra samples in 5 minutes.</li>
+<li>Reuse of Threads used for Parallel downloads through a ThreadPool: This improves throughput and increases JMeter scalability for such tests</li>
+<li>Total of 750% more throughput found on test with 15 threads, the more threads you have the higher the gain</li>
 </ul>
 </p>
 <ch_title>Introduction of Sampler Timeout feature</ch_title>
