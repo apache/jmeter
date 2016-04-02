@@ -473,23 +473,14 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
+                    extractAndSetReportOutputFolder(parser);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     startGui(testFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
-                    CLOption reportOutputFolderOpt = parser
-                            .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
-                    if(reportOutputFolderOpt != null) {
-                        String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
-                        File reportOutputFolderAsFile = new File(reportOutputFolder);
-
-                        JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
-                        log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
-                        JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
-                                reportOutputFolderAsFile.getAbsolutePath());                        
-                    }
+                    extractAndSetReportOutputFolder(parser);
                     
                     CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
                     if (rem == null) {
@@ -517,6 +508,28 @@ public class JMeter implements JMeterPlugin {
             log.fatalError("An error occurred: ",e);
             System.out.println("An error occurred: " + e.getMessage());
             System.exit(1); // TODO - could this be return?
+        }
+    }
+
+    /**
+     * Extract option JMeter#REPORT_OUTPUT_FOLDER_OPT and if defined sets property 
+     * {@link JMeter#JMETER_REPORT_OUTPUT_DIR_PROPERTY} after checking folder can
+     * be safely written to
+     * @param parser {@link CLArgsParser}
+     * @throws IllegalArgumentException
+     */
+    private void extractAndSetReportOutputFolder(CLArgsParser parser)
+            throws IllegalArgumentException {
+        CLOption reportOutputFolderOpt = parser
+                .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
+        if(reportOutputFolderOpt != null) {
+            String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
+            File reportOutputFolderAsFile = new File(reportOutputFolder);
+
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
+            log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
+            JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
+                    reportOutputFolderAsFile.getAbsolutePath());                        
         }
     }
 
