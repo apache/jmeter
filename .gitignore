@@ -21,6 +21,7 @@ target/
 .pmd
 .project
 .settings
+bin/ApacheJMeter.jar
 
 build-local.properties
 jmeter-fb.*
@@ -36,3 +37,9 @@ jmeter-fb.*
 # ignore default report output directory
 /bin/report-output
 /output/
+
+# IDEA
+
+out/
+.idea/
+*.iml
