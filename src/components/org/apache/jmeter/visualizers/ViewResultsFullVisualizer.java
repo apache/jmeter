@@ -25,7 +25,9 @@ package org.apache.jmeter.visualizers;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -42,10 +45,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -102,6 +107,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private JComboBox<ResultRenderer> selectRenderPanel;
 
     private int selectedTab;
+    
+    private AtomicLong currentSizeApproximation = new AtomicLong(0l);
 
     protected static final String COMBO_CHANGE_COMMAND = "change_combo"; // $NON-NLS-1$
 
@@ -124,11 +131,21 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final String VIEWERS_ORDER =
         JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
+    /**
+     * Max memory used by SampleResults
+     */
+    private static final int MAX_MEMORY_OCCUPATION = 
+            JMeterUtils.getPropDefault("view.results.tree.max_memory_occupation",
+            // 100 mb
+            100 * 1024 * 1024); //$NON-NLS-1$
+
     private ResultRenderer resultsRender = null;
 
     private TreeSelectionEvent lastSelectionEvent;
 
     private JCheckBox autoScrollCB;
+
+    private JLabel warningLabel;
 
     /**
      * Constructor
@@ -153,6 +170,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * Update the visualizer with new data.
      */
     private synchronized void updateGui(SampleResult res) {
+        if(applyOOMProtection()) {
+            return;
+        }
+        currentSizeApproximation.addAndGet(res.getEstimatedSize());
         // Add sample
         DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
         treeModel.insertNodeInto(currNode, root, root.getChildCount());
@@ -174,6 +195,27 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             jTree.scrollPathToVisible(new TreePath(new Object[] { root,
                     treeModel.getChild(root, root.getChildCount() - 1) }));
         }
+    }
+
+    /**
+     * When the limit is reached, JMeter will not {@link SampleResult} anymore
+     * Setting to 0 disables the protection
+     */
+    private boolean applyOOMProtection() {
+        // Protection already in place
+        if(warningLabel.isVisible()) {
+            return true;
+        }
+
+        if(MAX_MEMORY_OCCUPATION > 0 && 
+                // We reached the limit
+                currentSizeApproximation.get() > MAX_MEMORY_OCCUPATION) {
+            log.warn(getName()+":applying OUTOFMEMORY PROTECTION, SampleResults are not added anymore, use NON-GUI mode"
+                    + " or configure property 'view.results.tree.max_memory_occupation'");
+            warningLabel.setVisible(true);
+            return true;
+        }
+        return false;
     }
 
     private void addSubResults(DefaultMutableTreeNode currNode, SampleResult res) {
@@ -210,6 +252,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
         }
         resultsRender.clearData();
+        currentSizeApproximation.set(0);
+        warningLabel.setVisible(false);
     }
 
     /** {@inheritDoc} */
@@ -466,5 +510,22 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         // NOOP state is held by component
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#getNamePanel()
+     */
+    @Override
+    protected Container makeTitlePanel() {
+        Container container = super.makeTitlePanel();
+        ImageIcon image = JMeterUtils.getImage("warning.png"); //$NON-NLS-1$
+        warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
+        warningLabel.setForeground(Color.RED);
+        Font font = warningLabel.getFont();
+        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        warningLabel.setVisible(false);
+        container.add(warningLabel);
+        warningLabel.setText(JMeterUtils.getResString("view_results_tree_oom")); //$NON-NLS-1$
+        return container;
     }
 }
