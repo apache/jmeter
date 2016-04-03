@@ -1,6 +1,19 @@
+sudo: false
 language: java
-install: ant clean download_checkstyle download_jars install
-script: ant -Djava.awt.headless=true checkstyle test
-jdk:
-  - oraclejdk7
-  - oraclejdk8
+
+before_script:
+  - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
+  - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
+
+# skip default "install" command
+install: true
+
+matrix:
+  include:
+    - jdk: oraclejdk8
+      env: RUN_CHECKSTYLE=true
+      script: ant -Djava.awt.headless=true checkstyle
+    - jdk: oraclejdk7
+      script: ant -Djava.awt.headless=true test
+    - jdk: oraclejdk8
+      script: ant -Djava.awt.headless=true test
