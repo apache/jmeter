@@ -83,6 +83,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     private final transient Cache lookupCache;
 
+    private transient int timeoutMs;
+
     // ensure that the initial DNSServers are copied to the per-thread instances
 
     public DNSCacheManager() {
@@ -153,6 +155,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             try {
                 Lookup lookup = new Lookup(host, Type.A);
                 lookup.setCache(lookupCache);
+                if (timeoutMs > 0) {
+                    resolver.setTimeout(timeoutMs / 1000, timeoutMs % 1000);
+                }
                 lookup.setResolver(resolver);
                 Record[] records = lookup.run();
                 if (records == null || records.length == 0) {
@@ -235,6 +240,24 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     public void setCustomResolver(boolean isCustomResolver) {
         this.setProperty(IS_CUSTOM_RESOLVER, isCustomResolver);
+    }
+
+    /**
+     * Sets DNS resolution timeout.
+     *
+     * @param timeoutMs timeout in milliseconds
+     */
+    void setTimeoutMs(int timeoutMs) {
+        this.timeoutMs = timeoutMs;
+    }
+
+    /**
+     * Returns DNS resolution timeout in milliseconds.
+     *
+     * @return DNS resolution timeout in milliseconds
+     */
+    int getTimeoutMs() {
+        return timeoutMs;
     }
 
 }
