@@ -1444,4 +1444,23 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;
     }
+
+    /**
+     * Beta API
+     * Not to be used by extensions
+     * @return long an estimation of the size in memory
+     */
+    public long getEstimatedSize() {
+        long estimatedSize = getBytes();
+        for (AssertionResult assertionResult : getAssertionResults()) {
+            estimatedSize += 2* assertionResult.getName().length() 
+                    + 2 * assertionResult.getFailureMessage().length();
+        }
+        if(subResults != null) {
+            for (SampleResult subResult : subResults) {
+                estimatedSize += subResult.getEstimatedSize();
+            }
+        }
+        return estimatedSize;
+    }
 }
