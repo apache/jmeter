@@ -2515,13 +2515,20 @@ run JMeter unless all the JMeter jars are added.
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.jtl"/>
 
     <local         name="BatchTestLocal.csv.OK"/>
+    <local         name="file1.csv"/>
+    <local         name="file2.csv"/>
+
+    <loadfile property="file1.csv" srcFile="${batchtest.inp}/${batchtest.name}.csv"/>
+    <loadfile property="file2.csv" srcFile="${batchtest.out}/${batchtest.name}.csv"/>
     <condition property="BatchTestLocal.csv.OK">
         <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
         ${batchtest.inp}${file.separator}${batchtest.name}.csv
+        ${file1.csv}
         ${batchtest.out}${file.separator}${batchtest.name}.csv
+        ${file2.csv}
     </fail>
 
     <local         name="BatchTestLocal.xml.OK"/>
