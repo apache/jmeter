@@ -65,7 +65,7 @@ This post processor is very similar to Regular Expression Post Processor but is 
 It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> 
 <figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure></p>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
-<figure width="295" height="629" image="changes/3.0/view_results_tree_search_feature.png"></figure>
+<figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
 <ch_title>JSR223 Test Element do not require a Cache Compilation Key anymore, just check cache checkbox </ch_title>
 
 <figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
@@ -117,7 +117,7 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 <ch_title>BackendListener now allows one to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
 Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
-<figure width="815" height="395" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
+<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 </p>
 <ch_category>Protocols and Load Testing improvements</ch_category>
 <ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
