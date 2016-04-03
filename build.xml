@@ -2532,13 +2532,19 @@ run JMeter unless all the JMeter jars are added.
     </fail>
 
     <local         name="BatchTestLocal.xml.OK"/>
+    <local         name="file1.xml"/>
+    <local         name="file2.xml"/>
+    <loadfile property="file1.xml" srcFile="${batchtest.inp}/${batchtest.name}.xml"/>
+    <loadfile property="file2.xml" srcFile="${batchtest.out}/${batchtest.name}.xml"/>
     <condition property="BatchTestLocal.xml.OK">
        <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
         ${batchtest.inp}${file.separator}${batchtest.name}.xml
+        ${file1.xml}
         ${batchtest.out}${file.separator}${batchtest.name}.xml
+        ${file2.xml}
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
