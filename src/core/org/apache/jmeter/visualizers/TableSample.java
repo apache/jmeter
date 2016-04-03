@@ -49,6 +49,18 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     private final long connect;
 
     /**
+     * Beta API
+     * Not to be used by extensions
+     * @return long estimation of object size in memory
+     */
+    public long getEstimatedSize() {
+        return 48 + // 6 long 
+                1 + // 1 boolean
+                4 + // 1 int
+                (label != null ? label.length() : 0) * 2 +  
+                (threadName != null ? threadName.length() : 0)*2;
+    }
+    /**
      * @deprecated for unit test code only
      */
     @Deprecated
@@ -151,4 +163,5 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     public long getConnectTime() {
         return connect;
     }
+    
 }
