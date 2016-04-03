@@ -15,5 +15,7 @@ matrix:
       script: ant -Djava.awt.headless=true checkstyle
     - jdk: oraclejdk7
       script: ant -Djava.awt.headless=true test
+      sudo: true # otherwise TEST_HTTPS.jmx -> sni.velox.ch does not work
     - jdk: oraclejdk8
       script: ant -Djava.awt.headless=true test
+      sudo: true # otherwise TEST_HTTPS.jmx -> sni.velox.ch does not work
