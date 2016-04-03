@@ -33,6 +33,7 @@ public class TestDNSCacheManager extends JMeterTestCase {
         original.setCustomResolver(true);
         original.addServer("127.0.0.99");
         DNSCacheManager clone = (DNSCacheManager) original.clone();
+        clone.setTimeoutMs(100);
         try {
             clone.resolve("jmeter.apache.org");
             fail();
