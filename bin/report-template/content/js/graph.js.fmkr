@@ -1296,8 +1296,7 @@ function toggleAll(id, checked){
     var placeholder = document.getElementById(id);
 
     var cases = $(placeholder).find(':checkbox');
-
-    cases.attr('checked', checked);
+    cases.prop('checked', checked);
     $(cases).parent().children().children().toggleClass("legend-disabled", !checked);
 
     var choiceContainer;

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
@@ -50,6 +51,7 @@ import org.apache.commons.cli.avalon.CLArgsParser;
 import org.apache.commons.cli.avalon.CLOption;
 import org.apache.commons.cli.avalon.CLOptionDescriptor;
 import org.apache.commons.cli.avalon.CLUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.control.ReplaceableController;
 import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.DistributedRunner;
@@ -360,7 +362,6 @@ public class JMeter implements JMeterPlugin {
      * @param args The arguments for JMeter
      */
     public void start(String[] args) {
-
         CLArgsParser parser = new CLArgsParser(args, options);
         String error = parser.getErrorString();
         if (error == null){// Check option combinations
@@ -443,11 +444,12 @@ public class JMeter implements JMeterPlugin {
             JMeterUtils.setProperty("START.HMS",new SimpleDateFormat("HHmmss").format(today));// $NON-NLS-1$ $NON-NLS-2$
 
             if (parser.getArgumentById(VERSION_OPT) != null) {
-                System.out.println(JMeterUtils.getJMeterCopyright());
-                System.out.println("Version " + JMeterUtils.getJMeterVersion());
+                displayAsciiArt();
             } else if (parser.getArgumentById(HELP_OPT) != null) {
+                displayAsciiArt();
                 System.out.println(JMeterUtils.getResourceFileAsText("org/apache/jmeter/help.txt"));// $NON-NLS-1$
             } else if (parser.getArgumentById(OPTIONS_OPT) != null) {
+                displayAsciiArt();
                 System.out.println(CLUtil.describeOptions(options).toString());
             } else if (parser.getArgumentById(SERVER_OPT) != null) {
                 // Start the server
@@ -471,23 +473,14 @@ public class JMeter implements JMeterPlugin {
                 CLOption testReportOpt = parser.getArgumentById(REPORT_GENERATING_OPT);
                 if (testReportOpt != null) { // generate report from existing file
                     String reportFile = testReportOpt.getArgument();
+                    extractAndSetReportOutputFolder(parser);
                     ReportGenerator generator = new ReportGenerator(reportFile, null);
                     generator.generate();
                 } else if (parser.getArgumentById(NONGUI_OPT) == null) { // not non-GUI => GUI
                     startGui(testFile);
                     startOptionalServers();
                 } else { // NON-GUI must be true
-                    CLOption reportOutputFolderOpt = parser
-                            .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
-                    if(reportOutputFolderOpt != null) {
-                        String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
-                        File reportOutputFolderAsFile = new File(reportOutputFolder);
-
-                        JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
-                        log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
-                        JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
-                                reportOutputFolderAsFile.getAbsolutePath());                        
-                    }
+                    extractAndSetReportOutputFolder(parser);
                     
                     CLOption rem = parser.getArgumentById(REMOTE_OPT_PARAM);
                     if (rem == null) {
@@ -509,13 +502,49 @@ public class JMeter implements JMeterPlugin {
                 }
             }
         } catch (IllegalUserActionException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Incorrect Usage");
+            System.out.println("Incorrect Usage:"+e.getMessage());
             System.out.println(CLUtil.describeOptions(options).toString());
         } catch (Throwable e) {
             log.fatalError("An error occurred: ",e);
             System.out.println("An error occurred: " + e.getMessage());
             System.exit(1); // TODO - could this be return?
+        }
+    }
+
+    /**
+     * Extract option JMeter#REPORT_OUTPUT_FOLDER_OPT and if defined sets property 
+     * {@link JMeter#JMETER_REPORT_OUTPUT_DIR_PROPERTY} after checking folder can
+     * be safely written to
+     * @param parser {@link CLArgsParser}
+     * @throws IllegalArgumentException
+     */
+    private void extractAndSetReportOutputFolder(CLArgsParser parser)
+            throws IllegalArgumentException {
+        CLOption reportOutputFolderOpt = parser
+                .getArgumentById(REPORT_OUTPUT_FOLDER_OPT);
+        if(reportOutputFolderOpt != null) {
+            String reportOutputFolder = parser.getArgumentById(REPORT_OUTPUT_FOLDER_OPT).getArgument();
+            File reportOutputFolderAsFile = new File(reportOutputFolder);
+
+            JOrphanUtils.canSafelyWriteToFolder(reportOutputFolderAsFile);
+            log.info("Setting property '"+JMETER_REPORT_OUTPUT_DIR_PROPERTY+"' to:'"+reportOutputFolderAsFile.getAbsolutePath()+"'");
+            JMeterUtils.setProperty(JMETER_REPORT_OUTPUT_DIR_PROPERTY, 
+                    reportOutputFolderAsFile.getAbsolutePath());                        
+        }
+    }
+
+    /**
+     * Displays as ASCII Art Apache JMeter version + Copyright notice
+     */
+    private void displayAsciiArt() {
+        try (InputStream inputStream = JMeter.class.getResourceAsStream("jmeter_as_ascii_art.txt")) {
+            if(inputStream != null) {
+                String text = IOUtils.toString(inputStream);
+                System.out.println(text);
+            }
+        } catch (Exception e1) {
+            System.out.println(JMeterUtils.getJMeterCopyright());
+            System.out.println("Version " + JMeterUtils.getJMeterVersion());
         }
     }
 

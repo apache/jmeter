@@ -511,7 +511,7 @@
     <format property="year" pattern="yyyy" locale="en"/>
   </tstamp>
 
-  <filterset id="version.filters">
+  <filterset id="year.filters">
     <filter token="YEAR" value="${year}"/>
   </filterset>
 
@@ -531,6 +531,9 @@
     <echo level="info">jmeter.version = ${jmeter.version}</echo>
     <echo level="info">display.version = ${display.version}</echo>
     <echo level="info">implementation.version = ${implementation.version}</echo>
+    <filterset id="version.filters">
+      <filter token="VERSION" value="${display.version}"/>
+    </filterset>
   </target>
 
     <!-- Get version from SVN status -->
@@ -872,11 +875,13 @@
    <mkdir dir="${resources.meta-inf}" />
     <copy todir="${resources.meta-inf}" overwrite="yes" filtering="yes"
         encoding="${encoding}">
-      <filterset refid="version.filters"/>
+      <filterset refid="year.filters"/>
+      <filterset refid="version.filters" />
       <fileset dir="${res.dir}/META-INF" >
         <include name="*.license" />
         <include name="*.notice" />
-      </fileset>
+      	<include name="jmeter_as_ascii_art.txt" />
+      </fileset>      
     </copy>
     <fixcrlf encoding="${encoding}" srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
   </target>
@@ -938,6 +943,8 @@ run JMeter unless all the JMeter jars are added.
           fullpath="META-INF/NOTICE" />
         <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
+        <zipfileset file="${resources.meta-inf}/jmeter_as_ascii_art.txt"
+          fullpath="org/apache/jmeter/jmeter_as_ascii_art.txt" />
     </jar>
 
     <!-- core -->
@@ -2293,7 +2300,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="year" expression="${year}" />
     </xslt>
     <copy todir="${dest.docs}/images" overwrite="${docs.force}">
-      <fileset dir="${src.images}" excludes="logo.xcf,logo.svg"/>
+      <fileset dir="${src.images}" excludes="logo.xcf"/>
     </copy>
     <copy todir="${dest.docs}/css" overwrite="${docs.force}">
       <fileset dir="${src.css}"/>
@@ -2508,23 +2515,36 @@ run JMeter unless all the JMeter jars are added.
     <checkfile type="output" file="${batchtest.out}${file.separator}${batchtest.name}.jtl"/>
 
     <local         name="BatchTestLocal.csv.OK"/>
+    <local         name="file1.csv"/>
+    <local         name="file2.csv"/>
+
+    <loadfile property="file1.csv" srcFile="${batchtest.inp}/${batchtest.name}.csv"/>
+    <loadfile property="file2.csv" srcFile="${batchtest.out}/${batchtest.name}.csv"/>
     <condition property="BatchTestLocal.csv.OK">
         <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
         ${batchtest.inp}${file.separator}${batchtest.name}.csv
+        ${file1.csv}
         ${batchtest.out}${file.separator}${batchtest.name}.csv
+        ${file2.csv}
     </fail>
 
     <local         name="BatchTestLocal.xml.OK"/>
+    <local         name="file1.xml"/>
+    <local         name="file2.xml"/>
+    <loadfile property="file1.xml" srcFile="${batchtest.inp}/${batchtest.name}.xml"/>
+    <loadfile property="file2.xml" srcFile="${batchtest.out}/${batchtest.name}.xml"/>
     <condition property="BatchTestLocal.xml.OK">
        <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
         ${batchtest.inp}${file.separator}${batchtest.name}.xml
+        ${file1.xml}
         ${batchtest.out}${file.separator}${batchtest.name}.xml
+        ${file2.xml}
     </fail>
 
     <echo level="info">${batchtest.name} output files compared OK</echo>
@@ -2945,6 +2965,8 @@ run JMeter unless all the JMeter jars are added.
           <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
           <!-- jdom jar has moved; drop the old one -->
           <fileset dir="${lib.dir}" includes="jdom-1.1.3.jar"/>
+          <!-- Drop slf4j-nop implementation -->
+          <fileset dir="${lib.dir}" includes="slf4j-nop-1.7.13.jar"/>
         </delete>
         <antcall target="_process_all_jars">
             <param name="_get_file" value="true"/>

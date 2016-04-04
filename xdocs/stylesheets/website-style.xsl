@@ -74,8 +74,8 @@
           </xsl:comment>
           <div>
             <a href="http://www.apache.org">
-              <img title="Apache Software Foundation" width="215"
-                height="88" src="{$imgdir}/asf-logo.png" alt="Logo ASF" />
+              <img title="Apache Software Foundation" class="logo"
+                  src="{$imgdir}/asf-logo.png" alt="Logo ASF" />
             </a>
           </div>
           <xsl:if test="$project/logo">
@@ -94,35 +94,26 @@
             </xsl:comment>
             <div>
               <a href="{$home}">
-                <img src="{$src}" alt="{$alt}" />
+                <img class="logo" src="{$src}" alt="{$alt}"/>
               </a>
             </div>
           </xsl:if>
-          <div class="twitter">
-            <div>
-              <a href="https://twitter.com/share" class="twitter-share-button"
-                data-text="Powerful Load Testing with Apache #JMeter"
-                data-via="ApacheJMeter" data-lang="en-gb" data-size="large"
-              >Tweet</a>
-              <script><![CDATA[
-            (function(d,s,id){
-              var js,
-                  fjs=d.getElementsByTagName(s)[0],
-                  p=/^http:/.test(d.location)?'http':'https';
-              if (!d.getElementById(id)) {
-                  js=d.createElement(s);
-                  js.id=id;
-                  js.src=p+'://platform.twitter.com/widgets.js';
-                  fjs.parentNode.insertBefore(js,fjs);
-              }
-            })(document, 'script', 'twitter-wjs');]]>
-              </script>
-            </div>
-            <div>
-              <a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button"
-                data-show-count="false" data-lang="en-gb" data-size="large"
-              >Follow</a>
-              <script><![CDATA[(function(d,s,id){
+          <div class="banner">
+            <iframe src="http://www.apache.org/ads/bannerbar.html"
+              style="border-width:0;" frameborder="0" scrolling="no"
+            ></iframe>
+            <div class="clear"></div>
+          </div>
+        </div>
+        <div class="nav">
+          <div class="social menu">
+              <div>
+                <a href="https://twitter.com/share" class="twitter-share-button"
+                  data-text="Powerful Load Testing with Apache #JMeter"
+                  data-via="ApacheJMeter" data-lang="en-gb" data-size="large"
+                >Tweet</a>
+                <script><![CDATA[
+              (function(d,s,id){
                 var js,
                     fjs=d.getElementsByTagName(s)[0],
                     p=/^http:/.test(d.location)?'http':'https';
@@ -132,22 +123,43 @@
                     js.src=p+'://platform.twitter.com/widgets.js';
                     fjs.parentNode.insertBefore(js,fjs);
                 }
-            })(document, 'script', 'twitter-wjs');]]>
-              </script>
-<a href="https://github.com/apache/jmeter"><img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=default" /></a>
-<a href="https://github.com/apache/jmeter/fork"><img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=default" /></a>
-<a href="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter"><img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.png"></img></a>              
-            </div>
+              })(document, 'script', 'twitter-wjs');]]>
+                </script>
+              </div>
+              <div>
+                <a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button"
+                  data-show-count="false" data-lang="en-gb" data-size="large"
+                >Follow</a>
+                <script><![CDATA[(function(d,s,id){
+                  var js,
+                      fjs=d.getElementsByTagName(s)[0],
+                      p=/^http:/.test(d.location)?'http':'https';
+                  if (!d.getElementById(id)) {
+                      js=d.createElement(s);
+                      js.id=id;
+                      js.src=p+'://platform.twitter.com/widgets.js';
+                      fjs.parentNode.insertBefore(js,fjs);
+                  }
+              })(document, 'script', 'twitter-wjs');]]>
+                </script>
+              </div>
+              <div>
+                  <a href="https://github.com/apache/jmeter">
+                      <img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=default" />
+                  </a>
+              </div>
+              <div>
+                  <a href="https://github.com/apache/jmeter/fork">
+                      <img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=default" />
+                  </a>
+              </div>
+              <div>
+                  <a href="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter">
+                      <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.png" />
+                  </a>
+              </div>
           </div>
-          <div class="banner">
-            <iframe src="http://www.apache.org/ads/bannerbar.html"
-              style="border-width:0;" frameborder="0" scrolling="no"
-            ></iframe>
-            <div class="clear"></div>
-          </div>
-        </div>
-        <div class="nav">
-          <xsl:apply-templates select="$project/body/menu" />
+            <xsl:apply-templates select="$project/body/menu" />
         </div>
         <div class="main" id="content">
           <xsl:call-template name="pagelinks" />

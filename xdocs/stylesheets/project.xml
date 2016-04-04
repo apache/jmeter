@@ -20,14 +20,11 @@
 
      <title>Apache JMeter</title>
      <!---->
-     <logo width="182" height="88" href="/images/logo.jpg">Apache JMeter</logo>
+     <logo width="182" height="88" href="/images/logo.svg">Apache JMeter</logo>
      <!---->
      <body>
      <menu name="About">
        <item name="Overview"            href="/index.html"/>
-       <item name="JMeter on Twitter"   href="http://twitter.com/ApacheJMeter" icon="twitter.png"/>
-       <item name="Issue Tracking"      href="/issues.html"/>
-       <item name="Project info at Apache" href="https://projects.apache.org/project.html?jmeter"/>
        <item name="License"             href="http://www.apache.org/licenses/"/>
      </menu>
      <menu name="Download">
@@ -54,9 +51,11 @@
         <item name="Extending JMeter"     href="/extending/jmeter_tutorial.pdf"/>
      </menu>
      <menu name="Community">
+        <item name="Issue Tracking"      href="/issues.html"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
+        <item name="Project info at Apache" href="https://projects.apache.org/project.html?jmeter"/>
         <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
      </menu>
      <menu name="Foundation">

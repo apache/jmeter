@@ -250,17 +250,17 @@ public class FileServer {
      * Creates an association between a filename and a File inputOutputObject,
      * and stores it for later use - unless it is already stored.
      *
-     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param filename - relative (to base) or absolute file name (must not be null or empty)
      * @param charsetName - the character set encoding to use for the file (may be null)
      * @param alias - the name to be used to access the object (must not be null)
      * @param hasHeader true if the file has a header line describing the contents
      * @return the header line; may be null
      * @throws EOFException if eof reached
-     * @throws IllegalArgumentException if header could not be read
+     * @throws IllegalArgumentException if header could not be read or filename is null or empty
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
-        if (filename == null){
-            throw new IllegalArgumentException("Filename must not be null");
+        if (filename == null || filename.isEmpty()){
+            throw new IllegalArgumentException("Filename must not be null or empty");
         }
         if (alias == null){
             throw new IllegalArgumentException("Alias must not be null");
@@ -274,20 +274,20 @@ public class FileServer {
                 log.info("Stored: "+filename+" Alias: "+alias);
             }
             files.put(alias, fileEntry);
-            if (hasHeader){
+            if (hasHeader) {
                 try {
-                    fileEntry.headerLine=readLine(alias, false);
-                } catch (IOException e) {
+                    fileEntry.headerLine = readLine(alias, false);
+                    if (fileEntry.headerLine == null) {
+                        fileEntry.exception = new EOFException("File is empty: " + fileEntry.file);
+                    }
+                } catch (IOException | IllegalArgumentException e) {
                     fileEntry.exception = e;
-                    throw new IllegalArgumentException("Could not read file header line",e);
-                }
-                if (fileEntry.headerLine == null) {
-                    fileEntry.exception = new EOFException("File is empty: " + fileEntry.file);                    
                 }
             }
         }
         if (hasHeader && fileEntry.headerLine == null) {
-            throw new IllegalArgumentException("Could not read file header line", fileEntry.exception);            
+            throw new IllegalArgumentException("Could not read file header line for file " + filename,
+                    fileEntry.exception);
         }
         return fileEntry.headerLine;
     }
@@ -418,6 +418,9 @@ public class FileServer {
     }
 
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
+        if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
+            throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
+        }
         FileInputStream fis = new FileInputStream(fileEntry.file);
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding
