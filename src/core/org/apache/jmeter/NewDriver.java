@@ -20,6 +20,7 @@ package org.apache.jmeter;
 
 // N.B. this must only use standard Java packages
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -93,10 +94,10 @@ public final class NewDriver {
 
         // add thirdparty extensions to classpath
         File thirdpartyRoot = new File(jmDir + File.separator + "lib" + File.separator + "3rdparty");
-        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FilenameFilter() {
+        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FileFilter() {
             @Override
-            public boolean accept(File dir, String name) {
-                return new File(dir, name).isDirectory();
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
             }
         });
         Collections.addAll(libDirs, thirdpartyDirs);
