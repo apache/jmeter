@@ -100,8 +100,9 @@ public final class NewDriver {
                 return pathname.isDirectory();
             }
         });
-        Collections.addAll(libDirs, thirdpartyDirs);
-
+        if (thirdpartyDirs != null) {
+            Collections.addAll(libDirs, thirdpartyDirs);
+        }
 
         for (File libDir : libDirs) {
             File[] libJars = libDir.listFiles(new FilenameFilter() {
