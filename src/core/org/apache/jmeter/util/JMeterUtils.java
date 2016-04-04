@@ -351,8 +351,10 @@ public class JMeterUtils implements UnitTestManager {
                         return name.endsWith(".jar");// $NON-NLS-1$
                     }
                 });
-                for (File libJar : libJars) {
-                    result.add(libJar.getPath());
+                if (libJars != null) {
+                    for (File libJar : libJars) {
+                        result.add(libJar.getPath());
+                    }
                 }
             }
         }
