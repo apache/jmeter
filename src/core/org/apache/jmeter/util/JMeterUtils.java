@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,10 +32,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -316,15 +319,39 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String[] getSearchPaths() {
         String p = JMeterUtils.getPropDefault("search_paths", null); // $NON-NLS-1$
-        String[] result = new String[1];
+        List<String> result = new LinkedList<>();
+        result.add(getJMeterHome() + "/lib/ext"); // $NON-NLS-1$
 
+        // add from property
         if (p != null) {
-            String[] paths = p.split(";"); // $NON-NLS-1$
-            result = new String[paths.length + 1];
-            System.arraycopy(paths, 0, result, 1, paths.length);
+            Collections.addAll(result, p.split(";")); // $NON-NLS-1$
         }
-        result[0] = getJMeterHome() + "/lib/ext"; // $NON-NLS-1$
-        return result;
+
+        // add from thirdparty
+        addThirdpartyPaths(result);
+
+        return result.toArray(new String[0]);
+    }
+
+    private static void addThirdpartyPaths(List<String> result) {
+        File thirdpartyRoot = new File(jmDir + File.separator + "lib" + File.separator + "3rdparty");
+        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isDirectory();
+            }
+        });
+        for (File libDir: thirdpartyDirs) {
+            File[] libJars = libDir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith(".jar");// $NON-NLS-1$
+                }
+            });
+            for (File libJar : libJars) {
+                result.add(libJar.getPath());
+            }
+        }
     }
 
     /**

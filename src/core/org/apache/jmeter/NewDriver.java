@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -85,9 +86,22 @@ public final class NewDriver {
 
         // Add standard jar locations to initial classpath
         StringBuilder classpath = new StringBuilder();
-        File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
+        List<File> libDirs = new LinkedList<>();
+        libDirs.add(new File(jmDir + File.separator + "lib")); // $NON-NLS-1$ $NON-NLS-2$
+        libDirs.add(new File(jmDir + File.separator + "lib" + File.separator + "ext")); // $NON-NLS-1$ $NON-NLS-2$
+        libDirs.add(new File(jmDir + File.separator + "lib" + File.separator + "junit")); // $NON-NLS-1$ $NON-NLS-2$
+
+        // add thirdparty extensions to classpath
+        File thirdpartyRoot = new File(jmDir + File.separator + "lib" + File.separator + "3rdparty");
+        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isDirectory();
+            }
+        });
+        Collections.addAll(libDirs, thirdpartyDirs);
+
+
         for (File libDir : libDirs) {
             File[] libJars = libDir.listFiles(new FilenameFilter() {
                 @Override
