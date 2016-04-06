@@ -527,7 +527,7 @@ $comp.getAttributeValue("index")
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
 #set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 <td align="left">
-<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.svg" border="0"/></a>
 </td>
 <td align="right">
 #if ( $logoString.startsWith("/") )
@@ -538,7 +538,7 @@ $comp.getAttributeValue("index")
 </td>
 #else
 <td colspan="2">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.svg" border="0"/></a>
 </td>
 #end
 #end
