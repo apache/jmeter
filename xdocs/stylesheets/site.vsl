@@ -488,7 +488,7 @@ $node.getText()
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
 #set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 <td width="10%">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.svg" border="0"/></a>
 </td>
 <td align="left" width="40%">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -500,7 +500,7 @@ $node.getText()
 </td>
 #else
 <td colspan="2">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="$imgdir/asf-logo.svg" border="0"/></a>
 </td>
 #end
 #end

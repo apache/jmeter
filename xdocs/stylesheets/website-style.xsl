@@ -75,7 +75,7 @@
           <div>
             <a href="http://www.apache.org">
               <img title="Apache Software Foundation" class="logo"
-                  src="{$imgdir}/asf-logo.png" alt="Logo ASF" />
+                  src="{$imgdir}/asf-logo.svg" alt="Logo ASF" />
             </a>
           </div>
           <xsl:if test="$project/logo">
