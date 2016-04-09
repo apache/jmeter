@@ -156,70 +156,31 @@
                         The graph references in the templated
                         files use the syntax :
                         <code>${&lt;graph_id&gt;.&lt;value&gt;}</code> where :
-                        <ul>
-                            <li>"<code>graph_id</code>"
-                                is the identifier of the graph matching the jmeter
-                                properties
-                                definition</li>
-                            <li>"<code>value</code>" is the name of the value where data are stored.</li>
-                        </ul>
+                        <dl>
+                            <dt><code>graph_id</code></dt>
+                            <dd>is the identifier of the graph matching the jmeter
+                                properties definition</dd>
+                            <dt><code>value</code></dt>
+                            <dd>is the name of the value where data are stored.</dd>
+                        </dl>
                     </p>
                     <p>
                         Each graph produces the following values :
-                        <ul>
-                            <li>
-                                <p>
-                                    <code>maxX</code>
-                                    :
-                                    <br />
-                                    The maximum abscissa of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>maxY</code>
-                                    :
-                                    <br />
-                                    The maximum ordinate of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>minX</code>
-                                    :
-                                    <br />
-                                    The minimum abscissa of the graph
-                                    (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>minY</code>
-                                    :
-                                    <br />
-                                    The maximum ordinate
-                                    of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>title</code>
-                                    :
-                                    <br />
-                                    The
-                                    title of the graph (string).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>values</code>
-                                    :
-                                    <br />
-                                    A json object representing the data of the graph series
-                                    (string).
-                                </p>
-                            </li>
-                        </ul>
+                        <dl>
+                            <dt><code>maxX</code>:</dt>
+                            <dd>The maximum abscissa of the graph (double).</dd>
+                            <dt><code>maxY</code>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><code>minX</code>:</dt>
+                            <dd>The minimum abscissa of the graph (double).</dd>
+                            <dt><code>minY</code>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><code>title</code>:</dt>
+                            <dd>The title of the graph (string).</dd>
+                            <dt><code>values</code>:</dt>
+                            <dd>A json object representing the data of the graph series
+                                  (string).</dd>
+                        </dl>
                     </p>
                     <!-- <note> -->
                     <!-- Graph can provide some other values, see -->
