@@ -145,7 +145,7 @@
                         <a href="http://freemarker.org/">freemarker</a>
                         to produce html pages.
                         <br />
-                        Templated files are located in the template
+                        Template files are located in the template
                         directory defined by
                         the JMeter property
                         "<code>jmeter.reportgenerator.template_dir</code>"
@@ -153,12 +153,12 @@
                         the extension "<code>.fmkr</code>".
                     </p>
                     <p>
-                        The graph references in the templated
+                        The graph references in the template
                         files use the syntax :
                         <code>${&lt;graph_id&gt;.&lt;value&gt;}</code> where :
                         <dl>
                             <dt><code>graph_id</code></dt>
-                            <dd>is the identifier of the graph matching the jmeter
+                            <dd>is the identifier of the graph matching the JMeter
                                 properties definition</dd>
                             <dt><code>value</code></dt>
                             <dd>is the name of the value where data are stored.</dd>
@@ -178,7 +178,7 @@
                             <dt><code>title</code>:</dt>
                             <dd>The title of the graph (string).</dd>
                             <dt><code>values</code>:</dt>
-                            <dd>A json object representing the data of the graph series
+                            <dd>A JSON object representing the data of the graph series
                                   (string).</dd>
                         </dl>
                     </p>
@@ -195,15 +195,15 @@
                         template directory.
                     </p>
                     <p>
-                        If you want to add a graph to the dahsboard,
+                        If you want to add a graph to the dashboard,
                         you have to
                         <a href="#configure_graph">declare it among the JMeter properties</a>
-                        and use its references in the templated files.
+                        and use its references in the template files.
                     </p>
                     <p>If you want to remove
                         a graph from the dashboard, you must remove
                         all its references in
-                        the templated
+                        the template
                         files and clear JMeter
                         properties.</p>
                 </subsection>
