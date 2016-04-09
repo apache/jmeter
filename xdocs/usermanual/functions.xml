@@ -627,7 +627,7 @@ the comma after <code>7</code> is escaped.</note>
 
 <p>Examples:
 <source>${__Random(0,10)}</source> will return a random number between 0 and 10<br/>
-<source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in MYVAR. ${MYVAR} will contain the random number<br/>
+<source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in <code>MYVAR</code>. <code>${MYVAR}</code> will contain the random number<br/>
 </p>
 </component>
 
@@ -642,9 +642,9 @@ the comma after <code>7</code> is escaped.</note>
 </properties>
 <p>Examples:
 <source>${__RandomString(5)}</source> will return a random string of 5 characters which can be readable or not<br/>
-<source>${__RandomString(10,abcdefg)}</source> will return a random string of 10 characters pcked from <code>abcdefg</code> set, like cdbgdbeebd or adbfeggfad...<br/>
-<source>${__RandomString(6,a12zeczclk, MYVAR)}</source> will return a random string of 6 characters pcked from <code>a12zeczclk</code> set and store the result in MYVAR, MYVAR will contain
-string like 2z22ak or z11kce...<br/>
+<source>${__RandomString(10,abcdefg)}</source> will return a random string of 10 characters picked from <code>abcdefg</code> set, like <code>cdbgdbeebd</code> or <code>adbfeggfad</code>, &hellip;<br/>
+<source>${__RandomString(6,a12zeczclk, MYVAR)}</source> will return a random string of 6 characters picked from <code>a12zeczclk</code> set and store the result in <code>MYVAR</code>, <code>MYVAR</code> will contain
+string like <code>2z22ak</code> or <code>z11kce</code>, &hellip;<br/>
 </p>
 </component>
 
@@ -655,7 +655,7 @@ string like 2z22ak or z11kce...<br/>
 <properties>
 </properties>
 <p>Examples:
-<source>${UUID()}</source> will return UUIs with this format : c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd <br/>
+<source>${UUID()}</source> will return UUIs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
 </p>
 </component>
 
