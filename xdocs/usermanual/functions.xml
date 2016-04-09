@@ -407,7 +407,7 @@ The reference name is optional, but it must not be a valid integer.
 </component>
 
 <component index="&sect-num;.5.4b" name="__longSum">
-<description><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenver you know your values will not 
+<description><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenever you know your values will not 
 be in the interval -2147483648 to 2147483647.
 </p></description>
 
@@ -655,7 +655,7 @@ string like <code>2z22ak</code> or <code>z11kce</code>, &hellip;<br/>
 <properties>
 </properties>
 <p>Examples:
-<source>${UUID()}</source> will return UUIs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
+<source>${UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
 </p>
 </component>
 
@@ -1171,7 +1171,7 @@ i.intValue(); // or use i.longValue()
 
 <component index="&sect-num;.5.21" name="__evalVar">
 <description>
-    <p>The eval function returns the result of evaluating an expression stored in a variable.
+    <p>The evalVar function returns the result of evaluating an expression stored in a variable.
     </p>
     <p>
     This allows one to read a string from a file, and process any variable references in it.
