@@ -424,7 +424,6 @@ jmeter.reportgenerator.apdex_tolerated_threshold=3000
 # jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
 
 # Indicates which graph series are filtered (regular expression)
-# Indicates which graph series are filtered (regular expression)
 # In the below example we filter on Sample1 and Sample2
 # Note that the end of the pattern should always include (-success|-failure)? 
 # Transactions per second suffixes Transactions with "-success" or "-failure" depending 
