@@ -41,7 +41,7 @@ You can then import the project using
     <guimenuitem>File</guimenuitem>
     <guimenuitem>Import</guimenuitem>
     <guimenuitem>Existing projects into Workspace</guimenuitem>
-</menuchoice> and select the folder containing jmeter sources.
+</menuchoice> and select the folder containing JMeter sources.
 
 <h4>Option 2 : Setting up Eclipse project manually</h4> 
 The first step is to download dependencies by running the Ant command:</p>
@@ -106,7 +106,7 @@ Check that patch does not break JUnit tests by running:
     <li>Create a branch using for example bugzilla id: <source>git branch BUGID</source></li>
     <li>Checkout the new branch : <source>git checkout BUGID</source></li>
     <li>commit your fix there : <source>git commit -m 'Fix to BUGID' list of files</source></li>
-    <li>Add jmeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
+    <li>Add JMeter repository as upstream : <source>git remote add upstream http://www.github.com/apache/jmeter</source></li>
     <li>push it : <source>git push origin BUGID</source></li>
     <li>Create a PR and link it in the bugzilla issue</li>
 </ul>
