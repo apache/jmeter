@@ -441,7 +441,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     <p>
                         This configuration allows to generate a report where:
                         <ul>
-                            <li>Over time graphs have a time granularity equals to 1 minute.</li>
+                            <li>Over time graphs have a time granularity equal to 1 minute.</li>
                             <li>The satisfaction threshold for ADPEX calculation is 1 second and half.</li>
                             <li>The tolerance threshold for ADPEX calculation is 3 seconds.</li>
                             <li>The HTML files are generated in the directory <code>/tmp/test-report</code>.</li>

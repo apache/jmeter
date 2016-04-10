@@ -244,7 +244,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     </li>
     <li><code>org.apache.jmeter.protocol.http.visualizers.RequestViewHTTP.getQueryMap</code> signature has changed, if you use it ensure you update your code. See <bugzilla>58845</bugzilla></li>
     <li><code>__jexl</code> function (i.e. JEXL 1) has been deprecated and will be removed in next version. See <bugzilla>58903</bugzilla></li>
-    <li>JMS Subscriber will consider a sample to be in error if number of received messages is not equals to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
+    <li>JMS Subscriber will consider a sample to be an error if number of received messages is not equal to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
     <li>Since version 3.0, HTTP(S) Test Script recorder uses default port <code>8888</code> as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
     <li>Since version 3.0, the parser for embedded resources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped along with its dependencies.</li>
     <li>Since version 3.0, the support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>
