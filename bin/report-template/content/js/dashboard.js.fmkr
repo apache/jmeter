@@ -154,7 +154,7 @@ $(document).ready(function() {
                 break;
         }
         return item;
-    }, [[3, 1]], 0);
+    }, [[0, 0]], 0);
 
     // Create error table
     createTable($("#errorsTable"), ${errorsSummary!"{}"}, function(index, item){
