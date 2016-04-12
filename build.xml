@@ -2347,7 +2347,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${src.css}"/>
     </copy>
     <copy todir="${dest.docs}/images">
-      <fileset dir="${src.images}" excludes="logo.xcf,logo.svg"/>
+      <fileset dir="${src.images}" excludes="logo.xcf"/>
     </copy>
     <copy todir="${dest.printable_docs}/demos">
       <fileset dir="${src.demos}"/>
