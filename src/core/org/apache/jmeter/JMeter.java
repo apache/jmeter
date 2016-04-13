@@ -1081,7 +1081,12 @@ public class JMeter implements JMeterPlugin {
             long now = System.currentTimeMillis();
             println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
             checkForRemainingThreads();
-            generateReport();
+            try {
+                generateReport();
+            } catch (Exception e) {
+                System.err.println("Error generating the report: "+e);
+                log.error("Error generating the report",e);
+            }
             println("... end of run");
         }
 
