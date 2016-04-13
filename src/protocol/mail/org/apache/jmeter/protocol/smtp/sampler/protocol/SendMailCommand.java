@@ -302,16 +302,18 @@ public class SendMailCommand {
         } else {
             tr.connect();
         }
+        
+        try {
+            tr.sendMessage(message, message.getAllRecipients());
 
-        tr.sendMessage(message, message.getAllRecipients());
-
-        if (listener != null /*synchronousMode==true*/) {
-            listener.attend(); // listener cannot be null here
+            if (listener != null /*synchronousMode==true*/) {
+                listener.attend(); // listener cannot be null here
+            }
+        } finally {
+            tr.close();
+            logger.debug("transport closed");
         }
-
-        tr.close();
-        logger.debug("transport closed");
-
+        
         logger.debug("message sent");
         return;
     }
