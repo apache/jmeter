@@ -40,7 +40,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
-    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT = "Percentile %d";
+    private static final String RESPONSE_TIME_PER_SAMPLE_SERIES_FORMAT = "%dth percentile";
 
     /**
      * Instantiates a new response time per sample graph consumer.
