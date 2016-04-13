@@ -1080,9 +1080,9 @@ public class JMeter implements JMeterPlugin {
         public void testEnded() {
             long now = System.currentTimeMillis();
             println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
-            println("... end of run");
-            generateReport();
             checkForRemainingThreads();
+            generateReport();
+            println("... end of run");
         }
 
         @Override
