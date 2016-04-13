@@ -64,7 +64,7 @@
     The sample results have various attributes (success/fail, elapsed time, data size etc.) and can be viewed in the various listeners.
     </p>
 </description>
-<component name="FTP Request" index="&sect-num;.1.1" width="861" height="278" screenshot="ftptest/ftp-request.png">
+<component name="FTP Request" index="&sect-num;.1.1" width="911" height="274" screenshot="ftptest/ftp-request.png">
 <description>
 This controller lets you send an FTP "retrieve file" or "upload file" request to an FTP server.
 If you are going to send multiple requests to the same FTP server, consider
@@ -4005,7 +4005,7 @@ header table entries.</property>
 that tells JMeter to override the default "<code>User-Agent</code>" request header and use a particular Internet Explorer agent string
 instead. (see figures 12 and 13).</p>
 
-<figure width="247" height="121" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure width="266" height="117" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
 <figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
@@ -4660,7 +4660,7 @@ props.put("PROP1","1234");</source></li>
 </ul>
 </component>
 
-<component name="MD5Hex Assertion" index="&sect-num;.5.6" width="411" height="149" screenshot="assertion/MD5HexAssertion.png">
+<component name="MD5Hex Assertion" index="&sect-num;.5.6" width="398" height="130" screenshot="assertion/MD5HexAssertion.png">
 <description><p>The MD5Hex Assertion allows the user to check the MD5 hash of the response data.</p></description>
 
 <properties>
@@ -4670,7 +4670,7 @@ props.put("PROP1","1234");</source></li>
 </properties>
 </component>
 
-<component name="HTML Assertion" index="&sect-num;.5.7"  width="464" height="384" screenshot="assertion/HTMLAssertion.png">
+<component name="HTML Assertion" index="&sect-num;.5.7"  width="505" height="341" screenshot="assertion/HTMLAssertion.png">
 <description><p>The HTML Assertion allows the user to check the HTML syntax of the response data using JTidy.</p></description>
 
 <properties>
@@ -4842,7 +4842,7 @@ If an error is detected, the script should use <code>AssertionResult.setFailureM
 <p>For further details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
-<component name="Compare Assertion" index="&sect-num;.5.12"  width="292" height="296" screenshot="assertion/compare.png">
+<component name="Compare Assertion" index="&sect-num;.5.12"  width="580" height="302" screenshot="assertion/compare.png">
 <description>
 <note>
 Compare Assertion <b>must not be used</b> during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
@@ -5195,7 +5195,7 @@ to the random delay.</property>
         Preprocessors are used to modify the Samplers in their scope.
     <br></br>
     </description>
-<component name="HTML Link Parser" index="&sect-num;.7.1" width="239" height="113" screenshot="html_link_parser.png" anchor="html_link_parser">
+<component name="HTML Link Parser" index="&sect-num;.7.1" width="373" height="79" screenshot="html_link_parser.png" anchor="html_link_parser">
 <description>
 <p>This modifier parses HTML response from the server and extracts
 links and forms.  A URL test sample that passes through this modifier will be examined to
@@ -5243,7 +5243,7 @@ anything, the modifier will probably have a list of radio buttons to choose from
 will choose at random, and replace the value in your URL test sample.  Each time through
 the test, a new random value will be chosen.</p>
 
-<figure width="755" height="325" image="modification.png">Figure 18 - Online Poll Example</figure>
+<figure width="1250" height="493" image="modification.png">Figure 18 - Online Poll Example</figure>
 
 <note>One important thing to remember is that you must create a test sample immediately
 prior that will return an HTML page with the links and forms that are relevant to
@@ -5558,7 +5558,7 @@ can be set to <code>true</code> to use a separate Runnable thread instead of the
     after all Assertions have been run.
     </p>
     </description>
-<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="790" height="276" screenshot="regex_extractor.png">
+<component name="Regular Expression Extractor" index="&sect-num;.8.1"  width="1127" height="277" screenshot="regex_extractor.png">
 <description><p>Allows the user to extract values from a server response using a Perl-type regular expression.  As a post-processor,
 this element will execute after each Sample request in its scope, applying the regular expression, extracting the requested values,
 generate the template string, and store the result into the given variable name.</p></description>
@@ -6098,7 +6098,7 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 </description>
 </component>
 
-<component name="Thread Group" index="&sect-num;.9.2"  width="583" height="447" screenshot="threadgroup.png">
+<component name="Thread Group" index="&sect-num;.9.2"  width="706" height="407" screenshot="threadgroup.png">
 <description>
 <p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
@@ -6240,7 +6240,7 @@ Your WorkBench can be saved independently, if you like (right-click on <code>Wor
 </p>
 </component>
 
-<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="917" height="622" screenshot="proxy_control.png">
+<component name="HTTP(S) Test Script Recorder" was="HTTP Proxy Server" index="&sect-num;.9.5"  width="1052" height="694" screenshot="proxy_control.png">
 <description><p>The HTTP(S) Test Script Recorder allows JMeter to intercept and record your actions while you browse your web application
 with your normal browser.  JMeter will create test sample objects and store them
 directly into your test plan as you go (so you can view samples interactively while you make them).<br/>
@@ -6666,7 +6666,7 @@ For more details see "Extending JMeter".
 </p>
 </component>
 
-<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="671" height="174" screenshot="mirrorserver.png">
+<component name="HTTP Mirror Server" index="&sect-num;.9.6"  width="794" height="157" screenshot="mirrorserver.png">
 <description>
 <p>
 The HTTP Mirror Server is a very simple HTTP server - it simply mirrors the data sent to it.
@@ -6771,7 +6771,7 @@ This is done by default since JMeter 2.13.
 </note>
 </component>
 
-<component name="setUp Thread Group" index="&sect-num;.9.10" width="537" height="289" screenshot="setup_thread_group.png">
+<component name="setUp Thread Group" index="&sect-num;.9.10" width="678" height="377" screenshot="setup_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Pre-Test Actions.  The behavior of these threads
@@ -6781,7 +6781,7 @@ This is done by default since JMeter 2.13.
 </description>
 </component>
 
-<component name="tearDown Thread Group" index="&sect-num;.9.11" width="537" height="289" screenshot="teardown_thread_group.png">
+<component name="tearDown Thread Group" index="&sect-num;.9.11" width="677" height="379" screenshot="teardown_thread_group.png">
 <description>
     <p>
     A special type of ThreadGroup that can be utilized to perform Post-Test Actions.  The behavior of these threads
@@ -6794,7 +6794,7 @@ Note that by default it won't run if Test is gracefully shutdown, if you want to
 ensure you check option "<code>Run tearDown Thread Groups after shutdown of main threads</code>" on Test Plan element.
 If Test Plan is stopped, tearDown will not run even if option is checked.
 </note>
-<figure width="1081" height="570" image="tear_down_on_shutdown.png">Figure 1 - Run tearDown Thread Groups after shutdown of main threads</figure>
+<figure width="1130" height="486" image="tear_down_on_shutdown.png">Figure 1 - Run tearDown Thread Groups after shutdown of main threads</figure>
 </component>
 
 <a href="#">^</a>
