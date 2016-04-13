@@ -946,7 +946,7 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
 
 
 
-<component name="Access Log Sampler" index="&sect-num;.1.9"  width="613" height="318" screenshot="accesslogsampler.png">
+<component name="Access Log Sampler" index="&sect-num;.1.9"  width="702" height="305" screenshot="accesslogsampler.png">
 <center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
@@ -1231,7 +1231,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 </ul>
 </component>
 
-<component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="846" height="630" screenshot="jsr223-sampler.png">
+<component name="JSR223 Sampler" index="&sect-num;.1.11.1" width="861" height="502" screenshot="jsr223-sampler.png">
 <description>
 <p>
 The JSR223 Sampler allows JSR223 script code to be used to perform a sample.
@@ -2034,7 +2034,7 @@ following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Pa
 <p>
 Note, the File Reporter
 is configured to store the results in a file named "<code>simple-test.dat</code>" in the current directory.</p>
-<figure width="546" height="222" image="logic-controller/simple-example.png">Figure 6 Simple Controller Example</figure>
+<figure width="585" height="213" image="logic-controller/simple-example.png">Figure 6 Simple Controller Example</figure>
 
 </example>
 </component>
@@ -2065,7 +2065,7 @@ count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure width="548" height="160" image="logic-controller/loop-example.png">Figure 4 - Loop Controller Example</figure>
+<figure width="50-" height="158" image="logic-controller/loop-example.png">Figure 4 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -2106,7 +2106,7 @@ In this example, we created a Test Plan that has two threads that send HTTP requ
 Each thread sends one request to the Home Page, followed by three requests to the Bug Page.
 Although we configured the Thread Group to iterate three times, each JMeter thread only
 sends one request to the Home Page because this request lives inside a Once Only Controller.</p>
-<figure width="348" height="131" image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
+<figure width="233" height="138" image="logic-controller/once-only-example.png">Figure 5. Once Only Controller Example</figure>
 <p>Each JMeter thread will send the requests in the following order: Home Page, Bug Page,
 Bug Page, Bug Page.</p>
 <p>Note, the File Reporter is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
@@ -2146,7 +2146,7 @@ Group to loop, here is the sequence in which JMeter sends the requests:
 we configured the Thread Group to have two threads and a loop count of five, for a total of ten
 requests per thread. See the table below for the sequence JMeter sends the HTTP Requests.</p>
 
-<figure width="336" height="153" image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
+<figure width="231" height="153" image="logic-controller/interleave.png">Figure 1 - Interleave Controller Example 1</figure>
 
 <table border="1" cellspacing="0" cellpadding="4">
 <tr valign="top"><th>Loop Iteration</th><th>Each JMeter Thread Sends These HTTP Requests</th></tr>
@@ -2172,7 +2172,7 @@ example, we configured the Thread Group
 to have a single thread and a loop count of eight.  Notice that the Test Plan has an outer Interleave Controller with
 two Interleave Controllers inside of it.</p>
 
-<figure width="207" height="249" image="logic-controller/interleave2.png">
+<figure width="251" height="250" image="logic-controller/interleave2.png">
         Figure 2 - Interleave Controller Example 2
 </figure>
 
@@ -2181,7 +2181,7 @@ two inner ones.  Then, each inner Interleave Controller alternates between each 
 thread will send the requests in the following order: Home Page, Interleaved, Bug Page, Interleaved, CVS Page, Interleaved, and FAQ Page, Interleaved.</p>
 <p>Note, the File Reporter is configured to store the results in a file named "<code>interleave-test2.dat</code>" in the current directory.</p>
 
-<figure width="204" height="247" image="logic-controller/interleave3.png">
+<figure width="257" height="253" image="logic-controller/interleave3.png">
         Figure 3 - Interleave Controller Example 3
 </figure>
 <p>If the two interleave controllers under the main interleave controller were instead simple controllers, then the order would be: Home Page, CVS Page, Interleaved, Bug Page, FAQ Page, Interleaved.</p>
@@ -2427,7 +2427,7 @@ This would be the case if the Regular Expression returned no matches.</note>
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request to every link that can be found on the page.</p>
 
-<figure width="246" height="154" image="logic-controller/foreach-example.png">Figure 7 - ForEach Controller Example</figure>
+<figure width="300" height="158" image="logic-controller/foreach-example.png">Figure 7 - ForEach Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. You can see that we added one HTTP Request to the Thread Group and
@@ -2441,7 +2441,7 @@ out of the return page and puts them in the <code>inputVar</code> variable</p>
 This has two Regular Expressions and ForEach Controllers.
 The first RE matches, but the second does not match, 
 so no samples are run by the second ForEach Controller</p>
-<figure width="198" height="253" image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
+<figure width="237" height="249" image="logic-controller/foreach-example2.png">Figure 8 - ForEach Controller Example 2</figure>
 <p>The Thread Group has a single thread and a loop count of two.
 </p><p>
 Sample 1 uses the JavaTest Sampler to return the string "<code>a b c d</code>".
@@ -2457,7 +2457,7 @@ which clearly won't match. Thus the <code>For 2</code> Sampler will not be run.
 </example>
 </component>
 
-<component name="Module Controller" index="&sect-num;.2.13" width="504" height="217" screenshot="module_controller.png">
+<component name="Module Controller" index="&sect-num;.2.13" width="526" height="318" screenshot="module_controller.png">
 <description>
 <p>
 The Module Controller provides a mechanism for substituting test plan fragments into the current test plan at run-time.
@@ -2609,7 +2609,7 @@ by only one thread as a named lock will be taken before executing children of co
         <li><code>DS2-${__threadNum}</code> is executed only by one thread at a time</li>
         <li><code>DS4-${__threadNum}</code> is executed only by one thread at a time</li>
     </ul>
-<figure width="248" height="241" image="logic-controller/critical-section-controller-tp.png">Test Plan using Critical Section Controller</figure>
+<figure width="276" height="237" image="logic-controller/critical-section-controller-tp.png">Test Plan using Critical Section Controller</figure>
 
 <properties>
         <property name="Lock Name" required="Yes">Lock that will be taken by controller, ensure you use different lock names for unrelated sections</property>
@@ -2814,7 +2814,7 @@ are part of the test plan.</p></description>
 </links>
 </component>
 
-<component name="View Results Tree" index="&sect-num;.3.6" width="901" height="646" screenshot="view_results_tree.png">
+<component name="View Results Tree" index="&sect-num;.3.6" width="910" height="659" screenshot="view_results_tree.png">
 <description>
 <note>
 View Results Tree MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
@@ -2958,9 +2958,9 @@ compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ex
     Figure 9b (below) shows an example of an Document display.<br/>
 </p>
     <div align="center">
-<figure width="873" height="653" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
-<figure width="858" height="643" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
-<figure width="961" height="623" image="view_results_tree_document.png">Figure 9b Sample Document (here PDF) display</figure>
+<figure width="903" height="657" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
+<figure width="904" height="653" image="view_results_tree_regex.png">Figure 9a Sample Regexp Test display</figure>
+<figure width="849" height="655" image="view_results_tree_document.png">Figure 9b Sample Document (here PDF) display</figure>
 </div>
 </component>
 
@@ -3419,7 +3419,7 @@ vars.getObject("OBJ2");</source></dd>
 <p>For details of all the methods available on each of the above variables, please check the Javadoc</p>
 </component>
 
-<component name="Generate Summary Results" index="&sect-num;.3.19"  width="358" height="131" screenshot="summary.png">
+<component name="Generate Summary Results" index="&sect-num;.3.19"  width="364" height="76" screenshot="summary.png">
     <description>This test element can be placed anywhere in the test plan.
 Generates a summary of the test run so far to the log file and/or 
 standard output. Both running and differential totals are shown.
@@ -3791,7 +3791,7 @@ a username and password (see figure 11).  The two HTTP requests named "<code>Sec
 to "<code>/secret/index.html</code>" and "<code>/secret/index2.html</code>".  The other HTTP request, named "<code>NoSecretPage</code>" makes a request to
 "<code>/index.html</code>".</p>
 
-<figure width="289" height="201" image="http-config/auth-manager-example1a.gif">Figure 10 - Test Plan</figure>
+<figure width="452" height="177" image="http-config/auth-manager-example1a.png">Figure 10 - Test Plan</figure>
 <figure width="641" height="329" image="http-config/auth-manager-example1b.png">Figure 11 - Authorization Manager Control Panel</figure>
 
 <p>When we run the Test Plan, JMeter looks in the Authorization table for the URL it is requesting.  If the Base URL matches
@@ -3842,7 +3842,7 @@ This may cause problems for Assertions.
 </properties>
 </component>
 
-<component name="HTTP Cookie Manager" index="&sect-num;.4.6"  width="513" height="383" screenshot="http-config/http-cookie-manager.png">
+<component name="HTTP Cookie Manager" index="&sect-num;.4.6"  width="653" height="373" screenshot="http-config/http-cookie-manager.png">
 
 <note>If there is more than one Cookie Manager in the scope of a Sampler,
 there is currently no way to specify which one is to be used.
@@ -3914,7 +3914,7 @@ cookie table entries.</property>
 
 </component>
 
-<component name="HTTP Request Defaults" index="&sect-num;.4.7" width="853" height="463" 
+<component name="HTTP Request Defaults" index="&sect-num;.4.7" width="879" height="469" 
          screenshot="http-config/http-request-defaults.png">
 <description><p>This element lets you set default values that your HTTP Request controllers use.  For example, if you are
 creating a Test Plan with 25 HTTP Request controllers and all of the requests are being sent to the same server,
@@ -3925,6 +3925,7 @@ this field value from the HTTP Request Defaults element.</p>
 All port values are treated equally; a sampler that does not specify a port will use the HTTP Request Defaults port, if one is provided.
 </note>
 </description>
+<figure width="881" height="256" image="http-config/http-request-defaults-advanced-tab.png">HTTP Request Advanced config fields</figure>
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
@@ -4004,7 +4005,7 @@ header table entries.</property>
 that tells JMeter to override the default "<code>User-Agent</code>" request header and use a particular Internet Explorer agent string
 instead. (see figures 12 and 13).</p>
 
-<figure width="203" height="141" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure width="247" height="121" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
 <figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
