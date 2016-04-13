@@ -603,7 +603,7 @@ public final class JOrphanUtils {
             }
         } else {
             // check we can create it
-            if(!folder.getParentFile().canWrite()) {
+            if(!folder.getAbsoluteFile().getParentFile().canWrite()) {
                 throw new IllegalArgumentException("Cannot write to '"
                         +folder.getAbsolutePath()+"' as folder does not exist and parent folder is not writable");
             }
