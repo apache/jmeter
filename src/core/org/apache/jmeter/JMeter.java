@@ -495,7 +495,7 @@ public class JMeter implements JMeterPlugin {
                     if(reportAtEndOpt != null) {
                         if(jtlFile == null) {
                             throw new IllegalUserActionException(
-                                "Option -"+String.valueOf(REPORT_AT_END_OPT)+" requires -"+String.valueOf(LOGFILE_OPT )+ " option");
+                                "Option -"+ ((char)REPORT_AT_END_OPT)+" requires -"+((char)LOGFILE_OPT )+ " option");
                         }
                     }
                     startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
