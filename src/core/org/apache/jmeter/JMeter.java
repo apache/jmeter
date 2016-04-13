@@ -494,7 +494,8 @@ public class JMeter implements JMeterPlugin {
                     CLOption reportAtEndOpt = parser.getArgumentById(REPORT_AT_END_OPT);
                     if(reportAtEndOpt != null) {
                         if(jtlFile == null) {
-                            throw new IllegalUserActionException("Option -"+REPORT_AT_END_OPT+" requires -"+LOGFILE_OPT + " option");
+                            throw new IllegalUserActionException(
+                                "Option -"+String.valueOf(REPORT_AT_END_OPT)+" requires -"+String.valueOf(LOGFILE_OPT )+ " option");
                         }
                     }
                     startNonGui(testFile, jtlFile, rem, reportAtEndOpt != null);
