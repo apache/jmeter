@@ -18,9 +18,11 @@
 package org.apache.jmeter.report.dashboard;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
@@ -110,7 +112,8 @@ public class TemplateVisitor extends SimpleFileVisitor<Path> {
             Template template = configuration.getTemplate(templatePath);
             Path newPath = target.resolve(FilenameUtils
                     .removeExtension(templatePath));
-            try (Writer writer = new FileWriter(newPath.toString());
+            try (FileOutputStream stream = new FileOutputStream(newPath.toString());
+                    Writer writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
                     BufferedWriter bufferedWriter = new BufferedWriter(writer)){
                 template.process(data, bufferedWriter);
             } catch (TemplateException ex) {
