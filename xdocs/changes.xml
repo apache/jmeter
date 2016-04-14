@@ -361,6 +361,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
   <li><bug>58848</bug>Argument Panel : when adding an argument (add button or from clipboard) scroll the table to the new line. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
   <li><bug>58865</bug>Allow empty default value in the Regular Expression Extractor. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
   <li><bug>59156</bug>XMLAssertion : drop jdom dependency by using XMLReader</li>
+  <li><bug>59328</bug>Better tooltip for Variable Names in CSVDataSet. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li> 
 </ul>
 
 <h3>Functions</h3>
