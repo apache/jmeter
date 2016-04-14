@@ -413,6 +413,10 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
 # Change this parameter if you want to change the granularity of over time graphs.
 jmeter.reportgenerator.overall_granularity=60000
 
+ Change this parameter if you want to change the granularity of Response time distribution
+# Set to 500 ms by default
+#jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity=500
+
 # Change this parameter if you want to override the APDEX satisfaction threshold.
 jmeter.reportgenerator.apdex_statisfied_threshold=1500
 
