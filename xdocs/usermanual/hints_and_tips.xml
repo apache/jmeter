@@ -103,17 +103,19 @@ will match any component that contains test in searchable elements of the compon
 <description>
     <p>
     The HiDPI mode isn't currently support by Java Virtual Machine 7 or 8 on Linux or Windows, so JMeter with a HiDPI screen
-    can be very hard to see (little icons and chars).<br></br>
-    You can improve the JMeter's display on HiDPI screen by changing some properties:<br></br>
-    <source>jmeter.hidpi.mode</source>
-    set to <code>true</code> to activate a 'pseudo'-hidpi mode allowing to increase size of some UI elements
-    <source>jmeter.hidpi.scale.factor</source>
-    set to <code>2.0</code> to scale the size of some UI elements
-    <source>jmeter.toolbar.icons.size</source>
-    with these values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code>(Suggest value for HiDPI),
-    <source>jmeter.tree.icons.size</source>
-    with these values: <code>19x19</code> (default size),  <code>24x24</code>, <code>32x32</code> (Suggest value for HiDPI) or <code>48x48</code>,
+    can be very hard to see (little icons and chars).
     </p>
+    <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
+    <dl>
+      <dt><code>jmeter.hidpi.mode</code></dt>
+      <dd>set to <code>true</code> to activate a 'pseudo'-hidpi mode allowing to increase size of some UI elements</dd>
+      <dt><code>jmeter.hidpi.scale.factor</code></dt>
+      <dd>set to <code>2.0</code> to scale the size of some UI elements</dd>
+      <dt><code>jmeter.toolbar.icons.size</code></dt>
+      <dd>with these values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code> (Suggested value for HiDPI)</dd>
+      <dt><code>jmeter.tree.icons.size</code></dt>
+      <dd>with these values: <code>19x19</code> (default size), <code>24x24</code>, <code>32x32</code> (Suggested value for HiDPI) or <code>48x48</code></dd>
+    </dl>
 </description>
 </subsection>
 
