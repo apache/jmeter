@@ -650,8 +650,7 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
         // if the displayName is the empty string, leave it like that.
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.TRAILING);
-        text = propertyToolTipMessage.format(new Object[] { desc.getName(), desc.getShortDescription() });
-        label.setToolTipText(text);
+        label.setToolTipText(propertyToolTipMessage.format(new Object[] { desc.getShortDescription() }));
 
         return label;
     }
