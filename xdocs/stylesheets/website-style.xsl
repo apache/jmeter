@@ -67,9 +67,9 @@
         ></link>
         <link rel="apple-touch-icon-precomposed" href="{$imgdir}/apple-touch-icon.png"></link>
         <link rel="icon" href="{$imgdir}/favicon.png"></link>
-        <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="{$imgdir}/mstile-144x144.png">
-        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="msapplication-TileImage" content="{$imgdir}/mstile-144x144.png" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body role="document">
         <a href="#content" class="hidden" >Main content</a>
