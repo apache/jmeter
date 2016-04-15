@@ -66,11 +66,11 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 <figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure></p>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
-<ch_title>JSR223 Test Element do not require a Cache Compilation Key anymore, just check cache checkbox </ch_title>
-
+<ch_title>JSR223 Test Elements do not require a Cache Compilation Key anymore</ch_title>
+<p>Just check <code>Cache compiled script if available</code> checkbox and the elements (Pre-Processor, Post-Processor, Assertions, Listeners...) will pre-compile the script if underlying language supports it and cache the compiled code</p>
 <figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
 <ch_title>Nashorn can now be used as Javascript engine providing better performance and easier usage</ch_title>
-To enable it you need to set in <code>user.properties</code>:
+To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
 <source>javascript.use_rhino=false</source>
 <p>Nashorn can be used with Java 8 in the following elements:
 <ul>
@@ -84,7 +84,7 @@ To enable it you need to set in <code>user.properties</code>:
 JEXL is a language very similar to JSTL. 
 <ch_title>Simplified HTTP Request UI</ch_title>
 <p>A new "<code>Advanced</code>" tab has been added to HTTP Request to simplify configuration. The file upload feature has been moved into a dedicated tab.
-This has increased the size available for parameters in UI.</p>
+This increases the space available for parameters in UI and simplifies the UX.</p>
 <figure width="895" height="674" image="changes/3.0/http_request_basic.png"></figure>
 <figure width="880" height="299" image="changes/3.0/http_request_advanced.png"></figure>
 
@@ -97,6 +97,34 @@ This has increased the size available for parameters in UI.</p>
 <ch_category>Reporting improvements</ch_category>
 
 <ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
+<p>An dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
+This report provides the following metrics:
+<ul>
+    <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
+    <li>A request summary graph showing the Success and failed transaction percentage</li>
+    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles</li>
+    <li>An error table providing a summary of all errors and their proportion in the total requests</li>
+    <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
+        <ul>
+            <li>Response times Over Time</li>
+            <li>Bytes throughput Over Time</li>
+            <li>Latencies Over Time</li>
+            <li>Hits per second</li>
+            <li>Response codes per second</li>
+            <li>Transactions per second</li>
+            <li>Response Time vs Request per second</li>
+            <li>Latency vs Request per second</li>
+            <li>Response times percentiles</li>
+            <li>Active Threads Over Time</li>
+            <li>Times vs Threads</li>
+            <li>Response Time Distribution</li>
+            <li>Response Time per Sample</li>
+        </ul>
+	</li>
+</ul>
+
+
+</p>
 <ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
 <ch_title>Summariser displays a more readable duration</ch_title>
 Now duration are display in the format <code>hours:minutes:seconds</code>
@@ -114,7 +142,7 @@ Generate Summary Results =  30596 in 00:03:29 =  146.4/s Avg:     0 Min:     0 M
 Generate Summary Results +   1661 in 00:00:10 =  166.1/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 50 Started: 50 Finished: 0
 Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%)
 </source>
-<ch_title>BackendListener now allows one to define sampler list as a regular expression</ch_title>
+<ch_title>BackendListener now allows you to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
 Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
 <figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
