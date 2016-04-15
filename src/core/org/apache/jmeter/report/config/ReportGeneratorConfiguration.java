@@ -67,6 +67,10 @@ public class ReportGeneratorConfiguration {
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "sample_filter";
 
+    // report title
+    private static final String REPORT_GENERATOR_KEY_REPORT_TITLE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "report_title";
+
     private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
     private static final String INVALID_KEY_FMT = "Invalid property \"%s\", skip it.";
@@ -256,7 +260,7 @@ public class ReportGeneratorConfiguration {
         void initialize(String subConfId, T subConfiguration)
                 throws ConfigurationException;
     }
-
+    private String reportTitle;
     private String sampleFilter;
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
@@ -623,6 +627,10 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
         configuration.setSampleFilter(sampleFilter);
 
+        final String reportTitle = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_REPORT_TITLE, String.class);
+        configuration.setReportTitle(reportTitle);
+
         // Find graph identifiers and load a configuration for each
         final Map<String, GraphConfiguration> graphConfigurations = configuration
                 .getGraphConfigurations();
@@ -648,5 +656,19 @@ public class ReportGeneratorConfiguration {
         LOG.debug(END_LOADING_MSG);
 
         return configuration;
+    }
+
+    /**
+     * @return the reportTitle
+     */
+    public String getReportTitle() {
+        return reportTitle;
+    }
+
+    /**
+     * @param reportTitle the reportTitle to set
+     */
+    public void setReportTitle(String reportTitle) {
+        this.reportTitle = reportTitle;
     }
 }

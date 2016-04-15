@@ -410,6 +410,9 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                     <p>You can copy the following configuration in your user.properties
                         file in order to test the report generator.</p>
                     <source>
+# Configure this property to change the report title
+#jmeter.reportgenerator.report_title=Apache JMeter Dashboard
+
 # Change this parameter if you want to change the granularity of over time graphs.
 jmeter.reportgenerator.overall_granularity=60000
 
