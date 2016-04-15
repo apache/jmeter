@@ -48,19 +48,19 @@ function formatDuration(duration, spaced) {
     // Add non zero part.
     var formatArray = [];
     if (days > 0)
-        formatArray.push(formatUnit(days, "day(s)", spaced));
+        formatArray.push(formatUnit(days, " day(s)", spaced));
 
     if (hours > 0)
-        formatArray.push(formatUnit(hours, "hour(s)", spaced));
+        formatArray.push(formatUnit(hours, " hour(s)", spaced));
 
     if (minutes > 0)
-        formatArray.push(formatUnit(minutes,"min", spaced));
+        formatArray.push(formatUnit(minutes," min", spaced));
 
     if (seconds > 0)
-        formatArray.push(formatUnit(seconds, "sec", spaced));
+        formatArray.push(formatUnit(seconds, " sec", spaced));
 
     if (duration > 0)
-        formatArray.push(formatUnit(duration, "ms", spaced));
+        formatArray.push(formatUnit(duration, " ms", spaced));
 
     // Build the string
     return formatArray.join(" ");
