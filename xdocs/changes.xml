@@ -455,6 +455,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>59240</bug>Introduce a slf4j adapter for Logkit (this allows using slf4j within plugins and core code)</li>
 <li><bug>59153</bug>Stop test if CSVDataSet is accessing non-existing file. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>59320</bug>Better tooltip in GUI with GenericTestBeanCustomizer (CSV Data Set Config, JDBC Connection Configuration, Keystore Configuration...) . Based on a patch by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+<li><bug>59171</bug>Sample Result SaveConfig Dialog is generated in random order</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
 <ul>
