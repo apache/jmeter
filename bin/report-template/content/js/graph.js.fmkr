@@ -251,7 +251,7 @@ var responseTimePercentilesInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x.2 was %y"
+                    content: "%s : %x.2 percentile was %y ms"
                 },
                 selection: { mode: "xy" },
             };
@@ -397,7 +397,7 @@ var activeThreadsOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : At %x there were %y active threads"
                 }
             };
         },
@@ -589,7 +589,7 @@ var timeVsThreadsInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x.2 was %y.2"
+                    content: "%s: At %x.2 active threads, Average response time was %y.2 ms"
                 }
             };
         },
@@ -663,7 +663,7 @@ var bytesThroughputOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s at %x was %y"
                 }
             };
         },
@@ -740,7 +740,7 @@ var responseTimesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : at %x Average response time was %y ms"
                 }
             };
         },
@@ -817,7 +817,7 @@ var latenciesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : at %x Average latency was %y ms"
                 }
             };
         },
@@ -872,7 +872,7 @@ var responseTimeVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Response Time",
+                axisLabel: "Median Response Time (ms)",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -891,7 +891,7 @@ var responseTimeVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s for %x was %y"
+                content: "%s : Median response time at %x req/s was %y ms"
             }
         };
     },
@@ -945,7 +945,7 @@ var latenciesVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Latency",
+                axisLabel: "Median Latency (ms)",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -960,7 +960,7 @@ var latenciesVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s for %x was %y"
+                content: "%s : Median response time at %x req/s was %y ms"
             }
         };
     },
@@ -1034,7 +1034,7 @@ var hitsPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y.2"
+                    content: "%s at %x was %y.2 hits/sec"
                 }
             };
         },
@@ -1111,7 +1111,7 @@ var codesPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y.2"
+                    content: "Number of Response Codes %s at %x was %y.2 responses / sec"
                 }
             };
         },
@@ -1188,7 +1188,7 @@ var transactionsPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s at %x was %y transactions / sec"
                 }
             };
         },
