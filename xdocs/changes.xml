@@ -174,7 +174,10 @@ In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</c
 </p>
 
 <ch_title>JDBC request now uses DBCP2 pool</ch_title>
-
+<p>JDBC Request and JDBC Connection Configuration have been updated to replace old Excalibur Pool by Apache Commons DBCP2 pool. As a consequence properties have been migrated to equivalent 
+when available and UI has been updated.
+<figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
+</p>
 <ch_category>UX Improvements:</ch_category>
 
 <ch_title>Better display in HiDPI screens</ch_title>
