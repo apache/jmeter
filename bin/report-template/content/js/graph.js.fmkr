@@ -26,10 +26,10 @@ $(document).ready(function() {
 
     // Ugly code while this script is shared among several pages
     try{
-        refreshHitsPerSecond();
+        refreshHitsPerSecond(true);
     } catch(e){}
     try{
-        refreshResponseTimeOverTime();
+        refreshResponseTimeOverTime(true);
     } catch(e){}
     try{
         refreshResponseTimePercentiles();
@@ -413,10 +413,12 @@ var activeThreadsOverTimeInfos = {
 };
 
 // Active Threads Over Time
-function refreshActiveThreadsOverTime() {
+function refreshActiveThreadsOverTime(fixTimestamps) {
     var infos = activeThreadsOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotActiveThreadsOverTime"))) {
         infos.createGraph();
     }else{
@@ -677,10 +679,12 @@ var bytesThroughputOverTimeInfos = {
 };
 
 // Bytes throughput Over Time
-function refreshBytesThroughputOverTime() {
+function refreshBytesThroughputOverTime(fixTimestamps) {
     var infos = bytesThroughputOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotBytesThroughputOverTime"))){
         infos.createGraph();
     }else{
@@ -752,10 +756,12 @@ var responseTimesOverTimeInfos = {
 };
 
 // Response Times Over Time
-function refreshResponseTimeOverTime() {
+function refreshResponseTimeOverTime(fixTimestamps) {
     var infos = responseTimesOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotResponseTimesOverTime"))){
         infos.createGraph();
     }else{
@@ -827,10 +833,12 @@ var latenciesOverTimeInfos = {
 };
 
 // Latencies Over Time
-function refreshLatenciesOverTime() {
+function refreshLatenciesOverTime(fixTimestamps) {
     var infos = latenciesOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotLatenciesOverTime"))) {
         infos.createGraph();
     }else {
@@ -1042,10 +1050,12 @@ var hitsPerSecondInfos = {
 };
 
 // Hits per second
-function refreshHitsPerSecond() {
+function refreshHitsPerSecond(fixTimestamps) {
     var infos = hitsPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if (isGraph($("#flotHitsPerSecond"))){
         infos.createGraph();
     }else{
@@ -1117,10 +1127,12 @@ var codesPerSecondInfos = {
 };
 
 // Codes per second
-function refreshCodesPerSecond() {
+function refreshCodesPerSecond(fixTimestamps) {
     var infos = codesPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotCodesPerSecond"))){
         infos.createGraph();
     }else{
@@ -1192,10 +1204,12 @@ var transactionsPerSecondInfos = {
 };
 
 // Transactions per second
-function refreshTransactionsPerSecond() {
+function refreshTransactionsPerSecond(fixTimestamps) {
     var infos = transactionsPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotTransactionsPerSecond"))){
         infos.createGraph();
     }else{
@@ -1218,12 +1232,12 @@ function collapse(elem, collapsed){
         $(elem).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
         if (elem.id == "bodyBytesThroughputOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshBytesThroughputOverTime();
+                refreshBytesThroughputOverTime(true);
             }
             document.location.href="#responseTimesOverTime";
         } else if (elem.id == "bodyLantenciesOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshLatenciesOverTime();
+                refreshLatenciesOverTime(true);
             }
             document.location.href="#latenciesOverTime";
         } else if (elem.id == "bodyResponseTimeDistribution") {
@@ -1233,7 +1247,7 @@ function collapse(elem, collapsed){
             document.location.href="#responseTimeDistribution" ;
         } else if (elem.id == "bodyActiveThreadsOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshActiveThreadsOverTime();
+                refreshActiveThreadsOverTime(true);
             }
             document.location.href="#activeThreadsOverTime";
         } else if (elem.id == "bodyResponseTimePerSample") {
@@ -1248,12 +1262,12 @@ function collapse(elem, collapsed){
             document.location.href="#timeVsThreads" ;
         } else if (elem.id == "bodyCodesPerSecond") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshCodesPerSecond();
+                refreshCodesPerSecond(true);
             }
             document.location.href="#codesPerSecond";
         } else if (elem.id == "bodyTransactionsPerSecond") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshTransactionsPerSecond();
+                refreshTransactionsPerSecond(true);
             }
             document.location.href="#transactionsPerSecond";
         } else if (elem.id == "bodyResponseTimeVsRequest") {
@@ -1302,19 +1316,19 @@ function toggleAll(id, checked){
     var choiceContainer;
     if ( id == "choicesBytesThroughputOverTime"){
         choiceContainer = $("#choicesBytesThroughputOverTime");
-        refreshBytesThroughputOverTime();
+        refreshBytesThroughputOverTime(false);
     } else if(id == "choicesResponseTimesOverTime"){
         choiceContainer = $("#choicesResponseTimesOverTime");
-        refreshResponseTimeOverTime();
+        refreshResponseTimeOverTime(false);
     } else if ( id == "choicesLatenciesOverTime"){
         choiceContainer = $("#choicesLatenciesOverTime");
-        refreshLatenciesOverTime();
+        refreshLatenciesOverTime(false);
     } else if ( id == "choicesResponseTimePercentiles"){
         choiceContainer = $("#choicesResponseTimePercentiles");
         refreshResponseTimePercentiles();
     } else if(id == "choicesActiveThreadsOverTime"){
         choiceContainer = $("#choicesActiveThreadsOverTime");
-        refreshActiveThreadsOverTime();
+        refreshActiveThreadsOverTime(false);
     } else if ( id == "choicesTimeVsThreads"){
         choiceContainer = $("#choicesTimeVsThreads");
         refreshTimeVsThreads();
@@ -1326,13 +1340,13 @@ function toggleAll(id, checked){
         refreshResponseTimePerSample();
     } else if ( id == "choicesHitsPerSecond"){
         choiceContainer = $("#choicesHitsPerSecond");
-        refreshHitsPerSecond();
+        refreshHitsPerSecond(false);
     } else if(id == "choicesCodesPerSecond"){
         choiceContainer = $("#choicesCodesPerSecond");
-        refreshCodesPerSecond();
+        refreshCodesPerSecond(false);
     } else if ( id == "choicesTransactionsPerSecond"){
         choiceContainer = $("#choicesTransactionsPerSecond");
-        refreshTransactionsPerSecond();
+        refreshTransactionsPerSecond(false);
     } else if ( id == "choicesResponseTimeVsRequest"){
         choiceContainer = $("#choicesResponseTimeVsRequest");
         refreshResponseTimeVsRequest();
