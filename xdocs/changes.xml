@@ -271,8 +271,6 @@ Deprecated Libraries dropped or replaced by up to date ones:
         <li>htmllexer-2.1.jar (see <bugzilla>59037</bugzilla>)</li>
         <li>htmlparser-2.1.jar (see <bugzilla>59037</bugzilla>)</li>
         <li>soap-2.3.1.jar</li>
-        <li>xmlpull-1.1.3.1.jar (see <bugzilla>58679</bugzilla>)</li>
-        <li>xpp3_min-1.1.4c.jar (see <bugzilla>58679</bugzilla>)</li>
         <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
     </ul>
     </li>
@@ -460,7 +458,6 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>59037</bug>Drop HtmlParserHTMLParser and dependencies on htmlparser and htmllexer</li>
 <li><bug>58465</bug>JMS Read response field is badly named and documented</li>
 <li><bug>58601</bug>Change check for modification of <code>saveservice.properties</code> from <code>SVN Revision ID</code> to sha1 sum of the file itself.</li>
-<li><bug>58679</bug>Replace the xpp pull parser in xstream with a java6+ standard solution. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58726</bug>Remove the <code>jmeterthread.startearlier</code> parameter. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58784</bug>Make <code>JMeterUtils#runSafe</code> sync/async awt invocation configurable and change the visualizers to use the async version.</li>
 <li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
