@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.JMeter;
@@ -64,6 +65,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
+    public static final String DATA_CTX_REPORT_TITLE = "reportTitle";
     public static final String DATA_CTX_TESTFILE = "testFile";
     public static final String DATA_CTX_BEGINDATE = "beginDate";
     public static final String DATA_CTX_ENDDATE = "endDate";
@@ -90,6 +92,12 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     // Default output folder name
     private static final String OUTPUT_DIR_NAME_DEFAULT = "report-output";
 
+    /**
+     * Adds to context the value surrounding it with quotes
+     * @param key Key
+     * @param value Value
+     * @param context {@link DataContext}
+     */
     private void addToContext(String key, Object value, DataContext context) {
         if (value instanceof String) {
             value = '"' + (String) value + '"';
@@ -449,6 +457,11 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         TimeZone timezone = TimeZone.getDefault();
         addToContext(DATA_CTX_TIMEZONE_OFFSET,
                 Integer.valueOf(timezone.getOffset(oldTimestamp)), dataContext);
+
+        // Add report title to the context
+        if(!StringUtils.isEmpty(configuration.getReportTitle())) {
+            dataContext.put(DATA_CTX_REPORT_TITLE, StringEscapeUtils.escapeHtml4(configuration.getReportTitle()));
+        }
 
         // Add the test file name to the context
         addToContext(DATA_CTX_TESTFILE, file.getName(), dataContext);
