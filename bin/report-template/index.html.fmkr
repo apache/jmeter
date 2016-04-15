@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>JMeter Dashboard</title>
+    <title>${reportTitle!"Apache JMeter Dashboard"}</title>
 
      <!-- Bootstrap Core CSS -->
     <link href="sbadmin2-1.0.7/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">JMeter Dashboard</a>
+                <a class="navbar-brand" href="index.html">${reportTitle!"Apache JMeter Dashboard"}</a>
             </div>
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
