@@ -92,7 +92,6 @@ This increases the space available for parameters in UI and simplifies the UX.</
 <p>You can now configure Source Address (IP Spoofing like feature) and "<code>Save response as MD5 hash</code>" in Advanced Tab
 <figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
 </p>
-<ch_title>Module Controller has been much improved</ch_title>
 
 <ch_category>Reporting improvements</ch_category>
 
@@ -118,7 +117,6 @@ This report provides the following metrics:
             <li>Active Threads Over Time</li>
             <li>Times vs Threads</li>
             <li>Response Time Distribution</li>
-            <li>Response Time per Sample</li>
         </ul>
 	</li>
 </ul>
@@ -181,6 +179,7 @@ In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</c
 
 <ch_title>Better display in HiDPI screens</ch_title>
 <ch_title>New Icon look and Logo</ch_title>
+<p>JMeter has a new Logo created by Felix Schumacher. Icons have also been refreshed to give a more modern style and make them more meaningful</p>
 <ch_title>Lots of fixes of annoying little bugs</ch_title>
 <p>Around 40 UI fixes have been made to either fix buggy, confusing behaviour or simplify usage by not allowing incompatible options to be selected</p>
 <ch_title>Improved Thread Group UI and related actions (<code>Start</code>, <code>Start No Timers</code>, <code>Validate</code>)</ch_title>
@@ -207,17 +206,22 @@ This validation mode can be customized.
 <li>Shortcuts to expand nodes</li>
 </ul>
 </p>
-
-<ch_category>Configuration simplification:</ch_category>
-<ch_title>Better defaults</ch_title>
-<ch_title>Groovy bundled with JMeter</ch_title>
-<ch_title>Superflous and old properties removed</ch_title>
-
 <ch_category>Core improvements</ch_category>
 
-<ch_title>Migration to Java7 source code and use of its syntactic sugar</ch_title>
-<ch_title>Full review of documentation and improvement both in content and presentation</ch_title>
-<ch_title>Major code cleanups</ch_title>
+<ch_title>Configuration simplification with better defaults</ch_title>
+<p>Default values for many properties have been modified to make JMeter configuration optimal Out of the box. Read "Incompatible changes" section for more details.</p>
+<ch_title>Apache Groovy bundled with JMeter</ch_title>
+<p><a href="http://www.groovy-lang.org/" target="_blank">Apache Groovy</a>, the well-known JVM scripting language, is now bundled with Apache JMeter in lib folder. 
+This allows you to use it immediately through JSR223 Elements by selecting the Groovy language.</p>
+<ch_title>Superflous and old properties removed</ch_title>
+<p>Old properties that existed to maintain backward compatibility or to offer some superflous customization have been removed.
+Read "Incompatible changes" section to see which properties have been removed.</p> 
+<ch_title>Code and documentation improvements</ch_title>
+<ul>
+<li>Migration to Java7 source code and use of its syntactic sugar</li>
+<li>Major code cleanups</li>
+<li>Full review of documentation and improvement both in content and presentation</li>
+</ul>
 <ch_title>Improvements to unit tests</ch_title>
 <p>
 <ul>
@@ -227,7 +231,6 @@ This validation mode can be customized.
 </ul>
 </p>
 <ch_title>Dependencies refresh</ch_title>
-<ch_title>Slf4j can now be used within Plugins and core code</ch_title>
 <p>
 Deprecated Libraries dropped or replaced by up to date ones:
 <ul>
@@ -237,6 +240,8 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li>jdom removed</li>
 </ul>
 </p>
+<ch_title>Slf4j can now be used within Plugins and core code</ch_title>
+<p>You can now use <a href="http://www.slf4j.org/" target="_blank">SLF4J</a> logging wrapper in your custom plugins or <code>org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient</code> subclasses.</p>
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
