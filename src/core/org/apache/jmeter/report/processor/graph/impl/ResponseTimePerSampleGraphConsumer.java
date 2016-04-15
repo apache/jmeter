@@ -35,8 +35,9 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * The class ResponseTimePerSampleGraphConsumer provides a graph to visualize
  * percentiles of response time for each sample name.
- *
+ * NOT USED FOR NOW as of 3.0
  * @since 3.0
+ * 
  */
 public class ResponseTimePerSampleGraphConsumer extends AbstractGraphConsumer {
 
