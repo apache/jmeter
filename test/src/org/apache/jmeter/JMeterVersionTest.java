@@ -58,6 +58,7 @@ public class JMeterVersionTest extends JMeterTestCase {
         JAR_TO_BUILD_PROP.put("mail", "javamail");
         JAR_TO_BUILD_PROP.put("oro", "jakarta-oro");
         JAR_TO_BUILD_PROP.put("xercesImpl", "xerces");
+        JAR_TO_BUILD_PROP.put("xpp3_min", "xpp3");
     }
 
     private static final File JMETER_HOME = new File(JMeterUtils.getJMeterHome());

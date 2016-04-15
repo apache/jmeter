@@ -266,6 +266,18 @@ xmlgraphics-commons-2.0.1 (org.apache.xmlgraphics.image.codec)
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
 
+xmlpull-1.1.3.1
+---------------
+http://www.xmlpull.org/impls.shtml
+- xstream
+
+
+xpp3_min-1.1.4c
+---------------
+http://x-stream.github.io/download.html
+or
+http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
+- xstream
 
 xstream-1.4.8
 -------------
