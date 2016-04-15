@@ -100,23 +100,23 @@ This increases the space available for parameters in UI and simplifies the UX.</
 This report provides the following metrics:
 <ul>
     <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
-    <li>A request summary graph showing the Success and failed transaction percentage</li>
-    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles</li>
-    <li>An error table providing a summary of all errors and their proportion in the total requests</li>
+    <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="changes/3.0/report_apdex_and_summary.png" ></figure></li>
+    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="13736" height="433" image="changes/3.0/report_statistics.png" ></figure></li>
+    <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="changes/3.0/report_errors.png" ></figure></li>
     <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
         <ul>
-            <li>Response times Over Time</li>
-            <li>Bytes throughput Over Time</li>
-            <li>Latencies Over Time</li>
-            <li>Hits per second</li>
-            <li>Response codes per second</li>
-            <li>Transactions per second</li>
-            <li>Response Time vs Request per second</li>
-            <li>Latency vs Request per second</li>
-            <li>Response times percentiles</li>
-            <li>Active Threads Over Time</li>
-            <li>Times vs Threads</li>
-            <li>Response Time Distribution</li>
+            <li>Response times Over Time : <figure width="1398" height="566" image="changes/3.0/report_response_times_over_time.png" ></figure></li>
+            <li>Bytes throughput Over Time : <figure width="1373" height="543" image="changes/3.0/report_bytes_throughput_over_time.png" ></figure></li>
+            <li>Latencies Over Time : <figure width="1373" height="547" image="changes/3.0/report_latencies_over_time.png" ></figure></li>
+            <li>Hits per second : <figure width="1375" height="552" image="changes/3.0/report_hits_per_second.png" ></figure></li>
+            <li>Response codes per second : <figure width="1380" height="558" image="changes/3.0/report_codes_per_second.png" ></figure></li>
+            <li>Transactions per second : <figure width="1372" height="577" image="changes/3.0/report_transactions_per_second.png" ></figure></li>
+            <li>Response Time vs Request per second : <figure width="1380" height="545" image="changes/3.0/report_response_time_vs_request.png" ></figure></li>
+            <li>Latency vs Request per second : <figure width="1373" height="543" image="changes/3.0/report_latencies_vs_request.png" ></figure></li>
+            <li>Response times percentiles : <figure width="1374" height="551" image="changes/3.0/report_response_time_percentiles.png" ></figure></li>
+            <li>Active Threads Over Time : <figure width="1370" height="542" image="changes/3.0/report_active_threads_over_time.png" ></figure></li>
+            <li>Times vs Threads : <figure width="1373" height="567" image="changes/3.0/report_time_vs_threads.png" ></figure></li>
+            <li>Response Time Distribution : <figure width="1373" height="549" image="changes/3.0/report_response_time_distribution.png" ></figure></li>
         </ul>
 	</li>
 </ul>
