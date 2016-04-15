@@ -57,8 +57,7 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -81,7 +80,7 @@ public class SaveService {
 
     private static final class XStreamWrapper extends XStream {
         private XStreamWrapper(ReflectionProvider reflectionProvider) {
-            super(reflectionProvider, new StaxDriver());
+            super(reflectionProvider);
         }
 
         // Override wrapMapper in order to insert the Wrapper in the chain
@@ -302,7 +301,7 @@ public class SaveService {
         // Use deprecated method, to avoid duplicating code
         ScriptWrapper wrapper = new ScriptWrapper();
         wrapper.testPlan = tree;
-        JMXSAVER.marshal(wrapper, new PrettyPrintWriter(outputStreamWriter));
+        JMXSAVER.toXML(wrapper, outputStreamWriter);
         outputStreamWriter.write('\n');// Ensure terminated properly
         outputStreamWriter.close();
     }
@@ -313,7 +312,7 @@ public class SaveService {
         OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
         writeXmlHeader(outputStreamWriter);
         // Use deprecated method, to avoid duplicating code
-        JMXSAVER.marshal(el, new PrettyPrintWriter(outputStreamWriter));
+        JMXSAVER.toXML(el, outputStreamWriter);
         outputStreamWriter.close();
     }
 
@@ -341,7 +340,7 @@ public class SaveService {
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
         try {
-            JTLSAVER.marshal(evt.getResult(), new PrettyPrintWriter(writer), dh);
+            JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
         } catch(RuntimeException e) {
             throw new IllegalArgumentException("Failed marshalling:"+(evt.getResult() != null ? showDebuggingInfo(evt.getResult()) : "null"), e);
         }
@@ -469,7 +468,7 @@ public class SaveService {
         dh.put(RESULTCOLLECTOR_HELPER_OBJECT, resultCollectorHelper); // Allow TestResultWrapper to feed back the samples
         // This is effectively the same as saver.fromXML(InputStream) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        JTLSAVER.unmarshal(new StaxDriver().createReader(reader), null, dh);
+        JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
         inputStreamReader.close();
     }
 
