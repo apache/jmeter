@@ -24,6 +24,31 @@
                     CSV files to generate HTML files containing graph views.
                     It can generate the report at end of a load test or on demand.
                 </p>
+                <p>
+                This report provides the following metrics:
+                <ul>
+                    <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
+                    <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="dashboard/report_apdex_and_summary.png" ></figure></li>
+                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="13736" height="433" image="dashboard/report_statistics.png" ></figure></li>
+                    <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="dashboard/report_errors.png" ></figure></li>
+                    <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
+                        <ul>
+                            <li>Response times Over Time : <figure width="1398" height="566" image="dashboard/report_response_times_over_time.png" ></figure></li>
+                            <li>Bytes throughput Over Time : <figure width="1373" height="543" image="dashboard/report_bytes_throughput_over_time.png" ></figure></li>
+                            <li>Latencies Over Time : <figure width="1373" height="547" image="dashboard/report_latencies_over_time.png" ></figure></li>
+                            <li>Hits per second : <figure width="1375" height="552" image="dashboard/report_hits_per_second.png" ></figure></li>
+                            <li>Response codes per second : <figure width="1380" height="558" image="dashboard/report_codes_per_second.png" ></figure></li>
+                            <li>Transactions per second : <figure width="1372" height="577" image="dashboard/report_transactions_per_second.png" ></figure></li>
+                            <li>Response Time vs Request per second : <figure width="1380" height="545" image="dashboard/report_response_time_vs_request.png" ></figure></li>
+                            <li>Latency vs Request per second : <figure width="1373" height="543" image="dashboard/report_latencies_vs_request.png" ></figure></li>
+                            <li>Response times percentiles : <figure width="1374" height="551" image="dashboard/report_response_time_percentiles.png" ></figure></li>
+                            <li>Active Threads Over Time : <figure width="1370" height="542" image="dashboard/report_active_threads_over_time.png" ></figure></li>
+                            <li>Times vs Threads : <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure></li>
+                            <li>Response Time Distribution : <figure width="1373" height="549" image="dashboard/report_response_time_distribution.png" ></figure></li>
+                        </ul>
+                    </li>
+                </ul>
+                </p>
                 <!-- <p> It is designed to support different way of data exportation, if Html files are not relevant. </p> -->
             </subsection>
             <subsection name="&sect-num;.2 Configuring Dashboard Generation" anchor="configuration">
@@ -552,12 +577,6 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                             <td>True</td>
                         </tr>
                         <tr>
-                            <td>ResponseTimePerSampleGraphConsumer</td>
-                            <td>This graph represents the median and average response time
-                                per sample name.</td>
-                            <td>False</td>
-                        </tr>
-                        <tr>
                             <td>ResponseTimeVSRequestGraphConsumer</td>
                             <td>This graph represents the median and average response time
                                 depending on the number of current requests.</td>
@@ -598,7 +617,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     </tbody>
                 </table>
             </subsection>
-            <subsection name="&sect-num;.5  Want to improve Report Dashboard" anchor="development">
+            <subsection name="&sect-num;.5  Want to improve Report Dashboard ?" anchor="development">
             If you want to contribute new graphs or improve current ones, you
             can read this <a href="../devguide-dashboard.html" >developer documentation</a>.<br/>
             Read this <a href="../building.html" >documentation</a> on contributing.
