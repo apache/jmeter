@@ -1439,7 +1439,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public List<String> getSearchableTokens() throws Exception {
         List<String> datasToSearch = new ArrayList<>(4);
         datasToSearch.add(getSampleLabel());
-        datasToSearch.add(getDataEncodingNoDefault());
+        datasToSearch.add(getResponseDataAsString());
         datasToSearch.add(getRequestHeaders());
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;

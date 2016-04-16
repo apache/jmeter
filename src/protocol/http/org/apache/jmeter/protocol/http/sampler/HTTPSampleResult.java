@@ -272,7 +272,6 @@ public class HTTPSampleResult extends SampleResult {
         List<String> list = new ArrayList<>(super.getSearchableTokens());
         list.add(getQueryString());
         list.add(getCookies());
-        list.add(getQueryString());
         return list;
     }
 }
