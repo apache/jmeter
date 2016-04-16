@@ -490,7 +490,7 @@ This property is in this file:</p>
 
 </component>
 
-<component name="JDBC Request" index="&sect-num;.1.3"  width="466" height="334" screenshot="jdbctest/jdbc-request.png">
+<component name="JDBC Request" index="&sect-num;.1.3"  width="710" height="629" screenshot="jdbctest/jdbc-request.png">
 
 <description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
