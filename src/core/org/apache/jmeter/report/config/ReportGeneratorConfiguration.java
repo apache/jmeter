@@ -18,17 +18,16 @@
 package org.apache.jmeter.report.config;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
-
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import java.util.regex.Pattern;
 
 import jodd.props.Props;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The class ReportGeneratorConfiguration describes the configuration of the
@@ -265,7 +264,7 @@ public class ReportGeneratorConfiguration {
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
-    private List<String> filteredSamples = new ArrayList<>();
+    private Pattern filteredSamplesPattern;
     private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
     private Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
@@ -285,15 +284,7 @@ public class ReportGeneratorConfiguration {
      *            the new overall sample filter
      */
     public final void setSampleFilter(String sampleFilter) {
-        if (!Objects.equals(this.sampleFilter, sampleFilter)) {
-            this.sampleFilter = sampleFilter;
-            filteredSamples.clear();
-            if (sampleFilter != null) {
-                for (String item: sampleFilter.split(",")) {
-                    filteredSamples.add(item.trim());
-                }
-            }
-        }
+        this.sampleFilter = sampleFilter;
     }
 
     /**
@@ -351,15 +342,6 @@ public class ReportGeneratorConfiguration {
      */
     public final void setApdexToleratedThreshold(long apdexToleratedThreshold) {
         this.apdexToleratedThreshold = apdexToleratedThreshold;
-    }
-
-    /**
-     * Gets the filtered samples.
-     *
-     * @return the filteredSamples
-     */
-    public final List<String> getFilteredSamples() {
-        return filteredSamples;
     }
 
     /**
@@ -670,5 +652,18 @@ public class ReportGeneratorConfiguration {
      */
     public void setReportTitle(String reportTitle) {
         this.reportTitle = reportTitle;
+    }
+
+    /**
+     * @return the filteredSamplesPattern
+     */
+    public Pattern getFilteredSamplesPattern() {
+        if(StringUtils.isEmpty(sampleFilter)) {
+            return null;
+        }
+        if(filteredSamplesPattern == null) {
+            filteredSamplesPattern = Pattern.compile(sampleFilter);
+        }
+        return filteredSamplesPattern;
     }
 }

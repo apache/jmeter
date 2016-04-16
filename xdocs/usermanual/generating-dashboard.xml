@@ -114,8 +114,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             Sets the filter of samples to keep for generating
                             graphs and statistics. An empty value deactivates the
                             filtering.
-                            Format: comma separated list of
-                            sample names. Default: ""
+                            Format: Regular expression. 
+                            Default: ""
                         </property>
                         <property name="temp_dir" required="No">
                             Sets the temporary directory used by the generation
