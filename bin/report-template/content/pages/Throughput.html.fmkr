@@ -126,13 +126,13 @@
                             <#if overallFilter?has_content>
                                 <tr>
                                     <td>Filter for computing:</td>
-                                    <td>${overallFilter} )</td>
+                                    <td>${overallFilter}</td>
                                 </tr>
                             </#if>
                             <#if seriesFilter?has_content>
                                 <tr>
                                     <td>Filter for display:</td>
-                                    <td>${seriesFilter} )</td>
+                                    <td>${seriesFilter}</td>
                                 </tr>
                             </#if>
                         </table>
