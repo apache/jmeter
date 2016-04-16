@@ -392,12 +392,12 @@ public class ReportGenerator {
             @Override
             public boolean matches(Sample sample) {
                 // Get filtered samples from configuration
-                List<String> filteredSamples = configuration
-                        .getFilteredSamples();
-                // Sample is kept if none filter is set or if the filter
-                // contains its name
-                return filteredSamples.isEmpty()
-                        || filteredSamples.contains(sample.getName());
+                Pattern filteredSamplesPattern = configuration
+                        .getFilteredSamplesPattern();
+                // Sample is kept if no filter is set 
+                // or if its name matches the filter pattern
+                return filteredSamplesPattern == null 
+                        || filteredSamplesPattern.matcher(sample.getName()).matches();
             }
         });
         nameFilter.addSampleConsumer(createApdexSummaryConsumer());
