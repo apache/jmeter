@@ -1,23 +1,12 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
 <html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
           -
-          User's Manual: Building a JMS (Java Messaging Service) Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+          User's Manual: Building a JMS (Java Messaging Service) Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
             APACHE LOGO
-          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" alt="Logo ASF"></a></div><!--
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
-            --><div><a href="http://jmeter.apache.org/"><img src="../images/logo.jpg" alt="Apache JMeter"></a></div><div class="twitter"><div><a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a><script>
-            (function(d,s,id){
-              var js,
-                  fjs=d.getElementsByTagName(s)[0],
-                  p=/^http:/.test(d.location)?'http':'https';
-              if (!d.getElementById(id)) {
-                  js=d.createElement(s);
-                  js.id=id;
-                  js.src=p+'://platform.twitter.com/widgets.js';
-                  fjs.parentNode.insertBefore(js,fjs);
-              }
-            })(document, 'script', 'twitter-wjs');
-              </script></div><div><a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow</a><script>(function(d,s,id){
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><div class="social menu"><div><a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a><script>
+              (function(d,s,id){
                 var js,
                     fjs=d.getElementsByTagName(s)[0],
                     p=/^http:/.test(d.location)?'http':'https';
@@ -27,8 +16,19 @@
                     js.src=p+'://platform.twitter.com/widgets.js';
                     fjs.parentNode.insertBefore(js,fjs);
                 }
-            })(document, 'script', 'twitter-wjs');
-              </script></div></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter<img src="../images/twitter.png" alt="Icon for JMeter on Twitter"></a></li><li><a href="../issues.html">Issue Tracking</a></li><li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../nightly.html">Developer (Nightly) Builds</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Documentation</div><ul><li><a href="../changes.html">Changes per version</a></li><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Community</div><ul><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">SVN Repositories</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><ul class="pagelinks"><li><a href="build-jms-point-to-point-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-monitor-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">12. Building a JMS Topic Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
+              })(document, 'script', 'twitter-wjs');
+                </script></div><div><a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow</a><script>(function(d,s,id){
+                  var js,
+                      fjs=d.getElementsByTagName(s)[0],
+                      p=/^http:/.test(d.location)?'http':'https';
+                  if (!d.getElementById(id)) {
+                      js=d.createElement(s);
+                      js.id=id;
+                      js.src=p+'://platform.twitter.com/widgets.js';
+                      fjs.parentNode.insertBefore(js,fjs);
+                  }
+              })(document, 'script', 'twitter-wjs');
+                </script></div><div><a href="https://github.com/apache/jmeter"><img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=default"></a></div><div><a href="https://github.com/apache/jmeter/fork"><img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=default"></a></div><div><a href="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter"><img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.png"></a></div></div><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../nightly.html">Developer (Nightly) Builds</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../changes.html">Changes per version</a></li><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><ul class="pagelinks"><li><a href="build-jms-point-to-point-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-monitor-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">12. Building a JMS Topic Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
 <div class="clear"></div><div class="note">
 JMS requires some optional jars to be downloaded. Please refer to <a href="get-started.html">Getting Started</a> for full details.
 </div><div class="clear"></div>
@@ -49,9 +49,9 @@ Topic messaging is generally used in cases where a message is published by a pro
 consumed by multiple subscribers.  Queue messaging is generally used for transactions
 where the sender expects a response.  Messaging systems are quite different from
 normal HTTP requests. In HTTP, a single user sends a request and gets a response.
-Messaging system can work in sychronous and asynchronous mode.  A JMS sampler needs 
+Messaging system can work in synchronous and asynchronous mode.  A JMS sampler needs 
 the JMS implementation jar files; for example, from Apache ActiveMQ.  
-See <a href="#libraries_activemq">here</a> for the list of jars provided by ActiveMQ 3.0.</p>
+See <a href="get-started.html#libraries_activemq">here</a> for the list of jars provided by ActiveMQ.</p>
 
 </div><div class="section"><h1 id="adding_users">12.1 Adding Users<a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></h1>
 <p>The first step is add a <a href="test_plan.html#thread_group">Thread Group</a>
@@ -60,8 +60,8 @@ See <a href="#libraries_activemq">here</a> for the list of jars provided by Acti
 send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-clicking your right mouse button to get the Add menu, and then select
-Add --&gt; ThreadGroup.</p>
+clicking your right mouse button to get the <span class="menuchoice"><span class="guimenuitem">Add</span></span> menu, and then select
+<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">ThreadGroup</span></span>.</p>
 
 <p>You should now see the Thread Group element under Test Plan.  If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -77,11 +77,11 @@ Figure 12.1. Thread Group with Default Values"></a><figcaption>
 Figure 12.1. Thread Group with Default Values</figcaption></figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
-field, enter Subscribers.</p>
+field, enter <span class="code">Subscribers</span>.</p>
 
-<p>Next, increase the number of users (called threads) to 5.</p>
+<p>Next, increase the number of users (called threads) to <span class="code">5</span>.</p>
 
-<p>In the next field, the Ramp-Up Period, set the value to 0
+<p>In the next field, the Ramp-Up Period, set the value to <span class="code">0</span>
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
 finish starting all of your users by the end of the 5 seconds.  So, if we have
@@ -89,15 +89,15 @@ finish starting all of your users by the end of the 5 seconds.  So, if we have
 would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
 value to 0, JMeter will immediately start all users.</p>
 
-<p>Clear the checkbox labeled "Forever", and enter a value of 10 in the Loop
+<p>Clear the checkbox labeled "<span class="code">Forever</span>", and enter a value of <span class="code">10</span> in the Loop
 Count field.  This property tells JMeter how many times to repeat your test.
-If you enter a loop count value of 0, then JMeter will run your test only
-once. To have JMeter repeatedly run your Test Plan, select the Forever
+If you enter a loop count value of <span class="code">0</span>, then JMeter will run your test only
+once. To have JMeter repeatedly run your Test Plan, select the <span class="code">Forever</span>
 checkbox.</p>
 
 <p>Repeat the process and add another thread group. For the second thread
-group, enter "Publisher" in the name field, set the number of threads to 1,
-and set the iteration to 10.
+group, enter "<span class="code">Publisher</span>" in the name field, set the number of threads to <span class="code">1</span>,
+and set the iteration to <span class="code">10</span>.
 </p>
 
 <div class="clear"></div><div class="note">In most applications, you have to manually accept
@@ -109,28 +109,30 @@ leave the Control Panel (for example, when selecting another tree element).</div
 
 </div><div class="section"><h1 id="adding_subscriber_publisher">12.2 Adding JMS Subscriber and Publisher<a class="sectionlink" href="#adding_subscriber_publisher" title="Link to here">&para;</a></h1>
 
-<p>Make sure the required jar files are in JMeter's lib directory. If they are
+<p>Make sure the required jar files are in JMeter's <span class="code">lib</span> directory. If they are
 not, shutdown JMeter, copy the jar files over and restart JMeter.</p>
 
 <p>Start by adding the sampler <a href="../usermanual/component_reference.html#JMS_Subscriber">JMS Subscriber</a>
-to the Subscribers element (Add --&gt; Sampler --&gt; JMS Subscriber).
+to the Subscribers element
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JMS Subscriber</span></span>).
 Then, select the JMS Subscriber element in the tree and edit the following properties:
 
 <ol>
-<li>Change the Name field to "Sample Subscriber"</li>
-<li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Change the Name field to "<span class="code">Sample Subscriber</span>"</li>
+<li>If the JMS provider uses the <span class="code">jndi.properties</span> file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "<span class="code">org.apache.activemq.jndi.ActiveMQInitialContextFactory</span>"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "<span class="code">tcp://localhost:61616</span>"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1"
-Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
+of the JMS provider for the information. For ActiveMQ, the default is "<span class="code">ConnectionFactory</span>"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<span class="code">dynamicTopics/MyStaticTopic1</span>"
+<div class="clear"></div><div class="note">Note: Setup at startup mean that JMeter starting to listen on the Destination at beginning of test without name change possibility. 
 Setup on Each sample mean that JMeter (re)starting to listen before run each JMS Subscriber sample, 
-this last option permit to have Destination name with some JMeter variables</li>
-<li>If the JMS provider requires authentication, check "required" and enter the 
+this last option permit to have Destination name with some JMeter variables
+</div><div class="clear"></div></li>
+<li>If the JMS provider requires authentication, check "<span class="code">required</span>" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
-<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+<li>Enter <span class="code">10</span> in "<span class="code">Number of samples to aggregate</span>". For performance reasons, the sampler
 will aggregate messages, since small messages will arrive very quickly. If the sampler
 didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>If you want to read the response, check the box</li>
@@ -144,25 +146,27 @@ Figure 12.2. JMS Subscriber"></a><figcaption>
 Figure 12.2. JMS Subscriber</figcaption></figure>
 
 <p>Next add the sampler <a href="../usermanual/component_reference.html#JMS_Publisher">JMS Publisher</a>
-to the Publisher element (Add --&gt; Sampler --&gt; JMS Subscriber).
+to the Publisher element 
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JMS Subscriber</span></span>).
 Then, select the JMS Publisher element in the tree and edit the following properties:
 </p>
 
 <ol>
-<li>Change the Name field to "Sample Publisher".</li>
-<li>If the JMS provider uses the jndi.properties file, check the box</li>
-<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "org.apache.activemq.jndi.ActiveMQInitialContextFactory"</li>
-<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "tcp://localhost:61616"</li>
+<li>Change the Name field to "<span class="code">Sample Publisher</span>".</li>
+<li>If the JMS provider uses the <span class="code">jndi.properties</span> file, check the box</li>
+<li>Enter the name of the InitialContextFactory class. For example, with ActiveMQ 5.4, the value is "<span class="code">org.apache.activemq.jndi.ActiveMQInitialContextFactory</span>"</li>
+<li>Enter the provider URL. This is the URL for the JNDI server, if there is one. For example, with ActiveMQ 5.4 on local machine with default port, the value is "<span class="code">tcp://localhost:61616</span>"</li>
 <li>Enter the name of the connection factory. Please refer to the documentation
-of the JMS provider for the information. For ActiveMQ, the default is "ConnectionFactory"</li>
-<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "dynamicTopics/MyStaticTopic1". 
-Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
+of the JMS provider for the information. For ActiveMQ, the default is "<span class="code">ConnectionFactory</span>"</li>
+<li>Enter the name of the message topic. For ActiveMQ Dynamic Topics (create topics dynamically), example value is "<span class="code">dynamicTopics/MyStaticTopic1</span>". 
+<div class="clear"></div><div class="note">Note: Setup at startup mean that JMeter starting connection with the Destination at beginning of test without name change possibility. 
 Setup on Each sample mean that JMeter (re)starting the connection before run each JMS Publisher sample, 
-this last option permit to have Destination name with some JMeter variables</li>
-<li>If the JMS provider requires authentication, check "required" and enter the 
+this last option permit to have Destination name with some JMeter variables
+</div><div class="clear"></div></li>
+<li>If the JMS provider requires authentication, check "<span class="code">required</span>" and enter the 
 username and password. For example, Orion JMS requires authentication, while ActiveMQ
 and MQSeries does not</li>
-<li>Enter 10 in "Number of samples to aggregate". For performance reasons, the sampler
+<li>Enter <span class="code">10</span> in "<span class="code">Number of samples to aggregate</span>". For performance reasons, the sampler
 will aggregate messages, since small messages will arrive very quickly. If the sampler
 didn't aggregate the messages, JMeter wouldn't be able to keep up.</li>
 <li>Select the appropriate configuration for getting the message to publish. If you
@@ -183,8 +187,8 @@ Figure 12.3. JMS Publisher</figcaption></figure>
 responsible for storing all of the results of your HTTP requests in a file and presenting
 a visual model of the data.</p>
 
-<p>Select the Test Plan element and add a <a href="../usermanual/component_reference.html#Graph_Results">Graph Results</a> listener (Add --&gt; Listener
---&gt; Graph Results).  Next, you need to specify a directory and filename of the
+<p>Select the Test Plan element and add a <a href="../usermanual/component_reference.html#Graph_Results">Graph Results</a> listener
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Graph Results</span></span>).  Next, you need to specify a directory and filename of the
 output file.  You can either type it into the filename field, or select the
 Browse button and browse to a directory and then enter a filename.</p>
 
@@ -195,7 +199,7 @@ Figure 12.4. Graph Results Listener</figcaption></figure>
 </div><ul class="pagelinks"><li><a href="build-jms-point-to-point-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-monitor-test-plan.html">Next &gt;</a></li></ul></div><div class="footer"><div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2015
+            2016
             , Apache Software Foundation
           </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
             feather, and the Apache JMeter logo are
