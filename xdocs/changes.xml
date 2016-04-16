@@ -181,8 +181,9 @@ when available and UI has been updated.
 <ch_category>UX Improvements:</ch_category>
 
 <ch_title>Better display in HiDPI screens</ch_title>
+<p>See <a href="usermanual/hints_and_tips.html#hidpi">JMeter with a HiDPI screen on Linux or Windows</a> in Hints and Tips section in user manual</p>
 <ch_title>New Icon look and Logo</ch_title>
-<p>JMeter has a new Logo created by Felix Schumacher. Icons have also been refreshed to give a more modern style and make them more meaningful</p>
+<p>JMeter has a new Logo created by Felix Schumacher. <br/>Icons have also been refreshed to give a more modern style and make them more meaningful</p>
 <ch_title>Lots of fixes of annoying little bugs</ch_title>
 <p>Around 40 UI fixes have been made to either fix buggy, confusing behaviour or simplify usage by not allowing incompatible options to be selected</p>
 <ch_title>Improved Thread Group UI and related actions (<code>Start</code>, <code>Start No Timers</code>, <code>Validate</code>)</ch_title>
