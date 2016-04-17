@@ -94,7 +94,7 @@ public class AboutCommand implements Command {
                 }
             });
 
-            JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.jpg"));
+            JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.png"));
             JLabel copyright = new JLabel(JMeterUtils.getJMeterCopyright(), SwingConstants.CENTER);
             JLabel rights = new JLabel("All Rights Reserved.", SwingConstants.CENTER);
             JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), SwingConstants.CENTER);

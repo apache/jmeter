@@ -112,28 +112,9 @@
         </div>
         <div class="nav">
           <div class="social menu">
-              <div>
-                <a href="https://twitter.com/share" class="twitter-share-button"
-                  data-text="Powerful Load Testing with Apache #JMeter"
-                  data-via="ApacheJMeter" data-lang="en-gb" data-size="large"
-                >Tweet</a>
-                <script><![CDATA[
-              (function(d,s,id){
-                var js,
-                    fjs=d.getElementsByTagName(s)[0],
-                    p=/^http:/.test(d.location)?'http':'https';
-                if (!d.getElementById(id)) {
-                    js=d.createElement(s);
-                    js.id=id;
-                    js.src=p+'://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js,fjs);
-                }
-              })(document, 'script', 'twitter-wjs');]]>
-                </script>
-              </div>
-              <div>
+              <div align="center">
                 <a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button"
-                  data-show-count="false" data-lang="en-gb" data-size="large"
+                  data-show-count="false" data-lang="en-gb"
                 >Follow</a>
                 <script><![CDATA[(function(d,s,id){
                   var js,
@@ -148,19 +129,17 @@
               })(document, 'script', 'twitter-wjs');]]>
                 </script>
               </div>
-              <div>
+              <div align="center">
                   <a href="https://github.com/apache/jmeter">
-                      <img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=default" />
+                      <img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=flat" />
                   </a>
-              </div>
-              <div>
                   <a href="https://github.com/apache/jmeter/fork">
-                      <img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=default" />
+                      <img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=flat" />
                   </a>
               </div>
-              <div>
+              <div align="center">
                   <a href="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter">
-                      <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.png" />
+                      <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg" />
                   </a>
               </div>
           </div>
