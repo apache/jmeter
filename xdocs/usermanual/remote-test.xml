@@ -111,7 +111,7 @@ See also the <code>-X</code> flag (described below)
 use the script "<code>bin/jmeter</code>".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.</p>
-<figure image="remote/run-menu00.gif" width="232" height="156">Figure 1 - Run Menu</figure>
+<figure image="remote/run-menu00.png" width="487" height="295">Figure 1 - Run Menu</figure>
 
 <p><b>Step 3b: Start the JMeter from a non-GUI Client</b></p>
 <p>
