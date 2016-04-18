@@ -29,7 +29,7 @@
                 <ul>
                     <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
                     <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="dashboard/report_apdex_and_summary.png" ></figure></li>
-                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="13736" height="433" image="dashboard/report_statistics.png" ></figure></li>
+                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1376" height="433" image="dashboard/report_statistics.png" ></figure></li>
                     <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="dashboard/report_errors.png" ></figure></li>
                     <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
                         <ul>
