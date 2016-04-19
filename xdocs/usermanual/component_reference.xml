@@ -3508,7 +3508,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
-<component name="Backend Listener" index="&sect-num;.3.21"  width="902" height="341" screenshot="backend_listener.png">
+<component name="Backend Listener" index="&sect-num;.3.21"  width="705" height="350" screenshot="backend_listener.png">
 <description>
 The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
 By default, a Graphite implementation is provided.
@@ -4005,13 +4005,13 @@ header table entries.</property>
 that tells JMeter to override the default "<code>User-Agent</code>" request header and use a particular Internet Explorer agent string
 instead. (see figures 12 and 13).</p>
 
-<figure width="266" height="117" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure width="247" height="121" image="http-config/header-manager-example1a.png">Figure 12 - Test Plan</figure>
 <figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
 </component>
 
-<component name="Java Request Defaults" index="&sect-num;.4.9"  width="454" height="283" screenshot="java_defaults.png">
+<component name="Java Request Defaults" index="&sect-num;.4.9"  width="685" height="373" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
 </description>
 
@@ -4524,7 +4524,7 @@ These can be used anywhere within the expression and remain in effect until over
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
 <center>
-<figure image="assertion/example1a.png" width="242" height="123">Figure 14 - Test Plan</figure>
+<figure image="assertion/example1a.png" width="266" height="117">Figure 14 - Test Plan</figure>
 <figure image="assertion/example1b.png" width="920" height="451">Figure 15 - Assertion Control Panel with Pattern</figure>
 <figure image="assertion/example1c-pass.png" width="801" height="230">Figure 16 - Assertion Listener Results (Pass)</figure>
 <figure image="assertion/example1c-fail.png" width="800" height="233">Figure 17 - Assertion Listener Results (Fail)</figure>
@@ -5002,7 +5002,7 @@ Note that the throughput value should not be changed too often during a test
 </properties>
 </component>
 
-<component name="Synchronizing Timer" index="&sect-num;.6.5" width="415" height="125" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5" width="410" height="145" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -6109,11 +6109,12 @@ When using the scheduler, JMeter runs the thread group until either the number o
 Note that the condition is only checked between samples; when the end condition is reached, that thread will stop.
 JMeter does not interrupt samplers which are waiting for a response, so the end time may be delayed arbitrarily.
 </p>
+</description>
 <p>
 Since JMeter 3.0, you can run a selection of Thread Group by selecting them and right clicking. A popup menu will appear:
 <figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
 
-Notice you have 3 options to run the selection of Thread Groups:
+<br/>Notice you have 3 options to run the selection of Thread Groups:
 <ul>
 <li>Start : Start the selected thread groups only</li>
 <li>Start no pauses : Start the selected thread groups only but without running the timers</li>
@@ -6128,7 +6129,6 @@ This mode enables rapid validation of a Thread Group by running it with 1 thread
 <li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
 </ul> 
 </p>
-</description>
 
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
