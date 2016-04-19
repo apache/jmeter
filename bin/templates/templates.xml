@@ -105,9 +105,6 @@
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
         <h2>JMeter Configuration</h2>
             <ul>
-                <li>Download groovy from <a href="http://groovy-lang.org/download.html" >Groovy Download</a></li>
-                <li>Add the groovy-all-XXX.jar in jmeter/lib folder, it is usually located in embeddable folder</li>
-                <li>Restart JMeter</li>
                 <li>Configure the <b>Server address list</b>, and tune <b>MongoDB options</b> in MongoDB Source Config</li>
                 <li>Modify the JSR223 samples (<b>Insert into testCollection</b> and <b>Count from testCollection</b>) to match your needs</li>
             </ul>
