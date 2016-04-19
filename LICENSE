@@ -177,11 +177,18 @@
 
 ============================ End of Apache License V 2.0 ===================
 
-Source and binary distributions of Apache JMeter contain icons from the Open Icon Library
-http://openiconlibrary.sourceforge.net/
+Source and binary distributions of Apache JMeter contain:
+
+- icons from the Open Icon Library http://openiconlibrary.sourceforge.net/
 For license details, please see the file: licenses/src/openiconlibrary.txt
 
-Binary distributions additionally contain software included under various licenses.
+TBA to include
+metisMenu-1.1.3 (MIT)
+mocha-1.17.1 (MIT)
+bootstrap-3.3.4 (MIT)
+
+Binary distributions additionally contain software included under various licenses,
+see below.
 
 The following software is provided under the Apache License V 2.0 (as above):
 
@@ -233,7 +240,6 @@ For details, please see the files under: licenses/bin
 
 * asm-5.1.jar (?)
 * beanshell-2.0b5.jar (SPL)
-* bootstrap-3.3.4 (MIT)
 * dnsjava-2.1.7.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
@@ -245,8 +251,6 @@ For details, please see the files under: licenses/bin
 * jodd-props-3.6.7.jar (Simplified BSD)
 * jtidy-r938.jar (?)
 * junit-4.12.jar (BSD)
-* metisMenu-1.1.3 (MIT)
-* mocha-1.17.1 (MIT)
 * rhino-1.7.7.1.jar (MPL 2.0)
 * rsyntaxtextarea-2.5.8.jar (?)
 * slf4j-api-1.7.13.jar (MIT)
