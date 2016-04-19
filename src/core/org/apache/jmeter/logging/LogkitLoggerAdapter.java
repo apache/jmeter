@@ -32,12 +32,19 @@ import org.slf4j.helpers.MessageFormatter;
  */
 public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializable {
 
-    final transient Logger logger;
+    transient Logger logger;
     /**
      * 
      */
     private static final long serialVersionUID = -122848886791823355L;
 
+    /**
+     * Only for JUnit
+     */
+    public LogkitLoggerAdapter() {
+        super();
+    }
+    
     LogkitLoggerAdapter(org.apache.log.Logger logkitLogger) {
         this.logger = logkitLogger;
     }
