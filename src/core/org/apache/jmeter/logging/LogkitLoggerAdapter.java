@@ -39,8 +39,9 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
     private static final long serialVersionUID = -122848886791823355L;
 
     /**
-     * Only for JUnit
+     * @deprecated Only for use by JUnit
      */
+    @Deprecated // only for Unit test usage
     public LogkitLoggerAdapter() {
         super();
     }
