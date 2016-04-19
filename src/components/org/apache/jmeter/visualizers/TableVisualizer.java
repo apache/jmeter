@@ -20,9 +20,12 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -32,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -48,19 +52,26 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
+import org.apache.log.Logger;
 
 /**
  * This class implements a statistical analyser that calculates both the average
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
- * created March 10, 2002
- *
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
+    /** Logging. */
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final int MAX_MEMORY_OCCUPATION = 
+            JMeterUtils.getPropDefault("view.results.table.max_memory_occupation",
+            // 100 mb
+            100 * 1024 * 1024); //$NON-NLS-1$
 
     private static final String iconSize = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
 
@@ -109,6 +120,11 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
+    private JLabel warningLabel;
+    
+    private AtomicLong currentSizeApproximation = new AtomicLong(0l);
+
+    
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
         new TableCellRenderer[]{
@@ -169,6 +185,9 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     @Override
     public void add(final SampleResult res) {
+        if(applyOOMProtection()) {
+            return;
+        }
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
@@ -183,6 +202,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 }
                 synchronized (calc) {
                     calc.addSample(res);
+                    
                     int count = calc.getCount();
                     TableSample newS = new TableSample(
                             count, 
@@ -197,6 +217,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                             res.getConnectTime()
                             );
                     model.addRow(newS);
+                    currentSizeApproximation.addAndGet(newS.getEstimatedSize());
                 }
                 updateTextFields(res);
                 if (autoscroll.isSelected()) {
@@ -204,6 +225,26 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 }
             }
         });
+    }
+    
+    /**
+     * When the limit is reached, JMeter will not {@link SampleResult} anymore
+     * Setting to 0 disables the protection
+     */
+    private boolean applyOOMProtection() {
+        // Protection already in place
+        if(warningLabel.isVisible()) {
+            return true;
+        }
+        if(MAX_MEMORY_OCCUPATION > 0 && 
+                // We reached the limit
+                currentSizeApproximation.get() > MAX_MEMORY_OCCUPATION) {
+            log.warn(getName()+":applying OUTOFMEMORY PROTECTION, SampleResults are not added anymore, use NON-GUI mode"
+                    + " or configure property 'view.results.table.max_memory_occupation'");
+            warningLabel.setVisible(true);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -214,6 +255,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         dataField.setText("0"); // $NON-NLS-1$
         averageField.setText("0"); // $NON-NLS-1$
         deviationField.setText("0"); // $NON-NLS-1$
+        warningLabel.setVisible(false);
+        currentSizeApproximation.set(0);
         repaint();
     }
 
@@ -342,5 +385,22 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 return null;
             }
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.AbstractJMeterGuiComponent#getNamePanel()
+     */
+    @Override
+    protected Container makeTitlePanel() {
+        Container container = super.makeTitlePanel();
+        ImageIcon image = JMeterUtils.getImage("warning.png"); //$NON-NLS-1$
+        warningLabel = new JLabel("", image, SwingConstants.LEFT); // $NON-NLS-1$
+        warningLabel.setForeground(Color.RED);
+        Font font = warningLabel.getFont();
+        warningLabel.setFont(new Font(font.getFontName(), Font.BOLD, (int)(font.getSize()*1.1)));
+        warningLabel.setVisible(false);
+        container.add(warningLabel);
+        warningLabel.setText(JMeterUtils.getResString("view_results_table_oom")); //$NON-NLS-1$
+        return container;
     }
 }
