@@ -541,6 +541,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>58947</bug>Connect metric is wrong when <code>ConnectException</code> occurs</li>
     <li><bug>58980</bug>JMS Subscriber will return successful as long as 1 message is received. Contributed by Harrison Termotto (harrison dot termotto at stonybrook.edu)</li>
     <li><bug>59075</bug>JMS Publisher: <code>NumberFormatException</code> is thrown if priority or expiration field is empty</li>
+    <li><bug>59345</bug>SMTPSampler connection leak. Based on a patch by Luca Maragnani (luca dot maragnani at gmail dot com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -624,6 +625,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li>Gary Gregory (ggregory at apache.org)</li>
 <li>David Coppens (d.l.coppens at gmail.com)</li>
+<li>Luca Maragnani (luca dot maragnani at gmail dot com)</li>
 </ul>
 
 <br/>
