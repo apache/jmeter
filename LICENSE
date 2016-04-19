@@ -183,6 +183,7 @@ Source and binary distributions of Apache JMeter contain:
 For license details, please see the file: licenses/src/openiconlibrary.txt
 
 TBA to include
+start-bootstrap-admin2  - according to the current website it is MIT
 metisMenu-1.1.3 (MIT)
 mocha-1.17.1 (MIT)
 bootstrap-3.3.4 (MIT)
