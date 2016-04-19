@@ -180,7 +180,7 @@ public final class LoggingManager {
         isWriterSystemOut = false;
         try {
             File logFileAsFile = new File(logFile);
-            System.out.println("Writing log file to:"+logFileAsFile.getAbsolutePath());
+            System.out.println("Writing log file to: "+logFileAsFile.getAbsolutePath());
             wt = new FileWriter(logFile);
         } catch (Exception e) {
             System.out.println(propName + "=" + logFile + " " + e.toString());
