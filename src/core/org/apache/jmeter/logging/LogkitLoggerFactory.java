@@ -48,6 +48,9 @@ public class LogkitLoggerFactory implements ILoggerFactory {
     @Override
     public Logger getLogger(String name) {
         Logger slf4jLogger = null;
+        if(name == null) {
+            name = Logger.ROOT_LOGGER_NAME;
+        }
         // protect against concurrent access of loggerMap
         synchronized (this) {
             slf4jLogger = loggerMap.get(name);
