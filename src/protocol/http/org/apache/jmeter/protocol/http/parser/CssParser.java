@@ -115,8 +115,10 @@ public class CssParser implements LinkExtractorParser {
                             final ICSSTopLevelRule aTopLevelRule,
                             final CSSDeclaration aDeclaration,
                             final CSSExpressionMemberTermURI aURITerm) {
-                        urlCollection.addURL(aURITerm.getURIString(),
-                                baseUrl);
+                        // NOOP
+                        // Browser fetch such urls only when CSS rule matches
+                        // so we disable this code
+                        //urlCollection.addURL(aURITerm.getURIString(), baseUrl);
                     }
                 });
             } else {
