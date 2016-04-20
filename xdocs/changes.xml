@@ -626,6 +626,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li>Gary Gregory (ggregory at apache.org)</li>
 <li>David Coppens (d.l.coppens at gmail.com)</li>
 <li>Luca Maragnani (luca dot maragnani at gmail dot com)</li>
+<li>Philip Helger (http://www.helger.com) for his <a href="https://github.com/phax" target="_blank">CSS Parser</a> and for taking into account our bug reports very rapidly</li>
 </ul>
 
 <br/>
