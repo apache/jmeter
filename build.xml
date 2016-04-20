@@ -1265,7 +1265,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
-    <include name="${dest.jar.jmeter}/report-template/**/*.*"/>
+    <include name="${dest.jar.jmeter}/report-template/**"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
@@ -1343,6 +1343,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.project"/>
     <include name="eclipse.readme"/>
     <include name="checkstyle.xml"/>
+  	<include name="checkstyle-suppressions.xml"/>
+    <include name="rat-excludes.txt"/>
+  	<include name="${build.test-res}/**"/>
     <include name="${lib.dir}/aareadme.txt"/>
     <include name="fb-*.x*"/>
     <!-- Make sure that the lib/opt directory is included in the archives -->
