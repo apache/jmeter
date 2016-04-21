@@ -159,7 +159,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
     @Override
     public void info(String message) {
         if (logger.isInfoEnabled()) {
-            logger.log(Priority.ERROR, message);
+            logger.log(Priority.INFO, message);
         }
     }
 
