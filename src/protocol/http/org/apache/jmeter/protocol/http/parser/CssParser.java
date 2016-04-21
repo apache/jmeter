@@ -109,8 +109,7 @@ public class CssParser implements LinkExtractorParser {
                     public void onImport(final CSSImportRule importRule) {
                         String location = importRule.getLocationString();
                         if(!StringUtils.isEmpty(location)) {
-                            urlCollection.addURL(importRule.getLocationString(), 
-                                    baseUrl);
+                            urlCollection.addURL(location, baseUrl);
                         }
                     }
                     // Call for URLs outside of URLs
