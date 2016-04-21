@@ -163,7 +163,7 @@ public class SystemSampler extends AbstractSampler {
 
             if (checkReturnCode && (returnCode != expectedReturnCode)) {
                 results.setSuccessful(false);
-                results.setResponseMessage("Uexpected return code.  Expected ["+expectedReturnCode+"]. Actual ["+returnCode+"].");
+                results.setResponseMessage("Unexpected return code.  Expected ["+expectedReturnCode+"]. Actual ["+returnCode+"].");
             } else {
                 results.setSuccessful(true);
                 results.setResponseMessage("OK");
