@@ -140,6 +140,7 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
     protected HttpMethod httpMethod;
     protected HttpURLConnection httpUrlConnection;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         this.uri = new URI(LOCAL_HOST, false);
@@ -149,6 +150,7 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
         this.httpMethod.setURI(this.uri);
     }
 
+    @Override
     public void tearDown() throws Exception {
         this.httpUrlConnection = null;
         this.httpMethod = null;
