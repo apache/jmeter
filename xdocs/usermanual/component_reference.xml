@@ -1242,7 +1242,7 @@ To benefit from this feature:
 </p>
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
-    <li>Or Use Script Text and check <code>Compilation cache key</code> property.
+    <li>Or Use Script Text and check <code>Cache compiled script if available</code> property.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
@@ -1251,7 +1251,7 @@ Cache size is controlled by the following jmeter property (<code>jmeter.properti
 <source>jsr223.compiled_scripts_cache_size=100</source>
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
-JSR223 Test Elements using Script file or Script text + checked <code>Compilation cache key</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+JSR223 Test Elements using Script file or Script text + checked <code>Cache compiled script if available</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 </note>
 </description>
 <note>
@@ -1273,7 +1273,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Compilation cache key" required="No">If checked (advised) and the language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
+    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
