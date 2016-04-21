@@ -291,9 +291,9 @@
   </xsl:template>
 
   <xsl:template match="ch_title">
-    <h2 class="ch_title">
+    <h3 class="ch_title">
       <xsl:apply-templates />
-    </h2>
+    </h3>
   </xsl:template>
 
   <xsl:template match="ch_category">
