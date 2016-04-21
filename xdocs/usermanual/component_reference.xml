@@ -4057,6 +4057,8 @@ instead. (see figures 12 and 13).</p>
         <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.
         This defaults to 'SELECT 1' which is suitable for many databases. 
         However some may require a different query; for example Oracle requires something like 'SELECT 1 FROM DUAL'.
+        Note this validation query is used on pool creation to validate it even if "Test While Idle" suggests query would only be used on idle connections. 
+        This is DBCP behaviour.
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
