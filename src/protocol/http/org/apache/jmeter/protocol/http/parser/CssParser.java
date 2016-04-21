@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -106,8 +107,11 @@ public class CssParser implements LinkExtractorParser {
                 CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
                     @Override
                     public void onImport(final CSSImportRule importRule) {
-                        urlCollection.addURL(importRule.getLocationString(), 
+                        String location = importRule.getLocationString();
+                        if(!StringUtils.isEmpty(location)) {
+                            urlCollection.addURL(importRule.getLocationString(), 
                                     baseUrl);
+                        }
                     }
                     // Call for URLs outside of URLs
                     @Override
