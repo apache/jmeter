@@ -175,6 +175,9 @@ In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</c
 <ch_title>JDBC request now uses DBCP2 pool</ch_title>
 <p>JDBC Request and JDBC Connection Configuration have been updated to replace old Excalibur Pool by Apache Commons DBCP2 pool. As a consequence properties have been migrated to equivalent 
 when available and UI has been updated.
+Note that unlike Excalibur, Commons DBCP uses the validation query when creating the pool.
+So make sure the query is valid.
+The default query suits many databases, but not all - for example Oracle requires 'SELECT 1 FROM DUAL' or similar.
 </p>
 <figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
 <ch_category>UX Improvements:</ch_category>
