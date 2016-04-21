@@ -176,10 +176,8 @@
 
   <xsl:template name="social-media-links">
     <div class="social-media">
-      Contact:
       <ul class="social-media-links">
         <li class="twitter"><a href="https://twitter.com/ApacheJMeter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
-        <li><a href="http://jmeter.apache.org/mail.html"><i class="fa fa-envelope" aria-hidden="true"></i>Mail</a></li>
       </ul>
     </div>
   </xsl:template>
