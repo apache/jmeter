@@ -62,8 +62,8 @@ Summary
 <ch_title>New JSON Post Processor to better extract data from JSON content using user friendly JSON-PATH syntax</ch_title>
 <p>JSON is now a first class citizen in JMeter with the introduction of a new <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath</a> post processor. 
 This post processor is very similar to Regular Expression Post Processor but is well suited for JSON code.
-It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> 
-<figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure></p>
+It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> </p>
+<figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
 <ch_title>JSR223 Test Elements do not require a Cache Compilation Key anymore</ch_title>
@@ -73,12 +73,12 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
 <source>javascript.use_rhino=false</source>
 <p>Nashorn can be used with Java 8 in the following elements:
+</p>
 <ul>
 <li>IfController</li>
 <li>JSR223 Test elements with <code>javascript</code> language selected</li>
 <li><code>__javaScript</code> function</li>
 </ul>
-</p>
 <ch_title>Jexl3 has been integrated. It provides new scripting features and much better documentation</ch_title>
 <a href="http://commons.apache.org/proper/commons-jexl/" target="_blank">JEXL3</a> can now be used thanks to a new function <code>__jexl3</code>.
 JEXL is a language very similar to JSTL. 
@@ -90,14 +90,15 @@ This increases the space available for parameters in UI and simplifies the UX.</
 
 <ch_title>HTTP Request Defaults improvements</ch_title>
 <p>You can now configure Source Address (IP Spoofing like feature) and "<code>Save response as MD5 hash</code>" in Advanced Tab
-<figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
 </p>
+<figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
 
 <ch_category>Reporting improvements</ch_category>
 
 <ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
 <p>An dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
 This report provides the following metrics:
+</p>
 <ul>
     <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
     <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="changes/3.0/report_apdex_and_summary.png" ></figure></li>
@@ -122,7 +123,6 @@ This report provides the following metrics:
 </ul>
 
 
-</p>
 <ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
 <ch_title>Summariser displays a more readable duration</ch_title>
 Now duration are display in the format <code>hours:minutes:seconds</code>
@@ -143,11 +143,12 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 <ch_title>BackendListener now allows you to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
 Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
-<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 </p>
+<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 <ch_category>Protocols and Load Testing improvements</ch_category>
 <ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
 <p>Migration to HttpClient 4.5.2 improves the following fields of JMeter:
+</p>
 <ul>
 <li>Support of recent RFC like <a href="https://tools.ietf.org/html/rfc6265" target="_blank">HTTP State Management Mechanism RFC-6265 for Cookies</a>, you should use now <code>HC4CookieHandler</code> in HTTP Cookie Manager component</li>
 <li><a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank">Server Name Indication (SNI)</a> support for HttpClient4 implementation</li>
@@ -155,9 +156,7 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <li>Many bug fixes since previous version 4.2.6 used in JMeter 2.13, see <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES-4.5.x.txt" target="_blank">HttpClient 4.5.X release notes</a></li>
 <li>Better support of HTTP RFC 2616 / RFC 7230 and fixes to issues with <code>deflate</code> compression management</li>
 </ul>
-</p>
 <ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
-<p>
 <ul>
 <li>Parsing of CSS imported files (through <code>@import</code>) or embedded resources (background, images, &hellip;)</li>
 <li>Lazy initialization of SSL context: For 15 Threads 138% more sampling in 5 minutes for HTTP only tests. Gain increases as number of threads increases</li>
@@ -166,18 +165,17 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <li>Total of 750% more throughput found on test with 15 threads, the more threads you have the more the gain</li>
 <li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting <code>httpsampler.embedded_resources_use_md5=true</code> property</li>
 </ul>
-</p>
 <ch_title>Introduction of Sample Timeout feature</ch_title>
 <p>This new Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
 In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</code> and <code>HTTP Request</code> elements.
-<figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
 </p>
+<figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
 
 <ch_title>JDBC request now uses DBCP2 pool</ch_title>
 <p>JDBC Request and JDBC Connection Configuration have been updated to replace old Excalibur Pool by Apache Commons DBCP2 pool. As a consequence properties have been migrated to equivalent 
 when available and UI has been updated.
-<figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
 </p>
+<figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
 <ch_category>UX Improvements:</ch_category>
 
 <ch_title>Better display in HiDPI screens</ch_title>
@@ -191,10 +189,9 @@ when available and UI has been updated.
 Creating and testing a Test Plan before Load Test has been much simplified by allowing you to only start a selection of Thread Group, start them without applying Timers (thus gaining time)
 or start them using a new Validation mode. This validation mode allows you to start a Thread Group (without modifying it) with 1 thread, 1 iteration and without applying timers.
 This validation mode can be customized.
-<figure width="302" height="235" image="changes/3.0/thread_group_starters.png" ></figure>
 </p>
+<figure width="302" height="235" image="changes/3.0/thread_group_starters.png" ></figure>
 <ch_title>New shortcuts</ch_title>
-<p>
 <ul>
 <li>Add most used elements
     (<keycombo>
@@ -209,7 +206,6 @@ This validation mode can be customized.
     configurable through <code>gui.quick_<em>XXX</em></code> properties</li>
 <li>Shortcuts to expand nodes</li>
 </ul>
-</p>
 <ch_category>Core improvements</ch_category>
 
 <ch_title>Configuration simplification with better defaults</ch_title>
@@ -227,23 +223,21 @@ Read "Incompatible changes" section to see which properties have been removed.</
 <li>Full review of documentation and improvement both in content and presentation</li>
 </ul>
 <ch_title>Improvements to unit tests</ch_title>
-<p>
 <ul>
 <li>Migration of many tests to JUnit 4</li>
 <li>Better management of Headless tests</li>
 <li>More Unit Tests</li>
 </ul>
-</p>
 <ch_title>Dependencies refresh</ch_title>
 <p>
 Deprecated Libraries dropped or replaced by up to date ones:
+</p>
 <ul>
 <li>Excalibur replaced by commons-dbcp</li>
 <li>htmllexer, htmlparser removed</li>
 <li>soap removed</li>
 <li>jdom removed</li>
 </ul>
-</p>
 <ch_title>Slf4j can now be used within Plugins and core code</ch_title>
 <p>You can now use <a href="http://www.slf4j.org/" target="_blank">SLF4J</a> logging wrapper in your custom plugins or <code>org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient</code> subclasses.</p>
 <!-- =================== Incompatible changes =================== -->
@@ -609,6 +603,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 
 <ch_section>Thanks</ch_section>
 <p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
 <ul>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
@@ -639,7 +634,7 @@ We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
 </ul>
-
+<p>
 Apologies if we have omitted anyone else.
  </p>
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
