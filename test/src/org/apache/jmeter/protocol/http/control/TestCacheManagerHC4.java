@@ -191,6 +191,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
     private HttpRequestBase httpMethod;
     private HttpResponse httpResponse;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         this.httpMethod = new HttpPostStub();
@@ -198,6 +199,7 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         this.httpMethod.setURI(this.url.toURI());
     }
 
+    @Override
     public void tearDown() throws Exception {
         this.httpMethod = null;
         this.httpResponse = null;
