@@ -267,20 +267,8 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li>Property <code>jmeter.toolbar.display</code> has been removed, toolbar is now always displayed. See <bugzilla>59236</bugzilla></li>
     <li>Property <code>jmeter.errorscounter.display</code> has been removed, errors/warnings counter is now always displayed. See <bugzilla>59236</bugzilla></li>
     <li>Property <code>xml.parser</code> has been removed, it is not used anymore as <code>org.apache.jmeter.util.JMeterUtils#getXMLParser</code> has been deprecated and is not used neither. See <bugzilla>59236</bugzilla></li>  
-    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
     <li>Summariser listener now outputs a formated duration in <code>HH:mm:ss</code> (Hour:Minute:Second), it previously outputed seconds. See <bugzilla>58776</bugzilla></li>
-    <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
-    Classes and properties which were only used by those elements have been dropped:
-    <ul>
-        <li><code>org.apache.jmeter.protocol.http.util.DOMPool</code></li>
-        <li><code>org.apache.jmeter.protocol.http.util.WSDLException</code></li>
-        <li><code>org.apache.jmeter.protocol.http.util.WSDLHelper</code></li>
-        <li>Property <code>soap.document_cache</code></li>
-        <li>JAR soap-2.3.1 has been also removed</li>
-    </ul>
-    </li>
     <li><code>org.apache.jmeter.protocol.http.visualizers.RequestViewHTTP.getQueryMap</code> signature has changed, if you use it ensure you update your code. See <bugzilla>58845</bugzilla></li>
-    <li><code>__jexl</code> function (i.e. JEXL 1) has been deprecated and will be removed in next version. See <bugzilla>58903</bugzilla></li>
     <li>JMS Subscriber will consider a sample to be an error if number of received messages is not equal to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
     <li>Since version 3.0, HTTP(S) Test Script recorder uses default port <code>8888</code> as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
     <li>Since version 3.0, the parser for embedded resources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped along with its dependencies.</li>
@@ -311,6 +299,22 @@ Deprecated Libraries dropped or replaced by up to date ones:
         <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
     </ul>
     </li>
+</ul>
+<h3>Deprecated and removed elements</h3>
+<ul>
+    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
+    <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
+    Classes and properties which were only used by those elements have been dropped:
+    <ul>
+        <li><code>org.apache.jmeter.protocol.http.util.DOMPool</code></li>
+        <li><code>org.apache.jmeter.protocol.http.util.WSDLException</code></li>
+        <li><code>org.apache.jmeter.protocol.http.util.WSDLHelper</code></li>
+        <li>Property <code>soap.document_cache</code></li>
+        <li>JAR soap-2.3.1 has been also removed</li>
+    </ul>
+    </li>
+    <li><code>__jexl</code> function (i.e. JEXL 1) has been deprecated and will be removed in next version. See <bugzilla>58903</bugzilla></li>
+    <li>Spline Visualizer listener and Distribution Graph listener have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58791</bugzilla></li> 
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -501,6 +505,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated eight years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59262</bug>Add list of binary jars to LICENSE; use that for unit tests</li>
+<li><bug>59353</bug>Add "Deprecated and removed elements" in "Incompatible changes" part in changes.xml. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
