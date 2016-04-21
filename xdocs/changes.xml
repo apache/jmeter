@@ -96,7 +96,8 @@ This increases the space available for parameters in UI and simplifies the UX.</
 <ch_category>Reporting improvements</ch_category>
 
 <ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
-<p>An dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
+<p>A dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
+See <a href="./usermanual/generating-dashboard.html" target="_blank">Generating dashboard</a> for more details. 
 This report provides the following metrics:
 </p>
 <ul>
@@ -280,6 +281,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     </li>
     <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
     <li>For Thread Group Test Element, the property "<code>Action to be taken after a Sample Error</code>" value has been switched from "<code>Continue</code>" to "<code>Start Next thread loop</code>". See <bugzilla>59152</bugzilla></li>
+    <li>JDBC Request has been updated to use commons-dbcp2, since then the behaviour is slightly different, ensure you have a correct "Validation Query" for your database. See <bugzilla>58786</bugzilla></li>
     <li>The following jars have been removed:
     <ul>
         <li>excalibur-datasource-2.1.jar (see <bugzilla>59156</bugzilla>)</li>
