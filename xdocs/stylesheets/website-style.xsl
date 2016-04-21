@@ -178,6 +178,7 @@
     <div class="social-media">
       <ul class="social-media-links">
         <li class="twitter"><a href="https://twitter.com/ApacheJMeter" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
+        <li class="github"><a href="https://github.com/apache/jmeter" target="_blank"><i class="fa fa-github" aria-hidden="true"></i>github</a></li>
       </ul>
     </div>
   </xsl:template>
