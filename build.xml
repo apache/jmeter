@@ -92,6 +92,10 @@
 
   <property file="build-local.properties"/> <!-- allow local overrides -->
 
+  <!-- Remove .gitignore from the Ant's default excludes -->
+  <!-- to allow to have the .gitignore in the source archive -->
+  <defaultexcludes remove="**/.gitignore"/>
+
    <!-- Findbugs task and target -->
    <!--
    Findbugs is licensed under the Lesser GNU Public License
@@ -1342,10 +1346,11 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.classpath"/>
     <include name="eclipse.project"/>
     <include name="eclipse.readme"/>
+    <include name=".gitignore"/>
     <include name="checkstyle.xml"/>
-  	<include name="checkstyle-suppressions.xml"/>
+    <include name="checkstyle-suppressions.xml"/>
     <include name="rat-excludes.txt"/>
-  	<include name="${build.test-res}/**"/>
+    <include name="${build.test-res}/**"/>
     <include name="${lib.dir}/aareadme.txt"/>
     <include name="fb-*.x*"/>
     <!-- Make sure that the lib/opt directory is included in the archives -->
