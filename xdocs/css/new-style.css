@@ -602,7 +602,7 @@ table {
 }
 
 @media print {
-  .nav, .header, .footer, .pagelinks, .go-top {
+  .nav, .header, .footer, .pagelinks, .go-top, .social-media, .share-links {
     display: none;
   }
 
