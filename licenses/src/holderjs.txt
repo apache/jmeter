@@ -1,0 +1,9 @@
+License
+-------
+
+Holder is provided under the [MIT License](http://opensource.org/licenses/MIT).
+
+Credits
+-------
+
+Holder is a project by [Ivan Malopinsky](http://imsky.co).
