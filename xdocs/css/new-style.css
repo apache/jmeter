@@ -46,10 +46,11 @@
   padding: 0.3rem;
 }
 
+.social-media-links a, .share-links a,
 .social-media-links :visited, .share-links :visited,
 .social-media-links :hover, .share-links :hover,
 .social-media-links :link, .share-links :link {
-  color: white;
+  color: white !important;
 }
 
 .social-media-links i, .share-links i {
