@@ -202,11 +202,6 @@ For details, please see the files under: licenses/src
 * raphael-2.1.4.txt (MIT) | ./bin/report-template/sbadmin2-1.0.7/bower_components/raphael
 * start-bootstrap-admin2-1.0.7.txt (Apache License V2.0) | ./bin/report-template/sbadmin2-1.0.7 and not in the above folders
 
-Holder is provided under the [MIT License](http://opensource.org/licenses/MIT).
-flot-axislabels is released under the terms of [the MIT License](http://www.opensource.org/licenses/MIT).
-
-
-
 Binary distributions additionally contain software included under various licenses,
 see below.
 
