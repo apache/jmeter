@@ -638,6 +638,9 @@ Deprecated Libraries dropped or replaced by up to date ones:
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
+<li>purnasatyap at gmail dot com  for the tests and reports on nightly build</li>
+<li>Sergey Batalin (sergey_batalin at mail dot ru) for the tests and reports on nightly build</li>
+<li>Vincent Daburon (vdaburon at gmail dot com) for the tests and reports on nightly build</li> 
 </ul>
 <p>
 Apologies if we have omitted anyone else.
