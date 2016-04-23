@@ -83,7 +83,7 @@
           </xsl:comment>
           <div>
             <a href="http://www.apache.org">
-              <img title="Apache Software Foundation" class="logo"
+              <img title="Apache Software Foundation" class="asf-logo logo"
                   src="{$imgdir}/asf-logo.svg" alt="Logo ASF" />
             </a>
           </div>
