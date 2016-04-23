@@ -1229,6 +1229,11 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <include name="${dest.jar.jmeter}/examples/**"/>
     <include name="${dest.jar.jmeter}/templates/*.dtd"/>
+    <!-- report-templates files which need to have native eol -->
+    <include name="${dest.jar.jmeter}/report-template/README.TXT"/>
+  	<include name="${dest.jar.jmeter}/report-template/**/*.fmkr"/>
+    <include name="${dest.jar.jmeter}/report-template/content/**/*.css"/>
+  	<include name="${dest.jar.jmeter}/report-template/content/**/*.js"/>
     <!-- JMX files are in the non-native section -->
     <exclude name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${extras.dir}/**"/>
@@ -1269,7 +1274,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/proxyserver.jks"/>
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
-    <include name="${dest.jar.jmeter}/report-template/**"/>
+    <!-- report-template files non native -->
+  	<include name="${dest.jar.jmeter}/report-template/content/pages/*.png"/>
+  	<include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
