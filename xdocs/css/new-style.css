@@ -96,6 +96,12 @@ img.logo {
   max-height: 88px;
 }
 
+img.asf-logo {
+  width: 217px;
+  max-height: 88px;
+}
+
+
 .menu, h1, h2, h3, h4, h5, .go-top, .title {
   font-family: "Merriweather";
 }
