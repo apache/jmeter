@@ -1275,6 +1275,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <!-- report-template files non native -->
+    <include name="${dest.jar.jmeter}/report-template/content/pages/*.png"/>
     <include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
