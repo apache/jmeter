@@ -150,6 +150,10 @@ h1, h2, h3, h4, h5, .title {
   padding-left: 1.5rem;
 }
 
+.menu-title {
+  font-size: 105%;
+}
+
 .banner>iframe {
   width: 270px;
   height: 70px;
