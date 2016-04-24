@@ -405,8 +405,8 @@
     <include name="${lib.dir}/${junit.jar}"/>
     <include name="${lib.dir}/${logkit.jar}"/>
     <include name="${lib.dir}/${mongo-java-driver.jar}"/>
-  	<include name="${lib.dir}/${ph-css.jar}"/>
-  	<include name="${lib.dir}/${ph-commons.jar}"/>
+    <include name="${lib.dir}/${ph-css.jar}"/>
+    <include name="${lib.dir}/${ph-commons.jar}"/>
     <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
@@ -482,8 +482,8 @@
     <pathelement location="${lib.dir}/${junit.jar}"/>
     <pathelement location="${lib.dir}/${logkit.jar}"/>
     <pathelement location="${lib.dir}/${mongo-java-driver.jar}"/>
-  	<pathelement location="${lib.dir}/${ph-css.jar}"/>
-  	<pathelement location="${lib.dir}/${ph-commons.jar}"/>
+    <pathelement location="${lib.dir}/${ph-css.jar}"/>
+    <pathelement location="${lib.dir}/${ph-commons.jar}"/>
     <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
@@ -888,7 +888,7 @@
       <fileset dir="${res.dir}/META-INF" >
         <include name="*.license" />
         <include name="*.notice" />
-      	<include name="jmeter_as_ascii_art.txt" />
+        <include name="jmeter_as_ascii_art.txt" />
       </fileset>      
     </copy>
     <fixcrlf encoding="${encoding}" srcdir="${resources.meta-inf}" eol="crlf" includes="*.license *.notice"/>
@@ -1231,9 +1231,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/templates/*.dtd"/>
     <!-- report-templates files which need to have native eol -->
     <include name="${dest.jar.jmeter}/report-template/README.TXT"/>
-  	<include name="${dest.jar.jmeter}/report-template/**/*.fmkr"/>
+    <include name="${dest.jar.jmeter}/report-template/**/*.fmkr"/>
     <include name="${dest.jar.jmeter}/report-template/content/**/*.css"/>
-  	<include name="${dest.jar.jmeter}/report-template/content/**/*.js"/>
+    <include name="${dest.jar.jmeter}/report-template/content/**/*.js"/>
     <!-- JMX files are in the non-native section -->
     <exclude name="${dest.jar.jmeter}/examples/*.jmx"/>
     <include name="${extras.dir}/**"/>
@@ -1275,8 +1275,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Exclude any files that might be present from testing the release -->
     <exclude name="${dest.jar.jmeter}/*.log"/>
     <!-- report-template files non native -->
-  	<include name="${dest.jar.jmeter}/report-template/content/pages/*.png"/>
-  	<include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
+    <include name="${dest.jar.jmeter}/report-template/sbadmin2*/**"/>
     <include name="${dest.jar.jmeter}/templates/*.jmx"/>
     <include name="${dest.jar.jmeter}/templates/*.xml"/>
     <include name="${dest.jar.jmeter}/examples/*.jmx"/>
@@ -1323,6 +1322,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="NOTICE"/>
     <include name="README"/>
     <include name="${src.dir}/**"/>
+    <exclude name="**/messages.metaprops"/>
     <!-- Exclude binary types -->
     <exclude name="**/*.gif"/>
     <exclude name="**/*.jpg"/>
@@ -2892,8 +2892,8 @@ run JMeter unless all the JMeter jars are added.
     conditional execution (it would be a lot easier if antcall supported if/unless).
     -->
     <target name="_process_all_jars">
-        <process_jarfile jarname="accessors-smart"/>    	
-    	<process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="accessors-smart"/>        
+        <process_jarfile jarname="apache-bsf"/>
         <process_jarfile jarname="asm"/>
         <process_jarfile jarname="avalon-framework"/>
         <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
@@ -2937,8 +2937,8 @@ run JMeter unless all the JMeter jars are added.
         <process_jarfile jarname="junit"/>
         <process_jarfile jarname="logkit"/>
         <process_jarfile jarname="mongo-java-driver"/>
-    	<process_jarfile jarname="ph-css" />
-    	<process_jarfile jarname="ph-commons" />
+        <process_jarfile jarname="ph-css" />
+        <process_jarfile jarname="ph-commons" />
         <process_jarfile jarname="rsyntaxtextarea"/>
         <process_jarfile jarname="serializer"/>
         <process_jarfile jarname="slf4j-api"/>
