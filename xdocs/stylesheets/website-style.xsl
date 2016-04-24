@@ -162,8 +162,8 @@
   <xsl:template name="social-media-links">
     <div class="social-media">
       <ul class="social-media-links">
-        <li class="twitter"><a href="https://twitter.com/ApacheJMeter" target="_blank" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
-        <li class="github"><a href="https://github.com/apache/jmeter" target="_blank" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li>
+        <li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
+        <li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li>
       </ul>
     </div>
   </xsl:template>
@@ -172,9 +172,9 @@
     <div class="share-links">
       Share this page:
       <ul>
-        <li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" target="_blank" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li>
-        <li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" target="_blank" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li>
-        <li class="gplus"><a data-social-url="https://plus.google.com/share?url=" target="_blank" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li>
+        <li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li>
+        <li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li>
+        <li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li>
       </ul>
     </div>
   </xsl:template>
