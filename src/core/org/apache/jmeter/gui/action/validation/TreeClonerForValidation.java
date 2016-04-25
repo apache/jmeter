@@ -75,7 +75,9 @@ public class TreeClonerForValidation extends TreeCloner {
         } else {
             Object clonedNode = super.addNodeToTree(node);
             if(clonedNode instanceof org.apache.jmeter.threads.ThreadGroup) {
-                ((ThreadGroup)clonedNode).setNumThreads(VALIDATION_NUMBER_OF_THREADS);
+                ThreadGroup tg = (ThreadGroup)clonedNode;
+                tg.setNumThreads(VALIDATION_NUMBER_OF_THREADS);
+                tg.setProperty(ThreadGroup.DELAY, 0);
                 if(((AbstractThreadGroup)clonedNode).getSamplerController() instanceof LoopController) {
                     ((LoopController)((AbstractThreadGroup)clonedNode).getSamplerController()).setLoops(VALIDATION_ITERATIONS);
                 }
