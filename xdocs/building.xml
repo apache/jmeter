@@ -124,6 +124,19 @@ Check that patch does not break JUnit tests by running:
     <li>Attach your patch to the bugzilla issue</li>
 </ul>
 </section>
+
+<section name="Automated builds">
+<h2>Automated (nightly) builds</h2>
+<p>
+As part of the development process, the JMeter project has access to various Continuous Integration (CI) server builds.
+The build output can be useful for testing recent changes to the code-base. 
+</p>
+<p>
+Please note that the builds have not undergone any QA and should only be used for development testing.
+For further information, see the <a href="nightly.html">Nightly builds for developers</a> page.
+</p>
+</section>
+
 <section name="Building Add-Ons">
 <h2>Building Add-Ons</h2>
 <p>
