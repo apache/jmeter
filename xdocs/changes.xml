@@ -359,6 +359,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>58786</bug>JDBC Sampler : Replace Excalibur DataSource by more up to date library commons-dbcp2</li>
     <li><bug>59205</bug>TCP Sampler: Set connect time in sampler when connection is established.</li>
+    <li><bug>59381</bug>JMSPublisher : FileChooserDialog filter does not work for browser buttons. Based partly on a patch contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
