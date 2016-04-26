@@ -638,7 +638,7 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.37 Reporting configuration" anchor="reporting">
 <properties>
-<property name="jmeter.reportgenerator.apdex_statisfied_threshold"> Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:500</property>
+<property name="jmeter.reportgenerator.apdex_satisfied_threshold"> Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:500</property>
 <property name="jmeter.reportgenerator.apdex_tolerated_threshold"> Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:1500</property>
 <property name="jmeter.reportgenerator.sample_filter"> Regular Expression which Indicates which samples to keep for graphs and statistics generation.<br/> Empty value means no filtering<br/>, defaults to:</property>
 <property name="jmeter.reportgenerator.temp_dir"> Sets the temporary directory used by the generation processus if it needs file I/O operations.<br/>, defaults to:temp</property>
