@@ -298,6 +298,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
         <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
     </ul>
     </li>
+    <li>Number of redirects followed by JMeter is now 20, it was previously 5. This can be changed with property <code>httpsampler.max_redirects</code>. See <bugzilla>59382</bugzilla></li>
 </ul>
 <h3>Deprecated and removed elements</h3>
 <ul>
@@ -348,6 +349,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59190</bug>HTTP(S) Test Script Recorder : Suggested excludes should ignore case. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>59140</bug>Parallel Download : Add CSS Parsing to extract links from CSS files</li>
     <li><bug>59249</bug>Http Request Defaults : Add "<code>Source address</code>" and "<code>Save responses as MD5</code>"</li>
+    <li><bug>59382</bug>More realistic default value for <code>httpsampler.max_redirects</code></li>
 </ul>
 
 <h3>Other samplers</h3>
