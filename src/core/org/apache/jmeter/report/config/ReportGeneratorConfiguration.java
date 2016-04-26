@@ -52,9 +52,9 @@ public class ReportGeneratorConfiguration {
     private static final File REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT = new File(
             "temp");
 
-    // Apdex Satified Threshold
+    // Apdex Satisfied Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
-            + KEY_DELIMITER + "apdex_statisfied_threshold";
+            + KEY_DELIMITER + "apdex_satisfied_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT = Long.valueOf(500L);
 
     // Apdex Tolerated Threshold
