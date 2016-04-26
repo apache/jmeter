@@ -48,9 +48,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListener {
 
-    private static final long serialVersionUID = 240L;
-
-    private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
+    private static final long serialVersionUID = 241L;
 
     //++ These names are used in the JMX files, and must not be changed
     /** Take source from the named file */
@@ -102,9 +100,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); //$NON-NLS-1$
 
-    private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), ALL_FILES); //$NON-NLS-1$
+    private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file")); //$NON-NLS-1$
 
-    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
+    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file")); //$NON-NLS-1$
 
     private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
