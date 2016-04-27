@@ -62,8 +62,8 @@ Summary
 <ch_title>New JSON Post Processor to better extract data from JSON content using user friendly JSON-PATH syntax</ch_title>
 <p>JSON is now a first class citizen in JMeter with the introduction of a new <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath</a> post processor. 
 This post processor is very similar to Regular Expression Post Processor but is well suited for JSON code.
-It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> 
-<figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure></p>
+It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jayway JSON Path library</a> </p>
+<figure width="829" height="223" image="changes/3.0/json_path_extractor.png" ></figure>
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
 <ch_title>JSR223 Test Elements do not require a Cache Compilation Key anymore</ch_title>
@@ -73,12 +73,12 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
 <source>javascript.use_rhino=false</source>
 <p>Nashorn can be used with Java 8 in the following elements:
+</p>
 <ul>
 <li>IfController</li>
 <li>JSR223 Test elements with <code>javascript</code> language selected</li>
 <li><code>__javaScript</code> function</li>
 </ul>
-</p>
 <ch_title>Jexl3 has been integrated. It provides new scripting features and much better documentation</ch_title>
 <a href="http://commons.apache.org/proper/commons-jexl/" target="_blank">JEXL3</a> can now be used thanks to a new function <code>__jexl3</code>.
 JEXL is a language very similar to JSTL. 
@@ -90,18 +90,20 @@ This increases the space available for parameters in UI and simplifies the UX.</
 
 <ch_title>HTTP Request Defaults improvements</ch_title>
 <p>You can now configure Source Address (IP Spoofing like feature) and "<code>Save response as MD5 hash</code>" in Advanced Tab
-<figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
 </p>
+<figure width="893" height="259" image="changes/3.0/http_request_defaults_advanced.png" ></figure>
 
 <ch_category>Reporting improvements</ch_category>
 
 <ch_title>New Reporting Feature generating dynamic Graphs in HTML pages (APDEX, Summary report and Graphs)</ch_title>
-<p>An dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
+<p>A dynamic HTML report can now be generated either at the end of a load test or from a result file whenever you want.
+See <a href="./usermanual/generating-dashboard.html" target="_blank">Generating dashboard</a> for more details. 
 This report provides the following metrics:
+</p>
 <ul>
     <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
     <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="changes/3.0/report_apdex_and_summary.png" ></figure></li>
-    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="13736" height="433" image="changes/3.0/report_statistics.png" ></figure></li>
+    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1376" height="433" image="changes/3.0/report_statistics.png" ></figure></li>
     <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="changes/3.0/report_errors.png" ></figure></li>
     <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
         <ul>
@@ -122,7 +124,6 @@ This report provides the following metrics:
 </ul>
 
 
-</p>
 <ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
 <ch_title>Summariser displays a more readable duration</ch_title>
 Now duration are display in the format <code>hours:minutes:seconds</code>
@@ -143,11 +144,12 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 <ch_title>BackendListener now allows you to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
 Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
-<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 </p>
+<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 <ch_category>Protocols and Load Testing improvements</ch_category>
 <ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
 <p>Migration to HttpClient 4.5.2 improves the following fields of JMeter:
+</p>
 <ul>
 <li>Support of recent RFC like <a href="https://tools.ietf.org/html/rfc6265" target="_blank">HTTP State Management Mechanism RFC-6265 for Cookies</a>, you should use now <code>HC4CookieHandler</code> in HTTP Cookie Manager component</li>
 <li><a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank">Server Name Indication (SNI)</a> support for HttpClient4 implementation</li>
@@ -155,9 +157,7 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <li>Many bug fixes since previous version 4.2.6 used in JMeter 2.13, see <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES-4.5.x.txt" target="_blank">HttpClient 4.5.X release notes</a></li>
 <li>Better support of HTTP RFC 2616 / RFC 7230 and fixes to issues with <code>deflate</code> compression management</li>
 </ul>
-</p>
 <ch_title>Parallel Downloads is now realistic and scales much better:</ch_title>
-<p>
 <ul>
 <li>Parsing of CSS imported files (through <code>@import</code>) or embedded resources (background, images, &hellip;)</li>
 <li>Lazy initialization of SSL context: For 15 Threads 138% more sampling in 5 minutes for HTTP only tests. Gain increases as number of threads increases</li>
@@ -166,18 +166,20 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <li>Total of 750% more throughput found on test with 15 threads, the more threads you have the more the gain</li>
 <li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting <code>httpsampler.embedded_resources_use_md5=true</code> property</li>
 </ul>
-</p>
 <ch_title>Introduction of Sample Timeout feature</ch_title>
 <p>This new Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
 In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</code> and <code>HTTP Request</code> elements.
-<figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
 </p>
+<figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
 
 <ch_title>JDBC request now uses DBCP2 pool</ch_title>
 <p>JDBC Request and JDBC Connection Configuration have been updated to replace old Excalibur Pool by Apache Commons DBCP2 pool. As a consequence properties have been migrated to equivalent 
 when available and UI has been updated.
-<figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
+Note that unlike Excalibur, Commons DBCP uses the validation query when creating the pool.
+So make sure the query is valid.
+The default query suits many databases, but not all - for example Oracle requires '<code>SELECT 1 FROM DUAL</code>' or similar.
 </p>
+<figure width="582" height="434" image="changes/3.0/jdbc_connection_configuration.png" ></figure>
 <ch_category>UX Improvements:</ch_category>
 
 <ch_title>Better display in HiDPI screens</ch_title>
@@ -191,10 +193,9 @@ when available and UI has been updated.
 Creating and testing a Test Plan before Load Test has been much simplified by allowing you to only start a selection of Thread Group, start them without applying Timers (thus gaining time)
 or start them using a new Validation mode. This validation mode allows you to start a Thread Group (without modifying it) with 1 thread, 1 iteration and without applying timers.
 This validation mode can be customized.
-<figure width="302" height="235" image="changes/3.0/thread_group_starters.png" ></figure>
 </p>
+<figure width="302" height="235" image="changes/3.0/thread_group_starters.png" ></figure>
 <ch_title>New shortcuts</ch_title>
-<p>
 <ul>
 <li>Add most used elements
     (<keycombo>
@@ -209,7 +210,6 @@ This validation mode can be customized.
     configurable through <code>gui.quick_<em>XXX</em></code> properties</li>
 <li>Shortcuts to expand nodes</li>
 </ul>
-</p>
 <ch_category>Core improvements</ch_category>
 
 <ch_title>Configuration simplification with better defaults</ch_title>
@@ -227,23 +227,21 @@ Read "Incompatible changes" section to see which properties have been removed.</
 <li>Full review of documentation and improvement both in content and presentation</li>
 </ul>
 <ch_title>Improvements to unit tests</ch_title>
-<p>
 <ul>
 <li>Migration of many tests to JUnit 4</li>
 <li>Better management of Headless tests</li>
 <li>More Unit Tests</li>
 </ul>
-</p>
 <ch_title>Dependencies refresh</ch_title>
 <p>
 Deprecated Libraries dropped or replaced by up to date ones:
+</p>
 <ul>
 <li>Excalibur replaced by commons-dbcp</li>
 <li>htmllexer, htmlparser removed</li>
 <li>soap removed</li>
 <li>jdom removed</li>
 </ul>
-</p>
 <ch_title>Slf4j can now be used within Plugins and core code</ch_title>
 <p>You can now use <a href="http://www.slf4j.org/" target="_blank">SLF4J</a> logging wrapper in your custom plugins or <code>org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient</code> subclasses.</p>
 <!-- =================== Incompatible changes =================== -->
@@ -267,20 +265,8 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li>Property <code>jmeter.toolbar.display</code> has been removed, toolbar is now always displayed. See <bugzilla>59236</bugzilla></li>
     <li>Property <code>jmeter.errorscounter.display</code> has been removed, errors/warnings counter is now always displayed. See <bugzilla>59236</bugzilla></li>
     <li>Property <code>xml.parser</code> has been removed, it is not used anymore as <code>org.apache.jmeter.util.JMeterUtils#getXMLParser</code> has been deprecated and is not used neither. See <bugzilla>59236</bugzilla></li>  
-    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
     <li>Summariser listener now outputs a formated duration in <code>HH:mm:ss</code> (Hour:Minute:Second), it previously outputed seconds. See <bugzilla>58776</bugzilla></li>
-    <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
-    Classes and properties which were only used by those elements have been dropped:
-    <ul>
-        <li><code>org.apache.jmeter.protocol.http.util.DOMPool</code></li>
-        <li><code>org.apache.jmeter.protocol.http.util.WSDLException</code></li>
-        <li><code>org.apache.jmeter.protocol.http.util.WSDLHelper</code></li>
-        <li>Property <code>soap.document_cache</code></li>
-        <li>JAR soap-2.3.1 has been also removed</li>
-    </ul>
-    </li>
     <li><code>org.apache.jmeter.protocol.http.visualizers.RequestViewHTTP.getQueryMap</code> signature has changed, if you use it ensure you update your code. See <bugzilla>58845</bugzilla></li>
-    <li><code>__jexl</code> function (i.e. JEXL 1) has been deprecated and will be removed in next version. See <bugzilla>58903</bugzilla></li>
     <li>JMS Subscriber will consider a sample to be an error if number of received messages is not equal to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
     <li>Since version 3.0, HTTP(S) Test Script recorder uses default port <code>8888</code> as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
     <li>Since version 3.0, the parser for embedded resources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped along with its dependencies.</li>
@@ -298,6 +284,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     </li>
     <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
     <li>For Thread Group Test Element, the property "<code>Action to be taken after a Sample Error</code>" value has been switched from "<code>Continue</code>" to "<code>Start Next thread loop</code>". See <bugzilla>59152</bugzilla></li>
+    <li>JDBC Request has been updated to use commons-dbcp2, since then the behaviour is slightly different, ensure you have a correct "Validation Query" for your database. See <bugzilla>58786</bugzilla></li>
     <li>The following jars have been removed:
     <ul>
         <li>excalibur-datasource-2.1.jar (see <bugzilla>59156</bugzilla>)</li>
@@ -311,6 +298,23 @@ Deprecated Libraries dropped or replaced by up to date ones:
         <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
     </ul>
     </li>
+    <li>Number of redirects followed by JMeter is now 20, it was previously 5. This can be changed with property <code>httpsampler.max_redirects</code>. See <bugzilla>59382</bugzilla></li>
+</ul>
+<h3>Deprecated and removed elements</h3>
+<ul>
+    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
+    <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
+    Classes and properties which were only used by those elements have been dropped:
+    <ul>
+        <li><code>org.apache.jmeter.protocol.http.util.DOMPool</code></li>
+        <li><code>org.apache.jmeter.protocol.http.util.WSDLException</code></li>
+        <li><code>org.apache.jmeter.protocol.http.util.WSDLHelper</code></li>
+        <li>Property <code>soap.document_cache</code></li>
+        <li>JAR soap-2.3.1 has been also removed</li>
+    </ul>
+    </li>
+    <li><code>__jexl</code> function (i.e. JEXL 1) has been deprecated and will be removed in next version. See <bugzilla>58903</bugzilla></li>
+    <li>Spline Visualizer listener and Distribution Graph listener have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58791</bugzilla></li> 
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -345,6 +349,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59190</bug>HTTP(S) Test Script Recorder : Suggested excludes should ignore case. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>59140</bug>Parallel Download : Add CSS Parsing to extract links from CSS files</li>
     <li><bug>59249</bug>Http Request Defaults : Add "<code>Source address</code>" and "<code>Save responses as MD5</code>"</li>
+    <li><bug>59382</bug>More realistic default value for <code>httpsampler.max_redirects</code></li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -354,6 +359,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>58160</bug>JMS Publisher : reload file content if file name changes. Based partly on a patch contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>58786</bug>JDBC Sampler : Replace Excalibur DataSource by more up to date library commons-dbcp2</li>
     <li><bug>59205</bug>TCP Sampler: Set connect time in sampler when connection is established.</li>
+    <li><bug>59381</bug>JMSPublisher : FileChooserDialog filter does not work for browser buttons. Based partly on a patch contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -501,6 +507,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>58790</bug>Issue in CheckDirty and its relation to ActionRouter</li>
 <li><bug>59095</bug>Remove UserParameterXMLParser that was deprecated eight years ago. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59262</bug>Add list of binary jars to LICENSE; use that for unit tests</li>
+<li><bug>59353</bug>Add "Deprecated and removed elements" in "Incompatible changes" part in changes.xml. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
@@ -541,6 +548,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>58947</bug>Connect metric is wrong when <code>ConnectException</code> occurs</li>
     <li><bug>58980</bug>JMS Subscriber will return successful as long as 1 message is received. Contributed by Harrison Termotto (harrison dot termotto at stonybrook.edu)</li>
     <li><bug>59075</bug>JMS Publisher: <code>NumberFormatException</code> is thrown if priority or expiration field is empty</li>
+    <li><bug>59345</bug>SMTPSampler connection leak. Based on a patch by Luca Maragnani (luca dot maragnani at gmail dot com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -597,12 +605,14 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59096</bug>Search Feature : Case insensitive search is not really case insensitive</li>
     <li><bug>59193</bug><code>ant run_gui</code> fails with  <code>ClassNotFoundException</code> or <code>IllegalAccessError</code> when accessing classes from dependencies not loaded through <code>Thread.currentThread().getContextClassLoader()</code></li>
     <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+    <li><bug>56927</bug>Disable language change during a test</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
 
 <ch_section>Thanks</ch_section>
 <p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
 <ul>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Benoit Vatan (benoit.vatan at gmail.com)</li>
@@ -624,14 +634,20 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li>Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li>Gary Gregory (ggregory at apache.org)</li>
 <li>David Coppens (d.l.coppens at gmail.com)</li>
+<li>Luca Maragnani (luca dot maragnani at gmail dot com)</li>
+<li>Philip Helger (http://www.helger.com) for his <a href="https://github.com/phax" target="_blank">CSS Parser</a> and for taking into account our bug reports very rapidly</li>
+<li>Irek Pastusiak (the.automatic.tester at gmail.com)</li>
 </ul>
 
 <br/>
 We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
 <ul>
+<li>purnasatyap at gmail dot com  for the tests and reports on nightly build</li>
+<li>Sergey Batalin (sergey_batalin at mail dot ru) for the tests and reports on nightly build</li>
+<li>Vincent Daburon (vdaburon at gmail dot com) for the tests and reports on nightly build</li> 
 </ul>
-
+<p>
 Apologies if we have omitted anyone else.
  </p>
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->

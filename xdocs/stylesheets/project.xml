@@ -28,16 +28,16 @@
        <item name="License"             href="http://www.apache.org/licenses/"/>
      </menu>
      <menu name="Download">
-         <item name="Download Releases"    href="/download_jmeter.cgi"/>
-        <item name="Developer (Nightly) Builds"      href="/nightly.html"/>
+        <item name="Download Releases"    href="/download_jmeter.cgi"/>
+        <item name="Release Notes"        href="/changes.html"/>
      </menu>
      <menu name="Documentation">
-        <item name="Changes per version"             href="/changes.html"/>
         <item name="Get Started"         href="/usermanual/get-started.html"/>
         <item name="User Manual"         href="/usermanual/index.html"/>
         <item name="Best Practices"         href="/usermanual/best-practices.html"/>
         <item name="Component Reference"         href="/usermanual/component_reference.html"/>
         <item name="Functions Reference"         href="/usermanual/functions.html"/>
+        <item name="Change History"              href="/changes_history.html"/>
         <item name="Javadocs"             href="/api/index.html"/>
         <item name="Building JMeter and Add-Ons"     href="/building.html"/>
         <item name="JMeter Wiki"         href="http://wiki.apache.org/jmeter"/>

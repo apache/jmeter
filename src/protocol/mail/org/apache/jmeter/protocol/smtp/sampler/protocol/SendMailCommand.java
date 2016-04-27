@@ -289,28 +289,37 @@ public class SendMailCommand {
      */
     public void execute(Message message) throws MessagingException, IOException, InterruptedException {
 
-        Transport tr = session.getTransport(getProtocol());
-        SynchronousTransportListener listener = null;
+        Transport tr = null;
+        try {
+            tr = session.getTransport(getProtocol());
+            SynchronousTransportListener listener = null;
 
-        if (synchronousMode) {
-            listener = new SynchronousTransportListener();
-            tr.addTransportListener(listener);
+            if (synchronousMode) {
+                listener = new SynchronousTransportListener();
+                tr.addTransportListener(listener);
+            }
+    
+            if (useAuthentication) {
+                tr.connect(smtpServer, username, password);
+            } else {
+                tr.connect();
+            }
+
+            tr.sendMessage(message, message.getAllRecipients());
+
+            if (listener != null /*synchronousMode==true*/) {
+                listener.attend(); // listener cannot be null here
+            }
+        } finally {
+            if(tr != null) {
+                try {
+                    tr.close();
+                } catch (Exception e) {
+                    // NOOP
+                }
+            }
+            logger.debug("transport closed");
         }
-
-        if (useAuthentication) {
-            tr.connect(smtpServer, username, password);
-        } else {
-            tr.connect();
-        }
-
-        tr.sendMessage(message, message.getAllRecipients());
-
-        if (listener != null /*synchronousMode==true*/) {
-            listener.attend(); // listener cannot be null here
-        }
-
-        tr.close();
-        logger.debug("transport closed");
 
         logger.debug("message sent");
         return;

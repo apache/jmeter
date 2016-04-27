@@ -62,6 +62,10 @@
           href='http://fonts.googleapis.com/css?family=Merriweather:400normal'
           rel='stylesheet' type='text/css'
         ></link>
+        <link
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"
+          rel="stylesheet" type='text/css'
+        ></link>
         <link rel="stylesheet" type="text/css"
           href="{concat($cssdir, '/new-style.css')}"
         ></link>
@@ -79,7 +83,7 @@
           </xsl:comment>
           <div>
             <a href="http://www.apache.org">
-              <img title="Apache Software Foundation" class="logo"
+              <img title="Apache Software Foundation" class="asf-logo logo"
                   src="{$imgdir}/asf-logo.svg" alt="Logo ASF" />
             </a>
           </div>
@@ -111,47 +115,17 @@
           </div>
         </div>
         <div class="nav">
-          <div class="social menu">
-              <div align="center">
-                <a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button"
-                  data-show-count="false" data-lang="en-gb"
-                >Follow</a>
-                <script><![CDATA[(function(d,s,id){
-                  var js,
-                      fjs=d.getElementsByTagName(s)[0],
-                      p=/^http:/.test(d.location)?'http':'https';
-                  if (!d.getElementById(id)) {
-                      js=d.createElement(s);
-                      js.id=id;
-                      js.src=p+'://platform.twitter.com/widgets.js';
-                      fjs.parentNode.insertBefore(js,fjs);
-                  }
-              })(document, 'script', 'twitter-wjs');]]>
-                </script>
-              </div>
-              <div align="center">
-                  <a href="https://github.com/apache/jmeter">
-                      <img alt="star this repo" src="http://githubbadges.com/star.svg?user=apache&amp;repo=jmeter&amp;style=flat" />
-                  </a>
-                  <a href="https://github.com/apache/jmeter/fork">
-                      <img alt="fork this repo" src="http://githubbadges.com/fork.svg?user=apache&amp;repo=jmeter&amp;style=flat" />
-                  </a>
-              </div>
-              <div align="center">
-                  <a href="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter">
-                      <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg" />
-                  </a>
-              </div>
-          </div>
             <xsl:apply-templates select="$project/body/menu" />
         </div>
         <div class="main" id="content">
+          <xsl:call-template name="social-media-links" />
           <xsl:call-template name="pagelinks" />
           <xsl:if test="@index">
             <xsl:call-template name="section-index" />
           </xsl:if>
           <xsl:apply-templates select="body/section"></xsl:apply-templates>
           <xsl:call-template name="pagelinks" />
+          <xsl:call-template name="share-links" />
         </div>
         <div class="footer">
           <div class="copyright">
@@ -166,8 +140,43 @@
             Apache Software Foundation.
           </div>
         </div>
+        <script><![CDATA[(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();]]></script>
       </body>
     </html>
+  </xsl:template>
+
+  <xsl:template name="social-media-links">
+    <div class="social-media">
+      <ul class="social-media-links">
+        <li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
+        <li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li>
+      </ul>
+    </div>
+  </xsl:template>
+
+  <xsl:template name="share-links">
+    <div class="share-links">
+      Share this page:
+      <ul>
+        <li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li>
+        <li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li>
+        <li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li>
+      </ul>
+    </div>
   </xsl:template>
 
   <xsl:template name="pagelinks">
@@ -291,9 +300,9 @@
   </xsl:template>
 
   <xsl:template match="ch_title">
-    <h2 class="ch_title">
+    <h3 class="ch_title">
       <xsl:apply-templates />
-    </h2>
+    </h3>
   </xsl:template>
 
   <xsl:template match="ch_category">

@@ -285,7 +285,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <code>name</code> and
         <code>value</code>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
-        don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
+        don't expect an equals sign when the value is the empty string).  The query string will be generated in the correct fashion, depending on
         the choice of "Method" you made (i.e. if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
         appended to the URL, if <code>POST</code> or <code>PUT</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
@@ -350,7 +350,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <property name="Source address field" required="No">
         <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
         This property is used to enable IP Spoofing.
-        It override the default local IP address for this sample.
+        It overrides the default local IP address for this sample.
         The JMeter host must have multiple IP addresses (i.e. IP aliases, network interfaces, devices).
         The value can be a host name, IP address, or a network interface device such as "<code>eth0</code>" or "<code>lo</code>" or "<code>wlan0</code>".<br></br>
         If the property <code>httpclient.localaddress</code> is defined, that is used for all HttpClient requests.
@@ -492,7 +492,7 @@ This property is in this file:</p>
 
 <component name="JDBC Request" index="&sect-num;.1.3"  width="710" height="629" screenshot="jdbctest/jdbc-request.png">
 
-<description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
+<description><p>This sampler lets you send a JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
 <complink name="JDBC Connection Configuration"/> Configuration element
 </p>
@@ -629,7 +629,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>If the method <code>teardownTest</code> is not overriden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -846,7 +846,7 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
       <dt><b>Single bind/unbind</b></dt>
       <dd>
         <p> This is a combination of the LDAP "<code>bind</code>" and "<code>unbind</code>" operations.
-        It can be used for an authentication request/password check for any user. It will open an new session, just to
+        It can be used for an authentication request/password check for any user. It will open a new session, just to
         check the validity of the user/password combination, and end the session again.</p>
         <properties>
           <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
@@ -899,7 +899,7 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
          <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
          <property name="Scope" required="No">Use <code>0</code> for baseobject-, <code>1</code> for onelevel- and <code>2</code> for a subtree search. (Default=<code>0</code>)</property>
          <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=<code>0</code>, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode <code>4</code></property>
-         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
+         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the response time. (default is <code>0</code>, which means no limit)</property>
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
          <property name="Return object" required="No">Whether the object will be returned (<code>true</code>) or not (<code>false</code>). Default=<code>false</code></property>
          <property name="Dereference aliases" required="No">If <code>true</code>, it will dereference aliases, if <code>false</code>, it will not follow them (default=<code>false</code>)</property>
@@ -1222,7 +1222,7 @@ methods in the SampleResult. For example, the script has access to the methods
 </p>
 <p>
 Unlike the BeanShell Sampler, the BSF Sampler does not set the <code>ResponseCode</code>, <code>ResponseMessage</code> and sample status via script variables.
-Currently the only way to changes these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
+Currently the only way to change these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
 </p>
 <ul>
 <li><code>SampleResult.setSuccessful(true/false)</code></li>
@@ -1242,7 +1242,7 @@ To benefit from this feature:
 </p>
 <ul>
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
-    <li>Or Use Script Text and check <code>Compilation cache key</code> property.
+    <li>Or Use Script Text and check <code>Cache compiled script if available</code> property.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
     </li>
@@ -1251,7 +1251,7 @@ Cache size is controlled by the following jmeter property (<code>jmeter.properti
 <source>jsr223.compiled_scripts_cache_size=100</source>
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
-JSR223 Test Elements using Script file or Script text + checked <code>Compilation cache key</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
+JSR223 Test Elements using Script file or Script text + checked <code>Cache compiled script if available</code> are now compiled if ScriptEngine supports this feature, this enables great performance enhancements.
 </note>
 </description>
 <note>
@@ -1273,7 +1273,7 @@ props.put("PROP1","1234");</source>
     </property>
     <property name="Script File" required="No">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
     <property name="Parameters" required="No">List of parameters to be passed to the script file or the script.</property>
-    <property name="Compilation cache key" required="No">If checked (advised) and the language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
+    <property name="Cache compiled script if available" required="No">If checked (advised) and the language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</property>
     <property name="Script" required="Yes (unless script file is provided)">Script to be passed to JSR223 language</property>
 </properties>
 <p>
@@ -1973,7 +1973,7 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 </component>
 
 <component name="MongoDB Script (DEPRECATED)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
-<description><p>This sampler lets you send an Request to a MongoDB.</p>
+<description><p>This sampler lets you send a Request to a MongoDB.</p>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
@@ -2300,7 +2300,7 @@ setting is reset when a parent Loop Controller restarts.
         <ul>
             <li><code>${COUNT} &lt; 10</code></li>
             <li><code>"${VAR}" == "abcd"</code></li>
-            <li><code>${JMeterThread.last_sample_ok}</code> (check if last sample succeeded)</li>
+            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
     </example>
@@ -2834,7 +2834,7 @@ There are several ways to view the response, selectable by a drop-down box at th
 <td>The <i>CSS/JQuery Tester</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the CSS/JQuery to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The engine of CSS/JQuery expression can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
+The CSS/JQuery expression engine can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
 For example, the Selector <code>a[class=sectionlink]</code> with attribute <code>href</code> applied to the current JMeter functions page gives the following output:
 <br/>
 <source>
@@ -2883,7 +2883,7 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The engine of regular expression is the same that the Regular Expression Extractor.<br/>
+The regular expression engine is the same as that used in the Regular Expression Extractor.<br/>
 For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter home page gives the following output:
 <br/>
 <source>
@@ -2954,8 +2954,8 @@ compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ex
 <p>
     The Control Panel (above) shows an example of an HTML display.<br/>
     Figure 9 (below) shows an example of an XML display.<br/>
-    Figure 9a (below) shows an example of an Regexp tester display.<br/>
-    Figure 9b (below) shows an example of an Document display.<br/>
+    Figure 9a (below) shows an example of a Regexp tester display.<br/>
+    Figure 9b (below) shows an example of a Document display.<br/>
 </p>
     <div align="center">
 <figure width="903" height="657" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
@@ -3467,8 +3467,8 @@ label =    817 in 0:05:07 =    2.7/s Avg:  1526 Min:  1003 Max:  2020 Err:     0
 </source>
 The "<code>label</code>" is the name of the element.
 The <code>"+"</code> means that the line is a delta line, i.e. shows the changes since the last output.<br/>
-The <code>"="</code> means that the line is a totals line, i.e. it shows the running total.<br/>
-Entries in the jmeter log file also include time-stamps.
+The <code>"="</code> means that the line is a total line, i.e. it shows the running total.<br/>
+Entries in the JMeter log file also include time-stamps.
 The example "<code>817 in 0:05:07 =    2.7/s</code>" means that there were 817 samples recorded in 5 minutes and 7 seconds,
 and that works out at 2.7 samples per second.<br/>
 The <code>Avg</code> (Average), <code>Min</code> (Minimum) and <code>Max</code> (Maximum) times are in milliseconds.<br/>
@@ -3508,7 +3508,7 @@ The Comparison Assertion Visualizer shows the results of any <complink name="Com
  </properties>
 </component>
 
-<component name="Backend Listener" index="&sect-num;.3.21"  width="902" height="341" screenshot="backend_listener.png">
+<component name="Backend Listener" index="&sect-num;.3.21"  width="705" height="350" screenshot="backend_listener.png">
 <description>
 The backend listener is an Asynchronous listener that enables you to plug custom implementations of <a href="../api/org/apache/jmeter/visualizers/backend/BackendListenerClient.html">BackendListenerClient</a>.
 By default, a Graphite implementation is provided.
@@ -3758,7 +3758,7 @@ for references to more documentation, and tweak them to match your Kerberos conf
 </p>
 <p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
-from the url. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
+from the URL. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
 number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior
 can be emulated by setting the following jmeter property as below.
 </p>
@@ -4005,13 +4005,13 @@ header table entries.</property>
 that tells JMeter to override the default "<code>User-Agent</code>" request header and use a particular Internet Explorer agent string
 instead. (see figures 12 and 13).</p>
 
-<figure width="266" height="117" image="http-config/header-manager-example1a.gif">Figure 12 - Test Plan</figure>
+<figure width="247" height="121" image="http-config/header-manager-example1a.png">Figure 12 - Test Plan</figure>
 <figure image="http-config/header-manager-example1b.png">Figure 13 - Header Manager Control Panel</figure>
 </example>
 
 </component>
 
-<component name="Java Request Defaults" index="&sect-num;.4.9"  width="454" height="283" screenshot="java_defaults.png">
+<component name="Java Request Defaults" index="&sect-num;.4.9"  width="685" height="373" screenshot="java_defaults.png">
 <description><p>The Java Request Defaults component lets you set default values for Java testing.  See the <complink name="Java Request" />.</p>
 </description>
 
@@ -4054,7 +4054,12 @@ instead. (see figures 12 and 13).</p>
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getSoftMinEvictableIdleTimeMillis--">BasicDataSource.html#getSoftMinEvictableIdleTimeMillis</a>.
         Defaults to 5000 (5 seconds)
         </property>
-        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.</property>
+        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.
+        This defaults to 'SELECT 1' which is suitable for many databases. 
+        However some may require a different query; for example Oracle requires something like 'SELECT 1 FROM DUAL'.
+        Note this validation query is used on pool creation to validate it even if "Test While Idle" suggests query would only be used on idle connections. 
+        This is DBCP behaviour.
+        </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
         JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).</property>
@@ -4328,10 +4333,10 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Keep Trying" required="No">
             If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
             There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
-            <br/>It also can be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
+            <br/>It can also be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
             <note>Note that when using this flag
               <ul>
-                <li>for a replica set, the driver will trying to connect to the old master for that time, instead of failing over to the new one right away </li>
+                <li>for a replica set, the driver will try to connect to the old master for that time, instead of failing over to the new one right away </li>
                 <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
               </ul>
               Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
@@ -4524,7 +4529,7 @@ These can be used anywhere within the expression and remain in effect until over
 </p>
 <example title="Assertion Examples" anchor="assertion_examples">
 <center>
-<figure image="assertion/example1a.png" width="242" height="123">Figure 14 - Test Plan</figure>
+<figure image="assertion/example1a.png" width="266" height="117">Figure 14 - Test Plan</figure>
 <figure image="assertion/example1b.png" width="920" height="451">Figure 15 - Assertion Control Panel with Pattern</figure>
 <figure image="assertion/example1c-pass.png" width="801" height="230">Figure 16 - Assertion Listener Results (Pass)</figure>
 <figure image="assertion/example1c-fail.png" width="800" height="233">Figure 17 - Assertion Listener Results (Fail)</figure>
@@ -5002,7 +5007,7 @@ Note that the throughput value should not be changed too often during a test
 </properties>
 </component>
 
-<component name="Synchronizing Timer" index="&sect-num;.6.5" width="415" height="125" screenshot="timers/sync_timer.png">
+<component name="Synchronizing Timer" index="&sect-num;.6.5" width="410" height="145" screenshot="timers/sync_timer.png">
 
 <description>
 <p>
@@ -6109,11 +6114,12 @@ When using the scheduler, JMeter runs the thread group until either the number o
 Note that the condition is only checked between samples; when the end condition is reached, that thread will stop.
 JMeter does not interrupt samplers which are waiting for a response, so the end time may be delayed arbitrarily.
 </p>
+</description>
 <p>
 Since JMeter 3.0, you can run a selection of Thread Group by selecting them and right clicking. A popup menu will appear:
 <figure width="461" height="818" image="threadgroup-popup-menu.png">Popup menu to start a selection of Thread Groups</figure>
 
-Notice you have 3 options to run the selection of Thread Groups:
+<br/>Notice you have 3 options to run the selection of Thread Groups:
 <ul>
 <li>Start : Start the selected thread groups only</li>
 <li>Start no pauses : Start the selected thread groups only but without running the timers</li>
@@ -6121,14 +6127,14 @@ Notice you have 3 options to run the selection of Thread Groups:
 </ul> 
 
 <b>Validation Mode:</b><br></br>
-This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration and no timers:
+This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to 0.
+The 3 first properties can be modified by setting in user.properties:
 <ul>
 <li><code>testplan_validation.nb_threads_per_thread_group</code> : Number of threads to use to validate a Thread Group, by default 1</li>
 <li><code>testplan_validation.ignore_timers</code> : Ignore timers when validating the thread group of plan, by default 1</li>
 <li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
 </ul> 
 </p>
-</description>
 
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
@@ -6273,7 +6279,7 @@ When connecting via HTTPS, the server presents the certificate to the browser.
 To authenticate the certificate, the browser checks that the server certificate is signed
 by a Certificate Authority (CA) that is linked to one of its in-built root CAs.
 <note>Browsers also check that the certificate is for the correct host or domain, and that it is valid and not expired.</note>
-If any of the browser checks fail, it will prompt the user who can then decided whether to allow the connection to proceed.  
+If any of the browser checks fail, it will prompt the user who can then decide whether to allow the connection to proceed.  
 </p>
 <p>
 JMeter needs to use its own certificate to enable it to intercept the HTTPS connection from

@@ -359,7 +359,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             return IOUtils.toByteArray(inputStream, (int)file.length());
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
-            throw new IllegalStateException("Unable to load file", e);
+            throw new IllegalStateException("Unable to load file:'"+path+"'", e);
         } finally {
             JOrphanUtils.closeQuietly(inputStream);
         }
@@ -382,7 +382,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         readObject = (Serializable) xstream.fromXML(inputStream, readObject);
       } catch (Exception e) {
           log.error(e.getLocalizedMessage(), e);
-          throw new IllegalStateException("Unable to load object instance from file", e);
+          throw new IllegalStateException("Unable to load object instance from file:'"+path+"'", e);
       } finally {
           JOrphanUtils.closeQuietly(inputStream);
       }
