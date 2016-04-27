@@ -24,6 +24,10 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
+import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
@@ -46,6 +50,13 @@ public class ChangeLanguage implements Command {
      */
     @Override
     public void doAction(ActionEvent e) {
+        if (JMeterContextService.getTestStartTime()>0) {
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("language_change_test_running"),  //$NON-NLS-1$
+                    JMeterUtils.getResString("language_change_title"),  //$NON-NLS-1$
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String locale = ((Component) e.getSource()).getName();
         Locale loc;
 
