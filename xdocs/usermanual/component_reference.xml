@@ -2883,7 +2883,7 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The regular expression engine is the same as the Regular Expression Extractor.<br/>
+The regular expression engine is the same as that used in the Regular Expression Extractor.<br/>
 For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter home page gives the following output:
 <br/>
 <source>
