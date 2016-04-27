@@ -245,7 +245,7 @@ https.default.protocol=SSLv3
         so they are not seen by JMeter, and thus will not appear as samples.
         Should only be used for <code>GET</code> and <code>HEAD</code> requests.
         The HttpClient sampler will reject attempts to use it for <code>POST</code> or <code>PUT</code>.
-        <note>Warning: see below for information on cookie and header handling.</note>
+        <note>Warning: see below for information on cookies and headers handling.</note>
         </property>
         <property name="Follow Redirects" required="No">
         This only has any effect if "<code>Redirect Automatically</code>" is not enabled.
@@ -284,13 +284,13 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 </property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <code>name</code> and
-        <code>value</code>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
-        don't expect an equals when the value is the empty string).  The query string will be generated in the correct fashion, depending on
+        <code>value</code>, the options to encode the parameter, and an option to include or exclude an equal sign (some applications
+        don't expect an equal when the value is the empty string).  The query string will be generated in the correct fashion, depending on
         the choice of "Method" you made (i.e. if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
         appended to the URL, if <code>POST</code> or <code>PUT</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
-        <b>See below for some further information on parameter handling.</b>
+        <b>See below for some further information on parameters handling.</b>
         <p>
         Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as the following then encoding is usually required.:
@@ -310,7 +310,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests, 
         and also for <code>PUT</code> requests.
-        <b>See below for some further information on parameter handling.</b>
+        <b>See below for some further information on parameters handling.</b>
         </p>
         </property>
         <property name="Parameter name:" required="No">Value of the "<code>name</code>" web request parameter.</property>
@@ -350,7 +350,7 @@ and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSS
         <property name="Source address field" required="No">
         <i>[Only for HTTP Request with HTTPClient implementation]</i> <br></br>
         This property is used to enable IP Spoofing.
-        It override the default local IP address for this sample.
+        It overrides the default local IP address for this sample.
         The JMeter host must have multiple IP addresses (i.e. IP aliases, network interfaces, devices).
         The value can be a host name, IP address, or a network interface device such as "<code>eth0</code>" or "<code>lo</code>" or "<code>wlan0</code>".<br></br>
         If the property <code>httpclient.localaddress</code> is defined, that is used for all HttpClient requests.
@@ -492,7 +492,7 @@ This property is in this file:</p>
 
 <component name="JDBC Request" index="&sect-num;.1.3"  width="710" height="629" screenshot="jdbctest/jdbc-request.png">
 
-<description><p>This sampler lets you send an JDBC Request (an SQL query) to a database.</p>
+<description><p>This sampler lets you send a JDBC Request (an SQL query) to a database.</p>
 <p>Before using this you need to set up a
 <complink name="JDBC Connection Configuration"/> Configuration element
 </p>
@@ -629,7 +629,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>If the method <code>teardownTest</code> is not overriden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -846,7 +846,7 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
       <dt><b>Single bind/unbind</b></dt>
       <dd>
         <p> This is a combination of the LDAP "<code>bind</code>" and "<code>unbind</code>" operations.
-        It can be used for an authentication request/password check for any user. It will open an new session, just to
+        It can be used for an authentication request/password check for any user. It will open a new session, just to
         check the validity of the user/password combination, and end the session again.</p>
         <properties>
           <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
@@ -899,7 +899,7 @@ Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
          <property name="Search Filter" required="Yes">searchfilter, must be specified in LDAP syntax.</property>
          <property name="Scope" required="No">Use <code>0</code> for baseobject-, <code>1</code> for onelevel- and <code>2</code> for a subtree search. (Default=<code>0</code>)</property>
          <property name="Size Limit" required="No">Specify the maximum number of results you want back from the server. (default=<code>0</code>, which means no limit.) When the sampler hits the maximum number of results, it will fail with errorcode <code>4</code></property>
-         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the responsetime. (default is <code>0</code>, which means no limit)</property>
+         <property name="Time Limit" required="No">Specify the maximum amount of (cpu)time (in milliseconds) that the server can spend on your search. Take care, this does not say anything about the response time. (default is <code>0</code>, which means no limit)</property>
          <property name="Attributes" required="No">Specify the attributes you want to have returned, separated by a semicolon. An empty field will return all attributes</property>
          <property name="Return object" required="No">Whether the object will be returned (<code>true</code>) or not (<code>false</code>). Default=<code>false</code></property>
          <property name="Dereference aliases" required="No">If <code>true</code>, it will dereference aliases, if <code>false</code>, it will not follow them (default=<code>false</code>)</property>
@@ -1222,7 +1222,7 @@ methods in the SampleResult. For example, the script has access to the methods
 </p>
 <p>
 Unlike the BeanShell Sampler, the BSF Sampler does not set the <code>ResponseCode</code>, <code>ResponseMessage</code> and sample status via script variables.
-Currently the only way to changes these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
+Currently the only way to change these is via the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> methods:
 </p>
 <ul>
 <li><code>SampleResult.setSuccessful(true/false)</code></li>
@@ -1973,7 +1973,7 @@ If the timeout expires before the command finishes, JMeter will attempt to kill 
 </component>
 
 <component name="MongoDB Script (DEPRECATED)" index="&sect-num;.1.21" width="847" height="635" screenshot="mongodb-script.png">
-<description><p>This sampler lets you send an Request to a MongoDB.</p>
+<description><p>This sampler lets you send a Request to a MongoDB.</p>
 <p>Before using this you need to set up a
 <complink name="MongoDB Source Config"/> Configuration element
 </p>
@@ -2029,7 +2029,7 @@ storage device.</p>
 In this example, we created a Test Plan that sends two Ant HTTP requests and two
 Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
 Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
-processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
+processes the controller(s) you add to it.  So, in this example, JMeter sends requests in the
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.</p>
 <p>
 Note, the File Reporter
@@ -2300,7 +2300,7 @@ setting is reset when a parent Loop Controller restarts.
         <ul>
             <li><code>${COUNT} &lt; 10</code></li>
             <li><code>"${VAR}" == "abcd"</code></li>
-            <li><code>${JMeterThread.last_sample_ok}</code> (check if last sample succeeded)</li>
+            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
     </example>
@@ -2883,7 +2883,7 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The engine of regular expression is the same that the Regular Expression Extractor.<br/>
+The engine of regular expression is the same as the Regular Expression Extractor.<br/>
 For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter home page gives the following output:
 <br/>
 <source>
@@ -2954,8 +2954,8 @@ compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ex
 <p>
     The Control Panel (above) shows an example of an HTML display.<br/>
     Figure 9 (below) shows an example of an XML display.<br/>
-    Figure 9a (below) shows an example of an Regexp tester display.<br/>
-    Figure 9b (below) shows an example of an Document display.<br/>
+    Figure 9a (below) shows an example of a Regexp tester display.<br/>
+    Figure 9b (below) shows an example of a Document display.<br/>
 </p>
     <div align="center">
 <figure width="903" height="657" image="view_results_tree_xml.png">Figure 9 Sample XML display</figure>
@@ -3467,8 +3467,8 @@ label =    817 in 0:05:07 =    2.7/s Avg:  1526 Min:  1003 Max:  2020 Err:     0
 </source>
 The "<code>label</code>" is the name of the element.
 The <code>"+"</code> means that the line is a delta line, i.e. shows the changes since the last output.<br/>
-The <code>"="</code> means that the line is a totals line, i.e. it shows the running total.<br/>
-Entries in the jmeter log file also include time-stamps.
+The <code>"="</code> means that the line is a total line, i.e. it shows the running total.<br/>
+Entries in the JMeter log file also include time-stamps.
 The example "<code>817 in 0:05:07 =    2.7/s</code>" means that there were 817 samples recorded in 5 minutes and 7 seconds,
 and that works out at 2.7 samples per second.<br/>
 The <code>Avg</code> (Average), <code>Min</code> (Minimum) and <code>Max</code> (Maximum) times are in milliseconds.<br/>
@@ -3758,7 +3758,7 @@ for references to more documentation, and tweak them to match your Kerberos conf
 </p>
 <p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
-from the url. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
+from the URL. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
 number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior
 can be emulated by setting the following jmeter property as below.
 </p>
@@ -4333,10 +4333,10 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
         <property name="Keep Trying" required="No">
             If <code>true</code>, the driver will keep trying to connect to the same server in case that the socket cannot be established.<br/>
             There is maximum amount of time to keep retrying, which is 15s by default.<br/>This can be useful to avoid some exceptions being thrown when a server is down temporarily by blocking the operations.
-            <br/>It also can be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
+            <br/>It can also be useful to smooth the transition to a new master (so that a new master is elected within the retry time).<br/>
             <note>Note that when using this flag
               <ul>
-                <li>for a replica set, the driver will trying to connect to the old master for that time, instead of failing over to the new one right away </li>
+                <li>for a replica set, the driver will try to connect to the old master for that time, instead of failing over to the new one right away </li>
                 <li>this does not prevent exception from being thrown in read/write operations on the socket, which must be handled by application.</li>
               </ul>
               Even if this flag is false, the driver already has mechanisms to automatically recreate broken connections and retry the read operations.
@@ -6279,7 +6279,7 @@ When connecting via HTTPS, the server presents the certificate to the browser.
 To authenticate the certificate, the browser checks that the server certificate is signed
 by a Certificate Authority (CA) that is linked to one of its in-built root CAs.
 <note>Browsers also check that the certificate is for the correct host or domain, and that it is valid and not expired.</note>
-If any of the browser checks fail, it will prompt the user who can then decided whether to allow the connection to proceed.  
+If any of the browser checks fail, it will prompt the user who can then decide whether to allow the connection to proceed.  
 </p>
 <p>
 JMeter needs to use its own certificate to enable it to intercept the HTTPS connection from
