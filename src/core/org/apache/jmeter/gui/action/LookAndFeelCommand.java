@@ -29,9 +29,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -140,6 +142,11 @@ public class LookAndFeelCommand implements Command {
                 }
             }
             PREFS.put(USER_PREFS_KEY, className);
+            
+            JOptionPane.showMessageDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("laf_change_message"),  //$NON-NLS-1$
+                    JMeterUtils.getResString("laf_change_title"),  //$NON-NLS-1$
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (javax.swing.UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException | IllegalAccessException e) {
             JMeterUtils.reportErrorToUser("Look and Feel unavailable:" + e.toString());
         }
