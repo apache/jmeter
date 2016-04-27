@@ -245,7 +245,7 @@ https.default.protocol=SSLv3
         so they are not seen by JMeter, and thus will not appear as samples.
         Should only be used for <code>GET</code> and <code>HEAD</code> requests.
         The HttpClient sampler will reject attempts to use it for <code>POST</code> or <code>PUT</code>.
-        <note>Warning: see below for information on cookies and headers handling.</note>
+        <note>Warning: see below for information on cookie and header handling.</note>
         </property>
         <property name="Follow Redirects" required="No">
         This only has any effect if "<code>Redirect Automatically</code>" is not enabled.
@@ -284,13 +284,13 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 </property>
         <property name="Send Parameters With the Request" required="No">The query string will
         be generated from the list of parameters you provide.  Each parameter has a <code>name</code> and
-        <code>value</code>, the options to encode the parameter, and an option to include or exclude an equal sign (some applications
-        don't expect an equal when the value is the empty string).  The query string will be generated in the correct fashion, depending on
+        <code>value</code>, the options to encode the parameter, and an option to include or exclude an equals sign (some applications
+        don't expect an equals sign when the value is the empty string).  The query string will be generated in the correct fashion, depending on
         the choice of "Method" you made (i.e. if you chose <code>GET</code> or <code>DELETE</code>, the query string will be
         appended to the URL, if <code>POST</code> or <code>PUT</code>, then it will be sent separately).  Also, if you are
         sending a file using a multipart form, the query string will be created using the
         multipart form specifications.
-        <b>See below for some further information on parameters handling.</b>
+        <b>See below for some further information on parameter handling.</b>
         <p>
         Additionally, you can specify whether each parameter should be URL encoded.  If you are not sure what this
         means, it is probably best to select it.  If your values contain characters such as the following then encoding is usually required.:
@@ -310,7 +310,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
         then the file is sent as the entire body
         of the request, i.e. no wrappers are added. This allows arbitrary bodies to be sent. This functionality is present for <code>POST</code> requests, 
         and also for <code>PUT</code> requests.
-        <b>See below for some further information on parameters handling.</b>
+        <b>See below for some further information on parameter handling.</b>
         </p>
         </property>
         <property name="Parameter name:" required="No">Value of the "<code>name</code>" web request parameter.</property>
@@ -2029,7 +2029,7 @@ storage device.</p>
 In this example, we created a Test Plan that sends two Ant HTTP requests and two
 Log4J HTTP requests.  We grouped the Ant and Log4J requests by placing them inside
 Simple Logic Controllers.  Remember, the Simple Logic Controller has no effect on how JMeter
-processes the controller(s) you add to it.  So, in this example, JMeter sends requests in the
+processes the controller(s) you add to it.  So, in this example, JMeter sends the requests in the
 following order: Ant Home Page, Ant News Page, Log4J Home Page, Log4J History Page.</p>
 <p>
 Note, the File Reporter
@@ -2834,7 +2834,7 @@ There are several ways to view the response, selectable by a drop-down box at th
 <td>The <i>CSS/JQuery Tester</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the CSS/JQuery to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The engine of CSS/JQuery expression can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
+The CSS/JQuery expression engine can be JSoup or Jodd, syntax of these 2 implementation differs slightly.<br/>
 For example, the Selector <code>a[class=sectionlink]</code> with attribute <code>href</code> applied to the current JMeter functions page gives the following output:
 <br/>
 <source>
@@ -2883,7 +2883,7 @@ may download images, style-sheets, etc. referenced by the HTML code.
 <td>The <i>Regexp Tester view</i> only works for text responses. It shows the plain text in the upper panel.
 The "<code>Test</code>" button allows the user to apply the Regular Expression to the upper panel and the results
 will be displayed in the lower panel.<br/>
-The engine of regular expression is the same as the Regular Expression Extractor.<br/>
+The regular expression engine is the same as the Regular Expression Extractor.<br/>
 For example, the RE <code>(JMeter\w*).*</code> applied to the current JMeter home page gives the following output:
 <br/>
 <source>
