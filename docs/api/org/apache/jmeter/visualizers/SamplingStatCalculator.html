@@ -1,0 +1,610 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>SamplingStatCalculator (Apache JMeter API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SamplingStatCalculator (Apache JMeter API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/visualizers/SamplerResultTab.RowResult.html" title="class in org.apache.jmeter.visualizers"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/visualizers/SearchableTreeNode.html" title="class in org.apache.jmeter.visualizers"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/visualizers/SamplingStatCalculator.html" target="_top">Frames</a></li>
+<li><a href="SamplingStatCalculator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.jmeter.visualizers</div>
+<h2 title="Class SamplingStatCalculator" class="title">Class SamplingStatCalculator</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.jmeter.visualizers.SamplingStatCalculator</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../org/apache/jmeter/visualizers/CachingStatCalculator.html" title="class in org.apache.jmeter.visualizers">CachingStatCalculator</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">SamplingStatCalculator</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Aggregate sample data container. Just instantiate a new instance of this
+ class, and then call <a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#addSample(org.apache.jmeter.samplers.SampleResult)"><code>addSample(SampleResult)</code></a> a few times, and pull
+ the stats out with whatever methods you prefer.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#SamplingStatCalculator()">SamplingStatCalculator</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#SamplingStatCalculator(java.lang.String)">SamplingStatCalculator</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;label)</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jmeter/visualizers/Sample.html" title="class in org.apache.jmeter.visualizers">Sample</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#addSample(org.apache.jmeter.samplers.SampleResult)">addSample</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</code>
+<div class="block">Records a sample.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#clear()">clear</a></strong>()</code>
+<div class="block">Clear the counters (useful for differential stats)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getAvgPageBytes()">getAvgPageBytes</a></strong>()</code>
+<div class="block">calculates the average page size, which means divide the bytes by number
+ of samples.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getBytesPerSecond()">getBytesPerSecond</a></strong>()</code>
+<div class="block">Throughput in bytes / second</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getCount()">getCount</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jmeter/visualizers/Sample.html" title="class in org.apache.jmeter.visualizers">Sample</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getCurrentSample()">getCurrentSample</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>[]&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getDistribution()">getDistribution</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getElapsed()">getElapsed</a></strong>()</code>
+<div class="block">Get the elapsed time for the samples</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getErrorCount()">getErrorCount</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getErrorPercentage()">getErrorPercentage</a></strong>()</code>
+<div class="block">Returns the raw double value of the percentage of samples with errors
+ that were recorded.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getKBPerSecond()">getKBPerSecond</a></strong>()</code>
+<div class="block">Throughput in kilobytes / second</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getLabel()">getLabel</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMax()">getMax</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMaxThroughput()">getMaxThroughput</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMean()">getMean</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMeanAsNumber()">getMeanAsNumber</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMedian()">getMedian</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getMin()">getMin</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getPercentPoint(double)">getPercentPoint</a></strong>(double&nbsp;percent)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getPercentPoint(float)">getPercentPoint</a></strong>(float&nbsp;percent)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getRate()">getRate</a></strong>()</code>
+<div class="block">Returns the throughput associated to this sampler in requests per second.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#getStandardDeviation()">getStandardDeviation</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/visualizers/SamplingStatCalculator.html#toString()">toString</a></strong>()</code>
+<div class="block">For debugging purposes, only.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SamplingStatCalculator()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SamplingStatCalculator</h4>
+<pre>public&nbsp;SamplingStatCalculator()</pre>
+</li>
+</ul>
+<a name="SamplingStatCalculator(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SamplingStatCalculator</h4>
+<pre>public&nbsp;SamplingStatCalculator(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;label)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="clear()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear</h4>
+<pre>public&nbsp;void&nbsp;clear()</pre>
+<div class="block">Clear the counters (useful for differential stats)</div>
+</li>
+</ul>
+<a name="getCurrentSample()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCurrentSample</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jmeter/visualizers/Sample.html" title="class in org.apache.jmeter.visualizers">Sample</a>&nbsp;getCurrentSample()</pre>
+</li>
+</ul>
+<a name="getElapsed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getElapsed</h4>
+<pre>public&nbsp;long&nbsp;getElapsed()</pre>
+<div class="block">Get the elapsed time for the samples</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>how long the samples took</dd></dl>
+</li>
+</ul>
+<a name="getRate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRate</h4>
+<pre>public&nbsp;double&nbsp;getRate()</pre>
+<div class="block">Returns the throughput associated to this sampler in requests per second.
+ May be slightly skewed because it takes the timestamps of the first and
+ last samples as the total time passed, and the test may actually have
+ started before that start time and ended after that end time.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>throughput associated with this sampler per second</dd></dl>
+</li>
+</ul>
+<a name="getBytesPerSecond()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBytesPerSecond</h4>
+<pre>public&nbsp;double&nbsp;getBytesPerSecond()</pre>
+<div class="block">Throughput in bytes / second</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>throughput in bytes/second</dd></dl>
+</li>
+</ul>
+<a name="getKBPerSecond()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKBPerSecond</h4>
+<pre>public&nbsp;double&nbsp;getKBPerSecond()</pre>
+<div class="block">Throughput in kilobytes / second</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Throughput in kilobytes / second</dd></dl>
+</li>
+</ul>
+<a name="getAvgPageBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAvgPageBytes</h4>
+<pre>public&nbsp;double&nbsp;getAvgPageBytes()</pre>
+<div class="block">calculates the average page size, which means divide the bytes by number
+ of samples.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>average page size in bytes (0 if sample count is zero)</dd></dl>
+</li>
+</ul>
+<a name="getLabel()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLabel</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getLabel()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the label of this component</dd></dl>
+</li>
+</ul>
+<a name="addSample(org.apache.jmeter.samplers.SampleResult)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addSample</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jmeter/visualizers/Sample.html" title="class in org.apache.jmeter.visualizers">Sample</a>&nbsp;addSample(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</pre>
+<div class="block">Records a sample.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>res</code> - the sample to record</dd>
+<dt><span class="strong">Returns:</span></dt><dd>newly created sample with current statistics</dd></dl>
+</li>
+</ul>
+<a name="getErrorPercentage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getErrorPercentage</h4>
+<pre>public&nbsp;double&nbsp;getErrorPercentage()</pre>
+<div class="block">Returns the raw double value of the percentage of samples with errors
+ that were recorded. (Between 0.0 and 1.0)</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the raw double value of the percentage of samples with errors
+         that were recorded.</dd></dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
+<div class="block">For debugging purposes, only.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getErrorCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getErrorCount</h4>
+<pre>public&nbsp;long&nbsp;getErrorCount()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>errorCount</dd></dl>
+</li>
+</ul>
+<a name="getMaxThroughput()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMaxThroughput</h4>
+<pre>public&nbsp;double&nbsp;getMaxThroughput()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Returns the maxThroughput.</dd></dl>
+</li>
+</ul>
+<a name="getDistribution()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDistribution</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>[]&gt;&nbsp;getDistribution()</pre>
+</li>
+</ul>
+<a name="getPercentPoint(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPercentPoint</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getPercentPoint(double&nbsp;percent)</pre>
+</li>
+</ul>
+<a name="getCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCount</h4>
+<pre>public&nbsp;long&nbsp;getCount()</pre>
+</li>
+</ul>
+<a name="getMax()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMax</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getMax()</pre>
+</li>
+</ul>
+<a name="getMean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMean</h4>
+<pre>public&nbsp;double&nbsp;getMean()</pre>
+</li>
+</ul>
+<a name="getMeanAsNumber()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMeanAsNumber</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getMeanAsNumber()</pre>
+</li>
+</ul>
+<a name="getMedian()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMedian</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getMedian()</pre>
+</li>
+</ul>
+<a name="getMin()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMin</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getMin()</pre>
+</li>
+</ul>
+<a name="getPercentPoint(float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPercentPoint</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Number.html?is-external=true" title="class or interface in java.lang">Number</a>&nbsp;getPercentPoint(float&nbsp;percent)</pre>
+</li>
+</ul>
+<a name="getStandardDeviation()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getStandardDeviation</h4>
+<pre>public&nbsp;double&nbsp;getStandardDeviation()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/visualizers/SamplerResultTab.RowResult.html" title="class in org.apache.jmeter.visualizers"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/visualizers/SearchableTreeNode.html" title="class in org.apache.jmeter.visualizers"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/visualizers/SamplingStatCalculator.html" target="_top">Frames</a></li>
+<li><a href="SamplingStatCalculator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#xA9; 1998-2016 Apache Software Foundation. All Rights Reserved.</small></p>
+</body>
+</html>

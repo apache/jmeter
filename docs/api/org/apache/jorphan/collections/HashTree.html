@@ -1,0 +1,1633 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>HashTree (Apache JMeter API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="HashTree (Apache JMeter API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jorphan/collections/Data.html" title="class in org.apache.jorphan.collections"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jorphan/collections/HashTree.html" target="_top">Frames</a></li>
+<li><a href="HashTree.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.jorphan.collections</div>
+<h2 title="Class HashTree" class="title">Class HashTree</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.jorphan.collections.HashTree</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../org/apache/jorphan/collections/ListedHashTree.html" title="class in org.apache.jorphan.collections">ListedHashTree</a>, <a href="../../../../org/apache/jorphan/collections/SortedHashTree.html" title="class in org.apache.jorphan.collections">SortedHashTree</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">HashTree</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
+<div class="block">This class is used to create a tree structure of objects. Each element in the
+ tree is also a key to the next node down in the tree. It provides many ways
+ to add objects and branches, as well as many ways to retrieve.
+ <p>
+ HashTree implements the Map interface for convenience reasons. The main
+ difference between a Map and a HashTree is that the HashTree organizes the
+ data into a recursive tree structure, and provides the means to manipulate
+ that structure.
+ <p>
+ Of special interest is the <a href="../../../../org/apache/jorphan/collections/HashTree.html#traverse(org.apache.jorphan.collections.HashTreeTraverser)"><code>traverse(HashTreeTraverser)</code></a> method, which
+ provides an expedient way to traverse any HashTree by implementing the
+ <a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections"><code>HashTreeTraverser</code></a> interface in order to perform some operation on the
+ tree, or to extract information from the tree.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections"><code>HashTreeTraverser</code></a>, 
+<a href="../../../../org/apache/jorphan/collections/SearchByClass.html" title="class in org.apache.jorphan.collections"><code>SearchByClass</code></a>, 
+<a href="../../../../serialized-form.html#org.apache.jorphan.collections.HashTree">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_java.util.Map">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">V</a>&gt;</code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#data">data</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#HashTree()">HashTree</a></strong>()</code>
+<div class="block">Creates an empty new HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#HashTree(java.util.Collection)">HashTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;keys)</code>
+<div class="block">Creates a new HashTree and adds all the objects in the given collection
+ as top-level nodes in the tree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#HashTree(java.util.Map)">HashTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&nbsp;_map)</code>
+<div class="block">Allow subclasses to provide their own Map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#HashTree(java.lang.Object)">HashTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Creates a new HashTree and adds the given object as a top-level node.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#HashTree(java.lang.Object[])">HashTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;keys)</code>
+<div class="block">Creates a new HashTree and adds all the objects in the given array as
+ top-level nodes in the tree.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.util.Collection)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;keys)</code>
+<div class="block">Adds a bunch of keys into the HashTree at the current level.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.util.Collection,%20java.util.Collection)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Adds a series of nodes into the HashTree using the given path.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.util.Collection,%20java.lang.Object)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Adds a series of nodes into the HashTree using the given path.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.util.Collection,%20java.lang.Object[])">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Adds a series of nodes into the HashTree using the given path.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(org.apache.jorphan.collections.HashTree)">add</a></strong>(<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;newTree)</code>
+<div class="block">Adds all the nodes and branches of the given tree to this tree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Adds an key into the HashTree at the current level.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object[])">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;keys)</code>
+<div class="block">Adds all the given objects as nodes at the current level.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object[],%20java.util.Collection)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Adds a series of nodes into the HashTree using the given path.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object[],%20java.lang.Object)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object[],%20java.lang.Object[])">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Adds a series of nodes into the HashTree using the given path.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object,%20java.util.Collection)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Adds a key as a node at the current level and then adds all the objects
+ in the second argument as nodes of the new node.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object,%20org.apache.jorphan.collections.HashTree)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;subTree)</code>
+<div class="block">Adds a key as a node at the current level and then adds the given
+ HashTree to that new node.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object,%20java.lang.Object)">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Adds a key and it's value in the HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(java.lang.Object,%20java.lang.Object[])">add</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Adds a key and it's values in the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#addTreePath(java.util.Collection)">addTreePath</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#clear()">clear</a></strong>()</code>
+<div class="block">Clears the HashTree of all contents.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#clone()">clone</a></strong>()</code>
+<div class="block">Create a clone of this HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#cloneTree(org.apache.jorphan.collections.HashTree)">cloneTree</a></strong>(<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;newTree)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#containsKey(java.lang.Object)">containsKey</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">If the HashTree contains the given object as a key at the top level, then
+ a true result is returned, otherwise false.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#containsValue(java.lang.Object)">containsValue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Implemented as required by the Map interface, but is not very useful
+ here.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#createNewTree()">createNewTree</a></strong>()</code>
+<div class="block">Creates a new tree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#createNewTree(java.util.Collection)">createNewTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Creates a new tree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#createNewTree(java.lang.Object)">createNewTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Creates a new tree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#entrySet()">entrySet</a></strong>()</code>
+<div class="block">Exists to satisfy the Map interface.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Compares all objects in the tree and verifies that the two trees contain
+ the same objects at the same tree levels.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#get(java.lang.Object)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Returns the HashTree object associated with the given key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getArray()">getArray</a></strong>()</code>
+<div class="block">Gets an array of all keys in the current HashTree node.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getArray(java.util.Collection)">getArray</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</code>
+<div class="block">Recurses down into the HashTree structure using each subsequent key in the
+ treePath argument, and returns an array of keys of the HashTree object at
+ the end of the recursion.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getArray(java.lang.Object)">getArray</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Gets an array of all keys in the HashTree mapped to the given key of the
+ current HashTree object (in other words, one level down).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getArray(java.lang.Object[])">getArray</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</code>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ array of keys, and returns an array of keys of the HashTree object at the
+ end of the recursion.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getTree(java.util.Collection)">getTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</code>
+<div class="block">Gets the HashTree object mapped to the last key in the SortedSet by
+ recursing through the HashTree structure one key at a time.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getTree(java.lang.Object)">getTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Gets the HashTree mapped to the given key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getTree(java.lang.Object[])">getTree</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</code>
+<div class="block">Gets the HashTree object mapped to the last key in the array by recursing
+ through the HashTree structure one key at a time.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#getTreePath(java.util.Collection)">getTreePath</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#hashCode()">hashCode</a></strong>()</code>
+<div class="block">Returns a hashcode for this HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#isEmpty()">isEmpty</a></strong>()</code>
+<div class="block">If the HashTree is empty, true is returned, false otherwise.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#keySet()">keySet</a></strong>()</code>
+<div class="block">Returns a Set of all the keys in the top-level of this HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#list()">list</a></strong>()</code>
+<div class="block">Gets a Collection of all keys in the current HashTree node.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#list(java.util.Collection)">list</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</code>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ List of keys, and returns the Set of keys of the HashTree object at the
+ end of the recursion.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#list(java.lang.Object)">list</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Gets a Set of all keys in the HashTree mapped to the given key of the
+ current HashTree object (in other words, one level down.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#list(java.lang.Object[])">list</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</code>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ array of keys, and returns the Set of keys of the HashTree object at the
+ end of the recursion.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#put(java.lang.Object,%20org.apache.jorphan.collections.HashTree)">put</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;value)</code>
+<div class="block">This is the same as calling HashTree.add(key,value).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#putAll(java.util.Map)">putAll</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,? extends <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&nbsp;map)</code>
+<div class="block">The Map given must also be a HashTree, otherwise an
+ UnsupportedOperationException is thrown.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#remove(java.lang.Object)">remove</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Removes the entire branch specified by the given key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#replaceKey(java.lang.Object,%20java.lang.Object)">replaceKey</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;currentKey,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;newKey)</code>
+<div class="block">Finds the given current key, and replaces it with the given new key.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#search(java.lang.Object)">search</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Searches the HashTree structure for the given key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.util.Collection)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Sets the nodes of the current tree to be the objects of the given
+ collection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.util.Collection,%20java.util.Collection)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Sets a series of keys into the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.util.Collection,%20java.lang.Object[])">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Sets a series of keys into the HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object[],%20java.util.Collection)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Sets a series of keys into the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object[],%20java.lang.Object[])">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Sets a series of keys into the HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object,%20java.util.Collection)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</code>
+<div class="block">Sets a key and its values in the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object,%20org.apache.jorphan.collections.HashTree)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;t)</code>
+<div class="block">Sets a key into the current tree and assigns it a HashTree as its
+ subtree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object,%20java.lang.Object)">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Sets a key and it's value in the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#set(java.lang.Object,%20java.lang.Object[])">set</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</code>
+<div class="block">Sets a key and its values in the HashTree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#size()">size</a></strong>()</code>
+<div class="block">Returns the number of top-level entries in the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#toString()">toString</a></strong>()</code>
+<div class="block">Generate a printable representation of the tree.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#traverse(org.apache.jorphan.collections.HashTreeTraverser)">traverse</a></strong>(<a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections">HashTreeTraverser</a>&nbsp;visitor)</code>
+<div class="block">Allows any implementation of the HashTreeTraverser interface to easily
+ traverse (depth-first) all the nodes of the HashTree.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jorphan/collections/HashTree.html#values()">values</a></strong>()</code>
+<div class="block">Returns a collection of all the sub-trees of the current tree.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="data">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>data</h4>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt; data</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="HashTree()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>HashTree</h4>
+<pre>public&nbsp;HashTree()</pre>
+<div class="block">Creates an empty new HashTree.</div>
+</li>
+</ul>
+<a name="HashTree(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>HashTree</h4>
+<pre>protected&nbsp;HashTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&nbsp;_map)</pre>
+<div class="block">Allow subclasses to provide their own Map.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>_map</code> - <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> to use</dd></dl>
+</li>
+</ul>
+<a name="HashTree(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>HashTree</h4>
+<pre>public&nbsp;HashTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Creates a new HashTree and adds the given object as a top-level node.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - name of the new top-level node</dd></dl>
+</li>
+</ul>
+<a name="HashTree(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>HashTree</h4>
+<pre>public&nbsp;HashTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;keys)</pre>
+<div class="block">Creates a new HashTree and adds all the objects in the given collection
+ as top-level nodes in the tree.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - a collection of objects to be added to the created HashTree.</dd></dl>
+</li>
+</ul>
+<a name="HashTree(java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>HashTree</h4>
+<pre>public&nbsp;HashTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;keys)</pre>
+<div class="block">Creates a new HashTree and adds all the objects in the given array as
+ top-level nodes in the tree.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - array with names for the new top-level nodes</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="putAll(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putAll</h4>
+<pre>public&nbsp;void&nbsp;putAll(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,? extends <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&nbsp;map)</pre>
+<div class="block">The Map given must also be a HashTree, otherwise an
+ UnsupportedOperationException is thrown. If it is a HashTree, this is
+ like calling the add(HashTree) method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#putAll(java.util.Map)" title="class or interface in java.util">putAll</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/jorphan/collections/HashTree.html#add(org.apache.jorphan.collections.HashTree)"><code>add(HashTree)</code></a>, 
+<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#putAll(java.util.Map)" title="class or interface in java.util"><code>Map.putAll(Map)</code></a></dd></dl>
+</li>
+</ul>
+<a name="entrySet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>entrySet</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&gt;&nbsp;entrySet()</pre>
+<div class="block">Exists to satisfy the Map interface.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#entrySet()" title="class or interface in java.util">entrySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#entrySet()" title="class or interface in java.util"><code>Map.entrySet()</code></a></dd></dl>
+</li>
+</ul>
+<a name="containsValue(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsValue</h4>
+<pre>public&nbsp;boolean&nbsp;containsValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Implemented as required by the Map interface, but is not very useful
+ here. All 'values' in a HashTree are HashTree's themselves.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#containsValue(java.lang.Object)" title="class or interface in java.util">containsValue</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - Object to be tested as a value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>True if the HashTree contains the value, false otherwise.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#containsValue(java.lang.Object)" title="class or interface in java.util"><code>Map.containsValue(Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="put(java.lang.Object, org.apache.jorphan.collections.HashTree)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>put</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;put(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+           <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;value)</pre>
+<div class="block">This is the same as calling HashTree.add(key,value).</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#put(K,%20V)" title="class or interface in java.util">put</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - to use</dd><dd><code>value</code> - to store against key</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#put(K,%20V)" title="class or interface in java.util"><code>Map.put(Object, Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="clear()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear</h4>
+<pre>public&nbsp;void&nbsp;clear()</pre>
+<div class="block">Clears the HashTree of all contents.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#clear()" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#clear()" title="class or interface in java.util"><code>Map.clear()</code></a></dd></dl>
+</li>
+</ul>
+<a name="values()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>values</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;&nbsp;values()</pre>
+<div class="block">Returns a collection of all the sub-trees of the current tree.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#values()" title="class or interface in java.util">values</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#values()" title="class or interface in java.util"><code>Map.values()</code></a></dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object, org.apache.jorphan.collections.HashTree)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;subTree)</pre>
+<div class="block">Adds a key as a node at the current level and then adds the given
+ HashTree to that new node.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to create in this tree</dd><dd><code>subTree</code> - sub tree to add to the node created for the first argument.</dd></dl>
+</li>
+</ul>
+<a name="add(org.apache.jorphan.collections.HashTree)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;newTree)</pre>
+<div class="block">Adds all the nodes and branches of the given tree to this tree. Is like
+ merging two trees. Duplicates are ignored.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>newTree</code> - the tree to be added</dd></dl>
+</li>
+</ul>
+<a name="containsKey(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsKey</h4>
+<pre>public&nbsp;boolean&nbsp;containsKey(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">If the HashTree contains the given object as a key at the top level, then
+ a true result is returned, otherwise false.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#containsKey(java.lang.Object)" title="class or interface in java.util">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - Object to be tested as a key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>True if the HashTree contains the key, false otherwise.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#containsKey(java.lang.Object)" title="class or interface in java.util"><code>Map.containsKey(Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="isEmpty()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isEmpty</h4>
+<pre>public&nbsp;boolean&nbsp;isEmpty()</pre>
+<div class="block">If the HashTree is empty, true is returned, false otherwise.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#isEmpty()" title="class or interface in java.util">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>True if HashTree is empty, false otherwise.</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Sets a key and it's value in the HashTree. It actually sets up a key, and
+ then creates a node for the key and sets the value to the new node, as a
+ key. Any previous nodes that existed under the given key are lost.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be set up</dd><dd><code>value</code> - value to be set up as a key in the secondary node</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object, org.apache.jorphan.collections.HashTree)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;t)</pre>
+<div class="block">Sets a key into the current tree and assigns it a HashTree as its
+ subtree. Any previous entries under the given key are removed.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be set up</dd><dd><code>t</code> - HashTree that the key maps to</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object, java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Sets a key and its values in the HashTree. It sets up a key in the
+ current node, and then creates a node for that key, and sets all the
+ values in the array as keys in the new node. Any keys previously held
+ under the given key are lost.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - Key to be set up</dd><dd><code>values</code> - Array of objects to be added as keys in the secondary node</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Sets a key and its values in the HashTree. It sets up a key in the
+ current node, and then creates a node for that key, and set all the
+ values in the array as keys in the new node. Any keys previously held
+ under the given key are removed.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be set up</dd><dd><code>values</code> - Collection of objects to be added as keys in the secondary
+            node</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object[], java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Sets a series of keys into the HashTree. It sets up the first object in
+ the key array as a key in the current node, recurses into the next
+ HashTree node through that key and adds the second object in the array.
+ Continues recursing in this manner until the end of the first array is
+ reached, at which point all the values of the second array are set as
+ keys to the bottom-most node. All previous keys of that bottom-most node
+ are removed.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - array of keys to put into HashTree</dd><dd><code>values</code> - array of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="set(java.lang.Object[], java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Sets a series of keys into the HashTree. It sets up the first object in
+ the key array as a key in the current node, recurses into the next
+ HashTree node through that key and adds the second object in the array.
+ Continues recursing in this manner until the end of the first array is
+ reached, at which point all the values of the Collection of values are
+ set as keys to the bottom-most node. Any keys previously held by the
+ bottom-most node are lost.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - array of keys to put into HashTree</dd><dd><code>values</code> - Collection of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="set(java.util.Collection, java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Sets a series of keys into the HashTree. It sets up the first object in
+ the key list as a key in the current node, recurses into the next
+ HashTree node through that key and adds the second object in the list.
+ Continues recursing in this manner until the end of the first list is
+ reached, at which point all the values of the array of values are set as
+ keys to the bottom-most node. Any previously existing keys of that bottom
+ node are removed.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - collection of keys to put into HashTree</dd><dd><code>values</code> - array of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="set(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Sets the nodes of the current tree to be the objects of the given
+ collection. Any nodes previously in the tree are removed.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>values</code> - Collection of objects to set as nodes.</dd></dl>
+</li>
+</ul>
+<a name="set(java.util.Collection, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;void&nbsp;set(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Sets a series of keys into the HashTree. It sets up the first object in
+ the key list as a key in the current node, recurses into the next
+ HashTree node through that key and adds the second object in the list.
+ Continues recursing in this manner until the end of the first list is
+ reached, at which point all the values of the Collection of values are
+ set as keys to the bottom-most node. Any previously existing keys of that
+ bottom node are lost.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - list of keys to put into HashTree</dd><dd><code>values</code> - collection of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Adds an key into the HashTree at the current level. If a HashTree exists
+ for the key already, no new tree will be added</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be added to HashTree</dd>
+<dt><span class="strong">Returns:</span></dt><dd>newly generated tree, if no tree was found for the given key;
+         existing key otherwise</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;keys)</pre>
+<div class="block">Adds all the given objects as nodes at the current level.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - Array of Keys to be added to HashTree.</dd></dl>
+</li>
+</ul>
+<a name="add(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;keys)</pre>
+<div class="block">Adds a bunch of keys into the HashTree at the current level.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - Collection of Keys to be added to HashTree.</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Adds a key and it's value in the HashTree. The first argument becomes a
+ node at the current level, and the second argument becomes a node of it.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be added</dd><dd><code>value</code> - value to be added as a key in the secondary node</dd>
+<dt><span class="strong">Returns:</span></dt><dd>HashTree for which <code>value</code> is the key</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object, java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Adds a key and it's values in the HashTree. The first argument becomes a
+ node at the current level, and adds all the values in the array to the
+ new node.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be added</dd><dd><code>values</code> - array of objects to be added as keys in the secondary node</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Adds a key as a node at the current level and then adds all the objects
+ in the second argument as nodes of the new node.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key to be added</dd><dd><code>values</code> - Collection of objects to be added as keys in the secondary
+            node</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object[], java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Adds a series of nodes into the HashTree using the given path. The first
+ argument is an array that represents a path to a specific node in the
+ tree. If the path doesn't already exist, it is created (the objects are
+ added along the way). At the path, all the objects in the second argument
+ are added as nodes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - an array of objects representing a path</dd><dd><code>values</code> - array of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object[], java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Adds a series of nodes into the HashTree using the given path. The first
+ argument is an array that represents a path to a specific node in the
+ tree. If the path doesn't already exist, it is created (the objects are
+ added along the way). At the path, all the objects in the second argument
+ are added as nodes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - an array of objects representing a path</dd><dd><code>values</code> - collection of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="add(java.lang.Object[], java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+</li>
+</ul>
+<a name="add(java.util.Collection, java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;values)</pre>
+<div class="block">Adds a series of nodes into the HashTree using the given path. The first
+ argument is a List that represents a path to a specific node in the tree.
+ If the path doesn't already exist, it is created (the objects are added
+ along the way). At the path, all the objects in the second argument are
+ added as nodes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - a list of objects representing a path</dd><dd><code>values</code> - array of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="add(java.util.Collection, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Adds a series of nodes into the HashTree using the given path. The first
+ argument is a List that represents a path to a specific node in the tree.
+ If the path doesn't already exist, it is created (the objects are added
+ along the way). At the path, the object in the second argument is added
+ as a node.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - a list of objects representing a path</dd><dd><code>value</code> - Object to add as a node to bottom-most node</dd>
+<dt><span class="strong">Returns:</span></dt><dd>HashTree for which <code>value</code> is the key</dd></dl>
+</li>
+</ul>
+<a name="add(java.util.Collection, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add</h4>
+<pre>public&nbsp;void&nbsp;add(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Adds a series of nodes into the HashTree using the given path. The first
+ argument is a SortedSet that represents a path to a specific node in the
+ tree. If the path doesn't already exist, it is created (the objects are
+ added along the way). At the path, all the objects in the second argument
+ are added as nodes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - a SortedSet of objects representing a path</dd><dd><code>values</code> - Collection of values to be added as keys to bottom-most node</dd></dl>
+</li>
+</ul>
+<a name="addTreePath(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addTreePath</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;addTreePath(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</pre>
+</li>
+</ul>
+<a name="getTree(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTree</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;getTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Gets the HashTree mapped to the given key.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - Key used to find appropriate HashTree()</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the HashTree for <code>key</code></dd></dl>
+</li>
+</ul>
+<a name="get(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;get(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Returns the HashTree object associated with the given key. Same as
+ calling <a href="../../../../org/apache/jorphan/collections/HashTree.html#getTree(java.lang.Object)"><code>getTree(Object)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util">get</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>Map.get(Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getTree(java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTree</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;getTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</pre>
+<div class="block">Gets the HashTree object mapped to the last key in the array by recursing
+ through the HashTree structure one key at a time.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - array of keys.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>HashTree at the end of the recursion.</dd></dl>
+</li>
+</ul>
+<a name="clone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clone</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;clone()</pre>
+<div class="block">Create a clone of this HashTree. This is not a deep clone (ie, the
+ contents of the tree are not cloned).</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="cloneTree(org.apache.jorphan.collections.HashTree)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cloneTree</h4>
+<pre>protected&nbsp;void&nbsp;cloneTree(<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;newTree)</pre>
+</li>
+</ul>
+<a name="createNewTree()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createNewTree</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;createNewTree()</pre>
+<div class="block">Creates a new tree. This method exists to allow inheriting classes to
+ generate the appropriate types of nodes. For instance, when a node is
+ added, it's value is a HashTree. Rather than directly calling the
+ HashTree() constructor, the createNewTree() method is called. Inheriting
+ classes should override these methods and create the appropriate subclass
+ of HashTree.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>HashTree</dd></dl>
+</li>
+</ul>
+<a name="createNewTree(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createNewTree</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;createNewTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Creates a new tree. This method exists to allow inheriting classes to
+ generate the appropriate types of nodes. For instance, when a node is
+ added, it's value is a HashTree. Rather than directly calling the
+ HashTree() constructor, the createNewTree() method is called. Inheriting
+ classes should override these methods and create the appropriate subclass
+ of HashTree.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - object to use as the key for the top level</dd>
+<dt><span class="strong">Returns:</span></dt><dd>newly created <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections"><code>HashTree</code></a></dd></dl>
+</li>
+</ul>
+<a name="createNewTree(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createNewTree</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;createNewTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;values)</pre>
+<div class="block">Creates a new tree. This method exists to allow inheriting classes to
+ generate the appropriate types of nodes. For instance, when a node is
+ added, it's value is a HashTree. Rather than directly calling the
+ HashTree() constructor, the createNewTree() method is called. Inheriting
+ classes should override these methods and create the appropriate subclass
+ of HashTree.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>values</code> - objects to be added to the new <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections"><code>HashTree</code></a></dd>
+<dt><span class="strong">Returns:</span></dt><dd>newly created <a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections"><code>HashTree</code></a></dd></dl>
+</li>
+</ul>
+<a name="getTree(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTree</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;getTree(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</pre>
+<div class="block">Gets the HashTree object mapped to the last key in the SortedSet by
+ recursing through the HashTree structure one key at a time.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - Collection of keys</dd>
+<dt><span class="strong">Returns:</span></dt><dd>HashTree at the end of the recursion</dd></dl>
+</li>
+</ul>
+<a name="list()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>list</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;list()</pre>
+<div class="block">Gets a Collection of all keys in the current HashTree node. If the
+ HashTree represented a file system, this would be like getting a
+ collection of all the files in the current folder.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>Set of all keys in this HashTree</dd></dl>
+</li>
+</ul>
+<a name="list(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>list</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;list(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Gets a Set of all keys in the HashTree mapped to the given key of the
+ current HashTree object (in other words, one level down. If the HashTree
+ represented a file system, this would like getting a list of all files in
+ a sub-directory (of the current directory) specified by the key argument.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key used to find HashTree to get list of</dd>
+<dt><span class="strong">Returns:</span></dt><dd>Set of all keys in found HashTree.</dd></dl>
+</li>
+</ul>
+<a name="remove(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;remove(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Removes the entire branch specified by the given key.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util"><code>Map.remove(Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="list(java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>list</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;list(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</pre>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ array of keys, and returns the Set of keys of the HashTree object at the
+ end of the recursion. If the HashTree represented a file system, this
+ would be like getting a list of all the files in a directory specified by
+ the treePath, relative from the current directory.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - Array of keys used to recurse into HashTree structure</dd>
+<dt><span class="strong">Returns:</span></dt><dd>Set of all keys found in end HashTree</dd></dl>
+</li>
+</ul>
+<a name="list(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>list</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;list(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</pre>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ List of keys, and returns the Set of keys of the HashTree object at the
+ end of the recursion. If the HashTree represented a file system, this
+ would be like getting a list of all the files in a directory specified by
+ the treePath, relative from the current directory.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - List of keys used to recurse into HashTree structure</dd>
+<dt><span class="strong">Returns:</span></dt><dd>Set of all keys found in end HashTree</dd></dl>
+</li>
+</ul>
+<a name="replaceKey(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>replaceKey</h4>
+<pre>public&nbsp;void&nbsp;replaceKey(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;currentKey,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;newKey)</pre>
+<div class="block">Finds the given current key, and replaces it with the given new key. Any
+ tree structure found under the original key is moved to the new key.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>currentKey</code> - name of the key to be replaced</dd><dd><code>newKey</code> - name of the new key</dd></dl>
+</li>
+</ul>
+<a name="getArray()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;getArray()</pre>
+<div class="block">Gets an array of all keys in the current HashTree node. If the HashTree
+ represented a file system, this would be like getting an array of all the
+ files in the current folder.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>array of all keys in this HashTree.</dd></dl>
+</li>
+</ul>
+<a name="getArray(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;getArray(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Gets an array of all keys in the HashTree mapped to the given key of the
+ current HashTree object (in other words, one level down). If the HashTree
+ represented a file system, this would like getting a list of all files in
+ a sub-directory (of the current directory) specified by the key argument.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - key used to find HashTree to get list of</dd>
+<dt><span class="strong">Returns:</span></dt><dd>array of all keys in found HashTree</dd></dl>
+</li>
+</ul>
+<a name="getArray(java.lang.Object[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;getArray(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;treePath)</pre>
+<div class="block">Recurses down into the HashTree stucture using each subsequent key in the
+ array of keys, and returns an array of keys of the HashTree object at the
+ end of the recursion. If the HashTree represented a file system, this
+ would be like getting a list of all the files in a directory specified by
+ the treePath, relative from the current directory.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - array of keys used to recurse into HashTree structure</dd>
+<dt><span class="strong">Returns:</span></dt><dd>array of all keys found in end HashTree</dd></dl>
+</li>
+</ul>
+<a name="getArray(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;getArray(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</pre>
+<div class="block">Recurses down into the HashTree structure using each subsequent key in the
+ treePath argument, and returns an array of keys of the HashTree object at
+ the end of the recursion. If the HashTree represented a file system, this
+ would be like getting a list of all the files in a directory specified by
+ the treePath, relative from the current directory.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>treePath</code> - list of keys used to recurse into HashTree structure</dd>
+<dt><span class="strong">Returns:</span></dt><dd>array of all keys found in end HashTree</dd></dl>
+</li>
+</ul>
+<a name="getTreePath(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTreePath</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;getTreePath(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;treePath)</pre>
+</li>
+</ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<div class="block">Returns a hashcode for this HashTree.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#hashCode()" title="class or interface in java.util">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang"><code>Object.hashCode()</code></a></dd></dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Compares all objects in the tree and verifies that the two trees contain
+ the same objects at the same tree levels. Returns true if they do, false
+ otherwise.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - Object to be compared against</dd><dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang"><code>Object.equals(Object)</code></a></dd></dl>
+</li>
+</ul>
+<a name="keySet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>keySet</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;keySet()</pre>
+<div class="block">Returns a Set of all the keys in the top-level of this HashTree.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#keySet()" title="class or interface in java.util">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#keySet()" title="class or interface in java.util"><code>Map.keySet()</code></a></dd></dl>
+</li>
+</ul>
+<a name="search(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>search</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&nbsp;search(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Searches the HashTree structure for the given key. If it finds the key,
+ it returns the HashTree mapped to the key. If it finds nothing, it
+ returns null.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - Key to search for</dd>
+<dt><span class="strong">Returns:</span></dt><dd>HashTree mapped to key, if found, otherwise <code>null</code></dd></dl>
+</li>
+</ul>
+<a name="size()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>size</h4>
+<pre>public&nbsp;int&nbsp;size()</pre>
+<div class="block">Returns the number of top-level entries in the HashTree.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#size()" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,<a href="../../../../org/apache/jorphan/collections/HashTree.html" title="class in org.apache.jorphan.collections">HashTree</a>&gt;</code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#size()" title="class or interface in java.util"><code>Map.size()</code></a></dd></dl>
+</li>
+</ul>
+<a name="traverse(org.apache.jorphan.collections.HashTreeTraverser)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>traverse</h4>
+<pre>public&nbsp;void&nbsp;traverse(<a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections">HashTreeTraverser</a>&nbsp;visitor)</pre>
+<div class="block">Allows any implementation of the HashTreeTraverser interface to easily
+ traverse (depth-first) all the nodes of the HashTree. The Traverser
+ implementation will be given notification of each node visited.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>visitor</code> - the visitor that wants to traverse the tree</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections"><code>HashTreeTraverser</code></a></dd></dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
+<div class="block">Generate a printable representation of the tree.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>a representation of the tree</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jorphan/collections/Data.html" title="class in org.apache.jorphan.collections"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jorphan/collections/HashTreeTraverser.html" title="interface in org.apache.jorphan.collections"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jorphan/collections/HashTree.html" target="_top">Frames</a></li>
+<li><a href="HashTree.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#xA9; 1998-2016 Apache Software Foundation. All Rights Reserved.</small></p>
+</body>
+</html>
