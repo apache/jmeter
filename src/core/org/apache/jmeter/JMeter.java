@@ -1115,7 +1115,7 @@ public class JMeter implements JMeterPlugin {
             long now = System.currentTimeMillis();
             println("Tidying up remote @ "+new Date(now)+" ("+now+")");
             if (engines!=null){ // it will be null unless remoteStop = true
-                println("Exitting remote servers");
+                println("Exiting remote servers");
                 for (JMeterEngine e : engines){
                     e.exit();
                 }
