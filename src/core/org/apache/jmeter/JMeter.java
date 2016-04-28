@@ -1072,6 +1072,7 @@ public class JMeter implements JMeterPlugin {
             log.info("Finished remote host: " + host + " ("+now+")");
             if (started.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
+                stopSoon.setDaemon(false);
                 stopSoon.start();
             }
         }

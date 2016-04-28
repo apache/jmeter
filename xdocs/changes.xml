@@ -606,6 +606,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59193</bug><code>ant run_gui</code> fails with  <code>ClassNotFoundException</code> or <code>IllegalAccessError</code> when accessing classes from dependencies not loaded through <code>Thread.currentThread().getContextClassLoader()</code></li>
     <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>56927</bug>Disable language change during a test</li>
+    <li><bug>59391</bug>In Distributed mode, the client exits abnormally at the end of test</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
