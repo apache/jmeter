@@ -151,7 +151,7 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <p>Migration to HttpClient 4.5.2 improves the following fields of JMeter:
 </p>
 <ul>
-<li>Support of recent RFC like <a href="https://tools.ietf.org/html/rfc6265" target="_blank">HTTP State Management Mechanism RFC-6265 for Cookies</a>, you should use now <code>HC4CookieHandler</code> in HTTP Cookie Manager component</li>
+<li>Support of recent RFC like <a href="https://tools.ietf.org/html/rfc6265" target="_blank">HTTP State Management Mechanism RFC-6265 for Cookies</a>, you should use now <code>HC4CookieHandler</code> in HTTP Cookie Manager component and select <code>standard</code> Cookie policy</li>
 <li><a href="https://en.wikipedia.org/wiki/Server_Name_Indication" target="_blank">Server Name Indication (SNI)</a> support for HttpClient4 implementation</li>
 <li>Improved and better performing validation mechanism for Stale connections and Keep-Alive management, see properties <code>httpclient4.validate_after_inactivity</code> and <code>httpclient4.time_to_live</code></li>
 <li>Many bug fixes since previous version 4.2.6 used in JMeter 2.13, see <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES-4.5.x.txt" target="_blank">HttpClient 4.5.X release notes</a></li>
