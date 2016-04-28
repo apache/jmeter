@@ -195,7 +195,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      */
     @Override
     public void rexit() throws RemoteException {
-        log.info("Exitting");
+        log.info("Exiting");
         backingEngine.exit();
         // Tidy up any objects we created
         Registry reg = LocateRegistry.getRegistry(this.rmiPort);        
