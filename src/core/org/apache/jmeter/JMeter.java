@@ -1067,12 +1067,13 @@ public class JMeter implements JMeterPlugin {
         }
 
         @Override
+        // N.B. this is called by a daemon RMI thread from the remote host
         public void testEnded(String host) {
             long now=System.currentTimeMillis();
             log.info("Finished remote host: " + host + " ("+now+")");
             if (started.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
-                stopSoon.setDaemon(false);
+                stopSoon.setDaemon(false); // the calling thread is a daemon; this thread must not be
                 stopSoon.start();
             }
         }
