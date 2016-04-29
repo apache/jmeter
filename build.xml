@@ -1194,6 +1194,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
     <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/mirror-server"/>
+    <chmod perm="+x" includes="${dist.executables}"/>
   </target>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
@@ -1527,9 +1528,10 @@ run JMeter unless all the JMeter jars are added.
         <param name="fileset" value="dist_bin_files_native"/>
     </antcall>
     <zip  destfile="${dist.dir}/${pack.name}.zip">
-      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+      <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files_non_native"/>
       </zipfileset>
+      <zipfileset mode="755" dir="." includes="${dist.executables}" defaultexcludes="yes"/>
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
          <patternset refid="dist_bin_files_native"/>
       </zipfileset>
@@ -1549,9 +1551,10 @@ run JMeter unless all the JMeter jars are added.
       <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
          <patternset refid="dist_src_files_native"/>
       </tarfileset>
-      <tarfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+      <tarfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files_non_native"/>
       </tarfileset>
+      <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </tar>
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/lf" quiet="true"/>
@@ -1572,9 +1575,10 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
          <patternset refid="dist_src_files_native"/>
       </zipfileset>
-      <zipfileset dir="." prefix="${dist.name}" defaultexcludes="yes">
+      <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files_non_native"/>
       </zipfileset>
+      <zipfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
     <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
