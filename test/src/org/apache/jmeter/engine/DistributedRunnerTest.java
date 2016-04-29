@@ -171,7 +171,7 @@ public class DistributedRunnerTest {
 
         @Override
         public void exit() {
-            log.debug("Exitting " + host);
+            log.debug("Exiting " + host);
         }
 
         @Override
