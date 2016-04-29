@@ -2065,7 +2065,7 @@ count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure width="50-" height="158" image="logic-controller/loop-example.png">Figure 4 - Loop Controller Example</figure>
+<figure width="506" height="158" image="logic-controller/loop-example.png">Figure 4 - Loop Controller Example</figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
