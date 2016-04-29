@@ -1531,7 +1531,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files_non_native"/>
       </zipfileset>
-      <zipfileset mode="755" dir="." includes="${dist.executables}" defaultexcludes="yes"/>
+      <zipfileset filemode="755" dir="." includes="${dist.executables}" defaultexcludes="yes"/>
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
          <patternset refid="dist_bin_files_native"/>
       </zipfileset>
@@ -1578,7 +1578,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files_non_native"/>
       </zipfileset>
-      <zipfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
+      <zipfileset filemode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
     <antcall target="_hash">
         <param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
