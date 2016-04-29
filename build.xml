@@ -1531,7 +1531,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_bin_files_non_native"/>
       </zipfileset>
-      <zipfileset filemode="755" dir="." includes="${dist.executables}" defaultexcludes="yes"/>
+      <zipfileset filemode="755" dir="." includes="${dist.executables}" prefix="${dist.name}" defaultexcludes="yes"/>
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
          <patternset refid="dist_bin_files_native"/>
       </zipfileset>
