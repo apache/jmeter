@@ -1194,7 +1194,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
     <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/mirror-server"/>
-    <chmod perm="+x" includes="${dist.executables}"/>
+    <chmod perm="+x" dir="." includes="${dist.executables}"/>
   </target>
 
   <target name="install-examples" depends="compile-examples" description="Build and installs the example components.">
