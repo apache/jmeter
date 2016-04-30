@@ -1588,7 +1588,7 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/crlf" quiet="true"/>
-</target>
+  </target>
 
   <!-- Set up files for distribution to Maven via Nexus -->
   <target name="_dist_maven" depends="init-version">
@@ -1739,7 +1739,7 @@ run JMeter unless all the JMeter jars are added.
       <!-- Only one of the following will execute -->
       <antcall target="_svnmucc_storedPass"/>
       <antcall target="_svnmucc_providedPass"/>
-    </target>
+  </target>
 
     <!-- run svnmucc using stored credentials -->
     <target name="_svnmucc_storedPass" unless="asf.ldap.password">
@@ -2077,7 +2077,7 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="_pack-source"/>
   </target>
 
-   <target name="_pack-binaries">
+  <target name="_pack-binaries">
     <property name="pack.name" value="${dist.name}_bin"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
@@ -2100,9 +2100,9 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="dist.binaries.non.native"/>
       </zipfileset>
     </zip>
-    </target>
+  </target>
 
-   <target name="_pack-libraries">
+  <target name="_pack-libraries">
     <property name="pack.name" value="${dist.name}_lib"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
@@ -2124,9 +2124,9 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="external.jars"/>
       </zipfileset>
     </zip>
-    </target>
+  </target>
 
-   <target name="_pack-javadoc">
+  <target name="_pack-javadoc">
     <property name="pack.name" value="${dist.name}_api"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
@@ -2138,9 +2138,9 @@ run JMeter unless all the JMeter jars are added.
     <zip  destfile="${dist.dir}/${pack.name}.zip">
        <zipfileset includes="${dest.docs.api}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
-    </target>
+  </target>
 
-   <target name="_pack-source">
+  <target name="_pack-source">
     <property name="pack.name" value="${dist.name}_src"/>
     <mkdir dir="${dist.dir}"/>
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
@@ -2162,7 +2162,7 @@ run JMeter unless all the JMeter jars are added.
         <patternset refid="dist.sources.non.native"/>
       </zipfileset>
     </zip>
-    </target>
+  </target>
 
     <!-- Create a zip of all resource files for translators -->
     <target name="pack-resources">
@@ -2281,13 +2281,13 @@ run JMeter unless all the JMeter jars are added.
     <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 7 minimum -->
   </target>
 
-      <!--
+  <!--
     Run Doccheck: See http://java.sun.com/j2se/javadoc/doccheck/docs/DocCheck.html
     and http://java.sun.com/j2se/javadoc/doccheck/
     Download the doclet, and put the jar in lib/opt.
     Output is in reports/ directory
--->
-<target name="docs-check">
+  -->
+  <target name="docs-check">
     <javadoc sourcepathref="srcpaths"
     destdir="reports"
     docletpath="${lib.opt}/doccheck.jar"
@@ -2303,7 +2303,7 @@ run JMeter unless all the JMeter jars are added.
         <param name="-evident" value="4"/>
       </doclet>
     </javadoc>
-</target>
+  </target>
 
   <target name="docs-site" depends="init-docs" description="Generate browsable HTML documentation in web-site format.">
     <mkdir dir="${dest.docs}" />
@@ -2710,10 +2710,10 @@ run JMeter unless all the JMeter jars are added.
     </java>
   </target>
 
-<!--
+  <!--
     In order to run JUnit, both junit.jar and optional.jar need to be on the Ant classpath
     optional.jar is normally found in ANT_HOME/lib
--->
+  -->
   <target name="junit"  depends="compile-tests"
     description="Run individual JUnit test (-Dtest.case=org.apache.jorphan.test.AllTests) (-Dtest.format=plain) (-Dtest.showoutput=true)">
   <mkdir dir="reports"/>
