@@ -1,1 +1,1 @@
-This directory hosts the binary archive of sample junit tests.
+This directory is for jars to be used with the JUnit Sampler.
