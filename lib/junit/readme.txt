@@ -1,0 +1,1 @@
+This directory hosts the binary archive of sample junit tests.

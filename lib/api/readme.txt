@@ -1,0 +1,1 @@
+This directory hosts binary archives of the Legion of the Bouncy Castle Java cryptography APIs.
