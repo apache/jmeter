@@ -57,6 +57,8 @@
    
       JDBC - available from database supplier
       JMS - available from the JMS provider
+      Bouncy Castle - available from http://www.bouncycastle.org/latest_releases.html
+      (currently only needed for SMIME Assertion)
 
    o  Java Compiler [OPTIONAL]:
 
