@@ -1,0 +1,1 @@
+This directory hosts binary archives of Apache JMeter.
