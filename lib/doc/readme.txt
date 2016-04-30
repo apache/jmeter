@@ -1,0 +1,1 @@
+This directory hosts files for documentation generation.

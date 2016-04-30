@@ -1356,11 +1356,13 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.project"/>
     <include name="eclipse.readme"/>
     <include name=".gitignore"/>
-    <include name="checkstyle.xml"/>
+    <include name=".travis.yml"/>
+   <include name="checkstyle.xml"/>
     <include name="checkstyle-suppressions.xml"/>
     <include name="rat-excludes.txt"/>
     <include name="${build.test-res}/**"/>
     <include name="${lib.dir}/aareadme.txt"/>
+    <include name="${lib.dir}/**/readme.txt"/>
     <include name="fb-*.x*"/>
     <!-- Make sure that the lib/opt directory is included in the archives -->
     <include name="${lib.opt}/README.txt"/>
