@@ -640,10 +640,8 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li>Philip Helger (http://www.helger.com) for his <a href="https://github.com/phax" target="_blank">CSS Parser</a> and for taking into account our bug reports very rapidly</li>
 <li>Irek Pastusiak (the.automatic.tester at gmail.com)</li>
 </ul>
-
-<br/>
-We also thank bug reporters who helped us improve JMeter. <br/>
-For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:
+<p>We also thank bug reporters who helped us improve JMeter. <br/>
+For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
 <ul>
 <li>purnasatyap at gmail dot com  for the tests and reports on nightly build</li>
 <li>Sergey Batalin (sergey_batalin at mail dot ru) for the tests and reports on nightly build</li>
