@@ -96,7 +96,7 @@ public class CsvSampleReader implements Closeable{
             char separator, boolean useSaveSampleCfg) {
         if (!(inputFile.isFile() && inputFile.canRead())) {
             throw new IllegalArgumentException(inputFile.getAbsolutePath()
-                    + "does not exist or is not readable");
+                    + " does not exist or is not readable");
         }
         this.file = inputFile;
         try {
