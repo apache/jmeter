@@ -637,7 +637,8 @@
     </javac>
   </target>
 
-  <target name="compile-tests" description="Compile test components only">
+  <!-- Tests need main classes -->
+  <target name="compile-tests" depends="compile" description="Compile test components">
     <mkdir dir="${build.test}"/>
     <javac srcdir="${src.test}" destdir="${build.test}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
@@ -2386,7 +2387,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="package,compile-tests,_test,_allbatchtests"
+  <target name="test" depends="compile-tests,_test,_allbatchtests"
     description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
 
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -2651,7 +2652,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
-   <target name="_test">
+   <target name="_test" depends="package">
    <!--
    The property java.awt.headless is not automatically passed on,
    because the tests are run in a separate JVM from the build.
