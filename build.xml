@@ -1192,7 +1192,7 @@ run JMeter unless all the JMeter jars are added.
     <echo>Project has been successfully created, you can now import it in Eclipse using Right click > Import > Existing projects into Workspace</echo>
   </target>
 
-  <target name="install" depends="package" description="Install JMeter. (Compiles code and creates jars)">
+  <target name="install" depends="package,docs-printable" description="Install JMeter. (Compiles code and creates jars)">
     <fixcrlf encoding="${encoding}" srcdir="." eol="lf" includes="bin/*.sh bin/jmeter bin/jmeter-server bin/mirror-server"/>
     <chmod perm="+x" dir="." includes="${dist.executables}"/>
   </target>
