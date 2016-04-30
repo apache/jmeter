@@ -35,12 +35,12 @@
           </elementProp>
           <elementProp name="host" elementType="Argument">
             <stringProp name="Argument.name">host</stringProp>
-            <stringProp name="Argument.value">foo.org</stringProp>
+            <stringProp name="Argument.value">site.example</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="bugzilla_host" elementType="Argument">
             <stringProp name="Argument.name">bugzilla_host</stringProp>
-            <stringProp name="Argument.value">bz.foo.org</stringProp>
+            <stringProp name="Argument.value">bz.site.example</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
