@@ -225,7 +225,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             <property name="filters_only_sample_series" required="No">
                                 Defines whether <code>series_filter</code> (see below)
                                 apply only on sample series.
-                                Default: <code>false</code></property>
+                                Default: <code>true</code></property>
                             <property name="series_filter" required="No">Sets the filter
                                 of series. An empty value deactivates the filtering.
                                 Format: regular expression.
