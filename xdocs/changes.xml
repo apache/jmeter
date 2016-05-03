@@ -386,6 +386,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>55597</bug>View Results Tree: Add a search feature to search in recorded samplers</li>
 <li><bug>59102</bug>View Results Tree: Better default value for "<code>view.results.tree.max_size</code>"</li>
 <li><bug>59099</bug>Backend listener : Add the possibility to consider samplersList as a Regular Expression. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+<li><bug>59424</bug>Visualizer : Add "Clear" in popup menu</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
