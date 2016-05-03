@@ -687,7 +687,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="jmeter.reportgenerator.exporter.html.property.template_dir"> Sets the source directory of templated files from which the html pages are generated.<br/>, defaults to:report-template</property>
 <property name="jmeter.reportgenerator.exporter.html.property.output_dir"> Sets the destination directory for generated html pages.<br/> This will be overriden by the command line option -o <br/>, defaults to:report-output</property>
 <property name="jmeter.reportgenerator.exporter.html.series_filter"> Regular Expression which Indicates which graph series are filtered in display<br/> Empty value means no filtering<br/>, defaults to:</property>
-<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series"> Indicates whether series filter apply only on sample series<br/>, defaults to:false</property>
+<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series"> Indicates whether series filter apply only on sample series<br/>, defaults to:true</property>
 <property name="jmeter.reportgenerator.exporter.html.show_controllers_only"> Indicates whether only controller samples are displayed on graphs that support it.<br/>, defaults to:false</property>
 </properties>
 </section>
