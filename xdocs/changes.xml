@@ -67,7 +67,7 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
 <ch_title>JSR223 Test Elements do not require a Cache Compilation Key anymore</ch_title>
-<p>Just check <code>Cache compiled script if available</code> checkbox and the elements (Pre-Processor, Post-Processor, Assertions, Listeners...) will pre-compile the script if underlying language supports it and cache the compiled code</p>
+<p>Just check <code>Cache compiled script if available</code> checkbox and the elements (Pre-Processor, Post-Processor, Assertions, Listeners, &hellip;) will pre-compile the script if underlying language supports it and cache the compiled code</p>
 <figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
 <ch_title>Nashorn can now be used as Javascript engine providing better performance and easier usage</ch_title>
 To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
@@ -465,7 +465,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>59236</bug>JMeter Properties : Make some cleanup</li>
 <li><bug>59240</bug>Introduce a slf4j adapter for Logkit (this allows using slf4j within plugins and core code)</li>
 <li><bug>59153</bug>Stop test if CSVDataSet is accessing non-existing file. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
-<li><bug>59320</bug>Better tooltip in GUI with GenericTestBeanCustomizer (CSV Data Set Config, JDBC Connection Configuration, Keystore Configuration...) . Based on a patch by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+<li><bug>59320</bug>Better tooltip in GUI with GenericTestBeanCustomizer (CSV Data Set Config, JDBC Connection Configuration, Keystore Configuration, &hellip;) . Based on a patch by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>59171</bug>Sample Result SaveConfig Dialog is generated in random order</li>
 <li><bug>59425</bug>Display error about missing help page inside the help pane</li>
 </ul>
