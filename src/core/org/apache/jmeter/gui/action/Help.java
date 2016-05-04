@@ -99,7 +99,17 @@ public class Help implements Command {
             helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
         } catch (IOException ioe) {
             log.error(ioe.toString());
-            JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
+            helpDoc.setText("<html><head><title>Problem loading help page</title>"
+                    + "<style><!--"
+                    + ".note { background-color: #ffeeee; border: 1px solid brown; }"
+                    + "div { padding: 10; margin: 10; }"
+                    + "--></style></head>"
+                    + "<body><div class='note'>"
+                    + "<h1>Problem loading help page</h1>"
+                    + "<div>Can't load url: &quot;<em>"
+                    + url.toString() + "</em>&quot;</div>"
+                    + "<div>See log for more info</div>"
+                    + "</body>");
         }
     }
 
