@@ -203,6 +203,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Custom implementation that backups headers related to Compressed responses 
      * that HC core {@link ResponseContentEncoding} removes after uncompressing
+     * See Bug 59401
      */
     private static final HttpResponseInterceptor RESPONSE_CONTENT_ENCODING = new ResponseContentEncoding() {
         @Override
@@ -213,6 +214,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             final HttpEntity entity = response.getEntity();
             final HttpClientContext clientContext = HttpClientContext.adapt(context);
             final RequestConfig requestConfig = clientContext.getRequestConfig();
+            // store the headers if necessary
             if (requestConfig.isContentCompressionEnabled() && entity != null && entity.getContentLength() != 0) {
                 final Header ceheader = entity.getContentEncoding();
                 if (ceheader != null) {
@@ -224,6 +226,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                    context.setAttribute(JMETER_RESPONSE_BACKUP_HEADERS, headersToSave);
                 }
             }
+
+            // Now invoke original parent code
             super.process(response, clientContext);
         }
     };
