@@ -538,6 +538,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>56141</bug>Application does not behave correctly when using HTTP Recorder. With the help of Dan (java.junkee at yahoo.com)</li>
     <li><bug>59079</bug>"<code>httpsampler.max_redirects</code>" property is not enforced when "<code>Redirect Automatically</code>" is used</li>
     <li><bug>58811</bug>When pasting arguments between http samplers the column "Encode" and "Include Equals" are lost. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
+    <li><bug>59401</bug>The HttpClient4 implementation uncompresses the compressed response but removes Content-Encoding response header when request has header "Accept-Encoding = gzip, deflate</li>
 </ul>
 
 <h3>Other Samplers</h3>
