@@ -283,7 +283,6 @@ Deprecated Libraries dropped or replaced by up to date ones:
     </ul>
     </li>
     <li><code>httpsampler.await_termination_timeout</code> has been replaced by <code>httpsampler.parallel_download_thread_keepalive_inseconds</code> which is now the keep alive time for the parallel download threads (in seconds).</li>
-    <li>For Thread Group Test Element, the property "<code>Action to be taken after a Sample Error</code>" value has been switched from "<code>Continue</code>" to "<code>Start Next thread loop</code>". See <bugzilla>59152</bugzilla></li>
     <li>JDBC Request has been updated to use commons-dbcp2, since then the behaviour is slightly different, ensure you have a correct "Validation Query" for your database. See <bugzilla>58786</bugzilla></li>
     <li>The following jars have been removed:
     <ul>
@@ -458,7 +457,6 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>58715</bug>Feature request: Bundle <code>groovy-all</code> with JMeter</li>
 <li><bug>58426</bug>Improve display of JMeter on high resolution devices (HiDPI) (part 1 of enhancement)</li>
 <li><bug>59105</bug>TableEditor : Add ability to paste rows from clipboard and delete multiple selection. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
-<li><bug>59152</bug>Thread Group: Change "<code>Action to be taken after a Sample Error</code>" value from "<code>Continue</code>" to "<code>Start Next thread loop</code>". Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>59197</bug>Thread Group : it should be possible to only run a single threadgroup or a selection of threadgroups with a popup menu. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>59207</bug>Change the font color of <code>errorsOrFatalsLabel</code> to red when an error occurs. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>58941</bug>Create a new Starter that runs thread groups in validation mode (<code>1</code> thread only, <code>1</code> iteration, no pause all customizable)</li>
