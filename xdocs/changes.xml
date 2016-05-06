@@ -168,7 +168,7 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting the property <code>httpsampler.embedded_resources_use_md5=true</code></li>
 </ul>
 <ch_title>Introduction of Sample Timeout feature</ch_title>
-<p>This new <a href="usermanual/component_reference.html#Sample_Timeout">Sample Timeout</a> Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
+<p>This new <complink name="Sample Timeout"/> Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
 In the screenshot below the 10 second timeout applies to the <code>Debug Sampler</code> and <code>HTTP Request</code> elements.
 </p>
 <figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
