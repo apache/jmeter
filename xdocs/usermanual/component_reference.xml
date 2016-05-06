@@ -3527,7 +3527,8 @@ By default, a Graphite implementation is provided.
         <property name="graphiteMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</code> or <code>org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</code></property>
         <property name="graphiteHost" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server host</property>
         <property name="graphitePort" required="Yes">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to <code>2003</code>. Note <code>PickleGraphiteMetricsSender</code> (port <code>2004</code>) can only talk to Graphite server.</property>
-        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "<code>jmeter</code>."</property>
+        <property name="rootMetricsPrefix" required="Yes">Prefix of metrics sent to backend. Defaults to "<code>jmeter</code>."
+        Note that JMeter does not add a separator between the root prefix and the samplerName which is why the trailing dot is currently needed.</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
         <property name="samplersList" required="Yes">Defines the names (labels) of sample results to be sent to the back end. 
         If <code>useRegexpForSamplersList=false</code> this is a list of semi-colon separated names.
