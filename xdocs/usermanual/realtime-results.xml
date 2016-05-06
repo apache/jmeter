@@ -52,7 +52,7 @@ In this document we will present the configuration setup to graph and historize 
 <subsection name="&sect-num;.1 Metrics exposed" anchor="metrics">
     <subsection name="&sect-num;.1.1 Thread/Virtual Users metrics" anchor="metrics-threads">
     <p>
-    Threads metrics are the following:
+    Thread metrics are the following:
     </p>
     <dl>
       <dt><code>&lt;rootMetricsPrefix&gt;test.minAT</code></dt><dd>Min active threads</dd>
@@ -84,13 +84,13 @@ In this document we will present the configuration setup to graph and historize 
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dt>
       <dd>Percentile computed for failed responses of sampler name. There will be one metric for each calculated value.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.count</code></dt>
-      <dd>Number of responses for sampler name</dd>
+      <dd>Number of responses for sampler name (sum of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.min</code></dt>
-      <dd>Min response time for responses of sampler name</dd>
+      <dd>Min response time for responses of sampler name (min of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.max</code></dt>
-      <dd>Max response time for responses of sampler name</dd>
+      <dd>Max response time for responses of sampler name (max of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dt>
-      <dd>Percentile computed for responses of sampler name. There will be one metric for each calculated value.</dd>
+      <dd>Percentile computed for responses of sampler name. There will be one metric for each calculated value. (calculated on the totals for OK and failed samples)</dd>
     </dl>
     <p>
     The default <code>percentiles</code> setting on the <complink name="Backend Listener"/> is "90;95;99", 
