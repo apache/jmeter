@@ -67,7 +67,8 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 <ch_title>New validation feature, in one click run a selection of Thread Groups with <code>1</code> user, no pause and <code>1</code> iteration</ch_title>
 <figure width="295" height="629" image="changes/3.0/thread_group_validate.png"></figure>
 <ch_title>JSR223 Test Elements do not require a Cache Compilation Key anymore</ch_title>
-<p>Just check <code>Cache compiled script if available</code> checkbox and the elements (Pre-Processor, Post-Processor, Assertions, Listeners, &hellip;) will pre-compile the script if underlying language supports it and cache the compiled code</p>
+<p>Just check <code>Cache compiled script if available</code> checkbox and the elements (Pre-Processor, Post-Processor, Assertions, Listeners, &hellip;) 
+will pre-compile the script and cache the compiled code if the underlying language supports it</p>
 <figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
 <ch_title>Nashorn can now be used as Javascript engine providing better performance and easier usage</ch_title>
 To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
@@ -101,7 +102,7 @@ See <a href="./usermanual/generating-dashboard.html" target="_blank">Generating 
 This report provides the following metrics:
 </p>
 <ul>
-    <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
+    <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> (Application Performance Index) table that computes the APDEX based on configurable values for tolerated and satisfied thresholds</li>
     <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="changes/3.0/report_apdex_and_summary.png" ></figure></li>
     <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1376" height="433" image="changes/3.0/report_statistics.png" ></figure></li>
     <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="changes/3.0/report_errors.png" ></figure></li>
@@ -145,7 +146,7 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 <p>You can now use a regular expression to select the samplers you want to filter. 
 Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
 </p>
-<figure width="815" height="395" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
+<figure width="806" height="380" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 <ch_category>Protocols and Load Testing improvements</ch_category>
 <ch_title>Migration to HttpClient 4.5.2 has been started. Although not completely finished, it improves many areas in JMeter</ch_title>
 <p>Migration to HttpClient 4.5.2 improves the following fields of JMeter:
@@ -161,14 +162,14 @@ Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in par
 <ul>
 <li>Parsing of CSS imported files (through <code>@import</code>) or embedded resources (background, images, &hellip;)</li>
 <li>Lazy initialization of SSL context: For 15 Threads 138% more sampling in 5 minutes for HTTP only tests. Gain increases as number of threads increases</li>
-<li>Rework of Connection management for Parallel Download: This now reproduces nowadays browsers behaviour and improved throughput. For 15 Threads 135% extra samples in 5 minutes.</li>
+<li>Rework of Connection management for Parallel Download: This better simulates current browser behaviour and improves throughput. For 15 Threads 135% extra samples in 5 minutes.</li>
 <li>Reuse of Threads used for Parallel downloads through a ThreadPool: This improves throughput and increases JMeter scalability for such tests</li>
 <li>Total of 750% more throughput found on test with 15 threads, the more threads you have the more the gain</li>
-<li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting <code>httpsampler.embedded_resources_use_md5=true</code> property</li>
+<li>You can now compute and store just the MD5 of embedded resources instead of storing the entire response, this can be done by setting the property <code>httpsampler.embedded_resources_use_md5=true</code></li>
 </ul>
 <ch_title>Introduction of Sample Timeout feature</ch_title>
-<p>This new Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
-In the screenshot below the 10 seconds timeout applies to <code>Debug Sampler</code> and <code>HTTP Request</code> elements.
+<p>This new <a href="usermanual/component_reference.html#Sample_Timeout">Sample Timeout</a> Pre-Processor allows you to apply a Timeout on the elements that are in its scope. 
+In the screenshot below the 10 second timeout applies to the <code>Debug Sampler</code> and <code>HTTP Request</code> elements.
 </p>
 <figure width="828" height="161" image="changes/3.0/sample_timeout.png" ></figure>
 
@@ -255,24 +256,24 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li>Since version 3.0, <code>jmeter.save.saveservice.idle_time</code> property value is true, meaning CSV/XML result files will contain an additional column containing idle time between samplers, see <bugzilla>57182</bugzilla></li>
     <li>In RandomTimer class, protected instance <code>timer</code> field has been replaced by <code>getTimer()</code> protected method, this is related to <bugzilla>58100</bugzilla>. This may impact 3<sup>rd</sup> party plugins.</li>
     <li>Since version 3.0, you can use Nashorn Engine (default javascript engine is Rhino) under Java8 for Elements that use Javascript Engine (<code>__javaScript</code>, <code>IfController</code>). If you want to use it, use property <code>javascript.use_rhino=false</code>, see <bugzilla>58406</bugzilla>.
-    <note>Note in future versions, we will switch to Nashorn by default, so users are encouraged to report any issue related to broken code when using Nashorn instead of Rhino.</note>
+    <note>Note: in a future version, we will switch to Nashorn by default. Users are encouraged to report any issue related to using Nashorn instead of Rhino.</note>
     </li>
-    <li>Since version 3.0, JMS Publisher will reload contents of file if Message source is "<code>From File</code>" and the "<code>Filename</code>" field changes (e.g. if it uses a variable)</li>
+    <li>Since version 3.0, JMS Publisher will reload contents of file if Message source is "<code>From File</code>" and the "<code>Filename</code>" field changes (e.g. if it uses a variable that has changed)</li>
     <li>org.apache.jmeter.gui.util.ButtonPanel has been removed, if you use it in your 3<sup>rd</sup> party plugin or custom development ensure you update your code. See <bugzilla>58687</bugzilla></li>
     <li>Property <code>jmeterthread.startearlier</code> has been removed. See <bugzilla>58726</bugzilla></li>   
     <li>Property <code>jmeterengine.startlistenerslater</code> has been removed. See <bugzilla>58728</bugzilla></li>   
     <li>Property <code>jmeterthread.reversePostProcessors</code> has been removed. See <bugzilla>58728</bugzilla></li>
-    <li>Property <code>jmeter.toolbar.display</code> has been removed, toolbar is now always displayed. See <bugzilla>59236</bugzilla></li>
-    <li>Property <code>jmeter.errorscounter.display</code> has been removed, errors/warnings counter is now always displayed. See <bugzilla>59236</bugzilla></li>
-    <li>Property <code>xml.parser</code> has been removed, it is not used anymore as <code>org.apache.jmeter.util.JMeterUtils#getXMLParser</code> has been deprecated and is not used neither. See <bugzilla>59236</bugzilla></li>  
-    <li>Summariser listener now outputs a formated duration in <code>HH:mm:ss</code> (Hour:Minute:Second), it previously outputed seconds. See <bugzilla>58776</bugzilla></li>
+    <li>Property <code>jmeter.toolbar.display</code> has been removed, the toolbar is now always displayed. See <bugzilla>59236</bugzilla></li>
+    <li>Property <code>jmeter.errorscounter.display</code> has been removed, the errors/warnings counter is now always displayed. See <bugzilla>59236</bugzilla></li>
+    <li>Property <code>xml.parser</code> has been removed, it is not used anymore as <code>org.apache.jmeter.util.JMeterUtils#getXMLParser</code> has been deprecated and is not used either. See <bugzilla>59236</bugzilla></li>  
+    <li>Summariser listener now shows the duration in the format <code>HH:mm:ss</code> (Hour:Minute:Second), it previously showed the duration in seconds. See <bugzilla>58776</bugzilla></li>
     <li><code>org.apache.jmeter.protocol.http.visualizers.RequestViewHTTP.getQueryMap</code> signature has changed, if you use it ensure you update your code. See <bugzilla>58845</bugzilla></li>
-    <li>JMS Subscriber will consider a sample to be an error if number of received messages is not equal to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
-    <li>Since version 3.0, HTTP(S) Test Script recorder uses default port <code>8888</code> as configured when using Recording Template. See <bugzilla>59006</bugzilla></li>
-    <li>Since version 3.0, the parser for embedded resources (replaced since 2.10 by Lagarto based implementation) relying on htmlparser library (HtmlParserHTMLParser) has been dropped along with its dependencies.</li>
-    <li>Since version 3.0, the support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>
-    <li>Since version 3.0, the default property value for <code>http.java.sampler.retries</code> has been switched to <code>0</code> (no retry by default) to align it with the behaviour of HttpClient4. 
-    <note>Note also that its meaning has changed: before 3.0, <code>http.java.sampler.retries=1</code> meant <code>No Retry</code>, since 3.0 <code>http.java.sampler.retries=1</code> means <code>1</code> retry.
+    <li>JMS Subscriber will consider a sample to be an error if the number of received messages is not equal to expected number of messages. It previously considered a sample OK if at least 1 message was received. See <bugzilla>58980</bugzilla></li>
+    <li>Since version 3.0, HTTP(S) Test Script recorder defaults to using port <code>8888</code> (as configured when using Recording Template). See <bugzilla>59006</bugzilla></li>
+    <li>Since version 3.0, the parser for embedded resources (replaced since 2.10 by Lagarto based implementation) which relied on the htmlparser library (HtmlParserHTMLParser) has been dropped along with its dependencies.</li>
+    <li>Since version 3.0, support for reading old Avalon format JTL (result) files has been removed, see <bugzilla>59064</bugzilla></li>
+    <li>Since version 3.0, the default property value for <code>http.java.sampler.retries</code> has been changed to <code>0</code> (no retry by default) to align it with the behaviour of HttpClient4. 
+    <note>Note also that its meaning has changed: before 3.0, <code>http.java.sampler.retries=1</code> meant <code>No Retry</code> (i.e. total tries = 1), since 3.0 <code>http.java.sampler.retries=1</code> means <code>1</code> retry.
     (Note: this only applies to the Java HTTP Sampler)</note>
     See <bugzilla>59103</bugzilla></li>
     <li>Since 3.0, the following deprecated classes have been dropped
@@ -297,11 +298,11 @@ Deprecated Libraries dropped or replaced by up to date ones:
         <li>jdom-1.1.3.jar (see <bugzilla>59156</bugzilla>)</li>
     </ul>
     </li>
-    <li>Number of redirects followed by JMeter is now 20, it was previously 5. This can be changed with property <code>httpsampler.max_redirects</code>. See <bugzilla>59382</bugzilla></li>
+    <li>Maximum number of redirects allowed by JMeter is now 20, it was previously 5. This can be changed with the property <code>httpsampler.max_redirects</code>. See <bugzilla>59382</bugzilla></li>
 </ul>
 <h3>Deprecated and removed elements</h3>
 <ul>
-    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
+    <li>MongoDB elements (MongoDB Source Config, MongoDB Script) have been deprecated and will be removed in the next version of JMeter. They do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. The JMeter team advises not to use them anymore. See <bugzilla>58772</bugzilla></li>
     <li>WebService(SOAP) Request and HTML Parameter Mask which were deprecated in 2.13 version, have now been removed following our <a href="./usermanual/best-practices.html#deprecation">deprecation strategy</a>.
     Classes and properties which were only used by those elements have been dropped:
     <ul>
