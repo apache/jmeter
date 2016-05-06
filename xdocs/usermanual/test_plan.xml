@@ -30,7 +30,14 @@
 <body>
 
 <section name="&sect-num;. Elements of a Test Plan">
+<p>
+This section describes the different parts of a test plan.
+</p>
+<p>
+A minimal test will consist of the Test Plan, a Thread Group and one or more Samplers.
+</p>
 
+<subsection name="&sect-num;.0 Test Plan" anchor="test_plan">
 <p>The Test Plan object has a checkbox called "<code>Functional Testing</code>".  If selected, it
 will cause JMeter to record the data returned from the server for each sample.  If you have 
 selected a file in your test listeners, this data will be written to file.  This can be useful if
@@ -40,6 +47,7 @@ JMeter's performance will suffer.  This option should be off if you are doing st
 is off by default).  </p>
 <p>If you are not recording the data to file, this option makes no difference.</p>
 <p>You can also use the <code>Configuration</code> button on a listener to decide what fields to save.</p>
+</subsection>
 
 <subsection name="&sect-num;.1 Thread Group" anchor="thread_group">
 <p>Thread group elements are the beginning points of any test plan.
@@ -271,12 +279,12 @@ that come with JMeter.</p>
 
 <subsection name="&sect-num;.4 Timers" anchor="timers">
 
-<p>By default, a JMeter thread sends requests without pausing between each request.
+<p>By default, a JMeter thread executes samplers in sequence without pausing.
 We recommend that you specify a delay by adding one of the available timers to
 your Thread Group. If you do not add a delay, JMeter could overwhelm your server by
 making too many requests in a very short amount of time.</p>
 
-<p>The timer will cause JMeter to delay a certain amount of time <b>before</b> each
+<p>A timer will cause JMeter to delay a certain amount of time <b>before</b> each
 sampler which is in its <a href="#scoping_rules">scope</a>.</p>
 
 <p>
@@ -306,11 +314,11 @@ will then check that the text is present in the HTTP response.  If JMeter cannot
 text, then it will mark this as a failed request.</p>
 
 <note>
-Note that assertions apply to all samplers which are in its <a href="#scoping_rules">scope</a>.
-To restrict the assertion to a single sampler, add the assertion as a child of the sampler.
+Note that assertions apply to all samplers which are in their <a href="#scoping_rules">scope</a>.
+To restrict an assertion to a single sampler, add the assertion as a child of the sampler.
 </note>
 
-<p>To view the assertion results, add an Assertion Listener to the Thread Group.
+<p>To view assertion results, add an Assertion Listener to the Thread Group.
 Failed Assertions will also show up in the Tree View and Table Listeners, 
 and will count towards the error %age for example in the Aggregate and Summary reports.
 </p>
