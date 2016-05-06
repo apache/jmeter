@@ -26,8 +26,8 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * This interface defines the interactions between the BackendListener and external
  * Java programs which can be executed by JMeter. Any Java class which wants to
- * be executed as a JMeter test must implement this interface (either directly
- * or indirectly through AbstractBackendListenerClient).
+ * be executed using the BackendListener test element must implement this interface (either directly
+ * or preferably indirectly through AbstractBackendListenerClient).
  * <p>
  * JMeter will create one instance of a BackendListenerClient implementation for
  * each user/thread in the test. Additional instances may be created for
