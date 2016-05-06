@@ -24,15 +24,16 @@
 <document prev="remote-test.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
 
 <properties>
-  <author email="p.mouawad at ubik-ingenierie.com">Philippe Mouawad</author>
+  <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
   <title>User's Manual: Live Statistics</title>
 </properties>
 
 <body>
 
 <section name="&sect-num;. Real-time results" anchor="realtime-results">
-<p>Since JMeter 2.13 you can get realtime results sent to a backend through the 
-<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;) implementing <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
+<p>Since JMeter 2.13 you can get real-time results sent to a backend through the 
+<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;)
+by providing a class which implements <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
 JMeter ships with a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
 This feature provides:
 <ul>
