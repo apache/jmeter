@@ -3535,7 +3535,7 @@ By default, a Graphite implementation is provided.
         <property name="useRegexpForSamplersList" required="Yes">Consider samplersList as a regular expression to select the samplers for which you want to report metrics to backend. Defaults to <code>false</code>.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
     </properties>
-    <p>Read <a href="realtime-results.html" >this</a> for more details.</p>
+    <p>See also <a href="realtime-results.html" >Real-time results</a> for more details.</p>
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
 </component>
 
