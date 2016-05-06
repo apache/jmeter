@@ -146,11 +146,12 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         synchronized (LOCK) {
             for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
-                SamplerMetric metric = entry.getValue();
-                if(entry.getKey().equals(CUMULATED_METRICS)) {
+                final String key = entry.getKey();
+                final SamplerMetric metric = entry.getValue();
+                if(key.equals(CUMULATED_METRICS)) {
                     addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
                 } else {
-                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(entry.getKey()), metric);                
+                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);                
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
