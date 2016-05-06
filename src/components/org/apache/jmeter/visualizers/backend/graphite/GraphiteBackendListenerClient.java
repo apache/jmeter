@@ -259,8 +259,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         samplersList = context.getParameter(SAMPLERS_LIST, "");
         useRegexpForSamplersList = context.getBooleanParameter(USE_REGEXP_FOR_SAMPLERS_LIST, false);
         rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
-        String percentilesAsString = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX);
-        String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
+        String[]  percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
