@@ -3533,7 +3533,10 @@ By default, a Graphite implementation is provided.
         If <code>useRegexpForSamplersList=false</code> this is a list of semi-colon separated names.
         If <code>useRegexpForSamplersList=true</code> this is a regular expression which will be matched against the names.</property>
         <property name="useRegexpForSamplersList" required="Yes">Consider samplersList as a regular expression to select the samplers for which you want to report metrics to backend. Defaults to <code>false</code>.</property>
-        <property name="percentiles" required="Yes">The percentiles you want to send to backend. List must be semicolon separated.</property>
+        <property name="percentiles" required="Yes">The percentiles you want to send to the backend.
+        A percentile may contain a fractional part, for example <code>12.5</code>.
+        (The separator is always ".")
+        List must be semicolon separated. Generally 3 or 4 values should be sufficient.</property>
     </properties>
     <p>See also <a href="realtime-results.html" >Real-time results</a> for more details.</p>
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
