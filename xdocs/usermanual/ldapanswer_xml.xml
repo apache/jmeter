@@ -18,7 +18,7 @@
 <document>   
 <properties>     
     <title>User's Manual: LDAP answer XML description</title>   
-    <author email="Dolf.Smits@Siemens.com">Dolf Smits</author>
+    <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
   </properties> 
 <body> 
 
