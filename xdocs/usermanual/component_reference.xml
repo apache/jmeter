@@ -5536,7 +5536,7 @@ can be set to <code>true</code> to use a separate Runnable thread instead of the
 
 <properties>
         <property name="Name" required="No">Descriptive name for this timer that is shown in the tree.</property>
-        <property name="Sampler Timeout" required="Yes">If the sample takes longer to complete, it will be interrupted.</property>
+        <property name="Sample Timeout" required="Yes">If the sample takes longer to complete, it will be interrupted.</property>
 </properties>
 </component>
 
