@@ -21,7 +21,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="remote-test.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
+<document prev="generating-dashboard.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
 
 <properties>
   <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
