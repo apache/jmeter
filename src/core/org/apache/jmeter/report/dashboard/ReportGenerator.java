@@ -140,7 +140,14 @@ public class ReportGenerator {
         this.resultCollector = resultCollector;
         this.testFile = file;
         final Properties merged = new Properties();
-        merged.putAll(loadProps(new File(JMeterUtils.getJMeterBinDir(), REPORTGENERATOR_PROPERTIES)));
+        File rgp = new File(JMeterUtils.getJMeterBinDir(), REPORTGENERATOR_PROPERTIES);
+        if(LOG.isInfoEnabled()) {
+            LOG.info("Reading report generator properties from:"+rgp.getAbsolutePath());
+        }
+        merged.putAll(loadProps(rgp));
+        if(LOG.isInfoEnabled()) {
+            LOG.info("Merging with JMeter properties");
+        }
         merged.putAll(JMeterUtils.getJMeterProperties());
         configuration = ReportGeneratorConfiguration.loadFromProperties(merged);
     }
@@ -150,7 +157,7 @@ public class ReportGenerator {
         try (FileInputStream inStream = new FileInputStream(file)) {
             props.load(inStream);
         } catch (IOException e) {
-            LOG.error("Problem loading properties ", e);
+            LOG.error("Problem loading properties from file:"+file.getAbsolutePath(), e);
             System.err.println("Problem loading properties " + e);
         }
         return props;
