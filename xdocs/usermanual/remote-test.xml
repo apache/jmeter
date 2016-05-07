@@ -21,7 +21,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="listeners.html" next="realtime-results.html" id="$Id$">
+<document prev="listeners.html" next="generating-dashboard.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Remote (Distributed) Testing</title>

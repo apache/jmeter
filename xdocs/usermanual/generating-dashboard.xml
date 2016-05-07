@@ -9,7 +9,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
+<document prev="remote-test.html" next="realtime-results.html" id="$Id$">
     <properties>
         <title>User's Manual: Generating Dashboard Report</title>
     </properties>
