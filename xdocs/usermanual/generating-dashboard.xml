@@ -56,7 +56,8 @@
                     Dashboard generation uses JMeter properties to customize the
                     report. Some properties are used for general settings and others are
                     used for a particular graph configuration or exporter configuration.
-                    <note>All these properties should be set in <code>user.properties</code> file.</note>
+                    <note>All report generator properties can be found in file <code>reportgenerator.properties</code>.
+                    To customize these properties, you should copy them in <code>user.properties</code> file and modify them.</note>
                 </p>
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
