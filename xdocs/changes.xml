@@ -439,14 +439,10 @@ Deprecated Libraries dropped or replaced by up to date ones:
 <li><bug>56554</bug>JSR223 Test Element : Generate compilation cache key automatically. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58911</bug>Header Manager : it should be possible to copy/paste between Header Managers. Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
 <li><bug>58864</bug>Arguments Panel : when moving parameter with up / down, ensure that the selection remains visible. Based on a contribution by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-<li><bug>58924</bug>Dashboard / report : It should be possible to export the generated graph as image (PNG). Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-<li><bug>58884</bug>JMeter report generator : need better error message. Developed by Florent Sabbe (f dot sabbe at ubik-ingenierie.com) and contributed by Ubik-Ingenierie</li>
-<li><bug>58957</bug>Report/Dashboard: HTML Exporter does not create parent directories for output directory. Developed by Florent Sabbe (f dot sabbe at ubik-ingenierie.com) and contributed by Ubik-Ingenierie</li>
 <li><bug>58968</bug>Add a new template to allow to record script with think time included. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li><bug>58978</bug>Settings defaults : Switch "<code>jmeter.save.saveservice.assertion_results_failure_message</code>" to true (after 2.13)</li>
 <li><bug>58991</bug>Settings defaults : Switch "<code>jmeter.save.saveservice.print_field_names</code>" to true (after 2.13)</li>
 <li><bug>57182</bug>Settings defaults : Switch "<code>jmeter.save.saveservice.idle_time</code>" to true (after 2.13)</li>
-<li><bug>58987</bug>Report/Dashboard: Improve error reporting.</li>
 <li><bug>58870</bug>TableEditor: minimum size is too small. Contributed by Vincent Herilier (vherilier at gmail.com)</li>
 <li><bug>58933</bug>JSyntaxTextArea : Ability to set font.  Contributed by Denis Kirpichenkov (denis.kirpichenkov at gmail.com)</li>
 <li><bug>58793</bug>Create developers page explaining how to build and contribute</li>
@@ -598,11 +594,6 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>57821</bug>Command-line option "<code>-X --remoteexit</code>" doesn't work since 2.13 (regression related to <bugzilla>57500</bugzilla>)</li>
     <li><bug>58795</bug>NPE may occur in <code>GuiPackage#getTestElementCheckSum</code> with some 3<sup>rd</sup> party plugins</li>
     <li><bug>58913</bug>When closing JMeter should not interpret cancel as "<em>destroy my test plan</em>". Contributed by Benoit Wiart (benoit dot wiart at gmail.com)</li>
-    <li><bug>58952</bug>Report/Dashboard: Generation of aggregated series in graphs does not work. Developed by Florent Sabbe (f dot sabbe at ubik-ingenierie.com) and contributed by Ubik-Ingenierie</li>
-    <li><bug>58931</bug>New Report/Dashboard : Getting font errors under Firefox and Chrome (not Safari)</li>
-    <li><bug>58932</bug>Report / Dashboard: Document clearly and log what report are not generated when saveservice options are not correct. Developed by Florent Sabbe (f dot sabbe at ubik-ingenierie.com) and contributed by Ubik-Ingenierie</li>
-    <li><bug>59055</bug>JMeter report generator : When generation is not launched from <code>jmeter/bin</code> folder <code>report-template</code> is not found</li>
-    <li><bug>58986</bug>Report/Dashboard reuses the same output directory</li>
     <li><bug>59096</bug>Search Feature : Case insensitive search is not really case insensitive</li>
     <li><bug>59193</bug><code>ant run_gui</code> fails with  <code>ClassNotFoundException</code> or <code>IllegalAccessError</code> when accessing classes from dependencies not loaded through <code>Thread.currentThread().getContextClassLoader()</code></li>
     <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
