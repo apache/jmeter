@@ -103,7 +103,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                     <properties>
                         <property name="report_title" required="No">
                             Title used in the generated report. 
-                            Default: ""
+                            Default: "Apache JMeter Dashboard"
                         </property>
                         <property name="overall_granularity" required="No">
                             Granularity of over time graphs. Data is aggregated to have 1 minute ticks. 
