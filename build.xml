@@ -1219,6 +1219,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/jmeter.properties"/>
     <include name="${dest.jar.jmeter}/log4j.conf"/>
     <include name="${dest.jar.jmeter}/logkit.xml"/>
+  	<include name="${dest.jar.jmeter}/reportgenerator.properties"/>
     <include name="${dest.jar.jmeter}/upgrade.properties"/>
     <include name="${dest.jar.jmeter}/saveservice.properties"/>
     <include name="${dest.jar.jmeter}/users.dtd"/>
@@ -1269,6 +1270,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/heapdump.*"/>
     <include name="${dest.jar.jmeter}/jmeter*"/>
     <exclude name="${dest.jar.jmeter}/jmeter.properties"/>
+  	<exclude name="${dest.jar.jmeter}/reportgenerator.properties"/>
     <include name="${dest.jar.jmeter}/mirror-server*"/>
     <include name="${dest.jar.jmeter}/shutdown.*"/>
     <include name="${dest.jar.jmeter}/stoptest.*"/>
