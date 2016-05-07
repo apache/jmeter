@@ -44,7 +44,7 @@
 <section name="&sect-num; Introduction" anchor="introduction">
 <description>
 <p>
-This document describes JMeter properties. These properties present in <code>jmeter.properties</code> should be set using <code>user.properties</code> file.
+This document describes JMeter properties. The properties present in <code>jmeter.properties</code> or <code>reportgenerator.properties</code> should be set in the <code>user.properties</code> file.
 These properties are only taken into account after restarting JMeter as they are usually resolved when the class is loaded.
 </p>
 </description>
