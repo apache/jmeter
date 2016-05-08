@@ -106,7 +106,6 @@ public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
 
     @Override
     public void startConsuming() {
-        // TODO what if sampleIndexer is null ?
         if (sampleIndexer != null) {
             sampleIndexer.reset();
         }
@@ -116,7 +115,6 @@ public class TaggerConsumer<TIndex> extends AbstractSampleConsumer {
 
     @Override
     public void consume(Sample sample, int channel) {
-        // TODO what if s or sampleIndexer are null ?
         if (sample != null && sampleIndexer != null) {
             TIndex index = sampleIndexer.calculateIndex(sample);
             Sample indexedSample = createIndexedSample(sample, channel, index);
