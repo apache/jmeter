@@ -50,7 +50,6 @@ public abstract class AbstractOverTimeGraphConsumer extends
      * @param granularity
      *            the granularity to set
      */
-    // TODO must be final because called by ctor; however currently overridden in a subclass
     public void setGranularity(long granularity) {
         _setGranularity(granularity);
     }
