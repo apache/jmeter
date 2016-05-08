@@ -157,7 +157,7 @@ public class ReportGenerator {
         try (FileInputStream inStream = new FileInputStream(file)) {
             props.load(inStream);
         } catch (IOException e) {
-            LOG.error("Problem loading properties from file:"+file.getAbsolutePath(), e);
+            LOG.error("Problem loading properties from file ", e);
             System.err.println("Problem loading properties " + e);
         }
         return props;
