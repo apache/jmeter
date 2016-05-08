@@ -28,7 +28,7 @@ import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * Consume samples whose timestamp format is HH:mm and reproduce them as a long
+ * Consume samples using the JMeter timestamp property (defaulting to HH:mm:ss) and reproduce them as a long
  * value (for faster treatment later in the consuming chain).
  * 
  * @since 3.0
@@ -37,7 +37,6 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%s> on sample %s";
 
-    // TODO Get the date format from jmeter properties
     private static String DEFAULT_DATE_FORMAT = "HH:mm:ss";
 
     private int timestamp;
