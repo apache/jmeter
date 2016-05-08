@@ -37,11 +37,11 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%s> on sample %s";
 
-    private static String DEFAULT_DATE_FORMAT = "HH:mm:ss";
+    private static final String DEFAULT_DATE_FORMAT = "HH:mm:ss";
 
     private int timestamp;
 
-    private SimpleDateFormat df = new SimpleDateFormat(
+    private final SimpleDateFormat df = new SimpleDateFormat(
             JMeterUtils.getPropDefault(
                     "jmeter.save.saveservice.timestamp_format",
                     DEFAULT_DATE_FORMAT));
