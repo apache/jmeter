@@ -37,13 +37,13 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
     private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%s> on sample %s";
 
-    private static final String DEFAULT_DATE_FORMAT = "HH:mm:ss";
+    private static final String DEFAULT_DATE_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
 
     private int timestamp;
 
     private final SimpleDateFormat df = new SimpleDateFormat(
             JMeterUtils.getPropDefault(
-                    "jmeter.save.saveservice.timestamp_format",
+                    "jmeter.save.saveservice.timestamp_format", // $NON-NLS-1$
                     DEFAULT_DATE_FORMAT));
 
     private SampleMetadata sampleMetadata;
@@ -65,7 +65,6 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
                 // Try to parse the timestamp assuming is a long
                 date = new Date(Long.parseLong(tStr));
             } catch (NumberFormatException ex) {
-                // Try to parse the timestamp assuming it has HH:mm:ss format
                 date = df.parse(tStr);
             }
         } catch (Exception e) {
