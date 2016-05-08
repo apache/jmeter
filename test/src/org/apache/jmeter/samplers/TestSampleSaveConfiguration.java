@@ -133,10 +133,10 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     public void testFormatter() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
-        a.setFormatter(null);
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
+        a.setFormatter(null);
         b.setFormatter(null);
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
