@@ -23,18 +23,23 @@ import java.io.FileInputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import org.junit.Test;
 
-public class TestPropertiesFiles extends JMeterTestCaseJUnit3 {
+public class TestPropertiesFiles extends JMeterTestCase {
     
 
+    @Test
     public void testUserProperties() throws Exception {
         Properties props = loadProps(new File(JMeterUtils.getJMeterBinDir(), "user.properties"));
         assertTrue("user.properties should not contain any enabled properties", props.isEmpty());
     }
 
     // The keys in jmeter.properties and reportgenerator.properties should be distinct
+    @Test
     public void testDefaultProperties() throws Exception {
         Properties jmeter = loadProps(new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties"));
         Properties report = loadProps(new File(JMeterUtils.getJMeterBinDir(), "reportgenerator.properties"));
