@@ -500,7 +500,7 @@ public final class JOrphanUtils {
     /**
      * Display currently running threads on system.out
      * This may be expensive to run.
-     * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exitting.
+     * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exiting.
      *
      * @param includeDaemons whether to include daemon threads or not.
      */

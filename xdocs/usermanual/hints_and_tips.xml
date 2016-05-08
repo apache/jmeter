@@ -205,6 +205,7 @@ will match any component that contains test in searchable elements of the compon
             </dt>
             <dd>View Results Tree</dd>
         </dl>
+        <note>The binding above are made for Windows QWERTY keyboards. For other platforms and keyboards ensure you adapt those values.</note>
         <p>
             To change these binding, please find "<code>gui.quick_*</code>" properties within <code>jmeter.properties</code> file as example,
             it is recommended to put overrides for them into <code>user.properties</code> file.

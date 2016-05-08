@@ -87,7 +87,7 @@ public class ReportGeneratorConfiguration {
     // Required exporter properties
     // Filters only sample series ?
     public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
-    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.FALSE;
+    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.TRUE;
 
     // Series filter
     public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";

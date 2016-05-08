@@ -21,18 +21,19 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="remote-test.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
+<document prev="generating-dashboard.html" next="best-practices.html" id="$Id: realtime-results.xml 1457581 2013-03-17 22:58:08Z sebb $">
 
 <properties>
-  <author email="p.mouawad at ubik-ingenierie.com">Philippe Mouawad</author>
+  <author email="dev@jmeter.apache.org">Apache JMeter developers</author>
   <title>User's Manual: Live Statistics</title>
 </properties>
 
 <body>
 
 <section name="&sect-num;. Real-time results" anchor="realtime-results">
-<p>Since JMeter 2.13 you can get realtime results sent to a backend through the 
-<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;) implementing <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
+<p>Since JMeter 2.13 you can get real-time results sent to a backend through the 
+<a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;)
+by providing a class which implements <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
 JMeter ships with a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
 This feature provides:
 <ul>
@@ -51,54 +52,60 @@ In this document we will present the configuration setup to graph and historize 
 <subsection name="&sect-num;.1 Metrics exposed" anchor="metrics">
     <subsection name="&sect-num;.1.1 Thread/Virtual Users metrics" anchor="metrics-threads">
     <p>
-    Threads metrics are the following:
+    Thread metrics are the following:
     </p>
     <dl>
-      <dt><code>&lt;rootMetricsPrefix&gt;.test.minAT</code></dt><dd>Min active threads</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.test.maxAT</code></dt><dd>Max active threads</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.test.meanAT</code></dt><dd>Mean active threads</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.test.startedT</code></dt><dd>Started threads</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.test.endedT</code></dt><dd>Finished threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.minAT</code></dt><dd>Min active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.maxAT</code></dt><dd>Max active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.meanAT</code></dt><dd>Mean active threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.startedT</code></dt><dd>Started threads</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;test.endedT</code></dt><dd>Finished threads</dd>
     </dl>
     </subsection>
     <subsection name="&sect-num;.1.2 Response times metrics" anchor="metrics-response-times">
     <p>Response related metrics are the following:</p>
     <dl>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.count</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.count</code></dt>
       <dd>Number of successful responses for sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.h.count</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.h.count</code></dt>
       <dd>Server hits per seconds, this metric cumulates Sample Result and Sub results (if using Transaction Controller, "Generate parent sampler" should be unchecked)</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.min</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.min</code></dt>
       <dd>Min response time for successful responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.max</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.max</code></dt>
       <dd>Max response time for successful responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dt>
-      <dd>Percentile computed for successful responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.   
-      By default listener computes percentiles 90%, 95% and 99%</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.count</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for successful responses of sampler name. There will be one metric for each calculated value.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.count</code></dt>
       <dd>Number of failed responses for sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.min</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.min</code></dt>
       <dd>Min response time for failed responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.max</code></dt>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.max</code></dt>
       <dd>Max response time for failed responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dt>
-      <dd>Percentile computed for failed responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
-      By default listener computes percentiles 90%, 95% and 99%</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.count</code></dt>
-      <dd>Number of responses for sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.min</code></dt>
-      <dd>Min response time for responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.max</code></dt>
-      <dd>Max response time for responses of sampler name</dd>
-      <dt><code>&lt;rootMetricsPrefix&gt;.&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dt>
-      <dd>Percentile computed for responses of sampler name. You can input as many percentiles as you want (3 or 4 being a reasonable value).<br/>
-      When percentile contains a comma for example "<code>99.9</code>", dot is sanitized by "<code>_</code>" leading to <code>99_9</code>.
-      By default listener computes percentiles 90%, 95% and 99%</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for failed responses of sampler name. There will be one metric for each calculated value.</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.count</code></dt>
+      <dd>Number of responses for sampler name (sum of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.min</code></dt>
+      <dd>Min response time for responses of sampler name (min of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.max</code></dt>
+      <dd>Max response time for responses of sampler name (max of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dt>
+      <dd>Percentile computed for responses of sampler name. There will be one metric for each calculated value. (calculated on the totals for OK and failed samples)</dd>
     </dl>
     <p>
-    By default JMeter sends only metrics for all samplers using "<code>all</code>" as samplerName.
+    The default <code>percentiles</code> setting on the <complink name="Backend Listener"/> is "90;95;99", 
+    i.e. the 3 percentiles 90%, 95% and 99%.
+    </p>
+    <p>
+    The <a href="http://graphite.readthedocs.io/en/latest/feeding-carbon.html#step-1-plan-a-naming-hierarchy">Graphite naming hierarchy</a>
+    uses dot (".") to separate elements. This could be confused with decimal percentile values.
+    JMeter converts any such values, replacing dot (".") with underscore ("-"). 
+    For example, "<code>99.9</code>" becomes "<code>99_9</code>"
+    </p>
+    <p>
+    By default JMeter sends metrics for all samplers accumulated under the samplerName "<code>all</code>".
+    If the Backend Listener <code>samplersList</code> is configured, then JMeter also sends the metrics
+    for the matching sample names unless <code>summaryOnly=true</code>
     </p>
     </subsection>
 </subsection>
@@ -110,7 +117,7 @@ In this document we will present the configuration setup to graph and historize 
 </subsection>
 
 <subsection name="&sect-num;.2 InfluxDB" anchor="influxdb">
-<p>InfluxDB is an open-source, distributed,time-series database that allows to 
+<p>InfluxDB is an open-source, distributed, time-series database that allows to 
 easily store metrics.
 Installation and configuration is very easy, read this for more details <a href="http://influxdb.com/docs/v0.8/introduction/installation.html" target="_blank" >InfluxDB documentation</a>.<br/>
 InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga"  target="_blank">Influga</a> or <a href="http://grafana.org/"  target="_blank">Grafana</a>.
@@ -129,6 +136,9 @@ port = 2003
 database = "jmeter"  # store graphite data in this database
 # udp_enabled = true # enable udp interface on the same port as the tcp interface
     </source>
+    <p>
+    For later versions of InfluxDb (e.g. 0.12), replace <code>[input_plugins.graphite]</code> with <code>[[graphite]]</code>
+    </p>
     </subsection>
     <subsection name="&sect-num;.2.2 InfluxDB database configuration" anchor="influxdb_db_configuration">
     <p>Connect to InfluxDB admin console and create two databases:
@@ -164,7 +174,7 @@ datasources: {
     </source>
     <note>
     Note that grafana has "<code>grafanaDB:true</code>". Also note that here we use <code>root</code> user for simplicity
-    It is better to dedicate a special user with less rights.
+    It is better to dedicate a special user with restricted rights.
     </note>
     Here is the kind of dashboard that you could obtain:
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure> 

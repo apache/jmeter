@@ -44,7 +44,7 @@
 <section name="&sect-num; Introduction" anchor="introduction">
 <description>
 <p>
-This document describes JMeter properties. These properties present in <code>jmeter.properties</code> should be set using <code>user.properties</code> file.
+This document describes JMeter properties. The properties present in <code>jmeter.properties</code> or <code>reportgenerator.properties</code> should be set in the <code>user.properties</code> file.
 These properties are only taken into account after restarting JMeter as they are usually resolved when the class is loaded.
 </p>
 </description>
@@ -325,23 +325,24 @@ log_level.org.apache.http.client=DEBUG
 </source>
 </description>
 </section>
-<section name="&sect-num;.9 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
+<section name="&sect-num;.15 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
 <properties>
 <property name="hc.parameters.file"> define a properties file for overriding Apache HttpClient parameters<br/> Uncomment this line if you put anything in hc.parameters file<br/>, defaults to:hc.parameters</property>
-<property name="httpclient4.retrycount"> Number of retries to attempt (default 0)<br/>, defaults to:0</property>
-<property name=" Keep-Alive headers (default 0 "> Idle connection timeout (Milliseconds) to apply if the server does not send<br/>, defaults to: no Keep-Alive)</property>
-<property name="httpclient4.idletimeout">, defaults to:0</property>
-<property name="httpclient4.validate_after_inactivity"> Note: this is currently an experimental fix<br/> Check connections if the elapsed time (Milliseconds) since the last <br/> use of the connection exceed this value<br/>, defaults to:2000</property>
-<property name="httpclient4.time_to_live"> TTL (in Milliseconds) represents an absolute value. <br/> No matter what the connection will not be re-used beyond its TTL. <br/>, defaults to:2000</property>
+<property name="httpclient4.retrycount"> Number of retries to attempt<br/>, defaults to:0</property>
+<property name="httpclient4.idletimeout">Idle connection timeout (Milliseconds) to apply if the server does not send Keep-Alive headers, defaults to:0 (no suggested duration for Keep-Alive))</property>
+<property name="httpclient4.validate_after_inactivity">Check connections if the elapsed time (Milliseconds) since the last use of the connection exceeds this value<br/>, defaults to:2000</property>
+<property name="httpclient4.time_to_live"> TTL (in Milliseconds) represents an absolute value. No matter what, the connection will not be re-used beyond its TTL. <br/>, defaults to:2000</property>
 </properties>
 </section>
-<section name="&sect-num;.10 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
+<section name="&sect-num;.16 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
 <properties>
-<property name="httpclient.parameters.file">                            DEPRECATED<br/> define a properties file for overriding Commons HttpClient parameters<br/> See: http://hc.apache.org/httpclient-3.x/preference-api.html<br/> Uncomment this line if you put anything in httpclient.parameters file<br/>, defaults to:httpclient.parameters</property>
-<property name="httpclient3.retrycount"> Number of retries to attempt (default 0)<br/>, defaults to:0</property>
+<property name="httpclient.parameters.file">define a properties file for overriding Commons HttpClient parameters
+See <a href="http://hc.apache.org/httpclient-3.x/preference-api.html">this</a>.
+Uncomment this line if you put anything in httpclient.parameters file</property>
+<property name="httpclient3.retrycount">Number of retries to attempt, defaults to:0</property>
 </properties>
 </section>
-<section name="&sect-num;.11 HTTP Cache Manager configuration" anchor="cache_maanger">
+<section name="&sect-num;.17 HTTP Cache Manager configuration" anchor="cache_maanger">
 <properties>
 <property name="cacheable_methods"><br/> Space or comma separated list of methods that can be cached<br/>, defaults to:GET</property>
 <property name="cache_manager.cached_resource_mode"> N.B. This property is currently a temporary solution for Bug 56162<br/> Since 2.12, JMeter does not create anymore a Sample Result with 204 response <br/> code for a resource found in cache which is inline with what browser do.<br/>, defaults to:RETURN_NO_SAMPLE</property>
@@ -350,7 +351,7 @@ log_level.org.apache.http.client=DEBUG
 <property name=" RETURN_CUSTOM_STATUS.message">, defaults to:</property>
 </properties>
 </section>
-<section name="&sect-num;.12 Results file configuration" anchor="results_file_config">
+<section name="&sect-num;.18 Results file configuration" anchor="results_file_config">
 <properties>
 <property name="jmeter.save.saveservice.output_format"> This section helps determine how result data will be saved.<br/> The commented out values are the defaults.<br/> legitimate values: xml, csv, db.  Only xml and csv are currently supported.<br/>, defaults to:csv</property>
 <property name="jmeter.save.saveservice.assertion_results_failure_message"> true when field should be saved; false otherwise<br/> assertion_results_failure_message only affects CSV output<br/>, defaults to:true</property>
@@ -390,7 +391,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="jmeter.save.saveservice.autoflush"> AutoFlush on each line written in XML or CSV output<br/> Setting this to true will result in less test results data loss in case of Crash<br/> but with impact on performances, particularly for intensive tests (low or no pauses)<br/> Since JMeter 2.10, this is false by default<br/>, defaults to:false</property>
 </properties>
 </section>
-<section name="&sect-num;.13 Settings that affect SampleResults" anchor="sample_results">
+<section name="&sect-num;.19 Settings that affect SampleResults" anchor="sample_results">
 <properties>
 <property name="sampleresult.timestamp.start"> Save the start time stamp instead of the end<br/> This also affects the timestamp stored in result files<br/>, defaults to:true</property>
 <property name="sampleresult.useNanoTime"> Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()<br/>, defaults to:true</property>
@@ -398,12 +399,12 @@ log_level.org.apache.http.client=DEBUG
 <property name="sampleresult.nanoThreadSleep">Use a background thread to calculate the nanoTime offset<br/>. Set this to a value &lt; 0 to disable the background thread, defaults to:5000</property>
 </properties>
 </section>
-<section name="&sect-num;.14 Upgrade" anchor="upgrade">
+<section name="&sect-num;.20 Upgrade" anchor="upgrade">
 <properties>
 <property name="upgrade_properties"> File that holds a record of name changes for backward compatibility issues<br/>, defaults to:/bin/upgrade.properties</property>
 </properties>
 </section>
-<section name="&sect-num;.15 JMeter Test Script recorder configuration" anchor="test_script_recorder">
+<section name="&sect-num;.21 JMeter Test Script recorder configuration" anchor="test_script_recorder">
 <properties>
 <property name="proxy.pause"><br/> N.B. The element was originally called the Proxy recorder, which is why the<br/> properties have the prefix "proxy".<br/> If the recorder detects a gap of at least 5s (default) between HTTP requests,<br/> it assumes that the user has clicked a new URL<br/>, defaults to:5000</property>
 <property name="proxy.number.requests"> Add numeric prefix to Sampler names (default true)<br/>, defaults to:true</property>
@@ -424,7 +425,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="proxy.ssl.protocol"> SSL configuration<br/>, defaults to:TLS</property>
 </properties>
 </section>
-<section name="&sect-num;.16 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
+<section name="&sect-num;.22 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
 <properties>
 <property name="proxy.cert.directory">, defaults to:&lt;JMeter bin directory&gt;</property>
 <property name="proxy.cert.file">, defaults to:proxyserver.jks</property>
@@ -437,12 +438,12 @@ log_level.org.apache.http.client=DEBUG
 <property name="proxy.cert.dynamic_keys"> Use dynamic key generation (if supported by JMeter/JVM)<br/> If false, will revert to using a single key with no certificate<br/>, defaults to:true</property>
 </properties>
 </section>
-<section name="&sect-num;.17 JMeter Proxy configuration" anchor="proxy_config">
+<section name="&sect-num;.23 JMeter Proxy configuration" anchor="proxy_config">
 <properties>
 <property name="http.proxyDomain"> use command-line flags for user-name and password<br/>, defaults to:NTLM domain, if required by HTTPClient sampler</property>
 </properties>
 </section>
-<section name="&sect-num;.18 HTML Parser configuration" anchor="parser_config">
+<section name="&sect-num;.24 HTML Parser configuration" anchor="parser_config">
 <properties>
 <property name="HTTPResponse.parsers"> Space-separated list of parser groups<br/>, defaults to:htmlParser wmlParser cssParser</property>
 <property name="cssParser.className"> for each parser, there should be a parser.types and a parser.className property<br/> CSS Parser based on ph-css<br/>, defaults to:org.apache.jmeter.protocol.http.parser.CssParser</property>
@@ -457,7 +458,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="wmlParser.types">Used by HTTPSamplerBase to associate wmlParser with content types below <br/>, defaults to:text/vnd.wap.wml </property>
 </properties>
 </section>
-<section name="&sect-num;.19 Remote batching configuration" anchor="remote_batching_config">
+<section name="&sect-num;.25 Remote batching configuration" anchor="remote_batching_config">
 <properties>
 <property name="sample_sender_client_configured"> How is Sample sender implementations configured:<br/> - true (default) means client configuration will be used<br/> - false means server configuration will be used<br/>, defaults to:true</property>
 <property name=" but can now also be defined using mode"> Remote batching support<br/> Since JMeter 2.9, default is MODE_STRIPPED_BATCH, which returns samples in<br/> batch mode (every 100 samples or every minute by default)<br/> Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, so if you need it change to<br/> another mode<br/> Hold retains samples until end of test (may need lots of memory)<br/> Batch returns samples in batches<br/> Statistical returns sample summary statistics<br/> hold_samples was originally defined as a separate property,<br/>, defaults to:Hold</property>
@@ -479,18 +480,18 @@ log_level.org.apache.http.client=DEBUG
 <property name=" monitor.buffer.size"> Note: the mode is currently resolved on the client; <br/> other properties (e.g. time_threshold) are resolved on the server.<br/> To set the Monitor Health Visualiser buffer size, enter the desired value<br/>, defaults to:800</property>
 </properties>
 </section>
-<section name="&sect-num;.20 JDBC Request configuration" anchor="jdbc_request">
+<section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
 <properties>
 <property name="jdbcsampler.maxopenpreparedstatements"> Max number of PreparedStatements per Connection for PreparedStatement cache<br/>, defaults to:100</property>
 <property name="jdbcsampler.nullmarker"> String used to indicate a null value<br/>, defaults to:]NULL[</property>
 </properties>
 </section>
-<section name="&sect-num;.21 OS Process Sampler configuration" anchor="os_sampler">
+<section name="&sect-num;.27 OS Process Sampler configuration" anchor="os_sampler">
 <properties>
 <property name="os_sampler.poll_for_timeout"> Polling to see if process has finished its work, used when a timeout is configured on sampler<br/>, defaults to:100</property>
 </properties>
 </section>
-<section name="&sect-num;.22 TCP Sampler configuration" anchor="tcp_sampler">
+<section name="&sect-num;.28 TCP Sampler configuration" anchor="tcp_sampler">
 <properties>
 <property name="tcp.handler"> The default handler class<br/>, defaults to:TCPClientImpl</property>
 <property name=" eolByte "><br/>, defaults to: byte value for end of line</property>
@@ -504,7 +505,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="tcp.binarylength.prefix.length"> The length prefix used by LengthPrefixedBinaryTCPClientImpl implementation<br/> defaults to 2 bytes.<br/>, defaults to:2</property>
 </properties>
 </section>
-<section name="&sect-num;.23 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)" anchor="summariser">
+<section name="&sect-num;.29 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)" anchor="summariser">
 <properties>
 <property name="summariser.name"><br/> Comment the following property to disable the default non-GUI summariser<br/> [or change the value to rename it]<br/> (applies to non-GUI mode only)<br/>, defaults to:summary</property>
 <property name="summariser.interval"><br/> interval between summaries (in seconds) default 30 seconds<br/>, defaults to:30</property>
@@ -512,19 +513,19 @@ log_level.org.apache.http.client=DEBUG
 <property name="summariser.out"><br/> Write messages to System.out<br/>, defaults to:true</property>
 </properties>
 </section>
-<section name="&sect-num;.24 Aggregate Report and Aggregate Graph - configuration" anchor="aggregate_report_graph">
+<section name="&sect-num;.30 Aggregate Report and Aggregate Graph - configuration" anchor="aggregate_report_graph">
 <properties>
 <property name="aggregate_rpt_pct1"><br/> Percentiles to display in reports<br/> Can be float value between 0 and 100<br/> First percentile to display, defaults to 90%<br/>, defaults to:90</property>
 <property name="aggregate_rpt_pct2"> Second percentile to display, defaults to 95%<br/>, defaults to:95</property>
 <property name="aggregate_rpt_pct3"> Second percentile to display, defaults to 99%<br/>, defaults to:99</property>
 </properties>
 </section>
-<section name="&sect-num;.28 BackendListener - configuration" anchor="backend">
+<section name="&sect-num;.31 BackendListener - configuration" anchor="backend">
 <properties>
 <property name="backend_metrics_window"><br/> Backend metrics sliding window size for Percentiles, Min, Max<br/>, defaults to:100</property>
 </properties>
 </section>
-<section name="&sect-num;.29 BeanShell configuration" anchor="beanshell">
+<section name="&sect-num;.32 BeanShell configuration" anchor="beanshell">
 <properties>
 <property name="beanshell.server.port"> BeanShell Server properties<br/><br/> Define the port number as non-zero to start the http server on that port<br/>, defaults to:9000</property>
 <property name="beanshell.server.file"> The telnet server will be started on the next port<br/><br/> Define the server initialisation file<br/>, defaults to:../extras/startup.bsh</property>
@@ -538,13 +539,13 @@ log_level.org.apache.http.client=DEBUG
 <property name="beanshell.timer.init">, defaults to:etc</property>
 </properties>
 </section>
-<section name="&sect-num;.30 MailerModel configuration" anchor="mailer">
+<section name="&sect-num;.33 MailerModel configuration" anchor="mailer">
 <properties>
 <property name="mailer.successlimit"> The file BeanShellListeners.bshrc contains sample definitions<br/> of Test and Thread Listeners.<br/> Number of successful samples before a message is sent<br/>, defaults to:2</property>
 <property name="mailer.failurelimit"><br/> Number of failed samples before a message is sent<br/>, defaults to:2</property>
 </properties>
 </section>
-<section name="&sect-num;.31 CSVRead configuration" anchor="csv">
+<section name="&sect-num;.34 CSVRead configuration" anchor="csv">
 <properties>
 <property name="csvread.delimiter"> CSVRead delimiter setting (default ",")<br/> Make sure that there are no trailing spaces or tabs after the delimiter<br/> characters, or these will be included in the list of valid delimiters<br/>, defaults to:,</property>
 <property name="csvread.delimiter">, defaults to:;</property>
@@ -554,7 +555,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="csvread.delimiter">, defaults to:   </property>
 </properties>
 </section>
-<section name="&sect-num;.32 __time() function configuration" anchor="time">
+<section name="&sect-num;.35 __time() function configuration" anchor="time">
 <properties>
 <property name="time.YMD"><br/> The properties below can be used to redefine the default formats<br/>, defaults to:yyyyMMdd</property>
 <property name="time.HMS">, defaults to:HHmmss</property>
@@ -563,12 +564,12 @@ log_level.org.apache.http.client=DEBUG
 <property name="time.USER2">, defaults to:</property>
 </properties>
 </section>
-<section name="&sect-num;.33 CSV DataSet configuration" anchor="csv_dataset">
+<section name="&sect-num;.36 CSV DataSet configuration" anchor="csv_dataset">
 <properties>
 <property name="csvdataset.eofstring"> String to return at EOF (if recycle not used)<br/>, defaults to:<code>&lt;EOF&gt;</code></property>
 </properties>
 </section>
-<section name="&sect-num;.34 LDAP Sampler configuration" anchor="ldap">
+<section name="&sect-num;.37 LDAP Sampler configuration" anchor="ldap">
 <properties>
 <property name="ldapsampler.max_sorted_results"> Maximum number of search results returned by a search that will be sorted<br/> to guarantee a stable ordering (if more results then this limit are retruned<br/> then no sorting is done). Set to 0 to turn off all sorting, in which case<br/> "Equals" response assertions will be very likely to fail against search results.<br/><br/>, defaults to:1000</property>
 <property name="assertion.equals_section_diff_len"> Number of characters to log for each of three sections (starting matching section, diff section,<br/>   ending matching section where not all sections will appear for all diffs) diff display when an Equals<br/>   assertion fails. So a value of 100 means a maximum of 300 characters of diff text will be displayed<br/>   (+ a number of extra characters like "..." and "[[["/"]]]" which are used to decorate it).<br/>, defaults to:100</property>
@@ -576,7 +577,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="assertion.equals_diff_delta_end">, defaults to:]]]</property>
 </properties>
 </section>
-<section name="&sect-num;.35 Miscellaneous configuration" anchor="miscellaneous">
+<section name="&sect-num;.38 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
 <property name="mirror.server.port"> If defined, then start the mirror server on the port<br/>, defaults to:8081</property>
 <property name="oro.patterncache.size"> ORO PatternCacheLRU size<br/>, defaults to:1000</property>
@@ -626,7 +627,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="jsr223.compiled_scripts_cache_size"> Used by JSR223 elements<br/> Size of compiled scripts cache<br/>, defaults to:100</property>
 </properties>
 </section>
-<section name="&sect-num;.36 Classpath configuration" anchor="classpath">
+<section name="&sect-num;.39 Classpath configuration" anchor="classpath">
 <properties>
 <property name="search_paths"> List of directories (separated by ;) to search for additional JMeter plugin classes,<br/> for example new GUI elements and samplers.<br/> Any jar file in such a directory will be automatically included,<br/> jar files in sub directories are ignored.<br/> The given value is in addition to any jars found in the lib/ext directory.<br/> Do not use this for utility or plugin dependency jars.<br/>, defaults to:/app1/lib;/app2/lib</property>
 <property name="user.classpath"> List of directories that JMeter will search for utility and plugin dependency classes.<br/> Use your platform path separator to separate multiple paths.<br/> Any jar file in such a directory will be automatically included,<br/> jar files in sub directories are ignored.<br/> The given value is in addition to any jars found in the lib directory.<br/> All entries will be added to the class path of the system class loader<br/> and also to the path of the JMeter internal loader.<br/> Paths with spaces may cause problems for the JVM<br/>, defaults to:../classes;../lib</property>
@@ -636,7 +637,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="classfinder.functions.notContain">, defaults to:.gui.</property>
 </properties>
 </section>
-<section name="&sect-num;.37 Reporting configuration" anchor="reporting">
+<section name="&sect-num;.40 Reporting configuration" anchor="reporting">
 <properties>
 <property name="jmeter.reportgenerator.apdex_satisfied_threshold"> Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:500</property>
 <property name="jmeter.reportgenerator.apdex_tolerated_threshold"> Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:1500</property>
@@ -687,18 +688,18 @@ log_level.org.apache.http.client=DEBUG
 <property name="jmeter.reportgenerator.exporter.html.property.template_dir"> Sets the source directory of templated files from which the html pages are generated.<br/>, defaults to:report-template</property>
 <property name="jmeter.reportgenerator.exporter.html.property.output_dir"> Sets the destination directory for generated html pages.<br/> This will be overriden by the command line option -o <br/>, defaults to:report-output</property>
 <property name="jmeter.reportgenerator.exporter.html.series_filter"> Regular Expression which Indicates which graph series are filtered in display<br/> Empty value means no filtering<br/>, defaults to:</property>
-<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series"> Indicates whether series filter apply only on sample series<br/>, defaults to:false</property>
+<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series"> Indicates whether series filter apply only on sample series<br/>, defaults to:true</property>
 <property name="jmeter.reportgenerator.exporter.html.show_controllers_only"> Indicates whether only controller samples are displayed on graphs that support it.<br/>, defaults to:false</property>
 </properties>
 </section>
-<section name="&sect-num;.38 Additional property files to load" anchor="properties">
+<section name="&sect-num;.41 Additional property files to load" anchor="properties">
 <properties>
 <property name="user.properties">Should JMeter automatically load additional JMeter properties?<br/> File name to look for (comment to disable)<br/>, defaults to:user.properties</property>
 <property name="system.properties">Should JMeter automatically load additional system properties?<br/> File name to look for (comment to disable)<br/>, defaults to:system.properties</property>
 <property name="template.files">Comma separated list of files that contain reference to templates and their description<br/> Path must be relative to jmeter root folder<br/>, defaults to:/bin/templates/templates.xml</property>
 </properties>
 </section>
-<section name="&sect-num;.39 Thread Group Validation feature" anchor="validation">
+<section name="&sect-num;.42 Thread Group Validation feature" anchor="validation">
 <description>Validation is the name of the feature used to rapidly validate a Thread Group runs fine</description>
 <properties>
 <property name="testplan_validation.tree_cloner_class">Default implementation is org.apache.jmeter.gui.action.validation.TreeClonerForValidation<br/> It runs validation without timers, with 1 thread and 1 iteration<br/> You can implement your own policy that must extend org.apache.jmeter.engine.TreeCloner<br/> JMeter will instanciate it and use it to create the Tree used to run validation on Thread Group<br/>, defaults to:org.apache.jmeter.gui.action.validation.TreeClonerForValidation</property>

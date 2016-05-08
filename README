@@ -57,6 +57,8 @@
    
       JDBC - available from database supplier
       JMS - available from the JMS provider
+      Bouncy Castle - available from http://www.bouncycastle.org/latest_releases.html
+      (currently only needed for SMIME Assertion)
 
    o  Java Compiler [OPTIONAL]:
 
@@ -71,9 +73,6 @@
 
   - Release builds
   Unpack the binary archive into a suitable directory structure.
-  
-  - Nightly builds (Be aware that these have not been reviewed or tested)
-  Unpack BOTH the _bin and _lib archives into the SAME directory structure
   
   Running JMeter
   --------------
@@ -104,13 +103,6 @@
   You can also use Ant to download the required library files:
   
   ant download_jars 
-  
-  - Nightly builds
-  Unpack the _src, _bin and _lib archives into the same directory structure.
-
-  Please note:
-  To avoid unnecessary duplication, the nightly source archives do not contain 
-  the source files which are needed to run JMeter (for example properties files and scripts).
 
   Any optional jars (see above) should be placed in lib/opt and/or lib.
   

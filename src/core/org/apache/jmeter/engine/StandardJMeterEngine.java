@@ -270,8 +270,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                         // TODO should we call test listeners? That might hang too ...
                         log.fatalError(JMeterUtils.getResString("stopping_test_failed")); //$NON-NLS-1$
                         if (SYSTEM_EXIT_ON_STOP_FAIL) { // default is true
-                            log.fatalError("Exitting");
-                            System.out.println("Fatal error, could not stop test, exitting");
+                            log.fatalError("Exiting");
+                            System.out.println("Fatal error, could not stop test, exiting");
                             System.exit(1);
                         } else {
                             System.out.println("Fatal error, could not stop test");                            

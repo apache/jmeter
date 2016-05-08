@@ -1067,11 +1067,15 @@ public class JMeter implements JMeterPlugin {
         }
 
         @Override
+        // N.B. this is called by a daemon RMI thread from the remote host
         public void testEnded(String host) {
             long now=System.currentTimeMillis();
             log.info("Finished remote host: " + host + " ("+now+")");
             if (started.decrementAndGet() <= 0) {
                 Thread stopSoon = new Thread(this);
+                // the calling thread is a daemon; this thread must not be
+                // see Bug 59391
+                stopSoon.setDaemon(false); 
                 stopSoon.start();
             }
         }
@@ -1115,7 +1119,7 @@ public class JMeter implements JMeterPlugin {
             long now = System.currentTimeMillis();
             println("Tidying up remote @ "+new Date(now)+" ("+now+")");
             if (engines!=null){ // it will be null unless remoteStop = true
-                println("Exitting remote servers");
+                println("Exiting remote servers");
                 for (JMeterEngine e : engines){
                     e.exit();
                 }

@@ -146,11 +146,12 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         long timestampInSeconds = TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         synchronized (LOCK) {
             for (Map.Entry<String, SamplerMetric> entry : getMetricsPerSampler().entrySet()) {
-                SamplerMetric metric = entry.getValue();
-                if(entry.getKey().equals(CUMULATED_METRICS)) {
+                final String key = entry.getKey();
+                final SamplerMetric metric = entry.getValue();
+                if(key.equals(CUMULATED_METRICS)) {
                     addMetrics(timestampInSeconds, ALL_CONTEXT_NAME, metric);
                 } else {
-                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(entry.getKey()), metric);                
+                    addMetrics(timestampInSeconds, AbstractGraphiteMetricsSender.sanitizeString(key), metric);                
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
@@ -259,8 +260,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         samplersList = context.getParameter(SAMPLERS_LIST, "");
         useRegexpForSamplersList = context.getBooleanParameter(USE_REGEXP_FOR_SAMPLERS_LIST, false);
         rootMetricsPrefix = context.getParameter(ROOT_METRICS_PREFIX, DEFAULT_METRICS_PREFIX);
-        String percentilesAsString = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX);
-        String[]  percentilesStringArray = percentilesAsString.split(SEPARATOR);
+        String[]  percentilesStringArray = context.getParameter(PERCENTILES, DEFAULT_METRICS_PREFIX).split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);

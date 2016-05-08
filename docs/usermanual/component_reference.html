@@ -1869,7 +1869,7 @@ count to three, JMeter will send a total of <span class="code">2 * 3 = 6</span> 
 In this example, we created a Test Plan that sends a particular HTTP Request
 only once and sends another HTTP Request five times.</p>
 
-<figure><a href="../images/screenshots/logic-controller/loop-example.png"><img src="../images/screenshots/logic-controller/loop-example.png" width="50-" height="158" alt="Figure 4 - Loop Controller Example"></a><figcaption>Figure 4 - Loop Controller Example</figcaption></figure>
+<figure><a href="../images/screenshots/logic-controller/loop-example.png"><img src="../images/screenshots/logic-controller/loop-example.png" width="506" height="158" alt="Figure 4 - Loop Controller Example"></a><figcaption>Figure 4 - Loop Controller Example</figcaption></figure>
 
 <p>We configured the Thread Group for a single thread and a loop count value of
 one. Instead of letting the Thread Group control the looping, we used a Loop
@@ -3211,12 +3211,18 @@ By default, a Graphite implementation is provided.
         <div class="property"><div class="name req-true">graphiteMetricsSender</div><div class="description req-true"><span class="code">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</span> or <span class="code">org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</span></div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">graphiteHost</div><div class="description req-true">Graphite or InfluxDB (with Graphite plugin enabled) server host</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">graphitePort</div><div class="description req-true">Graphite or InfluxDB (with Graphite plugin enabled) server port, defaults to <span class="code">2003</span>. Note <span class="code">PickleGraphiteMetricsSender</span> (port <span class="code">2004</span>) can only talk to Graphite server.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">rootMetricsPrefix</div><div class="description req-true">Prefix of metrics sent to backend. Defaults to "<span class="code">jmeter</span>."</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">rootMetricsPrefix</div><div class="description req-true">Prefix of metrics sent to backend. Defaults to "<span class="code">jmeter</span>."
+        Note that JMeter does not add a separator between the root prefix and the samplerName which is why the trailing dot is currently needed.</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">summaryOnly</div><div class="description req-true">Only send a summary with no detail. Defaults to <span class="code">true</span>.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">samplersList</div><div class="description req-true">Semicolon separated list of samplers if <span class="code">useRegexpForSamplersList=false</span> or a regular expression for which you want to report metrics to backend if <span class="code">useRegexpForSamplersList=true</span>.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">samplersList</div><div class="description req-true">Defines the names (labels) of sample results to be sent to the back end. 
+        If <span class="code">useRegexpForSamplersList=false</span> this is a list of semi-colon separated names.
+        If <span class="code">useRegexpForSamplersList=true</span> this is a regular expression which will be matched against the names.</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">useRegexpForSamplersList</div><div class="description req-true">Consider samplersList as a regular expression to select the samplers for which you want to report metrics to backend. Defaults to <span class="code">false</span>.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">percentiles</div><div class="description req-true">The percentiles you want to send to backend. List must be semicolon separated.</div><div class="required req-true">Yes</div></div>
-    </div><p>Read <a href="realtime-results.html">this</a> for more details.</p><figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure><div class="go-top"><a href="#">^</a></div></div>
+        <div class="property"><div class="name req-true">percentiles</div><div class="description req-true">The percentiles you want to send to the backend.
+        A percentile may contain a fractional part, for example <span class="code">12.5</span>.
+        (The separator is always ".")
+        List must be semicolon separated. Generally 3 or 4 values should be sufficient.</div><div class="required req-true">Yes</div></div>
+    </div><p>See also <a href="realtime-results.html">Real-time results</a> for more details.</p><figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure><div class="go-top"><a href="#">^</a></div></div>
 
 <a href="#">^</a>
 
@@ -5011,7 +5017,7 @@ can be set to <span class="code">true</span> to use a separate Runnable thread i
         Parameters
         <a class="sectionlink" href="#Sample_Timeout_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
         <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this timer that is shown in the tree.</div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-true">Sampler Timeout</div><div class="description req-true">If the sample takes longer to complete, it will be interrupted.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Sample Timeout</div><div class="description req-true">If the sample takes longer to complete, it will be interrupted.</div><div class="required req-true">Yes</div></div>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 <a href="#">^</a>

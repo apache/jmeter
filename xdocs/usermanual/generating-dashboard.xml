@@ -9,7 +9,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="regular_expressions.html" next="hints_and_tips.html" id="$Id$">
+<document prev="remote-test.html" next="realtime-results.html" id="$Id$">
     <properties>
         <title>User's Manual: Generating Dashboard Report</title>
     </properties>
@@ -56,7 +56,8 @@
                     Dashboard generation uses JMeter properties to customize the
                     report. Some properties are used for general settings and others are
                     used for a particular graph configuration or exporter configuration.
-                    <note>All these properties should be set in <code>user.properties</code> file.</note>
+                    <note>All report generator properties can be found in file <code>reportgenerator.properties</code>.
+                    To customize these properties, you should copy them in <code>user.properties</code> file and modify them.</note>
                 </p>
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
@@ -73,7 +74,8 @@ jmeter.save.saveservice.successful = true
 jmeter.save.saveservice.thread_counts = true
 jmeter.save.saveservice.thread_name = true
 jmeter.save.saveservice.time = true
-jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other format)
+# You can use any other format than the one shown here
+jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         </source>
                         <note>
                             Property <code>jmeter.save.saveservice.timestamp_format</code> must be set
@@ -99,6 +101,14 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                         <source>jmeter.reportgenerator.</source>
                     </note>
                     <properties>
+                        <property name="report_title" required="No">
+                            Title used in the generated report. 
+                            Default: "Apache JMeter Dashboard"
+                        </property>
+                        <property name="overall_granularity" required="No">
+                            Granularity of over time graphs. Data is aggregated to have 1 minute ticks. 
+                            Default: "60000" (1 minute)
+                        </property>
                         <property name="apdex_satisfied_threshold" required="No">
                             Sets the satisfaction threshold for the
                             <a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a>
@@ -225,9 +235,10 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss (or any other for
                             <property name="filters_only_sample_series" required="No">
                                 Defines whether <code>series_filter</code> (see below)
                                 apply only on sample series.
-                                Default: <code>false</code></property>
+                                Default: <code>true</code></property>
                             <property name="series_filter" required="No">Sets the filter
                                 of series. An empty value deactivates the filtering.
+                                If not empty, regex should end with <code>(-success|-failure)?</code><br/>
                                 Format: regular expression.
                                 Default: ""
                             </property>
@@ -456,11 +467,11 @@ jmeter.reportgenerator.apdex_tolerated_threshold=3000
 # jmeter.reportgenerator.exporter.html.property.output_dir=/tmp/test-report
 
 # Indicates which graph series are filtered (regular expression)
-# In the below example we filter on Sample1 and Sample2
+# In the below example we filter on Search and Order samples
 # Note that the end of the pattern should always include (-success|-failure)? 
 # Transactions per second suffixes Transactions with "-success" or "-failure" depending 
 # on the result
-jmeter.reportgenerator.exporter.html.series_filter=((^s0)|(^s1))(-success|-failure)?
+#jmeter.reportgenerator.exporter.html.series_filter=((^Search)|(^Order))(-success|-failure)?
 
 # Indicates whether series filter apply only on sample series
 jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
