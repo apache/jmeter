@@ -33,6 +33,12 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
+    private static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE = 
+            JMeterUtils
+                .getPropDefault(
+                        SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
+                        true);
+            
     private static final Long ZERO = Long.valueOf(0);
     private static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private long errorCount = 0L;
@@ -75,10 +81,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         String code = sample.getResponseCode();
         if (isSuccessCode(code)) {
             code = ASSERTION_FAILED;
-            if (JMeterUtils
-                    .getPropDefault(
-                            SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
-                            false)) {
+            if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
                 if (!StringUtils.isEmpty(msg)) {
                     code = StringEscapeUtils.escapeJson(msg);
