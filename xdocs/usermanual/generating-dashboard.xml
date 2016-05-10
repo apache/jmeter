@@ -142,7 +142,13 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             Default: <code>200000</code>
                         </property>
                     </properties>
-
+                    <note>Percentiles used by Summary table and Percentile graphs can be adjusted to different values by using the 3 properties:
+                    <ul>
+                        <li>aggregate_rpt_pct1 : Defaults to 90</li>
+                        <li>aggregate_rpt_pct2 : Defaults to 95</li>
+                        <li>aggregate_rpt_pct3 : Defaults to 99</li>
+                    </ul>
+                    </note>
                     <note>Relative paths are built from the JMeter working directory
                         (default: <code>bin</code>).</note>
 
