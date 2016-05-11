@@ -186,10 +186,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
-    /**
-     * Attribute name used to store headers in {@link BasicHttpContext}
-     */
-    private static final String JMETER_RESPONSE_BACKUP_HEADERS = "__jmeter.RESPONSE_BACKUP_HEADERS";
 
     /**
      * Headers to save
@@ -209,8 +205,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
+            ArrayList<Header[]> headersToSave = new ArrayList<>(3);
             
-            context.removeAttribute(JMETER_RESPONSE_BACKUP_HEADERS);
             final HttpEntity entity = response.getEntity();
             final HttpClientContext clientContext = HttpClientContext.adapt(context);
             final RequestConfig requestConfig = clientContext.getRequestConfig();
@@ -218,17 +214,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (requestConfig.isContentCompressionEnabled() && entity != null && entity.getContentLength() != 0) {
                 final Header ceheader = entity.getContentEncoding();
                 if (ceheader != null) {
-                    ArrayList<Header[]> headersToSave = new ArrayList<>(3);
                     for(String name : HEADERS_TO_SAVE) {
                         Header[] hdr = response.getHeaders(name); // empty if none
                         headersToSave.add(hdr);
                     }
-                   context.setAttribute(JMETER_RESPONSE_BACKUP_HEADERS, headersToSave);
                 }
             }
 
             // Now invoke original parent code
             super.process(response, clientContext);
+            // Should this be in a finally ? 
+            for (Header[] headers : headersToSave) {
+                for (Header headerToRestore : headers) {
+                    response.addHeader(headerToRestore);                    
+                }
+            }
         }
     };
     
@@ -953,18 +953,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         for (Header responseHeader : rh) {
             writeResponseHeader(headerBuf, responseHeader);
         }
-        List<Header[]> backupHeaders = (List<Header[]>) localContext.getAttribute(JMETER_RESPONSE_BACKUP_HEADERS);
-        if(backupHeaders != null) {
-            for (Header[] headers : backupHeaders) {
-                for (Header responseHeader: headers) {
-                    if (response.containsHeader(responseHeader.getName())) {
-                        break; // it was not deleted, so don't store it again
-                    }
-                    writeResponseHeader(headerBuf, responseHeader);
-                }
-            }
-        }
-
         return headerBuf.toString();
     }
 
