@@ -23,28 +23,44 @@ import java.util.Date;
 import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
 import org.apache.jmeter.report.core.SampleMetadata;
-import org.apache.jmeter.report.processor.AbstractSampleConsumer;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
- * Consume samples using the JMeter timestamp property (defaulting to HH:mm:ss) and reproduce them as a long
+ * Consume samples using the JMeter timestamp property (defaulting to {@link SampleSaveConfiguration#MILLISECONDS}) and reproduce them as a long
  * value (for faster treatment later in the consuming chain).
  * 
  * @since 3.0
  */
 public class NormalizerSampleConsumer extends AbstractSampleConsumer {
 
-    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = "Could not parse timeStamp <%s> on sample %s";
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String DEFAULT_DATE_FORMAT = "HH:mm:ss"; // $NON-NLS-1$
-
-    private int timestamp;
-
-    private final SimpleDateFormat df = new SimpleDateFormat(
+    private static final String TIMESTAMP_FORMAT = 
             JMeterUtils.getPropDefault(
                     "jmeter.save.saveservice.timestamp_format", // $NON-NLS-1$
-                    DEFAULT_DATE_FORMAT));
+                    SampleSaveConfiguration.MILLISECONDS);
+
+    private static final String PARSE_TIMESTAMP_EXCEPTION_MESSAGE = 
+            "Could not parse timeStamp <%s> using format defined by property jmeter.save.saveservice.timestamp_format=%s on sample %s ";
+
+    /**
+     * index of the timeStamp column
+     */
+    private int timestamp;
+
+    /**
+     * is format ms
+     */
+    private boolean isMillisFormat;
+    
+    /**
+     * null if format is isMillisFormat is true
+     */
+    private final SimpleDateFormat dateFormat = createFormatter();
 
     private SampleMetadata sampleMetadata;
 
@@ -56,21 +72,39 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
         startProducing();
     }
 
+    /**
+     * @return null if format is ms or a SimpleDateFormat
+     * @throws SampleException is format is none
+     */
+    private SimpleDateFormat createFormatter() {
+        if(SampleSaveConfiguration.NONE.equalsIgnoreCase(TIMESTAMP_FORMAT)) {
+            throw new SampleException("'none' format for 'jmeter.save.saveservice.timestamp_format' property is not accepted for report generation");
+        }
+        log.info("Using format:"+TIMESTAMP_FORMAT+" to parse timeStamp field");
+        
+        isMillisFormat = SampleSaveConfiguration.MILLISECONDS.equalsIgnoreCase(TIMESTAMP_FORMAT);
+        SimpleDateFormat formatter = null;
+        // Prepare for a pretty date
+        if (!isMillisFormat) {
+            formatter = new SimpleDateFormat(TIMESTAMP_FORMAT);
+        } 
+        return formatter;
+    }
+
     @Override
     public void consume(Sample s, int channel) {
         Date date = null;
         try {
             String tStr = s.getData(timestamp);
-            try {
-                // Try to parse the timestamp assuming is a long
+            if(isMillisFormat) {
                 date = new Date(Long.parseLong(tStr));
-            } catch (NumberFormatException ex) {
-                date = df.parse(tStr);
+            } else {
+                date = dateFormat.parse(tStr);                    
             }
         } catch (Exception e) {
             throw new SampleException(String.format(
                     PARSE_TIMESTAMP_EXCEPTION_MESSAGE, s.getData(timestamp),
-                    s.toString()), e);
+                    TIMESTAMP_FORMAT, s.toString()), e);
         }
         long time = date.getTime();
         int cc = sampleMetadata.getColumnCount();
