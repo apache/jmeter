@@ -6382,6 +6382,11 @@ For this reason, the password for the keystore and private keys are randomly gen
 The passwords are stored in the local preferences area.
 Please ensure that only trusted users have access to the host with the keystore.
 </p>
+<note>
+The popup that displays once you start the Recorder is an informational popup:
+<figure width="1024" height="749" image="recorder_popup_info.png">Recorder Install Certificate Popup</figure>
+Just click ok and proceed further.
+</note>
 <h5>Installing the certificate in Firefox</h5>
 <p>
 Choose the following options:
