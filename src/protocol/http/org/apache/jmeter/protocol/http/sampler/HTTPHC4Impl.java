@@ -205,7 +205,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
-            ArrayList<Header[]> headersToSave = new ArrayList<>(3);
+            ArrayList<Header[]> headersToSave = null;
             
             final HttpEntity entity = response.getEntity();
             final HttpClientContext clientContext = HttpClientContext.adapt(context);
@@ -214,6 +214,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (requestConfig.isContentCompressionEnabled() && entity != null && entity.getContentLength() != 0) {
                 final Header ceheader = entity.getContentEncoding();
                 if (ceheader != null) {
+                    headersToSave = new ArrayList<>(3);
                     for(String name : HEADERS_TO_SAVE) {
                         Header[] hdr = response.getHeaders(name); // empty if none
                         headersToSave.add(hdr);
@@ -224,9 +225,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Now invoke original parent code
             super.process(response, clientContext);
             // Should this be in a finally ? 
-            for (Header[] headers : headersToSave) {
-                for (Header headerToRestore : headers) {
-                    response.addHeader(headerToRestore);                    
+            if(headersToSave != null) {
+                for (Header[] headers : headersToSave) {
+                    for (Header headerToRestore : headers) {
+                        if (response.containsHeader(headerToRestore.getName())) {
+                            break;
+                        }
+                        response.addHeader(headerToRestore);
+                    }
                 }
             }
         }
