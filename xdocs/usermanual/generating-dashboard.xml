@@ -27,7 +27,7 @@
                 <p>
                 This report provides the following metrics:
                 <ul>
-                    <li><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX</a> table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
+                    <li><a href="https://en.wikipedia.org/wiki/Apdex" title="Application Performance Index" target="_blank">APDEX</a> (Application Performance Index) table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
                     <li>A request summary graph showing the Success and failed transaction percentage: <figure width="1658" height="650" image="dashboard/report_apdex_and_summary.png" ></figure></li>
                     <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1376" height="433" image="dashboard/report_statistics.png" ></figure></li>
                     <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="dashboard/report_errors.png" ></figure></li>
@@ -62,8 +62,8 @@
                 <subsection name="&sect-num;.2.1 Requirements" anchor="configuration_requirements">
                     <p>
                         To enable the generator to operate, the input CSV files
-                        must include required data. Check that your JMeter
-                        configuration follows these settings:
+                        must include certain required data. Check that your JMeter
+                        configuration follows these settings (these are the defaults):
                         <source>
 jmeter.save.saveservice.bytes = true
 jmeter.save.saveservice.label = true
@@ -74,11 +74,14 @@ jmeter.save.saveservice.successful = true
 jmeter.save.saveservice.thread_counts = true
 jmeter.save.saveservice.thread_name = true
 jmeter.save.saveservice.time = true
-# You can use any other format than the one shown here
+# the timestamp format must include the time and should include the date.
+# For example the default, which is milliseconds since the epoch: 
+jmeter.save.saveservice.timestamp_format = ms
+# Or the following would also be suitable
 jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         </source>
                         <note>
-                            Property <code>jmeter.save.saveservice.timestamp_format</code> must be set
+                            The input CSV file must include the timeStamp
                         </note>
                         <note>
                             The "<code>Errors</code>" summary table shows more
@@ -139,7 +142,13 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             Default: <code>200000</code>
                         </property>
                     </properties>
-
+                    <note>Percentiles used by Summary table and Percentile graphs can be adjusted to different values by using the 3 properties:
+                    <ul>
+                        <li>aggregate_rpt_pct1 : Defaults to 90</li>
+                        <li>aggregate_rpt_pct2 : Defaults to 95</li>
+                        <li>aggregate_rpt_pct3 : Defaults to 99</li>
+                    </ul>
+                    </note>
                     <note>Relative paths are built from the JMeter working directory
                         (default: <code>bin</code>).</note>
 
@@ -149,7 +158,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             generator configuration.  These properties are freely named
                             but you should use the prefix
                             <source>jmeter.reportgenerator.</source>
-                            in order to avoid properties overlap.
+                            in order to avoid property overlap.
                         </p>
                         <p>
                             E.g.:
@@ -292,7 +301,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             <a href="#configure_general">General properties</a>
                             which discards data before calculations, here the
                             filtering is performed after the calculations and serves
-                            to lighten the final report.
+                            to simplify the final report.
                         </p>
                         <p>
                             The property <code>series_filter</code>
@@ -422,13 +431,13 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             </table>
                         </p>
                         <note>
-                            A wrong filtering configuration can lead to generate empty
+                            Incorrect filter configuration can lead to generate empty
                             graphs/summary tables:
                             <ul>
                                 <li>
                                     If you set the property
                                     <code>show_controllers_only</code>
-                                    whereas the graph is configured to exclude
+                                    and the graph is configured to exclude
                                     controllers.
                                 </li>
                                 <li>
@@ -443,14 +452,14 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                 </subsection>
 
                 <subsection name="&sect-num;.2.5 Sample configuration" anchor="sample_configuration">
-                    <p>You can copy the following configuration in your user.properties
+                    <p>You can copy the following configuration to your user.properties
                         file in order to test the report generator.</p>
                     <source>
 # Configure this property to change the report title
 #jmeter.reportgenerator.report_title=Apache JMeter Dashboard
 
 # Change this parameter if you want to change the granularity of over time graphs.
-jmeter.reportgenerator.overall_granularity=60000
+#jmeter.reportgenerator.overall_granularity=60000
 
  Change this parameter if you want to change the granularity of Response time distribution
 # Set to 500 ms by default
@@ -502,7 +511,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                     sample log file or automatically after running load test.
                 </p>
 
-                <subsection name="&sect-num;.3.1 Generation from an existing sample log file" anchor="report_only">
+                <subsection name="&sect-num;.3.1 Generation from an existing sample CSV log file" anchor="report_only">
                     <p>
                         Use the following command:
                         <source>jmeter -g &lt;log file&gt; -o &lt;Path to output folder&gt;</source>
@@ -519,7 +528,7 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
 
             <subsection name="&sect-num;.4 Default graphs" anchor="default_graphs">
                 <note>Due to limitations of this early version, each default graph
-                    must be declared among the JMeter properties. Otherwise, the graph
+                    must be declared in JMeter properties. Otherwise, the graph
                     views will be empty.</note>
 
                 <p>

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.jmeter.report.core.Sample;
 
-// TODO: Auto-generated Javadoc
 /**
  * The class IndexedNameSelector provides a projection from a sample to its name
  * and maintains an index of the projected names.

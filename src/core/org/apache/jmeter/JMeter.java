@@ -1054,7 +1054,7 @@ public class JMeter implements JMeterPlugin {
 
         private final List<JMeterEngine> engines;
 
-        private ReportGenerator reportGenerator;
+        private final ReportGenerator reportGenerator;
 
         /**
          * @param unused JMeter unused for now

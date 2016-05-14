@@ -111,7 +111,7 @@
                 <div class="col-lg-6">
                     <div class="panel panel-default" style="text-align:center;">
                         <div class="panel-heading">
-                           <p class="dashboard-title">APDEX</p>
+                           <p class="dashboard-title"><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX (Application Performance Index)</a></p>
                         </div>
                         <div class="panel-body">
                             <section id="apdex" class="col-md-12 table-responsive">

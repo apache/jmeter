@@ -39,7 +39,6 @@ public class JsonizerVisitor implements ResultDataVisitor<String> {
      * Instantiates a new jsonizer visitor.
      */
     public JsonizerVisitor() {
-        // TODO Auto-generated constructor stub
     }
 
     /*

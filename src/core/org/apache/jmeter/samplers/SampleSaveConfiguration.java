@@ -93,10 +93,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String FALSE = "false"; // $NON_NLS-1$
 
     /** A properties file indicator for milliseconds. * */
-    private static final String MILLISECONDS = "ms"; // $NON_NLS-1$
+    public static final String MILLISECONDS = "ms"; // $NON_NLS-1$
 
     /** A properties file indicator for none. * */
-    private static final String NONE = "none"; // $NON_NLS-1$
+    public static final String NONE = "none"; // $NON_NLS-1$
 
     /** A properties file indicator for the first of a series. * */
     private static final String FIRST = "first"; // $NON_NLS-1$
@@ -368,6 +368,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _printMilliseconds = MILLISECONDS.equalsIgnoreCase(_timeStampFormat);
 
         // Prepare for a pretty date
+        // FIXME Can _timeStampFormat be null ? it does not appear to me .
         if (!_printMilliseconds && !NONE.equalsIgnoreCase(_timeStampFormat) && (_timeStampFormat != null)) {
             _formatter = new SimpleDateFormat(_timeStampFormat);
         } else {
