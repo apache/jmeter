@@ -6043,11 +6043,11 @@ It will alow you to extract in a very easy way text content, see <a href="http:/
     <property name="Match Numbers" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
         <li><code>0</code> : means random (Default Value)</li>
-        <li><code>-1</code> means extract all results, they will be named as <code><em>variable name</em>_N</code> (where N goes from 1 to Number of results</li>
+        <li><code>-1</code> means extract all results, they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
         <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </property>
-    <property name="Compute concatenation var" required="No">If many results are found, plugin will concat them using ‘,’ separator and store it a var named <code><em>&lt;variable name&gt;</em>_ALL</code></property>
+    <property name="Compute concatenation var" required="No">If many results are found, plugin will concat them using ‘<code>,</code>’ separator and store it in a var named <code><em>&lt;variable name&gt;</em>_ALL</code></property>
 </properties>
 <figure width="855" height="276" image="json-post-processor.png">JSON PostProcessor</figure>
 </component>
