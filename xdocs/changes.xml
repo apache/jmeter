@@ -112,7 +112,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-<li>Updated to tika-core and tika-parsers 1.12 (from 1.7)</li>
+<li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->

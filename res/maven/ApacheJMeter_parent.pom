@@ -98,8 +98,8 @@ under the License.
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.13</slf4j-api.version>
       <jtidy.version>r938</jtidy.version>
-      <tika-core.version>1.12</tika-core.version>
-      <tika-parsers.version>1.12</tika-parsers.version>
+      <tika-core.version>1.13</tika-core.version>
+      <tika-parsers.version>1.13</tika-parsers.version>
       <xmlpull.version>1.1.3.1</xmlpull.version>
       <xstream.version>1.4.8</xstream.version>
       <xpp3.version>1.1.4c</xpp3.version>
