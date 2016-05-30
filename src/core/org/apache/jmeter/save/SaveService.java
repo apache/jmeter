@@ -480,14 +480,14 @@ public class SaveService {
      * @deprecated use {@link SaveService}{@link #loadTree(File)}
      */
     @Deprecated
-    public static HashTree loadTree(InputStream reader) throws IOException {
+    public static HashTree loadTree(InputStream inputStream) throws IOException {
         try {
-            return readTree(reader, null);
+            return readTree(inputStream, null);
         } catch(IllegalArgumentException e) {
             log.error("Problem loading XML, message:"+e.getMessage(), e);
             return null;
         } finally {
-            JOrphanUtils.closeQuietly(reader);
+            JOrphanUtils.closeQuietly(inputStream);
         }
     }
     
@@ -499,8 +499,10 @@ public class SaveService {
      */
     public static HashTree loadTree(File file) throws IOException {
         log.info("Loading file: " + file);
-        try (InputStream reader = new FileInputStream(file)){
-            return readTree(reader, file);
+        try (InputStream inputStream = new FileInputStream(file);
+                BufferedInputStream bufferedInputStream = 
+                    new BufferedInputStream(inputStream)){
+            return readTree(bufferedInputStream, file);
         }
     }
 
@@ -511,16 +513,12 @@ public class SaveService {
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
      */
-    private static HashTree readTree(InputStream reader, File file)
+    private static HashTree readTree(InputStream inputStream, File file)
             throws IOException {
-        if (!reader.markSupported()) {
-            reader = new BufferedInputStream(reader);
-        }
-        reader.mark(Integer.MAX_VALUE);
         ScriptWrapper wrapper = null;
         try {
             // Get the InputReader to use
-            InputStreamReader inputStreamReader = getInputStreamReader(reader);
+            InputStreamReader inputStreamReader = getInputStreamReader(inputStream);
             wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
             inputStreamReader.close();
             if (wrapper == null){
