@@ -149,6 +149,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>59607</bug>JMeter crashes when reading large test plan (greater than 2g). Based on fix by Felix Draxler (felix.draxler at sap.com)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -157,7 +158,7 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-<li>John Doe (john.doe at sample.com)</li>
+<li>Felix Draxler (felix.draxler at sap.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
