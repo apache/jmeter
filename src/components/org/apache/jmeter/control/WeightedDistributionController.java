@@ -141,7 +141,13 @@ public class WeightedDistributionController extends InterleaveControl {
     public JMeterTreeNode getNode() {
         if (node == null || node.getTestElement() != this
                 || node.getParent() == null) {
-            node = GuiPackage.getInstance().getNodeOf(this);
+            try {
+                node = GuiPackage.getInstance().getNodeOf(this);
+            } catch (NullPointerException npe) {
+                // This NPE is typically caused by GuiPackage not being initialized when
+                // Running unit tests
+                node = null;
+            }
         }
         return node;
     }
