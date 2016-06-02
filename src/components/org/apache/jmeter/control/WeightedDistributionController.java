@@ -39,10 +39,10 @@ public class WeightedDistributionController extends InterleaveControl {
     public static final int MIN_WEIGHT = 0;
     public static final int MAX_WEIGHT = 999999;
     public static final int DFLT_WEIGHT = MIN_WEIGHT;
-
     public static final long DFLT_SEED = 0l;
     
     private static final int UNSET_CUMULATIVE_PROBABILITY = -1;
+    private static final int NO_ELEMENT_FOUND = 0;
 
     private transient int cumulativeProbability;
     private transient JMeterTreeNode node;
@@ -54,6 +54,25 @@ public class WeightedDistributionController extends InterleaveControl {
         randomizer = null;
     }
 
+    @Override
+    protected void resetCurrent() {
+        current = determineCurrentTestElement();
+    }
+
+    @Override
+    protected void incrementCurrent() {
+        super.incrementCurrent();
+        current = determineCurrentTestElement();
+    }
+    
+    @Override
+    public void addTestElement(TestElement child) {
+        if (child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
+            super.addTestElement(child);
+        }
+
+    }
+    
     public long getSeed() {
         return getPropertyAsLong(SEED,
                 WeightedDistributionController.DFLT_SEED);
@@ -127,17 +146,6 @@ public class WeightedDistributionController extends InterleaveControl {
         return node;
     }
 
-    @Override
-    protected void resetCurrent() {
-        current = determineCurrentTestElement();
-    }
-
-    @Override
-    protected void incrementCurrent() {
-        super.incrementCurrent();
-        current = determineCurrentTestElement();
-    }
-
     private void initRandomizer() {
         if (getSeed() != DFLT_SEED) {
             randomizer = new Random(getSeed());
@@ -166,6 +174,6 @@ public class WeightedDistributionController extends InterleaveControl {
                 }
             }
         }
-        return 0;
+        return NO_ELEMENT_FOUND;
     }
 }
