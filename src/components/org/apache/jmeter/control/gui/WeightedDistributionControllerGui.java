@@ -86,15 +86,15 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
         model.reset();
         if (el instanceof WeightedDistributionController && model.size() > 0) {
             WeightedDistributionController wdc = (WeightedDistributionController) el;
+            
             if (seedField.getText().length() > 0) {
                 try {
                     wdc.setSeed(Long.parseLong(seedField.getText()));
                 } catch (NumberFormatException nfe) {
                     JMeterUtils.reportErrorToUser(ERRMSG);
                 }
-
             }
-            wdc.setPerThread(perThreadCheckbox.isSelected());
+            
             if (wdc.getNode() != null) {
                 while (model.next()) {
                     int childNodeIdx = (int) model.getColumnValue(
@@ -122,12 +122,13 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
         ((PowerTableModel) getTable().getModel()).clearData();
         if (el instanceof WeightedDistributionController) {
             WeightedDistributionController wdc = (WeightedDistributionController) el;
+            
+            
             if (wdc.getSeed() != WeightedDistributionController.DFLT_SEED) {
                 seedField.setText(Long.toString(wdc.getSeed()));
             } else {
                 seedField.setText("");
             }
-            perThreadCheckbox.setSelected(wdc.isPerThread());
 
             if (wdc.getNode() != null) {
                 wdc.resetCumulativeProbability();

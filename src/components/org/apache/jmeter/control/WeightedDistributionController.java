@@ -28,13 +28,11 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 
 public class WeightedDistributionController extends InterleaveControl {
     private static final long serialVersionUID = 8554248250211263894L;
 
-    public static final String PER_THREAD = "WeightedDistributionController.perThread";
     public static final String SEED = "WeightedDistributionController.seed";
     public static final String WEIGHT = "WeightedDistributionController.weight";
 
@@ -42,30 +40,18 @@ public class WeightedDistributionController extends InterleaveControl {
     public static final int MAX_WEIGHT = 999999;
     public static final int DFLT_WEIGHT = MIN_WEIGHT;
 
+    public static final long DFLT_SEED = 0l;
+    
     private static final int UNSET_CUMULATIVE_PROBABILITY = -1;
 
     private transient int cumulativeProbability;
     private transient JMeterTreeNode node;
-
-    private transient Randomizer randomizer = null;
-
-    public static final boolean DFTL_PERTHREAD = true;
-
-    public static final long DFLT_SEED = 0l;
+    private transient Random randomizer;
 
     public WeightedDistributionController() {
         node = null;
         cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
-    }
-
-    public boolean isPerThread() {
-        return getPropertyAsBoolean(PER_THREAD,
-                WeightedDistributionController.DFTL_PERTHREAD);
-    }
-
-    public void setPerThread(boolean perThread) {
-        setProperty(new BooleanProperty(PER_THREAD, perThread));
-        getRandomizer().setPerThread(perThread);
+        randomizer = null;
     }
 
     public long getSeed() {
@@ -74,11 +60,13 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 
     public void setSeed(long seed) {
-        setProperty(new LongProperty(SEED, seed));
-        getRandomizer().setSeed(seed);
+        if (getSeed() != seed) {
+            setProperty(new LongProperty(SEED, seed));
+            getRandomizer().setSeed(seed);
+        }
     }
 
-    public Randomizer getRandomizer() {
+    public Random getRandomizer() {
         if (randomizer == null) {
             initRandomizer();
         }
@@ -151,7 +139,11 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 
     private void initRandomizer() {
-        randomizer = new Randomizer(getSeed(), isPerThread());
+        if (getSeed() != DFLT_SEED) {
+            randomizer = new Random(getSeed());
+        } else {
+            randomizer = new Random();
+        }    
     }
 
     private int determineCurrentTestElement() {
@@ -175,103 +167,5 @@ public class WeightedDistributionController extends InterleaveControl {
             }
         }
         return 0;
-    }
-}
-
-class Randomizer {
-
-    private long seed;
-    private boolean perThread;
-    private ThreadLocal<Random> perThreadRandom = null;
-    private Random globalRandom = null;
-
-    public Randomizer(long seed, boolean perThread) {
-        this.seed = seed;
-        this.perThread = perThread;
-    }
-
-    public Randomizer(long seed) {
-        this(seed, WeightedDistributionController.DFTL_PERTHREAD);
-    }
-
-    public Randomizer(boolean perThread) {
-        this(WeightedDistributionController.DFLT_SEED, perThread);
-    }
-
-    public Randomizer() {
-        this(WeightedDistributionController.DFLT_SEED,
-                WeightedDistributionController.DFTL_PERTHREAD);
-    }
-
-    public boolean isPerThread() {
-        return perThread;
-    }
-
-    public synchronized void setPerThread(boolean perThread) {
-        this.perThread = perThread;
-    }
-
-    public long getSeed() {
-        return seed;
-    }
-
-    public synchronized void setSeed(long seed) {
-        if (this.seed != seed) {
-            this.seed = seed;
-
-            if (globalRandom != null) {
-                globalRandom.setSeed(seed);
-            }
-
-            if (perThreadRandom != null) {
-                initPerThreadRandom();
-            }
-        }
-    }
-
-    public synchronized int nextInt(int n) {
-        return getRandom().nextInt(n);
-    }
-
-    private Random getRandom() {
-        if (perThread) {
-            return getPerThreadRandom();
-        }
-        return getGlobalRandom();
-    }
-
-    private Random getPerThreadRandom() {
-        if (perThreadRandom == null) {
-            initPerThreadRandom();
-        }
-
-        return perThreadRandom.get();
-    }
-
-    private Random getGlobalRandom() {
-        if (globalRandom == null) {
-            initGlobalRandom();
-        }
-
-        return globalRandom;
-    }
-
-    private void initPerThreadRandom() {
-        perThreadRandom = new ThreadLocal<Random>() {
-            @Override
-            protected Random initialValue() {
-                long theSeed = seed == WeightedDistributionController.DFLT_SEED
-                        ? System.currentTimeMillis()
-                                * Thread.currentThread().getId()
-                        : seed;
-                return new Random(theSeed);
-            }
-        };
-    }
-
-    private void initGlobalRandom() {
-        long theSeed = seed == WeightedDistributionController.DFLT_SEED
-                ? System.currentTimeMillis() : seed;
-        globalRandom = new Random(theSeed);
     }
 }
