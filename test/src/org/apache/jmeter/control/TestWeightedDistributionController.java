@@ -18,11 +18,14 @@
 
 package org.apache.jmeter.control;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.inference.ChiSquareTest;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.junit.stubs.TestSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -31,19 +34,20 @@ import org.junit.Test;
 
 public class TestWeightedDistributionController extends JMeterTestCase {
     
+    ChiSquareTest cst = new ChiSquareTest();
+    
     @Test
     public void testDistribution() {
-        int no_of_iters = 1000;
-        long seed = 1l;
+        int no_of_iters = 1030;
         
         String[] names = { "Zero - 90%", "One - 9%", "Two - 1%" };
         int[] wgts = { 90, 9, 1 };
-        int[] exps = { 894, 92, 14 };
-        
+        int[] exps = SequentialNumberGenerator.findExpectedResults(wgts, no_of_iters);
+                       
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(seed);
-        
+        wdc.setRandomizer(new SequentialNumberGenerator(findWeightSum(wgts)));
+
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
         wdc.addTestElement(sub_0);
@@ -56,44 +60,35 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[2]));
         wdc.addTestElement(sub_2);
         
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
         sub_2.setRunningVersion(true);
         wdc.initialize();
         
-        for (int i = 0; i < no_of_iters; i++) {
-            TestElement sampler;
-            while((sampler = wdc.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
-            }
-        }
+        int[] results = executeTest(wdc, names, no_of_iters);
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
-        }
+        assertArrayEquals(exps, results);
     }
 
     @Test
     public void testDistributionTwoWdcs() {
         int no_of_iters = 1000;
-        long seed = 1l;
         
         String[] names = { "A-Zero - 90%", "A-One - 9%", "A-Two - 1%", "B-Three 33%", "B-Four 66%" };
         int[] wgts = { 90, 9, 1, 33, 66 };
-        int[] exps = { 894, 92, 14, 324, 676 };
+        
+        int[] exps_A = SequentialNumberGenerator.findExpectedResults(Arrays.copyOfRange(wgts, 0, 3), no_of_iters);
+        int[] exps_B = SequentialNumberGenerator.findExpectedResults(Arrays.copyOfRange(wgts, 3, 5), no_of_iters);
+        
+        int[] exps = ArrayUtils.addAll(exps_A, exps_B);
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         
         GenericController control = new GenericController();
         
         WeightedDistributionController wdc_A = new WeightedDistributionController();
-        wdc_A.setSeed(seed);
+        wdc_A.setRandomizer(new SequentialNumberGenerator(findWeightSum(Arrays.copyOfRange(wgts, 0, 3))));
         
         TestSampler sub_A_0 = new TestSampler(names[0]);
         sub_A_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
@@ -108,7 +103,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         wdc_A.addTestElement(sub_A_2);
         
         WeightedDistributionController wdc_B = new WeightedDistributionController();
-        wdc_B.setSeed(seed);
+        wdc_B.setRandomizer(new SequentialNumberGenerator(findWeightSum(Arrays.copyOfRange(wgts, 3, 5))));
         
         TestSampler sub_B_3 = new TestSampler(names[3]);
         sub_B_3.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[3]));
@@ -120,12 +115,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         control.addTestElement(wdc_A);
         control.addTestElement(wdc_B);
-        
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
+                
         control.setRunningVersion(true);
         wdc_A.setRunningVersion(true);
         wdc_B.setRunningVersion(true);
@@ -136,31 +126,30 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_B_4.setRunningVersion(true);
         control.initialize();
         
-        for (int i = 0; i < no_of_iters; i++) {
-            TestElement sampler;
-            while((sampler = control.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
-            }
-        }
+        int[] results = executeTest(control, names, no_of_iters);
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
-        }
+        assertArrayEquals(exps, results);
     }
     
     @Test
     public void testDistributionWithDisabled() {
         int no_of_iters = 1000;
-        long seed = 1l;
         
         String[] names = { "Zero - 1000 - disabled", "One - 1% - enabled", "Two - 9% - enabled", "Three - 1% - disabled", "Four - 90% - enabled", "Five - 10% - disabled" };
         int[] wgts = { 1000, 1, 9, 1, 90, 10 };
-        int[] exps = { 0, 8, 100, 0, 892, 0 };
+        
         boolean[] enbs = { false, true, true, false, true, false };
+        
+        int exp_wgts[] = new int[wgts.length];
+        for (int i = 0; i < exp_wgts.length; i++) {
+            exp_wgts[i] = enbs[i] ? wgts[i] : 0;
+        }
+        
+        int[] exps = SequentialNumberGenerator.findExpectedResults(exp_wgts, no_of_iters);
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(seed);
+        wdc.setRandomizer(new SequentialNumberGenerator(findWeightSum(exp_wgts)));
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
@@ -191,12 +180,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[5]));
         sub_5.setEnabled(enbs[5]);
         wdc.addTestElement(sub_5);
-        
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
+                
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -206,30 +190,22 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setRunningVersion(true);
         wdc.initialize();
         
-        for (int i = 0; i < no_of_iters; i++) {
-            TestElement sampler;
-            while((sampler = wdc.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
-            }
-        }
+        int[] results = executeTest(wdc, names, no_of_iters);
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
-        }
+        assertArrayEquals(exps, results);
     }
     
     @Test
     public void testDistributionWithZeroWeights() {
         int no_of_iters = 1000;
-        long seed = 1l;
         
         String[] names = { "Zero - 0%", "One - 1%", "Two - 9%", "Three - 0%", "Four - 90%", "Five - 0%" };
         int[] wgts = { 0, 1, 9, 0, 90, 0 };
-        int[] exps = { 0, 8, 100, 0, 892, 0 };
+        int[] exps = SequentialNumberGenerator.findExpectedResults(wgts, no_of_iters);
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(seed);
+        wdc.setRandomizer(new SequentialNumberGenerator(findWeightSum(wgts)));
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
@@ -255,11 +231,6 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[5]));
         wdc.addTestElement(sub_5);
         
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -269,22 +240,14 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setRunningVersion(true);
         wdc.initialize();
         
-        for (int i = 0; i < no_of_iters; i++) {
-            TestElement sampler;
-            while((sampler = wdc.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
-            }
-        }
+        int[] results = executeTest(wdc, names, no_of_iters);
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
-        }
+        assertArrayEquals(exps, results);
     }
     
     @Test
     public void testDistributionWithAllDisabled() {
         int no_of_iters = 1000;
-        long seed = 1l;
         
         String[] names = { "Zero - 90%", "One - 9%", "Two - 1%" };
         int[] wgts = { 90, 9, 1 };
@@ -292,7 +255,6 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(seed);
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
@@ -309,34 +271,21 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setEnabled(false);
         wdc.addTestElement(sub_2);
         
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
         sub_2.setRunningVersion(true);
         wdc.initialize();
         
-        for (int i = 0; i < no_of_iters; i++) {
-            TestElement sampler;
-            while((sampler = wdc.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
-            }
-        }
+        int[] results = executeTest(wdc, names, no_of_iters);
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
-        }
+        assertArrayEquals(exps, results);
     }
     
     
     @Test
     public void testDistributionWithAllZeroWeights() {
         int no_of_iters = 1000;
-        long seed = 1l;
         
         String[] names = { "Zero", "One", "Two" };
         int[] wgts = { 0, 0, 0 };
@@ -344,7 +293,6 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(seed);
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
@@ -358,26 +306,185 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[2]));
         wdc.addTestElement(sub_2);
         
-        Map<String, Integer> resultsMap = new HashMap<>(names.length);
-        for (int i = 0; i < names.length; i ++) {
-            resultsMap.put(names[i], 0);
-        }
-        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
         sub_2.setRunningVersion(true);
         wdc.initialize();
         
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    
+    @Test
+    public void testDistributionWithOneSampler() {
+        int no_of_iters = 1000;
+        
+        String[] names = { "Zero" };
+        int[] wgts = { 1 };
+        int[] exps = { no_of_iters };
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
+        wdc.addTestElement(sub_0);
+        
+        wdc.setRunningVersion(true);
+        sub_0.setRunningVersion(true);
+        wdc.initialize();
+        
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    @Test
+    public void testDistributionWithOneDisabledSampler() {
+        int no_of_iters = 1000;
+        
+        String[] names = { "Zero" };
+        int[] wgts = { 1 };
+        int[] exps = { 0 };
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
+        sub_0.setEnabled(false);
+        wdc.addTestElement(sub_0);
+        
+        wdc.setRunningVersion(true);
+        sub_0.setRunningVersion(true);
+        wdc.initialize();
+        
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    @Test
+    public void testDistributionWithOneZeroWeightSampler() {
+        int no_of_iters = 1000;
+        
+        String[] names = { "Zero" };
+        int[] wgts = { 0 };
+        int[] exps = { 0 };
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new IntegerProperty(WeightedDistributionController.WEIGHT, wgts[0]));
+        wdc.addTestElement(sub_0);
+        
+        wdc.setRunningVersion(true);
+        sub_0.setRunningVersion(true);
+        wdc.initialize();
+        
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    @Test
+    public void testDistributionWithNoSamplers() {
+        int no_of_iters = 1000;
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        wdc.setRunningVersion(true);
+        wdc.initialize();
+        
+        int actual_iters = 0;
         for (int i = 0; i < no_of_iters; i++) {
+            @SuppressWarnings("unused")
             TestElement sampler;
             while((sampler = wdc.next()) != null) {
-            resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
+                actual_iters++;
             }
         }
         
-        for (int i = 0; i < exps.length; i++) {
-            assertEquals(exps[i], (int)resultsMap.get(names[i]));
+        assertEquals(0, actual_iters);
+    }
+    
+    static int findWeightSum(int[] wgts) {
+        int wgtsum = 0;
+        for (int wgt : wgts) {
+            wgtsum += wgt;
         }
+        return wgtsum;
+    }
+    
+    static int[] executeTest(Controller control, String[] names, int iters) {
+        Map<String, Integer> resultsMap = new HashMap<>(names.length);
+        
+        for (String name : names) {
+            resultsMap.put(name, 0);
+        }
+        
+        for (int i = 0; i < iters; i++) {
+            TestElement sampler;
+            while((sampler = control.next()) != null) {
+                resultsMap.put(sampler.getName(), resultsMap.get(sampler.getName()) + 1);
+            }
+        }
+        
+        int[] results = new int[names.length];
+        
+        for(int i = 0; i < names.length; i++) {
+            results[i] = resultsMap.get(names[i]);
+        }
+        
+        return results;
+    }
+}
+
+class SequentialNumberGenerator implements IntegerGenerator {
+    
+    int currVal;
+    int maxVal;
+    
+    public SequentialNumberGenerator(int maxVal) {
+        this.currVal = 0;
+        this.maxVal = maxVal;
+    }
+    
+    public int nextInt(int n) {
+        int retVal = currVal++;
+        if (currVal >= maxVal) {
+            currVal = 0;
+        }
+        
+        return retVal;
+    }
+
+    @Override
+    public void setSeed(long seed) {
+        // do nothing
+    }
+    
+    static int[] findExpectedResults(int[] wgts, int iters) {
+        int[] exps = new int[wgts.length];
+        int wgtsum = TestWeightedDistributionController.findWeightSum(wgts);
+        
+        int completedIters = wgtsum > 0 ? iters/wgtsum : 0;
+        int remainingIters = wgtsum > 0 ? iters % wgtsum : 0;
+        
+        for (int i = 0; i < exps.length; i++) {
+            exps[i] = (completedIters * wgts[i] + (remainingIters > 0
+                    ? remainingIters > wgts[i]
+                            ? wgts[i]
+                            : remainingIters
+                    : 0));
+            remainingIters -= wgts[i];                         
+        }
+        
+        return exps;
     }
 }

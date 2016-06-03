@@ -46,7 +46,7 @@ public class WeightedDistributionController extends InterleaveControl {
 
     private transient int cumulativeProbability;
     private transient JMeterTreeNode node;
-    private transient Random randomizer;
+    private transient IntegerGenerator randomizer;
 
     public WeightedDistributionController() {
         node = null;
@@ -67,7 +67,7 @@ public class WeightedDistributionController extends InterleaveControl {
     
     @Override
     public void addTestElement(TestElement child) {
-        if (child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
+        if (child.isEnabled() && child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
             super.addTestElement(child);
         }
 
@@ -85,13 +85,17 @@ public class WeightedDistributionController extends InterleaveControl {
         }
     }
 
-    public Random getRandomizer() {
+    public IntegerGenerator getRandomizer() {
         if (randomizer == null) {
             initRandomizer();
         }
         return randomizer;
     }
-
+    
+    public void setRandomizer(IntegerGenerator intgen) {
+        randomizer = intgen;
+    }
+    
     public int getCumulativeProbability() {
         if (cumulativeProbability == UNSET_CUMULATIVE_PROBABILITY) {
             cumulativeProbability = 0;
@@ -153,11 +157,13 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 
     private void initRandomizer() {
+        Random rnd;
         if (getSeed() != DFLT_SEED) {
-            randomizer = new Random(getSeed());
+            rnd = new Random(getSeed());
         } else {
-            randomizer = new Random();
-        }    
+            rnd = new Random();
+        }
+        randomizer = new RandomIntegerGenerator(rnd);
     }
 
     private int determineCurrentTestElement() {
@@ -181,5 +187,29 @@ public class WeightedDistributionController extends InterleaveControl {
             }
         }
         return NO_ELEMENT_FOUND;
+    }
+}
+
+interface IntegerGenerator {
+    int nextInt(int n);
+    void setSeed(long seed);
+}
+
+class RandomIntegerGenerator implements IntegerGenerator {
+
+    private Random rnd;
+    
+    public RandomIntegerGenerator(Random rnd) {
+        this.rnd = rnd;
+    }
+
+    @Override
+    public int nextInt(int n) {
+        return rnd.nextInt(n);
+    }
+
+    @Override
+    public void setSeed(long seed) {
+        rnd.setSeed(seed);  
     }
 }
