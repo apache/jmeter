@@ -2075,8 +2075,8 @@ another HTTP Request to a Loop Controller.  We configured the Loop Controller
 with a loop count value of five.</p>
 <p>JMeter will send the requests in the following order: Home Page, News Page,
 News Page, News Page, News Page, and News Page.</p>
-<p>Note, the File Reporter
-is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</p>
+<note>Note, the File Reporter
+is configured to store the results in a file named "<code>loop-test.dat</code>" in the current directory.</note>
 
 </example>
 
