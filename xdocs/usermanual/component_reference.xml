@@ -2052,6 +2052,7 @@ count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests
         <property name="Loop Count" required="Yes, unless &quot;Forever&quot; is checked">
                 The number of times the subelements of this controller will be iterated each time
                 through a test run.
+                <p>The value <code>-1</code> is equivalent to checking the <code>Forever</code> toggle.</p>
                 <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
                 element behaves slightly different.  Unless set to forever, it stops the test after
                 the given number of iterations have been done.</p>
