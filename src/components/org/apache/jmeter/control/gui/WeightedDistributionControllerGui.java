@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.Box;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -46,7 +45,6 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
 
     private JTable table;
     JTextField seedField;
-    JCheckBox perThreadCheckbox;
 
     public static boolean isCurrentElementWeightedDistributionController() {
         return GuiPackage.getInstance()
@@ -173,11 +171,6 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
         seedField = new JTextField(0);
         seedField.setName("seed field");
         seedPanel.add(seedField);
-
-        perThreadCheckbox = new JCheckBox();
-        perThreadCheckbox.setName("per thread");
-        perThreadCheckbox.setText("Per Thread (User)?");
-        seedPanel.add(perThreadCheckbox);
 
         return seedPanel;
     }
