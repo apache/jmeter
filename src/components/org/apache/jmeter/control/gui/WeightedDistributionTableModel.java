@@ -21,55 +21,74 @@ package org.apache.jmeter.control.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 import org.apache.jmeter.control.WeightedDistributionController;
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.PowerTableModel;
-import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.testelement.TestElement;
 
+/**
+ * The Class WeightedDistributionTableModel. Provides Support for the GUI table
+ */
 class WeightedDistributionTableModel extends PowerTableModel {
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -600418978315572279L;
+    
+    /** The Constant ENABLED_COLUMN. */
     protected static final int ENABLED_COLUMN = 0;
+    
+    /** The Constant ELEMENT_NAME_COLUMN. */
     protected static final int ELEMENT_NAME_COLUMN = 1;
+    
+    /** The Constant WEIGHT_COLUMN. */
     protected static final int WEIGHT_COLUMN = 2;
-    protected static final int PERCENT_COLUMN = 3;
-    protected static final int HIDDEN_CHILD_NODE_IDX_COLUMN = 4;
     
+    /** The Constant EVAL_WEIGHT_COLUMN. */
+    protected static final int EVAL_WEIGHT_COLUMN = 3;
+    
+    /** The Constant PERCENT_COLUMN. */
+    protected static final int PERCENT_COLUMN = 4;
+    
+    /** The Constant HIDDEN_CHILD_NODE_IDX_COLUMN. */
+    protected static final int HIDDEN_CHILD_NODE_IDX_COLUMN = 5;
+    
+    /** The Constant HIDDEN_COLUMN_WIDTH. */
     protected static final int HIDDEN_COLUMN_WIDTH = 0;
-    protected static final int NUMERIC_COLUMN_WIDTH = 125;
     
-    protected static final String[] COLUMN_NAMES = { "Enabled", "Element Name",
-            String.format("Weight (%d-%d)",
-                    WeightedDistributionController.MIN_WEIGHT,
-                    WeightedDistributionController.MAX_WEIGHT),
-            "Percentage", null };
+    /** The Constant NUMERIC_COLUMN_WIDTH. */
+    protected static final int NUMERIC_COLUMN_WIDTH = 100;
     
+    /** The Constant COLUMN_NAMES. */
+    protected static final String[] COLUMN_NAMES = { "Enabled", "Element Name", "Weight", "Evaluates To", "Est. Prob.", null };
+    
+    /** The Constant INEDITABLE_COLUMNS. */
+    protected static final int[] INEDITABLE_COLUMNS = { EVAL_WEIGHT_COLUMN, PERCENT_COLUMN, HIDDEN_CHILD_NODE_IDX_COLUMN };
+    
+    
+    /** The Constant COLUMN_CLASSES. */
     @SuppressWarnings("rawtypes")
     protected static final Class[] COLUMN_CLASSES = { Boolean.class,
-            String.class, Integer.class, Float.class, Integer.class };
+            String.class, String.class, String.class, Float.class, Integer.class };
 
+    /**
+     * Builds the weighted distribution table.
+     *
+     * @return the j table
+     */
     static JTable buildWeightedDistributionTable() {
         TableModel tableModel = new WeightedDistributionTableModel();
         JTable table = new JTable(tableModel);
@@ -82,13 +101,7 @@ class WeightedDistributionTableModel extends PowerTableModel {
         table.getColumnModel().getColumn(ENABLED_COLUMN)
                 .setMaxWidth(NUMERIC_COLUMN_WIDTH);
         table.getColumnModel().getColumn(ENABLED_COLUMN).setResizable(false);
-        table.getColumnModel().getColumn(WEIGHT_COLUMN)
-                .setPreferredWidth(NUMERIC_COLUMN_WIDTH);
-        table.getColumnModel().getColumn(WEIGHT_COLUMN)
-                .setMaxWidth(NUMERIC_COLUMN_WIDTH);
-        table.getColumnModel().getColumn(WEIGHT_COLUMN).setResizable(false);
-        table.getColumnModel().getColumn(WEIGHT_COLUMN)
-                .setCellEditor(new WeightedDistributionIntegerCellEditor());
+        table.getColumnModel().getColumn(EVAL_WEIGHT_COLUMN).setCellRenderer(new WeightedDistributionIneditableEvaluatedWeightRenderer());
         table.getColumnModel().getColumn(PERCENT_COLUMN)
                 .setPreferredWidth(NUMERIC_COLUMN_WIDTH);
         table.getColumnModel().getColumn(PERCENT_COLUMN)
@@ -108,16 +121,24 @@ class WeightedDistributionTableModel extends PowerTableModel {
         return table;
     }
 
+    /**
+     * Instantiates a new weighted distribution table model.
+     */
     public WeightedDistributionTableModel() {
         super(COLUMN_NAMES, COLUMN_CLASSES);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.util.PowerTableModel#isCellEditable(int, int)
+     */
     @Override
     public boolean isCellEditable(int row, int column) {
-        return column != PERCENT_COLUMN
-                && column != HIDDEN_CHILD_NODE_IDX_COLUMN;
+        return Arrays.binarySearch(INEDITABLE_COLUMNS, column) < 0;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.gui.util.PowerTableModel#setValueAt(java.lang.Object, int, int)
+     */
     @Override
     public void setValueAt(Object aValue, int row, int column) {
         super.setValueAt(aValue, row, column);
@@ -182,15 +203,28 @@ class WeightedDistributionTableModelListener implements TableModelListener {
             WeightedDistributionTableModel firingModel = (WeightedDistributionTableModel) e
                     .getSource();
             Object[] rowData = firingModel.getRowData(e.getFirstRow());
-            int weight = (int) rowData[WeightedDistributionTableModel.WEIGHT_COLUMN];
+            String weight = (String) rowData[WeightedDistributionTableModel.WEIGHT_COLUMN];
             WeightedDistributionController wdc = (WeightedDistributionController) GuiPackage
                     .getInstance().getCurrentElement();
-            ((JMeterTreeNode) wdc.getNode().getChildAt(
+            TestElement testElem = ((JMeterTreeNode) wdc.getNode().getChildAt(
                     (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN]))
-                            .getTestElement()
-                            .setProperty(WeightedDistributionController.WEIGHT,
-                                    weight);
+                    .getTestElement();
+            testElem.setProperty(WeightedDistributionController.WEIGHT,
+                    weight);
+            TestElement evalTestElem = (TestElement) testElem.clone();
+            
+            
+            try {
+                GuiPackage.getInstance().getReplacer().replaceValues(evalTestElem);
+            } catch (InvalidVariableException ive) {
+                
+            }
+            evalTestElem.setRunningVersion(true);
+            
+            firingModel.setValueAt(evalTestElem.getPropertyAsString(WeightedDistributionController.WEIGHT), e.getFirstRow(), WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
+
             updateProbabilityColumn(firingModel);
+            
             GuiPackage.getInstance().getMainFrame().repaint();
         }
     }
@@ -201,21 +235,63 @@ class WeightedDistributionTableModelListener implements TableModelListener {
         WeightedDistributionController wdc = (WeightedDistributionController) GuiPackage
                 .getInstance().getCurrentElement();
         wdc.resetCumulativeProbability();
-        List<Integer> weightData = (List<Integer>) firingModel.getColumnData(
-                WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.WEIGHT_COLUMN]);
+        List<String> weightData = (List<String>) firingModel.getColumnData(
+                WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN]);
         List<Boolean> enabledData = (List<Boolean>) firingModel.getColumnData(
                 WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.ENABLED_COLUMN]);
         List<Float> probabilityData = new ArrayList<Float>(weightData.size());
-        for (int i = 0; i < weightData.size(); i++) {
+        for (int i = 0; i < enabledData.size(); i++) {
             if (enabledData.get(i)) {
+                String evalWeightStr = weightData.get(i);
+                int evalWeightInt;
+                try {
+                    evalWeightInt = Integer.parseInt(evalWeightStr);
+                } catch (NumberFormatException nfe) {
+                    evalWeightInt = 0;
+                }
                 probabilityData
-                        .add(wdc.calculateProbability(weightData.get(i)));
+                        .add(wdc.calculateProbability(evalWeightInt));
             } else {
                 probabilityData.add(wdc.calculateProbability(0));
             }
         }
         firingModel.setColumnData(WeightedDistributionTableModel.PERCENT_COLUMN,
                 probabilityData);
+    }
+}
+
+@SuppressWarnings("serial")
+class WeightedDistributionIneditableEvaluatedWeightRenderer
+        extends DefaultTableCellRenderer {
+    
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        String evalWeight = (String)table.getModel().getValueAt(row, WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
+        boolean isEnabled = (boolean)table.getModel().getValueAt(row, WeightedDistributionTableModel.ENABLED_COLUMN);
+        
+        int intValue = -1;
+        try {
+            intValue = Integer.parseInt(evalWeight);
+        } catch (NumberFormatException nfe) {
+            // Negative numbers and unable to parse both display red
+            intValue = -1;
+        }
+        
+        if (intValue == 0 || !isEnabled) {
+            setBackground(Color.LIGHT_GRAY);
+            setForeground(Color.BLACK);
+        } else if (intValue < 0) {
+            setBackground(Color.RED);
+            setForeground(Color.WHITE);
+        } else {
+            setBackground(Color.GREEN);
+            setForeground(Color.BLACK);
+        }
+        
+        return this;
     }
 }
 
@@ -236,107 +312,3 @@ class WeightedDistributionIneditablePercentageRenderer
     }
 }
 
-@SuppressWarnings("serial")
-class WeightedDistributionIntegerCellEditor extends DefaultCellEditor {
-
-    JFormattedTextField ftf;
-    NumberFormat intFormat = NumberFormat.getIntegerInstance();
-    private boolean DEBUG = false;
-    private static final String ERRMSG = String.format(
-            "Valid values are integers between %d - %d",
-            WeightedDistributionController.MIN_WEIGHT,
-            WeightedDistributionController.MAX_WEIGHT);
-
-    public WeightedDistributionIntegerCellEditor() {
-        super(new JFormattedTextField());
-        ftf = (JFormattedTextField) getComponent();
-        NumberFormatter intFormatter = new NumberFormatter(intFormat);
-        intFormatter.setMinimum(WeightedDistributionController.MIN_WEIGHT);
-        intFormatter.setMaximum(WeightedDistributionController.MAX_WEIGHT);
-        ftf.setFormatterFactory(new DefaultFormatterFactory(intFormatter));
-        ftf.setValue(0);
-        ftf.setHorizontalAlignment(JTextField.TRAILING);
-        ftf.setFocusLostBehavior(JFormattedTextField.PERSIST);
-
-        // React when the user presses Enter while the editor is
-        // active. (Tab is handled as specified by
-        // JFormattedTextField's focusLostBehavior property.)
-        ftf.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-                "check");
-        ftf.getActionMap().put("check", new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!ftf.isEditValid()) { // The text is invalid.
-                    JMeterUtils.reportErrorToUser(ERRMSG);
-                    ftf.postActionEvent();
-                    /*
-                     * if (userSaysRevert()) { //reverted ftf.postActionEvent();
-                     * //inform the editor }
-                     */
-                } else {
-                    try { // The text is valid,
-                        ftf.commitEdit(); // so use it.
-                        ftf.postActionEvent(); // stop editing
-                    } catch (java.text.ParseException exc) {
-                        // TODO: something
-                    }
-                }
-            }
-        });
-    }
-
-    // Override to invoke setValue on the formatted text field.
-    public Component getTableCellEditorComponent(JTable table, Object value,
-            boolean isSelected, int row, int column) {
-        JFormattedTextField ftf = (JFormattedTextField) super.getTableCellEditorComponent(
-                table, value, isSelected, row, column);
-        ftf.setValue(value);
-        return ftf;
-    }
-
-    // Override to ensure that the value remains an Integer.
-    public Object getCellEditorValue() {
-        JFormattedTextField ftf = (JFormattedTextField) getComponent();
-        Object o = ftf.getValue();
-        if (o instanceof Integer) {
-            return o;
-        } else if (o instanceof Number) {
-            return new Integer(((Number) o).intValue());
-        } else {
-            if (DEBUG) {
-                System.out.println("getCellEditorValue: o isn't a Number");
-            }
-            try {
-                return intFormat.parseObject(o.toString());
-            } catch (ParseException exc) {
-                System.err.println("getCellEditorValue: can't parse o: " + o);
-                return null;
-            }
-        }
-    }
-
-    // Override to check whether the edit is valid,
-    // setting the value if it is and complaining if
-    // it isn't. If it's OK for the editor to go
-    // away, we need to invoke the superclass's version
-    // of this method so that everything gets cleaned up.
-    public boolean stopCellEditing() {
-        JFormattedTextField ftf = (JFormattedTextField) getComponent();
-        if (ftf.isEditValid()) {
-            try {
-                ftf.commitEdit();
-            } catch (java.text.ParseException exc) {
-            }
-
-        } else { // text is invalid
-            JMeterUtils.reportErrorToUser(ERRMSG);
-            return false;
-            /*
-             * if (!userSaysRevert()) { //user wants to edit return false;
-             * //don't let the editor go away }
-             */
-        }
-        return super.stopCellEditing();
-    }
-}

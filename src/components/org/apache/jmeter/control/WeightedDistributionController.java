@@ -24,47 +24,85 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.apache.jmeter.control.Controller;
+import org.apache.jmeter.engine.util.ValueReplacer;
+import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.LongProperty;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WeightedDistributionController.
+ */
 public class WeightedDistributionController extends InterleaveControl {
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 8554248250211263894L;
 
+    /** The Constant SEED. */
     public static final String SEED = "WeightedDistributionController.seed";
+    
+    /** The Constant WEIGHT. */
     public static final String WEIGHT = "WeightedDistributionController.weight";
 
+    /** The Constant MIN_WEIGHT. */
     public static final int MIN_WEIGHT = 0;
+    
+    /** The Constant MAX_WEIGHT. */
     public static final int MAX_WEIGHT = 999999;
+    
+    /** The Constant DFLT_WEIGHT. */
     public static final int DFLT_WEIGHT = MIN_WEIGHT;
+    
+    /** The Constant DFLT_SEED. */
     public static final long DFLT_SEED = 0l;
     
+    /** The Constant UNSET_CUMULATIVE_PROBABILITY. */
     private static final int UNSET_CUMULATIVE_PROBABILITY = -1;
+    
+    /** The Constant NO_ELEMENT_FOUND. */
     private static final int NO_ELEMENT_FOUND = 0;
 
+    /** The cumulative probability. */
     private transient int cumulativeProbability;
+    
+    /** The node. */
     private transient JMeterTreeNode node;
+    
+    /** The randomizer. */
     private transient IntegerGenerator randomizer;
 
+    /**
+     * Instantiates a new weighted distribution controller.
+     */
     public WeightedDistributionController() {
         node = null;
         cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
         randomizer = null;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#resetCurrent()
+     */
     @Override
     protected void resetCurrent() {
         current = determineCurrentTestElement();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.InterleaveControl#incrementCurrent()
+     */
     @Override
     protected void incrementCurrent() {
         super.incrementCurrent();
         current = determineCurrentTestElement();
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.control.GenericController#addTestElement(org.apache.jmeter.testelement.TestElement)
+     */
     @Override
     public void addTestElement(TestElement child) {
         if (child.isEnabled() && child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
@@ -73,11 +111,21 @@ public class WeightedDistributionController extends InterleaveControl {
 
     }
     
+    /**
+     * Gets the seed.
+     *
+     * @return the seed
+     */
     public long getSeed() {
         return getPropertyAsLong(SEED,
                 WeightedDistributionController.DFLT_SEED);
     }
 
+    /**
+     * Sets the seed.
+     *
+     * @param seed the new seed
+     */
     public void setSeed(long seed) {
         if (getSeed() != seed) {
             setProperty(new LongProperty(SEED, seed));
@@ -85,6 +133,11 @@ public class WeightedDistributionController extends InterleaveControl {
         }
     }
 
+    /**
+     * Gets the randomizer.
+     *
+     * @return the randomizer
+     */
     public IntegerGenerator getRandomizer() {
         if (randomizer == null) {
             initRandomizer();
@@ -92,10 +145,20 @@ public class WeightedDistributionController extends InterleaveControl {
         return randomizer;
     }
     
+    /**
+     * Sets the randomizer.
+     *
+     * @param intgen the new randomizer
+     */
     public void setRandomizer(IntegerGenerator intgen) {
         randomizer = intgen;
     }
     
+    /**
+     * Gets the cumulative probability.
+     *
+     * @return the cumulative probability
+     */
     public int getCumulativeProbability() {
         if (cumulativeProbability == UNSET_CUMULATIVE_PROBABILITY) {
             cumulativeProbability = 0;
@@ -108,6 +171,7 @@ public class WeightedDistributionController extends InterleaveControl {
                     && getNode().children().hasMoreElements()) {
                 subControllers = getNode().children();
             }
+            ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
             while (subControllers != null && subControllers.hasMoreElements()) {
                 Object currSubCtrl = subControllers.nextElement();
                 TestElement currElement;
@@ -116,12 +180,21 @@ public class WeightedDistributionController extends InterleaveControl {
                             .getTestElement();
                 } else {
                     currElement = (TestElement) currSubCtrl;
-                }
-
+                }       
+                
                 if (currElement.isEnabled()
                         && (currElement instanceof Controller
                                 || currElement instanceof Sampler)) {
-                    cumulativeProbability += currElement
+                    TestElement currEvalSubCtrl = (TestElement) currElement.clone();                    
+                    try {
+                        replacer.replaceValues(currEvalSubCtrl);
+                    } catch (InvalidVariableException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    currEvalSubCtrl.setRunningVersion(true);
+                    
+                    cumulativeProbability += currEvalSubCtrl
                             .getPropertyAsInt(WEIGHT, DFLT_WEIGHT);
                 }
             }
@@ -130,10 +203,19 @@ public class WeightedDistributionController extends InterleaveControl {
         return cumulativeProbability;
     }
 
+    /**
+     * Reset cumulative probability.
+     */
     public void resetCumulativeProbability() {
         cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
     }
 
+    /**
+     * Calculate probability.
+     *
+     * @param weight the weight
+     * @return the float
+     */
     public float calculateProbability(int weight) {
         if (getCumulativeProbability() > 0) {
             return ((float) weight / getCumulativeProbability());
@@ -142,6 +224,11 @@ public class WeightedDistributionController extends InterleaveControl {
         return 0.0f;
     }
 
+    /**
+     * Gets the node.
+     *
+     * @return the node
+     */
     public JMeterTreeNode getNode() {
         if (node == null || node.getTestElement() != this
                 || node.getParent() == null) {
@@ -156,6 +243,9 @@ public class WeightedDistributionController extends InterleaveControl {
         return node;
     }
 
+    /**
+     * Inits the randomizer.
+     */
     private void initRandomizer() {
         Random rnd;
         if (getSeed() != DFLT_SEED) {
@@ -166,6 +256,11 @@ public class WeightedDistributionController extends InterleaveControl {
         randomizer = new RandomIntegerGenerator(rnd);
     }
 
+    /**
+     * Determine current test element.
+     *
+     * @return the int
+     */
     private int determineCurrentTestElement() {
         if (getCumulativeProbability() > 0) {
             int currentRandomizer = getRandomizer()
