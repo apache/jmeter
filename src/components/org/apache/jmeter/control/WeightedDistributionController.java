@@ -31,48 +31,61 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class WeightedDistributionController.
+ * 
+ * The Weighted Distribution Controller randomly selects one of its child
+ * elements (samplers/controllers) to be executed. The probability of a child
+ * being executed depends upon the relative weight assigned to that element. An
+ * expression can be used as a weight, as long as that expression evaluates to a
+ * positive integer.
  */
 public class WeightedDistributionController extends InterleaveControl {
-    
+
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 8554248250211263894L;
 
-    /** The Constant SEED. */
+    /** The log. */
+    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    /** The Constant SEED Property key */
     public static final String SEED = "WeightedDistributionController.seed";
-    
-    /** The Constant WEIGHT. */
+
+    /** The Constant WEIGHT Property key */
     public static final String WEIGHT = "WeightedDistributionController.weight";
 
-    /** The Constant MIN_WEIGHT. */
-    public static final int MIN_WEIGHT = 0;
-    
-    /** The Constant MAX_WEIGHT. */
-    public static final int MAX_WEIGHT = 999999;
-    
-    /** The Constant DFLT_WEIGHT. */
-    public static final int DFLT_WEIGHT = MIN_WEIGHT;
-    
-    /** The Constant DFLT_SEED. */
+    /** The Constant DFLT_WEIGHT. Default Weight value */
+    public static final int DFLT_WEIGHT = 0;
+
+    /** The Constant DFLT_SEED. Default Seed value */
     public static final long DFLT_SEED = 0l;
-    
-    /** The Constant UNSET_CUMULATIVE_PROBABILITY. */
+
+    /**
+     * The Constant UNSET_CUMULATIVE_PROBABILITY. Flag that cumulative
+     * probability needs to be re-calculated
+     */
     private static final int UNSET_CUMULATIVE_PROBABILITY = -1;
-    
-    /** The Constant NO_ELEMENT_FOUND. */
+
+    /**
+     * The Constant NO_ELEMENT_FOUND. Used as flag to indicate that No elements
+     * were returned when finding next element
+     */
     private static final int NO_ELEMENT_FOUND = 0;
 
     /** The cumulative probability. */
     private transient int cumulativeProbability;
-    
-    /** The node. */
+
+    /** The node. associated with this controller */
     private transient JMeterTreeNode node;
-    
+
     /** The randomizer. */
     private transient IntegerGenerator randomizer;
+
+    /** The value replacer for evaluating variable properties. */
+    private transient ValueReplacer replacer;
 
     /**
      * Instantiates a new weighted distribution controller.
@@ -81,9 +94,12 @@ public class WeightedDistributionController extends InterleaveControl {
         node = null;
         cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
         randomizer = null;
+        replacer = GuiPackage.getInstance().getReplacer();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.control.GenericController#resetCurrent()
      */
     @Override
@@ -91,7 +107,9 @@ public class WeightedDistributionController extends InterleaveControl {
         current = determineCurrentTestElement();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.control.InterleaveControl#incrementCurrent()
      */
     @Override
@@ -99,18 +117,25 @@ public class WeightedDistributionController extends InterleaveControl {
         super.incrementCurrent();
         current = determineCurrentTestElement();
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.control.GenericController#addTestElement(org.apache.jmeter.testelement.TestElement)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.control.GenericController#addTestElement(org.apache.
+     * jmeter.testelement.TestElement)
      */
     @Override
     public void addTestElement(TestElement child) {
-        if (child.isEnabled() && child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
+        // if you do not filter enabled elements, if no elements are found by
+        // determineCurrentTestElement() it will return the first element
+        if (child.isEnabled()
+                && child.getPropertyAsInt(WEIGHT, DFLT_WEIGHT) > 0) {
             super.addTestElement(child);
         }
 
     }
-    
+
     /**
      * Gets the seed.
      *
@@ -124,7 +149,8 @@ public class WeightedDistributionController extends InterleaveControl {
     /**
      * Sets the seed.
      *
-     * @param seed the new seed
+     * @param seed
+     *            the new seed
      */
     public void setSeed(long seed) {
         if (getSeed() != seed) {
@@ -144,24 +170,62 @@ public class WeightedDistributionController extends InterleaveControl {
         }
         return randomizer;
     }
-    
+
     /**
      * Sets the randomizer.
      *
-     * @param intgen the new randomizer
+     * @param intgen
+     *            the new randomizer
      */
     public void setRandomizer(IntegerGenerator intgen) {
         randomizer = intgen;
     }
-    
+
+    /**
+     * Gets the child node.
+     *
+     * @param idx
+     *            the index of the child node
+     * @return the child node
+     */
+    public JMeterTreeNode getChildNode(int idx) {
+        JMeterTreeNode childNode;
+
+        try {
+            childNode = (JMeterTreeNode) getNode().getChildAt(idx);
+        } catch (Exception ex) {
+            log.error("Unable to retreive child node at index: " + idx, ex);
+            childNode = null;
+        }
+
+        return childNode;
+    }
+
+    /**
+     * Gets the child test element.
+     *
+     * @param idx
+     *            the index of the child node
+     * @return the child test element
+     */
+    public TestElement getChildTestElement(int idx) {
+        JMeterTreeNode childNode = getChildNode(idx);
+        return childNode == null ? null : childNode.getTestElement();
+    }
+
     /**
      * Gets the cumulative probability.
      *
      * @return the cumulative probability
      */
     public int getCumulativeProbability() {
+        // recalculate if reset flag is set
         if (cumulativeProbability == UNSET_CUMULATIVE_PROBABILITY) {
             cumulativeProbability = 0;
+
+            // When calling in during test execution, the child elements are
+            // listed in getSubControllers, but during test design time,
+            // elements need to be pulled from the node tree
             @SuppressWarnings("rawtypes")
             Enumeration subControllers = null;
             if (this.getSubControllers().size() > 0) {
@@ -171,31 +235,32 @@ public class WeightedDistributionController extends InterleaveControl {
                     && getNode().children().hasMoreElements()) {
                 subControllers = getNode().children();
             }
-            ValueReplacer replacer = GuiPackage.getInstance().getReplacer();
+
             while (subControllers != null && subControllers.hasMoreElements()) {
                 Object currSubCtrl = subControllers.nextElement();
                 TestElement currElement;
+
+                // again, during test execution, the element is in the
+                // getSubControllers() list, otherwise it need to be picked off
+                // of the tree node
                 if (currSubCtrl instanceof JMeterTreeNode) {
                     currElement = ((JMeterTreeNode) currSubCtrl)
                             .getTestElement();
                 } else {
                     currElement = (TestElement) currSubCtrl;
-                }       
-                
+                }
+
                 if (currElement.isEnabled()
                         && (currElement instanceof Controller
                                 || currElement instanceof Sampler)) {
-                    TestElement currEvalSubCtrl = (TestElement) currElement.clone();                    
-                    try {
-                        replacer.replaceValues(currEvalSubCtrl);
-                    } catch (InvalidVariableException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    currEvalSubCtrl.setRunningVersion(true);
-                    
-                    cumulativeProbability += currEvalSubCtrl
-                            .getPropertyAsInt(WEIGHT, DFLT_WEIGHT);
+
+                    TestElement currEvalSubCtrl = evaluateTestElement(
+                            currElement);
+                    int currWeight = currEvalSubCtrl.getPropertyAsInt(WEIGHT,
+                            DFLT_WEIGHT);
+
+                    // filter negative weights
+                    cumulativeProbability += (currWeight > 0 ? currWeight : 0);
                 }
             }
         }
@@ -213,19 +278,42 @@ public class WeightedDistributionController extends InterleaveControl {
     /**
      * Calculate probability.
      *
-     * @param weight the weight
+     * @param weight
+     *            the weight
      * @return the float
      */
     public float calculateProbability(int weight) {
         if (getCumulativeProbability() > 0) {
-            return ((float) weight / getCumulativeProbability());
+            return ((float) (weight < 0 ? 0 : weight)
+                    / getCumulativeProbability());
         }
 
         return 0.0f;
     }
 
     /**
-     * Gets the node.
+     * Returns a clone of the test element with any variable properties
+     * evaluated.
+     *
+     * @param testElement
+     *            the source test element
+     * @return the cloned and evaluated test element
+     */
+    public TestElement evaluateTestElement(TestElement testElement) {
+        TestElement clonedTestElem = (TestElement) testElement.clone();
+
+        try {
+            replacer.replaceValues(clonedTestElem);
+        } catch (InvalidVariableException e) {
+            return testElement;
+        }
+
+        clonedTestElem.setRunningVersion(true);
+        return clonedTestElem;
+    }
+
+    /**
+     * Gets the node associated with this weighted distribution controller
      *
      * @return the node
      */
@@ -235,7 +323,8 @@ public class WeightedDistributionController extends InterleaveControl {
             try {
                 node = GuiPackage.getInstance().getNodeOf(this);
             } catch (NullPointerException npe) {
-                // This NPE is typically caused by GuiPackage not being initialized when
+                // This NPE is typically caused by GuiPackage not being
+                // initialized when
                 // Running unit tests
                 node = null;
             }
@@ -244,7 +333,7 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 
     /**
-     * Inits the randomizer.
+     * Initialized the randomizer with the seed, if set.
      */
     private void initRandomizer() {
         Random rnd;
@@ -257,9 +346,9 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 
     /**
-     * Determine current test element.
+     * Randomly determine the index of current test element.
      *
-     * @return the int
+     * @return the index of the current test element
      */
     private int determineCurrentTestElement() {
         if (getCumulativeProbability() > 0) {
@@ -285,15 +374,24 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 }
 
+/**
+ * This abstraction is necessary for unit tests, in which case a deterministic
+ * generator replaces the random one
+ */
 interface IntegerGenerator {
     int nextInt(int n);
+
     void setSeed(long seed);
 }
 
+/**
+ * Implementation of the IntegerGenerator used to provide random values at
+ * execution time
+ */
 class RandomIntegerGenerator implements IntegerGenerator {
 
     private Random rnd;
-    
+
     public RandomIntegerGenerator(Random rnd) {
         this.rnd = rnd;
     }
@@ -305,6 +403,6 @@ class RandomIntegerGenerator implements IntegerGenerator {
 
     @Override
     public void setSeed(long seed) {
-        rnd.setSeed(seed);  
+        rnd.setSeed(seed);
     }
 }

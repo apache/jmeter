@@ -23,7 +23,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -33,56 +32,92 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.jmeter.control.WeightedDistributionController;
-import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
-import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * The Class WeightedDistributionTableModel. Provides Support for the GUI table
+ * The Class WeightedDistributionTableModel. Provides Support for the control
+ * panel table
  */
 class WeightedDistributionTableModel extends PowerTableModel {
-    
+
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -600418978315572279L;
-    
-    /** The Constant ENABLED_COLUMN. */
+
+    /**
+     * The Constant ENABLED_COLUMN. Represents the column number of "Enabled"
+     */
     protected static final int ENABLED_COLUMN = 0;
-    
-    /** The Constant ELEMENT_NAME_COLUMN. */
+
+    /**
+     * The Constant ELEMENT_NAME_COLUMN. Represents the column number of
+     * "Element Name"
+     */
     protected static final int ELEMENT_NAME_COLUMN = 1;
-    
-    /** The Constant WEIGHT_COLUMN. */
+
+    /** The Constant WEIGHT_COLUMN. Represents the column number of "Weight" */
     protected static final int WEIGHT_COLUMN = 2;
-    
-    /** The Constant EVAL_WEIGHT_COLUMN. */
+
+    /**
+     * The Constant EVAL_WEIGHT_COLUMN. Represents the column number of
+     * "Evaluates To"
+     */
     protected static final int EVAL_WEIGHT_COLUMN = 3;
-    
-    /** The Constant PERCENT_COLUMN. */
-    protected static final int PERCENT_COLUMN = 4;
-    
-    /** The Constant HIDDEN_CHILD_NODE_IDX_COLUMN. */
+
+    /**
+     * The Constant PROBABILITY_COLUMN. Represents the column number of
+     * "Est. Prob."
+     */
+    protected static final int PROBABILITY_COLUMN = 4;
+
+    /**
+     * The Constant HIDDEN_CHILD_NODE_IDX_COLUMN. Represents the column number
+     * of a hidden column containing the index number of the child element
+     * represented by this row
+     */
     protected static final int HIDDEN_CHILD_NODE_IDX_COLUMN = 5;
-    
-    /** The Constant HIDDEN_COLUMN_WIDTH. */
+
+    /**
+     * The Constant HIDDEN_COLUMN_WIDTH. Represents the width of a hidden column
+     */
     protected static final int HIDDEN_COLUMN_WIDTH = 0;
-    
-    /** The Constant NUMERIC_COLUMN_WIDTH. */
-    protected static final int NUMERIC_COLUMN_WIDTH = 100;
-    
-    /** The Constant COLUMN_NAMES. */
-    protected static final String[] COLUMN_NAMES = { "Enabled", "Element Name", "Weight", "Evaluates To", "Est. Prob.", null };
-    
-    /** The Constant INEDITABLE_COLUMNS. */
-    protected static final int[] INEDITABLE_COLUMNS = { EVAL_WEIGHT_COLUMN, PERCENT_COLUMN, HIDDEN_CHILD_NODE_IDX_COLUMN };
-    
-    
-    /** The Constant COLUMN_CLASSES. */
+
+    /**
+     * The Constant NUMERIC_COLUMN_WIDTH. Represents the width of a fixed width,
+     * uneditable column
+     */
+    protected static final int FIXED_COLUMN_WIDTH = 100;
+
+    /**
+     * The Constant COLUMN_NAMES. Array of the property keys for the display
+     * names for the various columns
+     */
+    protected static final String[] COLUMN_NAMES = {
+            "weighted_distribution_controller_table_enabled",
+            "weighted_distribution_controller_table_element_name",
+            "weighted_distribution_controller_table_weight",
+            "weighted_distribution_controller_table_eval_weight",
+            "weighted_distribution_controller_table_probability", null };
+
+    /**
+     * The Constant INEDITABLE_COLUMNS. This is the set of columns that are not
+     * editable
+     */
+    protected static final int[] INEDITABLE_COLUMNS = { EVAL_WEIGHT_COLUMN,
+            PROBABILITY_COLUMN, HIDDEN_CHILD_NODE_IDX_COLUMN };
+
+    /**
+     * The Constant COLUMN_CLASSES. These are the classes that correspond to the
+     * columns
+     */
     @SuppressWarnings("rawtypes")
     protected static final Class[] COLUMN_CLASSES = { Boolean.class,
-            String.class, String.class, String.class, Float.class, Integer.class };
+            String.class, String.class, String.class, Float.class,
+            Integer.class };
 
     /**
      * Builds the weighted distribution table.
@@ -90,31 +125,42 @@ class WeightedDistributionTableModel extends PowerTableModel {
      * @return the j table
      */
     static JTable buildWeightedDistributionTable() {
+
         TableModel tableModel = new WeightedDistributionTableModel();
         JTable table = new JTable(tableModel);
+
+        // Header config
+        table.getTableHeader()
+                .setDefaultRenderer(new HeaderAsPropertyRenderer());
         Font defaultFont = table.getTableHeader().getFont();
         table.getTableHeader()
                 .setFont(new Font("Bold", Font.BOLD, defaultFont.getSize()));
+
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Column config
         table.getColumnModel().getColumn(ENABLED_COLUMN)
-                .setPreferredWidth(NUMERIC_COLUMN_WIDTH);
+                .setPreferredWidth(FIXED_COLUMN_WIDTH);
         table.getColumnModel().getColumn(ENABLED_COLUMN)
-                .setMaxWidth(NUMERIC_COLUMN_WIDTH);
+                .setMaxWidth(FIXED_COLUMN_WIDTH);
         table.getColumnModel().getColumn(ENABLED_COLUMN).setResizable(false);
-        table.getColumnModel().getColumn(EVAL_WEIGHT_COLUMN).setCellRenderer(new WeightedDistributionIneditableEvaluatedWeightRenderer());
-        table.getColumnModel().getColumn(PERCENT_COLUMN)
-                .setPreferredWidth(NUMERIC_COLUMN_WIDTH);
-        table.getColumnModel().getColumn(PERCENT_COLUMN)
-                .setMaxWidth(NUMERIC_COLUMN_WIDTH);
-        table.getColumnModel().getColumn(PERCENT_COLUMN).setResizable(false);
-        table.getColumnModel().getColumn(PERCENT_COLUMN).setCellRenderer(
-                new WeightedDistributionIneditablePercentageRenderer());
+        table.getColumnModel().getColumn(EVAL_WEIGHT_COLUMN).setCellRenderer(
+                new WeightedDistributionIneditableEvaluatedWeightRenderer());
+        table.getColumnModel().getColumn(PROBABILITY_COLUMN)
+                .setPreferredWidth(FIXED_COLUMN_WIDTH);
+        table.getColumnModel().getColumn(PROBABILITY_COLUMN)
+                .setMaxWidth(FIXED_COLUMN_WIDTH);
+        table.getColumnModel().getColumn(PROBABILITY_COLUMN)
+                .setResizable(false);
+        table.getColumnModel().getColumn(PROBABILITY_COLUMN).setCellRenderer(
+                new WeightedDistributionIneditableProbabilityRenderer());
         table.getColumnModel().getColumn(HIDDEN_CHILD_NODE_IDX_COLUMN)
                 .setMinWidth(HIDDEN_COLUMN_WIDTH);
         table.getColumnModel().getColumn(HIDDEN_CHILD_NODE_IDX_COLUMN)
                 .setMaxWidth(HIDDEN_COLUMN_WIDTH);
         table.getColumnModel().getColumn(HIDDEN_CHILD_NODE_IDX_COLUMN)
                 .setResizable(false);
+
         table.getModel().addTableModelListener(
                 new WeightedDistributionTableModelListener());
 
@@ -128,16 +174,22 @@ class WeightedDistributionTableModel extends PowerTableModel {
         super(COLUMN_NAMES, COLUMN_CLASSES);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.apache.jmeter.gui.util.PowerTableModel#isCellEditable(int, int)
      */
     @Override
     public boolean isCellEditable(int row, int column) {
-        return Arrays.binarySearch(INEDITABLE_COLUMNS, column) < 0;
+        return !ArrayUtils.contains(INEDITABLE_COLUMNS, column);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.jmeter.gui.util.PowerTableModel#setValueAt(java.lang.Object, int, int)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.jmeter.gui.util.PowerTableModel#setValueAt(java.lang.Object,
+     * int, int)
      */
     @Override
     public void setValueAt(Object aValue, int row, int column) {
@@ -147,6 +199,10 @@ class WeightedDistributionTableModel extends PowerTableModel {
 
 }
 
+/**
+ * This class listens for changes to the editable columns and updates the table
+ * or associated child test elements
+ */
 class WeightedDistributionTableModelListener implements TableModelListener {
 
     @Override
@@ -170,61 +226,74 @@ class WeightedDistributionTableModelListener implements TableModelListener {
     }
 
     private void handleEnabledChange(TableModelEvent e) {
-        if (WeightedDistributionControllerGui
-                .isCurrentElementWeightedDistributionController()) {
+        WeightedDistributionController wdc = WeightedDistributionControllerGui
+                .getCurrentWeightedDistributionController();
+        if (wdc != null) {
             WeightedDistributionTableModel firingModel = (WeightedDistributionTableModel) e
                     .getSource();
+
+            // get values from the row that was changed
             Object[] rowData = firingModel.getRowData(e.getFirstRow());
+            int childIdx = (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN];
             boolean isEnabled = (boolean) rowData[WeightedDistributionTableModel.ENABLED_COLUMN];
-            WeightedDistributionController wdc = (WeightedDistributionController) GuiPackage
-                    .getInstance().getCurrentElement();
-            ((JMeterTreeNode) wdc.getNode().getChildAt(
-                    (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN]))
-                            .setEnabled(isEnabled);
+
+            // get the associated child test element and set enabled to match
+            // table
+            wdc.getChildNode(childIdx).setEnabled(isEnabled);
+
+            // Update the probability column to add/remove this element
             updateProbabilityColumn(firingModel);
+
             GuiPackage.getInstance().getMainFrame().repaint();
         }
     }
 
     private void handleElementNameChange(TableModelEvent e) {
-        WeightedDistributionTableModel firingModel = (WeightedDistributionTableModel) e
-                .getSource();
-        Object[] rowData = firingModel.getRowData(e.getFirstRow());
-        ((JMeterTreeNode) GuiPackage.getInstance().getCurrentNode().getChildAt(
-                (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN]))
-                        .setName(
-                                (String) rowData[WeightedDistributionTableModel.ELEMENT_NAME_COLUMN]);
-        GuiPackage.getInstance().getMainFrame().repaint();
+        WeightedDistributionController wdc = WeightedDistributionControllerGui
+                .getCurrentWeightedDistributionController();
+        if (wdc != null) {
+            WeightedDistributionTableModel firingModel = (WeightedDistributionTableModel) e
+                    .getSource();
+
+            // get values from the row that was changed
+            Object[] rowData = firingModel.getRowData(e.getFirstRow());
+            int childIdx = (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN];
+            String elementName = (String) rowData[WeightedDistributionTableModel.ELEMENT_NAME_COLUMN];
+
+            // set the name of the associated child element
+            wdc.getChildNode(childIdx).setName(elementName);
+
+            GuiPackage.getInstance().getMainFrame().repaint();
+        }
     }
 
     private void handleWeightChange(TableModelEvent e) {
-        if (WeightedDistributionControllerGui
-                .isCurrentElementWeightedDistributionController()) {
+        WeightedDistributionController wdc = WeightedDistributionControllerGui
+                .getCurrentWeightedDistributionController();
+        if (wdc != null) {
             WeightedDistributionTableModel firingModel = (WeightedDistributionTableModel) e
                     .getSource();
-            Object[] rowData = firingModel.getRowData(e.getFirstRow());
-            String weight = (String) rowData[WeightedDistributionTableModel.WEIGHT_COLUMN];
-            WeightedDistributionController wdc = (WeightedDistributionController) GuiPackage
-                    .getInstance().getCurrentElement();
-            TestElement testElem = ((JMeterTreeNode) wdc.getNode().getChildAt(
-                    (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN]))
-                    .getTestElement();
-            testElem.setProperty(WeightedDistributionController.WEIGHT,
-                    weight);
-            TestElement evalTestElem = (TestElement) testElem.clone();
-            
-            
-            try {
-                GuiPackage.getInstance().getReplacer().replaceValues(evalTestElem);
-            } catch (InvalidVariableException ive) {
-                
-            }
-            evalTestElem.setRunningVersion(true);
-            
-            firingModel.setValueAt(evalTestElem.getPropertyAsString(WeightedDistributionController.WEIGHT), e.getFirstRow(), WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
 
+            // get values from the row that was changed
+            Object[] rowData = firingModel.getRowData(e.getFirstRow());
+            int childIdx = (int) rowData[WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN];
+            String weight = (String) rowData[WeightedDistributionTableModel.WEIGHT_COLUMN];
+
+            // update the weight property
+            TestElement testElem = wdc.getChildTestElement(childIdx);
+            testElem.setProperty(WeightedDistributionController.WEIGHT, weight);
+
+            // update the evaluated weight column
+            TestElement evalTestElem = wdc.evaluateTestElement(testElem);
+            firingModel.setValueAt(
+                    evalTestElem.getPropertyAsString(
+                            WeightedDistributionController.WEIGHT),
+                    e.getFirstRow(),
+                    WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
+
+            // Update the probability column to reflect the new weight
             updateProbabilityColumn(firingModel);
-            
+
             GuiPackage.getInstance().getMainFrame().repaint();
         }
     }
@@ -232,54 +301,80 @@ class WeightedDistributionTableModelListener implements TableModelListener {
     @SuppressWarnings("unchecked")
     private void updateProbabilityColumn(
             WeightedDistributionTableModel firingModel) {
-        WeightedDistributionController wdc = (WeightedDistributionController) GuiPackage
-                .getInstance().getCurrentElement();
-        wdc.resetCumulativeProbability();
-        List<String> weightData = (List<String>) firingModel.getColumnData(
-                WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN]);
-        List<Boolean> enabledData = (List<Boolean>) firingModel.getColumnData(
-                WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.ENABLED_COLUMN]);
-        List<Float> probabilityData = new ArrayList<Float>(weightData.size());
-        for (int i = 0; i < enabledData.size(); i++) {
-            if (enabledData.get(i)) {
-                String evalWeightStr = weightData.get(i);
-                int evalWeightInt;
-                try {
-                    evalWeightInt = Integer.parseInt(evalWeightStr);
-                } catch (NumberFormatException nfe) {
-                    evalWeightInt = 0;
+        WeightedDistributionController wdc = WeightedDistributionControllerGui
+                .getCurrentWeightedDistributionController();
+        if (wdc != null) {
+            // get the data necessary for updating the probabilities
+            List<String> weightData = (List<String>) firingModel.getColumnData(
+                    WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN]);
+            List<Boolean> enabledData = (List<Boolean>) firingModel
+                    .getColumnData(
+                            WeightedDistributionTableModel.COLUMN_NAMES[WeightedDistributionTableModel.ENABLED_COLUMN]);
+
+            List<Float> probabilityData = new ArrayList<Float>(
+                    weightData.size());
+
+            wdc.resetCumulativeProbability();
+
+            for (int i = 0; i < enabledData.size(); i++) {
+                // only determine values of enabled child elements
+                if (enabledData.get(i)) {
+                    // determine if the weight evaluates as an integer
+                    // we cannot use the same approach as in
+                    // WeightedDistributionController.configure(TestElement el)
+                    // because we are using the raw data from the table rather
+                    // than TestElement objects this is for performance reasons
+                    String evalWeightStr = weightData.get(i);
+                    int evalWeightInt;
+                    // if value cannot be parsed as int, weight = 0
+                    try {
+                        evalWeightInt = Integer.parseInt(evalWeightStr);
+                    } catch (NumberFormatException nfe) {
+                        evalWeightInt = 0;
+                    }
+                    probabilityData
+                            .add(wdc.calculateProbability(evalWeightInt));
+                } else {
+                    // disabled child elements have weight = 0
+                    probabilityData.add(wdc.calculateProbability(0));
                 }
-                probabilityData
-                        .add(wdc.calculateProbability(evalWeightInt));
-            } else {
-                probabilityData.add(wdc.calculateProbability(0));
             }
+            firingModel.setColumnData(
+                    WeightedDistributionTableModel.PROBABILITY_COLUMN,
+                    probabilityData);
         }
-        firingModel.setColumnData(WeightedDistributionTableModel.PERCENT_COLUMN,
-                probabilityData);
     }
 }
 
+/**
+ * This class renders the Evaluated Weight column and sets the background color
+ * as green/gray/red
+ */
 @SuppressWarnings("serial")
 class WeightedDistributionIneditableEvaluatedWeightRenderer
         extends DefaultTableCellRenderer {
-    
+
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        String evalWeight = (String)table.getModel().getValueAt(row, WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
-        boolean isEnabled = (boolean)table.getModel().getValueAt(row, WeightedDistributionTableModel.ENABLED_COLUMN);
-        
+
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                row, column);
+
+        // get the evaluated weight and enabled/disabled
+        String evalWeight = (String) table.getModel().getValueAt(row,
+                WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
+        boolean isEnabled = (boolean) table.getModel().getValueAt(row,
+                WeightedDistributionTableModel.ENABLED_COLUMN);
+
         int intValue = -1;
         try {
             intValue = Integer.parseInt(evalWeight);
         } catch (NumberFormatException nfe) {
-            // Negative numbers and unable to parse both display red
+            // Negative numbers and unable to parse as int both display red
             intValue = -1;
         }
-        
+
         if (intValue == 0 || !isEnabled) {
             setBackground(Color.LIGHT_GRAY);
             setForeground(Color.BLACK);
@@ -290,18 +385,22 @@ class WeightedDistributionIneditableEvaluatedWeightRenderer
             setBackground(Color.GREEN);
             setForeground(Color.BLACK);
         }
-        
+
         return this;
     }
 }
 
+/**
+ * This class renders the Probability column with a grey background with a
+ * nicely formatted percentage string
+ */
 @SuppressWarnings("serial")
-class WeightedDistributionIneditablePercentageRenderer
+class WeightedDistributionIneditableProbabilityRenderer
         extends DefaultTableCellRenderer {
     private static final String FORMAT = "###.####%";
     private final DecimalFormat formatter = new DecimalFormat(FORMAT);
 
-    public WeightedDistributionIneditablePercentageRenderer() {
+    public WeightedDistributionIneditableProbabilityRenderer() {
         super();
         setBackground(Color.LIGHT_GRAY);
         setHorizontalAlignment(RIGHT);
@@ -311,4 +410,3 @@ class WeightedDistributionIneditablePercentageRenderer
         setText((value == null) ? "" : formatter.format(value));
     }
 }
-
