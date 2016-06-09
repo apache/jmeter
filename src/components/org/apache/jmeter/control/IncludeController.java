@@ -123,7 +123,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         if (includePath != null && includePath.length() > 0) {
             try {
                 String fileName=prefix+includePath;
-                File file = new File(fileName);
+                File file = new File(fileName.trim());
                 final String absolutePath = file.getAbsolutePath();
                 log.info("loadIncludedElements -- try to load included module: "+absolutePath);
                 if(!file.exists() && !file.isAbsolute()){
