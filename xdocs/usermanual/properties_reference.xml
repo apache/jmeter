@@ -615,7 +615,7 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 <property name="jsyntaxtextarea.codefolding">, defaults to:true</property>
 <property name="jsyntaxtextarea.maxundos"> Set 0 to disable undo feature in JSyntaxTextArea<br/>, defaults to:50</property>
 <property name="jsyntaxtextarea.font.family"> Change the font on the (JSyntax) Text Areas. (Useful for HiDPI screens)<br/>, defaults to:Hack</property>
-<property name="jsyntaxtextarea.font.size">, defaults to:14</property>
+<property name="jsyntaxtextarea.font.size">Change the size of the (JSyntax) Text Areas. Will be used only, when <code>jsyntaxtextarea.font.family</code> is set, defaults to:14</property>
 <property name="loggerpanel.usejsyntaxtext"> Set this to false to disable the use of JSyntaxTextArea for the Console Logger panel <br/>, defaults to:true</property>
 <property name=" Maximum size of HTML page that can be displayed; default">, defaults to:10 mbytes</property>
 <property name="view.results.tree.max_size"> Set to 0 to disable the size check and display the whole response<br/>, defaults to:10485760</property>
