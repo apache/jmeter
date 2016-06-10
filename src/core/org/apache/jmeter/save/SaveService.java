@@ -508,7 +508,7 @@ public class SaveService {
 
     /**
      * 
-     * @param reader {@link InputStream} 
+     * @param inputStream {@link InputStream} 
      * @param file the JMX file used only for debug, can be null
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
