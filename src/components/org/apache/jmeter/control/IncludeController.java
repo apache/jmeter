@@ -121,8 +121,9 @@ public class IncludeController extends GenericController implements ReplaceableC
         final String includePath = getIncludePath();
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
+            String fileName=prefix+includePath;
             try {
-                String fileName=prefix+includePath;
+                
                 File file = new File(fileName);
                 final String absolutePath = file.getAbsolutePath();
                 log.info("loadIncludedElements -- try to load included module: "+absolutePath);
@@ -130,10 +131,10 @@ public class IncludeController extends GenericController implements ReplaceableC
                     log.info("loadIncludedElements -failed for: "+absolutePath);
                     file = new File(FileServer.getFileServer().getBaseDir(), includePath);
                     log.info("loadIncludedElements -Attempting to read it from: " + file.getAbsolutePath());
-                    if(!file.exists()){
+                    if(!file.canRead() || !file.isFile()){
                         log.error("loadIncludedElements -failed for: " + file.getAbsolutePath());
-                        throw new IOException("loadIncludedElements -failed for: " + absolutePath +
-                                " and " + file.getAbsolutePath());
+                        throw new IOException("Include Controller \""+ this.getName()+"\" can't load \"" + fileName +
+                                "\" - see log for details" );
                     }
                 }
                 
@@ -152,7 +153,7 @@ public class IncludeController extends GenericController implements ReplaceableC
                 JMeterUtils.reportErrorToUser(msg);
             } catch (FileNotFoundException ex) {
                 String msg = ex.getMessage();
-                JMeterUtils.reportErrorToUser(msg);
+                JMeterUtils.reportErrorToUser("File \""+ fileName + "\" not found for Include Controller \""+ this.getName()+"\"");
                 log.warn(msg);
             } catch (Exception ex) {
                 String msg = ex.getMessage();
