@@ -88,6 +88,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>59351</bug>Improve log/error/message for IncludeController. Partly contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -162,6 +163,7 @@ Summary
 </p>
 <ul>
 <li>Felix Draxler (felix.draxler at sap.com)</li>
+<li>Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
