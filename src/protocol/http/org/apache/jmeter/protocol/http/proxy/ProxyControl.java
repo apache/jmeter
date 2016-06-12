@@ -1161,9 +1161,11 @@ public class ProxyControl extends GenericController {
                             addTimers(treeModel, newNode, deltaTFinal);
                         }
 
-                        for (int i = 0; testElements != null && i < testElements.length; i++) {
-                            if(canTestElementBeAddedUnderSampler(testElements[i])) {
-                                treeModel.addComponent(testElements[i], newNode);
+                        if (testElements != null) {
+                            for (TestElement testElement: testElements) {
+                                if (canTestElementBeAddedUnderSampler(testElement)) {
+                                    treeModel.addComponent(testElement, newNode);
+                                }
                             }
                         }
                     } catch (IllegalUserActionException e) {
