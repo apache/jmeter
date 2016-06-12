@@ -30,6 +30,7 @@ import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -38,6 +39,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.codec.binary.Base64;
@@ -285,6 +287,11 @@ public class ProxyControl extends GenericController {
     private volatile boolean notifyChildSamplerListenersOfFilteredSamples = true;
 
     private volatile boolean regexMatch = false;// Should we match using regexes?
+    
+    private Set<Class<?>> addableInterfaces = new HashSet<>(
+            Arrays.asList(Visualizer.class, ConfigElement.class,
+                    Assertion.class, Timer.class, PreProcessor.class,
+                    PostProcessor.class));
 
     /**
      * Tree node where the samples should be stored.
@@ -1163,7 +1170,7 @@ public class ProxyControl extends GenericController {
 
                         if (testElements != null) {
                             for (TestElement testElement: testElements) {
-                                if (canTestElementBeAddedUnderSampler(testElement)) {
+                                if (isAddableTestElement(testElement)) {
                                     treeModel.addComponent(testElement, newNode);
                                 }
                             }
@@ -1183,26 +1190,28 @@ public class ProxyControl extends GenericController {
      * @param testElement {@link TestElement} to add
      * @return true if testElement can be added to Sampler
      */
-    private boolean canTestElementBeAddedUnderSampler(
+    private boolean isAddableTestElement(
             TestElement testElement) {
-        boolean isElementAddable = 
-                testElement instanceof Visualizer
-                || testElement instanceof ConfigElement
-                || testElement instanceof Assertion
-                || testElement instanceof Timer
-                || testElement instanceof PreProcessor
-                || testElement instanceof PostProcessor;
-        if(isElementAddable) {
-            if(testElement.getProperty(TestElement.GUI_CLASS) != null) {
+        if (hasCorrectInterface(testElement, addableInterfaces)) {
+            if (testElement.getProperty(TestElement.GUI_CLASS) != null) {
                 return true;
             } else {
-                log.error("Cannot add element with no " + TestElement.GUI_CLASS + " property "
-                        + "for testElement:"+testElement);
+                log.error("Cannot add element that lacks the " + TestElement.GUI_CLASS + " property "
+                        + " as testElement:" + testElement);
                 return false;
             }
         } else {
             return false;
         }
+    }
+    
+    private boolean hasCorrectInterface(Object obj, Set<Class<?>> klasses) {
+        for (Class<?> klass: klasses) {
+            if (klass != null && klass.isInstance(obj)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     
