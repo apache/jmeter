@@ -52,6 +52,8 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     private final List<ChangeListener> listeners = new LinkedList<>();
 
     private final String[] filetypes;
+    
+    private boolean onlyDirectories = false;
 
     // Mainly needed for unit test Serialisable tests
     public FilePanelEntry() {
@@ -66,7 +68,15 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         this(label, (ChangeListener) null, exts);
     }
 
+    public FilePanelEntry(String label, boolean onlyDirectories, String ... exts) {
+        this(label, onlyDirectories, (ChangeListener) null, exts);
+    }
+
     public FilePanelEntry(String label, ChangeListener listener, String ... exts) {
+        this(label, false, (ChangeListener) null, exts);
+    }
+    
+    public FilePanelEntry(String label, boolean onlyDirectories, ChangeListener listener, String ... exts) {
         this.label = new JLabel(label);
         if (listener != null) {
             listeners.add(listener);
@@ -79,6 +89,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         } else {
             this.filetypes = null;
         }
+        this.onlyDirectories=onlyDirectories;
         init();
     }
 
@@ -141,9 +152,9 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
         if (e.getActionCommand().equals(ACTION_BROWSE)) {
             JFileChooser chooser;
             if(filetypes == null || filetypes.length == 0){
-                chooser = FileDialoger.promptToOpenFile(filename.getText());
+                chooser = FileDialoger.promptToOpenFile(filename.getText(),onlyDirectories);
             } else {
-                chooser = FileDialoger.promptToOpenFile(filetypes, filename.getText());
+                chooser = FileDialoger.promptToOpenFile(filetypes, filename.getText(),onlyDirectories);
             }
             if (chooser != null && chooser.getSelectedFile() != null) {
                 filename.setText(chooser.getSelectedFile().getPath());
