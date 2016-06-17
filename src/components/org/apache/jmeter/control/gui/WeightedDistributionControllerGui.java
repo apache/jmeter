@@ -47,6 +47,7 @@ import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class WeightedDistributionControllerGui.
  */
@@ -58,10 +59,13 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
     /** The log. */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    /** The Constant LABEL_RESOURCE. */
     private static final String LABEL_RESOURCE = "weighted_distribution_controller_title";
 
+    /** The Constant SEED_LABEL_RESOURCE. */
     private static final String SEED_LABEL_RESOURCE = "weighted_distribution_controller_seed";
 
+    /** The Constant SEED_ERR_MRG_RES. */
     private static final String SEED_ERR_MRG_RES = "weighted_distribution_controller_seed_error";
 
     /** The table. */
@@ -135,36 +139,10 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
         model.reset();
         if (el instanceof WeightedDistributionController && model.size() > 0) {
             WeightedDistributionController wdc = (WeightedDistributionController) el;
-
-            // Determine if the seed has been set
-            if (seedField.getText().length() > 0) {
-                try {
-                    wdc.setSeed(Long.parseLong(seedField.getText()));
-                } catch (NumberFormatException nfe) {
-                    JMeterUtils.reportErrorToUser(
-                            JMeterUtils.getResString(SEED_ERR_MRG_RES));
-                }
-            }
+            setControllerSeedFromGuiField(wdc);
 
             if (wdc.getNode() != null) {
-                while (model.next()) {
-                    // Find the index value of the element from wdc.children
-                    int childNodeIdx = (int) model.getColumnValue(
-                            WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN);
-                    // Retrieve that element
-                    TestElement currTestElement = ((JMeterTreeNode) wdc
-                            .getNode().getChildAt(childNodeIdx))
-                                    .getTestElement();
-                    // Update element with values from the table
-                    currTestElement.setProperty(
-                            WeightedDistributionController.WEIGHT,
-                            (String) model.getColumnValue(
-                                    WeightedDistributionTableModel.WEIGHT_COLUMN));
-                    currTestElement.setName((String) model.getColumnValue(
-                            WeightedDistributionTableModel.ELEMENT_NAME_COLUMN));
-                    currTestElement.setEnabled((boolean) model.getColumnValue(
-                            WeightedDistributionTableModel.ENABLED_COLUMN));
-                }
+                setSubControllersFromTableModel(model, wdc);
             }
         }
         this.configureTestElement(el);
@@ -181,15 +159,11 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
     public void configure(TestElement el) {
         super.configure(el);
         ((PowerTableModel) getTable().getModel()).clearData();
+
         if (el instanceof WeightedDistributionController) {
             WeightedDistributionController wdc = (WeightedDistributionController) el;
 
-            // Set the seed field with the current value from the WDC
-            if (wdc.getSeed() != WeightedDistributionController.DFLT_SEED) {
-                seedField.setText(Long.toString(wdc.getSeed()));
-            } else {
-                seedField.setText("");
-            }
+            setGuiSeedFieldFromController(wdc);
 
             if (wdc.getNode() != null) {
                 wdc.resetCumulativeProbability();
@@ -198,45 +172,7 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
                 // iterate through child test emeb
                 for (int childNodeIdx = 0; childNodeIdx < wdc.getNode()
                         .getChildCount(); childNodeIdx++) {
-
-                    TestElement currTestElement = null;
-                    try {
-                        currTestElement = wdc.getChildTestElement(childNodeIdx);
-                    } catch (Exception ex) {
-                        log.error(
-                                "error retrieving TestElement corresponding to child node #"
-                                        + childNodeIdx,
-                                ex);
-                        continue;
-                    }
-
-                    // filter only controllers & samplers
-                    if (currTestElement instanceof Controller
-                            || currTestElement instanceof Sampler) {
-
-                        // Evaluate any expressions in the weight variable
-                        TestElement currEvalTestElement = wdc
-                                .evaluateTestElement(currTestElement);
-
-                        // Add data to the table
-                        ((PowerTableModel) getTable().getModel()).addRow(
-                                new Object[] { currTestElement.isEnabled(),
-                                        currTestElement.getName(),
-                                        currTestElement.getPropertyAsString(
-                                                WeightedDistributionController.WEIGHT,
-                                                Integer.toString(
-                                                        WeightedDistributionController.DFLT_WEIGHT)),
-                                        currEvalTestElement.getPropertyAsString(
-                                                WeightedDistributionController.WEIGHT),
-                                        currTestElement.isEnabled()
-                                                ? wdc.calculateProbability(
-                                                        currEvalTestElement
-                                                                .getPropertyAsInt(
-                                                                        WeightedDistributionController.WEIGHT,
-                                                                        WeightedDistributionController.DFLT_WEIGHT))
-                                                : 0.0f,
-                                        childNodeIdx });
-                    }
+                    setTableModelRowFromController(wdc, childNodeIdx);
                 }
             }
         }
@@ -290,6 +226,139 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
     private Component createTablePanel() {
         table = WeightedDistributionTableModel.buildWeightedDistributionTable();
         return makeScrollPane(table);
+    }
+
+    /**
+     * Sets the controller seed from gui field.
+     *
+     * @param wdc
+     *            the new controller seed from gui field
+     */
+    private void setControllerSeedFromGuiField(
+            WeightedDistributionController wdc) {
+        // Determine if the seed has been set
+        if (seedField.getText().length() > 0) {
+            try {
+                wdc.setSeed(Long.parseLong(seedField.getText()));
+            } catch (NumberFormatException nfe) {
+                JMeterUtils.reportErrorToUser(
+                        JMeterUtils.getResString(SEED_ERR_MRG_RES));
+            }
+        }
+    }
+
+    /**
+     * Sets the gui seed field from controller.
+     *
+     * @param wdc
+     *            the new gui seed field from controller
+     */
+    private void setGuiSeedFieldFromController(
+            WeightedDistributionController wdc) {
+        if (wdc.getSeed() != WeightedDistributionController.DFLT_SEED) {
+            seedField.setText(Long.toString(wdc.getSeed()));
+        } else {
+            seedField.setText("");
+        }
+    }
+
+    /**
+     * Sets the sub controllers from table model.
+     *
+     * @param model
+     *            the model
+     * @param wdc
+     *            the wdc
+     */
+    private void setSubControllersFromTableModel(Data model,
+            WeightedDistributionController wdc) {
+        while (model.next()) {
+
+            // Find the index value of the element from wdc.children
+            int childNodeIdx = (int) model.getColumnValue(
+                    WeightedDistributionTableModel.HIDDEN_CHILD_NODE_IDX_COLUMN);
+            // Retrieve that element
+            TestElement currTestElement = ((JMeterTreeNode) wdc.getNode()
+                    .getChildAt(childNodeIdx)).getTestElement();
+
+            // Update element with weight from the table
+            String weight = ((String) model.getColumnValue(
+                    WeightedDistributionTableModel.WEIGHT_COLUMN)).trim();
+            if (weight.equals("") || weight.equals("0")) {
+                currTestElement
+                        .removeProperty(WeightedDistributionController.WEIGHT);
+            } else if (!weight.trim()
+                    .equals(currTestElement.getPropertyAsString(
+                            WeightedDistributionController.WEIGHT))) {
+                currTestElement.setProperty(
+                        WeightedDistributionController.WEIGHT, weight);
+            }
+
+            // Update element name if needed
+            String elemName = ((String) model.getColumnValue(
+                    WeightedDistributionTableModel.ELEMENT_NAME_COLUMN)).trim();
+            if (!elemName.equals(currTestElement.getName())) {
+                currTestElement.setName(elemName);
+            }
+
+            // update enabled if needed
+            boolean enabled = (boolean) model.getColumnValue(
+                    WeightedDistributionTableModel.ENABLED_COLUMN);
+            if (enabled != currTestElement.isEnabled()) {
+                currTestElement.setEnabled(enabled);
+            }
+        }
+    }
+
+    /**
+     * Sets the table model row from controller.
+     *
+     * @param wdc
+     *            the wdc
+     * @param childNodeIdx
+     *            the child node idx
+     */
+    private void setTableModelRowFromController(
+            WeightedDistributionController wdc, int childNodeIdx) {
+        TestElement currTestElement = null;
+        try {
+            currTestElement = wdc.getChildTestElement(childNodeIdx);
+        } catch (Exception ex) {
+            log.error(
+                    "error retrieving TestElement corresponding to child node #"
+                            + childNodeIdx,
+                    ex);
+            return;
+        }
+
+        // filter only controllers & samplers
+        if (currTestElement instanceof Controller
+                || currTestElement instanceof Sampler) {
+
+            // Evaluate any expressions in the weight variable
+            TestElement currEvalTestElement = wdc
+                    .evaluateTestElement(currTestElement);
+
+            // Add data to the table
+            boolean enabled = currTestElement.isEnabled();
+            String name = currTestElement.getName();
+            String weight = currTestElement.getPropertyAsString(
+                    WeightedDistributionController.WEIGHT, Integer.toString(
+                            WeightedDistributionController.DFLT_WEIGHT));
+            String evalWeight = currEvalTestElement.getPropertyAsString(
+                    WeightedDistributionController.WEIGHT, Integer.toString(
+                            WeightedDistributionController.DFLT_WEIGHT));
+            float probability = currTestElement.isEnabled()
+                    ? wdc.calculateProbability(
+                            currEvalTestElement.getPropertyAsInt(
+                                    WeightedDistributionController.WEIGHT,
+                                    WeightedDistributionController.DFLT_WEIGHT))
+                    : 0.0f;
+
+            ((PowerTableModel) getTable().getModel())
+                    .addRow(new Object[] { enabled, name, weight, evalWeight,
+                            probability, childNodeIdx });
+        }
     }
 }
 

@@ -19,7 +19,9 @@
 package org.apache.jmeter.control;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Vector;
 
@@ -49,7 +51,7 @@ public class WeightedDistributionController extends InterleaveControl {
     private static final long serialVersionUID = 8554248250211263894L;
 
     /** The log. */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The Constant SEED Property key */
     public static final String SEED = "WeightedDistributionController.seed";
@@ -94,7 +96,7 @@ public class WeightedDistributionController extends InterleaveControl {
         node = null;
         cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
         randomizer = null;
-        replacer = GuiPackage.getInstance().getReplacer();
+        replacer = initValueReplacer();
     }
 
     /*
@@ -155,7 +157,10 @@ public class WeightedDistributionController extends InterleaveControl {
     public void setSeed(long seed) {
         if (getSeed() != seed) {
             setProperty(new LongProperty(SEED, seed));
-            getRandomizer().setSeed(seed);
+            randomizer = null;
+
+            // TODO: set seed later
+            // getRandomizer().setSeed(seed);
         }
     }
 
@@ -223,45 +228,17 @@ public class WeightedDistributionController extends InterleaveControl {
         if (cumulativeProbability == UNSET_CUMULATIVE_PROBABILITY) {
             cumulativeProbability = 0;
 
-            // When calling in during test execution, the child elements are
-            // listed in getSubControllers, but during test design time,
-            // elements need to be pulled from the node tree
-            @SuppressWarnings("rawtypes")
-            Enumeration subControllers = null;
-            if (this.getSubControllers().size() > 0) {
-                subControllers = new Vector<TestElement>(
-                        this.getSubControllers()).elements();
-            } else if (getNode() != null
-                    && getNode().children().hasMoreElements()) {
-                subControllers = getNode().children();
-            }
+            SubControllerIterator subControllerIter = new SubControllerIterator(this);
 
-            while (subControllers != null && subControllers.hasMoreElements()) {
-                Object currSubCtrl = subControllers.nextElement();
-                TestElement currElement;
+            while (subControllerIter.hasNext()) {
+                TestElement currElement = subControllerIter.next();
+                TestElement currEvalSubCtrl = evaluateTestElement(
+                        currElement);
+                int currWeight = currEvalSubCtrl.getPropertyAsInt(WEIGHT,
+                        DFLT_WEIGHT);
 
-                // again, during test execution, the element is in the
-                // getSubControllers() list, otherwise it need to be picked off
-                // of the tree node
-                if (currSubCtrl instanceof JMeterTreeNode) {
-                    currElement = ((JMeterTreeNode) currSubCtrl)
-                            .getTestElement();
-                } else {
-                    currElement = (TestElement) currSubCtrl;
-                }
-
-                if (currElement.isEnabled()
-                        && (currElement instanceof Controller
-                                || currElement instanceof Sampler)) {
-
-                    TestElement currEvalSubCtrl = evaluateTestElement(
-                            currElement);
-                    int currWeight = currEvalSubCtrl.getPropertyAsInt(WEIGHT,
-                            DFLT_WEIGHT);
-
-                    // filter negative weights
-                    cumulativeProbability += (currWeight > 0 ? currWeight : 0);
-                }
+                // filter negative weights
+                cumulativeProbability += (currWeight > 0 ? currWeight : 0);
             }
         }
 
@@ -336,13 +313,11 @@ public class WeightedDistributionController extends InterleaveControl {
      * Initialized the randomizer with the seed, if set.
      */
     private void initRandomizer() {
-        Random rnd;
-        if (getSeed() != DFLT_SEED) {
-            rnd = new Random(getSeed());
+        if (getSeed() == DFLT_SEED) {
+            randomizer = new RandomIntegerGenerator();
         } else {
-            rnd = new Random();
+            randomizer = new RandomIntegerGenerator(getSeed());
         }
-        randomizer = new RandomIntegerGenerator(rnd);
     }
 
     /**
@@ -355,6 +330,7 @@ public class WeightedDistributionController extends InterleaveControl {
             int currentRandomizer = getRandomizer()
                     .nextInt(getCumulativeProbability());
             List<TestElement> subControllers = getSubControllers();
+
             for (int currSubCtrlIdx = 0; currSubCtrlIdx < subControllers
                     .size(); currSubCtrlIdx++) {
                 TestElement currSubController = subControllers
@@ -372,6 +348,87 @@ public class WeightedDistributionController extends InterleaveControl {
         }
         return NO_ELEMENT_FOUND;
     }
+
+    private ValueReplacer initValueReplacer() {
+        ValueReplacer replacer;
+
+        try {
+            replacer = GuiPackage.getInstance().getReplacer();
+        } catch (Exception e) {
+            replacer = new ValueReplacer();
+        }
+
+        return replacer;
+    }
+}
+
+class SubControllerIterator implements Iterator<TestElement> {
+    
+    @SuppressWarnings("rawtypes")
+    private Enumeration subControllerEnumeration = null;
+        
+    private TestElement nextSubController;
+    
+    public SubControllerIterator(WeightedDistributionController wdc) {
+        subControllerEnumeration = null;
+        nextSubController = null;
+        
+        // When calling in during test execution, the child elements are
+        // listed in getSubControllers, but during test design time,
+        // elements need to be pulled from the node tree
+        if (wdc.getSubControllers().size() > 0) {
+            subControllerEnumeration =  new Vector<TestElement>(wdc.getSubControllers()).elements();
+        } else if (wdc.getNode() != null
+                && wdc.getNode().children().hasMoreElements()) {
+            subControllerEnumeration =  wdc.getNode().children();
+        } else {
+            WeightedDistributionController.log.warn("Unable to find subcontrollers");
+            subControllerEnumeration = null;
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        if (nextSubController != null) {
+            return true;
+        } else {
+            setNextSubController();
+            return nextSubController != null;
+        }
+    }
+
+    @Override
+    public TestElement next() {
+        if (nextSubController == null) {
+            setNextSubController();
+            if (nextSubController == null) {
+                throw new NoSuchElementException();
+            }
+        }
+        
+        TestElement returnSubController = nextSubController;
+        nextSubController = null;
+        
+        return returnSubController;
+    }
+    
+    private void setNextSubController() {
+        if (subControllerEnumeration != null && subControllerEnumeration.hasMoreElements()) {
+            Object currSubCtrl = subControllerEnumeration.nextElement();
+            
+            if (currSubCtrl instanceof JMeterTreeNode) {
+                nextSubController = ((JMeterTreeNode) currSubCtrl).getTestElement();
+            } else if (currSubCtrl instanceof TestElement) {
+                nextSubController = (TestElement) currSubCtrl;
+            }
+            
+            if (!(nextSubController.isEnabled()) && (nextSubController instanceof Controller || nextSubController instanceof Sampler)) {
+                setNextSubController();
+            }
+        } else {
+            nextSubController = null;
+        }
+    }
 }
 
 /**
@@ -380,8 +437,6 @@ public class WeightedDistributionController extends InterleaveControl {
  */
 interface IntegerGenerator {
     int nextInt(int n);
-
-    void setSeed(long seed);
 }
 
 /**
@@ -392,17 +447,20 @@ class RandomIntegerGenerator implements IntegerGenerator {
 
     private Random rnd;
 
-    public RandomIntegerGenerator(Random rnd) {
+    public RandomIntegerGenerator() {
+        this(new Random());
+    }
+
+    public RandomIntegerGenerator(long seed) {
+        this(new Random(seed));
+    }
+
+    private RandomIntegerGenerator(Random rnd) {
         this.rnd = rnd;
     }
 
     @Override
     public int nextInt(int n) {
         return rnd.nextInt(n);
-    }
-
-    @Override
-    public void setSeed(long seed) {
-        rnd.setSeed(seed);
     }
 }
