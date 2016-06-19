@@ -157,6 +157,7 @@ Summary
     <li><bug>59621</bug>Error count in report dashboard is one off.</li>
     <li><bug>59657</bug>Only set font in JSyntaxTextArea, when property <code>jsyntaxtextarea.font.family</code> is set.</li>
     <li><bug>59720</bug>Batch test file comparisons fail on Windows as XML files are generated as EOL=LF</li>
+    <li>Code cleanups. Patches by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -167,6 +168,7 @@ Summary
 <ul>
 <li>Felix Draxler (felix.draxler at sap.com)</li>
 <li>Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
+<li>Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
