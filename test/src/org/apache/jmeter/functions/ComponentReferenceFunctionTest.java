@@ -133,10 +133,9 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
             if (ct) {
                 funcTitles.put(title, Boolean.TRUE);// For detecting extra entries
             }
-            if (// Is this a work in progress ?
-            title.indexOf("(ALPHA") == -1 && title.indexOf("(EXPERIMENTAL") == -1) {// No, not a
-                                                                                    // work in progress
-                                                                                    // ...
+            // Is this a work in progress ?
+            if (!title.contains("(ALPHA") && !title.contains("(EXPERIMENTAL")) {
+                // No, not a work in progress ...
                 String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
                 if (!ct) {
                     LOG.warn(s); // Record in log as well
