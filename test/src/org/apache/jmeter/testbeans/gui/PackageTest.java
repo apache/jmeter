@@ -169,7 +169,7 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
         JMeterUtils.setLocale(defaultLocale);
         for (String className : testBeanClassNames) {
             Class<?> testBeanClass = Class.forName(className);
-            ResourceBundle defaultBundle = null;
+            ResourceBundle defaultBundle;
             try {
                 defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
                         GenericTestBeanCustomizer.RESOURCE_BUNDLE);
