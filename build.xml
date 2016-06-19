@@ -2703,7 +2703,7 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
       <arg value="${build.test}"/>
-      <arg value="${basedir}/bin/testfiles/jmetertest.properties"/>
+      <arg value="${basedir}/bin/jmeter.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
   </target>
