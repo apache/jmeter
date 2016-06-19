@@ -2500,7 +2500,7 @@ run JMeter unless all the JMeter jars are added.
       <sequential>
         <local name="found"/>
         <!--echo>Looking for @{file}</echo-->
-        available property="found" file="@{file}"/>
+        <available property="found" file="@{file}"/>
         <fail message="Cannot find @{type} file @{file}" unless="found"/>
       </sequential>
     </macrodef>
