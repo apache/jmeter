@@ -56,8 +56,6 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.converters.ConversionException;
-
 /**
  * This class handles all saving of samples.
  * The class must be thread-safe because it is shared between threads (NoThreadClone).
@@ -386,16 +384,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
-                        } catch (ConversionException e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
                         } catch (Exception e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
+                            log.warn("Failed to load " + filename + " using XStream. Error was: " + e);
                         }
                     }
                 }
             } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
                 // FIXME Why do we catch OOM ?
-                log.warn("Problem reading JTL file: "+file);
+                log.warn("Problem reading JTL file: " + file);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);

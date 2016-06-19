@@ -112,9 +112,7 @@ public class JMeterClientConnectionOperator extends
             Method s = null;
             try {
                 s = cls.getMethod("setHost", String.class);
-            } catch (SecurityException e) {
-                initFail(e);
-            } catch (NoSuchMethodException e) {
+            } catch (SecurityException | NoSuchMethodException e) {
                 initFail(e);
             }
             CURRENT.set(new HostNameSetter(cls, s));
@@ -154,11 +152,9 @@ public class JMeterClientConnectionOperator extends
             if (setter != null) {
                 try {
                     setter.invoke(sslsock, hostname);
-                } catch (IllegalArgumentException e) {
-                    setServerNameIndicationFail(e);
-                } catch (IllegalAccessException e) {
-                    setServerNameIndicationFail(e);
-                } catch (InvocationTargetException e) {
+                } catch (IllegalArgumentException
+                        | IllegalAccessException
+                        | InvocationTargetException e) {
                     setServerNameIndicationFail(e);
                 }
             }
