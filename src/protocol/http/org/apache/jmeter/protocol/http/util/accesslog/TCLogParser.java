@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -517,7 +518,7 @@ public class TCLogParser implements LogParser {
         } else {
             if (decode) {
                 try {
-                    value = URLDecoder.decode(value,"UTF-8");
+                    value = URLDecoder.decode(value, StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException e) {
                     log.warn(e.getMessage());
                 }

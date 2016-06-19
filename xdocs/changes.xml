@@ -158,6 +158,7 @@ Summary
     <li><bug>59657</bug>Only set font in JSyntaxTextArea, when property <code>jsyntaxtextarea.font.family</code> is set.</li>
     <li><bug>59720</bug>Batch test file comparisons fail on Windows as XML files are generated as EOL=LF</li>
     <li>Code cleanups. Patches by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>59722</bug>Use StandardCharsets to reduce the possibility of misspelling Charset names.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
