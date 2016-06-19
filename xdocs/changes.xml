@@ -160,6 +160,7 @@ Summary
     <li>Code cleanups. Patches by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>59722</bug>Use StandardCharsets to reduce the possibility of misspelling Charset names.</li>
     <li><bug>59723</bug>Use jmeter.properties for testing whenever possible</li>
+    <li><bug>59726</bug>Unit test to check that CSV header text and sample format don't change unexpectedly</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
