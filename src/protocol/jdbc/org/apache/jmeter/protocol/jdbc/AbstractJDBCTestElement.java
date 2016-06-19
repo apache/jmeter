@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -77,7 +78,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private static final String OUT = "OUT"; // $NON-NLS-1$
 
     // TODO - should the encoding be configurable?
-    protected static final String ENCODING = "UTF-8"; // $NON-NLS-1$
+    protected static final String ENCODING = StandardCharsets.UTF_8.name();
 
     // key: name (lowercase) from java.sql.Types; entry: corresponding int value
     private static final Map<String, Integer> mapJdbcNameToInt;
@@ -153,7 +154,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @throws IOException when I/O error occurs
      * @throws UnsupportedOperationException if the user provided incorrect query type 
      */
-    protected byte[] execute(Connection conn) throws SQLException, UnsupportedEncodingException, IOException, UnsupportedOperationException {
+    protected byte[] execute(Connection conn) throws SQLException, IOException, UnsupportedOperationException {
         log.debug("executing jdbc");
         Statement stmt = null;
         

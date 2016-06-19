@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class RequestViewHTTP implements RequestView {
 
     private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
     
-    private static final String CHARSET_DECODE = "ISO-8859-1"; //$NON-NLS-1$
+    private static final String CHARSET_DECODE = StandardCharsets.ISO_8859_1.name();
     
     private static final String PARAM_CONCATENATE = "&"; //$NON-NLS-1$
 
