@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.http.parser;
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -211,7 +212,7 @@ class JTidyHTMLParser extends HTMLParser {
         log.debug("Start : getParser");
         Tidy tidy = new Tidy();
         tidy.setInputEncoding(encoding);
-        tidy.setOutputEncoding("UTF8");
+        tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
         if (log.isDebugEnabled()) {
