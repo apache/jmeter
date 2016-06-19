@@ -81,7 +81,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
     }
     
     private Element getBodyFromXMLDocument(InputStream stream)
-            throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
+            throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringElementContentWhitespace(true);
         dbf.setIgnoringComments(true);
