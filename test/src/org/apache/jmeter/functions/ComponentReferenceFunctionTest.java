@@ -68,9 +68,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteFunctions() throws Exception {
         TestSuite suite = new TestSuite("Functions");
-        Iterator<Object> iter = JMeterTest.getObjects(Function.class).iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : JMeterTest.getObjects(Function.class)) {
             if (item.getClass().equals(CompoundVariable.class)) {
                 continue;
             }
@@ -149,9 +147,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {
-        Iterator<?> i = funcItem.getArgumentDesc().iterator();
-        while (i.hasNext()) {
-            Object o = i.next();
+        for (Object o : funcItem.getArgumentDesc()) {
             assertTrue("Description must be a String", o instanceof String);
             assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
         }
