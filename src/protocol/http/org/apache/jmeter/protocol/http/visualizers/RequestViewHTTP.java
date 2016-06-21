@@ -340,22 +340,21 @@ public class RequestViewHTTP implements RequestView {
      * 
      * @param query
      *            to decode
-     * @return a decode query string
+     * @return the decoded query string, if it can be url-decoded. Otherwise the original
+     *            query will be returned.
      */
     public static String decodeQuery(String query) {
         if (query != null && query.length() > 0) {
             try {
-                query = URLDecoder.decode(query, CHARSET_DECODE); // better ISO-8859-1 than UTF-8
-            } catch(IllegalArgumentException e) {
-                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, e);
-                return null;
-            } catch (UnsupportedEncodingException uee) {
-                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, uee);
-                return null;
-            } 
-            return query;
+                return URLDecoder.decode(query, CHARSET_DECODE); // better  ISO-8859-1 than UTF-8
+            } catch (IllegalArgumentException | UnsupportedEncodingException e) {
+                log.warn(
+                        "Error decoding query, maybe your request parameters should be encoded:"
+                                + query, e);
+                return query;
+            }
         }
-        return null;
+        return "";
     }
 
     @Override
