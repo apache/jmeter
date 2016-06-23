@@ -585,6 +585,33 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         assertEquals(0.0, wdc.calculateProbability(0), 0.001);
         assertEquals(0.0, wdc.calculateProbability(100), 0.001);
     }
+    
+    @Test
+    public void testGetChildTestElementReturnsNullInUnitTests() {
+        String[] names = { "Zero - 90%", "One - 9%", "Two - 1%" };
+        int[] wgts = { 90, 9, 1 };
+                       
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        wdc.setRandomizer(new SequentialNumberGenerator());
+
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
+        wdc.addTestElement(sub_0);
+        
+        TestSampler sub_1 = new TestSampler(names[1]);
+        sub_1.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[1])));
+        wdc.addTestElement(sub_1);
+        
+        TestSampler sub_2 = new TestSampler(names[2]);
+        sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
+        wdc.addTestElement(sub_2);
+        
+        assertNull(wdc.getChildNode(0));
+        assertNull(wdc.getChildTestElement(0));
+        assertNull(wdc.getChildNode(1));
+        assertNull(wdc.getChildTestElement(1));
+    }
         
     static int findWeightSum(int[] wgts) {
         int wgtsum = 0;
