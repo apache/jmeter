@@ -50,7 +50,7 @@ public class WeightedDistributionController extends InterleaveControl {
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 8554248250211263894L;
 
-    /** The log. */
+    /** The logger */
     static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The Constant SEED Property key */
@@ -158,9 +158,6 @@ public class WeightedDistributionController extends InterleaveControl {
         if (getSeed() != seed) {
             setProperty(new LongProperty(SEED, seed));
             randomizer = null;
-
-            // TODO: set seed later
-            // getRandomizer().setSeed(seed);
         }
     }
 
@@ -362,6 +359,12 @@ public class WeightedDistributionController extends InterleaveControl {
     }
 }
 
+/**
+ * SubControllerIterator
+ * 
+ * The list of subcontrollers is generated differently if called during test execution rather
+ * Test plan building gui mode, this abstracts the way that are accessed
+ */
 class SubControllerIterator implements Iterator<TestElement> {
     
     @SuppressWarnings("rawtypes")

@@ -145,7 +145,7 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
                 setSubControllersFromTableModel(model, wdc);
             }
         }
-        this.configureTestElement(el);
+        configureTestElement(el);
     }
 
     /*

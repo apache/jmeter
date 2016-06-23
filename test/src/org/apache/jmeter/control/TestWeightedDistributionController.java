@@ -60,6 +60,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
         wdc.addTestElement(sub_2);
         
+        assertEquals(Arrays.stream(wgts).sum(), wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -115,7 +117,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         control.addTestElement(wdc_A);
         control.addTestElement(wdc_B);
-                
+        
         control.setRunningVersion(true);
         wdc_A.setRunningVersion(true);
         wdc_B.setRunningVersion(true);
@@ -180,6 +182,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[5])));
         sub_5.setEnabled(enbs[5]);
         wdc.addTestElement(sub_5);
+        
+        assertEquals(Arrays.stream(exp_wgts).sum(), wdc.getCumulativeProbability());
                 
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
@@ -231,6 +235,60 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[5])));
         wdc.addTestElement(sub_5);
         
+        assertEquals(Arrays.stream(wgts).sum(), wdc.getCumulativeProbability());
+        
+        wdc.setRunningVersion(true);
+        sub_0.setRunningVersion(true);
+        sub_1.setRunningVersion(true);
+        sub_2.setRunningVersion(true);
+        sub_3.setRunningVersion(true);
+        sub_4.setRunningVersion(true);
+        sub_5.setRunningVersion(true);
+        wdc.initialize();
+        
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    @Test
+    public void testDistributionWithNegativeWeights() {
+        int no_of_iters = 1000;
+        
+        String[] names = { "Zero - negative 1%", "One - 1%", "Two - 9%", "Three - negative 1%", "Four - 90%", "Five - negative 1%" };
+        int[] wgts = { -1, 1, 9, -1, 90, -1 };
+        int[] exps = SequentialNumberGenerator.findExpectedResults(wgts, no_of_iters);
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        wdc.setRandomizer(new SequentialNumberGenerator());
+        
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
+        wdc.addTestElement(sub_0);
+        
+        TestSampler sub_1 = new TestSampler(names[1]);
+        sub_1.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[1])));
+        wdc.addTestElement(sub_1);
+        
+        TestSampler sub_2 = new TestSampler(names[2]);
+        sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
+        wdc.addTestElement(sub_2);
+        
+        TestSampler sub_3 = new TestSampler(names[3]);
+        sub_3.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[3])));
+        wdc.addTestElement(sub_3);
+        
+        TestSampler sub_4 = new TestSampler(names[4]);
+        sub_4.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[4])));
+        wdc.addTestElement(sub_4);
+        
+        TestSampler sub_5 = new TestSampler(names[5]);
+        sub_5.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[5])));
+        wdc.addTestElement(sub_5);
+        
+        //assertEquals(Arrays.stream(exps).sum(), wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -271,6 +329,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setEnabled(false);
         wdc.addTestElement(sub_2);
         
+        assertEquals(0, wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -306,6 +366,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
         wdc.addTestElement(sub_2);
         
+        assertEquals(0, wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         sub_1.setRunningVersion(true);
@@ -333,6 +395,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
         wdc.addTestElement(sub_0);
         
+        assertEquals(1, wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         wdc.initialize();
@@ -358,6 +422,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_0.setEnabled(false);
         wdc.addTestElement(sub_0);
         
+        assertEquals(0, wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         wdc.initialize();
@@ -382,6 +448,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
         wdc.addTestElement(sub_0);
         
+        assertEquals(0, wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
         wdc.initialize();
@@ -397,6 +465,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        assertEquals(0, wdc.getCumulativeProbability());
         
         wdc.setRunningVersion(true);
         wdc.initialize();
@@ -448,6 +518,8 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         TestElement eval_sub_2 = wdc.evaluateTestElement(sub_2);
         wdc.addTestElement(eval_sub_2);
         
+        assertEquals(Arrays.stream(wgtsEval).sum(), wdc.getCumulativeProbability());
+        
         wdc.setRunningVersion(true);
         eval_sub_0.setRunningVersion(true);
         eval_sub_1.setRunningVersion(true);
@@ -460,10 +532,66 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
     }
     
+    @Test
+    public void testSetSeed() {
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        wdc.setSeed(1);
+        assertEquals(85, wdc.getRandomizer().nextInt(100));
+        assertEquals(88, wdc.getRandomizer().nextInt(100));
+        wdc.setSeed(2);
+        assertEquals(8, wdc.getRandomizer().nextInt(100));
+        assertEquals(72, wdc.getRandomizer().nextInt(100));
+        wdc.setSeed(1);
+        assertEquals(85, wdc.getRandomizer().nextInt(100));
+        assertEquals(88, wdc.getRandomizer().nextInt(100));
+        wdc.setSeed(1);
+        assertEquals(47, wdc.getRandomizer().nextInt(100));
+        assertEquals(13, wdc.getRandomizer().nextInt(100));
+    }
+    
+    @Test
+    public void testCalculateProbability() {
+        String[] names = { "Zero - 90%", "One - 9%", "Two - 1%" };
+        int[] wgts = { 90, 9, 1 };
+                       
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        wdc.setRandomizer(new SequentialNumberGenerator());
+
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
+        wdc.addTestElement(sub_0);
+        
+        TestSampler sub_1 = new TestSampler(names[1]);
+        sub_1.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[1])));
+        wdc.addTestElement(sub_1);
+        
+        TestSampler sub_2 = new TestSampler(names[2]);
+        sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
+        wdc.addTestElement(sub_2);
+        
+        assertEquals(0.0, wdc.calculateProbability(0), 0.001);
+        assertEquals(0.0, wdc.calculateProbability(-1), 0.001);
+        wdc.resetCumulativeProbability();
+        assertEquals(0.01, wdc.calculateProbability(1), 0.001);
+        assertEquals(0.1, wdc.calculateProbability(10), 0.001);
+        assertEquals(1.0, wdc.calculateProbability(100), 0.001);
+        assertEquals(2.0, wdc.calculateProbability(200), 0.001);
+        
+        wdc = new WeightedDistributionController();
+        sub_0 = new TestSampler("Zero");
+        sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(0)));
+        wdc.addTestElement(sub_0);
+        
+        assertEquals(0.0, wdc.calculateProbability(0), 0.001);
+        assertEquals(0.0, wdc.calculateProbability(100), 0.001);
+    }
+        
     static int findWeightSum(int[] wgts) {
         int wgtsum = 0;
         for (int wgt : wgts) {
-            wgtsum += wgt;
+            if (wgt > 0) {
+                wgtsum += wgt;
+            }
         }
         return wgtsum;
     }
@@ -516,12 +644,13 @@ class SequentialNumberGenerator implements IntegerGenerator {
         int remainingIters = wgtsum > 0 ? iters % wgtsum : 0;
         
         for (int i = 0; i < exps.length; i++) {
-            exps[i] = (completedIters * wgts[i] + (remainingIters > 0
-                    ? remainingIters > wgts[i]
-                            ? wgts[i]
+            int currWgt = wgts[i] > 0 ? wgts[i] : 0;
+            exps[i] = (completedIters * currWgt + (remainingIters > 0
+                    ? remainingIters > currWgt
+                            ? currWgt
                             : remainingIters
                     : 0));
-            remainingIters -= wgts[i];                         
+            remainingIters -= currWgt;
         }
         
         return exps;
