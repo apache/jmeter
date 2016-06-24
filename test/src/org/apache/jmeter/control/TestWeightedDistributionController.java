@@ -46,7 +46,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
                        
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
 
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
@@ -90,7 +90,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         GenericController control = new GenericController();
         
         WeightedDistributionController wdc_A = new WeightedDistributionController();
-        wdc_A.setRandomizer(new SequentialNumberGenerator());
+        wdc_A.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_A_0 = new TestSampler(names[0]);
         sub_A_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
@@ -105,7 +105,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         wdc_A.addTestElement(sub_A_2);
         
         WeightedDistributionController wdc_B = new WeightedDistributionController();
-        wdc_B.setRandomizer(new SequentialNumberGenerator());
+        wdc_B.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_B_3 = new TestSampler(names[3]);
         sub_B_3.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[3])));
@@ -151,7 +151,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT, Integer.toString(wgts[0])));
@@ -209,7 +209,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
@@ -261,7 +261,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
@@ -460,6 +460,33 @@ public class TestWeightedDistributionController extends JMeterTestCase {
     }
     
     @Test
+    public void testDistributionWithOneNegativeWeightSampler() {
+        int no_of_iters = 1000;
+        
+        String[] names = { "Negative One" };
+        int[] wgts = { -1 };
+        int[] exps = { 0 };
+        
+        testLog.debug("Testing WeightedDistributionController percentage distribution");
+        WeightedDistributionController wdc = new WeightedDistributionController();
+        
+        TestSampler sub_0 = new TestSampler(names[0]);
+        sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
+        wdc.addTestElement(sub_0);
+        
+        assertEquals(0, wdc.getCumulativeProbability());
+        
+        wdc.setRunningVersion(true);
+        sub_0.setRunningVersion(true);
+        wdc.initialize();
+        
+        int[] results = executeTest(wdc, names, no_of_iters);
+        
+        assertArrayEquals(exps, results);
+    }
+    
+    
+    @Test
     public void testDistributionWithNoSamplers() {
         int no_of_iters = 1000;
         
@@ -501,7 +528,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
                        
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
         
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  wgtsStr[0]));
@@ -535,18 +562,18 @@ public class TestWeightedDistributionController extends JMeterTestCase {
     @Test
     public void testSetSeed() {
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setSeed(1);
-        assertEquals(85, wdc.getRandomizer().nextInt(100));
-        assertEquals(88, wdc.getRandomizer().nextInt(100));
-        wdc.setSeed(2);
-        assertEquals(8, wdc.getRandomizer().nextInt(100));
-        assertEquals(72, wdc.getRandomizer().nextInt(100));
-        wdc.setSeed(1);
-        assertEquals(85, wdc.getRandomizer().nextInt(100));
-        assertEquals(88, wdc.getRandomizer().nextInt(100));
-        wdc.setSeed(1);
-        assertEquals(47, wdc.getRandomizer().nextInt(100));
-        assertEquals(13, wdc.getRandomizer().nextInt(100));
+        wdc.setGeneratorSeed(1);
+        assertEquals(85, wdc.getIntegerGenerator().nextInt(100));
+        assertEquals(88, wdc.getIntegerGenerator().nextInt(100));
+        wdc.setGeneratorSeed(2);
+        assertEquals(8, wdc.getIntegerGenerator().nextInt(100));
+        assertEquals(72, wdc.getIntegerGenerator().nextInt(100));
+        wdc.setGeneratorSeed(1);
+        assertEquals(85, wdc.getIntegerGenerator().nextInt(100));
+        assertEquals(88, wdc.getIntegerGenerator().nextInt(100));
+        wdc.setGeneratorSeed(1);
+        assertEquals(47, wdc.getIntegerGenerator().nextInt(100));
+        assertEquals(13, wdc.getIntegerGenerator().nextInt(100));
     }
     
     @Test
@@ -555,7 +582,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         int[] wgts = { 90, 9, 1 };
                        
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
 
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
@@ -593,7 +620,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
                        
         testLog.debug("Testing WeightedDistributionController percentage distribution");
         WeightedDistributionController wdc = new WeightedDistributionController();
-        wdc.setRandomizer(new SequentialNumberGenerator());
+        wdc.setIntegerGenerator(new SequentialNumberGenerator());
 
         TestSampler sub_0 = new TestSampler(names[0]);
         sub_0.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[0])));
