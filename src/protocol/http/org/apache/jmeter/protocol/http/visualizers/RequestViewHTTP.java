@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class RequestViewHTTP implements RequestView {
 
     private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
     
-    private static final String CHARSET_DECODE = "ISO-8859-1"; //$NON-NLS-1$
+    private static final String CHARSET_DECODE = StandardCharsets.ISO_8859_1.name();
     
     private static final String PARAM_CONCATENATE = "&"; //$NON-NLS-1$
 
@@ -297,9 +298,8 @@ public class RequestViewHTTP implements RequestView {
         String[] params = query.split(PARAM_CONCATENATE);
         for (String param : params) {
             String[] paramSplit = param.split("=");
-            String name = paramSplit[0];
-            name = decodeQuery(name);
-            
+            String name = decodeQuery(paramSplit[0]);
+
             // hack for SOAP request (generally)
             if (name.trim().startsWith("<?")) { // $NON-NLS-1$
                 map.put(" ", new String[] {query}); //blank name // $NON-NLS-1$
@@ -314,8 +314,7 @@ public class RequestViewHTTP implements RequestView {
 
             String value = "";
             if(paramSplit.length>1) {
-                value = paramSplit[1];
-                value = decodeQuery(value);
+                value = decodeQuery(paramSplit[1]);
             }
             
             String[] known = map.get(name);
@@ -339,22 +338,21 @@ public class RequestViewHTTP implements RequestView {
      * 
      * @param query
      *            to decode
-     * @return a decode query string
+     * @return the decoded query string, if it can be url-decoded. Otherwise the original
+     *            query will be returned.
      */
     public static String decodeQuery(String query) {
         if (query != null && query.length() > 0) {
             try {
-                query = URLDecoder.decode(query, CHARSET_DECODE); // better ISO-8859-1 than UTF-8
-            } catch(IllegalArgumentException e) {
-                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, e);
-                return null;
-            } catch (UnsupportedEncodingException uee) {
-                log.warn("Error decoding query, maybe your request parameters should be encoded:" + query, uee);
-                return null;
-            } 
-            return query;
+                return URLDecoder.decode(query, CHARSET_DECODE); // better  ISO-8859-1 than UTF-8
+            } catch (IllegalArgumentException | UnsupportedEncodingException e) {
+                log.warn(
+                        "Error decoding query, maybe your request parameters should be encoded:"
+                                + query, e);
+                return query;
+            }
         }
-        return null;
+        return "";
     }
 
     @Override

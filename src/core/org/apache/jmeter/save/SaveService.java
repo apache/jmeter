@@ -474,7 +474,7 @@ public class SaveService {
 
     /**
      * Load a Test tree (JMX file)
-     * @param reader the JMX file as an {@link InputStream}
+     * @param inputStream the JMX file as an {@link InputStream}
      * @return the loaded tree or null if an error occurs
      * @throws IOException if there is a problem reading the file or processing it
      * @deprecated use {@link SaveService}{@link #loadTree(File)}
@@ -508,7 +508,7 @@ public class SaveService {
 
     /**
      * 
-     * @param reader {@link InputStream} 
+     * @param inputStream {@link InputStream} 
      * @param file the JMX file used only for debug, can be null
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it

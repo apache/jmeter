@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.protocol.ldap.sampler;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1031,14 +1031,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             return StringEscapeUtils.escapeXml10((String)value);
         }
         if (value instanceof byte[]) {
-            try
-            {
-                return StringEscapeUtils.escapeXml10(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                log.error("this can't happen: UTF-8 character encoding not supported", e);
-            }
+            return StringEscapeUtils.escapeXml10(new String((byte[])value, StandardCharsets.UTF_8));
         }
         return StringEscapeUtils.escapeXml10(value.toString());
     }

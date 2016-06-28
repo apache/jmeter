@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,7 +160,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
      *
      */
     private Document parseResponse(String unicodeData, XPathExtractor extractor)
-      throws UnsupportedEncodingException, IOException, ParserConfigurationException,SAXException,TidyException
+      throws IOException, ParserConfigurationException,SAXException,TidyException
     {
       //TODO: validate contentType for reasonable types?
 
@@ -168,7 +168,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
       //       Therefore we do byte -> unicode -> byte conversion
       //       to ensure UTF-8 encoding as required by XPathUtil
       // convert unicode String -> UTF-8 bytes
-      byte[] utf8data = unicodeData.getBytes("UTF-8"); // $NON-NLS-1$
+      byte[] utf8data = unicodeData.getBytes(StandardCharsets.UTF_8);
       ByteArrayInputStream in = new ByteArrayInputStream(utf8data);
       boolean isXML = JOrphanUtils.isXML(utf8data);
       // this method assumes UTF-8 input data

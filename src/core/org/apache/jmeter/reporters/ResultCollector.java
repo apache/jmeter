@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,8 +56,6 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-
-import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
  * This class handles all saving of samples.
@@ -386,16 +385,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
-                        } catch (ConversionException e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
                         } catch (Exception e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
+                            log.warn("Failed to load " + filename + " using XStream. Error was: " + e);
                         }
                     }
                 }
             } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
                 // FIXME Why do we catch OOM ?
-                log.warn("Problem reading JTL file: "+file);
+                log.warn("Problem reading JTL file: " + file);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
@@ -470,7 +467,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-                    trimmed)), SaveService.getFileEncoding("UTF-8")), SAVING_AUTOFLUSH); // $NON-NLS-1$
+                    trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
             log.debug("Opened file: "+filename);
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {

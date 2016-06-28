@@ -68,9 +68,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
      */
     private static Test suiteFunctions() throws Exception {
         TestSuite suite = new TestSuite("Functions");
-        Iterator<Object> iter = JMeterTest.getObjects(Function.class).iterator();
-        while (iter.hasNext()) {
-            Object item = iter.next();
+        for (Object item : JMeterTest.getObjects(Function.class)) {
             if (item.getClass().equals(CompoundVariable.class)) {
                 continue;
             }
@@ -83,7 +81,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
     }
     
     private Element getBodyFromXMLDocument(InputStream stream)
-            throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
+            throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringElementContentWhitespace(true);
         dbf.setIgnoringComments(true);
@@ -133,10 +131,9 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
             if (ct) {
                 funcTitles.put(title, Boolean.TRUE);// For detecting extra entries
             }
-            if (// Is this a work in progress ?
-            title.indexOf("(ALPHA") == -1 && title.indexOf("(EXPERIMENTAL") == -1) {// No, not a
-                                                                                    // work in progress
-                                                                                    // ...
+            // Is this a work in progress ?
+            if (!title.contains("(ALPHA") && !title.contains("(EXPERIMENTAL")) {
+                // No, not a work in progress ...
                 String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
                 if (!ct) {
                     LOG.warn(s); // Record in log as well
@@ -150,9 +147,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
      * Check that function descriptions are OK
      */
     public void runFunction2() throws Exception {
-        Iterator<?> i = funcItem.getArgumentDesc().iterator();
-        while (i.hasNext()) {
-            Object o = i.next();
+        for (Object o : funcItem.getArgumentDesc()) {
             assertTrue("Description must be a String", o instanceof String);
             assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));
         }
