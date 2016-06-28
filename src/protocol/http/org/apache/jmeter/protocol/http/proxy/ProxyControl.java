@@ -30,6 +30,7 @@ import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -38,6 +39,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.codec.binary.Base64;
@@ -47,6 +49,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.conn.ssl.AbstractVerifier;
+import org.apache.jmeter.assertions.Assertion;
 import org.apache.jmeter.assertions.ResponseAssertion;
 import org.apache.jmeter.assertions.gui.AssertionGui;
 import org.apache.jmeter.config.Arguments;
@@ -62,6 +65,8 @@ import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
+import org.apache.jmeter.processor.PostProcessor;
+import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.Header;
@@ -90,6 +95,7 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
@@ -281,6 +287,11 @@ public class ProxyControl extends GenericController {
     private volatile boolean notifyChildSamplerListenersOfFilteredSamples = true;
 
     private volatile boolean regexMatch = false;// Should we match using regexes?
+    
+    private Set<Class<?>> addableInterfaces = new HashSet<>(
+            Arrays.asList(Visualizer.class, ConfigElement.class,
+                    Assertion.class, Timer.class, PreProcessor.class,
+                    PostProcessor.class));
 
     /**
      * Tree node where the samples should be stored.
@@ -539,12 +550,12 @@ public class ProxyControl extends GenericController {
      * Always sends the result to any registered sample listeners.
      *
      * @param sampler the sampler, may be null
-     * @param subConfigs the configuration elements to be added (e.g. header namager)
+     * @param testElements the test elements to be added (e.g. header namager) under the Sampler
      * @param result the sample result, not null
      * TODO param serverResponse to be added to allow saving of the
      * server's response while recording.
      */
-    public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs, final SampleResult result) {
+    public synchronized void deliverSampler(final HTTPSamplerBase sampler, final TestElement[] testElements, final SampleResult result) {
         boolean notifySampleListeners = true;
         if (sampler != null) {
             if (ATTEMPT_REDIRECT_DISABLING && (samplerRedirectAutomatically || samplerFollowRedirects)) {
@@ -575,7 +586,7 @@ public class ProxyControl extends GenericController {
                 Collection<Arguments> userDefinedVariables = (Collection<Arguments>) findApplicableElements(myTarget, Arguments.class, true);
 
                 removeValuesFromSampler(sampler, defaultConfigurations);
-                replaceValues(sampler, subConfigs, userDefinedVariables);
+                replaceValues(sampler, testElements, userDefinedVariables);
                 sampler.setAutoRedirects(samplerRedirectAutomatically);
                 sampler.setFollowRedirects(samplerFollowRedirects);
                 sampler.setUseKeepAlive(useKeepAlive);
@@ -585,11 +596,11 @@ public class ProxyControl extends GenericController {
                     sampler.setName(prefix + sampler.getName());
                     result.setSampleLabel(prefix + result.getSampleLabel());
                 }
-                Authorization authorization = createAuthorization(subConfigs, sampler);
+                Authorization authorization = createAuthorization(testElements, sampler);
                 if (authorization != null) {
                     setAuthorization(authorization, myTarget);
                 }
-                placeSampler(sampler, subConfigs, myTarget);
+                placeSampler(sampler, testElements, myTarget);
             } else {
                 if(log.isDebugEnabled()) {
                     log.debug("Sample excluded based on url or content-type: " + result.getUrlAsString() + " - " + result.getContentType());
@@ -616,11 +627,11 @@ public class ProxyControl extends GenericController {
      * @param sampler {@link HTTPSamplerBase}
      * @return {@link Authorization}
      */
-    private Authorization createAuthorization(final TestElement[] subConfigs, HTTPSamplerBase sampler) {
+    private Authorization createAuthorization(final TestElement[] testElements, HTTPSamplerBase sampler) {
         Header authHeader = null;
         Authorization authorization = null;
         // Iterate over subconfig elements searching for HeaderManager
-        for (TestElement te : subConfigs) {
+        for (TestElement te : testElements) {
             if (te instanceof HeaderManager) {
                 @SuppressWarnings("unchecked") // headers should only contain the correct classes
                 List<TestElementProperty> headers = (ArrayList<TestElementProperty>) ((HeaderManager) te).getHeaders().getObjectValue();
@@ -1093,7 +1104,7 @@ public class ProxyControl extends GenericController {
         return elements;
     }
 
-    private void placeSampler(final HTTPSamplerBase sampler, final TestElement[] subConfigs,
+    private void placeSampler(final HTTPSamplerBase sampler, final TestElement[] testElements,
             JMeterTreeNode myTarget) {
         try {
             final JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
@@ -1157,23 +1168,53 @@ public class ProxyControl extends GenericController {
                             addTimers(treeModel, newNode, deltaTFinal);
                         }
 
-                        for (int i = 0; subConfigs != null && i < subConfigs.length; i++) {
-                            if (subConfigs[i] instanceof HeaderManager) {
-                                final TestElement headerManager = subConfigs[i];
-                                headerManager.setProperty(TestElement.GUI_CLASS, HEADER_PANEL);
-                                treeModel.addComponent(headerManager, newNode);
+                        if (testElements != null) {
+                            for (TestElement testElement: testElements) {
+                                if (isAddableTestElement(testElement)) {
+                                    treeModel.addComponent(testElement, newNode);
+                                }
                             }
                         }
                     } catch (IllegalUserActionException e) {
                         JMeterUtils.reportErrorToUser(e.getMessage());
                     }
                 }
+
             });
         } catch (Exception e) {
             JMeterUtils.reportErrorToUser(e.getMessage());
         }
     }
 
+    /**
+     * @param testElement {@link TestElement} to add
+     * @return true if testElement can be added to Sampler
+     */
+    private boolean isAddableTestElement(
+            TestElement testElement) {
+        if (hasCorrectInterface(testElement, addableInterfaces)) {
+            if (testElement.getProperty(TestElement.GUI_CLASS) != null) {
+                return true;
+            } else {
+                log.error("Cannot add element that lacks the " + TestElement.GUI_CLASS + " property "
+                        + " as testElement:" + testElement);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    private boolean hasCorrectInterface(Object obj, Set<Class<?>> klasses) {
+        for (Class<?> klass: klasses) {
+            if (klass != null && klass.isInstance(obj)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
     /**
      * Remove from the sampler all values which match the one provided by the
      * first configuration in the given collection which provides a value for

@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -127,7 +128,7 @@ public class ConversionUtils {
      * @throws Exception when given <code>url</code> leads to a malformed URL or URI
      */
     public static String escapeIllegalURLCharacters(String url) throws Exception{
-        String decodeUrl = URLDecoder.decode(url,"UTF-8");
+        String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
         URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
         return uri.toString();

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -358,23 +359,18 @@ public class TCLogParser implements LogParser {
      */
     public String cleanURL(String entry) {
         String url = entry;
-        // if the string contains atleast one double
-        // quote and checkMethod is true, go ahead
-        // and tokenize the string.
-        if (entry.indexOf('"') > -1 && checkMethod(entry)) {
-            StringTokenizer tokens = null;
+        if (entry.contains("\"") && checkMethod(entry)) {
             // we tokenize using double quotes. this means
             // for tomcat we should have 3 tokens if there
             // isn't any additional information in the logs
-            tokens = this.tokenize(entry, "\"");
+            StringTokenizer tokens = this.tokenize(entry, "\"");
             while (tokens.hasMoreTokens()) {
-                String toke = tokens.nextToken();
-                // if checkMethod on the token is true
-                // we tokenzie it using space and escape
-                // the while loop. Only the first matching
-                // token will be used
-                if (checkMethod(toke)) {
-                    StringTokenizer token2 = this.tokenize(toke, " ");
+                String token = tokens.nextToken();
+                if (checkMethod(token)) {
+                    // we tokenzie it using space and escape
+                    // the while loop. Only the first matching
+                    // token will be used
+                    StringTokenizer token2 = this.tokenize(token, " ");
                     while (token2.hasMoreTokens()) {
                         String t = (String) token2.nextElement();
                         if (t.equalsIgnoreCase(GET)) {
@@ -432,7 +428,7 @@ public class TCLogParser implements LogParser {
      * @return String presenting the parameters, or <code>null</code> when none where found
      */
     public String stripFile(String url, TestElement el) {
-        if (url.indexOf('?') > -1) {
+        if (url.contains("?")) {
             StringTokenizer tokens = this.tokenize(url, "?");
             this.URL_PATH = tokens.nextToken();
             el.setProperty(HTTPSamplerBase.PATH, URL_PATH);
@@ -451,10 +447,7 @@ public class TCLogParser implements LogParser {
      *         <code>false</code> otherwise
      */
     public boolean checkURL(String url) {
-        if (url.indexOf('?') > -1) {
-            return true;
-        }
-        return false;
+        return url.contains("?");
     }
 
     /**
@@ -466,10 +459,7 @@ public class TCLogParser implements LogParser {
      *         and <code>=</code>, <code>false</code> otherwise
      */
     public boolean checkParamFormat(String text) {
-        if (text.indexOf('&') > -1 && text.indexOf('=') > -1) {
-            return true;
-        }
-        return false;
+        return text.contains("&") && text.contains("=");
     }
 
     /**
@@ -528,7 +518,7 @@ public class TCLogParser implements LogParser {
         } else {
             if (decode) {
                 try {
-                    value = URLDecoder.decode(value,"UTF-8");
+                    value = URLDecoder.decode(value, StandardCharsets.UTF_8.name());
                 } catch (UnsupportedEncodingException e) {
                     log.warn(e.getMessage());
                 }
