@@ -239,7 +239,7 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
         // Determine if the seed has been set
         if (seedField.getText().length() > 0) {
             try {
-                wdc.setSeed(Long.parseLong(seedField.getText()));
+                wdc.setGeneratorSeed(Long.parseLong(seedField.getText()));
             } catch (NumberFormatException nfe) {
                 JMeterUtils.reportErrorToUser(
                         JMeterUtils.getResString(SEED_ERR_MRG_RES));
@@ -255,8 +255,8 @@ public class WeightedDistributionControllerGui extends AbstractControllerGui {
      */
     private void setGuiSeedFieldFromController(
             WeightedDistributionController wdc) {
-        if (wdc.getSeed() != WeightedDistributionController.DFLT_SEED) {
-            seedField.setText(Long.toString(wdc.getSeed()));
+        if (wdc.getGeneratorSeed() != WeightedDistributionController.DFLT_GENERATOR_SEED) {
+            seedField.setText(Long.toString(wdc.getGeneratorSeed()));
         } else {
             seedField.setText("");
         }

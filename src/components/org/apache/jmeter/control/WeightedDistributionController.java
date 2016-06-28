@@ -54,7 +54,7 @@ public class WeightedDistributionController extends InterleaveControl {
     static final Logger log = LoggingManager.getLoggerForClass();
 
     /** The Constant SEED Property key */
-    public static final String SEED = "WeightedDistributionController.seed";
+    public static final String GENERATOR_SEED = "WeightedDistributionController.seed";
 
     /** The Constant WEIGHT Property key */
     public static final String WEIGHT = "WeightedDistributionController.weight";
@@ -63,13 +63,7 @@ public class WeightedDistributionController extends InterleaveControl {
     public static final int DFLT_WEIGHT = 0;
 
     /** The Constant DFLT_SEED. Default Seed value */
-    public static final long DFLT_SEED = 0l;
-
-    /**
-     * The Constant UNSET_CUMULATIVE_PROBABILITY. Flag that cumulative
-     * probability needs to be re-calculated
-     */
-    private static final int UNSET_CUMULATIVE_PROBABILITY = -1;
+    public static final long DFLT_GENERATOR_SEED = 0l;
 
     /**
      * The Constant NO_ELEMENT_FOUND. Used as flag to indicate that No elements
@@ -84,18 +78,20 @@ public class WeightedDistributionController extends InterleaveControl {
     private transient JMeterTreeNode node;
 
     /** The randomizer. */
-    private transient IntegerGenerator randomizer;
+    private transient IntegerGenerator integerGenerator;
 
     /** The value replacer for evaluating variable properties. */
     private transient ValueReplacer replacer;
+    
+    private transient boolean resetCumulativeProbability;
 
     /**
      * Instantiates a new weighted distribution controller.
      */
     public WeightedDistributionController() {
         node = null;
-        cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
-        randomizer = null;
+        resetCumulativeProbability = true;
+        integerGenerator = null;
         replacer = initValueReplacer();
     }
 
@@ -143,9 +139,9 @@ public class WeightedDistributionController extends InterleaveControl {
      *
      * @return the seed
      */
-    public long getSeed() {
-        return getPropertyAsLong(SEED,
-                WeightedDistributionController.DFLT_SEED);
+    public long getGeneratorSeed() {
+        return getPropertyAsLong(GENERATOR_SEED,
+                WeightedDistributionController.DFLT_GENERATOR_SEED);
     }
 
     /**
@@ -154,10 +150,10 @@ public class WeightedDistributionController extends InterleaveControl {
      * @param seed
      *            the new seed
      */
-    public void setSeed(long seed) {
-        if (getSeed() != seed) {
-            setProperty(new LongProperty(SEED, seed));
-            randomizer = null;
+    public void setGeneratorSeed(long seed) {
+        if (getGeneratorSeed() != seed) {
+            setProperty(new LongProperty(GENERATOR_SEED, seed));
+            integerGenerator = null;
         }
     }
 
@@ -166,11 +162,11 @@ public class WeightedDistributionController extends InterleaveControl {
      *
      * @return the randomizer
      */
-    public IntegerGenerator getRandomizer() {
-        if (randomizer == null) {
-            initRandomizer();
+    public IntegerGenerator getIntegerGenerator() {
+        if (integerGenerator == null) {
+            initIntegerGenerator();
         }
-        return randomizer;
+        return integerGenerator;
     }
 
     /**
@@ -179,8 +175,8 @@ public class WeightedDistributionController extends InterleaveControl {
      * @param intgen
      *            the new randomizer
      */
-    public void setRandomizer(IntegerGenerator intgen) {
-        randomizer = intgen;
+    public void setIntegerGenerator(IntegerGenerator intgen) {
+        integerGenerator = intgen;
     }
 
     /**
@@ -222,8 +218,9 @@ public class WeightedDistributionController extends InterleaveControl {
      */
     public int getCumulativeProbability() {
         // recalculate if reset flag is set
-        if (cumulativeProbability == UNSET_CUMULATIVE_PROBABILITY) {
+        if (resetCumulativeProbability) {
             cumulativeProbability = 0;
+            resetCumulativeProbability = false;
 
             SubControllerIterator subControllerIter = new SubControllerIterator(this);
 
@@ -246,7 +243,8 @@ public class WeightedDistributionController extends InterleaveControl {
      * Reset cumulative probability.
      */
     public void resetCumulativeProbability() {
-        cumulativeProbability = UNSET_CUMULATIVE_PROBABILITY;
+        resetCumulativeProbability = true;
+        cumulativeProbability = 0;
     }
 
     /**
@@ -309,11 +307,11 @@ public class WeightedDistributionController extends InterleaveControl {
     /**
      * Initialized the randomizer with the seed, if set.
      */
-    private void initRandomizer() {
-        if (getSeed() == DFLT_SEED) {
-            randomizer = new RandomIntegerGenerator();
+    private void initIntegerGenerator() {
+        if (getGeneratorSeed() == DFLT_GENERATOR_SEED) {
+            integerGenerator = new RandomIntegerGenerator();
         } else {
-            randomizer = new RandomIntegerGenerator(getSeed());
+            integerGenerator = new RandomIntegerGenerator(getGeneratorSeed());
         }
     }
 
@@ -324,7 +322,7 @@ public class WeightedDistributionController extends InterleaveControl {
      */
     private int determineCurrentTestElement() {
         if (getCumulativeProbability() > 0) {
-            int currentRandomizer = getRandomizer()
+            int currentRandomizer = getIntegerGenerator()
                     .nextInt(getCumulativeProbability());
             List<TestElement> subControllers = getSubControllers();
 
