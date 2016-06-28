@@ -121,8 +121,8 @@ public class IncludeController extends GenericController implements ReplaceableC
         final String includePath = getIncludePath();
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
-            String fileName=prefix+includePath;
             try {
+                String fileName=prefix+includePath;
                 File file = new File(fileName);
                 final String absolutePath = file.getAbsolutePath();
                 log.info("loadIncludedElements -- try to load included module: "+absolutePath);
@@ -130,10 +130,8 @@ public class IncludeController extends GenericController implements ReplaceableC
                     log.info("loadIncludedElements -failed for: "+absolutePath);
                     file = new File(FileServer.getFileServer().getBaseDir(), includePath);
                     log.info("loadIncludedElements -Attempting to read it from: " + file.getAbsolutePath());
-                    if(!file.canRead() || !file.isFile()){
-                        log.error("Include Controller \""
-                                + this.getName()+"\" can't load \"" 
-                                + fileName+"\" - see log for details");
+                    if(!file.exists()){
+                        log.error("loadIncludedElements -failed for: " + file.getAbsolutePath());
                         throw new IOException("loadIncludedElements -failed for: " + absolutePath +
                                 " and " + file.getAbsolutePath());
                     }
@@ -146,22 +144,23 @@ public class IncludeController extends GenericController implements ReplaceableC
                 return tree;
             } catch (NoClassDefFoundError ex) // Allow for missing optional jars
             {
-                String msg = "Including file \""+ fileName 
-                            + "\" failed for Include Controller \""+ this.getName()
-                            +"\", missing jar file";
-                log.warn(msg, ex);
-                JMeterUtils.reportErrorToUser(msg+" - see log for details");
+                String msg = ex.getMessage();
+                if (msg == null) {
+                    msg = "Missing jar file - see log for details";
+                }
+                log.warn("Missing jar file", ex);
+                JMeterUtils.reportErrorToUser(msg);
             } catch (FileNotFoundException ex) {
-                String msg = "File \""+ fileName 
-                        + "\" not found for Include Controller \""+ this.getName()+"\"";
-                JMeterUtils.reportErrorToUser(msg+" - see log for details");
-                log.warn(msg, ex);
+                String msg = ex.getMessage();
+                JMeterUtils.reportErrorToUser(msg);
+                log.warn(msg);
             } catch (Exception ex) {
-                String msg = "Including file \"" + fileName 
-                            + "\" failed for Include Controller \"" + this.getName()
-                            +"\", unexpected error";
-                JMeterUtils.reportErrorToUser(msg+" - see log for details");
-                log.warn(msg, ex);
+                String msg = ex.getMessage();
+                if (msg == null) {
+                    msg = "Unexpected error - see log for details";
+                }
+                JMeterUtils.reportErrorToUser(msg);
+                log.warn("Unexpected error", ex);
             }
         }
         return tree;

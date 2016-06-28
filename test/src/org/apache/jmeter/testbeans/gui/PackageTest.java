@@ -128,7 +128,7 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
         String dn = defaultBundle.getString("displayName").toUpperCase(Locale.ENGLISH);
 
         // Skip the rest of this test for alpha/experimental beans:
-        if (dn.contains("(ALPHA") || dn.contains("(EXPERIMENTAL")) {
+        if (dn.indexOf("(ALPHA") != -1 || dn.indexOf("(EXPERIMENTAL") != -1) {
             return;
         }
 
@@ -169,7 +169,7 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
         JMeterUtils.setLocale(defaultLocale);
         for (String className : testBeanClassNames) {
             Class<?> testBeanClass = Class.forName(className);
-            ResourceBundle defaultBundle;
+            ResourceBundle defaultBundle = null;
             try {
                 defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
                         GenericTestBeanCustomizer.RESOURCE_BUNDLE);

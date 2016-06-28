@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,7 +74,7 @@ public final class HtmlParsingUtils {
     {
         String query = null;
         try {
-            query = URLDecoder.decode(newLink.getQueryString(), StandardCharsets.UTF_8.name());
+            query = URLDecoder.decode(newLink.getQueryString(), "UTF-8"); // $NON-NLS-1$
         } catch (UnsupportedEncodingException e) {
             // UTF-8 unsupported? You must be joking!
             log.error("UTF-8 encoding not supported!");
@@ -205,8 +204,8 @@ public final class HtmlParsingUtils {
     public static Tidy getParser() {
         log.debug("Start : getParser1");
         Tidy tidy = new Tidy();
-        tidy.setInputEncoding(StandardCharsets.UTF_8.name());
-        tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
+        tidy.setInputEncoding("UTF8");
+        tidy.setOutputEncoding("UTF8");
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
 
@@ -229,19 +228,21 @@ public final class HtmlParsingUtils {
     public static Node getDOM(String text) {
         log.debug("Start : getDOM1");
 
-        Node node = getParser()
-                .parseDOM(
-                        new ByteArrayInputStream(
-                                text.getBytes(StandardCharsets.UTF_8)), null);
+        try {
+            Node node = getParser().parseDOM(new ByteArrayInputStream(text.getBytes("UTF-8")), null);// $NON-NLS-1$
 
-        if (log.isDebugEnabled()) {
-            log.debug("node : " + node);
+            if (log.isDebugEnabled()) {
+                log.debug("node : " + node);
+            }
+
+            log.debug("End : getDOM1");
+
+            return node;
+        } catch (UnsupportedEncodingException e) {
+            log.error("getDOM1 : Unsupported encoding exception - " + e);
+            log.debug("End : getDOM1");
+            throw new RuntimeException("UTF-8 encoding failed", e);
         }
-
-        log.debug("End : getDOM1");
-
-        return node;
-
     }
 
     public static Document createEmptyDoc() {

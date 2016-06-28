@@ -19,13 +19,9 @@
 package org.apache.jmeter.extractor.json.jsonpath;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
@@ -64,30 +60,13 @@ public class JSONManager {
      * 
      * @param jsonString JSON String from which data is extracted
      * @param jsonPath JSON-PATH expression
-     * @return List of JSON Strings of the extracted data
+     * @return List of String extracted data
      * @throws ParseException
      */
     public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
-        List<Object> extractedObjects = jsonPathParser.read(jsonString,
+        return jsonPathParser.read(jsonString, 
                 DEFAULT_CONFIGURATION);
-        List<Object> results = new ArrayList<>(extractedObjects.size());
-        for (Object obj: extractedObjects) {
-            results.add(stringifyJSONObject(obj));
-        }
-        return results;
     }
-
-    @SuppressWarnings("unchecked")
-    private String stringifyJSONObject(Object obj) {
-        if (obj instanceof Map) {
-            return new JSONObject((Map<String, ?>) obj).toJSONString();
-        }
-        if (obj instanceof JSONArray) {
-            return ((JSONArray)obj).toJSONString();
-        }
-        return obj == null ? "" : obj.toString(); //$NON-NLS-1$
-    }
-
 }

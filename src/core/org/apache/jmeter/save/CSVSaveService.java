@@ -25,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public final class CSVSaveService {
         final boolean successOnly = resultCollector.isSuccessOnlyLogging();
         try {
             dataReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(filename), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())));
+                    new FileInputStream(filename), SaveService.getFileEncoding("UTF-8"))); 
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();

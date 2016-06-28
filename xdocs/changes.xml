@@ -88,7 +88,6 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>59351</bug>Improve log/error/message for IncludeController. Partly contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -97,7 +96,6 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>59609</bug>Format extracted JSON Objects in JSON Post Processor correctly as JSON.</li>
 </ul>
 
 <h3>Functions</h3>
@@ -123,7 +121,6 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>58888</bug>HTTP(S) Test Script Recorder (ProxyControl) does not add TestElement's returned by SamplerCreator createChildren ()</li>
  </ul>
 
 <h3>Other Samplers</h3>
@@ -136,8 +133,6 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>59712</bug>Display original query in RequestView when decoding fails. Based on a patch by
-         Teemu Vesala (teemu.vesala at qentinel.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -154,15 +149,7 @@ Summary
 
 <h3>General</h3>
 <ul>
-    <li><bug>59400</bug>Get rid of UnmarshalException on stopping when <code>-X</code> option is used.</li>
     <li><bug>59607</bug>JMeter crashes when reading large test plan (greater than 2g). Based on fix by Felix Draxler (felix.draxler at sap.com)</li>
-    <li><bug>59621</bug>Error count in report dashboard is one off.</li>
-    <li><bug>59657</bug>Only set font in JSyntaxTextArea, when property <code>jsyntaxtextarea.font.family</code> is set.</li>
-    <li><bug>59720</bug>Batch test file comparisons fail on Windows as XML files are generated as EOL=LF</li>
-    <li>Code cleanups. Patches by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>59722</bug>Use StandardCharsets to reduce the possibility of misspelling Charset names.</li>
-    <li><bug>59723</bug>Use jmeter.properties for testing whenever possible</li>
-    <li><bug>59726</bug>Unit test to check that CSV header text and sample format don't change unexpectedly</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -172,9 +159,6 @@ Summary
 </p>
 <ul>
 <li>Felix Draxler (felix.draxler at sap.com)</li>
-<li>Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
-<li>Graham Russell (graham at ham1.co.uk)</li>
-<li>Teemu Vesala (teemu.vesala at qentinel.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

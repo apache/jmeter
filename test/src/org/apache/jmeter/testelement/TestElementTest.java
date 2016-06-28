@@ -46,8 +46,9 @@ public class TestElementTest extends JMeterTestCaseJUnit3 {
      */
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("TestElements");
-        for (Object o : JMeterTest.getObjects(TestElement.class)) {
-            TestElement item = (TestElement) o;
+        Iterator<Object> iter = JMeterTest.getObjects(TestElement.class).iterator();
+        while (iter.hasNext()) {
+            TestElement item = (TestElement) iter.next();
             TestSuite ts = new TestSuite(item.getClass().getName());
             ts.addTest(new TestElementTest("runTestElement", item));
             suite.addTest(ts);

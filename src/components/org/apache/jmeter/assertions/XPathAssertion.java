@@ -21,7 +21,6 @@ package org.apache.jmeter.assertions;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -81,8 +80,8 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
         try {
             if (isScopeVariable()){
                 String inputString=getThreadContext().getVariables().get(getVariableName());
-                if (!StringUtils.isEmpty(inputString)) {
-                    responseData = inputString.getBytes(StandardCharsets.UTF_8);
+                if(!StringUtils.isEmpty(inputString)) {
+                    responseData = inputString.getBytes("UTF-8");
                 } 
             } else {
                 responseData = response.getResponseData();

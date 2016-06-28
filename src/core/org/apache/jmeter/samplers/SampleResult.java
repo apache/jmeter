@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +54,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * The default encoding to be used if not overridden.
      * The value is ISO-8859-1.
      */
-    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.ISO_8859_1.name();
+    public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
 
     // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
     // However the suggested System.getProperty("file.encoding") is Cp1252 on

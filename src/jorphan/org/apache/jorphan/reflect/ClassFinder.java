@@ -81,21 +81,22 @@ public final class ClassFinder {
 
         @Override
         public boolean accept(String className) {
-
-            if (contains != null && !className.contains(contains)) {
+            
+            if (contains!=null && className.indexOf(contains) == -1){
                 return false; // It does not contain a required string
             }
-            if (notContains != null && className.contains(notContains)) {
+            if (notContains!=null && className.indexOf(notContains) != -1){
                 return false; // It contains a banned string
             }
-            if (!className.contains("$") || inner) { // $NON-NLS-1$
-                if (isChildOf(parents, className, contextClassLoader)) {
+            if ((className.indexOf('$') == -1) || inner) { // $NON-NLS-1$
+                if (isChildOf(parents,className, contextClassLoader)) {
                     return true;
                 }
             }
             return false;
         }
     }
+
     
     private static class AnnoClassFilter implements ClassFilter {
         
@@ -112,7 +113,7 @@ public final class ClassFinder {
         
         @Override
         public boolean accept(String className) {
-            if (!className.contains("$") || inner) { // $NON-NLS-1$
+            if ((className.indexOf('$') == -1) || inner) { // $NON-NLS-1$
                 if (hasAnnotationOnMethod(annotations,className, contextClassLoader)) {
                     return true;
                 }

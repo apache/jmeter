@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.oro.util.Cache;
 import org.apache.oro.util.CacheLRU;
@@ -28,7 +27,7 @@ import org.apache.oro.util.CacheLRU;
 public class EncoderCache {
 
     /** The encoding which should be usd for URLs, according to HTTP specification */
-    public static final String URL_ARGUMENT_ENCODING = StandardCharsets.UTF_8.name();
+    public static final String URL_ARGUMENT_ENCODING = "UTF-8";
 
     private Cache cache;
 

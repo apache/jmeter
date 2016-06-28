@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.visualizers.backend.graphite;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * @since 2.13
  */
@@ -28,7 +26,7 @@ interface GraphiteMetricsSender {
     int SOCKET_TIMEOUT = 1000;
 
 
-    String CHARSET_NAME = StandardCharsets.UTF_8.name();
+    String CHARSET_NAME = "UTF-8"; //$NON-NLS-1$
 
     final class MetricTuple {
         String name;

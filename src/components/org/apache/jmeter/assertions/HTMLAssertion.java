@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
 import org.apache.commons.io.IOUtils;
@@ -102,8 +101,8 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 log.debug("xml mode: " + isXML());
             }
             tidy = new Tidy();
-            tidy.setInputEncoding(StandardCharsets.UTF_8.name());
-            tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
+            tidy.setInputEncoding("UTF8");
+            tidy.setOutputEncoding("UTF8");
             tidy.setQuiet(false);
             tidy.setShowWarnings(true);
             tidy.setOnlyErrors(isErrorsOnly());

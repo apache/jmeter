@@ -125,12 +125,11 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                                         new StringBuilder(getComputeConcatenation()
                                                 ? extractedValues.size() * 20
                                                 : 1);
-                                for (Object extractedObject : extractedValues) {
-                                    String extractedString = stringify(extractedObject);
-                                    vars.put(currentRefName + "_" + index,
-                                            extractedString); //$NON-NLS-1$
+                                for (Object stringExtracted : extractedValues) {
+                                    vars.put(currentRefName + "_" + index, 
+                                            stringExtracted != null ? stringExtracted.toString() : ""); //$NON-NLS-1$
                                     if (getComputeConcatenation()) {
-                                        concat.append(extractedString)
+                                        concat.append(stringExtracted)
                                                 .append(JSONPostProcessor.JSON_CONCATENATION_SEPARATOR);
                                     }
                                     index++;
@@ -142,9 +141,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                             } else if (matchNumber == 0) {
                                 // Random extraction
                                 int matchSize = extractedValues.size();
-                                int matchNr = JMeterUtils.getRandomInt(matchSize);
-                                placeObjectIntoVars(vars, currentRefName,
-                                        extractedValues, matchNr);
+                                Object obj = extractedValues.get(JMeterUtils.getRandomInt(matchSize));
+                                vars.put(currentRefName, 
+                                        obj != null ? obj.toString() : ""); //$NON-NLS-1$
                             } else {
                                 // extract at position
                                 if (matchNumber > extractedValues.size()) {
@@ -156,14 +155,20 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                                     }
                                     vars.put(currentRefName, defaultValues[i]);
                                 } else {
-                                    placeObjectIntoVars(vars, currentRefName, extractedValues, matchNumber - 1);
+                                    Object obj = extractedValues.get(matchNumber - 1);
+                                    vars.put(currentRefName, 
+                                            obj != null ? obj.toString() : ""); //$NON-NLS-1$
                                 }
                             }
                         } else {
                             // else just one value extracted
-                            placeObjectIntoVars(vars, currentRefName, extractedValues, 0);
+                            Object obj = extractedValues.get(0);
+                            String objAsString = 
+                                    obj != null ? obj.toString() : ""; //$NON-NLS-1$
+                            vars.put(currentRefName, 
+                                    objAsString); 
                             if (matchNumber < 0 && getComputeConcatenation()) {
-                                vars.put(currentRefName + ALL_SUFFIX, vars.get(currentRefName));
+                                vars.put(currentRefName + ALL_SUFFIX, objAsString);
                             }
                         }
                         vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
@@ -180,16 +185,6 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                 vars.put(currentRefName, defaultValues[i]);
             }
         }
-    }
-
-    private void placeObjectIntoVars(JMeterVariables vars, String currentRefName,
-            List<Object> extractedValues, int matchNr) {
-        vars.put(currentRefName,
-                stringify(extractedValues.get(matchNr)));
-    }
-
-    private String stringify(Object obj) {
-        return obj == null ? "" : obj.toString(); //$NON-NLS-1$
     }
 
     public String getJsonPathExpressions() {

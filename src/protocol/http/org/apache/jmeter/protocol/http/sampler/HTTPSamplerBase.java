@@ -371,8 +371,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             return true;
         } else {
             boolean noArgumentsHasName = true;
-            for (JMeterProperty jMeterProperty : getArguments()) {
-                HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
+            PropertyIterator args = getArguments().iterator();
+            while (args.hasNext()) {
+                HTTPArgument arg = (HTTPArgument) args.next().getObjectValue();
                 if (arg.getName() != null && arg.getName().length() > 0) {
                     noArgumentsHasName = false;
                     break;

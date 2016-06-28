@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -220,8 +219,8 @@ public class XPathUtil {
      */
     public static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml, StringWriter stringWriter) {
         Tidy tidy = new Tidy();
-        tidy.setInputEncoding(StandardCharsets.UTF_8.name());
-        tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
+        tidy.setInputEncoding("UTF8");
+        tidy.setOutputEncoding("UTF8");
         tidy.setQuiet(quiet);
         tidy.setShowWarnings(showWarnings);
         tidy.setMakeClean(true);

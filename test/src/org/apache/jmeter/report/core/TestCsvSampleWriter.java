@@ -28,8 +28,6 @@ import org.junit.Test;
 
 public class TestCsvSampleWriter {
 
-    private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
-
     @Before
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
@@ -52,7 +50,7 @@ public class TestCsvSampleWriter {
                         metadata)) {
             csvWriter.writeHeader();
             csvWriter.flush();
-            assertEquals("a,b" + LINE_SEP, writer.toString());
+            assertEquals("a,b\n", writer.toString());
         }
     }
 
@@ -93,7 +91,7 @@ public class TestCsvSampleWriter {
                     .build();
             csvWriter.write(sample);
             csvWriter.flush();
-            assertEquals("a1,b1" + LINE_SEP, writer.toString());
+            assertEquals("a1,b1\n", writer.toString());
         }
     }
 

@@ -24,7 +24,6 @@ package org.apache.jmeter.save.converters;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class ConversionHelp {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String CHAR_SET = StandardCharsets.UTF_8.name();
+    private static final String CHAR_SET = "UTF-8"; //$NON-NLS-1$
 
     // Attributes for TestElement and TestElementProperty
     // Must all be unique

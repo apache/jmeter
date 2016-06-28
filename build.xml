@@ -159,21 +159,21 @@
       <sourcePath path="${src.mongodb}" />
 
       <auxClasspath>
-        <fileset dir="${lib.dir}">
-          <include name="*.jar"/>
-        </fileset>
+          <fileset dir="${lib.dir}">
+              <include name="*.jar"/>
+          </fileset>
       </auxClasspath>
 
       <auxClasspath>
-        <fileset dir="${lib.opt}">
-          <include name="*.jar"/>
-        </fileset>
+          <fileset dir="${lib.opt}">
+              <include name="*.jar"/>
+          </fileset>
       </auxClasspath>
 
       <auxClasspath>
-        <fileset dir="${lib.api}">
-          <include name="*.jar"/>
-        </fileset>
+          <fileset dir="${lib.api}">
+              <include name="*.jar"/>
+          </fileset>
       </auxClasspath>
 
     </findbugs>
@@ -182,22 +182,22 @@
   </target>
 
   <!-- Convert findbugs XML output to CSV -->
-  <target name="findbugs-style">
-    <xslt style="fb-csv.xsl"
+   <target name="findbugs-style">
+     <xslt style="fb-csv.xsl"
        force="true"
        in="${findbugs.outName}.xml"
        out="${findbugs.outName}.csv">
-    </xslt>
-  </target>
+     </xslt>
+   </target>
 
   <!-- Convert findbugs XML output to HTML -->
-  <target name="findbugs-xsl">
-    <xslt style="${findbugs.xsldir}/${findbugs.xslname}.xsl"
+   <target name="findbugs-xsl">
+     <xslt style="${findbugs.xsldir}/${findbugs.xslname}.xsl"
        force="true"
        in="${findbugs.outName}.xml"
        out="${findbugs.outName}_${findbugs.xslname}.html">
-    </xslt>
-  </target>
+     </xslt>
+   </target>
 
   <!-- Where the Sources live -->
   <property name="src.dir" value="src"/>
@@ -357,9 +357,9 @@
   <property name="resources.meta-inf"      value="${build.res}/META-INF"/>
 
   <patternset id="external.jars.notices">
-    <include name="LICENSE"/>
-    <include name="NOTICE"/>
-    <include name="README"/>
+        <include name="LICENSE"/>
+        <include name="NOTICE"/>
+        <include name="README"/>
   </patternset>
 
   <!-- Jars for binary release -->
@@ -529,11 +529,11 @@
         JMeter version
         This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.1-SNAPSHOT"/>
+    <property name="jmeter.version" value="3.0-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
-      <isset property="svn.revision"/>
+        <isset property="svn.revision"/>
     </condition>
     <property name="display.version" value="${implementation.version}"/>
     <echo level="info">jmeter.version = ${jmeter.version}</echo>
@@ -544,7 +544,7 @@
     </filterset>
   </target>
 
-  <!-- Get version from SVN status -->
+    <!-- Get version from SVN status -->
   <target name="init-svnVersion" depends="svnCheck">
     <fail message="Could not get SVN revision" unless="svn.revision"/>
     <property name="jmeter.version" value="r${svn.revision}"/>
@@ -560,11 +560,11 @@
 
   <target name="init-docs" depends="report-anakia-missing">
     <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
-  </target>
+    </target>
 
   <!--
     - Check for anakia task
-  -->
+    -->
   <target name="check-anakia">
     <available classpathref="anakia.classpath" classname="org.apache.velocity.anakia.AnakiaTask" property="AnakiaTask.present"/>
     <!-- Check for Velocity version 1.5 -->
@@ -881,7 +881,7 @@
   <target name="prepare-resources"
      description="Prepare some resources files, update date">
     <mkdir dir="${build.res}" />
-    <mkdir dir="${resources.meta-inf}" />
+   <mkdir dir="${resources.meta-inf}" />
     <copy todir="${resources.meta-inf}" overwrite="yes" filtering="yes"
         encoding="${encoding}">
       <filterset refid="year.filters"/>
@@ -913,25 +913,25 @@ run JMeter unless all the JMeter jars are added.
 -->
   <target name="package-only" description="Package already-compiled classes (shortcut for IDE users)">
     <manifest file="${build.dir}/MANIFEST_BIN.MF">
-      <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Extension-Name" value=" JMeter"/>
-      <attribute name="Specification-Title" value=" Apache JMeter"/>
-      <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
-      <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
-      <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
-      <attribute name="Implementation-Version" value="${implementation.version}"/>
-      <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
-      <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Extension-Name" value=" JMeter"/>
+        <attribute name="Specification-Title" value=" Apache JMeter"/>
+        <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
+        <attribute name="Implementation-Version" value="${implementation.version}"/>
+        <attribute name="X-Compile-Source-JDK" value="${src.java.version}"/>
+        <attribute name="X-Compile-Target-JDK" value="${target.java.version}"/>
     </manifest>
 
     <manifest file="${build.dir}/MANIFEST_SRC.MF">
-      <attribute name="Built-By" value="${user.name}"/>
-      <attribute name="Extension-Name" value=" JMeter"/>
-      <attribute name="Specification-Title" value=" Apache JMeter"/>
-      <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
-      <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
-      <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
-      <attribute name="Implementation-Version" value="${implementation.version}"/>
+       <attribute name="Built-By" value="${user.name}"/>
+       <attribute name="Extension-Name" value=" JMeter"/>
+       <attribute name="Specification-Title" value=" Apache JMeter"/>
+       <attribute name="Specification-Vendor" value=" Apache Software Foundation"/>
+       <attribute name="Implementation-Vendor" value=" Apache Software Foundation"/>
+       <attribute name="Implementation-Vendor-Id" value=" org.apache"/>
+       <attribute name="Implementation-Version" value="${implementation.version}"/>
    </manifest>
 
     <mkdir dir="${dest.jar}"/>
@@ -945,14 +945,14 @@ run JMeter unless all the JMeter jars are added.
         includes="**/NewDriver*,**/DynamicClassLoader*,**/ShutdownClient.class"
         basedir="${build.core}"
         manifest="${build.dir}/MANIFEST_BIN.MF">
-      <manifest>
-        <attribute name="Main-Class" value="org.apache.jmeter.NewDriver"/>
-      </manifest>
-      <zipfileset file="${resources.meta-inf}/default.notice"
+        <manifest>
+           <attribute name="Main-Class" value="org.apache.jmeter.NewDriver"/>
+        </manifest>
+        <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
+        <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
-      <zipfileset file="${resources.meta-inf}/jmeter_as_ascii_art.txt"
+        <zipfileset file="${resources.meta-inf}/jmeter_as_ascii_art.txt"
           fullpath="org/apache/jmeter/jmeter_as_ascii_art.txt" />
     </jar>
 
@@ -1148,9 +1148,9 @@ run JMeter unless all the JMeter jars are added.
     </jar>
 
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
-      <zipfileset file="${resources.meta-inf}/default.notice"
+        <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
+        <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
       <fileset dir="${build.jorphan}" includes="**/*.class"/>
       <fileset dir="${src.jorphan}" includes="**/*.properties"/>
@@ -1165,9 +1165,9 @@ run JMeter unless all the JMeter jars are added.
   <target name="_check_3rdparty">
     <condition property="3rdparty.present">
       <and>
-        <!-- No need to check all jars; just check a few -->
-        <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
-        <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
+          <!-- No need to check all jars; just check a few -->
+          <available classpathref="classpath" classname="org.apache.bsf.BSFEngine"/>
+          <available classpathref="classpath" classname="com.thoughtworks.xstream.XStream"/>
       </and>
     </condition>
   </target>
@@ -1179,13 +1179,13 @@ run JMeter unless all the JMeter jars are added.
     <fail message="Cannot find required classes"/>
   </target>
 
-  <target name="setup-eclipse-project" description="Setup eclipse project to contribute to JMeter">
+ <target name="setup-eclipse-project" description="Setup eclipse project to contribute to JMeter">
     <echo>Creating eclipse project</echo>
     <copy overwrite="false" file="eclipse.project" tofile=".project" />
     <copy overwrite="false" file="eclipse.classpath" tofile=".classpath"/>
     <input message="Next step will download dependencies for JMeter, do you agree with the download ?" addproperty="do.download" validargs="y,n"/>
     <condition property="do.abort">
-      <equals arg1="n" arg2="${do.download}"/>
+        <equals arg1="n" arg2="${do.download}"/>
     </condition>
     <fail message="You didn't agree to download dependencies, ensure you call Ant target 'download_jars when importing project" if="do.abort"/>
     <echo>Downloading dependencies</echo>
@@ -1349,7 +1349,9 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
     <!-- These are generated with EOL=LF -->
-    <exclude name="${dest.jar.jmeter}/testfiles/*.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/Bug*.xml"/>
+    <exclude name="${dest.jar.jmeter}/testfiles/HTMLParserTestFile_2.xml"/>
     <!-- Ignore unit test output -->
     <exclude name="${dest.jar.jmeter}/testfiles/*.out"/>
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
@@ -1358,7 +1360,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="eclipse.readme"/>
     <include name=".gitignore"/>
     <include name=".travis.yml"/>
-    <include name="checkstyle.xml"/>
+   <include name="checkstyle.xml"/>
     <include name="checkstyle-suppressions.xml"/>
     <include name="rat-excludes.txt"/>
     <include name="${build.test-res}/**"/>
@@ -1383,7 +1385,9 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <include name="${dest.jar.jmeter}/testfiles/*.jtl"/>
     <!-- These are generated with EOL=LF -->
-    <include name="${dest.jar.jmeter}/testfiles/*.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/BatchTestLocal.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/Bug*.xml"/>
+    <include name="${dest.jar.jmeter}/testfiles/HTMLParserTestFile_2.xml"/>
     <!-- Include the image files used in parsing / embedded download tests -->
     <include name="${dest.jar.jmeter}/testfiles/**/*.gif"/>
     <include name="${dest.jar.jmeter}/testfiles/**/*.jpg"/>
@@ -1392,43 +1396,43 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- Convert eol:native source files to appropriate format if required -->
     <target name="_filter" unless="native.${eoltype}">
-      <property name="workdir" value="${dist.dir}/${eoltype}"/>
-      <echo level="info">Converting work files to eol=${eoltype} in ${workdir}</echo>
-      <mkdir dir="${workdir}"/>
-      <copy includeemptydirs="false" todir="${workdir}" encoding="${encoding}">
-        <fileset dir=".">
-          <patternset refid="${fileset}"/>
-        </fileset>
-        <filterchain>
-          <fixcrlf encoding="${encoding}" fixlast="false" eol="${eoltype}" srcdir="${workdir}"/>
-        </filterchain>
-      </copy>
+        <property name="workdir" value="${dist.dir}/${eoltype}"/>
+        <echo level="info">Converting work files to eol=${eoltype} in ${workdir}</echo>
+        <mkdir dir="${workdir}"/>
+        <copy includeemptydirs="false" todir="${workdir}" encoding="${encoding}">
+            <fileset dir=".">
+                <patternset refid="${fileset}"/>
+            </fileset>
+            <filterchain>
+                <fixcrlf encoding="${encoding}" fixlast="false" eol="${eoltype}" srcdir="${workdir}"/>
+            </filterchain>
+        </copy>
     </target>
 
     <!-- Files to be included in full source download -->
     <patternset id="dist_src_files_native">
-      <patternset refid="dist.sources.native"/>
-      <patternset refid="dist.common.native"/>
+        <patternset refid="dist.sources.native"/>
+        <patternset refid="dist.common.native"/>
     </patternset>
 
     <patternset id="dist_src_files_non_native">
-      <patternset refid="dist.sources.non.native"/>
-      <patternset refid="dist.common.non.native"/>
+        <patternset refid="dist.sources.non.native"/>
+        <patternset refid="dist.common.non.native"/>
     </patternset>
 
     <!-- Files to be included in full binary download -->
     <patternset id="dist_bin_files_native">
-      <patternset refid="dist.binaries.native"/>
-      <patternset refid="external.jars.notices"/>
-      <!-- We don't need the site docs, but we do want Javadoc (e.g. for BeanShell) -->
-      <include name="${dest.docs.api}/**"/>
-      <exclude name="${dest.docs.api}/resources/**"/>
+        <patternset refid="dist.binaries.native"/>
+        <patternset refid="external.jars.notices"/>
+        <!-- We don't need the site docs, but we do want Javadoc (e.g. for BeanShell) -->
+        <include name="${dest.docs.api}/**"/>
+        <exclude name="${dest.docs.api}/resources/**"/>
     </patternset>
 
     <patternset id="dist_bin_files_non_native">
-      <patternset refid="dist.binaries.non.native"/>
-      <patternset refid="external.jars"/>
-      <include name="${dest.docs.api}/resources/**"/>
+        <patternset refid="dist.binaries.non.native"/>
+        <patternset refid="external.jars"/>
+        <include name="${dest.docs.api}/resources/**"/>
     </patternset>
 
     <!-- NOTE: the site documents are not included in either archive -->
@@ -1442,14 +1446,14 @@ run JMeter unless all the JMeter jars are added.
         description="Build JMeter for end-user distribution"/>
 
     <target name="check-versions" unless="disable-check-versions">
-      <fail message="jmeter.version must be defined" unless="jmeter.version"/>
-      <fail message="svn.revision must be defined" unless="svn.revision"/>
-      <local         name="version.match"/>
-      <condition property="version.match">
-        <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
+        <fail message="jmeter.version must be defined" unless="jmeter.version"/>
+        <fail message="svn.revision must be defined" unless="svn.revision"/>
+        <local         name="version.match"/>
+        <condition property="version.match">
+            <resourcecontains resource="${src.core}/org/apache/jmeter/util/JMeterVersion.java"
                 substring='VERSION = "${jmeter.version}";'/>
-      </condition>
-      <fail message="jmeter.version (${jmeter.version}) must be same as JMeterVersion.VERSION" unless="version.match"/>
+        </condition>
+        <fail message="jmeter.version (${jmeter.version}) must be same as JMeterVersion.VERSION" unless="version.match"/>
     </target>
 
     <!--
@@ -1462,8 +1466,8 @@ run JMeter unless all the JMeter jars are added.
         name="nightly-setup"
         description="Disables some checks"
         depends="clean,clean-docs,clean-apidocs,clean-dist">
-      <property name="disable-check-versions" value="true" />
-      <property name="docs.force" value="true" />
+        <property name="disable-check-versions" value="true" />
+        <property name="docs.force" value="true" />
     </target>
     <target
         name="nightly"
@@ -1471,21 +1475,21 @@ run JMeter unless all the JMeter jars are added.
         description="Build JMeter for nightly distribution (include docs)"/>
 
     <target name="_eolcheck">
-      <!-- Determine if the native format is CRLF or LF (or neither) -->
-      <condition property="native.lf">
-        <os family="unix"/>
-      </condition>
-      <condition property="native.crlf">
-        <os family="dos"/>
-      </condition>
-      <!-- Define native.dir.x as either the source or updated directory as appropriate -->
-      <condition property="native.dir.lf" value="." else="${dist.dir}/lf">
-        <isset property="native.lf"/>
-      </condition>
-      <condition property="native.dir.crlf" value="." else="${dist.dir}/crlf">
-        <isset property="native.crlf"/>
-      </condition>
-      <echoproperties prefix="native"></echoproperties>
+        <!-- Determine if the native format is CRLF or LF (or neither) -->
+        <condition property="native.lf">
+            <os family="unix"/>
+        </condition>
+        <condition property="native.crlf">
+            <os family="dos"/>
+        </condition>
+        <!-- Define native.dir.x as either the source or updated directory as appropriate -->
+        <condition property="native.dir.lf" value="." else="${dist.dir}/lf">
+            <isset property="native.lf"/>
+        </condition>
+        <condition property="native.dir.crlf" value="." else="${dist.dir}/crlf">
+            <isset property="native.crlf"/>
+        </condition>
+        <echoproperties prefix="native"></echoproperties>
     </target>
 
     <!-- Internal target -->
@@ -1501,17 +1505,17 @@ run JMeter unless all the JMeter jars are added.
 
     <!-- Runtime archives -->
     <antcall target="_filter">
-      <param name="eoltype" value="lf"/>
-      <param name="fileset" value="dist_bin_files_native"/>
+        <param name="eoltype" value="lf"/>
+        <param name="fileset" value="dist_bin_files_native"/>
     </antcall>
 
     <tar destfile="${dist.dir}/${pack.name}.tar" longfile="gnu">
       <tarfileset dir="." prefix="${dist.name}" excludes="${dist.executables}" defaultexcludes="yes">
-        <patternset refid="dist_bin_files_non_native"/>
+         <patternset refid="dist_bin_files_non_native"/>
       </tarfileset>
       <tarfileset mode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
       <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
-        <patternset refid="dist_bin_files_native"/>
+         <patternset refid="dist_bin_files_native"/>
       </tarfileset>
     </tar>
     <!-- Delete work directory (may not exist) -->
@@ -1521,12 +1525,12 @@ run JMeter unless all the JMeter jars are added.
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}.tar"/>
     <antcall target="_hash">
-      <param name="path" value="${dist.dir}/${dist.name}.tgz"/>
+        <param name="path" value="${dist.dir}/${dist.name}.tgz"/>
     </antcall>
 
     <antcall target="_filter">
-      <param name="eoltype" value="crlf"/>
-      <param name="fileset" value="dist_bin_files_native"/>
+        <param name="eoltype" value="crlf"/>
+        <param name="fileset" value="dist_bin_files_native"/>
     </antcall>
     <zip  destfile="${dist.dir}/${pack.name}.zip">
       <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
@@ -1534,23 +1538,23 @@ run JMeter unless all the JMeter jars are added.
       </zipfileset>
       <zipfileset filemode="755" dir="." includes="${dist.executables}" prefix="${dist.name}" defaultexcludes="yes"/>
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
-        <patternset refid="dist_bin_files_native"/>
+         <patternset refid="dist_bin_files_native"/>
       </zipfileset>
     </zip>
     <antcall target="_hash">
-      <param name="path" value="${dist.dir}/${dist.name}.zip"/>
+        <param name="path" value="${dist.dir}/${dist.name}.zip"/>
     </antcall>
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/crlf" quiet="true"/>
 
     <!-- Source archives -->
     <antcall target="_filter">
-      <param name="eoltype" value="lf"/>
-      <param name="fileset" value="dist_src_files_native"/>
+        <param name="eoltype" value="lf"/>
+        <param name="fileset" value="dist_src_files_native"/>
     </antcall>
     <tar destfile="${dist.dir}/${pack.name}_src.tar" longfile="gnu">
       <tarfileset dir="${native.dir.lf}" prefix="${dist.name}">
-        <patternset refid="dist_src_files_native"/>
+         <patternset refid="dist_src_files_native"/>
       </tarfileset>
       <tarfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files_non_native"/>
@@ -1564,17 +1568,17 @@ run JMeter unless all the JMeter jars are added.
     <!-- no longer needed -->
     <delete file="${dist.dir}/${pack.name}_src.tar"/>
     <antcall target="_hash">
-      <param name="path" value="${dist.dir}/${dist.name}_src.tgz"/>
+        <param name="path" value="${dist.dir}/${dist.name}_src.tgz"/>
     </antcall>
 
     <antcall target="_filter">
-      <param name="eoltype" value="crlf"/>
-      <param name="fileset" value="dist_src_files_native"/>
+        <param name="eoltype" value="crlf"/>
+        <param name="fileset" value="dist_src_files_native"/>
     </antcall>
 
     <zip  destfile="${dist.dir}/${pack.name}_src.zip">
       <zipfileset dir="${native.dir.crlf}" prefix="${dist.name}">
-        <patternset refid="dist_src_files_native"/>
+         <patternset refid="dist_src_files_native"/>
       </zipfileset>
       <zipfileset excludes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes">
         <patternset refid="dist_src_files_non_native"/>
@@ -1582,7 +1586,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset filemode="755" includes="${dist.executables}" dir="." prefix="${dist.name}" defaultexcludes="yes"/>
     </zip>
     <antcall target="_hash">
-      <param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
+        <param name="path" value="${dist.dir}/${dist.name}_src.zip"/>
     </antcall>
     <!-- Delete work directory (may not exist) -->
     <delete dir="${dist.dir}/crlf" quiet="true"/>
@@ -1594,10 +1598,10 @@ run JMeter unless all the JMeter jars are added.
     <delete dir="${maven.dir}" includes="*.pom" quiet="true"/>
     <echo>Updating POM files to version ${jmeter.version}</echo>
     <copy todir="${maven.dir}">
-      <fileset dir="${maven.poms}" includes="*.pom"/>
-      <filterset>
-        <filter token="MAVEN.DEPLOY.VERSION" value="${jmeter.version}"/>
-      </filterset>
+        <fileset dir="${maven.poms}" includes="*.pom"/>
+        <filterset>
+            <filter token="MAVEN.DEPLOY.VERSION" value="${jmeter.version}"/>
+        </filterset>
     </copy>
     <delete dir="${maven.dir}" includes="*.jar" quiet="true"/>
     <echo>Copying jar files ready for signing</echo>
@@ -1612,9 +1616,9 @@ run JMeter unless all the JMeter jars are added.
         Cannot be added to any of the other jars as that would cause problems for stand-alone JMeter usage.
     -->
     <jar jarfile="${maven.dir}/ApacheJMeter_config.jar" manifest="${build.dir}/MANIFEST_SRC.MF">
-      <zipfileset file="${resources.meta-inf}/default.notice"
+        <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
+        <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
@@ -1725,58 +1729,58 @@ run JMeter unless all the JMeter jars are added.
       Run svnnmucc against the svnpubsub distribution area
   -->
   <target name="_svnmucc">
-    <property name="repoType" value="test"/>
-    <condition property="repo"
+      <property name="repoType" value="test"/>
+      <condition property="repo"
             value="https://dist.apache.org/repos/dist/"
             else="https://svn.apache.org/repos/asf/jmeter/test/" >
-      <equals arg1="live" arg2="${repoType}"/>
-    </condition>
-    <echo level="info">Processing ${tempfile} using svnmucc on repo: ${repoType}</echo>
-    <echo level="info">${repo}</echo>
-    <echo level="info">${message}</echo>
-    <!-- Only one of the following will execute -->
-    <antcall target="_svnmucc_storedPass"/>
-    <antcall target="_svnmucc_providedPass"/>
+        <equals arg1="live" arg2="${repoType}"/>
+      </condition>
+      <echo level="info">Processing ${tempfile} using svnmucc on repo: ${repoType}</echo>
+      <echo level="info">${repo}</echo>
+      <echo level="info">${message}</echo>
+      <!-- Only one of the following will execute -->
+      <antcall target="_svnmucc_storedPass"/>
+      <antcall target="_svnmucc_providedPass"/>
   </target>
 
-  <!-- run svnmucc using stored credentials -->
-  <target name="_svnmucc_storedPass" unless="asf.ldap.password">
-    <echo level="info" message="Using stored credentials"/>
-    <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
-      <arg value="--non-interactive"/> <!-- -n alias was removed in svnmucc 1.8.0 -->
-      <!-- not strictly necessary, but does no harm and agrees with password version -->
-      <arg value="--no-auth-cache"/>
-      <arg value="--message"/> <!-- -m -->
-      <arg value="${message}"/>
-      <arg value="--root-url"/> <!-- -U -->
-      <arg value="${repo}"/>
-      <arg value="--extra-args"/> <!-- -X -->
-      <arg value="${tempfile}"/>
-    </exec>
-  </target>
+    <!-- run svnmucc using stored credentials -->
+    <target name="_svnmucc_storedPass" unless="asf.ldap.password">
+      <echo level="info" message="Using stored credentials"/>
+      <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
+        <arg value="--non-interactive"/> <!-- -n alias was removed in svnmucc 1.8.0 -->
+        <!-- not strictly necessary, but does no harm and agrees with password version -->
+        <arg value="--no-auth-cache"/>
+        <arg value="--message"/> <!-- -m -->
+        <arg value="${message}"/>
+        <arg value="--root-url"/> <!-- -U -->
+        <arg value="${repo}"/>
+        <arg value="--extra-args"/> <!-- -X -->
+        <arg value="${tempfile}"/>
+      </exec>
+    </target>
 
-  <!-- run svnmucc using password provided as a property -->
-  <target name="_svnmucc_providedPass" if="asf.ldap.password">
-    <!-- provide default user name -->
-    <property name="asf.ldap.username" value="${user.name}"/>
-    <echo level="info" message="Using provided credentials for user ${asf.ldap.username}"/>
-    <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
-      <arg value="--non-interactive"/>
-      <!-- we don't want to cache the provided credentials -->
-      <arg value="--no-auth-cache"/>
-      <arg value="--message"/> <!-- -m -->
-      <arg value="${message}"/>
-      <arg value="--root-url"/> <!-- -U -->
-      <arg value="${repo}"/>
-      <arg value="--extra-args"/> <!-- -X -->
-      <arg value="${tempfile}"/>
-      <!-- Add credentials provided on command-line -->
-      <arg value="--username"/> <!-- -u -->
-      <arg value="${asf.ldap.username}"/>
-      <arg value="--password"/> <!-- -p -->
-      <arg value="${asf.ldap.password}"/>
-    </exec>
-  </target>
+    <!-- run svnmucc using password provided as a property -->
+    <target name="_svnmucc_providedPass" if="asf.ldap.password">
+      <!-- provide default user name -->
+      <property name="asf.ldap.username" value="${user.name}"/>
+      <echo level="info" message="Using provided credentials for user ${asf.ldap.username}"/>
+      <exec executable="svnmucc" dir="${dist.dir}" logerror="true" failonerror="true" failifexecutionfails="true">
+        <arg value="--non-interactive"/>
+        <!-- we don't want to cache the provided credentials -->
+        <arg value="--no-auth-cache"/>
+        <arg value="--message"/> <!-- -m -->
+        <arg value="${message}"/>
+        <arg value="--root-url"/> <!-- -U -->
+        <arg value="${repo}"/>
+        <arg value="--extra-args"/> <!-- -X -->
+        <arg value="${tempfile}"/>
+        <!-- Add credentials provided on command-line -->
+        <arg value="--username"/> <!-- -u -->
+        <arg value="${asf.ldap.username}"/>
+        <arg value="--password"/> <!-- -p -->
+        <arg value="${asf.ldap.password}"/>
+      </exec>
+    </target>
 
   <!--
         Targets for deploying release candidates via svnpubsub.
@@ -2032,7 +2036,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="_gump_properties">
-    <echo level="info">
+  <echo level="info">
  Gump properties for this run
   jmeter.version      = ${jmeter.version}
   gump.run            = ${gump.run}
@@ -2046,11 +2050,11 @@ run JMeter unless all the JMeter jars are added.
   optimize            = ${optimize}
   deprecation         = ${deprecation}
   encoding            = ${encoding}
-    </echo>
-    <echoproperties prefix="ant"/>
-    <echoproperties prefix="gump"/>
-    <echoproperties prefix="os"/>
-    <echoproperties prefix="java"/>
+  </echo>
+  <echoproperties prefix="ant"/>
+  <echoproperties prefix="gump"/>
+  <echoproperties prefix="os"/>
+  <echoproperties prefix="java"/>
 
   </target>
 
@@ -2162,18 +2166,18 @@ run JMeter unless all the JMeter jars are added.
     </zip>
   </target>
 
-  <!-- Create a zip of all resource files for translators -->
-  <target name="pack-resources">
-    <mkdir dir="${dist.dir}"/>
-    <zip  destfile="${dist.dir}/resources.zip">
-      <zipfileset dir="." defaultexcludes="yes">
-        <patternset excludes="${src.dir}/examples/**" />
-        <patternset includes="${src.dir}/**/*Resources.properties" />
-        <patternset includes="${src.dir}/**/messages.properties" />
-        <patternset includes="${src.dir}/**/i18nedit.properties" />
-      </zipfileset>
-    </zip>
-  </target>
+    <!-- Create a zip of all resource files for translators -->
+    <target name="pack-resources">
+        <mkdir dir="${dist.dir}"/>
+        <zip  destfile="${dist.dir}/resources.zip">
+          <zipfileset dir="." defaultexcludes="yes">
+            <patternset excludes="${src.dir}/examples/**" />
+            <patternset includes="${src.dir}/**/*Resources.properties" />
+            <patternset includes="${src.dir}/**/messages.properties" />
+            <patternset includes="${src.dir}/**/i18nedit.properties" />
+          </zipfileset>
+        </zip>
+    </target>
 
 <!--
     Utility target to create MD5 checksums in standard format (with *filename)
@@ -2183,15 +2187,15 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
 -->
 
-  <target name="_hash" unless="hash.skip">
-    <echo message="Creating MD5 for ${path}"/>
-    <basename property="_base" file="${path}"/>
-    <checksum algorithm="MD5" file="${path}" property="md5"/>
-    <echo message="${md5} *${_base}" file="${path}.md5"/>
-    <echo message="Creating SHA for ${path}"/>
-    <checksum algorithm="SHA" file="${path}" property="sha"/>
-    <echo message="${sha} *${_base}" file="${path}.sha"/>
-  </target>
+    <target name="_hash" unless="hash.skip">
+        <echo message="Creating MD5 for ${path}"/>
+        <basename property="_base" file="${path}"/>
+        <checksum algorithm="MD5" file="${path}" property="md5"/>
+        <echo message="${md5} *${_base}" file="${path}.md5"/>
+        <echo message="Creating SHA for ${path}"/>
+        <checksum algorithm="SHA" file="${path}" property="sha"/>
+        <echo message="${sha} *${_base}" file="${path}.sha"/>
+    </target>
 
   <!--
   Clean-docs and clean-apidocs can be used to empty the docs or docs/api directories.
@@ -2199,39 +2203,39 @@ run JMeter unless all the JMeter jars are added.
   -->
   <target name="clean-docs">
     <delete>
-      <fileset dir="${dest.docs}" excludes=".svn/** api/**"/>
+        <fileset dir="${dest.docs}" excludes=".svn/** api/**"/>
     </delete>
   </target>
 
   <!-- Use this before running docs-print to ensure image files are synchronised -->
   <target name="clean-docs-images">
-    <delete failonerror="false">
-      <fileset dir="${dest.docs}/images" excludes=".svn/**"/>
-    </delete>
+      <delete failonerror="false">
+          <fileset dir="${dest.docs}/images" excludes=".svn/**"/>
+      </delete>
   </target>
 
   <target name="clean-apidocs">
     <delete failonerror="false">
-      <fileset dir="${dest.docs.api}" excludes=".svn/**" />
+        <fileset dir="${dest.docs.api}" excludes=".svn/**" />
     </delete>
   </target>
 
   <target name="clean" description="Clean up to force a build from source.">
     <!-- Unfortunately Ant reports failure if a directory does not exist -->
     <delete quiet="false" failonerror="false">
-      <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
-      <fileset dir="${lib.dir}" includes="jorphan.jar"/>
-      <fileset dir="${lib.dir}" includes="bshclient.jar"/>
-      <fileset dir="${dest.jar}" includes="*.jar"/>
-      <fileset dir="${build.dir}"/>
-      <fileset dir="${dest.printable_docs}"/>
-      <fileset dir="${dist.dir}"/>
+        <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
+        <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+        <fileset dir="${lib.dir}" includes="bshclient.jar"/>
+        <fileset dir="${dest.jar}" includes="*.jar"/>
+        <fileset dir="${build.dir}"/>
+        <fileset dir="${dest.printable_docs}"/>
+        <fileset dir="${dist.dir}"/>
     </delete>
   </target>
 
   <target name="clean-dist" description="Clean up dist directory.">
     <delete quiet="true">
-      <fileset dir="${dist.dir}"/>
+        <fileset dir="${dist.dir}"/>
     </delete>
   </target>
 
@@ -2249,14 +2253,14 @@ run JMeter unless all the JMeter jars are added.
 
     <mkdir dir="${dest.docs.api}"/>
     <delete quiet="true">
-      <fileset dir="${dest.docs.api}" includes="**/*.html"/>
+        <fileset dir="${dest.docs.api}" includes="**/*.html"/>
     </delete>
     <echo level="info">Updating overview to ${docversion}</echo>
     <replaceregexp match="version [^\s]+"
                  encoding="${encoding}"
                  replace="version ${docversion}"
                  flags="g" byline="true">
-      <fileset dir="${src.docs}" includes="overview.html" />
+       <fileset dir="${src.docs}" includes="overview.html" />
     </replaceregexp>
     <javadoc
       sourcepathref="srcpaths"
@@ -2287,10 +2291,10 @@ run JMeter unless all the JMeter jars are added.
   -->
   <target name="docs-check">
     <javadoc sourcepathref="srcpaths"
-             destdir="reports"
-             docletpath="${lib.opt}/doccheck.jar"
-             packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
-             excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
+    destdir="reports"
+    docletpath="${lib.opt}/doccheck.jar"
+    packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
+    excludepackagenames="org.apache.jmeter.util.keystore,org.apache.jorphan.timer">
       <classpath refid="classpath"/>
       <doclet name="com.sun.tools.doclets.doccheck.DocCheck">
         <!--
@@ -2410,36 +2414,30 @@ run JMeter unless all the JMeter jars are added.
       <format property="rmi_port" pattern="1mmss"/>
     </tstamp>
     <parallel>
-      <daemons>
-        <java taskname="server" classname="org.apache.jmeter.NewDriver" fork="yes" dir="${batchtestserver.out}">
-          <classpath>
-            <fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
-            <fileset dir="${dest.jar}" includes="*.jar"/>
-            <path refid="classpath"/>
-          </classpath>
-          <sysproperty key="java.awt.headless" value="true"/>
-          <!-- Bug 59723 -->
-          <!-- quieten the logging; this has to be done first -->
-          <arg value="-ptestfiles/jmeter-batch.properties"/>
-          <!-- pick up default properties -->
-          <arg value="-qjmeter.properties"/>
-          <!-- reset the logging and other parameters -->
-          <arg value="-qtestfiles/jmeter-batch.properties"/>
-          <arg value="-j"/>
-          <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
-          <arg value="-Dserver_port=${rmi_port}"/>
-          <arg value="-s"/>
-          <arg value="-Jserver.exitaftertest=true"/>
-        </java>
-      </daemons>
-      <sequential>
-        <sleep seconds="1"/>
-        <antcall target="batchtest">
-          <param name="remote" value="-Rlocalhost:${rmi_port}"/>
-          <param name="taskname" value="client"/>
-          <!-- Default the test name so we can override with a parameter -->
-        </antcall>
-      </sequential>
+        <daemons>
+            <java taskname="server" classname="org.apache.jmeter.NewDriver" fork="yes" dir="${batchtestserver.out}">
+               <classpath>
+                <fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
+                <fileset dir="${dest.jar}" includes="*.jar"/>
+                <path refid="classpath"/>
+               </classpath>
+               <sysproperty key="java.awt.headless" value="true"/>
+                <arg value="-ptestfiles/jmeter-batch.properties"/>
+                <arg value="-j"/>
+                <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
+                <arg value="-Dserver_port=${rmi_port}"/>
+                <arg value="-s"/>
+                <arg value="-Jserver.exitaftertest=true"/>
+             </java>
+        </daemons>
+        <sequential>
+            <sleep seconds="1"/>
+            <antcall target="batchtest">
+                <param name="remote" value="-Rlocalhost:${rmi_port}"/>
+                <param name="taskname" value="client"/>
+                <!-- Default the test name so we can override with a parameter -->
+            </antcall>
+        </sequential>
     </parallel>
     <!-- Show the log file -->
     <concat>
@@ -2448,16 +2446,16 @@ run JMeter unless all the JMeter jars are added.
 
     <local         name="BatchTestLocalServer.len"/>
     <condition property="BatchTestLocalServer.len">
-      <length file="${batchtestserver.out}/${batchtestserver.log}" when="equal" length="0" />
+        <length file="${batchtestserver.out}/${batchtestserver.log}" when="equal" length="0" />
     </condition>
     <fail unless="BatchTestLocalServer.len">
         Error detected in server log file. See above.
     </fail>
 
     <delete>
-      <fileset dir="${batchtestserver.out}">
-        <include name="${batchtestserver.log}"/>
-      </fileset>
+        <fileset dir="${batchtestserver.out}">
+             <include name="${batchtestserver.log}"/>
+        </fileset>
      </delete>
   </target>
 
@@ -2482,27 +2480,27 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info" message="Starting ${batchtest.name} using ${remote}"/>
 
     <macrodef name="deleteworkfiles">
-      <sequential>
+        <sequential>
         <delete>
-          <fileset dir="${batchtest.out}">
-            <include name="${batchtest.name}.csv"/>
-            <include name="${batchtest.name}.xml"/>
-            <include name="${batchtest.name}.log"/>
-            <include name="${batchtest.name}.jtl"/>
-          </fileset>
-        </delete>
-      </sequential>
+            <fileset dir="${batchtest.out}">
+                 <include name="${batchtest.name}.csv"/>
+                 <include name="${batchtest.name}.xml"/>
+                 <include name="${batchtest.name}.log"/>
+                 <include name="${batchtest.name}.jtl"/>
+            </fileset>
+         </delete>
+        </sequential>
     </macrodef>
 
     <macrodef name="checkfile">
-      <attribute name="type" default=""/>
-      <attribute name="file"/>
-      <sequential>
-        <local name="found"/>
-        <!--echo>Looking for @{file}</echo-->
-        <available property="found" file="@{file}"/>
-        <fail message="Cannot find @{type} file @{file}" unless="found"/>
-      </sequential>
+       <attribute name="type" default=""/>
+       <attribute name="file"/>
+       <sequential>
+          <local name="found"/>
+          <!--echo>Looking for @{file}</echo-->
+         <available property="found" file="@{file}"/>
+         <fail message="Cannot find @{type} file @{file}" unless="found"/>
+       </sequential>
     </macrodef>
 
     <checkfile type="input" file="${batchtest.inp}${file.separator}${batchtest.name}.csv"/>
@@ -2511,36 +2509,30 @@ run JMeter unless all the JMeter jars are added.
     <deleteworkfiles/>
 
     <java taskname="${taskname}" classname="org.apache.jmeter.NewDriver" fork="yes" dir="${basedir}/bin">
-      <classpath>
+       <classpath>
         <fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
-      </classpath>
-      <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
-      <sysproperty key="user.language" value="en"/>
-      <sysproperty key="user.region" value="US"/>
-      <sysproperty key="java.awt.headless" value="false"/>
-      <!-- Bug 59723 -->
-      <!-- quieten the logging; this has to be done first -->
-      <arg value="-ptestfiles/jmeter-batch.properties"/>
-      <!-- pick up default properties -->
-      <arg value="-qjmeter.properties"/>
-      <!-- reset the logging and other parameters -->
-      <arg value="-qtestfiles/jmeter-batch.properties"/>
-      <arg value="-n"/>
-      <arg value="-ttestfiles/${batchtest.name}.jmx"/>
-      <arg value="-j"/>
-      <arg value="${batchtest.name}.log"/>
-      <arg value="-l"/>
-      <arg value="${batchtest.name}.jtl"/>
-      <arg value="${remote}"/>
-      <!-- Check properties can be passed to local/remote tests -->
-      <arg value="-Jmodule=Module"/>
-      <arg value="-Gmodule=Module"/>
-      <!-- Check property can be used for filenames in local/remote tests (no need to defined as -G) -->
-      <arg value="-JCSVFILE=${batchtest.name}.csv"/>
-      <arg value="-J${batchtest.variable}=${batchtest.value}"/>
-    </java>
+       </classpath>
+        <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
+       <sysproperty key="user.language" value="en"/>
+       <sysproperty key="user.region" value="US"/>
+       <sysproperty key="java.awt.headless" value="false"/>
+        <arg value="-ptestfiles/jmeter-batch.properties"/>
+        <arg value="-n"/>
+        <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+        <arg value="-j"/>
+        <arg value="${batchtest.name}.log"/>
+        <arg value="-l"/>
+        <arg value="${batchtest.name}.jtl"/>
+        <arg value="${remote}"/>
+        <!-- Check properties can be passed to local/remote tests -->
+        <arg value="-Jmodule=Module"/>
+        <arg value="-Gmodule=Module"/>
+        <!-- Check property can be used for filenames in local/remote tests (no need to defined as -G) -->
+        <arg value="-JCSVFILE=${batchtest.name}.csv"/>
+        <arg value="-J${batchtest.variable}=${batchtest.value}"/>
+     </java>
 
     <!-- Show the log file -->
     <concat>
@@ -2558,7 +2550,7 @@ run JMeter unless all the JMeter jars are added.
     <loadfile property="file1.csv" srcFile="${batchtest.inp}/${batchtest.name}.csv"/>
     <loadfile property="file2.csv" srcFile="${batchtest.out}/${batchtest.name}.csv"/>
     <condition property="BatchTestLocal.csv.OK">
-      <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
+        <filesmatch file1="${batchtest.inp}/${batchtest.name}.csv" file2="${batchtest.out}/${batchtest.name}.csv"/>
     </condition>
     <fail unless="BatchTestLocal.csv.OK">
         CSV Files are not identical.
@@ -2574,7 +2566,7 @@ run JMeter unless all the JMeter jars are added.
     <loadfile property="file1.xml" srcFile="${batchtest.inp}/${batchtest.name}.xml"/>
     <loadfile property="file2.xml" srcFile="${batchtest.out}/${batchtest.name}.xml"/>
     <condition property="BatchTestLocal.xml.OK">
-     <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
+       <filesmatch file1="${batchtest.inp}/${batchtest.name}.xml" file2="${batchtest.out}/${batchtest.name}.xml"/>
     </condition>
     <fail unless="BatchTestLocal.xml.OK">
         XML Files are not identical.
@@ -2588,7 +2580,7 @@ run JMeter unless all the JMeter jars are added.
 
     <local         name="BatchTestLocal.len"/>
     <condition property="BatchTestLocal.len">
-      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+        <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
     </condition>
     <fail unless="BatchTestLocal.len">
         Error detected in log file. See above.
@@ -2600,61 +2592,61 @@ run JMeter unless all the JMeter jars are added.
 
   <!-- Additional test scripts -->
   <target name="batch_scripts">
-    <antcall target="batchtest">
-      <param name="batchtest.name" value="HTMLParserTestFile_2"/>
-    </antcall>
-    <antcall target="batchtest">
-      <!--  Using the same module controller name in command line mode causes NPE -->
-      <param name="batchtest.name" value="Bug47165"/>
-    </antcall>
-    <antcall target="batchtest">
-      <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
-      <!-- N.B. requires access to jmeter.apache.org -->
-      <param name="batchtest.name" value="Bug52310"/>
-    </antcall>
-    <antcall target="batchtest">
-      <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
-      <param name="batchtest.name" value="Bug52968"/>
-    </antcall>
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="HTMLParserTestFile_2"/>
+      </antcall>
+      <antcall target="batchtest">
+          <!--  Using the same module controller name in command line mode causes NPE -->
+          <param name="batchtest.name" value="Bug47165"/>
+      </antcall>
+      <antcall target="batchtest">
+          <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
+          <!-- N.B. requires access to jmeter.apache.org -->
+          <param name="batchtest.name" value="Bug52310"/>
+      </antcall>
+      <antcall target="batchtest">
+          <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
+          <param name="batchtest.name" value="Bug52968"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
-      <param name="batchtest.name" value="Bug50898"/>
-    </antcall>
+      <antcall target="batchtest">
+          <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
+          <param name="batchtest.name" value="Bug50898"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <!-- Foreach works incorrectly with indexes on subsequent iterations -->
-      <param name="batchtest.name" value="Bug56243"/>
-    </antcall>
+      <antcall target="batchtest">
+          <!-- Foreach works incorrectly with indexes on subsequent iterations -->
+          <param name="batchtest.name" value="Bug56243"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
-      <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
-      <param name="batchtest.name" value="Bug54685"/>
-      <param name="batchtest.variable" value="sample_variables"/>
-      <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
-    </antcall>
+      <antcall target="batchtest">
+          <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
+          <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
+          <param name="batchtest.name" value="Bug54685"/>
+          <param name="batchtest.variable" value="sample_variables"/>
+          <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <!--   StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node -->
-      <param name="batchtest.name" value="Bug55375"/>
-    </antcall>
+      <antcall target="batchtest">
+        <!--   StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node -->
+        <param name="batchtest.name" value="Bug55375"/>
+      </antcall>
 
-    <antcall target="batchtestserver">
-      <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
-      <!-- This is the actual test -->
-      <param name="batchtest.name" value="Bug54685"/>
-      <param name="batchtest.variable" value="sample_variables"/>
-      <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
-    </antcall>
+      <antcall target="batchtestserver">
+          <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
+          <!-- This is the actual test -->
+          <param name="batchtest.name" value="Bug54685"/>
+          <param name="batchtest.variable" value="sample_variables"/>
+          <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <param name="batchtest.name" value="Bug56811"/>
-    </antcall>
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="Bug56811"/>
+      </antcall>
 
-    <antcall target="batchtest">
-      <param name="batchtest.name" value="TEST_HTTPS"/>
-    </antcall>
+      <antcall target="batchtest">
+          <param name="batchtest.name" value="TEST_HTTPS"/>
+      </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
@@ -2686,7 +2678,7 @@ run JMeter unless all the JMeter jars are added.
     <condition property="build.test.gump" value="${build.test}">
       <not><isset property="build.test.gump"/></not>
     </condition>
-    <echo level="info">
+   <echo level="info">
    gump.run = ${gump.run}
    java.awt.headless = ${java.awt.headless}
    test.headless = ${test.headless}
@@ -2696,12 +2688,12 @@ run JMeter unless all the JMeter jars are added.
    test dir gump = ${build.test.gump}
    testsaveservice.saveout = ${testsaveservice.saveout}
    test.encoding = ${test.encoding}
-    </echo>
-    <delete quiet="true">
+   </echo>
+   <delete quiet="true">
       <fileset dir="${basedir}/bin/testfiles" includes="*.jmx.out"/>
-    </delete>
-    <!-- fork="yes" is required or dir attribute is ignored -->
-    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
+   </delete>
+   <!-- fork="yes" is required or dir attribute is ignored -->
+   <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
       <classpath>
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
@@ -2715,7 +2707,7 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
       <arg value="${build.test}"/>
-      <arg value="${basedir}/bin/jmeter.properties"/>
+      <arg value="${basedir}/bin/testfiles/jmetertest.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
     </java>
   </target>
@@ -2726,26 +2718,26 @@ run JMeter unless all the JMeter jars are added.
   -->
   <target name="junit"  depends="compile-tests"
     description="Run individual JUnit test (-Dtest.case=org.apache.jorphan.test.AllTests) (-Dtest.format=plain) (-Dtest.showoutput=true)">
-    <mkdir dir="reports"/>
-    <property name="test.format" value="plain"/>
-    <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
-    <property name="test.showoutput" value="false"/>
-    <junit fork="true"
-           dir="${basedir}/bin"
-           showoutput="${test.showoutput}"
-           printsummary="on">
-      <formatter type="${test.format}" usefile="yes"/>
-      <formatter type="xml"/>
-      <jvmarg value="-Dfile.encoding=${test.encoding}"/>
-      <!-- Allow headless to be passed in -->
-      <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
+  <mkdir dir="reports"/>
+  <property name="test.format" value="plain"/>
+  <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
+  <property name="test.showoutput" value="false"/>
+  <junit fork="true"
+   dir="${basedir}/bin"
+   showoutput="${test.showoutput}"
+   printsummary="on">
+  <formatter type="${test.format}" usefile="yes"/>
+  <formatter type="xml"/>
+  <jvmarg value="-Dfile.encoding=${test.encoding}"/>
+  <!-- Allow headless to be passed in -->
+  <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
       <classpath>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
         <path refid="classpath"/>
       </classpath>
-      <test name="${test.case}" todir="reports"/>
-    </junit>
+  <test name="${test.case}" todir="reports"/>
+  </junit>
   </target>
 
   <!-- Utility target to collate reports -->
@@ -2759,16 +2751,16 @@ run JMeter unless all the JMeter jars are added.
     </junitreport>
   </target>
 
-  <target name="generator_jar" depends="compile-tests" description="Create the test tree generator jar">
-    <jar jarfile="${dest.jar}/ApacheJMeter_generator.jar"
-         manifest="${build.dir}/MANIFEST_BIN.MF">
-      <zipfileset file="${resources.meta-inf}/default.notice"
-         fullpath="META-INF/NOTICE" />
-      <zipfileset file="${resources.meta-inf}/default.license"
-         fullpath="META-INF/LICENSE" />
-      <fileset dir="${build.test}" includes="**/GenerateTreeGui*.class"/>
-    </jar>
-  </target>
+    <target name="generator_jar" depends="compile-tests" description="Create the test tree generator jar">
+      <jar jarfile="${dest.jar}/ApacheJMeter_generator.jar"
+          manifest="${build.dir}/MANIFEST_BIN.MF">
+        <zipfileset file="${resources.meta-inf}/default.notice"
+          fullpath="META-INF/NOTICE" />
+        <zipfileset file="${resources.meta-inf}/default.license"
+          fullpath="META-INF/LICENSE" />
+        <fileset dir="${build.test}" includes="**/GenerateTreeGui*.class"/>
+      </jar>
+    </target>
 
   <target name="svnCheck" description="Use SVN to get the current revision" unless="disable-svnCheck">
     <exec executable="svn" logerror="true" outputproperty="svn.exec.result" failonerror="true" failifexecutionfails="true">
@@ -2790,376 +2782,376 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info" message="svn.revision=${svn.revision}"/>
   </target>
 
-  <!-- Macro is needed to be able to perform indirect evaluation of property names -->
-  <macrodef name="process_jarfile">
-    <attribute name="jarname"/>
-    <attribute name="dest.dir" default="${lib.dir}"/>
-    <sequential>
-      <!-- Call all possible targets; these are only executed if the appropriate property is set -->
-      <antcall target="_check_exists">
-        <param name="file" value="@{dest.dir}/${@{jarname}.jar}"/>
-        <param name="loc" value="${@{jarname}.loc}"/>
-        <param name="jar" value="${@{jarname}.jar}"/>
-        <param name="path" value="@{dest.dir}"/>
-        <param name="md5"  value="${@{jarname}.md5}"/>
-        <param name="_checkMD5" value="true"/>
-      </antcall>
-      <antcall target="_check_jarfile">
-        <param name="loc" value="${@{jarname}.loc}"/>
-        <param name="jar" value="${@{jarname}.jar}"/>
-        <param name="path" value="@{dest.dir}"/>
-        <param name="md5"  value="${@{jarname}.md5}"/>
-        <param name="_checkMD5" value="true"/>
-        <param name="zip" value="${@{jarname}.zip}"/>
-        <param name="ent" value="${@{jarname}.ent}"/>
-        <param name="zipprop" value="@{jarname}.zip"/>
-      </antcall>
-    </sequential>
-  </macrodef>
+    <!-- Macro is needed to be able to perform indirect evaluation of property names -->
+    <macrodef name="process_jarfile">
+        <attribute name="jarname"/>
+        <attribute name="dest.dir" default="${lib.dir}"/>
+        <sequential>
+            <!-- Call all possible targets; these are only executed if the appropriate property is set -->
+            <antcall target="_check_exists">
+                <param name="file" value="@{dest.dir}/${@{jarname}.jar}"/>
+                <param name="loc" value="${@{jarname}.loc}"/>
+                <param name="jar" value="${@{jarname}.jar}"/>
+                <param name="path" value="@{dest.dir}"/>
+                <param name="md5"  value="${@{jarname}.md5}"/>
+                <param name="_checkMD5" value="true"/>
+            </antcall>
+            <antcall target="_check_jarfile">
+                <param name="loc" value="${@{jarname}.loc}"/>
+                <param name="jar" value="${@{jarname}.jar}"/>
+                <param name="path" value="@{dest.dir}"/>
+                <param name="md5"  value="${@{jarname}.md5}"/>
+                <param name="_checkMD5" value="true"/>
+                <param name="zip" value="${@{jarname}.zip}"/>
+                <param name="ent" value="${@{jarname}.ent}"/>
+                <param name="zipprop" value="@{jarname}.zip"/>
+            </antcall>
+        </sequential>
+    </macrodef>
 
-  <!-- Check if jarfile exists, and set properties for calling zip or jar download -->
-  <target name="_check_jarfile" if="_get_file">
-    <!-- Check if file exists -->
-    <fail message="Error in build file or calling sequence" if="file.exists"/>
-    <echo level="info">Checking ${jar}</echo>
-    <available file="${path}/${jar}" property="file.exists"/>
-    <condition property="_get_zipfile">
-      <isset property="${zipprop}"/>
-    </condition>
-    <condition property="_get_jarfile">
-      <not>
-        <isset property="${zipprop}"/>
-      </not>
-    </condition>
-    <!-- Delete all but the desired version of the file -->
-    <loadresource property="wildCard">
-      <propertyresource name="jar"/>
-      <filterchain>
-        <tokenfilter>
-          <filetokenizer/>
-          <replaceregex pattern="-\d+\.\d+.*(\.jar|\.zip)" replace="-*\1"/>
-        </tokenfilter>
-      </filterchain>
-    </loadresource>
-    <echo level="info" message="Deleting ${wildCard} (excluding ${jar})"/>
-    <delete verbose="true">
-      <!-- Unfortunately commons-jexl jars don't have unique prefixes -->
-      <fileset dir="${path}" includes="${wildCard}" excludes="${jar} commons-jexl-*"/>
-    </delete>
-    <!-- Emulate conditional execution; targets use if/unless to suppress execution -->
-    <antcall target="_get_jarfile"/>
-    <antcall target="_get_zipfile"/>
-  </target>
+    <!-- Check if jarfile exists, and set properties for calling zip or jar download -->
+    <target name="_check_jarfile" if="_get_file">
+        <!-- Check if file exists -->
+        <fail message="Error in build file or calling sequence" if="file.exists"/>
+        <echo level="info">Checking ${jar}</echo>
+        <available file="${path}/${jar}" property="file.exists"/>
+        <condition property="_get_zipfile">
+            <isset property="${zipprop}"/>
+        </condition>
+        <condition property="_get_jarfile">
+            <not>
+                <isset property="${zipprop}"/>
+            </not>
+        </condition>
+        <!-- Delete all but the desired version of the file -->
+        <loadresource property="wildCard">
+          <propertyresource name="jar"/>
+          <filterchain>
+            <tokenfilter>
+              <filetokenizer/>
+              <replaceregex pattern="-\d+\.\d+.*(\.jar|\.zip)" replace="-*\1"/>
+            </tokenfilter>
+          </filterchain>
+        </loadresource>
+        <echo level="info" message="Deleting ${wildCard} (excluding ${jar})"/>
+        <delete verbose="true">
+          <!-- Unfortunately commons-jexl jars don't have unique prefixes -->
+          <fileset dir="${path}" includes="${wildCard}" excludes="${jar} commons-jexl-*"/>
+        </delete>
+        <!-- Emulate conditional execution; targets use if/unless to suppress execution -->
+        <antcall target="_get_jarfile"/>
+        <antcall target="_get_zipfile"/>
+    </target>
 
-  <!-- Get a zip file and unpack it -->
-  <target name="_get_zipfile" if="_get_zipfile" unless="file.exists">
-    <get src="${loc}/${zip}"
-         dest="${build.dir}/${zip}"
-         usetimestamp="true" ignoreerrors="false"/>
-    <unzip dest="${build.dir}" src="${build.dir}/${zip}">
-      <patternset>
-        <include name="**/${ent}"/>
-      </patternset>
-      <!-- This requires Ant 1.7.0 or later -->
-      <mapper type="flatten"/>
-    </unzip>
-    <antcall target="_checkMD5">
-      <param name="file" value="${ent}"/>
-      <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
-    </antcall>
-    <move preservelastmodified="true" overwrite="true"
-          file="${build.dir}/${ent}" tofile="${path}/${jar}" verbose="true"/>
-  </target>
+    <!-- Get a zip file and unpack it -->
+    <target name="_get_zipfile" if="_get_zipfile" unless="file.exists">
+        <get src="${loc}/${zip}"
+             dest="${build.dir}/${zip}"
+             usetimestamp="true" ignoreerrors="false"/>
+        <unzip dest="${build.dir}" src="${build.dir}/${zip}">
+            <patternset>
+                <include name="**/${ent}"/>
+            </patternset>
+            <!-- This requires Ant 1.7.0 or later -->
+            <mapper type="flatten"/>
+        </unzip>
+        <antcall target="_checkMD5">
+            <param name="file" value="${ent}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <move preservelastmodified="true" overwrite="true"
+            file="${build.dir}/${ent}" tofile="${path}/${jar}" verbose="true"/>
+    </target>
 
-  <!-- Download a jar file and check its hash; if correct, move to correct directory -->
-  <target name="_get_jarfile" if="_get_jarfile" unless="file.exists">
-    <echo message="Fetching: ${path}/${jar}" level="info"/>
-    <get src="${loc}/${jar}"
-         dest="${build.dir}/${jar}"
-         usetimestamp="false" ignoreerrors="false"/>
-    <antcall target="_checkMD5">
-      <param name="file" value="${jar}"/>
-      <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
-    </antcall>
-    <move preservelastmodified="true" overwrite="true"
-          file="${build.dir}/${jar}" tofile="${path}/${jar}" verbose="true"/>
-  </target>
+    <!-- Download a jar file and check its hash; if correct, move to correct directory -->
+    <target name="_get_jarfile" if="_get_jarfile" unless="file.exists">
+        <echo message="Fetching: ${path}/${jar}" level="info"/>
+        <get src="${loc}/${jar}"
+             dest="${build.dir}/${jar}"
+             usetimestamp="false" ignoreerrors="false"/>
+        <antcall target="_checkMD5">
+            <param name="file" value="${jar}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <move preservelastmodified="true" overwrite="true"
+            file="${build.dir}/${jar}" tofile="${path}/${jar}" verbose="true"/>
+    </target>
 
-  <!-- Ant subroutine, required to localise MD5OK property -->
-  <target name="_checkMD5" if="_checkMD5">
-    <!--
-    @param path - location of file
-    @param file - file name
-    -->
-    <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
-    <condition property="MD5OK">
-      <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
-    </condition>
-    <fail unless="MD5OK">Bad Checksum: for ${file}
+    <!-- Ant subroutine, required to localise MD5OK property -->
+    <target name="_checkMD5" if="_checkMD5">
+        <!--
+        @param path - location of file
+        @param file - file name
+        -->
+        <checksum algorithm="MD5" file="${path}/${file}" property="MD5"/>
+        <condition property="MD5OK">
+            <equals arg1="${MD5}" arg2="${md5}" casesensitive="false"/>
+        </condition>
+        <fail unless="MD5OK">Bad Checksum: for ${file}
         expected ${md5}
         actual   ${MD5}</fail>
-    <echo level="info" message="Checksum OK: ${file}"/>
-  </target>
+        <echo level="info" message="Checksum OK: ${file}"/>
+    </target>
 
-  <!--
+    <!--
     Generic target to process all external jars.
     The "process_jarfile" macro resolves the properties that begin with the jarname
     and calls all the possible targets. The targets use "if" and "unless" to provide
     conditional execution (it would be a lot easier if antcall supported if/unless).
-  -->
-  <target name="_process_all_jars">
-    <process_jarfile jarname="accessors-smart"/>
-    <process_jarfile jarname="apache-bsf"/>
-    <process_jarfile jarname="asm"/>
-    <process_jarfile jarname="avalon-framework"/>
-    <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
-    <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
-    <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
-    <process_jarfile jarname="beanshell"/>
-    <process_jarfile jarname="commons-codec"/>
-    <process_jarfile jarname="commons-collections"/>
-    <process_jarfile jarname="commons-dbcp2"/>
-    <process_jarfile jarname="commons-httpclient"/>
-    <process_jarfile jarname="commons-io"/>
-    <process_jarfile jarname="commons-jexl"/>
-    <process_jarfile jarname="commons-jexl2"/>
-    <process_jarfile jarname="commons-jexl3"/>
-    <process_jarfile jarname="commons-lang3"/>
-    <process_jarfile jarname="commons-logging"/>
-    <process_jarfile jarname="commons-math3"/>
-    <process_jarfile jarname="commons-net"/>
-    <process_jarfile jarname="commons-pool2"/>
-    <process_jarfile jarname="dnsjava"/>
-    <process_jarfile jarname="excalibur-logger"/>
-    <process_jarfile jarname="freemarker"/>
-    <process_jarfile jarname="groovy-all"/>
-    <process_jarfile jarname="hamcrest-core"/>
-    <process_jarfile jarname="httpclient"/>
-    <process_jarfile jarname="httpcore"/>
-    <process_jarfile jarname="httpmime"/>
-    <process_jarfile jarname="jakarta-oro"/>
-    <process_jarfile jarname="javamail"/>
-    <process_jarfile jarname="jcharts"/>
-    <process_jarfile jarname="jdom" dest.dir="${lib.doc}"/>
-    <process_jarfile jarname="jms"/>
-    <process_jarfile jarname="rhino"/>
-    <process_jarfile jarname="jodd-core"/>
-    <process_jarfile jarname="jodd-lagarto"/>
-    <process_jarfile jarname="jodd-log"/>
-    <process_jarfile jarname="jodd-props"/>
-    <process_jarfile jarname="json-path"/>
-    <process_jarfile jarname="json-smart"/>
-    <process_jarfile jarname="jsoup"/>
-    <process_jarfile jarname="junit"/>
-    <process_jarfile jarname="logkit"/>
-    <process_jarfile jarname="mongo-java-driver"/>
-    <process_jarfile jarname="ph-css" />
-    <process_jarfile jarname="ph-commons" />
-    <process_jarfile jarname="rsyntaxtextarea"/>
-    <process_jarfile jarname="serializer"/>
-    <process_jarfile jarname="slf4j-api"/>
-    <process_jarfile jarname="jtidy"/>
-    <process_jarfile jarname="tika-core"/>
-    <process_jarfile jarname="tika-parsers"/>
-    <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
-    <process_jarfile jarname="commons-lang" dest.dir="${lib.doc}"/>
-    <process_jarfile jarname="xalan"/>
-    <process_jarfile jarname="xerces"/>
-    <process_jarfile jarname="xml-apis"/>
-    <process_jarfile jarname="xmlgraphics-commons"/>
-    <process_jarfile jarname="xmlpull"/>
-    <process_jarfile jarname="xpp3"/>
-    <process_jarfile jarname="xstream"/>
-  </target>
+    -->
+    <target name="_process_all_jars">
+        <process_jarfile jarname="accessors-smart"/>
+        <process_jarfile jarname="apache-bsf"/>
+        <process_jarfile jarname="asm"/>
+        <process_jarfile jarname="avalon-framework"/>
+        <process_jarfile jarname="bcmail" dest.dir="${lib.api}"/>
+        <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
+        <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
+        <process_jarfile jarname="beanshell"/>
+        <process_jarfile jarname="commons-codec"/>
+        <process_jarfile jarname="commons-collections"/>
+        <process_jarfile jarname="commons-dbcp2"/>
+        <process_jarfile jarname="commons-httpclient"/>
+        <process_jarfile jarname="commons-io"/>
+        <process_jarfile jarname="commons-jexl"/>
+        <process_jarfile jarname="commons-jexl2"/>
+        <process_jarfile jarname="commons-jexl3"/>
+        <process_jarfile jarname="commons-lang3"/>
+        <process_jarfile jarname="commons-logging"/>
+        <process_jarfile jarname="commons-math3"/>
+        <process_jarfile jarname="commons-net"/>
+        <process_jarfile jarname="commons-pool2"/>
+        <process_jarfile jarname="dnsjava"/>
+        <process_jarfile jarname="excalibur-logger"/>
+        <process_jarfile jarname="freemarker"/>
+        <process_jarfile jarname="groovy-all"/>
+        <process_jarfile jarname="hamcrest-core"/>
+        <process_jarfile jarname="httpclient"/>
+        <process_jarfile jarname="httpcore"/>
+        <process_jarfile jarname="httpmime"/>
+        <process_jarfile jarname="jakarta-oro"/>
+        <process_jarfile jarname="javamail"/>
+        <process_jarfile jarname="jcharts"/>
+        <process_jarfile jarname="jdom" dest.dir="${lib.doc}"/>
+        <process_jarfile jarname="jms"/>
+        <process_jarfile jarname="rhino"/>
+        <process_jarfile jarname="jodd-core"/>
+        <process_jarfile jarname="jodd-lagarto"/>
+        <process_jarfile jarname="jodd-log"/>
+        <process_jarfile jarname="jodd-props"/>
+        <process_jarfile jarname="json-path"/>
+        <process_jarfile jarname="json-smart"/>
+        <process_jarfile jarname="jsoup"/>
+        <process_jarfile jarname="junit"/>
+        <process_jarfile jarname="logkit"/>
+        <process_jarfile jarname="mongo-java-driver"/>
+        <process_jarfile jarname="ph-css" />
+        <process_jarfile jarname="ph-commons" />
+        <process_jarfile jarname="rsyntaxtextarea"/>
+        <process_jarfile jarname="serializer"/>
+        <process_jarfile jarname="slf4j-api"/>
+        <process_jarfile jarname="jtidy"/>
+        <process_jarfile jarname="tika-core"/>
+        <process_jarfile jarname="tika-parsers"/>
+        <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+        <process_jarfile jarname="commons-lang" dest.dir="${lib.doc}"/>
+        <process_jarfile jarname="xalan"/>
+        <process_jarfile jarname="xerces"/>
+        <process_jarfile jarname="xml-apis"/>
+        <process_jarfile jarname="xmlgraphics-commons"/>
+        <process_jarfile jarname="xmlpull"/>
+        <process_jarfile jarname="xpp3"/>
+        <process_jarfile jarname="xstream"/>
+    </target>
 
-  <target name="_process_doc_jars">
-    <process_jarfile jarname="commons-collections"/>
-    <process_jarfile jarname="commons-lang"   dest.dir="${lib.doc}"/>
-    <process_jarfile jarname="jdom"           dest.dir="${lib.doc}"/>
-    <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
-  </target>
+    <target name="_process_doc_jars">
+      <process_jarfile jarname="commons-collections"/>
+      <process_jarfile jarname="commons-lang"   dest.dir="${lib.doc}"/>
+      <process_jarfile jarname="jdom"           dest.dir="${lib.doc}"/>
+      <process_jarfile jarname="velocity"   dest.dir="${lib.doc}"/>
+    </target>
 
-  <target name="_process_checkstyle_jars">
-    <process_jarfile jarname="checkstyle-all"    dest.dir="${lib.opt}"/>
-  </target>
+    <target name="_process_checkstyle_jars">
+      <process_jarfile jarname="checkstyle-all"    dest.dir="${lib.opt}"/>
+    </target>
 
-  <!-- Update a jar (clean, download, package in one shot.-->
-  <target name="update_jar" depends="clean, download_jars, package">
-  </target>
+    <!-- Update a jar (clean, download, package in one shot.-->
+    <target name="update_jar" depends="clean, download_jars, package">
+    </target>
 
 
-  <!-- Download all missing jars.-->
-  <target name="download_jars" description="Download any missing jar files">
-    <!-- build.dir may be needed as a temporary work area -->
-    <mkdir dir="${build.dir}" />
-    <!-- The directories must exist otherwise the build fails when deleting previous versions -->
-    <mkdir dir="${lib.api}" />
-    <mkdir dir="${lib.doc}" />
-    <delete verbose="true">
-      <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
-      <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
-      <!-- tidy up unused Excalibur jars -->
-      <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
-      <!-- jdom jar has moved; drop the old one -->
-      <fileset dir="${lib.dir}" includes="jdom-1.1.3.jar"/>
-      <!-- Drop slf4j-nop implementation -->
-      <fileset dir="${lib.dir}" includes="slf4j-nop-1.7.13.jar"/>
-    </delete>
-    <antcall target="_process_all_jars">
+    <!-- Download all missing jars.-->
+    <target name="download_jars" description="Download any missing jar files">
+        <!-- build.dir may be needed as a temporary work area -->
+        <mkdir dir="${build.dir}" />
+        <!-- The directories must exist otherwise the build fails when deleting previous versions -->
+        <mkdir dir="${lib.api}" />
+        <mkdir dir="${lib.doc}" />
+        <delete verbose="true">
+          <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
+          <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
+          <!-- tidy up unused Excalibur jars -->
+          <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
+          <!-- jdom jar has moved; drop the old one -->
+          <fileset dir="${lib.dir}" includes="jdom-1.1.3.jar"/>
+          <!-- Drop slf4j-nop implementation -->
+          <fileset dir="${lib.dir}" includes="slf4j-nop-1.7.13.jar"/>
+        </delete>
+        <antcall target="_process_all_jars">
+            <param name="_get_file" value="true"/>
+        </antcall>
+    </target>
+
+    <target name="download_doc_jars">
+      <!-- build.dir may be needed as a temporary work area -->
+      <mkdir dir="${build.dir}" />
+      <antcall target="_process_doc_jars">
+          <param name="_get_file" value="true"/>
+      </antcall>
+    </target>
+
+    <target name="download_checkstyle">
+      <!-- build.dir may be needed as a temporary work area -->
+     <mkdir dir="${build.dir}" />
+      <antcall target="_process_checkstyle_jars">
         <param name="_get_file" value="true"/>
-    </antcall>
-  </target>
+      </antcall>
+    </target>
 
-  <target name="download_doc_jars">
-    <!-- build.dir may be needed as a temporary work area -->
-    <mkdir dir="${build.dir}" />
-    <antcall target="_process_doc_jars">
-      <param name="_get_file" value="true"/>
-    </antcall>
-  </target>
+    <target name="_check_exists" if="_check_exists">
+        <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
+        <available file="${file}" property="file.exists"/>
+        <fail message="Could not find file ${file}" unless="file.exists"/>
+        <antcall target="_checkMD5">
+            <param name="file" value="${jar}"/>
+            <param name="path" value="${path}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <!--echo level="info" message="Found ${file}"/-->
+    </target>
 
-  <target name="download_checkstyle">
-    <!-- build.dir may be needed as a temporary work area -->
-   <mkdir dir="${build.dir}" />
-    <antcall target="_process_checkstyle_jars">
-      <param name="_get_file" value="true"/>
-    </antcall>
-  </target>
+    <target name="check_jars" description="Check that all required jar files are present" unless="no_check_jars">
+        <antcall target="_process_all_jars">
+            <param name="_check_exists" value="true"/>
+        </antcall>
+    </target>
 
-  <target name="_check_exists" if="_check_exists">
-    <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>
-    <available file="${file}" property="file.exists"/>
-    <fail message="Could not find file ${file}" unless="file.exists"/>
-    <antcall target="_checkMD5">
-      <param name="file" value="${jar}"/>
-      <param name="path" value="${path}"/>
-      <param name="md5"  value="${md5}"/>
-    </antcall>
-    <!--echo level="info" message="Found ${file}"/-->
-  </target>
+    <!-- Special: process to get RSyntaxTextArea-->
+    <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
+    <!--
+    <target name="_process_rsyntaxtextarea">
+        <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
+        <antcall target="_get_rsyntaxtextarea"/>
+    </target>
+    -->
+    <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
+    <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
+    <!--
+    <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
+        <property name="loc" value="${rsyntaxtextarea.loc}"/>
+        <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
+        <property name="jar" value="${rsyntaxtextarea.name}.jar"/>
+        <property name="md5" value="${rsyntaxtextarea.md5}"/>
+        <property name="path" value="./lib"/>
+        <get src="${loc}/${zip}"
+             dest="${build.dir}/${zip}"
+             usetimestamp="true" ignoreerrors="false"/>
+        <unzip dest="${build.dir}" src="${build.dir}/${zip}">
+            <patternset>
+                <include name="**/${jar}"/>
+            </patternset>
+            <mapper type="flatten"/>
+        </unzip>
+        <antcall target="_checkMD5">
+            <param name="file" value="${build.dir}/${jar}"/>
+            <param name="path" value="${build.dir}"/>
+            <param name="md5"  value="${md5}"/>
+        </antcall>
+        <delete>
+            <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/>
+        </delete>
+        <move preservelastmodified="true" overwrite="true"
+            file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
+        <delete file="${build.dir}/${zip}"/>
+    </target>
+    -->
 
-  <target name="check_jars" description="Check that all required jar files are present" unless="no_check_jars">
-    <antcall target="_process_all_jars">
-      <param name="_check_exists" value="true"/>
-    </antcall>
-  </target>
+    <!-- Need to define config_loc for use by Eclipse -->
+    <property name="config_loc" value="."/>
+    <target name="checkstyle">
+        <available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
+        <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
 
-  <!-- Special: process to get RSyntaxTextArea-->
-  <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-  <!--
-  <target name="_process_rsyntaxtextarea">
-      <available file="./lib/${rsyntaxtextarea.jar}" property="rsyntaxtextarea.exists"/>
-      <antcall target="_get_rsyntaxtextarea"/>
-  </target>
-  -->
-  <!-- Get RSyntaxTextArea binary zip file, unpack it, pick up jar file and remove the zip -->
-  <!-- Useless since rsyntaxtextarea artifacts are published to Maven Repo since 9th july 2014 (JMeter 2.12) -->
-  <!--
-  <target name="_get_rsyntaxtextarea" unless="rsyntaxtextarea.exists">
-    <property name="loc" value="${rsyntaxtextarea.loc}"/>
-    <property name="zip" value="${rsyntaxtextarea.name}_${rsyntaxtextarea.version}.zip"/>
-    <property name="jar" value="${rsyntaxtextarea.name}.jar"/>
-    <property name="md5" value="${rsyntaxtextarea.md5}"/>
-    <property name="path" value="./lib"/>
-    <get src="${loc}/${zip}"
-         dest="${build.dir}/${zip}"
-         usetimestamp="true" ignoreerrors="false"/>
-    <unzip dest="${build.dir}" src="${build.dir}/${zip}">
-      <patternset>
-        <include name="**/${jar}"/>
-      </patternset>
-      <mapper type="flatten"/>
-    </unzip>
-    <antcall target="_checkMD5">
-      <param name="file" value="${build.dir}/${jar}"/>
-      <param name="path" value="${build.dir}"/>
-      <param name="md5"  value="${md5}"/>
-    </antcall>
-    <delete>
-      <fileset dir="${path}" includes="${rsyntaxtextarea.name}-*.jar"/>
-    </delete>
-    <move preservelastmodified="true" overwrite="true"
-        file="${build.dir}/${jar}" tofile="${path}/${rsyntaxtextarea.jar}" verbose="true"/>
-    <delete file="${build.dir}/${zip}"/>
-  </target>
-  -->
+        <antcall target="_process_checkstyle_jars"></antcall>
+        <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+                 classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
+        <checkstyle config="checkstyle.xml">
+          <fileset dir="src" includes="**/*.java"/>
+          <formatter type="plain"/>
+          <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
+        </checkstyle>
 
-  <!-- Need to define config_loc for use by Eclipse -->
-  <property name="config_loc" value="."/>
-  <target name="checkstyle">
-    <available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
-    <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
+    </target>
 
-    <antcall target="_process_checkstyle_jars"></antcall>
-    <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-             classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
-    <checkstyle config="checkstyle.xml">
-      <fileset dir="src" includes="**/*.java"/>
-      <formatter type="plain"/>
-      <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
-    </checkstyle>
-
-  </target>
-
-  <target name="sign_dist"
-    description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
-    <scriptdef name="gpg" language="beanshell">
-      <classpath>
-        <pathelement location="${lib.dir}/${beanshell.jar}"/>
-      </classpath>
-      <element name="fileset" type="fileset"/>
-      <![CDATA[
-      int execcode( String command ) // helper
-      {
-          StringTokenizer st = new StringTokenizer(command);
-          String[] cmdarray = new String[st.countTokens()];
-          for (int i = 0; st.hasMoreTokens(); i++) {
-              cmdarray[i] = st.nextToken();
-          }
-          // Merge stderr with stdout so only have to fetch one stream
-          proc = new ProcessBuilder(cmdarray).redirectErrorStream(true).start();
-          din = new DataInputStream( proc.getInputStream() );
-          while( (line=din.readLine()) != null ) {
-              print(line);
-          }
-          return this.proc.waitFor();
-      }
-        keyname = project.getProperty("gpg.keyname");
-        // Java 1.6 returns void, Java 1.5 returns null
-        if (keyname == void || keyname == null) {
-          self.fail("Please provide the gpg.keyname property");
+    <target name="sign_dist"
+      description="Sign release artifacts in dist and dist/maven.  Usage: ant sign_dist -Dgpg.keyname=key-id [-Dgpg.secretKeyring=path-to-keyring]      ">
+      <scriptdef name="gpg" language="beanshell">
+        <classpath>
+          <pathelement location="${lib.dir}/${beanshell.jar}"/>
+        </classpath>
+        <element name="fileset" type="fileset"/>
+        <![CDATA[
+        int execcode( String command ) // helper
+        {
+            StringTokenizer st = new StringTokenizer(command);
+            String[] cmdarray = new String[st.countTokens()];
+            for (int i = 0; st.hasMoreTokens(); i++) {
+                cmdarray[i] = st.nextToken();
+            }
+            // Merge stderr with stdout so only have to fetch one stream
+            proc = new ProcessBuilder(cmdarray).redirectErrorStream(true).start();
+            din = new DataInputStream( proc.getInputStream() );
+            while( (line=din.readLine()) != null ) {
+                print(line);
+            }
+            return this.proc.waitFor();
         }
-        keyring = project.getProperty("gpg.secretKeyring");
-        if (keyring == void || keyring == null) {
-          keyring = "secring.gpg"; // the default
-        }
-        sep=java.io.File.separator;
-        cmd="gpg2 --batch --yes -ba -u " + keyname + " --secret-keyring " + keyring;
-        self.log("Command: "+cmd);
-        filesets = elements.get("fileset");
-        for (i = 0; i < filesets.size(); ++i) {
-          fileset = filesets.get(i);
-          basedir = fileset.getDir();
-          self.log("Processing "+basedir);
-          ds = fileset.getDirectoryScanner();
-          srcFiles = ds.getIncludedFiles();
-          for (j=0; j < srcFiles.length; j++) {
-            srcFile=srcFiles[j];
-            file=basedir + sep + srcFile;
-            self.log("Signing "+srcFile);
-            ret=execcode(cmd+ " " + file);
-            if (ret != 0) {
-               self.fail("Command failed: "+ret);
+          keyname = project.getProperty("gpg.keyname");
+          // Java 1.6 returns void, Java 1.5 returns null
+          if (keyname == void || keyname == null) {
+            self.fail("Please provide the gpg.keyname property");
+          }
+          keyring = project.getProperty("gpg.secretKeyring");
+          if (keyring == void || keyring == null) {
+            keyring = "secring.gpg"; // the default
+          }
+          sep=java.io.File.separator;
+          cmd="gpg2 --batch --yes -ba -u " + keyname + " --secret-keyring " + keyring;
+          self.log("Command: "+cmd);
+          filesets = elements.get("fileset");
+          for (i = 0; i < filesets.size(); ++i) {
+            fileset = filesets.get(i);
+            basedir = fileset.getDir();
+            self.log("Processing "+basedir);
+            ds = fileset.getDirectoryScanner();
+            srcFiles = ds.getIncludedFiles();
+            for (j=0; j < srcFiles.length; j++) {
+              srcFile=srcFiles[j];
+              file=basedir + sep + srcFile;
+              self.log("Signing "+srcFile);
+              ret=execcode(cmd+ " " + file);
+              if (ret != 0) {
+                 self.fail("Command failed: "+ret);
+              }
             }
           }
-        }
-      ]]>
-    </scriptdef>
-    <gpg>
-      <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
-      <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
-    </gpg>
-  </target>
+        ]]>
+      </scriptdef>
+      <gpg>
+        <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
+        <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
+      </gpg>
+    </target>
 </project>

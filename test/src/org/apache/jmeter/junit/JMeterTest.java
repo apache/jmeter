@@ -179,7 +179,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
      * @throws FileNotFoundException 
      */
     private Element getBodyFromXMLDocument(InputStream stream)
-            throws ParserConfigurationException, SAXException, IOException {
+            throws ParserConfigurationException, FileNotFoundException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringElementContentWhitespace(true);
         dbf.setIgnoringComments(true);
