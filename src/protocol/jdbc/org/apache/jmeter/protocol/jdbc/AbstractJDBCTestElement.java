@@ -150,7 +150,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @param conn a {@link Connection}
      * @return the result of the execute command
      * @throws SQLException if a database error occurs
-     * @throws UnsupportedEncodingException when the result can not be converted to the required charset
      * @throws IOException when I/O error occurs
      * @throws UnsupportedOperationException if the user provided incorrect query type 
      */
@@ -159,9 +158,17 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }
 
     /**
+     * Execute the test element.
      * Use the sample given as argument to set time to first byte in the "latency" field of the SampleResult.
+     *
+     * @param conn a {@link Connection}
+     * @param sample a {@link SampleResult} to save the latency
+     * @return the result of the execute command
+     * @throws SQLException if a database error occurs
+     * @throws IOException when I/O error occurs
+     * @throws UnsupportedOperationException if the user provided incorrect query type
      */
-    protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException {
+    protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException, UnsupportedOperationException {
         log.debug("executing jdbc");
         Statement stmt = null;
 
