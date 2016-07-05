@@ -211,7 +211,9 @@ public class DataSourceElement extends AbstractTestElement
         if(isKeepAlive()) {
             dataSource.setTestWhileIdle(true);
             String validationQuery = getCheckQuery();
-            if (!StringUtils.isBlank(validationQuery)) {
+            if (StringUtils.isBlank(validationQuery)) {
+                dataSource.setValidationQuery(null);
+            } else {
                 dataSource.setValidationQuery(validationQuery);
             }
             dataSource.setSoftMinEvictableIdleTimeMillis(Long.parseLong(getConnectionAge()));
