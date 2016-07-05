@@ -110,6 +110,8 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>59803</bug>Use <code>isValid()</code> method from jdbc driver, if no validationQuery
+    is given in JDBC Connection Configuration.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

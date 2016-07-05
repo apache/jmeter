@@ -4061,10 +4061,10 @@ instead. (see figures 12 and 13).</p>
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getSoftMinEvictableIdleTimeMillis--">BasicDataSource.html#getSoftMinEvictableIdleTimeMillis</a>.
         Defaults to 5000 (5 seconds)
         </property>
-        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.
-        This defaults to 'SELECT 1' which is suitable for many databases. 
-        However some may require a different query; for example Oracle requires something like 'SELECT 1 FROM DUAL'.
-        Note this validation query is used on pool creation to validate it even if "Test While Idle" suggests query would only be used on idle connections. 
+        <property name="Validation Query" required="No">A simple query used to determine if the database is still responding.
+        This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
+        However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
+        Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
         This is DBCP behaviour.
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
