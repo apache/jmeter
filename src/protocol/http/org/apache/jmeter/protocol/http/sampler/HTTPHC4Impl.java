@@ -1218,7 +1218,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 bos.flush();
                 // We get the posted bytes using the encoding used to create it
-                postedBody.append(new String(bos.toByteArray(),
+                postedBody.append(bos.toString(
                         contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
                         : contentEncoding));
                 bos.close();
@@ -1341,11 +1341,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         post.getEntity().writeTo(bos);
                         bos.flush();
                         // We get the posted bytes using the encoding used to create it
-                        if (contentEncoding != null) {
-                            postedBody.append(new String(bos.toByteArray(), contentEncoding));
-                        } else {
-                            postedBody.append(new String(bos.toByteArray(), SampleResult.DEFAULT_HTTP_ENCODING));
-                        }
+                        postedBody.append(bos.toString(contentEncoding != null?contentEncoding:SampleResult.DEFAULT_HTTP_ENCODING));
+                        
                         bos.close();
                     }  else {
                         postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
