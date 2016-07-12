@@ -107,6 +107,7 @@ Summary
 
 <h3>I18N</h3>
 <ul>
+    <li>PR 214. Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé.</li>
 </ul>
 
 <h3>General</h3>
@@ -178,6 +179,7 @@ Summary
 <li>Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
 <li>Graham Russell (graham at ham1.co.uk)</li>
 <li>Teemu Vesala (teemu.vesala at qentinel.com)</li>
+<li>Asier Lostalé</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
