@@ -1600,7 +1600,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
         boolean wasRedirected = false;
         if (!areFollowingRedirect && res.isRedirect()) {
-            log.debug("Location set to - " + res.getRedirectLocation());
+            if(log.isDebugEnabled()) {
+                log.debug("Location set to - " + res.getRedirectLocation());
+            }
 
             if (getFollowRedirects()) {
                 res = followRedirects(res, frameDepth);
