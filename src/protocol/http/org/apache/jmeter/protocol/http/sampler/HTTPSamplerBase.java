@@ -684,9 +684,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return port number or UNSPECIFIED_PORT (== 0)
      */
     public int getPortIfSpecified() {
-        String port_s = getPropertyAsString(PORT, UNSPECIFIED_PORT_AS_STRING);
+        String portAsString = getPropertyAsString(PORT);
+        if(portAsString == null || portAsString.isEmpty()) {
+            return UNSPECIFIED_PORT;
+        }
+        
         try {
-            return Integer.parseInt(port_s.trim());
+            return Integer.parseInt(portAsString.trim());
         } catch (NumberFormatException e) {
             return UNSPECIFIED_PORT;
         }
