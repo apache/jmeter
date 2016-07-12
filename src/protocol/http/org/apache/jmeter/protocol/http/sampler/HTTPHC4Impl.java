@@ -96,6 +96,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BufferedHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
@@ -106,6 +107,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
+import org.apache.http.util.CharArrayBuffer;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -951,11 +953,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return string containing the headers, one per line
      */
     private String getResponseHeaders(HttpResponse response, HttpContext localContext) {
-        StringBuilder headerBuf = new StringBuilder();
+        Header[] rh = response.getAllHeaders();
+
+        StringBuilder headerBuf = new StringBuilder(40 * (rh.length+1));
         headerBuf.append(response.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
 
-        Header[] rh = response.getAllHeaders();
         for (Header responseHeader : rh) {
             writeResponseHeader(headerBuf, responseHeader);
         }
@@ -967,12 +970,17 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param headerBuffer {@link StringBuilder}
      * @param responseHeader {@link Header}
      */
-    private void writeResponseHeader(StringBuilder headerBuffer,
-            Header responseHeader) {
-        headerBuffer.append(responseHeader.getName())
+    private void writeResponseHeader(StringBuilder headerBuffer, Header responseHeader) {
+        if(responseHeader instanceof BufferedHeader) {
+            CharArrayBuffer buffer = ((BufferedHeader)responseHeader).getBuffer();
+            headerBuffer.append(buffer.buffer(), 0, buffer.length()).append("\n"); // $NON-NLS-1$;
+        }
+        else {
+            headerBuffer.append(responseHeader.getName())
             .append(": ") // $NON-NLS-1$
             .append(responseHeader.getValue())
             .append("\n"); // $NON-NLS-1$
+        }
     }
 
     /**
