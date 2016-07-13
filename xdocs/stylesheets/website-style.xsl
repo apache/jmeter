@@ -495,14 +495,14 @@
   </xsl:template>
 
   <xsl:template match="bugzilla">
-    <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id={./text()}">
+    <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id={./text()}">
       Bug
       <xsl:value-of select="./text()" />
     </a>
   </xsl:template>
 
   <xsl:template match="bug">
-    <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id={./text()}">
+    <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id={./text()}">
       Bug
       <xsl:value-of select="./text()" />
     </a>
