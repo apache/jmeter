@@ -749,7 +749,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
         
         HttpClient httpClient = null;
-        if(this.testElement.isConcurrentDwn()) {
+        boolean concurrentDwn = this.testElement.isConcurrentDwn();
+        if(concurrentDwn) {
             httpClient = (HttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
         }
         
@@ -784,7 +785,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
             // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
-            if(this.testElement.isConcurrentDwn()) {
+            if(concurrentDwn) {
                 try {
                     int maxConcurrentDownloads = Integer.parseInt(this.testElement.getConcurrentPool());
                     connManager.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, connManager.getDefaultMaxPerRoute()));                
@@ -843,7 +844,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
         }
 
-        if(this.testElement.isConcurrentDwn()) {
+        if(concurrentDwn) {
             JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
         }
 
