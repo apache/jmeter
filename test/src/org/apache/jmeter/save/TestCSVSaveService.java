@@ -164,7 +164,6 @@ public class TestCSVSaveService extends JMeterTestCase {
     // sample format should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
     public void testSample() {
-        System.out.println(JMeterUtils.getProperty("jmeter.save.saveservice.timestamp_format"));
         final String RESULT = "1,2,3,4,5,6,7,true,,8,9,10,11,12";
         SampleResult result = new SampleResult();
         result.setSaveConfig(new SampleSaveConfiguration());
