@@ -84,7 +84,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
-    <li>PR 211. Differentiate the timing for JDBC Sampler. Use latency and connect time.
+    <li><pr>211</pr>Differentiate the timing for JDBC Sampler. Use latency and connect time.
     Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
 </ul>
 
@@ -109,7 +109,7 @@ Summary
 
 <h3>I18N</h3>
 <ul>
-    <li>PR 214. Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé.</li>
+    <li><pr>214</pr>Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé.</li>
 </ul>
 
 <h3>General</h3>

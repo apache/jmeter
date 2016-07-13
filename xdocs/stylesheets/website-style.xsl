@@ -509,6 +509,13 @@
     -
   </xsl:template>
 
+  <xsl:template match="pr">
+    <a href="https://github.com/apache/jmeter/pull/{./text()}">
+      Pull request #<xsl:value-of select="./text()" />
+    </a>
+    -
+  </xsl:template>
+
   <xsl:template match="links">
     <div class="links">
       <div class="title">See also:</div>
