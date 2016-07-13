@@ -143,21 +143,35 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     protected AbstractJDBCTestElement() {
     }
-    
+
     /**
      * Execute the test element.
-     * 
-     * @param conn a {@link SampleResult} in case the test should sample; <code>null</code> if only execution is requested
+     *
+     * @param conn a {@link Connection}
      * @return the result of the execute command
      * @throws SQLException if a database error occurs
-     * @throws UnsupportedEncodingException when the result can not be converted to the required charset
      * @throws IOException when I/O error occurs
      * @throws UnsupportedOperationException if the user provided incorrect query type 
      */
     protected byte[] execute(Connection conn) throws SQLException, IOException, UnsupportedOperationException {
+        return execute(conn,  new SampleResult());
+    }
+
+    /**
+     * Execute the test element.
+     * Use the sample given as argument to set time to first byte in the "latency" field of the SampleResult.
+     *
+     * @param conn a {@link Connection}
+     * @param sample a {@link SampleResult} to save the latency
+     * @return the result of the execute command
+     * @throws SQLException if a database error occurs
+     * @throws IOException when I/O error occurs
+     * @throws UnsupportedOperationException if the user provided incorrect query type
+     */
+    protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException, UnsupportedOperationException {
         log.debug("executing jdbc");
         Statement stmt = null;
-        
+
         try {
             // Based on query return value, get results
             String _queryType = getQueryType();
@@ -167,6 +181,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 ResultSet rs = null;
                 try {
                     rs = stmt.executeQuery(getQuery());
+                    sample.latencyEnd();
                     return getStringFromResultSet(rs).getBytes(ENCODING);
                 } finally {
                     close(rs);
@@ -177,12 +192,14 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 // A CallableStatement can return more than 1 ResultSets
                 // plus a number of update counts.
                 boolean hasResultSet = cstmt.execute();
+                sample.latencyEnd();
                 String sb = resultSetsToString(cstmt,hasResultSet, out);
                 return sb.getBytes(ENCODING);
             } else if (UPDATE.equals(_queryType)) {
                 stmt = conn.createStatement();
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
                 stmt.executeUpdate(getQuery());
+                sample.latencyEnd();
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
                 return results.getBytes(ENCODING);
@@ -192,6 +209,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 ResultSet rs = null;
                 try {
                     rs = pstmt.executeQuery();
+                    sample.latencyEnd();
                     return getStringFromResultSet(rs).getBytes(ENCODING);
                 } finally {
                     close(rs);
@@ -200,19 +218,24 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 PreparedStatement pstmt = getPreparedStatement(conn);
                 setArguments(pstmt);
                 pstmt.executeUpdate();
+                sample.latencyEnd();
                 String sb = resultSetsToString(pstmt,false,null);
                 return sb.getBytes(ENCODING);
             } else if (ROLLBACK.equals(_queryType)){
                 conn.rollback();
+                sample.latencyEnd();
                 return ROLLBACK.getBytes(ENCODING);
             } else if (COMMIT.equals(_queryType)){
                 conn.commit();
+                sample.latencyEnd();
                 return COMMIT.getBytes(ENCODING);
             } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
                 conn.setAutoCommit(false);
+                sample.latencyEnd();
                 return AUTOCOMMIT_FALSE.getBytes(ENCODING);
             } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
                 conn.setAutoCommit(true);
+                sample.latencyEnd();
                 return AUTOCOMMIT_TRUE.getBytes(ENCODING);
             } else { // User provided incorrect query type
                 throw new UnsupportedOperationException("Unexpected query type: "+_queryType);
