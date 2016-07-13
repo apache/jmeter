@@ -84,6 +84,8 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+    <li>PR 211. Differentiate the timing for JDBC Sampler. Use latency and connect time.
+    Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
 </ul>
 
 <h3>Controllers</h3>
