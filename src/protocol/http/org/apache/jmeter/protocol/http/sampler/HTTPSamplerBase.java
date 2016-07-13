@@ -998,13 +998,20 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the QueryString value
      */
     public String getQueryString(String contentEncoding) {
+        
+        CollectionProperty arguments = getArguments().getArguments();
+        if(arguments.size() == 0) {
+            return "";
+        }
+        
         // Check if the sampler has a specified content encoding
         if (JOrphanUtils.isBlank(contentEncoding)) {
             // We use the encoding which should be used according to the HTTP spec, which is UTF-8
             contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
-        StringBuilder buf = new StringBuilder();
-        PropertyIterator iter = getArguments().iterator();
+        
+        StringBuilder buf = new StringBuilder(arguments.size() * 15);
+        PropertyIterator iter = arguments.iterator();
         boolean first = true;
         while (iter.hasNext()) {
             HTTPArgument item = null;
