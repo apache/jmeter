@@ -1084,7 +1084,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private String getConnectionHeaders(HttpRequest method) {
         if(method != null) {
             // Get all the request headers
-            StringBuilder hdrs = new StringBuilder(100);
+            StringBuilder hdrs = new StringBuilder(150);
             Header[] requestHeaders = method.getAllHeaders();
             for (Header requestHeader : requestHeaders) {
                 // Exclude the COOKIE header, since cookie is reported separately in the sample
