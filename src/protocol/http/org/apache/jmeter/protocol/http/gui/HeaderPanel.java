@@ -35,7 +35,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
@@ -45,8 +44,8 @@ import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Allows the user to specify if she needs HTTP header services, and give
@@ -57,8 +56,8 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
 {
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
+    private static final Logger LOG = LoggerFactory.getLogger(HeaderPanel.class);
+    
     private static final String ADD_COMMAND = "Add"; // $NON-NLS-1$
 
     private static final String DELETE_COMMAND = "Delete"; // $NON-NLS-1$
@@ -125,7 +124,6 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         boolean hasRows = tableModel.getRowCount() > 0;
         deleteButton.setEnabled(hasRows);
         saveButton.setEnabled(hasRows);
-
     }
 
     @Override
@@ -140,47 +138,53 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         add(makeTitlePanel(), BorderLayout.NORTH);
         add(createHeaderTablePanel(), BorderLayout.CENTER);
     }
+    
+    private void checkButtonsStatus() {
+        if (tableModel.getRowCount() == 0) {
+            deleteButton.setEnabled(false);
+            saveButton.setEnabled(false);
+        } else {
+            deleteButton.setEnabled(true);
+            saveButton.setEnabled(true);
+        }
+    }
+    
+    /**
+     * Remove the currently selected rows from the table.
+     */
+    protected void deleteRows() {
+        // If a table cell is being edited, we must cancel the editing
+        // before deleting the row.
+        GuiUtils.cancelEditing(headerTable);
+
+        int[] rowsSelected = headerTable.getSelectedRows();
+        int anchorSelection = headerTable.getSelectionModel().getAnchorSelectionIndex();
+        headerTable.clearSelection();
+        if (rowsSelected.length > 0) {
+            for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                tableModel.removeRow(rowsSelected[i]);
+            }
+            tableModel.fireTableDataChanged();
+
+            // Table still contains one or more rows, so highlight (select)
+            // the appropriate one.
+            if (tableModel.getRowCount() > 0) {
+                if (anchorSelection >= tableModel.getRowCount()) {
+                    anchorSelection = tableModel.getRowCount() - 1;
+                }
+                headerTable.setRowSelectionInterval(anchorSelection, anchorSelection);
+            }
+            
+            checkButtonsStatus();
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
 
         if (action.equals(DELETE_COMMAND)) {
-            if (tableModel.getRowCount() > 0) {
-                // If a table cell is being edited, we must cancel the editing
-                // before deleting the row.
-                if (headerTable.isEditing()) {
-                    TableCellEditor cellEditor = headerTable.getCellEditor(headerTable.getEditingRow(),
-                            headerTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
-
-                int rowSelected = headerTable.getSelectedRow();
-
-                if (rowSelected != -1) {
-                    tableModel.removeRow(rowSelected);
-                    tableModel.fireTableDataChanged();
-
-                    // Disable the DELETE and SAVE buttons if no rows remaining
-                    // after delete
-                    if (tableModel.getRowCount() == 0) {
-                        deleteButton.setEnabled(false);
-                        saveButton.setEnabled(false);
-                    }
-
-                    // Table still contains one or more rows, so highlight
-                    // (select) the appropriate one.
-                    else {
-                        int rowToSelect = rowSelected;
-
-                        if (rowSelected >= tableModel.getRowCount()) {
-                            rowToSelect = rowSelected - 1;
-                        }
-
-                        headerTable.setRowSelectionInterval(rowToSelect, rowToSelect);
-                    }
-                }
-            }
+            deleteRows();
         } else if (action.equals(ADD_COMMAND)) {
             // If a table cell is being edited, we should accept the current
             // value and stop the editing before adding a new row.
@@ -189,14 +193,8 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
 
-            // Enable the DELETE and SAVE buttons if they are currently
-            // disabled.
-            if (!deleteButton.isEnabled()) {
-                deleteButton.setEnabled(true);
-            }
-            if (!saveButton.isEnabled()) {
-                saveButton.setEnabled(true);
-            }
+            // Enable the DELETE and SAVE buttons if they are currently disabled.
+            checkButtonsStatus();
 
             // Highlight (select) the appropriate row.
             int rowToSelect = tableModel.getRowCount() - 1;
@@ -208,13 +206,10 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
                     headerManager.addFile(chooser.getSelectedFile().getAbsolutePath());
                     tableModel.fireTableDataChanged();
 
-                    if (tableModel.getRowCount() > 0) {
-                        deleteButton.setEnabled(true);
-                        saveButton.setEnabled(true);
-                    }
+                    checkButtonsStatus();
                 }
             } catch (IOException ex) {
-                log.error("Could not load headers", ex);
+                LOG.error("Could not load headers", ex);
             }
         } else if (action.equals(SAVE_COMMAND)) {
             try {
@@ -258,13 +253,12 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             }
             tableModel.fireTableDataChanged();
             if (headerTable.getRowCount() > rowCount) {
-                deleteButton.setEnabled(true);
-                saveButton.setEnabled(true);
-
                 // Highlight (select) the appropriate rows.
                 int rowToSelect = tableModel.getRowCount() - 1;
                 headerTable.setRowSelectionInterval(rowCount, rowToSelect);
             }
+            
+            checkButtonsStatus();
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(this,
                     "Could not add read headers from clipboard:\n" + ioe.getLocalizedMessage(), "Error",
@@ -281,7 +275,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         headerTable = new JTable(tableModel);
         JMeterUtils.applyHiDPI(headerTable);
         headerTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        headerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        headerTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         headerTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
