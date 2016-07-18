@@ -150,11 +150,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
             if (tableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (cookieTable.isEditing()) {
-                    TableCellEditor cellEditor = cookieTable.getCellEditor(cookieTable.getEditingRow(),
-                            cookieTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(cookieTable);
 
                 int rowSelected = cookieTable.getSelectedRow();
 

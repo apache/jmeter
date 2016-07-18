@@ -376,7 +376,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private class UpListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            cancelEditing();
+            GuiUtils.cancelEditing(table);
 
             int[] rowsSelected = table.getSelectedRows();
             if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
@@ -394,7 +394,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
     private class DownListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            cancelEditing();
+            GuiUtils.cancelEditing(table);
             
             int[] rowsSelected = table.getSelectedRows();
             if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < table.getRowCount() - 1) {
@@ -415,16 +415,4 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         this.model.clearData();
     }
     
-    /**
-     * Cancel cell editing if it is being edited
-     */
-    private void cancelEditing() {
-        // If a table cell is being edited, we must cancel the editing before
-        // deleting the row
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
-    }
-
 }

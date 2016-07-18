@@ -136,11 +136,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
             if (tableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (jmsPropertiesTable.isEditing()) {
-                    TableCellEditor cellEditor = jmsPropertiesTable.getCellEditor(jmsPropertiesTable.getEditingRow(), jmsPropertiesTable
-                            .getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(jmsPropertiesTable);
 
                 int rowSelected = jmsPropertiesTable.getSelectedRow();
 
