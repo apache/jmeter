@@ -408,10 +408,7 @@ public class AssertionGui extends AbstractAssertionGui {
     private class ClearPatternsListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (stringTable.isEditing()) {
-                TableCellEditor cellEditor = stringTable.getCellEditor(stringTable.getEditingRow(), stringTable.getEditingColumn());
-                cellEditor.cancelCellEditing();
-            }
+            GuiUtils.cancelEditing(stringTable);
             
             int[] rowsSelected = stringTable.getSelectedRows();
             stringTable.clearSelection();

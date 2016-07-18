@@ -282,11 +282,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
             if (dnsServersTableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (dnsServersTable.isEditing()) {
-                    TableCellEditor cellEditor = dnsServersTable.getCellEditor(dnsServersTable.getEditingRow(),
-                            dnsServersTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(dnsServersTable);
 
                 int rowSelected = dnsServersTable.getSelectedRow();
 
