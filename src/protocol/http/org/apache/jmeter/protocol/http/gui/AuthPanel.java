@@ -184,7 +184,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     protected void deleteRows() {
         // If a table cell is being edited, we must cancel the editing
         // before deleting the row.
-        cancelEditing();
+        GuiUtils.cancelEditing(authTable);
 
         int[] rowsSelected = authTable.getSelectedRows();
         int anchorSelection = authTable.getSelectionModel().getAnchorSelectionIndex();
@@ -208,15 +208,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
-    /**
-     * If a table cell is being edited, we must cancel the editing before deleting the row
-     */
-    private void cancelEditing() {
-        if (authTable.isEditing()) {
-            TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
-    }
 
     private void checkButtonsStatus() {
         // Disable DELETE if there are no rows in the table to delete.

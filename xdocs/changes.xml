@@ -123,7 +123,9 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-<li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
+    <li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
+    <li><pr>215</pr>Reduce duplicated code by using the newly added method <code>GuiUtils#cancelEditing</code>.
+    Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
 </ul>
  
  <!-- =================== Bug fixes =================== -->
