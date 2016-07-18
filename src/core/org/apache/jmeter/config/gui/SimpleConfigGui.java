@@ -279,10 +279,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
     protected void deleteArgument() {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
+        GuiUtils.cancelEditing(table);
 
         int rowSelected = table.getSelectedRow();
 

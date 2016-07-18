@@ -329,11 +329,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     private class DeleteRowAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (paramTable.isEditing()) {
-                TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
-                        .getEditingColumn());
-                cellEditor.cancelCellEditing();
-            }
+            GuiUtils.cancelEditing(paramTable);
 
             int rowSelected = paramTable.getSelectedRow();
             if (rowSelected >= 0) {
@@ -363,11 +359,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     private class DeleteColumnAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (paramTable.isEditing()) {
-                TableCellEditor cellEditor = paramTable.getCellEditor(paramTable.getEditingRow(), paramTable
-                        .getEditingColumn());
-                cellEditor.cancelCellEditing();
-            }
+            GuiUtils.cancelEditing(paramTable);
 
             int colSelected = paramTable.getSelectedColumn();
             if (colSelected == 0 || colSelected == 1) {
