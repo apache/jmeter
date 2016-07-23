@@ -39,7 +39,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -141,10 +140,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         tableModel.manager.clear();
         tableModel.manager.addTestElement((AuthManager) el.clone());
         clearEachIteration.setSelected(((AuthManager) el).getClearEachIteration());
-        if (tableModel.getRowCount() != 0) {
-            deleteButton.setEnabled(true);
-            saveButton.setEnabled(true);
-        }
+        checkButtonsStatus();
     }
 
     @Override
