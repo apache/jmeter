@@ -121,9 +121,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
         headerManager.clear();
         super.configure(el);
         headerManager.addTestElement(el);
-        boolean hasRows = tableModel.getRowCount() > 0;
-        deleteButton.setEnabled(hasRows);
-        saveButton.setEnabled(hasRows);
+        checkButtonsStatus();
     }
 
     @Override
