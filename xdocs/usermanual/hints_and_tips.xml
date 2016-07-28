@@ -102,13 +102,13 @@ will match any component that contains test in searchable elements of the compon
 <subsection name="&sect-num;.4 JMeter with a HiDPI screen on Linux or Windows" anchor="hidpi">
 <description>
     <p>
-    The HiDPI mode isn't currently support by Java Virtual Machine 7 or 8 on Linux or Windows, so JMeter with a HiDPI screen
-    can be very hard to see (little icons and chars).
+    The HiDPI mode isn't currently support by the Swing API in Java on Linux, MacOS or Windows. Therefore
+    JMeter can be very hard to read with a HiDPI screen (little icons and chars).
     </p>
     <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
     <dl>
       <dt><code>jmeter.hidpi.mode</code></dt>
-      <dd>set to <code>true</code> to activate a 'pseudo'-hidpi mode allowing to increase size of some UI elements</dd>
+      <dd>set to <code>true</code> to activate a '<em>pseudo</em>'-hidpi mode allowing to increase size of some UI elements</dd>
       <dt><code>jmeter.hidpi.scale.factor</code></dt>
       <dd>set to <code>2.0</code> to scale the size of some UI elements</dd>
       <dt><code>jmeter.toolbar.icons.size</code></dt>
@@ -116,6 +116,13 @@ will match any component that contains test in searchable elements of the compon
       <dt><code>jmeter.tree.icons.size</code></dt>
       <dd>with these values: <code>19x19</code> (default size), <code>24x24</code>, <code>32x32</code> (Suggested value for HiDPI) or <code>48x48</code></dd>
     </dl>
+    <note>This is not a full HiDPI support and only affects
+      <ul>
+        <li>JMeter tree nodes</li>
+        <li>icons in the menus</li>
+        <li>Tables content</li>
+      </ul>
+    </note>
 </description>
 </subsection>
 
