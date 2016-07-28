@@ -175,6 +175,7 @@ Summary
     <li><bug>59722</bug>Use StandardCharsets to reduce the possibility of misspelling Charset names.</li>
     <li><bug>59723</bug>Use jmeter.properties for testing whenever possible</li>
     <li><bug>59726</bug>Unit test to check that CSV header text and sample format don't change unexpectedly</li>
+    <li><bug>59889</bug>Change encoding to UTF-8 in reports for dashboard.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
