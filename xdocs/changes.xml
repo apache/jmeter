@@ -65,7 +65,7 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-    <li>Sample change...</li>
+    <li>A cache for CSS Parsing of URLs has been introduced in this version, it is enabled by default. It is controlled by property <code>css.parser.cache.size</code>. It can be disabled by setting its value to 0. See <bugzilla>59885</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements</h3>
@@ -80,6 +80,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>59882</bug>Reduce memory allocations for better throughput. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>217</pr></li>
+    <li><bug>59885</bug>Optimize css parsing for embedded resources download by introducing a cache. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>219</pr></li>
 </ul>
 
 <h3>Other samplers</h3>
