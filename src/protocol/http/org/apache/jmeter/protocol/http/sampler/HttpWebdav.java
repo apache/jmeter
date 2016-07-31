@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.sampler;
 
 import java.net.URI;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
@@ -28,7 +29,10 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
  * @since 2.12
  */
 public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
-
+    // A HTTP method can be a token as specified in
+    // https://tools.ietf.org/html/rfc7230#section-3.2.6
+    private static final Pattern WEBDAV_METHOD_PATTERN = Pattern.compile("^(?i)[\\da-z!#$%&'*+\\-.^_`|~]+$");
+    
     private final String davMethod;
 
     /**
@@ -56,8 +60,6 @@ public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
      * @return <code>true</code> if method is a Webdav one
      */
     public static boolean isWebdavMethod(String method) {
-        // A HTTP method can be a token as specified in
-        // https://tools.ietf.org/html/rfc7230#section-3.2.6
-        return method != null && method.matches("^(?i)[\\da-z!#$%&'*+\\-.^_`|~]+$");
+        return method != null && WEBDAV_METHOD_PATTERN.matcher(method).matches();
     }
 }
