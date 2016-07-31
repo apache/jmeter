@@ -445,14 +445,18 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 </section>
 <section name="&sect-num;.24 HTML Parser configuration" anchor="parser_config">
 <properties>
-<property name="HTTPResponse.parsers"> Space-separated list of parser groups<br/>, defaults to:htmlParser wmlParser cssParser</property>
-<property name="cssParser.className"> for each parser, there should be a parser.types and a parser.className property<br/> CSS Parser based on ph-css<br/>, defaults to:org.apache.jmeter.protocol.http.parser.CssParser</property>
-<property name="cssParser.types">, defaults to:text/css</property>
-<property name=" see https://bz.apache.org/bugzilla/show_bug.cgi?id"> Define the HTML parser to be used.<br/> Default parser:<br/> This new parser (since 2.10) should perform better than all others<br/>, defaults to:55632</property>
-<property name="htmlParser.className"> Do not comment this property<br/>, defaults to:org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</property>
-<property name="htmlParser.className"> Other parsers:<br/> Default parser before 2.10<br/>, defaults to:org.apache.jmeter.protocol.http.parser.JTidyHTMLParser</property>
-<property name="htmlParser.className"> Note that Regexp extractor may detect references that have been commented out.<br/> In many cases it will work OK, but you should be aware that it may generate <br/> additional references.<br/>, defaults to:org.apache.jmeter.protocol.http.parser.RegexpHTMLParser</property>
-<property name="htmlParser.className"> This parser is based on JSoup, it should be the most accurate but less performant<br/> than LagartoBasedHtmlParser<br/>, defaults to:org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser</property>
+<property name="HTTPResponse.parsers">Space-separated list of parser groups<br/>, defaults to:htmlParser wmlParser cssParser. For each parser, there should be a parser.types and a parser.className property</property>
+<property name="cssParser.className"> CSS Parser based on ph-css<br/>, defaults to:org.apache.jmeter.protocol.http.parser.CssParser</property>
+<property name="cssParser.types">content types handled by cssParser, defaults to:text/css</property>
+<property name="css.parser.cache.size">CSS parser LRU cache size. This cache stores the URLs found in a CSS to avoid continuously parsing the CSS. By default the cache size is 400. It can be disabled by setting its value to 0.</property>
+<property name="htmlParser.className">Define the HTML parser to be used. This new parser (since 2.10) should perform better than all others. see https://bz.apache.org/bugzilla/show_bug.cgi?id=55632. Do not comment this property<br/>, defaults to:org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</property>
+Other parsers:<br/>
+<ul> 
+<li>org.apache.jmeter.protocol.http.parser.JTidyHTMLParser : Default parser before 2.10<br/> 
+<li>org.apache.jmeter.protocol.http.parser.RegexpHTMLParser : Note that Regexp extractor may detect references that have been commented out.<br/> In many cases it will work OK, but you should be aware that it may generate additional references.</li>
+<li>org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser:This parser is based on JSoup, it should be the most accurate but less performant than LagartoBasedHtmlParser, defaults to:org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser</li>
+</li>
+</ul>
 <property name="htmlParser.types">Used by HTTPSamplerBase to associate htmlParser with content types below <br/>, defaults to:text/html application/xhtml+xml application/xml text/xml</property>
 <property name="wmlParser.className">, defaults to:org.apache.jmeter.protocol.http.parser.RegexpHTMLParser</property>
 <property name="wmlParser.types">Used by HTTPSamplerBase to associate wmlParser with content types below <br/>, defaults to:text/vnd.wap.wml </property>
