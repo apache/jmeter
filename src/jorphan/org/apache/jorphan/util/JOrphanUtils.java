@@ -252,7 +252,7 @@ public final class JOrphanUtils {
     /**
      * Version of String.replaceAll() for JDK1.3
      * See below for another version which replaces strings rather than chars
-     *
+     * and provides a fast path which does not allocate memory
      * @param source
      *            input string
      * @param search
@@ -262,15 +262,22 @@ public final class JOrphanUtils {
      * @return the output string
      */
     public static String replaceAllChars(String source, char search, String replace) {
+        int indexOf = source.indexOf(search);
+        if(indexOf == -1) {
+            return source;
+        }
+        
+        int offset = 0;
         char[] chars = source.toCharArray();
         StringBuilder sb = new StringBuilder(source.length()+20);
-        for(char c : chars){
-            if (c == search){
-                sb.append(replace);
-            } else {
-                sb.append(c);
-            }
+        while(indexOf != -1) {
+            sb.append(chars, offset, indexOf-offset);
+            sb.append(replace);
+            offset = indexOf +1;
+            indexOf = source.indexOf(search, offset);
         }
+        sb.append(chars, offset, chars.length- offset);
+        
         return sb.toString();
     }
 
