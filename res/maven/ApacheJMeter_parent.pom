@@ -93,7 +93,7 @@ under the License.
       <junit.version>4.12</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
-      <ph-css.version>4.1.1</ph-css.version>
+      <ph-css.version>4.1.4</ph-css.version>
       <ph-commons.version>6.2.4</ph-commons.version>
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.13</slf4j-api.version>
