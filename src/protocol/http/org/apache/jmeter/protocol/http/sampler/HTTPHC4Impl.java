@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
@@ -147,6 +148,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
+    
+    private static final Pattern PORT_PATTERN = Pattern.compile("^\\d+$");
 
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
         @Override
@@ -1058,7 +1061,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         String[] hostParts = hostHeaderValue.split(":");
         if (hostParts.length > 1) {
             String portString = hostParts[hostParts.length - 1];
-            if (portString.matches("^\\d+$")) {
+            if (PORT_PATTERN.matcher(portString).matches()) {
                 return Integer.parseInt(portString);
             }
         }
