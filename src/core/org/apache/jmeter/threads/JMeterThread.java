@@ -457,16 +457,20 @@ public class JMeterThread implements Runnable, Interruptible {
 
         // Perform the actual sample
         currentSampler = sampler;
-        for(SampleMonitor monitor : sampleMonitors) {
-            monitor.sampleStarting(sampler);
+        if(!sampleMonitors.isEmpty()) {
+            for(SampleMonitor monitor : sampleMonitors) {
+                monitor.sampleStarting(sampler);
+            }
         }
         SampleResult result = null;
         try {
             result = sampler.sample(null); // TODO: remove this useless Entry parameter
         } finally {
-            for(SampleMonitor monitor : sampleMonitors) {
-                monitor.sampleEnded(sampler);
-            }            
+            if(sampleMonitors.isEmpty()) {
+                for(SampleMonitor monitor : sampleMonitors) {
+                    monitor.sampleEnded(sampler);
+                }
+            }
         }
         currentSampler = null;
 
