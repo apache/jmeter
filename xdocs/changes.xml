@@ -79,7 +79,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>XXXXX</bug>Sample Bugzilla title</li>
+    <li><bug>59882</bug>Reduce memory allocations for better throughput. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>217</pr></li>
 </ul>
 
 <h3>Other samplers</h3>
