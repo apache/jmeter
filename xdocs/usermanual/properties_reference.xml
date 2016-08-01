@@ -18,13 +18,14 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '25'>
+<!ENTITY sect-num '21'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
 ]>
-<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.25"
-  prev="glossary.html"  id="$Id: property_reference.xml 1739440 2016-04-16 11:11:17Z pmouawad $">
+<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.21"
+  next="functions.html"
+  prev="component_reference.html"  id="$Id: property_reference.xml 1739440 2016-04-16 11:11:17Z pmouawad $">
 
 <properties>
   <title>User's Manual: Properties Reference</title>

@@ -18,7 +18,7 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '21'>
+<!ENTITY sect-num '22'>
 <!ENTITY ccedil   "&#x000E7;" >
 <!ENTITY eacute   "&#x000E9;" >
 <!ENTITY hellip   "&#x02026;" >
@@ -26,7 +26,7 @@
 <!ENTITY yen      "&#x000A5;" >
 ]>
 
-<document prev="component_reference.html" next="regular_expressions.html" id="$Id$">
+<document prev="properties_reference.html" next="regular_expressions.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Functions and Variables</title>
