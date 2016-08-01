@@ -38,10 +38,6 @@
                          N.B. Ant interprets relative paths against the build file
         -Djmeter.home=.. - path to JMeter home directory (defaults to parent of this build file)
         -Dreport.title="My Report" - title for html report (default is 'Load Test Results')
-
-        Deprecated:
-        -Dformat=2.0 - use version 2.0 JTL files rather than 2.1
-
     </description>
     
     <property name="testpath" value="${user.dir}"/>
@@ -56,10 +52,6 @@
 
     <property name="format" value="2.1"/>
     
-    <condition property="style_version" value="">
-        <equals arg1="${format}" arg2="2.0"/>
-    </condition>
-
     <condition property="style_version" value="_21">
         <equals arg1="${format}" arg2="2.1"/>
     </condition>
