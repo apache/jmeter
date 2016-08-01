@@ -18,13 +18,13 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '19'>
+<!ENTITY sect-num '20'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
-  prev="boss.html" next="functions.html" id="$Id$">
+  prev="boss.html" next="properties_reference.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Component Reference</title>

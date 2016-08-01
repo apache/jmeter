@@ -50,10 +50,11 @@
   <li><a href="#best-practices">+</a>...<a href="best-practices.html">18. Best Practices</a></li>
   <li><a href="#boss">+</a>...<a href="boss.html">19. Help! My boss wants me to load test our web app!</a></li>
   <li><a href="#component_reference">+</a>...<a href="component_reference.html">20. Component Reference</a></li>
-  <li><a href="#functions">+</a>...<a href="functions.html">21. Functions</a></li>
-  <li><a href="#regex">+</a>...<a href="regular_expressions.html">22. Regular Expressions</a></li>
-  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">23. Hints and Tips</a></li>
-  <li><a href="#glossary">+</a>...<a href="glossary.html">24. Glossary</a></li>
+  <li><a href="#properties_reference">+</a>...<a href="properties_reference.html">21. Properties Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">22. Functions</a></li>
+  <li><a href="#regex">+</a>...<a href="regular_expressions.html">23. Regular Expressions</a></li>
+  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">24. Hints and Tips</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">25. Glossary</a></li>
 </ul>
 </subsection>
 <subsection name="Detailed Section List" anchor="details">
