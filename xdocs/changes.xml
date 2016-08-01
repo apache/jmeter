@@ -120,6 +120,7 @@ Summary
 <ul>
     <li><bug>59803</bug>Use <code>isValid()</code> method from jdbc driver, if no validationQuery
     is given in JDBC Connection Configuration.</li>
+    <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
