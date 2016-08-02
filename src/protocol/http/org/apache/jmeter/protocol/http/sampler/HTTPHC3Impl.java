@@ -354,21 +354,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             log.debug("End : sample");
             return res;
-        } catch (IllegalArgumentException e) { // e.g. some kinds of invalid URL
+        } catch (IllegalArgumentException // e.g. some kinds of invalid URL
+                | IOException e) { 
             res.sampleEnd();
             // pick up headers if failed to execute the request
             // httpMethod can be null if method is unexpected
             if(httpMethod != null) {
                 res.setRequestHeaders(getConnectionHeaders(httpMethod));
             }
-            errorResult(e, res);
-            return res;
-        } catch (IOException e) {
-            res.sampleEnd();
-            // pick up headers if failed to execute the request
-            // httpMethod cannot be null here, otherwise 
-            // it would have been caught in the previous catch block
-            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             errorResult(e, res);
             return res;
         } finally {
