@@ -122,6 +122,7 @@ Summary
     is given in JDBC Connection Configuration.</li>
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>57493</bug>Create a documentation page for properties</li>
+    <li><bug>59924</bug>The log level of XXX package is set to DEBUG if <code>log_level.XXXX</code> property value contains spaces, same for __log function</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
