@@ -603,7 +603,8 @@ public final class JOrphanUtils {
                 throw new IllegalArgumentException("Cannot write to '"
                         +folder.getAbsolutePath()+"' as it is an existing file");
             } else {
-                if(folder.listFiles().length > 0) {
+                File[] listedFiles = folder.listFiles();
+                if(listedFiles != null && listedFiles.length > 0) {
                     throw new IllegalArgumentException("Cannot write to '"
                             +folder.getAbsolutePath()+"' as folder is not empty");
                 }

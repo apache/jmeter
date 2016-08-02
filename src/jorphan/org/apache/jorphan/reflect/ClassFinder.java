@@ -154,8 +154,9 @@ public final class ClassFinder {
                             return name.endsWith(DOT_JAR);
                         }
                     });
-                    // jars cannot be null
-                    Collections.addAll(fullList, jars);
+                    if(jars != null) {
+                        Collections.addAll(fullList, jars);
+                    }
                 }
             }
         }
