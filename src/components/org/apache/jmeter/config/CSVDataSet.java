@@ -180,7 +180,7 @@ public class CSVDataSet extends ConfigTestElement
                     vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
                     firstLineIsNames = true;
                 } catch (IOException e) {
-                    log.warn("Could not split CSV header line",e);
+                    throw new IllegalArgumentException("Could not split CSV header line from file:" + _fileName,e);
                 }
             } else {
                 server.reserveFile(_fileName, getFileEncoding(), alias);
