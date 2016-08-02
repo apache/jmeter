@@ -147,6 +147,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>59113</bug>JDBC Connection Configuration : Transaction Isolation level not correctly set if constant used instead of numerical</li>
 </ul>
 
 <h3>Controllers</h3>
