@@ -19,39 +19,39 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 final class CssParserCacheLoader extends CacheLoader<Triple<String, URL, Charset>, URLCollection> {
-  private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-  @Override
-  public URLCollection load(final Triple<String, URL, Charset> triple) throws Exception {
-    final String cssContent = triple.getLeft();
-    final URL baseUrl = triple.getMiddle();
-    final Charset charset = triple.getRight();
+    @Override
+    public URLCollection load(final Triple<String, URL, Charset> triple) throws Exception {
+        final String cssContent = triple.getLeft();
+        final URL baseUrl = triple.getMiddle();
+        final Charset charset = triple.getRight();
 
-    final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
-            new CSSReaderSettings()
-                    .setBrowserCompliantMode(true)
-                    .setFallbackCharset(charset)
-                    .setCSSVersion(ECSSVersion.CSS30)
-                    .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
-                    .setCustomExceptionHandler(new CSSParseExceptionCallback(baseUrl)));
-    final URLCollection urls = new URLCollection(new ArrayList<>());
+        final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
+                new CSSReaderSettings()
+                        .setBrowserCompliantMode(true)
+                        .setFallbackCharset(charset)
+                        .setCSSVersion(ECSSVersion.CSS30)
+                        .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
+                        .setCustomExceptionHandler(new CSSParseExceptionCallback(baseUrl)));
+        final URLCollection urls = new URLCollection(new ArrayList<>());
 
-    if (aCSS == null) {
-      LOG.warn("Failed parsing url:" + baseUrl + ", got null CascadingStyleSheet");
-      return urls;
-    }
-
-    CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
-      @Override
-      public void onImport(final CSSImportRule importRule) {
-        final String location = importRule.getLocationString();
-        if (!StringUtils.isEmpty(location)) {
-          urls.addURL(location, baseUrl);
+        if (aCSS == null) {
+            LOG.warn("Failed parsing url:" + baseUrl + ", got null CascadingStyleSheet");
+            return urls;
         }
-      }
-    });
 
-    return urls;
-  }
+        CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
+            @Override
+            public void onImport(final CSSImportRule importRule) {
+                final String location = importRule.getLocationString();
+                if (!StringUtils.isEmpty(location)) {
+                    urls.addURL(location, baseUrl);
+                }
+            }
+        });
+
+        return urls;
+    }
 
 }
