@@ -18,15 +18,19 @@
 
 package org.apache.jmeter.protocol.http.parser;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.jmeter.protocol.http.util.ConversionUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Collection class designed for handling URLs
@@ -38,97 +42,75 @@ import org.apache.log.Logger;
  * does not support remove()
  *
  */
-public class URLCollection {
-    private static final Logger log = LoggingManager.getLoggerForClass();
-    private final Collection<URLString> coll;
-
-    /**
-     * Creates a new URLCollection from an existing Collection
-     *
-     * @param c collection to start with
-     */
-    public URLCollection(Collection<URLString> c) {
-        coll = c;
+public final class URLCollection {
+  private static final Logger LOG = LoggingManager.getLoggerForClass();
+  private static final Function<URLString, URL> TO_URL = new Function<URLString, URL>() {
+    @Override
+    public URL apply(final URLString input) {
+      return input.getURL();
     }
+  };
 
-    /**
-     * Adds the URL to the Collection, first wrapping it in the URLString class
-     *
-     * @param u
-     *            URL to add
-     * @return boolean condition returned by the add() method of the underlying
-     *         collection
-     */
-    public boolean add(URL u) {
-        return coll.add(new URLString(u));
+  private final Collection<URLString> coll;
+
+  /**
+   * Creates a new URLCollection from an existing Collection
+   *
+   * @param c collection to start with
+   */
+  public URLCollection(final Collection<URLString> c) {
+    super();
+    coll = checkNotNull(c);
+  }
+
+  /**
+   * Adds the URL to the Collection, first wrapping it in the URLString class
+   *
+   * @param u
+   *            URL to add
+   * @return boolean condition returned by the add() method of the underlying
+   *         collection
+   */
+  public boolean add(URL u) {
+    return coll.add(new URLString(u));
+  }
+
+  /**
+   * Convenience method for adding URLs to the collection. If the url
+   * parameter is <code>null</code>, empty or URL is malformed, nothing is
+   * done
+   *
+   * @param url
+   *            String, may be null or empty
+   * @param baseUrl
+   *            base for <code>url</code> to add information, which might be
+   *            missing in <code>url</code>
+   * @return boolean condition returned by the add() method of the underlying
+   *         collection
+   */
+  public boolean addURL(String url, URL baseUrl) {
+    if (url == null || url.length() == 0) {
+      return false;
     }
-
-    /**
-     * Convenience method for adding URLs to the collection. If the url
-     * parameter is <code>null</code>, empty or URL is malformed, nothing is
-     * done
-     *
-     * @param url
-     *            String, may be null or empty
-     * @param baseUrl
-     *            base for <code>url</code> to add information, which might be
-     *            missing in <code>url</code>
-     * @return boolean condition returned by the add() method of the underlying
-     *         collection
-     */
-    public boolean addURL(String url, URL baseUrl) {
-        if (url == null || url.length() == 0) {
-            return false;
-        }
-        //url.replace('+',' ');
-        url=StringEscapeUtils.unescapeXml(url);
-        boolean b = false;
-        try {
-            b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
-        } catch (MalformedURLException mfue) {
-            // No WARN message to avoid performance impact
-            if(log.isDebugEnabled()) {
-                log.debug("Error occured building relative url for:"+url+", message:"+mfue.getMessage());
-            }
-            // No point in adding the URL as String as it will result in null 
-            // returned during iteration, see URLString
-            // See https://bz.apache.org/bugzilla/show_bug.cgi?id=55092
-            return false;
-        }
-        return b;
+    //url.replace('+',' ');
+    url = StringEscapeUtils.unescapeXml(url);
+    boolean b = false;
+    try {
+      b = this.add(ConversionUtils.makeRelativeURL(baseUrl, url));
+    } catch (final MalformedURLException mfue) {
+      // No WARN message to avoid performance impact
+      if(LOG.isDebugEnabled()) {
+        LOG.debug("Error occured building relative url for:"+url+", message:"+mfue.getMessage());
+      }
+      // No point in adding the URL as String as it will result in null
+      // returned during iteration, see URLString
+      // See https://bz.apache.org/bugzilla/show_bug.cgi?id=55092
+      return false;
     }
+    return b;
+  }
 
-    public Iterator<URL> iterator() {
-        return new UrlIterator(coll.iterator());
-    }
-
-    /*
-     * Private iterator used to unwrap the URL from the URLString class
-     *
-     */
-    private static class UrlIterator implements Iterator<URL> {
-        private final Iterator<URLString> iter;
-
-        UrlIterator(Iterator<URLString> i) {
-            iter = i;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return iter.hasNext();
-        }
-
-        /*
-         * Unwraps the URLString class to return the URL
-         */
-        @Override
-        public URL next() {
-            return iter.next().getURL();
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
+  public Iterator<URL> iterator() {
+    return FluentIterable.from(coll).transform(TO_URL).iterator();
+  }
 }
