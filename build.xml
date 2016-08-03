@@ -385,6 +385,7 @@
     <include name="${lib.dir}/${dnsjava.jar}"/>
     <include name="${lib.dir}/${excalibur-logger.jar}"/>
     <include name="${lib.dir}/${freemarker.jar}"/>
+    <include name="${lib.dir}/${guava.jar}"/>
     <include name="${lib.dir}/${groovy-all.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
@@ -462,6 +463,7 @@
     <pathelement location="${lib.dir}/${dnsjava.jar}"/>
     <pathelement location="${lib.dir}/${excalibur-logger.jar}"/>
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
+    <pathelement location="${lib.dir}/${guava.jar}"/>
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
