@@ -22,7 +22,7 @@ final class CssParserCacheLoader extends CacheLoader<Triple<String, URL, Charset
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     @Override
-    public URLCollection load(final Triple<String, URL, Charset> triple) throws Exception {
+    public URLCollection load(final Triple<String, URL, Charset> triple) {
         final String cssContent = triple.getLeft();
         final URL baseUrl = triple.getMiddle();
         final Charset charset = triple.getRight();
@@ -34,7 +34,7 @@ final class CssParserCacheLoader extends CacheLoader<Triple<String, URL, Charset
                         .setCSSVersion(ECSSVersion.CSS30)
                         .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
                         .setCustomExceptionHandler(new CSSParseExceptionCallback(baseUrl)));
-        final URLCollection urls = new URLCollection(new ArrayList<>());
+        final URLCollection urls = new URLCollection(new ArrayList<URLString>());
 
         if (aCSS == null) {
             LOG.warn("Failed parsing url:" + baseUrl + ", got null CascadingStyleSheet");
