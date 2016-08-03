@@ -1,4 +1,4 @@
-package org.apache.jmeter.protocol.http.parser.css;
+package org.apache.jmeter.protocol.http.parser;
 
 import com.google.common.cache.CacheLoader;
 import com.helger.css.ECSSVersion;
@@ -11,7 +11,6 @@ import com.helger.css.reader.CSSReaderSettings;
 import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
-import org.apache.jmeter.protocol.http.parser.URLCollection;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 

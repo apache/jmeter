@@ -1,4 +1,4 @@
-package org.apache.jmeter.protocol.http.parser.css;
+package org.apache.jmeter.protocol.http.parser;
 
 import com.helger.css.handler.LoggingCSSParseExceptionCallback;
 import com.helger.css.parser.ParseException;

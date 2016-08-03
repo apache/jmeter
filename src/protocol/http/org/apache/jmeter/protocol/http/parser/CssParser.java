@@ -16,16 +16,13 @@
  *
  */
 
-package org.apache.jmeter.protocol.http.parser.css;
+package org.apache.jmeter.protocol.http.parser;
 
 import com.google.common.base.Joiner;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
-import org.apache.jmeter.protocol.http.parser.LinkExtractorParseException;
-import org.apache.jmeter.protocol.http.parser.LinkExtractorParser;
-import org.apache.jmeter.protocol.http.parser.URLCollection;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
