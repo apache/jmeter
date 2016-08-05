@@ -135,6 +135,7 @@
       <sourcePath path="${src.components}" />
       <sourcePath path="${src.functions}" />
       <class location="${lib.dir}/jorphan.jar" />
+      <class location="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
       <class location="${dest.jar}/ApacheJMeter_components.jar"/>
       <class location="${dest.jar}/ApacheJMeter_components.jar"/>
       <class location="${dest.jar}/ApacheJMeter_core.jar"/>
@@ -152,6 +153,7 @@
       <class location="${dest.jar}/ApacheJMeter_mongodb.jar"/>
       <class location="${dest.jar}/ApacheJMeter_tcp.jar"/>
       <class location="${dest.jar.jmeter}/ApacheJMeter.jar" />
+      <sourcePath path="${src.slf4j_logkit}" />
       <sourcePath path="${src.jorphan}" />
       <sourcePath path="${src.tcp}" />
       <sourcePath path="${src.jms}" />
@@ -220,6 +222,7 @@
   <property name="src.jms" value="src/protocol/jms"/>
   <property name="src.native" value="src/protocol/native"/>
   <property name="src.mongodb" value="src/protocol/mongodb"/>
+  <property name="src.slf4j_logkit" value="src/slf4j-logkit"/>
 
   <!-- Where the documentation sources live -->
   <property name="src.docs" value="xdocs"/>
@@ -247,6 +250,7 @@
     <pathelement location="${src.jms}"/>
     <pathelement location="${src.native}"/>
     <pathelement location="${src.mongodb}"/>
+    <pathelement location="${src.slf4j_logkit}"/>
   </path>
 
   <!-- Temporary build directories: where the .class live -->
@@ -269,6 +273,7 @@
   <property name="build.jms" value="build/protocol/jms"/>
   <property name="build.native" value="build/protocol/native"/>
   <property name="build.mongodb" value="build/protocol/mongodb"/>
+  <property name="build.slf4j_logkit" value="build/slf4j-logkit"/>
   <property name="build.test" value="build/test"/>
   <property name="build.res" value="build/res"/>
   <property name="build.test-res" value="test/resources"/>
@@ -499,12 +504,20 @@
     <pathelement location="${lib.dir}/${xstream.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+  	<fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
     <!-- API-only jars-->
     <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
+	
+  <path id="slf4j_logkit_classpath">
+    <!-- Externally produced jars -->
+    <pathelement location="${lib.dir}/${logkit.jar}"/>
+    <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
+  </path>
+	
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${lib.doc}/${velocity.jar}"/>
@@ -816,6 +829,17 @@
       </classpath>
     </javac>
   </target>
+	
+  <target name="compile-slf4j_logkit" description="Compile JMeter slf4j LogKit bootstrap classes.">
+    <mkdir dir="${build.slf4j_logkit}"/>
+    <javac srcdir="${src.slf4j_logkit}" destdir="${build.slf4j_logkit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
+           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
+      <include name="**/*.java"/>
+      <classpath>
+	    <path refid="slf4j_logkit_classpath"/>
+	  </classpath>
+    </javac>
+  </target>
 
   <target name="compile-jms" depends="compile-jorphan,compile-core,compile-components"
         description="Compile components specific to JMS sampling.">
@@ -860,7 +884,7 @@
   </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb"
+  depends="_message_3rdParty,compile-slf4j_logkit,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -1147,6 +1171,18 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${src.mongodb}" includes="**/*.properties" />
     </jar>
 
+    <!-- slf4j-logkit -->
+    <!-- Ensure that build dir exists, even if slf4j-logkit has not been built -->
+    <mkdir dir="${build.slf4j_logkit}"/>
+    <jar jarfile="${lib.dir}/ApacheJMeter_slf4j_logkit.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
+      <zipfileset file="${resources.meta-inf}/default.notice"
+        fullpath="META-INF/NOTICE" />
+      <zipfileset file="${resources.meta-inf}/default.license"
+        fullpath="META-INF/LICENSE" />
+      <fileset dir="${build.slf4j_logkit}" includes="**/*.class" />
+      <fileset dir="${src.slf4j_logkit}" includes="**/*.properties" />
+    </jar>
+
     <jar jarfile="${lib.dir}/jorphan.jar" manifest="${build.dir}/MANIFEST_BIN.MF">
       <zipfileset file="${resources.meta-inf}/default.notice"
           fullpath="META-INF/NOTICE" />
@@ -1298,6 +1334,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
+  	<include name="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <!-- Help documentation, binary files -->
@@ -1605,6 +1642,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${dest.jar}" includes="ApacheJMeter*.jar"/>
       <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
       <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
     </copy>
     <copy tofile="${maven.dir}/ApacheJMeter_junit-test.jar" file="${lib.dir}/junit/test.jar"/>
     <!--
@@ -1983,6 +2021,7 @@ run JMeter unless all the JMeter jars are added.
 
     <deployfile stem="ApacheJMeter_parent" packaging="pom"/>
     <deployfile stem="jorphan"/>
+    <deployfile stem="ApacheJMeter_slf4j_logkit"/>
     <deployfile stem="ApacheJMeter"/>
     <deployfile stem="ApacheJMeter_components"/>
     <deployfile stem="ApacheJMeter_config"/>
@@ -2221,6 +2260,7 @@ run JMeter unless all the JMeter jars are added.
     <delete quiet="false" failonerror="false">
       <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
       <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
       <fileset dir="${lib.dir}" includes="bshclient.jar"/>
       <fileset dir="${dest.jar}" includes="*.jar"/>
       <fileset dir="${build.dir}"/>
