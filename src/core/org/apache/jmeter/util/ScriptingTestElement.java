@@ -37,7 +37,7 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
 
     protected String scriptLanguage = ""; // BSF/JSR223 language to use
     
-    protected String defaultScriptLanguage = "groovy"; // if no language is chosen in GUI
+    protected final static String defaultScriptLanguage = "groovy"; // if no language is chosen in GUI
     //-- For TestBean implementations only
 
     public ScriptingTestElement() {
