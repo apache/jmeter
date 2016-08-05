@@ -84,9 +84,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void debug(String msg, Throwable throwable) {
-        if (logger.isDebugEnabled()) {
-            logger.log(Priority.DEBUG, msg, throwable);
-        }
+        logger.log(Priority.DEBUG, msg, throwable);
     }
 
     /* (non-Javadoc)
@@ -94,10 +92,8 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void debug(String format, Object arg1, Object arg2) {
-        if (logger.isDebugEnabled()) {
-            FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
-            logger.log(Priority.DEBUG, ft.getMessage(), ft.getThrowable());
-        }
+        FormattingTuple ft = MessageFormatter.format(format, arg1, arg2);
+        logger.log(Priority.DEBUG, ft.getMessage(), ft.getThrowable());
     }
 
     /* (non-Javadoc)
@@ -105,9 +101,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void error(String message) {
-        if (logger.isErrorEnabled()) {
-            logger.log(Priority.ERROR, message);
-        }
+        logger.log(Priority.ERROR, message);
     }
 
     /* (non-Javadoc)
@@ -158,9 +152,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void info(String message) {
-        if (logger.isInfoEnabled()) {
-            logger.log(Priority.INFO, message);
-        }
+        logger.log(Priority.INFO, message);
     }
 
     /* (non-Javadoc)
@@ -190,9 +182,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void info(String message, Throwable throwable) {
-        if (logger.isInfoEnabled()) {
-            logger.log(Priority.INFO, message, throwable);
-        }
+        logger.log(Priority.INFO, message, throwable);
     }
 
     /* (non-Javadoc)
@@ -251,9 +241,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void warn(String message) {
-        if (logger.isWarnEnabled()) {
-            logger.log(Priority.WARN, message);
-        }
+        logger.log(Priority.WARN, message);
     }
 
     /* (non-Javadoc)
@@ -283,9 +271,7 @@ public class LogkitLoggerAdapter extends MarkerIgnoringBase implements Serializa
      */
     @Override
     public void warn(String message, Throwable throwable) {
-        if (logger.isWarnEnabled()) {
-            logger.log(Priority.WARN, message, throwable);
-        }
+        logger.log(Priority.WARN, message, throwable);
     }
 
     /* (non-Javadoc)
