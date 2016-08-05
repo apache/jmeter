@@ -117,6 +117,7 @@ Summary
 <ul>
     <li><bug>59803</bug>Use <code>isValid()</code> method from jdbc driver, if no validationQuery
     is given in JDBC Connection Configuration.</li>
+    <li><bug>59951</bug>Remove bundle display in "script language choice" list in JSR223 elements.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

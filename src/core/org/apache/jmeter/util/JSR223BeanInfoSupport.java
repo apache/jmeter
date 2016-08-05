@@ -21,11 +21,9 @@ package org.apache.jmeter.util;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListResourceBundle;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 
@@ -67,15 +65,8 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
         }
     }
 
-    private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {            
-        @Override
-        protected Object[][] getContents() {
-            return LANGUAGE_NAMES;
-        }
-    };
-
     protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
-        super(beanClass, LANGUAGE_TAGS, NAME_BUNDLE);
+        super(beanClass, LANGUAGE_TAGS);
     }
 
 }
