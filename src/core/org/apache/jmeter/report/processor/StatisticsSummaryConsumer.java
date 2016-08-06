@@ -58,7 +58,7 @@ public class StatisticsSummaryConsumer extends
         data.getPercentile1().addValue(elapsedTime);
         data.getPercentile2().addValue(elapsedTime);
         data.getPercentile3().addValue(elapsedTime);
-
+        data.getMean().addValue(elapsedTime);
         data.setMin(elapsedTime);
         data.setMax(elapsedTime);
 
@@ -114,6 +114,7 @@ public class StatisticsSummaryConsumer extends
         result.addResult(new ValueResultData(Long.valueOf(total)));
         result.addResult(new ValueResultData(Long.valueOf(errors)));
         result.addResult(new ValueResultData(Double.valueOf((double) errors * 100 / total)));
+        result.addResult(new ValueResultData(Double.valueOf(data.getMean().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile1().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile2().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile3().getResult())));
@@ -154,6 +155,8 @@ public class StatisticsSummaryConsumer extends
             .getResString("reportgenerator_summary_statistics_error_count")));
         titles.addResult(new ValueResultData(
             JMeterUtils.getResString("reportgenerator_summary_statistics_error_percent")));
+        titles.addResult(new ValueResultData(
+                JMeterUtils.getResString("reportgenerator_summary_statistics_mean")));
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),

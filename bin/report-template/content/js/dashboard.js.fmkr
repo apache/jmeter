@@ -142,14 +142,22 @@ $(document).ready(function() {
     // Create statistics table
     createTable($("#statisticsTable"), ${statisticsSummary!"{}"}, function(index, item){
         switch(index){
+            // Errors pct
             case 3:
                 item = item.toFixed(2) + '%';
                 break;
+            // Mean
             case 4:
+            // Percentile 1
             case 5:
+            // Percentile 2
             case 6:
+            // Percentile 3
             case 7:
+            // Throughput
             case 8:
+            // Kbytes/s
+            case 9:
                 item = item.toFixed(2);
                 break;
         }
