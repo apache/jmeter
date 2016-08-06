@@ -407,6 +407,9 @@ public class ReportGenerator {
         return apdexSummaryConsumer;
     }
 
+    /**
+     * @return a {@link FilterConsumer} that filters samplers based on their name
+     */
     private FilterConsumer createNameFilter() {
         FilterConsumer nameFilter = new FilterConsumer();
         nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
@@ -429,6 +432,9 @@ public class ReportGenerator {
         return nameFilter;
     }
 
+    /**
+     * @return Consumer that compute the end date of the test
+     */
     private AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
                 new MaxAggregator(), new SampleSelector<Double>() {
@@ -442,6 +448,9 @@ public class ReportGenerator {
         return endDateConsumer;
     }
 
+    /**
+     * @return Consumer that compute the begining date of the test
+     */
     private AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
                 new MinAggregator(), new SampleSelector<Double>() {
