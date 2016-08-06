@@ -31,6 +31,7 @@ public class StatisticsSummaryData {
     private long bytes = 0L;
     private long errors = 0L;
     private long total = 0L;
+    private final MeanAggregator mean;
     private final PercentileAggregator percentile1;
     private final PercentileAggregator percentile2;
     private final PercentileAggregator percentile3;
@@ -191,6 +192,7 @@ public class StatisticsSummaryData {
         percentile1 = new PercentileAggregator(percentileIndex1);
         percentile2 = new PercentileAggregator(percentileIndex2);
         percentile3 = new PercentileAggregator(percentileIndex3);
+        mean = new MeanAggregator();
     }
 
     /**
@@ -230,5 +232,12 @@ public class StatisticsSummaryData {
 
     public void incErrors() {
         errors++;
+    }
+
+    /**
+     * @return the mean response times
+     */
+    public MeanAggregator getMean() {
+        return mean;
     }
 }
