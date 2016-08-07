@@ -126,6 +126,7 @@ Summary
     <li><bug>59924</bug>The log level of XXX package is set to DEBUG if <code>log_level.XXXX</code> property value contains spaces, same for __log function</li>
     <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a jmeter lib</li>
     <li><bug>59954</bug>Web Report/Dashboard : Add average metric</li>
+    <li><bug>59956</bug>Web Report / Dashboard : Add ability to generate a graph for a range of data</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
