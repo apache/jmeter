@@ -67,7 +67,7 @@ public interface SampleConsumer extends SampleProcessor {
     void setConsumedMetadata(SampleMetadata sampleMetadata, int channel);
 
     /**
-     * Start the sample consuming. This step is used be consumer to intialize
+     * Start the sample consuming. This step is used by consumer to initialize
      * their process.
      */
     void startConsuming();
