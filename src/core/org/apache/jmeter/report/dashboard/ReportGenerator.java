@@ -87,6 +87,7 @@ public class ReportGenerator {
     public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
     public static final String END_DATE_CONSUMER_NAME = "endDate";
     public static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
+    public static final String DATE_RANGE_FILTER_CONSUMER_NAME = "dateRangeFilter";
     public static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
     public static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
     public static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
@@ -212,9 +213,10 @@ public class ReportGenerator {
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
-
-        normalizer.addSampleConsumer(createBeginDateConsumer());
-        normalizer.addSampleConsumer(createEndDateConsumer());
+        
+        FilterConsumer dateRangeConsumer = createFilterByDateRange();
+        dateRangeConsumer.addSampleConsumer(createBeginDateConsumer());
+        dateRangeConsumer.addSampleConsumer(createEndDateConsumer());
 
         FilterConsumer nameFilter = createNameFilter();
 
@@ -222,8 +224,10 @@ public class ReportGenerator {
 
         nameFilter.addSampleConsumer(excludeControllerFilter);
 
-        normalizer.addSampleConsumer(nameFilter);
-
+        dateRangeConsumer.addSampleConsumer(nameFilter);
+        
+        normalizer.addSampleConsumer(dateRangeConsumer);
+        
         source.addSampleConsumer(normalizer);
 
         // Get graph configurations
@@ -262,6 +266,38 @@ public class ReportGenerator {
 
         LOG.debug("End of report generation");
 
+    }
+
+    /**
+     * @return {@link FilterConsumer} that filter data based on date range
+     */
+    private FilterConsumer createFilterByDateRange() {
+        FilterConsumer dateRangeFilter = new FilterConsumer();
+        dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
+        dateRangeFilter.setSamplePredicate(new SamplePredicate() {
+
+            @Override
+            public boolean matches(Sample sample) {
+                long sampleStartTime = sample.getStartTime();
+                if(configuration.getStartDate() != null) {
+                    if((sampleStartTime >= configuration.getStartDate().getTime())) {
+                        if(configuration.getEndDate() != null) {
+                            return sampleStartTime <= configuration.getEndDate().getTime();                             
+                        } else {
+                            return true;                            
+                        }
+                    }
+                    return false;
+                } else {
+                    if(configuration.getEndDate() != null) {
+                        return sampleStartTime <= configuration.getEndDate().getTime(); 
+                    } else {
+                        return true;                            
+                    }
+                }
+            }
+        });     
+        return dateRangeFilter;
     }
 
     private void removeTempDir(File tmpDir, boolean tmpDirCreated) {
