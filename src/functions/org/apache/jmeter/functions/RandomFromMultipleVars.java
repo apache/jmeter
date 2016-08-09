@@ -147,5 +147,4 @@ public class RandomFromMultipleVars extends AbstractFunction {
     public List<String> getArgumentDesc() {
         return desc;
     }
-
 }
