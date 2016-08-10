@@ -1245,6 +1245,14 @@ To benefit from this feature:
     <li>Or Use Script Text and check <code>Cache compiled script if available</code> property.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
+    <note>When using Groovy as scripting language and not checking <code>Cache compiled script if available</code> (while caching is recommended), you should set this JVM Property <code>-Dgroovy.use.classvalue=true</code>
+        due to a Groovy Memory leak as of version 2.4.6, see:
+        <ul>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7683" >GROOVY-7683</a></li>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7591">GROOVY-7591</a></li>
+            <li><a href="https://bugs.openjdk.java.net/browse/JDK-8136353">JDK-8136353</a></li>
+        </ul> 
+    </note>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (<code>jmeter.properties</code>):
@@ -3393,9 +3401,12 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
         <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
     </dl></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not).
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
+
 <p>
 Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
@@ -4819,7 +4830,9 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following variables are set up for use by the script:</p>
@@ -5160,7 +5173,9 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
     A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      </property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">
         The script. The return value is used as the number of milliseconds to wait.
     </property>
@@ -5427,7 +5442,9 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following JSR223 variables are set up for use by the script:</p>
@@ -5985,7 +6002,9 @@ The JSR223 PostProcessor allows JSR223 script code to be applied after taking a 
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
