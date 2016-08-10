@@ -5656,6 +5656,11 @@ generate the template string, and store the result into the given variable name.
         In this case, remove the default value once debugging is complete.
         </p> 
         </property>
+        <property name="Use empty default value" required="No">
+        If the checkbox is checked and <code>Default Value</code> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <code>${var}</code> (if <code>Reference Name</code> is var) in your Test Plan, if the extracted value is not found then 
+        <code>${var}</code> will be equal to empty string instead of containing <code>${var}</code> which may be useful if extracted value is optional.
+        </property>
 </properties>
 <p>
     If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
@@ -5764,6 +5769,11 @@ extracting the node as text or attribute value and store the result into the giv
         you may wish to leave the variable unchanged if the expression does not match.
         In this case, remove the default value once debugging is complete.
         </p> 
+        </property>
+        <property name="Use empty default value" required="No">
+        If the checkbox is checked and <code>Default Value</code> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <code>${var}</code> (if <code>Reference Name</code> is var) in your Test Plan, if the extracted value is not found then 
+        <code>${var}</code> will be equal to empty string instead of containing <code>${var}</code> which may be useful if extracted value is optional.
         </property>
 </properties>
 <p>

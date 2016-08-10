@@ -76,6 +76,8 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
     
+    private static final String DEFAULT_EMPTY_VALUE = "HtmlExtractor.default_empty_value"; // $NON-NLS-1$
+
     private Extractor extractor;
 
     /**
@@ -102,7 +104,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         int matchNumber = getMatchNumber();
         final String defaultValue = getDefaultValue();
         
-        if (defaultValue.length() > 0){// Only replace default if it is provided
+        if (defaultValue.length() > 0  || isEmptyDefaultValue()){// Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
         
@@ -307,10 +309,24 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     }
 
     /**
+     * @param defaultEmptyValue boolean set value to "" if not found
+     */
+    public void setDefaultEmptyValue(boolean defaultEmptyValue) {
+        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue);
+    }
+    
+    /**
      * Get the default value for the variable if no matches are found
      * @return The default value for the variable
      */
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
+    }
+    
+    /**
+     * @return boolean set value to "" if not found
+     */
+    public boolean isEmptyDefaultValue() {
+        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE);
     }
 }
