@@ -112,15 +112,18 @@ public class RandomFromMultipleVars extends AbstractFunction {
             JMeterVariables vars, List<String> results)
             throws NumberFormatException {
         String matchNumberAsStr = vars.get(variableName+"_matchNr");
+        int matchNumber = 0;
         if(!StringUtils.isEmpty(matchNumberAsStr)) {
-            int matchNumber = Integer.parseInt(matchNumberAsStr);
+            matchNumber = Integer.parseInt(matchNumberAsStr);
+        }
+        if(matchNumber > 0) {
             for (int i = 1; i <= matchNumber; i++) {
                 results.add(vars.get(variableName+"_"+i));
             }
         } else {
             String value = vars.get(variableName);
             if(!StringUtils.isEmpty(value)) {
-                results.add(vars.get(variableName));
+                results.add(value);
             }
         }
     }
