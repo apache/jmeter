@@ -120,7 +120,7 @@ public final class JOrphanUtils {
     {
         return split(splittee,splitChar,true);
     }
-
+*/
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
      * strings of the string split by the tokenizer character(s).
@@ -169,7 +169,19 @@ public final class JOrphanUtils {
     }
 
 */
+
+    public static String[] split(String splittee, String splitChar,boolean truncate) {
+        return splittee.split(splitChar);
+
+    }
+
+    public static String[] split(String splittee,String splitChar)
+    {
+        //return split(splittee,splitChar,true);
+        return splittee.split(splitChar);
+    }
     private static final String SPACES = "                                 ";
+
 
     private static final int SPACES_LEN = SPACES.length();
 
@@ -193,13 +205,6 @@ public final class JOrphanUtils {
         in.insert(0, SPACES.substring(0, pfx));
         return in;
     }
-
-    public static String[] split(String splittee,String splitChar)
-    {
-        //return split(splittee,splitChar,true);
-        return splittee.split(splitChar);
-    }
-
 
     /**
      * Left aligns some text in a StringBuilder N.B. modifies the input buffer
