@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
