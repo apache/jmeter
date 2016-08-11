@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.*;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -540,10 +540,12 @@ public class Data implements Serializable {
      *            string array.
      */
     public void setData(String[] contents, String delimiter) {
-        setHeaders(JOrphanUtils.split(contents[0], delimiter));
+        //setHeaders(JOrphanUtils.split(contents[0], delimiter));
+        setHeaders(contents[0].split(delimiter));//changed to string.splti()
         int x = 1;
         while (x < contents.length) {
-            setLine(JOrphanUtils.split(contents[x++], delimiter));
+            //setLine(JOrphanUtils.split(contents[x++], delimiter));
+            setLine(contents[x++].split(delimiter));
         }
     }
 
