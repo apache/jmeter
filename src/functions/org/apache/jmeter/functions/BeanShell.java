@@ -111,8 +111,9 @@ public class BeanShell extends AbstractFunction {
         {
             log.warn("Error running BSH script", ex);
         }
-
-        log.debug("Output=" + resultStr);
+        if(log.isDebugEnabled()) {
+            log.debug("Output=" + resultStr);
+        }
         return resultStr;
 
     }
