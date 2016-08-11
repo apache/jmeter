@@ -87,6 +87,7 @@ public class RequestViewRaw implements RequestView {
             }
             if (sb.length() > 0) {
                 sampleDataField.setText(sb.toString());
+                sampleDataField.setCaretPosition(1);
             } else {
                 // add a message when no request data (ex. Java request)
                 sampleDataField.setText(JMeterUtils
