@@ -73,7 +73,102 @@ public final class JOrphanUtils {
      * @see #split(String, String, String)
      *
      */
+   /* public static String[] split(String splittee, String splitChar,boolean truncate) {
+        if (splittee == null || splitChar == null) {
+            return new String[0];
+        }
+        final String EMPTY_ELEMENT = "";
+        int spot;
+        final int splitLength = splitChar.length();
+        final String adjacentSplit = splitChar + splitChar;
+        final int adjacentSplitLength = adjacentSplit.length();
+        if(truncate) {
+            while ((spot = splittee.indexOf(adjacentSplit)) != -1) {
+                splittee = splittee.substring(0, spot + splitLength)
+                        + splittee.substring(spot + adjacentSplitLength, splittee.length());
+            }
+            if(splittee.startsWith(splitChar)) {
+                splittee = splittee.substring(splitLength);
+            }
+            if(splittee.endsWith(splitChar)) { // Remove trailing splitter
+                splittee = splittee.substring(0,splittee.length()-splitLength);
+            }
+        }
+        List<String> returns = new ArrayList<>();
+        final int length = splittee.length(); // This is the new length
+        int start = 0;
+        spot = 0;
+        while (start < length && (spot = splittee.indexOf(splitChar, start)) > -1) {
+            if (spot > 0) {
+                returns.add(splittee.substring(start, spot));
+            }
+            else
+            {
+                returns.add(EMPTY_ELEMENT);
+            }
+            start = spot + splitLength;
+        }
+        if (start < length) {
+            returns.add(splittee.substring(start));
+        } else if (spot == length - splitLength){// Found splitChar at end of line
+            returns.add(EMPTY_ELEMENT);
+        }
+        return returns.toArray(new String[returns.size()]);
+    }
 
+    public static String[] split(String splittee,String splitChar)
+    {
+        return split(splittee,splitChar,true);
+    }
+
+    /**
+     * Takes a String and a tokenizer character string, and returns a new array of
+     * strings of the string split by the tokenizer character(s).
+     *
+     * Trailing delimiters are significant (unless the default = null)
+     *
+     * @param splittee
+     *            String to be split.
+     * @param delims
+     *            Delimiter character(s) to split the string on
+     * @param def
+     *            Default value to place between two split chars that have
+     *            nothing between them. If null, then ignore omitted elements.
+     *
+     * @return Array of all the tokens.
+     *
+     * @throws NullPointerException if splittee or delims are null
+     *
+     * @see #split(String, String, boolean)
+     * @see #split(String, String)
+     *
+     * This is a rewritten version of JMeterUtils.split()
+     */
+ /*   public static String[] split(String splittee, String delims, String def) {
+        StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
+        boolean lastWasDelim=false;
+        List<String> strList = new ArrayList<>();
+        while (tokens.hasMoreTokens()) {
+            String tok=tokens.nextToken();
+            if (   tok.length()==1 // we have a single character; could be a token
+                && delims.contains(tok)) // it is a token
+            {
+                if (lastWasDelim) {// we saw a delimiter last time
+                    strList.add(def);// so add the default
+                }
+                lastWasDelim=true;
+            } else {
+                lastWasDelim=false;
+                strList.add(tok);
+            }
+        }
+        if (lastWasDelim) {
+            strList.add(def);
+        }
+        return strList.toArray(new String[strList.size()]);
+    }
+
+*/
     private static final String SPACES = "                                 ";
 
     private static final int SPACES_LEN = SPACES.length();
@@ -98,6 +193,13 @@ public final class JOrphanUtils {
         in.insert(0, SPACES.substring(0, pfx));
         return in;
     }
+
+    public static String[] split(String splittee,String splitChar)
+    {
+        //return split(splittee,splitChar,true);
+        return splittee.split(splitChar);
+    }
+
 
     /**
      * Left aligns some text in a StringBuilder N.B. modifies the input buffer
