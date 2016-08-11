@@ -73,7 +73,7 @@ public final class JOrphanUtils {
      * @see #split(String, String, String)
      *
      */
-   /* public static String[] split(String splittee, String splitChar,boolean truncate) {
+    public static String[] split(String splittee, String splitChar,boolean truncate) {
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -116,11 +116,7 @@ public final class JOrphanUtils {
         return returns.toArray(new String[returns.size()]);
     }
 
-    public static String[] split(String splittee,String splitChar)
-    {
-        return split(splittee,splitChar,true);
-    }
-*/
+
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
      * strings of the string split by the tokenizer character(s).
@@ -144,7 +140,7 @@ public final class JOrphanUtils {
      *
      * This is a rewritten version of JMeterUtils.split()
      */
- /*   public static String[] split(String splittee, String delims, String def) {
+    public static String[] split(String splittee, String delims, String def) {
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
         List<String> strList = new ArrayList<>();
@@ -168,16 +164,10 @@ public final class JOrphanUtils {
         return strList.toArray(new String[strList.size()]);
     }
 
-*/
-    public static String[] split(String splittee, String delims, String def) {
-        return splittee.split(delims);
-    }
 
 
-    public static String[] split(String splittee, String splitChar,boolean truncate) {
-        return splittee.split(splitChar);
 
-    }
+
 
     public static String[] split(String splittee,String splitChar)
     {
