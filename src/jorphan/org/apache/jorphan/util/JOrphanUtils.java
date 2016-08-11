@@ -169,6 +169,10 @@ public final class JOrphanUtils {
     }
 
 */
+    public static String[] split(String splittee, String delims, String def) {
+        return splittee.split(delims);
+    }
+
 
     public static String[] split(String splittee, String splitChar,boolean truncate) {
         return splittee.split(splitChar);
