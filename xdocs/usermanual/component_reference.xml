@@ -629,7 +629,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code><a href="../api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html">AbstractJavaSamplerClient</a></code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
