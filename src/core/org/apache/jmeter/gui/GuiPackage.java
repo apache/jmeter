@@ -169,16 +169,33 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *            the TreeListener for JMeter's test tree
      * @param treeModel
      *            the model for JMeter's test tree
+     */
+    public static void initInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
+        GuiPackage guiPack = new GuiPackage(treeModel, listener);
+        guiPack.undoHistory.add(treeModel, "Created");
+        GuiPackage.guiPack = guiPack;
+    }
+    
+    /**
+     * When GuiPackage is requested for the first time, it should be given
+     * handles to JMeter's Tree Listener and TreeModel.
+     *
+     * @param listener
+     *            the TreeListener for JMeter's test tree
+     * @param treeModel
+     *            the model for JMeter's test tree
      *
      * @return GuiPackage
+     * @deprecated  Will be remove in next version
      */
+    @Deprecated
     public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
-        if (guiPack == null) {
-            guiPack = new GuiPackage(treeModel, listener);
-            guiPack.undoHistory.add(treeModel, "Created");
+        if(guiPack == null) {
+            initInstance(listener, treeModel);
         }
-        return guiPack;
+        return GuiPackage.guiPack;
     }
+    
 
     /**
      * Get a JMeterGUIComponent for the specified test element. If the GUI has
