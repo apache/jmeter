@@ -322,8 +322,7 @@ public class JMeter implements JMeterPlugin {
         final ActionRouter instance = ActionRouter.getInstance();
         instance.populateCommandMap();
         treeLis.setActionHandler(instance);
-        // NOTUSED: GuiPackage guiPack =
-        GuiPackage.getInstance(treeLis, treeModel);
+        GuiPackage.initInstance(treeLis, treeModel);
         MainFrame main = new MainFrame(treeModel, treeLis);
         ComponentUtil.centerComponentInWindow(main, 80);
         main.setVisible(true);
