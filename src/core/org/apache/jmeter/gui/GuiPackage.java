@@ -186,7 +186,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      *            the model for JMeter's test tree
      *
      * @return GuiPackage
-     * @deprecated  Will be remove in next version
+     * @deprecated  Will be removed in next version. Use {@link GuiPackage#initInstance(JMeterTreeListener, JMeterTreeModel)}
      */
     @Deprecated
     public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
