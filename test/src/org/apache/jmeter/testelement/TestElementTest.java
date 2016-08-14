@@ -20,7 +20,6 @@ package org.apache.jmeter.testelement;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTest;
