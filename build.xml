@@ -15,7 +15,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project name="JMeter" default="install" basedir=".">
+<project name="JMeter" default="install" basedir="."
+    xmlns:rat="antlib:org.apache.rat.anttasks"
+    xmlns="antlib:org.apache.tools.ant">
   <description>
 
   N.B. To build JMeter from a release you need both the binary and source archives,
@@ -899,7 +901,7 @@
   <target name="package" depends="compile, prepare-resources, package-only"
      description="Compile everything and create the jars"/>
 
-  <target name="package-and-check" depends="clean, package, checkstyle"
+  <target name="package-and-check" depends="clean, package, checkstyle, rat"
      description="Compile, create jars and apply checkstyle before commiting code"/>
 
   <target name="prepare-resources"
@@ -3025,6 +3027,11 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="checkstyle-all"    dest.dir="${lib.opt}"/>
   </target>
 
+  <target name="_process_rat_jars">
+    <process_jarfile jarname="rat"        dest.dir="${lib.opt}"/>
+    <process_jarfile jarname="rat-tasks"  dest.dir="${lib.opt}"/>
+  </target>
+
   <!-- Update a jar (clean, download, package in one shot.-->
   <target name="update_jar" depends="clean, download_jars, package">
   </target>
@@ -3064,6 +3071,14 @@ run JMeter unless all the JMeter jars are added.
     <!-- build.dir may be needed as a temporary work area -->
    <mkdir dir="${build.dir}" />
     <antcall target="_process_checkstyle_jars">
+      <param name="_get_file" value="true"/>
+    </antcall>
+  </target>
+
+  <target name="download_rat">
+    <!-- build.dir may be needed as a temporary work area -->
+   <mkdir dir="${build.dir}" />
+    <antcall target="_process_rat_jars">
       <param name="_get_file" value="true"/>
     </antcall>
   </target>
@@ -3141,6 +3156,32 @@ run JMeter unless all the JMeter jars are added.
       <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
     </checkstyle>
 
+  </target>
+
+  <target name="rat">
+    <available property="rat.jar.available" file="${lib.opt}/apache-rat-tasks-${rat.version}.jar"/>
+    <fail message="This task requires Apache Creadur RAT, please run download_rat target to download it" unless="rat.jar.available"/>
+    <taskdef
+      uri="antlib:org.apache.rat.anttasks"
+      resource="org/apache/rat/anttasks/antlib.xml">
+      <classpath>
+        <pathelement location="${lib.opt}/apache-rat-${rat.version}.jar"/>
+        <pathelement location="${lib.opt}/apache-rat-tasks-${rat.version}.jar"/>
+        <!--pathelement location="${lib.dir}/${commons-io.jar}"/-->
+      </classpath>
+    </taskdef>
+    <rat:report reportfile="reports/rat-report.txt">
+        <fileset dir="." excludesfile="rat-excludes.txt"/>
+    </rat:report>
+    <loadfile property="rat-errors" srcFile="reports/rat-report.txt">
+      <filterchain>
+        <linecontains>
+          <contains value="Unknown"/>
+        </linecontains>
+      </filterchain>
+    </loadfile>
+    <echo message="reports/rat-report.txt:"/>
+    <echo message="${rat-errors}"/>
   </target>
 
   <target name="sign_dist"
