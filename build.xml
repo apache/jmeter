@@ -3144,12 +3144,12 @@ run JMeter unless all the JMeter jars are added.
   <!-- Need to define config_loc for use by Eclipse -->
   <property name="config_loc" value="."/>
   <target name="checkstyle">
-    <available property="checkstyle.jar.available" file="${lib.opt}/checkstyle-6.13-all.jar"/>
+    <available property="checkstyle.jar.available" file="${lib.opt}/${checkstyle-all.jar}"/>
     <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
 
     <antcall target="_process_checkstyle_jars"></antcall>
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-             classpath="${lib.opt}/checkstyle-6.13-all.jar"/>
+             classpath="${lib.opt}/${checkstyle-all.jar}"/>
     <checkstyle config="checkstyle.xml">
       <fileset dir="src" includes="**/*.java"/>
       <formatter type="plain"/>
@@ -3159,15 +3159,14 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="rat">
-    <available property="rat.jar.available" file="${lib.opt}/apache-rat-tasks-${rat.version}.jar"/>
+    <available property="rat.jar.available" file="${lib.opt}/${rat.jar}"/>
     <fail message="This task requires Apache Creadur RAT, please run download_rat target to download it" unless="rat.jar.available"/>
     <taskdef
       uri="antlib:org.apache.rat.anttasks"
       resource="org/apache/rat/anttasks/antlib.xml">
       <classpath>
-        <pathelement location="${lib.opt}/apache-rat-${rat.version}.jar"/>
-        <pathelement location="${lib.opt}/apache-rat-tasks-${rat.version}.jar"/>
-        <!--pathelement location="${lib.dir}/${commons-io.jar}"/-->
+        <pathelement location="${lib.opt}/${rat.jar}"/>
+        <pathelement location="${lib.opt}/${rat-tasks.jar}"/>
       </classpath>
     </taskdef>
     <rat:report reportfile="reports/rat-report.txt">
