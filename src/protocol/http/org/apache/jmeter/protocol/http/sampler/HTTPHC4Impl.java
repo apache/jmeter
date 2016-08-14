@@ -151,7 +151,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
     
-    private static final Pattern PORT_PATTERN = Pattern.compile("^\\d+$");
+    private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
         @Override
