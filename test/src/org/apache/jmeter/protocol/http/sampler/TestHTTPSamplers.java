@@ -21,8 +21,6 @@ package org.apache.jmeter.protocol.http.sampler;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import javax.crypto.Cipher;
-
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -365,11 +363,5 @@ public class TestHTTPSamplers {
         sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("","","mime2")});
         file = sampler.getHTTPFiles()[0];
         assertEquals("mime2", file.getMimeType());
-    }
-
-    @Test
-    public void testCryptoStrength() throws Exception {
-        int maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
-        System.err.println("Crypto Max key length="+maxKeyLen);
     }
 }
