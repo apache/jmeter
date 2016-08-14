@@ -31,7 +31,7 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 public final class HttpWebdav extends HttpEntityEnclosingRequestBase {
     // A HTTP method can be a token as specified in
     // https://tools.ietf.org/html/rfc7230#section-3.2.6
-    private static final Pattern WEBDAV_METHOD_PATTERN = Pattern.compile("^(?i)[\\da-z!#$%&'*+\\-.^_`|~]+$");
+    private static final Pattern WEBDAV_METHOD_PATTERN = Pattern.compile("(?i)[\\da-z!#$%&'*+\\-.^_`|~]+"); // only used in .matches(), no need for anchors
     
     private final String davMethod;
 
