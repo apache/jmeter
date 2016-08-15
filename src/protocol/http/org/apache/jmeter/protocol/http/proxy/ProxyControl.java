@@ -73,7 +73,6 @@ import org.apache.jmeter.protocol.http.control.Header;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
 import org.apache.jmeter.protocol.http.control.RecordingController;
 import org.apache.jmeter.protocol.http.gui.AuthPanel;
-import org.apache.jmeter.protocol.http.gui.HeaderPanel;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerFactory;
@@ -121,8 +120,6 @@ public class ProxyControl extends GenericController {
     private static final String TRANSACTION_CONTROLLER_GUI = TransactionControllerGui.class.getName();
 
     private static final String LOGIC_CONTROLLER_GUI = LogicControllerGui.class.getName();
-
-    private static final String HEADER_PANEL = HeaderPanel.class.getName();
 
     private static final String AUTH_PANEL = AuthPanel.class.getName();
 
