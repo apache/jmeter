@@ -29,7 +29,6 @@ import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
-import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Test;
 
 public class TestCSVSaveService extends JMeterTestCase {
