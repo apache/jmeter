@@ -2679,6 +2679,10 @@ before loading the file.
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
 <b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in <code>jmeter.properties</code>.</b>
+<note>
+XML files written by JMeter have version 1.0 declared in header while actual file is serialized with 1.1 rules. 
+This causes strict XML parsers to fail. Consider using non-string XML parsers to read JTL files.
+</note>
 </p>
 <note>
 The file name can contain function and/or variable references.
