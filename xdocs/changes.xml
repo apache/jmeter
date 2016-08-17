@@ -153,7 +153,6 @@ Summary
 <ul>
     <li><bug>58888</bug>HTTP(S) Test Script Recorder (ProxyControl) does not add TestElement's returned by SamplerCreator createChildren ()</li>
     <li><bug>59902</bug>Https handshake failure when setting <code>httpclient.socket.https.cps</code> property</li>
-    <li><bug>59973</bug>XML version in JTL files is changed into 1.1 to match serializer output. Implemented by Andrey Pokhilko (andrey at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
  </ul>
 
 <h3>Other Samplers</h3>
