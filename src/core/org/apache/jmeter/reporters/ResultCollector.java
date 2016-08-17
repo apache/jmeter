@@ -79,7 +79,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
-    private static final String XML_HEADER = "<?xml version=\"1.1\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
+    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
 
     private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
             + TESTRESULTS_END.length();

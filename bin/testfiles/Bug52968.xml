@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <testResults version="1.2">
 <sample s="true" lb="TNP1-JR0-0" rc="200" rm="" dt="text" sc="1" ec="0" ng="1" na="1"/>
 <sample s="true" lb="TC-NOPARENT-1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" dt="" sc="1" ec="0" ng="1" na="1"/>
