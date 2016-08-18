@@ -2531,6 +2531,8 @@ run JMeter unless all the JMeter jars are added.
             <include name="${batchtest.name}.xml"/>
             <include name="${batchtest.name}.log"/>
             <include name="${batchtest.name}.jtl"/>
+            <!-- Allow for optional error files -->
+            <include name="${batchtest.name}.err"/>
           </fileset>
         </delete>
       </sequential>
