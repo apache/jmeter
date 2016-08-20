@@ -2228,19 +2228,21 @@ what results any given interaction will give</note>
 
 <component name="Throughput Controller" index="&sect-num;.2.7" width="329" height="167" screenshot="throughput_controller.png">
 <description>
-<p>
-<b>This controller is badly named, as it does not control throughput.</b>
-Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
-</p>
-<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.</p>
+<p>The Throughput Controller allows the user to control how often it is executed.  
+There are two modes:
+<ul>
+<li>percent execution</li>
+<li>total executions</li>
+</ul>
 <dl>
   <dt><code>Percent executions</code></dt><dd>causes the controller to execute a certain percentage of the iterations through the test plan.</dd>
   <dt><code>Total executions</code></dt><dd>causes the controller to stop executing after a certain number of executions have occurred.</dd>
 </dl>
-<p>
-Like the Once Only Controller, this
-setting is reset when a parent Loop Controller restarts.
+Like the Once Only Controller, this setting is reset when a parent Loop Controller restarts.
 </p>
+<note>This controller is badly named, as it does not control throughput.
+Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
+</note>
 </description>
 <note>The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).</note>
 <properties>
@@ -2680,7 +2682,7 @@ before loading the file.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
 <b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in <code>jmeter.properties</code>.</b>
 <note>
-XML files written by JMeter have version 1.0 declared in header while actual file is serialized with 1.1 rules.
+XML files written by JMeter have version 1.0 declared in header while actual file is serialized with 1.1 rules. 
 (This is done for historical compatibility reasons; see <bugzilla>59973</bugzilla> and <bugzilla>58679</bugzilla>) 
 This causes strict XML parsers to fail. Consider using non-strict XML parsers to read JTL files.
 </note>
