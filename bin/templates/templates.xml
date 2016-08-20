@@ -201,7 +201,7 @@
         <name>Think Time at a point</name>
         <fileName>ThinkTime.jmx</fileName>
         <description><![CDATA[
-        <h1>Sample BeanShell Sampler</h1>
+        <h1>Think Time between 2 samplers</h1>
         <h2>Overview</h2>
         This shows how to introduce a Think Time of 1s+/- 100 ms between 2 samplers 
         <br/>
