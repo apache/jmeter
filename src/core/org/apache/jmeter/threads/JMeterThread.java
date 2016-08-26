@@ -280,7 +280,7 @@ public class JMeterThread implements Runnable, Interruptible {
             log.info("Stopping Test Now: " + e.toString());
             stopTestNow();
         } catch (JMeterStopThreadException e) {
-            log.info("Stop Thread seen: " + e.toString());
+            log.info("Stop Thread seen for thread " + getThreadName()+", reason:"+ e.toString());
         } catch (Exception e) {
             log.error("Test failed!", e);
         } catch (ThreadDeath e) {
