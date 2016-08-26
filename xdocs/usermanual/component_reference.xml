@@ -2311,7 +2311,6 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <ul>
             <li><code>${COUNT} &lt; 10</code></li>
             <li><code>"${VAR}" == "abcd"</code></li>
-            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
     </example>
@@ -2319,6 +2318,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <ul>
             <li><code>${__jexl(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
+            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
     </example>
 </component>
@@ -5028,8 +5028,8 @@ Note that the throughput value should not be changed too often during a test
     <li><code>all active threads (shared)</code> - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
   </property>
-  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.
-  The shared algorithm should generate a more accurate overall transaction rate.
+  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.<br/>
+  The shared algorithm should generate a more accurate overall transaction rate.<br/>
   The non-shared algorithm should generate a more even spread of transactions across threads.</p>
 </properties>
 </component>
