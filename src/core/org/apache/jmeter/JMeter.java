@@ -1083,13 +1083,13 @@ public class JMeter implements JMeterPlugin {
         public void testEnded() {
             long now = System.currentTimeMillis();
             println("Tidying up ...    @ "+new Date(now)+" ("+now+")");
-            checkForRemainingThreads();
             try {
                 generateReport();
             } catch (Exception e) {
                 System.err.println("Error generating the report: "+e);
                 log.error("Error generating the report",e);
             }
+            checkForRemainingThreads();
             println("... end of run");
         }
 
@@ -1128,9 +1128,14 @@ public class JMeter implements JMeterPlugin {
             } catch (InterruptedException ignored) {
             }
             ClientJMeterEngine.tidyRMI(log);
-            println("... end of run");
-            generateReport();
+            try {
+                generateReport();
+            } catch (Exception e) {
+                System.err.println("Error generating the report: "+e);
+                log.error("Error generating the report",e);
+            }
             checkForRemainingThreads();
+            println("... end of run");
         }
 
         /**
