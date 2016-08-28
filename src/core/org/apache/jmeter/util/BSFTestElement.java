@@ -74,7 +74,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
         mgr.declareBean("Label",label, String.class); // $NON-NLS-1$
         mgr.declareBean("FileName",fileName, String.class); // $NON-NLS-1$
         mgr.declareBean("Parameters", scriptParameters, String.class); // $NON-NLS-1$
-        String [] args=JOrphanUtils.split(scriptParameters, " ");//$NON-NLS-1$
+        String [] args=(scriptParameters).split( " ");//$NON-NLS-1$
         mgr.declareBean("args",args,args.getClass());//$NON-NLS-1$
         // Add variables for access to context and variables
         JMeterContext jmctx = JMeterContextService.getContext();
