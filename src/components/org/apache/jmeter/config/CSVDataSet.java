@@ -184,7 +184,7 @@ public class CSVDataSet extends ConfigTestElement
                 }
             } else {
                 server.reserveFile(_fileName, getFileEncoding(), alias);
-                vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
+                vars = names.split(","); // $NON-NLS-1$
             }
         }
            
