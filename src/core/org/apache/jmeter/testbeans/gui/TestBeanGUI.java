@@ -134,9 +134,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
         paths.add("org.apache.jmeter.testbeans.gui");// $NON-NLS-1$
         paths.addAll(Arrays.asList(PropertyEditorManager.getEditorSearchPath()));
         String s = JMeterUtils.getPropDefault("propertyEditorSearchPath", null);// $NON-NLS-1$
-        //if (s != null) {
-            paths.addAll(Arrays.asList(JOrphanUtils.split(s, ",", "")));// $NON-NLS-1$ // $NON-NLS-2$
-        //}
+        if (s != null) {
+           paths.addAll(Arrays.asList(s.split(",")));// $NON-NLS-1$ // $NON-NLS-2$
+        }
         PropertyEditorManager.setEditorSearchPath(paths.toArray(new String[paths.size()]));
     }
 
