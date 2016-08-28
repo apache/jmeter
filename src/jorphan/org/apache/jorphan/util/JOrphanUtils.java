@@ -73,7 +73,7 @@ public final class JOrphanUtils {
      * @see #split(String, String, String)
      *
      */
-   public static String[] split(String splittee, String splitChar,boolean truncate) {
+  /* public static String[] split(String splittee, String splitChar,boolean truncate) {
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -140,9 +140,7 @@ public final class JOrphanUtils {
      *
      * This is a rewritten version of JMeterUtils.split()
      */
-    public static String[] split(String splittee, String delims, String def) {
-
-
+  /*  public static String[] split(String splittee, String delims, String def) {
 
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
@@ -171,7 +169,7 @@ public final class JOrphanUtils {
         return split(splittee,splitChar,true);
 
     }
-
+*/
     private static final String SPACES = "                                 ";
 
 
