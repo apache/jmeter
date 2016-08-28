@@ -73,7 +73,7 @@ public final class JOrphanUtils {
      * @see #split(String, String, String)
      *
      */
- public static String[] split(String splittee, String splitChar,boolean truncate) {
+/*  public static String[] split(String splittee, String splitChar,boolean truncate) {
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -115,7 +115,7 @@ public final class JOrphanUtils {
         }
         return returns.toArray(new String[returns.size()]);
     }
-
+*/
 
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
@@ -140,11 +140,7 @@ public final class JOrphanUtils {
      *
      * This is a rewritten version of JMeterUtils.split()
      */
-   public static String[] split(String splittee, String delims, String def) {
-       if (splittee == null || delims == null) {
-           throw new IllegalArgumentException("The provided splittee or delims was null; non-null value must be provided.");
-
-       }else {
+    public static String[] split(String splittee, String delims, String def) {
 
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
@@ -167,8 +163,7 @@ public final class JOrphanUtils {
             strList.add(def);
         }
         return strList.toArray(new String[strList.size()]);
-       }
-   }
+    }
 
     public static String[] split(String splittee,String splitChar) {
         return split(splittee,splitChar,true);
