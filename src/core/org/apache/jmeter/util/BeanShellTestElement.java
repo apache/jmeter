@@ -145,7 +145,7 @@ public abstract class BeanShellTestElement extends AbstractTestElement
         bsh.set("Parameters", params); // $NON-NLS-1$
         // and set as an array
         bsh.set("bsh.args",//$NON-NLS-1$
-                JOrphanUtils.split(params, " "));//$NON-NLS-1$
+                (params).split(" "));//$NON-NLS-1$
 
         if (fileName.length() == 0) {
             return bsh.eval(getScript());
