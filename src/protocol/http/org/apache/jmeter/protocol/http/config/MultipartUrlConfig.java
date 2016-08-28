@@ -107,7 +107,7 @@ public class MultipartUrlConfig implements Serializable {
      * @param queryString text to parse
      */
     public void parseArguments(String queryString) {
-        String[] parts = JOrphanUtils.split(queryString, "--" + getBoundary()); //$NON-NLS-1$
+        String[] parts = queryString.split("--" + getBoundary()); //$NON-NLS-1$
         for (String part : parts) {
             String contentDisposition = getHeaderValue("Content-disposition", part); //$NON-NLS-1$
             String contentType = getHeaderValue("Content-type", part); //$NON-NLS-1$
