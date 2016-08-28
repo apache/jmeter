@@ -792,14 +792,20 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     private void delay(List<Timer> timers) {
-        long sum = 0;
+        long totalDelay = 0;
         for (Timer timer : timers) {
             TestBeanHelper.prepare((TestElement) timer);
-            sum += timer.delay();
+            totalDelay += timer.delay();
         }
-        if (sum > 0) {
+        if (totalDelay > 0) {
             try {
-                TimeUnit.MILLISECONDS.sleep(sum);
+                if(scheduler) {
+                    long now = System.currentTimeMillis();
+                    if(now + totalDelay > endTime) {
+                        totalDelay = endTime - now;
+                    }
+                }
+                TimeUnit.MILLISECONDS.sleep(totalDelay);
             } catch (InterruptedException e) {
                 log.warn("The delay timer was interrupted - probably did not wait as long as intended.");
             }
