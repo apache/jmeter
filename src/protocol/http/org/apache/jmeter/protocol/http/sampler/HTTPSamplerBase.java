@@ -309,7 +309,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
 
     static {
-        String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
+        String[] parsers = RESPONSE_PARSERS.split(" ");// returns empty array for null
         for (final String parser : parsers) {
             String classname = JMeterUtils.getProperty(parser + ".className");//$NON-NLS-1$
             if (classname == null) {
@@ -1057,7 +1057,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      *            if non-null then it is used to decode the
      */
     public void parseArguments(String queryString, String contentEncoding) {
-        String[] args = JOrphanUtils.split(queryString, QRY_SEP);
+        String[] args = queryString.split(QRY_SEP);
         final boolean isDebug = log.isDebugEnabled();
         for (String arg : args) {
             if (isDebug) {
