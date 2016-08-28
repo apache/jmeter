@@ -77,7 +77,7 @@ public class TestJorphanUtils {
     @Test
     public void testSplit1() {
         String in = "a,bc,,"; // Test ignore trailing split characters
-        String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
+        String out[] = in.split(",");// Ignore adjacent delimiters
         assertEquals(2, out.length);
         assertEquals("a", out[0]);
         assertEquals("bc", out[1]);
