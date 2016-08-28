@@ -175,7 +175,7 @@ public final class AllTests {
         logprop("java.class.version");
         
         String cp = System.getProperty("java.class.path");
-        String[] cpe = JOrphanUtils.split(cp, java.io.File.pathSeparator);
+        String[] cpe = cp.split(java.io.File.pathSeparator);
         StringBuilder sb = new StringBuilder(3000);
         sb.append("java.class.path=");
         for (String path : cpe) {
