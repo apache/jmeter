@@ -154,7 +154,7 @@ public class JMeterUtils implements UnitTestManager {
     public static void initLocale() {
         String loc = appProperties.getProperty("language"); // $NON-NLS-1$
         if (loc != null) {
-            String []parts = JOrphanUtils.split(loc,"_");// $NON-NLS-1$
+            String []parts = loc.split("_");// $NON-NLS-1$
             if (parts.length==2) {
                 setLocale(new Locale(parts[0], parts[1]));
             } else {
