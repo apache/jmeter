@@ -141,6 +141,9 @@ public final class JOrphanUtils {
      * This is a rewritten version of JMeterUtils.split()
      */
     public static String[] split(String splittee, String delims, String def) {
+        if (splittee == null || delims==null){
+            throw new IllegalArgumentException("The provided splittee or delims was null; non-null value must be provided.");
+        }
 
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
