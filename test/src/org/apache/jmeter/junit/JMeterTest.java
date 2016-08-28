@@ -506,6 +506,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
                 System.out.println("Class path is:");
                 String cp = System.getProperty("java.class.path");
                 String classPathElements[] = cp.split(java.io.File.pathSeparator);
+
                 for (String classPathElement : classPathElements) {
                     System.out.println(classPathElement);
                 }
