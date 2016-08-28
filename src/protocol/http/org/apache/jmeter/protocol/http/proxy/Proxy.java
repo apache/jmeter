@@ -93,7 +93,7 @@ public class Proxy extends Thread {
 
     static {
         String removeList = JMeterUtils.getPropDefault(PROXY_HEADERS_REMOVE,PROXY_HEADERS_REMOVE_DEFAULT);
-        HEADERS_TO_REMOVE = JOrphanUtils.split(removeList,PROXY_HEADERS_REMOVE_SEPARATOR);
+        HEADERS_TO_REMOVE = JOrphanUtils.split(PROXY_HEADERS_REMOVE_SEPARATOR);
         log.info("Proxy will remove the headers: "+removeList);
     }
 
