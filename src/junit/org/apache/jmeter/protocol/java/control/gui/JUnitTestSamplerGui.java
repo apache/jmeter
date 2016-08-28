@@ -182,7 +182,7 @@ implements ChangeListener, ActionListener, ItemListener
                      new Class[] { TestCase.class });
             }
             ClassFilter filter = new ClassFilter();
-            filter.setPackges(JOrphanUtils.split(filterpkg.getText(),",")); //$NON-NLS-1$
+            filter.setPackges(filterpkg.getText().split(",")); //$NON-NLS-1$
             // change the classname drop down
             String[] clist = filter.filterArray(classList);
             for (String classStr : clist) {
