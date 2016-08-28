@@ -179,7 +179,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     }
 
     public String[] getTestPlanClasspathArray() {
-        return JOrphanUtils.split(this.getTestPlanClasspath(),CLASSPATH_SEPARATOR);
+        return (this.getTestPlanClasspath()).split(CLASSPATH_SEPARATOR);
     }
 
     /**

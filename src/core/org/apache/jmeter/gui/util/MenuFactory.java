@@ -152,7 +152,7 @@ public final class MenuFactory {
         menuMap.put(PRE_PROCESSORS, preProcessors);
         try {
             String[] classesToSkip =
-                JOrphanUtils.split(JMeterUtils.getPropDefault("not_in_menu", ""), ","); //$NON-NLS-1$
+                    (JMeterUtils.getPropDefault("not_in_menu", "")).split(","); //$NON-NLS-1$
             for (String aClassesToSkip : classesToSkip) {
                 elementsToSkip.add(aClassesToSkip.trim());
             }

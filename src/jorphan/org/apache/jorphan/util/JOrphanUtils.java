@@ -17,7 +17,7 @@
  */
 
 package org.apache.jorphan.util;
-
+import java.util.*;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +52,7 @@ public final class JOrphanUtils {
     /**
      * This is _almost_ equivalent to the String.split method in JDK 1.4. It is
      * here to enable us to support earlier JDKs.
+     * Therefore it can remove because many others use JDK >1.4.
      *
      * Note that unlike JDK1.4 split(), it optionally ignores leading split Characters,
      * and the splitChar parameter is not a Regular expression
@@ -72,7 +73,7 @@ public final class JOrphanUtils {
      * @see #split(String, String, String)
      *
      */
-    public static String[] split(String splittee, String splitChar,boolean truncate) {
+  /* public static String[] split(String splittee, String splitChar,boolean truncate) {
         if (splittee == null || splitChar == null) {
             return new String[0];
         }
@@ -115,10 +116,6 @@ public final class JOrphanUtils {
         return returns.toArray(new String[returns.size()]);
     }
 
-    public static String[] split(String splittee,String splitChar)
-    {
-        return split(splittee,splitChar,true);
-    }
 
     /**
      * Takes a String and a tokenizer character string, and returns a new array of
@@ -143,7 +140,8 @@ public final class JOrphanUtils {
      *
      * This is a rewritten version of JMeterUtils.split()
      */
-    public static String[] split(String splittee, String delims, String def) {
+  /*  public static String[] split(String splittee, String delims, String def) {
+
         StringTokenizer tokens = new StringTokenizer(splittee,delims,def!=null);
         boolean lastWasDelim=false;
         List<String> strList = new ArrayList<>();
@@ -167,8 +165,13 @@ public final class JOrphanUtils {
         return strList.toArray(new String[strList.size()]);
     }
 
+    public static String[] split(String splittee,String splitChar) {
+        return split(splittee,splitChar,true);
 
+    }
+*/
     private static final String SPACES = "                                 ";
+
 
     private static final int SPACES_LEN = SPACES.length();
 

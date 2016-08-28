@@ -236,7 +236,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
                     if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {//$NON-NLS-1$
                         continue;
                     }
-                    String[] st = JOrphanUtils.split(line, TAB, false);
+                    String[] st = line.split(TAB);
 
                     final int _domain = 0;
                     //final int _ignored = 1;

@@ -92,7 +92,7 @@ public class SplitFunction extends AbstractFunction {
         if (log.isDebugEnabled()){
             log.debug("Split "+stringToSplit+ " using "+ splitString+ " into "+varNamePrefix);
         }
-        String[] parts = JOrphanUtils.split(stringToSplit, splitString, "?");// $NON-NLS-1$
+        String[] parts =stringToSplit.split(splitString);// $NON-NLS-1$
 
         vars.put(varNamePrefix, stringToSplit);
         vars.put(varNamePrefix + "_n", Integer.toString(parts.length));// $NON-NLS-1$ 

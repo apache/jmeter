@@ -153,7 +153,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
                     if (line.startsWith("#") || JOrphanUtils.isBlank(line)) {// $NON-NLS-1$
                         continue;
                     }
-                    String[] st = JOrphanUtils.split(line, "\t", " ");// $NON-NLS-1$ $NON-NLS-2$
+                    String[] st = line.split("\t");// $NON-NLS-1$ $NON-NLS-2$
                     int name = 0;
                     int value = 1;
                     Header header = new Header(st[name], st[value]);

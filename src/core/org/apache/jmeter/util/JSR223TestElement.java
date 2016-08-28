@@ -110,7 +110,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         bindings.put("Label", label); // $NON-NLS-1$ (this name is fixed)
         bindings.put("FileName", fileName); // $NON-NLS-1$ (this name is fixed)
         bindings.put("Parameters", scriptParameters); // $NON-NLS-1$ (this name is fixed)
-        String [] args=JOrphanUtils.split(scriptParameters, " ");//$NON-NLS-1$
+        String [] args=scriptParameters.split(" ");//$NON-NLS-1$
         bindings.put("args", args); // $NON-NLS-1$ (this name is fixed)
         // Add variables for access to context and variables
         JMeterContext jmctx = JMeterContextService.getContext();

@@ -153,7 +153,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         remoteEngineStop = new LinkedList<>();
         remoteEngineShut = new LinkedList<>();
         remoteEngineExit = new LinkedList<>();
-        remoteHosts = JOrphanUtils.split(JMeterUtils.getPropDefault("remote_hosts", ""), ","); //$NON-NLS-1$
+        remoteHosts = (JMeterUtils.getPropDefault("remote_hosts", "")).split(","); //$NON-NLS-1$
         if (remoteHosts.length == 1 && remoteHosts[0].isEmpty()) {
             remoteHosts = new String[0];
         }

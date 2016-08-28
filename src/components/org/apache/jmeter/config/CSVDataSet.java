@@ -184,7 +184,7 @@ public class CSVDataSet extends ConfigTestElement
                 }
             } else {
                 server.reserveFile(_fileName, getFileEncoding(), alias);
-                vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
+                vars = names.split(","); // $NON-NLS-1$
             }
         }
            
@@ -196,7 +196,7 @@ public class CSVDataSet extends ConfigTestElement
                 lineValues = server.getParsedLine(alias, recycle, firstLineIsNames, delim.charAt(0));
             } else {
                 String line = server.readLine(alias, recycle, firstLineIsNames);
-                lineValues = JOrphanUtils.split(line, delim, false);
+                lineValues = line.split(delim);
             }
             for (int a = 0; a < vars.length && a < lineValues.length; a++) {
                 threadVars.put(vars[a], lineValues[a]);
