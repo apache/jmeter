@@ -318,7 +318,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
             String typeList = JMeterUtils.getProperty(parser + ".types");//$NON-NLS-1$
             if (typeList != null) {
-                String[] types = JOrphanUtils.split(typeList, " ", true);
+                String[] types = typeList.split(" ");
                 for (final String type : types) {
                     log.info("Parser for " + type + " is " + classname);
                     PARSERS_FOR_CONTENT_TYPE.put(type, classname);
