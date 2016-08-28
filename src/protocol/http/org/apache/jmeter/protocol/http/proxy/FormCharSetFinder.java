@@ -66,7 +66,7 @@ public class FormCharSetFinder {
                 String acceptCharSet = element.attr("accept-charset");
                 // Check if we found an accept-charset attribute on the form
                 if(acceptCharSet != null) {
-                    String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
+                    String[] charSets = acceptCharSet.split(",");
                     // Just use the first one of the possible many charsets
                     if(charSets.length > 0) {
                         formCharSet = charSets[0].trim();
