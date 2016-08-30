@@ -135,6 +135,7 @@ Summary
     <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a jmeter lib</li>
     <li><bug>59954</bug>Web Report/Dashboard : Add average metric</li>
     <li><bug>59956</bug>Web Report / Dashboard : Add ability to generate a graph for a range of data</li>
+    <li><bug>60065</bug>Report / Dashboard : Improve Dashboard Error Summary by adding response message to "Type of error". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
