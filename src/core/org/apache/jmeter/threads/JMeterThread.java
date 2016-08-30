@@ -800,6 +800,8 @@ public class JMeterThread implements Runnable, Interruptible {
         if (totalDelay > 0) {
             try {
                 if(scheduler) {
+                    // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
+                    // See Bug 60049
                     long now = System.currentTimeMillis();
                     if(now + totalDelay > endTime) {
                         totalDelay = endTime - now;
