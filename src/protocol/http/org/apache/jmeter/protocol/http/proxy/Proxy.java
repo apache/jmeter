@@ -109,9 +109,9 @@ public class Proxy extends Thread {
     /** Whether or not to capture the HTTP headers. */
     private boolean captureHttpHeaders;
 
-    /** Reference to Deamon's Map of url string to page character encoding of that page */
+    /** Reference to Daemon's Map of url string to page character encoding of that page */
     private Map<String, String> pageEncodings;
-    /** Reference to Deamon's Map of url string to character encoding for the form */
+    /** Reference to Daemon's Map of url string to character encoding for the form */
     private Map<String, String> formEncodings;
 
     private String port; // For identifying log messages
