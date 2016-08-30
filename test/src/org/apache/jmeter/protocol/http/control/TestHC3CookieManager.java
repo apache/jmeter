@@ -39,6 +39,7 @@ import org.junit.Test;
 /**
  * HC3CookieHandler tests
  */
+@SuppressWarnings("deprecation") // unit test of deprecated class
 public class TestHC3CookieManager extends JMeterTestCase {
         private CookieManager man = null;
 
