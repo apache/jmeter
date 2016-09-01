@@ -134,7 +134,11 @@ function prepareOptions(options, data) {
 }
 
 // Filter, mark series and sort data
-function prepareSeries(data){
+/**
+ * @param data
+ * @param noMatchColor if defined and true, series.color are not matched with index
+ */
+function prepareSeries(data, noMatchColor){
     var result = data.result;
 
     // Keep only series when needed
@@ -156,7 +160,9 @@ function prepareSeries(data){
     // Sort data and mark series
     $.each(result.series, function(index, series) {
         series.data.sort(compareByXCoordinate);
-        series.color = index;
+        if(!(noMatchColor && noMatchColor===true)) {
+	        series.color = index;
+	    }
     });
 }
 
@@ -350,6 +356,76 @@ function refreshResponseTimeDistribution() {
         createLegend(choiceContainer, infos);
         infos.createGraph();
         $('#footerResponseTimeDistribution .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+
+
+var syntheticResponseTimeDistributionInfos = {
+        data: ${syntheticResponseTimeDistribution!"{}"},
+        getOptions: function() {
+            return {
+                legend: {
+                    noColumns: 2,
+                    show: true,
+                    container: '#legendSyntheticResponseTimeDistribution'
+                },
+                xaxis:{
+                    axisLabel: "Response times ranges",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                    tickLength:0,
+                },
+                yaxis: {
+                    axisLabel: "Number of responses",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                bars : {
+                    show: true,
+                    align: "center",
+                    barWidth: 0.5,
+                    fill:.75
+                },
+                grid: {
+                    hoverable: true // IMPORTANT! this is needed for tooltip to
+                                    // work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: function(label, xval, yval, flotItem){
+                        return yval + " " + label;
+                    }
+                },
+                colors: [  "red", "green", "orange","yellow"]                
+            };
+        },
+        createGraph: function() {
+            var data = this.data;
+            var options = this.getOptions();
+            prepareOptions(options, data);
+            options.xaxis.ticks = data.result.ticks;
+            $.plot($("#flotSyntheticResponseTimeDistribution"), prepareData(data.result.series, $("#choicesSyntheticResponseTimeDistribution")), options);
+        }
+
+};
+
+// Response time distribution
+function refreshSyntheticResponseTimeDistribution() {
+    var infos = syntheticResponseTimeDistributionInfos;
+    prepareSeries(infos.data, true);
+    if (isGraph($("#flotSyntheticResponseTimeDistribution"))){
+        infos.createGraph();
+    }else{
+        var choiceContainer = $("#choicesSyntheticResponseTimeDistribution");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        $('#footerSyntheticResponseTimeDistribution .legendColorBox > div').each(function(i){
             $(this).clone().prependTo(choiceContainer.find("li").eq(i));
         });
     }
@@ -1123,6 +1199,11 @@ function collapse(elem, collapsed){
                 refreshResponseTimeDistribution();
             }
             document.location.href="#responseTimeDistribution" ;
+        } else if (elem.id == "bodySyntheticResponseTimeDistribution") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshSyntheticResponseTimeDistribution();
+            }
+            document.location.href="#syntheticResponseTimeDistribution" ;
         } else if (elem.id == "bodyActiveThreadsOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshActiveThreadsOverTime(true);
@@ -1205,6 +1286,9 @@ function toggleAll(id, checked){
     } else if ( id == "choicesTimeVsThreads"){
         choiceContainer = $("#choicesTimeVsThreads");
         refreshTimeVsThreads();
+    } else if ( id == "choicesSyntheticResponseTimeDistribution"){
+        choiceContainer = $("#choicesSyntheticResponseTimeDistribution");
+        refreshSyntheticResponseTimeDistribution();
     } else if ( id == "choicesResponseTimeDistribution"){
         choiceContainer = $("#choicesResponseTimeDistribution");
         refreshResponseTimeDistribution();
