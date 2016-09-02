@@ -78,11 +78,15 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="OverTime.html#latenciesOverTime" onclick="$('#bodyLantenciesOverTime').collapse('show');">
+                                            <a href="OverTime.html#latenciesOverTime" onclick="$('#bodyLatenciesOverTime').collapse('show');">
                                                 Latencies Over Time
                                             </a>
                                         </li>
-
+                                        <li>
+                                            <a href="OverTime.html#connectTimeOverTime" onclick="$('#bodyConnectTimeOverTime').collapse('show');">
+                                                Connect Time Over Time
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li>
@@ -262,7 +266,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">Latencies Over Time</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyLatenciesOverTime" aria-expanded="true" aria-controls="bodyLatenciesOverTime">Latencies Over Time</span>
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
@@ -278,14 +282,14 @@
                                         </li>
                                         <li><a href="#latenciesOverTime" onclick="exportToPNG('flotLatenciesOverTime', this);">Save as PNG</a></li>
                                     </ul>
-                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLantenciesOverTime" aria-expanded="true" aria-controls="bodyLantenciesOverTime">
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyLatenciesOverTime" aria-expanded="true" aria-controls="bodyLatenciesOverTime">
                                         <i class="fa fa-chevron-down"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <!-- /.panel-heading -->
-                        <div class="collapse out portlet-content" id="bodyLantenciesOverTime">
+                        <div class="collapse out portlet-content" id="bodyLatenciesOverTime">
                             <div class="panel-body" id="collapseLatencies">
                                 <div class="flot-chart">
                                     <div class="flot-chart-content" id="flotLatenciesOverTime" style="float: left; width:80%;"></div>
@@ -306,6 +310,55 @@
                     <!-- /.panel -->
                 </div>
 
+                <!-- /.col-lg-6 -->
+                <div class="col-lg-12 portlet" id="connectTimeOverTime">
+                    <div class="panel panel-default">
+                        <div class="panel-heading portlet-header">
+                            <i class="fa fa-bar-chart-o fa-fw"></i>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyConnectTimeOverTime" aria-expanded="true" aria-controls="bodyConnectTimeOverTime">Connect Time Over Time</span>
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <a class="btn btn-link btn-xs">
+                                        <i class="glyphicon glyphicon-resize-vertical"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-wrench"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="#connectTimeOverTime" onClick="checkAll('choicesConnectTimeOverTime');">Display all samples</a>
+                                        </li>
+                                        <li><a href="#connectTimeOverTime" onClick="uncheckAll('choicesConnectTimeOverTime');">Hide all samples</a>
+                                        </li>
+                                        <li><a href="#connectTimeOverTime" onclick="exportToPNG('flotConnectTimeOverTime', this);">Save as PNG</a></li>
+                                    </ul>
+                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyConnectTimeOverTime" aria-expanded="true" aria-controls="bodyConnectTimeOverTime">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="collapse out portlet-content" id="bodyConnectTimeOverTime">
+                            <div class="panel-body" id="collapseConnectTime">
+                                <div class="flot-chart">
+                                    <div class="flot-chart-content" id="flotConnectTimeOverTime" style="float: left; width:80%;"></div>
+                                    <div style="float:left;margin-left:5px">
+                                        <p>Zoom :</p>
+                                        <div id="overviewConnectTimeOverTime" style="width:190px;height:100px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer" id="footerConnectTimeOverTime">
+                                    <p id="legendConnectTimeOverTime" hidden></p>
+                                    <ul id="choicesConnectTimeOverTime" class="legend"></ul>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
 
                 <!-- /.col-lg-6 -->
             </div>
