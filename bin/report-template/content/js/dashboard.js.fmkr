@@ -91,12 +91,12 @@ $(document).ready(function() {
         {
             "label" : "KO",
             "data" : data.KoPercent,
-               "color" : "red"
+			"color" : "#FF6347"
         },
         {
             "label" : "OK",
             "data" : data.OkPercent,
-            "color" : "blue"
+            "color" : "#9ACD32"
         }];
     $.plot($("#flot-requests-summary"), dataset, {
         series : {
