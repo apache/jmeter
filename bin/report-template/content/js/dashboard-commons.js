@@ -73,6 +73,13 @@ function getElapsedTimeLabel(granularity) {
     return "Elapsed Time (granularity: " + formatDuration(granularity) + ")";
 }
 
+/*
+ * Gets axis label for the specified granularity
+ */
+function getConnectTimeLabel(granularity) {
+    return "Connect Time (granularity: " + formatDuration(granularity) + ")";
+}
+
 //Get the property value of an object using the specified key
 //Returns the property value if all properties in the key exist; undefined
 //otherwise.

@@ -402,7 +402,7 @@ var syntheticResponseTimeDistributionInfos = {
                         return yval + " " + label;
                     }
                 },
-                colors: ["green", "yellow", "orange", "red"]                
+                colors: ["#9ACD32", "yellow", "orange", "#FF6347"]                
             };
         },
         createGraph: function() {
@@ -806,6 +806,83 @@ function refreshLatenciesOverTime(fixTimestamps) {
     }
 };
 
+var connectTimeOverTimeInfos = {
+        data: ${connectTimeOverTime!"{}"},
+        getOptions: function() {
+            return {
+                series: {
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                xaxis: {
+                    mode: "time",
+                    timeformat: "%H:%M:%S",
+                    axisLabel: getConnectTimeLabel(this.data.result.granularity),
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                yaxis: {
+                    axisLabel: "Average Connect Time in ms",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                legend: {
+                    noColumns: 2,
+                    show: true,
+                    container: '#legendConnectTimeOverTime'
+                },
+                selection: {
+                    mode: 'xy'
+                },
+                grid: {
+                    hoverable: true // IMPORTANT! this is needed for tooltip to
+                                    // work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%s : at %x Average connect time was %y ms"
+                }
+            };
+        },
+        createGraph: function () {
+            var data = this.data;
+            var dataset = prepareData(data.result.series, $("#choicesConnectTimeOverTime"));
+            var options = this.getOptions();
+            prepareOptions(options, data);
+            $.plot($("#flotConnectTimeOverTime"), dataset, options);
+            // setup overview
+            $.plot($("#overviewConnectTimeOverTime"), dataset, prepareOverviewOptions(options));
+        }
+};
+
+// Connect Time Over Time
+function refreshConnectTimeOverTime(fixTimestamps) {
+    var infos = connectTimeOverTimeInfos;
+    prepareSeries(infos.data);
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
+    if(isGraph($("#flotConnectTimeOverTime"))) {
+        infos.createGraph();
+    }else {
+        var choiceContainer = $("#choicesConnectTimeOverTime");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        setGraphZoomable("#flotConnectTimeOverTime", "#overviewConnectTimeOverTime");
+        $('#footerConnectTimeOverTime .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+
 var responseTimeVsRequestInfos = {
     data: ${responseTimeVsRequest!"{}"},
     getOptions: function() {
@@ -1189,11 +1266,16 @@ function collapse(elem, collapsed){
                 refreshBytesThroughputOverTime(true);
             }
             document.location.href="#responseTimesOverTime";
-        } else if (elem.id == "bodyLantenciesOverTime") {
+        } else if (elem.id == "bodyLatenciesOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshLatenciesOverTime(true);
             }
             document.location.href="#latenciesOverTime";
+        } else if (elem.id == "bodyConnectTimeOverTime") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshConnectTimeOverTime(true);
+            }
+            document.location.href="#connectTimeOverTime";
         } else if (elem.id == "bodyResponseTimeDistribution") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshResponseTimeDistribution();
@@ -1277,6 +1359,9 @@ function toggleAll(id, checked){
     } else if ( id == "choicesLatenciesOverTime"){
         choiceContainer = $("#choicesLatenciesOverTime");
         refreshLatenciesOverTime(false);
+    } else if ( id == "choicesConnectTimeOverTime"){
+        choiceContainer = $("#choicesConnectTimeOverTime");
+        refreshConnectTimeOverTime(false);
     } else if ( id == "choicesResponseTimePercentiles"){
         choiceContainer = $("#choicesResponseTimePercentiles");
         refreshResponseTimePercentiles();

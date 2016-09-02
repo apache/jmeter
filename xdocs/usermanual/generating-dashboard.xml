@@ -74,6 +74,7 @@ jmeter.save.saveservice.successful = true
 jmeter.save.saveservice.thread_counts = true
 jmeter.save.saveservice.thread_name = true
 jmeter.save.saveservice.time = true
+jmeter.save.saveservice.connect_time = true
 # the timestamp format must include the time and should include the date.
 # For example the default, which is milliseconds since the epoch: 
 jmeter.save.saveservice.timestamp_format = ms
@@ -581,6 +582,11 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                         <tr>
                             <td>LatencyOverTimeGraphConsumer</td>
                             <td>This graph represents the average latency time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
+                            <td>ConnectTimeOverTimeGraphConsumer</td>
+                            <td>This graph represents the connection time over time.</td>
                             <td>True</td>
                         </tr>
                         <tr>
