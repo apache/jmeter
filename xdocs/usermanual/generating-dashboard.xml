@@ -110,12 +110,12 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         </property>
                         <property name="start_date" required="No">
                             Start date of the range of data to use for report.
-                            Date format is <code>dd/MM/yyyy HH:mm:ss</code> 
+                            Date format is <code>yyyyMMddHHmmss</code> 
                             Default: not filled which means data range will be used from the begining
                         </property>
                         <property name="end_date" required="No">
                             End date of the range of data to use for report. 
-                            Date format is <code>dd/MM/yyyy HH:mm:ss</code>
+                            Date format is <code>yyyyMMddHHmmss</code>
                             Default: not filled which means data range will be used until the end
                         </property>
                         <property name="overall_granularity" required="No">
