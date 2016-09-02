@@ -234,6 +234,15 @@ public class Sample {
     public long getLatency() {
         return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
+    
+    /**
+     * Gets the connect time stored in the sample.
+     *
+     * @return the connect time stored in the sample
+     */
+    public long getConnectTime() {
+        return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+    }
 
     /**
      * Gets the success status stored in the sample.
