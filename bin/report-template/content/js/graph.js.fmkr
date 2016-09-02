@@ -378,6 +378,8 @@ var syntheticResponseTimeDistributionInfos = {
                     axisLabelFontFamily: 'Verdana, Arial',
                     axisLabelPadding: 20,
                     tickLength:0,
+                    min:-0.5,
+                    max:3.5
                 },
                 yaxis: {
                     axisLabel: "Number of responses",
@@ -389,7 +391,7 @@ var syntheticResponseTimeDistributionInfos = {
                 bars : {
                     show: true,
                     align: "center",
-                    barWidth: 0.5,
+                    barWidth: 0.25,
                     fill:.75
                 },
                 grid: {
