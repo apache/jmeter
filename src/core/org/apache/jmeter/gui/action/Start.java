@@ -71,7 +71,7 @@ public class Start extends AbstractAction {
      */
     private static final String CLONER_FOR_VALIDATION_CLASS_NAME = 
             JMeterUtils.getPropDefault(VALIDATION_CLONER_CLASS_PROPERTY_NAME, //$NON-NLS-1$ 
-                    TreeClonerForValidation.class.getName());
+                    "org.apache.jmeter.validation.ComponentTreeClonerForValidation");
 
     static {
         commands.add(ActionNames.ACTION_START);
