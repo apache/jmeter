@@ -86,8 +86,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
-    <li><pr>211</pr>Differentiate the timing for JDBC Sampler. Use latency and connect time.
-    Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
+    <li><pr>211</pr>Differentiate the timing for JDBC Sampler. Use latency and connect time. Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -113,6 +112,7 @@ Summary
     <li><bug>59967</bug>CSS/JQuery Extractor : Allow empty default value. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>59974</bug>Response Assertion : Add button "Add from clipboard". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60050</bug>CSV Data Set : Make it clear in the logs when a thread will exit due to this configuration</li>
+    <li><bug>59962</bug>Cache Manager does not update expires date when response code is 304.</li>
 </ul>
 
 <h3>Functions</h3>
