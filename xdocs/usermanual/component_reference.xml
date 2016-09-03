@@ -6171,11 +6171,12 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 
 <b>Validation Mode:</b><br></br>
 This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to 0.
-The 3 first properties can be modified by setting in user.properties:
+Behaviour can be modified with some properties by setting in user.properties:
 <ul>
 <li><code>testplan_validation.nb_threads_per_thread_group</code> : Number of threads to use to validate a Thread Group, by default 1</li>
 <li><code>testplan_validation.ignore_timers</code> : Ignore timers when validating the thread group of plan, by default 1</li>
 <li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
+<li><code>testplan_validation.tpc_force_100_pct</code> : Wether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
 </ul> 
 </p>
 
