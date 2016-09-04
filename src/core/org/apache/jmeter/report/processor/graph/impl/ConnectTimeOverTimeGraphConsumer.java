@@ -32,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * The class ConnectTimeOverTimeGraphConsumer provides a graph to visualize Connection time
- * over time.
+ * per time period (defined by granularity)
  *
  * @since 3.1
  */

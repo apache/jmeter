@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
  * The class LatencyOverTimeGraphConsumer provides a graph to visualize latency
- * rate over time.
+ * per time period (defined by granularity)
  *
  * @since 3.0
  */
