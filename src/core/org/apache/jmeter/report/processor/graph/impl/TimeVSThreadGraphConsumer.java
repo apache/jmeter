@@ -30,7 +30,8 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The class TimeVSThreadGraphConsumer provides a graph to visualize ...
+ * The class TimeVSThreadGraphConsumer provides a graph to visualize average response time
+ * vs number of threads
  *
  * @since 3.0
  */

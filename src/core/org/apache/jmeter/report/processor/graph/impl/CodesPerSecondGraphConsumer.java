@@ -29,8 +29,8 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
- * per second.
+ * The class CodesPerSecondGraphConsumer provides a graph to visualize response codes rate
+ * per second 
  *
  * @since 3.0
  */
