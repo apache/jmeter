@@ -31,7 +31,7 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize
+ * The class TransactionsPerSecondGraphConsumer provides a graph to visualize
  * transactions rate per second.
  *
  * @since 3.0

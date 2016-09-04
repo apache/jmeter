@@ -31,7 +31,7 @@ import org.apache.jmeter.report.processor.graph.StatusSeriesSelector;
 
 /**
  * The class ResponseTimeVSRequestGraphConsumer provides a graph to visualize
- * ...
+ * latency vs requests
  *
  * @since 3.0
  */
