@@ -34,8 +34,12 @@ public class ConnectTimeValueSelector implements GraphValueSelector {
      * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
-    public double select(String series, Sample sample) {
-        return sample.getConnectTime();
+    public Double select(String series, Sample sample) {
+        if(!sample.isEmptyController()) {
+            return Double.valueOf(sample.getConnectTime());
+        } else {
+            return null;
+        }
     }
 
 }

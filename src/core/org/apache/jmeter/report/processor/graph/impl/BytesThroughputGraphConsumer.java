@@ -77,9 +77,14 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
                 }, new GraphValueSelector() {
 
                     @Override
-                    public double select(String series, Sample sample) {
-                        return (RECEIVED_BYTES_SERIES_LABEL.equals(series)) ? sample
-                                .getReceivedBytes() : sample.getSentBytes();
+                    public Double select(String series, Sample sample) {
+                        if(!sample.isEmptyController()) {
+                            return Double.valueOf(
+                                (RECEIVED_BYTES_SERIES_LABEL.equals(series)) ? sample
+                                .getReceivedBytes() : sample.getSentBytes());
+                        } else {
+                            return null;
+                        }
                     }
                 }, false, false));
         return groupInfos;
