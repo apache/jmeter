@@ -25,7 +25,8 @@ import org.apache.jmeter.report.core.Sample;
  * @since 3.0
  */
 public class CountValueSelector implements GraphValueSelector {
-
+    private static final Double ONE = Double.valueOf(1.0d);
+    private static final Double ZERO = Double.valueOf(0.0d);
     /*
      * (non-Javadoc)
      * 
@@ -34,8 +35,12 @@ public class CountValueSelector implements GraphValueSelector {
      * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
-    public double select(String series, Sample sample) {
-        return 1;
+    public Double select(String series, Sample sample) {
+        if(!sample.isEmptyController()) {
+            return ONE;
+        } else {
+            return ZERO;
+        }
     }
 
 }

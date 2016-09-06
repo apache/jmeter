@@ -35,8 +35,12 @@ public class ElapsedTimeValueSelector implements GraphValueSelector {
      * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
-    public double select(String series, Sample sample) {
-        return sample.getElapsedTime();
+    public Double select(String series, Sample sample) {
+        if(!sample.isEmptyController()) {
+            return Double.valueOf(sample.getElapsedTime());
+        } else {
+            return null;
+        }
     }
 
 }
