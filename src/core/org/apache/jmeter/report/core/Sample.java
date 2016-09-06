@@ -254,12 +254,22 @@ public class Sample {
     }
 
     /**
+     * Gets the number of received bytes stored in the sample.
+     *
+     * @return the number of received bytes stored in the sample
+     */
+    public int getReceivedBytes() {
+        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+    }
+    
+    /**
      * Gets the number of sent bytes stored in the sample.
      *
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+        // TODO To implement when metric is available
+        return 0;
     }
 
     /**
