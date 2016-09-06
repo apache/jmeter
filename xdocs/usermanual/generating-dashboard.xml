@@ -613,6 +613,11 @@ jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
                             <td>True</td>
                         </tr>
                         <tr>
+                            <td>ResponseTimePercentilesOverTimeGraphConsumer</td>
+                            <td>This graph shows Min/Max and 3 percentiles response time over time.</td>
+                            <td>True</td>
+                        </tr>
+                        <tr>
                             <td>ResponseTimeVSRequestGraphConsumer</td>
                             <td>This graph represents the median and average response time
                                 depending on the number of current requests.</td>
