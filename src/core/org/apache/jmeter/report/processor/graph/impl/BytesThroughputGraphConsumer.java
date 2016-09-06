@@ -78,9 +78,8 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 
                     @Override
                     public double select(String series, Sample sample) {
-                        // TODO Add Received bytes support
-                        return (SENT_BYTES_SERIES_LABEL.equals(series)) ? sample
-                                .getSentBytes() : 0;
+                        return (RECEIVED_BYTES_SERIES_LABEL.equals(series)) ? sample
+                                .getReceivedBytes() : sample.getSentBytes();
                     }
                 }, false, false));
         return groupInfos;

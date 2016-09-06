@@ -48,6 +48,7 @@ public class StatisticsSummaryConsumer extends
 
     void aggregateSample(Sample sample, StatisticsSummaryData data) {
         data.incTotal();
+        data.incBytes(sample.getReceivedBytes());
         data.incBytes(sample.getSentBytes());
 
         if (!sample.getSuccess()) {
