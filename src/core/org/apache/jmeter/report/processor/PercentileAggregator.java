@@ -46,6 +46,14 @@ public class PercentileAggregator implements Aggregator {
         percentileIndex = index;
     }
 
+    /**
+     * @param lastAggregator {@link PercentileAggregator}
+     */
+    public PercentileAggregator(PercentileAggregator lastAggregator) {
+        this.statistics = new DescriptiveStatistics(lastAggregator.statistics);
+        this.percentileIndex = lastAggregator.percentileIndex;
+    }
+
     /*
      * (non-Javadoc)
      * 
