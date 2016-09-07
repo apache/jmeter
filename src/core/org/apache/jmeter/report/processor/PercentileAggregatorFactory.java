@@ -25,6 +25,7 @@ package org.apache.jmeter.report.processor;
 public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
 
     private double percentileIndex;
+    private Aggregator lastAggregator;
 
     /**
      * Gets the percentile index.
@@ -54,7 +55,14 @@ public class PercentileAggregatorFactory extends AbstractAggregatorFactory {
      */
     @Override
     protected Aggregator createAggregator() {
-        return new PercentileAggregator(percentileIndex);
+        Aggregator newAggregator = null;
+        if(lastAggregator != null) {
+            newAggregator = new PercentileAggregator((PercentileAggregator)lastAggregator);
+        } else {
+            newAggregator = new PercentileAggregator(percentileIndex);
+        }
+        lastAggregator = newAggregator;
+        return newAggregator;
     }
 
 }
