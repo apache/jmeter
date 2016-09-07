@@ -36,13 +36,10 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.collections.map.LRUMap;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -69,9 +66,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     // String used to indicate a null value
     private static final String NULL_MARKER =
         JMeterUtils.getPropDefault("jdbcsampler.nullmarker","]NULL["); // $NON-NLS-1$
-    
-    private static final int MAX_OPEN_PREPARED_STATEMENTS =
-        JMeterUtils.getPropDefault("jdbcsampler.maxopenpreparedstatements", 100); 
 
     private static final String INOUT = "INOUT"; // $NON-NLS-1$
 
@@ -129,14 +123,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String resultSetHandler = RS_STORE_AS_STRING; 
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
-
-    /**
-     *  Cache of PreparedStatements stored in a per-connection basis. Each entry of this
-     *  cache is another Map mapping the statement string to the actual PreparedStatement.
-     *  At one time a Connection is only held by one thread
-     */
-    private static final Map<Connection, Map<String, PreparedStatement>> perConnCache =
-            new ConcurrentHashMap<>();
 
     /**
      * Creates a JDBCSampler.
@@ -446,48 +432,14 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     }
 
     private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
-        Map<String, PreparedStatement> preparedStatementMap = perConnCache.get(conn);
-        if (null == preparedStatementMap ) {
-            @SuppressWarnings("unchecked") // LRUMap is not generic
-            Map<String, PreparedStatement> lruMap = new LRUMap(MAX_OPEN_PREPARED_STATEMENTS) {
-                private static final long serialVersionUID = 1L;
-                @Override
-                protected boolean removeLRU(LinkEntry entry) {
-                    PreparedStatement preparedStatement = (PreparedStatement)entry.getValue();
-                    close(preparedStatement);
-                    return true;
-                }
-            };
-            preparedStatementMap = Collections.<String, PreparedStatement>synchronizedMap(lruMap);
-            // As a connection is held by only one thread, we cannot already have a 
-            // preparedStatementMap put by another thread
-            perConnCache.put(conn, preparedStatementMap);
-        }
-        PreparedStatement pstmt = preparedStatementMap.get(getQuery());
-        if (null == pstmt) {
-            if (callable) {
-                pstmt = conn.prepareCall(getQuery());
-            } else {
-                pstmt = conn.prepareStatement(getQuery());
-            }
-            pstmt.setQueryTimeout(getIntegerQueryTimeout());
-            // PreparedStatementMap is associated to one connection so 
-            //  2 threads cannot use the same PreparedStatement map at the same time
-            preparedStatementMap.put(getQuery(), pstmt);
+        PreparedStatement pstmt;
+        if (callable) {
+            pstmt = conn.prepareCall(getQuery());
         } else {
-            int timeoutInS = getIntegerQueryTimeout();
-            if(pstmt.getQueryTimeout() != timeoutInS) {
-                pstmt.setQueryTimeout(getIntegerQueryTimeout());
-            }
+            pstmt = conn.prepareStatement(getQuery());
         }
-        pstmt.clearParameters();
+        pstmt.setQueryTimeout(getIntegerQueryTimeout());
         return pstmt;
-    }
-
-    private static void closeAllStatements(Collection<PreparedStatement> collection) {
-        for (PreparedStatement pstmt : collection) {
-            close(pstmt);
-        }
     }
 
     /**
@@ -759,7 +711,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     @Override
     public void testStarted(String host) {
-        cleanCache();
     }
 
     /**
@@ -777,17 +728,6 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     @Override
     public void testEnded(String host) {
-        cleanCache();
-    }
-    
-    /**
-     * Clean cache of PreparedStatements
-     */
-    private static void cleanCache() {
-        for (Map<String, PreparedStatement> element : perConnCache.values()) {
-            closeAllStatements(element.values());
-        }
-        perConnCache.clear();
     }
 
 }
