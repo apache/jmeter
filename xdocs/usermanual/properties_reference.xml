@@ -487,7 +487,6 @@ Other parsers:<br/>
 </section>
 <section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
 <properties>
-<property name="jdbcsampler.maxopenpreparedstatements"> Max number of PreparedStatements per Connection for PreparedStatement cache<br/>, defaults to:100</property>
 <property name="jdbcsampler.nullmarker"> String used to indicate a null value<br/>, defaults to:]NULL[</property>
 </properties>
 </section>
