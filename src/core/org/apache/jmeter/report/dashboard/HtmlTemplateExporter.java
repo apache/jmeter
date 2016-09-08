@@ -217,7 +217,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 // discrimination and excludes
                 // controllers
                 LOG.warn(ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
-                        + " is set while the graph excludes controllers.");
+                        + " is set while the graph "+graphId+" excludes controllers.");
                 return false;
             } else {
                 if (filterPattern != null) {
@@ -264,8 +264,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                         }
                         if (!matches) {
                             // None series matches the pattern
-                            LOG.warn("No serie matches the "
-                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER);
+                            LOG.warn("No serie matches the series_filter:"
+                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER + " in graph:"+graphId);
                             return false;
                         }
                     }
