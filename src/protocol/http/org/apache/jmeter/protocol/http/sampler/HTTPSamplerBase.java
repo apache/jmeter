@@ -309,6 +309,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     private static final String RESPONSE_PARSERS = // list of parsers
             JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
+    
+    private static final String LOCAL_FILE_PREFIX = "file:"; // $NON-NLS-1$
 
     static {
         String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
@@ -1363,9 +1365,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return escaped url
      */
     private String escapeIllegalURLCharacters(String url) {
-        if (url == null || url.toLowerCase().startsWith("file:")) {
+        if (url == null || url.regionMatches(true, 0, LOCAL_FILE_PREFIX, 0, LOCAL_FILE_PREFIX.length())) {
             return url;
         }
+        
         try {
             String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
             if (log.isDebugEnabled() && !escapedUrl.equals(url)) {
