@@ -28,7 +28,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @since 3.0
  */
-// TODO Add support of "TOTAL" statistics line
 public class StatisticsSummaryConsumer extends
         AbstractSummaryConsumer<StatisticsSummaryData> {
 
@@ -84,7 +83,7 @@ public class StatisticsSummaryConsumer extends
             overallData = new StatisticsSummaryData(PERCENTILE_INDEX1,
                             PERCENTILE_INDEX2, PERCENTILE_INDEX3);
             overallInfo.setData(overallData);
-            }
+        }
 
         StatisticsSummaryData data = info.getData();
         if (data == null) {
@@ -93,8 +92,10 @@ public class StatisticsSummaryConsumer extends
             info.setData(data);
         }
 
-        aggregateSample(sample, data);
-        aggregateSample(sample, overallData);
+        if(!sample.isEmptyController()) {
+            aggregateSample(sample, data);
+            aggregateSample(sample, overallData);
+        }
     }
 
     /*
