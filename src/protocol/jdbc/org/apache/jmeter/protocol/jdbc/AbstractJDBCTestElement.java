@@ -350,7 +350,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     outputs[i]=java.sql.Types.NULL; // can't have an output parameter type null
                 }
             } catch (NullPointerException e) { // thrown by Derby JDBC (at least) if there are no "?" markers in statement
-                throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?");
+                throw new SQLException("Could not set argument no: "+(i+1)+" - missing parameter marker?", e);
             }
         }
         return outputs;
@@ -419,7 +419,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             try {
                 entry = Integer.decode(jdbcType);
             } catch (NumberFormatException e) {
-                throw new SQLException("Invalid data type: "+jdbcType);
+                throw new SQLException("Invalid data type: "+jdbcType, e);
             }
         }
         return (entry).intValue();
