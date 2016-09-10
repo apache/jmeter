@@ -62,7 +62,8 @@ public class ResponseTimeOverTimeGraphConsumer extends
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new ElapsedTimeValueSelector(), false, false));
+                // We include Transaction Controller results
+                new ElapsedTimeValueSelector(false), false, false));
         return groupInfos;
     }
 }

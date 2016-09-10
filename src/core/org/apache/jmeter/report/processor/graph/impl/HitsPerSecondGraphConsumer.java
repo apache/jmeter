@@ -61,7 +61,8 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
-                new CountValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new CountValueSelector(true), false, false));
         return groupInfos;
     }
 

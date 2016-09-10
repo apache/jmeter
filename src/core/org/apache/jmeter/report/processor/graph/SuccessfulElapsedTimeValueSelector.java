@@ -28,13 +28,20 @@ import org.apache.jmeter.report.core.Sample;
 public class SuccessfulElapsedTimeValueSelector extends ElapsedTimeValueSelector {
 
     /**
+     * 
+     */
+    public SuccessfulElapsedTimeValueSelector() {
+        super(true);
+    }
+
+    /**
      * @see
      * org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java
      * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
      */
     @Override
     public Double select(String series, Sample sample) {
-        if(!sample.isEmptyController() && sample.getSuccess()) {
+        if(!sample.isController() && sample.getSuccess()) {
             return Double.valueOf(sample.getElapsedTime());
         } else {
             return null;

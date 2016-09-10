@@ -61,7 +61,8 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new LatencyValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new LatencyValueSelector(false), false, false));
         return groupInfos;
     }
 }
