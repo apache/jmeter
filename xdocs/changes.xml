@@ -143,6 +143,7 @@ Summary
     <li><bug>60091</bug>Report / Dashboard : Have a new report containing min/max and percentiles graphs.</li>
     <li><bug>60085</bug>Remove cache for prepared statements, as it didn't work with the current jdbc pool implementation and current jdbc drivers should support caching of prepared statements themselves.</li>
     <li><bug>60108</bug>Report / Dashboard : In Requests Summary rounding is too aggressive</li>
+    <li><bug>60098</bug>Report / Dashboard : Reduce default value for "jmeter.reportgenerator.statistic_window" to reduce memory impact</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
