@@ -123,7 +123,7 @@ public class ApdexSummaryConsumer extends
         overallData.incTotalCount();
 
         // Process only succeeded samples
-        if (sample.getSuccess()) {
+        if (sample.getSuccess() && !sample.isEmptyController()) {
             long elapsedTime = sample.getElapsedTime();
 
             // Increment the counters depending on the elapsed time.
