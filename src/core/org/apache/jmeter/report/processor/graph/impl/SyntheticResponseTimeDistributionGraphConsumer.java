@@ -107,7 +107,8 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
         SyntheticSeriesSelector syntheticSeriesSelector = new SyntheticSeriesSelector();
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new SumAggregatorFactory(), syntheticSeriesSelector,
-                new CountValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new CountValueSelector(true), false, false));
 
         return groupInfos;
     }

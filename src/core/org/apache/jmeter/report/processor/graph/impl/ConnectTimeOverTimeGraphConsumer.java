@@ -68,7 +68,8 @@ public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsu
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new ConnectTimeValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new ConnectTimeValueSelector(false), false, false));
         return groupInfos;
     }
 }
