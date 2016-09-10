@@ -45,7 +45,16 @@ public class StatisticsSummaryConsumer extends
         super(true);
     }
 
-    void aggregateSample(Sample sample, StatisticsSummaryData data) {
+    /**
+     * 
+     * @param sample {@link Sample}
+     * @param data {@link StatisticsSummaryData}
+     * @param isOverall boolean indicatin if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
+     */
+    private void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
+        if(isOverall && sample.isController()) {
+            return;
+        }
         data.incTotal();
         data.incBytes(sample.getReceivedBytes());
         data.incBytes(sample.getSentBytes());
@@ -93,8 +102,8 @@ public class StatisticsSummaryConsumer extends
         }
 
         if(!sample.isEmptyController()) {
-            aggregateSample(sample, data);
-            aggregateSample(sample, overallData);
+            aggregateSample(sample, data, false);
+            aggregateSample(sample, overallData, true);
         }
     }
 
