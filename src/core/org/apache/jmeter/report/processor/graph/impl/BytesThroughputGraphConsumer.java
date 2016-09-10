@@ -78,7 +78,8 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
 
                     @Override
                     public Double select(String series, Sample sample) {
-                        if(!sample.isEmptyController()) {
+                        // We ignore Transaction Controller results
+                        if(!sample.isController()) {
                             return Double.valueOf(
                                 (RECEIVED_BYTES_SERIES_LABEL.equals(series)) ? sample
                                 .getReceivedBytes() : sample.getSentBytes());

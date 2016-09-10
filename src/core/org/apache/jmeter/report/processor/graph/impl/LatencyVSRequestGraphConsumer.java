@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.LatencyValueSelector;
 import org.apache.jmeter.report.processor.graph.StatusSeriesSelector;
 
 /**
- * The class ResponseTimeVSRequestGraphConsumer provides a graph to visualize
+ * The class LatencyVSRequestGraphConsumer provides a graph to visualize
  * latency vs requests
  *
  * @since 3.0
@@ -67,7 +67,8 @@ public class LatencyVSRequestGraphConsumer extends
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MedianAggregatorFactory(), new StatusSeriesSelector(),
-                new LatencyValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new LatencyValueSelector(true), false, false));
         return groupInfos;
     }
 }

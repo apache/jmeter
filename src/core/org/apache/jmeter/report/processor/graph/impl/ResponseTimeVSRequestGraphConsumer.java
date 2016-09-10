@@ -66,7 +66,8 @@ public class ResponseTimeVSRequestGraphConsumer extends
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MedianAggregatorFactory(), new StatusSeriesSelector(),
-                new ElapsedTimeValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new ElapsedTimeValueSelector(true), false, false));
         return groupInfos;
     }
 }
