@@ -647,7 +647,7 @@ Other parsers:<br/>
 <property name="jmeter.reportgenerator.apdex_tolerated_threshold"> Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:1500</property>
 <property name="jmeter.reportgenerator.sample_filter"> Regular Expression which Indicates which samples to keep for graphs and statistics generation.<br/> Empty value means no filtering<br/>, defaults to:</property>
 <property name="jmeter.reportgenerator.temp_dir"> Sets the temporary directory used by the generation processus if it needs file I/O operations.<br/>, defaults to:temp</property>
-<property name="jmeter.reportgenerator.statistic_window "> Sets the size of the sliding window used by percentile evaluation.<br/> Caution : higher value provides a better accurency but needs more memory.<br/>, defaults to: 200000</property>
+<property name="jmeter.reportgenerator.statistic_window "> Sets the size of the sliding window used by percentile evaluation.<br/> Caution : higher value provides a better accurency but needs more memory.<br/>, defaults to: 20000</property>
 <property name="jmeter.reportgenerator.report_title"> Configure this property to change the report title<br/>, defaults to:Apache JMeter Dashboard</property>
 <property name="jmeter.reportgenerator.overall_granularity"> Defines the overall granularity for over time graphs<br/>, defaults to:60000</property>
 <property name="jmeter.reportgenerator.graph.responseTimePercentiles.classname"> Response Time Percentiles graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer</property>

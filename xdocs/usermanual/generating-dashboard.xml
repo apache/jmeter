@@ -155,7 +155,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                             Sets the size of the sliding window used by percentile
                             evaluation. Caution: higher value provides a
                             better accuracy but needs more memory.
-                            Default: <code>200000</code>
+                            Default: <code>20000</code>
                         </property>
                     </properties>
                     <note>Percentiles used by Summary table and Percentile graphs can be adjusted to different values by using the 3 properties:
