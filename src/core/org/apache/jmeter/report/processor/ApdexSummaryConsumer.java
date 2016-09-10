@@ -98,7 +98,9 @@ public class ApdexSummaryConsumer extends
      */
     @Override
     protected void updateData(SummaryInfo info, Sample sample) {
-
+        if(sample.isEmptyController()) {
+            return;
+        }
         // Initialize overall data if they don't exist
         SummaryInfo overallInfo = getOverallInfo();
         ApdexSummaryData overallData = overallInfo.getData();
@@ -123,7 +125,7 @@ public class ApdexSummaryConsumer extends
         overallData.incTotalCount();
 
         // Process only succeeded samples
-        if (sample.getSuccess() && !sample.isEmptyController()) {
+        if (sample.getSuccess()) {
             long elapsedTime = sample.getElapsedTime();
 
             // Increment the counters depending on the elapsed time.
