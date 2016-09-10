@@ -179,14 +179,13 @@
                         <!-- /.panel-heading -->
                         <div class="collapse in portlet-content" id="bodyResponseTimePercentiles">
                             <div class="panel-body" id="collapseResponseTimePercentiles">
-                                <div class="flot-chart col-lg-11 col-md-11 col-sm-11 col-xs-12">
+                                <div class="flot-chart">
                                     <div class="flot-chart-content" id="flotResponseTimesPercentiles" style="float: left; width:80%;"></div>
                                     <div style="float:left;margin-left:5px">
                                         <p>Zoom :</p>
                                         <div id="overviewResponseTimesPercentiles" style="width:190px;height:100px;"></div>
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs"><div id="slider-vertical" style="height:342px;margin-top:9px;margin-right:auto;margin-left:auto;"></div><input type="text" id="amount" disabled style="width:100%;text-align:center;margin-top:20px"></div>
                             </div>
                             <div class="panel-footer" id="footerPercentiles">
                                 <p id="legendResponseTimePercentiles" hidden></p>
