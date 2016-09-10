@@ -37,7 +37,6 @@ $(document).ready(function() {
     $(".portlet-header").css("cursor", "auto");
 });
 
-var percentileThreshold = 0;
 var showControllersOnly = ${showControllersOnly?c!"false"};
 var seriesFilter = ${seriesFilter!"undefined"};
 var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
@@ -264,13 +263,7 @@ var responseTimePercentilesInfos = {
         },
         createGraph: function() {
             var data = this.data;
-            var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"), function(series){
-                series.curvedLines = {apply: true, tension: 1};
-                series.threshold = {
-                        below: percentileThreshold,
-                        color: $("#slider-vertical").children("div").css("background-color")
-                };
-            });
+            var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"));
             var options = this.getOptions();
             prepareOptions(options, data);
             $.plot($("#flotResponseTimesPercentiles"), dataset, options);
@@ -1520,26 +1513,6 @@ function prepareData(series, choiceContainer, customizeSeries){
     });
     return datasets;
 }
-
-// create slider
-$(function() {
-    $( "#slider-vertical" ).slider({
-      orientation: "vertical",
-      range: "min",
-      min: responseTimePercentilesInfos.data.result.minY,
-      max: responseTimePercentilesInfos.data.result.maxY,
-      value: 0,
-      stop: function(event, ui ) {
-       percentileThreshold= ui.value;
-       refreshResponseTimePercentiles();
-       $("#amount").val(percentileThreshold);
-      }
-    });
-    $("#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
-    $("#slider-vertical").children("div").css("background-color","purple");
-    $("#amount" ).css("color", $("#slider-vertical").children("div").css("background-color"));
-    $("#slider-vertical").children("div").css("opacity","0.3");
-});
 
 /*
  * Ignore case comparator
