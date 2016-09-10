@@ -173,14 +173,15 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     close(rs);
                 }
             } else if (CALLABLE.equals(_queryType)) {
-                CallableStatement cstmt = getCallableStatement(conn);
-                int[] out = setArguments(cstmt);
-                // A CallableStatement can return more than 1 ResultSets
-                // plus a number of update counts.
-                boolean hasResultSet = cstmt.execute();
-                sample.latencyEnd();
-                String sb = resultSetsToString(cstmt,hasResultSet, out);
-                return sb.getBytes(ENCODING);
+                try (CallableStatement cstmt = getCallableStatement(conn)) {
+                    int[] out = setArguments(cstmt);
+                    // A CallableStatement can return more than 1 ResultSets
+                    // plus a number of update counts.
+                    boolean hasResultSet = cstmt.execute();
+                    sample.latencyEnd();
+                    String sb = resultSetsToString(cstmt,hasResultSet, out);
+                    return sb.getBytes(ENCODING);
+                }
             } else if (UPDATE.equals(_queryType)) {
                 stmt = conn.createStatement();
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
@@ -190,23 +191,25 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 String results = updateCount + " updates";
                 return results.getBytes(ENCODING);
             } else if (PREPARED_SELECT.equals(_queryType)) {
-                PreparedStatement pstmt = getPreparedStatement(conn);
-                setArguments(pstmt);
-                ResultSet rs = null;
-                try {
-                    rs = pstmt.executeQuery();
-                    sample.latencyEnd();
-                    return getStringFromResultSet(rs).getBytes(ENCODING);
-                } finally {
-                    close(rs);
+                try (PreparedStatement pstmt = getPreparedStatement(conn)) {
+                    setArguments(pstmt);
+                    ResultSet rs = null;
+                    try {
+                        rs = pstmt.executeQuery();
+                        sample.latencyEnd();
+                        return getStringFromResultSet(rs).getBytes(ENCODING);
+                    } finally {
+                        close(rs);
+                    }
                 }
             } else if (PREPARED_UPDATE.equals(_queryType)) {
-                PreparedStatement pstmt = getPreparedStatement(conn);
-                setArguments(pstmt);
-                pstmt.executeUpdate();
-                sample.latencyEnd();
-                String sb = resultSetsToString(pstmt,false,null);
-                return sb.getBytes(ENCODING);
+                try (PreparedStatement pstmt = getPreparedStatement(conn)) {
+                    setArguments(pstmt);
+                    pstmt.executeUpdate();
+                    sample.latencyEnd();
+                    String sb = resultSetsToString(pstmt,false,null);
+                    return sb.getBytes(ENCODING);
+                }
             } else if (ROLLBACK.equals(_queryType)){
                 conn.rollback();
                 sample.latencyEnd();
