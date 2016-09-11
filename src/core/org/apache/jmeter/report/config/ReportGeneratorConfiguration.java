@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -42,10 +43,14 @@ public class ReportGeneratorConfiguration {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-    private static final String RANGE_DATE_FORMAT = "yyyyMMddHHmmss"; //$NON-NLS-1$
+    private static final String RANGE_DATE_FORMAT_DEFAULT = "yyyyMMddHHmmss"; //$NON-NLS-1$
 
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
+    
+    public static final String REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "date_format";
+    
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "graph";
     public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
@@ -634,15 +639,21 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_START_DATE, String.class);
         final String endDateValue = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_END_DATE, String.class);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(RANGE_DATE_FORMAT);
+
+        String rangeDateFormat = getOptionalProperty(props, REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT, String.class);
+        if (StringUtils.isEmpty(rangeDateFormat)) {
+            rangeDateFormat = RANGE_DATE_FORMAT_DEFAULT;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat(rangeDateFormat, Locale.ENGLISH);
+
         try {
             if(!StringUtils.isEmpty(startDateValue)) {
                 reportStartDate = dateFormat.parse(startDateValue);
                 configuration.setStartDate(reportStartDate);
             }
         } catch (ParseException e) {
-            LOG.error("Error parsing property 'REPORT_GENERATOR_KEY_START_DATE' with value:" + startDateValue
-                    +" using format:"+RANGE_DATE_FORMAT, e);
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_START_DATE + " with value: " + startDateValue
+                    + " using format: " + rangeDateFormat, e);
         }
         try {
             if(!StringUtils.isEmpty(endDateValue)) {
@@ -650,11 +661,11 @@ public class ReportGeneratorConfiguration {
                 configuration.setEndDate(reportEndDate);
             }
         } catch (ParseException e) {
-            LOG.error("Error parsing property 'REPORT_GENERATOR_KEY_START_DATE' with value:" + endDateValue 
-                    +" using format:"+RANGE_DATE_FORMAT, e);
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_END_DATE + " with value: " + endDateValue 
+                    + " using format: " + rangeDateFormat, e);
         }
         
-        LOG.info("Will use date range start date: "+startDateValue+", end date: "+endDateValue);
+        LOG.info("Will use date range start date: " + startDateValue + ", end date: " + endDateValue);
 
         // Find graph identifiers and load a configuration for each
         final Map<String, GraphConfiguration> graphConfigurations = configuration
