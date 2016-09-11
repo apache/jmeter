@@ -1266,25 +1266,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     if (url == null) {
                         log.warn("Null URL detected (should not happen)");
                     } else {
-                        String urlstr = url.toString();
-                        String urlStrEnc = escapeIllegalURLCharacters(encodeSpaces(urlstr));
-                        if (!urlstr.equals(urlStrEnc)) {// There were some spaces in the URL
-                            try {
-                                url = new URL(urlStrEnc);
-                            } catch (MalformedURLException e) {
-                                res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), new HTTPSampleResult(res)));
-                                setParentSampleSuccess(res, false);
-                                continue;
-                            }
+                        try {
+                            url = escapeIllegalURLCharacters(url);
+                        } catch (Exception e) {
+                            res.addSubResult(errorResult(new Exception(url.toString() + " is not a correct URI"), new HTTPSampleResult(res)));
+                            setParentSampleSuccess(res, false);
+                            continue;
                         }
                         // I don't think localMatcher can be null here, but check just in case
-                        if (pattern != null && localMatcher != null && !localMatcher.matches(urlStrEnc, pattern)) {
+                        if (pattern != null && localMatcher != null && !localMatcher.matches(url.toString(), pattern)) {
                             continue; // we have a pattern and the URL does not match, so skip it
                         }
                         try {
                             url = url.toURI().normalize().toURL();
                         } catch (MalformedURLException | URISyntaxException e) {
-                            res.addSubResult(errorResult(new Exception(urlStrEnc + " URI can not be normalized", e), new HTTPSampleResult(res)));
+                            res.addSubResult(errorResult(new Exception(url.toString() + " URI can not be normalized", e), new HTTPSampleResult(res)));
                             setParentSampleSuccess(res, false);
                             continue;
                         }
@@ -1298,7 +1294,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             res.addSubResult(binRes);
                             setParentSampleSuccess(res, res.isSuccessful() && (binRes == null || binRes.isSuccessful()));
                         }
-
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
@@ -1357,22 +1352,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return null;
     }
-
+    
     /**
      * @param url URL to escape
      * @return escaped url
      */
-    private String escapeIllegalURLCharacters(String url) {
-        if (url == null || StringUtils.startsWithIgnoreCase(url, "file:")) {
+    private URL escapeIllegalURLCharacters(java.net.URL url) {
+        if (url == null || url.getProtocol().equals("file")) {
             return url;
         }
         try {
-            String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
-            if (log.isDebugEnabled() && !escapedUrl.equals(url)) {
-                log.debug("Url '" + url + "' has been escaped to '"
-                        + escapedUrl + "'. Please correct your webpage.");
-            }
-            return escapedUrl;
+            return ConversionUtils.sanitizeUrl(url).toURL();
         } catch (Exception e1) {
             log.error("Error escaping URL:'" + url + "', message:" + e1.getMessage());
             return url;
