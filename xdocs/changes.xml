@@ -127,6 +127,18 @@ Summary
     <li><pr>214</pr>Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé (asier.lostale at openbravo.com).</li>
 </ul>
 
+<h3>Report / Dashboard</h3>
+<ul>
+    <li><bug>59954</bug>Web Report/Dashboard : Add average metric</li>
+    <li><bug>59956</bug>Web Report / Dashboard : Add ability to generate a graph for a range of data</li>
+    <li><bug>60065</bug>Report / Dashboard : Improve Dashboard Error Summary by adding response message to "Type of error". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60079</bug>Report / Dashboard : Add a new "Response Time Overview" graph</li>
+    <li><bug>60080</bug>Report / Dashboard : Add a new "Connect Time Over Time " graph. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60091</bug>Report / Dashboard : Have a new report containing min/max and percentiles graphs.</li>
+    <li><bug>60108</bug>Report / Dashboard : In Requests Summary rounding is too aggressive</li>
+    <li><bug>60098</bug>Report / Dashboard : Reduce default value for "jmeter.reportgenerator.statistic_window" to reduce memory impact</li>
+    <li><bug>60115</bug>Add date format property for start/end date filter into Report generator</li>
+</ul>
 <h3>General</h3>
 <ul>
     <li><bug>59803</bug>Use <code>isValid()</code> method from jdbc driver, if no validationQuery
@@ -135,15 +147,7 @@ Summary
     <li><bug>57493</bug>Create a documentation page for properties</li>
     <li><bug>59924</bug>The log level of XXX package is set to DEBUG if <code>log_level.XXXX</code> property value contains spaces, same for __log function</li>
     <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a jmeter lib</li>
-    <li><bug>59954</bug>Web Report/Dashboard : Add average metric</li>
-    <li><bug>59956</bug>Web Report / Dashboard : Add ability to generate a graph for a range of data</li>
-    <li><bug>60065</bug>Report / Dashboard : Improve Dashboard Error Summary by adding response message to "Type of error". Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60079</bug>Report / Dashboard : Add a new "Response Time Overview" graph</li>
-    <li><bug>60080</bug>Report / Dashboard : Add a new "Connect Time Over Time " graph. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60091</bug>Report / Dashboard : Have a new report containing min/max and percentiles graphs.</li>
     <li><bug>60085</bug>Remove cache for prepared statements, as it didn't work with the current jdbc pool implementation and current jdbc drivers should support caching of prepared statements themselves.</li>
-    <li><bug>60108</bug>Report / Dashboard : In Requests Summary rounding is too aggressive</li>
-    <li><bug>60098</bug>Report / Dashboard : Reduce default value for "jmeter.reportgenerator.statistic_window" to reduce memory impact</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
