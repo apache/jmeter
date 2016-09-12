@@ -538,28 +538,24 @@ the additional variables for rows four, five and six will be removed.
             <li>Autocommit(true)</li>
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
-            <note>
-            When "<code>Prepared Select Statement</code>", "<code>Prepared Update Statement</code>" or "<code>Callable Statement</code>" types are selected, a Statement Cache per connection is used by JDBC Request. 
-            It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors).
-            </note>
         </property>
         <property name="SQL Query" required="Yes">
         SQL query.
         <note>Do not enter a trailing semi-colon.</note>
         There is generally no need to use <code>{</code> and <code>}</code> to enclose Callable statements;
         however they may be used if the database uses a non-standard syntax.
-        [The JDBC driver automatically converts the statement if necessary when it is enclosed in <code>{}</code>].
+        <note>The JDBC driver automatically converts the statement if necessary when it is enclosed in <code>{}</code>.</note>
         For example:
         <ul>
         <li><code>select * from t_customers where id=23</code></li>
-        <li><code>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)</code>
+        <li><code>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null, ?, ?, null, null, null)</code>
         <ul>
         <li>Parameter values: <code>tablename</code>,<code>filename</code></li>
         <li>Parameter types:  <code>VARCHAR</code>,<code>VARCHAR</code></li>
         </ul>
         </li>
-        The second example assumes you are using Apache Derby.
         </ul>
+        The second example assumes you are using Apache Derby.
         </property>
         <property name="Parameter values" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of parameter values. Use <code>]NULL[</code> to indicate a <code>NULL</code> parameter.
@@ -568,14 +564,15 @@ the additional variables for rows four, five and six will be removed.
         The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
         and any embedded double-quotes must be doubled-up, for example:
         <source>"Dbl-Quote: "" and Comma: ,"</source>
-        <note>There must be as many values as there are placeholders in the statement even if your parameters are <code>OUT</code> ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
+        <note>There must be as many values as there are placeholders in the statement even if your parameters are <code>OUT</code> ones.
+        Be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
-        Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants when for example you use custom database types proposed by driver (<code>-10</code> for <code>OracleTypes.CURSOR</code> for example).<br/>
+        Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants. Those integer values can be used, when you use custom database types proposed by driver (For example <code>OracleTypes.CURSOR</code> could be represented by its integer value <code>-10</code>).<br/>
         These are defined as fields in the class <code>java.sql.Types</code>, see for example:<br/>
         <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
-        [Note: JMeter will use whatever types are defined by the runtime JVM,
-        so if you are running on a different JVM, be sure to check the appropriate document]<br/>
+        <note>Note: JMeter will use whatever types are defined by the runtime JVM,
+        so if you are running on a different JVM, be sure to check the appropriate documentation</note>
         <b>If the callable statement has <code>INOUT</code> or <code>OUT</code> parameters, then these must be indicated by prefixing the
         appropriate parameter types, e.g. instead of "<code>INTEGER</code>", use "<code>INOUT INTEGER</code>".</b> <br/>
         If not specified, "<code>IN</code>" is assumed, i.e. "<code>DATE</code>" is the same as "<code>IN DATE</code>".
@@ -596,9 +593,9 @@ the additional variables for rows four, five and six will be removed.
         </property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
-                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list.</li>
-                <li>Store As Object - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code> </li>
-                <li>Count Records - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+                <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list.</li>
+                <li><code>Store As Object</code> - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code>.</li>
+                <li><code>Count Records</code> - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
             </ul>
         </property>
 </properties>
@@ -607,7 +604,7 @@ the additional variables for rows four, five and six will be removed.
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
-<note>Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</note>
+<note>Current Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</note>
 <note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
