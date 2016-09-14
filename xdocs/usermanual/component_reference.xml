@@ -2886,6 +2886,9 @@ Images, style-sheets, etc. aren't downloaded.
 <td>If the <i>HTML (download resources) view</i> option is selected, the renderer
 may download images, style-sheets, etc. referenced by the HTML code. 
 <br/></td></tr>
+<tr><td><code>HTML Source formated</code></td>
+<td>If the <i>HTML Source formated view</i> option is selected, the renderer will display the HTML source code formated and cleaned by <a href="https://jsoup.org/">Jsoup</a>. 
+<br/></td></tr>
 <tr><td><code>JSON</code></td>
 <td>The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
 <br/></td></tr>
