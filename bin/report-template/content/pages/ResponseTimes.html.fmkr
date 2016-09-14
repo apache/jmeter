@@ -86,11 +86,6 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="ResponseTimes.html#activeThreadsOverTime" onclick="$('#bodyActiveThreadsOverTime').collapse('show');">
-                                                Active Threads Over Time
-                                            </a>
-                                        </li>
-                                        <li>
                                             <a href="ResponseTimes.html#timeVsThreads" onclick="$('#bodyTimeVsThreads').collapse('show');">Time Vs Threads</a>
                                         </li>
                                         <li>
@@ -237,53 +232,6 @@
 
                                 </ul>
                             </div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <div class="col-lg-12 portlet" id="activeThreadsOverTime">
-                    <div class="panel panel-default" >
-                        <div class="panel-heading portlet-header">
-                           <i class="fa fa-bar-chart-o fa-fw"> </i>  <span type="button" class="span-title dropdown-toggle click-title" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">Active Threads Over Time</span>
-                           <div class="pull-right">
-                                <div class="btn-group">
-                                    <a class="drag btn btn-link btn-xs">
-                                        <i class="glyphicon glyphicon-resize-vertical"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-wrench"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-user">
-                                        <li><a href="#activeThreadsOverTime" onClick="checkAll('choicesActiveThreadsOverTime');">Display all samples</a>
-                                        </li>
-                                        <li><a href="#activeThreadsOverTime" onClick="uncheckAll('choicesActiveThreadsOverTime');">Hide all samples</a>
-                                        </li>
-                                        <li><a href="#activeThreadsOverTime" onclick="exportToPNG('flotActiveThreadsOverTime', this);">Save as PNG</a></li>
-                                    </ul>
-                                    <button type="button" class="btn btn-link btn-xs dropdown-toggle" data-toggle="collapse" href="#bodyActiveThreadsOverTime" aria-expanded="true" aria-controls="bodyActiveThreadsOverTime">
-                                        <i class="fa fa-chevron-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="collapse out portlet-content" id="bodyActiveThreadsOverTime">
-                            <div class="panel-body" id="collapseActiveThreadsOverTime">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flotActiveThreadsOverTime" style="float: left; width:80%;"></div>
-                                    <div style="float:left;margin-left:5px">
-                                        <p>Zoom :</p>
-                                        <div id="overviewActiveThreadsOverTime" style="width:190px;height:100px;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer" id="footerActiveThreadsOverTime">
-                                    <p id="legendActiveThreadsOverTime" hidden></p>
-                                    <ul id="choicesActiveThreadsOverTime" class="legend">
-
-                                    </ul>
-                                </div>
                         </div>
                         <!-- /.panel-body -->
                     </div>
