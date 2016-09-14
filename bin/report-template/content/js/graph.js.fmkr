@@ -1341,7 +1341,7 @@ function collapse(elem, collapsed){
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshBytesThroughputOverTime(true);
             }
-            document.location.href="#responseTimesOverTime";
+            document.location.href="#bytesThroughputOverTime";
         } else if (elem.id == "bodyLatenciesOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshLatenciesOverTime(true);
@@ -1356,7 +1356,7 @@ function collapse(elem, collapsed){
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshResponseTimePercentilesOverTime(true);
             }
-            document.location.href="#connectTimeOverTime";
+            document.location.href="#responseTimePercentilesOverTime";
         } else if (elem.id == "bodyResponseTimeDistribution") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshResponseTimeDistribution();
