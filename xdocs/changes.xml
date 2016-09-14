@@ -180,6 +180,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+<li><bug>59948</bug>Add a formated and sane HTML source code render to View Results Tree</li>
 </ul>
 
 <h3>Listeners</h3>
