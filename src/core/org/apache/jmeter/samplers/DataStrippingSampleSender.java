@@ -22,6 +22,7 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -38,8 +39,21 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final boolean DEFAULT_STRIP_ALSO_ON_ERROR = true;
+    
+    private static final boolean SERVER_CONFIGURED_STRIP_ALSO_ON_ERROR = 
+            JMeterUtils.getPropDefault("sample_sender_strip_also_on_error", DEFAULT_STRIP_ALSO_ON_ERROR); // $NON-NLS-1$
+
+    // instance fields are copied from the client instance
+    private final boolean clientConfiguredStripAlsoOnError = 
+            JMeterUtils.getPropDefault("sample_sender_strip_also_on_error", DEFAULT_STRIP_ALSO_ON_ERROR); // $NON-NLS-1$
+    
+    
     private final RemoteSampleListener listener;
     private final SampleSender decoratedSender;
+    // Configuration items, set up by readResolve
+    private transient volatile boolean stripAlsoOnError;
+
 
     /**
      * @deprecated only for use by test code
@@ -76,7 +90,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
     public void sampleOccurred(SampleEvent event) {
         //Strip the response data before writing, but only for a successful request.
         SampleResult result = event.getResult();
-        if(result.isSuccessful()) {
+        if(stripAlsoOnError || result.isSuccessful()) {
             // Compute bytes before stripping
             stripResponse(result);
             // see Bug 57449
@@ -115,7 +129,12 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
      *             never
      */
     private Object readResolve() throws ObjectStreamException{
-        log.info("Using DataStrippingSampleSender for this run");
+        if (isClientConfigured()) {
+            stripAlsoOnError = clientConfiguredStripAlsoOnError;
+        } else {
+            stripAlsoOnError = SERVER_CONFIGURED_STRIP_ALSO_ON_ERROR;
+        }
+        log.info("Using DataStrippingSampleSender for this run with stripAlsoOnError:"+stripAlsoOnError);
         return this;
     }
 }
