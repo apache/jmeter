@@ -45,7 +45,7 @@ public final class FileDialoger {
     }
 
     /**
-     * Prompts the user to choose a file from their filesystems for our own
+     * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
      * before dismissing the dialog. This does NOT imply they actually chose a
      * file from that directory, only that they closed the dialog there. It is
@@ -60,7 +60,7 @@ public final class FileDialoger {
     }
 
     /**
-     * Prompts the user to choose a file from their filesystems for our own
+     * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
      * before dismissing the dialog. This does NOT imply they actually chose a
      * file from that directory, only that they closed the dialog there. It is
@@ -78,7 +78,27 @@ public final class FileDialoger {
     }
     
     /**
-     * Prompts the user to choose a file from their filesystems for our own
+     * Prompts the user to choose a file or a directory from their filesystems for our own
+     * devious uses. This method maintains the last directory the user visited
+     * before dismissing the dialog. This does NOT imply they actually chose a
+     * file from that directory, only that they closed the dialog there. It is
+     * the caller's responsibility to check to see if the selected file is
+     * non-null.
+     * @param existingFileName The name of a file with path. If the filename points
+     *             to an existing file, the directory in which it lies, will be used
+     *             as the starting point for the returned JFileChooser.
+     * @param onlyDirectories If true, only directories are displayed in the FileChooser
+     *
+     * @return the JFileChooser that interacted with the user, after they are
+     *         finished using it - null if no file was chosen
+     */
+    public static JFileChooser promptToOpenFile(String existingFileName, boolean onlyDirectories) {
+        return promptToOpenFile(new String[0], existingFileName, onlyDirectories);
+    }
+    
+    
+    /**
+     * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
      * before dismissing the dialog. This does NOT imply they actually chose a
      * file from that directory, only that they closed the dialog there. It is
@@ -95,7 +115,7 @@ public final class FileDialoger {
     }
     
     /**
-     * Prompts the user to choose a file from their filesystems for our own
+     * Prompts the user to choose a file or a directory from their filesystems for our own
      * devious uses. This method maintains the last directory the user visited
      * before dismissing the dialog. This does NOT imply they actually chose a
      * file from that directory, only that they closed the dialog there. It is
@@ -111,38 +131,64 @@ public final class FileDialoger {
      *         finished using it - null if no file was chosen
      */
     public static JFileChooser promptToOpenFile(String[] exts, String existingFileName) {
-        if(!StringUtils.isEmpty(existingFileName)) {
-            File existingFileStart = new File(existingFileName);
-            if(existingFileStart.exists() && existingFileStart.canRead()) {
-                jfc.setCurrentDirectory(new File(existingFileName));
-            }
-        }
-        else if (lastJFCDirectory == null) {
-            String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
-
-            if (start.length() > 0) {
-                jfc.setCurrentDirectory(new File(start));
-            }
-        }
-        clearFileFilters();
-        if(exts != null && exts.length > 0) {
-            JMeterFileFilter currentFilter = new JMeterFileFilter(exts);
-            jfc.addChoosableFileFilter(currentFilter);
-            jfc.setAcceptAllFileFilterUsed(true);
-            jfc.setFileFilter(currentFilter);
-        }
-        if(lastJFCDirectory==null) {
-            lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
-        }
-        jfc.setCurrentDirectory(new File(lastJFCDirectory));
-        int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
-        lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
-
-        if (retVal == JFileChooser.APPROVE_OPTION) {
-            return jfc;
-        }
-        return null;
+        return promptToOpenFile(exts, null, false);
     }
+  
+    /**
+    * Prompts the user to choose a file or a directory from their filesystems for our own
+    * devious uses. This method maintains the last directory the user visited
+    * before dismissing the dialog. This does NOT imply they actually chose a
+    * file from that directory, only that they closed the dialog there. It is
+    * the caller's responsibility to check to see if the selected file is
+    * non-null.
+    * @param exts The list of allowed file extensions. If empty, any
+    *             file extension is allowed
+    * @param existingFileName The name of a file with path. If the filename points
+    *             to an existing file, the directory in which it lies, will be used
+    *             as the starting point for the returned JFileChooser.
+     * @param onlyDirectories If true, only directories are displayed in the FileChooser
+    *
+    * @return the JFileChooser that interacted with the user, after they are
+    *         finished using it - null if no file was chosen
+    */
+   public static JFileChooser promptToOpenFile(String[] exts, String existingFileName, boolean onlyDirectories) {
+       if (onlyDirectories) {
+           jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+       } else {
+           jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+       }
+       if(!StringUtils.isEmpty(existingFileName)) {
+           File existingFileStart = new File(existingFileName);
+           if(existingFileStart.exists() && existingFileStart.canRead()) {
+               jfc.setCurrentDirectory(new File(existingFileName));
+           }
+       }
+       else if (lastJFCDirectory == null) {
+           String start = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+
+           if (start.length() > 0) {
+               jfc.setCurrentDirectory(new File(start));
+           }
+       }
+       clearFileFilters();
+       if(exts != null && exts.length > 0) {
+           JMeterFileFilter currentFilter = new JMeterFileFilter(exts);
+           jfc.addChoosableFileFilter(currentFilter);
+           jfc.setAcceptAllFileFilterUsed(true);
+           jfc.setFileFilter(currentFilter);
+       }
+       if(lastJFCDirectory==null) {
+           lastJFCDirectory = System.getProperty("user.dir", ""); //$NON-NLS-1$//$NON-NLS-2$
+       }
+       jfc.setCurrentDirectory(new File(lastJFCDirectory));
+       int retVal = jfc.showOpenDialog(GuiPackage.getInstance().getMainFrame());
+       lastJFCDirectory = jfc.getCurrentDirectory().getAbsolutePath();
+
+       if (retVal == JFileChooser.APPROVE_OPTION) {
+           return jfc;
+       }
+       return null;
+   }
 
     private static void clearFileFilters() {
         FileFilter[] filters = jfc.getChoosableFileFilters();
