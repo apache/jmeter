@@ -76,6 +76,7 @@ under the License.
       <dnsjava.version>2.1.7</dnsjava.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
       <freemarker.version>2.3.23</freemarker.version>
+      <guava.version>19.0</guava.version>
       <groovy-all.version>2.4.6</groovy-all.version>
       <hamcrest-core.version>1.3</hamcrest-core.version>
       <httpclient.version>4.5.2</httpclient.version>
@@ -227,6 +228,11 @@ under the License.
         <groupId>excalibur-logger</groupId>
         <artifactId>excalibur-logger</artifactId>
         <version>${excalibur-logger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
