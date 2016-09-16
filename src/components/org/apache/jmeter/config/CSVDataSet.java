@@ -156,7 +156,7 @@ public class CSVDataSet extends ConfigTestElement
             delim=",";
         }
         if (vars == null) {
-            String _fileName = getFilename();
+            String _fileName = getFilename().trim();
             String mode = getShareMode();
             int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
             switch(modeInt){
