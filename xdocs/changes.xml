@@ -90,6 +90,7 @@ Summary
 <h3>Other samplers</h3>
 <ul>
     <li><pr>211</pr>Differentiate the timing for JDBC Sampler. Use latency and connect time. Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
+    <li><bug>59620</bug>Fix button action in "JMS Publisher -> Random File from folder specified below" to allow to select a directory</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -97,6 +98,8 @@ Summary
     <li><bug>59351</bug>Improve log/error/message for IncludeController. Partly contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>60023</bug>ThroughputController : Make "Percent Executions" and global the default values. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60082</bug>Validation mode : Be able to force Throughput Controller to run as if it was set to 100%</li>
+    <li><bug>59329</bug>Trim spaces in input filename in CSVDataSet.</li>
+    <li><bug>59349</bug>Trim spaces in input filename in IncludeController.</li>
 </ul>
 
 <h3>Listeners</h3>
