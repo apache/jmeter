@@ -102,7 +102,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file")); //$NON-NLS-1$
 
-    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file")); //$NON-NLS-1$
+    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), true); //$NON-NLS-1$
 
     private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
