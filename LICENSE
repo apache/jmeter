@@ -227,7 +227,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * excalibur-logger-1.1.jar
 * groovy-all-2.4.7.jar
 * httpclient-4.5.2.jar
-* httpcore-4.4.4.jar
+* httpcore-4.4.5.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
 * logkit-2.0.jar
