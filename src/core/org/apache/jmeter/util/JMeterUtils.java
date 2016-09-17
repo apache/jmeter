@@ -54,6 +54,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.test.UnitTestManager;
+import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
@@ -864,7 +865,7 @@ public class JMeterUtils implements UnitTestManager {
      *            the name of the property.
      * @param defaultVal
      *            the default value.
-     * @return The PropDefault value
+     * @return The PropDefault value applying a trim on it
      */
     public static String getPropDefault(String propName, String defaultVal) {
         String ans = defaultVal;
@@ -1407,6 +1408,23 @@ public class JMeterUtils implements UnitTestManager {
         if (JMeterUtils.getHiDPIMode()) {
             table.setRowHeight((int) Math.round(table.getRowHeight() * JMeterUtils.getHiDPIScaleFactor()));
         }
+    }
+
+    /**
+     * Return delimiterValue handling the TAB case
+     * @param delimiterValue Delimited value 
+     * @return String delimited modified to handle correctly tab
+     * @throws JMeterError if delimiterValue has a length different from 1
+     */
+    public static String getDelimiter(String delimiterValue) {
+        if (delimiterValue.equals("\\t")) {// Make it easier to enter a tab (can use \<tab> but that is awkward)
+            delimiterValue="\t";
+        }
+
+        if (delimiterValue.length() != 1){
+            throw new JMeterError("Delimiter '"+delimiterValue+"' must be of length 1.");
+        }
+        return delimiterValue;
     }
 
 }

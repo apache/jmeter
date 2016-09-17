@@ -57,6 +57,7 @@ import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
 import org.apache.jmeter.report.processor.ThresholdSelector;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -77,7 +78,9 @@ public class ReportGenerator {
                     "jmeter.save.saveservice.output_format", "csv"));
 
     private static final char CSV_DEFAULT_SEPARATOR =
-            JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
+            // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
+            JMeterUtils.getDelimiter(
+                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
@@ -206,9 +209,7 @@ public class ReportGenerator {
         // Build consumers chain
         SampleContext sampleContext = new SampleContext();
         sampleContext.setWorkingDirectory(tmpDir);
-        SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
-                .getPropDefault("jmeter.save.saveservice.default_delimiter",
-                        ",").charAt(0));
+        SampleSource source = new CsvFileSampleSource(testFile, CSV_DEFAULT_SEPARATOR);
         source.setSampleContext(sampleContext);
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
