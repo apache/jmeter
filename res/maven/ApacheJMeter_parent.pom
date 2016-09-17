@@ -96,7 +96,7 @@ under the License.
       <ph-css.version>4.1.5</ph-css.version>
       <ph-commons.version>6.2.4</ph-commons.version>
       <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
-      <slf4j-api.version>1.7.13</slf4j-api.version>
+      <slf4j-api.version>1.7.21</slf4j-api.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.13</tika-core.version>
       <tika-parsers.version>1.13</tika-parsers.version>
