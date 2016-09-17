@@ -9,7 +9,7 @@ commons-codec-1.10.jar
 commons-collections-3.2.2.jar
 commons-dbcp2-2.1.1.jar
 commons-httpclient-3.1.jar
-commons-io-2.4.jar
+commons-io-2.5.jar
 commons-jexl-1.1.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.0.jar
