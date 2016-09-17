@@ -54,7 +54,7 @@ http://hc.apache.org/downloads.cgi
 - httpclient version of HTTP sampler
 - Cookie manager implementation
 
-commons-io-2.4
+commons-io-2.5
 --------------
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
