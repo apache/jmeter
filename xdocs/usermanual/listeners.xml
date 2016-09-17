@@ -135,7 +135,7 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.subresults=true
 #jmeter.save.saveservice.assertions=true
 #jmeter.save.saveservice.latency=true
-#jmeter.save.saveservice.connect_time=false
+#jmeter.save.saveservice.connect_time=true
 #jmeter.save.saveservice.samplerData=false
 #jmeter.save.saveservice.responseHeaders=false
 #jmeter.save.saveservice.requestHeaders=false
