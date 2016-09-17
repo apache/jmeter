@@ -52,7 +52,7 @@ under the License.
     <properties>
       <!-- these must agree with the definitions in build.properties -->
       <logkit.version>2.0</logkit.version>
-      <slf4j-api.version>1.7.13</slf4j-api.version>
+      <slf4j-api.version>1.7.21</slf4j-api.version>
     </properties>
 
     <dependencies>
