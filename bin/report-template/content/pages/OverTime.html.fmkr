@@ -230,7 +230,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading portlet-header">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
-                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyResponseTimePercentilesOverTime" aria-expanded="true" aria-controls="bodyResponseTimePercentilesOverTime">Response Time Percentiles Over Time</span>
+                            <span type="button" class="dropdown-toggle click-title span-title" data-toggle="collapse" href="#bodyResponseTimePercentilesOverTime" aria-expanded="true" aria-controls="bodyResponseTimePercentilesOverTime">Response Time Percentiles Over Time (successful responses)</span>
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <a class="btn btn-link btn-xs">
