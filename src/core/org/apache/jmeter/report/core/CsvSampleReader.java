@@ -51,7 +51,9 @@ public class CsvSampleReader implements Closeable{
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
 
     private static final char DEFAULT_SEPARATOR =
-            JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
+            // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
+            JMeterUtils.getDelimiter(
+                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
 
     private File file;
 

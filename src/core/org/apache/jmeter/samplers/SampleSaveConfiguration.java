@@ -121,7 +121,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * The name of the property indicating which delimiter should be used when
      * saving in a delimited values format.
      **************************************************************************/
-    private static final String DEFAULT_DELIMITER_PROP = "jmeter.save.saveservice.default_delimiter"; // $NON_NLS-1$
+    public static final String DEFAULT_DELIMITER_PROP = "jmeter.save.saveservice.default_delimiter"; // $NON_NLS-1$
 
     /***************************************************************************
      * The name of the property indicating which format should be used when
@@ -298,7 +298,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final boolean _idleTime;
 
-    private static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
+    public static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
 
     /**
      * Read in the properties having to do with saving from a properties file.
@@ -315,14 +315,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _requestHeaders  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
         _encoding        = TRUE.equalsIgnoreCase(props.getProperty(ENCODING_PROP, FALSE));
 
-        String dlm = props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER);
-        if (dlm.equals("\\t")) {// Make it easier to enter a tab (can use \<tab> but that is awkward)
-            dlm="\t";
-        }
-
-        if (dlm.length() != 1){
-            throw new JMeterError("Delimiter '"+dlm+"' must be of length 1.");
-        }
+        String dlm = JMeterUtils.getDelimiter(props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER));
         char ch = dlm.charAt(0);
 
         if (CharUtils.isAsciiAlphanumeric(ch) || ch == CSVSaveService.QUOTING_CHAR){
