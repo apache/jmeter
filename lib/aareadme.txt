@@ -103,7 +103,7 @@ excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 --------------------
 - LoggingManager
 
-groovy-all-2.4.6
+groovy-all-2.4.7
 ----------------------
 Advised scripting language for JSR223 Test Elements
 

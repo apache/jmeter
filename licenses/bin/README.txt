@@ -20,7 +20,7 @@ commons-net-3.5.jar
 commons-pool2-2.4.2.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-groovy-all-2.4.6.jar
+groovy-all-2.4.7.jar
 httpclient-4.5.2.jar
 httpcore-4.4.4.jar
 httpmime-4.5.2.jar
