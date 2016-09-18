@@ -171,6 +171,7 @@ Summary
     <li>Updated to slf4j-api 1.7.21 (from 1.7.13)</li>
     <li>Updated to rsyntaxtextarea-2.6.0 (from 2.5.8)</li>
     <li>Updated to xstream 1.4.9 (from 1.4.8)</li>
+    <li>Updated to jodd 3.7.1 (from 3.6.7.jar)</li>
     <li><pr>215</pr>Reduce duplicated code by using the newly added method <code>GuiUtils#cancelEditing</code>.
     Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><pr>218</pr>Misc cleanup. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
