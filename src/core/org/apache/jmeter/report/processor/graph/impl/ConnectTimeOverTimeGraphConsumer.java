@@ -38,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ConnectTimeOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer {
     private static final boolean CONNECT_TIME_SAVED =
-            JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", false); //$NON-NLS-1$
+            JMeterUtils.getPropDefault("jmeter.save.saveservice.connect_time", true); //$NON-NLS-1$
 
     /*
      * (non-Javadoc)
