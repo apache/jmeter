@@ -857,6 +857,26 @@ public class JMeterUtils implements UnitTestManager {
         }
         return ans;
     }
+    
+    /**
+     * Get a float value with default if not present.
+     *
+     * @param propName
+     *            the name of the property.
+     * @param defaultVal
+     *            the default value.
+     * @return The PropDefault value
+     */
+    public static float getPropDefault(String propName, float defaultVal) {
+        float ans;
+        try {
+            ans = Float.parseFloat(appProperties.getProperty(propName, Float.toString(defaultVal)).trim());
+        } catch (Exception e) {
+            log.warn("Exception '"+ e.getMessage()+ "' occurred when fetching float property:'"+propName+"', defaulting to:"+defaultVal);
+            ans = defaultVal;
+        }
+        return ans;
+    }
 
     /**
      * Get a String value with default if not present.
