@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.timers.ModifiableTimer;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -74,6 +75,13 @@ public class JMeterThread implements Runnable, Interruptible {
     /** How often to check for shutdown during ramp-up, default 1000ms */
     private static final int RAMPUP_GRANULARITY =
             JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
+
+    private static final float TIMER_FACTOR = JMeterUtils.getPropDefault("timer.factor", 1.0f);
+
+    /**
+     * 1 as float
+     */
+    private static final float ONE_AS_FLOAT = 1.0f;
 
     private final Controller threadGroupLoopController;
 
@@ -795,7 +803,20 @@ public class JMeterThread implements Runnable, Interruptible {
         long totalDelay = 0;
         for (Timer timer : timers) {
             TestBeanHelper.prepare((TestElement) timer);
-            totalDelay += timer.delay();
+            long delay = timer.delay();
+            if(TIMER_FACTOR != ONE_AS_FLOAT && 
+                    // TODO Improve this with Optional methods when migration to Java8 is completed 
+                    ((timer instanceof ModifiableTimer) 
+                            && ((ModifiableTimer)timer).isModifiable())) {
+                if(log.isDebugEnabled()) {
+                    log.debug("Applying TIMER_FACTOR:"
+                            +TIMER_FACTOR + " on timer:"
+                            +((TestElement)timer).getName()
+                            + " for thread:"+getThreadName());
+                }
+                delay = Math.round(delay * TIMER_FACTOR);
+            }
+            totalDelay += delay;
         }
         if (totalDelay > 0) {
             try {
