@@ -18,7 +18,6 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
-<!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
     <template isTestPlan="true">
         <name>Recording</name>
