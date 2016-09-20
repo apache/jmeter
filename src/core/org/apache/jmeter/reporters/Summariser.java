@@ -237,11 +237,11 @@ public class Summariser extends AbstractTestElement
     private static String format(String name, SummariserRunningSample summariserRunningSample, String type) {
         DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
         StringBuilder tmp = new StringBuilder(20); // for intermediate use
-        StringBuilder sb = new StringBuilder(100); // output line buffer
+        StringBuilder sb = new StringBuilder(140); // output line buffer
         sb.append(name);
-        sb.append(" ");
+        sb.append(' ');
         sb.append(type);
-        sb.append(" ");
+        sb.append(' ');
         sb.append(longToSb(tmp, summariserRunningSample.getNumSamples(), 6));
         sb.append(" in ");
         long elapsed = summariserRunningSample.getElapsed();
@@ -263,7 +263,7 @@ public class Summariser extends AbstractTestElement
         sb.append(longToSb(tmp, summariserRunningSample.getErrorCount(), 5));
         sb.append(" (");
         sb.append(summariserRunningSample.getErrorPercentageString());
-        sb.append(")");
+        sb.append(')');
         if ("+".equals(type)) {
             ThreadCounts tc = JMeterContextService.getThreadCounts();
             sb.append(" Active: ");

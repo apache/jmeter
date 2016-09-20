@@ -952,7 +952,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         } else {
             // HTTP URLs must be absolute, allow file to be relative
             if (!path.startsWith("/")) { // $NON-NLS-1$
-                pathAndQuery.append("/"); // $NON-NLS-1$
+                pathAndQuery.append('/'); // $NON-NLS-1$
             }
         }
         pathAndQuery.append(path);
