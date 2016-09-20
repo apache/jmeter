@@ -93,6 +93,7 @@ Summary
 <ul>
     <li><pr>211</pr>Differentiate the timing for JDBC Sampler. Use latency and connect time. Contributed by Thomas Peyrard (thomas.peyrard at murex.com)</li>
     <li><bug>59620</bug>Fix button action in "JMS Publisher -> Random File from folder specified below" to allow to select a directory</li>
+    <li><bug>60085</bug>Handle CLOBs and BLOBs and limit them if necessary when storing them in result sampler.</li>
 </ul>
 
 <h3>Controllers</h3>

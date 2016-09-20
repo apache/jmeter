@@ -593,9 +593,9 @@ the additional variables for rows four, five and six will be removed.
         </property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
-                <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list.</li>
-                <li><code>Store As Object</code> - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code>.</li>
-                <li><code>Count Records</code> - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+                <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list. <code>CLOB</code>s will be converted to Strings. <code>BLOB</code>s will be converted to Strings as if they were an UTF-8 encoded byte-array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
+                <li><code>Store As Object</code> - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code>. <code>CLOB</code>s will be handled as if <code>Store As String</code> was selected. <code>BLOBs</code> will be stored as a byte array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
+                <li><code>Count Records</code> - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings. For <code>BLOB</code>s the size of the object will be stored.</li>
             </ul>
         </property>
 </properties>
