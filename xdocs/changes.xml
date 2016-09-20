@@ -110,7 +110,7 @@ Summary
     <li><bug>59953</bug>GraphiteBackendListener : Add Average metric. Partly contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
     <li><bug>59975</bug>View Results Tree : Text renderer annoyingly scrolls down when content is bulky. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60109</bug>Summariser : Make it ignore TC generated SampleResult in its summary computations</li>
-    <li><bug>59948</bug>Add a formated and sane HTML source code render to View Results Tree</li>
+    <li><bug>59948</bug>Add a formatted and sane HTML source code render to View Results Tree</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -151,13 +151,13 @@ Summary
 </ul>
 <h3>General</h3>
 <ul>
-    <li><bug>59803</bug>Use <code>isValid()</code> method from jdbc driver, if no validationQuery
+    <li><bug>59803</bug>Use <code>isValid()</code> method from JDBC driver, if no validationQuery
     is given in JDBC Connection Configuration.</li>
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>57493</bug>Create a documentation page for properties</li>
     <li><bug>59924</bug>The log level of XXX package is set to DEBUG if <code>log_level.XXXX</code> property value contains spaces, same for __log function</li>
-    <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a jmeter lib</li>
-    <li><bug>60085</bug>Remove cache for prepared statements, as it didn't work with the current jdbc pool implementation and current jdbc drivers should support caching of prepared statements themselves.</li>
+    <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a JMeter lib</li>
+    <li><bug>60085</bug>Remove cache for prepared statements, as it didn't work with the current JDBC pool implementation and current JDBC drivers should support caching of prepared statements themselves.</li>
     <li><bug>60137</bug>In Distributed testing when using StrippedXXXX modes strip response also on error</li>
     <li><bug>60106</bug>Settings defaults : Switch "jmeter.save.saveservice.connect_time" to true (after 3.0)</li>
     <li><pr>229</pr> tiny memory allocation improvements. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
@@ -189,7 +189,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>58888</bug>HTTP(S) Test Script Recorder (ProxyControl) does not add TestElement's returned by SamplerCreator createChildren ()</li>
+    <li><bug>58888</bug>HTTP(S) Test Script Recorder (ProxyControl) does not add TestElement's returned by SamplerCreator#createChildren()</li>
     <li><bug>59902</bug>Https handshake failure when setting <code>httpclient.socket.https.cps</code> property</li>
     <li><bug>60084</bug>JMeter 3.0 embedded resource URL is silently encoded</li>
  </ul>
