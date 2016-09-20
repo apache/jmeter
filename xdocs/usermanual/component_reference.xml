@@ -4931,7 +4931,16 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
 
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
-    <br></br>
+    <note>
+    Since version 3.1, a new feature (in Beta mode as of JMeter 3.1 and subject to changes) has been implemented which provides the following feature.<br/>
+    You can apply a multiplication factor on the sleep delays computed by Random timer by setting property <code>timer.factor=float number</code> where float number is a decimal positive number.<br/>
+    JMeter will multiply this factor by the computed sleep delay. This feature can be used by:
+    <ul> 
+        <li><complink name="Gaussian Random Timer"/></li>
+        <li><complink name="Poisson Random Timer"/></li>
+        <li><complink name="Uniform Random Timer"/></li>
+    </ul> 
+    </note>
     <note>
     Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
     if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
