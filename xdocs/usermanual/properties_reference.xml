@@ -488,6 +488,7 @@ Other parsers:<br/>
 <section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
 <properties>
 <property name="jdbcsampler.nullmarker"> String used to indicate a null value<br/>, defaults to:]NULL[</property>
+<property name="jdbcsampler.max_retain_result_size">Max bytes to store from a CLOB or BLOB in the sampler<br/>, defaults to: 65536 (bytes)</property>
 </properties>
 </section>
 <section name="&sect-num;.27 OS Process Sampler configuration" anchor="os_sampler">
