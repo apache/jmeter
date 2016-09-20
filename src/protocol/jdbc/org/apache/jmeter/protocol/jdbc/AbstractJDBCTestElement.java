@@ -23,7 +23,9 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -35,11 +37,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.AbstractTestElement;
@@ -123,6 +125,8 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private String resultSetHandler = RS_STORE_AS_STRING; 
     private String resultVariable = ""; // $NON-NLS-1$
     private String queryTimeout = ""; // $NON-NLS-1$
+
+    private static final int MAX_RETAIN_SIZE = JMeterUtils.getPropDefault("jdbcsampler.max_retain_result_size", 64 * 1024);
 
     /**
      * Creates a JDBCSampler.
@@ -283,16 +287,11 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     if (name.length()>0){ // Save the value in the variable if present
                         Object o = outputValues.get(i);
                         if( o instanceof java.sql.ResultSet ) { 
-                            ResultSet resultSet = (ResultSet) o;
-                            if(RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
-                                jmvars.putObject(name, o);
-                            }
-                            else if( RS_COUNT_RECORDS.equals(resultSetHandler)) {
-                                jmvars.put(name,o.toString()+" "+countRows(resultSet)+" rows");
-                            }
-                            else {
-                                jmvars.put(name, o.toString());
-                            }
+                            putIntoVar(jmvars, name, (java.sql.ResultSet) o);
+                        } else if (o instanceof java.sql.Clob) {
+                            putIntoVar(jmvars, name, (java.sql.Clob) o);
+                        } else if (o instanceof java.sql.Blob) {
+                            putIntoVar(jmvars, name, (java.sql.Blob) o);
                         }
                         else {
                             jmvars.put(name, o == null ? null : o.toString());
@@ -303,7 +302,59 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         }
         return sb.toString();
     }
-    
+
+    private void putIntoVar(final JMeterVariables jmvars, final String name,
+            final ResultSet resultSet) throws SQLException {
+        if (RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
+            jmvars.putObject(name, resultSet);
+        } else if (RS_COUNT_RECORDS.equals(resultSetHandler)) {
+            jmvars.put(name, resultSet.toString() + " " + countRows(resultSet)
+                    + " rows");
+        } else {
+            jmvars.put(name, resultSet.toString());
+        }
+    }
+
+    private void putIntoVar(final JMeterVariables jmvars, final String name,
+            final Clob clob) throws SQLException {
+        try {
+            if (clob.length() > MAX_RETAIN_SIZE) {
+                jmvars.put(
+                        name,
+                        IOUtils.toString(clob.getCharacterStream(0,
+                                MAX_RETAIN_SIZE))
+                                + "<result cut off, it is too big>");
+            } else {
+                jmvars.put(name, IOUtils.toString(clob.getCharacterStream()));
+            }
+        } catch (IOException e) {
+            log.warn("Could not read CLOB into " + name, e);
+        }
+    }
+
+    private void putIntoVar(final JMeterVariables jmvars, final String name,
+            final Blob blob) throws SQLException {
+        if (RS_STORE_AS_OBJECT.equals(resultSetHandler)) {
+            try {
+                long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
+                jmvars.putObject(name,
+                        IOUtils.toByteArray(blob.getBinaryStream(0, length)));
+            } catch (IOException e) {
+                log.warn("Could not read BLOB into " + name + " as object.", e);
+            }
+        } else if (RS_COUNT_RECORDS.equals(resultSetHandler)) {
+            jmvars.put(name, blob.length() + " bytes");
+        } else {
+            try {
+                long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
+                jmvars.put(name, IOUtils.toString(
+                        blob.getBinaryStream(0, length), ENCODING));
+            } catch (IOException e) {
+                log.warn("Can't convert BLOB to String using " + ENCODING, e);
+            }
+        }
+    }
+
     /**
      * Count rows in result set
      * @param resultSet {@link ResultSet}
