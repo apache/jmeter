@@ -116,15 +116,15 @@ public class LogFunction extends AbstractFunction {
         StringBuilder sb = new StringBuilder(80);
         sb.append("Log: ");
         sb.append(tn);
-        if (c.length()>0){
-            sb.append(" ");
+        if (c.length()>0) {
+            sb.append(' ');
             sb.append(c);
         } else {
             sb.append(DEFAULT_SEPARATOR);
         }
         sb.append(s);
         if (t != null) {
-            sb.append(" ");
+            sb.append(' ');
             ps.print(sb.toString());
             t.printStackTrace(ps);
         } else {
@@ -148,7 +148,7 @@ public class LogFunction extends AbstractFunction {
                 StringBuilder sb = new StringBuilder(40);
                 sb.append(tn);
                 if (c.length()>0){
-                    sb.append(" ");
+                    sb.append(' ');
                     sb.append(c);
                 } else {
                     sb.append(DEFAULT_SEPARATOR);

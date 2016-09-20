@@ -344,4 +344,16 @@ public class TestJorphanUtils {
         assertTrue(JOrphanUtils.isBlank("    "));
         assertFalse(JOrphanUtils.isBlank(" zdazd dzd "));
     }
+    
+    @Test
+    public void testRightAlign() {
+        StringBuilder in = new StringBuilder("AZE");
+        assertEquals("   AZE", JOrphanUtils.rightAlign(in, 6).toString());
+        in = new StringBuilder("AZERTY");
+        assertEquals("AZERTY", JOrphanUtils.rightAlign(in, 6).toString());
+        in = new StringBuilder("baulpismuth");
+        assertEquals("baulpismuth", JOrphanUtils.rightAlign(in, 6).toString());
+        in = new StringBuilder("A");
+        assertEquals("       A", JOrphanUtils.rightAlign(in, 8).toString());
+    }
 }
