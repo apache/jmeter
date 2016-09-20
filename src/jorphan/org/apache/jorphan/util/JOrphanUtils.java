@@ -168,9 +168,8 @@ public final class JOrphanUtils {
     }
 
 
-    private static final String SPACES = "                                 ";
-
-    private static final int SPACES_LEN = SPACES.length();
+    private static final char[] SPACES_CHARS = "                                 ".toCharArray();
+    private static final int SPACES_LEN = SPACES_CHARS.length;
 
     /**
      * Right aligns some text in a StringBuilder N.B. modifies the input buffer
@@ -189,7 +188,7 @@ public final class JOrphanUtils {
         if (pfx > SPACES_LEN) {
             pfx = SPACES_LEN;
         }
-        in.insert(0, SPACES.substring(0, pfx));
+        in.insert(0, SPACES_CHARS, 0, pfx);
         return in;
     }
 
@@ -210,7 +209,7 @@ public final class JOrphanUtils {
         if (sfx > SPACES_LEN) {
             sfx = SPACES_LEN;
         }
-        in.append(SPACES.substring(0, sfx));
+        in.append(SPACES_CHARS, 0, sfx);
         return in;
     }
 
@@ -427,7 +426,7 @@ public final class JOrphanUtils {
         for (byte b : ba) {
             int j = b & 0xff;
             if (j < 16) {
-                sb.append("0"); // $NON-NLS-1$ add zero padding
+                sb.append('0'); // $NON-NLS-1$ add zero padding
             }
             sb.append(Integer.toHexString(j));
         }
@@ -449,7 +448,7 @@ public final class JOrphanUtils {
             }
             int j = ba[i] & 0xff;
             if (j < 16) {
-                sb.append("0"); // $NON-NLS-1$ add zero padding
+                sb.append('0'); // $NON-NLS-1$ add zero padding
             }
             sb.append(Integer.toHexString(j));
         }

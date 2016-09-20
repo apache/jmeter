@@ -164,7 +164,7 @@ public class CssParser implements LinkExtractorParser {
                 StringBuilder builder = new StringBuilder();
                 for (Iterator<URL> iterator = urlCollection.iterator(); iterator.hasNext();) {
                     URL urlString = iterator.next();
-                    builder.append(urlString).append(",");
+                    builder.append(urlString).append(',');
                 }
                 LOG.debug("Parsed:"+baseUrl+", got:"+builder.toString());
             }
