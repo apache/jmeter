@@ -29,6 +29,7 @@ import java.util.UUID;
 import javax.swing.JCheckBox;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
@@ -116,7 +117,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         
     }
     
-    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener {
+    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener, ClearGui {
 
         private final JCheckBox checkbox;
 
@@ -197,6 +198,12 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         @Override
         public boolean supportsCustomEditor() {
             return true;
+        }
+
+        @Override
+        public void clearGui() {
+            initialValue = null;
+            checkbox.setSelected(false);
         }
     }
 }

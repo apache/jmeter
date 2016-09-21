@@ -46,6 +46,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.ThreadListener;
+import org.apache.jmeter.timers.ModifiableTimer;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
@@ -74,6 +75,13 @@ public class JMeterThread implements Runnable, Interruptible {
     /** How often to check for shutdown during ramp-up, default 1000ms */
     private static final int RAMPUP_GRANULARITY =
             JMeterUtils.getPropDefault("jmeterthread.rampup.granularity", 1000); // $NON-NLS-1$
+
+    private static final float TIMER_FACTOR = JMeterUtils.getPropDefault("timer.factor", 1.0f);
+
+    /**
+     * 1 as float
+     */
+    private static final float ONE_AS_FLOAT = 1.0f;
 
     private final Controller threadGroupLoopController;
 
@@ -280,7 +288,7 @@ public class JMeterThread implements Runnable, Interruptible {
             log.info("Stopping Test Now: " + e.toString());
             stopTestNow();
         } catch (JMeterStopThreadException e) {
-            log.info("Stop Thread seen: " + e.toString());
+            log.info("Stop Thread seen for thread " + getThreadName()+", reason:"+ e.toString());
         } catch (Exception e) {
             log.error("Test failed!", e);
         } catch (ThreadDeath e) {
@@ -457,16 +465,20 @@ public class JMeterThread implements Runnable, Interruptible {
 
         // Perform the actual sample
         currentSampler = sampler;
-        for(SampleMonitor monitor : sampleMonitors) {
-            monitor.sampleStarting(sampler);
+        if(!sampleMonitors.isEmpty()) {
+            for(SampleMonitor monitor : sampleMonitors) {
+                monitor.sampleStarting(sampler);
+            }
         }
         SampleResult result = null;
         try {
             result = sampler.sample(null); // TODO: remove this useless Entry parameter
         } finally {
-            for(SampleMonitor monitor : sampleMonitors) {
-                monitor.sampleEnded(sampler);
-            }            
+            if(!sampleMonitors.isEmpty()) {
+                for(SampleMonitor monitor : sampleMonitors) {
+                    monitor.sampleEnded(sampler);
+                }
+            }
         }
         currentSampler = null;
 
@@ -788,14 +800,35 @@ public class JMeterThread implements Runnable, Interruptible {
     }
 
     private void delay(List<Timer> timers) {
-        long sum = 0;
+        long totalDelay = 0;
         for (Timer timer : timers) {
             TestBeanHelper.prepare((TestElement) timer);
-            sum += timer.delay();
+            long delay = timer.delay();
+            if(TIMER_FACTOR != ONE_AS_FLOAT && 
+                    // TODO Improve this with Optional methods when migration to Java8 is completed 
+                    ((timer instanceof ModifiableTimer) 
+                            && ((ModifiableTimer)timer).isModifiable())) {
+                if(log.isDebugEnabled()) {
+                    log.debug("Applying TIMER_FACTOR:"
+                            +TIMER_FACTOR + " on timer:"
+                            +((TestElement)timer).getName()
+                            + " for thread:"+getThreadName());
+                }
+                delay = Math.round(delay * TIMER_FACTOR);
+            }
+            totalDelay += delay;
         }
-        if (sum > 0) {
+        if (totalDelay > 0) {
             try {
-                TimeUnit.MILLISECONDS.sleep(sum);
+                if(scheduler) {
+                    // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
+                    // See Bug 60049
+                    long now = System.currentTimeMillis();
+                    if(now + totalDelay > endTime) {
+                        totalDelay = endTime - now;
+                    }
+                }
+                TimeUnit.MILLISECONDS.sleep(totalDelay);
             } catch (InterruptedException e) {
                 log.warn("The delay timer was interrupted - probably did not wait as long as intended.");
             }

@@ -21,9 +21,13 @@ package org.apache.jmeter.protocol.http.parser;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -50,7 +54,20 @@ import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 public class CssParser implements LinkExtractorParser {
     private static final boolean IGNORE_UNRECOVERABLE_PARSING_ERROR = JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resource", false); //$NON-NLS-1$
     private static final Logger LOG = LoggingManager.getLoggerForClass();
+    
+    /**
+     * 
+     */
+    private static final int CSS_URL_CACHE_MAX_SIZE = JMeterUtils.getPropDefault("css.parser.cache.size", 400);
+    
+    /**
+     * 
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, URLCollection> CSS_URL_CACHE = 
+            CSS_URL_CACHE_MAX_SIZE > 0 ? Collections.synchronizedMap(new LRUMap(CSS_URL_CACHE_MAX_SIZE)) : null;
 
+    
     private static final class CustomLoggingCSSParseExceptionCallback extends LoggingCSSParseExceptionCallback {
         /**
          * 
@@ -76,6 +93,7 @@ public class CssParser implements LinkExtractorParser {
             }
         }
     }
+    
     /**
      * 
      */
@@ -93,48 +111,64 @@ public class CssParser implements LinkExtractorParser {
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] data,
             final URL baseUrl, String encoding) throws LinkExtractorParseException {
         try {
-            String cssContent = new String(data, encoding);
-            final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
-                        new CSSReaderSettings()
-                            .setBrowserCompliantMode(true)
-                            .setFallbackCharset(Charset.forName(encoding))
-                            .setCSSVersion (ECSSVersion.CSS30)
-                            .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
-                            .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
-            final List<URLString> list = new ArrayList<>();
-            final URLCollection urlCollection = new URLCollection(list);
-            if(aCSS != null) {
-                CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
-                    @Override
-                    public void onImport(final CSSImportRule importRule) {
-                        String location = importRule.getLocationString();
-                        if(!StringUtils.isEmpty(location)) {
-                            urlCollection.addURL(location, baseUrl);
-                        }
-                    }
-                    // Call for URLs outside of URLs
-                    @Override
-                    public void onUrlDeclaration(
-                            final ICSSTopLevelRule aTopLevelRule,
-                            final CSSDeclaration aDeclaration,
-                            final CSSExpressionMemberTermURI aURITerm) {
-                        // NOOP
-                        // Browser fetch such urls only when CSS rule matches
-                        // so we disable this code
-                        //urlCollection.addURL(aURITerm.getURIString(), baseUrl);
-                    }
-                });
-            } else {
-               LOG.warn("Failed parsing url:"+baseUrl+", got null CascadingStyleSheet");
+            boolean cacheEnabled = CSS_URL_CACHE_MAX_SIZE > 0;
+            String md5Key = null;
+            URLCollection urlCollection = null;
+            if(cacheEnabled) {
+                md5Key = DigestUtils.md5Hex(data);
+                urlCollection = CSS_URL_CACHE.get(md5Key);                
             }
+            
+            if(urlCollection == null) {
+                String cssContent = new String(data, encoding);
+                final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
+                            new CSSReaderSettings()
+                                .setBrowserCompliantMode(true)
+                                .setFallbackCharset(Charset.forName(encoding))
+                                .setCSSVersion (ECSSVersion.CSS30)
+                                .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
+                                .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
+                final List<URLString> list = new ArrayList<>();
+                urlCollection = new URLCollection(list);
+                final URLCollection localCollection = urlCollection;
+                if(aCSS != null) {
+                    CSSVisitor.visitCSSUrl(aCSS, new DefaultCSSUrlVisitor() {
+                        @Override
+                        public void onImport(final CSSImportRule importRule) {
+                            String location = importRule.getLocationString();
+                            if(!StringUtils.isEmpty(location)) {
+                                localCollection.addURL(location, baseUrl);
+                            }
+                        }
+                        // Call for URLs outside of URLs
+                        @Override
+                        public void onUrlDeclaration(
+                                final ICSSTopLevelRule aTopLevelRule,
+                                final CSSDeclaration aDeclaration,
+                                final CSSExpressionMemberTermURI aURITerm) {
+                            // NOOP
+                            // Browser fetch such urls only when CSS rule matches
+                            // so we disable this code
+                            //urlCollection.addURL(aURITerm.getURIString(), baseUrl);
+                        }
+                    });
+                    if(cacheEnabled) {
+                        CSS_URL_CACHE.put(md5Key, urlCollection);
+                    }
+                } else {
+                   LOG.warn("Failed parsing url:"+baseUrl+", got null CascadingStyleSheet");
+                }
+            }
+            
             if(LOG.isDebugEnabled()) {
                 StringBuilder builder = new StringBuilder();
                 for (Iterator<URL> iterator = urlCollection.iterator(); iterator.hasNext();) {
                     URL urlString = iterator.next();
-                    builder.append(urlString).append(",");
+                    builder.append(urlString).append(',');
                 }
                 LOG.debug("Parsed:"+baseUrl+", got:"+builder.toString());
             }
+            
             return urlCollection.iterator();
         } catch (Exception e) {
             throw new LinkExtractorParseException(e);

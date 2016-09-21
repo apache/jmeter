@@ -43,6 +43,9 @@ public class ParseBenchmark {
             if (args[2] != null) {
                 loops = Integer.parseInt(args[2]);
             }
+            if(file == null) {
+                throw new IllegalArgumentException("file is null");
+            }
             java.io.File infile = new java.io.File(file);
             java.io.FileInputStream fis = null;
             java.io.InputStreamReader isr = null;

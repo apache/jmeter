@@ -19,6 +19,8 @@
 package org.apache.jmeter.control;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
@@ -81,42 +83,49 @@ public class SwitchController extends GenericController implements Serializable 
         setProperty(new StringProperty(SWITCH_VALUE, inputValue));
     }
 
-    /*
-     * Returns the selection value as a int,
-     * with the value set to zero if it is out of range.
+    /**
+     * @return the selection value as a int with the value set to zero if it is out of range.
      */
     private int getSelectionAsInt() {
-        int ret;
         getProperty(SWITCH_VALUE).recoverRunningVersion(null);
         String sel = getSelection();
-        try {
-            ret = Integer.parseInt(sel);
-            if (ret < 0 || ret >= getSubControllers().size()) {
-                ret = 0;
+        if (StringUtils.isEmpty(sel)) {
+            return 0;
+        } else {
+            try {
+                if(StringUtils.isNumeric(sel)) {
+                    int ret = Integer.parseInt(sel);
+                    if (ret < 0 || ret >= getSubControllers().size()) {
+                        // Out of range, we return first one
+                        ret = 0;
+                    }
+                    return ret;
+                }
+            } catch (NumberFormatException e) {
+                // it will be handled by code below
             }
-        } catch (NumberFormatException e) {
-            if (sel.length()==0) {
-                ret = 0;
-            } else {
-                ret = scanControllerNames(sel);
-            }
+            return scanControllerNames(sel);
         }
-        return ret;
     }
 
-    private int scanControllerNames(String sel){
+    /**
+     * @param sel controller name
+     * @return index of controller named sel if present, otherwise index of default if found, otherwise {@link Integer#MAX_VALUE} 
+     */
+    private int scanControllerNames(String sel) {
         int i = 0;
         int defaultPos = Integer.MAX_VALUE;
-        for(TestElement el : getSubControllers()) {
-            String name=el.getName();
+        for (TestElement el : getSubControllers()) {
+            String name = el.getName();
             if (name.equals(sel)) {
                 return i;
             }
-             if (name.equalsIgnoreCase("default")) {  //$NON-NLS-1$
-                 defaultPos = i;
-             }
+            if (name.equalsIgnoreCase("default")) { //$NON-NLS-1$
+                defaultPos = i;
+            }
             i++;
         }
+
         return defaultPos;
     }
 

@@ -32,7 +32,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -136,11 +135,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
             if (tableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (jmsPropertiesTable.isEditing()) {
-                    TableCellEditor cellEditor = jmsPropertiesTable.getCellEditor(jmsPropertiesTable.getEditingRow(), jmsPropertiesTable
-                            .getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(jmsPropertiesTable);
 
                 int rowSelected = jmsPropertiesTable.getSelectedRow();
 

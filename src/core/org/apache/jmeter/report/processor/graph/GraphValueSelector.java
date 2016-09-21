@@ -35,7 +35,7 @@ public interface GraphValueSelector {
      *            the series where the value will be aggregated
      * @param sample
      *            the sample
-     * @return the value to aggregate
+     * @return the value to aggregate or null if value should be ignored
      */
-    double select(String series, Sample sample);
+    Double select(String series, Sample sample);
 }

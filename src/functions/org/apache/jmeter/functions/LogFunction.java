@@ -116,15 +116,15 @@ public class LogFunction extends AbstractFunction {
         StringBuilder sb = new StringBuilder(80);
         sb.append("Log: ");
         sb.append(tn);
-        if (c.length()>0){
-            sb.append(" ");
+        if (c.length()>0) {
+            sb.append(' ');
             sb.append(c);
         } else {
             sb.append(DEFAULT_SEPARATOR);
         }
         sb.append(s);
         if (t != null) {
-            sb.append(" ");
+            sb.append(' ');
             ps.print(sb.toString());
             t.printStackTrace(ps);
         } else {
@@ -142,13 +142,13 @@ public class LogFunction extends AbstractFunction {
             printDetails(System.err, s, t, c);
         } else {
             // N.B. if the string is not recognised, DEBUG is assumed
-            Priority p = Priority.getPriorityForName(prio);
+            Priority p = Priority.getPriorityForName(prio.trim());
             if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
                 String tn = Thread.currentThread().getName();
                 StringBuilder sb = new StringBuilder(40);
                 sb.append(tn);
                 if (c.length()>0){
-                    sb.append(" ");
+                    sb.append(' ');
                     sb.append(c);
                 } else {
                     sb.append(DEFAULT_SEPARATOR);

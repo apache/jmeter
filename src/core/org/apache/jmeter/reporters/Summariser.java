@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.Remoteable;
 import org.apache.jmeter.samplers.SampleEvent;
@@ -79,6 +80,9 @@ public class Summariser extends AbstractTestElement
 
     /** Write messages to System.out ? */
     private static final boolean TOOUT = JMeterUtils.getPropDefault("summariser.out", true); //$NON-NLS-1$
+    
+    /** Ignore TC generated SampleResult in summary */
+    private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils.getPropDefault("summariser.ignore_transaction_controller_sample_result", true); //$NON-NLS-1$
 
     /*
      * Ensure that a report is not skipped if we are slightly late in checking
@@ -168,6 +172,9 @@ public class Summariser extends AbstractTestElement
     @Override
     public void sampleOccurred(SampleEvent e) {
         SampleResult s = e.getResult();
+        if(IGNORE_TC_GENERATED_SAMPLERESULT && TransactionController.isFromTransactionController(s)) {
+            return;
+        }
 
         long now = System.currentTimeMillis() / 1000;// in seconds
 
@@ -230,11 +237,11 @@ public class Summariser extends AbstractTestElement
     private static String format(String name, SummariserRunningSample summariserRunningSample, String type) {
         DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
         StringBuilder tmp = new StringBuilder(20); // for intermediate use
-        StringBuilder sb = new StringBuilder(100); // output line buffer
+        StringBuilder sb = new StringBuilder(140); // output line buffer
         sb.append(name);
-        sb.append(" ");
+        sb.append(' ');
         sb.append(type);
-        sb.append(" ");
+        sb.append(' ');
         sb.append(longToSb(tmp, summariserRunningSample.getNumSamples(), 6));
         sb.append(" in ");
         long elapsed = summariserRunningSample.getElapsed();
@@ -256,7 +263,7 @@ public class Summariser extends AbstractTestElement
         sb.append(longToSb(tmp, summariserRunningSample.getErrorCount(), 5));
         sb.append(" (");
         sb.append(summariserRunningSample.getErrorPercentageString());
-        sb.append(")");
+        sb.append(')');
         if ("+".equals(type)) {
             ThreadCounts tc = JMeterContextService.getThreadCounts();
             sb.append(" Active: ");

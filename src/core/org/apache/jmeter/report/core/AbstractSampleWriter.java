@@ -25,8 +25,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.jmeter.save.SaveService;
+import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 
 /**
@@ -45,7 +48,9 @@ abstract public class AbstractSampleWriter extends SampleWriter {
 
     private static final int BUF_SIZE = 10000;
 
-    private static final String CHARSET = "ISO8859-1";
+    private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
+    
+    private static org.apache.log.Logger log = LoggingManager.getLoggerForClass();
 
     /** output writer to write samples to */
     protected PrintWriter writer;
@@ -72,7 +77,8 @@ abstract public class AbstractSampleWriter extends SampleWriter {
 
     /**
      * Instructs this sample writer to write samples on the specified output
-     * with ISO8859-1 encoding
+     * with UTG-8 encoding. The encoding can be overriden by the user through
+     * {@link SaveService#getFileEncoding(String)}
      * 
      * @param out
      *            The output stream on which sample should be written
@@ -83,7 +89,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));
         } catch (UnsupportedEncodingException e) {
-            // ignore iso8859-1 always supported
+            log.warn("Unsupported CHARSET: " + CHARSET, e);
         }
     }
 

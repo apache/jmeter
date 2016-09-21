@@ -110,6 +110,11 @@ public class JMeterVersionTest extends JMeterTestCase {
         propNames.remove("checkstyle-all"); // not needed in Maven
         buildProp.remove("checkstyle-all.loc"); // not a Maven download
         versions.remove("checkstyle-all");
+        // remove option RAT jars
+        propNames.remove("rat");
+        versions.remove("rat");
+        propNames.remove("rat-tasks");
+        versions.remove("rat-tasks");
         prop = buildProp;
         final File licencesDir = getFileFromHome("licenses/bin");
         licencesDir.list(new FilenameFilter() {

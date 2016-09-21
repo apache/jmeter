@@ -28,7 +28,6 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  * @since 3.0
  */
-// TODO Add support of "TOTAL" statistics line
 public class StatisticsSummaryConsumer extends
         AbstractSummaryConsumer<StatisticsSummaryData> {
 
@@ -46,8 +45,18 @@ public class StatisticsSummaryConsumer extends
         super(true);
     }
 
-    void aggregateSample(Sample sample, StatisticsSummaryData data) {
+    /**
+     * 
+     * @param sample {@link Sample}
+     * @param data {@link StatisticsSummaryData}
+     * @param isOverall boolean indicatin if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
+     */
+    private void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
+        if(isOverall && sample.isController()) {
+            return;
+        }
         data.incTotal();
+        data.incBytes(sample.getReceivedBytes());
         data.incBytes(sample.getSentBytes());
 
         if (!sample.getSuccess()) {
@@ -58,7 +67,7 @@ public class StatisticsSummaryConsumer extends
         data.getPercentile1().addValue(elapsedTime);
         data.getPercentile2().addValue(elapsedTime);
         data.getPercentile3().addValue(elapsedTime);
-
+        data.getMean().addValue(elapsedTime);
         data.setMin(elapsedTime);
         data.setMax(elapsedTime);
 
@@ -83,7 +92,7 @@ public class StatisticsSummaryConsumer extends
             overallData = new StatisticsSummaryData(PERCENTILE_INDEX1,
                             PERCENTILE_INDEX2, PERCENTILE_INDEX3);
             overallInfo.setData(overallData);
-            }
+        }
 
         StatisticsSummaryData data = info.getData();
         if (data == null) {
@@ -92,8 +101,10 @@ public class StatisticsSummaryConsumer extends
             info.setData(data);
         }
 
-        aggregateSample(sample, data);
-        aggregateSample(sample, overallData);
+        if(!sample.isEmptyController()) {
+            aggregateSample(sample, data, false);
+            aggregateSample(sample, overallData, true);
+        }
     }
 
     /*
@@ -114,6 +125,7 @@ public class StatisticsSummaryConsumer extends
         result.addResult(new ValueResultData(Long.valueOf(total)));
         result.addResult(new ValueResultData(Long.valueOf(errors)));
         result.addResult(new ValueResultData(Double.valueOf((double) errors * 100 / total)));
+        result.addResult(new ValueResultData(Double.valueOf(data.getMean().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile1().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile2().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile3().getResult())));
@@ -154,6 +166,8 @@ public class StatisticsSummaryConsumer extends
             .getResString("reportgenerator_summary_statistics_error_count")));
         titles.addResult(new ValueResultData(
             JMeterUtils.getResString("reportgenerator_summary_statistics_error_percent")));
+        titles.addResult(new ValueResultData(
+                JMeterUtils.getResString("reportgenerator_summary_statistics_mean")));
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),

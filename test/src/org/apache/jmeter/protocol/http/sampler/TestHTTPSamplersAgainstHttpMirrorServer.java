@@ -1440,7 +1440,9 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
             case HTTP_SAMPLER:
                 return new HTTPSampler();
             case HTTP_SAMPLER2:
-                return new HTTPSampler2();
+            @SuppressWarnings("deprecation") // unit test of deprecated class
+            final HTTPSampler2 httpSampler2 = new HTTPSampler2();
+            return httpSampler2;
             case HTTP_SAMPLER3:
                 return new HTTPSampler3();
             default:

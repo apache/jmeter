@@ -48,6 +48,11 @@ public class ConversionUtils {
     private static final String DOTDOT = ".."; // $NON-NLS-1$
     private static final String SLASH = "/"; // $NON-NLS-1$
     private static final String COLONSLASHSLASH = "://"; // $NON-NLS-1$
+    
+    /**
+     * Match /../[../] etc.
+     */
+    private static final Pattern MAKE_RELATIVE_PATTERN = Pattern.compile("^/((?:\\.\\./)+)"); // $NON-NLS-1$
 
     /**
      * Extract the encoding (charset) from the Content-Type, e.g.
@@ -110,9 +115,7 @@ public class ConversionUtils {
             return initial;
         }
         String path = initial.getPath();
-        // Match /../[../] etc.
-        Pattern p = Pattern.compile("^/((?:\\.\\./)+)"); // $NON-NLS-1$
-        Matcher m = p.matcher(path);
+        Matcher m = MAKE_RELATIVE_PATTERN.matcher(path);
         if (m.lookingAt()){
             String prefix = m.group(1); // get ../ or ../../ etc.
             if (location.startsWith(prefix)){

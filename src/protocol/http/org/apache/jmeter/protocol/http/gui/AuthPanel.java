@@ -39,7 +39,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -141,10 +140,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         tableModel.manager.clear();
         tableModel.manager.addTestElement((AuthManager) el.clone());
         clearEachIteration.setSelected(((AuthManager) el).getClearEachIteration());
-        if (tableModel.getRowCount() != 0) {
-            deleteButton.setEnabled(true);
-            saveButton.setEnabled(true);
-        }
+        checkButtonsStatus();
     }
 
     @Override
@@ -184,7 +180,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
     protected void deleteRows() {
         // If a table cell is being edited, we must cancel the editing
         // before deleting the row.
-        cancelEditing();
+        GuiUtils.cancelEditing(authTable);
 
         int[] rowsSelected = authTable.getSelectedRows();
         int anchorSelection = authTable.getSelectionModel().getAnchorSelectionIndex();
@@ -208,15 +204,6 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         }
     }
 
-    /**
-     * If a table cell is being edited, we must cancel the editing before deleting the row
-     */
-    private void cancelEditing() {
-        if (authTable.isEditing()) {
-            TableCellEditor cellEditor = authTable.getCellEditor(authTable.getEditingRow(), authTable.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
-    }
 
     private void checkButtonsStatus() {
         // Disable DELETE if there are no rows in the table to delete.

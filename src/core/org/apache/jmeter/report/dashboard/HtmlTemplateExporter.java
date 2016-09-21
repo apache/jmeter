@@ -159,7 +159,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
      *
      */
     private interface ResultChecker {
-        void checkResult(ResultData result);
+        boolean checkResult(DataContext dataContext, ResultData result);
     }
 
     /**
@@ -202,23 +202,23 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
          * 
          * @see
          * org.apache.jmeter.report.dashboard.HtmlTemplateExporter.ResultChecker
-         * #checkResult(org.apache.jmeter.report.processor.ResultData)
+         * #checkResult( org.apache.jmeter.report.core.DataContext dataContext, org.apache.jmeter.report.processor.ResultData)
          */
         @Override
-        public void checkResult(ResultData result) {
+        public boolean checkResult(DataContext dataContext, ResultData result) {
             Boolean supportsControllerDiscrimination = findValue(Boolean.class,
                     AbstractGraphConsumer.RESULT_SUPPORTS_CONTROLLERS_DISCRIMINATION,
                     result);
 
-            String message = null;
             if (supportsControllerDiscrimination.booleanValue() && showControllerSeriesOnly
                     && excludesControllers) {
                 // Exporter shows controller series only
                 // whereas the current graph support controller
                 // discrimination and excludes
                 // controllers
-                message = ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
-                        + " is set while the graph excludes controllers.";
+                LOG.warn(ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
+                        + " is set while the graph "+graphId+" excludes controllers.");
+                return false;
             } else {
                 if (filterPattern != null) {
                     // Detect whether none series matches
@@ -264,17 +264,14 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                         }
                         if (!matches) {
                             // None series matches the pattern
-                            message = "None series matches the "
-                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER;
+                            LOG.warn("No serie matches the series_filter:"
+                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER + " in graph:"+graphId);
+                            return false;
                         }
                     }
                 }
             }
-
-            // Log empty graph when needed.
-            if (message != null) {
-                LOG.warn(String.format(EMPTY_GRAPH_FMT, graphId, message));
-            }
+            return true;
         }
     }
 
@@ -293,7 +290,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         if (data instanceof ResultData) {
             ResultData result = (ResultData) data;
             if (checker != null) {
-                checker.checkResult(result);
+                checker.checkResult(dataContext, result);
             }
             if (customizer != null) {
                 result = customizer.customizeResult(result);

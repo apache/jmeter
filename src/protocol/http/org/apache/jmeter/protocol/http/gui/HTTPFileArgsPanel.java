@@ -35,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.util.FileDialoger;
@@ -249,10 +248,8 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     private void runCommandOnSelectedFile(String command) {
         // If a table cell is being edited, we must cancel the editing before
         // deleting the row
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
+        GuiUtils.cancelEditing(table);
+
         int rowSelected = table.getSelectedRow();
         if (rowSelected >= 0) {
             runCommandOnRow(command, rowSelected);
@@ -301,9 +298,7 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
         tableModel.addRow(new HTTPFileArg(path));
 
-        // Enable DELETE (which may already be enabled, but it won't hurt)
-        delete.setEnabled(true);
-        browse.setEnabled(true);
+        checkDeleteAndBrowseStatus();
 
         // Highlight (select) the appropriate row.
         int rowToSelect = tableModel.getRowCount() - 1;

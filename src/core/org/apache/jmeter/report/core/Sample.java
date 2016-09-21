@@ -17,9 +17,9 @@
  */
 package org.apache.jmeter.report.core;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents a sample read from a CSV source.
@@ -35,6 +35,8 @@ public class Sample {
     private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
+    
+    private static final String EMPTY_CONTROLLER_PATTERN = "Number of samples in transaction : 0";
 
     private final boolean storesStartTimeStamp;
     private final SampleMetadata metadata;
@@ -234,6 +236,15 @@ public class Sample {
     public long getLatency() {
         return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
+    
+    /**
+     * Gets the connect time stored in the sample.
+     *
+     * @return the connect time stored in the sample
+     */
+    public long getConnectTime() {
+        return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+    }
 
     /**
      * Gets the success status stored in the sample.
@@ -245,12 +256,22 @@ public class Sample {
     }
 
     /**
+     * Gets the number of received bytes stored in the sample.
+     *
+     * @return the number of received bytes stored in the sample
+     */
+    public int getReceivedBytes() {
+        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+    }
+
+    /**
      * Gets the number of sent bytes stored in the sample.
      *
      * @return the number of sent bytes stored in the sample
      */
     public int getSentBytes() {
-        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+        // TODO To implement when metric is available
+        return 0;
     }
 
     /**
@@ -289,5 +310,16 @@ public class Sample {
     public boolean isController() {
         String message = getResponseMessage();
         return message != null && message.startsWith(CONTROLLER_PATTERN);
+    }
+    
+    /**
+     * Checks if this sample is an empty controller.
+     *
+     * @return {@code true}, if this sample is a controller; otherwise
+     *         {@code false}
+     */
+    public boolean isEmptyController() {
+        String message = getResponseMessage();
+        return message != null && message.startsWith(EMPTY_CONTROLLER_PATTERN);
     }
 }

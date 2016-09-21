@@ -79,9 +79,6 @@ public class BeanShell extends AbstractFunction {
         }
 
         String resultStr = ""; //$NON-NLS-1$
-
-        log.debug("Script=" + script);
-
         try {
 
             // Pass in some variables
@@ -111,8 +108,9 @@ public class BeanShell extends AbstractFunction {
         {
             log.warn("Error running BSH script", ex);
         }
-
-        log.debug("Output=" + resultStr);
+        if(log.isDebugEnabled()) {
+            log.debug("__Beanshell("+script+","+varName+")=" + resultStr);
+        }
         return resultStr;
 
     }

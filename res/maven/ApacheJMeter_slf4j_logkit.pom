@@ -1,0 +1,70 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.jmeter</groupId>
+    <artifactId>ApacheJMeter_slf4j_logkit</artifactId>
+    <version>@MAVEN.DEPLOY.VERSION@</version>
+    <name>Apache JMeter SLF4J Logkit</name>
+    <!-- Parent poms have to be packaged as pom, not jar -->
+    <packaging>pom</packaging>
+
+    <description>Apache JMeter SLF4K Logkit is open source software, it is a slf4j binding for logkit used by Apache JMeter
+    </description>
+    <url>http://jmeter.apache.org/</url>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>bugzilla</system>
+        <url>https://bz.apache.org/bugzilla/describecomponents.cgi?product=JMeter</url>
+    </issueManagement>
+    <scm>
+        <connection>http://svn.apache.org/repos/asf/jmeter/trunk/</connection>
+        <developerConnection>https://svn.apache.org/repos/asf/jmeter/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/jmeter/trunk/</url>
+    </scm>
+
+
+    <properties>
+      <!-- these must agree with the definitions in build.properties -->
+      <logkit.version>2.0</logkit.version>
+      <slf4j-api.version>1.7.21</slf4j-api.version>
+    </properties>
+
+    <dependencies>
+      <dependency>
+        <groupId>logkit</groupId>
+        <artifactId>logkit</artifactId>
+        <version>${logkit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+    </dependencies>
+</project>

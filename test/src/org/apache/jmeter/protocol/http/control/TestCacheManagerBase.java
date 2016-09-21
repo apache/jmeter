@@ -94,6 +94,22 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     }
 
     @Test
+    public void testExpiresBug59962() throws Exception {
+        this.cacheManager.setUseExpires(true);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        long start = System.currentTimeMillis();
+        setExpires(makeDate(new Date(start + 2000)));
+        cacheResultWithGivenCode("304");
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertTrue("Should find valid entry", this.cacheManager.inCache(url));
+        sleepTill(start + 2010);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+    }
+    
+    @Test
     public void testExpires() throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -354,4 +370,6 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     private CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
         return getThreadCache().get(url);
     }
+    
+
 }

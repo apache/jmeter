@@ -50,8 +50,6 @@ public class XPathFileContainer {
 
     private final String fileName; // name of the file
 
-    private final String xpath;
-
     /** Keeping track of which row is next to be read. */
     private int nextRow;// probably does not need to be synch (always accessed through ThreadLocal?)
     int getNextRow(){// give access to Test code
@@ -64,12 +62,11 @@ public class XPathFileContainer {
             log.debug("XPath(" + file + ") xpath " + xpath);
         }
         fileName = file;
-        this.xpath = xpath;
         nextRow = 0;
-        nodeList=load();
+        nodeList=load(xpath);
     }
 
-    private NodeList load() throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
+    private NodeList load(String xpath) throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
             TransformerException {
         InputStream fis = null;
         NodeList nl = null;
