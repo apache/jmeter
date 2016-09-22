@@ -93,7 +93,6 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         if (StringUtils.isEmpty(lang)) {
             lang = DEFAULT_SCRIPT_LANGUAGE;
             setScriptLanguage(lang);
-            log.warn("Script language has not been chosen on the UI: "+getName()+", the script will be interpreted as a groovy script");
         }
 
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
