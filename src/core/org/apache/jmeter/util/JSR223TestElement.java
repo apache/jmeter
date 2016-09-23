@@ -66,6 +66,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     }
     
     private static final long serialVersionUID = 233L;
+    
+    private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** If not empty then script in ScriptText will be compiled and cached */
     private String cacheKey = "";
@@ -86,11 +88,16 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     }
 
     protected ScriptEngine getScriptEngine() throws ScriptException {
-        final String lang = getScriptLanguage();
+        String lang = getScriptLanguage();
+        
+        if (StringUtils.isEmpty(lang)) {
+            lang = DEFAULT_SCRIPT_LANGUAGE;
+            setScriptLanguage(lang);
+        }
 
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         if (scriptEngine == null) {
-            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element:"+getName());
+            throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element: "+getName());
         }
 
         return scriptEngine;

@@ -161,6 +161,7 @@ Summary
     <li><bug>60137</bug>In Distributed testing when using StrippedXXXX modes strip response also on error</li>
     <li><bug>60106</bug>Settings defaults : Switch "jmeter.save.saveservice.connect_time" to true (after 3.0)</li>
     <li><pr>229</pr> tiny memory allocation improvements. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
+    <li><bug>59945</bug>For all JSR223 elements, if script language has not been chosen on the UI, the script will be interpreted as a groovy script.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
