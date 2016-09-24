@@ -333,6 +333,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="httpclient4.idletimeout">Idle connection timeout (Milliseconds) to apply if the server does not send Keep-Alive headers, defaults to:0 (no suggested duration for Keep-Alive))</property>
 <property name="httpclient4.validate_after_inactivity">Check connections if the elapsed time (Milliseconds) since the last use of the connection exceeds this value<br/>, defaults to:2000</property>
 <property name="httpclient4.time_to_live"> TTL (in Milliseconds) represents an absolute value. No matter what, the connection will not be re-used beyond its TTL. <br/>, defaults to:2000</property>
+<property name="httpclient4.max_body_retain_size">Max size in bytes of PUT body to retain in result sampler. Bigger results will be clipped.<br/>, defaults to: 327678 (bytes)</property>
 </properties>
 </section>
 <section name="&sect-num;.16 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
