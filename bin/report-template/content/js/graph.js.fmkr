@@ -431,8 +431,10 @@ var activeThreadsOverTimeInfos = {
         getOptions: function() {
             return {
                 series: {
+                    stack: true,
                     lines: {
-                        show: true
+                        show: true,
+                        fill: true
                     },
                     points: {
                         show: true
