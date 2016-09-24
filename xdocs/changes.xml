@@ -88,6 +88,7 @@ Summary
 <ul>
     <li><bug>59882</bug>Reduce memory allocations for better throughput. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>217</pr> and <pr>228</pr></li>
     <li><bug>59885</bug>Optimize css parsing for embedded resources download by introducing a cache. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>219</pr></li>
+    <li><bug>60092</bug>Add shortened version of the PUT body to sampler result.</li>
 </ul>
 
 <h3>Other samplers</h3>
