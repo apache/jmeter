@@ -65,10 +65,8 @@ public abstract class JSR223TestElement extends ScriptingTestElement
             return LazyHolder.INSTANCE;
     }
     
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 231L;
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
     /** If not empty then script in ScriptText will be compiled and cached */
     private String cacheKey = "";
     
@@ -87,20 +85,28 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         super();
     }
 
+    /**
+     * @return {@link ScriptEngine} for language defaulting to groovy if language is not set
+     */
     protected ScriptEngine getScriptEngine() throws ScriptException {
-        String lang = getScriptLanguage();
-        
-        if (StringUtils.isEmpty(lang)) {
-            lang = DEFAULT_SCRIPT_LANGUAGE;
-            setScriptLanguage(lang);
-        }
-
+        String lang = getScriptLanguageWithDefault();
         ScriptEngine scriptEngine = getInstance().getEngineByName(lang);
         if (scriptEngine == null) {
             throw new ScriptException("Cannot find engine named: '"+lang+"', ensure you set language field in JSR223 Test Element: "+getName());
         }
 
         return scriptEngine;
+    }
+
+    /**
+     * @return script language or DEFAULT_SCRIPT_LANGUAGE if none is set
+     */
+    private String getScriptLanguageWithDefault() {
+        String lang = getScriptLanguage();
+        if (!StringUtils.isNotEmpty(lang)) {
+            return lang;
+        }
+        return DEFAULT_SCRIPT_LANGUAGE;
     }
 
     /**
