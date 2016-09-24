@@ -23,16 +23,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.jsoup.Jsoup;
 
-public class RenderAsHTMLFormated extends SamplerResultTab implements ResultRenderer {
+public class RenderAsHTMLFormatted extends SamplerResultTab implements ResultRenderer {
 
     /** {@inheritDoc} */
     @Override
     public void renderResult(SampleResult sampleResult) {
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
-        showHTMLFormatedResponse(response);
+        showHTMLFormattedResponse(response);
     }
 
-    private void showHTMLFormatedResponse(String response) {
+    private void showHTMLFormattedResponse(String response) {
         results.setContentType("text/plain"); // $NON-NLS-1$
         results.setText(response == null ? "" : Jsoup.parse(response).html()); // $NON-NLS-1$
         results.setCaretPosition(0);
@@ -45,7 +45,7 @@ public class RenderAsHTMLFormated extends SamplerResultTab implements ResultRend
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return JMeterUtils.getResString("view_results_render_html_formated"); // $NON-NLS-1$
+        return JMeterUtils.getResString("view_results_render_html_formatted"); // $NON-NLS-1$
     }
 
 }
