@@ -72,6 +72,7 @@ Summary
     <li>Since 3.1 version, when using Stripped modes (by default StrippedBatch is used) , response will be stripped also for failing SampleResults, you can revert this to previous behaviour by setting <code>sample_sender_strip_also_on_error=false</code> in user.properties, see <bugzilla>60137</bugzilla></li>
     <li>Since 3.1 version, <code>jmeter.save.saveservice.connect_time</code> property value is true, meaning CSV file for results will contain an additional column containing connection time, see <bugzilla>60106</bugzilla></li>
     <li>Since 3.1 version, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
+    <li>Since 3.1 version, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements</h3>
