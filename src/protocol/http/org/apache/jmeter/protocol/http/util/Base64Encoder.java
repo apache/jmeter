@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.http.util;
 
 /**
  * This class provides an implementation of Base64 encoding without relying on
- * the the sun.* packages.
+ * the sun.* packages.
  *
  * @version $Revision$
  */
