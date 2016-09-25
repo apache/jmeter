@@ -19,7 +19,7 @@
 package org.apache.jmeter.junit.categories;
 
 /**
- * JUnit category marker for tests that could not not run in headless mode
+ * JUnit category marker for tests that could not run in headless mode
  */
 public interface NeedGuiTests {
     // yeah !

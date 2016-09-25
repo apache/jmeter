@@ -414,7 +414,7 @@ public class TestHTTPMirrorThread extends TestCase {
     }
 
     /**
-     * Check that the the two byte arrays have identical content
+     * Check that the two byte arrays have identical content
      *
      * @param expected
      * @param actual

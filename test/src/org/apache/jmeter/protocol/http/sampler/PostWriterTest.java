@@ -827,7 +827,7 @@ public class PostWriterTest {
     }
 
     /**
-     * Check that the the two byte arrays have identical content
+     * Check that the two byte arrays have identical content
      * 
      * @param expected
      * @param actual
@@ -860,7 +860,7 @@ public class PostWriterTest {
     }
 
     /**
-     * Check that the the two byte arrays different content
+     * Check that the two byte arrays different content
      * 
      * @param expected
      * @param actual
