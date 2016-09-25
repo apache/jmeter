@@ -1,4 +1,4 @@
-<img src="https://jmeter.apache.org/docs/images/logo.svg" hspace="20" />
+![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
 # Apache JMeter
 
 ## What is it?
