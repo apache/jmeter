@@ -714,9 +714,9 @@ Other parsers:<br/>
 <property name="testplan_validation.nb_threads_per_thread_group">Number of threads to use to validate a Thread Group<br/>, defaults to:1</property>
 <property name="testplan_validation.ignore_timers">Ignore timers when validating the thread group of plan<br/>, defaults to:true</property>
 <property name="testplan_validation.number_iterations">Number of iterations to use to validate a Thread Group<br/>, defaults to:1</property>
+<property name="testplan_validation.tpc_force_100_pct">Force throuput controllers that work in percentage mode to be a 100%<br/>, defaults to:false</property>
 </properties>
 <a href="#">^</a>
-
 </section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
