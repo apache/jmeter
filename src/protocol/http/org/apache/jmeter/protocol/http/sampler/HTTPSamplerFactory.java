@@ -30,7 +30,7 @@ public final class HTTPSamplerFactory {
 
     // N.B. These values are used in jmeter.properties (jmeter.httpsampler) - do not change
     // They can alse be used as the implementation name
-    /** Use the the default Java HTTP implementation */
+    /** Use the default Java HTTP implementation */
     public static final String HTTP_SAMPLER_JAVA = "HTTPSampler"; //$NON-NLS-1$
 
     /** Use Apache HTTPClient HTTP implementation */
