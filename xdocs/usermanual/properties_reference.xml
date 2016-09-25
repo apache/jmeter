@@ -467,6 +467,7 @@ Other parsers:<br/>
 <section name="&sect-num;.25 Remote batching configuration" anchor="remote_batching_config">
 <properties>
 <property name="sample_sender_client_configured"> How is Sample sender implementations configured:<br/> - true (default) means client configuration will be used<br/> - false means server configuration will be used<br/>, defaults to:true</property>
+<property name="sample_sender_strip_also_on_error">By default when Stripping modes are used JMeter since 3.1 will strip response even for SampleResults in error. If you want to revert to previous behaviour (no stripping of Responses in error)  set this property to false</property>
 <property name=" but can now also be defined using mode"> Remote batching support<br/> Since JMeter 2.9, default is MODE_STRIPPED_BATCH, which returns samples in<br/> batch mode (every 100 samples or every minute by default)<br/> Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, so if you need it change to<br/> another mode<br/> Hold retains samples until end of test (may need lots of memory)<br/> Batch returns samples in batches<br/> Statistical returns sample summary statistics<br/> hold_samples was originally defined as a separate property,<br/>, defaults to:Hold</property>
 <property name="mode"> mode can also be the class name of an implementation of org.apache.jmeter.samplers.SampleSender<br/>, defaults to:Standard</property>
 <property name="mode">, defaults to:Batch</property>
