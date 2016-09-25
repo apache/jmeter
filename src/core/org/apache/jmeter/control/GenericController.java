@@ -41,7 +41,7 @@ import org.apache.log.Logger;
  * It also implements SimpleController.
  * </p>
  * <p>
- * The main entry point is next(), which is called by by JMeterThread as follows:
+ * The main entry point is next(), which is called by JMeterThread as follows:
  * </p>
  * <p>
  * <code>while (running &amp;&amp; (sampler = controller.next()) != null)</code>
