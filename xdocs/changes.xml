@@ -160,7 +160,11 @@ Summary
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>57493</bug>Create a documentation page for properties</li>
     <li><bug>59924</bug>The log level of <em>XXX</em> package is set to <code>DEBUG</code> if <code>log_level.<em>XXXX</em></code> property value contains spaces, same for <code>__log</code> function</li>
-    <li><bug>59777</bug>Extract slf4j binding into its own jar and make it a JMeter lib</li>
+    <li><bug>59777</bug>Extract SLF4J binding into its own jar and make it a JMeter lib.
+    <note>If you get a warning about multiple SLF4J bindings on startup. Remove either the Apache JMeter provided binding
+          <code>lib/ApacheJMeter_slf4j_logkit.jar</code>, or all of the other reported bindings.
+          For more information you can have a look at <a href="http://www.slf4j.org/codes.html#multiple_bindings">SLF4Js own info page.</a></note>
+    </li>
     <li><bug>60085</bug>Remove cache for prepared statements, as it didn't work with the current JDBC pool implementation and current JDBC drivers should support caching of prepared statements themselves.</li>
     <li><bug>60137</bug>In Distributed testing when using StrippedXXXX modes strip response also on error</li>
     <li><bug>60106</bug>Settings defaults : Switch "<code>jmeter.save.saveservice.connect_time</code>" to true (after 3.0)</li>
