@@ -60,12 +60,12 @@ The following requirements exist for running Apache JMeter:
  -  Java Compiler [OPTIONAL]:
 
     A Java compiler is not needed since the distribution includes a
-    precompiled Java binary archive. Note that a compiler is required
-    if you plan to build plugins for Apache JMeter.
+    precompiled Java binary archive. _Note that a compiler is required
+    if you plan to build plugins for Apache JMeter._
 
 ## Installation Instructions
 
-Note that spaces in directory names can cause problems.
+_Note that spaces in directory names can cause problems._
 
  - Release builds
 
