@@ -1,3 +1,4 @@
+![Apache JMeter Logo](http://jmeter.apache.org/docs/images/logo.svg)
 # Apache JMeter
 
 ## What is it?
@@ -87,7 +88,7 @@ Drag-drop a JMX file onto one of them:
 ## Documentation
 
 The documentation available as of the date of this release is
-also included, in HTML format, in the `printable\_docs/` directory,
+also included, in HTML format, in the `printable_docs/` directory,
 and it may be browsed starting from the file called `index.html`.
 
 ## Build instructions
