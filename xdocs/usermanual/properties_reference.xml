@@ -716,6 +716,17 @@ Other parsers:<br/>
 <property name="testplan_validation.number_iterations">Number of iterations to use to validate a Thread Group<br/>, defaults to:1</property>
 <property name="testplan_validation.tpc_force_100_pct">Force throuput controllers that work in percentage mode to be a 100%<br/>, defaults to:false</property>
 </properties>
+</section>
+<section name="&sect-num;.43 Timer related feature" anchor="timer">
+<description>Timer are used to introduce think time in your plan.</description>
+<properties>
+<property name="timer.factor">Apply a factor on computed pauses by the following Timers:
+<ul>
+<li>Gaussian Random Timer</li>
+<li>Uniform Random Timer</li>
+<li>Poisson Random Timer</li>
+</ul><br/>Defaults to:1.0f</property>
+</properties>
 <a href="#">^</a>
 </section>
 <!-- 
