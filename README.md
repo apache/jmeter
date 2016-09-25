@@ -53,6 +53,7 @@ The following requirements exist for running Apache JMeter:
     + JDBC - available from database supplier
     + JMS - available from the JMS provider
     + Bouncy Castle - available from http://www.bouncycastle.org/latest_releases.html
+
       (currently only needed for SMIME Assertion)
 
  -  Java Compiler [OPTIONAL]:
@@ -78,7 +79,9 @@ For Windows there are also some other scripts.
 Drag-drop a JMX file onto one of them:
 
 `jmeter-n.cmd` - runs the file as a non-GUI test
+
 `jmeter-n-r.cmd` - runs the file as a non-GUI remote (client-server) test
+
 `jmeter-t.cmd` - loads the file ready to run it as a GUI test
 
 ## Documentation
@@ -113,7 +116,7 @@ JMeter is built using Ant.
 Change to the top-level directory and issue the command:
 
 ```sh
-ant download\_jars
+ant download_jars
 ```
 _Only needs to be done once; will download any missing 3rd party jars_
 
@@ -135,12 +138,15 @@ does not have a suitable GUI display.
 ## Developer information
 
 The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
+
 There is a read-only mirror at GitHub: https://github.com/apache/jmeter
 
 ## Licensing and legal issues
 
 For legal and licensing issues, please look the files:
+
 LICENSE
+
 NOTICE
 
 ## Cryptographic Software Notice
@@ -173,7 +179,7 @@ may be subject to export controls on cryptographic software:
     - HTTPS support
 
   Apache JMeter interfaces (via Apache HttpClient3) with the
-  Java Cryptography Extension (JCE) API to provide 
+  Java Cryptography Extension (JCE) API to provide
 
     - NTLM authentication
 
