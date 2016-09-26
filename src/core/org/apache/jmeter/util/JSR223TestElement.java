@@ -87,6 +87,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
 
     /**
      * @return {@link ScriptEngine} for language defaulting to groovy if language is not set
+     * @throws ScriptException when no {@link ScriptEngine} could be found
      */
     protected ScriptEngine getScriptEngine() throws ScriptException {
         String lang = getScriptLanguageWithDefault();
