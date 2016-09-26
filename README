@@ -21,6 +21,7 @@
    o  Mail - SMTP(S), POP3(S) and IMAP(S)
    o  Native commands or shell scripts
    o  TCP
+   o  AJP
 
   Full multithreading framework allows concurrent sampling by many threads
   and simultaneous sampling of different functions by separate thread groups.
