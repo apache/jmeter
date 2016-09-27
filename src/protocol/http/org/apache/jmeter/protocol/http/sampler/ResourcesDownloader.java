@@ -148,7 +148,7 @@ public class ResourcesDownloader {
      * @param maxConcurrentDownloads max concurrent downloads
      * @param list list of resources to download
      * @return list tasks that have been scheduled
-     * @throws InterruptedException
+     * @throws InterruptedException when interrupted while waiting
      */
     public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads, List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
         List<Future<AsynSamplerResultHolder>> submittedTasks = new ArrayList<>();
