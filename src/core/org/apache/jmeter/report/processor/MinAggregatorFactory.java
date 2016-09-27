@@ -26,9 +26,7 @@ public class MinAggregatorFactory extends AbstractAggregatorFactory {
 
 
     /**
-     * @see
-     * org.apache.jmeter.report.core.AbstractAggregatorFactory#createAggregator
-     * ()
+     * @see AbstractAggregatorFactory#createAggregator()
      */
     @Override
     protected Aggregator createAggregator() {
