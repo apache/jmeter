@@ -429,7 +429,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     /**
      * Convert a config name to the method name of the getter.
      * The getter method returns a boolean.
-     * @param configName
+     * @param configName the config name
      * @return the getter method name
      */
     public static final String getterName(String configName) {
@@ -442,7 +442,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     /**
      * Convert a config name to the method name of the setter
      * The setter method requires a boolean parameter.
-     * @param configName
+     * @param configName the config name
      * @return the setter method name
      */
     public static final String setterName(String configName) {
