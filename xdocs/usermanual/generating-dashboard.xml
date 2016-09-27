@@ -134,6 +134,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         </property>
                         <property name="overall_granularity" required="No">
                             Granularity of over time graphs. Data is aggregated to have 1 minute ticks.<br/>
+                            <note>Granularity must be higher than 1 second (1000) otherwise throughput graphs will be incorrect</note>
                             Default: "60000" (1 minute)
                         </property>
                         <property name="apdex_satisfied_threshold" required="No">
@@ -484,6 +485,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
 #jmeter.reportgenerator.report_title=Apache JMeter Dashboard
 
 # Change this parameter if you want to change the granularity of over time graphs.
+# Granularity must be higher than 1000 (1second) otherwise Throughput graphs will be incorrect
+# see Bug 60149
 #jmeter.reportgenerator.overall_granularity=60000
 
  Change this parameter if you want to change the granularity of Response time distribution
