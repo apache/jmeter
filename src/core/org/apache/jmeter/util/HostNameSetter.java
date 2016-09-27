@@ -27,7 +27,7 @@ import javax.net.ssl.SSLSocket;
 
 /**
  * Uses the underlying implementation to support Server Name Indication (SNI).
- * @author Michael Locher <cmbntr@gmail.com>
+ * @author Michael Locher {@literal <cmbntr@gmail.com>}
  * @see <a href="https://issues.apache.org/jira/browse/HTTPCLIENT-1119">HTTPCLIENT-1119</a>
  * @since 3.1 (extracted from JMeterClientConnectionOperator.java)
  */
