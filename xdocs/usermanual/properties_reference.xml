@@ -465,26 +465,77 @@ Other parsers:<br/>
 </properties>
 </section>
 <section name="&sect-num;.25 Remote batching configuration" anchor="remote_batching_config">
+<p>
+Configure how SampleResults are sent from server to client when using distributed testing.
+Note that the mode is currently resolved on the client, while other properties (e.g. time_threshold) are resolved on the server.<br/>
+Since JMeter 2.9, default is StrippedBatch, which returns samples in batch mode (every 100 samples or every minute by default).<br/>
+<note>StrippedBatch strips response data from SampleResult, so if you need the response data, change to another mode.</note>
+</p>
+<p>
+Possible modes are:
+<table>
+<tr>
+    <th>mode</th>
+    <th>Description</th>
+</tr>
+<tr>
+    <td>Standard</td>
+    <td>Sends SampleResult one by one</td>
+</tr>
+<tr>
+    <td>Batch</td>
+    <td>Accumulates SampleResults before sending them. Configured by properties <code>num_sample_threshold</code> and <code>time_threshold</code></td>
+</tr>
+<tr>
+    <td>Hold</td>
+    <td>retains samples until end of test (may need lots of memory)</td>
+</tr>
+<tr>
+    <td>Statistical</td>
+    <td>returns sample summary statistics. Configured by property <code>key_on_threadname</code> and <code>time_threshold</code></td>
+</tr>
+<tr>
+    <td>Stripped</td>
+    <td>Similar to Standard mode but strips Response from SampleResult. Configured by property <code>sample_sender_strip_also_on_error</code></td>
+</tr>
+<tr>
+    <td>StrippedBatch</td>
+    <td>Same as Batch but strips Response from SampleResult. Configured by properties <code>num_sample_threshold</code>, <code>time_threshold</code> and <code>sample_sender_strip_also_on_error</code></td>
+</tr>
+<tr>
+    <td>Asynch</td>
+    <td>Asynchronous sender; uses a queue and background worker process to return the samples. Configured by propertiy <code>asynch.batch.queue.size</code></td>
+</tr>
+<tr>
+    <td>StrippedAsynch</td>
+    <td>Same as Asynch but strips response data from SampleResult. Configured by properties <code>asynch.batch.queue.size</code> and <code>sample_sender_strip_also_on_error</code></td>
+</tr>
+<tr>
+    <td>StrippedDiskStore</td>
+    <td>Same as DiskStore but strips response data from SampleResult</td>
+</tr>
+<tr>
+    <td>Class extending AbstractSampleSender (<code>org.example.load.MySampleSender</code> for example)</td>
+    <td>A custom implementation of your choice</td>
+</tr>
+</table>
+</p>
 <properties>
-<property name="sample_sender_client_configured"> How is Sample sender implementations configured:<br/> - true (default) means client configuration will be used<br/> - false means server configuration will be used<br/>, defaults to:true</property>
+<property name="sample_sender_client_configured"> How is Sample sender implementations configured:<br/>
+<ul>
+    <li>true: (default) means client configuration will be used</li>
+    <li>false: means server configuration will be used</li>
+</ul><br/>
+Defaults to:true</property>
+
 <property name="sample_sender_strip_also_on_error">By default when Stripping modes are used JMeter since 3.1 will strip response even for SampleResults in error. If you want to revert to previous behaviour (no stripping of Responses in error)  set this property to false</property>
+
 <property name=" but can now also be defined using mode"> Remote batching support<br/> Since JMeter 2.9, default is MODE_STRIPPED_BATCH, which returns samples in<br/> batch mode (every 100 samples or every minute by default)<br/> Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, so if you need it change to<br/> another mode<br/> Hold retains samples until end of test (may need lots of memory)<br/> Batch returns samples in batches<br/> Statistical returns sample summary statistics<br/> hold_samples was originally defined as a separate property,<br/>, defaults to:Hold</property>
-<property name="mode"> mode can also be the class name of an implementation of org.apache.jmeter.samplers.SampleSender<br/>, defaults to:Standard</property>
-<property name="mode">, defaults to:Batch</property>
-<property name="mode">, defaults to:Hold</property>
-<property name="mode">, defaults to:Statistical</property>
+
 <property name="key_on_threadname">Set to true to key statistical samples on threadName rather than threadGroup<br/>, defaults to:false</property>
-<property name="mode">, defaults to:Stripped</property>
-<property name="mode">, defaults to:StrippedBatch</property>
-<property name="mode">, defaults to:org.example.load.MySampleSender</property>
-<property name="num_sample_threshold"><br/>, defaults to:100</property>
-<property name="time_threshold"> Value is in milliseconds<br/>, defaults to:60000</property>
-<property name="mode"><br/> Asynchronous sender; uses a queue and background worker process to return the samples<br/>, defaults to:Asynch</property>
-<property name="asynch.batch.queue.size"> default queue size<br/>, defaults to:100</property>
-<property name="mode"> Same as Asynch but strips response data from SampleResult<br/>, defaults to:StrippedAsynch</property>
-<property name="mode"><br/> DiskStore: as for Hold mode, but serialises the samples to disk, rather than saving in memory<br/>, defaults to:DiskStore</property>
-<property name="mode"> Same as DiskStore but strips response data from SampleResult<br/>, defaults to:StrippedDiskStore</property>
-<property name=" monitor.buffer.size"> Note: the mode is currently resolved on the client; <br/> other properties (e.g. time_threshold) are resolved on the server.<br/> To set the Monitor Health Visualiser buffer size, enter the desired value<br/>, defaults to:800</property>
+<property name="num_sample_threshold"><br/>Number of SampleResults to accumulate before sending to client, defaults to:100</property>
+<property name="time_threshold">Time to retain SampleResults before sending them to client. Value is in milliseconds<br/>, defaults to:60000</property>
+<property name="asynch.batch.queue.size">Default queue size used by Async mode<br/>, defaults to:100</property>
 </properties>
 </section>
 <section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
@@ -587,6 +638,7 @@ Other parsers:<br/>
 </section>
 <section name="&sect-num;.38 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
+<property name="monitor.buffer.size">To set the Monitor Health Visualiser buffer size, enter the desired value<br/>, defaults to:800</property>
 <property name="mirror.server.port"> If defined, then start the mirror server on the port<br/>, defaults to:8081</property>
 <property name="oro.patterncache.size"> ORO PatternCacheLRU size<br/>, defaults to:1000</property>
 <property name="propertyEditorSearchPath">TestBeanGui<br/><br/>, defaults to:null</property>
