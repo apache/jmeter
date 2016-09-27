@@ -52,7 +52,13 @@ These properties are only taken into account after restarting JMeter as they are
 </section>
 <section name="&sect-num;.1 Language" anchor="language">
 <properties>
-<property name="language">Preferred GUI language. Comment out to use the JVM default locale's language.<br/>, example:<source>language=en</source></property>
+<property name="language">Preferred GUI language. Comment out to use the JVM default locale's language.<br/>, example:<source>language=en</source>
+<note>This property is the only one that must be set in <code>jmeter.properties</code> file</note>
+<note>To fully configure language ensure you set locale, see <a href="http://www.oracle.com/us/technologies/java/locale-140624.html">Internationalization: Understanding Locale in the Java Platform</a>.
+Example for english: 
+<source>-Duser.language=en -Duser.region=EN</source>
+</note>
+</property>
 <property name="locales.add">Additional locale(s) to add to the displayed list.<br/>The current default list is: en, fr, de, no, es, tr, ja, zh_CN, zh_TW, pl, pt_BR<br/> see <code>JMeterMenuBar#makeLanguageMenu()]</code><br/> The entries are a comma-separated list of language names<br/>, Example: <source>locales.add=zu</source></property>
 </properties>
 </section>
@@ -517,7 +523,7 @@ Possible modes are:
     <td>Same as DiskStore but strips response data from SampleResult</td>
 </tr>
 <tr>
-    <td>Class extending AbstractSampleSender (<code>org.example.load.MySampleSender</code> for example)</td>
+    <td>Class extending <a href="../api/org/apache/jmeter/samplers/AbstractSampleSender.html"><code>AbstractSampleSender</code></a> (<code>org.example.load.MySampleSender</code> for example)</td>
     <td>A custom implementation of your choice</td>
 </tr>
 </table>
