@@ -469,6 +469,8 @@ Other parsers:<br/>
 Configure how SampleResults are sent from server to client when using distributed testing.
 Note that the mode is currently resolved on the client, while other properties (e.g. time_threshold) are resolved on the server.<br/>
 Since JMeter 2.9, default is StrippedBatch, which returns samples in batch mode (every 100 samples or every minute by default).<br/>
+You can set mode by configuring:
+<source>mode=one of the possible modes below</source>
 <note>StrippedBatch strips response data from SampleResult, so if you need the response data, change to another mode.</note>
 </p>
 <p>
