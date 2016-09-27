@@ -44,16 +44,25 @@ public interface SampleSource extends Runnable {
     /**
      * Sets the specified sample consumers that will consume samples produced by
      * this sample source.
+     *
+     * @param consumers
+     *            consumers to be set
      */
     void setSampleConsumers(List<SampleConsumer> consumers);
     
     /**
      * Add a sample consumer to this sample source.
+     *
+     * @param consumer
+     *            consumer to be added
      */
     void addSampleConsumer(SampleConsumer consumer);
     
     /**
      * Remove a sample consumer from this sample source.
+     *
+     * @param consumer
+     *            consumer to be removed
      */
     void removeSampleConsumer(SampleConsumer consumer);
 }
