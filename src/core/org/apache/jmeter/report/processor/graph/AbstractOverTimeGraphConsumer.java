@@ -94,9 +94,7 @@ public abstract class AbstractOverTimeGraphConsumer extends
      * createGroupInfos()
      */
     @Override
-    protected Map<String, GroupInfo> createGroupInfos() {
-        return null;
-    }
+    protected abstract Map<String, GroupInfo> createGroupInfos();
 
     /*
      * (non-Javadoc)
