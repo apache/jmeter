@@ -38,10 +38,8 @@ public class ElapsedTimeValueSelector extends AbstractGraphValueSelector {
     
     /*
      * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.jmeter.report.csv.processor.GraphValueSelector#select(java
-     * .lang.String, java.lang.Object, org.apache.jmeter.report.csv.core.Sample)
+     *
+     * @see GraphValueSelector#select(String, Sample)
      */
     @Override
     public Double select(String series, Sample sample) {

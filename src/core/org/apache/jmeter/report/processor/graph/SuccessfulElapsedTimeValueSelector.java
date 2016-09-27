@@ -35,9 +35,7 @@ public class SuccessfulElapsedTimeValueSelector extends ElapsedTimeValueSelector
     }
 
     /**
-     * @see
-     * org.apache.jmeter.report.processor.graph.GraphValueSelector#select(java
-     * .lang.String, org.apache.jmeter.report.csv.core.Sample)
+     * @see GraphValueSelector#select(String, Sample)
      */
     @Override
     public Double select(String series, Sample sample) {
