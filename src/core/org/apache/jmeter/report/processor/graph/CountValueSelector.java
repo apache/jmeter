@@ -39,9 +39,7 @@ public class CountValueSelector extends AbstractGraphValueSelector {
     }
 
     /**
-     * @see
-     * org.apache.jmeter.report.processor.graph.GraphValueSelector#select(java
-     * .lang.String, org.apache.jmeter.report.core.Sample)
+     * @see GraphValueSelector#select(String, Sample)
      */
     @Override
     public Double select(String series, Sample sample) {
