@@ -560,14 +560,11 @@ Defaults to:true</property>
 <section name="&sect-num;.28 TCP Sampler configuration" anchor="tcp_sampler">
 <properties>
 <property name="tcp.handler"> The default handler class<br/>, defaults to:TCPClientImpl</property>
-<property name=" eolByte "><br/>, defaults to: byte value for end of line</property>
-<property name="tcp.eolByte"> set this to a value outside the range -128 to +127 to skip eol checking<br/>, defaults to:1000</property>
-<property name="tcp.charset"><br/> TCP Charset, used by org.apache.jmeter.protocol.tcp.sampler.TCPClientImpl<br/> default to Platform defaults charset as returned by Charset.defaultCharset().name()<br/>, defaults to:</property>
-<property name=" status.prefix and suffix "><br/>, defaults to: strings that enclose the status response code</property>
-<property name="tcp.status.prefix">, defaults to:Status</property>
-<property name="tcp.status.suffix">, defaults to:.</property>
-<property name=" status.properties "><br/>, defaults to: property file to convert codes to messages</property>
-<property name="tcp.status.properties">, defaults to:mytestfiles/tcpstatus.properties</property>
+<property name="tcp.eolByte"> set this to a value outside the range -128 to +127 to skip eol checking<br/>, defaults to byte value for end of line:1000</property>
+<property name="tcp.charset">TCP Charset, used by org.apache.jmeter.protocol.tcp.sampler.TCPClientImpl<br/> default to Platform defaults charset as returned by Charset.defaultCharset().name()</property>
+<property name="tcp.status.prefix">strings at the begining of the status response code, defaults to:<code>Status</code></property>
+<property name="tcp.status.suffix">string at the end of the status response code, defaults to:<code>.</code></property>
+<property name="tcp.status.properties">property file to convert codes to messages, defaults to:mytestfiles/tcpstatus.properties</property>
 <property name="tcp.binarylength.prefix.length"> The length prefix used by LengthPrefixedBinaryTCPClientImpl implementation<br/> defaults to 2 bytes.<br/>, defaults to:2</property>
 </properties>
 </section>
