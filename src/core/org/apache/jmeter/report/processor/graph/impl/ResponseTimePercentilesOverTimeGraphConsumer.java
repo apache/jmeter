@@ -100,7 +100,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
 
     /**
      * 
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#createGroupInfos()
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#createGroupInfos()
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
