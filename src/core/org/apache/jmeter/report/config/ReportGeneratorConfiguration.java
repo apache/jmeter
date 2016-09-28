@@ -610,7 +610,7 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT, File.class);
         configuration.setTempDirectory(tempDirectory);
 
-        // Load apdex statified threshold
+        // Load apdex statisfied threshold
         final long apdexSatisfiedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
