@@ -43,11 +43,11 @@ import org.apache.jmeter.util.JMeterUtils;
 public class SyntheticResponseTimeDistributionGraphConsumer extends
         AbstractGraphConsumer {
     private static final String FAILED_LABEL = JMeterUtils.getResString("response_time_distribution_failed_label");
-    private static final MessageFormat SATISFIED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_satified_label"));
+    private static final MessageFormat SATISFIED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_satisfied_label"));
     private static final MessageFormat TOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_tolerated_label"));
     private static final MessageFormat UNTOLERATED_LABEL = new MessageFormat(JMeterUtils.getResString("response_time_distribution_untolerated_label"));
 
-    private long satifiedThreshold;
+    private long satisfiedThreshold;
     private long toleratedThreshold;
 
     private class SyntheticSeriesSelector extends AbstractSeriesSelector {
@@ -57,10 +57,10 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
                 return Arrays.asList(FAILED_LABEL);
             } else {
                 long elapsedTime = sample.getElapsedTime();
-                if(elapsedTime<=getSatifiedThreshold()) {
-                    return Arrays.asList(SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatifiedThreshold())}));
+                if(elapsedTime<=getSatisfiedThreshold()) {
+                    return Arrays.asList(SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold())}));
                 } else if(elapsedTime <= getToleratedThreshold()) {
-                    return Arrays.asList(TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatifiedThreshold()), Long.valueOf(getToleratedThreshold())}));
+                    return Arrays.asList(TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}));
                 } else {
                     return Arrays.asList(UNTOLERATED_LABEL.format(new Object[] {Long.valueOf(getToleratedThreshold())}));
                 }
@@ -81,7 +81,7 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
             public Double select(Sample sample) {
                 if(sample.getSuccess()) {
                     long elapsedTime = sample.getElapsedTime();
-                    if(elapsedTime<=satifiedThreshold) {
+                    if(elapsedTime<=satisfiedThreshold) {
                         return Double.valueOf(0);
                     } else if(elapsedTime <= toleratedThreshold) {
                         return Double.valueOf(1);
@@ -117,8 +117,8 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     protected void initializeExtraResults(MapResultData parentResult) {
         ListResultData listResultData = new ListResultData();
         String[] messages = new String[]{
-                SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatifiedThreshold())}),
-                TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatifiedThreshold()), Long.valueOf(getToleratedThreshold())}),
+                SATISFIED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold())}),
+                TOLERATED_LABEL.format(new Object[] {Long.valueOf(getSatisfiedThreshold()), Long.valueOf(getToleratedThreshold())}),
                 UNTOLERATED_LABEL.format(new Object[] {Long.valueOf(getToleratedThreshold())}),
                 FAILED_LABEL
         };
@@ -132,17 +132,17 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
     }
 
     /**
-     * @return the satifiedThreshold
+     * @return the satisfiedThreshold
      */
-    public long getSatifiedThreshold() {
-        return satifiedThreshold;
+    public long getSatisfiedThreshold() {
+        return satisfiedThreshold;
     }
 
     /**
-     * @param satifiedThreshold the satifiedThreshold to set
+     * @param satisfiedThreshold the satisfiedThreshold to set
      */
-    public void setSatifiedThreshold(long satifiedThreshold) {
-        this.satifiedThreshold = satifiedThreshold;
+    public void setSatisfiedThreshold(long satisfiedThreshold) {
+        this.satisfiedThreshold = satisfiedThreshold;
     }
 
     /**
