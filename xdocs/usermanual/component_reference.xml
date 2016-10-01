@@ -2281,7 +2281,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <note>
         No variables are made available to the script when the condition is interpreted as Javascript.
         If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
-        a <code>__javaScript()</code> function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
+        a <code>__jexl3</code>, <code>__groovy</code> or <code>__javaScript()</code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
         </note>
         <note>
         To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
@@ -2310,10 +2310,11 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
             <li><code>"${VAR}" == "abcd"</code></li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
+        <note>Note it is advised to avoid using Javascript mode for performances</note>
     </example>
     <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
-            <li><code>${__jexl(${COUNT} &lt; 10)}</code></li>
+            <li><code>${__jexl3(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
             <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
