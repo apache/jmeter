@@ -19,6 +19,7 @@
 <!DOCTYPE document
 [
 <!ENTITY sect-num '21'>
+<!ENTITY command  "&#x02318;" >
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
@@ -163,17 +164,58 @@ The <code>system.properties</code> file gives more flexibility.</note>
 </section>
 <section name="&sect-num;.5 Toolbar display" anchor="toolbar_display">
 <properties>
-<property name="jmeter.toolbar.icons">Toolbar icon definitions<br/>, defaults to <code>org/apache/jmeter/images/toolbar/icons-toolbar.properties</code></property>
-<property name="jmeter.toolbar">Toolbar list<br/>, defaults to:<source>new,open,close,save,save_as_testplan,|,cut,copy,paste,|,expand,collapse,toggle,|,test_start,test_stop,test_shutdown,|,test_start_remote_all,test_stop_remote_all,test_shutdown_remote_all,|,test_clear,test_clear_all,|,search,search_reset,|,function_helper,help</source></property>
-<property name="jmeter.toolbar.icons.size">Available sizes are: <code>22x22, 32x32, 48x48</code>. Suggested value for HiDPI mode is <source>jmeter.toolbar.icons.size=48x48</source>, defaults to:22x22</property>
-<property name="jmeter.icons">Icon definitions. Alternate set: <source>jmeter.icons=org/apache/jmeter/images/icon_1.properties</source>, Historical icon set (deprecated):<source>jmeter.icons=org/apache/jmeter/images/icon_old.properties</source> <br/>defaults to:<code>org/apache/jmeter/images/icon.properties</code></property>
-<property name="jmeter.tree.icons.size">Available sizes are: <code>19x19, 24x24, 32x32, 48x48</code>. Useful for HiDPI display (see below)<br/>, defaults to:<code>19x19</code>Suggested value for HiDPI screen like 3200x1800 is defaults to:<code>32x32</code></property>
-<property name="jmeter.hidpi.mode">HiDPI mode. Activate a 'pseudo'-hidpi mode. Allows to increase size of some UI elements which are not correctly managed by JVM with high resolution screens in Linux or Windows<br/>, defaults to:false</property>
-<property name="jmeter.hidpi.scale.factor">HiDPI scale factor, suggested value for HiDPI: <code>2.0</code>, defaults to:<code>1.0</code></property>
-<property name="not_in_menu">Components to not display in JMeter GUI (GUI class name or static label)<br/> These elements are deprecated and will be removed in next version: <source>MongoDB Script, MongoDB Source Config, Distribution Graph, Spline Visualizer</source> defaults to:<source>org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler, org.apache.jmeter.protocol.mongodb.config.MongoSourceElement, org.apache.jmeter.visualizers.DistributionGraphVisualizer, org.apache.jmeter.visualizers.SplineVisualizer</source></property>
-<property name="undo.history.size">Number of items in undo history<br/> Feature is disabled by default (0) due to known and not fixed bugs <bug>57043</bug>,<bug>57039</bug> and <bug>57040</bug>.
-Set it to a number &gt; 0 (25 can be a good default)<br/> The bigger it is, the more it consumes memory, defaults to:<code>0</code></property>
-<property name="gui.quick_X">Hotkeys to add JMeter components where X is the shortcut key, for example:
+<property name="jmeter.toolbar.icons">
+    Toolbar icon definitions.<br/>
+    Defaults to <code>org/apache/jmeter/images/toolbar/icons-toolbar.properties</code>
+</property>
+<property name="jmeter.toolbar">
+    Toolbar list.<br/>
+    Defaults to:
+    <source>new,open,close,save,save_as_testplan,|,cut,copy,paste,|,expand,collapse,toggle,|,test_start,test_stop,test_shutdown,|,test_start_remote_all,test_stop_remote_all,test_shutdown_remote_all,|,test_clear,test_clear_all,|,search,search_reset,|,function_helper,help</source>
+</property>
+<property name="jmeter.toolbar.icons.size">
+    Available sizes are: <code>22x22</code>, <code>32x32</code>, <code>48x48</code>. Suggested value for HiDPI mode is
+    <source>jmeter.toolbar.icons.size=48x48</source>
+    Defaults to: <code>22x22</code>
+</property>
+<property name="jmeter.icons">
+    Icon definitions. Alternate set: 
+    <source>jmeter.icons=org/apache/jmeter/images/icon_1.properties</source>
+    Historical icon set (deprecated):
+    <source>jmeter.icons=org/apache/jmeter/images/icon_old.properties</source>
+    Defaults to:<code>org/apache/jmeter/images/icon.properties</code>
+</property>
+<property name="jmeter.tree.icons.size">
+    Available sizes are: <code>19x19</code>, <code>24x24</code>, <code>32x32</code>, <code>48x48</code>.
+    Useful for HiDPI display (see below).<br/>
+    Defaults to: <code>19x19</code><br/>
+    Suggested value for HiDPI screen like 3200x1800 is: <code>32x32</code>
+</property>
+<property name="jmeter.hidpi.mode">
+    HiDPI mode. Activate a '<em>pseudo</em>'-HiDPI mode. Allows to increase size of some UI
+    elements which are not correctly managed by JVM with high resolution screens in Linux or Windows.<br/>
+    Defaults to: <code>false</code></property>
+<property name="jmeter.hidpi.scale.factor">
+    HiDPI scale factor. Suggested value for HiDPI: <code>2.0</code>.
+    Defaults to: <code>1.0</code>
+</property>
+<property name="not_in_menu">
+    Components to not display in JMeter GUI (GUI class name or static label).<br/>
+    These elements are deprecated and will be removed in next version:
+    <source>MongoDB Script, MongoDB Source Config, Distribution Graph, Spline Visualizer</source>
+    Defaults to:
+    <source>org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler, org.apache.jmeter.protocol.mongodb.config.MongoSourceElement, org.apache.jmeter.visualizers.DistributionGraphVisualizer, org.apache.jmeter.visualizers.SplineVisualizer</source>
+</property>
+<property name="undo.history.size">
+    Number of items in undo history.<br/>
+    Feature is disabled by default (<code>0</code>) due to known and not fixed bugs
+    <bugzilla>57043</bugzilla>, <bugzilla>57039</bugzilla> and <bugzilla>57040</bugzilla>.
+    Set it to a number greater than zero (<code>25</code> can be a good default).<br/>
+    The bigger it is, the more memory will be consumed.
+    Defaults to: <code>0</code>
+</property>
+<property name="gui.quick_X">
+    Hotkeys to add JMeter components where <code><em>X</em></code> is the shortcut key, for example:
 <source>
 gui.quick_0=ThreadGroupGui
 gui.quick_1=HttpTestSampleGui
@@ -186,7 +228,11 @@ gui.quick_7=JSR223PreProcessor
 gui.quick_8=DebugSampler
 gui.quick_9=ViewResultsFullVisualizer
 </source>
-Above code will add elements when you press Ctrl+0 .. Ctrl+9 (Command+0 .. Command+9 on Mac)
+    Above code will add the corresponding elements when you press
+    <keycombo><keysym>Ctrl</keysym><keysym>0</keysym></keycombo> &hellip;
+    <keycombo><keysym>Ctrl</keysym><keysym>9</keysym></keycombo>
+    (<keycombo><keysym>&command;</keysym><keysym>0</keysym></keycombo> &hellip;
+    <keycombo><keysym>&command;</keysym><keysym>9</keysym></keycombo> on Mac)
 </property>
 </properties>
 </section>
