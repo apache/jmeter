@@ -111,20 +111,39 @@ The <code>system.properties</code> file gives more flexibility.</note>
 </section>
 <section name="&sect-num;.4 Look and Feel configuration" anchor="laf_config">
 <properties>
-<property name="jmeter.laf.windows_xp">Classname of the Swing default UI<br/>
-The LAF classnames that are available are now displayed as ToolTip text<br/> when hovering over the Options/Look and Feel selection list.
-You can either use a full class name, as shown below, or one of the strings "System" or "CrossPlatform" which means JMeter will use the 
-corresponding string returned by <code>UIManager.get&lt;name&gt;LookAndFeelClassName()</code>.<br/> 
-LAF can be overridden by os.name (lowercased, spaces replaced by '_')<br/> Sample os.name LAF:<br/>, example:<source>jmeter.laf.windows_xp=javax.swing.plaf.metal.MetalLookAndFeel</source>
-Failing that, the OS family = os.name, but only up to first space: Sample OS family LAF:<br/>, example <source>jmeter.laf.windows=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</source>
-Mac apparently looks better with the System LAF set through <source>jmeter.laf.mac=System</source>.
-Failing that, the JMeter default laf can be defined through: <source>jmeter.laf=System</source>
-If none of the above jmeter.laf properties are defined, JMeter uses the CrossPlatform LAF.
-This is because the CrossPlatform LAF generally looks better than the System LAF. See <bug>52026</bug> for details
+<property name="jmeter.laf.windows_10">
+    Classname of the Swing default UI<br/>
+    The LAF classnames that are available are now displayed as ToolTip text when hovering over
+    the Options/Look and Feel selection list.<br/>
+    You can either use a full class name, as shown below, or one of the strings "<code>System</code>"
+    or "<code>CrossPlatform</code>" which means JMeter will use the
+    corresponding string returned by <code>UIManager.get&lt;name&gt;LookAndFeelClassName()</code>.<br/>
+    LAF can be overridden by <code>os.name</code> (lowercased, spaces replaced by '_').<br/>
+    <example tile="Order of LAF property lookup" anchor="order-laf-lookup">
+        Take for example an <code>os.name</code> of <code>Windows 10</code>.<br/>
+        JMeter would look first for a property <source>jmeter.laf.windows_10=javax.swing.plaf.metal.MetalLookAndFeel</source>.<br/>
+        Failing that, the OS family <code>os.name</code> would be used shortened to the first space. In our example
+        JMeter would therefore look for a property <source>jmeter.laf.windows=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</source>.
+    </example>
+    <note>
+        Mac apparently looks better with the System LAF set through <source>jmeter.laf.mac=System</source>.
+        Failing that, the JMeter default laf can be defined through: <source>jmeter.laf=System</source>
+        If none of the above <code>jmeter.laf</code> properties are defined, JMeter uses the <code>CrossPlatform</code> LAF.
+        This is because the <code>CrossPlatform</code> LAF generally looks better than the <code>System</code> LAF.
+        See <bug>52026</bug> for details.
+    </note>
  </property>
-<property name="jmeter.loggerpanel.display">LoggerPanel display<br/> defaults to:false</property>
-<property name="jmeter.loggerpanel.enable_when_closed">Enable LogViewer Panel to receive log event even if closed<br/> Enabled since 2.12<br/> Note this has some impact on performances, but as GUI mode must<br/> not be used for Load Test it is acceptable<br/>, defaults to:true</property>
-<property name="jmeter.loggerpanel.maxlength"> Max characters kept in LoggerPanel, 0 means no limit<br/>, defaults to:80000</property>
+<property name="jmeter.loggerpanel.display">
+    Display LoggerPanel.<br/>
+    Defaults to: <code>false</code></property>
+<property name="jmeter.loggerpanel.enable_when_closed">
+    Enable LogViewer Panel to receive log event even when closed.<br/>
+    Enabled since 2.12<br/>
+    <note>Note this has some impact on performances, but as GUI mode must not be used for Load Test it is acceptable</note>
+    Defaults to: <code>true</code></property>
+<property name="jmeter.loggerpanel.maxlength">
+     Max characters kept in LoggerPanel, <code>0</code> means no limit.<br/>
+     Defaults to: <code>80000</code></property>
 </properties>
 </section>
 <section name="&sect-num;.5 Toolbar display" anchor="toolbar_display">
