@@ -52,20 +52,25 @@ These properties are only taken into account after restarting JMeter as they are
 </section>
 <section name="&sect-num;.1 Language" anchor="language">
 <properties>
-<property name="language">Preferred GUI language. Comment out to use the JVM default locale's language.<br/>, example:<source>language=en</source>
-<note>This property is the only one that must be set in <code>jmeter.properties</code> file</note>
-<note>To fully configure language ensure you set locale, see <a href="http://www.oracle.com/us/technologies/java/locale-140624.html">Internationalization: Understanding Locale in the Java Platform</a>.
-Example for English:
-<source>-Duser.language=en -Duser.region=EN</source>
-</note>
+<property name="language">
+    Preferred GUI language. Comment out to use the JVM default locale's language.<br/>
+    Example: <source>language=en</source>
+    <note>This property is the only one that must be set in <code>jmeter.properties</code> file</note>
+    <note>To fully configure language ensure you set locale, see <a href="http://www.oracle.com/us/technologies/java/locale-140624.html">Internationalization: Understanding Locale in the Java Platform</a>.
+    Example for English:
+    <source>-Duser.language=en -Duser.region=EN</source>
+    </note>
 </property>
 <property name="locales.add">
-    Additional locale(s) to add to the displayed list.<br/>The current default list is: <code>en</code>, <code>fr</code>,
-    <code>de</code>, <code>no</code>, <code>es</code>, <code>tr</code>, <code>ja</code>, <code>zh_CN</code>,
+    Additional locale(s) to add to the displayed list.<br/>
+    The current default list is: <code>en</code>, <code>fr</code>,
+    <code>de</code>, <code>no</code>, <code>es</code>, <code>tr</code>,
+    <code>ja</code>, <code>zh_CN</code>,
     <code>zh_TW</code>, <code>pl</code>, <code>pt_BR</code>.<br/>
     See <code>JMeterMenuBar#makeLanguageMenu()</code><br/>
     The entries are a comma-separated list of language names.<br/>
-    Example: <source>locales.add=zu</source></property>
+    Example: <source>locales.add=zu</source>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.2 XML Parser" anchor="xml_parser">
@@ -82,31 +87,37 @@ These must now be defined in the <code>system.properties</code> file or on the c
 The <code>system.properties</code> file gives more flexibility.</note>
 <property name="https.sessioncontext.shared">
     By default, SSL session contexts are now created per-thread, rather than being shared.<br/>
-    The old behaviour can be enabled by setting this property to <code>true</code>. Defaults to: <code>false</code></property>
+    The old behaviour can be enabled by setting this property to <code>true</code>. Defaults to: <code>false</code>
+</property>
 <property name="https.default.protocol">
     Be aware that https default protocol may vary depending on the version of JVM.
     See <a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank">Diagnosing TLS, SSL and HTTPS</a>
-    and <bug>58236</bug>.
-    Default HTTPS protocol level: <source>https.default.protocol=TLS</source>.
-    This may need to be changed to: <source>https.default.protocol=SSLv3</source></property>
+    and <bugzilla>58236</bugzilla>.
+    Default HTTPS protocol level: <source>https.default.protocol=TLS</source>
+    This may need to be changed to: <source>https.default.protocol=SSLv3</source>
+</property>
 <properties>
 <property name="https.socket.protocols">
     List of protocols to enable. You may have to select only a subset if you find issues with target server.<br/>
     This is needed when server does not support Socket version negotiation, this can lead to errors like:
     <code>javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>
     or <code>java.net.SocketException: Connection reset</code>.<br/>
-    See <bug>54759</bug>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source></property>
+    See <bugzilla>54759</bugzilla>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source>
+</property>
 <property name="https.use.cached.ssl.context">
     Control if we allow reuse of cached SSL context between iterations.<br/>
     Set the value to <code>false</code> to reset the SSL context each iteration.<br/>
-    Defaults to: <code>true</code></property>
+    Defaults to: <code>true</code>
+</property>
 <property name="https.keyStoreStartIndex">
     Start index to be used with keystores with many entries.<br/>
     The default is to use entry <code>0</code>, i.e. the first.<br/>
-    Defaults to: <code>0</code></property>
+    Defaults to: <code>0</code>
+</property>
 <property name="https.keyStoreEndIndex">
     End index to be used with keystores with many entries.<br/>
-    Defaults to: <code>0</code></property>
+    Defaults to: <code>0</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.4 Look and Feel configuration" anchor="laf_config">
@@ -119,18 +130,22 @@ The <code>system.properties</code> file gives more flexibility.</note>
     or "<code>CrossPlatform</code>" which means JMeter will use the
     corresponding string returned by <code>UIManager.get&lt;name&gt;LookAndFeelClassName()</code>.<br/>
     LAF can be overridden by <code>os.name</code> (lowercased, spaces replaced by '_').<br/>
-    <example tile="Order of LAF property lookup" anchor="order-laf-lookup">
+    <example title="Order of LAF property lookup" anchor="order-laf-lookup">
         Take for example an <code>os.name</code> of <code>Windows 10</code>.<br/>
-        JMeter would look first for a property <source>jmeter.laf.windows_10=javax.swing.plaf.metal.MetalLookAndFeel</source>.<br/>
+        JMeter would look first for a property
+        <source>jmeter.laf.windows_10=javax.swing.plaf.metal.MetalLookAndFeel</source>
         Failing that, the OS family <code>os.name</code> would be used shortened to the first space. In our example
-        JMeter would therefore look for a property <source>jmeter.laf.windows=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</source>.
+        JMeter would therefore look for a property
+        <source>jmeter.laf.windows=com.sun.java.swing.plaf.windows.WindowsLookAndFeel</source>
     </example>
     <note>
-        Mac apparently looks better with the System LAF set through <source>jmeter.laf.mac=System</source>.
-        Failing that, the JMeter default laf can be defined through: <source>jmeter.laf=System</source>
+        Mac apparently looks better with the System LAF set through
+        <source>jmeter.laf.mac=System</source>
+        Failing that, the JMeter default laf can be defined through:
+        <source>jmeter.laf=System</source>
         If none of the above <code>jmeter.laf</code> properties are defined, JMeter uses the <code>CrossPlatform</code> LAF.
         This is because the <code>CrossPlatform</code> LAF generally looks better than the <code>System</code> LAF.
-        See <bug>52026</bug> for details.
+        See <bugzilla>52026</bugzilla> for details.
     </note>
  </property>
 <property name="jmeter.loggerpanel.display">
