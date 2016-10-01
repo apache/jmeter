@@ -55,36 +55,58 @@ These properties are only taken into account after restarting JMeter as they are
 <property name="language">Preferred GUI language. Comment out to use the JVM default locale's language.<br/>, example:<source>language=en</source>
 <note>This property is the only one that must be set in <code>jmeter.properties</code> file</note>
 <note>To fully configure language ensure you set locale, see <a href="http://www.oracle.com/us/technologies/java/locale-140624.html">Internationalization: Understanding Locale in the Java Platform</a>.
-Example for english: 
+Example for English:
 <source>-Duser.language=en -Duser.region=EN</source>
 </note>
 </property>
-<property name="locales.add">Additional locale(s) to add to the displayed list.<br/>The current default list is: en, fr, de, no, es, tr, ja, zh_CN, zh_TW, pl, pt_BR<br/> see <code>JMeterMenuBar#makeLanguageMenu()]</code><br/> The entries are a comma-separated list of language names<br/>, Example: <source>locales.add=zu</source></property>
+<property name="locales.add">
+    Additional locale(s) to add to the displayed list.<br/>The current default list is: <code>en</code>, <code>fr</code>,
+    <code>de</code>, <code>no</code>, <code>es</code>, <code>tr</code>, <code>ja</code>, <code>zh_CN</code>,
+    <code>zh_TW</code>, <code>pl</code>, <code>pt_BR</code>.<br/>
+    See <code>JMeterMenuBar#makeLanguageMenu()</code><br/>
+    The entries are a comma-separated list of language names.<br/>
+    Example: <source>locales.add=zu</source></property>
 </properties>
 </section>
 <section name="&sect-num;.2 XML Parser" anchor="xml_parser">
 <properties>
-<property name="xpath.namespace.config">Path to a Properties file containing Namespace mapping in the form <code>prefix=Namespace</code>, Example: <source>ns=http://biz.aol.com/schema/2006-12-18</source></property>
+<property name="xpath.namespace.config">
+    Path to a Properties file containing Namespace mapping in the form <code>prefix=Namespace</code>.
+    Example: <source>ns=http://biz.aol.com/schema/2006-12-18</source></property>
 </properties>
 </section>
 <section name="&sect-num;.3 SSL configuration" anchor="ssl_config">
-<note>SSL (Java) System properties are now in system.properties<br/> 
-JMeter no longer converts <code>javax.xxx</code> property entries in this file into System properties.<br/>
+<note>SSL (Java) System properties are now in <code>system.properties</code><br/> 
+JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in this file into System properties.<br/>
 These must now be defined in the <code>system.properties</code> file or on the command-line.<br/>
-The system.properties file gives more flexibility.</note>
-<property name="https.sessioncontext.shared">By default, SSL session contexts are now created per-thread, rather than being shared.<br/> The old behaviour can be enabled by setting this property to <code>true</code>. Defaults to: false</property>
-<property name="https.default.protocol">Be aware that https default protocol may vary depending on the version of JVM
-See <a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank">Diagnosing TLS, SSL and HTTPS</a> and <bug>58236</bug>
-Default HTTPS protocol level: <source>https.default.protocol=TLS</source>
-This may need to be changed to:<source>https.default.protocol=SSLv3</source></property>
+The <code>system.properties</code> file gives more flexibility.</note>
+<property name="https.sessioncontext.shared">
+    By default, SSL session contexts are now created per-thread, rather than being shared.<br/>
+    The old behaviour can be enabled by setting this property to <code>true</code>. Defaults to: <code>false</code></property>
+<property name="https.default.protocol">
+    Be aware that https default protocol may vary depending on the version of JVM.
+    See <a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https" target="_blank">Diagnosing TLS, SSL and HTTPS</a>
+    and <bug>58236</bug>.
+    Default HTTPS protocol level: <source>https.default.protocol=TLS</source>.
+    This may need to be changed to: <source>https.default.protocol=SSLv3</source></property>
 <properties>
-<property name="https.socket.protocols">List of protocols to enable. You may have to select only a subset if you find issues with target server.<br/>
-This is needed when server does not support Socket version negotiation, this can lead to errors like:
-<code>javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code> 
-or <code>java.net.SocketException: Connection reset</code><br/>, see <bug>54759</bug>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source></property>
-<property name="https.use.cached.ssl.context">Control if we allow reuse of cached SSL context between iterations<br/> set the value to 'false' to reset the SSL context each iteration<br/>, defaults to:true</property>
-<property name="https.keyStoreStartIndex"> Start index to be used with keystores with many entries<br/> The default is to use entry 0, i.e. the first<br/>, defaults to:0</property>
-<property name="https.keyStoreEndIndex">End index to be used with keystores with many entries<br/>, defaults to:0</property>
+<property name="https.socket.protocols">
+    List of protocols to enable. You may have to select only a subset if you find issues with target server.<br/>
+    This is needed when server does not support Socket version negotiation, this can lead to errors like:
+    <code>javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>
+    or <code>java.net.SocketException: Connection reset</code>.<br/>
+    See <bug>54759</bug>, example: <source>https.socket.protocols=SSLv2Hello SSLv3 TLSv1</source></property>
+<property name="https.use.cached.ssl.context">
+    Control if we allow reuse of cached SSL context between iterations.<br/>
+    Set the value to <code>false</code> to reset the SSL context each iteration.<br/>
+    Defaults to: <code>true</code></property>
+<property name="https.keyStoreStartIndex">
+    Start index to be used with keystores with many entries.<br/>
+    The default is to use entry <code>0</code>, i.e. the first.<br/>
+    Defaults to: <code>0</code></property>
+<property name="https.keyStoreEndIndex">
+    End index to be used with keystores with many entries.<br/>
+    Defaults to: <code>0</code></property>
 </properties>
 </section>
 <section name="&sect-num;.4 Look and Feel configuration" anchor="laf_config">
