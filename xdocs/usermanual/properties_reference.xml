@@ -238,10 +238,33 @@ gui.quick_9=ViewResultsFullVisualizer
 </section>
 <section name="&sect-num;.6 JMX Backup configuration" anchor="backup">
 <properties>
-<property name="jmeter.gui.action.save.backup_on_save">Enable auto backups of the .jmx file when a test plan is saved.<br/>When enabled, before the .jmx is saved, it will be backed up to the directory pointed<br/>by the jmeter.gui.action.save.backup_directory property (see below). Backup file names are built<br/>after the jmx file being saved. For example, saving test-plan.jmx will create a test-plan-000012.jmx<br/>in the backup directory provided that the last created backup file is test-plan-000011.jmx.<br/>Default value is true indicating that auto backups are enabled<br/>, defaults to:true</property>
-<property name="jmeter.gui.action.save.backup_directory">Set the backup directory path where JMX backups will be created upon save in the GUI.<br/>If not set (what it defaults to) then backup files will be created in<br/>a sub-directory of the JMeter base installation. If set and the directory does not exist, it will be created.<br/>, defaults to:<code>${JMETER_HOME}/backups</code></property>
-<property name="jmeter.gui.action.save.keep_backup_max_hours">Set the maximum time (in hours) that backup files should be preserved since the save time.<br/>By default no expiration time is set which means we keep backups for ever.<br/>, defaults to:0</property>
-<property name="jmeter.gui.action.save.keep_backup_max_count">Set the maximum number of backup files that should be preserved. By default 10 backups will be preserved.<br/>Setting this to zero will cause the backups to not being deleted (unless keep_backup_max_hours is set to a non zero value)<br/>, defaults to:10</property>
+<property name="jmeter.gui.action.save.backup_on_save">
+    Enable auto backups of the <code>.jmx</code> file when a test plan is saved.<br/>
+    When enabled, before the <code>.jmx</code> is saved, it will be backed up to the directory
+    pointed to by the <code>jmeter.gui.action.save.backup_directory</code> property (see below).
+    Backup file names are built after the jmx file being saved. For example,
+    saving <code>test-plan.jmx</code> will create a <code>test-plan-000012.jmx</code> in the backup
+    directory provided that the last created backup file is <code>test-plan-000011.jmx</code>.<br/>
+    Default value is <code>true</code> indicating that auto backups are enabled.<br/> 
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.gui.action.save.backup_directory">
+    Set the backup directory path where JMX backups will be created upon save in the GUI.<br/>
+    If not set (what it defaults to) then backup files will be created in a sub-directory of
+    the JMeter base installation. If set and the directory does not exist, a corresponding directory will be created.<br/>
+    Defaults to: <code>${JMETER_HOME}/backups</code>
+</property>
+<property name="jmeter.gui.action.save.keep_backup_max_hours">
+    Set the maximum time (in hours) that backup files should be preserved since the save time.<br/>
+    By default no expiration time is set which means we keep backups for ever.<br/>
+    Defaults to: <code>0</code></property>
+<property name="jmeter.gui.action.save.keep_backup_max_count">
+    Set the maximum number of backup files that should be preserved.
+    By default ten backups will be preserved.<br/>
+    Setting this to zero will cause the backups to not being deleted (unless <code>keep_backup_max_hours</code>
+    is set to a non zero value).<br/>
+    Defaults to: <code>10</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.7 Remote hosts and RMI configuration" anchor="remote">
