@@ -1123,16 +1123,47 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.32 BeanShell configuration" anchor="beanshell">
 <properties>
-<property name="beanshell.server.port"> BeanShell Server properties<br/><br/> Define the port number as non-zero to start the http server on that port<br/>, defaults to:9000</property>
-<property name="beanshell.server.file"> The telnet server will be started on the next port<br/><br/> Define the server initialisation file<br/>, defaults to:../extras/startup.bsh</property>
-<property name="beanshell.init.file"><br/> Define a file to be processed at startup<br/> This is processed using its own interpreter.<br/>, defaults to:</property>
-<property name="beanshell.sampler.init"><br/> Define the intialisation files for BeanShell Sampler, Function and other BeanShell elements<br/> N.B. Beanshell test elements do not share interpreters.<br/>      Each element in each thread has its own interpreter.<br/>      This is retained between samples.<br/>, defaults to:BeanShellSampler.bshrc</property>
-<property name="beanshell.function.init">, defaults to:BeanShellFunction.bshrc</property>
-<property name="beanshell.assertion.init">, defaults to:BeanShellAssertion.bshrc</property>
-<property name="beanshell.listener.init">, defaults to:etc</property>
-<property name="beanshell.postprocessor.init">, defaults to:etc</property>
-<property name="beanshell.preprocessor.init">, defaults to:etc</property>
-<property name="beanshell.timer.init">, defaults to:etc</property>
+<property name="beanshell.server.port">
+    BeanShell Server properties.<br/>
+    Define the port number as non-zero to start the http server on that port.<br/>
+    The telnet server will be started on the next port.<br/>
+    Defaults to: <code>0</code>
+</property>
+<property name="beanshell.server.file">
+    Define the server initialisation file.<br/>
+    Defaults to: <code>../extras/startup.bsh</code>
+</property>
+<property name="beanshell.init.file">
+    Define a file to be processed at startup.<br/>
+    This is processed using its own interpreter.<br/>
+    Defaults to empty value.
+</property>
+<property name="beanshell.sampler.init">
+    Define the intialisation files for BeanShell Sampler, Function and
+    other BeanShell elements.<br/>
+    <note>N.B. Beanshell test elements do not share interpreters.
+    Each element in each thread has its own interpreter.
+    This is retained between samples.</note>
+    Defaults to empty value.
+</property>
+<property name="beanshell.function.init">
+    Defaults to empty value.
+</property>
+<property name="beanshell.assertion.init">
+    Defaults to empty value.
+</property>
+<property name="beanshell.listener.init">
+    Defaults to empty value.
+</property>
+<property name="beanshell.postprocessor.init">
+    Defaults to empty value.
+</property>
+<property name="beanshell.preprocessor.init">
+    Defaults to empty value.
+</property>
+<property name="beanshell.timer.init">
+    Defaults to empty value.
+</property>
 </properties>
 </section>
 <section name="&sect-num;.33 MailerModel configuration" anchor="mailer">
