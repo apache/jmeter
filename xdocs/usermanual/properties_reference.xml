@@ -1248,53 +1248,215 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.38 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
-<property name="monitor.buffer.size">To set the Monitor Health Visualiser buffer size, enter the desired value<br/>, defaults to:800</property>
-<property name="mirror.server.port"> If defined, then start the mirror server on the port<br/>, defaults to:8081</property>
-<property name="oro.patterncache.size"> ORO PatternCacheLRU size<br/>, defaults to:1000</property>
-<property name="propertyEditorSearchPath">TestBeanGui<br/><br/>, defaults to:null</property>
-<property name="jmeter.expertMode"> Turn expert mode on/off: expert mode will show expert-mode beans and properties<br/>, defaults to:true</property>
-<property name="httpsampler.max_redirects"> Maximum redirects to follow in a single sequence (default 5)<br/>, defaults to:5</property>
-<property name="httpsampler.max_frame_depth"> Maximum frame/iframe nesting depth (default 5)<br/>, defaults to:5</property>
-<property name="httpsampler.separate.container"> Revert to BUG 51939 behaviour (no separate container for embedded resources) by setting the following false:<br/>, defaults to:true</property>
-<property name="httpsampler.ignore_failed_embedded_resources"> If embedded resources download fails due to missing resources or other reasons, if this property is true<br/> Parent sample will not be marked as failed <br/>, defaults to:false</property>
-<property name="httpsampler.parallel_download_thread_keepalive_inseconds">keep alive time for the parallel download threads (in seconds)<br/>, defaults to:60</property>
-<property name="httpsampler.embedded_resources_use_md5"> Don't keep the embedded resources response data : just keep the size and the md5<br/> default to false<br/>, defaults to:false</property>
-<property name="httpsampler.user_defined_methods"> List of extra HTTP methods that should be available in select box<br/>, defaults to:VERSION-CONTROL,REPORT,CHECKOUT,CHECKIN,UNCHECKOUT,MKWORKSPACE,UPDATE,LABEL,MERGE,BASELINE-CONTROL,MKACTIVITY</property>
-<property name="sampleresult.default.encoding"> The encoding to be used if none is provided (default ISO-8859-1)<br/>, defaults to:ISO-8859-1</property>
-<property name="sampleresult.getbytes.body_real_size"> Network response size calculation method<br/> Use real size: number of bytes for response body return by webserver<br/> (i.e. the network bytes received for response)<br/> if set to false, the (uncompressed) response data size will used (default before 2.5)<br/> Include headers: add the headers size in real size<br/>, defaults to:true</property>
-<property name="sampleresult.getbytes.headers_size">, defaults to:true</property>
-<property name="CookieManager.delete_null_cookies"> CookieManager behaviour - should cookies with null/empty values be deleted?<br/> Default is true. Use false to revert to original behaviour<br/>, defaults to:true</property>
-<property name="CookieManager.allow_variable_cookies"> CookieManager behaviour - should variable cookies be allowed?<br/> Default is true. Use false to revert to original behaviour<br/>, defaults to:true</property>
-<property name="CookieManager.save.cookies"> CookieManager behaviour - should Cookies be stored as variables?<br/> Default is false<br/>, defaults to:false</property>
-<property name="CookieManager.name.prefix"> CookieManager behaviour - prefix to add to cookie name before storing it as a variable<br/> Default is COOKIE_; to remove the prefix, define it as one or more spaces<br/>, defaults to:</property>
-<property name="CookieManager.check.cookies"> CookieManager behaviour - check received cookies are valid before storing them?<br/> Default is true. Use false to revert to previous behaviour<br/>, defaults to:true</property>
-<property name="cookies"> Netscape HTTP Cookie file<br/>, defaults to:cookies</property>
-<property name=" - JDK >"> Ability to switch to Nashorn as default Javascript Engine used by IfController and __javaScript function<br/> JMeter works as following:<br/> - JDK &lt; 8 : Rhino<br/>, defaults to: 8 and javascript.use_rhino</property>
-<property name="javascript.use_rhino"> If you want to use Nashorn on JDK8, set this property to false<br/>, defaults to:true</property>
-<property name="jmeterengine.threadstop.wait"> Number of milliseconds to wait for a thread to stop<br/>, defaults to:5000</property>
-<property name="jmeterengine.remote.system.exit">Whether to invoke System.exit(0) in server exit code after stopping RMI<br/>, defaults to:false</property>
-<property name="jmeterengine.stopfail.system.exit"> Whether to call System.exit(1) on failure to stop threads in non-GUI mode.<br/> This only takes effect if the test was explictly requested to stop.<br/> If this is disabled, it may be necessary to kill the JVM externally<br/>, defaults to:true</property>
-<property name="jmeterengine.force.system.exit"> Whether to force call System.exit(0) at end of test in non-GUI mode, even if<br/> there were no failures and the test was not explicitly asked to stop.<br/> Without this, the JVM may never exit if there are other threads spawned by<br/> the test which never exit.<br/>, defaults to:false</property>
-<property name="jmeter.exit.check.pause">How long to pause (in ms) in the daemon thread before reporting that the JVM has failed to exit.<br/>, If the value is &lt; 0, the JMeter does not start the daemon thread, defaults to:2000</property>
-<property name="jmeterengine.nongui.port"> If running non-GUI, then JMeter listens on the following port for a shutdown message.<br/> To disable, set the port to 1000 or less.<br/>, defaults to:4445</property>
-<property name="jmeterengine.nongui.maxport"><br/> If the initial port is busy, keep trying until this port is reached<br/> (to disable searching, set the value less than or equal to the .port property)<br/>, defaults to:4455</property>
-<property name="jmeterthread.rampup.granularity"> How often to check for shutdown during ramp-up (milliseconds)<br/>, defaults to:1000</property>
-<property name="onload.expandtree">Should JMeter expand the tree when loading a test plan?<br/> default value is false since JMeter 2.7<br/>, defaults to:false</property>
-<property name="jsyntaxtextarea.wrapstyleword">JSyntaxTextArea configuration<br/>, defaults to:true</property>
-<property name="jsyntaxtextarea.linewrap">, defaults to:true</property>
-<property name="jsyntaxtextarea.codefolding">, defaults to:true</property>
-<property name="jsyntaxtextarea.maxundos"> Set 0 to disable undo feature in JSyntaxTextArea<br/>, defaults to:50</property>
-<property name="jsyntaxtextarea.font.family"> Change the font on the (JSyntax) Text Areas. (Useful for HiDPI screens)<br/>, defaults to:Hack</property>
-<property name="jsyntaxtextarea.font.size">Change the size of the (JSyntax) Text Areas. Will be used only, when <code>jsyntaxtextarea.font.family</code> is set, defaults to:14</property>
-<property name="loggerpanel.usejsyntaxtext"> Set this to false to disable the use of JSyntaxTextArea for the Console Logger panel <br/>, defaults to:true</property>
-<property name=" Maximum size of HTML page that can be displayed; default">, defaults to:10 mbytes</property>
-<property name="view.results.tree.max_size"> Set to 0 to disable the size check and display the whole response<br/>, defaults to:10485760</property>
-<property name="view.results.tree.renderers_order"> Order of Renderers in View Results Tree<br/> Note full class names should be used for non jmeter core renderers<br/> For JMeter core renderers, class names start with . and are automatically<br/> prefixed with org.apache.jmeter.visualizers<br/>, defaults to:.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</property>
-<property name=" Maximum size of Document that can be parsed by Tika engine; defaut">, defaults to:10 * 1024 * 1024 (10MB)</property>
-<property name="document.max_size"> Set to 0 to disable the size check<br/>, defaults to:0</property>
-<property name="JMSSampler.useSecurity.properties">JMS options<br/> Enable the following property to stop JMS Point-to-Point Sampler from using<br/> the properties java.naming.security.[principal|credentials] when creating the queue connection<br/>, defaults to:false</property>
-<property name="confirm.delete.skip"> Set the following value to true in order to skip the delete confirmation dialogue<br/>, defaults to:false</property>
-<property name="jsr223.compiled_scripts_cache_size"> Used by JSR223 elements<br/> Size of compiled scripts cache<br/>, defaults to:100</property>
+<property name="monitor.buffer.size">
+    To set the Monitor Health Visualiser buffer size, enter the desired value.<br/>
+    Defaults to: <code>800</code>
+</property>
+<property name="mirror.server.port">
+    If defined and greater then zero, then start the mirror server on the port.<br/>
+    Defaults to: <code>0</code>
+</property>
+<property name="oro.patterncache.size">
+    ORO PatternCacheLRU size.<br/>
+    Defaults to: <code>1000</code>
+</property>
+<property name="propertyEditorSearchPath">
+    TestBeanGui<br/>
+    Defaults to: <code>null</code>
+</property>
+<property name="jmeter.expertMode">
+    Turn expert mode on/off: expert mode will show expert-mode beans and properties.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpsampler.max_redirects">
+    Maximum redirects to follow in a single sequence.<br/>
+    Defaults to: <code>20</code>
+</property>
+<property name="httpsampler.max_frame_depth">
+    Maximum frame/iframe nesting depth.<br/>
+    defaults to: <code>5</code>
+</property>
+<property name="httpsampler.separate.container">
+    Revert to <bugzilla>51939</bugzilla> behaviour (no separate container for embedded resources)
+    by setting the following <code>false</code>.<br/>
+    defaults to: <code>true</code>
+</property>
+<property name="httpsampler.ignore_failed_embedded_resources">
+    If embedded resources download fails due to missing resources or other reasons,
+    if this property is <code>true</code>, Parent sample will not be marked as failed.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpsampler.parallel_download_thread_keepalive_inseconds">
+    Keep-alive time for the parallel download threads (in seconds).<br/>
+    Defaults to: <code>60</code>
+</property>
+<property name="httpsampler.embedded_resources_use_md5">
+    Don't keep the embedded resources response data; just keep the size and the MD5 sum.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="httpsampler.user_defined_methods">
+    List of extra HTTP methods that should be available in select box.<br/>
+    Defaults to:
+    <source>VERSION-CONTROL,REPORT,CHECKOUT,CHECKIN,UNCHECKOUT,MKWORKSPACE,UPDATE,LABEL,MERGE,BASELINE-CONTROL,MKACTIVITY</source>
+</property>
+<property name="sampleresult.default.encoding">
+    The encoding to be used if none is provided.<br/>
+    Defaults to: <code>ISO-8859-1</code>
+</property>
+<property name="sampleresult.getbytes.body_real_size">
+    Network response size calculation method<br/>
+    Use real size: number of bytes for response body returned by webserver
+    (i.e. the network bytes received for response). If set to <code>false</code>,
+    the (uncompressed) response data size will used (default before version 2.5).<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="sampleresult.getbytes.headers_size">
+    Include headers: add the headers size in real size.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="CookieManager.delete_null_cookies">
+    CookieManager behaviour - should cookies with null/empty values be deleted?<br/>
+    Use <code>false</code> to revert to original behaviour.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="CookieManager.allow_variable_cookies">
+    CookieManager behaviour - should variable cookies be allowed?<br/>
+    Use <code>false</code> to revert to original behaviour.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="CookieManager.save.cookies">
+    CookieManager behaviour - should Cookies be stored as variables?<br/>
+    Default to: <code>false</code>
+</property>
+<property name="CookieManager.name.prefix">
+    CookieManager behaviour - prefix to add to cookie name before storing it as a variable.<br/>
+    Default is COOKIE_; to remove the prefix, define it as one or more spaces.<br/>
+    Defaults to: <code>COOKIE_</code></property>
+<property name="CookieManager.check.cookies">
+    CookieManager behaviour - check received cookies are valid before storing them?<br/>
+    Use <code>false</code> to revert to previous behaviour.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="cookies">
+    Netscape HTTP Cookie file.<br/>
+    Defaults to: <code>cookies</code>
+</property>
+<property name="javascript.use_rhino">
+    Ability to switch to Nashorn as default Javascript Engine used by <code>IfController</code>
+    and <code>__javaScript</code> function.<br/>
+    <note>JMeter will prefer to use Rhino even if it detects a JRE 8 or higher.
+    If you want to use Nashorn, set this value to <code>false</code></note>
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeterengine.threadstop.wait">
+    Number of milliseconds to wait for a thread to stop.<br/>
+    Defaults to: <code>5000</code>
+</property>
+<property name="jmeterengine.remote.system.exit">
+    Whether to invoke <code>System.exit(0)</code> in server exit code after
+    stopping RMI.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeterengine.stopfail.system.exit">
+    Whether to call <code>System.exit(1)</code> on failure to stop threads in
+    non-GUI mode.<br/>
+    This only takes effect if the test was explicitly requested to stop.<br/>
+    If this is disabled, it may be necessary to kill the JVM externally.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeterengine.force.system.exit">
+    Whether to force call <code>System.exit(0)</code> at end of test in non-GUI mode,
+    even if there were no failures and the test was not explicitly asked to stop.<br/>
+    Without this, the JVM may never exit if there are other threads spawned by
+    the test which never exit.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.exit.check.pause">
+    How long to pause (in ms) in the daemon thread before reporting that the JVM has
+    failed to exit.<br/>
+    If the value is less than zero, the JMeter does not start the daemon thread<br/>
+    Defaults to: <code>2000</code>
+</property>
+<property name="jmeterengine.nongui.port">
+    If running non-GUI, then JMeter listens on the following port for a shutdown message.<br/>
+    To disable, set the port to <code>1000</code> or less.<br/>
+    Defaults to: <code>4445</code>
+</property>
+<property name="jmeterengine.nongui.maxport">
+    If the initial port is busy, keep trying until this port is reached
+    (to disable searching, set the value less than or equal to the <code>.port</code> property).<br/>
+    Defaults to: <code>4455</code>
+</property>
+<property name="jmeterthread.rampup.granularity">
+    How often to check for shutdown during ramp-up (milliseconds).<br/>
+    Defaults to: <code>1000</code>
+</property>
+<property name="onload.expandtree">
+    Should JMeter expand the tree when loading a test plan?<br/>
+    Default value is <code>false</code> since JMeter 2.7<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jsyntaxtextarea.wrapstyleword">
+    JSyntaxTextArea configuration.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="jsyntaxtextarea.linewrap">
+    Defaults to: <code>true</code>
+</property>
+<property name="jsyntaxtextarea.codefolding">
+    Defaults to: <code>true</code>
+</property>
+<property name="jsyntaxtextarea.maxundos">
+    Set to zero to disable undo feature in JSyntaxTextArea.<br/>
+    Defaults to: <code>50</code>
+</property>
+<property name="jsyntaxtextarea.font.family">
+    Change the font on the (JSyntax) Text Areas. (Useful for HiDPI screens).<br/>
+    Defaults to empty value, which means platform default monospaced font
+</property>
+<property name="jsyntaxtextarea.font.size">
+    Change the size of the (JSyntax) Text Areas. Will be used only,
+    when <code>jsyntaxtextarea.font.family</code> is set.<br/>
+    Defaults to: <code>-1</code></property>
+<property name="loggerpanel.usejsyntaxtext">
+    Set this to <code>false</code> to disable the use of JSyntaxTextArea
+    for the Console Logger panel.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="view.results.tree.max_size">
+    Maximum size (in bytes) of HTML page that can be displayed.<br/>
+    Set to zero to disable the size check and display the whole response.<br/>
+    Defaults to: <code>10485760</code>
+</property>
+<property name="view.results.tree.renderers_order">
+    Order of Renderers in View Results Tree.<br/>
+    <note>Note full class names should be used for non JMeter core renderers</note>
+    For JMeter core renderers, class names start with <code>.</code> and are automatically
+    prefixed with <code>org.apache.jmeter.visualizers</code><br/>
+    Defaults to:
+    <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
+</property>
+<property name="document.max_size">
+    Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
+    Set to zero to disable the size check.<br/>
+    Defaults to: <code>10485760</code>
+</property>
+<property name="JMSSampler.useSecurity.properties">
+    JMS options.<br/>
+    Enable the following property to stop JMS Point-to-Point Sampler from using
+    the properties <code>java.naming.security.[principal|credentials]</code> when
+    creating the queue connection.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="confirm.delete.skip">
+    Set the following value to <code>true</code> in order to skip the delete
+    confirmation dialogue.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="jsr223.compiled_scripts_cache_size">
+    Used by JSR223 elements.<br/>
+    Size of compiled scripts cache.<br/>
+    Defaults to: <code>100</code></property>
 </properties>
 </section>
 <section name="&sect-num;.39 Classpath configuration" anchor="classpath">
