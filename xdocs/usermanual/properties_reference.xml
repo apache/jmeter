@@ -333,48 +333,51 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.8 Include Controller" anchor="include_controller">
 <properties>
-<property name="includecontroller.prefix"> Prefix used by IncludeController when building file name<br/>, defaults to empty value</property>
+<property name="includecontroller.prefix">
+    Prefix used by <code>IncludeController</code> when building file names.<br/>
+    Defaults to empty value
+</property>
 </properties>
 </section>
 <section name="&sect-num;.9 Logging Configuration" anchor="logging">
 <description>
-JMeter uses Avalon (Excalibur) LogKit
-The Logging Format is described <a href="http://excalibur.apache.org/apidocs/org/apache/log/format/PatternFormatter.html" target="_blank">here</a> 
-
-Default format:
-<source>log_format=%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - %{category}: %{message} %{throwable}
-</source>
-<code>\n</code> is automatically added to the end of the string
-Predefined formats in the JMeter LoggingManager:
-<source>
-#log_format_type=default
+    JMeter uses Avalon (Excalibur) LogKit.
+    The Logging Format is described <a href="http://excalibur.apache.org/apidocs/org/apache/log/format/PatternFormatter.html" target="_blank">here</a><br/>
+    Default format:
+    <source>log_format=%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - %{category}: %{message} %{throwable}</source>
+    <note><code>\n</code> is automatically added to the end of the string.</note>
+    Predefined formats in the JMeter LoggingManager:
+    <source>#log_format_type=default
 #log_format_type=thread_prefix
 #log_format_type=thread_suffix
 </source>
-<code>default</code> is as above.
-<code>thread_prefix</code> adds the thread name as a prefix to the category.
-<code>thread_suffix</code> adds the thread name as a suffix to the category
-<note>Thread name is not included by default, as it requires extra processing.</note>
+    <dl>
+        <dt><code>default</code></dt><dd>is as above.</dd>
+        <dt><code>thread_prefix</code></dt><dd>adds the thread name as a prefix to the category.</dd>
+        <dt><code>thread_suffix</code></dt><dd>adds the thread name as a suffix to the category.</dd>
+    </dl>
+    <note>Thread name is not included by default, as it requires extra processing.</note>
 
-To change the logging format, define either <code>log_format_type</code> or <code>log_format</code>
-If both are defined, the type takes precedence. Note that these properties cannot be defined using the <code>-J</code> or <code>-D</code> JMeter command-line flags, 
-as the format will have already been determined by then
-However, they can be defined as JVM properties
-Logging levels for the logging categories in JMeter.  
-Correct values are:
-<ul>
- <li>FATAL_ERROR</li>
- <li>ERROR</li>
- <li>WARN</li>
- <li>INFO</li>
- <li>DEBUG</li>
-</ul>
+    To change the logging format, define either <code>log_format_type</code> or <code>log_format</code>
+    If both are defined, the type takes precedence.
+    <note>Note that these properties cannot be defined using the <code>-J</code> or <code>-D</code> JMeter
+    command-line flags, as the format will have already been determined by then.
+    However, they can be defined as JVM properties.</note>
+    Logging levels for the logging categories in JMeter.
+    Correct values are:
+    <ul>
+        <li><code>FATAL_ERROR</code></li>
+        <li><code>ERROR</code></li>
+        <li><code>WARN</code></li>
+        <li><code>INFO</code></li>
+        <li><code>DEBUG</code></li>
+    </ul>
 
-To set the log level for a package or individual class, use:
+    To set the log level for a package or individual class, use:
 <source>
 log_level.[package_name].[classname]=[PRIORITY_LEVEL]
 </source>
-But omit <code>org.apache</code> from the package name.  The classname is optional.  Further examples below.
+    But omit <code>org.apache</code> from the package name. The classname is optional. Further examples below.
 
 <source>
 log_level.jmeter=INFO
@@ -396,41 +399,33 @@ log_level.jmeter.testelements.property=DEBUG
 log_level.jorphan=INFO
 </source>
 
-# You can specify a different log file for different categories via:
-<source>
-log_file.[category]=[filename]
-</source>
-<code>category</code> is equivalent to the package/class names described above
+    You can specify a different log file for different categories via:
+    <source>log_file.[category]=[filename]</source>
+    <code>category</code> is equivalent to the package/class names described above.<br/>
 
-Combined log file (for jmeter and jorphan)
-<source>
-log_file=jmeter.log
-</source>
+    Combined log file (for <code>jmeter</code> and <code>jorphan</code>)
+    <source>log_file=jmeter.log</source>
 
-To redirect logging to standard output, try the following (it will probably report an error, but output will be to stdout):
-<source>
-log_file=
-</source>
+    To redirect logging to standard output, try the following (it will probably report an error, but output will be to <code>stdout</code>):
+    <source>log_file=</source>
 
-Or define separate logs if required:
-<source>
-log_file.jorphan=jorphan.log
-log_file.jmeter=jmeter.log
-</source>
-If the filename contains  paired single-quotes, then the name is processed as a SimpleDateFormat format applied to the current date, for example:
-<source>
-log_file='jmeter_'yyyyMMddHHmmss'.tmp'
-</source>
-When JMeter starts, it sets the system property:
-<code>org.apache.commons.logging.Log</code> to <code>org.apache.commons.logging.impl.LogKitLogger</code>
-if not already set. This causes Apache and Commons HttpClient to use the same logging as JMeter
+    Or define separate logs if required:
+   <source>log_file.jorphan=jorphan.log
+log_file.jmeter=jmeter.log</source>
 
-Excalibur logging provides the facility to configure logging using configuration files written in XML. This allows for such features as
-log file rotation which are not supported directly by JMeter. If such a file specified, it will be applied to the current logging
- hierarchy when that has been created. 
-<source>
-log_config=logkit.xml
-</source>
+    If the filename contains paired single-quotes, then the name is processed as 
+    a <code>SimpleDateFormat</code> format applied to the current date, for example:
+    <source>log_file='jmeter_'yyyyMMddHHmmss'.tmp'</source>
+
+    When JMeter starts, it sets the system property:
+    <code>org.apache.commons.logging.Log</code> to
+    <code>org.apache.commons.logging.impl.LogKitLogger</code>
+    if not already set. This causes Apache and Commons HttpClient to use the same logging as JMeter.<br/>
+
+    Excalibur logging provides the facility to configure logging using configuration files written in XML. This allows for such features as
+    log file rotation, which are not supported directly by JMeter. If such a file is specified, it will be applied to the current logging
+    hierarchy when that has been created.
+    <source>log_config=logkit.xml</source>
 </description>
 </section>
 <section name="&sect-num;.10 HTTP Java configuration" anchor="http_java_config">
