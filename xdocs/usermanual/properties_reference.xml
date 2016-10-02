@@ -553,19 +553,50 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.16 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
 <properties>
-<property name="httpclient.parameters.file">define a properties file for overriding Commons HttpClient parameters
-See <a href="http://hc.apache.org/httpclient-3.x/preference-api.html">this</a>.
-Uncomment this line if you put anything in httpclient.parameters file</property>
-<property name="httpclient3.retrycount">Number of retries to attempt, defaults to:0</property>
+<property name="httpclient.parameters.file">
+    Define a properties file for overriding Commons HttpClient parameters.
+    See <a href="http://hc.apache.org/httpclient-3.x/preference-api.html">this</a>.
+    Uncomment this line if you put anything in <code>httpclient.parameters</code> file.
+</property>
+<property name="httpclient3.retrycount">
+    Number of retries to attempt.<br/>
+    Defaults to: <code>0</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.17 HTTP Cache Manager configuration" anchor="cache_maanger">
 <properties>
-<property name="cacheable_methods"><br/> Space or comma separated list of methods that can be cached<br/>, defaults to:GET</property>
-<property name="cache_manager.cached_resource_mode"> N.B. This property is currently a temporary solution for Bug 56162<br/> Since 2.12, JMeter does not create anymore a Sample Result with 204 response <br/> code for a resource found in cache which is inline with what browser do.<br/>, defaults to:RETURN_NO_SAMPLE</property>
-<property name=" RETURN_200_CACHE.message"> You can choose between 3 modes:<br/> RETURN_NO_SAMPLE (default)<br/> RETURN_200_CACHE<br/> RETURN_CUSTOM_STATUS<br/> Those mode have the following behaviours:<br/> RETURN_NO_SAMPLE : this mode returns no Sample Result, it has no additional configuration<br/> RETURN_200_CACHE : this mode will return Sample Result with response code to 200 and response message to "(ex cache)", you can modify response message by setting <br/>, defaults to:(ex cache)</property>
-<property name=" RETURN_CUSTOM_STATUS.code"> RETURN_CUSTOM_STATUS : This mode lets you select what response code and message you want to return, if you use this mode you need to set those properties<br/>, defaults to:</property>
-<property name=" RETURN_CUSTOM_STATUS.message">, defaults to:</property>
+<property name="cacheable_methods">
+    Space or comma separated list of methods that can be cached.<br/>
+    Defaults to: <code>GET</code>
+</property>
+<property name="cache_manager.cached_resource_mode">
+    <note>N.B. This property is currently a temporary solution for <bugzilla>56162</bugzilla>.</note>
+    Since version 2.12, JMeter does not create anymore a Sample Result with a response
+    code of <code>204</code> for a resource found in cache. This is in line with what browser do.<br/>
+    You can choose between three modes:
+    <dl>
+        <dt><code>RETURN_NO_SAMPLE</code> (default)</dt>
+        <dd>this mode returns no Sample Result. It has no additional configuration.</dd>
+        <dt><code>RETURN_200_CACHE</code></dt>
+        <dd>this mode will return Sample Result with response code to <code>200</code> and
+        response message to "<code>(ex cache)</code>".</dd>
+        <dt><code>RETURN_CUSTOM_STATUS</code></dt>
+        <dd>choosing this mode, response code and message have to be set by specifying
+        <code>RETURN_CUSTOM_STATUS.code</code> and <code>RETURN_CUSTOM_STATUS.message</code>.</dd>
+    </dl>
+    Defaults to: <code>RETURN_NO_SAMPLE</code>
+</property>
+<property name="RETURN_CUSTOM_STATUS.code">
+    This lets you select what response code you want to return if mode <code>RETURN_CUSTOM_STATUS</code>
+    is selected.<br/>
+    Defaults to empty value.
+</property>
+<property name="RETURN_CUSTOM_STATUS.message">
+    This lets you select what response message you want to return if mode <code>RETURN_CUSTOM_STATUS</code>
+    is selected.<br/>
+    Defaults to empty value
+</property>
 </properties>
 </section>
 <section name="&sect-num;.18 Results file configuration" anchor="results_file_config">
