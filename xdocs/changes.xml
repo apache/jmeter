@@ -106,6 +106,7 @@ Summary
     <li><bug>60082</bug>Validation mode : Be able to force Throughput Controller to run as if it was set to 100%</li>
     <li><bug>59329</bug>Trim spaces in input filename in CSVDataSet.</li>
     <li><bug>59349</bug>Trim spaces in input filename in IncludeController.</li>
+    <li><bug>60081</bug>Interleave Controller : Add an option to alternate across threads</li>
 </ul>
 
 <h3>Listeners</h3>
