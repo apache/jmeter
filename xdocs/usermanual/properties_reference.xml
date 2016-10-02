@@ -762,23 +762,78 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.21 JMeter Test Script recorder configuration" anchor="test_script_recorder">
 <properties>
-<property name="proxy.pause"><br/> N.B. The element was originally called the Proxy recorder, which is why the<br/> properties have the prefix "proxy".<br/> If the recorder detects a gap of at least 5s (default) between HTTP requests,<br/> it assumes that the user has clicked a new URL<br/>, defaults to:5000</property>
-<property name="proxy.number.requests"> Add numeric prefix to Sampler names (default true)<br/>, defaults to:true</property>
-<property name="proxy.excludes.suggested"> List of URL patterns that will be added to URL Patterns to exclude<br/> Separate multiple lines with ;<br/>, defaults to:.*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)</property>
-<property name="jmeter.httpsampler"> Change the default HTTP Sampler (currently HttpClient4)<br/> Java:<br/>, defaults to:HTTPSampler</property>
-<property name="jmeter.httpsampler">or<br/>, defaults to:Java</property>
-<property name="jmeter.httpsampler"><br/> Apache HTTPClient:<br/>, defaults to:HTTPSampler2</property>
-<property name="jmeter.httpsampler">or<br/>, defaults to:HttpClient3.1</property>
-<property name="jmeter.httpsampler"><br/> HttpClient4.x<br/>, defaults to:HttpClient4</property>
-<property name="jmeter.httpclient.strict_rfc2616"> By default JMeter tries to be more lenient with RFC2616 redirects and allows<br/> relative paths.<br/> If you want to test strict conformance, set this value to true<br/> When the property is true, JMeter follows http://tools.ietf.org/html/rfc3986#section-5.2<br/>, defaults to:false</property>
-<property name="proxy.content_type_include"> Default content-type include filter to use<br/>, defaults to:text/html|text/plain|text/xml</property>
-<property name="proxy.content_type_exclude"> Default content-type exclude filter to use<br/>, defaults to:image/.*|text/css|application/.*</property>
-<property name="proxy.headers.remove"> Default headers to remove from Header Manager elements<br/> (Cookie and Authorization are always removed)<br/>, defaults to:If-Modified-Since,If-None-Match,Host</property>
-<property name="proxy.binary.types"> Binary content-type handling<br/> These content-types will be handled by saving the request in a file:<br/>, defaults to:application/x-amf,application/x-java-serialized-object</property>
-<property name="proxy.binary.directory"> The files will be saved in this directory:<br/>, defaults to:user.dir</property>
-<property name="proxy.binary.filesuffix"> The files will be created with this file filesuffix:<br/>, defaults to:.binary</property>
-<property name="proxy.redirect.disabling"> Whether to attempt disabling of samples that resulted from redirects<br/> where the generated samples use auto-redirection<br/>, defaults to:true</property>
-<property name="proxy.ssl.protocol"> SSL configuration<br/>, defaults to:TLS</property>
+<property name="proxy.pause">
+    <note>N.B. The element was originally called the Proxy recorder, which is why the properties
+    have the prefix "proxy".</note>
+    If the recorder detects a gap of at least 5s (default) between HTTP requests, it assumes
+    that the user has clicked a new URL. Specified in milliseconds.<br/>
+    Defaults to: <code>5000</code>
+</property>
+<property name="proxy.number.requests">
+    Add numeric prefix to Sampler names.<br/>
+    defaults to: <code>true</code>
+</property>
+<property name="proxy.excludes.suggested">
+    List of URL patterns that will be added to URL Patterns to exclude.<br/>
+    Separate multiple lines with <code>;</code><br/>
+    Defaults to: <code>.*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)</code>
+</property>
+<property name="jmeter.httpsampler">
+    Change the default HTTP Sampler.<br/>
+    Can be one of
+    <dl>
+        <dt><code>HTTPSampler</code> or <code>Java</code></dt>
+        <dd>Use the <code>Java</code> Sampler</dd>
+        <dt><code>HTTPSampler2</code> or <code>HttpClient3.1</code></dt>
+        <dd>Use Apache HTTPClient version 3.1</dd>
+        <dt><code>HttpClient4</code></dt>
+        <dd>Use Apache HTTPClient version 4</dd>
+    </dl>
+    Defaults to: <code>HttpClient4</code>
+</property>
+<property name="jmeter.httpclient.strict_rfc2616">
+    By default JMeter tries to be more lenient with <a href="http://tools.ietf.org/html/rfc2616">RFC 2616</a>
+    redirects and allows relative paths.<br/>
+    If you want to test strict conformance, set this value to <code>true</code>.<br/>
+    When the property is <code>true</code>, JMeter follows
+    <a href="http://tools.ietf.org/html/rfc3986#section-5.2">RFC 3986 section 5.2</a>.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="proxy.content_type_include">
+    Default <code>content-type</code> include filter to use. Specified as a regex.<br/>
+    Defaults to: <code>text/html|text/plain|text/xml</code>
+</property>
+<property name="proxy.content_type_exclude">
+    Default <code>content-type</code> exclude filter to use. Specified as a regex.<br/>
+    Defaults to: <code>image/.*|text/css|application/.*</code>
+</property>
+<property name="proxy.headers.remove">
+    Default headers to remove from Header Manager elements. Specified as comma separated list<br/>
+    <note>The headers <code>Cookie</code> and <code>Authorization</code> are always removed.</note>
+    Defaults to: <code>If-Modified-Since,If-None-Match,Host</code>
+</property>
+<property name="proxy.binary.types">
+    Binary <code>content-type</code> handling.<br/>
+    These <code>content-types</code> will be handled by saving the request in a file.<br/>
+    Defaults to: <code>application/x-amf,application/x-java-serialized-object</code>
+</property>
+<property name="proxy.binary.directory">
+    The files will be saved in this directory.<br/>
+    Defaults to: <code>user.dir</code>
+</property>
+<property name="proxy.binary.filesuffix">
+    The files will be created suffixed with this value.<br/>
+    Defaults to: <code>.binary</code>
+</property>
+<property name="proxy.redirect.disabling">
+    Whether to attempt disabling of samples that resulted from redirects where the
+    generated samples use auto-redirection.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="proxy.ssl.protocol">
+    SSL configuration.<br/>
+    Defaults to: <code>TLS</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.22 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
