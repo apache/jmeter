@@ -2129,6 +2129,9 @@ other controllers for each loop iteration. </p>
 <properties>
         <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
+        <property name="Interleave accross threads" required="No">If checked, the interleave controller will alternate among each of its children controllers for each loop iteration but accross all threads, for example in a 
+        configuration with 4 threads and 3 child controllers, on first iteration
+        thread 1 will run first child, thread 2 second child, thread 3 third child, thread 4 first child, on next iteration each thread will run the following child controller</property>
 </properties>
 
 <!--
