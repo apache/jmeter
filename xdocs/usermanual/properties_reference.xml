@@ -1168,32 +1168,54 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.33 MailerModel configuration" anchor="mailer">
 <properties>
-<property name="mailer.successlimit">The file BeanShellListeners.bshrc contains sample definitions of Test and Thread Listeners.<br/> Number of successful samples before a message is sent<br/> defaults to:2</property>
-<property name="mailer.failurelimit">Number of failed samples before a message is sent<br/> defaults to:2</property>
+<property name="mailer.successlimit">
+    The file <code>BeanShellListeners.bshrc</code> contains sample definitions
+    of Test and Thread Listeners.<br/>
+    Number of successful samples before a message is sent.<br/>
+    Defaults to: <code>2</code>
+</property>
+<property name="mailer.failurelimit">
+    Number of failed samples before a message is sent.<br/>
+    Defaults to: <code>2</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.34 CSVRead configuration" anchor="csv">
 <properties>
-<property name="csvread.delimiter"> CSVRead delimiter setting (default ",")<br/> Make sure that there are no trailing spaces or tabs after the delimiter<br/> characters, or these will be included in the list of valid delimiters<br/>, defaults to:,</property>
-<property name="csvread.delimiter">, defaults to:;</property>
-<property name="csvread.delimiter">, defaults to:!</property>
-<property name="csvread.delimiter">, defaults to:~</property>
-<property name=" The following line has a tab after the ">, defaults to:</property>
-<property name="csvread.delimiter">, defaults to:   </property>
+<property name="csvread.delimiter">
+    CSVRead delimiter setting (default "<code>,</code>").<br/>
+    <note>Make sure that there are no trailing spaces or tabs after the delimiter
+    characters, or these will be included in the list of valid delimiters.</note>
+    Defaults to: <code>,</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.35 __time() function configuration" anchor="time">
 <properties>
-<property name="time.YMD"><br/> The properties below can be used to redefine the default formats<br/>, defaults to:yyyyMMdd</property>
-<property name="time.HMS">, defaults to:HHmmss</property>
-<property name="time.YMDHMS">, defaults to:yyyyMMdd-HHmmss</property>
-<property name="time.USER1">, defaults to:</property>
-<property name="time.USER2">, defaults to:</property>
+<property name="time.YMD">
+    This and the following properties can be used to redefine the default time formats.<br/>
+    Defaults to: <code>yyyyMMdd</code>
+</property>
+<property name="time.HMS">
+    Defaults to: <code>HHmmss</code>
+</property>
+<property name="time.YMDHMS">
+    Defaults to: <code>yyyyMMdd-HHmmss</code>
+</property>
+<property name="time.USER1">
+    Defaults to empty value
+</property>
+<property name="time.USER2">
+    Defaults to empty value
+</property>
 </properties>
 </section>
 <section name="&sect-num;.36 CSV DataSet configuration" anchor="csv_dataset">
 <properties>
-<property name="csvdataset.eofstring"> String to return at EOF (if recycle not used)<br/> defaults to:<code>&lt;EOF&gt;</code></property>
+<property name="csvdataset.eofstring">
+    String to return at <abbr title="end of file"><code>EOF</code></abbr> (if recycle not used).<br/>
+    Defaults to: <code>&lt;EOF&gt;</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.37 LDAP Sampler configuration" anchor="ldap">
