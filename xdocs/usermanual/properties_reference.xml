@@ -1505,85 +1505,263 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.40 Reporting configuration" anchor="reporting">
 <properties>
-<property name="jmeter.reportgenerator.apdex_satisfied_threshold"> Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:500</property>
-<property name="jmeter.reportgenerator.apdex_tolerated_threshold"> Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:1500</property>
-<property name="jmeter.reportgenerator.sample_filter"> Regular Expression which Indicates which samples to keep for graphs and statistics generation.<br/> Empty value means no filtering<br/>, defaults to:</property>
-<property name="jmeter.reportgenerator.temp_dir"> Sets the temporary directory used by the generation processus if it needs file I/O operations.<br/>, defaults to:temp</property>
-<property name="jmeter.reportgenerator.statistic_window "> Sets the size of the sliding window used by percentile evaluation.<br/> Caution : higher value provides a better accurency but needs more memory.<br/>, defaults to: 20000</property>
-<property name="jmeter.reportgenerator.report_title"> Configure this property to change the report title<br/>, defaults to:Apache JMeter Dashboard</property>
-<property name="jmeter.reportgenerator.overall_granularity"> Defines the overall granularity for over time graphs<br/>, defaults to:60000</property>
-<property name="jmeter.reportgenerator.graph.responseTimePercentiles.classname"> Response Time Percentiles graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.responseTimePercentiles.title">, defaults to:Response Time Percentiles</property>
-<property name="jmeter.reportgenerator.graph.responseTimeDistribution.classname"> Response Time Distribution graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.responseTimeDistribution.title">, defaults to:Response Time Distribution</property>
-<property name="jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity">, defaults to:500</property>
-<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.classname"> Active Threads Over Time graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.title">, defaults to:Active Threads Over Time</property>
-<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.timeVsThreads.classname"> Time VS Threads graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.timeVsThreads.title">, defaults to:Time VS Threads</property>
-<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.classname"> Bytes Throughput Over Time graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.title">, defaults to:Bytes Throughput Over Time</property>
-<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.responseTimesOverTime.classname"> Response Time Over Time graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.responseTimesOverTime.title">, defaults to:Response Time Over Time</property>
-<property name="jmeter.reportgenerator.graph.responseTimesOverTime.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.latenciesOverTime.classname"> Latencies Over Time graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.latenciesOverTime.title">, defaults to:Latencies Over Time</property>
-<property name="jmeter.reportgenerator.graph.latenciesOverTime.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.classname"> Response Time Vs Request graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.title">, defaults to:Response Time Vs Request</property>
-<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.exclude_controllers">, defaults to:true</property>
-<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.latencyVsRequest.classname"> Latencies Vs Request graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.latencyVsRequest.title">, defaults to:Latencies Vs Request</property>
-<property name="jmeter.reportgenerator.graph.latencyVsRequest.exclude_controllers">, defaults to:true</property>
-<property name="jmeter.reportgenerator.graph.latencyVsRequest.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.hitsPerSecond.classname"> Hits Per Second graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.hitsPerSecond.title">, defaults to:Hits Per Second</property>
-<property name="jmeter.reportgenerator.graph.hitsPerSecond.exclude_controllers">, defaults to:true</property>
-<property name="jmeter.reportgenerator.graph.hitsPerSecond.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.codesPerSecond.classname"> Codes Per Second graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.codesPerSecond.title">, defaults to:Codes Per Second</property>
-<property name="jmeter.reportgenerator.graph.codesPerSecond.exclude_controllers">, defaults to:true</property>
-<property name="jmeter.reportgenerator.graph.codesPerSecond.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.graph.transactionsPerSecond.classname"> Transactions Per Second graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer</property>
-<property name="jmeter.reportgenerator.graph.transactionsPerSecond.title">, defaults to:Transactions Per Second</property>
-<property name="jmeter.reportgenerator.graph.transactionsPerSecond.property.set_granularity">, defaults to:${jmeter.reportgenerator.overall_granularity}</property>
-<property name="jmeter.reportgenerator.exporter.html.classname"> HTML Export<br/>, defaults to:org.apache.jmeter.report.dashboard.HtmlTemplateExporter</property>
-<property name="jmeter.reportgenerator.exporter.html.property.template_dir"> Sets the source directory of templated files from which the html pages are generated.<br/>, defaults to:report-template</property>
-<property name="jmeter.reportgenerator.exporter.html.property.output_dir"> Sets the destination directory for generated html pages.<br/> This will be overriden by the command line option -o <br/>, defaults to:report-output</property>
-<property name="jmeter.reportgenerator.exporter.html.series_filter"> Regular Expression which Indicates which graph series are filtered in display<br/> Empty value means no filtering<br/>, defaults to:</property>
-<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series"> Indicates whether series filter apply only on sample series<br/>, defaults to:true</property>
-<property name="jmeter.reportgenerator.exporter.html.show_controllers_only"> Indicates whether only controller samples are displayed on graphs that support it.<br/>, defaults to:false</property>
+<property name="jmeter.reportgenerator.apdex_satisfied_threshold">
+    Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>
+    Defaults to: <code>500</code>
+</property>
+<property name="jmeter.reportgenerator.apdex_tolerated_threshold">
+    Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>
+    Defaults to: <code>1500</code>
+</property>
+<property name="jmeter.reportgenerator.sample_filter">
+    Regular Expression which Indicates which samples to keep for graphs and statistics generation.<br/>
+    Empty value means no filtering<br/>
+    Defaults to empty value.
+</property>
+<property name="jmeter.reportgenerator.temp_dir">
+    Sets the temporary directory used by the generation process if it needs file I/O operations.<br/>
+    Defaults to: <code>temp</code>
+</property>
+<property name="jmeter.reportgenerator.statistic_window">
+    Sets the size of the sliding window used by percentile evaluation.<br/>
+    <note>Caution: higher value provides a better accurency but needs more memory.</note>
+    Defaults to: <code>20000</code>
+</property>
+<property name="jmeter.reportgenerator.report_title">
+    Configure this property to change the report title<br/>
+    Defaults to: <code>Apache JMeter Dashboard</code>
+</property>
+<property name="jmeter.reportgenerator.overall_granularity">
+    Defines the overall granularity for over time graphs<br/>
+    Defaults to: <code>60000</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimePercentiles.classname">
+    Response Time Percentiles graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimePercentiles.title">
+    Defaults to: <code>Response Time Percentiles</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeDistribution.classname">
+    Response Time Distribution graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeDistribution.title">
+    Defaults to: <code>Response Time Distribution</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeDistribution.property.set_granularity">
+    Defaults to: <code>500</code>
+</property>
+<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.classname">
+    Active Threads Over Time graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.title">
+    Defaults to: <code>Active Threads Over Time</code>
+</property>
+<property name="jmeter.reportgenerator.graph.activeThreadsOverTime.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.timeVsThreads.classname">
+    Time VS Threads graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.timeVsThreads.title">
+    Defaults to: <code>Time VS Threads</code>
+</property>
+<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.classname">
+    Bytes Throughput Over Time graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.title">
+    Defaults to: <code>Bytes Throughput Over Time</code>
+</property>
+<property name="jmeter.reportgenerator.graph.bytesThroughputOverTime.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimesOverTime.classname">
+    Response Time Over Time graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimesOverTime.title">
+    Defaults to: <code>Response Time Over Time</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimesOverTime.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.latenciesOverTime.classname">
+    Latencies Over Time graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.latenciesOverTime.title">
+    Defaults to: <code>Latencies Over Time</code>
+</property>
+<property name="jmeter.reportgenerator.graph.latenciesOverTime.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.classname">
+    Response Time Vs Request graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.title">
+    Defaults to: <code>Response Time Vs Request</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.exclude_controllers">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.reportgenerator.graph.responseTimeVsRequest.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.latencyVsRequest.classname">
+    Latencies Vs Request graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.latencyVsRequest.title">
+    Defaults to: <code>Latencies Vs Request</code>
+</property>
+<property name="jmeter.reportgenerator.graph.latencyVsRequest.exclude_controllers">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.reportgenerator.graph.latencyVsRequest.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.hitsPerSecond.classname">
+    Hits Per Second graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.hitsPerSecond.title">
+    Defaults to: <code>Hits Per Second</code>
+</property>
+<property name="jmeter.reportgenerator.graph.hitsPerSecond.exclude_controllers">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.reportgenerator.graph.hitsPerSecond.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.codesPerSecond.classname">
+    Codes Per Second graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.codesPerSecond.title">
+    Defaults to: <code>Codes Per Second</code>
+</property>
+<property name="jmeter.reportgenerator.graph.codesPerSecond.exclude_controllers">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.reportgenerator.graph.codesPerSecond.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.graph.transactionsPerSecond.classname">
+    Transactions Per Second graph definition<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer</source>
+</property>
+<property name="jmeter.reportgenerator.graph.transactionsPerSecond.title">
+    Defaults to: <code>Transactions Per Second</code>
+</property>
+<property name="jmeter.reportgenerator.graph.transactionsPerSecond.property.set_granularity">
+    Defaults to: <code>${jmeter.reportgenerator.overall_granularity}</code>
+</property>
+<property name="jmeter.reportgenerator.exporter.html.classname">
+    HTML Export<br/>
+    Defaults to:
+    <source>org.apache.jmeter.report.dashboard.HtmlTemplateExporter</source>
+</property>
+<property name="jmeter.reportgenerator.exporter.html.property.template_dir">
+    Sets the source directory of templated files from which the html pages are generated.<br/>
+    Defaults to: <code>report-template</code>
+</property>
+<property name="jmeter.reportgenerator.exporter.html.property.output_dir">
+    Sets the destination directory for generated html pages.<br/>
+    This will be overridden by the command line option <code>-o</code>.<br/>
+    Defaults to: <code>report-output</code>
+</property>
+<property name="jmeter.reportgenerator.exporter.html.series_filter">
+    Regular Expression which Indicates which graph series are filtered in display.<br/>
+    Empty value means no filtering.<br/>
+    Defaults to empty value.
+</property>
+<property name="jmeter.reportgenerator.exporter.html.filters_only_sample_series">
+    Indicates whether series filter apply only on sample series<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.reportgenerator.exporter.html.show_controllers_only">
+    Indicates whether only controller samples are displayed on graphs that support it.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.41 Additional property files to load" anchor="properties">
 <properties>
-<property name="user.properties">Should JMeter automatically load additional JMeter properties?<br/> File name to look for (comment to disable)<br/>, defaults to:user.properties</property>
-<property name="system.properties">Should JMeter automatically load additional system properties?<br/> File name to look for (comment to disable)<br/>, defaults to:system.properties</property>
-<property name="template.files">Comma separated list of files that contain reference to templates and their description<br/> Path must be relative to jmeter root folder<br/>, defaults to:/bin/templates/templates.xml</property>
+<property name="user.properties">
+    Should JMeter automatically load additional JMeter properties?<br/>
+    File name to look for (comment to disable)<br/>
+    Defaults to: <code>user.properties</code>
+</property>
+<property name="system.properties">
+    Should JMeter automatically load additional system properties?<br/>
+    File name to look for (comment to disable)<br/>
+    Defaults to: <code>system.properties</code>
+</property>
+<property name="template.files">
+    Comma separated list of files that contain reference to templates and their description.<br/>
+    Path must be relative to JMeter root folder<br/>
+    Defaults to: <code>/bin/templates/templates.xml</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.42 Thread Group Validation feature" anchor="validation">
 <description>Validation is the name of the feature used to rapidly validate a Thread Group runs fine</description>
 <properties>
-<property name="testplan_validation.tree_cloner_class">Default implementation is org.apache.jmeter.gui.action.validation.TreeClonerForValidation<br/> It runs validation without timers, with 1 thread and 1 iteration<br/> You can implement your own policy that must extend org.apache.jmeter.engine.TreeCloner<br/> JMeter will instanciate it and use it to create the Tree used to run validation on Thread Group<br/>, defaults to:org.apache.jmeter.gui.action.validation.TreeClonerForValidation</property>
-<property name="testplan_validation.nb_threads_per_thread_group">Number of threads to use to validate a Thread Group<br/>, defaults to:1</property>
-<property name="testplan_validation.ignore_timers">Ignore timers when validating the thread group of plan<br/>, defaults to:true</property>
-<property name="testplan_validation.number_iterations">Number of iterations to use to validate a Thread Group<br/>, defaults to:1</property>
-<property name="testplan_validation.tpc_force_100_pct">Force throuput controllers that work in percentage mode to be a 100%<br/>, defaults to:false</property>
+<property name="testplan_validation.tree_cloner_class">
+    Default implementation is <source>org.apache.jmeter.gui.action.validation.TreeClonerForValidation</source>
+    It runs validation without timers, with one thread and one iteration.<br/>
+    You can implement your own policy that must extend <code>org.apache.jmeter.engine.TreeCloner</code>.<br/>
+    JMeter will instantiate it and use it to create the Tree used to run validation on Thread Group.<br/>
+    Defaults to:
+    <source>org.apache.jmeter.gui.action.validation.TreeClonerForValidation</source>
+</property>
+<property name="testplan_validation.nb_threads_per_thread_group">
+    Number of threads to use to validate a Thread Group.<br/>
+    Defaults to: <code>1</code>
+</property>
+<property name="testplan_validation.ignore_timers">
+    Ignore timers when validating the thread group of plan.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="testplan_validation.number_iterations">
+    Number of iterations to use to validate a Thread Group.<br/>
+    Defaults to: <code>1</code>
+</property>
+<property name="testplan_validation.tpc_force_100_pct">
+    Force throughput controllers that work in percentage mode to be a 100%.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.43 Timer related feature" anchor="timer">
 <description>Timer are used to introduce think time in your plan.</description>
 <properties>
-<property name="timer.factor">Apply a factor on computed pauses by the following Timers:
-<ul>
-<li>Gaussian Random Timer</li>
-<li>Uniform Random Timer</li>
-<li>Poisson Random Timer</li>
-</ul><br/>Defaults to:1.0f</property>
+<property name="timer.factor">
+    Apply a factor on computed pauses by the following Timers:
+    <ul>
+        <li>Gaussian Random Timer</li>
+        <li>Uniform Random Timer</li>
+        <li>Poisson Random Timer</li>
+    </ul>
+    Defaults to: <code>1.0f</code>
+</property>
 </properties>
 <a href="#">^</a>
 </section>
