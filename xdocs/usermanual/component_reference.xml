@@ -2122,7 +2122,7 @@ Bug Page, Bug Page.</p>
 Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
-<component name="Interleave Controller" index="&sect-num;.2.4"  width="329" height="104" screenshot="logic-controller/interleave-controller.png">
+<component name="Interleave Controller" index="&sect-num;.2.4"  width="626" height="127" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
