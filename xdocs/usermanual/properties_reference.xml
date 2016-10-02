@@ -1016,13 +1016,23 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
 <properties>
-<property name="jdbcsampler.nullmarker"> String used to indicate a null value<br/>, defaults to:]NULL[</property>
-<property name="jdbcsampler.max_retain_result_size">Max bytes to store from a CLOB or BLOB in the sampler<br/>, defaults to: 65536 (bytes)</property>
+<property name="jdbcsampler.nullmarker">
+    String used to indicate a null value.<br/>
+    Defaults to: <code>]NULL[</code>
+</property>
+<property name="jdbcsampler.max_retain_result_size">
+    Max bytes to store from a <code>CLOB</code> or <code>BLOB</code> in the sampler.<br/>
+    Defaults to: <code>65536</code> (bytes)
+</property>
 </properties>
 </section>
 <section name="&sect-num;.27 OS Process Sampler configuration" anchor="os_sampler">
 <properties>
-<property name="os_sampler.poll_for_timeout"> Polling to see if process has finished its work, used when a timeout is configured on sampler<br/>, defaults to:100</property>
+<property name="os_sampler.poll_for_timeout">
+    Polling to see if process has finished its work, used when a timeout
+    is configured on sampler. Specified in milliseconds.<br/>
+    Defaults to: <code>100</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.28 TCP Sampler configuration" anchor="tcp_sampler">
