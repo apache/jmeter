@@ -838,20 +838,45 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.22 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
 <properties>
-<property name="proxy.cert.directory">, defaults to:&lt;JMeter bin directory&gt;</property>
-<property name="proxy.cert.file">, defaults to:proxyserver.jks</property>
-<property name="proxy.cert.type">, defaults to:JKS</property>
-<property name="proxy.cert.keystorepass">, defaults to:password</property>
-<property name="proxy.cert.keypassword">, defaults to:password</property>
-<property name="proxy.cert.factory">, defaults to:SunX509</property>
-<property name="proxy.cert.alias"> define this property if you wish to use your own keystore<br/>, defaults to:<code>none</code></property>
-<property name="proxy.cert.validity"> The default validity for certificates created by JMeter<br/>, defaults to:7</property>
-<property name="proxy.cert.dynamic_keys"> Use dynamic key generation (if supported by JMeter/JVM)<br/> If false, will revert to using a single key with no certificate<br/>, defaults to:true</property>
+<property name="proxy.cert.directory">
+    Defaults to: <em>JMeter <code>bin</code> directory</em>
+</property>
+<property name="proxy.cert.file">
+    Defaults to: <code>proxyserver.jks</code>
+</property>
+<property name="proxy.cert.type">
+    Defaults to: <code>JKS</code>
+</property>
+<property name="proxy.cert.keystorepass">
+    Defaults to: <code>password</code>
+</property>
+<property name="proxy.cert.keypassword">
+    Defaults to: <code>password</code>
+</property>
+<property name="proxy.cert.factory">
+    Defaults to: <code>SunX509</code>
+</property>
+<property name="proxy.cert.alias">
+    Define this property if you wish to use a special entry from the keystore.<br/>
+    Defaults to empty value
+</property>
+<property name="proxy.cert.validity">
+    The default validity (in days) for certificates created by JMeter.<br/>
+    Defaults to: <code>7</code>
+</property>
+<property name="proxy.cert.dynamic_keys">
+    Use dynamic key generation (if supported by JMeter/JVM).<br/>
+    If <code>false</code>, will revert to using a single key with no certificate.<br/>
+    Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.23 JMeter Proxy configuration" anchor="proxy_config">
 <properties>
-<property name="http.proxyDomain"> use command-line flags for user-name and password<br/>, defaults to:NTLM domain, if required by HTTPClient sampler</property>
+<property name="http.proxyDomain">
+    Use command-line flags for user-name and password.<br/>
+    Defaults to: NTLM domain, if required by HTTPClient sampler
+</property>
 </properties>
 </section>
 <section name="&sect-num;.24 HTML Parser configuration" anchor="parser_config">
