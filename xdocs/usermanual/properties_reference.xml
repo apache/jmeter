@@ -736,15 +736,28 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.19 Settings that affect SampleResults" anchor="sample_results">
 <properties>
-<property name="sampleresult.timestamp.start"> Save the start time stamp instead of the end<br/> This also affects the timestamp stored in result files<br/>, defaults to:true</property>
-<property name="sampleresult.useNanoTime"> Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()<br/>, defaults to:true</property>
-<property name=" "> </property>
-<property name="sampleresult.nanoThreadSleep">Use a background thread to calculate the nanoTime offset<br/>. Set this to a value &lt; 0 to disable the background thread, defaults to:5000</property>
+<property name="sampleresult.timestamp.start">
+    Save the start time stamp instead of the end.<br/>
+    This also affects the timestamp stored in result files.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="sampleresult.useNanoTime">
+    Whether to use <code>System.nanoTime()</code> - otherwise only use <code>System.currentTimeMillis()</code>.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="sampleresult.nanoThreadSleep">
+    Use a background thread to calculate the nanoTime offset.<br/>
+    Set this to a value less than zero to disable the background thread.<br/>
+    Defaults to: <code>5000</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.20 Upgrade" anchor="upgrade">
 <properties>
-<property name="upgrade_properties"> File that holds a record of name changes for backward compatibility issues<br/>, defaults to:/bin/upgrade.properties</property>
+<property name="upgrade_properties">
+    File that holds a record of name changes for backward compatibility issues.<br/>
+    Defaults to: <code>/bin/upgrade.properties</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.21 JMeter Test Script recorder configuration" anchor="test_script_recorder">
