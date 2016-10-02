@@ -269,32 +269,66 @@ gui.quick_9=ViewResultsFullVisualizer
 </section>
 <section name="&sect-num;.7 Remote hosts and RMI configuration" anchor="remote">
 <properties>
-<property name="remote_hosts"> Remote Hosts - comma delimited, example <source>remote_hosts=localhost:1099,localhost:2010</source>, defaults to:127.0.0.1.</property>
-<property name="server_port"> RMI port to be used by the server (must start rmiregistry with same port)
-To change the port to (say) 1234:
-On the server(s):
-<ul>
-<ol>set server_port=1234</ol>
-<ol>start rmiregistry with port 1234</ol>
-</ul>
-On Windows this can be done by:
-<ul>
-<ol><code>SET SERVER_PORT=1234</code></ol>
-<ol>JMETER-SERVER</ol>
-</ul>
-On Unix:
-<code>SERVER_PORT=1234 jmeter-server</code><br/>
-On the client:
-<code>set remote_hosts=server:1234</code><br/>
-defaults to:1099</property>
-<property name="client.rmi.localport"> Parameter that controls the RMI port used by the RemoteSampleListenerImpl (The Controler)<br/> Default value is 0 which means port is randomly assigned<br/> You may need to open Firewall port on the Controller machine<br/>, defaults to:0</property>
-<property name="client.tries"> When distributed test is starting, there may be several attempts to initialize<br/> remote engines. By default, only single try is made. Increase following property<br/> to make it retry for additional times<br/>, defaults to:1</property>
-<property name="client.retries_delay"> If there is initialization retries, following property sets delay between attempts<br/>, defaults to:5000</property>
-<property name="client.continue_on_fail"> When all initialization tries was made, test will fail if some remote engines are failed<br/> Set following property to true to ignore failed nodes and proceed with test <br/>, defaults to:false</property>
-<property name="server.rmi.port"> To change the default port (1099) used to access the server:<br/>, defaults to:1234</property>
-<property name="server.rmi.localport"> To use a specific port for the JMeter server engine, define<br/> the following property before starting the server:<br/>, defaults to:4000</property>
-<property name="server.rmi.create"> From JMeter 2.3.1, the jmeter server creates the RMI registry as part of the server process.<br/> To stop the server creating the RMI registry:<br/>, defaults to:false</property>
-<property name="server.exitaftertest"> From JMeter 2.3.1, define the following property to cause JMeter to exit after the first test<br/>, defaults to:true</property>
+<property name="remote_hosts">
+    Remote Hosts - comma delimited, for example
+    <source>remote_hosts=localhost:1099,localhost:2010</source>
+    Defaults to: <code>127.0.0.1</code></property>
+<property name="server_port">
+    RMI port to be used by the server (must start <code>rmiregistry</code> with same port).
+    To change the port to (say) <code>1234</code>:<br/>
+    On the server(s):
+    <ul>
+        <ol><code>set server_port=1234</code></ol>
+        <ol>start <code>rmiregistry</code> with port <code>1234</code></ol>
+    </ul>
+    On Windows this can be done by:
+    <source>SET SERVER_PORT=1234
+JMETER-SERVER</source>
+    On Unix:
+    <source>SERVER_PORT=1234 jmeter-server</source>
+    On the windows client:
+    <source>set remote_hosts=<em>server</em>:1234</source>
+    On the unix client:
+    <source>export remote_hosts=<em>server</em>:1234</source>
+    Defaults to: <code>1099</code>
+</property>
+<property name="client.rmi.localport">
+    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controler)<br/>
+    Default value is <code>0</code>, which means port is randomly assigned.
+    <note>You may need to open a port in the firewall on the Controller machine.</note>
+    Defaults to: <code>0</code>
+</property>
+<property name="client.tries">
+    When distributed test is starting, there may be several attempts to initialize remote engines.<br/>
+    By default, only a single try is made. Increase this property to make it retry additional times.<br/>
+    Defaults to: <code>1</code>
+</property>
+<property name="client.retries_delay">
+    If initialization is retried, this property sets the delay between those attempts in milliseconds.<br/>
+    Defaults to: <code>5000</code>
+</property>
+<property name="client.continue_on_fail">
+    When all initialization tries were made, the test will fail, if any remote engines are failed.<br/>
+    Set this property to <code>true</code> to ignore failed nodes and proceed with test.<br/>
+    Defaults to: <code>false</code>
+</property>
+<property name="server.rmi.port">
+    To change the default port (<code>1099</code>) used to access the server.<br/>
+    Defaults to: <code>1099</code>
+</property>
+<property name="server.rmi.localport">
+    To use a specific port for the JMeter server engine, define this property before starting the server.<br/>
+    Defaults to: <code>4000</code>
+</property>
+<property name="server.rmi.create">
+    From JMeter version 2.3.1, the jmeter server creates the RMI registry as part of the server process.<br/>
+    Set this property to <code>false</code>, to stop the server creating the RMI registry.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="server.exitaftertest">
+    From JMeter version 2.3.1, define this property to cause JMeter to exit after the first test.<br/>
+    Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.8 Include Controller" anchor="include_controller">
