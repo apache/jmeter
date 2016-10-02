@@ -430,17 +430,43 @@ log_file.jmeter=jmeter.log</source>
 </section>
 <section name="&sect-num;.10 HTTP Java configuration" anchor="http_java_config">
 <properties>
-<property name="http.java.sampler.retries"> Number of connection retries performed by HTTP Java sampler before giving up. 0 means no retry since version 3.0, defaults to:0</property>
+<property name="http.java.sampler.retries">
+    Number of connection retries performed by HTTP Java sampler before giving up.
+    <code>0</code> means no retry since version 3.0.<br/>
+    Defaults to: <code>0</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.11 Commons and Apache HttpClient common properties" anchor="httpclient_common_properties">
 <properties>
-<property name="httpclient.timeout"> set the socket timeout (or use the parameter <code>http.socket.timeout</code>) <br/> for AJP Sampler and HttpClient3 implementation.<br/> Note for HttpClient3 implementation it is better to use GUI to set timeout or use <code>http.socket.timeout</code> in httpclient.parameters. Value is in milliseconds, 0 means no timeout, defaults to:0</property>
-<property name="httpclient.version"> Set the http version, defaults to:<code>1.1</code> (or use the parameter <code>http.protocol.version</code>)</property>
-<property name="httpclient.socket.http.cps"> Set characters per second to a value &gt; 0 to emulate slow connections<br/>, defaults to:0</property>
-<property name="httpclient.socket.https.cps">Same as before but for https, defaults to:0</property>
-<property name="httpclient.loopback">Enable loopback protocol<br/>, defaults to:true</property>
-<property name="httpclient.localaddress"> Define the local host address to be used for multi-homed hosts, example <source>httpclient.localaddress=1.2.3.4</source></property>
+<property name="httpclient.timeout">
+    Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
+    AJP Sampler and HttpClient3 implementation.<br/>
+    <note>Note for HttpClient3 implementation it is better to use GUI to set timeout or
+    use <code>http.socket.timeout</code> in <code>httpclient.parameters</code>.</note>
+    Value is in milliseconds, <code>0</code> means no timeout.<br/>
+    Defaults to: <code>0</code>
+</property>
+<property name="httpclient.version">
+    Set the http version.<br/>
+    Defaults to: <code>1.1</code> (or use the parameter <code>http.protocol.version</code>)
+</property>
+<property name="httpclient.socket.http.cps">
+    Set characters per second to a value greater then zero to emulate slow connections.<br/>
+    Defaults to: <code>0</code>
+</property>
+<property name="httpclient.socket.https.cps">
+    Same as before but for https.
+    Defaults to: <code>0</code>
+</property>
+<property name="httpclient.loopback">
+    Enable loopback protocol.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="httpclient.localaddress">
+    Define the local host address to be used for multi-homed hosts,
+    example <source>httpclient.localaddress=1.2.3.4</source>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.12 Kerberos properties" anchor="kerberos">
