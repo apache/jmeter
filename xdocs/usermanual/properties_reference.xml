@@ -601,42 +601,137 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.18 Results file configuration" anchor="results_file_config">
 <properties>
-<property name="jmeter.save.saveservice.output_format"> This section helps determine how result data will be saved.<br/> The commented out values are the defaults.<br/> legitimate values: xml, csv, db.  Only xml and csv are currently supported.<br/>, defaults to:csv</property>
-<property name="jmeter.save.saveservice.assertion_results_failure_message"> true when field should be saved; false otherwise<br/> assertion_results_failure_message only affects CSV output<br/>, defaults to:true</property>
-<property name="jmeter.save.saveservice.assertion_results"><br/> legitimate values: none, first, all<br/>, defaults to:none</property>
-<property name="jmeter.save.saveservice.data_type"><br/>, defaults to:true</property>
-<property name="jmeter.save.saveservice.label">, defaults to:true</property>
-<property name="jmeter.save.saveservice.response_code">, defaults to:true</property>
-<property name="jmeter.save.saveservice.response_data"> response_data is not currently supported for CSV output<br/>, defaults to:false</property>
-<property name="jmeter.save.saveservice.response_data.on_error"> Save ResponseData for failed samples<br/>, defaults to:false</property>
-<property name="jmeter.save.saveservice.response_message">, defaults to:true</property>
-<property name="jmeter.save.saveservice.successful">, defaults to:true</property>
-<property name="jmeter.save.saveservice.thread_name">, defaults to:true</property>
-<property name="jmeter.save.saveservice.time">, defaults to:true</property>
-<property name="jmeter.save.saveservice.subresults">, defaults to:true</property>
-<property name="jmeter.save.saveservice.assertions">, defaults to:true</property>
-<property name="jmeter.save.saveservice.latency">, defaults to:true</property>
-<property name="jmeter.save.saveservice.connect_time">, defaults to:false</property>
-<property name="jmeter.save.saveservice.samplerData">, defaults to:false</property>
-<property name="jmeter.save.saveservice.responseHeaders">, defaults to:false</property>
-<property name="jmeter.save.saveservice.requestHeaders">, defaults to:false</property>
-<property name="jmeter.save.saveservice.encoding">, defaults to:false</property>
-<property name="jmeter.save.saveservice.bytes">, defaults to:true</property>
-<property name="jmeter.save.saveservice.url">, defaults to:false</property>
-<property name="jmeter.save.saveservice.filename">, defaults to:false</property>
-<property name="jmeter.save.saveservice.hostname">, defaults to:false</property>
-<property name="jmeter.save.saveservice.thread_counts">, defaults to:true</property>
-<property name="jmeter.save.saveservice.sample_count">, defaults to:false</property>
-<property name="jmeter.save.saveservice.idle_time">, defaults to:true</property>
-<property name="jmeter.save.saveservice.timestamp_format"> Timestamp format - this only affects CSV output files<br/> legitimate values: none, ms, or a format suitable for SimpleDateFormat<br/>, defaults to:ms</property>
-<property name="jmeter.save.saveservice.timestamp_format">, defaults to:yyyy/MM/dd HH:mm:ss.SSS</property>
-<property name="jmeter.save.saveservice.default_delimiter"> For use with Comma-separated value (CSV) files or other formats<br/> where the fields' values are separated by specified delimiters.<br/> Default:<br/>, defaults to:,</property>
-<property name="jmeter.save.saveservice.default_delimiter"> For TAB, since JMeter 2.3 one can use:<br/>, defaults to:\t</property>
-<property name="jmeter.save.saveservice.print_field_names"> Only applies to CSV format files:<br/> Print field names as first line in CSV<br/>, defaults to:true</property>
-<property name="sample_variables"> Optional list of JMeter variable names whose values are to be saved in the result data files.<br/> Use commas to separate the names. For example:<br/>, defaults to:SESSION_ID,REFERENCE</property>
-<property name="jmeter.save.saveservice.xml_pi"> N.B. The current implementation saves the values in XML as attributes,<br/> so the names must be valid XML names.<br/> Versions of JMeter after 2.3.2 send the variable to all servers<br/> to ensure that the correct data is available at the client.<br/> Optional xml processing instruction for line 2 of the file:<br/> Example:<br/>, defaults to:</property>
-<property name="jmeter.save.saveservice.base_prefix"> Prefix used to identify filenames that are relative to the current base<br/>, defaults to:~/</property>
-<property name="jmeter.save.saveservice.autoflush"> AutoFlush on each line written in XML or CSV output<br/> Setting this to true will result in less test results data loss in case of Crash<br/> but with impact on performances, particularly for intensive tests (low or no pauses)<br/> Since JMeter 2.10, this is false by default<br/>, defaults to:false</property>
+<property name="jmeter.save.saveservice.output_format">
+    This section helps determine how result data will be saved.<br/>
+    The commented out values are the defaults.<br/>
+    Legitimate values: <code>xml</code>, <code>csv</code>, <code>db</code>.<br/>
+    Only <code>xml</code> and <code>csv</code> are currently supported.<br/>
+    Defaults to: <code>csv</code>
+</property>
+<property name="jmeter.save.saveservice.assertion_results_failure_message">
+    <code>true</code> when field should be saved; <code>false</code> otherwise.<br/>
+    <code>assertion_results_failure_message</code> only affects CSV output.<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.assertion_results">
+    Legitimate values: <code>none</code>, <code>first</code>, <code>all</code>.<br/>
+    Defaults to: <code>none</code>
+</property>
+<property name="jmeter.save.saveservice.data_type">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.label">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.response_code">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.response_data">
+    <note><code>response_data</code> is currently not supported for CSV output</note>
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.response_data.on_error">
+    Save ResponseData for failed samples.
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.response_message">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.successful">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.thread_name">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.time">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.subresults">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.assertions">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.latency">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.connect_time">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.samplerData">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.responseHeaders">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.requestHeaders">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.encoding">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.bytes">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.url">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.filename">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.hostname">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.thread_counts">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.sample_count">
+    Defaults to: <code>false</code>
+</property>
+<property name="jmeter.save.saveservice.idle_time">
+    Defaults to: <code>true</code>
+</property>
+<property name="jmeter.save.saveservice.timestamp_format">
+    Timestamp format - this only affects CSV output files.<br/>
+    Legitimate values: <code>none</code>, <code>ms</code>, or a format suitable for <code>SimpleDateFormat</code>.<br/>
+    Defaults to: <code>ms</code>
+</property>
+<property name="jmeter.save.saveservice.timestamp_format">
+    Defaults to: <code>yyyy/MM/dd HH:mm:ss.SSS</code>
+</property>
+<property name="jmeter.save.saveservice.default_delimiter">
+    For use with Comma-separated value (CSV) files or other formats where the fields' values
+    are separated by specified delimiters.<br/>
+    <note>For TAB, since JMeter version 2.3 one can use <code>\t</code></note>
+    Defaults to: <code>,</code>
+</property>
+<property name="jmeter.save.saveservice.print_field_names">
+    Only applies to CSV format files:<br/>
+    Print field names as first line in CSV<br/>
+    Defaults to: <code>true</code>
+</property>
+<property name="sample_variables">
+    Optional list of JMeter variable names whose values are to be saved in the result data files.<br/>
+    Use commas to separate the names.<br/>
+    Defaults to: <code>SESSION_ID,REFERENCE</code>
+</property>
+<property name="jmeter.save.saveservice.xml_pi">
+    <note>N.B. The current implementation saves the values in XML as attributes, so the names must be valid XML names.</note>
+    Versions of JMeter after 2.3.2 send the variable to all servers to ensure that the correct data is available at the client.<br/>
+    Optional xml processing instruction for line two of the file.<br/>
+    Defaults to empty value
+</property>
+<property name="jmeter.save.saveservice.base_prefix">
+    Prefix used to identify filenames that are relative to the current base.<br/>
+    Defaults to: <code>~/</code>
+</property>
+<property name="jmeter.save.saveservice.autoflush">
+    AutoFlush on each line written in XML or CSV output.<br/>
+    Setting this to <code>true</code> will result in less test results data loss in case of a crash, but
+    with impact on performances, particularly for intensive tests (low or no pauses).<br/>
+    Since JMeter version 2.10, this is <code>false</code> by default.<br/>
+    Defaults to: <code>false</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.19 Settings that affect SampleResults" anchor="sample_results">
