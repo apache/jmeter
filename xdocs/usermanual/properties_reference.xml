@@ -471,23 +471,30 @@ log_file.jmeter=jmeter.log</source>
 </section>
 <section name="&sect-num;.12 Kerberos properties" anchor="kerberos">
 <properties>
-<property name="kerberos_jaas_application"> AuthManager Kerberos configuration<br/> Name of application module used in jaas.conf, defaults to:JMeter  </property>
-<property name="kerberos.spnego.strip_port"> Should ports be stripped from urls before constructing SPNs for spnego authentication, defaults to:true</property>
+<property name="kerberos_jaas_application">
+    AuthManager Kerberos configuration<br/>
+    Name of application module used in <code>jaas.conf</code>.<br/>
+    Defaults to: <code>JMeter</code>
+</property>
+<property name="kerberos.spnego.strip_port">
+    Should port be stripped from urls before constructing SPNs for SPNEGO authentication.
+    Defaults to: <code>true</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.13 Sample logging levels for Commons HttpClient" anchor="log_levels_commons_httpclient">
 <description>
-Commons HttpClient Logging information can be found at <a href="http://hc.apache.org/httpclient-3.x/logging.html" target="_blank" >Logging</a>
-Note that full category names are used, i.e. must include the org.apache.
-Info level produces no output.
-Set debug level:
-<source>log_level.org.apache.commons.httpclient=debug</source>
-Might be useful:
-<source>log_level.org.apache.commons.httpclient.Authenticator=trace</source> 
-Show headers only
-<source>log_level.httpclient.wire.header=debug</source>
-Full wire debug produces a lot of output; consider using separate file:
-<source>
+    Commons HttpClient Logging information can be found at <a href="http://hc.apache.org/httpclient-3.x/logging.html" target="_blank" >Logging</a>
+    <note>Note that full category names are used, i.e. must include the <code>org.apache</code>.</note>
+    Info level produces no output.<br/>
+    Set debug level:
+    <source>log_level.org.apache.commons.httpclient=debug</source>
+    Might be useful:
+    <source>log_level.org.apache.commons.httpclient.Authenticator=trace</source> 
+    Show headers only
+    <source>log_level.httpclient.wire.header=debug</source>
+    Full wire debug produces a lot of output; consider using separate file:
+    <source>
 log_level.httpclient.wire=debug
 log_file.httpclient=httpclient.log
 </source>
@@ -495,16 +502,16 @@ log_file.httpclient=httpclient.log
 </section>
 <section name="&sect-num;.14 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
-Enable header wire + context logging - Best for Debugging
+    Enable header wire and context logging - Best for Debugging
 <source>
 log_level.org.apache.http=DEBUG
 log_level.org.apache.http.wire=ERROR
 </source>
-Enable full wire + context logging
-<source>log_level.org.apache.http=DEBUG</source>
-Enable context logging for connection management
-<source>log_level.org.apache.http.impl.conn=DEBUG</source>
-Enable context logging for connection management / request execution
+    Enable full wire and context logging
+    <source>log_level.org.apache.http=DEBUG</source>
+    Enable context logging for connection management
+    <source>log_level.org.apache.http.impl.conn=DEBUG</source>
+    Enable context logging for connection management / request execution
 <source>
 log_level.org.apache.http.impl.conn=DEBUG
 log_level.org.apache.http.impl.client=DEBUG
