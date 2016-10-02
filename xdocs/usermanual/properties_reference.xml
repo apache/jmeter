@@ -1461,12 +1461,46 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.39 Classpath configuration" anchor="classpath">
 <properties>
-<property name="search_paths"> List of directories (separated by ;) to search for additional JMeter plugin classes,<br/> for example new GUI elements and samplers.<br/> Any jar file in such a directory will be automatically included,<br/> jar files in sub directories are ignored.<br/> The given value is in addition to any jars found in the lib/ext directory.<br/> Do not use this for utility or plugin dependency jars.<br/>, defaults to:/app1/lib;/app2/lib</property>
-<property name="user.classpath"> List of directories that JMeter will search for utility and plugin dependency classes.<br/> Use your platform path separator to separate multiple paths.<br/> Any jar file in such a directory will be automatically included,<br/> jar files in sub directories are ignored.<br/> The given value is in addition to any jars found in the lib directory.<br/> All entries will be added to the class path of the system class loader<br/> and also to the path of the JMeter internal loader.<br/> Paths with spaces may cause problems for the JVM<br/>, defaults to:../classes;../lib</property>
-<property name="plugin_dependency_paths"> List of directories (separated by ;) that JMeter will search for utility<br/> and plugin dependency classes.<br/> Any jar file in such a directory will be automatically included,<br/> jar files in sub directories are ignored.<br/> The given value is in addition to any jars found in the lib directory<br/> or given by the user.classpath property.<br/> All entries will be added to the path of the JMeter internal loader only.<br/> For plugin dependencies this property should be used instead of user.classpath.<br/>, defaults to:../dependencies/lib;../app1/;../app2/</property>
-<property name=" "> Classpath finder<br/>, defaults to:</property>
-<property name="classfinder.functions.contain"> The classpath finder currently needs to load every single JMeter class to find<br/> the classes it needs.<br/> For non-GUI mode, it's only necessary to scan for Function classes, but all classes<br/> are still loaded.<br/> All current Function classes include ".function." in their name,<br/> and none include ".gui." in the name, so the number of unwanted classes loaded can be<br/> reduced by checking for these. However, if a valid function class name does not match<br/> these restrictions, it will not be loaded. If problems are encountered, then comment<br/> or change the following properties:<br/>, defaults to:.functions.</property>
-<property name="classfinder.functions.notContain">, defaults to:.gui.</property>
+<property name="search_paths">
+    List of directories (separated by <code>;</code>) to search for additional
+    JMeter plugin classes, for example new GUI elements and samplers.<br/>
+    Any jar file in such a directory will be automatically included; jar files in sub directories are ignored.<br/>
+    The given value is in addition to any jars found in the <code>lib/ext</code> directory.<br/>
+    Do not use this for utility or plugin dependency jars.<br/>
+    Defaults to empty value.
+</property>
+<property name="user.classpath">
+    List of directories that JMeter will search for utility and plugin dependency classes.<br/>
+    Use your platform path separator to separate multiple paths.<br/>
+    Any jar file in such a directory will be automatically included; jar files in sub directories are ignored.<br/>
+    The given value is in addition to any jars found in the <code>lib</code> directory.<br/>
+    All entries will be added to the class path of the system class loader and also to the path
+    of the JMeter internal loader.<br/>
+    Paths with spaces may cause problems for the JVM.<br/>
+    Defaults to empty value.
+</property>
+<property name="plugin_dependency_paths">
+    List of directories (separated by <code>;</code>) that JMeter will search for utility
+    and plugin dependency classes.<br/>
+    Any jar file in such a directory will be automatically included; jar files in sub directories are ignored.<br/>
+    The given value is in addition to any jars found in the <code>lib</code> directory
+    or given by the <code>user.classpath</code> property.<br/>
+    All entries will be added to the path of the JMeter internal loader only.<br/>
+    For plugin dependencies this property should be used instead of <code>user.classpath</code>.<br/>
+    Defaults to empty value.
+</property>
+<property name="classfinder.functions.contain">
+    The classpath finder currently needs to load every single JMeter class to find the classes it needs.<br/>
+    For non-GUI mode, it's only necessary to scan for Function classes, but all classes are still loaded.<br/>
+    All current Function classes include "<code>.function.</code>" in their name, and none include
+    "<code>.gui.</code>" in the name, so the number of unwanted classes loaded can be reduced by
+    checking for these. However, if a valid function class name does not match these restrictions,
+    it will not be loaded. If problems are encountered, then comment or change this or the following property.<br/>
+    Defaults to: <code>.functions.</code>
+</property>
+<property name="classfinder.functions.notContain">
+    Defaults to: <code>.gui.</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.40 Reporting configuration" anchor="reporting">
