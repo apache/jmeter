@@ -1095,7 +1095,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-            <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+            <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
                 <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
         </ul>
@@ -1200,7 +1200,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - JMeterProperties  (class <code>java.util.Properties</code>) - e.g. 
+<li><code>props</code> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. 
   <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
@@ -1302,7 +1302,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - JMeterProperties  (class <code>java.util.Properties</code>) - e.g. 
+<li><code>props</code> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. 
   <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
@@ -3183,7 +3183,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
-        The syntax is the Java <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
+        The syntax is the Java <a href="http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
 </properties>
@@ -3257,7 +3257,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
 <li><code>sampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
 <li><code>sampleEvent</code> (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul>
@@ -3387,7 +3387,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></dd>
-<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -3433,7 +3433,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></dd>
-<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -4279,7 +4279,7 @@ however the <code>minimum</code> and <code>maximum</code> values can be any <cod
   <property name="Maximum Value" required="Yes">The maximum value (<code>long</code>) of the generated random number.</property>
   <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds. 
   If you use the same seed value with Per Thread set to <code>true</code>, you will get the same value for each Thread as per 
-  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html" >Random</a> class.
+  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html" >Random</a> class.
   </property>
   <property name="Per Thread(User)?" required="Yes">If <code>False</code>, the generator is shared between all threads in the thread group.
   If <code>True</code>, then each thread has its own random generator.</property>
@@ -4681,7 +4681,7 @@ These are strings unless otherwise noted:
     <source>vars.get("VAR1");
 vars.put("VAR2","value");
 vars.putObject("OBJ1",new Object());</source></li>
-  <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+  <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
     <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 </ul>
@@ -4808,7 +4808,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
 <source>
 props.get("START.HMS");
 props.put("PROP1","1234");
@@ -4861,7 +4861,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
 <source>
 props.get("START.HMS");
 props.put("PROP1","1234");
