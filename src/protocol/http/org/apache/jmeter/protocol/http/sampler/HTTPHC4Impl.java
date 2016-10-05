@@ -35,9 +35,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpConnection;
@@ -96,6 +99,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BufferedHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
@@ -106,6 +110,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
+import org.apache.http.util.CharArrayBuffer;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -134,6 +139,8 @@ import org.apache.log.Logger;
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
+    private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /** retry count to be used (default 0); 0 = disable retries */
@@ -147,6 +154,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
+    
+    private static final Pattern PORT_PATTERN = Pattern.compile("\\d+"); // only used in .matches(), no need for anchors
 
     private static final ConnectionKeepAliveStrategy IDLE_STRATEGY = new DefaultConnectionKeepAliveStrategy(){
         @Override
@@ -710,9 +719,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (hasProxy) {
                 sb.append(" via ");
                 sb.append(proxyUser);
-                sb.append("@");
+                sb.append('@');
                 sb.append(proxyHost);
-                sb.append(":");
+                sb.append(':');
                 sb.append(proxyPort);
             }
             return sb.toString();
@@ -747,7 +756,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         HttpClientKey key = new HttpClientKey(url, useProxy, proxyHost, proxyPort, proxyUser, proxyPass);
         
         HttpClient httpClient = null;
-        if(this.testElement.isConcurrentDwn()) {
+        boolean concurrentDwn = this.testElement.isConcurrentDwn();
+        if(concurrentDwn) {
             httpClient = (HttpClient) JMeterContextService.getContext().getSamplerContext().get(HTTPCLIENT_TOKEN);
         }
         
@@ -782,7 +792,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
             // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
-            if(this.testElement.isConcurrentDwn()) {
+            if(concurrentDwn) {
                 try {
                     int maxConcurrentDownloads = Integer.parseInt(this.testElement.getConcurrentPool());
                     connManager.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, connManager.getDefaultMaxPerRoute()));                
@@ -841,7 +851,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
         }
 
-        if(this.testElement.isConcurrentDwn()) {
+        if(concurrentDwn) {
             JMeterContextService.getContext().getSamplerContext().put(HTTPCLIENT_TOKEN, httpClient);
         }
 
@@ -951,11 +961,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return string containing the headers, one per line
      */
     private String getResponseHeaders(HttpResponse response, HttpContext localContext) {
-        StringBuilder headerBuf = new StringBuilder();
+        Header[] rh = response.getAllHeaders();
+
+        StringBuilder headerBuf = new StringBuilder(40 * (rh.length+1));
         headerBuf.append(response.getStatusLine());// header[0] is not the status line...
         headerBuf.append("\n"); // $NON-NLS-1$
 
-        Header[] rh = response.getAllHeaders();
         for (Header responseHeader : rh) {
             writeResponseHeader(headerBuf, responseHeader);
         }
@@ -963,16 +974,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Write responseHeader to headerBuffer
+     * Write responseHeader to headerBuffer in an optimized way
      * @param headerBuffer {@link StringBuilder}
      * @param responseHeader {@link Header}
      */
-    private void writeResponseHeader(StringBuilder headerBuffer,
-            Header responseHeader) {
-        headerBuffer.append(responseHeader.getName())
+    private void writeResponseHeader(StringBuilder headerBuffer, Header responseHeader) {
+        if(responseHeader instanceof BufferedHeader) {
+            CharArrayBuffer buffer = ((BufferedHeader)responseHeader).getBuffer();
+            headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$;
+        }
+        else {
+            headerBuffer.append(responseHeader.getName())
             .append(": ") // $NON-NLS-1$
             .append(responseHeader.getValue())
-            .append("\n"); // $NON-NLS-1$
+            .append('\n'); // $NON-NLS-1$
+        }
     }
 
     /**
@@ -1058,7 +1074,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         String[] hostParts = hostHeaderValue.split(":");
         if (hostParts.length > 1) {
             String portString = hostParts[hostParts.length - 1];
-            if (portString.matches("^\\d+$")) {
+            if (PORT_PATTERN.matcher(portString).matches()) {
                 return Integer.parseInt(portString);
             }
         }
@@ -1075,7 +1091,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private String getConnectionHeaders(HttpRequest method) {
         if(method != null) {
             // Get all the request headers
-            StringBuilder hdrs = new StringBuilder(100);
+            StringBuilder hdrs = new StringBuilder(150);
             Header[] requestHeaders = method.getAllHeaders();
             for (Header requestHeader : requestHeaders) {
                 // Exclude the COOKIE header, since cookie is reported separately in the sample
@@ -1218,7 +1234,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 }
                 bos.flush();
                 // We get the posted bytes using the encoding used to create it
-                postedBody.append(new String(bos.toByteArray(),
+                postedBody.append(bos.toString(
                         contentEncoding == null ? "US-ASCII" // $NON-NLS-1$ this is the default used by HttpClient
                         : contentEncoding));
                 bos.close();
@@ -1341,11 +1357,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         post.getEntity().writeTo(bos);
                         bos.flush();
                         // We get the posted bytes using the encoding used to create it
-                        if (contentEncoding != null) {
-                            postedBody.append(new String(bos.toByteArray(), contentEncoding));
-                        } else {
-                            postedBody.append(new String(bos.toByteArray(), SampleResult.DEFAULT_HTTP_ENCODING));
-                        }
+                        postedBody.append(bos.toString(contentEncoding != null?contentEncoding:SampleResult.DEFAULT_HTTP_ENCODING));
+                        
                         bos.close();
                     }  else {
                         postedBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
@@ -1432,7 +1445,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
             if(entityEntry.isRepeatable()) {
-                entityBody.append("<actual file content, not shown here>");
+                entityBody.append(IOUtils.toString(new BoundedInputStream(
+                        entityEntry.getContent(), MAX_BODY_RETAIN_SIZE)));
+                if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
+                    entityBody.append("<actual file content shortened>");
+                }
             }
             else { // this probably cannot happen
                 entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");

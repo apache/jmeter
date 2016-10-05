@@ -28,7 +28,8 @@ import org.apache.jmeter.report.core.SampleSelector;
 public interface GraphSeriesSelector extends SampleSelector<Iterable<String>> {
     
     /**
-     * Indicates whether this selector allows controllers discrimination.
+     * Indicates whether this selector allows controllers discrimination, 
+     * which allows on graphs to only show transaction controllers
      *
      * @return true, if this selector allows controllers discrimination; false otherwise
      */

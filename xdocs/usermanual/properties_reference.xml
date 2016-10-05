@@ -18,13 +18,14 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '25'>
+<!ENTITY sect-num '21'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
 ]>
-<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.25"
-  prev="glossary.html"  id="$Id: property_reference.xml 1739440 2016-04-16 11:11:17Z pmouawad $">
+<document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.21"
+  next="functions.html"
+  prev="component_reference.html"  id="$Id: property_reference.xml 1739440 2016-04-16 11:11:17Z pmouawad $">
 
 <properties>
   <title>User's Manual: Properties Reference</title>
@@ -332,6 +333,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="httpclient4.idletimeout">Idle connection timeout (Milliseconds) to apply if the server does not send Keep-Alive headers, defaults to:0 (no suggested duration for Keep-Alive))</property>
 <property name="httpclient4.validate_after_inactivity">Check connections if the elapsed time (Milliseconds) since the last use of the connection exceeds this value<br/>, defaults to:2000</property>
 <property name="httpclient4.time_to_live"> TTL (in Milliseconds) represents an absolute value. No matter what, the connection will not be re-used beyond its TTL. <br/>, defaults to:2000</property>
+<property name="httpclient4.max_body_retain_size">Max size in bytes of PUT body to retain in result sampler. Bigger results will be clipped.<br/>, defaults to: 327678 (bytes)</property>
 </properties>
 </section>
 <section name="&sect-num;.16 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
@@ -445,14 +447,18 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 </section>
 <section name="&sect-num;.24 HTML Parser configuration" anchor="parser_config">
 <properties>
-<property name="HTTPResponse.parsers"> Space-separated list of parser groups<br/>, defaults to:htmlParser wmlParser cssParser</property>
-<property name="cssParser.className"> for each parser, there should be a parser.types and a parser.className property<br/> CSS Parser based on ph-css<br/>, defaults to:org.apache.jmeter.protocol.http.parser.CssParser</property>
-<property name="cssParser.types">, defaults to:text/css</property>
-<property name=" see https://bz.apache.org/bugzilla/show_bug.cgi?id"> Define the HTML parser to be used.<br/> Default parser:<br/> This new parser (since 2.10) should perform better than all others<br/>, defaults to:55632</property>
-<property name="htmlParser.className"> Do not comment this property<br/>, defaults to:org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</property>
-<property name="htmlParser.className"> Other parsers:<br/> Default parser before 2.10<br/>, defaults to:org.apache.jmeter.protocol.http.parser.JTidyHTMLParser</property>
-<property name="htmlParser.className"> Note that Regexp extractor may detect references that have been commented out.<br/> In many cases it will work OK, but you should be aware that it may generate <br/> additional references.<br/>, defaults to:org.apache.jmeter.protocol.http.parser.RegexpHTMLParser</property>
-<property name="htmlParser.className"> This parser is based on JSoup, it should be the most accurate but less performant<br/> than LagartoBasedHtmlParser<br/>, defaults to:org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser</property>
+<property name="HTTPResponse.parsers">Space-separated list of parser groups<br/>, defaults to:htmlParser wmlParser cssParser. For each parser, there should be a parser.types and a parser.className property</property>
+<property name="cssParser.className"> CSS Parser based on ph-css<br/>, defaults to:org.apache.jmeter.protocol.http.parser.CssParser</property>
+<property name="cssParser.types">content types handled by cssParser, defaults to:text/css</property>
+<property name="css.parser.cache.size">CSS parser LRU cache size. This cache stores the URLs found in a CSS to avoid continuously parsing the CSS. By default the cache size is 400. It can be disabled by setting its value to 0.</property>
+<property name="htmlParser.className">Define the HTML parser to be used. This new parser (since 2.10) should perform better than all others. see https://bz.apache.org/bugzilla/show_bug.cgi?id=55632. Do not comment this property<br/>, defaults to:org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser</property>
+Other parsers:<br/>
+<ul> 
+<li>org.apache.jmeter.protocol.http.parser.JTidyHTMLParser : Default parser before 2.10<br/> 
+<li>org.apache.jmeter.protocol.http.parser.RegexpHTMLParser : Note that Regexp extractor may detect references that have been commented out.<br/> In many cases it will work OK, but you should be aware that it may generate additional references.</li>
+<li>org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser:This parser is based on JSoup, it should be the most accurate but less performant than LagartoBasedHtmlParser, defaults to:org.apache.jmeter.protocol.http.parser.JsoupBasedHtmlParser</li>
+</li>
+</ul>
 <property name="htmlParser.types">Used by HTTPSamplerBase to associate htmlParser with content types below <br/>, defaults to:text/html application/xhtml+xml application/xml text/xml</property>
 <property name="wmlParser.className">, defaults to:org.apache.jmeter.protocol.http.parser.RegexpHTMLParser</property>
 <property name="wmlParser.types">Used by HTTPSamplerBase to associate wmlParser with content types below <br/>, defaults to:text/vnd.wap.wml </property>
@@ -461,6 +467,7 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 <section name="&sect-num;.25 Remote batching configuration" anchor="remote_batching_config">
 <properties>
 <property name="sample_sender_client_configured"> How is Sample sender implementations configured:<br/> - true (default) means client configuration will be used<br/> - false means server configuration will be used<br/>, defaults to:true</property>
+<property name="sample_sender_strip_also_on_error">By default when Stripping modes are used JMeter since 3.1 will strip response even for SampleResults in error. If you want to revert to previous behaviour (no stripping of Responses in error)  set this property to false</property>
 <property name=" but can now also be defined using mode"> Remote batching support<br/> Since JMeter 2.9, default is MODE_STRIPPED_BATCH, which returns samples in<br/> batch mode (every 100 samples or every minute by default)<br/> Note also that MODE_STRIPPED_BATCH strips response data from SampleResult, so if you need it change to<br/> another mode<br/> Hold retains samples until end of test (may need lots of memory)<br/> Batch returns samples in batches<br/> Statistical returns sample summary statistics<br/> hold_samples was originally defined as a separate property,<br/>, defaults to:Hold</property>
 <property name="mode"> mode can also be the class name of an implementation of org.apache.jmeter.samplers.SampleSender<br/>, defaults to:Standard</property>
 <property name="mode">, defaults to:Batch</property>
@@ -482,8 +489,8 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 </section>
 <section name="&sect-num;.26 JDBC Request configuration" anchor="jdbc_request">
 <properties>
-<property name="jdbcsampler.maxopenpreparedstatements"> Max number of PreparedStatements per Connection for PreparedStatement cache<br/>, defaults to:100</property>
 <property name="jdbcsampler.nullmarker"> String used to indicate a null value<br/>, defaults to:]NULL[</property>
+<property name="jdbcsampler.max_retain_result_size">Max bytes to store from a CLOB or BLOB in the sampler<br/>, defaults to: 65536 (bytes)</property>
 </properties>
 </section>
 <section name="&sect-num;.27 OS Process Sampler configuration" anchor="os_sampler">
@@ -511,6 +518,7 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 <property name="summariser.interval"><br/> interval between summaries (in seconds) default 30 seconds<br/>, defaults to:30</property>
 <property name="summariser.log"><br/> Write messages to log file<br/>, defaults to:true</property>
 <property name="summariser.out"><br/> Write messages to System.out<br/>, defaults to:true</property>
+<property name="summariser.ignore_transaction_controller_sample_result"><br/> Ignore SampleResults generated by TransactionControllers<br/>, defaults to true</property>
 </properties>
 </section>
 <section name="&sect-num;.30 Aggregate Report and Aggregate Graph - configuration" anchor="aggregate_report_graph">
@@ -643,7 +651,7 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 <property name="jmeter.reportgenerator.apdex_tolerated_threshold"> Sets the tolerance threshold for the APDEX calculation (in milliseconds).<br/>, defaults to:1500</property>
 <property name="jmeter.reportgenerator.sample_filter"> Regular Expression which Indicates which samples to keep for graphs and statistics generation.<br/> Empty value means no filtering<br/>, defaults to:</property>
 <property name="jmeter.reportgenerator.temp_dir"> Sets the temporary directory used by the generation processus if it needs file I/O operations.<br/>, defaults to:temp</property>
-<property name="jmeter.reportgenerator.statistic_window "> Sets the size of the sliding window used by percentile evaluation.<br/> Caution : higher value provides a better accurency but needs more memory.<br/>, defaults to: 200000</property>
+<property name="jmeter.reportgenerator.statistic_window "> Sets the size of the sliding window used by percentile evaluation.<br/> Caution : higher value provides a better accurency but needs more memory.<br/>, defaults to: 20000</property>
 <property name="jmeter.reportgenerator.report_title"> Configure this property to change the report title<br/>, defaults to:Apache JMeter Dashboard</property>
 <property name="jmeter.reportgenerator.overall_granularity"> Defines the overall granularity for over time graphs<br/>, defaults to:60000</property>
 <property name="jmeter.reportgenerator.graph.responseTimePercentiles.classname"> Response Time Percentiles graph definition<br/>, defaults to:org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer</property>
@@ -706,9 +714,20 @@ Uncomment this line if you put anything in httpclient.parameters file</property>
 <property name="testplan_validation.nb_threads_per_thread_group">Number of threads to use to validate a Thread Group<br/>, defaults to:1</property>
 <property name="testplan_validation.ignore_timers">Ignore timers when validating the thread group of plan<br/>, defaults to:true</property>
 <property name="testplan_validation.number_iterations">Number of iterations to use to validate a Thread Group<br/>, defaults to:1</property>
+<property name="testplan_validation.tpc_force_100_pct">Force throuput controllers that work in percentage mode to be a 100%<br/>, defaults to:false</property>
+</properties>
+</section>
+<section name="&sect-num;.43 Timer related feature" anchor="timer">
+<description>Timer are used to introduce think time in your plan.</description>
+<properties>
+<property name="timer.factor">Apply a factor on computed pauses by the following Timers:
+<ul>
+<li>Gaussian Random Timer</li>
+<li>Uniform Random Timer</li>
+<li>Poisson Random Timer</li>
+</ul><br/>Defaults to:1.0f</property>
 </properties>
 <a href="#">^</a>
-
 </section>
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">

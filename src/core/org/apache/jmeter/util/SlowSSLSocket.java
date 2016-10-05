@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
@@ -174,6 +175,12 @@ public class SlowSSLSocket extends SSLSocket {
 
     @Override
     public void connect(SocketAddress endpoint, int timeout) throws IOException {
+        // see Bug 59902
+        if(endpoint instanceof InetSocketAddress) {
+            InetSocketAddress address = 
+                    (InetSocketAddress) endpoint;
+            HostNameSetter.setServerNameIndication(address.getHostString(), sslSock);
+        }
         sslSock.connect(endpoint, timeout);
     }
 

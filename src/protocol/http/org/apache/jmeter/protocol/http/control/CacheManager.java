@@ -153,7 +153,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param res
      *            result to decide if result is cacheable
      * @throws URIException
-     *             if extraction of the the uri from <code>method</code> fails
+     *             if extraction of the uri from <code>method</code> fails
      * @deprecated HC3.1 will be dropped in upcoming version
      */
     @Deprecated
@@ -297,13 +297,14 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     /*
      * Is the sample result OK to cache?
-     * i.e is it in the 2xx range, and is it a cacheable method?
+     * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
     private boolean isCacheable(HTTPSampleResult res){
         final String responseCode = res.getResponseCode();
-        return isCacheableMethod(res)
-            && "200".compareTo(responseCode) <= 0  // $NON-NLS-1$
-            && "299".compareTo(responseCode) >= 0;  // $NON-NLS-1$
+        return isCacheableMethod(res) 
+                && (("200".compareTo(responseCode) <= 0  // $NON-NLS-1$
+                    && "299".compareTo(responseCode) >= 0)  // $NON-NLS-1$
+                    || "304".equals(responseCode));  // $NON-NLS-1$
     }
 
     private boolean isCacheableMethod(HTTPSampleResult res) {

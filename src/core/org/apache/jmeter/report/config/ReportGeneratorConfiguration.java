@@ -18,7 +18,11 @@
 package org.apache.jmeter.report.config;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -39,8 +43,14 @@ public class ReportGeneratorConfiguration {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
+    private static final String RANGE_DATE_FORMAT_DEFAULT = "yyyyMMddHHmmss"; //$NON-NLS-1$
+
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
+    
+    public static final String REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "date_format";
+    
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "graph";
     public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
@@ -69,6 +79,14 @@ public class ReportGeneratorConfiguration {
     // report title
     private static final String REPORT_GENERATOR_KEY_REPORT_TITLE = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "report_title";
+    
+    // start date for which report must be generated
+    private static final String REPORT_GENERATOR_KEY_START_DATE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "start_date";
+    
+    // end date for which report must be generated
+    private static final String REPORT_GENERATOR_KEY_END_DATE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "end_date";
 
     private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
@@ -260,6 +278,8 @@ public class ReportGeneratorConfiguration {
                 throws ConfigurationException;
     }
     private String reportTitle;
+    private Date startDate;
+    private Date endDate;
     private String sampleFilter;
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
@@ -613,6 +633,40 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_REPORT_TITLE, String.class);
         configuration.setReportTitle(reportTitle);
 
+        Date reportStartDate = null;
+        Date reportEndDate = null;
+        final String startDateValue = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_START_DATE, String.class);
+        final String endDateValue = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_END_DATE, String.class);
+
+        String rangeDateFormat = getOptionalProperty(props, REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT, String.class);
+        if (StringUtils.isEmpty(rangeDateFormat)) {
+            rangeDateFormat = RANGE_DATE_FORMAT_DEFAULT;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat(rangeDateFormat, Locale.ENGLISH);
+
+        try {
+            if(!StringUtils.isEmpty(startDateValue)) {
+                reportStartDate = dateFormat.parse(startDateValue);
+                configuration.setStartDate(reportStartDate);
+            }
+        } catch (ParseException e) {
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_START_DATE + " with value: " + startDateValue
+                    + " using format: " + rangeDateFormat, e);
+        }
+        try {
+            if(!StringUtils.isEmpty(endDateValue)) {
+                reportEndDate = dateFormat.parse(endDateValue);
+                configuration.setEndDate(reportEndDate);
+            }
+        } catch (ParseException e) {
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_END_DATE + " with value: " + endDateValue 
+                    + " using format: " + rangeDateFormat, e);
+        }
+        
+        LOG.info("Will use date range start date: " + startDateValue + ", end date: " + endDateValue);
+
         // Find graph identifiers and load a configuration for each
         final Map<String, GraphConfiguration> graphConfigurations = configuration
                 .getGraphConfigurations();
@@ -665,5 +719,33 @@ public class ReportGeneratorConfiguration {
             filteredSamplesPattern = Pattern.compile(sampleFilter);
         }
         return filteredSamplesPattern;
+    }
+
+    /**
+     * @return the start date to use to generate the report
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the start date to use to generate the report
+     */
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the end date to use to generate the report
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the end date to use to generate the report
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

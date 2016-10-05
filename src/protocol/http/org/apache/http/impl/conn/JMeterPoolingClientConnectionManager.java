@@ -34,7 +34,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ClientConnectionOperator;
 import org.apache.http.conn.ClientConnectionRequest;
@@ -53,10 +52,9 @@ import org.apache.http.util.Asserts;
  * extracted from {@link PoolingHttpClientConnectionManager} to allow using 
  * better validation mechanism introduced in 4.4
  * TODO : Remove when full upgrade to new HttpClient 4.5.X API is finished
- * @deprecated Will be removed in 3.1, DO NOT USE
+ * @deprecated Will be removed in 3.2, DO NOT USE
  */
 @Deprecated
-@ThreadSafe
 public class JMeterPoolingClientConnectionManager implements ClientConnectionManager, ConnPoolControl<HttpRoute> {
 
     private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 2000;

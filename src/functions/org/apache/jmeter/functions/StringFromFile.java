@@ -286,11 +286,11 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         sb.append("setParameters(");//$NON-NLS-1$
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {
-                sb.append(",");
+                sb.append(',');
             }
             sb.append(((CompoundVariable) values[i]).getRawParameters());
         }
-        sb.append(")");//$NON-NLS-1$
+        sb.append(')');//$NON-NLS-1$
         log.info(sb.toString());
 
         // N.B. setParameters is called before the test proper is started,

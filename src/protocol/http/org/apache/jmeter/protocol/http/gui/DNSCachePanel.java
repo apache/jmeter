@@ -32,7 +32,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -282,11 +281,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
             if (dnsServersTableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (dnsServersTable.isEditing()) {
-                    TableCellEditor cellEditor = dnsServersTable.getCellEditor(dnsServersTable.getEditingRow(),
-                            dnsServersTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(dnsServersTable);
 
                 int rowSelected = dnsServersTable.getSelectedRow();
 

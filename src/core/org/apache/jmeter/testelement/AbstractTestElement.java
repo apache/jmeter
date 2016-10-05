@@ -187,6 +187,16 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
         }
         return prop;
     }
+    
+    /**
+     * Null property are wrapped in a {@link NullProperty}
+     * This method avoids this wrapping
+     * for internal use only
+     * @since 3.1
+     */
+    private JMeterProperty getRawProperty(String key) {
+        return propMap.get(key);
+    }
 
     @Override
     public void traverse(TestElementTraverser traverser) {
@@ -230,8 +240,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public int getPropertyAsInt(String key, int defaultValue) {
-        JMeterProperty jmp = getProperty(key);
-        return jmp instanceof NullProperty ? defaultValue : jmp.getIntValue();
+        JMeterProperty jmp = getRawProperty(key);
+        return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getIntValue();
     }
 
     @Override
@@ -241,8 +251,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public boolean getPropertyAsBoolean(String key, boolean defaultVal) {
-        JMeterProperty jmp = getProperty(key);
-        return jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
+        JMeterProperty jmp = getRawProperty(key);
+        return jmp == null || jmp instanceof NullProperty ? defaultVal : jmp.getBooleanValue();
     }
 
     @Override
@@ -257,8 +267,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public long getPropertyAsLong(String key, long defaultValue) {
-        JMeterProperty jmp = getProperty(key);
-        return jmp instanceof NullProperty ? defaultValue : jmp.getLongValue();
+        JMeterProperty jmp = getRawProperty(key);
+        return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getLongValue();
     }
 
     @Override
@@ -273,8 +283,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
 
     @Override
     public String getPropertyAsString(String key, String defaultValue) {
-        JMeterProperty jmp = getProperty(key);
-        return jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
+        JMeterProperty jmp = getRawProperty(key);
+        return jmp == null || jmp instanceof NullProperty ? defaultValue : jmp.getStringValue();
     }
 
     /**

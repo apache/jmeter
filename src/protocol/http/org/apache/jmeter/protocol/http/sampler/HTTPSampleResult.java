@@ -147,12 +147,12 @@ public class HTTPSampleResult extends SampleResult {
         if (u != null) {
             sb.append(' ');
             sb.append(u.toString());
-            sb.append("\n");
+            sb.append('\n');
             // Include request body if it is a post or put or patch
             if (!METHODS_WITHOUT_BODY.contains(method)) {
-                sb.append("\n"+method+" data:\n");
+                sb.append("\n").append(method).append(" data:\n");
                 sb.append(queryString);
-                sb.append("\n");
+                sb.append('\n');
             }
             if (cookies.length()>0){
                 sb.append("\nCookie Data:\n");
@@ -160,7 +160,7 @@ public class HTTPSampleResult extends SampleResult {
             } else {
                 sb.append("\n[no cookies]");
             }
-            sb.append("\n");
+            sb.append('\n');
         }
         final String sampData = super.getSamplerData();
         if (sampData != null){

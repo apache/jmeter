@@ -20,9 +20,13 @@ package org.apache.jmeter.extractor.json.jsonpath;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -30,6 +34,7 @@ import net.minidev.json.JSONObject;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.PathNotFoundException;
 
 /**
  * Handles the extractions
@@ -37,6 +42,8 @@ import com.jayway.jsonpath.Option;
  * @since 3.0
  */
 public class JSONManager {
+
+    private static final Logger log = LoggingManager.getLoggerForClass();
     private static final Configuration DEFAULT_CONFIGURATION =
             Configuration.defaultConfiguration().addOptions(Option.ALWAYS_RETURN_LIST);
     /**
@@ -70,8 +77,17 @@ public class JSONManager {
     public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
-        List<Object> extractedObjects = jsonPathParser.read(jsonString,
-                DEFAULT_CONFIGURATION);
+        List<Object> extractedObjects;
+        try {
+            extractedObjects = jsonPathParser.read(jsonString,
+                    DEFAULT_CONFIGURATION);
+        } catch (PathNotFoundException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Could not find JSON Path " + jsonPath + " in ["
+                        + jsonString + "]: " + e.getLocalizedMessage());
+            }
+            return Collections.emptyList();
+        }
         List<Object> results = new ArrayList<>(extractedObjects.size());
         for (Object obj: extractedObjects) {
             results.add(stringifyJSONObject(obj));

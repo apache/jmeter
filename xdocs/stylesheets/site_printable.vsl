@@ -233,6 +233,10 @@ No
 <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
+#macro ( pr $id)
+<a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a> - ##
+#end
+
 ## Shorthand - automatically adds " - " before remaining text
 #macro ( bug $id)
 #bugzilla($id) - ##
@@ -286,6 +290,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #bugzilla ($node)
 #elseif ($node.getName().equals("bug"))
 #bug ($node)
+#elseif ($node.getName().equals("pr"))
+#pr ($node)
 #elseif ($node.getName().equals("contributor"))
 #contributor ($node)
 #elseif ($node.getName().equals("ch_section"))

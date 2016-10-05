@@ -73,6 +73,8 @@ In this document we will present the configuration setup to graph and historize 
       <dd>Min response time for successful responses of sampler name</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.max</code></dt>
       <dd>Max response time for successful responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.avg</code></dt>
+      <dd>Average response time for successful responses of sampler name.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ok.pct&lt;percentileValue&gt;</code></dt>
       <dd>Percentile computed for successful responses of sampler name. There will be one metric for each calculated value.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.count</code></dt>
@@ -81,6 +83,8 @@ In this document we will present the configuration setup to graph and historize 
       <dd>Min response time for failed responses of sampler name</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.max</code></dt>
       <dd>Max response time for failed responses of sampler name</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.avg</code></dt>
+      <dd>Average response time for failed responses of sampler name.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.ko.pct&lt;percentileValue&gt;</code></dt>
       <dd>Percentile computed for failed responses of sampler name. There will be one metric for each calculated value.</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.count</code></dt>
@@ -89,6 +93,8 @@ In this document we will present the configuration setup to graph and historize 
       <dd>Min response time for responses of sampler name (min of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.max</code></dt>
       <dd>Max response time for responses of sampler name (max of ok.count and ko.count)</dd>
+      <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.avg</code></dt>
+      <dd>Average response time for responses of sampler name (avg of ok.count and ko.count)</dd>
       <dt><code>&lt;rootMetricsPrefix&gt;&lt;samplerName&gt;.a.pct&lt;percentileValue&gt;</code></dt>
       <dd>Percentile computed for responses of sampler name. There will be one metric for each calculated value. (calculated on the totals for OK and failed samples)</dd>
     </dl>

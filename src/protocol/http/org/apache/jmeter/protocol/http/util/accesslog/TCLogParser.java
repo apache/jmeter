@@ -465,7 +465,7 @@ public class TCLogParser implements LogParser {
     /**
      * Convert a single line into XML
      *
-     * @param text to be be converted
+     * @param text to be converted
      * @param el {@link HTTPSamplerBase} which consumes the <code>text</code>
      */
     public void convertStringToJMRequest(String text, TestElement el) {

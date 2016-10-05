@@ -116,8 +116,8 @@ public class NormalizerSampleConsumer extends AbstractSampleConsumer {
                 data[i] = s.getData(i);
             }
         }
-        Sample rewrited = new Sample(s.getSampleRow(), sampleMetadata, data);
-        super.produce(rewrited, 0);
+        Sample rewritten = new Sample(s.getSampleRow(), sampleMetadata, data);
+        super.produce(rewritten, 0);
     }
 
     @Override

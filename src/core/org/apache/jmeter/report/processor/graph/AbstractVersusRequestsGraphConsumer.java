@@ -266,7 +266,7 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                 createdWorkDir = workDir.mkdir();
                 if (!createdWorkDir) {
                     String message = String.format(
-                            "Cannot create create working directory \"%s\"",
+                            "Cannot create working directory \"%s\"",
                             workDir);
                     log.error(message);
                     throw new SampleException(message);

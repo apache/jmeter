@@ -156,7 +156,7 @@ public class CSVDataSet extends ConfigTestElement
             delim=",";
         }
         if (vars == null) {
-            String _fileName = getFilename();
+            String _fileName = getFilename().trim();
             String mode = getShareMode();
             int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
             switch(modeInt){
@@ -180,7 +180,7 @@ public class CSVDataSet extends ConfigTestElement
                     vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
                     firstLineIsNames = true;
                 } catch (IOException e) {
-                    log.warn("Could not split CSV header line",e);
+                    throw new IllegalArgumentException("Could not split CSV header line from file:" + _fileName,e);
                 }
             } else {
                 server.reserveFile(_fileName, getFileEncoding(), alias);
@@ -206,7 +206,8 @@ public class CSVDataSet extends ConfigTestElement
         }
         if (lineValues.length == 0) {// i.e. EOF
             if (getStopThread()) {
-                throw new JMeterStopThreadException("End of file detected");
+                throw new JMeterStopThreadException("End of file:"+ getFilename()+" detected for CSV DataSet:"
+                        +getName()+" configured with stopThread:"+ getStopThread()+", recycle:" + getRecycle());
             }
             for (String var :vars) {
                 threadVars.put(var, EOFVALUE);

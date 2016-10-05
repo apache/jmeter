@@ -341,7 +341,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     }
 
     /**
-     * Write a tag with with a content of <code>value</code> to the
+     * Write a tag with a content of <code>value</code> to the
      * <code>writer</code>
      * 
      * @param writer

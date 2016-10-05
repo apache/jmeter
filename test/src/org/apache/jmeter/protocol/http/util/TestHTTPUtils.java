@@ -109,6 +109,23 @@ public class TestHTTPUtils {
                         "http://localhost:8080/!£$*():@~;'\"%^{}[]<>|\\#"); // unencoded path
         testSanitizeUrl("http://localhost:8080/!£$*():@~;'%22%25%5E%7B%7D%5B%5D%3C%3E%7C%5C#",
                         "http://localhost:8080/!£$*():@~;'%22%25%5E%7B%7D%5B%5D%3C%3E%7C%5C#"); // encoded
+
+        testSanitizeUrl("http://localhost/?%2525%255B%255D!@$%25%5E*()#",
+                "http://localhost/?%25%5B%5D!@$%^*()#");
+        testSanitizeUrl("http://localhost/?%2525%255B%255D!@$%25%5E*()#",
+                "http://localhost/?%2525%255B%255D!@$%25%5E*()#");
+        
+        testSanitizeUrl("http://localhost/%255B%255D?[]!@$%25%5E*()#",
+                "http://localhost/%5B%5D?[]!@$%^*()#");
+        
+        testSanitizeUrl("http://localhost/%255B%255D?[]!@$%25%5E*()#",
+                "http://localhost/%255B%255D?[]!@$%25%5E*()#");
+
+        testSanitizeUrl("http://localhost/IqGo6EM1JEVZ+MSRJqUSo@qhjVMSFBTs/37/0/1",
+                "http://localhost/IqGo6EM1JEVZ+MSRJqUSo@qhjVMSFBTs/37/0/1");
+        
+        testSanitizeUrl("http://localhost/test?getItem=%7BsomeID%7D", 
+                "http://localhost/test?getItem={someID}");
     }
     
 

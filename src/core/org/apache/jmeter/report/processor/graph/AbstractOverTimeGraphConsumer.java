@@ -95,7 +95,6 @@ public abstract class AbstractOverTimeGraphConsumer extends
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {
-        // TODO Auto-generated method stub
         return null;
     }
 

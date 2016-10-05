@@ -18,13 +18,13 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '19'>
+<!ENTITY sect-num '20'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
 ]>
 <document index="yes" index-level-2="yes" index-numbers="no" colbreak="&sect-num;.4"
-  prev="boss.html" next="functions.html" id="$Id$">
+  prev="boss.html" next="properties_reference.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Component Reference</title>
@@ -538,28 +538,24 @@ the additional variables for rows four, five and six will be removed.
             <li>Autocommit(true)</li>
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
-            <note>
-            When "<code>Prepared Select Statement</code>", "<code>Prepared Update Statement</code>" or "<code>Callable Statement</code>" types are selected, a Statement Cache per connection is used by JDBC Request. 
-            It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors).
-            </note>
         </property>
         <property name="SQL Query" required="Yes">
         SQL query.
         <note>Do not enter a trailing semi-colon.</note>
         There is generally no need to use <code>{</code> and <code>}</code> to enclose Callable statements;
         however they may be used if the database uses a non-standard syntax.
-        [The JDBC driver automatically converts the statement if necessary when it is enclosed in <code>{}</code>].
+        <note>The JDBC driver automatically converts the statement if necessary when it is enclosed in <code>{}</code>.</note>
         For example:
         <ul>
         <li><code>select * from t_customers where id=23</code></li>
-        <li><code>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)</code>
+        <li><code>CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null, ?, ?, null, null, null)</code>
         <ul>
         <li>Parameter values: <code>tablename</code>,<code>filename</code></li>
         <li>Parameter types:  <code>VARCHAR</code>,<code>VARCHAR</code></li>
         </ul>
         </li>
-        The second example assumes you are using Apache Derby.
         </ul>
+        The second example assumes you are using Apache Derby.
         </property>
         <property name="Parameter values" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of parameter values. Use <code>]NULL[</code> to indicate a <code>NULL</code> parameter.
@@ -568,14 +564,15 @@ the additional variables for rows four, five and six will be removed.
         The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
         and any embedded double-quotes must be doubled-up, for example:
         <source>"Dbl-Quote: "" and Comma: ,"</source>
-        <note>There must be as many values as there are placeholders in the statement even if your parameters are <code>OUT</code> ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
+        <note>There must be as many values as there are placeholders in the statement even if your parameters are <code>OUT</code> ones.
+        Be sure to set a value even if the value will not be used (for example in a CallableStatement).</note>
         </property>
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
-        Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants when for example you use custom database types proposed by driver (<code>-10</code> for <code>OracleTypes.CURSOR</code> for example).<br/>
+        Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants. Those integer values can be used, when you use custom database types proposed by driver (For example <code>OracleTypes.CURSOR</code> could be represented by its integer value <code>-10</code>).<br/>
         These are defined as fields in the class <code>java.sql.Types</code>, see for example:<br/>
         <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
-        [Note: JMeter will use whatever types are defined by the runtime JVM,
-        so if you are running on a different JVM, be sure to check the appropriate document]<br/>
+        <note>Note: JMeter will use whatever types are defined by the runtime JVM,
+        so if you are running on a different JVM, be sure to check the appropriate documentation</note>
         <b>If the callable statement has <code>INOUT</code> or <code>OUT</code> parameters, then these must be indicated by prefixing the
         appropriate parameter types, e.g. instead of "<code>INTEGER</code>", use "<code>INOUT INTEGER</code>".</b> <br/>
         If not specified, "<code>IN</code>" is assumed, i.e. "<code>DATE</code>" is the same as "<code>IN DATE</code>".
@@ -596,9 +593,9 @@ the additional variables for rows four, five and six will be removed.
         </property>
         <property name="Handle ResultSet" required="No">Defines how ResultSet returned from callable statements be handled:
             <ul>
-                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list.</li>
-                <li>Store As Object - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code> </li>
-                <li>Count Records - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+                <li><code>Store As String</code> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <code>ResultSet</code> when present on the list. <code>CLOB</code>s will be converted to Strings. <code>BLOB</code>s will be converted to Strings as if they were an UTF-8 encoded byte-array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
+                <li><code>Store As Object</code> - Variables of <code>ResultSet</code> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <code>ResultSet</code>. <code>CLOB</code>s will be handled as if <code>Store As String</code> was selected. <code>BLOBs</code> will be stored as a byte array. Both <code>CLOB</code>s and <code>BLOB</code>s will be cut off after <code>jdbcsampler.max_retain_result_size</code> bytes.</li>
+                <li><code>Count Records</code> - Variables of <code>ResultSet</code> types will be iterated through showing the count of records as result. Variables will be stored as Strings. For <code>BLOB</code>s the size of the object will be stored.</li>
             </ul>
         </property>
 </properties>
@@ -607,7 +604,7 @@ the additional variables for rows four, five and six will be removed.
         <link href="build-db-test-plan.html">Building a Database Test Plan</link>
         <complink name="JDBC Connection Configuration"/>
 </links>
-<note>Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</note>
+<note>Current Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</note>
 <note>Ensure Variable Name is unique across Test Plan.</note>
 </component>
 
@@ -629,7 +626,7 @@ The fields allow variables to be used, so the values of these can readily be see
 </p>
 </description>
 
-<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code>AbstractJavaSamplerClient</code>, its <code>teardownTest</code> method will not be called.
+<note>If the method <code>teardownTest</code> is not overridden by a subclass of <code><a href="../api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html">AbstractJavaSamplerClient</a></code>, its <code>teardownTest</code> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </note>
@@ -1245,6 +1242,14 @@ To benefit from this feature:
     <li>Or Use Script Text and check <code>Cache compiled script if available</code> property.
     <note>When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</note>
     <note>To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</note>
+    <note>When using Groovy as scripting language and not checking <code>Cache compiled script if available</code> (while caching is recommended), you should set this JVM Property <code>-Dgroovy.use.classvalue=true</code>
+        due to a Groovy Memory leak as of version 2.4.6, see:
+        <ul>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7683" >GROOVY-7683</a></li>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7591">GROOVY-7591</a></li>
+            <li><a href="https://bugs.openjdk.java.net/browse/JDK-8136353">JDK-8136353</a></li>
+        </ul> 
+    </note>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (<code>jmeter.properties</code>):
@@ -2220,19 +2225,21 @@ what results any given interaction will give</note>
 
 <component name="Throughput Controller" index="&sect-num;.2.7" width="329" height="167" screenshot="throughput_controller.png">
 <description>
-<p>
-<b>This controller is badly named, as it does not control throughput.</b>
-Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
-</p>
-<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.</p>
+<p>The Throughput Controller allows the user to control how often it is executed.  
+There are two modes:
+<ul>
+<li>percent execution</li>
+<li>total executions</li>
+</ul>
 <dl>
   <dt><code>Percent executions</code></dt><dd>causes the controller to execute a certain percentage of the iterations through the test plan.</dd>
   <dt><code>Total executions</code></dt><dd>causes the controller to stop executing after a certain number of executions have occurred.</dd>
 </dl>
-<p>
-Like the Once Only Controller, this
-setting is reset when a parent Loop Controller restarts.
+Like the Once Only Controller, this setting is reset when a parent Loop Controller restarts.
 </p>
+<note>This controller is badly named, as it does not control throughput.
+Please refer to the <complink name="Constant Throughput Timer"/> for an element that can be used to adjust the throughput.
+</note>
 </description>
 <note>The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).</note>
 <properties>
@@ -2301,7 +2308,6 @@ setting is reset when a parent Loop Controller restarts.
         <ul>
             <li><code>${COUNT} &lt; 10</code></li>
             <li><code>"${VAR}" == "abcd"</code></li>
-            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
     </example>
@@ -2309,6 +2315,7 @@ setting is reset when a parent Loop Controller restarts.
         <ul>
             <li><code>${__jexl(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
+            <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
     </example>
 </component>
@@ -2694,6 +2701,11 @@ before loading the file.
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
 <b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in <code>jmeter.properties</code>.</b>
+<note>
+XML files written by JMeter have version 1.0 declared in header while actual file is serialized with 1.1 rules. 
+(This is done for historical compatibility reasons; see <bugzilla>59973</bugzilla> and <bugzilla>58679</bugzilla>) 
+This causes strict XML parsers to fail. Consider using non-strict XML parsers to read JTL files.
+</note>
 </p>
 <note>
 The file name can contain function and/or variable references.
@@ -2896,6 +2908,9 @@ Images, style-sheets, etc. aren't downloaded.
 <tr><td><code>HTML (download resources)</code></td>
 <td>If the <i>HTML (download resources) view</i> option is selected, the renderer
 may download images, style-sheets, etc. referenced by the HTML code. 
+<br/></td></tr>
+<tr><td><code>HTML Source formatted</code></td>
+<td>If the <em>HTML Source formatted view</em> option is selected, the renderer will display the HTML source code formatted and cleaned by <a href="https://jsoup.org/">Jsoup</a>. 
 <br/></td></tr>
 <tr><td><code>JSON</code></td>
 <td>The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
@@ -3416,9 +3431,12 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
         <dt><code>args</code></dt><dd>String array containing parameters, split on white-space</dd>
     </dl></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not).
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
+
 <p>
 Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
@@ -4084,10 +4102,10 @@ instead. (see figures 12 and 13).</p>
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getSoftMinEvictableIdleTimeMillis--">BasicDataSource.html#getSoftMinEvictableIdleTimeMillis</a>.
         Defaults to 5000 (5 seconds)
         </property>
-        <property name="Validation Query" required="Yes">A simple query used to determine if the database is still responding.
-        This defaults to 'SELECT 1' which is suitable for many databases. 
-        However some may require a different query; for example Oracle requires something like 'SELECT 1 FROM DUAL'.
-        Note this validation query is used on pool creation to validate it even if "Test While Idle" suggests query would only be used on idle connections. 
+        <property name="Validation Query" required="No">A simple query used to determine if the database is still responding.
+        This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
+        However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
+        Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
         This is DBCP behaviour.
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
@@ -4842,7 +4860,9 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following variables are set up for use by the script:</p>
@@ -4934,7 +4954,16 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
 
 <section name="&sect-num;.6 Timers" anchor="timers">
 <description>
-    <br></br>
+    <note>
+    Since version 3.1, a new feature (in Beta mode as of JMeter 3.1 and subject to changes) has been implemented which provides the following feature.<br/>
+    You can apply a multiplication factor on the sleep delays computed by Random timer by setting property <code>timer.factor=float number</code> where float number is a decimal positive number.<br/>
+    JMeter will multiply this factor by the computed sleep delay. This feature can be used by:
+    <ul> 
+        <li><complink name="Gaussian Random Timer"/></li>
+        <li><complink name="Poisson Random Timer"/></li>
+        <li><complink name="Uniform Random Timer"/></li>
+    </ul> 
+    </note>
     <note>
     Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
     if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
@@ -5031,8 +5060,8 @@ Note that the throughput value should not be changed too often during a test
     <li><code>all active threads (shared)</code> - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
   </property>
-  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.
-  The shared algorithm should generate a more accurate overall transaction rate.
+  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.<br/>
+  The shared algorithm should generate a more accurate overall transaction rate.<br/>
   The non-shared algorithm should generate a more even spread of transactions across threads.</p>
 </properties>
 </component>
@@ -5183,7 +5212,9 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
     A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      </property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">
         The script. The return value is used as the number of milliseconds to wait.
     </property>
@@ -5450,7 +5481,9 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>The following JSR223 variables are set up for use by the script:</p>
@@ -5662,6 +5695,11 @@ generate the template string, and store the result into the given variable name.
         In this case, remove the default value once debugging is complete.
         </p> 
         </property>
+        <property name="Use empty default value" required="No">
+        If the checkbox is checked and <code>Default Value</code> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <code>${var}</code> (if <code>Reference Name</code> is var) in your Test Plan, if the extracted value is not found then 
+        <code>${var}</code> will be equal to empty string instead of containing <code>${var}</code> which may be useful if extracted value is optional.
+        </property>
 </properties>
 <p>
     If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
@@ -5770,6 +5808,11 @@ extracting the node as text or attribute value and store the result into the giv
         you may wish to leave the variable unchanged if the expression does not match.
         In this case, remove the default value once debugging is complete.
         </p> 
+        </property>
+        <property name="Use empty default value" required="No">
+        If the checkbox is checked and <code>Default Value</code> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <code>${var}</code> (if <code>Reference Name</code> is var) in your Test Plan, if the extracted value is not found then 
+        <code>${var}</code> will be equal to empty string instead of containing <code>${var}</code> which may be useful if extracted value is optional.
         </property>
 </properties>
 <p>
@@ -6008,7 +6051,9 @@ The JSR223 PostProcessor allows JSR223 script code to be applied after taking a 
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)</property>
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code>Compilable</code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
+    </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
 </properties>
 <p>
@@ -6158,11 +6203,12 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 
 <b>Validation Mode:</b><br></br>
 This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <code>Startup delay</code> set to 0.
-The 3 first properties can be modified by setting in user.properties:
+Behaviour can be modified with some properties by setting in user.properties:
 <ul>
 <li><code>testplan_validation.nb_threads_per_thread_group</code> : Number of threads to use to validate a Thread Group, by default 1</li>
 <li><code>testplan_validation.ignore_timers</code> : Ignore timers when validating the thread group of plan, by default 1</li>
 <li><code>testplan_validation.number_iterations</code> : Number of iterations to use to validate a Thread Group</li>
+<li><code>testplan_validation.tpc_force_100_pct</code> : Wether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
 </ul> 
 </p>
 

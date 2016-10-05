@@ -101,9 +101,9 @@ public class ThroughputControllerGui extends AbstractControllerGui {
     @Override
     public void clearGui() {
         super.clearGui();
-        styleBox.setSelectedIndex(0);
+        styleBox.setSelectedIndex(1);
         throughput.setText("1"); // $NON-NLS-1$
-        perthread.setSelected(true);
+        perthread.setSelected(false);
     }
 
     @Override

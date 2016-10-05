@@ -18,7 +18,6 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
-<!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
     <template isTestPlan="true">
         <name>Recording</name>
@@ -195,6 +194,22 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html</a></li>
             </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
+        <name>Think Time at a point</name>
+        <fileName>ThinkTime.jmx</fileName>
+        <description><![CDATA[
+        <h1>Think Time between 2 samplers</h1>
+        <h2>Overview</h2>
+        This shows how to introduce a Think Time of 1s+/- 100 ms between 2 samplers 
+        <br/>
+        Please select a suitable location in the tree - e.g. Thread Group or Controller - before merging.
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Test_Action" >Test Action</a></li>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Uniform_Random_Timer" >Uniform Random Timer</a></li>
+            </ul>
         ]]></description>
     </template>
 </templates>

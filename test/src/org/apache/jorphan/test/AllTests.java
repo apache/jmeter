@@ -27,9 +27,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+
+import javax.crypto.Cipher;
 
 import org.apache.jmeter.junit.categories.ExcludeCategoryFilter;
 import org.apache.jmeter.junit.categories.NeedGuiTests;
@@ -189,6 +192,13 @@ public final class AllTests {
         }
         log.info(sb.toString());
 
+        try {
+            int maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
+            System.out.println("JCE max key length = " + maxKeyLen);
+        } catch (NoSuchAlgorithmException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         System.out.println("+++++++++++");
         logprop("java.awt.headless", true);
         logprop("java.awt.graphicsenv", true);
@@ -252,7 +262,7 @@ public final class AllTests {
     }
 
     /**
-     * An overridable method that that instantiates a UnitTestManager (if one
+     * An overridable method that instantiates a UnitTestManager (if one
      * was specified in the command-line arguments), and hands it the name of
      * the properties file to use to configure the system.
      * 

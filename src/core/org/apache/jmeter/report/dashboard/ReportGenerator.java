@@ -57,6 +57,7 @@ import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
 import org.apache.jmeter.report.processor.ThresholdSelector;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -77,7 +78,9 @@ public class ReportGenerator {
                     "jmeter.save.saveservice.output_format", "csv"));
 
     private static final char CSV_DEFAULT_SEPARATOR =
-            JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
+            // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
+            JMeterUtils.getDelimiter(
+                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
@@ -87,6 +90,7 @@ public class ReportGenerator {
     public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
     public static final String END_DATE_CONSUMER_NAME = "endDate";
     public static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
+    public static final String DATE_RANGE_FILTER_CONSUMER_NAME = "dateRangeFilter";
     public static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
     public static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
     public static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
@@ -205,16 +209,15 @@ public class ReportGenerator {
         // Build consumers chain
         SampleContext sampleContext = new SampleContext();
         sampleContext.setWorkingDirectory(tmpDir);
-        SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
-                .getPropDefault("jmeter.save.saveservice.default_delimiter",
-                        ",").charAt(0));
+        SampleSource source = new CsvFileSampleSource(testFile, CSV_DEFAULT_SEPARATOR);
         source.setSampleContext(sampleContext);
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
-
-        normalizer.addSampleConsumer(createBeginDateConsumer());
-        normalizer.addSampleConsumer(createEndDateConsumer());
+        
+        FilterConsumer dateRangeConsumer = createFilterByDateRange();
+        dateRangeConsumer.addSampleConsumer(createBeginDateConsumer());
+        dateRangeConsumer.addSampleConsumer(createEndDateConsumer());
 
         FilterConsumer nameFilter = createNameFilter();
 
@@ -222,8 +225,10 @@ public class ReportGenerator {
 
         nameFilter.addSampleConsumer(excludeControllerFilter);
 
-        normalizer.addSampleConsumer(nameFilter);
-
+        dateRangeConsumer.addSampleConsumer(nameFilter);
+        
+        normalizer.addSampleConsumer(dateRangeConsumer);
+        
         source.addSampleConsumer(normalizer);
 
         // Get graph configurations
@@ -262,6 +267,38 @@ public class ReportGenerator {
 
         LOG.debug("End of report generation");
 
+    }
+
+    /**
+     * @return {@link FilterConsumer} that filter data based on date range
+     */
+    private FilterConsumer createFilterByDateRange() {
+        FilterConsumer dateRangeFilter = new FilterConsumer();
+        dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
+        dateRangeFilter.setSamplePredicate(new SamplePredicate() {
+
+            @Override
+            public boolean matches(Sample sample) {
+                long sampleStartTime = sample.getStartTime();
+                if(configuration.getStartDate() != null) {
+                    if((sampleStartTime >= configuration.getStartDate().getTime())) {
+                        if(configuration.getEndDate() != null) {
+                            return sampleStartTime <= configuration.getEndDate().getTime();                             
+                        } else {
+                            return true;                            
+                        }
+                    }
+                    return false;
+                } else {
+                    if(configuration.getEndDate() != null) {
+                        return sampleStartTime <= configuration.getEndDate().getTime(); 
+                    } else {
+                        return true;                            
+                    }
+                }
+            }
+        });     
+        return dateRangeFilter;
     }
 
     private void removeTempDir(File tmpDir, boolean tmpDirCreated) {
@@ -407,6 +444,9 @@ public class ReportGenerator {
         return apdexSummaryConsumer;
     }
 
+    /**
+     * @return a {@link FilterConsumer} that filters samplers based on their name
+     */
     private FilterConsumer createNameFilter() {
         FilterConsumer nameFilter = new FilterConsumer();
         nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
@@ -429,6 +469,9 @@ public class ReportGenerator {
         return nameFilter;
     }
 
+    /**
+     * @return Consumer that compute the end date of the test
+     */
     private AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
                 new MaxAggregator(), new SampleSelector<Double>() {
@@ -442,6 +485,9 @@ public class ReportGenerator {
         return endDateConsumer;
     }
 
+    /**
+     * @return Consumer that compute the begining date of the test
+     */
     private AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
                 new MinAggregator(), new SampleSelector<Double>() {

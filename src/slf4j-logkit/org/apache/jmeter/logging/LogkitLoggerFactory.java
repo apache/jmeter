@@ -21,7 +21,6 @@ package org.apache.jmeter.logging;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Hierarchy;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -59,7 +58,7 @@ public class LogkitLoggerFactory implements ILoggerFactory {
                 if (name.equalsIgnoreCase(Logger.ROOT_LOGGER_NAME)) {
                     logkitLogger = Hierarchy.getDefaultHierarchy().getRootLogger();
                 } else {
-                    logkitLogger = LoggingManager.getLoggerFor(name);
+                    logkitLogger = Hierarchy.getDefaultHierarchy().getLoggerFor(name);
                 }
                 slf4jLogger = new LogkitLoggerAdapter(logkitLogger);
                 loggerMap.put(name, slf4jLogger);

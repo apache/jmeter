@@ -30,7 +30,8 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The class TimeVSThreadGraphConsumer provides a graph to visualize ...
+ * The class TimeVSThreadGraphConsumer provides a graph to visualize average response time
+ * vs number of threads
  *
  * @since 3.0
  */
@@ -65,7 +66,8 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new ElapsedTimeValueSelector(), false, true));
+                // We include Transaction Controller results
+                new ElapsedTimeValueSelector(false), false, true));
 
         return groupInfos;
     }

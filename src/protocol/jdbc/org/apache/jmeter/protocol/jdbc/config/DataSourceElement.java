@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -209,7 +210,12 @@ public class DataSourceElement extends AbstractTestElement
 
         if(isKeepAlive()) {
             dataSource.setTestWhileIdle(true);
-            dataSource.setValidationQuery(getCheckQuery());
+            String validationQuery = getCheckQuery();
+            if (StringUtils.isBlank(validationQuery)) {
+                dataSource.setValidationQuery(null);
+            } else {
+                dataSource.setValidationQuery(validationQuery);
+            }
             dataSource.setSoftMinEvictableIdleTimeMillis(Long.parseLong(getConnectionAge()));
             dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(getTrimInterval()));
         }

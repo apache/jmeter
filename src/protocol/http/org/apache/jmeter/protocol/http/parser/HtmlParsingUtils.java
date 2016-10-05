@@ -359,18 +359,18 @@ public final class HtmlParsingUtils {
 
     private static String printNode(Node node) {
         StringBuilder buf = new StringBuilder();
-        buf.append("<"); // $NON-NLS-1$
+        buf.append('<'); // $NON-NLS-1$
         buf.append(node.getNodeName());
         NamedNodeMap atts = node.getAttributes();
         for (int x = 0; x < atts.getLength(); x++) {
-            buf.append(" "); // $NON-NLS-1$
+            buf.append(' '); // $NON-NLS-1$
             buf.append(atts.item(x).getNodeName());
             buf.append("=\""); // $NON-NLS-1$
             buf.append(atts.item(x).getNodeValue());
             buf.append("\""); // $NON-NLS-1$
         }
 
-        buf.append(">"); // $NON-NLS-1$
+        buf.append('>'); // $NON-NLS-1$
 
         return buf.toString();
     }

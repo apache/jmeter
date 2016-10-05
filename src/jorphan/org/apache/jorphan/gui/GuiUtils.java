@@ -111,6 +111,20 @@ public final class GuiUtils {
             cellEditor.stopCellEditing();
         }
     }
+
+    /**
+     * cancel any editing that is currently being done on the table.
+     *
+     * @param table the table to cancel on editing
+     * @since 3.1
+     */
+    public static void cancelEditing(JTable table) {
+        // If a table cell is being edited, we must cancel the editing
+        if (table != null && table.isEditing()) {
+            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
+            cellEditor.cancelCellEditing();
+        }
+    }
     
     /**
      * Get pasted text from clipboard

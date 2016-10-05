@@ -30,7 +30,7 @@ public class PercentileAggregator implements Aggregator {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault(
             ReportGeneratorConfiguration.REPORT_GENERATOR_KEY_PREFIX
                     + ReportGeneratorConfiguration.KEY_DELIMITER
-                    + "statistic_window", 200000);
+                    + "statistic_window", 20000);
 
     private final DescriptiveStatistics statistics;
     private final double percentileIndex;
@@ -44,6 +44,14 @@ public class PercentileAggregator implements Aggregator {
     public PercentileAggregator(double index) {
         statistics = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
         percentileIndex = index;
+    }
+
+    /**
+     * @param lastAggregator {@link PercentileAggregator}
+     */
+    public PercentileAggregator(PercentileAggregator lastAggregator) {
+        this.statistics = new DescriptiveStatistics(lastAggregator.statistics);
+        this.percentileIndex = lastAggregator.percentileIndex;
     }
 
     /*

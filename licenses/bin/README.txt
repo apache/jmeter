@@ -9,20 +9,20 @@ commons-codec-1.10.jar
 commons-collections-3.2.2.jar
 commons-dbcp2-2.1.1.jar
 commons-httpclient-3.1.jar
-commons-io-2.4.jar
+commons-io-2.5.jar
 commons-jexl-1.1.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.0.jar
 commons-lang3-3.4.jar
 commons-logging-1.2.jar
 commons-math3-3.5.jar
-commons-net-3.4.jar
+commons-net-3.5.jar
 commons-pool2-2.4.2.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
-groovy-all-2.4.6.jar
+groovy-all-2.4.7.jar
 httpclient-4.5.2.jar
-httpcore-4.4.4.jar
+httpcore-4.4.5.jar
 httpmime-4.5.2.jar
 jorphan.jar (part of JMeter)
 logkit-2.0.jar
@@ -33,4 +33,4 @@ tika-parsers-1.13.jar
 xalan-2.7.2.jar
 xercesImpl-2.11.0.jar
 xml-apis-1.4.01.jar
-xmlgraphics-commons-2.0.1.jar
+xmlgraphics-commons-2.1.jar

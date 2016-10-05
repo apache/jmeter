@@ -19,6 +19,7 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -56,6 +57,7 @@ import org.apache.jmeter.protocol.http.parser.LinkExtractorParseException;
 import org.apache.jmeter.protocol.http.parser.LinkExtractorParser;
 import org.apache.jmeter.protocol.http.sampler.ResourcesDownloader.AsynSamplerResultHolder;
 import org.apache.jmeter.protocol.http.util.ConversionUtils;
+import org.apache.jmeter.protocol.http.util.DirectAccessByteArrayOutputStream;
 import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -682,9 +684,13 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return port number or UNSPECIFIED_PORT (== 0)
      */
     public int getPortIfSpecified() {
-        String port_s = getPropertyAsString(PORT, UNSPECIFIED_PORT_AS_STRING);
+        String portAsString = getPropertyAsString(PORT);
+        if(portAsString == null || portAsString.isEmpty()) {
+            return UNSPECIFIED_PORT;
+        }
+        
         try {
-            return Integer.parseInt(port_s.trim());
+            return Integer.parseInt(portAsString.trim());
         } catch (NumberFormatException e) {
             return UNSPECIFIED_PORT;
         }
@@ -946,7 +952,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         } else {
             // HTTP URLs must be absolute, allow file to be relative
             if (!path.startsWith("/")) { // $NON-NLS-1$
-                pathAndQuery.append("/"); // $NON-NLS-1$
+                pathAndQuery.append('/'); // $NON-NLS-1$
             }
         }
         pathAndQuery.append(path);
@@ -992,13 +998,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the QueryString value
      */
     public String getQueryString(String contentEncoding) {
+        
+        CollectionProperty arguments = getArguments().getArguments();
+        // Optimisation : avoid building useless objects if empty arguments
+        if(arguments.size() == 0) {
+            return "";
+        }
+        
         // Check if the sampler has a specified content encoding
         if (JOrphanUtils.isBlank(contentEncoding)) {
             // We use the encoding which should be used according to the HTTP spec, which is UTF-8
             contentEncoding = EncoderCache.URL_ARGUMENT_ENCODING;
         }
-        StringBuilder buf = new StringBuilder();
-        PropertyIterator iter = getArguments().iterator();
+        
+        StringBuilder buf = new StringBuilder(arguments.size() * 15);
+        PropertyIterator iter = arguments.iterator();
         boolean first = true;
         while (iter.hasNext()) {
             HTTPArgument item = null;
@@ -1252,25 +1266,21 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                     if (url == null) {
                         log.warn("Null URL detected (should not happen)");
                     } else {
-                        String urlstr = url.toString();
-                        String urlStrEnc = escapeIllegalURLCharacters(encodeSpaces(urlstr));
-                        if (!urlstr.equals(urlStrEnc)) {// There were some spaces in the URL
-                            try {
-                                url = new URL(urlStrEnc);
-                            } catch (MalformedURLException e) {
-                                res.addSubResult(errorResult(new Exception(urlStrEnc + " is not a correct URI"), new HTTPSampleResult(res)));
-                                setParentSampleSuccess(res, false);
-                                continue;
-                            }
+                        try {
+                            url = escapeIllegalURLCharacters(url);
+                        } catch (Exception e) {
+                            res.addSubResult(errorResult(new Exception(url.toString() + " is not a correct URI"), new HTTPSampleResult(res)));
+                            setParentSampleSuccess(res, false);
+                            continue;
                         }
                         // I don't think localMatcher can be null here, but check just in case
-                        if (pattern != null && localMatcher != null && !localMatcher.matches(urlStrEnc, pattern)) {
+                        if (pattern != null && localMatcher != null && !localMatcher.matches(url.toString(), pattern)) {
                             continue; // we have a pattern and the URL does not match, so skip it
                         }
                         try {
                             url = url.toURI().normalize().toURL();
                         } catch (MalformedURLException | URISyntaxException e) {
-                            res.addSubResult(errorResult(new Exception(urlStrEnc + " URI can not be normalized", e), new HTTPSampleResult(res)));
+                            res.addSubResult(errorResult(new Exception(url.toString() + " URI can not be normalized", e), new HTTPSampleResult(res)));
                             setParentSampleSuccess(res, false);
                             continue;
                         }
@@ -1284,7 +1294,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             res.addSubResult(binRes);
                             setParentSampleSuccess(res, res.isSuccessful() && (binRes == null || binRes.isSuccessful()));
                         }
-
                     }
                 } catch (ClassCastException e) { // TODO can this happen?
                     res.addSubResult(errorResult(new Exception(binURL + " is not a correct URI"), new HTTPSampleResult(res)));
@@ -1343,22 +1352,17 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         return null;
     }
-
+    
     /**
      * @param url URL to escape
      * @return escaped url
      */
-    private String escapeIllegalURLCharacters(String url) {
-        if (url == null || url.toLowerCase().startsWith("file:")) {
+    private URL escapeIllegalURLCharacters(java.net.URL url) {
+        if (url == null || url.getProtocol().equals("file")) {
             return url;
         }
         try {
-            String escapedUrl = ConversionUtils.escapeIllegalURLCharacters(url);
-            if (!escapedUrl.equals(url) && log.isDebugEnabled()) {
-                log.debug("Url '" + url + "' has been escaped to '"
-                        + escapedUrl + "'. Please correct your webpage.");
-            }
-            return escapedUrl;
+            return ConversionUtils.sanitizeUrl(url).toURL();
         } catch (Exception e1) {
             log.error("Error escaping URL:'" + url + "', message:" + e1.getMessage());
             return url;
@@ -1598,7 +1602,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     protected HTTPSampleResult resultProcessing(boolean areFollowingRedirect, int frameDepth, HTTPSampleResult res) {
         boolean wasRedirected = false;
         if (!areFollowingRedirect && res.isRedirect()) {
-            log.debug("Location set to - " + res.getRedirectLocation());
+            if(log.isDebugEnabled()) {
+                log.debug("Location set to - " + res.getRedirectLocation());
+            }
 
             if (getFollowRedirects()) {
                 res = followRedirects(res, frameDepth);
@@ -1606,7 +1612,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 wasRedirected = true;
             }
         }
-        if (isImageParser() && (SampleResult.TEXT).equals(res.getDataType()) && res.isSuccessful()) {
+        
+        if (res.isSuccessful() && SampleResult.TEXT.equals(res.getDataType()) && isImageParser() ) {
             if (frameDepth > MAX_FRAME_DEPTH) {
                 HTTPSampleResult errSubResult = new HTTPSampleResult(res);
                 errSubResult.removeSubResults();
@@ -1751,27 +1758,29 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @throws IOException if reading the result fails
      */
     public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
+        
+        OutputStream w = null;
         try {
             byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
             int bufferSize = 32;// Enough for MD5
 
             MessageDigest md = null;
-            boolean asMD5 = useMD5();
-            if (asMD5) {
+            boolean knownResponseLength = length > 0;// may also happen if long value > int.max
+            if (useMD5()) {
                 try {
                     md = MessageDigest.getInstance("MD5"); //$NON-NLS-1$
                 } catch (NoSuchAlgorithmException e) {
                     log.error("Should not happen - could not find MD5 digest", e);
-                    asMD5 = false;
                 }
             } else {
-                if (length <= 0) {// may also happen if long value > int.max
+                if (!knownResponseLength) {
                     bufferSize = 4 * 1024;
                 } else {
                     bufferSize = length;
                 }
             }
-            ByteArrayOutputStream w = new ByteArrayOutputStream(bufferSize);
+            
+            
             int bytesRead = 0;
             int totalBytes = 0;
             boolean first = true;
@@ -1779,29 +1788,59 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 if (first) {
                     sampleResult.latencyEnd();
                     first = false;
+                    if(md == null) {
+                        if(knownResponseLength) {
+                            w = new DirectAccessByteArrayOutputStream(bufferSize);
+                        }
+                        else {
+                            w = new org.apache.commons.io.output.ByteArrayOutputStream(bufferSize);
+                        }
+                    }
                 }
-                if (asMD5 && md != null) {
+                
+                if (md == null) {
+                    w.write(readBuffer, 0, bytesRead);
+                } else {
                     md.update(readBuffer, 0, bytesRead);
                     totalBytes += bytesRead;
-                } else {
-                    w.write(readBuffer, 0, bytesRead);
                 }
             }
+            
             if (first) { // Bug 46838 - if there was no data, still need to set latency
                 sampleResult.latencyEnd();
+                return new byte[0];
             }
-            in.close();
-            w.flush();
-            if (asMD5 && md != null) {
+            
+            if (md != null) {
                 byte[] md5Result = md.digest();
-                w.write(JOrphanUtils.baToHexBytes(md5Result));
                 sampleResult.setBytes(totalBytes);
+                return JOrphanUtils.baToHexBytes(md5Result);
             }
-            w.close();
-            return w.toByteArray();
+            
+            return toByteArray(w);
         } finally {
             IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(w);
         }
+    }
+
+    /**
+     * Optimized method to get byte array from {@link OutputStream}
+     * @param w {@link OutputStream}
+     * @return byte array
+     */
+    private byte[] toByteArray(OutputStream w) {
+        if(w instanceof DirectAccessByteArrayOutputStream) {
+            return ((DirectAccessByteArrayOutputStream) w).toByteArray();
+        }
+        
+        if(w instanceof org.apache.commons.io.output.ByteArrayOutputStream) {
+            return ((org.apache.commons.io.output.ByteArrayOutputStream) w).toByteArray();
+        }
+        
+        log.warn("Unknown stream type " + w.getClass());
+        
+        return null;
     }
 
     /**

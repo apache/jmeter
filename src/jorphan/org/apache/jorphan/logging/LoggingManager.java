@@ -272,7 +272,7 @@ public final class LoggingManager {
      * @param category - string containing the category
      */
     public static void setPriority(String priority, String category) {
-        setPriority(Priority.getPriorityForName(priority), category);
+        setPriority(Priority.getPriorityForName(trimPriority(priority)), category);
     }
 
     /**
@@ -282,7 +282,7 @@ public final class LoggingManager {
      * @param fullName - e.g. org.apache.jmeter.etc, will have the prefix removed.
      */
     public static void setPriorityFullName(String priority, String fullName) {
-        setPriority(Priority.getPriorityForName(priority), removePrefix(fullName));
+        setPriority(Priority.getPriorityForName(trimPriority(priority)), removePrefix(fullName));
     }
 
     /**
@@ -296,7 +296,15 @@ public final class LoggingManager {
     }
 
     public static void setPriority(String p) {
-        setPriority(Priority.getPriorityForName(p));
+        setPriority(Priority.getPriorityForName(trimPriority(p)));
+    }
+    
+    /**
+     * @param priority String log priority
+     * @return String trimmed priority
+     */
+    private static final String trimPriority(String priority) {
+        return priority.trim();
     }
 
     /**

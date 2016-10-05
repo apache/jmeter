@@ -168,7 +168,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     }
 
     /**
-     * Compares the the size of a return result to the set allowed size using a
+     * Compares the size of a return result to the set allowed size using a
      * logical comparator set in setLogicalComparator().
      * 
      * Possible values are: equal, not equal, greater than, less than, greater

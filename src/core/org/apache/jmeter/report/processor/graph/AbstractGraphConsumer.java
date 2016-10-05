@@ -514,15 +514,15 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 }
 
                 // Get the value to aggregate and dispatch it to the groupData
-                double value = groupInfo.getValueSelector().select(seriesName,
+                Double value = groupInfo.getValueSelector().select(seriesName,
                         sample);
-
-                aggregateValue(factory, seriesData, key, value);
-                if (overallSeries) {
-                    SeriesData overallData = groupData.getOverallSeries();
-                    aggregateValue(factory, overallData, key, value);
+                if(value != null) {
+                    aggregateValue(factory, seriesData, key, value);
+                    if (overallSeries) {
+                        SeriesData overallData = groupData.getOverallSeries();
+                        aggregateValue(factory, overallData, key, value);
+                    }
                 }
-
             }
         }
 
