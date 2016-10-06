@@ -128,6 +128,7 @@ Summary
     <li><bug>60050</bug>CSV Data Set : Make it clear in the logs when a thread will exit due to this configuration</li>
     <li><bug>59962</bug>Cache Manager does not update expires date when response code is <code>304</code>.</li>
     <li><bug>60018</bug>Timer : Add a factor to apply on pauses. Partly based on a patch by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60203</bug>Use more available space for textarea in XPath Assertion.</li>
 </ul>
 
 <h3>Functions</h3>

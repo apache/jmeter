@@ -4718,7 +4718,7 @@ props.put("PROP1","1234");</source></li>
 
 </properties>
 </component>
-<component name="XPath Assertion" index="&sect-num;.5.8"  width="800" height="317" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8"  width="871" height="615" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "<code>/</code>" will match any well-formed
