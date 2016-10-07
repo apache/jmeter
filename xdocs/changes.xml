@@ -75,6 +75,7 @@ Summary
     <li>Since 3.1 version, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since 3.1 version, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
     <li>Since 3.1 version, JSON Path Post Processor has been renamed to JSON Path Extractor, see <bugzilla>60220</bugzilla></li>
+    <li>Since 3.1 version, deprecated elements Distribution Graph and Spline Visualizer were removed, see <bugzilla>60222</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements</h3>
@@ -116,6 +117,7 @@ Summary
     <li><bug>59975</bug>View Results Tree : Text renderer annoyingly scrolls down when content is bulky. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60109</bug>Summariser : Make it ignore TC generated SampleResult in its summary computations</li>
     <li><bug>59948</bug>Add a formatted and sane HTML source code render to View Results Tree</li>
+    <li><bug>60222</bug>Remove deprecated elements Distribution Graph, Spline Visualizer</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
