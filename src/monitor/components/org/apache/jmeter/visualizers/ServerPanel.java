@@ -22,6 +22,7 @@ import java.awt.FlowLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.monitor.util.Stats;
 
@@ -30,7 +31,10 @@ import org.apache.jmeter.monitor.util.Stats;
  * status. The server label consist of the protocol, host and port. For example,
  * a system with multiple Tomcat's running on different ports would be different
  * ServerPanel.
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class ServerPanel extends JPanel implements MonitorGuiListener {
 
     private static final long serialVersionUID = 240L;

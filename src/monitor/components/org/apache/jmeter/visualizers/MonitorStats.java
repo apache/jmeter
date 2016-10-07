@@ -21,14 +21,17 @@ import java.io.Serializable;
 import org.apache.jmeter.monitor.util.Stats;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
-/*
+/**
  *  TODO - convert this into an immutable class using plain variables
  *  The current implementation is quite inefficient, as it stores everything
  *  in properties.
  *
  *  This will require changes to ResultCollector.recordStats()
  *  and SaveService.saveTestElement() which are both currently only used by Monitor classes
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class MonitorStats extends AbstractTestElement implements Serializable {
 
     private static final long serialVersionUID = 240L;
