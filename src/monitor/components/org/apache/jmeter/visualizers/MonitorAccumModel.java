@@ -31,6 +31,11 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public class MonitorAccumModel implements Clearable, Serializable {
 
     private static final long serialVersionUID = 240L;
@@ -160,26 +165,22 @@ public class MonitorAccumModel implements Clearable, Serializable {
         if (sample instanceof HTTPSampleResult) {
             surl = ((HTTPSampleResult) sample).getURL();
             // String rescontent = new String(sample.getResponseData());
-            if (sample.isResponseCodeOK() && ((HTTPSampleResult) sample).isMonitor()) {
-                ObjectFactory of = ObjectFactory.getInstance();
-                Status st = of.parseBytes(sample.getResponseData());
-                st.setConnectorPrefix(connectorPrefix);
-                if (surl != null) {// surl can be null if read from a file
-                    MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
-                            .calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
-                            .getPort()), surl.getProtocol(), System.currentTimeMillis());
-                    MonitorModel mo = new MonitorModel(stat);
-                    this.addSample(mo);
-                    notifyListeners(mo);
-                } 
-                // This part of code throws NullPointerException
-                // Don't think Monitor results can be loaded from files
-                // see https://bz.apache.org/bugzilla/show_bug.cgi?id=51810
-//                else {
-//                    noResponse(surl);
-//                }
-            } else if (((HTTPSampleResult) sample).isMonitor()) {
-                noResponse(surl);
+            if (((HTTPSampleResult) sample).isMonitor()) {
+                if (sample.isResponseCodeOK()) {
+                    ObjectFactory of = ObjectFactory.getInstance();
+                    Status st = of.parseBytes(sample.getResponseData());
+                    st.setConnectorPrefix(connectorPrefix);
+                    if (surl != null) {// surl can be null if read from a file
+                        MonitorStats stat = new MonitorStats(Stats.calculateStatus(st), Stats.calculateLoad(st), 0, Stats
+                                .calculateMemoryLoad(st), Stats.calculateThreadLoad(st), surl.getHost(), String.valueOf(surl
+                                .getPort()), surl.getProtocol(), System.currentTimeMillis());
+                        MonitorModel mo = new MonitorModel(stat);
+                        this.addSample(mo);
+                        notifyListeners(mo);
+                    }
+                } else if (((HTTPSampleResult) sample).isMonitor()) {
+                    noResponse(surl);
+                }
             }
         }
     }

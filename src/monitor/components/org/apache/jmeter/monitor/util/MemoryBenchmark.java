@@ -16,8 +16,8 @@
  */
 package org.apache.jmeter.monitor.util;
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.jmeter.monitor.model.Connector;
 import org.apache.jmeter.monitor.model.Jvm;
@@ -34,7 +34,10 @@ import org.apache.jmeter.visualizers.MonitorStats;
 /**
  *
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class MemoryBenchmark {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

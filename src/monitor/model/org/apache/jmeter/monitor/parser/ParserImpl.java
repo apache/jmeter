@@ -33,6 +33,11 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public abstract class ParserImpl implements Parser {
 
     private static final Logger log = LoggingManager.getLoggerForClass();

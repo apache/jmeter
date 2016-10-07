@@ -22,7 +22,10 @@ import java.util.List;
 /**
  *
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class WorkersImpl implements Workers {
     private final List<Worker> worker;
 

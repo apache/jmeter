@@ -18,7 +18,11 @@ package org.apache.jmeter.monitor.parser;
 
 import org.apache.jmeter.monitor.model.Status;
 import org.apache.jmeter.samplers.SampleResult;
-
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public interface Parser {
     Status parseBytes(byte[] bytes);
 
