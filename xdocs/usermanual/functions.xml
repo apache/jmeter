@@ -567,13 +567,13 @@ For details of the language, please see <a href="http://www.mozilla.org/rhino/ov
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 </ul>
 <p>
 Rhinoscript allows access to static methods via its Packages object.
@@ -879,13 +879,13 @@ sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li><code>log</code> - the logger for the BeanShell function (*)</li>
-<li><code>ctx</code> - the current JMeter context variable</li>
-<li><code>vars</code> - the current JMeter variables</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the BeanShell function (*)</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
-<li><code>Sampler</code> - the current Sampler, if any</li>
-<li><code>SampleResult</code> - the current SampleResult, if any</li>
+<li><code>Sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><code>SampleResult</code> - the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed. 
 Other variables vary from invocation to invocation.
@@ -923,13 +923,13 @@ sample init file in the bin directory: <code>utility.groovy</code>.
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li><code>log</code> - the logger for the BeanShell function (*)</li>
-<li><code>ctx</code> - the current JMeter context variable</li>
-<li><code>vars</code> - the current JMeter variables</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the groovy function (*)</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
-<li><code>sampler</code> - the current Sampler, if any</li>
-<li><code>prev</code> - the previous SampleResult, if any</li>
+<li><code>sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><code>prev</code> - the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
 <li><code>OUT</code> - System.out</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed. 
@@ -1099,13 +1099,13 @@ The following shorthand aliases are provided:
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
@@ -1150,13 +1150,13 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
@@ -1201,13 +1201,13 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
