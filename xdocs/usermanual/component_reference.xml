@@ -2797,25 +2797,6 @@ Further details on the precise meaning of the statistical terms can be found on 
  <p>The value displayed on the top left of graph is the max of 90<sup>th</sup> percentile of response time.</p>
 </component>
 
-<component name="Spline Visualizer (DEPRECATED)" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
-<note>
-Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</note>
-<description>
-<p>
-The Spline Visualizer provides a view of all sample times from the start
-of the test till the end, regardless of how many samples have been taken.  The spline
-has 10 points, each representing 10% of the samples, and connected using spline
-logic to show a single continuous line.
-</p>
-<p>
-The graph is automatically scaled to fit within the window.
-This needs to be borne in mind when comparing graphs.
-</p>
-</description>
-</component>
-
 <component name="Assertion Results" index="&sect-num;.3.5"  width="954" height="365" screenshot="assertion_results.png">
 <description>
 <note>
@@ -3099,29 +3080,6 @@ Use a browser to check that you can access the Tomcat status servlet OK.
 For a detailed description of how to use the monitor, please refer to
 <a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
 </p>
-</description>
-</component>
-
-<component name="Distribution Graph (DEPRECATED)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
-<description>
-<note>
-Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</note>
-
-<p>The distribution graph will display a bar for every unique response time. Since the
-granularity of <code>System.currentTimeMillis()</code> is 10 milliseconds, the 90% threshold should be
-within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
-What this means is 50% of the response times finished between 0 and the line. The same
-is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
-requests. The graph was able to display the distribution without any problems and both
-the 50% and 90% line were within the width of the graph. A performant application will
-generally produce results that clump together. A poorly written application that has
-memory leaks may result in wild fluctuations. In those situations, the threshold lines
-may be beyond the width of the graph. The recommended solution to this specific problem
-is fix the webapp so it performs well. If your test plan produces distribution graphs
-with no apparent clumping or pattern, it may indicate a memory leak. The only way to
-know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
