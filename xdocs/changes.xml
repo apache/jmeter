@@ -74,13 +74,12 @@ Summary
     <li>Since 3.1 version, <code>jmeter.save.saveservice.connect_time</code> property value is <code>true</code>, meaning CSV file for results will contain an additional column containing connection time, see <bugzilla>60106</bugzilla></li>
     <li>Since 3.1 version, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since 3.1 version, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
-    <li>Since 3.1 version, JSON Path Post Processor has been renamed to JSON Path Extractor, see <bugzilla>60220</bugzilla></li>
-    <li>Since 3.1 version, deprecated elements Distribution Graph and Spline Visualizer were removed, see <bugzilla>60222</bugzilla></li>
+    <li>Since 3.1 version, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements</h3>
 <ul>
-    <li>Sample removed element</li>
+    <li>Since 3.1 version, deprecated elements Distribution Graph and Spline Visualizer were removed, see <bugzilla>60222</bugzilla></li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -133,6 +132,7 @@ Summary
     <li><bug>60018</bug>Timer : Add a factor to apply on pauses. Partly based on a patch by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60203</bug>Use more available space for textarea in XPath Assertion.</li>
     <li><bug>60220</bug>Rename JSON Path Post Processor to JSON Path Extractor</li>
+    <li><bug>60221</bug>CSV DataSet : trim variable names</li>
 </ul>
 
 <h3>Functions</h3>
