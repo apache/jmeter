@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.jmeter.control.gui;
+package org.apache.jmeter.control.gui.wdc;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

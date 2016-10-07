@@ -16,12 +16,9 @@
  *
  */
 
-package org.apache.jmeter.control.gui;
+package org.apache.jmeter.control.gui.wdc;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +26,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -42,8 +38,11 @@ import org.apache.jmeter.testelement.TestElement;
 /**
  * The Class WeightedDistributionTableModel. Provides Support for the control
  * panel table
+ * 
+ * NOTE:  This class was intended to be a internal class, but the requirement by
+ * JMeterTest to instantiate all Serializable classes breaks unless this is public
  */
-class WeightedDistributionTableModel extends PowerTableModel {
+public class WeightedDistributionTableModel extends PowerTableModel {
 
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -600418978315572279L;
@@ -343,70 +342,5 @@ class WeightedDistributionTableModelListener implements TableModelListener {
                     WeightedDistributionTableModel.PROBABILITY_COLUMN,
                     probabilityData);
         }
-    }
-}
-
-/**
- * This class renders the Evaluated Weight column and sets the background color
- * as green/gray/red
- */
-@SuppressWarnings("serial")
-class WeightedDistributionIneditableEvaluatedWeightRenderer
-        extends DefaultTableCellRenderer {
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-
-        super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-                row, column);
-
-        // get the evaluated weight and enabled/disabled
-        String evalWeight = (String) table.getModel().getValueAt(row,
-                WeightedDistributionTableModel.EVAL_WEIGHT_COLUMN);
-        boolean isEnabled = (boolean) table.getModel().getValueAt(row,
-                WeightedDistributionTableModel.ENABLED_COLUMN);
-
-        int intValue = -1;
-        try {
-            intValue = Integer.parseInt(evalWeight);
-        } catch (NumberFormatException nfe) {
-            // Negative numbers and unable to parse as int both display red
-            intValue = -1;
-        }
-
-        if (intValue == 0 || !isEnabled) {
-            setBackground(Color.LIGHT_GRAY);
-            setForeground(Color.BLACK);
-        } else if (intValue < 0) {
-            setBackground(Color.RED);
-            setForeground(Color.WHITE);
-        } else {
-            setBackground(Color.GREEN);
-            setForeground(Color.BLACK);
-        }
-
-        return this;
-    }
-}
-
-/**
- * This class renders the Probability column with a grey background with a
- * nicely formatted percentage string
- */
-@SuppressWarnings("serial")
-class WeightedDistributionIneditableProbabilityRenderer
-        extends DefaultTableCellRenderer {
-    private static final String FORMAT = "###.####%";
-    private final DecimalFormat formatter = new DecimalFormat(FORMAT);
-
-    public WeightedDistributionIneditableProbabilityRenderer() {
-        super();
-        setBackground(Color.LIGHT_GRAY);
-        setHorizontalAlignment(RIGHT);
-    }
-
-    public void setValue(Object value) {
-        setText((value == null) ? "" : formatter.format(value));
     }
 }
