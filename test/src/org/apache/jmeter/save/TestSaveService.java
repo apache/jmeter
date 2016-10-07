@@ -88,7 +88,7 @@ public class TestSaveService extends JMeterTestCase {
 
     @Test
     public void testPropfile2() throws Exception {
-        assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with revision id of saveservice.properties", SaveService.FILEVERSION, SaveService.getFileVersion());
+        assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with sha1 of saveservice.properties without newline", SaveService.FILEVERSION, SaveService.getFileVersion());
     }
     
     @Test
