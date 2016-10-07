@@ -202,9 +202,9 @@ The <code>system.properties</code> file gives more flexibility.</note>
 <property name="not_in_menu">
     Components to not display in JMeter GUI (GUI class name or static label).<br/>
     These elements are deprecated and will be removed in next version:
-    <source>MongoDB Script, MongoDB Source Config, Distribution Graph, Spline Visualizer</source>
+    <source>MongoDB Script, MongoDB Source Config</source>
     Defaults to:
-    <source>org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler, org.apache.jmeter.protocol.mongodb.config.MongoSourceElement, org.apache.jmeter.visualizers.DistributionGraphVisualizer, org.apache.jmeter.visualizers.SplineVisualizer</source>
+    <source>org.apache.jmeter.protocol.mongodb.sampler.MongoScriptSampler, org.apache.jmeter.protocol.mongodb.config.MongoSourceElement</source>
 </property>
 <property name="undo.history.size">
     Number of items in undo history.<br/>
