@@ -22,6 +22,11 @@ import java.util.Date;
 
 import org.apache.jmeter.samplers.Clearable;
 
+/**
+ * 
+ * @deprecated since 3.1
+ */
+@Deprecated
 public class MonitorModel implements Clearable, Serializable, Cloneable {
 
     private static final long serialVersionUID = 240L;

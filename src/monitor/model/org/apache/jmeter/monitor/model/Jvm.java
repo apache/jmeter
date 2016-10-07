@@ -16,7 +16,11 @@
  */
 
 package org.apache.jmeter.monitor.model;
-
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public interface Jvm {
     Memory getMemory();
 

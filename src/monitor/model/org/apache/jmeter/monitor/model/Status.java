@@ -17,7 +17,11 @@
 package org.apache.jmeter.monitor.model;
 
 import java.util.List;
-
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public interface Status {
     Jvm getJvm();
 

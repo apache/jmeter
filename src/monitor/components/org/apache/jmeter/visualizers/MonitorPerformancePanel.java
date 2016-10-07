@@ -41,6 +41,11 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 
+/**
+ * 
+ * @deprecated since 3.1
+ */
+@Deprecated
 public class MonitorPerformancePanel extends JSplitPane implements TreeSelectionListener, MonitorListener, Clearable {
 
     private static final long serialVersionUID = 240L;

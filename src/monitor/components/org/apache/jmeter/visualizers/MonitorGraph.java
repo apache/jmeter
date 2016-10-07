@@ -28,7 +28,10 @@ import org.apache.jmeter.samplers.Clearable;
 /**
  * MonitorGraph will draw the performance history of a given server. It displays
  * 4 lines:
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class MonitorGraph extends JComponent implements MonitorGuiListener, Clearable {
 
     private static final long serialVersionUID = 240L;

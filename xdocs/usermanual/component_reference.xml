@@ -1085,7 +1085,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
         <li><code>FileName</code> - the file name, if any</li>
         <li><code>Parameters</code> - text from the Parameters field</li>
         <li><code>bsh.args</code> - the parameters, split as described above</li>
-        <li><code>SampleResult</code> - pointer to the current SampleResult</li>
+        <li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a></li>
             <li><code>ResponseCode</code> defaults to <code>200</code></li>
             <li><code>ResponseMessage</code> defaults to "<code>OK</code>"</li>
             <li><code>IsSuccess</code> defaults to <code>true</code></li>
@@ -1095,7 +1095,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-            <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+            <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
                 <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
         </ul>
@@ -1200,7 +1200,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - JMeterProperties  (class <code>java.util.Properties</code>) - e.g. 
+<li><code>props</code> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. 
   <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
@@ -1302,7 +1302,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</source></li>
-<li><code>props</code> - JMeterProperties  (class <code>java.util.Properties</code>) - e.g. 
+<li><code>props</code> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. 
   <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
@@ -2122,13 +2122,16 @@ Bug Page, Bug Page.</p>
 Thread Group or a Loop Controller is not currently defined. Odd things may happen.</note>
 </component>
 
-<component name="Interleave Controller" index="&sect-num;.2.4"  width="329" height="104" screenshot="logic-controller/interleave-controller.png">
+<component name="Interleave Controller" index="&sect-num;.2.4"  width="626" height="127" screenshot="logic-controller/interleave-controller.png">
 <description><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
 </description>
 <properties>
         <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
+        <property name="Interleave accross threads" required="No">If checked, the interleave controller will alternate among each of its children controllers for each loop iteration but accross all threads, for example in a 
+        configuration with 4 threads and 3 child controllers, on first iteration
+        thread 1 will run first child, thread 2 second child, thread 3 third child, thread 4 first child, on next iteration each thread will run the following child controller</property>
 </properties>
 
 <!--
@@ -2281,7 +2284,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <note>
         No variables are made available to the script when the condition is interpreted as Javascript.
         If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
-        a <code>__javaScript()</code> function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
+        a <code>__jexl3</code>, <code>__groovy</code> or <code>__javaScript()</code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
         </note>
         <note>
         To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
@@ -2310,10 +2313,11 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
             <li><code>"${VAR}" == "abcd"</code></li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
+        <note>Note it is advised to avoid using Javascript mode for performances</note>
     </example>
     <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
-            <li><code>${__jexl(${COUNT} &lt; 10)}</code></li>
+            <li><code>${__jexl3(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
             <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
         </ul>
@@ -2816,25 +2820,6 @@ Further details on the precise meaning of the statistical terms can be found on 
  <p>The value displayed on the top left of graph is the max of 90<sup>th</sup> percentile of response time.</p>
 </component>
 
-<component name="Spline Visualizer (DEPRECATED)" index="&sect-num;.3.4"  width="737" height="489" screenshot="spline_visualizer.png">
-<note>
-Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</note>
-<description>
-<p>
-The Spline Visualizer provides a view of all sample times from the start
-of the test till the end, regardless of how many samples have been taken.  The spline
-has 10 points, each representing 10% of the samples, and connected using spline
-logic to show a single continuous line.
-</p>
-<p>
-The graph is automatically scaled to fit within the window.
-This needs to be borne in mind when comparing graphs.
-</p>
-</description>
-</component>
-
 <component name="Assertion Results" index="&sect-num;.3.5"  width="954" height="365" screenshot="assertion_results.png">
 <description>
 <note>
@@ -3090,7 +3075,7 @@ See the <code>jmeter.properties</code> file for details.
 </description>
 </component>
 
-<component name="Monitor Results" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
+<component name="Monitor Results (DEPRECATED)" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
 <description>
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
@@ -3118,29 +3103,6 @@ Use a browser to check that you can access the Tomcat status servlet OK.
 For a detailed description of how to use the monitor, please refer to
 <a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
 </p>
-</description>
-</component>
-
-<component name="Distribution Graph (DEPRECATED)" index="&sect-num;.3.11"  width="819" height="626" screenshot="distribution_graph.png">
-<description>
-<note>
-Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</note>
-
-<p>The distribution graph will display a bar for every unique response time. Since the
-granularity of <code>System.currentTimeMillis()</code> is 10 milliseconds, the 90% threshold should be
-within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
-What this means is 50% of the response times finished between 0 and the line. The same
-is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
-requests. The graph was able to display the distribution without any problems and both
-the 50% and 90% line were within the width of the graph. A performant application will
-generally produce results that clump together. A poorly written application that has
-memory leaks may result in wild fluctuations. In those situations, the threshold lines
-may be beyond the width of the graph. The recommended solution to this specific problem
-is fix the webapp so it performs well. If your test plan produces distribution graphs
-with no apparent clumping or pattern, it may indicate a memory leak. The only way to
-know for sure is to use a profiling tool.</p>
 </description>
 </component>
 
@@ -3202,7 +3164,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         <property name="Graph size" required="No">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use <code>Width</code> and <code>Height</code> fields to define a custom size. The unit is pixel. </property>
         <property name="X Axis settings" required="No">Customize the date format of  X axis label.
-        The syntax is the Java <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
+        The syntax is the Java <a href="http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</property>
         <property name="Y Axis settings" required="No">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</property>
         <property name="Legend" required="Yes">Define the placement and font settings for chart legend</property>
 </properties>
@@ -3276,7 +3238,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></li>
 <li><code>sampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
 <li><code>sampleEvent</code> (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul>
@@ -3406,7 +3368,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></dd>
-<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -3452,7 +3414,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</source></dd>
-<dt><code>props</code></dt><dd>(JMeterProperties - class <code>java.util.Properties</code>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
+<dt><code>props</code></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g. <code>props.get("START.HMS");</code> <code>props.put("PROP1","1234");</code></dd>
 <dt><code>sampleResult</code>, <code>prev</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><code>sampleEvent</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><code>sampler</code></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -4298,7 +4260,7 @@ however the <code>minimum</code> and <code>maximum</code> values can be any <cod
   <property name="Maximum Value" required="Yes">The maximum value (<code>long</code>) of the generated random number.</property>
   <property name="Random Seed" required="No">The seed for the random number generator. Default is the current time in milliseconds. 
   If you use the same seed value with Per Thread set to <code>true</code>, you will get the same value for each Thread as per 
-  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html" >Random</a> class.
+  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html" >Random</a> class.
   </property>
   <property name="Per Thread(User)?" required="Yes">If <code>False</code>, the generator is shared between all threads in the thread group.
   If <code>True</code>, then each thread has its own random generator.</property>
@@ -4700,7 +4662,7 @@ These are strings unless otherwise noted:
     <source>vars.get("VAR1");
 vars.put("VAR2","value");
 vars.putObject("OBJ1",new Object());</source></li>
-  <li><code>props</code> - JMeterProperties (class <code>java.util.Properties</code>) - e.g.
+  <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
     <source>props.get("START.HMS");
 props.put("PROP1","1234");</source></li>
 </ul>
@@ -4737,7 +4699,7 @@ props.put("PROP1","1234");</source></li>
 
 </properties>
 </component>
-<component name="XPath Assertion" index="&sect-num;.5.8"  width="800" height="317" screenshot="xpath_assertion.png">
+<component name="XPath Assertion" index="&sect-num;.5.8"  width="871" height="615" screenshot="xpath_assertion.png">
 <description><p>The XPath Assertion tests a document for well formedness, has the option
 of validating against a DTD, or putting the document through JTidy and testing for an
 XPath.  If that XPath exists, the Assertion is true.  Using "<code>/</code>" will match any well-formed
@@ -4827,7 +4789,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
 <source>
 props.get("START.HMS");
 props.put("PROP1","1234");
@@ -4880,7 +4842,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </source></li>
-<li><code>props</code> - (JMeterProperties - class <code>java.util.Properties</code>) - e.g.
+<li><code>props</code> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) - e.g.
 <source>
 props.get("START.HMS");
 props.put("PROP1","1234");
@@ -6095,7 +6057,7 @@ In the linked test plan, "<code>JDBC PostProcessor</code>" JDBC PostProcessor ca
 <figure width="818" height="399" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </component>
 
-<component name="JSON Path PostProcessor" index="&sect-num;.8.9">
+<component name="JSON Path Extractor" index="&sect-num;.8.9" anchor="JSON_Path_PostProcessor">
 <description>
 <p>
 The JSON PostProcessor enables you extract data from JSON responses using JSON-PATH syntax. This post processor is very similar to Regular expression extractor.

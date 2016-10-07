@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import org.apache.jmeter.assertions.XPathAssertion;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.layout.VerticalLayout;
 
 public class XPathAssertionGui extends AbstractAssertionGui {
 
@@ -76,14 +75,22 @@ public class XPathAssertionGui extends AbstractAssertionGui {
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        setLayout(new VerticalLayout(5, VerticalLayout.BOTH, VerticalLayout.TOP));
+        setLayout(new BorderLayout());
         setBorder(makeBorder());
 
-        add(makeTitlePanel());
-        Box box = Box.createVerticalBox();
-        box.add(createScopePanel(true));
-        add(box);
-        
+        Box topBox = Box.createVerticalBox();
+
+        topBox.add(makeTitlePanel());
+
+        topBox.add(createScopePanel(true));
+
+        xml = new XMLConfPanel();
+        xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
+                .getResString("xpath_assertion_option"))); //$NON-NLS-1$
+        topBox.add(xml);
+
+        add(topBox, BorderLayout.NORTH);
+
         // USER_INPUT
         JPanel sizePanel = new JPanel(new BorderLayout());
         sizePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -91,13 +98,7 @@ public class XPathAssertionGui extends AbstractAssertionGui {
                 getXPathAttributesTitle()));
         xpath = new XPathPanel();
         sizePanel.add(xpath);
-
-        xml = new XMLConfPanel();
-        xml.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
-                .getResString("xpath_assertion_option"))); //$NON-NLS-1$
-        add(xml);
-
-        add(sizePanel);
+        add(sizePanel, BorderLayout.CENTER);
     }
 
     /**

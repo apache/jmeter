@@ -25,7 +25,10 @@ import org.apache.jmeter.samplers.SampleResult;
 /**
  * ObjectFactory is a simple factory class which creates new instances of
  * objects. It also provides convienant method to parse XML status results.
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class ObjectFactory {
 
     private static class ObjectFactoryHolder {

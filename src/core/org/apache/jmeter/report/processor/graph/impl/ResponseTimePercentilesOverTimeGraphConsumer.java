@@ -42,7 +42,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
     private static final String PERCENTILE_FORMAT = "%dth percentile";
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.jmeter.report.csv.processor.impl.AbstractOverTimeGraphConsumer
      * #createTimeStampKeysSelector()
@@ -53,7 +53,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
         keysSelector.setSelectBeginTime(false);
         return keysSelector;
     }
-    
+
     /**
      * Creates the group info for elapsed time percentile depending on jmeter
      * properties.
@@ -62,7 +62,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
      *            the property key
      * @param defaultValue
      *            the default value
-     * @param serieName Serie name           
+     * @param serieName Serie name
      * @return the group info
      */
     private GroupInfo createPercentileGroupInfo(String propertyKey, int defaultValue, String serieName) {
@@ -86,7 +86,7 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
         return new GroupInfo(new MinAggregatorFactory(), seriesSelector,
                 new SuccessfulElapsedTimeValueSelector(), false, false);
     }
-    
+
     /**
      * Creates the group info for max elapsed time
      * @return the group info
@@ -99,8 +99,8 @@ public class ResponseTimePercentilesOverTimeGraphConsumer extends
     }
 
     /**
-     * 
-     * @see org.apache.jmeter.report.csv.processor.impl.AbstractGraphConsumer#createGroupInfos()
+     *
+     * @see org.apache.jmeter.report.processor.graph.AbstractGraphConsumer#createGroupInfos()
      */
     @Override
     protected Map<String, GroupInfo> createGroupInfos() {

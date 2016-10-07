@@ -22,7 +22,6 @@ import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import org.apache.jmeter.monitor.model.ObjectFactory;
 import org.apache.jmeter.monitor.model.Connector;
 import org.apache.jmeter.monitor.model.Jvm;
@@ -33,7 +32,11 @@ import org.apache.jmeter.monitor.model.ThreadInfo;
 import org.apache.jmeter.monitor.model.Worker;
 import org.apache.jmeter.monitor.model.Workers;
 import org.apache.jmeter.monitor.model.WorkersImpl;
-
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public class MonitorHandler extends DefaultHandler {
   
     private final ObjectFactory factory;

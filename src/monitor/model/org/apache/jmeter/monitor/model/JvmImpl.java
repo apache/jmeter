@@ -18,8 +18,10 @@ package org.apache.jmeter.monitor.model;
 
 /**
  *
- * @version $Revision$
+ * @version $Revision$ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class JvmImpl implements Jvm {
     private Memory memory = null;
 

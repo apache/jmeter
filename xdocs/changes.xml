@@ -74,11 +74,13 @@ Summary
     <li>Since 3.1 version, <code>jmeter.save.saveservice.connect_time</code> property value is <code>true</code>, meaning CSV file for results will contain an additional column containing connection time, see <bugzilla>60106</bugzilla></li>
     <li>Since 3.1 version, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since 3.1 version, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
+    <li>Since 3.1 version, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements</h3>
 <ul>
-    <li>Sample removed element</li>
+    <li><bug>60222</bug>Remove deprecated elements Distribution Graph, Spline Visualizer</li>
+    <li><bug>60224</bug>Deprecate <code><a href="./usermanual/component_reference.html#Monitor_Results_(DEPRECATED)">Monitor Results</a></code> listener</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -106,6 +108,7 @@ Summary
     <li><bug>60082</bug>Validation mode : Be able to force Throughput Controller to run as if it was set to 100%</li>
     <li><bug>59329</bug>Trim spaces in input filename in CSVDataSet.</li>
     <li><bug>59349</bug>Trim spaces in input filename in IncludeController.</li>
+    <li><bug>60081</bug>Interleave Controller : Add an option to alternate across threads</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -127,6 +130,9 @@ Summary
     <li><bug>60050</bug>CSV Data Set : Make it clear in the logs when a thread will exit due to this configuration</li>
     <li><bug>59962</bug>Cache Manager does not update expires date when response code is <code>304</code>.</li>
     <li><bug>60018</bug>Timer : Add a factor to apply on pauses. Partly based on a patch by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60203</bug>Use more available space for textarea in XPath Assertion.</li>
+    <li><bug>60220</bug>Rename JSON Path Post Processor to JSON Path Extractor</li>
+    <li><bug>60221</bug>CSV DataSet : trim variable names</li>
 </ul>
 
 <h3>Functions</h3>
@@ -254,6 +260,7 @@ Summary
     <li><bug>60110</bug>Report / Dashboard : In Response Time Percentiles, slider is useless</li>
     <li><bug>60135</bug>Report / Dashboard : Active Threads Over Time should be in OverTime section</li>
     <li><bug>60125</bug>Report / Dashboard : Dashboard cannot be generated if the default delimiter is <code>\t</code>. Based on a report from Tamas Szabadi (tamas.szabadi at rightside.co)</li>
+    <li><bug>59439</bug>Report / Dashboard : AbstractOverTimeGraphConsumer.createGroupInfos() should be abstract</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

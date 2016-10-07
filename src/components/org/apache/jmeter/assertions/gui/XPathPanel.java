@@ -20,6 +20,7 @@ package org.apache.jmeter.assertions.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -62,18 +63,18 @@ public class XPathPanel extends JPanel {
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+        setLayout(new BorderLayout());
+
         Box hbox = Box.createHorizontalBox();
+
         hbox.add(Box.createHorizontalGlue());
-        hbox.add(JTextScrollPane.getInstance(getXPathField()));
+        hbox.add(getNegatedCheckBox());
         hbox.add(Box.createHorizontalGlue());
         hbox.add(getCheckXPathButton());
+        hbox.add(Box.createHorizontalGlue());
 
-        Box vbox = Box.createVerticalBox();
-        vbox.add(hbox);
-        vbox.add(Box.createVerticalGlue());
-        vbox.add(getNegatedCheckBox());
-
-        add(vbox);
+        add(JTextScrollPane.getInstance(getXPathField()), BorderLayout.CENTER);
+        add(hbox, BorderLayout.SOUTH);
 
         setDefaultValues();
     }
