@@ -20,7 +20,10 @@ package org.apache.jmeter.monitor.parser;
  * Constants for the custom DocumentHandler.
  *
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class Constants {
     public static final String STATUS = "status";
 

@@ -18,6 +18,11 @@ package org.apache.jmeter.visualizers;
 
 import javax.swing.JTabbedPane;
 
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public class MonitorTabPane extends JTabbedPane {
 
     private static final long serialVersionUID = 240L;

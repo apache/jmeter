@@ -35,7 +35,10 @@ import org.apache.jmeter.monitor.model.Status;
  * The load factors are stored in the properties files. Simply change the values
  * in the properties to change how load is calculated. The defaults values are
  * memory (50) and threads (50). The sum of the factors must equal 100.
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class Stats {
 
     public static final int DEAD = 0;

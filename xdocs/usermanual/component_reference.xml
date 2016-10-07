@@ -1085,7 +1085,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
         <li><code>FileName</code> - the file name, if any</li>
         <li><code>Parameters</code> - text from the Parameters field</li>
         <li><code>bsh.args</code> - the parameters, split as described above</li>
-        <li><code>SampleResult</code> - pointer to the current SampleResult</li>
+        <li><code>SampleResult</code> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><code>SampleResult</code></a></li>
             <li><code>ResponseCode</code> defaults to <code>200</code></li>
             <li><code>ResponseMessage</code> defaults to "<code>OK</code>"</li>
             <li><code>IsSuccess</code> defaults to <code>true</code></li>
@@ -3052,7 +3052,7 @@ See the <code>jmeter.properties</code> file for details.
 </description>
 </component>
 
-<component name="Monitor Results" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
+<component name="Monitor Results (DEPRECATED)" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
 <description>
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
