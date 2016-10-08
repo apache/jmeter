@@ -1155,7 +1155,6 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         <p>By default, JMeter supports the following languages:</p>
         <ul>
         <li>javascript</li>
-        <li>jexl</li>
         <li>xslt</li>
         </ul>
         <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
@@ -1164,7 +1163,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
       <note>N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: jexl, javascript, xslt.
+        The following are supported: javascript, xslt.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.
       </note>
     </property>
@@ -1271,8 +1270,7 @@ props.put("PROP1","1234");</source>
 <properties>
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Scripting Language" required="Yes">Name of the JSR223 scripting language to be used.
-      <note>N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: jexl, javascript, xslt.
+      <note>There are other languages supported than those that appear in the drop-down list.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.
       </note>
     </property>
@@ -2275,7 +2273,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         The script can be processed as a variable expression, rather than requiring Javascript.
         It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
         now this can be done without the overhead of using Javascript as well. For example, previously one could use the condition:
-        <code>${__jexl(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to Javascript
+        <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to Javascript
         which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
         and compared with "<code>true</code>", without needing to use Javascript.
         Also, variable expressions can return any value, whereas the
@@ -2299,7 +2297,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     <property name="Condition (default Javascript)" required="Yes">By default the condition is interpreted as <b>Javascript</b> code that returns "<code>true</code>" or "<code>false</code>",
     but this can be overridden (see below)</property>
     <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
-    For example, <code>${FOUND}</code> or <code>${__jexl(${VAR} &gt; 100)}</code>.
+    For example, <code>${FOUND}</code> or <code>${__jexl3(${VAR} &gt; 100)}</code>.
     Unlike the Javascript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
     </property>
     <property name="Evaluate for all children" required="Yes">
