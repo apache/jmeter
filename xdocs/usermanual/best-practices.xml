@@ -260,13 +260,13 @@ java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
 </section>
 
 <section name="&sect-num;.9 BeanShell scripting" anchor="bsh_scripting">
+<note>Since JMeter 3.1, we advise switching from BeanShell to JSR223 Test Elements (see JSR223 section below for more details), and switching from <code><a href="functions.html#__BeanShell">__Beanshell</a></code> function 
+to <a href="functions.html#__groovy" >__groovy</a> function.</note>
 <subsection name="&sect-num;.9.1 Overview" anchor="bsh_overview">
 <p>
 Each BeanShell test element has its own copy of the interpreter (for each thread).
 If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
 between invocations unless the "<code>Reset bsh.Interpreter before each call</code>" option is selected.
-For intensive load testing, it is recommended to use a JSR223 scripting language whose ScriptingEngine implements <code>Compilable</code>,
-see JSR223 section below for more details.
 </p>
 <p>
 Some long-running tests may cause the interpreter to use lots of memory; if this is the case try using the reset option.
@@ -323,22 +323,23 @@ defined by the JMeter property "<code>beanshell.init.file</code>". This is only 
 </subsection>
 </section>
 
-<section name="&sect-num;.10 Developing script functions in BeanShell, Javascript or Jexl etc." anchor="developing_scripts">
+<section name="&sect-num;.10 Developing script functions in Groovy or Jexl3 etc." anchor="developing_scripts">
 <p>
 It's quite hard to write and test scripts as functions.
-However, JMeter has the JSR223, BSF (and BeanShell) samplers which can be used instead.
+However, JMeter has the JSR223 samplers which can be used instead with any language supporting it. 
+We advise using <a href="http://www.groovy-lang.org/">Apache Groovy</a> or any language that supports the <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface of JSR223.
 </p>
 <p>
-Create a simple Test Plan containing the JSR223 or BSF Sampler and Tree View Listener.
+Create a simple Test Plan containing the JSR223 Sampler and Tree View Listener.
 Code the script in the sampler script pane, and test it by running the test.
-If there are any errors, these will show up in the Tree View.
+If there are any errors, these will show up in the Tree View and jmeter.log file.
 Also the result of running the script will show up as the response.
 </p>
 <p>
 Once the script is working properly, it can be stored as a variable on the Test Plan.
 The script variable can then be used to create the function call.
-For example, suppose a BeanShell script is stored in the variable <code>RANDOM_NAME</code>.
-The function call can then be coded as <code>${__BeanShell(${RANDOM_NAME})}</code>.
+For example, suppose a Groovy script is stored in the variable <code>RANDOM_NAME</code>.
+The function call can then be coded as <code>${__groovy(${RANDOM_NAME})}</code>.
 There is no need to escape any commas in the script,
 because the function call is parsed before the variable's value is interpolated.
 </p>
@@ -369,14 +370,14 @@ The appropriate property file can be passed in to JMeter using the <code>-q</cod
 
 <section name="&sect-num;.12 JSR223 Elements" anchor="jsr223">
 <p>
-For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the <code>Compilable</code> interface.
-Groovy scripting engine implements <code>Compilable</code>. However neither Beanshell nor Javascript do so as of release date of JMeter 2.13, so it is
+For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface.
+Groovy scripting engine implements <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code>. However neither Beanshell nor Javascript do so as of release date of JMeter 3.1, so it is
 recommended to avoid them for intensive load testing.
-<note>Note: Beanshell implements the <code>Compilable</code> interface but it has not been coded - the method just throws an Exception.
+<note>Note: Beanshell implements the <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface but it has not been coded - the method just throws an Exception.
 JMeter has an explicit work-round for this bug.</note>
 
-When using JSR 223 elements, always set caching key to a unique value to ensure the script compilation is cached if underlying language supports it.
-Ensure the script does not use any variable using <code>${varName}</code> as caching would take only first value of <code>${varName}</code>. Instead use :
+When using JSR 223 elements, it is advised to check <code>Cache compiled script if available</code> property to ensure the script compilation is cached if underlying language supports it.
+In this case, ensure the script does not use any variable using <code>${varName}</code> as caching would take only first value of <code>${varName}</code>. Instead use :
 <source>
 vars.get("varName")
 </source>
