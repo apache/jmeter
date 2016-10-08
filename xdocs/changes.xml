@@ -164,7 +164,6 @@ Summary
 <ul>
     <li><bug>59803</bug>Use <code>isValid()</code> method from JDBC driver, if no <code>validationQuery</code>
     is given in JDBC Connection Configuration.</li>
-    <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>57493</bug>Create a documentation page for properties</li>
     <li><bug>59924</bug>The log level of <em>XXX</em> package is set to <code>DEBUG</code> if <code>log_level.<em>XXXX</em></code> property value contains spaces, same for <code>__log</code> function</li>
     <li><bug>59777</bug>Extract SLF4J binding into its own jar and make it a JMeter lib.
@@ -262,6 +261,7 @@ Summary
     <li><bug>60135</bug>Report / Dashboard : Active Threads Over Time should be in OverTime section</li>
     <li><bug>60125</bug>Report / Dashboard : Dashboard cannot be generated if the default delimiter is <code>\t</code>. Based on a report from Tamas Szabadi (tamas.szabadi at rightside.co)</li>
     <li><bug>59439</bug>Report / Dashboard : AbstractOverTimeGraphConsumer.createGroupInfos() should be abstract</li>
+    <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
