@@ -133,7 +133,7 @@ $value.content
 #end
 
 #macro ( code $value)
-<tt class="code">$escape.getText($value.getText())</tt>
+<tt class="code">#runloop($value)</tt>
 #end
 
 #macro ( source $value)
@@ -146,7 +146,7 @@ $value.content
 </tr>
 <tr>
 <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-<td bgcolor="#ffffff"><pre>$escape.getText($value.getText())</pre></td>
+<td bgcolor="#ffffff"><pre>#runloop($value)</pre></td>
 <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 </tr>
 <tr>
