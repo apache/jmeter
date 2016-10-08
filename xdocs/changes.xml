@@ -81,7 +81,7 @@ Summary
 <ul>
     <li><bug>60222</bug>Remove deprecated elements Distribution Graph, Spline Visualizer</li>
     <li><bug>60224</bug>Deprecate <code><a href="./usermanual/component_reference.html#Monitor_Results_(DEPRECATED)">Monitor Results</a></code> listener. It will be dropped in next version</li>
-    <li><bug>60225</bug>Drop deprecated <code>__jexl</code> function and dependency on <code>commons-jexl-1.1.jar</code> This function can be easily replaced with <code><a href="./usermanual/functions.html#__jexl3">__jexl3</a></code> function</li>
+    <li><bug>60225</bug>Drop deprecated <code>__jexl</code> function, jexl support in BSF and dependency on <code>commons-jexl-1.1.jar</code> This function can be easily replaced with <code><a href="./usermanual/functions.html#__jexl3">__jexl3</a></code> function</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
