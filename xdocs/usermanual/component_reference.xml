@@ -323,7 +323,7 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener.</property>
+        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener. DEPRECATED</property>
        <property name="Save response as MD5 hash?" required="No">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
