@@ -6032,7 +6032,7 @@ In the linked test plan, "<code>JDBC PostProcessor</code>" JDBC PostProcessor ca
 <figure width="818" height="399" image="jdbc-post-processor.png">JDBC PostProcessor</figure>
 </component>
 
-<component name="JSON Path Extractor" index="&sect-num;.8.9" anchor="JSON_Path_PostProcessor">
+<component name="JSON Extractor" index="&sect-num;.8.9" anchor="JSON_Path_PostProcessor">
 <description>
 <p>
 The JSON PostProcessor enables you extract data from JSON responses using JSON-PATH syntax. This post processor is very similar to Regular expression extractor.

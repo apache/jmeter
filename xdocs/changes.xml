@@ -130,7 +130,7 @@ Summary
     <li><bug>59962</bug>Cache Manager does not update expires date when response code is <code>304</code>.</li>
     <li><bug>60018</bug>Timer : Add a factor to apply on pauses. Partly based on a patch by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60203</bug>Use more available space for textarea in XPath Assertion.</li>
-    <li><bug>60220</bug>Rename JSON Path Post Processor to JSON Path Extractor</li>
+    <li><bug>60220</bug>Rename JSON Path Post Processor to JSON Extractor</li>
     <li><bug>60221</bug>CSV DataSet : trim variable names</li>
     <li><bug>59329</bug>Trim spaces in input filename in CSVDataSet.</li>
 </ul>
