@@ -37,7 +37,7 @@ import org.apache.log.Logger;
  * Provides a RandomFromMultiResult function which returns a random element from a multi valued extracted variable.
  * Those kind of variable are extracted by:
  * - Regular Expression extractor
- * - JSON PATH extractor
+ * - JSON extractor
  * - CSS/JQuery extractor
  * - XPath Extractor
  * 
