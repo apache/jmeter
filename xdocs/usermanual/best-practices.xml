@@ -332,7 +332,7 @@ We advise using <a href="http://www.groovy-lang.org/">Apache Groovy</a> or any l
 <p>
 Create a simple Test Plan containing the JSR223 Sampler and Tree View Listener.
 Code the script in the sampler script pane, and test it by running the test.
-If there are any errors, these will show up in the Tree View and jmeter.log file.
+If there are any errors, these will show up in the Tree View and <code>jmeter.log</code> file.
 Also the result of running the script will show up as the response.
 </p>
 <p>

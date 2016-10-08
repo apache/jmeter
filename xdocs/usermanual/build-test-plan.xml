@@ -136,7 +136,7 @@ The commands will only be accepted if the script is run from the same host.
 <p>
 JMeter reports warnings and errors to the <code>jmeter.log</code> file, as well as some information on the test run itself.
 JMeter shows the number of warnings/errors found in <code>jmeter.log</code> file next to the warning icon (triangle) at the right hand end of its window. 
-Click on the warning icon to show the jmeter.log file at the bottom of JMeter's window.
+Click on the warning icon to show the <code>jmeter.log</code> file at the bottom of JMeter's window.
 Just occasionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
 If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
 </p>
