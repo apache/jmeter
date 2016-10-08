@@ -65,7 +65,6 @@ under the License.
       <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
       <commons-io.version>2.5</commons-io.version>
-      <commons-jexl.version>1.1</commons-jexl.version>
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-jexl3.version>3.0</commons-jexl3.version>
       <commons-lang3.version>3.4</commons-lang3.version>
@@ -177,11 +176,6 @@ under the License.
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-jexl</groupId>
-        <artifactId>commons-jexl</artifactId>
-        <version>${commons-jexl.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
