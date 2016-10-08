@@ -190,8 +190,9 @@ The following functions should work OK on the test plan:
 <li>longSum</li>
 <li>machineName</li>
 <li>BeanShell</li>
+<li>groovy</li>
 <li>javaScript</li>
-<li>jexl</li>
+<li>jexl2/jexl3</li>
 <li>random</li>
 <li>time</li>
 <li>property functions</li>
@@ -226,7 +227,7 @@ be omitted.</p>
 
 <p><b>Argument values that themselves contain commas should be escaped as necessary.
 If you need to include a comma in your parameter value, escape it like so: '<code>\,</code>'.</b>
-This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl, groovy - where it is necessary to escape any commas
 that may be needed in script method calls - e.g.
 </p>
 <pre>
