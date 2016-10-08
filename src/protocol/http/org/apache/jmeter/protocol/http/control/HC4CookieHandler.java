@@ -55,7 +55,7 @@ public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Needed by CookiePanel
-    public static String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; 
+    public static final String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; 
 
     public static final String[] AVAILABLE_POLICIES = new String[]{
         DEFAULT_POLICY_NAME,
