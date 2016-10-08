@@ -128,7 +128,6 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Scripting</td><td> <a href="#__groovy">groovy</a></td><td>run a Groovy script</td><td>3.1</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td><td>1.9</td></tr>
-        <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression. This function is DEPRECATED as of JMeter 3.0, it will be removed in 3.1 version.</td><td>jexl1(1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
@@ -1073,58 +1072,6 @@ The following shorthand aliases are provided:
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <code>time.YMD=yyMMdd</code>
 </p>
-</component>
-
-<component index="&sect-num;.5.18" name="__jexl">
-<description>
-    <p>The jexl function returns the result of evaluating a 
-    <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>. 
-    See links below for more information on JEXL expressions.
-    </p>
-    <p>The <code>__jexl</code> function uses Commons JEXL</p>
-    <ul>
-    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
-    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
-    </ul>
-    <note>THIS FUNCTION IS DEPRECATED and should not be used, it will be dropped in next JMeter version</note>
-    </description>
-
-<properties>
-        <property name="Expression" required="Yes">
-        The expression to be evaluated. For example, <code>6*(5+2)</code>
-        </property>
-        <property name="Name of variable" required="No">The name of the variable to set.</property>
-</properties>
-<p>
-The following variables are made available to the script:
-</p>
-<ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
-<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
-<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
-<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
-<li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
-<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
-<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
-</ul>
-    <p>
-    Jexl can also create classes and call methods on them, for example:
-    </p>
-    <p>
-    <source>
-Systemclass=log.class.forName("java.lang.System");
-now=Systemclass.currentTimeMillis();
-</source>
-    Note that the Jexl documentation on the web-site wrongly suggests that "<code>div</code>" does integer division.
-    In fact "<code>div</code>" and "<code>/</code>" both perform normal division. One can get the same effect
-    as follows:
-    <source>
-i= 5 / 2;
-i.intValue(); // or use i.longValue()
-</source>
-    </p>
-    <note>JMeter allows the expression to contain multiple statements.</note>
 </component>
 
 <component index="&sect-num;.5.18" name="__jexl2">
