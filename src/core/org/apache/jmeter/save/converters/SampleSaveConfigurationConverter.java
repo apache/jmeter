@@ -58,6 +58,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
     private static final String NODE_HOSTNAME = "hostname"; // $NON-NLS-1$
     private static final String NODE_URL = "url"; // $NON-NLS-1$
     private static final String NODE_BYTES = "bytes"; // $NON-NLS-1$
+    private static final String NODE_SENT_BYTES = "sentBytes"; // $NON-NLS-1$
     private static final String NODE_THREAD_COUNT = "threadCounts"; // $NON-NLS-1$
     private static final String NODE_SAMPLE_COUNT = "sampleCount"; // $NON-NLS-1$
     private static final String NODE_IDLE_TIME = "idleTime"; // $NON-NLS-1$
@@ -84,6 +85,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
             // These are new fields; not saved unless true
             // This list MUST agree with the list in the marshall() method below
             if (fieldName.equals(NODE_BYTES)) { return false; }
+            if (fieldName.equals(NODE_SENT_BYTES)) { return false; }
             if (fieldName.equals(NODE_URL)) { return false; }
             if (fieldName.equals(NODE_FILENAME)) { return false; }
             if (fieldName.equals(NODE_HOSTNAME)) { return false; }
@@ -129,6 +131,7 @@ public class SampleSaveConfigurationConverter  extends ReflectionConverter {
         // Save the new fields - but only if they are true
         // This list MUST agree with the list in MyWrapper#shouldSerializeMember()
         createNode(writer,prop.saveBytes(),NODE_BYTES);
+        createNode(writer,prop.saveSentBytes(),NODE_SENT_BYTES);
         createNode(writer,prop.saveUrl(),NODE_URL);
         createNode(writer,prop.saveFileName(),NODE_FILENAME);
         createNode(writer,prop.saveHostname(),NODE_HOSTNAME);

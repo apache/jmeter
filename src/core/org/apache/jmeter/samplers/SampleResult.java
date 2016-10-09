@@ -267,7 +267,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * Cache for responseData as string to avoid multiple computations
      */
     private volatile transient String responseDataAsString;
-    
+
+    private long sentBytes;
+
     private long initOffset(){
         if (useNanoTime){
             return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
@@ -329,6 +331,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
+        sentBytes = res.sentBytes;
         startTime = res.startTime;//OK
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
@@ -611,6 +614,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
         setBytes(getBytes() + subResult.getBytes());
+        setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
         setBodySize(getBodySize() + subResult.getBodySize());
         addRawSubResult(subResult);
@@ -1194,6 +1198,21 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         bytes = length;
     }
 
+    /**
+     * 
+     * @param sentBytesCount long sent bytes
+     */
+    public void setSentBytes(long sentBytesCount) {
+        sentBytes = sentBytesCount;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
+    }
+    
     /**
      * return the bytes returned by the response.
      *

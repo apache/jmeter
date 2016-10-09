@@ -269,9 +269,8 @@ public class Sample {
      *
      * @return the number of sent bytes stored in the sample
      */
-    public int getSentBytes() {
-        // TODO To implement when metric is available
-        return 0;
+    public long getSentBytes() {
+        return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
     }
 
     /**

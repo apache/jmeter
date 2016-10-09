@@ -81,6 +81,7 @@ public final class CSVSaveService {
 
     public static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
     public static final String CSV_BYTES = "bytes"; // $NON-NLS-1$
+    public static final String CSV_SENT_BYTES = "sentBytes"; // $NON-NLS-1$
     public static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
     public static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
     public static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
@@ -300,6 +301,12 @@ public final class CSVSaveService {
                 text = parts[i++];
                 result.setBytes(Integer.parseInt(text));
             }
+            
+            if (saveConfig.saveSentBytes()) {
+                field = CSV_SENT_BYTES;
+                text = parts[i++];
+                result.setSentBytes(Long.parseLong(text));
+            }
 
             if (saveConfig.saveThreadCounts()) {
                 field = CSV_THREAD_COUNT1;
@@ -446,6 +453,11 @@ public final class CSVSaveService {
             text.append(CSV_BYTES);
             text.append(delim);
         }
+        
+        if (saveConfig.saveSentBytes()) {
+            text.append(CSV_SENT_BYTES);
+            text.append(delim);
+        }
 
         if (saveConfig.saveThreadCounts()) {
             text.append(CSV_THREAD_COUNT1);
@@ -533,6 +545,7 @@ public final class CSVSaveService {
         headerLabelMethods.put(FAILURE_MESSAGE, new Functor(
                 "setAssertionResultsFailureMessage"));
         headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
+        headerLabelMethods.put(CSV_SENT_BYTES, new Functor("setSentBytes"));
         // Both these are needed in the list even though they set the same
         // variable
         headerLabelMethods.put(CSV_THREAD_COUNT1,
@@ -924,6 +937,10 @@ public final class CSVSaveService {
 
         if (saveConfig.saveBytes()) {
             text.append(sample.getBytes());
+        }
+        
+        if (saveConfig.saveSentBytes()) {
+            text.append(sample.getSentBytes());
         }
 
         if (saveConfig.saveThreadCounts()) {
