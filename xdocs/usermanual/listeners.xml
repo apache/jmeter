@@ -141,6 +141,7 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.requestHeaders=false
 #jmeter.save.saveservice.encoding=false
 #jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.sent_bytes=true
 #jmeter.save.saveservice.url=false
 #jmeter.save.saveservice.filename=false
 #jmeter.save.saveservice.hostname=false
@@ -302,6 +303,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li><code>success</code> - <code>true</code> or <code>false</code></li>
 <li><code>failureMessage</code> - if any</li>
 <li><code>bytes</code> - number of bytes in the sample</li>
+<li><code>sentBytes</code> - number of bytes sent for the sample</li>
 <li><code>grpThreads</code> - number of active threads in this thread group</li>
 <li><code>allThreads</code> - total number of active threads in all groups</li>
 <li><code>URL</code></li>
@@ -424,6 +426,7 @@ The sample attributes have the following meaning:
 <table>
 <tr><th>Attribute</th><th>Content</th></tr>
 <tr><td><code>by</code></td><td>Bytes</td></tr>
+<tr><td><code>sby</code></td><td>Sent Bytes</td></tr>
 <tr><td><code>de</code></td><td>Data encoding</td></tr>
 <tr><td><code>dt</code></td><td>Data type</td></tr>
 <tr><td><code>ec</code></td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
