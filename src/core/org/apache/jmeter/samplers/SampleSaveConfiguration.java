@@ -180,6 +180,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // Save bytes read
     private static final String SAVE_BYTES_PROP = "jmeter.save.saveservice.bytes"; // $NON_NLS-1$
+    
+    // Save bytes written
+    private static final String SAVE_SENT_BYTES_PROP = "jmeter.save.saveservice.sent_bytes"; // $NON_NLS-1$
 
     // Save URL
     private static final String SAVE_URL_PROP = "jmeter.save.saveservice.url"; // $NON_NLS-1$
@@ -230,7 +233,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
-    private boolean url = _url, bytes = _bytes , fileName = _fileName;
+    private boolean url = _url, bytes = _bytes , sentBytes = _sentBytes, fileName = _fileName;
 
     private boolean hostname = _hostname;
 
@@ -277,6 +280,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final boolean _printMilliseconds;
 
     private static final boolean _bytes;
+    
+    private static final boolean _sentBytes;
 
     private static final boolean _url;
 
@@ -347,6 +352,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         _threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
 
         _bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, TRUE));
+        
+        _sentBytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SENT_BYTES_PROP, TRUE));
 
         _url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
 
@@ -468,6 +475,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         "Success",
         "AssertionResultsFailureMessage",
         "Bytes",
+        "SentBytes",
         "ThreadCounts", // grpThreads and allThreads
         "Url",
         "FileName",
@@ -515,6 +523,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         sampleCount = value;
         samplerData = value;
         saveAssertionResultsFailureMessage = value;
+        sentBytes = value;
         subresults = value;
         success = value;
         threadCounts = value;
@@ -579,6 +588,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             s.responseDataOnError == responseDataOnError &&
             s.url == url &&
             s.bytes == bytes &&
+            s.sentBytes == sentBytes &&
             s.fileName == fileName &&
             s.hostname == hostname &&
             s.sampleCount == sampleCount &&
@@ -625,6 +635,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         hash = 31 * hash + (responseDataOnError ? 1 : 0);
         hash = 31 * hash + (url ? 1 : 0);
         hash = 31 * hash + (bytes ? 1 : 0);
+        hash = 31 * hash + (sentBytes ? 1 : 0);
         hash = 31 * hash + (fileName ? 1 : 0);
         hash = 31 * hash + (hostname ? 1 : 0);
         hash = 31 * hash + (threadCounts ? 1 : 0);
@@ -815,6 +826,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public void setBytes(boolean save) {
         this.bytes = save;
+    }
+    
+    public boolean saveSentBytes() {
+        return sentBytes;
+    }
+
+    public void setSentBytes(boolean save) {
+        this.sentBytes = save;
     }
 
     public boolean saveFileName() {
