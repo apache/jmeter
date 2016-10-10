@@ -4696,7 +4696,7 @@ Some sample expressions:
 <property name="Quiet"    required="If Tidy is selected">Sets the Tidy Quiet flag</property>
 <property name="Report Errors"    required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
 <property name="Show warnings"    required="If Tidy is selected">Sets the Tidy showWarnings option</property>
-<property name="Use Namespaces"    required="If Tidy is not selected">Should namespaces be honoured?</property>
+<property name="Use Namespaces"    required="If Tidy is not selected">Should namespaces be honoured? (see note below on NAMESPACES)</property>
 <property name="Validate XML"    required="If Tidy is not selected">Check the document against its schema.</property>
 <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
 <property name="Fetch External DTDs"  required="If Tidy is not selected">If selected, external DTDs are fetched.</property>
@@ -4707,6 +4707,7 @@ Some sample expressions:
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
 </note>
 <note>
+<b>NAMESPACES</b>
 As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
 you can provide a Properties file which contains mappings for the namespace prefixes: 
 <source>
@@ -5803,7 +5804,7 @@ extracting the node as text or attribute value and store the result into the giv
 <property name="Report Errors"  required="If Tidy is selected">If a Tidy error occurs, then set the Assertion accordingly</property>
 <property name="Show warnings"  required="If Tidy is selected">Sets the Tidy showWarnings option</property>
 <property name="Use Namespaces" required="If Tidy is not selected">
-        If checked, then the XML parser will use namespace resolution.
+        If checked, then the XML parser will use namespace resolution.(see note below on NAMESPACES)
         Note that currently only namespaces declared on the root element will be recognised.
         A later version of JMeter may support user-definition of additional workspace names.
         Meanwhile, a work-round is to replace: 
@@ -5812,6 +5813,7 @@ extracting the node as text or attribute value and store the result into the giv
         <source>//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</source>
         where "<code>uri-for-namespace</code>" is the uri for the "<code>mynamespace</code>" namespace.
         (not applicable if Tidy is selected)
+        
 </property>
     <property name="Validate XML"   required="If Tidy is not selected">Check the document against its schema.</property>
     <property name="Ignore Whitespace"  required="If Tidy is not selected">Ignore Element Whitespace.</property>
@@ -5859,6 +5861,19 @@ extracting the node as text or attribute value and store the result into the giv
      See <a href="http://jtidy.sf.net">Tidy homepage</a> for more information.
  </note>
  
+ <note>
+<b>NAMESPACES</b>
+As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
+you can provide a Properties file which contains mappings for the namespace prefixes: 
+<source>
+prefix1=Full Namespace 1
+prefix2=Full Namespace 2
+&hellip;
+</source>
+
+You reference this file in <code>jmeter.properties</code> file using the property:
+    <source>xpath.namespace.config</source>
+</note>
 </component>
 
 <component name="Result Status Action Handler" index="&sect-num;.8.4"  width="613" height="133" screenshot="resultstatusactionhandler.png">
