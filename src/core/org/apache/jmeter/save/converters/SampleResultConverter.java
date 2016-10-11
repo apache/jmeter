@@ -68,6 +68,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
     // samplerData attributes. Must be unique. Keep sorted by string value.
     // Ensure the Listener documentation is updated when new attributes are added
     private static final String ATT_BYTES             = "by"; //$NON-NLS-1$
+    private static final String ATT_SENT_BYTES        = "sby"; //$NON-NLS-1$
     private static final String ATT_DATA_ENCODING     = "de"; //$NON-NLS-1$
     private static final String ATT_DATA_TYPE         = "dt"; //$NON-NLS-1$
     private static final String ATT_ERROR_COUNT       = "ec"; //$NON-NLS-1$
@@ -321,6 +322,9 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         if (save.saveBytes()) {
             writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
         }
+        if (save.saveSentBytes()) {
+            writer.addAttribute(ATT_SENT_BYTES, String.valueOf(res.getSentBytes()));
+        }
         if (save.saveSampleCount()){
             writer.addAttribute(ATT_SAMPLE_COUNT, String.valueOf(res.getSampleCount()));
             writer.addAttribute(ATT_ERROR_COUNT, String.valueOf(res.getErrorCount()));
@@ -446,6 +450,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
         res.setConnectTime(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME)));
         res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
+        res.setSentBytes(Converter.getLong(reader.getAttribute(ATT_SENT_BYTES)));
         res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
         res.setErrorCount(Converter.getInt(reader.getAttribute(ATT_ERROR_COUNT),0)); // default is 0
         res.setGroupThreads(Converter.getInt(reader.getAttribute(ATT_GRP_THRDS)));

@@ -57,7 +57,6 @@ public class StatisticsSummaryConsumer extends
         }
         data.incTotal();
         data.incBytes(sample.getReceivedBytes());
-        data.incBytes(sample.getSentBytes());
 
         if (!sample.getSuccess()) {
             data.incErrors();

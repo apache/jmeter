@@ -381,7 +381,6 @@
     <include name="${lib.dir}/${commons-dbcp2.jar}"/>
     <include name="${lib.dir}/${commons-httpclient.jar}"/>
     <include name="${lib.dir}/${commons-io.jar}"/>
-    <include name="${lib.dir}/${commons-jexl.jar}"/>
     <include name="${lib.dir}/${commons-jexl2.jar}"/>
     <include name="${lib.dir}/${commons-jexl3.jar}"/>
     <include name="${lib.dir}/${commons-lang3.jar}"/>
@@ -458,7 +457,6 @@
     <pathelement location="${lib.dir}/${commons-dbcp2.jar}"/>
     <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
     <pathelement location="${lib.dir}/${commons-io.jar}"/>
-    <pathelement location="${lib.dir}/${commons-jexl.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl2.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl3.jar}"/>
     <pathelement location="${lib.dir}/${commons-lang3.jar}"/>
@@ -2967,7 +2965,6 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="commons-dbcp2"/>
     <process_jarfile jarname="commons-httpclient"/>
     <process_jarfile jarname="commons-io"/>
-    <process_jarfile jarname="commons-jexl"/>
     <process_jarfile jarname="commons-jexl2"/>
     <process_jarfile jarname="commons-jexl3"/>
     <process_jarfile jarname="commons-lang3"/>
