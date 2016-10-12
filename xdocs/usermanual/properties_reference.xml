@@ -1268,6 +1268,14 @@ log_level.org.apache.http.client=DEBUG
     Turn expert mode on/off: expert mode will show expert-mode beans and properties.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="httpsampler.max_bytes_to_store_per_request">
+    Max size of bytes stored in memory per SampleResult. Ensure you don't exceed max capacity of a Java Array and remember that the higher it is, the higher JMeter will consume heap<br/>
+    Defaults to: <code>10485760</code> bytes
+</property>
+<property name="httpsampler.max_buffer_size">
+    Max size of buffer in bytes used when reading responses.<br/>
+    Defaults to: <code>66560</code> bytes
+</property>
 <property name="httpsampler.max_redirects">
     Maximum redirects to follow in a single sequence.<br/>
     Defaults to: <code>20</code>
