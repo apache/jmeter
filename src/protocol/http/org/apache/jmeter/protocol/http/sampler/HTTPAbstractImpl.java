@@ -395,7 +395,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Closes the inputStream
      * <p>
      * Invokes
-     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
      * 
      * @param res
      *            sample to store information about the response into
@@ -409,6 +409,32 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      */
     protected byte[] readResponse(SampleResult res, InputStream instream,
             int responseContentLength) throws IOException {
+        return readResponse(res, instream, (long)responseContentLength);
+    }
+    /**
+     * Read response from the input stream, converting to MD5 digest if the
+     * useMD5 property is set.
+     * <p>
+     * For the MD5 case, the result byte count is set to the size of the
+     * original response.
+     * <p>
+     * Closes the inputStream
+     * <p>
+     * Invokes
+     * {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
+     * 
+     * @param res
+     *            sample to store information about the response into
+     * @param instream
+     *            input stream from which to read the response
+     * @param responseContentLength
+     *            expected input length or zero
+     * @return the response or the MD5 of the response
+     * @throws IOException
+     *             if reading the result fails
+     */
+    protected byte[] readResponse(SampleResult res, InputStream instream,
+            long responseContentLength) throws IOException {
         return testElement.readResponse(res, instream, responseContentLength);
     }
 
@@ -421,7 +447,35 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * <p>
      * Closes the inputStream
      * <p>
-     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, int)}
+     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
+     * 
+     * @param res
+     *            sample to store information about the response into
+     * @param in
+     *            input stream from which to read the response
+     * @param contentLength
+     *            expected input length or zero
+     * @return the response or the MD5 of the response
+     * @throws IOException
+     *             when reading the result fails
+     * @deprecated use {@link HTTPAbstractImpl#readResponse(SampleResult, BufferedInputStream, long)
+     */
+    @Deprecated
+    protected byte[] readResponse(SampleResult res, BufferedInputStream in,
+            int contentLength) throws IOException {
+        return testElement.readResponse(res, in, contentLength);
+    }
+    
+    /**
+     * Read response from the input stream, converting to MD5 digest if the
+     * useMD5 property is set.
+     * <p>
+     * For the MD5 case, the result byte count is set to the size of the
+     * original response.
+     * <p>
+     * Closes the inputStream
+     * <p>
+     * Invokes {@link HTTPSamplerBase#readResponse(SampleResult, InputStream, long)}
      * 
      * @param res
      *            sample to store information about the response into
@@ -434,7 +488,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      *             when reading the result fails
      */
     protected byte[] readResponse(SampleResult res, BufferedInputStream in,
-            int contentLength) throws IOException {
+            long contentLength) throws IOException {
         return testElement.readResponse(res, in, contentLength);
     }
 

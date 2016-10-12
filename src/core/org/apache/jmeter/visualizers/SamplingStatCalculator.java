@@ -157,7 +157,7 @@ public class SamplingStatCalculator {
         boolean rbool;
         synchronized (calculator) {
             calculator.addValue(res.getTime(), res.getSampleCount());
-            calculator.addBytes(res.getBytes());
+            calculator.addBytes(res.getBytesAsLong());
             setStartTime(res);
             eCount = getCurrentSample().getErrorCount();
             eCount += res.getErrorCount();
