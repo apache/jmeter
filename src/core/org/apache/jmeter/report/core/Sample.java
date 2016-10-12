@@ -260,8 +260,8 @@ public class Sample {
      *
      * @return the number of received bytes stored in the sample
      */
-    public int getReceivedBytes() {
-        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+    public long getReceivedBytes() {
+        return getData(long.class, CSVSaveService.CSV_BYTES).longValue();
     }
 
     /**

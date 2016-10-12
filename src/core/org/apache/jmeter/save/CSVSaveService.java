@@ -299,9 +299,9 @@ public final class CSVSaveService {
             if (saveConfig.saveBytes()) {
                 field = CSV_BYTES;
                 text = parts[i++];
-                result.setBytes(Integer.parseInt(text));
+                result.setBytes(Long.parseLong(text));
             }
-            
+
             if (saveConfig.saveSentBytes()) {
                 field = CSV_SENT_BYTES;
                 text = parts[i++];
@@ -453,7 +453,7 @@ public final class CSVSaveService {
             text.append(CSV_BYTES);
             text.append(delim);
         }
-        
+
         if (saveConfig.saveSentBytes()) {
             text.append(CSV_SENT_BYTES);
             text.append(delim);
@@ -936,9 +936,9 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveBytes()) {
-            text.append(sample.getBytes());
+            text.append(sample.getBytesAsLong());
         }
-        
+
         if (saveConfig.saveSentBytes()) {
             text.append(sample.getSentBytes());
         }
