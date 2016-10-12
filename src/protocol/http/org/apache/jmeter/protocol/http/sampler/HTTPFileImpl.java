@@ -62,9 +62,15 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
             byte[] readBuffer = new byte[bufferSize];
             int bytesReadInBuffer = 0;
             long totalBytes = 0;
+            boolean storeInBOS = true;
             while ((bytesReadInBuffer = is.read(readBuffer)) > -1) {
-                if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
-                    bos.write(readBuffer, 0, bytesReadInBuffer);
+                if(storeInBOS) {
+                    if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
+                        bos.write(readBuffer, 0, bytesReadInBuffer);
+                    } else {
+                        bos.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
+                        storeInBOS = false;
+                    }
                 }
                 totalBytes += bytesReadInBuffer;
             }
