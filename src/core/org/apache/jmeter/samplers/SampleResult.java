@@ -1427,6 +1427,15 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public void setBodySize(long bodySize) {
         this.bodySize = bodySize;
     }
+    
+    /**
+     * @param bodySize the body size to set
+     * @deprecated use setBodySize(long)
+     */
+    @Deprecated
+    public void setBodySize(int bodySize) {
+        this.bodySize = bodySize;
+    }
 
     private static class NanoOffset extends Thread {
 
