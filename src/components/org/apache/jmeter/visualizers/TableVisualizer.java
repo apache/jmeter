@@ -194,7 +194,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                             res.getSampleLabel(),
                             res.getTime(),
                             res.isSuccessful(),
-                            res.getBytes(),
+                            res.getBytesAsLong(),
                             res.getSentBytes(),
                             res.getLatency(),
                             res.getConnectTime()

@@ -320,7 +320,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             writer.addAttribute(ATT_DATA_ENCODING, ConversionHelp.encode(res.getDataEncodingNoDefault()));
         }
         if (save.saveBytes()) {
-            writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytes()));
+            writer.addAttribute(ATT_BYTES, String.valueOf(res.getBytesAsLong()));
         }
         if (save.saveSentBytes()) {
             writer.addAttribute(ATT_SENT_BYTES, String.valueOf(res.getSentBytes()));
@@ -449,7 +449,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         res.setIdleTime(Converter.getLong(reader.getAttribute(ATT_IDLETIME)));
         res.setLatency(Converter.getLong(reader.getAttribute(ATT_LATENCY)));
         res.setConnectTime(Converter.getLong(reader.getAttribute(ATT_CONNECT_TIME)));
-        res.setBytes(Converter.getInt(reader.getAttribute(ATT_BYTES)));
+        res.setBytes(Converter.getLong(reader.getAttribute(ATT_BYTES)));
         res.setSentBytes(Converter.getLong(reader.getAttribute(ATT_SENT_BYTES)));
         res.setSampleCount(Converter.getInt(reader.getAttribute(ATT_SAMPLE_COUNT),1)); // default is 1
         res.setErrorCount(Converter.getInt(reader.getAttribute(ATT_ERROR_COUNT),0)); // default is 0
@@ -461,7 +461,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
         File in = new File(resultFileName);
         try (FileInputStream fis = new FileInputStream(in);
                 BufferedInputStream bis = new BufferedInputStream(fis)){
-            ByteArrayOutputStream outstream = new ByteArrayOutputStream(res.getBytes());
+            ByteArrayOutputStream outstream = new ByteArrayOutputStream(4096);
             byte[] buffer = new byte[4096];
             int len;
             while ((len = bis.read(buffer)) > 0) {
@@ -473,7 +473,6 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             log.warn(e.getLocalizedMessage());
         } 
     }
-
 
     /**
      * @param arg0 the mapper

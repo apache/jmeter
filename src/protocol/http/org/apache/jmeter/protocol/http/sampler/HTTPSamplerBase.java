@@ -189,6 +189,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
 
+    private static final int MAX_BYTES_TO_STORE_PER_REQUEST =
+            JMeterUtils.getPropDefault("httpsampler.max_bytes_to_store_per_request", 10 * 1024 *1024); // $NON-NLS-1$ // default value: 10MB
+
+    private static final int MAX_BUFFER_SIZE = 
+            JMeterUtils.getPropDefault("httpsampler.max_buffer_size", 65 * 1024); // $NON-NLS-1$
+
     private static final boolean IGNORE_FAILED_EMBEDDED_RESOURCES =
             JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resources", false); // $NON-NLS-1$ // default value: false
 
@@ -925,6 +931,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     // Bug 51939
     private static final boolean SEPARATE_CONTAINER =
             JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
+
 
     /**
      * Get the URL, built from its component parts.
@@ -1757,7 +1764,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return the response or the MD5 of the response
      * @throws IOException if reading the result fails
      */
-    public byte[] readResponse(SampleResult sampleResult, InputStream in, int length) throws IOException {
+    public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
         
         OutputStream w = null;
         try {
@@ -1776,34 +1783,36 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 if (!knownResponseLength) {
                     bufferSize = 4 * 1024;
                 } else {
-                    bufferSize = length;
+                    bufferSize = (int) Math.min(MAX_BUFFER_SIZE, length);
                 }
             }
             
             
-            int bytesRead = 0;
-            int totalBytes = 0;
+            int bytesReadInBuffer = 0;
+            long totalBytes = 0;
             boolean first = true;
-            while ((bytesRead = in.read(readBuffer)) > -1) {
+            while ((bytesReadInBuffer = in.read(readBuffer)) > -1) {
                 if (first) {
                     sampleResult.latencyEnd();
                     first = false;
                     if(md == null) {
-                        if(knownResponseLength) {
-                            w = new DirectAccessByteArrayOutputStream(bufferSize);
+                        if(!knownResponseLength) {
+                            w = new org.apache.commons.io.output.ByteArrayOutputStream(bufferSize);
                         }
                         else {
-                            w = new org.apache.commons.io.output.ByteArrayOutputStream(bufferSize);
+                            w = new DirectAccessByteArrayOutputStream(bufferSize);
                         }
                     }
                 }
                 
                 if (md == null) {
-                    w.write(readBuffer, 0, bytesRead);
+                    if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
+                        w.write(readBuffer, 0, bytesReadInBuffer);
+                    } 
                 } else {
-                    md.update(readBuffer, 0, bytesRead);
-                    totalBytes += bytesRead;
+                    md.update(readBuffer, 0, bytesReadInBuffer);
                 }
+                totalBytes += bytesReadInBuffer;
             }
             
             if (first) { // Bug 46838 - if there was no data, still need to set latency
@@ -1811,13 +1820,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 return new byte[0];
             }
             
-            if (md != null) {
+            if (md == null) {
+                return toByteArray(w);
+            } else {
                 byte[] md5Result = md.digest();
                 sampleResult.setBytes(totalBytes);
-                return JOrphanUtils.baToHexBytes(md5Result);
+                return JOrphanUtils.baToHexBytes(md5Result);                
             }
             
-            return toByteArray(w);
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(w);

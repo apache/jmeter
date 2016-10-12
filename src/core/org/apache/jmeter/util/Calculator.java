@@ -110,7 +110,7 @@ public class Calculator {
      * @param res the sample result; might represent multiple values
      */
     public void addSample(SampleResult res) {
-        addBytes(res.getBytes());
+        addBytes(res.getBytesAsLong());
         addValue(res.getTime(),res.getSampleCount());
         errors+=res.getErrorCount(); // account for multiple samples
         if (startTime == 0){ // not yet intialised

@@ -75,6 +75,13 @@ Summary
     <li>Since version 3.1, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since version 3.1, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
     <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
+    <li>Since version 3.1, HTTP Request is able when using HttpClient4 (default) implementation to handle responses bigger than <code>2147483647</code>. To allow this 2 properties have been introduced:
+    <ul>
+        <li><code>httpsampler.max_bytes_to_store_per_request</code> (defaults to 10MB)will control what is held in memory, by default JMeter will only keep in memory the first 10MB of a response. If you have responses larger than this value and use assertions that are after the first 10MB, then you must increase this value</li>
+        <li><code>httpsampler.max_buffer_size</code> will control the buffer used to read the data. Previously JMeter used a buffer equal to Content-Length header which could lead to failures and make JMeter less resistant to faulty applications, but note this may impact response times and give slightly different results
+         than previous versions if your application returned a Content-Length header higher than current default value (65KB) </li>
+    </ul>
+    See <bugzilla>53039</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
@@ -94,6 +101,7 @@ Summary
     <li><bug>59885</bug>Optimize css parsing for embedded resources download by introducing a cache. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>219</pr></li>
     <li><bug>60092</bug>Add shortened version of the PUT body to sampler result.</li>
     <li><bug>60229</bug>Add a new metric : sent_bytes. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes</li>
 </ul>
 
 <h3>Other samplers</h3>
