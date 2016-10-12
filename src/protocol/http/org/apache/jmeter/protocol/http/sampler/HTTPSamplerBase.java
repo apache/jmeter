@@ -1791,6 +1791,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             int bytesReadInBuffer = 0;
             long totalBytes = 0;
             boolean first = true;
+            boolean storeInBOS = true;
             while ((bytesReadInBuffer = in.read(readBuffer)) > -1) {
                 if (first) {
                     sampleResult.latencyEnd();
@@ -1806,9 +1807,14 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 }
                 
                 if (md == null) {
-                    if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
-                        w.write(readBuffer, 0, bytesReadInBuffer);
-                    } 
+                    if(storeInBOS) {
+                        if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
+                            w.write(readBuffer, 0, bytesReadInBuffer);
+                        } else {
+                            w.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
+                            storeInBOS = false;
+                        }
+                    }
                 } else {
                     md.update(readBuffer, 0, bytesReadInBuffer);
                 }
