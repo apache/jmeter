@@ -167,6 +167,7 @@ Summary
     <li><bug>60098</bug>Report / Dashboard : Reduce default value for "<code>jmeter.reportgenerator.statistic_window</code>" to reduce memory impact</li>
     <li><bug>60115</bug>Add date format property for start/end date filter into Report generator</li>
     <li><bug>60171</bug>Report / Dashboard : Active Threads Over Time should stack lines to give the total amount of threads running</li>
+    <li><bug>60250</bug>Report / Dashboard : Need to Add Sent KB/s in Statistics Report of HTML Dashboard</li>
 </ul>
 <h3>General</h3>
 <ul>
