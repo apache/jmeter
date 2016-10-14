@@ -173,6 +173,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         StringBuilder propBuffer = new StringBuilder();
         int loop = getIterationCount();
         result.sampleStart();
+        final long startNanos = System.nanoTime();
         String type = getMessageChoice();
         
         try {
@@ -212,6 +213,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         } catch (Exception e) {
             result.setResponseMessage(e.toString());
         } finally {
+            result.elapsedInNanos(System.nanoTime()-startNanos);
             result.sampleEnd();            
         }
         return result;
