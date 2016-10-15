@@ -119,20 +119,23 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             "aggregate_report_max",           //$NON-NLS-1$
             "aggregate_report_error%",        //$NON-NLS-1$
             "aggregate_report_rate",          //$NON-NLS-1$
-            "aggregate_report_bandwidth" };   //$NON-NLS-1$
+            "aggregate_report_bandwidth",     //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
+    };
     
-    static final Object[][] COLUMNS_MSG_PARAMETERS = { null, //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            new Object[]{pct1Label},                      //$NON-NLS-1$
-            new Object[]{pct2Label},                      //$NON-NLS-1$
-            new Object[]{pct3Label},                      //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null,                             //$NON-NLS-1$
-            null };                           //$NON-NLS-1$
+    static final Object[][] COLUMNS_MSG_PARAMETERS = { null, 
+            null,
+            null,
+            null,
+            new Object[]{pct1Label},
+            new Object[]{pct2Label},
+            new Object[]{pct3Label},
+            null,
+            null,
+            null,
+            null,
+            null,
+            null};
 
     private final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
             "aggregate_report_median",        //$NON-NLS-1$
@@ -305,11 +308,12 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 new Functor("getMax"),                         //$NON-NLS-1$
                 new Functor("getErrorPercentage"),            //$NON-NLS-1$
                 new Functor("getRate"),                        //$NON-NLS-1$
-                new Functor("getKBPerSecond") },            //$NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null, null, null, null, null, null, null },
+                new Functor("getKBPerSecond"),                 //$NON-NLS-1$
+                new Functor("getSentKBPerSecond") },            //$NON-NLS-1$
+                new Functor[] { null, null, null, null, null, null, null, null, null, null, null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
                             Long.class, Long.class, Long.class, Long.class, String.class, 
-                            String.class, String.class });
+                            String.class, String.class, String.class});
     }
 
     // Column formats
@@ -326,7 +330,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null, // Max
             new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
             new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
-            new DecimalFormat("#.0")    // pageSize   //$NON-NLS-1$
+            new DecimalFormat("#0.00"),      // Throughput //$NON-NLS-1$
+            new DecimalFormat("#0.00")    // pageSize   //$NON-NLS-1$
         };
     
     // Column renderers
@@ -343,7 +348,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null, // Max
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
-            new NumberRenderer("#.0"),    // pageSize   //$NON-NLS-1$
+            new NumberRenderer("#0.00"),      // Received bytes per sec //$NON-NLS-1$
+            new NumberRenderer("#0.00"),    // Sent bytes per sec   //$NON-NLS-1$
         };
 
     public static boolean testFunctors(){

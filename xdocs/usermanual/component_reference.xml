@@ -3017,7 +3017,8 @@ The time unit is chosen so that the displayed rate is at least 1.0.
 When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as 0.5.
 </li>
-<li><code>Kb/sec</code> - The throughput measured in Kilobytes per second</li>
+<li><code>Received KB/sec</code> - The throughput measured in received Kilobytes per second</li>
+<li><code>Sent KB/sec</code> - The throughput measured in sent Kilobytes per second</li>
 </ul>
 <p>Times are in milliseconds.</p>
 </description>
@@ -3250,7 +3251,8 @@ The time unit is chosen so that the displayed rate is at least <code>1.0</code>.
 When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as <code>0.5</code>.
 </li>
-<li><code>Kb/sec</code> - The throughput measured in Kilobytes per second</li>
+<li><code>Received KB/sec</code> - The throughput measured in Kilobytes per second</li>
+<li><code>Sent KB/sec</code> - The throughput measured in Kilobytes per second</li>
 <li><code>Avg. Bytes</code> - average size of the sample response in bytes.</li>
 </ul>
 <p>Times are in milliseconds.</p>
