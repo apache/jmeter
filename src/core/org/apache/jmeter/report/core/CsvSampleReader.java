@@ -46,7 +46,7 @@ import org.apache.log.Logger;
 public class CsvSampleReader implements Closeable{
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
-    private static final int BUF_SIZE = 10000;
+    private static final int BUF_SIZE = 1024 * 1024;
 
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
 
