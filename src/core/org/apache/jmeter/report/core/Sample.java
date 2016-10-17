@@ -240,10 +240,14 @@ public class Sample {
     /**
      * Gets the connect time stored in the sample.
      *
-     * @return the connect time stored in the sample
+     * @return the connect time stored in the sample or 0 is column is not in results
      */
     public long getConnectTime() {
-        return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+        if(metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -266,11 +270,15 @@ public class Sample {
 
     /**
      * Gets the number of sent bytes stored in the sample.
-     *
+     * If column is not in results, we return 0
      * @return the number of sent bytes stored in the sample
      */
     public long getSentBytes() {
-        return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
+        if(metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
+        } else {
+            return 0L;
+        }
     }
 
     /**
