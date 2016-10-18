@@ -30,7 +30,7 @@ import org.apache.jmeter.gui.GuiPackage;
  * Processes the Collapse All and Expand All options.
  *
  */
-public class CollapseExpand implements Command {
+public class CollapseExpand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 

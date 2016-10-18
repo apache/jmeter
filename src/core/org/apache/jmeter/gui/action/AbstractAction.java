@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
@@ -35,7 +36,7 @@ public abstract class AbstractAction implements Command {
      * @see Command#doAction(ActionEvent)
      */
     @Override
-    public void doAction(ActionEvent e) {
+    public void doAction(ActionEvent e) throws IllegalUserActionException {
     }
 
     /**

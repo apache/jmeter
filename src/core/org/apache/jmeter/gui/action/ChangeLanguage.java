@@ -34,9 +34,9 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * 
  */
-public class ChangeLanguage implements Command {
+public class ChangeLanguage extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();

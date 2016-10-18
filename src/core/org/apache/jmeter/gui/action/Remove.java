@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * Implements the Remove menu item.
  */
-public class Remove implements Command {
+public class Remove extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 

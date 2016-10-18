@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class ExitCommand implements Command {
+public class ExitCommand extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 
