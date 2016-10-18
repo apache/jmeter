@@ -102,15 +102,7 @@ public class SamplingStatCalculator {
      * @return throughput in bytes/second
      */
     public double getBytesPerSecond() {
-        // Code duplicated from getPageSize()
-        double rate = 0;
-        if (this.getElapsed() > 0 && calculator.getTotalBytes() > 0) {
-            rate = calculator.getTotalBytes() / ((double) this.getElapsed() / 1000);
-        }
-        if (rate < 0) {
-            rate = 0;
-        }
-        return rate;
+        return getRatePerSecond(calculator.getTotalBytes());
     }
 
     /**
@@ -120,6 +112,39 @@ public class SamplingStatCalculator {
      */
     public double getKBPerSecond() {
         return getBytesPerSecond() / 1024; // 1024=bytes per kb
+    }
+    
+    /**
+     * Sent Throughput in bytes / second
+     *
+     * @return sent throughput in bytes/second
+     */
+    public double getSentBytesPerSecond() {
+        return getRatePerSecond(calculator.getTotalSentBytes());
+    }
+
+    /**
+     * @param value long 
+     * @return rate per second
+     */
+    private double getRatePerSecond(long value) {
+        double rate = 0;
+        if (this.getElapsed() > 0 && value > 0) {
+            rate = value / ((double) this.getElapsed() / 1000);
+        }
+        if (rate < 0) {
+            rate = 0;
+        }
+        return rate;
+    }
+
+    /**
+     * Sent Throughput in kilobytes / second
+     *
+     * @return Sent Throughput in kilobytes / second
+     */
+    public double getSentKBPerSecond() {
+        return getSentBytesPerSecond() / 1024; // 1024=bytes per kb
     }
 
     /**
@@ -157,7 +182,8 @@ public class SamplingStatCalculator {
         boolean rbool;
         synchronized (calculator) {
             calculator.addValue(res.getTime(), res.getSampleCount());
-            calculator.addBytes(res.getBytes());
+            calculator.addBytes(res.getBytesAsLong());
+            calculator.addSentBytes(res.getSentBytes());
             setStartTime(res);
             eCount = getCurrentSample().getErrorCount();
             eCount += res.getErrorCount();

@@ -142,17 +142,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Resize the table columns to appropriate widths.
-     *
-     * @param table
-     *  the table to resize columns for
-     */
-    private void sizeColumns(JTable table) {
-        GuiUtils.fixSize(table.getColumn(PARAMNAME), table);
-        GuiUtils.fixSize(table.getColumn(MIMETYPE), table);
-    }
-
-    /**
      * Save the GUI data in the HTTPSamplerBase element.
      *
      * @param testElement {@link TestElement} to modify
@@ -403,7 +392,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
         p.add(makeButtonPanel(), BorderLayout.SOUTH);
 
         table.revalidate();
-        sizeColumns(table);
     }
 
     private JScrollPane makeScrollPane(Component comp) {

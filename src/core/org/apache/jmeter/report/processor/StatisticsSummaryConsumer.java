@@ -57,6 +57,7 @@ public class StatisticsSummaryConsumer extends
         }
         data.incTotal();
         data.incBytes(sample.getReceivedBytes());
+        data.incSentBytes(sample.getSentBytes());
 
         if (!sample.getSuccess()) {
             data.incErrors();
@@ -130,6 +131,7 @@ public class StatisticsSummaryConsumer extends
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile3().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getThroughput())));
         result.addResult(new ValueResultData(Double.valueOf(data.getKBytesPerSecond())));
+        result.addResult(new ValueResultData(Double.valueOf(data.getSentKBytesPerSecond())));
         result.addResult(new ValueResultData(Long.valueOf(data.getMin())));
         result.addResult(new ValueResultData(Long.valueOf(data.getMax())));
         return result;
@@ -181,6 +183,7 @@ public class StatisticsSummaryConsumer extends
                 Integer.valueOf(PERCENTILE_INDEX3))));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_throughput")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_kbytes")));
+        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_sent_kbytes")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_min")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_max")));
         return titles;

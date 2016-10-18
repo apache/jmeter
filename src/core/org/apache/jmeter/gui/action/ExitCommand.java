@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
 
-public class ExitCommand implements Command {
+public class ExitCommand extends AbstractActionWithNoRunningTest {
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -58,7 +58,7 @@ public class ExitCommand implements Command {
      *            Description of Parameter
      */
     @Override
-    public void doAction(ActionEvent e) {
+    public void doActionAfterCheck(ActionEvent e) {
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.CHECK_DIRTY));
         if (GuiPackage.getInstance().isDirty()) {
             int chosenOption = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(), JMeterUtils

@@ -1,6 +1,7 @@
 rat-excludes.txt
 .*
 .*/**
+README.md
 **/*.jmx
 bin/*.csv
 bin/*.xml

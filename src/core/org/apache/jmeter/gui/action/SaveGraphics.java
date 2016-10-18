@@ -28,8 +28,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.exceptions.IllegalUserActionException;
-import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.save.SaveGraphicsService;
 import org.apache.jmeter.util.JMeterUtils;
@@ -43,7 +43,7 @@ import org.apache.jmeter.visualizers.Printable;
  * file if no extension is provided. If either .png or .tif is in the filename,
  * it will call SaveGraphicsService to save in the format.
  */
-public class SaveGraphics implements Command {
+public class SaveGraphics extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 

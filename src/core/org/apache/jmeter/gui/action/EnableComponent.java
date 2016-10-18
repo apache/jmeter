@@ -30,7 +30,7 @@ import org.apache.log.Logger;
 /**
  * Implements the Enable menu item.
  */
-public class EnableComponent implements Command {
+public class EnableComponent extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();

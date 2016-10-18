@@ -210,10 +210,10 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         if (contents.length() > 0){
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
-                            res.setBytes(bytes.length);
+                            res.setBytes((long)bytes.length);
                         } else {
                             File infile = new File(local);
-                            res.setBytes((int)infile.length());
+                            res.setBytes(infile.length());
                             input = new BufferedInputStream(new FileInputStream(infile));
                         }
                         ftpOK = ftp.storeFile(remote, input);
@@ -249,7 +249,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                     res.setDataType(SampleResult.TEXT);
                                 }
                             } else {
-                                res.setBytes((int) bytes);
+                                res.setBytes(bytes);
                             }
                         }
                     }

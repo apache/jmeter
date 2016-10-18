@@ -29,6 +29,7 @@ public class StatisticsSummaryData {
     private long firstTime = Long.MAX_VALUE;
     private long endTime = Long.MIN_VALUE;
     private long bytes = 0L;
+    private long sentBytes = 0L;
     private long errors = 0L;
     private long total = 0L;
     private final MeanAggregator mean;
@@ -226,9 +227,23 @@ public class StatisticsSummaryData {
         total++;
     }
 
+    /**
+     * Increment received bytes
+     * @param value bytes
+     */
     public void incBytes(long value) {
         bytes += value;
     }
+    
+
+    /**
+     * Increment sent bytes
+     * @param value bytes
+     */
+    public void incSentBytes(long value) {
+        sentBytes += value;
+    }
+    
 
     public void incErrors() {
         errors++;
@@ -239,5 +254,30 @@ public class StatisticsSummaryData {
      */
     public MeanAggregator getMean() {
         return mean;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
+    }
+    
+    /**
+     * Gets the sent bytes per second.
+     *
+     * @return the sent bytes per second
+     */
+    public double getSentBytesPerSecond() {
+        return sentBytes / ((double) getElapsedTime() / 1000);
+    }
+
+    /**
+     * Gets the sent kilo bytes per second.
+     *
+     * @return the sent kilo bytes per second
+     */
+    public double getSentKBytesPerSecond() {
+        return getSentBytesPerSecond() / 1024;
     }
 }

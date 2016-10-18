@@ -78,6 +78,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             "aggregate_report_error%",     //$NON-NLS-1$
             "aggregate_report_rate",       //$NON-NLS-1$
             "aggregate_report_bandwidth",  //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec",  //$NON-NLS-1$
             "average_bytes",               //$NON-NLS-1$
             };
 
@@ -118,6 +119,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
             new NumberRenderer("#0.00"),  // kB/sec //$NON-NLS-1$
+            new NumberRenderer("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new NumberRenderer("#.0"),    // avg. pageSize //$NON-NLS-1$
         };
     
@@ -133,6 +135,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
             new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00"),  // kB/sec //$NON-NLS-1$
+            new DecimalFormat("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new DecimalFormat("#.0"),    // avg. pageSize //$NON-NLS-1$
         };
 
@@ -150,11 +153,12 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                     new Functor("getErrorPercentage"),    //$NON-NLS-1$
                     new Functor("getRate"),               //$NON-NLS-1$
                     new Functor("getKBPerSecond"),        //$NON-NLS-1$
+                    new Functor("getSentKBPerSecond"),        //$NON-NLS-1$
                     new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
-                new Functor[] { null, null, null, null, null, null, null, null , null, null },
+                new Functor[] { null, null, null, null, null, null, null, null , null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              String.class, String.class, String.class, String.class, String.class });
+                              String.class, String.class, String.class, String.class, String.class, String.class });
         clearData();
         init();
     }

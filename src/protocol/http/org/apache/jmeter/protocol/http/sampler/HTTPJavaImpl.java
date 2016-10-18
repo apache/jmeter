@@ -223,7 +223,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     protected byte[] readResponse(HttpURLConnection conn, SampleResult res) throws IOException {
         BufferedInputStream in;
 
-        final int contentLength = conn.getContentLength();
+        final long contentLength = conn.getContentLength();
         if ((contentLength == 0)
             && OBEY_CONTENT_LENGTH) {
             log.info("Content-Length: 0, not reading http-body");
@@ -284,7 +284,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
         if (instream != null) {
-            res.setBodySize(((CountingInputStream) instream).getCount());
+            res.setBodySize(((CountingInputStream) instream).getByteCount());
             instream.close();
         }
         return responseData;
@@ -566,8 +566,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
                     .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
             if (log.isDebugEnabled()) {
-                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
+                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySizeAsLong()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
             }
             
             // If we redirected automatically, the URL may have changed

@@ -406,7 +406,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
-                res.setResponseData(readResponse(res, entity.getContent(), (int) entity.getContentLength()));
+                res.setResponseData(readResponse(res, entity.getContent(), entity.getContentLength()));
             }
             
             res.sampleEnd(); // Done with the sampling proper.
@@ -437,12 +437,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
               + 1 // Add \r for initial header
               + 2; // final \r\n before data
             long totalBytes = metrics.getReceivedBytesCount();
-            res.setHeadersSize((int) headerBytes);
-            res.setBodySize((int)(totalBytes - headerBytes));
+            res.setHeadersSize((int)headerBytes);
+            res.setBodySize(totalBytes - headerBytes);
             res.setSentBytes(metrics.getSentBytesCount());
             if (log.isDebugEnabled()) {
-                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getBodySize()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getBodySizeAsLong()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
             }
 
             // If we redirected automatically, the URL may have changed

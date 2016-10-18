@@ -101,6 +101,9 @@ public class SampleMetadata {
         if (saveConfig.saveBytes()) {
             configuredColumns.add(CSVSaveService.CSV_BYTES);
         }
+        if (saveConfig.saveSentBytes()) {
+            configuredColumns.add(CSVSaveService.CSV_SENT_BYTES);
+        }
         if (saveConfig.saveThreadCounts()) {
             configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT1);
             configuredColumns.add(CSVSaveService.CSV_THREAD_COUNT2);
