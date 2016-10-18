@@ -31,7 +31,7 @@ import org.apache.jmeter.gui.GuiPackage;
  * Hide / unhide LoggerPanel.
  *
  */
-public class LoggerPanelEnableDisable implements Command {
+public class LoggerPanelEnableDisable extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 

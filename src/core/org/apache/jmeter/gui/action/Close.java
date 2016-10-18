@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * test plan.
  *
  */
-public class Close implements Command {
+public class Close extends AbstractAction {
 
     private static final Set<String> commands = new HashSet<>();
 

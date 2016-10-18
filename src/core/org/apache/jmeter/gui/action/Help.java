@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 /**
  * Implements the Help menu item.
  */
-public class Help implements Command {
+public class Help extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();

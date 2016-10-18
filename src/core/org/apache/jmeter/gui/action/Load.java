@@ -50,7 +50,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Handles the Open (load a new file) and Merge commands.
  *
  */
-public class Load implements Command {
+public class Load extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$

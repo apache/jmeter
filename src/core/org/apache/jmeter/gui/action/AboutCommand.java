@@ -47,7 +47,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * protocols, config options, etc.
  *
  */
-public class AboutCommand implements Command {
+public class AboutCommand extends AbstractAction {
     private static final Set<String> commandSet;
 
     private static JDialog about;

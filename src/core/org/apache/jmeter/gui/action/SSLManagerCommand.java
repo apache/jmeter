@@ -52,7 +52,7 @@ import org.apache.jmeter.util.SSLManager;
  * already defined via the property.
  *
  */
-public class SSLManagerCommand implements Command {
+public class SSLManagerCommand extends AbstractAction {
     private static final Set<String> commandSet;
     static {
         Set<String> commands = new HashSet<>();
