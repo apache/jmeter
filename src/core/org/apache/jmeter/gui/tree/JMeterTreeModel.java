@@ -126,7 +126,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
 
     /**
      * Add a {@link TestElement} to a {@link JMeterTreeNode}
-     * @param component The {@link TestElement} to be used as data for the newly created note
+     * @param component The {@link TestElement} to be used as data for the newly created node
      * @param node The {@link JMeterTreeNode} into which the newly created node is to be inserted
      * @return new {@link JMeterTreeNode} for the given <code>component</code>
      * @throws IllegalUserActionException
