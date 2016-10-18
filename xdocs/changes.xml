@@ -102,6 +102,7 @@ Summary
     <li><bug>60092</bug>Add shortened version of the PUT body to sampler result.</li>
     <li><bug>60229</bug>Add a new metric : sent_bytes. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes</li>
+    <li><bug>60265</bug> - HTTP Request : In Files Upload Tab you cannot resize columns</li>
 </ul>
 
 <h3>Other samplers</h3>
