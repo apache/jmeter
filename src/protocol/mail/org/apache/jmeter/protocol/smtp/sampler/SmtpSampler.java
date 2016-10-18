@@ -204,7 +204,7 @@ public class SmtpSampler extends AbstractSampler {
                 message.writeTo(cs);
                 res.setBytes(cs.getCount());
             } else {
-                res.setBytes(-1);
+                res.setBytes(-1L);
             }
 
         } catch (Exception ex) {
