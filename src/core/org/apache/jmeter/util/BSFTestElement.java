@@ -40,14 +40,11 @@ import org.apache.log.Logger;
 public abstract class BSFTestElement extends ScriptingTestElement
     implements Serializable
 {
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     static {
-        BSFManager.registerScriptingEngine("jexl", //$NON-NLS-1$
-                "org.apache.commons.jexl.bsf.JexlEngine", //$NON-NLS-1$
-                new String[]{"jexl"}); //$NON-NLS-1$
         log.info("Registering JMeter version of JavaScript engine as work-round for BSF-22");
         BSFManager.registerScriptingEngine("javascript", //$NON-NLS-1$
                 "org.apache.jmeter.util.BSFJavaScriptEngine", //$NON-NLS-1$

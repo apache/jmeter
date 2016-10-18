@@ -22,7 +22,10 @@ import java.util.List;
 /**
  *
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class StatusImpl implements Status {
     private Jvm jvm = null;
 

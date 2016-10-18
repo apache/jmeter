@@ -494,7 +494,8 @@
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.time.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot/jquery.flot.selection.js"></script>
     <script src="../../sbadmin2-1.0.7/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-    <script src="../js/jquery.flot.axislabels.js"></script>
+    <script src="../../sbadmin2-1.0.7/bower_components/flot-axislabels/jquery.flot.axislabels.js"></script>
+    <script src="../js/jquery.flot.stack.js"></script>
     <script src="../js/hashtable.js"></script>
     <script src="../js/jquery.numberformatter-1.2.3.min.js"></script>
     <script src="../js/curvedLines.js"></script>

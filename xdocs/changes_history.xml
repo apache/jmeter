@@ -260,7 +260,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <note>Note: in a future version, we will switch to Nashorn by default. Users are encouraged to report any issue related to using Nashorn instead of Rhino.</note>
     </li>
     <li>Since version 3.0, JMS Publisher will reload contents of file if Message source is "<code>From File</code>" and the "<code>Filename</code>" field changes (e.g. if it uses a variable that has changed)</li>
-    <li>org.apache.jmeter.gui.util.ButtonPanel has been removed, if you use it in your 3<sup>rd</sup> party plugin or custom development ensure you update your code. See <bugzilla>58687</bugzilla></li>
+    <li><code>org.apache.jmeter.gui.util.ButtonPanel</code> has been removed, if you use it in your 3<sup>rd</sup> party plugin or custom development ensure you update your code. See <bugzilla>58687</bugzilla></li>
     <li>Property <code>jmeterthread.startearlier</code> has been removed. See <bugzilla>58726</bugzilla></li>   
     <li>Property <code>jmeterengine.startlistenerslater</code> has been removed. See <bugzilla>58728</bugzilla></li>   
     <li>Property <code>jmeterthread.reversePostProcessors</code> has been removed. See <bugzilla>58728</bugzilla></li>
@@ -600,7 +600,7 @@ Deprecated Libraries dropped or replaced by up to date ones:
     <li><bug>59225</bug>Bad display of running indicator icon. Contributed by Antonio Gomes Rodrigues (ra0077 at gmail.com)</li>
     <li><bug>56927</bug>Disable language change during a test</li>
     <li><bug>59391</bug>In Distributed mode, the client exits abnormally at the end of test</li>
-    <li><bug>59397</bug>build.xml does not make dist.executables executable on Unix systems</li>    
+    <li><bug>59397</bug><code>build.xml</code> does not make dist.executables executable on Unix systems</li>    
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -856,7 +856,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <ul>
     <li>Since 2.13, Aggregate Graph, Summary Report and Aggregate Report now export percentages to %, before they exported the decimal value which differed from what was shown in GUI</li>
     <li>Third party plugins may be impacted by fix of <bugzilla>57586</bugzilla>, ensure that your subclass of HttpTestSampleGui implements ItemListener if you relied on parent class doing so.</li>
-    <li>Report package has been removed, ApacheJMeter_report.jar is not generated anymore as a consequence, see <bugzilla>57269</bugzilla></li>
+    <li>Report package has been removed, <code>ApacheJMeter_report.jar</code> is not generated anymore as a consequence, see <bugzilla>57269</bugzilla></li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -910,8 +910,8 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <h3>General</h3>
 <ul>
 <li><bug>57518</bug>Icons for toolbar with several sizes</li>
-<li><bug>57605</bug>When there is an error loading Test Plan, SaveService.loadTree returns null leading to NPE in callers</li>
-<li><bug>57269</bug>Drop org.apache.jmeter.reports package</li>
+<li><bug>57605</bug>When there is an error loading Test Plan, <code>SaveService.loadTree</code> returns <code>null</code> leading to NPE in callers</li>
+<li><bug>57269</bug>Drop <code>org.apache.jmeter.reports</code> package</li>
 <li><bug>53764</bug>Website : Create a new style for website</li>
 </ul>
 <ch_section>Non-functional changes</ch_section>
@@ -926,13 +926,13 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
 <li>Updated to rsyntaxtextarea-2.5.6 (from 2.5.3)</li>
 <li>Updated to slf4j-1.7.10 (from 1.7.5)</li>
 <li><bug>57276</bug>RMIC no longer needed since Java 5</li>
-<li><bug>57310</bug>Replace System.getProperty("file.separator") with File.separator throughout (Also "path.separator" with File.pathSeparator)</li>
+<li><bug>57310</bug>Replace <code>System.getProperty("file.separator")</code> with <code>File.separator</code> throughout (Also "<code>path.separator"</code> with <code>File.pathSeparator</code>)</li>
 <li><bug>57389</bug>Fix potential NPE in converters</li>
-<li><bug>57417</bug>Remove unused method isTemporary from NullProperty. This was a leftover from a refactoring done in 2003.</li>
+<li><bug>57417</bug>Remove unused method <code>isTemporary</code> from <code>NullProperty</code>. This was a leftover from a refactoring done in 2003.</li>
 <li><bug>57418</bug>Remove unused constructor from Workbench</li>
 <li><bug>57419</bug>Remove unused interface ModelListener.</li>
 <li><bug>57466</bug>IncludeController : Remove an unneeded set creation. Contributed by Benoit Wiart (benoit.wiart at gmail.com)</li>
-<li>Added property loggerpanel.usejsyntaxtext to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
+<li>Added property <code>loggerpanel.usejsyntaxtext</code> to disable the use of JSyntaxTextArea for the Console Logger (in case of memory or other issues)</li>
 <li><bug>57586</bug>HttpTestSampleGui: Remove interface ItemListener implementation</li>
 </ul>
  
@@ -979,7 +979,7 @@ with the value 22x22 (default size), 32x32 or 48x48.</br></p>
  -->
 <h3>General</h3>
 <ul>
-<li><bug>57365</bug>Selected LAF is not correctly setup due to call of UIManager.setLookAndFeel too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+<li><bug>57365</bug>Selected LAF is not correctly setup due to call of <code>UIManager.setLookAndFeel</code> too late. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bug>57364</bug>Options &lt; Look And Feel does not update all windows LAF. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 <li><bug>57394</bug>When constructing an instance with ClassTools#construct(String, int) the integer was ignored and the default constructor was used instead.</li>
 <li><bug>57440</bug>OutOfMemoryError after introduction of JSyntaxTextArea in LoggerPanel due to disableUndo not being taken into account.</li>
@@ -1040,11 +1040,11 @@ This does not affect JMeter operation. This issue is fixed since Java 7b05.
 
 <li>
 Note that under some windows systems you may have this WARNING:
-<pre>
+<source>
 java.util.prefs.WindowsPreferences 
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
 x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
-</pre>
+</source>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
 </li>
 
@@ -1222,11 +1222,11 @@ This does not affect JMeter operation. This issue is fixed since Java 7b05.
 
 <li>
 Note that under some windows systems you may have this WARNING:
-<pre>
+<source>
 java.util.prefs.WindowsPreferences 
 WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
 x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
-</pre>
+</source>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
 </li>
 
@@ -1267,7 +1267,7 @@ See  <bugzilla>56357</bugzilla> for details.
 This is usually the expected behaviour as you want to have the number of running threads during the test. But if you want to revert to previous behaviour, set property <b>jmeter.save.saveservice.thread_counts=false</b></li>
 <li>Since JMeter 2.12, Mail Reader Sampler will show 1 for number of samples instead of number of messages retrieved, see <bugzilla>56539</bugzilla></li>
 <li>Since JMeter 2.12, when using Cache Manager, if resource is found in cache no SampleResult will be created, in previous version a SampleResult with empty content and 204 return code was returned, see <bugzilla>54778</bugzilla>.
-You can choose between different ways to handle this case, see cache_manager.cached_resource_mode in jmeter.properties.</li>
+You can choose between different ways to handle this case, see <code>cache_manager.cached_resource_mode</code> in <code>jmeter.properties</code>.</li>
 <li>Since JMeter 2.12, Log Viewer will no more clear logs when closed and will have logs available even if closed. See <bugzilla>56920</bugzilla>. Read <a href="./usermanual/hints_and_tips.html#debug_logging">Hints and Tips &gt; Enabling Debug logging</a>
 for details on configuring this component.</li>
 </ul>
@@ -1292,7 +1292,7 @@ for details on configuring this component.</li>
 <ul>
 <li><bugzilla>55977</bugzilla> - JDBC pool keepalive flooding</li>
 <li><bugzilla>55999</bugzilla> - Scroll bar on jms point-to-point sampler does not work when content exceeds display</li>
-<li><bugzilla>56198</bugzilla> - JMSSampler : NullPointerException is thrown when JNDI underlying implementation of JMS provider does not comply with Context.getEnvironment contract</li>
+<li><bugzilla>56198</bugzilla> - JMSSampler : NullPointerException is thrown when JNDI underlying implementation of JMS provider does not comply with <code>Context.getEnvironment</code> contract</li>
 <li><bugzilla>56428</bugzilla> - MailReaderSampler - should it use mail.pop3s.* properties?</li>
 <li><bugzilla>46932</bugzilla> - Alias given in select statement is not used as column header in response data for a JDBC request. Based on report and analysis of Nicola Ambrosetti</li>
 <li><bugzilla>56539</bugzilla> - Mail reader sampler: When Number of messages to retrieve is superior to 1, Number of samples should only show 1 not the number of messages retrieved</li>
@@ -1498,7 +1498,7 @@ Summary
 Following improvements have been made since major changes introduced in JMeter 2.10 on HTTP(S) Test Script Recorder:
 <ul>
 <li>Better detection of missing or invalid configuration of keytool utility</li>
-<li>New system property keytool.directory (see system.properties) lets you configure directory containing keytool in case on non-standard installation</li>
+<li>New system property <code>keytool.directory</code> (see <code>system.properties</code>) lets you configure directory containing keytool in case on non-standard installation</li>
 </ul>
 </p>
 
@@ -1603,7 +1603,7 @@ A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 <ul>
 <li>When creating a new Transaction Controller, property "Include duration of timer and pre-post processors in generated sample" will be unchecked starting from version 2.11</li>
 <li>In Non GUI mode, since 2.11 summariser is enabled with a 30 seconds frequency</li>
-<li>JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "jmeter.httpclient.strict_rfc2616" in jmeter.properties to change this behaviour, see <bugzilla>55717</bugzilla></li>
+<li>JMeter is more lenient with redirect handling and relaxes on RFC2616 by allowing relative locations. See property "<code>jmeter.httpclient.strict_rfc2616</code>" in <code>jmeter.properties</code> to change this behaviour, see <bugzilla>55717</bugzilla></li>
 <li>When creating a new Response Assertion, property "Pattern Matching Rules" now defaults to Substring starting from version 2.11</li>
 </ul>
 

@@ -26,7 +26,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
  */
 public abstract class ScriptingTestElement extends AbstractTestElement {
 
-    private static final long serialVersionUID = 281L;
+    private static final long serialVersionUID = 282L;
 
     //++ For TestBean implementations only
     private String parameters = ""; // passed to file or script
@@ -36,6 +36,9 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
     private String script = ""; // script (if file not provided)
 
     protected String scriptLanguage = ""; // BSF/JSR223 language to use
+    
+    protected final static String DEFAULT_SCRIPT_LANGUAGE = "groovy"; // if no language is chosen in GUI
+    
     //-- For TestBean implementations only
 
     public ScriptingTestElement() {

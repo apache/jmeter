@@ -50,10 +50,15 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         p = property("scriptLanguage"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
+            p.setValue(DEFAULT, "groovy"); // $NON-NLS-1$
+        } else {
+            p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        }
         if (rb != null) {
             p.setValue(RESOURCE_BUNDLE, rb);
         }
+        
         p.setValue(TAGS, languageTags);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$

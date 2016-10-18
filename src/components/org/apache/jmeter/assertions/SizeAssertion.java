@@ -79,7 +79,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
             String variableName = getVariableName();
             String value = getThreadContext().getVariables().get(variableName);
             try {
-                resultSize = Integer.parseInt(value);
+                resultSize = Long.parseLong(value);
             } catch (NumberFormatException e) {
                 result.setFailure(true);
                 result.setFailureMessage("Error parsing variable name: "+variableName+" value: "+value);
@@ -88,13 +88,13 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         } else if (isTestFieldResponseHeaders()) {
             resultSize = response.getHeadersSize();
         }  else if (isTestFieldResponseBody()) {
-            resultSize = response.getBodySize();
+            resultSize = response.getBodySizeAsLong();
         } else if (isTestFieldResponseCode()) {
             resultSize = response.getResponseCode().length();
         } else if (isTestFieldResponseMessage()) {
             resultSize = response.getResponseMessage().length();
         } else {
-            resultSize = response.getBytes();
+            resultSize = response.getBytesAsLong();
         }
         // is the Sample the correct size?
         final String msg = compareSize(resultSize);
@@ -168,7 +168,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     }
 
     /**
-     * Compares the the size of a return result to the set allowed size using a
+     * Compares the size of a return result to the set allowed size using a
      * logical comparator set in setLogicalComparator().
      * 
      * Possible values are: equal, not equal, greater than, less than, greater

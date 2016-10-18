@@ -285,9 +285,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     Header responseHeader = httpMethod.getResponseHeader(HTTPConstants.HEADER_CONTENT_ENCODING);
                     if (responseHeader!= null && HTTPConstants.ENCODING_GZIP.equals(responseHeader.getValue())) {
                         InputStream tmpInput = new GZIPInputStream(instream); // tmp inputstream needs to have a good counting
-                        res.setResponseData(readResponse(res, tmpInput, (int) httpMethod.getResponseContentLength()));                        
+                        res.setResponseData(readResponse(res, tmpInput, httpMethod.getResponseContentLength()));                        
                     } else {
-                        res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
+                        res.setResponseData(readResponse(res, instream, httpMethod.getResponseContentLength()));
                     }
                 } finally {
                     JOrphanUtils.closeQuietly(instream);
@@ -328,12 +328,12 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
             if (instream != null) {
-                res.setBodySize(((CountingInputStream) instream).getCount());
+                res.setBodySize(((CountingInputStream) instream).getByteCount());
             }
             res.setHeadersSize(calculateHeadersSize(httpMethod));
             if (log.isDebugEnabled()) {
-                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
+                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySizeAsLong()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
             }
             
             // If we redirected automatically, the URL may have changed

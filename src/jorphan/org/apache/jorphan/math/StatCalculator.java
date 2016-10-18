@@ -55,6 +55,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     private T max;
 
     private long bytes = 0;
+    
+    private long sentBytes = 0;
 
     private final T ZERO;
 
@@ -86,13 +88,25 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
         deviation = 0;
         count = 0;
         bytes = 0;
+        sentBytes = 0;
         max = MIN_VALUE;
         min = MAX_VALUE;
     }
 
-
+    /**
+     * Add to received bytes
+     * @param newValue 
+     */
     public void addBytes(long newValue) {
         bytes += newValue;
+    }
+    
+    /**
+     * Add to sent bytes
+     * @param newValue
+     */
+    public void addSentBytes(long newValue) {
+        sentBytes += newValue;
     }
 
     public void addAll(StatCalculator<T> calc) {
@@ -107,6 +121,10 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     public long getTotalBytes() {
         return bytes;
+    }
+    
+    public long getTotalSentBytes() {
+        return sentBytes;
     }
 
     /**

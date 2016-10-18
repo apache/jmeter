@@ -155,7 +155,7 @@ public class TestCSVSaveService extends JMeterTestCase {
     // header text should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
     public void testHeader() {
-        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,Latency,IdleTime,Connect";
+        final String HDR = "timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,Latency,IdleTime,Connect";
         assertEquals("Header text has changed", HDR, CSVSaveService.printableFieldNamesToString());
     }
 
@@ -163,7 +163,7 @@ public class TestCSVSaveService extends JMeterTestCase {
     // sample format should not change unexpectedly
     // if this test fails, check whether the default was intentionally changed or not
     public void testSample() {
-        final String RESULT = "1,2,3,4,5,6,7,true,,8,9,10,11,12,13";
+        final String RESULT = "1,2,3,4,5,6,7,true,,8,9,10,11,12,13,14";
         SampleResult result = new SampleResult();
         result.setSaveConfig(new SampleSaveConfiguration());
         result.setStampAndTime(1, 2);
@@ -174,11 +174,13 @@ public class TestCSVSaveService extends JMeterTestCase {
         result.setDataType("7");
         result.setSuccessful(true);
         result.setBytes(8);
-        result.setGroupThreads(9);
-        result.setAllThreads(10);
-        result.setLatency(11);
-        result.setIdleTime(12);
-        result.setConnectTime(13);
+        result.setSentBytes(9);
+        result.setGroupThreads(10);
+        result.setAllThreads(11);
+        result.setLatency(12);
+        result.setIdleTime(13);
+        result.setConnectTime(14);
+        
         assertEquals("Result text has changed", RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")));
     }
 }

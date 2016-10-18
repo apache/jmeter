@@ -39,6 +39,8 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpConnection;
@@ -136,6 +138,8 @@ import org.apache.log.Logger;
  *
  */
 public class HTTPHC4Impl extends HTTPHCAbstractImpl {
+
+    private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -402,7 +406,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
-                res.setResponseData(readResponse(res, entity.getContent(), (int) entity.getContentLength()));
+                res.setResponseData(readResponse(res, entity.getContent(), entity.getContentLength()));
             }
             
             res.sampleEnd(); // Done with the sampling proper.
@@ -433,11 +437,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
               + 1 // Add \r for initial header
               + 2; // final \r\n before data
             long totalBytes = metrics.getReceivedBytesCount();
-            res.setHeadersSize((int) headerBytes);
-            res.setBodySize((int)(totalBytes - headerBytes));
+            res.setHeadersSize((int)headerBytes);
+            res.setBodySize(totalBytes - headerBytes);
+            res.setSentBytes(metrics.getSentBytesCount());
             if (log.isDebugEnabled()) {
-                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getBodySize()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
+                log.debug("ResponseHeadersSize=" + res.getHeadersSize() + " Content-Length=" + res.getBodySizeAsLong()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
             }
 
             // If we redirected automatically, the URL may have changed
@@ -1441,7 +1446,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
             if(entityEntry.isRepeatable()) {
-                entityBody.append("<actual file content, not shown here>");
+                entityBody.append(IOUtils.toString(new BoundedInputStream(
+                        entityEntry.getContent(), MAX_BODY_RETAIN_SIZE)));
+                if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
+                    entityBody.append("<actual file content shortened>");
+                }
             }
             else { // this probably cannot happen
                 entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");

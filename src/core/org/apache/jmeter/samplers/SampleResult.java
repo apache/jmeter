@@ -210,11 +210,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private int sampleCount = 1;
 
-    private int bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
+    private long bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
     
     private int headersSize = 0;
     
-    private int bodySize = 0;
+    private long bodySize = 0;
 
     /** Currently active threads in this thread group */
     private volatile int groupThreads = 0;
@@ -268,6 +268,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     private volatile transient String responseDataAsString;
     
+    private long sentBytes;
+
     private long initOffset(){
         if (useNanoTime){
             return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
@@ -329,6 +331,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
+        sentBytes = res.sentBytes;
         startTime = res.startTime;//OK
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
@@ -610,9 +613,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         // Extend the time to the end of the added sample
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
-        setBytes(getBytes() + subResult.getBytes());
+        setBytes(getBytesAsLong() + subResult.getBytesAsLong());
+        setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
-        setBodySize(getBodySize() + subResult.getBodySize());
+        setBodySize(getBodySizeAsLong() + subResult.getBodySizeAsLong());
         addRawSubResult(subResult);
     }
     
@@ -1182,6 +1186,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * errors in remote statistical batch mode.
      *
      */
+    
     /**
      * In the event the sampler does want to pass back the actual contents, we
      * still want to calculate the throughput. The bytes are the bytes of the
@@ -1190,8 +1195,48 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param length
      *            the number of bytes of the response data for this sample
      */
-    public void setBytes(int length) {
+    public void setBytes(long length) {
         bytes = length;
+    }
+    
+    /**
+     * In the event the sampler does want to pass back the actual contents, we
+     * still want to calculate the throughput. The bytes are the bytes of the
+     * response data.
+     *
+     * @param length
+     *            the number of bytes of the response data for this sample
+     * @deprecated use setBytes(long)
+     */
+    @Deprecated 
+    public void setBytes(int length) {
+        setBytes((long) length);
+    }
+    
+    /**
+     * 
+     * @param sentBytesCount long sent bytes
+     */
+    public void setSentBytes(long sentBytesCount) {
+        sentBytes = sentBytesCount;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
+    }
+    
+    /**
+     * return the bytes returned by the response.
+     *
+     * @return byte count
+     * @deprecated use getBytesAsLong 
+     */
+    @Deprecated
+    public int getBytes() {
+        return (int) getBytesAsLong();
     }
 
     /**
@@ -1199,14 +1244,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *
      * @return byte count
      */
-    public int getBytes() {
+    public long getBytesAsLong() {
         if (GETBYTES_NETWORK_SIZE) {
-            int tmpSum = this.getHeadersSize() + this.getBodySize();
+            long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
             return tmpSum == 0 ? bytes : tmpSum;
         } else if (GETBYTES_HEADERS_SIZE) {
             return this.getHeadersSize();
         } else if (GETBYTES_BODY_REALSIZE) {
-            return this.getBodySize();
+            return this.getBodySizeAsLong();
         }
         return bytes == 0 ? responseData.length : bytes;
     }
@@ -1364,13 +1409,30 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /**
      * @return the body size in bytes
      */
+    @Deprecated
     public int getBodySize() {
+        return (int) getBodySizeAsLong();
+    }
+    
+    /**
+     * @return the body size in bytes
+     */
+    public long getBodySizeAsLong() {
         return bodySize == 0 ? responseData.length : bodySize;
     }
 
     /**
      * @param bodySize the body size to set
      */
+    public void setBodySize(long bodySize) {
+        this.bodySize = bodySize;
+    }
+    
+    /**
+     * @param bodySize the body size to set
+     * @deprecated use setBodySize(long)
+     */
+    @Deprecated
     public void setBodySize(int bodySize) {
         this.bodySize = bodySize;
     }

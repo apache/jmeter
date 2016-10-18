@@ -117,7 +117,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
      * @param result {@link SampleResult}
      */
     private void stripResponse(SampleResult result) {
-        result.setBytes(result.getBytes());
+        result.setBytes(result.getBytesAsLong());
         result.setResponseData(SampleResult.EMPTY_BA);
     }
 

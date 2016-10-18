@@ -84,6 +84,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             "table_visualizer_sample_time", // $NON-NLS-1$
             "table_visualizer_status",      // $NON-NLS-1$
             "table_visualizer_bytes",       // $NON-NLS-1$
+            "table_visualizer_sent_bytes",       // $NON-NLS-1$
             "table_visualizer_latency",     // $NON-NLS-1$
             "table_visualizer_connect"};    // $NON-NLS-1$
 
@@ -137,11 +138,12 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 new Functor("getElapsed"),             // $NON-NLS-1$
                 new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes"),               // $NON-NLS-1$
+                new Functor("getSentBytes"),               // $NON-NLS-1$
                 new Functor("getLatency"),             // $NON-NLS-1$
                 new Functor("getConnectTime") },       // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null, null, null, null },
+                new Functor[] { null, null, null, null, null, null, null, null, null, null },
                 new Class[] {
-                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class, Long.class });
+                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class, Long.class, Long.class });
         init();
     }
 
@@ -192,7 +194,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                             res.getSampleLabel(),
                             res.getTime(),
                             res.isSuccessful(),
-                            res.getBytes(),
+                            res.getBytesAsLong(),
+                            res.getSentBytes(),
                             res.getLatency(),
                             res.getConnectTime()
                             );

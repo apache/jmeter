@@ -158,6 +158,8 @@ $(document).ready(function() {
             case 8:
             // Kbytes/s
             case 9:
+            // Sent Kbytes/s
+            case 10:
                 item = item.toFixed(2);
                 break;
         }

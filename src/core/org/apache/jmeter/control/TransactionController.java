@@ -321,7 +321,8 @@ public class TransactionController extends GenericController implements SampleLi
             if(res != null && !se.isTransactionSampleEvent()) {
                 SampleResult sampleResult = se.getResult();
                 res.setThreadName(sampleResult.getThreadName());
-                res.setBytes(res.getBytes() + sampleResult.getBytes());
+                res.setBytes(res.getBytesAsLong() + sampleResult.getBytesAsLong());
+                res.setSentBytes(res.getSentBytes() + sampleResult.getSentBytes());
                 if (!isIncludeTimers()) {// Accumulate waiting time for later
                     pauseTime += sampleResult.getEndTime() - sampleResult.getTime() - prevEndTime;
                     prevEndTime = sampleResult.getEndTime();

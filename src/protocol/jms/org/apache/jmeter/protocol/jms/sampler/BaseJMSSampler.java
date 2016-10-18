@@ -212,7 +212,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * get the number of samples to aggregate
      *
-     * @return String containing the the number of samples to aggregate
+     * @return String containing the number of samples to aggregate
      */
     public String getIterations() {
         return getPropertyAsString(ITERATIONS);
@@ -221,7 +221,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     /**
      * get the number of samples to aggregate
      *
-     * @return int containing the the number of samples to aggregate
+     * @return int containing the number of samples to aggregate
      */
     public int getIterationCount() {
         return getPropertyAsInt(ITERATIONS);

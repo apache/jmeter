@@ -21,7 +21,10 @@ import java.util.List;
 
 /**
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public interface Workers {
 
     List<Worker> getWorker();

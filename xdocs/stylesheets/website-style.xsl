@@ -572,7 +572,7 @@
   </xsl:template>
 
   <xsl:template
-    match="h1|h2|h3|h4|h5|p|b|em|ul|ol|li|a|i|pre|br|tt|tr|th|td|dl|dt|dd|sup|span|u|strong|thead|tbody|form|select|option|input|font|center|img|body|style|div|hr"
+    match="abbr|h1|h2|h3|h4|h5|p|b|em|ul|ol|li|a|i|pre|br|tt|tr|th|td|dl|dt|dd|sup|span|u|strong|thead|tbody|form|select|option|input|font|center|img|body|style|div|hr"
   >
     <xsl:copy>
       <xsl:apply-templates select="@*|*|text()" />

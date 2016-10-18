@@ -18,7 +18,9 @@ package org.apache.jmeter.monitor.model;
 
 /**
  *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class WorkerImpl implements Worker {
     private int requestProcessingTime = 0;
 

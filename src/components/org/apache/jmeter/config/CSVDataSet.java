@@ -151,7 +151,7 @@ public class CSVDataSet extends ConfigTestElement
         String delim = getDelimiter();
         if (delim.equals("\\t")) { // $NON-NLS-1$
             delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
-        } else if (delim.length()==0){
+        } else if (delim.isEmpty()){
             log.warn("Empty delimiter converted to ','");
             delim=",";
         }
@@ -186,6 +186,7 @@ public class CSVDataSet extends ConfigTestElement
                 server.reserveFile(_fileName, getFileEncoding(), alias);
                 vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
             }
+            trimVarNames(vars);
         }
            
         // TODO: fetch this once as per vars above?
@@ -212,6 +213,16 @@ public class CSVDataSet extends ConfigTestElement
             for (String var :vars) {
                 threadVars.put(var, EOFVALUE);
             }
+        }
+    }
+
+    /**
+     * trim content of array varNames
+     * @param varsNames
+     */
+    private void trimVarNames(String[] varsNames) {
+        for (int i = 0; i < varsNames.length; i++) {
+            varsNames[i] = varsNames[i].trim();
         }
     }
 

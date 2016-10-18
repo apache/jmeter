@@ -209,7 +209,7 @@ public class LdapExtClient {
      * @param dirContext
      *            context to operate on
      * @param ddn
-     *            distinguished name name of object to rename
+     *            distinguished name of object to rename
      * @param newdn
      *            new distinguished name of object
      * @throws NamingException

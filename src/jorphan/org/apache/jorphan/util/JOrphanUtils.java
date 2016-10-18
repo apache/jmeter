@@ -593,7 +593,7 @@ public final class JOrphanUtils {
      *  <li>Because it does not exist but cannot be created</li>
      * </ul>
      * @param folder {@link File}
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when folder can't be written to
      */
     public static void canSafelyWriteToFolder(File folder)
             throws IllegalArgumentException {

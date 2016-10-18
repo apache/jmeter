@@ -59,7 +59,7 @@ commons-io-2.5
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
 
-commons-jexl-1.1, commons-jexl-2.1.1, commons-jexl3-3.0
+commons-jexl-2.1.1, commons-jexl3-3.0
 ----------------
 http://commons.apache.org/downloads/download_jexl.cgi
 - Jexl function and BSF test elements

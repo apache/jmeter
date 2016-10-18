@@ -16,6 +16,11 @@
  */
 package org.apache.jmeter.visualizers;
 
+/**
+ *
+ * @deprecated since 3.1
+ */
+@Deprecated
 public interface MonitorGuiListener {
     void updateGui(MonitorModel event);
 

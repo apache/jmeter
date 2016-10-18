@@ -262,7 +262,7 @@ public final class AllTests {
     }
 
     /**
-     * An overridable method that that instantiates a UnitTestManager (if one
+     * An overridable method that instantiates a UnitTestManager (if one
      * was specified in the command-line arguments), and hands it the name of
      * the properties file to use to configure the system.
      * 

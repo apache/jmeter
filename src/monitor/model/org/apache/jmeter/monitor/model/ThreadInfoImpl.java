@@ -19,7 +19,10 @@ package org.apache.jmeter.monitor.model;
 /**
  *
  * @version $Revision$
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class ThreadInfoImpl implements ThreadInfo {
     private int maxSpareThreads = 0;
 

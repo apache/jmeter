@@ -34,7 +34,10 @@ import org.apache.jmeter.util.JMeterUtils;
 /**
  * The health panel is responsible for showing the health of the servers. It
  * only uses the most current information to show the status.
+ *
+ * @deprecated since 3.1
  */
+@Deprecated
 public class MonitorHealthPanel extends JPanel implements MonitorListener, Clearable {
     private static final long serialVersionUID = 240L;
 
