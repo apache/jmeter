@@ -84,7 +84,7 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
         
         if(this.isEnabled() && 
                 // Check test is not started already
-                JMeterContextService.getTestStartTime()==0) {
+                !JMeterUtils.isTestRunning()) {
             pop.addSeparator();
             JMenuItem runTg = new JMenuItem(JMeterUtils.getResString("run_threadgroup"));
             runTg.setName("run_threadgroup");
