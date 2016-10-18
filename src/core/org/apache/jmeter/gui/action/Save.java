@@ -65,7 +65,7 @@ import org.apache.log.Logger;
  * Save TestPlan As
  * Save (Selection) As
  */
-public class Save implements Command {
+public class Save extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();

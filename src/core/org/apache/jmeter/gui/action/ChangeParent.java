@@ -40,9 +40,9 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Implements the Add Parent menu command
+ * Allows to change Controller implementation
  */
-public class ChangeParent implements Command {
+public class ChangeParent extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();

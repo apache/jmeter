@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
@@ -31,7 +32,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * Handles the Revert Project command.
  *
  */
-public class RevertProject implements Command {
+public class RevertProject extends AbstractAction {
     private static final Set<String> commands = new HashSet<>();
 
     static {

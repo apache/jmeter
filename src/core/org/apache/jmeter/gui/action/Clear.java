@@ -35,7 +35,7 @@ import org.apache.log.Logger;
  * - Clear All (Data)
  * - Reset (Clear GUI)
  */
-public class Clear implements Command {
+public class Clear extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();
