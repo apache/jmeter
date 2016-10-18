@@ -50,7 +50,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Handles the Open (load a new file) and Merge commands.
  *
  */
-public class Load extends AbstractAction {
+public class Load extends AbstractActionWithNoRunningTest {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
@@ -72,7 +72,7 @@ public class Load extends AbstractAction {
     }
 
     @Override
-    public void doAction(final ActionEvent e) {
+    public void doActionAfterCheck(final ActionEvent e) {
         final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
         if (chooser == null) {
             return;

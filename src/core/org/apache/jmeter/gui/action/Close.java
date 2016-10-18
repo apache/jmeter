@@ -34,7 +34,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * test plan.
  *
  */
-public class Close extends AbstractAction {
+public class Close extends AbstractActionWithNoRunningTest {
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -65,7 +65,7 @@ public class Close extends AbstractAction {
      *            the generic UI action event
      */
     @Override
-    public void doAction(ActionEvent e) {
+    public void doActionAfterCheck(ActionEvent e) {
         performAction(e);
     }
 
