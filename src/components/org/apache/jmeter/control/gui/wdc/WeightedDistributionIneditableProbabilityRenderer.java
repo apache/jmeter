@@ -29,6 +29,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  * 
  * NOTE:  This class was intended to be a internal class, but the requirement by
  * JMeterTest to instantiate all Serializable classes breaks unless this is public
+ * 
+ * Do not use
  */
 @SuppressWarnings("serial")
 public class WeightedDistributionIneditableProbabilityRenderer
