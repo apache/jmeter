@@ -48,9 +48,9 @@ import org.apache.log.Logger;
 /**
  * This class loads data from a saved file and displays statistics about it.
  *
- *
- * @version $Revision$
+ * @deprecated will be removed in 3.2
  */
+@Deprecated
 public class FileReporter extends JPanel {
     private static final long serialVersionUID = 240L;
 
