@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * Utility-class to calculate message size.
  */
 public class CounterOutputStream extends OutputStream {
-    int count = 0;
+    private long count = 0;
 
     /**
      * {@inheritDoc}
@@ -58,7 +58,7 @@ public class CounterOutputStream extends OutputStream {
      * Returns message size
      * @return Message size
      */
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 }
