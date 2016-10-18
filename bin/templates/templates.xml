@@ -84,6 +84,22 @@
         ]]></description>
     </template>
     <template isTestPlan="false">
+        <name>JSR223 Sampler using Groovy</name>
+        <fileName>GroovyJSR223Sampler.jmx</fileName>
+        <description><![CDATA[
+        <h1>Sample JSR223 Sampler using Groovy</h1>
+        <h2>Overview</h2>
+        This is a sample JSR223 sampler which shows how to use some of its features with Apache Groovy language
+        <br/>
+        Please select a suitable location in the tree - e.g. Thread Group or WorkBench - before merging.
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#JSR223_Sampler" >JSR223 Sampler</a></li>
+                <li><a href="http://groovy-lang.org/documentation.html" >Apache Groovy</a></li>
+            </ul>
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
         <name>BeanShell Sampler</name>
         <fileName>BeanShellSampler.jmx</fileName>
         <description><![CDATA[
