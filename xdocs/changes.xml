@@ -189,6 +189,7 @@ Summary
     <li><bug>60106</bug>Settings defaults : Switch "<code>jmeter.save.saveservice.connect_time</code>" to true (after 3.0)</li>
     <li><pr>229</pr> tiny memory allocation improvements. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><bug>59945</bug>For all JSR223 elements, if script language has not been chosen on the UI, the script will be interpreted as a groovy script.</li>
+    <li><bug>60266</bug>Usability/ UX : It should not be possible to close/exit/Revert/Load/Load a recent project or create from template a JMeter plan or open a new one if a test is running</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

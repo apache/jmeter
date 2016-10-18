@@ -59,7 +59,7 @@ public class LoadRecentProject extends Load {
     }
 
     @Override
-    public void doAction(ActionEvent e) {
+    public void doActionAfterCheck(ActionEvent e) {
         // We must ask the user if it is ok to close current project
         if (!Close.performAction(e)) {
             return;
