@@ -413,6 +413,11 @@ class SubControllerIterator implements Iterator<TestElement> {
         return returnSubController;
     }
     
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Iterator.remove() not implemented");
+    }
+    
     private void setNextSubController() {
         if (subControllerEnumeration != null && subControllerEnumeration.hasMoreElements()) {
             Object currSubCtrl = subControllerEnumeration.nextElement();
