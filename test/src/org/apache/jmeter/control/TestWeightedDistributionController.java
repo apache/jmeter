@@ -60,7 +60,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_2.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[2])));
         wdc.addTestElement(sub_2);
         
-        assertEquals(Arrays.stream(wgts).sum(), wdc.getCumulativeProbability());
+        assertEquals(arraySum(wgts), wdc.getCumulativeProbability());
         
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
@@ -183,7 +183,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setEnabled(enbs[5]);
         wdc.addTestElement(sub_5);
         
-        assertEquals(Arrays.stream(exp_wgts).sum(), wdc.getCumulativeProbability());
+        assertEquals(arraySum(exp_wgts), wdc.getCumulativeProbability());
                 
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
@@ -235,7 +235,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[5])));
         wdc.addTestElement(sub_5);
         
-        assertEquals(Arrays.stream(wgts).sum(), wdc.getCumulativeProbability());
+        assertEquals(arraySum(wgts), wdc.getCumulativeProbability());
         
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
@@ -287,7 +287,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         sub_5.setProperty(new StringProperty(WeightedDistributionController.WEIGHT,  Integer.toString(wgts[5])));
         wdc.addTestElement(sub_5);
         
-        //assertEquals(Arrays.stream(exps).sum(), wdc.getCumulativeProbability());
+        //assertEquals(arraySum(exps), wdc.getCumulativeProbability());
         
         wdc.setRunningVersion(true);
         sub_0.setRunningVersion(true);
@@ -545,7 +545,7 @@ public class TestWeightedDistributionController extends JMeterTestCase {
         TestElement eval_sub_2 = wdc.evaluateTestElement(sub_2);
         wdc.addTestElement(eval_sub_2);
         
-        assertEquals(Arrays.stream(wgtsEval).sum(), wdc.getCumulativeProbability());
+        assertEquals(arraySum(wgtsEval), wdc.getCumulativeProbability());
         
         wdc.setRunningVersion(true);
         eval_sub_0.setRunningVersion(true);
@@ -652,6 +652,14 @@ public class TestWeightedDistributionController extends JMeterTestCase {
             }
         }
         return wgtsum;
+    }
+    
+    static int arraySum(int[] ints) {
+        int sum = 0;
+        for (int currInt : ints) {
+            sum += currInt;
+        }
+        return sum;
     }
     
     static int[] executeTest(Controller control, String[] names, int iters) {
