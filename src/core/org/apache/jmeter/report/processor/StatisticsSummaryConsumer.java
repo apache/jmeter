@@ -21,10 +21,21 @@ import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * <p>
- * The class ErrorSummaryConsumer provides a consumer that calculates error
- * statistics.
- * </p>
+ * The class StatisticsSummaryConsumer provides a consumer that calculates:
+ * <ul>
+ *      <li>total number of samples</li>
+ *      <li>errors</li>
+ *      <li>error %</li>
+ *      <li>mean response time</li>
+ *      <li>percentile 1 (90% by default)</li>
+ *      <li>percentile 2 (95% by default)</li>
+ *      <li>percentile 3 (99% by default)</li>
+ *      <li>throughput</li>
+ *      <li>received bytes per second</li>
+ *      <li>sent bytes per second</li>
+ *      <li>min</li>
+ *      <li>max</li>
+ * </ul>
  * 
  * @since 3.0
  */
