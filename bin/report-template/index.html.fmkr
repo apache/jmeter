@@ -159,6 +159,19 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-12">
+                <div class="panel panel-default" style="text-align:center;">
+                    <div class="panel-heading">
+                        <p class="dashboard-title">Top 5 Errors by sampler</p>
+                    </div>
+                    <div class="panel-body">
+                        <section class="col-md-12 table-responsive">
+                            <table id="top5ErrorsBySamplerTable" class="table table-bordered table-condensed tablesorter ">
+                            </table>
+                        </section>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -64,10 +64,12 @@ function createTable(table, info, formatter, defaultSorts, seriesIndex) {
         if((!regexp || filtersOnlySampleSeries && !info.supportsControllersDiscrimination || regexp.test(item.data[seriesIndex]))
                 &&
                 (!showControllersOnly || !info.supportsControllersDiscrimination || item.isController)){
-            var newRow = tBody.insertRow(-1);
-            for(var col=0; col < item.data.length; col++){
-                var cell = newRow.insertCell(-1);
-                cell.innerHTML = formatter ? formatter(col, item.data[col]) : item.data[col];
+            if(item.data.length > 0) {
+                var newRow = tBody.insertRow(-1);
+                for(var col=0; col < item.data.length; col++){
+                    var cell = newRow.insertCell(-1);
+                    cell.innerHTML = formatter ? formatter(col, item.data[col]) : item.data[col];
+                }
             }
         }
     }
@@ -165,7 +167,7 @@ $(document).ready(function() {
         }
         return item;
     }, [[0, 0]], 0);
-
+    
     // Create error table
     createTable($("#errorsTable"), ${errorsSummary!"{}"}, function(index, item){
         switch(index){
@@ -176,4 +178,10 @@ $(document).ready(function() {
         }
         return item;
     }, [[1, 1]]);
+    
+        // Create top5 errors by sampler
+    createTable($("#top5ErrorsBySamplerTable"), ${top5ErrorsBySampler!"{}"}, function(index, item){
+        return item;
+    }, [[0, 0]], 0);
+    
 });

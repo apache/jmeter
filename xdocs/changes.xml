@@ -172,6 +172,7 @@ Summary
     <li><bug>60115</bug>Add date format property for start/end date filter into Report generator</li>
     <li><bug>60171</bug>Report / Dashboard : Active Threads Over Time should stack lines to give the total amount of threads running</li>
     <li><bug>60250</bug>Report / Dashboard : Need to Add Sent KB/s in Statistics Report of HTML Dashboard</li>
+    <li><bug>60287</bug>Report / Dashboard : Have a new Top5 Errors by sampler table in Dashboard. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 <h3>General</h3>
 <ul>
