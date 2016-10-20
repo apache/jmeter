@@ -33,14 +33,14 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
-    private static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE = 
+    static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE = 
             JMeterUtils
                 .getPropDefault(
                         SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
                         true);
             
+    static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private static final Long ZERO = Long.valueOf(0);
-    private static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private long errorCount = 0L;
 
     /**
@@ -135,7 +135,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      *         FIXME Duplicates HTTPSamplerBase#isSuccessCode but it's in http
      *         protocol
      */
-    protected boolean isSuccessCode(String codeAsString) {
+    static boolean isSuccessCode(String codeAsString) {
         if (StringUtils.isNumeric(codeAsString)) {
             try {
                 int code = Integer.parseInt(codeAsString);

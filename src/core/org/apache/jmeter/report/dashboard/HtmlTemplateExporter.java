@@ -418,6 +418,10 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         addResultToContext(ReportGenerator.STATISTICS_SUMMARY_CONSUMER_NAME,
                 storedData, dataContext, jsonizer);
 
+        // Add Top 5 errors by sampler consumer result to the data context
+        addResultToContext(ReportGenerator.TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME,
+                storedData, dataContext, jsonizer);
+
         // Collect graph results from sample context and transform them into
         // Json strings to inject in the data context
         ExtraOptionsResultCustomizer customizer = new ExtraOptionsResultCustomizer();
