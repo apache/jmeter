@@ -277,6 +277,7 @@ Summary
     <li><bug>60125</bug>Report / Dashboard : Dashboard cannot be generated if the default delimiter is <code>\t</code>. Based on a report from Tamas Szabadi (tamas.szabadi at rightside.co)</li>
     <li><bug>59439</bug>Report / Dashboard : AbstractOverTimeGraphConsumer.createGroupInfos() should be abstract</li>
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
+    <li><bug>60295</bug>JSON Extractor doesn't index array elements when only one element is found. Based on a patch by Roberto Braga (roberto.braga at sociale.it)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -295,6 +296,7 @@ Summary
 <li>Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Tamas Szabadi (tamas.szabadi at rightside.co)</li>
+<li>Roberto Braga (roberto.braga at soziale.it)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
