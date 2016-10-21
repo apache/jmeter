@@ -161,7 +161,8 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                             }
                         } else {
                             // else just one value extracted
-                            placeObjectIntoVars(vars, currentRefName, extractedValues, 0);
+                            String suffix = (matchNumber < 0) ? "_1" : "";
+                            placeObjectIntoVars(vars, currentRefName + suffix, extractedValues, 0);
                             if (matchNumber < 0 && getComputeConcatenation()) {
                                 vars.put(currentRefName + ALL_SUFFIX, vars.get(currentRefName));
                             }
