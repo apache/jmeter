@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.1">
+<jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1-SNAPSHOT.20161022">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <collectionProp name="TestPlan.thread_groups"/>
@@ -213,37 +213,6 @@
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector guiclass="GraphAccumVisualizer" testclass="ResultCollector" testname="Graph Accum Visualizer" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>false</threadName>
-                <dataType>true</dataType>
-                <encoding>true</encoding>
-                <assertions>false</assertions>
-                <subresults>false</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>true</xml>
-                <fieldNames>true</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
           <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
@@ -306,7 +275,7 @@
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector guiclass="SplineVisualizer" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
+          <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
               <name>saveConfig</name>
@@ -560,27 +529,12 @@
         <hashTree>
           <AnchorModifier guiclass="AnchorModifierGui" testclass="AnchorModifier" testname="Anchor Modifier" enabled="true"/>
           <hashTree/>
-          <ParamModifier guiclass="ParamModifierGui" testclass="ParamModifier" testname="Param Modifier" enabled="true">
-            <elementProp name="ParamModifier.mask" elementType="ParamMask">
-              <stringProp name="ParamModifier.field_name"></stringProp>
-              <stringProp name="ParamModifier.prefix"></stringProp>
-              <longProp name="ParamModifier.lower_bound">0</longProp>
-              <longProp name="ParamModifier.upper_bound">10</longProp>
-              <longProp name="ParamModifier.increment">1</longProp>
-              <stringProp name="ParamModifier.suffix"></stringProp>
-            </elementProp>
-          </ParamModifier>
-          <hashTree/>
           <URLRewritingModifier guiclass="URLRewritingModifierGui" testclass="URLRewritingModifier" testname="URL Rewriting Modifier" enabled="true">
             <boolProp name="path_extension">false</boolProp>
             <boolProp name="path_extension_no_questionmark">false</boolProp>
             <stringProp name="argument_name"></stringProp>
             <boolProp name="path_extension_no_equals">false</boolProp>
           </URLRewritingModifier>
-          <hashTree/>
-          <UserParameterModifier guiclass="UserParameterModifierGui" testclass="UserParameterModifier" testname="User Parameter Modifier" enabled="true">
-            <stringProp name="UserParameterModifier.xmluri">users.xml</stringProp>
-          </UserParameterModifier>
           <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
@@ -616,43 +570,16 @@
             <stringProp name="SoapSampler.URL_DATA"></stringProp>
           </SoapSampler>
           <hashTree/>
-          <WebServiceSampler guiclass="WebServiceSamplerGui" testclass="WebServiceSampler" testname="WebService (SOAP) Request" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="HTTPSampler.path">/</stringProp>
-            <stringProp name="HTTPSampler.encoded_path">/</stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <stringProp name="WebServiceSampler.proxy_host"></stringProp>
-            <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <stringProp name="WebServiceSampler.proxy_port"></stringProp>
-            <intProp name="HTTPSampler.port">80</intProp>
-            <stringProp name="WebServiceSampler.use_proxy">false</stringProp>
-            <stringProp name="Soap.Action"></stringProp>
-            <stringProp name="WebServiceSampler.xml_data_file"></stringProp>
-            <stringProp name="WebServiceSampler.read_response">false</stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
-            <stringProp name="WebServiceSampler.memory_cache">false</stringProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSamper.xml_data"></stringProp>
-          </WebServiceSampler>
-          <hashTree/>
           <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Tomcat Access Log Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="AccessLogSampler.parser_class_name">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
-            <boolProp name="HTTPSampler.image_parser">false</boolProp>
-            <intProp name="HTTPSampler.port">80</intProp>
             <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
             <stringProp name="portString"></stringProp>
             <stringProp name="logFile"></stringProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="domain"></stringProp>
             <stringProp name="AccessLogSampler.generator_class_name">org.apache.jmeter.protocol.http.util.accesslog.StandardGenerator</stringProp>
             <boolProp name="imageParsing">false</boolProp>
-            <stringProp name="AccessLogSampler.log_file"></stringProp>
           </AccessLogSampler>
           <hashTree/>
         </hashTree>
