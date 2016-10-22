@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.1">
+<jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1-SNAPSHOT.20161022">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan for 2.5.1" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Generator2.13" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -11,21 +11,6 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
-        </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1337360547000</longProp>
-        <longProp name="ThreadGroup.end_time">1337360547000</longProp>
-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="ThreadGroup.duration"></stringProp>
-        <stringProp name="ThreadGroup.delay"></stringProp>
-      </SetupThreadGroup>
-      <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -34,8 +19,8 @@
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1337360522000</longProp>
-        <longProp name="ThreadGroup.end_time">1337360522000</longProp>
+        <longProp name="ThreadGroup.start_time">1457798199000</longProp>
+        <longProp name="ThreadGroup.end_time">1457798199000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -43,6 +28,10 @@
       <hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Controllers" enabled="true"/>
         <hashTree>
+          <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Critical Section Controller" enabled="true">
+            <stringProp name="CriticalSectionController.lockName">global_lock</stringProp>
+          </CriticalSectionController>
+          <hashTree/>
           <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
             <stringProp name="ForeachController.inputVal"></stringProp>
             <stringProp name="ForeachController.returnVal"></stringProp>
@@ -101,6 +90,7 @@
           </ThroughputController>
           <hashTree/>
           <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Transaction Controller" enabled="true">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
             <boolProp name="TransactionController.parent">false</boolProp>
           </TransactionController>
           <hashTree/>
@@ -111,17 +101,6 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Config Elements" enabled="true"/>
         <hashTree>
-          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-            <stringProp name="delimiter">,</stringProp>
-            <stringProp name="fileEncoding"></stringProp>
-            <stringProp name="filename"></stringProp>
-            <boolProp name="quotedData">false</boolProp>
-            <boolProp name="recycle">true</boolProp>
-            <stringProp name="shareMode">All threads</stringProp>
-            <boolProp name="stopThread">false</boolProp>
-            <stringProp name="variableNames"></stringProp>
-          </CSVDataSet>
-          <hashTree/>
           <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
             <stringProp name="CounterConfig.start"></stringProp>
             <stringProp name="CounterConfig.end"></stringProp>
@@ -130,6 +109,23 @@
             <stringProp name="CounterConfig.format"></stringProp>
             <boolProp name="CounterConfig.per_user">false</boolProp>
           </CounterConfig>
+          <hashTree/>
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
+            <stringProp name="delimiter">,</stringProp>
+            <stringProp name="fileEncoding"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <boolProp name="quotedData">false</boolProp>
+            <boolProp name="recycle">true</boolProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+            <boolProp name="stopThread">false</boolProp>
+            <stringProp name="variableNames"></stringProp>
+          </CSVDataSet>
+          <hashTree/>
+          <DNSCacheManager guiclass="DNSCachePanel" testclass="DNSCacheManager" testname="DNS Cache Manager" enabled="true">
+            <collectionProp name="DNSCacheManager.servers"/>
+            <boolProp name="DNSCacheManager.clearEachIteration">false</boolProp>
+            <boolProp name="DNSCacheManager.isCustomResolver">false</boolProp>
+          </DNSCacheManager>
           <hashTree/>
           <ConfigTestElement guiclass="FtpConfigGui" testclass="ConfigTestElement" testname="FTP Request Defaults" enabled="true">
             <stringProp name="FTPSampler.server"></stringProp>
@@ -173,21 +169,6 @@
             <stringProp name="HTTPSampler.path"></stringProp>
             <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
           </ConfigTestElement>
-          <hashTree/>
-          <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
-            <boolProp name="autocommit">true</boolProp>
-            <stringProp name="checkQuery">Select 1</stringProp>
-            <stringProp name="connectionAge">5000</stringProp>
-            <stringProp name="dataSource"></stringProp>
-            <stringProp name="dbUrl"></stringProp>
-            <stringProp name="driver"></stringProp>
-            <boolProp name="keepAlive">true</boolProp>
-            <stringProp name="password"></stringProp>
-            <stringProp name="poolMax">10</stringProp>
-            <stringProp name="timeout">10000</stringProp>
-            <stringProp name="trimInterval">60000</stringProp>
-            <stringProp name="username"></stringProp>
-          </JDBCDataSource>
           <hashTree/>
           <JavaConfig guiclass="JavaConfigGui" testclass="JavaConfig" testname="Java Request Defaults" enabled="true">
             <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
@@ -237,6 +218,29 @@
             <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
           </JavaConfig>
           <hashTree/>
+          <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
+            <boolProp name="autocommit">true</boolProp>
+            <stringProp name="checkQuery">Select 1</stringProp>
+            <stringProp name="connectionAge">5000</stringProp>
+            <stringProp name="dataSource"></stringProp>
+            <stringProp name="dbUrl"></stringProp>
+            <stringProp name="driver"></stringProp>
+            <boolProp name="keepAlive">true</boolProp>
+            <stringProp name="password"></stringProp>
+            <stringProp name="poolMax">10</stringProp>
+            <stringProp name="timeout">10000</stringProp>
+            <stringProp name="transactionIsolation">DEFAULT</stringProp>
+            <stringProp name="trimInterval">60000</stringProp>
+            <stringProp name="username"></stringProp>
+          </JDBCDataSource>
+          <hashTree/>
+          <KeystoreConfig guiclass="TestBeanGUI" testclass="KeystoreConfig" testname="Keystore Configuration" enabled="true">
+            <stringProp name="clientCertAliasVarName"></stringProp>
+            <stringProp name="endIndex"></stringProp>
+            <stringProp name="preload">True</stringProp>
+            <stringProp name="startIndex"></stringProp>
+          </KeystoreConfig>
+          <hashTree/>
           <ConfigTestElement guiclass="LdapExtConfigGui" testclass="ConfigTestElement" testname="LDAP Extended Request Defaults" enabled="true">
             <stringProp name="servername"></stringProp>
             <stringProp name="port"></stringProp>
@@ -275,6 +279,25 @@
             <stringProp name="ConfigTestElement.password"></stringProp>
           </ConfigTestElement>
           <hashTree/>
+          <MongoSourceElement guiclass="TestBeanGUI" testclass="MongoSourceElement" testname="MongoDB Source Config" enabled="true">
+            <boolProp name="autoConnectRetry">false</boolProp>
+            <intProp name="connectTimeout">0</intProp>
+            <stringProp name="connection"></stringProp>
+            <intProp name="connectionsPerHost">10</intProp>
+            <boolProp name="continueOnInsertError">false</boolProp>
+            <boolProp name="fsync">false</boolProp>
+            <longProp name="maxAutoConnectRetryTime">0</longProp>
+            <intProp name="maxWaitTime">120000</intProp>
+            <boolProp name="safe">false</boolProp>
+            <boolProp name="socketKeepAlive">false</boolProp>
+            <intProp name="socketTimeout">0</intProp>
+            <stringProp name="source"></stringProp>
+            <intProp name="threadsAllowedToBlockForConnectionMultiplier">5</intProp>
+            <boolProp name="waitForJournaling">false</boolProp>
+            <intProp name="writeOperationNumberOfServers">0</intProp>
+            <intProp name="writeOperationTimeout">0</intProp>
+          </MongoSourceElement>
+          <hashTree/>
           <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Variable" enabled="true">
             <stringProp name="maximumValue"></stringProp>
             <stringProp name="minimumValue">1</stringProp>
@@ -293,6 +316,7 @@
             <boolProp name="TCPSampler.nodelay">false</boolProp>
             <stringProp name="TCPSampler.timeout"></stringProp>
             <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
           </ConfigTestElement>
           <hashTree/>
           <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -302,13 +326,6 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Timers" enabled="true"/>
         <hashTree>
-          <BSFTimer guiclass="TestBeanGUI" testclass="BSFTimer" testname="BSF Timer" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </BSFTimer>
-          <hashTree/>
           <BeanShellTimer guiclass="TestBeanGUI" testclass="BeanShellTimer" testname="BeanShell Timer" enabled="true">
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -316,8 +333,15 @@
             <stringProp name="script"></stringProp>
           </BeanShellTimer>
           <hashTree/>
+          <BSFTimer guiclass="TestBeanGUI" testclass="BSFTimer" testname="BSF Timer" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFTimer>
+          <hashTree/>
           <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-            <stringProp name="calcMode">this thread only</stringProp>
+            <intProp name="calcMode">0</intProp>
             <doubleProp>
               <name>throughput</name>
               <value>0.0</value>
@@ -335,14 +359,21 @@
           </GaussianRandomTimer>
           <hashTree/>
           <JSR223Timer guiclass="TestBeanGUI" testclass="JSR223Timer" testname="JSR223 Timer" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
             <stringProp name="scriptLanguage"></stringProp>
           </JSR223Timer>
           <hashTree/>
+          <PoissonRandomTimer guiclass="PoissonRandomTimerGui" testclass="PoissonRandomTimer" testname="Poisson Random Timer" enabled="true">
+            <stringProp name="ConstantTimer.delay">300</stringProp>
+            <stringProp name="RandomTimer.range">100</stringProp>
+          </PoissonRandomTimer>
+          <hashTree/>
           <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Synchronizing Timer" enabled="true">
             <intProp name="groupSize">0</intProp>
+            <longProp name="timeoutInMs">0</longProp>
           </SyncTimer>
           <hashTree/>
           <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Uniform Random Timer" enabled="true">
@@ -353,19 +384,19 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Pre Processors" enabled="true"/>
         <hashTree>
-          <BSFPreProcessor guiclass="TestBeanGUI" testclass="BSFPreProcessor" testname="BSF PreProcessor" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </BSFPreProcessor>
-          <hashTree/>
           <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="script"></stringProp>
           </BeanShellPreProcessor>
+          <hashTree/>
+          <BSFPreProcessor guiclass="TestBeanGUI" testclass="BSFPreProcessor" testname="BSF PreProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFPreProcessor>
           <hashTree/>
           <AnchorModifier guiclass="AnchorModifierGui" testclass="AnchorModifier" testname="HTML Link Parser" enabled="true"/>
           <hashTree/>
@@ -375,14 +406,34 @@
             <boolProp name="path_extension_no_equals">false</boolProp>
             <boolProp name="path_extension_no_questionmark">false</boolProp>
             <boolProp name="cache_value">false</boolProp>
+            <boolProp name="encode">false</boolProp>
           </URLRewritingModifier>
           <hashTree/>
+          <JDBCPreProcessor guiclass="TestBeanGUI" testclass="JDBCPreProcessor" testname="JDBC PreProcessor" enabled="true">
+            <stringProp name="dataSource"></stringProp>
+            <stringProp name="query"></stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCPreProcessor>
+          <hashTree/>
           <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
             <stringProp name="scriptLanguage"></stringProp>
           </JSR223PreProcessor>
+          <hashTree/>
+          <RegExUserParameters guiclass="RegExUserParametersGui" testclass="RegExUserParameters" testname="RegEx User Parameters" enabled="true">
+            <stringProp name="RegExUserParameters.regex_ref_name"></stringProp>
+            <stringProp name="RegExUserParameters.param_names_gr_nr"></stringProp>
+            <stringProp name="RegExUserParameters.param_values_gr_nr"></stringProp>
+          </RegExUserParameters>
           <hashTree/>
           <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
             <collectionProp name="UserParameters.names"/>
@@ -395,6 +446,17 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Samplers" enabled="true"/>
         <hashTree>
+          <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Access Log Sampler" enabled="true">
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="domain"></stringProp>
+            <boolProp name="imageParsing">false</boolProp>
+            <stringProp name="logFile"></stringProp>
+            <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
+            <stringProp name="portString"></stringProp>
+          </AccessLogSampler>
+          <hashTree/>
           <AjpSampler guiclass="AjpSamplerGui" testclass="AjpSampler" testname="AJP/1.3 Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
@@ -415,30 +477,19 @@
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </AjpSampler>
           <hashTree/>
-          <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Access Log Sampler" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="domain"></stringProp>
-            <boolProp name="imageParsing">false</boolProp>
-            <stringProp name="logFile"></stringProp>
-            <stringProp name="parserClassName">org.apache.jmeter.protocol.http.util.accesslog.TCLogParser</stringProp>
-            <stringProp name="portString"></stringProp>
-          </AccessLogSampler>
-          <hashTree/>
-          <BSFSampler guiclass="BSFSamplerGui" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
-            <stringProp name="BSFSampler.filename"></stringProp>
-            <stringProp name="BSFSampler.language">beanbasic</stringProp>
-            <stringProp name="BSFSampler.parameters"></stringProp>
-            <stringProp name="BSFSampler.query"></stringProp>
-          </BSFSampler>
-          <hashTree/>
           <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BeanShell Sampler" enabled="true">
             <stringProp name="BeanShellSampler.query"></stringProp>
             <stringProp name="BeanShellSampler.filename"></stringProp>
             <stringProp name="BeanShellSampler.parameters"></stringProp>
             <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
           </BeanShellSampler>
+          <hashTree/>
+          <BSFSampler guiclass="TestBeanGUI" testclass="BSFSampler" testname="BSF Sampler" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFSampler>
           <hashTree/>
           <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
             <boolProp name="displayJMeterProperties">false</boolProp>
@@ -478,89 +529,6 @@
             <boolProp name="HTTPSampler.monitor">false</boolProp>
             <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           </HTTPSamplerProxy>
-          <hashTree/>
-          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
-            <stringProp name="dataSource"></stringProp>
-            <stringProp name="query"></stringProp>
-            <stringProp name="queryArguments"></stringProp>
-            <stringProp name="queryArgumentsTypes"></stringProp>
-            <stringProp name="queryType">Select Statement</stringProp>
-            <stringProp name="resultVariable"></stringProp>
-            <stringProp name="variableNames"></stringProp>
-          </JDBCSampler>
-          <hashTree/>
-          <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS Point-to-Point" enabled="true">
-            <stringProp name="JMSSampler.queueconnectionfactory"></stringProp>
-            <stringProp name="JMSSampler.SendQueue"></stringProp>
-            <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
-            <boolProp name="JMSSampler.isFireAndForget">true</boolProp>
-            <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
-            <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
-            <stringProp name="JMSSampler.timeout"></stringProp>
-            <stringProp name="HTTPSamper.xml_data"></stringProp>
-            <stringProp name="JMSSampler.initialContextFactory"></stringProp>
-            <stringProp name="JMSSampler.contextProviderUrl"></stringProp>
-            <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-          </JMSSampler>
-          <hashTree/>
-          <PublisherSampler guiclass="JMSPublisherGui" testclass="PublisherSampler" testname="JMS Publisher" enabled="true">
-            <stringProp name="jms.jndi_properties">false</stringProp>
-            <stringProp name="jms.initial_context_factory"></stringProp>
-            <stringProp name="jms.provider_url"></stringProp>
-            <stringProp name="jms.connection_factory"></stringProp>
-            <stringProp name="jms.topic"></stringProp>
-            <stringProp name="jms.security_principle"></stringProp>
-            <stringProp name="jms.security_credentials"></stringProp>
-            <stringProp name="jms.text_message"></stringProp>
-            <stringProp name="jms.input_file"></stringProp>
-            <stringProp name="jms.random_path"></stringProp>
-            <stringProp name="jms.config_choice">jms_use_text</stringProp>
-            <stringProp name="jms.config_msg_type">jms_text_message</stringProp>
-            <stringProp name="jms.iterations">1</stringProp>
-            <boolProp name="jms.authenticate">false</boolProp>
-          </PublisherSampler>
-          <hashTree/>
-          <SubscriberSampler guiclass="JMSSubscriberGui" testclass="SubscriberSampler" testname="JMS Subscriber" enabled="true">
-            <stringProp name="jms.jndi_properties">false</stringProp>
-            <stringProp name="jms.initial_context_factory"></stringProp>
-            <stringProp name="jms.provider_url"></stringProp>
-            <stringProp name="jms.connection_factory"></stringProp>
-            <stringProp name="jms.topic"></stringProp>
-            <stringProp name="jms.security_principle"></stringProp>
-            <stringProp name="jms.security_credentials"></stringProp>
-            <boolProp name="jms.authenticate">false</boolProp>
-            <stringProp name="jms.iterations">1</stringProp>
-            <stringProp name="jms.read_response">true</stringProp>
-            <stringProp name="jms.client_choice">jms_subscriber_receive</stringProp>
-          </SubscriberSampler>
-          <hashTree/>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </JSR223Sampler>
-          <hashTree/>
-          <JUnitSampler guiclass="JUnitTestSamplerGui" testclass="JUnitSampler" testname="JUnit Request" enabled="true">
-            <stringProp name="junitSampler.classname">test.RerunTest</stringProp>
-            <stringProp name="junitsampler.constructorstring"></stringProp>
-            <stringProp name="junitsampler.method">testRerun</stringProp>
-            <stringProp name="junitsampler.pkg.filter"></stringProp>
-            <stringProp name="junitsampler.success">Test successful</stringProp>
-            <stringProp name="junitsampler.success.code">1000</stringProp>
-            <stringProp name="junitsampler.failure">Test failed</stringProp>
-            <stringProp name="junitsampler.failure.code">0001</stringProp>
-            <stringProp name="junitsampler.error">An unexpected error occured</stringProp>
-            <stringProp name="junitsampler.error.code">9999</stringProp>
-            <stringProp name="junitsampler.exec.setup">false</stringProp>
-            <stringProp name="junitsampler.append.error">false</stringProp>
-            <stringProp name="junitsampler.append.exception">false</stringProp>
-          </JUnitSampler>
           <hashTree/>
           <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java Request" enabled="true">
             <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
@@ -610,6 +578,97 @@
             <stringProp name="classname">org.apache.jmeter.protocol.java.test.JavaTest</stringProp>
           </JavaSampler>
           <hashTree/>
+          <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
+            <stringProp name="dataSource"></stringProp>
+            <stringProp name="query"></stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCSampler>
+          <hashTree/>
+          <JMSSampler guiclass="JMSSamplerGui" testclass="JMSSampler" testname="JMS Point-to-Point" enabled="true">
+            <stringProp name="JMSSampler.queueconnectionfactory"></stringProp>
+            <stringProp name="JMSSampler.SendQueue"></stringProp>
+            <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+            <boolProp name="JMSSampler.isFireAndForget">true</boolProp>
+            <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+            <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+            <stringProp name="JMSSampler.timeout"></stringProp>
+            <stringProp name="HTTPSamper.xml_data"></stringProp>
+            <stringProp name="JMSSampler.initialContextFactory"></stringProp>
+            <stringProp name="JMSSampler.contextProviderUrl"></stringProp>
+            <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <elementProp name="arguments" elementType="JMSProperties">
+              <collectionProp name="JMSProperties.properties"/>
+            </elementProp>
+          </JMSSampler>
+          <hashTree/>
+          <PublisherSampler guiclass="JMSPublisherGui" testclass="PublisherSampler" testname="JMS Publisher" enabled="true">
+            <stringProp name="jms.jndi_properties">false</stringProp>
+            <stringProp name="jms.initial_context_factory"></stringProp>
+            <stringProp name="jms.provider_url"></stringProp>
+            <stringProp name="jms.connection_factory"></stringProp>
+            <stringProp name="jms.topic"></stringProp>
+            <stringProp name="jms.expiration"></stringProp>
+            <stringProp name="jms.priority"></stringProp>
+            <stringProp name="jms.security_principle"></stringProp>
+            <stringProp name="jms.security_credentials"></stringProp>
+            <stringProp name="jms.text_message"></stringProp>
+            <stringProp name="jms.input_file"></stringProp>
+            <stringProp name="jms.random_path"></stringProp>
+            <stringProp name="jms.config_choice">jms_use_text</stringProp>
+            <stringProp name="jms.config_msg_type">jms_text_message</stringProp>
+            <stringProp name="jms.iterations">1</stringProp>
+            <boolProp name="jms.authenticate">false</boolProp>
+            <elementProp name="jms.jmsProperties" elementType="JMSProperties">
+              <collectionProp name="JMSProperties.properties"/>
+            </elementProp>
+          </PublisherSampler>
+          <hashTree/>
+          <SubscriberSampler guiclass="JMSSubscriberGui" testclass="SubscriberSampler" testname="JMS Subscriber" enabled="true">
+            <stringProp name="jms.jndi_properties">false</stringProp>
+            <stringProp name="jms.initial_context_factory"></stringProp>
+            <stringProp name="jms.provider_url"></stringProp>
+            <stringProp name="jms.connection_factory"></stringProp>
+            <stringProp name="jms.topic"></stringProp>
+            <stringProp name="jms.security_principle"></stringProp>
+            <stringProp name="jms.security_credentials"></stringProp>
+            <boolProp name="jms.authenticate">false</boolProp>
+            <stringProp name="jms.iterations">1</stringProp>
+            <stringProp name="jms.read_response">true</stringProp>
+            <stringProp name="jms.client_choice">jms_subscriber_receive</stringProp>
+          </SubscriberSampler>
+          <hashTree/>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+          <JUnitSampler guiclass="JUnitTestSamplerGui" testclass="JUnitSampler" testname="JUnit Request" enabled="true">
+            <stringProp name="junitSampler.classname">test.RerunTest</stringProp>
+            <stringProp name="junitsampler.constructorstring"></stringProp>
+            <stringProp name="junitsampler.method">testRerun</stringProp>
+            <stringProp name="junitsampler.pkg.filter"></stringProp>
+            <stringProp name="junitsampler.success">Test successful</stringProp>
+            <stringProp name="junitsampler.success.code">1000</stringProp>
+            <stringProp name="junitsampler.failure">Test failed</stringProp>
+            <stringProp name="junitsampler.failure.code">0001</stringProp>
+            <stringProp name="junitsampler.error">An unexpected error occured</stringProp>
+            <stringProp name="junitsampler.error.code">9999</stringProp>
+            <stringProp name="junitsampler.exec.setup">false</stringProp>
+            <stringProp name="junitsampler.append.error">false</stringProp>
+            <stringProp name="junitsampler.append.exception">false</stringProp>
+          </JUnitSampler>
+          <hashTree/>
           <LDAPExtSampler guiclass="LdapExtTestSamplerGui" testclass="LDAPExtSampler" testname="LDAP Extended Request" enabled="true">
             <stringProp name="servername"></stringProp>
             <stringProp name="port"></stringProp>
@@ -648,11 +707,11 @@
           <MailReaderSampler guiclass="MailReaderSamplerGui" testclass="MailReaderSampler" testname="Mail Reader Sampler" enabled="true">
             <stringProp name="host_type">pop3</stringProp>
             <stringProp name="folder">INBOX</stringProp>
+            <intProp name="num_messages">-1</intProp>
+            <boolProp name="delete">false</boolProp>
             <stringProp name="host"></stringProp>
             <stringProp name="username"></stringProp>
             <stringProp name="password"></stringProp>
-            <intProp name="num_messages">-1</intProp>
-            <boolProp name="delete">false</boolProp>
             <stringProp name="SMTPSampler.useSSL">false</stringProp>
             <stringProp name="SMTPSampler.useStartTLS">false</stringProp>
             <stringProp name="SMTPSampler.trustAllCerts">false</stringProp>
@@ -660,6 +719,27 @@
             <stringProp name="SMTPSampler.useLocalTrustStore">false</stringProp>
             <stringProp name="SMTPSampler.trustStoreToUse"></stringProp>
           </MailReaderSampler>
+          <hashTree/>
+          <MongoScriptSampler guiclass="TestBeanGUI" testclass="MongoScriptSampler" testname="MongoDB Script" enabled="true">
+            <stringProp name="database"></stringProp>
+            <stringProp name="password"></stringProp>
+            <stringProp name="source"></stringProp>
+            <stringProp name="username"></stringProp>
+            <stringProp name="script"></stringProp>
+          </MongoScriptSampler>
+          <hashTree/>
+          <SystemSampler guiclass="SystemSamplerGui" testclass="SystemSampler" testname="OS Process Sampler" enabled="true">
+            <boolProp name="SystemSampler.checkReturnCode">false</boolProp>
+            <stringProp name="SystemSampler.expectedReturnCode">0</stringProp>
+            <stringProp name="SystemSampler.command"></stringProp>
+            <elementProp name="SystemSampler.arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <elementProp name="SystemSampler.environment" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="SystemSampler.directory"></stringProp>
+          </SystemSampler>
           <hashTree/>
           <SmtpSampler guiclass="SmtpSamplerGui" testclass="SmtpSampler" testname="SMTP Sampler" enabled="true">
             <stringProp name="SMTPSampler.server"></stringProp>
@@ -710,6 +790,7 @@
             <boolProp name="TCPSampler.nodelay">false</boolProp>
             <stringProp name="TCPSampler.timeout"></stringProp>
             <stringProp name="TCPSampler.request"></stringProp>
+            <boolProp name="TCPSampler.closeConnection">false</boolProp>
             <stringProp name="ConfigTestElement.username"></stringProp>
             <stringProp name="ConfigTestElement.password"></stringProp>
           </TCPSampler>
@@ -720,38 +801,9 @@
             <stringProp name="ActionProcessor.duration"></stringProp>
           </TestAction>
           <hashTree/>
-          <WebServiceSampler guiclass="WebServiceSamplerGui" testclass="WebServiceSampler" testname="WebService(SOAP) Request" enabled="true">
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-              <collectionProp name="Arguments.arguments"/>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain"></stringProp>
-            <stringProp name="HTTPSampler.port"></stringProp>
-            <stringProp name="HTTPSampler.protocol">http</stringProp>
-            <stringProp name="HTTPSampler.path"></stringProp>
-            <stringProp name="WebserviceSampler.wsdl_url"></stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <stringProp name="Soap.Action"></stringProp>
-            <stringProp name="HTTPSamper.xml_data"></stringProp>
-            <stringProp name="WebServiceSampler.xml_data_file"></stringProp>
-            <stringProp name="WebServiceSampler.xml_path_loc"></stringProp>
-            <stringProp name="WebserviceSampler.timeout"></stringProp>
-            <stringProp name="WebServiceSampler.memory_cache">true</stringProp>
-            <stringProp name="WebServiceSampler.read_response">false</stringProp>
-            <stringProp name="WebServiceSampler.use_proxy">false</stringProp>
-            <stringProp name="WebServiceSampler.proxy_host"></stringProp>
-            <stringProp name="WebServiceSampler.proxy_port"></stringProp>
-          </WebServiceSampler>
-          <hashTree/>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Post Processors" enabled="true"/>
         <hashTree>
-          <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="BSF PostProcessor" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </BSFPostProcessor>
-          <hashTree/>
           <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor" enabled="true">
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -759,9 +811,43 @@
             <stringProp name="script"></stringProp>
           </BeanShellPostProcessor>
           <hashTree/>
-          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true"/>
+          <BSFPostProcessor guiclass="TestBeanGUI" testclass="BSFPostProcessor" testname="BSF PostProcessor" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFPostProcessor>
+          <hashTree/>
+          <HtmlExtractor guiclass="HtmlExtractorGui" testclass="HtmlExtractor" testname="CSS/JQuery Extractor" enabled="true">
+            <stringProp name="HtmlExtractor.refname"></stringProp>
+            <stringProp name="HtmlExtractor.expr"></stringProp>
+            <stringProp name="HtmlExtractor.attribute"></stringProp>
+            <stringProp name="HtmlExtractor.default"></stringProp>
+            <stringProp name="HtmlExtractor.match_number"></stringProp>
+            <stringProp name="HtmlExtractor.extractor_impl"></stringProp>
+          </HtmlExtractor>
+          <hashTree/>
+          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySamplerProperties">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugPostProcessor>
+          <hashTree/>
+          <JDBCPostProcessor guiclass="TestBeanGUI" testclass="JDBCPostProcessor" testname="JDBC PostProcessor" enabled="true">
+            <stringProp name="dataSource"></stringProp>
+            <stringProp name="query"></stringProp>
+            <stringProp name="queryArguments"></stringProp>
+            <stringProp name="queryArgumentsTypes"></stringProp>
+            <stringProp name="queryTimeout"></stringProp>
+            <stringProp name="queryType">Select Statement</stringProp>
+            <stringProp name="resultSetHandler">Store as String</stringProp>
+            <stringProp name="resultVariable"></stringProp>
+            <stringProp name="variableNames"></stringProp>
+          </JDBCPostProcessor>
           <hashTree/>
           <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -793,19 +879,19 @@
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Assertions" enabled="true"/>
         <hashTree>
-          <BSFAssertion guiclass="TestBeanGUI" testclass="BSFAssertion" testname="BSF Assertion" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </BSFAssertion>
-          <hashTree/>
           <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
             <stringProp name="BeanShellAssertion.query"></stringProp>
             <stringProp name="BeanShellAssertion.filename"></stringProp>
             <stringProp name="BeanShellAssertion.parameters"></stringProp>
             <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
           </BeanShellAssertion>
+          <hashTree/>
+          <BSFAssertion guiclass="TestBeanGUI" testclass="BSFAssertion" testname="BSF Assertion" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFAssertion>
           <hashTree/>
           <CompareAssertion guiclass="TestBeanGUI" testclass="CompareAssertion" testname="Compare Assertion" enabled="true">
             <boolProp name="compareContent">true</boolProp>
@@ -827,6 +913,7 @@
           </HTMLAssertion>
           <hashTree/>
           <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -841,8 +928,14 @@
             <collectionProp name="Asserion.test_strings"/>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
+            <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
+          <hashTree/>
+          <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
+            <stringProp name="Assertion.test_field">SizeAssertion.response_network_size</stringProp>
+            <stringProp name="SizeAssertion.size"></stringProp>
+            <intProp name="SizeAssertion.operator">1</intProp>
+          </SizeAssertion>
           <hashTree/>
           <SMIMEAssertion guiclass="SMIMEAssertionGui" testclass="SMIMEAssertion" testname="SMIME Assertion" enabled="true">
             <boolProp name="SMIMEAssert.verifySignature">false</boolProp>
@@ -857,12 +950,6 @@
             <boolProp name="SMIMEAssert.signerCheckByFile">false</boolProp>
             <stringProp name="SMIMEAssert.messagePosition"></stringProp>
           </SMIMEAssertion>
-          <hashTree/>
-          <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="Size Assertion" enabled="true">
-            <stringProp name="Assertion.test_field">SizeAssertion.response_network_size</stringProp>
-            <stringProp name="SizeAssertion.size"></stringProp>
-            <intProp name="SizeAssertion.operator">1</intProp>
-          </SizeAssertion>
           <hashTree/>
           <XMLAssertion guiclass="XMLAssertionGui" testclass="XMLAssertion" testname="XML Assertion" enabled="true"/>
           <hashTree/>
@@ -901,7 +988,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -909,6 +996,7 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -933,7 +1021,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -941,6 +1029,7 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -965,7 +1054,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -973,17 +1062,54 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
-          <BSFListener guiclass="TestBeanGUI" testclass="BSFListener" testname="BSF Listener" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script"></stringProp>
-            <stringProp name="scriptLanguage"></stringProp>
-          </BSFListener>
+          <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
+            <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="graphiteMetricsSender" elementType="Argument">
+                  <stringProp name="Argument.name">graphiteMetricsSender</stringProp>
+                  <stringProp name="Argument.value">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="graphiteHost" elementType="Argument">
+                  <stringProp name="Argument.name">graphiteHost</stringProp>
+                  <stringProp name="Argument.value"></stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="graphitePort" elementType="Argument">
+                  <stringProp name="Argument.name">graphitePort</stringProp>
+                  <stringProp name="Argument.value">2003</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="rootMetricsPrefix" elementType="Argument">
+                  <stringProp name="Argument.name">rootMetricsPrefix</stringProp>
+                  <stringProp name="Argument.value">jmeter.</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="summaryOnly" elementType="Argument">
+                  <stringProp name="Argument.name">summaryOnly</stringProp>
+                  <stringProp name="Argument.value">true</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="samplersList" elementType="Argument">
+                  <stringProp name="Argument.name">samplersList</stringProp>
+                  <stringProp name="Argument.value"></stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+                <elementProp name="percentiles" elementType="Argument">
+                  <stringProp name="Argument.name">percentiles</stringProp>
+                  <stringProp name="Argument.value">90;95;99</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="classname">org.apache.jmeter.visualizers.backend.graphite.GraphiteBackendListenerClient</stringProp>
+          </BackendListener>
           <hashTree/>
           <BeanShellListener guiclass="TestBeanGUI" testclass="BeanShellListener" testname="BeanShell Listener" enabled="true">
             <stringProp name="filename"></stringProp>
@@ -991,6 +1117,13 @@
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="script"></stringProp>
           </BeanShellListener>
+          <hashTree/>
+          <BSFListener guiclass="TestBeanGUI" testclass="BSFListener" testname="BSF Listener" enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage"></stringProp>
+          </BSFListener>
           <hashTree/>
           <ResultCollector guiclass="ComparisonVisualizer" testclass="ResultCollector" testname="Comparison Assertion Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -1011,7 +1144,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1019,12 +1152,13 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector guiclass="DistributionGraphVisualizer" testclass="ResultCollector" testname="Distribution Graph (alpha)" enabled="true">
+          <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Distribution Graph (alpha)" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
               <name>saveConfig</name>
@@ -1043,7 +1177,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1051,44 +1185,13 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
           <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
-          <hashTree/>
-          <ResultCollector guiclass="GraphAccumVisualizer" testclass="ResultCollector" testname="Graph Full Results" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>true</xml>
-                <fieldNames>false</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
           <hashTree/>
           <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -1109,7 +1212,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1117,12 +1220,14 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
           <JSR223Listener guiclass="TestBeanGUI" testclass="JSR223Listener" testname="JSR223 Listener" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script"></stringProp>
@@ -1148,7 +1253,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1156,6 +1261,7 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <elementProp name="MailerResultCollector.mailer_model" elementType="MailerModel">
@@ -1189,7 +1295,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1197,6 +1303,40 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -1229,7 +1369,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1237,12 +1377,13 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
           </ResultCollector>
           <hashTree/>
-          <ResultCollector guiclass="SplineVisualizer" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
+          <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Spline Visualizer" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
               <name>saveConfig</name>
@@ -1261,7 +1402,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1269,6 +1410,7 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -1293,7 +1435,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1301,38 +1443,7 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
-              </value>
-            </objProp>
-            <stringProp name="filename"></stringProp>
-          </ResultCollector>
-          <hashTree/>
-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-            <boolProp name="ResultCollector.error_logging">false</boolProp>
-            <objProp>
-              <name>saveConfig</name>
-              <value class="SampleSaveConfiguration">
-                <time>true</time>
-                <latency>true</latency>
-                <timestamp>true</timestamp>
-                <success>true</success>
-                <label>true</label>
-                <code>true</code>
-                <message>true</message>
-                <threadName>true</threadName>
-                <dataType>true</dataType>
-                <encoding>false</encoding>
-                <assertions>true</assertions>
-                <subresults>true</subresults>
-                <responseData>false</responseData>
-                <samplerData>false</samplerData>
-                <xml>true</xml>
-                <fieldNames>false</fieldNames>
-                <responseHeaders>false</responseHeaders>
-                <requestHeaders>false</requestHeaders>
-                <responseDataOnError>false</responseDataOnError>
-                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-                <assertionsResultsToSave>0</assertionsResultsToSave>
-                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -1357,7 +1468,7 @@
                 <subresults>true</subresults>
                 <responseData>false</responseData>
                 <samplerData>false</samplerData>
-                <xml>true</xml>
+                <xml>false</xml>
                 <fieldNames>false</fieldNames>
                 <responseHeaders>false</responseHeaders>
                 <requestHeaders>false</requestHeaders>
@@ -1365,6 +1476,40 @@
                 <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
                 <assertionsResultsToSave>0</assertionsResultsToSave>
                 <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
               </value>
             </objProp>
             <stringProp name="filename"></stringProp>
@@ -1372,23 +1517,6 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
-        </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1337360555000</longProp>
-        <longProp name="ThreadGroup.end_time">1337360555000</longProp>
-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
-        <stringProp name="ThreadGroup.duration"></stringProp>
-        <stringProp name="ThreadGroup.delay"></stringProp>
-      </PostThreadGroup>
-      <hashTree/>
-      <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Test Fragment" enabled="true"/>
-      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
