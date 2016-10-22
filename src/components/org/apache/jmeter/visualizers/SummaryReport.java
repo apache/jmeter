@@ -132,8 +132,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Min
             null, // Max
             new DecimalFormat("#0.00"), // Std Dev. //$NON-NLS-1$
-            new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
-            new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
+            new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
+            new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00"),  // kB/sec //$NON-NLS-1$
             new DecimalFormat("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new DecimalFormat("#.0"),    // avg. pageSize //$NON-NLS-1$
