@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -118,7 +119,11 @@ public class TestSaveService extends JMeterTestCase {
         
         boolean failed = false;
 
-        FileStats orig = computeFileStats(new BufferedReader(new FileReader(testFile)));
+        final FileStats orig;
+        try (FileReader fileReader = new FileReader(testFile);
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            orig = computeFileStats(bufferedReader);
+        }
 
         HashTree tree = SaveService.loadTree(testFile);
 
@@ -129,9 +134,12 @@ public class TestSaveService extends JMeterTestCase {
             out.close(); // Make sure all the data is flushed out
         }
 
-        ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-        
-        FileStats output = computeFileStats(new BufferedReader(new InputStreamReader(ins)));
+        final FileStats output;
+        try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
+                Reader insReader = new InputStreamReader(ins);
+                BufferedReader bufferedReader = new BufferedReader(insReader)) {
+            output = computeFileStats(bufferedReader);
+        }
         // We only check the length of the result. Comparing the
         // actual result (out.toByteArray==original) will usually
         // fail, because the order of the properties within each
@@ -174,20 +182,16 @@ public class TestSaveService extends JMeterTestCase {
      * different attributes/attribute lengths.
      */
     private FileStats computeFileStats(BufferedReader br) throws Exception {
-        try {
-            int length=0;
-            int lines=0;
-            String line;
-            while((line=br.readLine()) != null) {
-                lines++;
-                if (!line.startsWith("<jmeterTestPlan")) {
-                    length += line.length();
-                }
+        int length = 0;
+        int lines = 0;
+        String line;
+        while ((line = br.readLine()) != null) {
+            lines++;
+            if (!line.startsWith("<jmeterTestPlan")) {
+                length += line.length();
             }
-            return new FileStats(length, lines);
-        } finally {
-            br.close();
         }
+        return new FileStats(length, lines);
     }
 
     @Test
