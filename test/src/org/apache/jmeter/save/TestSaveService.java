@@ -27,8 +27,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
@@ -103,11 +105,13 @@ public class TestSaveService extends JMeterTestCase {
 
         for (final String fileName : FILES) {
             final File testFile = findTestFile("testfiles/" + fileName);
-            failed |= loadAndSave(testFile, fileName, true);
+            final File savedFile = findTestFile("testfiles/Saved" + fileName);
+            failed |= loadAndSave(testFile, fileName, true, savedFile);
         }
         for (final String fileName : FILES_LINES) {
             final File testFile = findTestFile("testfiles/" + fileName);
-            failed |= loadAndSave(testFile, fileName, false);
+            final File savedFile = findTestFile("testfiles/Saved" + fileName);
+            failed |= loadAndSave(testFile, fileName, false, savedFile);
         }
         if (failed) // TODO make these separate tests?
         {
@@ -115,15 +119,12 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
 
-    private boolean loadAndSave(File testFile, String fileName, boolean checkSize) throws Exception {
+    private boolean loadAndSave(File testFile, String fileName, boolean checkSize, File savedFile) throws Exception {
         
         boolean failed = false;
 
-        final FileStats origStats;
-        try (FileReader fileReader = new FileReader(testFile);
-                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            origStats = computeFileStats(bufferedReader);
-        }
+        final FileStats origStats = getFileStats(testFile);
+        final FileStats savedStats = getFileStats(savedFile);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
         try {
@@ -132,6 +133,8 @@ public class TestSaveService extends JMeterTestCase {
         } finally {
             out.close(); // Make sure all the data is flushed out
         }
+
+        final FileStats compareStats = savedStats == FileStats.NO_STATS ? origStats : savedStats;
 
         final FileStats outputStats;
         try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
@@ -144,13 +147,13 @@ public class TestSaveService extends JMeterTestCase {
         // fail, because the order of the properties within each
         // test element may change. Comparing the lengths should be
         // enough to detect most problem cases...
-        if ((checkSize && !origStats.isSameSize(outputStats)) || !origStats.hasSameLinesCount(outputStats)) {
+        if ((checkSize && !compareStats.isSameSize(outputStats)) || !compareStats.hasSameLinesCount(outputStats)) {
             failed = true;
             System.out.println();
             System.out.println("Loading file testfiles/" + fileName + " and "
-                    + "saving it back changes its size from " + origStats.size + " to " + outputStats.size + ".");
+                    + "saving it back changes its size from " + compareStats.size + " to " + outputStats.size + ".");
             if (!origStats.hasSameLinesCount(outputStats)) {
-                System.out.println("Number of lines changes from " + origStats.lines + " to " + outputStats.lines);
+                System.out.println("Number of lines changes from " + compareStats.lines + " to " + outputStats.lines);
             }
             if (saveOut) {
                 final File outFile = findTestFile("testfiles/" + fileName + ".out");
@@ -168,13 +171,24 @@ public class TestSaveService extends JMeterTestCase {
         // the test file.
         return failed;
     }
-    
+
+    private FileStats getFileStats(File testFile) throws IOException,
+            FileNotFoundException {
+        if (testFile == null || !testFile.exists()) {
+            return FileStats.NO_STATS;
+        }
+        try (FileReader fileReader = new FileReader(testFile);
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            return computeFileStats(bufferedReader);
+        }
+    }
+
     /**
      * Calculate size and line count ignoring EOL and 
      * "jmeterTestPlan" element which may vary because of 
      * different attributes/attribute lengths.
      */
-    private FileStats computeFileStats(BufferedReader br) throws Exception {
+    private FileStats computeFileStats(BufferedReader br) throws IOException {
         int length = 0;
         int lines = 0;
         String line;
@@ -211,6 +225,8 @@ public class TestSaveService extends JMeterTestCase {
     private static class FileStats {
         int size;
         int lines;
+
+        final static FileStats NO_STATS = new FileStats(-1, -1);
 
         public FileStats(int size, int lines) {
             this.size = size;
