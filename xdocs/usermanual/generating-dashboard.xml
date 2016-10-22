@@ -47,7 +47,9 @@
                             <li>Latency vs Request per second (Ignores Transaction Controller Sample Results): <figure width="1373" height="543" image="dashboard/report_latencies_vs_request.png" ></figure></li>
                             <li>Response time Overview (Excludes Transaction Controller Sample Results)</li>
                             <li>Response times percentiles (Includes Transaction Controller Sample Results): <figure width="1374" height="551" image="dashboard/report_response_time_percentiles.png" ></figure></li>
-                            <li>Times vs Threads (Includes Transaction Controller Sample Results): <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure></li>
+                            <li>Times vs Threads (Includes Transaction Controller Sample Results): <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure>
+                            <note>In distributed mode, this graph shows a horizontal axis the number of threads for 1 server. It's a current limitation</note>
+                            </li>
                             <li>Response Time Distribution (Includes Transaction Controller Sample Results): <figure width="1373" height="549" image="dashboard/report_response_time_distribution.png" ></figure></li>
                         </ul>
                     </li>
@@ -70,6 +72,8 @@
                         configuration follows these settings (these are the defaults):
                         <source>
 jmeter.save.saveservice.bytes = true
+# Only available with HttpClient4
+#jmeter.save.saveservice.sent_bytes=true
 jmeter.save.saveservice.label = true
 jmeter.save.saveservice.latency = true
 jmeter.save.saveservice.response_code = true
@@ -79,8 +83,6 @@ jmeter.save.saveservice.thread_counts = true
 jmeter.save.saveservice.thread_name = true
 jmeter.save.saveservice.time = true
 jmeter.save.saveservice.connect_time = true
-# Only available with HttpClient4
-#jmeter.save.saveservice.sent_bytes=true
 # the timestamp format must include the time and should include the date.
 # For example the default, which is milliseconds since the epoch: 
 jmeter.save.saveservice.timestamp_format = ms
@@ -106,6 +108,11 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                                     <figure image="transactioncontroller.png"></figure>
                                 </li>
                             </ul>
+                        </note>
+                        <note>When using JMeter distributed mode with multiple jmeter-server instances, ensure you add in your Thread Groups something that uniquely identifies ThreadGroup for every JVM, example:
+                        <source>ThreadXXX_${__P(JVM_ID)}</source>
+                        where you pass a different JVM_ID property for each jmeter-server through:
+                        <source>-JJVM_ID=i</source> where <code>i</code> varies between 1 and the number of jmeter-server you are using. 
                         </note>
                     </p>
                 </subsection>
