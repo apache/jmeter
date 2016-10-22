@@ -119,10 +119,10 @@ public class TestSaveService extends JMeterTestCase {
         
         boolean failed = false;
 
-        final FileStats orig;
+        final FileStats origStats;
         try (FileReader fileReader = new FileReader(testFile);
                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            orig = computeFileStats(bufferedReader);
+            origStats = computeFileStats(bufferedReader);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
@@ -133,24 +133,24 @@ public class TestSaveService extends JMeterTestCase {
             out.close(); // Make sure all the data is flushed out
         }
 
-        final FileStats output;
+        final FileStats outputStats;
         try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
                 Reader insReader = new InputStreamReader(ins);
                 BufferedReader bufferedReader = new BufferedReader(insReader)) {
-            output = computeFileStats(bufferedReader);
+            outputStats = computeFileStats(bufferedReader);
         }
         // We only check the length of the result. Comparing the
         // actual result (out.toByteArray==original) will usually
         // fail, because the order of the properties within each
         // test element may change. Comparing the lengths should be
         // enough to detect most problem cases...
-        if ((checkSize && !orig.isSameSize(output)) || !orig.hasSameLinesCount(output)) {
+        if ((checkSize && !origStats.isSameSize(outputStats)) || !origStats.hasSameLinesCount(outputStats)) {
             failed = true;
             System.out.println();
             System.out.println("Loading file testfiles/" + fileName + " and "
-                    + "saving it back changes its size from " + orig.size + " to " + output.size + ".");
-            if (!orig.hasSameLinesCount(output)) {
-                System.out.println("Number of lines changes from " + orig.lines + " to " + output.lines);
+                    + "saving it back changes its size from " + origStats.size + " to " + outputStats.size + ".");
+            if (!origStats.hasSameLinesCount(outputStats)) {
+                System.out.println("Number of lines changes from " + origStats.lines + " to " + outputStats.lines);
             }
             if (saveOut) {
                 final File outFile = findTestFile("testfiles/" + fileName + ".out");
