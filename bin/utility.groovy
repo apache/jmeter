@@ -15,6 +15,9 @@
  * limitations under the License.
  *
  */
-
-// Uncomment this function and use it with ${__g(factorial(10))}
+// Remember to add this file to the property "groovy.utilities" in
+// "bin/jmeter.properties", if you want to access it through
+// the __groovy function
+//
+// Uncomment this function and use it with ${__groovy(factorial(10))}
 // def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }
