@@ -155,14 +155,8 @@ public class TestSaveService extends JMeterTestCase {
             if (saveOut) {
                 final File outFile = findTestFile("testfiles/" + fileName + ".out");
                 System.out.println("Write " + outFile);
-                FileOutputStream outf = null;
-                try {
-                    outf = new FileOutputStream(outFile);
+                try (FileOutputStream outf = new FileOutputStream(outFile)) {
                     outf.write(out.toByteArray());
-                } finally {
-                    if(outf != null) {
-                        outf.close();
-                    }
                 }
                 System.out.println("Wrote " + outFile);
             }
