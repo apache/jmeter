@@ -125,10 +125,9 @@ public class TestSaveService extends JMeterTestCase {
             orig = computeFileStats(bufferedReader);
         }
 
-        HashTree tree = SaveService.loadTree(testFile);
-
         ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
         try {
+            HashTree tree = SaveService.loadTree(testFile);
             SaveService.saveTree(tree, out);
         } finally {
             out.close(); // Make sure all the data is flushed out
