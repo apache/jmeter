@@ -328,8 +328,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null, // 99%
             null, // Min
             null, // Max
-            new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
-            new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
+            new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
+            new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00")    // pageSize   //$NON-NLS-1$
         };
