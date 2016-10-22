@@ -118,7 +118,7 @@ public class TestSaveService extends JMeterTestCase {
         
         boolean failed = false;
 
-        int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
+        FileStats orig = computeFileStats(new BufferedReader(new FileReader(testFile)));
 
         HashTree tree = SaveService.loadTree(testFile);
 
@@ -131,19 +131,19 @@ public class TestSaveService extends JMeterTestCase {
 
         ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
         
-        int [] output = readFile(new BufferedReader(new InputStreamReader(ins)));
+        FileStats output = computeFileStats(new BufferedReader(new InputStreamReader(ins)));
         // We only check the length of the result. Comparing the
         // actual result (out.toByteArray==original) will usually
         // fail, because the order of the properties within each
         // test element may change. Comparing the lengths should be
         // enough to detect most problem cases...
-        if ((checkSize && (orig[0] != output[0] ))|| orig[1] != output[1]) {
+        if ((checkSize && !orig.isSameSize(output)) || !orig.hasSameLinesCount(output)) {
             failed = true;
             System.out.println();
             System.out.println("Loading file testfiles/" + fileName + " and "
-                    + "saving it back changes its size from " + orig[0] + " to " + output[0] + ".");
-            if (orig[1] != output[1]) {
-                System.out.println("Number of lines changes from " + orig[1] + " to " + output[1]);
+                    + "saving it back changes its size from " + orig.size + " to " + output.size + ".");
+            if (!orig.hasSameLinesCount(output)) {
+                System.out.println("Number of lines changes from " + orig.lines + " to " + output.lines);
             }
             if (saveOut) {
                 final File outFile = findTestFile("testfiles/" + fileName + ".out");
@@ -173,7 +173,7 @@ public class TestSaveService extends JMeterTestCase {
      * "jmeterTestPlan" element which may vary because of 
      * different attributes/attribute lengths.
      */
-    private int[] readFile(BufferedReader br) throws Exception {
+    private FileStats computeFileStats(BufferedReader br) throws Exception {
         try {
             int length=0;
             int lines=0;
@@ -184,7 +184,7 @@ public class TestSaveService extends JMeterTestCase {
                     length += line.length();
                 }
             }
-            return new int []{length, lines};
+            return new FileStats(length, lines);
         } finally {
             br.close();
         }
@@ -208,6 +208,30 @@ public class TestSaveService extends JMeterTestCase {
         List<String> missingClasses = SaveService.checkClasses();
         if (missingClasses.size() > 0) {
             fail("One or more classes not found:"+missingClasses);
+        }
+    }
+
+    private static class FileStats {
+        int size;
+        int lines;
+
+        public FileStats(int size, int lines) {
+            this.size = size;
+            this.lines = lines;
+        }
+
+        public boolean isSameSize(FileStats other) {
+            if (other == null) {
+                return false;
+            }
+            return size == other.size;
+        }
+
+        public boolean hasSameLinesCount(FileStats other) {
+            if (other == null) {
+                return false;
+            }
+            return lines == other.lines;
         }
     }
 }
