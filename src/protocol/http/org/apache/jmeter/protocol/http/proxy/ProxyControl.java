@@ -301,11 +301,26 @@ public class ProxyControl extends GenericController {
 
     private String keyPassword;
 
+    private JMeterTreeModel nonGuiTreeModel;
+
     public ProxyControl() {
         setPort(DEFAULT_PORT);
         setExcludeList(new HashSet<String>());
         setIncludeList(new HashSet<String>());
         setCaptureHttpHeaders(true); // maintain original behaviour
+    }
+
+    /**
+     * Set a {@link JMeterTreeModel} to be used by the ProxyControl, when used
+     * in a non-GUI environment, where the {@link JMeterTreeModel} can't be
+     * acquired through {@link GuiPackage#getTreeModel()}
+     *
+     * @param treeModel
+     *            the {@link JMeterTreeModel} to be used, or {@code null} when
+     *            the GUI model should be used
+     */
+    public void setNonGuiTreeModel(JMeterTreeModel treeModel) {
+        this.nonGuiTreeModel = treeModel;
     }
 
     public void setPort(int port) {
@@ -475,6 +490,13 @@ public class ProxyControl extends GenericController {
         return getPropertyAsString(CONTENT_TYPE_INCLUDE);
     }
 
+    /**
+     * @return the {@link JMeterTreeModel} used when run in non-GUI mode, or {@code null} when run in GUI mode
+     */
+    public JMeterTreeModel getNonGuiTreeModel() {
+        return nonGuiTreeModel;
+    }
+
     public void addConfigElement(ConfigElement config) {
         // NOOP
     }
@@ -493,7 +515,9 @@ public class ProxyControl extends GenericController {
         try {
             server = new Daemon(getPort(), this);
             server.start();
-            GuiPackage.getInstance().register(server);
+            if (GuiPackage.getInstance() != null) {
+                GuiPackage.getInstance().register(server);
+            }
         } catch (IOException e) {
             log.error("Could not create Proxy daemon", e);
             throw e;
@@ -682,7 +706,9 @@ public class ProxyControl extends GenericController {
     public void stopProxy() {
         if (server != null) {
             server.stopServer();
-            GuiPackage.getInstance().unregister(server);
+            if (GuiPackage.getInstance() != null) {
+                GuiPackage.getInstance().unregister(server);
+            }
             try {
                 server.join(1000); // wait for server to stop
             } catch (InterruptedException e) {
@@ -819,7 +845,7 @@ public class ProxyControl extends GenericController {
      * @param target {@link JMeterTreeNode}
      */
     private void setAuthorization(Authorization authorization, JMeterTreeNode target) {
-        JMeterTreeModel jmeterTreeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel jmeterTreeModel = getJmeterTreeModel();
         List<JMeterTreeNode> authManagerNodes = jmeterTreeModel.getNodesOfType(AuthManager.class);
         if (authManagerNodes.size() == 0) {
             try {
@@ -833,6 +859,13 @@ public class ProxyControl extends GenericController {
             AuthManager authManager=(AuthManager)authManagerNodes.get(0).getTestElement();
             authManager.addAuth(authorization);
         }
+    }
+
+    private JMeterTreeModel getJmeterTreeModel() {
+        if (this.nonGuiTreeModel == null) {
+            return GuiPackage.getInstance().getTreeModel();
+        }
+        return this.nonGuiTreeModel;
     }
 
     /**
@@ -980,7 +1013,7 @@ public class ProxyControl extends GenericController {
      *         <code>null</code> if none was found.
      */
     private JMeterTreeNode findFirstNodeOfType(Class<?> type) {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel treeModel = getJmeterTreeModel();
         List<JMeterTreeNode> nodes = treeModel.getNodesOfType(type);
         for (JMeterTreeNode node : nodes) {
             if (node.isEnabled()) {
@@ -1046,7 +1079,7 @@ public class ProxyControl extends GenericController {
      */
     // TODO - could be converted to generic class?
     private Collection<?> findApplicableElements(JMeterTreeNode myTarget, Class<? extends TestElement> myClass, boolean ascending) {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel treeModel = getJmeterTreeModel();
         LinkedList<TestElement> elements = new LinkedList<>();
 
         // Look for elements directly within the HTTP proxy:
@@ -1104,7 +1137,7 @@ public class ProxyControl extends GenericController {
     private void placeSampler(final HTTPSamplerBase sampler, final TestElement[] testElements,
             JMeterTreeNode myTarget) {
         try {
-            final JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+            final JMeterTreeModel treeModel = getJmeterTreeModel();
 
             boolean firstInBatch = false;
             long now = System.currentTimeMillis();
@@ -1326,7 +1359,7 @@ public class ProxyControl extends GenericController {
      *            sampling event to be delivered
      */
     private void notifySampleListeners(SampleEvent event) {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
@@ -1345,7 +1378,7 @@ public class ProxyControl extends GenericController {
      * (here meaning the proxy recording) has started.
      */
     private void notifyTestListenersOfStart() {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
@@ -1364,7 +1397,7 @@ public class ProxyControl extends GenericController {
      * (here meaning the proxy recording) has ended.
      */
     private void notifyTestListenersOfEnd() {
-        JMeterTreeModel treeModel = GuiPackage.getInstance().getTreeModel();
+        JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         Enumeration<JMeterTreeNode> kids = myNode.children();
         while (kids.hasMoreElements()) {
