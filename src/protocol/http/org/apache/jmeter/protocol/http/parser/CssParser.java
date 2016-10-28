@@ -67,7 +67,7 @@ public class CssParser implements LinkExtractorParser {
      *
      */
     @SuppressWarnings("unchecked")
-    private static Map<String, URLCollection> CSS_URL_CACHE =
+    private static final Map<String, URLCollection> CSS_URL_CACHE =
             CSS_URL_CACHE_MAX_SIZE > 0 ? Collections.synchronizedMap(new LRUMap(CSS_URL_CACHE_MAX_SIZE)) : null;
 
 
