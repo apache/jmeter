@@ -57,6 +57,16 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
+<ch_section>Formatted HTML source view in Results Tree View</ch_section>
+The HTML source code in the Results Tree View can now be viewed formatted. This is extremely useful, if the code of the webpage has been stripped of all superfluous whitespace.
+<figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
+
+<ch_section>New <code>__groovy</code> function</ch_section>
+Introduce a new function <code>__groovy</code> that enable Groovy functions. This can be handy, as JavaScript can be quite slow, when used in highly concurrent test plans.
+
+<ch_section>Use Groovy as default for JSR-223 elements</ch_section>
+Groovy is now set as the default language for JSR-223 elements. If you want to use another of the supported language, you have to make an explicit choice.
+
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
