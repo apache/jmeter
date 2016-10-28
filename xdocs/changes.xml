@@ -191,6 +191,7 @@ Summary
     <li><pr>229</pr> tiny memory allocation improvements. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><bug>59945</bug>For all JSR223 elements, if script language has not been chosen on the UI, the script will be interpreted as a groovy script.</li>
     <li><bug>60266</bug>Usability/ UX : It should not be possible to close/exit/Revert/Load/Load a recent project or create from template a JMeter plan or open a new one if a test is running</li>
+    <li><bug>57305</bug>Remove dependency of <code>ProxyControl</code> on <code>GuiPackage</code>. Based on patches by jarek102 at gmail.com and Wyatt Epp (wyatt.epp at gmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -298,6 +299,8 @@ Summary
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Tamas Szabadi (tamas.szabadi at rightside.co)</li>
 <li>Roberto Braga (roberto.braga at soziale.it)</li>
+<li>jarek102 at gmail.com</li>
+<li>Wyatt Epp (wyatt.epp at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
