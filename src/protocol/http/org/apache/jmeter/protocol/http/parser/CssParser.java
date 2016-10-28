@@ -107,8 +107,7 @@ public class CssParser implements LinkExtractorParser {
      *
      * @see
      * org.apache.jmeter.protocol.http.parser.LinkExtractorParser#getEmbeddedResourceURLs
-     * (java.lang.String, byte[], java.net.URL,
-     * org.apache.jmeter.protocol.http.parser.URLCollection, java.lang.String)
+     * (java.lang.String, byte[], java.net.URL, java.lang.String)
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] data,
