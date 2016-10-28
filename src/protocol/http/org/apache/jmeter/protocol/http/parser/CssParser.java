@@ -45,6 +45,8 @@ import com.helger.css.handler.LoggingCSSParseExceptionCallback;
 import com.helger.css.parser.ParseException;
 import com.helger.css.reader.CSSReader;
 import com.helger.css.reader.CSSReaderSettings;
+import com.helger.css.reader.errorhandler.DoNothingCSSInterpretErrorHandler;
+import com.helger.css.reader.errorhandler.ICSSInterpretErrorHandler;
 import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 /**
@@ -59,6 +61,7 @@ public class CssParser implements LinkExtractorParser {
      * 
      */
     private static final int CSS_URL_CACHE_MAX_SIZE = JMeterUtils.getPropDefault("css.parser.cache.size", 400);
+    private static final boolean IGNORE_ALL_CSS_ERRORS = JMeterUtils.getPropDefault("css.parser.ignore_all_css_errors", true);
     
     /**
      * 
@@ -121,13 +124,21 @@ public class CssParser implements LinkExtractorParser {
             
             if(urlCollection == null) {
                 String cssContent = new String(data, encoding);
-                final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
-                            new CSSReaderSettings()
-                                .setBrowserCompliantMode(true)
-                                .setFallbackCharset(Charset.forName(encoding))
-                                .setCSSVersion (ECSSVersion.CSS30)
-                                .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
-                                .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
+                final CSSReaderSettings cssSettings = new CSSReaderSettings()
+                        .setBrowserCompliantMode(true)
+                        .setFallbackCharset(Charset.forName(encoding))
+                        .setCSSVersion(ECSSVersion.CSS30)
+                        .setCustomErrorHandler(
+                                new LoggingCSSParseErrorHandler())
+                        .setCustomExceptionHandler(
+                                new CustomLoggingCSSParseExceptionCallback(
+                                        baseUrl));
+                if (IGNORE_ALL_CSS_ERRORS) {
+                    cssSettings
+                            .setInterpretErrorHandler(new DoNothingCSSInterpretErrorHandler());
+                }
+                final CascadingStyleSheet aCSS = CSSReader
+                        .readFromStringStream(cssContent, cssSettings);
                 final List<URLString> list = new ArrayList<>();
                 urlCollection = new URLCollection(list);
                 final URLCollection localCollection = urlCollection;
