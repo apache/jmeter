@@ -104,6 +104,7 @@ Summary
     <li><bug>60229</bug>Add a new metric : sent_bytes. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes</li>
     <li><bug>60265</bug>HTTP Request : In Files Upload Tab you cannot resize columns</li>
+    <li><bug>60318</bug>Ignore CSS warnings when parsing with ph-css library.</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -197,7 +198,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to jsoup-1.9.2 (from 1.8.3)</li>
-    <li>Updated to ph-css 4.1.5 (from 4.1.4)</li>
+    <li>Updated to ph-css 4.1.6 (from 4.1.4)</li>
     <li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
     <li>Updated to commons-io 2.5 (from 2.4)</li>
     <li>Updated to commons-net 3.5 (from 3.4)</li>

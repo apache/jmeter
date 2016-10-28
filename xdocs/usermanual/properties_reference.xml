@@ -899,6 +899,10 @@ log_level.org.apache.http.client=DEBUG
     parsing the CSS. By default the cache size is 400. It can be disabled by setting its value to 0.<br/>
     Defaults to: <code>400</code>
 </property>
+<property name="css.parser.ignore_all_css_errors">
+    Let the CSS Parser ignore all CSS errors.<br/>
+    Defaults to: <code>true</code>
+</property>
 <property name="htmlParser.className" required="Yes">
     Define the HTML parser to be used.<br/>
     Do not comment this property.<br/>
