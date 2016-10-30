@@ -228,7 +228,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to jsoup-1.9.2 (from 1.8.3)</li>
+    <li>Updated to jsoup-1.10.1 (from 1.8.3)</li>
     <li>Updated to ph-css 4.1.6 (from 4.1.4)</li>
     <li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
     <li>Updated to commons-io 2.5 (from 2.4)</li>
