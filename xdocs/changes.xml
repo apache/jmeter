@@ -232,6 +232,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
     <li>Updated to ph-css 4.1.6 (from 4.1.4)</li>
     <li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
     <li>Updated to commons-io 2.5 (from 2.4)</li>
+    <li>Updated to commons-lang3 3.5 (from 3.4)</li>
     <li>Updated to commons-net 3.5 (from 3.4)</li>
     <li>Updated to groovy 2.4.7 (from 2.4.6)</li>
     <li>Updated to httpcore 4.4.5 (from 4.4.4)</li>
