@@ -58,17 +58,35 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 
 <ch_section>Improve Report/Dashboard</ch_section>
-The Dashboard has been improved and reports more details like "Type of error" or "Connect Time over Time" and uses less memory when compiled.
+The Dashboard has been improved with 3 new graphs and 1 summary table:
+<ul>
+    <li>Connect Time over Time graph : <figure width="1635" height="520" image="dashboard/report_connect_time_over_time.png" ></figure></li>
+    <li>Response Time Percentiles Over Time (successful responses) graph : <figure width="1640" height="539" image="dashboard/response_time_percentiles_over_time.png" ></figure></li>
+    <li>Response Time Overview graph : <figure width="1645" height="562" image="dashboard/response_time_overview.png" ></figure></li>
+    <li>Top 5 errors by Sampler table : <figure width="1609" height="508" image="dashboard/top_5_errors_by_sampler.png" ></figure></li>
+    <li>More details on errors in Errors table</li>
+    <li>Average response time added to Statistics table : <figure width="1639" height="467" image="dashboard/report_statistics.png" ></figure></li>
+    <li>Active Threads table now stacks threads : <figure width="1638" height="544" image="dashboard/report_active_threads_over_time.png" ></figure></li>
+</ul>
+
+<ch_section>New Metrics</ch_section>
+A new <code>sent_bytes</code> metric has been introduced which reports the bytes sent to server.<br/>
+Another metric <code>connect_time</code> has been enabled by default in this version
+
+<ch_section>Handling Big responses</ch_section>
+JMeter is now able to handle in terms of metrics responses bigger than 2GB, limit has been increased to 9223372 TB.<br/>
+To handle such big responses, it can also now truncate part of the response to avoid overflooding memory. See <code>httpsampler.max_bytes_to_store_per_request</code> property.
+
+<ch_section>New <code>__groovy</code> function</ch_section>
+Introduce a new function <code>__groovy</code> that enables Groovy functions. This can be handy, as JavaScript can be quite slow (same for BeanShell), when used in highly concurrent test plans.
+
+<ch_section>Use Groovy as default for JSR-223 elements</ch_section>
+Groovy is now set as the default language for JSR-223 elements. If you want to use another of the supported language, you have to make an explicit choice.
+<note>By default <code>Cache compiled script if available</code> is not checked by default although we advise you to check it and ensure you don't use <code>${varName}</code> syntax to access JMeter variables but <code>vars.get("varName")</code> instead.</note>
 
 <ch_section>Formatted HTML source view in Results Tree View</ch_section>
 The HTML source code in the Results Tree View can now be viewed formatted. This is extremely useful, if the code of the webpage has been stripped of all superfluous whitespace.
 <figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
-
-<ch_section>New <code>__groovy</code> function</ch_section>
-Introduce a new function <code>__groovy</code> that enable Groovy functions. This can be handy, as JavaScript can be quite slow, when used in highly concurrent test plans.
-
-<ch_section>Use Groovy as default for JSR-223 elements</ch_section>
-Groovy is now set as the default language for JSR-223 elements. If you want to use another of the supported language, you have to make an explicit choice.
 
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
