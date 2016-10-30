@@ -85,9 +85,9 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
     <li>Since version 3.1, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since version 3.1, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
     <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
-    <li>Since version 3.1, HTTP Request is able when using HttpClient4 (default) implementation to handle responses bigger than <code>2147483647</code>. To allow this 2 properties have been introduced:
+    <li>Since version 3.1, HTTP Request is able when using HttpClient4 (default) implementation to handle responses bigger than <code>2147483647</code> Bytes, that is 2GB. To allow this two properties have been introduced:
     <ul>
-        <li><code>httpsampler.max_bytes_to_store_per_request</code> (defaults to 10MB)will control what is held in memory, by default JMeter will only keep in memory the first 10MB of a response. If you have responses larger than this value and use assertions that are after the first 10MB, then you must increase this value</li>
+        <li><code>httpsampler.max_bytes_to_store_per_request</code> (defaults to 10MB) will control what is held in memory. By default JMeter will only keep in memory the first 10MB of a response. If you have responses larger than this value and use assertions that are after the first 10MB, then you must increase this value</li>
         <li><code>httpsampler.max_buffer_size</code> will control the buffer used to read the data. Previously JMeter used a buffer equal to Content-Length header which could lead to failures and make JMeter less resistant to faulty applications, but note this may impact response times and give slightly different results
          than previous versions if your application returned a Content-Length header higher than current default value (65KB) </li>
     </ul>
@@ -98,7 +98,7 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
 <ul>
     <li><bug>60222</bug>Remove deprecated elements Distribution Graph, Spline Visualizer</li>
     <li><bug>60224</bug>Deprecate <code><a href="./usermanual/component_reference.html#Monitor_Results_(DEPRECATED)">Monitor Results</a></code> listener. It will be dropped in next version</li>
-    <li><bug>60225</bug>Drop deprecated <code>__jexl</code> function, jexl support in BSF and dependency on <code>commons-jexl-1.1.jar</code> This function can be easily replaced with <code><a href="./usermanual/functions.html#__jexl3">__jexl3</a></code> function</li>
+    <li><bug>60225</bug>Drop deprecated <code>__jexl</code> function, jexl support in BSF and dependency on <code>commons-jexl-1.1.jar</code>. This function can be easily replaced with <code><a href="./usermanual/functions.html#__jexl3">__jexl3</a></code> function</li>
     <li><bug>60268</bug>Drop org.apache.jmeter.gui.action.Analyze and deprecate org.apache.jmeter.reporters.FileReporter (will be removed in next version)</li>
 </ul>
 
@@ -112,7 +112,7 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
     <li><bug>59885</bug>Optimize css parsing for embedded resources download by introducing a cache. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>219</pr></li>
     <li><bug>60092</bug>Add shortened version of the PUT body to sampler result.</li>
     <li><bug>60229</bug>Add a new metric : sent_bytes. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes</li>
+    <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes (that is 2GB)</li>
     <li><bug>60265</bug>HTTP Request : In Files Upload Tab you cannot resize columns</li>
     <li><bug>60318</bug>Ignore CSS warnings when parsing with ph-css library.</li>
 </ul>
@@ -202,7 +202,7 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
     <li><pr>229</pr> tiny memory allocation improvements. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><bug>59945</bug>For all JSR223 elements, if script language has not been chosen on the UI, the script will be interpreted as a groovy script.</li>
     <li><bug>60266</bug>Usability/ UX : It should not be possible to close/exit/Revert/Load/Load a recent project or create from template a JMeter plan or open a new one if a test is running</li>
-    <li><bug>57305</bug>Remove dependency of <code>ProxyControl</code> on <code>GuiPackage</code>. Based on patches by jarek102 at gmail.com and Wyatt Epp (wyatt.epp at gmail.com)</li>
+    <li><bug>57305</bug>Remove dependency of <code>ProxyControl</code> on <code>GuiPackage</code>. Based on patches by jarek102 (jarek102 at gmail.com) and Wyatt Epp (wyatt.epp at gmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -269,7 +269,7 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
 <h3>General</h3>
 <ul>
     <li><bug>59400</bug>Get rid of UnmarshalException on stopping when <code>-X</code> option is used.</li>
-    <li><bug>59607</bug>JMeter crashes when reading large test plan (greater than 2g). Based on fix by Felix Draxler (felix.draxler at sap.com)</li>
+    <li><bug>59607</bug>JMeter crashes when reading large test plan (greater than 2GB). Based on fix by Felix Draxler (felix.draxler at sap.com)</li>
     <li><bug>59621</bug>Error count in report dashboard is one off.</li>
     <li><bug>59657</bug>Only set font in JSyntaxTextArea, when property <code>jsyntaxtextarea.font.family</code> is set.</li>
     <li><bug>59720</bug>Batch test file comparisons fail on Windows as XML files are generated as EOL=LF</li>
@@ -283,7 +283,7 @@ Groovy is now set as the default language for JSR-223 elements. If you want to u
     <li><bug>60089</bug>Report / Dashboard : Bytes throughput Over Time has reversed Sent and Received bytes. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60090</bug>Report / Dashboard : Empty Transaction Controller should not count in metrics</li>
     <li><bug>60103</bug>Report / Dashboard : Requests summary includes Transaction Controller leading to wrong percentage</li>
-    <li><bug>60105</bug>Report / Dashboard : Report requires Transaction Controller "<code>generate parent sample</code>" option to be checked , fix related issues</li>
+    <li><bug>60105</bug>Report / Dashboard : Report requires Transaction Controller "<code>generate parent sample</code>" option to be checked, fix related issues</li>
     <li><bug>60107</bug>Report / Dashboard : In StatisticSummary, TransactionController SampleResult makes Total line wrong</li>
     <li><bug>60110</bug>Report / Dashboard : In Response Time Percentiles, slider is useless</li>
     <li><bug>60135</bug>Report / Dashboard : Active Threads Over Time should be in OverTime section</li>
@@ -355,7 +355,7 @@ The fix is to run JMeter as Administrator, it will create the registry key for y
 </li>
 
 <li>
-With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry. 
+With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry.
 This is a known Java bug, see Bug <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
 A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
@@ -394,7 +394,7 @@ This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JD
 The fix is to use JDK 8 b132 or later.
 </li>
 </ul>
- 
-</section> 
-</body> 
+
+</section>
+</body>
 </document>
