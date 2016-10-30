@@ -69,7 +69,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.4
+commons-lang3-3.5
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
