@@ -57,6 +57,9 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
+<ch_section>Improve Report/Dashboard</ch_section>
+The Dashboard has been improved and reports more details like "Type of error" or "Connect Time over Time" and uses less memory when compiled.
+
 <ch_section>Formatted HTML source view in Results Tree View</ch_section>
 The HTML source code in the Results Tree View can now be viewed formatted. This is extremely useful, if the code of the webpage has been stripped of all superfluous whitespace.
 <figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
