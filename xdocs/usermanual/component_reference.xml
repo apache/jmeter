@@ -1791,7 +1791,7 @@ This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excl
 </note>
 </component>
 
-<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="547" height="409" screenshot="mailreader_sampler.png">
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="595" height="413" screenshot="mailreader_sampler.png">
 <description>
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
