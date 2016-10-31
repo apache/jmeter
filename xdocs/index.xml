@@ -34,7 +34,7 @@
     <h2>What can I do with it?</h2>
     <p>
       Apache JMeter may be used to test performance both on static and dynamic
-      resources , Web dynamic applications. <br/> 
+      resources, Web dynamic applications. <br/> 
       It can be used to simulate a heavy load on a server, group of servers, 
       network or object to test its strength or to analyze overall performance 
       under different load types.<br/> 
@@ -55,10 +55,10 @@
         <li>Java Objects</li>
         </ul>
     </li>
-    <li>Full featured Test IDE that allows faster Test Plan <b>recording, building and debugging</b>.</li>
-    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (NON GUI)</a></b> to load test from any Java compatible OS (Windows, Linux, Mac)</li>
-    <li>Analysis of Load Test thanks to a clear, complete and dynamic <b><a href="usermanual/generating-dashboard.html" >ready to present HTML report</a></b></li>
-    <li>Easy correlation for most popular formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
+    <li>Full featured Test IDE that allows faster Test Plan <b>recording (from Browsers or native applications), building and debugging</b>.</li>
+    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (Non GUI)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX...)</li>
+    <li>A complete and <b><a href="usermanual/generating-dashboard.html" >ready to present dynamic HTML report</a></b></li>
+    <li>Easy correlation through ability to extract data from most popular response formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
         <a href="usermanual/component_reference.html#XPath_Extractor" >XML</a> or <a href="usermanual/component_reference.html#Regular_Expression_Extractor" >any textual format</a></b></li>
     <li>Complete portability and <b>100% Java purity</b>.</li>
     <li>Full <b>multi-threading</b> framework allows concurrent sampling by many threads and
@@ -67,20 +67,21 @@
     <li><b>Highly Extensible core:</b>
       <ul>
         <li>Pluggable Samplers allow unlimited testing capabilities.</li>
+        <li><b>Scriptable Samplers</b> (JSR223-compatible languages (<a href="http://groovy-lang.org">Groovy</a>) and BeanShell)</li>
         <li>Several load statistics may be chosen with <b>pluggable timers</b>.</li>
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
-        <li><b>Scriptable Samplers</b> (JSR223-compatible languages (<a href="http://groovy-lang.org">Groovy</a>) and BeanShell)</li>
+        <li>Easy Continuous Integration through 3rd party Open Source libraries for Maven, Graddle and Jenkins</li>
       </ul>
     </li>
 </ul>
 <h2>How do I do it?</h2>
 <ul>
-<li><a href="usermanual/index.html">Using JMeter</a> to understand how to use JMeter</li>
+<li><a href="usermanual/index.html">Using JMeter</a> to understand how to use it</li>
 <li><a href="usermanual/component_reference.html">Component reference</a> to have detailed information for every Test element</li>
-<li><a href="usermanual/functions.html">Functions reference</a> to have detailed information for every function</li>
-<li><a href="usermanual/properties_reference.html">Properties reference</a> for all properties that customize JMeter</li>
+<li><a href="usermanual/functions.html">Functions reference</a> to have detailed information and examples for every function</li>
+<li><a href="usermanual/properties_reference.html">Properties reference</a> for all properties that allow you to customize JMeter</li>
 <li><a href="api/index.html">Javadoc API documentation</a></li>
 <li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
 <li><a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
