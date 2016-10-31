@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.commons.lang3.CharUtils;
@@ -597,11 +598,11 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
         boolean stringValues = false;
         if(primitiveValues) {
-            stringValues = s.delimiter == delimiter || (delimiter != null && delimiter.equals(s.delimiter));
+            stringValues = Objects.equals(delimiter, s.delimiter);
         }
         boolean complexValues = false;
         if(primitiveValues && stringValues) {
-            complexValues = s.formatter == formatter || (formatter != null && formatter.equals(s.formatter));
+            complexValues = Objects.equals(formatter, s.formatter);
         }
 
         return primitiveValues && stringValues && complexValues;
