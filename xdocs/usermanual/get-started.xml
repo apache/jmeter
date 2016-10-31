@@ -17,11 +17,11 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '2'>
+<!ENTITY sect-num '1'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="intro.html" next="build-test-plan.html" id="$Id$">
+<document next="build-test-plan.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Getting Started</title>
