@@ -46,11 +46,11 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 Summary
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
-<li><a href="#Known bugs">Known bugs</a></li>
 <li><a href="#Incompatible changes">Incompatible changes</a></li>
 <li><a href="#Bug fixes">Bug fixes</a></li>
 <li><a href="#Improvements">Improvements</a></li>
 <li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
 <li><a href="#Thanks">Thanks</a></li>
 
 </ul>
@@ -116,9 +116,20 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
+<p><note>These elements do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. The JMeter team advises not to use them anymore and migrate to their replacement.</note></p>
 <ul>
     <li><bug>60222</bug>Remove deprecated elements Distribution Graph, Spline Visualizer</li>
-    <li><bug>60224</bug>Deprecate <code><a href="./usermanual/component_reference.html#Monitor_Results_(DEPRECATED)">Monitor Results</a></code> listener. It will be dropped in next version</li>
+    <li><bug>60224</bug>Deprecate <code><a href="./usermanual/component_reference.html#Monitor_Results_(DEPRECATED)">Monitor Results</a></code> listener. It will be dropped in next version.</li>
+    <li><bug>60323</bug>Deprecate BSF Elements (Use JSR223 Elements instead). They will probably be dropped in N+2 version. The following elements are deprecated:
+        <ul>
+            <li><code><a href="./usermanual/component_reference.html#BSF_Sampler_(DEPRECATED)">BSF Sampler</a></code></li>
+            <li><code><a href="./usermanual/component_reference.html#BSF_Listener_(DEPRECATED)">BSF Listener</a></code></li>
+            <li><code><a href="./usermanual/component_reference.html#BSF_Assertion_(DEPRECATED)">BSF Assertion</a></code></li>
+            <li><code><a href="./usermanual/component_reference.html#BSF_Timer_(DEPRECATED)">BSF Timer</a></code></li>
+            <li><code><a href="./usermanual/component_reference.html#BSF_PreProcessor_(DEPRECATED)">BSF PreProcessor</a></code></li>
+            <li><code><a href="./usermanual/component_reference.html#BSF_PostProcessor_(DEPRECATED)">BSF PostProcessor</a></code></li>
+        </ul>
+    </li>
     <li><bug>60225</bug>Drop deprecated <code>__jexl</code> function, jexl support in BSF and dependency on <code>commons-jexl-1.1.jar</code>. This function can be easily replaced with <code><a href="./usermanual/functions.html#__jexl3">__jexl3</a></code> function</li>
     <li><bug>60268</bug>Drop org.apache.jmeter.gui.action.Analyze and deprecate org.apache.jmeter.reporters.FileReporter (will be removed in next version)</li>
 </ul>
