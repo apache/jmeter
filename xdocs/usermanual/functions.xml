@@ -239,7 +239,7 @@ Alternatively, you can define your script as a variable, e.g. on the Test Plan:
 The script can then be referenced as follows:
 <pre>${__BeanShell(${SCRIPT})}</pre>
 There is no need to escape commas in the <code>SCRIPT</code> variable because the function call is parsed before the variable is replaced with its value.
-This works well in conjunction with the BSF or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
+This works well in conjunction with the JSR223 or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
 </p>
 <p>
 Functions can reference variables and other functions, for example 
