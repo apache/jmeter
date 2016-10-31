@@ -2696,7 +2696,7 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell/BSF Listener</li>
+<li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
@@ -4392,7 +4392,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     <note>
     Note: Unless documented otherwise, Assertions are not applied to sub-samples (child samples) -
     only to the parent sample.
-    In the case of BSF and BeanShell Assertions, the script can retrieve sub-samples using the method
+    In the case of JSR223 and BeanShell Assertions, the script can retrieve sub-samples using the method
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
     </note>
@@ -5555,7 +5555,7 @@ can be set to <code>true</code> to use a separate Runnable thread instead of the
     <note>
     Note: Unless documented otherwise, Post-Processors are not applied to sub-samples (child samples) -
     only to the parent sample.
-    In the case of BSF and BeanShell post-processors, the script can retrieve sub-samples using the method
+    In the case of JSR223 and BeanShell post-processors, the script can retrieve sub-samples using the method
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
     </note>
