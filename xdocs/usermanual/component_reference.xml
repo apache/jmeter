@@ -1141,7 +1141,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
+<component name="BSF Sampler (DEPRECATED)" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
     <description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
         See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
         website for details of the languages supported.
@@ -3309,7 +3309,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
  </properties>
 </component>
 
-<component name="BSF Listener" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
+<component name="BSF Listener (DEPRECATED)" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
 <description>
 <p>
 The BSF Listener allows BSF script code to be applied to sample results.
@@ -4731,7 +4731,7 @@ You reference this file in <code>jmeter.properties</code> file using the propert
 </properties>
 </component>
 
-<component name="BSF Assertion" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
+<component name="BSF Assertion (DEPRECATED)" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
 <description>
 <p>
 The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
@@ -5087,7 +5087,7 @@ vars.putObject("OBJ1",new Object());
 </component>
 
 
-<component name="BSF Timer" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
+<component name="BSF Timer (DEPRECATED)" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
 <description>
 <p>
 The BSF Timer can be used to generate a delay using a BSF scripting language.
@@ -5365,7 +5365,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>If the property <code>beanshell.preprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
+<component name="BSF PreProcessor (DEPRECATED)" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
 <description>
 <p>
 The BSF PreProcessor allows BSF script code to be applied before taking a sample.
@@ -5945,7 +5945,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>If the property <code>beanshell.postprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor (DEPRECATED)" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.
