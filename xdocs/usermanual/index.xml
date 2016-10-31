@@ -61,6 +61,13 @@
 <ul>
   <li><a name="get-started"/><a href="get-started.html">1. Getting Started</a>
   <ul>
+     <li><a href="get-started.html#overview">1.0 Overview</a></li>
+     <ul>
+        <li><a href="get-started.html#test_plan_building">Test plan building</a></li>
+        <li><a href="get-started.html#load_test_running">Load Test running</a></li>
+        <li><a href="get-started.html#load_test_analysis">Load Test analysis</a></li>
+        <li><a href="get-started.html#lets_start">Let's start</a></li>
+     </ul>
      <li><a href="get-started.html#requirements">1.1 Requirements</a></li>
      <ul>
         <li><a href="get-started.html#java_versions">1.1.1 Java Version</a></li>
@@ -192,24 +199,7 @@
    </ul>
  </li>
  <li><a name="realtime-results"/><a href="realtime-results.html">16. Real time Results</a></li>
- <li><a name="best-practices"/><a href="best-practices.html">17. Best Practices</a>
-  <ul>
-     <li><a href="best-practices.html#use_latest_version">17.1 Always use latest version of JMeter</a></li>
-     <li><a href="best-practices.html#sizing_threads">17.2 Use the correct Number of Threads</a></li>
-     <li><a href="best-practices.html#put_cookie_manager">17.3 Where to Put the Cookie Manager</a></li>
-     <li><a href="best-practices.html#put_auth_manager">17.4 Where to Put the Authorization Manager</a></li>
-     <li><a href="best-practices.html#proxy_server">17.5 Using the HTTP(S) Test Script Recorder</a></li>
-     <li><a href="best-practices.html#user_variables">17.6 User variables</a></li>
-     <li><a href="best-practices.html#lean_mean">17.7 Reducing resource requirements</a></li>
-     <li><a href="best-practices.html#beanshell_server">17.8 BeanShell server</a></li>
-     <li><a href="best-practices.html#bsh_scripting">17.9 BeanShell scripting</a></li>
-     <li><a href="best-practices.html#developing_scripts">17.10 Developing script functions in BeanShell, Javascript or Jexl etc.</a></li>
-     <li><a href="best-practices.html#parameterising_tests">17.11 Parameterising tests</a></li>
-     <li><a href="best-practices.html#jsr223">17.12 JSR223 Elements</a></li>
-     <li><a href="best-practices.html#sharing_variables">17.13 Sharing variables between threads and thread groups</a></li>
-     <li><a href="best-practices.html#properties">17.14 Managing properties</a></li>
-  </ul>
- </li>
+ <li><a name="best-practices"/><a href="best-practices.html">17. Best Practices</a></li>
  <li><a name="boss"/><a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
  <li><a name="component_reference"/><a href="component_reference.html">19. Component Reference</a></li>
  <li><a name="properties"/><a href="properties_reference.html">20. Properties reference</a></li>
