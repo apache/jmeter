@@ -85,12 +85,14 @@ Nor does it render the HTML pages as a browser does
 
 <h2>How do I do it?</h2>
 <ul>
-<li><a href="usermanual/index.html">Using JMeter</a></li>
-<li><a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
-<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
+<li><a href="usermanual/index.html">Using JMeter</a> to understand how to use JMeter</li>
+<li><a href="usermanual/component_reference.html">Component reference</a> to have detailed information for every Test element</li>
+<li><a href="usermanual/functions.html">Functions reference</a> to have detailed information for every function</li>
+<li><a href="usermanual/properties_reference.html">Properties reference</a> for all properties that customize JMeter</li>
 <li><a href="api/index.html">Javadoc API documentation</a></li>
-<li><a href="localising/index.html">JMeter Localisation (Translator's Guide)</a></li>
-<li><a href="building.html">Building JMeter and Add-Ons</a></li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">JMeter FAQ (Wiki)</a></li>
+<li><a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
+<li><a href="building.html">Building JMeter and Add-Ons</a> for advanced usage</li>
 </ul>
 <h2>Tutorials (PDF)</h2>
 <ul>
@@ -103,7 +105,7 @@ Nor does it render the HTML pages as a browser does
 <h2>Further Information About JMeter</h2>
 <ul>
 <li><a href="changes.html">Changes List</a></li>
-<li><a href="issues.html">Issues</a></li>
+<li><a href="issues.html">Knowing existings Issues (Bugs or Enhancements) or reporting new ones (please do it !)</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
 <li><a href="mail.html">Mailing Lists</a></li>
 <li><a href="svnindex.html">Source Repositories</a></li>
