@@ -192,6 +192,7 @@ You can rename the parent directory (i.e. <code>apache-jmeter-X.Y</code>) if you
 <p>To run JMeter, run the <code>jmeter.bat</code> (for Windows) or <code>jmeter</code> (for Unix) file.
 These files are found in the bin directory.
 After a short time, the JMeter GUI should appear.
+<note>GUI mode should only be used for creating the test script, NON GUI mode must be used for load testing</note>
 </p>
 
 <p>
@@ -335,7 +336,7 @@ This is not to be confused with the proxy settings described above, which are us
 </subsection>
 
 <subsection name="&sect-num;.4.4 Non-GUI Mode (Command Line mode)" anchor="non_gui">
-<p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
+<p>For load testing, you must run JMeter in this mode (Without the GUI) to get the optimal results from it. To do so, use
 the following command options:</p>
 <dl>
 <dt><code>-n</code></dt><dd>This specifies JMeter is to run in non-gui mode</dd>
