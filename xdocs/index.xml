@@ -34,20 +34,17 @@
     <h2>What can I do with it?</h2>
     <p>
       Apache JMeter may be used to test performance both on static and dynamic
-      resources (Webservices (SOAP/REST), Web dynamic languages - PHP, Java, ASP.NET, Files, etc. -, Java Objects, Data Bases and
-      Queries, FTP Servers and more). It can be used to simulate a heavy
-load on a server, group of servers, network or object to test its strength or to analyze
-overall performance under different load types. You can use it to make a
-graphical analysis of performance or to test your server/script/object
-behavior under heavy concurrent load.
-</p>
-<h2>What does it do?</h2>
+      resources , Web dynamic applications. <br/> 
+      It can be used to simulate a heavy load on a server, group of servers, 
+      network or object to test its strength or to analyze overall performance 
+      under different load types.<br/> 
+    </p>
 <p>Apache JMeter features include:</p>
 <ul>
-    <li>Ability to load and performance test many different server/protocol types:
+    <li>Ability to load and performance test many different applications/server/protocol types:
         <ul>
-        <li>Web - HTTP, HTTPS</li>
-        <li>SOAP / REST</li>
+        <li>Web - HTTP, HTTPS (Java, NodeJS, PHP, ASP.NET...)</li>
+        <li>SOAP / REST Webservices</li>
         <li>FTP</li>
         <li>Database via JDBC</li>
         <li>LDAP</li>
@@ -55,12 +52,17 @@ behavior under heavy concurrent load.
         <li>Mail - SMTP(S), POP3(S) and IMAP(S)</li>
         <li>Native commands or shell scripts</li>
         <li>TCP</li>
+        <li>Java Objects</li>
         </ul>
     </li>
+    <li>Full featured Test IDE that allows faster Test Plan <b>recording, building and debugging</b>.</li>
+    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (NON GUI)</a></b> to load test from any Java compatible OS (Windows, Linux, Mac)</li>
+    <li>Analysis of Load Test thanks to a clear, complete and dynamic <b><a href="usermanual/generating-dashboard.html" >ready to present HTML report</a></b></li>
+    <li>Easy correlation for most popular formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
+        <a href="usermanual/component_reference.html#XPath_Extractor" >XML</a> or <a href="usermanual/component_reference.html#Regular_Expression_Extractor" >any textual format</a></b></li>
     <li>Complete portability and <b>100% Java purity</b>.</li>
-    <li>Full <b>multithreading</b> framework allows concurrent sampling by many threads and
+    <li>Full <b>multi-threading</b> framework allows concurrent sampling by many threads and
         simultaneous sampling of different functions by separate thread groups.</li>
-    <li>Careful <b>GUI</b> design allows faster Test Plan building and debugging.</li>
     <li>Caching and offline analysis/replaying of test results.</li>
     <li><b>Highly Extensible core:</b>
       <ul>
@@ -69,20 +71,10 @@ behavior under heavy concurrent load.
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
-        <li><b>Scriptable Samplers</b> (BeanShell, BSF-compatible languages and JSR223-compatible languages)</li>
+        <li><b>Scriptable Samplers</b> (JSR223-compatible languages (<a href="http://groovy-lang.org">Groovy</a>) and BeanShell)</li>
       </ul>
     </li>
 </ul>
-<h2>JMeter is not a browser</h2>
-<p>
-JMeter is not a browser.
-As far as web-services and remote services are concerned, JMeter looks like a browser (or rather, multiple browsers);
-however JMeter does not perform all the actions supported by browsers.
-In particular, JMeter does not execute the Javascript found in HTML pages.
-Nor does it render the HTML pages as a browser does 
-(it's possible to view the response as HTML etc., but the timings are not included in any samples, and only one sample in one thread is ever viewed at a time).
-</p>
-
 <h2>How do I do it?</h2>
 <ul>
 <li><a href="usermanual/index.html">Using JMeter</a> to understand how to use JMeter</li>
@@ -94,6 +86,17 @@ Nor does it render the HTML pages as a browser does
 <li><a href="http://wiki.apache.org/jmeter/">JMeter Wiki</a></li>
 <li><a href="building.html">Building JMeter and Add-Ons</a> for advanced usage</li>
 </ul>
+
+<h2>JMeter is not a browser</h2>
+<p>
+JMeter is not a browser, it works at protocol level.
+As far as web-services and remote services are concerned, JMeter looks like a browser (or rather, multiple browsers);
+however JMeter does not perform all the actions supported by browsers.
+In particular, JMeter does not execute the Javascript found in HTML pages.
+Nor does it render the HTML pages as a browser does 
+(it's possible to view the response as HTML etc., but the timings are not included in any samples, and only one sample in one thread is ever viewed at a time).
+</p>
+
 <h2>Tutorials (PDF)</h2>
 <ul>
 <li><a href="usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li>
