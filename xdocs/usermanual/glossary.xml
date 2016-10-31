@@ -17,9 +17,9 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '25'>
+<!ENTITY sect-num '24'>
 ]>
-<document prev="hints_and_tips.html" id="$Id$">
+<document prev="hints_and_tips.html" next="history_future.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Glossary</title>
