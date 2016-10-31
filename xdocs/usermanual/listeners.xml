@@ -269,7 +269,7 @@ Most of the listeners currently keep a copy of every sample they display, apart 
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell/BSF Listener</li>
+<li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
