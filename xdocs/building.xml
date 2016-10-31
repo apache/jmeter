@@ -83,7 +83,8 @@ See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets t
 <section name="Contributing to JMeter">
 <h2>We love contribution</h2>
 We are very grateful to you if you take some time to contribute to the project.
-If you have some time to spend on the project you can pick existing enhancement or bug from <a target="_blank" href="issues.html">Issues page</a>.
+If you have some time to spend on the project you can pick existing enhancement or bug from <a target="_blank" href="issues.html">Issues page</a>.<br/>
+You can also contribute to translation, see <a href="localising/index.html">JMeter Localisation (Translator's Guide)</a>.
 
 <h2>Submitting a patch</h2>
 
