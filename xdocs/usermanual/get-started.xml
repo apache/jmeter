@@ -54,7 +54,7 @@ The first step is to configure the injectors that will run JMeter, this as for a
 <ul>
     <li>Correct machine sizing in terms of CPU, memory and network</li>
     <li>OS Tuning</li>
-    <li>Java setup: Ensure you install the last version of Java supported by JMeter</li>
+    <li>Java setup: Ensure you install the latest version of Java supported by JMeter</li>
     <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
 </ul> 
 
@@ -111,8 +111,8 @@ over your Test Plans.</p>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 7 or 8, we advise that you install last minor version of those major versions. 
-Java 9 is not tested completely as of JMeter 3.1. 
+<note>JMeter requires a fully compliant JVM 7 or 8, we advise that you install latest minor version of those major versions.
+Java 9 is not tested completely as of JMeter 3.1.
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
