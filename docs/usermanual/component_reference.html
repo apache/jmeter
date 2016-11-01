@@ -5,11 +5,11 @@
             APACHE LOGO
           --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
-            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="functions.html">Next &gt;</a></li></ul><ul class="section-index"><li><a href="#introduction">19 Introduction</a><ul></ul></li><li><a href="#samplers">19.1 Samplers</a><ul><li><a href="#FTP_Request">FTP Request</a></li><li><a href="#HTTP_Request">HTTP Request</a></li><li><a href="#JDBC_Request">JDBC Request</a></li><li><a href="#Java_Request">Java Request</a></li><li><a href="#SOAP/XML-RPC_Request">SOAP/XML-RPC Request</a></li><li><a href="#LDAP_Request">LDAP Request</a></li><li><a href="#LDAP_Extended_Request">LDAP Extended Request</a></li><li><a href="#Access_Log_Sampler">Access Log Sampler</a></li><li><a href="#BeanShell_Sampler">BeanShell Sampler</a></li><li><a href="#BSF_Sampler">BSF Sampler</a></li><li><a href="#JSR223_Sampler">JSR223 Sampler</a></li><li><a href="#TCP_Sampler">TCP Sampler</a></li><li><a href="#JMS_Publisher">JMS Publisher</a></li><li><a href="#JMS_Subscriber">JMS Subscriber</a></li><li><a href="#JMS_Point-to-Point">JMS Point-to-Point</a></li><li><a href="#JUnit_Request">JUnit Request</a></li><li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li><li><a href="#Test_Action">Test Action</a></li><li><a href="#SMTP_Sampler">SMTP Sampler</a></li><li><a href="#OS_Process_Sampler">OS Process Sampler</a></li><li><a href="#MongoDB_Script_(DEPRECATED)">MongoDB Script (DEPRECATED)</a></li></ul></li><li><a href="#logic_controllers">19.2 Logic Controllers</a><ul><li><a href="#Simple_Controller">Simple Controller</a></li><li><a href="#Loop_Controller">Loop Controller</a></li><li><a href="#Once_Only_Controller">Once Only Controller</a></li><li><a href="#Interleave_Controller">Interleave Controller</a></li><li><a href="#Random_Controller">Random Controller</a></li><li><a href="#Random_Order_Controller">Random Order Controller</a></li><li><a href="#Throughput_Controller">Throughput Controller</a></li><li><a href="#Runtime_Controller">Runtime Controller</a></li><li><a href="#If_Controller">If Controller</a></li><li><a href="#While_Controller">While Controller</a></li><li><a href="#Switch_Controller">Switch Controller</a></li><li><a href="#ForEach_Controller">ForEach Controller</a></li><li><a href="#Module_Controller">Module Controller</a></li><li><a href="#Include_Controller">Include Controller</a></li><li><a href="#Transaction_Controller">Transaction Controller</a></li><li><a href="#Recording_Controller">Recording Controller</a></li><li><a href="#Critical_Section_Controller">Critical Section Controller</a></li></ul></li><li><a href="#listeners">19.3 Listeners</a><ul><li><a href="#Sample_Result_Save_Configuration">Sample Result Save Configuration</a></li><li><a href="#Graph_Results">Graph Results</a></li><li><a href="#Spline_Visualizer_(DEPRECATED)">Spline Visualizer (DEPRECATED)</a></li><li><a href="#Assertion_Results">Assertion Results</a></li><li><a href="#View_Results_Tree">View Results Tree</a></li><li><a href="#Aggregate_Report">Aggregate Report</a></li><li><a href="#View_Results_in_Table">View Results in Table</a></li><li><a href="#Simple_Data_Writer">Simple Data Writer</a></li><li><a href="#Monitor_Results">Monitor Results</a></li><li><a href="#Distribution_Graph_(DEPRECATED)">Distribution Graph (DEPRECATED)</a></li><li><a href="#Aggregate_Graph">Aggregate Graph</a></li><li><a href="#Response_Time_Graph">Response Time Graph</a></li><li><a href="#Mailer_Visualizer">Mailer Visualizer</a></li><li><a href="#BeanShell_Listener">BeanShell Listener</a></li><li><a href="#Summary_Report">Summary Report</a></li><li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li><li><a href="#BSF_Listener">BSF Listener</a></li><li><a href="#JSR223_Listener">JSR223 Listener</a></li><li><a href="#Generate_Summary_Results">Generate Summary Results</a></li><li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li><li><a href="#Backend_Listener">Backend Listener</a></li></ul></li><li><a href="#config_elements">19.4 Configuration Elements</a><ul><li><a href="#CSV_Data_Set_Config">CSV Data Set Config</a></li><li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li><li><a href="#DNS_Cache_Manager">DNS Cache Manager</a></li><li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li><li><a href="#HTTP_Cache_Manager">HTTP Cache Manager</a></li><li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li><li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li><li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li><li><a href="#Java_Request_Defaults">Java Request Defaults</a></li><li><a href="#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li><li><a href="#Keystore_Configuration">Keystore Configuration</a></li><li><a href="#Login_Config_Element">Login Config Element</a></li><li><a href="#LDAP_Request_Defaults">LDAP Request Defaults</a></li><li><a href="#LDAP_Extended_Request_Defaults">LDAP Extended Request Defaults</a></li><li><a href="#TCP_Sampler_Config">TCP Sampler Config</a></li><li><a href="#User_Defined_Variables">User Defined Variables</a></li><li><a href="#Random_Variable">Random Variable</a></li><li><a href="#Counter">Counter</a></li><li><a href="#Simple_Config_Element">Simple Config Element</a></li><li><a href="#MongoDB_Source_Config_(DEPRECATED)">MongoDB Source Config (DEPRECATED)</a></li></ul></li><li><a href="#assertions">19.5 Assertions</a><ul><li><a href="#Response_Assertion">Response Assertion</a></li><li><a href="#Duration_Assertion">Duration Assertion</a></li><li><a href="#Size_Assertion">Size Assertion</a></li><li><a href="#XML_Assertion">XML Assertion</a></li><li><a href="#BeanShell_Assertion">BeanShell Assertion</a></li><li><a href="#MD5Hex_Assertion">MD5Hex Assertion</a></li><li><a href="#HTML_Assertion">HTML Assertion</a></li><li><a href="#XPath_Assertion">XPath Assertion</a></li><li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li><li><a href="#BSF_Assertion">BSF Assertion</a></li><li><a href="#JSR223_Assertion">JSR223 Assertion</a></li><li><a href="#Compare_Assertion">Compare Assertion</a></li><li><a href="#SMIME_Assertion">SMIME Assertion</a></li></ul></li><li><a href="#timers">19.6 Timers</a><ul><li><a href="#Constant_Timer">Constant Timer</a></li><li><a href="#Gaussian_Random_Timer">Gaussian Random Timer</a></li><li><a href="#Uniform_Random_Timer">Uniform Random Timer</a></li><li><a href="#Constant_Throughput_Timer">Constant Throughput Timer</a></li><li><a href="#Synchronizing_Timer">Synchronizing Timer</a></li><li><a href="#BeanShell_Timer">BeanShell Timer</a></li><li><a href="#BSF_Timer">BSF Timer</a></li><li><a href="#JSR223_Timer">JSR223 Timer</a></li><li><a href="#Poisson_Random_Timer">Poisson Random Timer</a></li></ul></li><li><a href="#preprocessors">19.7 Pre Processors</a><ul><li><a href="#HTML_Link_Parser">HTML Link Parser</a></li><li><a href="#HTTP_URL_Re-writing_Modifier">HTTP URL Re-writing Modifier</a></li><li><a href="#User_Parameters">User Parameters</a></li><li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li><li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li><li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li><li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li><li><a href="#RegEx_User_Parameters">RegEx User Parameters</a></li><li><a href="#Sample_Timeout">Sample Timeout</a></li></ul></li><li><a href="#postprocessors">19.8 Post-Processors</a><ul><li><a href="#Regular_Expression_Extractor">Regular Expression Extractor</a></li><li><a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li><li><a href="#XPath_Extractor">XPath Extractor</a></li><li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li><li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li><li><a href="#BSF_PostProcessor">BSF PostProcessor</a></li><li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li><li><a href="#JDBC_PostProcessor">JDBC PostProcessor</a></li><li><a href="#JSON_Path_PostProcessor">JSON Path PostProcessor</a></li></ul></li><li><a href="#Miscellaneous_Features">19.9 Miscellaneous Features</a><ul><li><a href="#Test_Plan">Test Plan</a></li><li><a href="#Thread_Group">Thread Group</a></li><li><a href="#WorkBench">WorkBench</a></li><li><a href="#SSL_Manager">SSL Manager</a></li><li><a href="#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="properties_reference.html">Next &gt;</a></li></ul><ul class="section-index"><li><a href="#introduction">20 Introduction</a><ul></ul></li><li><a href="#samplers">20.1 Samplers</a><ul><li><a href="#FTP_Request">FTP Request</a></li><li><a href="#HTTP_Request">HTTP Request</a></li><li><a href="#JDBC_Request">JDBC Request</a></li><li><a href="#Java_Request">Java Request</a></li><li><a href="#SOAP/XML-RPC_Request">SOAP/XML-RPC Request</a></li><li><a href="#LDAP_Request">LDAP Request</a></li><li><a href="#LDAP_Extended_Request">LDAP Extended Request</a></li><li><a href="#Access_Log_Sampler">Access Log Sampler</a></li><li><a href="#BeanShell_Sampler">BeanShell Sampler</a></li><li><a href="#BSF_Sampler">BSF Sampler</a></li><li><a href="#JSR223_Sampler">JSR223 Sampler</a></li><li><a href="#TCP_Sampler">TCP Sampler</a></li><li><a href="#JMS_Publisher">JMS Publisher</a></li><li><a href="#JMS_Subscriber">JMS Subscriber</a></li><li><a href="#JMS_Point-to-Point">JMS Point-to-Point</a></li><li><a href="#JUnit_Request">JUnit Request</a></li><li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li><li><a href="#Test_Action">Test Action</a></li><li><a href="#SMTP_Sampler">SMTP Sampler</a></li><li><a href="#OS_Process_Sampler">OS Process Sampler</a></li><li><a href="#MongoDB_Script_(DEPRECATED)">MongoDB Script (DEPRECATED)</a></li></ul></li><li><a href="#logic_controllers">20.2 Logic Controllers</a><ul><li><a href="#Simple_Controller">Simple Controller</a></li><li><a href="#Loop_Controller">Loop Controller</a></li><li><a href="#Once_Only_Controller">Once Only Controller</a></li><li><a href="#Interleave_Controller">Interleave Controller</a></li><li><a href="#Random_Controller">Random Controller</a></li><li><a href="#Random_Order_Controller">Random Order Controller</a></li><li><a href="#Throughput_Controller">Throughput Controller</a></li><li><a href="#Runtime_Controller">Runtime Controller</a></li><li><a href="#If_Controller">If Controller</a></li><li><a href="#While_Controller">While Controller</a></li><li><a href="#Switch_Controller">Switch Controller</a></li><li><a href="#ForEach_Controller">ForEach Controller</a></li><li><a href="#Module_Controller">Module Controller</a></li><li><a href="#Include_Controller">Include Controller</a></li><li><a href="#Transaction_Controller">Transaction Controller</a></li><li><a href="#Recording_Controller">Recording Controller</a></li><li><a href="#Critical_Section_Controller">Critical Section Controller</a></li></ul></li><li><a href="#listeners">20.3 Listeners</a><ul><li><a href="#Sample_Result_Save_Configuration">Sample Result Save Configuration</a></li><li><a href="#Graph_Results">Graph Results</a></li><li><a href="#Assertion_Results">Assertion Results</a></li><li><a href="#View_Results_Tree">View Results Tree</a></li><li><a href="#Aggregate_Report">Aggregate Report</a></li><li><a href="#View_Results_in_Table">View Results in Table</a></li><li><a href="#Simple_Data_Writer">Simple Data Writer</a></li><li><a href="#Monitor_Results_(DEPRECATED)">Monitor Results (DEPRECATED)</a></li><li><a href="#Aggregate_Graph">Aggregate Graph</a></li><li><a href="#Response_Time_Graph">Response Time Graph</a></li><li><a href="#Mailer_Visualizer">Mailer Visualizer</a></li><li><a href="#BeanShell_Listener">BeanShell Listener</a></li><li><a href="#Summary_Report">Summary Report</a></li><li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li><li><a href="#BSF_Listener">BSF Listener</a></li><li><a href="#JSR223_Listener">JSR223 Listener</a></li><li><a href="#Generate_Summary_Results">Generate Summary Results</a></li><li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li><li><a href="#Backend_Listener">Backend Listener</a></li></ul></li><li><a href="#config_elements">20.4 Configuration Elements</a><ul><li><a href="#CSV_Data_Set_Config">CSV Data Set Config</a></li><li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li><li><a href="#DNS_Cache_Manager">DNS Cache Manager</a></li><li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li><li><a href="#HTTP_Cache_Manager">HTTP Cache Manager</a></li><li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li><li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li><li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li><li><a href="#Java_Request_Defaults">Java Request Defaults</a></li><li><a href="#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li><li><a href="#Keystore_Configuration">Keystore Configuration</a></li><li><a href="#Login_Config_Element">Login Config Element</a></li><li><a href="#LDAP_Request_Defaults">LDAP Request Defaults</a></li><li><a href="#LDAP_Extended_Request_Defaults">LDAP Extended Request Defaults</a></li><li><a href="#TCP_Sampler_Config">TCP Sampler Config</a></li><li><a href="#User_Defined_Variables">User Defined Variables</a></li><li><a href="#Random_Variable">Random Variable</a></li><li><a href="#Counter">Counter</a></li><li><a href="#Simple_Config_Element">Simple Config Element</a></li><li><a href="#MongoDB_Source_Config_(DEPRECATED)">MongoDB Source Config (DEPRECATED)</a></li></ul></li><li><a href="#assertions">20.5 Assertions</a><ul><li><a href="#Response_Assertion">Response Assertion</a></li><li><a href="#Duration_Assertion">Duration Assertion</a></li><li><a href="#Size_Assertion">Size Assertion</a></li><li><a href="#XML_Assertion">XML Assertion</a></li><li><a href="#BeanShell_Assertion">BeanShell Assertion</a></li><li><a href="#MD5Hex_Assertion">MD5Hex Assertion</a></li><li><a href="#HTML_Assertion">HTML Assertion</a></li><li><a href="#XPath_Assertion">XPath Assertion</a></li><li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li><li><a href="#BSF_Assertion">BSF Assertion</a></li><li><a href="#JSR223_Assertion">JSR223 Assertion</a></li><li><a href="#Compare_Assertion">Compare Assertion</a></li><li><a href="#SMIME_Assertion">SMIME Assertion</a></li></ul></li><li><a href="#timers">20.6 Timers</a><ul><li><a href="#Constant_Timer">Constant Timer</a></li><li><a href="#Gaussian_Random_Timer">Gaussian Random Timer</a></li><li><a href="#Uniform_Random_Timer">Uniform Random Timer</a></li><li><a href="#Constant_Throughput_Timer">Constant Throughput Timer</a></li><li><a href="#Synchronizing_Timer">Synchronizing Timer</a></li><li><a href="#BeanShell_Timer">BeanShell Timer</a></li><li><a href="#BSF_Timer">BSF Timer</a></li><li><a href="#JSR223_Timer">JSR223 Timer</a></li><li><a href="#Poisson_Random_Timer">Poisson Random Timer</a></li></ul></li><li><a href="#preprocessors">20.7 Pre Processors</a><ul><li><a href="#HTML_Link_Parser">HTML Link Parser</a></li><li><a href="#HTTP_URL_Re-writing_Modifier">HTTP URL Re-writing Modifier</a></li><li><a href="#User_Parameters">User Parameters</a></li><li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li><li><a href="#BSF_PreProcessor">BSF PreProcessor</a></li><li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li><li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li><li><a href="#RegEx_User_Parameters">RegEx User Parameters</a></li><li><a href="#Sample_Timeout">Sample Timeout</a></li></ul></li><li><a href="#postprocessors">20.8 Post-Processors</a><ul><li><a href="#Regular_Expression_Extractor">Regular Expression Extractor</a></li><li><a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li><li><a href="#XPath_Extractor">XPath Extractor</a></li><li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li><li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li><li><a href="#BSF_PostProcessor">BSF PostProcessor</a></li><li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li><li><a href="#JDBC_PostProcessor">JDBC PostProcessor</a></li><li><a href="#JSON_Extractor">JSON Extractor</a></li></ul></li><li><a href="#Miscellaneous_Features">20.9 Miscellaneous Features</a><ul><li><a href="#Test_Plan">Test Plan</a></li><li><a href="#Thread_Group">Thread Group</a></li><li><a href="#WorkBench">WorkBench</a></li><li><a href="#SSL_Manager">SSL Manager</a></li><li><a href="#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder
                     (was:
                     HTTP Proxy Server
                     )
-                  </a></li><li><a href="#HTTP_Mirror_Server">HTTP Mirror Server</a></li><li><a href="#Property_Display">Property Display</a></li><li><a href="#Debug_Sampler">Debug Sampler</a></li><li><a href="#Debug_PostProcessor">Debug PostProcessor</a></li><li><a href="#Test_Fragment">Test Fragment</a></li><li><a href="#setUp_Thread_Group">setUp Thread Group</a></li><li><a href="#tearDown_Thread_Group">tearDown Thread Group</a></li></ul></li></ul><div class="section"><h1 id="introduction">19 Introduction<a class="sectionlink" href="#introduction" title="Link to here">&para;</a></h1>
+                  </a></li><li><a href="#HTTP_Mirror_Server">HTTP Mirror Server</a></li><li><a href="#Property_Display">Property Display</a></li><li><a href="#Debug_Sampler">Debug Sampler</a></li><li><a href="#Debug_PostProcessor">Debug PostProcessor</a></li><li><a href="#Test_Fragment">Test Fragment</a></li><li><a href="#setUp_Thread_Group">setUp Thread Group</a></li><li><a href="#tearDown_Thread_Group">tearDown Thread Group</a></li></ul></li></ul><div class="section"><h1 id="introduction">20 Introduction<a class="sectionlink" href="#introduction" title="Link to here">&para;</a></h1>
 <div class="description">
 <p>
 
@@ -22,7 +22,7 @@
 <p>
 </p>
 </div>
-</div><div class="section"><h1 id="samplers">19.1 Samplers<a class="sectionlink" href="#samplers" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="samplers">20.1 Samplers<a class="sectionlink" href="#samplers" title="Link to here">&para;</a></h1>
 <div class="description">
     <p>
     Samplers perform the actual work of JMeter.
@@ -279,7 +279,7 @@ so unsafe characters may need to be encoded to avoid errors such as <span class=
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Use as monitor</div><div class="description req-false">For use with the <a href="../usermanual/component_reference.html#Monitor_Results">Monitor Results</a> listener.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Use as monitor</div><div class="description req-false">For use with the <a href="../usermanual/component_reference.html#Monitor_Results">Monitor Results</a> listener. DEPRECATED</div><div class="required req-false">No</div></div>
        <div class="property"><div class="name req-false">Save response as MD5 hash?</div><div class="description req-false">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
@@ -398,7 +398,7 @@ This error is related to increased security in Java 7 version u16 (MD2) and vers
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <span class="code">jdk.certpath.disabledAlgorithms</span> property. Remove the MD2 value or the constraint on size, depending on your case.
 </p><p>
-This property is in this file:</p><pre class="source">JAVA_HOME/jre/lib/security/java.security</pre><p>See  <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56357">
+This property is in this file:</p><pre class="source">JAVA_HOME/jre/lib/security/java.security</pre><p>See  <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=56357">
       Bug
       56357</a> for details.
 </p><div class="links"><div class="title">See also:</div><ul class="links"><li><a href="test_plan.html#assertions">Assertion</a></li><li><a href="build-web-test-plan.html">Building a Web Test Plan</a></li><li><a href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</a></li><li><a href="../usermanual/component_reference.html#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li><li><a href="../usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li><li><a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a></li><li><a href="../usermanual/component_reference.html#HTML_Link_Parser">HTML Link Parser</a></li><li><a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a></li><li><a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a></li><li><a href="build-adv-web-test-plan.html#session_url_rewriting">HTTP Requests and Session ID's: URL Rewriting</a></li></ul></div><div class="go-top"><a href="#">^</a></div></div>
@@ -449,28 +449,24 @@ the additional variables for rows four, five and six will be removed.
             <li>Autocommit(true)</li>
             <li>Edit - this should be a variable reference that evaluates to one of the above</li>
             </ul>
-            <div class="clear"></div><div class="note">
-            When "<span class="code">Prepared Select Statement</span>", "<span class="code">Prepared Update Statement</span>" or "<span class="code">Callable Statement</span>" types are selected, a Statement Cache per connection is used by JDBC Request. 
-            It stores by default up to 100 PreparedStatements per connection, this can impact your database (Open Cursors).
-            </div><div class="clear"></div>
         </div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">SQL Query</div><div class="description req-true">
         SQL query.
         <div class="clear"></div><div class="note">Do not enter a trailing semi-colon.</div><div class="clear"></div>
         There is generally no need to use <span class="code">{</span> and <span class="code">}</span> to enclose Callable statements;
         however they may be used if the database uses a non-standard syntax.
-        [The JDBC driver automatically converts the statement if necessary when it is enclosed in <span class="code">{}</span>].
+        <div class="clear"></div><div class="note">The JDBC driver automatically converts the statement if necessary when it is enclosed in <span class="code">{}</span>.</div><div class="clear"></div>
         For example:
         <ul>
         <li><span class="code">select * from t_customers where id=23</span></li>
-        <li><span class="code">CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null,?, ?, null, null, null)</span>
+        <li><span class="code">CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (null, ?, ?, null, null, null)</span>
         <ul>
         <li>Parameter values: <span class="code">tablename</span>,<span class="code">filename</span></li>
         <li>Parameter types:  <span class="code">VARCHAR</span>,<span class="code">VARCHAR</span></li>
         </ul>
         </li>
-        The second example assumes you are using Apache Derby.
         </ul>
+        The second example assumes you are using Apache Derby.
         </div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">Parameter values</div><div class="description req-true">
         Comma-separated list of parameter values. Use <span class="code">]NULL[</span> to indicate a <span class="code">NULL</span> parameter.
@@ -479,14 +475,15 @@ the additional variables for rows four, five and six will be removed.
         The list must be enclosed in double-quotes if any of the values contain a comma or double-quote,
         and any embedded double-quotes must be doubled-up, for example:
         <pre class="source">"Dbl-Quote: "" and Comma: ,"</pre>
-        <div class="clear"></div><div class="note">There must be as many values as there are placeholders in the statement even if your parameters are <span class="code">OUT</span> ones, be sure to set a value even if the value will not be used (for example in a CallableStatement).</div><div class="clear"></div>
+        <div class="clear"></div><div class="note">There must be as many values as there are placeholders in the statement even if your parameters are <span class="code">OUT</span> ones.
+        Be sure to set a value even if the value will not be used (for example in a CallableStatement).</div><div class="clear"></div>
         </div><div class="required req-true">Yes, if a prepared or callable statement has parameters</div></div>
         <div class="property"><div class="name req-true">Parameter types</div><div class="description req-true">
-        Comma-separated list of SQL parameter types (e.g. <span class="code">INTEGER</span>, <span class="code">DATE</span>, <span class="code">VARCHAR</span>, <span class="code">DOUBLE</span>) or integer values of Constants when for example you use custom database types proposed by driver (<span class="code">-10</span> for <span class="code">OracleTypes.CURSOR</span> for example).<br>
+        Comma-separated list of SQL parameter types (e.g. <span class="code">INTEGER</span>, <span class="code">DATE</span>, <span class="code">VARCHAR</span>, <span class="code">DOUBLE</span>) or integer values of Constants. Those integer values can be used, when you use custom database types proposed by driver (For example <span class="code">OracleTypes.CURSOR</span> could be represented by its integer value <span class="code">-10</span>).<br>
         These are defined as fields in the class <span class="code">java.sql.Types</span>, see for example:<br>
         <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br>
-        [Note: JMeter will use whatever types are defined by the runtime JVM,
-        so if you are running on a different JVM, be sure to check the appropriate document]<br>
+        <div class="clear"></div><div class="note">Note: JMeter will use whatever types are defined by the runtime JVM,
+        so if you are running on a different JVM, be sure to check the appropriate documentation</div><div class="clear"></div>
         <b>If the callable statement has <span class="code">INOUT</span> or <span class="code">OUT</span> parameters, then these must be indicated by prefixing the
         appropriate parameter types, e.g. instead of "<span class="code">INTEGER</span>", use "<span class="code">INOUT INTEGER</span>".</b> <br>
         If not specified, "<span class="code">IN</span>" is assumed, i.e. "<span class="code">DATE</span>" is the same as "<span class="code">IN DATE</span>".
@@ -507,12 +504,12 @@ the additional variables for rows four, five and six will be removed.
         </div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Handle ResultSet</div><div class="description req-false">Defines how ResultSet returned from callable statements be handled:
             <ul>
-                <li>Store As String (default) - All variables on Variable Names list are stored as strings, will not iterate through a <span class="code">ResultSet</span> when present on the list.</li>
-                <li>Store As Object - Variables of <span class="code">ResultSet</span> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <span class="code">ResultSet</span> </li>
-                <li>Count Records - Variables of <span class="code">ResultSet</span> types will be iterated through showing the count of records as result. Variables will be stored as Strings.</li>
+                <li><span class="code">Store As String</span> (default) - All variables on Variable Names list are stored as strings, will not iterate through a <span class="code">ResultSet</span> when present on the list. <span class="code">CLOB</span>s will be converted to Strings. <span class="code">BLOB</span>s will be converted to Strings as if they were an UTF-8 encoded byte-array. Both <span class="code">CLOB</span>s and <span class="code">BLOB</span>s will be cut off after <span class="code">jdbcsampler.max_retain_result_size</span> bytes.</li>
+                <li><span class="code">Store As Object</span> - Variables of <span class="code">ResultSet</span> type on Variables Names list will be stored as Object and can be accessed in subsequent tests/scripts and iterated, will not iterate through the <span class="code">ResultSet</span>. <span class="code">CLOB</span>s will be handled as if <span class="code">Store As String</span> was selected. <span class="code">BLOBs</span> will be stored as a byte array. Both <span class="code">CLOB</span>s and <span class="code">BLOB</span>s will be cut off after <span class="code">jdbcsampler.max_retain_result_size</span> bytes.</li>
+                <li><span class="code">Count Records</span> - Variables of <span class="code">ResultSet</span> types will be iterated through showing the count of records as result. Variables will be stored as Strings. For <span class="code">BLOB</span>s the size of the object will be stored.</li>
             </ul>
         </div><div class="required req-false">No</div></div>
-</div><div class="links"><div class="title">See also:</div><ul class="links"><li><a href="build-db-test-plan.html">Building a Database Test Plan</a></li><li><a href="../usermanual/component_reference.html#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li></ul></div><div class="clear"></div><div class="note">Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</div><div class="clear"></div><div class="clear"></div><div class="note">Ensure Variable Name is unique across Test Plan.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+</div><div class="links"><div class="title">See also:</div><ul class="links"><li><a href="build-db-test-plan.html">Building a Database Test Plan</a></li><li><a href="../usermanual/component_reference.html#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li></ul></div><div class="clear"></div><div class="note">Current Versions of JMeter use UTF-8 as the character encoding. Previously the platform default was used.</div><div class="clear"></div><div class="clear"></div><div class="note">Ensure Variable Name is unique across Test Plan.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Java_Request">Java Request<a class="sectionlink" href="#Java_Request" title="Link to here">&para;</a></h2><div class="description"><p>This sampler lets you control a java class that implements the
 <span class="code">org.apache.jmeter.protocol.java.sampler.JavaSamplerClient</span> interface.
@@ -528,7 +525,7 @@ The <span class="code">JavaTest</span> example sampler can be useful for checkin
 values in almost all the fields. These can then be used by Assertions, etc.
 The fields allow variables to be used, so the values of these can readily be seen.
 </p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/java_request.png"><img src="../images/screenshots/java_request.png" width="628" height="365" alt="Screenshot for Control-Panel of Java Request"></a><figcaption>Screenshot of Control-Panel of Java Request</figcaption></figure></div><div class="clear"></div><div class="note">If the method <span class="code">teardownTest</span> is not overridden by a subclass of <span class="code">AbstractJavaSamplerClient</span>, its <span class="code">teardownTest</span> method will not be called.
+</div><div class="screenshot"><figure><a href="../images/screenshots/java_request.png"><img src="../images/screenshots/java_request.png" width="628" height="365" alt="Screenshot for Control-Panel of Java Request"></a><figcaption>Screenshot of Control-Panel of Java Request</figcaption></figure></div><div class="clear"></div><div class="note">If the method <span class="code">teardownTest</span> is not overridden by a subclass of <span class="code"><a href="../api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html">AbstractJavaSamplerClient</a></span>, its <span class="code">teardownTest</span> method will not be called.
 This reduces JMeter memory requirements.
 This will not have any impact on existing Test plans.
 </div><div class="clear"></div><div class="clear"></div><div class="note">The Add/Delete buttons don't serve any purpose at present.</div><div class="clear"></div><div class="properties"><h3 id="Java_Request_parms1">
@@ -962,7 +959,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
         <li><span class="code">FileName</span> - the file name, if any</li>
         <li><span class="code">Parameters</span> - text from the Parameters field</li>
         <li><span class="code">bsh.args</span> - the parameters, split as described above</li>
-        <li><span class="code">SampleResult</span> - pointer to the current SampleResult</li>
+        <li><span class="code">SampleResult</span> - pointer to the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html"><span class="code">SampleResult</span></a></li>
             <li><span class="code">ResponseCode</span> defaults to <span class="code">200</span></li>
             <li><span class="code">ResponseMessage</span> defaults to "<span class="code">OK</span>"</li>
             <li><span class="code">IsSuccess</span> defaults to <span class="code">true</span></li>
@@ -972,7 +969,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</pre></li>
-            <li><span class="code">props</span> - JMeterProperties (class <span class="code">java.util.Properties</span>) - e.g.
+            <li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g.
                 <pre class="source">props.get("START.HMS");
 props.put("PROP1","1234");</pre></li>
         </ul><p>When the script completes, control is returned to the Sampler, and it copies the contents
@@ -1021,7 +1018,6 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         <p>By default, JMeter supports the following languages:</p>
         <ul>
         <li>javascript</li>
-        <li>jexl</li>
         <li>xslt</li>
         </ul>
         <div class="clear"></div><div class="note">Unlike the BeanShell sampler, the interpreter is not saved between invocations.</div><div class="clear"></div>
@@ -1031,7 +1027,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
     <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this sampler that is shown in the tree.</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Scripting Language</div><div class="description req-true">Name of the BSF scripting language to be used.
       <div class="clear"></div><div class="note">N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: jexl, javascript, xslt.
+        The following are supported: javascript, xslt.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.
       </div><div class="clear"></div>
     </div><div class="required req-true">Yes</div></div>
@@ -1063,7 +1059,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</pre></li>
-<li><span class="code">props</span> - JMeterProperties  (class <span class="code">java.util.Properties</span>) - e.g. 
+<li><span class="code">props</span> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. 
   <pre class="source">props.get("START.HMS");
 props.put("PROP1","1234");</pre></li>
 <li><span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span></li>
@@ -1098,7 +1094,15 @@ To benefit from this feature:
     <li>Use Script files instead of inlining them. This will make JMeter compile them if this feature is available on ScriptEngine and cache them.</li>
     <li>Or Use Script Text and check <span class="code">Cache compiled script if available</span> property.
     <div class="clear"></div><div class="note">When using this feature, ensure your script code does not use JMeter variables directly in script code as caching would only cache first replacement. Instead use script parameters.</div><div class="clear"></div>
-    <div class="clear"></div><div class="note">To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="clear"></div>
+    <div class="clear"></div><div class="note">To benefit from caching and compilation, the language engine used for scripting must implement JSR223 <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="clear"></div>
+    <div class="clear"></div><div class="note">When using Groovy as scripting language and not checking <span class="code">Cache compiled script if available</span> (while caching is recommended), you should set this JVM Property <span class="code">-Dgroovy.use.classvalue=true</span>
+        due to a Groovy Memory leak as of version 2.4.6, see:
+        <ul>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7683">GROOVY-7683</a></li>
+            <li><a href="https://issues.apache.org/jira/browse/GROOVY-7591">GROOVY-7591</a></li>
+            <li><a href="https://bugs.openjdk.java.net/browse/JDK-8136353">JDK-8136353</a></li>
+        </ul> 
+    </div><div class="clear"></div>
     </li>
 </ul>
 Cache size is controlled by the following jmeter property (<span class="code">jmeter.properties</span>):
@@ -1120,14 +1124,13 @@ props.put("PROP1","1234");</pre>
         <a class="sectionlink" href="#JSR223_Sampler_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
     <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this sampler that is shown in the tree.</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Scripting Language</div><div class="description req-true">Name of the JSR223 scripting language to be used.
-      <div class="clear"></div><div class="note">N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: jexl, javascript, xslt.
+      <div class="clear"></div><div class="note">There are other languages supported than those that appear in the drop-down list.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.
       </div><div class="clear"></div>
     </div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-false">Script File</div><div class="description req-false">Name of a file to be used as a JSR223 script, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Parameters</div><div class="description req-false">List of parameters to be passed to the script file or the script.</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Cache compiled script if available</div><div class="description req-false">If checked (advised) and the language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Cache compiled script if available</div><div class="description req-false">If checked (advised) and the language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not), JMeter will compile the Script and cache it using it's MD5 hash as unique cache key</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">Script to be passed to JSR223 language</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>
 If a script file is supplied, that will be used, otherwise the script will be used.</p><p>
@@ -1147,7 +1150,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put("VAR2","value");
 vars.remove("VAR3");
 vars.putObject("OBJ1",new Object());</pre></li>
-<li><span class="code">props</span> - JMeterProperties  (class <span class="code">java.util.Properties</span>) - e.g. 
+<li><span class="code">props</span> - JMeterProperties  (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. 
   <pre class="source">props.get("START.HMS");
 props.put("PROP1","1234");</pre></li>
 <li><span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span></li>
@@ -1615,7 +1618,7 @@ This is to allow the <span class="code">setUp</span>/<span class="code">tearDown
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
 </p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/mailreader_sampler.png"><img src="../images/screenshots/mailreader_sampler.png" width="547" height="409" alt="Screenshot for Control-Panel of Mail Reader Sampler"></a><figcaption>Screenshot of Control-Panel of Mail Reader Sampler</figcaption></figure></div><div class="properties"><h3 id="Mail_Reader_Sampler_parms1">
+</div><div class="screenshot"><figure><a href="../images/screenshots/mailreader_sampler.png"><img src="../images/screenshots/mailreader_sampler.png" width="595" height="413" alt="Screenshot for Control-Panel of Mail Reader Sampler"></a><figcaption>Screenshot of Control-Panel of Mail Reader Sampler</figcaption></figure></div><div class="properties"><h3 id="Mail_Reader_Sampler_parms1">
         Parameters
         <a class="sectionlink" href="#Mail_Reader_Sampler_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
 <div class="property"><div class="name req-true">Name</div><div class="description req-true">Descriptive name for this element that is shown in the tree.</div><div class="required req-true"></div></div>
@@ -1819,7 +1822,7 @@ MongoDB Script is more suitable for functional testing or test setup (setup/tear
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="logic_controllers">19.2 Logic Controllers<a class="sectionlink" href="#logic_controllers" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="logic_controllers">20.2 Logic Controllers<a class="sectionlink" href="#logic_controllers" title="Link to here">&para;</a></h1>
 <div class="description">
     <br>Logic Controllers determine the order in which Samplers are processed.
 </div>
@@ -1858,6 +1861,7 @@ count to three, JMeter will send a total of <span class="code">2 * 3 = 6</span> 
         <div class="property"><div class="name req-true">Loop Count</div><div class="description req-true">
                 The number of times the subelements of this controller will be iterated each time
                 through a test run.
+                <p>The value <span class="code">-1</span> is equivalent to checking the <span class="code">Forever</span> toggle.</p>
                 <p><b>Special Case:</b> The Loop Controller embedded in the <a href="test_plan.html#thread_group">Thread Group</a>
                 element behaves slightly different.  Unless set to forever, it stops the test after
                 the given number of iterations have been done.</p>
@@ -1878,8 +1882,8 @@ another HTTP Request to a Loop Controller.  We configured the Loop Controller
 with a loop count value of five.</p>
 <p>JMeter will send the requests in the following order: Home Page, News Page,
 News Page, News Page, News Page, and News Page.</p>
-<p>Note, the File Reporter
-is configured to store the results in a file named "<span class="code">loop-test.dat</span>" in the current directory.</p>
+<div class="clear"></div><div class="note">Note, the File Reporter
+is configured to store the results in a file named "<span class="code">loop-test.dat</span>" in the current directory.</div><div class="clear"></div>
 
 </div><div class="go-top"><a href="#">^</a></div></div>
 
@@ -1916,11 +1920,14 @@ Thread Group or a Loop Controller is not currently defined. Odd things may happe
 
 <div class="component"><h2 id="Interleave_Controller">Interleave Controller<a class="sectionlink" href="#Interleave_Controller" title="Link to here">&para;</a></h2><div class="description"><p>If you add Generative or Logic Controllers to an Interleave Controller, JMeter will alternate among each of the
 other controllers for each loop iteration. </p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/logic-controller/interleave-controller.png"><img src="../images/screenshots/logic-controller/interleave-controller.png" width="329" height="104" alt="Screenshot for Control-Panel of Interleave Controller"></a><figcaption>Screenshot of Control-Panel of Interleave Controller</figcaption></figure></div><div class="properties"><h3 id="Interleave_Controller_parms1">
+</div><div class="screenshot"><figure><a href="../images/screenshots/logic-controller/interleave-controller.png"><img src="../images/screenshots/logic-controller/interleave-controller.png" width="626" height="127" alt="Screenshot for Control-Panel of Interleave Controller"></a><figcaption>Screenshot of Control-Panel of Interleave Controller</figcaption></figure></div><div class="properties"><h3 id="Interleave_Controller_parms1">
         Parameters
         <a class="sectionlink" href="#Interleave_Controller_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
         <div class="property"><div class="name req-false">name</div><div class="description req-false">Descriptive name for this controller that is shown in the tree.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">ignore sub-controller blocks</div><div class="description req-false">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Interleave accross threads</div><div class="description req-false">If checked, the interleave controller will alternate among each of its children controllers for each loop iteration but accross all threads, for example in a 
+        configuration with 4 threads and 3 child controllers, on first iteration
+        thread 1 will run first child, thread 2 second child, thread 3 third child, thread 4 first child, on next iteration each thread will run the following child controller</div><div class="required req-false">No</div></div>
 </div><div class="example"><div class="title">Simple Interleave Example<a class="sectionlink" href="#simple_interleave_example" title="Link to here">&para;</a></div>
 
 <p><a href="../demos/InterleaveTestPlan.jmx">Download</a> this example (see Figure 1).  In this example,
@@ -1997,19 +2004,21 @@ what results any given interaction will give</div><div class="clear"></div>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Throughput_Controller">Throughput Controller<a class="sectionlink" href="#Throughput_Controller" title="Link to here">&para;</a></h2><div class="description">
-<p>
-<b>This controller is badly named, as it does not control throughput.</b>
-Please refer to the <a href="../usermanual/component_reference.html#Constant_Throughput_Timer">Constant Throughput Timer</a> for an element that can be used to adjust the throughput.
-</p>
-<p>The Throughput Controller allows the user to control how often it is executed.  There are two modes - percent execution and total executions.</p>
+<p>The Throughput Controller allows the user to control how often it is executed.  
+There are two modes:
+<ul>
+<li>percent execution</li>
+<li>total executions</li>
+</ul>
 <dl>
   <dt><span class="code">Percent executions</span></dt><dd>causes the controller to execute a certain percentage of the iterations through the test plan.</dd>
   <dt><span class="code">Total executions</span></dt><dd>causes the controller to stop executing after a certain number of executions have occurred.</dd>
 </dl>
-<p>
-Like the Once Only Controller, this
-setting is reset when a parent Loop Controller restarts.
+Like the Once Only Controller, this setting is reset when a parent Loop Controller restarts.
 </p>
+<div class="clear"></div><div class="note">This controller is badly named, as it does not control throughput.
+Please refer to the <a href="../usermanual/component_reference.html#Constant_Throughput_Timer">Constant Throughput Timer</a> for an element that can be used to adjust the throughput.
+</div><div class="clear"></div>
 </div><div class="screenshot"><figure><a href="../images/screenshots/throughput_controller.png"><img src="../images/screenshots/throughput_controller.png" width="329" height="167" alt="Screenshot for Control-Panel of Throughput Controller"></a><figcaption>Screenshot of Control-Panel of Throughput Controller</figcaption></figure></div><div class="clear"></div><div class="note">The Throughput Controller can yield very complex behavior when combined with other controllers - in particular with interleave or random controllers as parents (also very useful).</div><div class="clear"></div><div class="properties"><h3 id="Throughput_Controller_parms1">
         Parameters
         <a class="sectionlink" href="#Throughput_Controller_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
@@ -2038,7 +2047,7 @@ setting is reset when a parent Loop Controller restarts.
         The script can be processed as a variable expression, rather than requiring Javascript.
         It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "<span class="code">true</span>" or "<span class="code">false</span>";
         now this can be done without the overhead of using Javascript as well. For example, previously one could use the condition:
-        <span class="code">${__jexl(${VAR} == 23)}</span> and this would be evaluated as <span class="code">true</span>/<span class="code">false</span>, the result would then be passed to Javascript
+        <span class="code">${__jexl3(${VAR} == 23)}</span> and this would be evaluated as <span class="code">true</span>/<span class="code">false</span>, the result would then be passed to Javascript
         which would then return <span class="code">true</span>/<span class="code">false</span>. If the Variable Expression option is selected, then the expression is evaluated
         and compared with "<span class="code">true</span>", without needing to use Javascript.
         Also, variable expressions can return any value, whereas the
@@ -2047,7 +2056,7 @@ setting is reset when a parent Loop Controller restarts.
         <div class="clear"></div><div class="note">
         No variables are made available to the script when the condition is interpreted as Javascript.
         If you need access to such variables, then select "<span class="code">Interpret Condition as Variable Expression?</span>" and use
-        a <span class="code">__javaScript()</span> function call. You can then use the objects "<span class="code">vars</span>", "<span class="code">log</span>", "<span class="code">ctx</span>" etc. in the script.
+        a <span class="code">__jexl3</span>, <span class="code">__groovy</span> or <span class="code">__javaScript()</span> (discouraged for performance) function call. You can then use the objects "<span class="code">vars</span>", "<span class="code">log</span>", "<span class="code">ctx</span>" etc. in the script.
         </div><div class="clear"></div>
         <div class="clear"></div><div class="note">
         To test if a variable is undefined (or null) do the following, suppose var is named <span class="code">myVar</span>, expression will be:
@@ -2063,7 +2072,7 @@ setting is reset when a parent Loop Controller restarts.
     <div class="property"><div class="name req-true">Condition (default Javascript)</div><div class="description req-true">By default the condition is interpreted as <b>Javascript</b> code that returns "<span class="code">true</span>" or "<span class="code">false</span>",
     but this can be overridden (see below)</div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">Interpret Condition as Variable Expression?</div><div class="description req-true">If this is selected, then the condition must be an expression that evaluates to "<span class="code">true</span>" (case is ignored).
-    For example, <span class="code">${FOUND}</span> or <span class="code">${__jexl(${VAR} &gt; 100)}</span>.
+    For example, <span class="code">${FOUND}</span> or <span class="code">${__jexl3(${VAR} &gt; 100)}</span>.
     Unlike the Javascript case, the condition is only checked to see if it matches "<span class="code">true</span>" (case is ignored).
     </div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">Evaluate for all children</div><div class="description req-true">
@@ -2074,13 +2083,14 @@ setting is reset when a parent Loop Controller restarts.
         <ul>
             <li><span class="code">${COUNT} &lt; 10</span></li>
             <li><span class="code">"${VAR}" == "abcd"</span></li>
-            <li><span class="code">${JMeterThread.last_sample_ok}</span> (check if the last sample succeeded)</li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <span class="code">false</span>, and a message is logged in <span class="code">jmeter.log</span>.
+        <div class="clear"></div><div class="note">Note it is advised to avoid using Javascript mode for performances</div><div class="clear"></div>
     </div><div class="example"><div class="title">Examples (Variable Expression)<a class="sectionlink" href="#example_if_variable" title="Link to here">&para;</a></div>
         <ul>
-            <li><span class="code">${__jexl(${COUNT} &lt; 10)}</span></li>
+            <li><span class="code">${__jexl3(${COUNT} &lt; 10)}</span></li>
             <li><span class="code">${RESULT}</span></li>
+            <li><span class="code">${JMeterThread.last_sample_ok}</span> (check if the last sample succeeded)</li>
         </ul>
     </div><div class="go-top"><a href="#">^</a></div></div>
 
@@ -2281,7 +2291,7 @@ However, if the property <span class="code">includecontroller.prefix</span> is d
 the contents are used to prefix the pathname.
 </div><div class="clear"></div>
 <div class="clear"></div><div class="note">
-When using Include Controller and including the same JMX file, ensure you name the Include Controller differently to avoid facing known issue <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=50898">
+When using Include Controller and including the same JMX file, ensure you name the Include Controller differently to avoid facing known issue <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=50898">
       Bug
       50898</a>.
 </div><div class="clear"></div>
@@ -2376,7 +2386,7 @@ Critical Section Controller takes locks only within one JVM, so if using Distrib
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="listeners">19.3 Listeners<a class="sectionlink" href="#listeners" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="listeners">20.3 Listeners<a class="sectionlink" href="#listeners" title="Link to here">&para;</a></h1>
 <div class="description">
     <br>
 Most of the listeners perform several roles in addition to "listening"
@@ -2414,6 +2424,15 @@ before loading the file.
 <p>Results can be read from XML or CSV format files.
 When reading from CSV results files, the header (if present) is used to determine which fields are present.
 <b>In order to interpret a header-less CSV file correctly, the appropriate properties must be set in <span class="code">jmeter.properties</span>.</b>
+<div class="clear"></div><div class="note">
+XML files written by JMeter have version 1.0 declared in header while actual file is serialized with 1.1 rules. 
+(This is done for historical compatibility reasons; see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=59973">
+      Bug
+      59973</a> and <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=58679">
+      Bug
+      58679</a>) 
+This causes strict XML parsers to fail. Consider using non-strict XML parsers to read JTL files.
+</div><div class="clear"></div>
 </p>
 <div class="clear"></div><div class="note">
 The file name can contain function and/or variable references.
@@ -2518,22 +2537,6 @@ Further details on the precise meaning of the statistical terms can be found on 
  </ul><p>The individual figures at the bottom of the display are the current values. 
  "<span class="code">Latest Sample</span>" is the current elapsed sample time, shown on the graph as "<span class="code">Data</span>".</p><p>The value displayed on the top left of graph is the max of 90<sup>th</sup> percentile of response time.</p><div class="go-top"><a href="#">^</a></div></div>
 
-<div class="component"><h2 id="Spline_Visualizer_(DEPRECATED)">Spline Visualizer (DEPRECATED)<a class="sectionlink" href="#Spline_Visualizer_(DEPRECATED)" title="Link to here">&para;</a></h2><div class="description">
-<p>
-The Spline Visualizer provides a view of all sample times from the start
-of the test till the end, regardless of how many samples have been taken.  The spline
-has 10 points, each representing 10% of the samples, and connected using spline
-logic to show a single continuous line.
-</p>
-<p>
-The graph is automatically scaled to fit within the window.
-This needs to be borne in mind when comparing graphs.
-</p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/spline_visualizer.png"><img src="../images/screenshots/spline_visualizer.png" width="737" height="489" alt="Screenshot for Control-Panel of Spline Visualizer (DEPRECATED)"></a><figcaption>Screenshot of Control-Panel of Spline Visualizer (DEPRECATED)</figcaption></figure></div><div class="clear"></div><div class="note">
-Spline Visualizer MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
-
 <div class="component"><h2 id="Assertion_Results">Assertion Results<a class="sectionlink" href="#Assertion_Results" title="Link to here">&para;</a></h2><div class="description">
 <div class="clear"></div><div class="note">
 Assertion Results MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
@@ -2600,6 +2603,9 @@ Images, style-sheets, etc. aren't downloaded.
 <tr><td><span class="code">HTML (download resources)</span></td>
 <td>If the <i>HTML (download resources) view</i> option is selected, the renderer
 may download images, style-sheets, etc. referenced by the HTML code. 
+<br></td></tr>
+<tr><td><span class="code">HTML Source formatted</span></td>
+<td>If the <em>HTML Source formatted view</em> option is selected, the renderer will display the HTML source code formatted and cleaned by <a href="https://jsoup.org/">Jsoup</a>. 
 <br></td></tr>
 <tr><td><span class="code">JSON</span></td>
 <td>The <i>JSON view</i> will show the response in tree style (also handles JSON embedded in JavaScript).
@@ -2742,7 +2748,8 @@ The time unit is chosen so that the displayed rate is at least 1.0.
 When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as 0.5.
 </li>
-<li><span class="code">Kb/sec</span> - The throughput measured in Kilobytes per second</li>
+<li><span class="code">Received KB/sec</span> - The throughput measured in received Kilobytes per second</li>
+<li><span class="code">Sent KB/sec</span> - The throughput measured in sent Kilobytes per second</li>
 </ul>
 <p>Times are in milliseconds.</p>
 </div><div class="screenshot"><figure><a href="../images/screenshots/aggregate_report.png"><img src="../images/screenshots/aggregate_report.png" width="1140" height="266" alt="Screenshot for Control-Panel of Aggregate Report"></a><figcaption>Screenshot of Control-Panel of Aggregate Report</figcaption></figure></div><div align="center">
@@ -2769,7 +2776,7 @@ The fields to save are defined by JMeter properties.
 See the <span class="code">jmeter.properties</span> file for details.
 </div><div class="screenshot"><figure><a href="../images/screenshots/simpledatawriter.png"><img src="../images/screenshots/simpledatawriter.png" width="741" height="141" alt="Screenshot for Control-Panel of Simple Data Writer"></a><figcaption>Screenshot of Control-Panel of Simple Data Writer</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
 
-<div class="component"><h2 id="Monitor_Results">Monitor Results<a class="sectionlink" href="#Monitor_Results" title="Link to here">&para;</a></h2><div class="description">
+<div class="component"><h2 id="Monitor_Results_(DEPRECATED)">Monitor Results (DEPRECATED)<a class="sectionlink" href="#Monitor_Results_(DEPRECATED)" title="Link to here">&para;</a></h2><div class="description">
 <p>Monitor Results is a new Visualizer for displaying server
 status. It is designed for Tomcat 5, but any servlet container
 can port the status servlet and use this monitor. There are two primary
@@ -2796,28 +2803,7 @@ Use a browser to check that you can access the Tomcat status servlet OK.
 For a detailed description of how to use the monitor, please refer to
 <a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
 </p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/monitor_screencap.png"><img src="../images/screenshots/monitor_screencap.png" width="762" height="757" alt="Screenshot for Control-Panel of Monitor Results"></a><figcaption>Screenshot of Control-Panel of Monitor Results</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
-
-<div class="component"><h2 id="Distribution_Graph_(DEPRECATED)">Distribution Graph (DEPRECATED)<a class="sectionlink" href="#Distribution_Graph_(DEPRECATED)" title="Link to here">&para;</a></h2><div class="description">
-<div class="clear"></div><div class="note">
-Distribution Graph MUST NOT BE USED during load test as it consumes a lot of resources (memory and CPU). Use it only for either functional testing or 
-during Test Plan debugging and Validation.
-</div><div class="clear"></div>
-
-<p>The distribution graph will display a bar for every unique response time. Since the
-granularity of <span class="code">System.currentTimeMillis()</span> is 10 milliseconds, the 90% threshold should be
-within the width of the graph. The graph will draw two threshold lines: 50% and 90%.
-What this means is 50% of the response times finished between 0 and the line. The same
-is true of 90% line. Several tests with Tomcat were performed using 30 threads for 600K
-requests. The graph was able to display the distribution without any problems and both
-the 50% and 90% line were within the width of the graph. A performant application will
-generally produce results that clump together. A poorly written application that has
-memory leaks may result in wild fluctuations. In those situations, the threshold lines
-may be beyond the width of the graph. The recommended solution to this specific problem
-is fix the webapp so it performs well. If your test plan produces distribution graphs
-with no apparent clumping or pattern, it may indicate a memory leak. The only way to
-know for sure is to use a profiling tool.</p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/distribution_graph.png"><img src="../images/screenshots/distribution_graph.png" width="819" height="626" alt="Screenshot for Control-Panel of Distribution Graph (DEPRECATED)"></a><figcaption>Screenshot of Control-Panel of Distribution Graph (DEPRECATED)</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
+</div><div class="screenshot"><figure><a href="../images/screenshots/monitor_screencap.png"><img src="../images/screenshots/monitor_screencap.png" width="762" height="757" alt="Screenshot for Control-Panel of Monitor Results (DEPRECATED)"></a><figcaption>Screenshot of Control-Panel of Monitor Results (DEPRECATED)</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Aggregate_Graph">Aggregate Graph<a class="sectionlink" href="#Aggregate_Graph" title="Link to here">&para;</a></h2><div class="description">The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
@@ -2872,7 +2858,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
         <div class="property"><div class="name req-false">Graph size</div><div class="description req-false">Compute the graph size by  the width and height depending of the current JMeter's window size.
         Use <span class="code">Width</span> and <span class="code">Height</span> fields to define a custom size. The unit is pixel. </div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">X Axis settings</div><div class="description req-false">Customize the date format of  X axis label.
-        The syntax is the Java <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</div><div class="required req-false">No</div></div>
+        The syntax is the Java <a href="http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat API</a>.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Y Axis settings</div><div class="description req-false">Define a custom maximum value for Y Axis in milli-seconds. Define the increment for the scale (in ms) Show or not the number grouping in Y Axis labels.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-true">Legend</div><div class="description req-true">Define the placement and font settings for chart legend</div><div class="required req-true">Yes</div></div>
 </div><div class="go-top"><a href="#">^</a></div></div>
@@ -2942,7 +2928,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 </pre></li>
-<li><span class="code">props</span> - (JMeterProperties - class <span class="code">java.util.Properties</span>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></li>
+<li><span class="code">props</span> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></li>
 <li><span class="code">sampleResult</span>, <span class="code">prev</span> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a></li>
 <li><span class="code">sampleEvent</span> (<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) gives access to the current sample event</li>
 </ul><p>For details of all the methods available on each of the above variables, please check the Javadoc</p><p>If the property <span class="code">beanshell.listener.init</span> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p><div class="go-top"><a href="#">^</a></div></div>
@@ -2975,7 +2961,8 @@ The time unit is chosen so that the displayed rate is at least <span class="code
 When the throughput is saved to a CSV file, it is expressed in requests/second,
 i.e. 30.0 requests/minute is saved as <span class="code">0.5</span>.
 </li>
-<li><span class="code">Kb/sec</span> - The throughput measured in Kilobytes per second</li>
+<li><span class="code">Received KB/sec</span> - The throughput measured in Kilobytes per second</li>
+<li><span class="code">Sent KB/sec</span> - The throughput measured in Kilobytes per second</li>
 <li><span class="code">Avg. Bytes</span> - average size of the sample response in bytes.</li>
 </ul>
 <p>Times are in milliseconds.</p>
@@ -3062,7 +3049,7 @@ Note that these are BSF variables - i.e. they can be used directly in the script
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</pre></dd>
-<dt><span class="code">props</span></dt><dd>(JMeterProperties - class <span class="code">java.util.Properties</span>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></dd>
+<dt><span class="code">props</span></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></dd>
 <dt><span class="code">sampleResult</span>, <span class="code">prev</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><span class="code">sampleEvent</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><span class="code">sampler</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -3085,7 +3072,9 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
         <dt><span class="code">args</span></dt><dd>String array containing parameters, split on white-space</dd>
     </dl></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Script file</div><div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not).
+    <div class="clear"></div><div class="note">See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</div><div class="clear"></div>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>
 Before invoking the script, some variables are set up.
@@ -3101,7 +3090,7 @@ Note that these are JSR223 variables - i.e. they can be used directly in the scr
 vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");</pre></dd>
-<dt><span class="code">props</span></dt><dd>(JMeterProperties - class <span class="code">java.util.Properties</span>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></dd>
+<dt><span class="code">props</span></dt><dd>(JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g. <span class="code">props.get("START.HMS");</span> <span class="code">props.put("PROP1","1234");</span></dd>
 <dt><span class="code">sampleResult</span>, <span class="code">prev</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the SampleResult</dd>
 <dt><span class="code">sampleEvent</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/SampleEvent.html">SampleEvent</a>) - gives access to the SampleEvent</dd>
 <dt><span class="code">sampler</span></dt><dd>(<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>)- gives access to the last sampler</dd>
@@ -3226,7 +3215,7 @@ By default, a Graphite implementation is provided.
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="config_elements">19.4 Configuration Elements<a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="config_elements">20.4 Configuration Elements<a class="sectionlink" href="#config_elements" title="Link to here">&para;</a></h1>
 <div class="description">
     <br>
     Configuration elements can be used to set up defaults and variables for later use by samplers.
@@ -3281,7 +3270,7 @@ By default, a Graphite implementation is provided.
     <div class="clear"></div><div class="note">CSV Dataset variables are defined at the start of each test iteration.
     As this is after configuration processing is completed,
     they cannot be used for some configuration items - such as JDBC Config - 
-    that process their contents at configuration time (see <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=40394">
+    that process their contents at configuration time (see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=40394">
       Bug
       40394</a>)
     However the variables do work in the HTTP Auth Manager, as the <span class="code">username</span> etc. are processed at run-time.
@@ -3694,12 +3683,12 @@ instead. (see figures 12 and 13).</p>
         See <a href="https://commons.apache.org/proper/commons-dbcp/api-2.1.1/org/apache/commons/dbcp2/BasicDataSource.html#getSoftMinEvictableIdleTimeMillis--">BasicDataSource.html#getSoftMinEvictableIdleTimeMillis</a>.
         Defaults to 5000 (5 seconds)
         </div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">Validation Query</div><div class="description req-true">A simple query used to determine if the database is still responding.
-        This defaults to 'SELECT 1' which is suitable for many databases. 
-        However some may require a different query; for example Oracle requires something like 'SELECT 1 FROM DUAL'.
-        Note this validation query is used on pool creation to validate it even if "Test While Idle" suggests query would only be used on idle connections. 
-        This is DBCP behaviour.
-        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Validation Query</div><div class="description req-false">A simple query used to determine if the database is still responding.
+        This defaults to the '<span class="code">isValid()</span>' method of the jdbc driver, which is suitable for many databases.
+        However some may require a different query; for example Oracle something like '<span class="code">SELECT 1 FROM DUAL</span>' could be used.
+        <div class="clear"></div><div class="note">Note this validation query is used on pool creation to validate it even if "<span class="code">Test While Idle</span>" suggests query would only be used on idle connections.
+        This is DBCP behaviour.</div><div class="clear"></div>
+        </div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-true">Database URL</div><div class="description req-true">JDBC Connection string for the database.</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">JDBC Driver class</div><div class="description req-true">Fully qualified name of driver class. (Must be in
         JMeter's classpath - easiest to copy <span class="code">.jar</span> file into JMeter's <span class="code">/lib</span> directory).</div><div class="required req-true">Yes</div></div>
@@ -3865,7 +3854,7 @@ however the <span class="code">minimum</span> and <span class="code">maximum</sp
   <div class="property"><div class="name req-true">Maximum Value</div><div class="description req-true">The maximum value (<span class="code">long</span>) of the generated random number.</div><div class="required req-true">Yes</div></div>
   <div class="property"><div class="name req-false">Random Seed</div><div class="description req-false">The seed for the random number generator. Default is the current time in milliseconds. 
   If you use the same seed value with Per Thread set to <span class="code">true</span>, you will get the same value for each Thread as per 
-  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html">Random</a> class.
+  <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html">Random</a> class.
   </div><div class="required req-false">No</div></div>
   <div class="property"><div class="name req-true">Per Thread(User)?</div><div class="description req-true">If <span class="code">False</span>, the generator is shared between all threads in the thread group.
   If <span class="code">True</span>, then each thread has its own random generator.</div><div class="required req-true">Yes</div></div>
@@ -4000,7 +3989,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="assertions">19.5 Assertions<a class="sectionlink" href="#assertions" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="assertions">20.5 Assertions<a class="sectionlink" href="#assertions" title="Link to here">&para;</a></h1>
 <div class="description">
     <p>
     Assertions are used to perform additional checks on samplers, and are processed after <b>every sampler</b>
@@ -4241,7 +4230,7 @@ These are strings unless otherwise noted:
     <pre class="source">vars.get("VAR1");
 vars.put("VAR2","value");
 vars.putObject("OBJ1",new Object());</pre></li>
-  <li><span class="code">props</span> - JMeterProperties (class <span class="code">java.util.Properties</span>) - e.g.
+  <li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g.
     <pre class="source">props.get("START.HMS");
 props.put("PROP1","1234");</pre></li>
 </ul><p>The following methods of the Response object may be useful:</p><ul>
@@ -4284,7 +4273,7 @@ Some sample expressions:
 <li><span class="code">//title[text()='Text to match']</span> - matches <span class="code">&lt;text&gt;Text to match&lt;/text&gt;</span> anywhere in the response</li>
 <li><span class="code">/title[text()='Text to match']</span> - matches <span class="code">&lt;text&gt;Text to match&lt;/text&gt;</span> at root level in the response</li>
 </ul>
-</div><div class="screenshot"><figure><a href="../images/screenshots/xpath_assertion.png"><img src="../images/screenshots/xpath_assertion.png" width="800" height="317" alt="Screenshot for Control-Panel of XPath Assertion"></a><figcaption>Screenshot of Control-Panel of XPath Assertion</figcaption></figure></div><div class="properties"><h3 id="XPath_Assertion_parms1">
+</div><div class="screenshot"><figure><a href="../images/screenshots/xpath_assertion.png"><img src="../images/screenshots/xpath_assertion.png" width="871" height="615" alt="Screenshot for Control-Panel of XPath Assertion"></a><figcaption>Screenshot of Control-Panel of XPath Assertion</figcaption></figure></div><div class="properties"><h3 id="XPath_Assertion_parms1">
         Parameters
         <a class="sectionlink" href="#XPath_Assertion_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
 <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this element that is shown in the tree.</div><div class="required req-false">No</div></div>
@@ -4292,7 +4281,7 @@ Some sample expressions:
 <div class="property"><div class="name req-false">Quiet</div><div class="description req-false">Sets the Tidy Quiet flag</div><div class="required req-false">If Tidy is selected</div></div>
 <div class="property"><div class="name req-false">Report Errors</div><div class="description req-false">If a Tidy error occurs, then set the Assertion accordingly</div><div class="required req-false">If Tidy is selected</div></div>
 <div class="property"><div class="name req-false">Show warnings</div><div class="description req-false">Sets the Tidy showWarnings option</div><div class="required req-false">If Tidy is selected</div></div>
-<div class="property"><div class="name req-false">Use Namespaces</div><div class="description req-false">Should namespaces be honoured?</div><div class="required req-false">If Tidy is not selected</div></div>
+<div class="property"><div class="name req-false">Use Namespaces</div><div class="description req-false">Should namespaces be honoured? (see note below on NAMESPACES)</div><div class="required req-false">If Tidy is not selected</div></div>
 <div class="property"><div class="name req-false">Validate XML</div><div class="description req-false">Check the document against its schema.</div><div class="required req-false">If Tidy is not selected</div></div>
 <div class="property"><div class="name req-false">Ignore Whitespace</div><div class="description req-false">Ignore Element Whitespace.</div><div class="required req-false">If Tidy is not selected</div></div>
 <div class="property"><div class="name req-false">Fetch External DTDs</div><div class="description req-false">If selected, external DTDs are fetched.</div><div class="required req-false">If Tidy is not selected</div></div>
@@ -4301,6 +4290,7 @@ Some sample expressions:
 </div><div class="clear"></div><div class="note">
 The non-tolerant parser can be quite slow, as it may need to download the DTD etc.
 </div><div class="clear"></div><div class="clear"></div><div class="note">
+<b>NAMESPACES</b>
 As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
 you can provide a Properties file which contains mappings for the namespace prefixes: 
 <pre class="source">
@@ -4352,7 +4342,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </pre></li>
-<li><span class="code">props</span> - (JMeterProperties - class <span class="code">java.util.Properties</span>) - e.g.
+<li><span class="code">props</span> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g.
 <pre class="source">
 props.get("START.HMS");
 props.put("PROP1","1234");
@@ -4382,7 +4372,9 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
         <li><span class="code">args</span> - String array containing parameters, split on white-space</li>
     </ul></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Script file</div><div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <div class="clear"></div><div class="note">See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</div><div class="clear"></div>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>The following variables are set up for use by the script:</p><ul>
 <li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
@@ -4398,7 +4390,7 @@ vars.put(key,val);
 vars.putObject("OBJ1",new Object());
 vars.getObject("OBJ2");
 </pre></li>
-<li><span class="code">props</span> - (JMeterProperties - class <span class="code">java.util.Properties</span>) - e.g.
+<li><span class="code">props</span> - (JMeterProperties - class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) - e.g.
 <pre class="source">
 props.get("START.HMS");
 props.put("PROP1","1234");
@@ -4463,9 +4455,18 @@ please ensure that you select "<span class="code">Store the message using MIME (
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="timers">19.6 Timers<a class="sectionlink" href="#timers" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="timers">20.6 Timers<a class="sectionlink" href="#timers" title="Link to here">&para;</a></h1>
 <div class="description">
-    <br>
+    <div class="clear"></div><div class="note">
+    Since version 3.1, a new feature (in Beta mode as of JMeter 3.1 and subject to changes) has been implemented which provides the following feature.<br>
+    You can apply a multiplication factor on the sleep delays computed by Random timer by setting property <span class="code">timer.factor=float number</span> where float number is a decimal positive number.<br>
+    JMeter will multiply this factor by the computed sleep delay. This feature can be used by:
+    <ul> 
+        <li><a href="../usermanual/component_reference.html#Gaussian_Random_Timer">Gaussian Random Timer</a></li>
+        <li><a href="../usermanual/component_reference.html#Poisson_Random_Timer">Poisson Random Timer</a></li>
+        <li><a href="../usermanual/component_reference.html#Uniform_Random_Timer">Uniform Random Timer</a></li>
+    </ul> 
+    </div><div class="clear"></div>
     <div class="clear"></div><div class="note">
     Note that timers are processed <b>before</b> each sampler in the scope in which they are found;
     if there are several timers in the same scope, <b>all</b> the timers will be processed <b>before
@@ -4550,8 +4551,8 @@ Note that the throughput value should not be changed too often during a test
     <li><span class="code">all active threads (shared)</span> - as above; each thread is delayed based on when any thread last ran.</li>
    </ul>
   </div><div class="required req-true">Yes</div></div>
-  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.
-  The shared algorithm should generate a more accurate overall transaction rate.
+  <p>The shared and non-shared algorithms both aim to generate the desired throughput, and will produce similar results.<br>
+  The shared algorithm should generate a more accurate overall transaction rate.<br>
   The non-shared algorithm should generate a more even spread of transactions across threads.</p>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
@@ -4686,7 +4687,9 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
     A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property
      The return value is converted to a long integer and used as the number of milliseconds to wait.
      </div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <div class="clear"></div><div class="note">See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</div><div class="clear"></div>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">
         The script. The return value is used as the number of milliseconds to wait.
     </div><div class="required req-true">Yes (unless script file is provided)</div></div>
@@ -4716,7 +4719,7 @@ to the random delay.</div><div class="required req-true">Yes</div></div>
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="preprocessors">19.7 Pre Processors<a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="preprocessors">20.7 Pre Processors<a class="sectionlink" href="#preprocessors" title="Link to here">&para;</a></h1>
     <div class="description">
     <br>
         Preprocessors are used to modify the Samplers in their scope.
@@ -4733,7 +4736,7 @@ expressions are used to find matches.</p>
 Matches are performed using <span class="code">protocol</span>, <span class="code">host</span>, <span class="code">path</span> and <span class="code">parameter names</span>.
 The target sampler cannot contain parameters that are not in the response links.
 </div><div class="clear"></div><div class="clear"></div><div class="note">
-If using distributed testing, ensure you switch mode (see <span class="code">jmeter.properties</span>) so that it's not a stripping one, see <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56376">
+If using distributed testing, ensure you switch mode (see <span class="code">jmeter.properties</span>) so that it's not a stripping one, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=56376">
       Bug
       56376</a>
 </div><div class="clear"></div><div class="example"><div class="title">Spidering Example<a class="sectionlink" href="#spider_example" title="Link to here">&para;</a></div>
@@ -4799,7 +4802,7 @@ Clever users will even determine that this modifier can be used to grab values t
         URL Encode value when writing parameter
         </div><div class="required req-false">No</div></div>
 </div><div class="clear"></div><div class="note">
-If using distributed testing, ensure you switch mode (see <span class="code">jmeter.properties</span>) so that it's not a stripping one, see <a href="http://bz.apache.org/bugzilla/show_bug.cgi?id=56376">
+If using distributed testing, ensure you switch mode (see <span class="code">jmeter.properties</span>) so that it's not a stripping one, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=56376">
       Bug
       56376</a>.
 </div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
@@ -4920,7 +4923,9 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
         <li><span class="code">args</span> - String array containing parameters, split on white-space</li>
     </ul></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Script file</div><div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <div class="clear"></div><div class="note">See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</div><div class="clear"></div>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>The following JSR223 variables are set up for use by the script:</p><ul>
 <li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
@@ -5022,7 +5027,7 @@ can be set to <span class="code">true</span> to use a separate Runnable thread i
 
 <a href="#">^</a>
 
-</div><div class="section"><h1 id="postprocessors">19.8 Post-Processors<a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="postprocessors">20.8 Post-Processors<a class="sectionlink" href="#postprocessors" title="Link to here">&para;</a></h1>
     <div class="description">
     <p>
         As the name suggests, Post-Processors are applied after samplers. Note that they are
@@ -5112,6 +5117,11 @@ generate the template string, and store the result into the given variable name.
         In this case, remove the default value once debugging is complete.
         </p> 
         </div><div class="required req-false">No, but recommended</div></div>
+        <div class="property"><div class="name req-false">Use empty default value</div><div class="description req-false">
+        If the checkbox is checked and <span class="code">Default Value</span> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <span class="code">${var}</span> (if <span class="code">Reference Name</span> is var) in your Test Plan, if the extracted value is not found then 
+        <span class="code">${var}</span> will be equal to empty string instead of containing <span class="code">${var}</span> which may be useful if extracted value is optional.
+        </div><div class="required req-false">No</div></div>
 </div><p>
     If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
 </p><ul>
@@ -5212,6 +5222,11 @@ extracting the node as text or attribute value and store the result into the giv
         In this case, remove the default value once debugging is complete.
         </p> 
         </div><div class="required req-false">No, but recommended</div></div>
+        <div class="property"><div class="name req-false">Use empty default value</div><div class="description req-false">
+        If the checkbox is checked and <span class="code">Default Value</span> is empty, then JMeter will set the variable to empty string instead of not setting it.
+        Thus when you will for example use <span class="code">${var}</span> (if <span class="code">Reference Name</span> is var) in your Test Plan, if the extracted value is not found then 
+        <span class="code">${var}</span> will be equal to empty string instead of containing <span class="code">${var}</span> which may be useful if extracted value is optional.
+        </div><div class="required req-false">No</div></div>
 </div><p>
     If the match number is set to a non-negative number, and a match occurs, the variables are set as follows:
 </p><ul>
@@ -5257,7 +5272,7 @@ extracting the node as text or attribute value and store the result into the giv
 <div class="property"><div class="name req-false">Report Errors</div><div class="description req-false">If a Tidy error occurs, then set the Assertion accordingly</div><div class="required req-false">If Tidy is selected</div></div>
 <div class="property"><div class="name req-false">Show warnings</div><div class="description req-false">Sets the Tidy showWarnings option</div><div class="required req-false">If Tidy is selected</div></div>
 <div class="property"><div class="name req-false">Use Namespaces</div><div class="description req-false">
-        If checked, then the XML parser will use namespace resolution.
+        If checked, then the XML parser will use namespace resolution.(see note below on NAMESPACES)
         Note that currently only namespaces declared on the root element will be recognised.
         A later version of JMeter may support user-definition of additional workspace names.
         Meanwhile, a work-round is to replace: 
@@ -5266,6 +5281,7 @@ extracting the node as text or attribute value and store the result into the giv
         <pre class="source">//*[local-name()='tagname' and namespace-uri()='uri-for-namespace']</pre>
         where "<span class="code">uri-for-namespace</span>" is the uri for the "<span class="code">mynamespace</span>" namespace.
         (not applicable if Tidy is selected)
+        
 </div><div class="required req-false">If Tidy is not selected</div></div>
     <div class="property"><div class="name req-false">Validate XML</div><div class="description req-false">Check the document against its schema.</div><div class="required req-false">If Tidy is not selected</div></div>
     <div class="property"><div class="name req-false">Ignore Whitespace</div><div class="description req-false">Ignore Element Whitespace.</div><div class="required req-false">If Tidy is not selected</div></div>
@@ -5305,7 +5321,19 @@ extracting the node as text or attribute value and store the result into the giv
          <li>Tidy attempts to correct improperly nested elements. For example - original (incorrect) <span class="code">ul/font/li</span> becomes correct <span class="code">ul/li/font</span></li>
      </ul>
      See <a href="http://jtidy.sf.net">Tidy homepage</a> for more information.
- </div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+ </div><div class="clear"></div><div class="clear"></div><div class="note">
+<b>NAMESPACES</b>
+As a work-round for namespace limitations of the Xalan XPath parser implementation on which JMeter is based,
+you can provide a Properties file which contains mappings for the namespace prefixes: 
+<pre class="source">
+prefix1=Full Namespace 1
+prefix2=Full Namespace 2
+&hellip;
+</pre>
+
+You reference this file in <span class="code">jmeter.properties</span> file using the property:
+    <pre class="source">xpath.namespace.config</pre>
+</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Result_Status_Action_Handler">Result Status Action Handler<a class="sectionlink" href="#Result_Status_Action_Handler" title="Link to here">&para;</a></h2><div class="description">This test element allows the user to stop the thread or the whole test if the relevant sampler failed.
    </div><div class="screenshot"><figure><a href="../images/screenshots/resultstatusactionhandler.png"><img src="../images/screenshots/resultstatusactionhandler.png" width="613" height="133" alt="Screenshot for Control-Panel of Result Status Action Handler"></a><figcaption>Screenshot of Control-Panel of Result Status Action Handler</figcaption></figure></div><div class="properties"><h3 id="Result_Status_Action_Handler_parms1">
@@ -5425,7 +5453,9 @@ The JSR223 PostProcessor allows JSR223 script code to be applied after taking a 
         <li><span class="code">args</span> - String array containing parameters, split on white-space</li>
     </ul></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Script file</div><div class="description req-false">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<span class="code">user.dir</span>" System property</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code">Compilable</span> interface (Groovy is one of these, java, beanshell and javascript are not)</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Script compilation caching</div><div class="description req-false">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <div class="clear"></div><div class="note">See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</div><div class="clear"></div>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>
 Before invoking the script, some variables are set up.
@@ -5456,16 +5486,16 @@ This can be useful if your JDBC Sample changes some data and you want to reset s
 In the linked test plan, "<span class="code">JDBC PostProcessor</span>" JDBC PostProcessor calls a stored procedure to delete from Database the Price Cut-Off that was created by PreProcessor.
 </p><figure><a href="../images/screenshots/jdbc-post-processor.png"><img src="../images/screenshots/jdbc-post-processor.png" width="818" height="399" alt="JDBC PostProcessor"></a><figcaption>JDBC PostProcessor</figcaption></figure><div class="go-top"><a href="#">^</a></div></div>
 
-<div class="component"><h2 id="JSON_Path_PostProcessor">JSON Path PostProcessor<a class="sectionlink" href="#JSON_Path_PostProcessor" title="Link to here">&para;</a></h2><div class="description">
+<div class="component"><h2 id="JSON_Extractor">JSON Extractor<a class="sectionlink" href="#JSON_Extractor" title="Link to here">&para;</a></h2><div class="description">
 <p>
 The JSON PostProcessor enables you extract data from JSON responses using JSON-PATH syntax. This post processor is very similar to Regular expression extractor.
 It must be placed as a child of HTTP Sampler or any other sampler that has responses.
-It will alow you to extract in a very easy way text content, see <a href="http://goessner.net/articles/JsonPath/">JSON Path syntax</a>.
+It will allow you to extract in a very easy way text content, see <a href="http://goessner.net/articles/JsonPath/">JSON Path syntax</a>.
 
 </p>
-</div><div class="properties"><h3 id="JSON_Path_PostProcessor_parms1">
+</div><div class="properties"><h3 id="JSON_Extractor_parms1">
         Parameters
-        <a class="sectionlink" href="#JSON_Path_PostProcessor_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <a class="sectionlink" href="#JSON_Extractor_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
     <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this element that is shown in the tree.</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Variable Names</div><div class="description req-true">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">JSON Path Expressions</div><div class="description req-true">Semi-colon separated JSON-PATH expressions (must match number of variables)</div><div class="required req-true">Yes</div></div>
@@ -5473,14 +5503,14 @@ It will alow you to extract in a very easy way text content, see <a href="http:/
     <div class="property"><div class="name req-false">Match Numbers</div><div class="description req-false">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
         <li><span class="code">0</span> : means random (Default Value)</li>
-        <li><span class="code">-1</span> means extract all results, they will be named as <span class="code"><em>variable name</em>_N</span> (where N goes from 1 to Number of results</li>
+        <li><span class="code">-1</span> means extract all results, they will be named as <span class="code"><em>&lt;variable name&gt;</em>_N</span> (where <span class="code">N</span> goes from 1 to Number of results)</li>
         <li><span class="code">X</span> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
     </ul>
     </div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Compute concatenation var</div><div class="description req-false">If many results are found, plugin will concat them using &lsquo;,&rsquo; separator and store it a var named <span class="code"><em>&lt;variable name&gt;</em>_ALL</span></div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Compute concatenation var</div><div class="description req-false">If many results are found, plugin will concatenate them using &lsquo;<span class="code">,</span>&rsquo; separator and store it in a var named <span class="code"><em>&lt;variable name&gt;</em>_ALL</span></div><div class="required req-false">No</div></div>
 </div><figure><a href="../images/screenshots/json-post-processor.png"><img src="../images/screenshots/json-post-processor.png" width="855" height="276" alt="JSON PostProcessor"></a><figcaption>JSON PostProcessor</figcaption></figure><div class="go-top"><a href="#">^</a></div></div>
 
-</div><div class="section"><h1 id="Miscellaneous_Features">19.9 Miscellaneous Features<a class="sectionlink" href="#Miscellaneous_Features" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="Miscellaneous_Features">20.9 Miscellaneous Features<a class="sectionlink" href="#Miscellaneous_Features" title="Link to here">&para;</a></h1>
 <div class="description">
         <br>
 </div>
@@ -5556,11 +5586,12 @@ Since JMeter 3.0, you can run a selection of Thread Group by selecting them and 
 
 <b>Validation Mode:</b><br>
 This mode enables rapid validation of a Thread Group by running it with 1 thread, 1 iteration, no timers and no <span class="code">Startup delay</span> set to 0.
-The 3 first properties can be modified by setting in user.properties:
+Behaviour can be modified with some properties by setting in user.properties:
 <ul>
 <li><span class="code">testplan_validation.nb_threads_per_thread_group</span> : Number of threads to use to validate a Thread Group, by default 1</li>
 <li><span class="code">testplan_validation.ignore_timers</span> : Ignore timers when validating the thread group of plan, by default 1</li>
 <li><span class="code">testplan_validation.number_iterations</span> : Number of iterations to use to validate a Thread Group</li>
+<li><span class="code">testplan_validation.tpc_force_100_pct</span> : Wether to force Throughput Controller in percentage mode to run as if percentage was 100%. Defaults to false</li>
 </ul> 
 </p><div class="properties"><h3 id="Thread_Group_parms1">
         Parameters
@@ -6145,7 +6176,7 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
 
 <a href="#">^</a>
 
-</div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="functions.html">Next &gt;</a></li></ul><div class="share-links">
+</div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="properties_reference.html">Next &gt;</a></li></ul><div class="share-links">
       Share this page:
       <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
             Copyright &copy;
