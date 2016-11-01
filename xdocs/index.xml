@@ -16,7 +16,8 @@
    limitations under the License.
 -->
 <!DOCTYPE document [
-  <!ENTITY trade "&#x02122;">
+  <!ENTITY trade  "&#x02122;">
+  <!ENTITY hellip "&#x02026;">
 ]>
 <document>
   <properties>
@@ -43,7 +44,7 @@
 <ul>
     <li>Ability to load and performance test many different applications/server/protocol types:
         <ul>
-        <li>Web - HTTP, HTTPS (Java, NodeJS, PHP, ASP.NET...)</li>
+        <li>Web - HTTP, HTTPS (Java, NodeJS, PHP, ASP.NET, &hellip;)</li>
         <li>SOAP / REST Webservices</li>
         <li>FTP</li>
         <li>Database via JDBC</li>
@@ -56,7 +57,7 @@
         </ul>
     </li>
     <li>Full featured Test IDE that allows faster Test Plan <b>recording (from Browsers or native applications), building and debugging</b>.</li>
-    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (Non GUI)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX...)</li>
+    <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (Non GUI)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX, &hellip;)</li>
     <li>A complete and <b><a href="usermanual/generating-dashboard.html" >ready to present dynamic HTML report</a></b></li>
     <li>Easy correlation through ability to extract data from most popular response formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
         <a href="usermanual/component_reference.html#XPath_Extractor" >XML</a> or <a href="usermanual/component_reference.html#Regular_Expression_Extractor" >any textual format</a></b></li>
@@ -72,7 +73,7 @@
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
         <li>Functions can be used to provide dynamic input to a test or provide data manipulation.</li>
-        <li>Easy Continuous Integration through 3rd party Open Source libraries for Maven, Graddle and Jenkins</li>
+        <li>Easy Continuous Integration through 3<sup>rd</sup> party Open Source libraries for Maven, Graddle and Jenkins</li>
       </ul>
     </li>
 </ul>
