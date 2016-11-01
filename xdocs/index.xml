@@ -56,7 +56,7 @@
         <li>Java Objects</li>
         </ul>
     </li>
-    <li>Full featured Test IDE that allows faster Test Plan <b>recording (from Browsers or native applications), building and debugging</b>.</li>
+    <li>Full featured Test IDE that allows fast Test Plan <b>recording (from Browsers or native applications), building and debugging</b>.</li>
     <li><b><a href="usermanual/get-started.html#non_gui">CLI mode (Non GUI)</a></b> to load test from any Java compatible OS (Linux, Windows, Mac OSX, &hellip;)</li>
     <li>A complete and <b><a href="usermanual/generating-dashboard.html" >ready to present dynamic HTML report</a></b></li>
     <li>Easy correlation through ability to extract data from most popular response formats, <b><a href="usermanual/component_reference.html#CSS/JQuery_Extractor" >HTML</a>, <a href="usermanual/component_reference.html#JSON_Extractor" >JSON </a>, 
