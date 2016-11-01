@@ -35,18 +35,20 @@ When using JMeter you will usually follow this process:
 <p>To do that, you will <a href="get-started.html#running">run JMeter in GUI Mode.</a><br/>
 Then you can either choose to record the application from a browser, or native application.
 You can use for that the menu <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates...</guimenuitem><guimenuitem>Recording</guimenuitem></menuchoice><br/>
-
+</p>
+<p>
 Note you can also manually build your plan. Ensure you read this <a href="test_plan.html">documentation</a> to understand major concepts.
-
-You will also debug it using one of those options:
-<ul> 
+</p>
+You will also debug it using one of these options:
+<ul>
     <li><menuchoice><guimenuitem>Run</guimenuitem><guimenuitem>Start no pauses</guimenuitem></menuchoice></li>
     <li><menuchoice><guimenuitem>Run</guimenuitem><guimenuitem>Start</guimenuitem></menuchoice></li>
     <li><menuchoice><guimenuitem>Validate</guimenuitem></menuchoice> on <a href="component_reference.html#Thread_Group">Thread Group</a></li>
 </ul>
+<p>
 and <a href="component_reference.html#View_Results_Tree">View Results Tree</a> renderers or Testers (CSS/JQUERY, JSON, Regexp, XPath).<br/>
 Ensure you follow <a href="best-practices.html" >best-practices</a> when building your Test Plan.
-</p> 
+</p>
 </subsection>
 <subsection name="&sect-num;.0.2 Load Test running" anchor="load_test_running">
 <p>Once your Test Plan is ready, you can start your Load Test.
