@@ -40,7 +40,6 @@
         <item name="Properties Reference"         href="/usermanual/properties_reference.html"/>
         <item name="Change History"              href="/changes_history.html"/>
         <item name="Javadocs"             href="/api/index.html"/>
-        <item name="Building JMeter and Add-Ons"     href="/building.html"/>
         <item name="JMeter Wiki"         href="http://wiki.apache.org/jmeter"/>
          <item name="FAQ (Wiki)"             href="http://wiki.apache.org/jmeter/JMeterFAQ"/>
      </menu>
