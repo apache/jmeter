@@ -30,7 +30,7 @@
 
 <section name="&sect-num;. Getting Started" anchor="get_started">
 <section name="&sect-num;.0 Overview" anchor="overview">
-When using JMeter you will usually follow this processs:
+When using JMeter you will usually follow this process:
 <subsection name="&sect-num;.0.1 Test plan building" anchor="test_plan_building">
 <p>To do that, you will <a href="get-started.html#running">run JMeter in GUI Mode.</a><br/>
 Then you can either choose to record the application from a browser, or native application.
