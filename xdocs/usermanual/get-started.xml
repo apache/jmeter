@@ -49,7 +49,16 @@ Ensure you follow <a href="best-practices.html" >best-practices</a> when buildin
 </p> 
 </subsection>
 <subsection name="&sect-num;.0.2 Load Test running" anchor="load_test_running">
-<p>Once your Test Plan is ready, you will use CLI mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. <note>Don't run load test using GUI mode !</note><br/>
+<p>Once your Test Plan is ready, you can start your Load Test.
+The first step is to configure the injectors that will run JMeter, this as for any other Load Testing tool includes:
+<ul>
+    <li>Correct machine sizing in terms of CPU, memory and network</li>
+    <li>OS Tuning</li>
+    <li>Java setup: Ensure you install the last version of Java supported by JMeter</li>
+    <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
+</ul> 
+
+Once everything is ready, you will use CLI mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. <note>Don't run load test using GUI mode !</note><br/>
 Using Non-GUI mode, you can generate a CSV (or XML) file containing results and have JMeter <a href="generating-dashboard.html">generate an HTML report</a> at end of Load Test.
 JMeter will by default provide a summary of load test while it's running. <br/>
 You can also have <a href="realtime-results.html" >real-time results</a> during your test using <a href="component_reference.html#Backend_Listener">Backend Listener</a>.
@@ -102,7 +111,8 @@ over your Test Plans.</p>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 7 or higher.  
+<note>JMeter requires a fully compliant JVM 7 or 8, we advise that you install last minor version of those major versions. 
+Java 9 is not tested completely as of JMeter 3.1. 
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
