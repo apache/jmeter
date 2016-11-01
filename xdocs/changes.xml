@@ -92,6 +92,8 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <ul>
 <li>Various GUI and UX fixes</li>
 <li>Memory usage improvements</li>
+<li>JDBC Request is now able to return Blob/Clob and computes latency and connect time</li>
+<li>CSS Parsing introduced in 3.0 has been optimized by introduction of a parsing cache</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
