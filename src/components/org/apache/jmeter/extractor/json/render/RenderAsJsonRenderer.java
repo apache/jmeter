@@ -188,13 +188,13 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonDataField.setWrapStyleWord(true);
 
         this.jsonDataPane = GuiUtils.makeScrollPane(jsonDataField);
-        jsonDataPane.setMinimumSize(new Dimension(0, 400));
+        jsonDataPane.setMinimumSize(new Dimension(100, 200));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 jsonDataPane, createJSonPathExtractorTasksPanel());
-        mainSplit.setDividerLocation(400);
+        mainSplit.setDividerLocation(0.6d);
         panel.add(mainSplit, BorderLayout.CENTER);
         return panel;
     }
@@ -221,6 +221,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonPathResultField.setEditable(false);
         jsonPathResultField.setLineWrap(true);
         jsonPathResultField.setWrapStyleWord(true);
+        jsonPathResultField.setMinimumSize(new Dimension(100, 150));
 
         JPanel xpathTasksPanel = new JPanel(new BorderLayout(0, 5));
         xpathTasksPanel.add(jsonPathActionPanel, BorderLayout.NORTH);
