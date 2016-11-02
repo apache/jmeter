@@ -302,6 +302,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <ul>
     <li><bug>59964</bug>JSR223 Test Element : Cache compiled script if available is not correctly reset. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>59609</bug>Format extracted JSON Objects in JSON Post Processor correctly as JSON.</li>
+    <li><bug>60332</bug>View Results Tree : With Windows LAF, JSON Extractor does not show JSON Path Expression and Result panel</li>
 </ul>
 
 <h3>Functions</h3>
