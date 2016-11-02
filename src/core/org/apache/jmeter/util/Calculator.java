@@ -127,7 +127,7 @@ public class Calculator {
     
     /**
      * add received bytes
-     * @param value received bytes
+     * @param newValue received bytes
      */
     public void addBytes(long newValue) {
         bytes += newValue;
