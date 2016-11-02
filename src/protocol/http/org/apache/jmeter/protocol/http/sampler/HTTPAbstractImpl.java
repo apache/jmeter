@@ -458,7 +458,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * @return the response or the MD5 of the response
      * @throws IOException
      *             when reading the result fails
-     * @deprecated use {@link HTTPAbstractImpl#readResponse(SampleResult, BufferedInputStream, long)
+     * @deprecated use {@link HTTPAbstractImpl#readResponse(SampleResult, BufferedInputStream, long)}
      */
     @Deprecated
     protected byte[] readResponse(SampleResult res, BufferedInputStream in,
