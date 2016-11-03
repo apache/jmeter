@@ -68,7 +68,7 @@
     <li><b>Highly Extensible core:</b>
       <ul>
         <li>Pluggable Samplers allow unlimited testing capabilities.</li>
-        <li><b>Scriptable Samplers</b> (JSR223-compatible languages (<a href="http://groovy-lang.org">Groovy</a>) and BeanShell)</li>
+        <li><b>Scriptable Samplers</b> (JSR223-compatible languages like <a href="http://groovy-lang.org">Groovy</a> and BeanShell)</li>
         <li>Several load statistics may be chosen with <b>pluggable timers</b>.</li>
         <li>Data analysis and <b>visualization plugins</b> allow great extensibility
         as well as personalization.</li>
