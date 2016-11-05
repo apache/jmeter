@@ -1,0 +1,1447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>SampleSaveConfiguration (Apache JMeter API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SampleSaveConfiguration (Apache JMeter API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/samplers/SampleSender.html" title="interface in org.apache.jmeter.samplers"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/samplers/SampleSaveConfiguration.html" target="_top">Frames</a></li>
+<li><a href="SampleSaveConfiguration.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.jmeter.samplers</div>
+<h2 title="Class SampleSaveConfiguration" class="title">Class SampleSaveConfiguration</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.jmeter.samplers.SampleSaveConfiguration</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">SampleSaveConfiguration</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+<div class="block">Holds details of which sample attributes to save.
+
+ The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
+ <p>
+ For each field <em>XXX</em>
+ <ul>
+  <li>methods have the signature "boolean save<em>XXX</em>()"</li>
+  <li>a corresponding "void set<em>XXX</em>(boolean)" method</li>
+  <li>messages.properties contains the key save_<em>XXX</em></li>
+ </ul></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../serialized-form.html#org.apache.jmeter.samplers.SampleSaveConfiguration">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#ASSERTION_RESULTS_FAILURE_MESSAGE_PROP">ASSERTION_RESULTS_FAILURE_MESSAGE_PROP</a></strong></code>
+<div class="block">The name of the property indicating which assertion results should be
+ saved.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#DEFAULT_DELIMITER">DEFAULT_DELIMITER</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#DEFAULT_DELIMITER_PROP">DEFAULT_DELIMITER_PROP</a></strong></code>
+<div class="block">The name of the property indicating which delimiter should be used when
+ saving in a delimited values format.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#MILLISECONDS">MILLISECONDS</a></strong></code>
+<div class="block">A properties file indicator for milliseconds</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#NONE">NONE</a></strong></code>
+<div class="block">A properties file indicator for none</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SAVE_ALL_ASSERTIONS">SAVE_ALL_ASSERTIONS</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SAVE_CONFIG_NAMES">SAVE_CONFIG_NAMES</a></strong></code>
+<div class="block">List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SAVE_FIRST_ASSERTION">SAVE_FIRST_ASSERTION</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SAVE_NO_ASSERTIONS">SAVE_NO_ASSERTIONS</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SampleSaveConfiguration()">SampleSaveConfiguration</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#SampleSaveConfiguration(boolean)">SampleSaveConfiguration</a></strong>(boolean&nbsp;value)</code>
+<div class="block">Alternate constructor for use by CsvSaveService</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#assertionsResultsToSave()">assertionsResultsToSave</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#clone()">clone</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#formatter()">formatter</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#getDelimiter()">getDelimiter</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#getterName(java.lang.String)">getterName</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configName)</code>
+<div class="block">Convert a config name to the method name of the getter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#getVarCount()">getVarCount</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#getXmlPi()">getXmlPi</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#printMilliseconds()">printMilliseconds</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveAssertionResultsFailureMessage()">saveAssertionResultsFailureMessage</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveAssertions()">saveAssertions</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveAsXml()">saveAsXml</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveBytes()">saveBytes</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveCode()">saveCode</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveConnectTime()">saveConnectTime</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveDataType()">saveDataType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveEncoding()">saveEncoding</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveFieldNames()">saveFieldNames</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveFileName()">saveFileName</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveHostname()">saveHostname</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveIdleTime()">saveIdleTime</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveLabel()">saveLabel</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveLatency()">saveLatency</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveMessage()">saveMessage</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveRequestHeaders()">saveRequestHeaders</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveResponseData()">saveResponseData</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveResponseData(org.apache.jmeter.samplers.SampleResult)">saveResponseData</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveResponseHeaders()">saveResponseHeaders</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSampleCount()">saveSampleCount</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSamplerData()">saveSamplerData</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSamplerData(org.apache.jmeter.samplers.SampleResult)">saveSamplerData</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSentBytes()">saveSentBytes</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSubresults()">saveSubresults</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveSuccess()">saveSuccess</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveThreadCounts()">saveThreadCounts</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveThreadName()">saveThreadName</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveTime()">saveTime</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveTimestamp()">saveTimestamp</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#saveUrl()">saveUrl</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setAssertionResultsFailureMessage(boolean)">setAssertionResultsFailureMessage</a></strong>(boolean&nbsp;b)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setAssertions(boolean)">setAssertions</a></strong>(boolean&nbsp;assertions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setAsXml(boolean)">setAsXml</a></strong>(boolean&nbsp;xml)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setBytes(boolean)">setBytes</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setCode(boolean)">setCode</a></strong>(boolean&nbsp;code)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setConnectTime(boolean)">setConnectTime</a></strong>(boolean&nbsp;connectTime)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setDataType(boolean)">setDataType</a></strong>(boolean&nbsp;dataType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setDefaultDelimiter()">setDefaultDelimiter</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setDefaultTimeStampFormat()">setDefaultTimeStampFormat</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setDelimiter(java.lang.String)">setDelimiter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;delim)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setEncoding(boolean)">setEncoding</a></strong>(boolean&nbsp;encoding)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setFieldNames(boolean)">setFieldNames</a></strong>(boolean&nbsp;printFieldNames)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setFileName(boolean)">setFileName</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setFormatter(java.text.DateFormat)">setFormatter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a>&nbsp;fmt)</code>
+<div class="block">Intended for use by CsvSaveService (and test cases)</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setHostname(boolean)">setHostname</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setIdleTime(boolean)">setIdleTime</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setLabel(boolean)">setLabel</a></strong>(boolean&nbsp;label)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setLatency(boolean)">setLatency</a></strong>(boolean&nbsp;latency)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setMessage(boolean)">setMessage</a></strong>(boolean&nbsp;message)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setRequestHeaders(boolean)">setRequestHeaders</a></strong>(boolean&nbsp;r)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setResponseData(boolean)">setResponseData</a></strong>(boolean&nbsp;responseData)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setResponseHeaders(boolean)">setResponseHeaders</a></strong>(boolean&nbsp;r)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setSampleCount(boolean)">setSampleCount</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setSamplerData(boolean)">setSamplerData</a></strong>(boolean&nbsp;samplerData)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setSentBytes(boolean)">setSentBytes</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setSubresults(boolean)">setSubresults</a></strong>(boolean&nbsp;subresults)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setSuccess(boolean)">setSuccess</a></strong>(boolean&nbsp;success)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setterName(java.lang.String)">setterName</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configName)</code>
+<div class="block">Convert a config name to the method name of the setter
+ The setter method requires a boolean parameter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setThreadCounts(boolean)">setThreadCounts</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setThreadName(boolean)">setThreadName</a></strong>(boolean&nbsp;threadName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setTime(boolean)">setTime</a></strong>(boolean&nbsp;time)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setTimestamp(boolean)">setTimestamp</a></strong>(boolean&nbsp;timestamp)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setUrl(boolean)">setUrl</a></strong>(boolean&nbsp;save)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#setVarCount(int)">setVarCount</a></strong>(int&nbsp;varCount)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html#staticConfig()">staticConfig</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="MILLISECONDS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MILLISECONDS</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> MILLISECONDS</pre>
+<div class="block">A properties file indicator for milliseconds. *</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.MILLISECONDS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="NONE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>NONE</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> NONE</pre>
+<div class="block">A properties file indicator for none. *</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.NONE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="ASSERTION_RESULTS_FAILURE_MESSAGE_PROP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ASSERTION_RESULTS_FAILURE_MESSAGE_PROP</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> ASSERTION_RESULTS_FAILURE_MESSAGE_PROP</pre>
+<div class="block">The name of the property indicating which assertion results should be
+ saved.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="DEFAULT_DELIMITER_PROP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_DELIMITER_PROP</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> DEFAULT_DELIMITER_PROP</pre>
+<div class="block">The name of the property indicating which delimiter should be used when
+ saving in a delimited values format.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.DEFAULT_DELIMITER_PROP">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SAVE_NO_ASSERTIONS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SAVE_NO_ASSERTIONS</h4>
+<pre>public static final&nbsp;int SAVE_NO_ASSERTIONS</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.SAVE_NO_ASSERTIONS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SAVE_FIRST_ASSERTION">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SAVE_FIRST_ASSERTION</h4>
+<pre>public static final&nbsp;int SAVE_FIRST_ASSERTION</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.SAVE_FIRST_ASSERTION">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SAVE_ALL_ASSERTIONS">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SAVE_ALL_ASSERTIONS</h4>
+<pre>public static final&nbsp;int SAVE_ALL_ASSERTIONS</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.SAVE_ALL_ASSERTIONS">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="DEFAULT_DELIMITER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_DELIMITER</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> DEFAULT_DELIMITER</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../constant-values.html#org.apache.jmeter.samplers.SampleSaveConfiguration.DEFAULT_DELIMITER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="SAVE_CONFIG_NAMES">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SAVE_CONFIG_NAMES</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; SAVE_CONFIG_NAMES</pre>
+<div class="block">List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
+ New method names should be added at the end so that existing layouts are not affected.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SampleSaveConfiguration()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SampleSaveConfiguration</h4>
+<pre>public&nbsp;SampleSaveConfiguration()</pre>
+</li>
+</ul>
+<a name="SampleSaveConfiguration(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SampleSaveConfiguration</h4>
+<pre>public&nbsp;SampleSaveConfiguration(boolean&nbsp;value)</pre>
+<div class="block">Alternate constructor for use by CsvSaveService</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - initial setting for boolean fields used in Config dialogue</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getVarCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVarCount</h4>
+<pre>public&nbsp;int&nbsp;getVarCount()</pre>
+</li>
+</ul>
+<a name="setVarCount(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVarCount</h4>
+<pre>public&nbsp;void&nbsp;setVarCount(int&nbsp;varCount)</pre>
+</li>
+</ul>
+<a name="staticConfig()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>staticConfig</h4>
+<pre>public static&nbsp;<a href="../../../../org/apache/jmeter/samplers/SampleSaveConfiguration.html" title="class in org.apache.jmeter.samplers">SampleSaveConfiguration</a>&nbsp;staticConfig()</pre>
+</li>
+</ul>
+<a name="getterName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getterName</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getterName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configName)</pre>
+<div class="block">Convert a config name to the method name of the getter.
+ The getter method returns a boolean.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>configName</code> - the config name</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the getter method name</dd></dl>
+</li>
+</ul>
+<a name="setterName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setterName</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;setterName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configName)</pre>
+<div class="block">Convert a config name to the method name of the setter
+ The setter method requires a boolean parameter.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>configName</code> - the config name</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the setter method name</dd></dl>
+</li>
+</ul>
+<a name="clone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clone</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;clone()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;equals(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="saveResponseHeaders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveResponseHeaders</h4>
+<pre>public&nbsp;boolean&nbsp;saveResponseHeaders()</pre>
+</li>
+</ul>
+<a name="setResponseHeaders(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResponseHeaders</h4>
+<pre>public&nbsp;void&nbsp;setResponseHeaders(boolean&nbsp;r)</pre>
+</li>
+</ul>
+<a name="saveRequestHeaders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveRequestHeaders</h4>
+<pre>public&nbsp;boolean&nbsp;saveRequestHeaders()</pre>
+</li>
+</ul>
+<a name="setRequestHeaders(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRequestHeaders</h4>
+<pre>public&nbsp;void&nbsp;setRequestHeaders(boolean&nbsp;r)</pre>
+</li>
+</ul>
+<a name="saveAssertions()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveAssertions</h4>
+<pre>public&nbsp;boolean&nbsp;saveAssertions()</pre>
+</li>
+</ul>
+<a name="setAssertions(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAssertions</h4>
+<pre>public&nbsp;void&nbsp;setAssertions(boolean&nbsp;assertions)</pre>
+</li>
+</ul>
+<a name="saveCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveCode</h4>
+<pre>public&nbsp;boolean&nbsp;saveCode()</pre>
+</li>
+</ul>
+<a name="setCode(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCode</h4>
+<pre>public&nbsp;void&nbsp;setCode(boolean&nbsp;code)</pre>
+</li>
+</ul>
+<a name="saveDataType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveDataType</h4>
+<pre>public&nbsp;boolean&nbsp;saveDataType()</pre>
+</li>
+</ul>
+<a name="setDataType(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDataType</h4>
+<pre>public&nbsp;void&nbsp;setDataType(boolean&nbsp;dataType)</pre>
+</li>
+</ul>
+<a name="saveEncoding()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveEncoding</h4>
+<pre>public&nbsp;boolean&nbsp;saveEncoding()</pre>
+</li>
+</ul>
+<a name="setEncoding(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEncoding</h4>
+<pre>public&nbsp;void&nbsp;setEncoding(boolean&nbsp;encoding)</pre>
+</li>
+</ul>
+<a name="saveLabel()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveLabel</h4>
+<pre>public&nbsp;boolean&nbsp;saveLabel()</pre>
+</li>
+</ul>
+<a name="setLabel(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLabel</h4>
+<pre>public&nbsp;void&nbsp;setLabel(boolean&nbsp;label)</pre>
+</li>
+</ul>
+<a name="saveLatency()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveLatency</h4>
+<pre>public&nbsp;boolean&nbsp;saveLatency()</pre>
+</li>
+</ul>
+<a name="setLatency(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLatency</h4>
+<pre>public&nbsp;void&nbsp;setLatency(boolean&nbsp;latency)</pre>
+</li>
+</ul>
+<a name="saveConnectTime()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveConnectTime</h4>
+<pre>public&nbsp;boolean&nbsp;saveConnectTime()</pre>
+</li>
+</ul>
+<a name="setConnectTime(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setConnectTime</h4>
+<pre>public&nbsp;void&nbsp;setConnectTime(boolean&nbsp;connectTime)</pre>
+</li>
+</ul>
+<a name="saveMessage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveMessage</h4>
+<pre>public&nbsp;boolean&nbsp;saveMessage()</pre>
+</li>
+</ul>
+<a name="setMessage(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMessage</h4>
+<pre>public&nbsp;void&nbsp;setMessage(boolean&nbsp;message)</pre>
+</li>
+</ul>
+<a name="saveResponseData(org.apache.jmeter.samplers.SampleResult)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveResponseData</h4>
+<pre>public&nbsp;boolean&nbsp;saveResponseData(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</pre>
+</li>
+</ul>
+<a name="saveResponseData()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveResponseData</h4>
+<pre>public&nbsp;boolean&nbsp;saveResponseData()</pre>
+</li>
+</ul>
+<a name="setResponseData(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResponseData</h4>
+<pre>public&nbsp;void&nbsp;setResponseData(boolean&nbsp;responseData)</pre>
+</li>
+</ul>
+<a name="saveSamplerData(org.apache.jmeter.samplers.SampleResult)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSamplerData</h4>
+<pre>public&nbsp;boolean&nbsp;saveSamplerData(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</pre>
+</li>
+</ul>
+<a name="saveSamplerData()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSamplerData</h4>
+<pre>public&nbsp;boolean&nbsp;saveSamplerData()</pre>
+</li>
+</ul>
+<a name="setSamplerData(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSamplerData</h4>
+<pre>public&nbsp;void&nbsp;setSamplerData(boolean&nbsp;samplerData)</pre>
+</li>
+</ul>
+<a name="saveSubresults()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSubresults</h4>
+<pre>public&nbsp;boolean&nbsp;saveSubresults()</pre>
+</li>
+</ul>
+<a name="setSubresults(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSubresults</h4>
+<pre>public&nbsp;void&nbsp;setSubresults(boolean&nbsp;subresults)</pre>
+</li>
+</ul>
+<a name="saveSuccess()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSuccess</h4>
+<pre>public&nbsp;boolean&nbsp;saveSuccess()</pre>
+</li>
+</ul>
+<a name="setSuccess(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSuccess</h4>
+<pre>public&nbsp;void&nbsp;setSuccess(boolean&nbsp;success)</pre>
+</li>
+</ul>
+<a name="saveThreadName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveThreadName</h4>
+<pre>public&nbsp;boolean&nbsp;saveThreadName()</pre>
+</li>
+</ul>
+<a name="setThreadName(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setThreadName</h4>
+<pre>public&nbsp;void&nbsp;setThreadName(boolean&nbsp;threadName)</pre>
+</li>
+</ul>
+<a name="saveTime()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveTime</h4>
+<pre>public&nbsp;boolean&nbsp;saveTime()</pre>
+</li>
+</ul>
+<a name="setTime(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTime</h4>
+<pre>public&nbsp;void&nbsp;setTime(boolean&nbsp;time)</pre>
+</li>
+</ul>
+<a name="saveTimestamp()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveTimestamp</h4>
+<pre>public&nbsp;boolean&nbsp;saveTimestamp()</pre>
+</li>
+</ul>
+<a name="setTimestamp(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTimestamp</h4>
+<pre>public&nbsp;void&nbsp;setTimestamp(boolean&nbsp;timestamp)</pre>
+</li>
+</ul>
+<a name="saveAsXml()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveAsXml</h4>
+<pre>public&nbsp;boolean&nbsp;saveAsXml()</pre>
+</li>
+</ul>
+<a name="setAsXml(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAsXml</h4>
+<pre>public&nbsp;void&nbsp;setAsXml(boolean&nbsp;xml)</pre>
+</li>
+</ul>
+<a name="saveFieldNames()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveFieldNames</h4>
+<pre>public&nbsp;boolean&nbsp;saveFieldNames()</pre>
+</li>
+</ul>
+<a name="setFieldNames(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFieldNames</h4>
+<pre>public&nbsp;void&nbsp;setFieldNames(boolean&nbsp;printFieldNames)</pre>
+</li>
+</ul>
+<a name="saveUrl()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveUrl</h4>
+<pre>public&nbsp;boolean&nbsp;saveUrl()</pre>
+</li>
+</ul>
+<a name="setUrl(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUrl</h4>
+<pre>public&nbsp;void&nbsp;setUrl(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveBytes</h4>
+<pre>public&nbsp;boolean&nbsp;saveBytes()</pre>
+</li>
+</ul>
+<a name="setBytes(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBytes</h4>
+<pre>public&nbsp;void&nbsp;setBytes(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveSentBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSentBytes</h4>
+<pre>public&nbsp;boolean&nbsp;saveSentBytes()</pre>
+</li>
+</ul>
+<a name="setSentBytes(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSentBytes</h4>
+<pre>public&nbsp;void&nbsp;setSentBytes(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveFileName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveFileName</h4>
+<pre>public&nbsp;boolean&nbsp;saveFileName()</pre>
+</li>
+</ul>
+<a name="setFileName(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFileName</h4>
+<pre>public&nbsp;void&nbsp;setFileName(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveAssertionResultsFailureMessage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveAssertionResultsFailureMessage</h4>
+<pre>public&nbsp;boolean&nbsp;saveAssertionResultsFailureMessage()</pre>
+</li>
+</ul>
+<a name="setAssertionResultsFailureMessage(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAssertionResultsFailureMessage</h4>
+<pre>public&nbsp;void&nbsp;setAssertionResultsFailureMessage(boolean&nbsp;b)</pre>
+</li>
+</ul>
+<a name="saveThreadCounts()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveThreadCounts</h4>
+<pre>public&nbsp;boolean&nbsp;saveThreadCounts()</pre>
+</li>
+</ul>
+<a name="setThreadCounts(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setThreadCounts</h4>
+<pre>public&nbsp;void&nbsp;setThreadCounts(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveSampleCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveSampleCount</h4>
+<pre>public&nbsp;boolean&nbsp;saveSampleCount()</pre>
+</li>
+</ul>
+<a name="setSampleCount(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSampleCount</h4>
+<pre>public&nbsp;void&nbsp;setSampleCount(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="setFormatter(java.text.DateFormat)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFormatter</h4>
+<pre>public&nbsp;void&nbsp;setFormatter(<a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a>&nbsp;fmt)</pre>
+<div class="block">Intended for use by CsvSaveService (and test cases)</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>fmt</code> - format of the date to be saved. If <code>null</code>
+            milliseconds since epoch will be printed</dd></dl>
+</li>
+</ul>
+<a name="printMilliseconds()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>printMilliseconds</h4>
+<pre>public&nbsp;boolean&nbsp;printMilliseconds()</pre>
+</li>
+</ul>
+<a name="formatter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>formatter</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/text/DateFormat.html?is-external=true" title="class or interface in java.text">DateFormat</a>&nbsp;formatter()</pre>
+</li>
+</ul>
+<a name="assertionsResultsToSave()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>assertionsResultsToSave</h4>
+<pre>public&nbsp;int&nbsp;assertionsResultsToSave()</pre>
+</li>
+</ul>
+<a name="getDelimiter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDelimiter</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDelimiter()</pre>
+</li>
+</ul>
+<a name="getXmlPi()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getXmlPi</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getXmlPi()</pre>
+</li>
+</ul>
+<a name="setDelimiter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDelimiter</h4>
+<pre>public&nbsp;void&nbsp;setDelimiter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;delim)</pre>
+</li>
+</ul>
+<a name="setDefaultDelimiter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultDelimiter</h4>
+<pre>public&nbsp;void&nbsp;setDefaultDelimiter()</pre>
+</li>
+</ul>
+<a name="setDefaultTimeStampFormat()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDefaultTimeStampFormat</h4>
+<pre>public&nbsp;void&nbsp;setDefaultTimeStampFormat()</pre>
+</li>
+</ul>
+<a name="saveHostname()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveHostname</h4>
+<pre>public&nbsp;boolean&nbsp;saveHostname()</pre>
+</li>
+</ul>
+<a name="setHostname(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHostname</h4>
+<pre>public&nbsp;void&nbsp;setHostname(boolean&nbsp;save)</pre>
+</li>
+</ul>
+<a name="saveIdleTime()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveIdleTime</h4>
+<pre>public&nbsp;boolean&nbsp;saveIdleTime()</pre>
+</li>
+</ul>
+<a name="setIdleTime(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setIdleTime</h4>
+<pre>public&nbsp;void&nbsp;setIdleTime(boolean&nbsp;save)</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/samplers/SampleSender.html" title="interface in org.apache.jmeter.samplers"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/samplers/SampleSaveConfiguration.html" target="_top">Frames</a></li>
+<li><a href="SampleSaveConfiguration.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#xA9; 1998-2016 Apache Software Foundation. All Rights Reserved.</small></p>
+</body>
+</html>
