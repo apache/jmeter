@@ -1,0 +1,631 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>TransactionController (Apache JMeter API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="TransactionController (Apache JMeter API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/control/TransactionSampler.html" title="class in org.apache.jmeter.control"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/control/TransactionController.html" target="_top">Frames</a></li>
+<li><a href="TransactionController.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.apache.jmeter.control.GenericController">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.jmeter.control</div>
+<h2 title="Class TransactionController" class="title">Class TransactionController</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">org.apache.jmeter.testelement.AbstractTestElement</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">org.apache.jmeter.control.GenericController</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.jmeter.control.TransactionController</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, <a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a>, <a href="../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui">Searchable</a>, <a href="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a>, <a href="../../../../org/apache/jmeter/threads/TestCompilerHelper.html" title="interface in org.apache.jmeter.threads">TestCompilerHelper</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">TransactionController</span>
+extends <a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a>
+implements <a href="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</a>, <a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+<div class="block">Transaction Controller to measure transaction times
+
+ There are two different modes for the controller:
+ - generate additional total sample after nested samples (as in JMeter 2.2)
+ - generate parent sampler containing the nested samples</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../serialized-form.html#org.apache.jmeter.control.TransactionController">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.jmeter.control.GenericController">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.apache.jmeter.control.<a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></h3>
+<code><a href="../../../../org/apache/jmeter/control/GenericController.html#current">current</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#subControllersAndSamplers">subControllersAndSamplers</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.jmeter.testelement.TestElement">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.apache.jmeter.testelement.<a href="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a></h3>
+<code><a href="../../../../org/apache/jmeter/testelement/TestElement.html#COMMENTS">COMMENTS</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#TransactionController()">TransactionController</a></strong>()</code>
+<div class="block">Creates a Transaction Controller</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#isFromTransactionController(org.apache.jmeter.samplers.SampleResult)">isFromTransactionController</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#isGenerateParentSample()">isGenerateParentSample</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#isIncludeTimers()">isIncludeTimers</a></strong>()</code>
+<div class="block">Whether to include timer and pre/post processor time in overall sample.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#isParent()">isParent</a></strong>()</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>use <a href="../../../../org/apache/jmeter/control/TransactionController.html#isGenerateParentSample()"><code>isGenerateParentSample()</code></a>
+             instead</i></div>
+</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#next()">next</a></strong>()</code>
+<div class="block">
+ Determines the next sampler to be processed.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#nextIsAController(org.apache.jmeter.control.Controller)">nextIsAController</a></strong>(<a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a>&nbsp;controller)</code>
+<div class="block">Called by <a href="../../../../org/apache/jmeter/control/GenericController.html#next()"><code>GenericController.next()</code></a> if the element is a Controller, and returns the
+ next sampler from the controller.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#notifyListeners()">notifyListeners</a></strong>()</code>
+<div class="block">Create additional SampleEvent in NON Parent Mode</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#readResolve()">readResolve</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">sampleOccurred</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;se)</code>
+<div class="block">A sample has started and stopped.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">sampleStarted</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;e)</code>
+<div class="block">A sample has started.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">sampleStopped</a></strong>(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;e)</code>
+<div class="block">A sample has stopped.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#setGenerateParentSample(boolean)">setGenerateParentSample</a></strong>(boolean&nbsp;generateParent)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#setIncludeTimers(boolean)">setIncludeTimers</a></strong>(boolean&nbsp;includeTimers)</code>
+<div class="block">Whether to include timers and pre/post processor time in overall sample.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#setParent(boolean)">setParent</a></strong>(boolean&nbsp;_parent)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>use
+             <a href="../../../../org/apache/jmeter/control/TransactionController.html#setGenerateParentSample(boolean)"><code>setGenerateParentSample(boolean)</code></a>
+             instead</i></div>
+</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/jmeter/control/TransactionController.html#triggerEndOfLoop()">triggerEndOfLoop</a></strong>()</code>
+<div class="block">Trigger end of loop condition on controller (used by Start Next Loop feature)</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.control.GenericController">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.jmeter.control.<a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></h3>
+<code><a href="../../../../org/apache/jmeter/control/GenericController.html#addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">addIterationListener</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#addTestElementOnce(org.apache.jmeter.testelement.TestElement)">addTestElementOnce</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#currentReturnedNull(org.apache.jmeter.control.Controller)">currentReturnedNull</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#fireIterationStart()">fireIterationStart</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#fireIterEvents()">fireIterEvents</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#getCurrentElement()">getCurrentElement</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#getIterCount()">getIterCount</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#getSubControllers()">getSubControllers</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#incrementCurrent()">incrementCurrent</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#incrementIterCount()">incrementIterCount</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#initialize()">initialize</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#initializeSubControllers()">initializeSubControllers</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#isDone()">isDone</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#isFirst()">isFirst</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsASampler(org.apache.jmeter.samplers.Sampler)">nextIsASampler</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsNull()">nextIsNull</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#reInitialize()">reInitialize</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#reInitializeSubController()">reInitializeSubController</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#removeCurrentElement()">removeCurrentElement</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#removeIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">removeIterationListener</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#resetCurrent()">resetCurrent</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#resetIterCount()">resetIterCount</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#setCurrentElement(org.apache.jmeter.testelement.TestElement)">setCurrentElement</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#setDone(boolean)">setDone</a>, <a href="../../../../org/apache/jmeter/control/GenericController.html#setFirst(boolean)">setFirst</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.jmeter.testelement.<a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</a></h3>
+<code><a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addPropertiesValues(java.util.List,%20java.util.Set)">addPropertiesValues</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty,%20boolean)">addProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTestElementChildren()">clearTestElementChildren</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String,%20boolean)">getPropertyAsBoolean</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String,%20int)">getPropertyAsInt</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String,%20long)">getPropertyAsLong</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String,%20java.lang.String)">getPropertyAsString</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getSearchableTokens()">getSearchableTokens</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setEnabled(boolean)">setEnabled</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20boolean)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20boolean,%20boolean)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20int)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20int,%20int)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20long)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20long,%20long)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty,%20org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty,%20org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</a>, <a href="../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser,%20org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.control.Controller">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.apache.jmeter.control.<a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a></h3>
+<code><a href="../../../../org/apache/jmeter/control/Controller.html#addIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">addIterationListener</a>, <a href="../../../../org/apache/jmeter/control/Controller.html#initialize()">initialize</a>, <a href="../../../../org/apache/jmeter/control/Controller.html#isDone()">isDone</a>, <a href="../../../../org/apache/jmeter/control/Controller.html#removeIterationListener(org.apache.jmeter.engine.event.LoopIterationListener)">removeIterationListener</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.testelement.TestElement">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.apache.jmeter.testelement.<a href="../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a></h3>
+<code><a href="../../../../org/apache/jmeter/testelement/TestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#canRemove()">canRemove</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#clear()">clear</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#clearTestElementChildren()">clearTestElementChildren</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#clone()">clone</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getComment()">getComment</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getName()">getName</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getProperty(java.lang.String)">getProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String,%20boolean)">getPropertyAsBoolean</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String,%20int)">getPropertyAsInt</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String,%20long)">getPropertyAsLong</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String,%20java.lang.String)">getPropertyAsString</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getThreadContext()">getThreadContext</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#getThreadName()">getThreadName</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#isEnabled()">isEnabled</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#isRunningVersion()">isRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#propertyIterator()">propertyIterator</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#recoverRunningVersion()">recoverRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#removeProperty(java.lang.String)">removeProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setComment(java.lang.String)">setComment</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setEnabled(boolean)">setEnabled</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setName(java.lang.String)">setName</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20boolean)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20boolean,%20boolean)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20int)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20int,%20int)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20long)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20long,%20long)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setRunningVersion(boolean)">setRunningVersion</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#setThreadName(java.lang.String)">setThreadName</a>, <a href="../../../../org/apache/jmeter/testelement/TestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="TransactionController()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>TransactionController</h4>
+<pre>public&nbsp;TransactionController()</pre>
+<div class="block">Creates a Transaction Controller</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="readResolve()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readResolve</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;readResolve()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/GenericController.html#readResolve()">readResolve</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setGenerateParentSample(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGenerateParentSample</h4>
+<pre>public&nbsp;void&nbsp;setGenerateParentSample(boolean&nbsp;generateParent)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>generateParent</code> - flag whether a parent sample should be generated.</dd></dl>
+</li>
+</ul>
+<a name="isGenerateParentSample()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isGenerateParentSample</h4>
+<pre>public&nbsp;boolean&nbsp;isGenerateParentSample()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd><code>true</code> if a parent sample will be generated</dd></dl>
+</li>
+</ul>
+<a name="isParent()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isParent</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public&nbsp;boolean&nbsp;isParent()</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>use <a href="../../../../org/apache/jmeter/control/TransactionController.html#isGenerateParentSample()"><code>isGenerateParentSample()</code></a>
+             instead</i></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd><code>true</code> if a parent sample will be generated</dd></dl>
+</li>
+</ul>
+<a name="setParent(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setParent</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public&nbsp;void&nbsp;setParent(boolean&nbsp;_parent)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>use
+             <a href="../../../../org/apache/jmeter/control/TransactionController.html#setGenerateParentSample(boolean)"><code>setGenerateParentSample(boolean)</code></a>
+             instead</i></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>_parent</code> - flag whether a parent sample should be generated</dd></dl>
+</li>
+</ul>
+<a name="next()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>next</h4>
+<pre>public&nbsp;<a href="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a>&nbsp;next()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html#next()">GenericController</a></code></strong></div>
+<div class="block"><p>
+ Determines the next sampler to be processed.
+ </p>
+
+ <p>
+ If <a href="../../../../org/apache/jmeter/control/GenericController.html#isDone()"><code>GenericController.isDone()</code></a> is <code>true</code>, returns null.
+ </p>
+
+ <p>
+ Gets the list element using current pointer.
+ If this is <code>null</code>, calls <a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsNull()"><code>GenericController.nextIsNull()</code></a>.
+ </p>
+
+ <p>
+ If the list element is a <a href="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers"><code>Sampler</code></a>, calls <a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsASampler(org.apache.jmeter.samplers.Sampler)"><code>GenericController.nextIsASampler(Sampler)</code></a>,
+ otherwise calls <a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)"><code>GenericController.nextIsAController(Controller)</code></a>
+ </p>
+
+ <p>
+ If any of the called methods throws <a href="../../../../org/apache/jmeter/control/NextIsNullException.html" title="class in org.apache.jmeter.control"><code>NextIsNullException</code></a>, returns <code>null</code>,
+ otherwise the value obtained above is returned.
+ </p></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/Controller.html#next()">next</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/GenericController.html#next()">next</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the next sampler or <code>null</code></dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/jmeter/control/Controller.html#next()"><code>Controller.next()</code></a></dd></dl>
+</li>
+</ul>
+<a name="nextIsAController(org.apache.jmeter.control.Controller)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextIsAController</h4>
+<pre>protected&nbsp;<a href="../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a>&nbsp;nextIsAController(<a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a>&nbsp;controller)
+                             throws <a href="../../../../org/apache/jmeter/control/NextIsNullException.html" title="class in org.apache.jmeter.control">NextIsNullException</a></pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)">GenericController</a></code></strong></div>
+<div class="block">Called by <a href="../../../../org/apache/jmeter/control/GenericController.html#next()"><code>GenericController.next()</code></a> if the element is a Controller, and returns the
+ next sampler from the controller. If this is <code>null</code>, then
+ updates the current pointer and makes recursive call to <a href="../../../../org/apache/jmeter/control/GenericController.html#next()"><code>GenericController.next()</code></a>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/GenericController.html#nextIsAController(org.apache.jmeter.control.Controller)">nextIsAController</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>controller</code> - the current <em>next</em> element</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the next sampler</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/NextIsNullException.html" title="class in org.apache.jmeter.control">NextIsNullException</a></code> - when the end of the list has already been reached</dd></dl>
+</li>
+</ul>
+<a name="isFromTransactionController(org.apache.jmeter.samplers.SampleResult)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isFromTransactionController</h4>
+<pre>public static&nbsp;boolean&nbsp;isFromTransactionController(<a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;res)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>res</code> - <a href="../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers"><code>SampleResult</code></a></dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if res is the ParentSampler transactions</dd></dl>
+</li>
+</ul>
+<a name="triggerEndOfLoop()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>triggerEndOfLoop</h4>
+<pre>public&nbsp;void&nbsp;triggerEndOfLoop()</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html#triggerEndOfLoop()">GenericController</a></code></strong></div>
+<div class="block">Trigger end of loop condition on controller (used by Start Next Loop feature)</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/Controller.html#triggerEndOfLoop()">triggerEndOfLoop</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/apache/jmeter/control/Controller.html" title="interface in org.apache.jmeter.control">Controller</a></code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/control/GenericController.html#triggerEndOfLoop()">triggerEndOfLoop</a></code>&nbsp;in class&nbsp;<code><a href="../../../../org/apache/jmeter/control/GenericController.html" title="class in org.apache.jmeter.control">GenericController</a></code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/jmeter/control/GenericController.html#triggerEndOfLoop()"><code>GenericController.triggerEndOfLoop()</code></a></dd></dl>
+</li>
+</ul>
+<a name="notifyListeners()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>notifyListeners</h4>
+<pre>protected&nbsp;void&nbsp;notifyListeners()</pre>
+<div class="block">Create additional SampleEvent in NON Parent Mode</div>
+</li>
+</ul>
+<a name="sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sampleOccurred</h4>
+<pre>public&nbsp;void&nbsp;sampleOccurred(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;se)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">SampleListener</a></code></strong></div>
+<div class="block">A sample has started and stopped.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleOccurred(org.apache.jmeter.samplers.SampleEvent)">sampleOccurred</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>se</code> - the <a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><code>SampleEvent</code></a> that has occurred</dd></dl>
+</li>
+</ul>
+<a name="sampleStarted(org.apache.jmeter.samplers.SampleEvent)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sampleStarted</h4>
+<pre>public&nbsp;void&nbsp;sampleStarted(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;e)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">SampleListener</a></code></strong></div>
+<div class="block">A sample has started.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStarted(org.apache.jmeter.samplers.SampleEvent)">sampleStarted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>e</code> - the <a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><code>SampleEvent</code></a> that has started</dd></dl>
+</li>
+</ul>
+<a name="sampleStopped(org.apache.jmeter.samplers.SampleEvent)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sampleStopped</h4>
+<pre>public&nbsp;void&nbsp;sampleStopped(<a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers">SampleEvent</a>&nbsp;e)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">SampleListener</a></code></strong></div>
+<div class="block">A sample has stopped.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html#sampleStopped(org.apache.jmeter.samplers.SampleEvent)">sampleStopped</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../org/apache/jmeter/samplers/SampleListener.html" title="interface in org.apache.jmeter.samplers">SampleListener</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>e</code> - the <a href="../../../../org/apache/jmeter/samplers/SampleEvent.html" title="class in org.apache.jmeter.samplers"><code>SampleEvent</code></a> that has stopped</dd></dl>
+</li>
+</ul>
+<a name="setIncludeTimers(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setIncludeTimers</h4>
+<pre>public&nbsp;void&nbsp;setIncludeTimers(boolean&nbsp;includeTimers)</pre>
+<div class="block">Whether to include timers and pre/post processor time in overall sample.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>includeTimers</code> - Flag whether timers and pre/post processor should be included in overall sample</dd></dl>
+</li>
+</ul>
+<a name="isIncludeTimers()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isIncludeTimers</h4>
+<pre>public&nbsp;boolean&nbsp;isIncludeTimers()</pre>
+<div class="block">Whether to include timer and pre/post processor time in overall sample.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>boolean (defaults to true for backwards compatibility)</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/jmeter/control/ThroughputController.html" title="class in org.apache.jmeter.control"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/jmeter/control/TransactionSampler.html" title="class in org.apache.jmeter.control"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/jmeter/control/TransactionController.html" target="_top">Frames</a></li>
+<li><a href="TransactionController.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_org.apache.jmeter.control.GenericController">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#xA9; 1998-2016 Apache Software Foundation. All Rights Reserved.</small></p>
+</body>
+</html>

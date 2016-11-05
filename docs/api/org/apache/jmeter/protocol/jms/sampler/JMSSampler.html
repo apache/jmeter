@@ -1,0 +1,834 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>JMSSampler (Apache JMeter API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="JMSSampler (Apache JMeter API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperty.html" title="class in org.apache.jmeter.protocol.jms.sampler"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/MessageAdmin.html" title="class in org.apache.jmeter.protocol.jms.sampler"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/jmeter/protocol/jms/sampler/JMSSampler.html" target="_top">Frames</a></li>
+<li><a href="JMSSampler.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.jmeter.protocol.jms.sampler</div>
+<h2 title="Class JMSSampler" class="title">Class JMSSampler</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">org.apache.jmeter.testelement.AbstractTestElement</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../../org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">org.apache.jmeter.samplers.AbstractSampler</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.jmeter.protocol.jms.sampler.JMSSampler</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, <a href="../../../../../../org/apache/jmeter/engine/util/ConfigMergabilityIndicator.html" title="interface in org.apache.jmeter.engine.util">ConfigMergabilityIndicator</a>, <a href="../../../../../../org/apache/jmeter/gui/Searchable.html" title="interface in org.apache.jmeter.gui">Searchable</a>, <a href="../../../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a>, <a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">JMSSampler</span>
+extends <a href="../../../../../../org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">AbstractSampler</a>
+implements <a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</a></pre>
+<div class="block">This class implements the JMS Point-to-Point sampler</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../serialized-form.html#org.apache.jmeter.protocol.jms.sampler.JMSSampler">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_org.apache.jmeter.testelement.TestElement">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.apache.jmeter.testelement.<a href="../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a></h3>
+<code><a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#COMMENTS">COMMENTS</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#ENABLED">ENABLED</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#GUI_CLASS">GUI_CLASS</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#NAME">NAME</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#TEST_CLASS">TEST_CLASS</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#JMSSampler()">JMSSampler</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getArguments(java.lang.String)">getArguments</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getContent()">getContent</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getContextProvider()">getContextProvider</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getExpiration()">getExpiration</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getInitialContextFactory()">getInitialContextFactory</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperties</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getJMSProperties()">getJMSProperties</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getJMSSelector()">getJMSSelector</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getJNDIProperties()">getJNDIProperties</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getPriority()">getPriority</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getQueueConnectionFactory()">getQueueConnectionFactory</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getReceiveQueue()">getReceiveQueue</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getSendQueue()">getSendQueue</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#getTimeout()">getTimeout</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#isNonPersistent()">isNonPersistent</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#isOneway()">isOneway</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#isUseReqMsgIdAsCorrelId()">isUseReqMsgIdAsCorrelId</a></strong>()</code>
+<div class="block">Which request field to use for correlation?</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#isUseResMsgIdAsCorrelId()">isUseResMsgIdAsCorrelId</a></strong>()</code>
+<div class="block">Which response field to use for correlation?</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#sample(org.apache.jmeter.samplers.Entry)">sample</a></strong>(<a href="../../../../../../org/apache/jmeter/samplers/Entry.html" title="class in org.apache.jmeter.samplers">Entry</a>&nbsp;entry)</code>
+<div class="block">Obtains statistics about the given Entry, and packages the information
+ into a SampleResult.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setArguments(org.apache.jmeter.config.Arguments)">setArguments</a></strong>(<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;args)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setContent(java.lang.String)">setContent</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;content)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setContextProvider(java.lang.String)">setContextProvider</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setExpiration(java.lang.String)">setExpiration</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setInitialContextFactory(java.lang.String)">setInitialContextFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setIsOneway(boolean)">setIsOneway</a></strong>(boolean&nbsp;isOneway)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setJMSProperties(org.apache.jmeter.protocol.jms.sampler.JMSProperties)">setJMSProperties</a></strong>(<a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperties</a>&nbsp;jmsProperties)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setJMSSelector(java.lang.String)">setJMSSelector</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;selector)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setJNDIProperties(org.apache.jmeter.config.Arguments)">setJNDIProperties</a></strong>(<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;args)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setNonPersistent(boolean)">setNonPersistent</a></strong>(boolean&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setPriority(java.lang.String)">setPriority</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setQueueConnectionFactory(java.lang.String)">setQueueConnectionFactory</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;qcf)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setReceiveQueue(java.lang.String)">setReceiveQueue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setSendQueue(java.lang.String)">setSendQueue</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setTimeout(java.lang.String)">setTimeout</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setUseReqMsgIdAsCorrelId(boolean)">setUseReqMsgIdAsCorrelId</a></strong>(boolean&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#setUseResMsgIdAsCorrelId(boolean)">setUseResMsgIdAsCorrelId</a></strong>(boolean&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#threadFinished()">threadFinished</a></strong>()</code>
+<div class="block">Called for each thread after all samples have been processed.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#threadStarted()">threadStarted</a></strong>()</code>
+<div class="block">Called for each thread before starting sampling.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSSampler.html#toString()">toString</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.samplers.AbstractSampler">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.jmeter.samplers.<a href="../../../../../../org/apache/jmeter/samplers/AbstractSampler.html" title="class in org.apache.jmeter.samplers">AbstractSampler</a></h3>
+<code><a href="../../../../../../org/apache/jmeter/samplers/AbstractSampler.html#applies(org.apache.jmeter.config.ConfigTestElement)">applies</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.testelement.AbstractTestElement">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.jmeter.testelement.<a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html" title="class in org.apache.jmeter.testelement">AbstractTestElement</a></h3>
+<code><a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addPropertiesValues(java.util.List,%20java.util.Set)">addPropertiesValues</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty)">addProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addProperty(org.apache.jmeter.testelement.property.JMeterProperty,%20boolean)">addProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#canRemove()">canRemove</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clear()">clear</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">clearTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clearTestElementChildren()">clearTestElementChildren</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#clone()">clone</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#emptyTemporary()">emptyTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#equals(java.lang.Object)">equals</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getComment()">getComment</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getName()">getName</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getProperty(java.lang.String)">getProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsBoolean(java.lang.String,%20boolean)">getPropertyAsBoolean</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsInt(java.lang.String,%20int)">getPropertyAsInt</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsLong(java.lang.String,%20long)">getPropertyAsLong</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getPropertyAsString(java.lang.String,%20java.lang.String)">getPropertyAsString</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getSearchableTokens()">getSearchableTokens</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadContext()">getThreadContext</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#getThreadName()">getThreadName</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#hashCode()">hashCode</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isEnabled()">isEnabled</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isRunningVersion()">isRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#logProperties()">logProperties</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#mergeIn(org.apache.jmeter.testelement.TestElement)">mergeIn</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#propertyIterator()">propertyIterator</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#recoverRunningVersion()">recoverRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#removeProperty(java.lang.String)">removeProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setComment(java.lang.String)">setComment</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setEnabled(boolean)">setEnabled</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setName(java.lang.String)">setName</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20boolean)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20boolean,%20boolean)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20int)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20int,%20int)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20long)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20long,%20long)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setProperty(java.lang.String,%20java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setRunningVersion(boolean)">setRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#setThreadName(java.lang.String)">setThreadName</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseCollection(org.apache.jmeter.testelement.property.CollectionProperty,%20org.apache.jmeter.testelement.TestElementTraverser)">traverseCollection</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseMap(org.apache.jmeter.testelement.property.MapProperty,%20org.apache.jmeter.testelement.TestElementTraverser)">traverseMap</a>, <a href="../../../../../../org/apache/jmeter/testelement/AbstractTestElement.html#traverseProperty(org.apache.jmeter.testelement.TestElementTraverser,%20org.apache.jmeter.testelement.property.JMeterProperty)">traverseProperty</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.jmeter.testelement.TestElement">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.apache.jmeter.testelement.<a href="../../../../../../org/apache/jmeter/testelement/TestElement.html" title="interface in org.apache.jmeter.testelement">TestElement</a></h3>
+<code><a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#addTestElement(org.apache.jmeter.testelement.TestElement)">addTestElement</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#canRemove()">canRemove</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#clear()">clear</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#clearTestElementChildren()">clearTestElementChildren</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#clone()">clone</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getComment()">getComment</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getName()">getName</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getProperty(java.lang.String)">getProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String)">getPropertyAsBoolean</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsBoolean(java.lang.String,%20boolean)">getPropertyAsBoolean</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsDouble(java.lang.String)">getPropertyAsDouble</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsFloat(java.lang.String)">getPropertyAsFloat</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String)">getPropertyAsInt</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsInt(java.lang.String,%20int)">getPropertyAsInt</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String)">getPropertyAsLong</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsLong(java.lang.String,%20long)">getPropertyAsLong</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String)">getPropertyAsString</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getPropertyAsString(java.lang.String,%20java.lang.String)">getPropertyAsString</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadContext()">getThreadContext</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#getThreadName()">getThreadName</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#isEnabled()">isEnabled</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#isRunningVersion()">isRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#isTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">isTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#propertyIterator()">propertyIterator</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#recoverRunningVersion()">recoverRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#removeProperty(java.lang.String)">removeProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setComment(java.lang.String)">setComment</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setEnabled(boolean)">setEnabled</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setName(java.lang.String)">setName</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(org.apache.jmeter.testelement.property.JMeterProperty)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20boolean)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20boolean,%20boolean)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20int)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20int,%20int)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20long)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20long,%20long)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setProperty(java.lang.String,%20java.lang.String,%20java.lang.String)">setProperty</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setRunningVersion(boolean)">setRunningVersion</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setTemporary(org.apache.jmeter.testelement.property.JMeterProperty)">setTemporary</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadContext(org.apache.jmeter.threads.JMeterContext)">setThreadContext</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#setThreadName(java.lang.String)">setThreadName</a>, <a href="../../../../../../org/apache/jmeter/testelement/TestElement.html#traverse(org.apache.jmeter.testelement.TestElementTraverser)">traverse</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="JMSSampler()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>JMSSampler</h4>
+<pre>public&nbsp;JMSSampler()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="sample(org.apache.jmeter.samplers.Entry)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sample</h4>
+<pre>public&nbsp;<a href="../../../../../../org/apache/jmeter/samplers/SampleResult.html" title="class in org.apache.jmeter.samplers">SampleResult</a>&nbsp;sample(<a href="../../../../../../org/apache/jmeter/samplers/Entry.html" title="class in org.apache.jmeter.samplers">Entry</a>&nbsp;entry)</pre>
+<div class="block">Obtains statistics about the given Entry, and packages the information
+ into a SampleResult.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../org/apache/jmeter/samplers/Sampler.html#sample(org.apache.jmeter.samplers.Entry)">sample</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/apache/jmeter/samplers/Sampler.html" title="interface in org.apache.jmeter.samplers">Sampler</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>entry</code> - the Entry (TODO seems to be unused)</dd>
+<dt><span class="strong">Returns:</span></dt><dd>information about the sample</dd></dl>
+</li>
+</ul>
+<a name="getJMSProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJMSProperties</h4>
+<pre>public&nbsp;<a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperties</a>&nbsp;getJMSProperties()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler"><code>JMSProperties</code></a> JMS Properties</dd></dl>
+</li>
+</ul>
+<a name="setJMSProperties(org.apache.jmeter.protocol.jms.sampler.JMSProperties)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setJMSProperties</h4>
+<pre>public&nbsp;void&nbsp;setJMSProperties(<a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperties.html" title="class in org.apache.jmeter.protocol.jms.sampler">JMSProperties</a>&nbsp;jmsProperties)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jmsProperties</code> - JMS Properties</dd></dl>
+</li>
+</ul>
+<a name="getJNDIProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJNDIProperties</h4>
+<pre>public&nbsp;<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;getJNDIProperties()</pre>
+</li>
+</ul>
+<a name="setJNDIProperties(org.apache.jmeter.config.Arguments)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setJNDIProperties</h4>
+<pre>public&nbsp;void&nbsp;setJNDIProperties(<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;args)</pre>
+</li>
+</ul>
+<a name="getQueueConnectionFactory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueueConnectionFactory</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getQueueConnectionFactory()</pre>
+</li>
+</ul>
+<a name="setQueueConnectionFactory(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setQueueConnectionFactory</h4>
+<pre>public&nbsp;void&nbsp;setQueueConnectionFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;qcf)</pre>
+</li>
+</ul>
+<a name="getSendQueue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSendQueue</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getSendQueue()</pre>
+</li>
+</ul>
+<a name="setSendQueue(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSendQueue</h4>
+<pre>public&nbsp;void&nbsp;setSendQueue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a name="getReceiveQueue()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getReceiveQueue</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getReceiveQueue()</pre>
+</li>
+</ul>
+<a name="setReceiveQueue(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setReceiveQueue</h4>
+<pre>public&nbsp;void&nbsp;setReceiveQueue(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a name="getContent()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getContent</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getContent()</pre>
+</li>
+</ul>
+<a name="setContent(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setContent</h4>
+<pre>public&nbsp;void&nbsp;setContent(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;content)</pre>
+</li>
+</ul>
+<a name="isOneway()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isOneway</h4>
+<pre>public&nbsp;boolean&nbsp;isOneway()</pre>
+</li>
+</ul>
+<a name="isNonPersistent()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNonPersistent</h4>
+<pre>public&nbsp;boolean&nbsp;isNonPersistent()</pre>
+</li>
+</ul>
+<a name="isUseReqMsgIdAsCorrelId()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isUseReqMsgIdAsCorrelId</h4>
+<pre>public&nbsp;boolean&nbsp;isUseReqMsgIdAsCorrelId()</pre>
+<div class="block">Which request field to use for correlation?</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>true if correlation should use the request JMSMessageID rather than JMSCorrelationID</dd></dl>
+</li>
+</ul>
+<a name="isUseResMsgIdAsCorrelId()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isUseResMsgIdAsCorrelId</h4>
+<pre>public&nbsp;boolean&nbsp;isUseResMsgIdAsCorrelId()</pre>
+<div class="block">Which response field to use for correlation?</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>true if correlation should use the response JMSMessageID rather than JMSCorrelationID</dd></dl>
+</li>
+</ul>
+<a name="getInitialContextFactory()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInitialContextFactory</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getInitialContextFactory()</pre>
+</li>
+</ul>
+<a name="getContextProvider()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getContextProvider</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getContextProvider()</pre>
+</li>
+</ul>
+<a name="setIsOneway(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setIsOneway</h4>
+<pre>public&nbsp;void&nbsp;setIsOneway(boolean&nbsp;isOneway)</pre>
+</li>
+</ul>
+<a name="setNonPersistent(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setNonPersistent</h4>
+<pre>public&nbsp;void&nbsp;setNonPersistent(boolean&nbsp;value)</pre>
+</li>
+</ul>
+<a name="setUseReqMsgIdAsCorrelId(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUseReqMsgIdAsCorrelId</h4>
+<pre>public&nbsp;void&nbsp;setUseReqMsgIdAsCorrelId(boolean&nbsp;value)</pre>
+</li>
+</ul>
+<a name="setUseResMsgIdAsCorrelId(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUseResMsgIdAsCorrelId</h4>
+<pre>public&nbsp;void&nbsp;setUseResMsgIdAsCorrelId(boolean&nbsp;value)</pre>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;toString()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="threadStarted()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>threadStarted</h4>
+<pre>public&nbsp;void&nbsp;threadStarted()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html#threadStarted()">ThreadListener</a></code></strong></div>
+<div class="block">Called for each thread before starting sampling.
+ WARNING: this is called before any Config test elements are processed,
+ so any properties they define will not have been merged in yet.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html#threadStarted()">threadStarted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</a></code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../org/apache/jmeter/threads/JMeterThread.html#threadStarted()"><code>JMeterThread.threadStarted()</code></a></dd></dl>
+</li>
+</ul>
+<a name="getTimeout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTimeout</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getTimeout()</pre>
+</li>
+</ul>
+<a name="getExpiration()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getExpiration</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getExpiration()</pre>
+</li>
+</ul>
+<a name="getPriority()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPriority</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPriority()</pre>
+</li>
+</ul>
+<a name="threadFinished()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>threadFinished</h4>
+<pre>public&nbsp;void&nbsp;threadFinished()</pre>
+<div class="block">Called for each thread after all samples have been processed.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html#threadFinished()">threadFinished</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/apache/jmeter/testelement/ThreadListener.html" title="interface in org.apache.jmeter.testelement">ThreadListener</a></code></dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../../org/apache/jmeter/threads/JMeterThread.html#threadFinished(org.apache.jmeter.engine.event.LoopIterationListener)"><code>JMeterThread.threadFinished(org.apache.jmeter.engine.event.LoopIterationListener)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setArguments(org.apache.jmeter.config.Arguments)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setArguments</h4>
+<pre>public&nbsp;void&nbsp;setArguments(<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;args)</pre>
+</li>
+</ul>
+<a name="getArguments(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArguments</h4>
+<pre>public&nbsp;<a href="../../../../../../org/apache/jmeter/config/Arguments.html" title="class in org.apache.jmeter.config">Arguments</a>&nbsp;getArguments(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a name="setTimeout(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTimeout</h4>
+<pre>public&nbsp;void&nbsp;setTimeout(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+</li>
+</ul>
+<a name="setPriority(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPriority</h4>
+<pre>public&nbsp;void&nbsp;setPriority(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+</li>
+</ul>
+<a name="setExpiration(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setExpiration</h4>
+<pre>public&nbsp;void&nbsp;setExpiration(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+</li>
+</ul>
+<a name="getJMSSelector()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJMSSelector</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getJMSSelector()</pre>
+<dl><dt><span class="strong">Returns:</span></dt><dd>String JMS Selector</dd></dl>
+</li>
+</ul>
+<a name="setJMSSelector(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setJMSSelector</h4>
+<pre>public&nbsp;void&nbsp;setJMSSelector(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;selector)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>selector</code> - String selector</dd></dl>
+</li>
+</ul>
+<a name="setInitialContextFactory(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setInitialContextFactory</h4>
+<pre>public&nbsp;void&nbsp;setInitialContextFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>string</code> - name of the initial context factory to use</dd></dl>
+</li>
+</ul>
+<a name="setContextProvider(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setContextProvider</h4>
+<pre>public&nbsp;void&nbsp;setContextProvider(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</pre>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>string</code> - url of the provider</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em><b>Apache JMeter</b></em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/JMSProperty.html" title="class in org.apache.jmeter.protocol.jms.sampler"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../org/apache/jmeter/protocol/jms/sampler/MessageAdmin.html" title="class in org.apache.jmeter.protocol.jms.sampler"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?org/apache/jmeter/protocol/jms/sampler/JMSSampler.html" target="_top">Frames</a></li>
+<li><a href="JMSSampler.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#xA9; 1998-2016 Apache Software Foundation. All Rights Reserved.</small></p>
+</body>
+</html>
