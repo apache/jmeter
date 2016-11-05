@@ -60,7 +60,8 @@ The first step is to configure the injectors that will run JMeter, this as for a
     <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
 </ul> 
 
-Once everything is ready, you will use CLI mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. <note>Don't run load test using GUI mode !</note><br/>
+Once everything is ready, you will use Command-line mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
+<note>Don't run load test using GUI mode !</note><br/>
 Using Non-GUI mode, you can generate a CSV (or XML) file containing results and have JMeter <a href="generating-dashboard.html">generate an HTML report</a> at end of Load Test.
 JMeter will by default provide a summary of load test while it's running. <br/>
 You can also have <a href="realtime-results.html" >real-time results</a> during your test using <a href="component_reference.html#Backend_Listener">Backend Listener</a>.
