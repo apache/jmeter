@@ -2963,7 +2963,7 @@ compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ex
 </div>
 </component>
 
-<component name="Aggregate Report" index="&sect-num;.3.7"  width="1140" height="266" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7"  width="1206" height="306" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
@@ -3026,7 +3026,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <p>
     The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="1140" height="276" image="aggregate_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
+<figure width="1207" height="298" image="aggregate_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
@@ -3222,7 +3222,7 @@ vars.putObject("OBJ1",new Object());
 <p>If the property <code>beanshell.listener.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.16"  width="1204" height="300" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -3261,7 +3261,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
 <p>
     The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="923" height="325" image="summary_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
+<figure width="1208" height="302" image="summary_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
