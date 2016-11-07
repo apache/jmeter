@@ -295,7 +295,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <ul>
     <li><bug>59712</bug>Display original query in RequestView when decoding fails. Based on a patch by
          Teemu Vesala (teemu.vesala at qentinel.com)</li>
-    <li><bug>60278</bug>Since 2.13 (and <bug>57514</bug>), Aggregate Graph, Summary Report and Aggregate Report lost precision in the Error, Rate and Bandwidth values saved in the saved file csv</li>
+    <li><bug>60278</bug>Since 2.13 (and <bugzilla>57514</bugzilla>), Aggregate Graph, Summary Report and Aggregate Report lost precision in the Error, Rate and Bandwidth values saved in the saved file csv</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
