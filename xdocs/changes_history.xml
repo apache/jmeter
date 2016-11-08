@@ -42,8 +42,9 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <!--  =================== 3.0 =================== -->
 
 <h1>Version 3.0</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Known bugs">Known bugs</a></li>
@@ -72,7 +73,9 @@ It is based on <a href="https://github.com/jayway/JsonPath" target="_blank" >Jay
 will pre-compile the script and cache the compiled code if the underlying language supports it</p>
 <figure width="991" height="606" image="changes/3.0/jsr223_cache_compiled.png"></figure>
 <ch_title>Nashorn can now be used as Javascript engine providing better performance and easier usage</ch_title>
+<p>
 To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html" >Nashorn</a>, you need to set in <code>user.properties</code>:
+</p>
 <source>javascript.use_rhino=false</source>
 <p>Nashorn can be used with Java 8 in the following elements:
 </p>
@@ -82,8 +85,10 @@ To enable <a target="_blank" href="http://www.oracle.com/technetwork/articles/ja
 <li><code>__javaScript</code> function</li>
 </ul>
 <ch_title>Jexl3 has been integrated. It provides new scripting features and much better documentation</ch_title>
+<p>
 <a href="http://commons.apache.org/proper/commons-jexl/" target="_blank">JEXL3</a> can now be used thanks to a new function <code>__jexl3</code>.
 JEXL is a language very similar to JSTL. 
+</p>
 <ch_title>Simplified HTTP Request UI</ch_title>
 <p>A new "<code>Advanced</code>" tab has been added to HTTP Request to simplify configuration. The file upload feature has been moved into a dedicated tab.
 This increases the space available for parameters in UI and simplifies the UX.</p>
@@ -128,7 +133,9 @@ This report provides the following metrics:
 
 <ch_title>GraphiteBackendListener has a new Server Hits metric</ch_title>
 <ch_title>Summariser displays a more readable duration</ch_title>
+<p>
 Now duration are display in the format <code>hours:minutes:seconds</code>
+</p>
 <source>
 Generate Summary Results +      1 in 00:00:01 =    1.7/s Avg:     1 Min:     1 Max:     1 Err:     0 (0.00%) Active: 1 Started: 1 Finished: 0
 Generate Summary Results +    138 in 00:00:09 =   16.2/s Avg:     0 Min:     0 Max:     1 Err:     0 (0.00%) Active: 9 Started: 9 Finished: 0
@@ -721,8 +728,9 @@ The fix is to use JDK 8 b132 or later.
 <!--  =================== 2.13 =================== -->
 
 <h1>Version 2.13</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Known bugs">Known bugs</a></li>
@@ -1079,8 +1087,9 @@ See  <bugzilla>56357</bugzilla> for details.
 <!--  =================== 2.12 =================== -->
 
 <h1>Version 2.12</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Known bugs">Known bugs</a></li>
@@ -1477,8 +1486,9 @@ Apologies if we have omitted anyone else.
 <!--  =================== 2.11 =================== -->
 
 <h1>Version 2.11</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Known bugs">Known bugs</a></li>
@@ -1731,8 +1741,9 @@ Apologies if we have omitted anyone else.
 <!--  =================== 2.10 =================== -->
 
 <h1>Version 2.10</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Known bugs">Known bugs</a></li>
