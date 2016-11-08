@@ -42,8 +42,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <!--  =================== 3.1 =================== -->
 
 <h1>Version 3.1</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Incompatible changes">Incompatible changes</a></li>
@@ -58,7 +59,9 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 
 <ch_section>Improve Report/Dashboard</ch_section>
+<p>
 The Dashboard has been improved with 3 new graphs and 1 summary table:
+</p>
 <ul>
     <li>Connect Time over Time graph : <figure width="1635" height="520" image="dashboard/report_connect_time_over_time.png" ></figure></li>
     <li>Response Time Percentiles Over Time (successful responses) graph : <figure width="1640" height="539" image="dashboard/response_time_percentiles_over_time.png" ></figure></li>
@@ -70,22 +73,32 @@ The Dashboard has been improved with 3 new graphs and 1 summary table:
 </ul>
 
 <ch_section>New Metrics</ch_section>
+<p>
 A new <code>sent_bytes</code> metric has been introduced which reports the bytes sent to server.<br/>
 Another metric <code>connect_time</code> has been enabled by default in this version
+</p>
 
 <ch_section>Handling Big responses</ch_section>
+<p>
 JMeter is now able to handle in terms of metrics responses bigger than 2GB, limit has been increased to 9223372 TB.<br/>
 To handle such big responses, it can also now truncate part of the response to avoid overflooding memory. See <code>httpsampler.max_bytes_to_store_per_request</code> property.
+</p>
 
 <ch_section>New <code>__groovy</code> function</ch_section>
+<p>
 Introduce a new function <code>__groovy</code> that enables Groovy functions. This can be handy, as JavaScript can be quite slow (same for BeanShell), when used in highly concurrent test plans.
+</p>
 
 <ch_section>Use Groovy as default for JSR-223 elements</ch_section>
+<p>
 Groovy is now set as the default language for JSR-223 elements. If you want to use another of the supported language, you have to make an explicit choice.
+</p>
 <note>By default <code>Cache compiled script if available</code> is not checked by default although we advise you to check it and ensure you don't use <code>${varName}</code> syntax to access JMeter variables but <code>vars.get("varName")</code> instead.</note>
 
 <ch_section>Formatted HTML source view in Results Tree View</ch_section>
+<p>
 The HTML source code in the Results Tree View can now be viewed formatted. This is extremely useful, if the code of the webpage has been stripped of all superfluous whitespace.
+</p>
 <figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
 
 <ch_title>Core improvements</ch_title>
