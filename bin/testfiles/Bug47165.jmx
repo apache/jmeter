@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.1">
+<jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Bug47165" enabled="true">
       <stringProp name="TestPlan.comments">Causes NPE when run in non-GUI mode on 2.3.2 and earler</stringProp>
@@ -96,7 +96,7 @@
         <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
           <collectionProp name="ModuleController.node_path">
             <stringProp name="-1227702913">WorkBench</stringProp>
-            <stringProp name="764597751">Test Plan</stringProp>
+            <stringProp name="-1476373639">Bug47165</stringProp>
             <stringProp name="-1948168983">Thread Group</stringProp>
             <stringProp name="-1591803190">Simple Controller</stringProp>
           </collectionProp>
@@ -105,7 +105,7 @@
         <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
           <collectionProp name="ModuleController.node_path">
             <stringProp name="-1227702913">WorkBench</stringProp>
-            <stringProp name="764597751">Test Plan</stringProp>
+            <stringProp name="-1476373639">Bug47165</stringProp>
             <stringProp name="-1948168983">Thread Group</stringProp>
             <stringProp name="-1591803190">Simple Controller</stringProp>
           </collectionProp>
