@@ -226,6 +226,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <h3>I18N</h3>
 <ul>
     <li><pr>214</pr>Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé (asier.lostale at openbravo.com).</li>
+    <li><bug>60348</bug>Change chinese translation for <code>Save as</code>. Contributed by XMeter (support at xmeter.net).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -372,6 +373,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <li>Roberto Braga (roberto.braga at soziale.it)</li>
 <li>jarek102 at gmail.com</li>
 <li>Wyatt Epp (wyatt.epp at gmail.com)</li>
+<li>XMeter (support at xmeter.net)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
