@@ -302,6 +302,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>60361</bug>ModuleController : If a Test plan contains a Module Controller which references an unexistant Controller, JMeter in GUI mode will not stop</li>
 </ul>
 
 <h3>Listeners</h3>
