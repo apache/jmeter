@@ -101,6 +101,12 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 </p>
 <figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
 
+<ch_section>Ability to update all timers in Test plan with a new property</ch_section>
+<p>
+A new property <code>timer.factor=1.0f</code> has been introduced which allows you to multiply pause times computed by Gaussian, Uniform and Poisson Timers by it.
+This allows you to update Think Times from one place and let you gain productivity. 
+</p>
+
 <ch_title>Core improvements</ch_title>
 <ul>
 <li>Various GUI and UX fixes</li>
