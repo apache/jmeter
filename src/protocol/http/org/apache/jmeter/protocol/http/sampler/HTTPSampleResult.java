@@ -40,8 +40,10 @@ public class HTTPSampleResult extends SampleResult {
 
     /** Set of all HTTP methods, that have no body */
     private static final Set<String> METHODS_WITHOUT_BODY = new HashSet<>(
-            Arrays.asList(HTTPConstants.GET, HTTPConstants.HEAD,
-                    HTTPConstants.OPTIONS, HTTPConstants.DELETE,
+            Arrays.asList(
+                    HTTPConstants.GET,
+                    HTTPConstants.HEAD,
+                    HTTPConstants.OPTIONS,
                     HTTPConstants.TRACE));
 
     private String cookies = ""; // never null
@@ -148,7 +150,7 @@ public class HTTPSampleResult extends SampleResult {
             sb.append(' ');
             sb.append(u.toString());
             sb.append('\n');
-            // Include request body if it is a post or put or patch
+            // Include request body if it can have one
             if (!METHODS_WITHOUT_BODY.contains(method)) {
                 sb.append("\n").append(method).append(" data:\n");
                 sb.append(queryString);
