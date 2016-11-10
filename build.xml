@@ -2645,10 +2645,13 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="HTMLParserTestFile_2"/>
     </antcall>
+  	<!-- Disable Test which seems wrong -->
+  	<!--
     <antcall target="batchtest">
-      <!--  Using the same module controller name in command line mode causes NPE -->
+      Using the same module controller name in command line mode causes NPE
       <param name="batchtest.name" value="Bug47165"/>
     </antcall>
+  	-->
     <antcall target="batchtest">
       <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
