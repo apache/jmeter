@@ -45,6 +45,7 @@ import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
+import org.apache.jorphan.util.JMeterStopTestException;
 import org.apache.log.Logger;
 
 /**
@@ -454,31 +455,36 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     
     private void startThreadGroup(AbstractThreadGroup group, int groupCount, SearchByClass<?> searcher, List<?> testLevelElements, ListenerNotifier notifier)
     {
-        int numThreads = group.getNumThreads();
-        JMeterContextService.addTotalThreads(numThreads);
-        boolean onErrorStopTest = group.getOnErrorStopTest();
-        boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
-        boolean onErrorStopThread = group.getOnErrorStopThread();
-        boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
-        String groupName = group.getName();
-        log.info("Starting " + numThreads + " threads for group " + groupName + ".");
-
-        if (onErrorStopTest) {
-            log.info("Test will stop on error");
-        } else if (onErrorStopTestNow) {
-            log.info("Test will stop abruptly on error");
-        } else if (onErrorStopThread) {
-            log.info("Thread will stop on error");
-        } else if (onErrorStartNextLoop) {
-            log.info("Thread will start next loop on error");
-        } else {
-            log.info("Thread will continue on error");
+        try {
+            int numThreads = group.getNumThreads();
+            JMeterContextService.addTotalThreads(numThreads);
+            boolean onErrorStopTest = group.getOnErrorStopTest();
+            boolean onErrorStopTestNow = group.getOnErrorStopTestNow();
+            boolean onErrorStopThread = group.getOnErrorStopThread();
+            boolean onErrorStartNextLoop = group.getOnErrorStartNextLoop();
+            String groupName = group.getName();
+            log.info("Starting " + numThreads + " threads for group " + groupName + ".");
+    
+            if (onErrorStopTest) {
+                log.info("Test will stop on error");
+            } else if (onErrorStopTestNow) {
+                log.info("Test will stop abruptly on error");
+            } else if (onErrorStopThread) {
+                log.info("Thread will stop on error");
+            } else if (onErrorStartNextLoop) {
+                log.info("Thread will start next loop on error");
+            } else {
+                log.info("Thread will continue on error");
+            }
+            ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
+            threadGroupTree.add(group, testLevelElements);
+    
+            groups.add(group);
+            group.start(groupCount, notifier, threadGroupTree, this);
+        } catch (JMeterStopTestException ex) {
+            JMeterUtils.reportErrorToUser("Error occurred compiling the tree:\r\n "+ex.getMessage()+", \r\nsee log file for more details");
+            return; // no point continuing
         }
-        ListedHashTree threadGroupTree = (ListedHashTree) searcher.getSubTree(group);
-        threadGroupTree.add(group, testLevelElements);
-
-        groups.add(group);
-        group.start(groupCount, notifier, threadGroupTree, this);
     }
 
     /**
