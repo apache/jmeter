@@ -227,7 +227,7 @@ http://www.slf4j.org/
 - jodd-core
 - json-path
 
-tika-1.13
+tika-1.14
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
