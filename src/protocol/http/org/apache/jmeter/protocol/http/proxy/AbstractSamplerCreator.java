@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.samplers.SampleResult;
@@ -68,7 +69,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     private static final boolean numberRequests =
         JMeterUtils.getPropDefault("proxy.number.requests", true); // $NON-NLS-1$
 
-    private static volatile int requestNumber = 0;// running number
+    private static AtomicInteger REQUEST_NUMBER = new AtomicInteger(0);// running number
     
 
     /**
@@ -85,14 +86,14 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * @return int request number
      */
     protected static int getRequestNumber() {
-        return requestNumber;
+        return REQUEST_NUMBER.get();
     }
 
     /**
      * Increment request number
      */
     protected static void incrementRequestNumber() {
-        requestNumber++;
+        REQUEST_NUMBER.incrementAndGet();
     }
 
     /**
