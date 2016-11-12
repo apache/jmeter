@@ -17,7 +17,9 @@
 -->
 <project name="JMeter" default="install" basedir="."
     xmlns:rat="antlib:org.apache.rat.anttasks"
-    xmlns="antlib:org.apache.tools.ant">
+    xmlns:jacoco="antlib:org.jacoco.ant"
+    xmlns:if="ant:if"
+    xmlns="antlib:org.apache.tools.ant" >
   <description>
 
   N.B. To build JMeter from a release you need both the binary and source archives,
@@ -330,6 +332,14 @@
 
   <!-- Directory where Optional 3rd party libraries live -->
   <property name="lib.opt" value="lib/opt"/>
+
+  <!-- Directory where Jacoco libraries live -->
+  <!-- I'm to lazy to fix this now, so I tag along with rat & checkstyle,
+    which already live there. But: none of these should apear on the classpath
+    of Jmeter, neither runtime, nor compiletime. These are only required on the 
+    Ant classpath, so judging from comments elsewhere, this is the wrong place.
+  -->
+  <property name="lib.coverage" location="lib/opt"/>
 
   <!-- Other stuff -->
   <property name="extras.dir" value="extras"/>
@@ -892,6 +902,7 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
+      <jvmarg value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver" if:set="jacocoagent" />
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
   </target>
@@ -899,7 +910,7 @@
   <target name="package" depends="compile, prepare-resources, package-only"
      description="Compile everything and create the jars"/>
 
-  <target name="package-and-check" depends="clean, package, checkstyle, rat"
+  <target name="package-and-check" depends="clean, download_jars, package, checkstyle, rat"
      description="Compile, create jars and apply checkstyle before commiting code"/>
 
   <target name="prepare-resources"
@@ -2457,6 +2468,7 @@ run JMeter unless all the JMeter jars are added.
             <fileset dir="${dest.jar}" includes="*.jar"/>
             <path refid="classpath"/>
           </classpath>
+          <jvmarg value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}" if:set="jacocoagent" />
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
           <!-- quieten the logging; this has to be done first -->
@@ -2558,6 +2570,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
       </classpath>
+      <jvmarg value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}" if:set="jacocoagent" />
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
       <sysproperty key="user.region" value="US"/>
@@ -2755,6 +2768,7 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
       </classpath>
       <jvmarg value="-server"/>
+      <jvmarg value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests" if:set="jacocoagent" />
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
@@ -2781,6 +2795,7 @@ run JMeter unless all the JMeter jars are added.
            printsummary="on">
       <formatter type="${test.format}" usefile="yes"/>
       <formatter type="xml"/>
+      <jvmarg value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver" if:set="jacocoagent" />
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <!-- Allow headless to be passed in -->
       <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
@@ -3016,6 +3031,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xmlpull"/>
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
+    <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
   </target>
 
   <target name="_process_doc_jars">
@@ -3084,6 +3100,74 @@ run JMeter unless all the JMeter jars are added.
       <param name="_get_file" value="true"/>
     </antcall>
   </target>
+
+  <target name="_coverage.prepare" >
+     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${lib.coverage}/${jacocoant.jar}"/>
+     </taskdef>
+     <jacoco:agent property="jacocoagent" 
+                   destfile="${build.dir}/jacoco.exec"
+                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder"
+                   sessionid="" 
+     />
+  </target>
+
+  <target name="_coverage.report" depends="_coverage.prepare, init-svnVersion, init-version">
+    <jacoco:report>
+        <executiondata>
+            <file file="${build.dir}/jacoco.exec"/>
+        </executiondata>
+        <structure name="JMeter ${jmeter.version} ${implementation.version}">
+            <classfiles>
+                <fileset dir="${build.components}"/>
+                <fileset dir="${build.core}"/>
+                <fileset dir="${build.functions}"/>
+                <fileset dir="${build.jorphan}"/>
+                <fileset dir="${build.junit}"/>
+                <fileset dir="${build.monitor.components}"/>
+                <fileset dir="${build.monitor.model}"/>
+                <fileset dir="${build.ftp}"/>
+                <fileset dir="${build.http}"/>
+                <fileset dir="${build.java}"/>
+                <fileset dir="${build.jdbc}"/>
+                <fileset dir="${build.jms}"/>
+                <fileset dir="${build.ldap}"/>
+                <fileset dir="${build.mail}"/>
+                <fileset dir="${build.mongodb}"/>
+                <fileset dir="${build.native}"/>
+                <fileset dir="${build.tcp}"/>
+                <fileset dir="${build.slf4j_logkit}"/>
+                <fileset dir="${build.test}"/>
+            </classfiles>
+            <sourcefiles encoding="${encoding}">
+                <fileset dir="${src.components}"/>
+                <fileset dir="${src.core}"/>
+                <fileset dir="${src.functions}"/>
+                <fileset dir="${src.jorphan}"/>
+                <fileset dir="${src.junit}"/>
+                <fileset dir="${src.monitor.components}"/>
+                <fileset dir="${src.monitor.model}"/>
+                <fileset dir="${src.ftp}"/>
+                <fileset dir="${src.http}"/>
+                <fileset dir="${src.java}"/>
+                <fileset dir="${src.jdbc}"/>
+                <fileset dir="${src.jms}"/>
+                <fileset dir="${src.ldap}"/>
+                <fileset dir="${src.mail}"/>
+                <fileset dir="${src.mongodb}"/>
+                <fileset dir="${src.native}"/>
+                <fileset dir="${src.tcp}"/>
+                <fileset dir="${src.slf4j_logkit}"/>
+                <fileset dir="${src.test}"/>
+            </sourcefiles>
+        </structure>
+        <html destdir="reports/coverage"/>
+        <xml destfile="reports/coverage/jmeter-coverage.xml"/>
+        <csv destfile="reports/coverage/jmeter-coverage.csv"/>
+    </jacoco:report>
+  </target>
+
+  <target name="coverage"  depends="_coverage.prepare, test-both, _allbatchtests, _coverage.report"/>
 
   <target name="_check_exists" if="_check_exists">
     <fail message="Invalid call sequence - file.exists should not be defined" if="file.exists"/>

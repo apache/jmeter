@@ -290,6 +290,7 @@ This allows you to update Think Times from one place and let you gain productivi
     Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><pr>218</pr>Misc cleanup. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><pr>216</pr>Re-use pattern when possible. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
+    <li><bug>60364</bug>Document Test Coverage. Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -382,6 +383,7 @@ This allows you to update Think Times from one place and let you gain productivi
 <li>Roberto Braga (roberto.braga at soziale.it)</li>
 <li>jarek102 at gmail.com</li>
 <li>Wyatt Epp (wyatt.epp at gmail.com)</li>
+<li>Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
