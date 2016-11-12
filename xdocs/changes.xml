@@ -179,6 +179,7 @@ This allows you to update Think Times from one place and let you gain productivi
     <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes (that is 2GB)</li>
     <li><bug>60265</bug>HTTP Request : In Files Upload Tab you cannot resize columns</li>
     <li><bug>60318</bug>Ignore CSS warnings when parsing with ph-css library.</li>
+    <li><bug>60358</bug>Http Request : Allow sending Body Data for HTTP GET request</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -232,6 +233,7 @@ This allows you to update Think Times from one place and let you gain productivi
 <h3>I18N</h3>
 <ul>
     <li><pr>214</pr>Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé (asier.lostale at openbravo.com).</li>
+    <li><bug>60348</bug>Change chinese translation for <code>Save as</code>. Contributed by XMeter (support at xmeter.net).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>

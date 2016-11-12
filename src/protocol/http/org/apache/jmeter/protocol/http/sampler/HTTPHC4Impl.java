@@ -111,6 +111,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.util.CharArrayBuffer;
+import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
@@ -308,6 +309,22 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     protected HTTPHC4Impl(HTTPSamplerBase testElement) {
         super(testElement);
     }
+    
+    /**
+     * Implementation that allows GET method to have a body
+     */
+    public static final class HttpGetWithEntity extends HttpEntityEnclosingRequestBase {
+
+        public HttpGetWithEntity(final URI uri) {
+            super();
+            setURI(uri);
+        }
+
+        @Override
+        public String getMethod() {
+            return HTTPConstants.GET;
+        }
+    }
 
     public static final class HttpDelete extends HttpEntityEnclosingRequestBase {
 
@@ -341,7 +358,15 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
             } else if (method.equals(HTTPConstants.GET)) {
-                httpRequest = new HttpGet(uri);
+                // Some servers fail if Content-Length is equal to 0
+                // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
+                // otherwise we use HttpGetWithEntity
+                if ( (!hasArguments() && getSendFileAsPostBody()) 
+                        || getSendParameterValuesAsPostBody() ) {
+                    httpRequest = new HttpGetWithEntity(uri);
+                } else {
+                    httpRequest = new HttpGet(uri);
+                }
             } else if (method.equals(HTTPConstants.PUT)) {
                 httpRequest = new HttpPut(uri);
             } else if (method.equals(HTTPConstants.HEAD)) {
@@ -1391,8 +1416,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @throws IOException cannot really occur for ByteArrayOutputStream methods
      */
     protected String sendEntityData( HttpEntityEnclosingRequestBase entity) throws IOException {
-        // Buffer to hold the entity body
-        StringBuilder entityBody = new StringBuilder(1000);
         boolean hasEntityBody = false;
 
         final HTTPFileArg[] files = getHTTPFiles();
@@ -1427,8 +1450,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             hasEntityBody = true;
 
             // Just append all the parameter values, and use that as the entity body
-            StringBuilder entityBodyContent = new StringBuilder();
-            for (JMeterProperty jMeterProperty : getArguments()) {
+            Arguments arguments = getArguments();
+            StringBuilder entityBodyContent = new StringBuilder(arguments.getArgumentCount()*15);
+            for (JMeterProperty jMeterProperty : arguments) {
                 HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
                 // Note: if "Encoded?" is not selected, arg.getEncodedValue is equivalent to arg.getValue
                 if (charset != null) {
@@ -1445,18 +1469,25 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             // If the request entity is repeatable, we can send it first to
             // our own stream, so we can return it
             final HttpEntity entityEntry = entity.getEntity();
+            // Buffer to hold the entity body
+            StringBuilder entityBody = null;
             if(entityEntry.isRepeatable()) {
+                entityBody = new StringBuilder(1000);
+                // FIXME Charset
                 entityBody.append(IOUtils.toString(new BoundedInputStream(
                         entityEntry.getContent(), MAX_BODY_RETAIN_SIZE)));
                 if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
                     entityBody.append("<actual file content shortened>");
                 }
             }
-            else { // this probably cannot happen
+            else { 
+                entityBody = new StringBuilder(65);
+                // this probably cannot happen
                 entityBody.append("<RequestEntity was not repeatable, cannot view what was sent>");
             }
+            return entityBody.toString();
         }
-        return entityBody.toString(); // may be the empty string
+        return ""; // may be the empty string
     }
 
     /**
