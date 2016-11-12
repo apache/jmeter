@@ -144,6 +144,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
         }
     }
 
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     private void setValues() {
         synchronized (lock) {
             if (log.isDebugEnabled()) {
