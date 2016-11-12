@@ -381,7 +381,7 @@ For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 </p>
 <br/>
-<p>You have the option to switch to Post Body when a request has only unnamed parameters
+<p>You have the option to switch to <code>Body Data</code> tab when a request has only unnamed parameters
 (or no parameters at all).
 This option is useful in the following cases (amongst others):</p>
 <ul>
@@ -391,10 +391,10 @@ This option is useful in the following cases (amongst others):</p>
 <li>SOAP HTTP Request</li>
 </ul>
 <note>
-Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
+Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the <code>Body Data</code> tab from its data.
 </note>
 <p>
-In Post Body mode, each line will be sent with <code>CRLF</code> appended, apart from the last line.
+In <code>Body Data</code> mode, each line will be sent with <code>CRLF</code> appended, apart from the last line.
 To send a <code>CRLF</code> after the last line of data, just ensure that there is an empty line following it.
 (This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p>
@@ -404,20 +404,19 @@ To send a <code>CRLF</code> after the last line of data, just ensure that there 
 
 <p>
 <b>Method Handling:</b><br></br>
-The <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that the <code>PUT</code> and <code>PATCH</code> methods do not support multipart requests
+The <code>GET</code>, <code>DELETE</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that as of 3.1, only <code>POST</code> method supports multipart requests
 or file upload.
-The <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
+The <code>GET</code>, <code>DELETE</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
 <ul>
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
-<li>use the Post Body tab</li>
+<li>use the <code>Body Data</code> tab</li>
 </ul>
 <p>
 If you define any parameters with a name in either the sampler or HTTP
 defaults then nothing is sent.
-<code>PUT</code> and <code>PATCH</code> require a Content-Type.
+<code>GET</code>, <code>DELETE</code>, <code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
-The <code>GET</code> and <code>DELETE</code> request methods work similarly to each other.
 </p>
 <p>JMeter scan responses from embedded resources. It uses the property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
  e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
