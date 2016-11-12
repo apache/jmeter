@@ -113,6 +113,7 @@ This allows you to update Think Times from one place and let you gain productivi
 <li>Memory usage improvements</li>
 <li>JDBC Request is now able to return Blob/Clob and computes latency and connect time</li>
 <li>CSS Parsing introduced in 3.0 has been optimized by introduction of a parsing cache</li>
+<li>HTTP Request is now able to handle body in GET request, this is useful for Elastic Search requests for example.</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
