@@ -362,6 +362,7 @@ This allows you to update Think Times from one place and let you gain productivi
     <li><bug>59439</bug>Report / Dashboard : AbstractOverTimeGraphConsumer.createGroupInfos() should be abstract</li>
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>60295</bug>JSON Extractor doesn't index array elements when only one element is found. Based on a patch by Roberto Braga (roberto.braga at sociale.it)</li>
+    <li><bug>60299</bug>Thread Group with Scheduler : Weird behaviour when End-Time is in the past</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
