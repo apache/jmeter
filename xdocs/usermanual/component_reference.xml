@@ -110,7 +110,7 @@ Latency is set to the time it takes to login.
         <ul>
         <li>images</li>
         <li>applets</li>
-        <li>stylesheets</li>
+        <li>stylesheets (CSS) and resources referenced from those files</li>
         <li>external scripts</li>
         <li>frames, iframes</li>
         <li>background images (body, table, TD, TR)</li>
@@ -406,20 +406,20 @@ To send a <code>CRLF</code> after the last line of data, just ensure that there 
 <b>Method Handling:</b><br></br>
 The <code>GET</code>, <code>DELETE</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that as of 3.1, only <code>POST</code> method supports multipart requests
 or file upload.
-The <code>GET</code>, <code>DELETE</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
+The <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
 <ul>
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
 <li>use the <code>Body Data</code> tab</li>
 </ul>
+
+The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <p>
-If you define any parameters with a name in either the sampler or HTTP
-defaults then nothing is sent.
 <code>GET</code>, <code>DELETE</code>, <code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 </p>
 <p>JMeter scan responses from embedded resources. It uses the property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
- e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
+ e.g. <code>htmlParser</code>, <code>cssParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
  <ul>
  <li><code>id.types</code> - a list of content types</li>
  <li><code>id.className</code> - the parser to be used to extract the embedded resources</li>
