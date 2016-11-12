@@ -115,6 +115,9 @@ public class JMeterVersionTest extends JMeterTestCase {
         versions.remove("rat");
         propNames.remove("rat-tasks");
         versions.remove("rat-tasks");
+        // remove optional jacoco jars (required for coverage reporting, not required for jmeter)
+        propNames.remove("jacocoant");
+        versions.remove("jacocoant");
         prop = buildProp;
         final File licencesDir = getFileFromHome("licenses/bin");
         licencesDir.list(new FilenameFilter() {
