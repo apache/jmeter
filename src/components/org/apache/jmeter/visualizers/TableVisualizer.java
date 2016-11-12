@@ -106,7 +106,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private JCheckBox childSamples = null;
 
-    private transient Calculator calc = new Calculator();
+    private final transient Calculator calc = new Calculator();
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
