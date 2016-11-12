@@ -32,6 +32,47 @@ import org.apache.log.Logger;
  *
  */
 public class MessageAdmin {
+
+    private static final class PlaceHolder {
+        private final CountDownLatch latch;
+        private final Object request;
+    
+        private Object reply;
+    
+        PlaceHolder(Object original, CountDownLatch latch) {
+            this.request = original;
+            this.latch = latch;
+        }
+    
+        void setReply(Object reply) {
+            this.reply = reply;
+        }
+    
+        public Object getReply() {
+            return reply;
+        }
+    
+        public Object getRequest() {
+            return request;
+        }
+    
+        boolean hasReply() {
+            return reply != null;
+        }
+    
+        @Override
+        public String toString() {
+            return "request=" + request + ", reply=" + reply;
+        }
+    
+        /**
+         * @return the latch
+         */
+        public CountDownLatch getLatch() {
+            return latch;
+        }
+    }
+
     private static final MessageAdmin SINGLETON = new MessageAdmin();
 
     private final Map<String, PlaceHolder> table = new ConcurrentHashMap<>();
@@ -118,45 +159,5 @@ public class MessageAdmin {
             log.debug("Message with " + id + " not found.");
         }
         return holder==null ? null : (Message) holder.getReply();
-    }
-}
-
-class PlaceHolder {
-    private final CountDownLatch latch;
-    private final Object request;
-
-    private Object reply;
-
-    PlaceHolder(Object original, CountDownLatch latch) {
-        this.request = original;
-        this.latch = latch;
-    }
-
-    void setReply(Object reply) {
-        this.reply = reply;
-    }
-
-    public Object getReply() {
-        return reply;
-    }
-
-    public Object getRequest() {
-        return request;
-    }
-
-    boolean hasReply() {
-        return reply != null;
-    }
-
-    @Override
-    public String toString() {
-        return "request=" + request + ", reply=" + reply;
-    }
-
-    /**
-     * @return the latch
-     */
-    public CountDownLatch getLatch() {
-        return latch;
     }
 }
