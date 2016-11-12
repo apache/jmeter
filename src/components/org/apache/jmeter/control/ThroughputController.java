@@ -172,7 +172,8 @@ public class ThroughputController extends GenericController implements Serializa
         }
         return retVal;
     }
-
+    
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     private int getExecutions() {
         if (!isPerThread()) {
             synchronized (counterLock) {
@@ -232,6 +233,7 @@ public class ThroughputController extends GenericController implements Serializa
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public void iterationStart(LoopIterationEvent iterEvent) {
         if (!isPerThread()) {
             synchronized (counterLock) {
@@ -251,6 +253,7 @@ public class ThroughputController extends GenericController implements Serializa
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public void testStarted() {
         synchronized (counterLock) {
             globalNumExecutions = new MutableInteger(0);
