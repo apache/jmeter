@@ -36,12 +36,11 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class HTTPSampleResult extends SampleResult {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     /** Set of all HTTP methods, that have no body */
     private static final Set<String> METHODS_WITHOUT_BODY = new HashSet<>(
             Arrays.asList(
-                    HTTPConstants.GET,
                     HTTPConstants.HEAD,
                     HTTPConstants.OPTIONS,
                     HTTPConstants.TRACE));
