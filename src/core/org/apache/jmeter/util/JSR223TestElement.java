@@ -104,7 +104,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      */
     private String getScriptLanguageWithDefault() {
         String lang = getScriptLanguage();
-        if (!StringUtils.isNotEmpty(lang)) {
+        if (StringUtils.isNotEmpty(lang)) {
             return lang;
         }
         return DEFAULT_SCRIPT_LANGUAGE;

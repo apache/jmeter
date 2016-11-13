@@ -88,7 +88,7 @@ public final class NameUpdater {
                 Enumeration<String> propertyNames = (Enumeration<String>) prop.propertyNames();
                 while (propertyNames.hasMoreElements()) {
                     String key = propertyNames.nextElement();
-                    if (!nameMap.contains(key)) {
+                    if (!nameMap.containsKey(key)) {
                        nameMap.put(key, prop.get(key));
                        log.info("Added additional nameMap entry: " + key);
                     } else {

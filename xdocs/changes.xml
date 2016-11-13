@@ -42,8 +42,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 <!--  =================== 3.1 =================== -->
 
 <h1>Version 3.1</h1>
-
+<p>
 Summary
+</p>
 <ul>
 <li><a href="#New and Noteworthy">New and Noteworthy</a></li>
 <li><a href="#Incompatible changes">Incompatible changes</a></li>
@@ -58,7 +59,9 @@ Summary
 <ch_section>New and Noteworthy</ch_section>
 
 <ch_section>Improve Report/Dashboard</ch_section>
+<p>
 The Dashboard has been improved with 3 new graphs and 1 summary table:
+</p>
 <ul>
     <li>Connect Time over Time graph : <figure width="1635" height="520" image="dashboard/report_connect_time_over_time.png" ></figure></li>
     <li>Response Time Percentiles Over Time (successful responses) graph : <figure width="1640" height="539" image="dashboard/response_time_percentiles_over_time.png" ></figure></li>
@@ -70,23 +73,39 @@ The Dashboard has been improved with 3 new graphs and 1 summary table:
 </ul>
 
 <ch_section>New Metrics</ch_section>
+<p>
 A new <code>sent_bytes</code> metric has been introduced which reports the bytes sent to server.<br/>
 Another metric <code>connect_time</code> has been enabled by default in this version
+</p>
 
 <ch_section>Handling Big responses</ch_section>
+<p>
 JMeter is now able to handle in terms of metrics responses bigger than 2GB, limit has been increased to 9223372 TB.<br/>
 To handle such big responses, it can also now truncate part of the response to avoid overflooding memory. See <code>httpsampler.max_bytes_to_store_per_request</code> property.
+</p>
 
 <ch_section>New <code>__groovy</code> function</ch_section>
+<p>
 Introduce a new function <code>__groovy</code> that enables Groovy functions. This can be handy, as JavaScript can be quite slow (same for BeanShell), when used in highly concurrent test plans.
+</p>
 
 <ch_section>Use Groovy as default for JSR-223 elements</ch_section>
+<p>
 Groovy is now set as the default language for JSR-223 elements. If you want to use another of the supported language, you have to make an explicit choice.
+</p>
 <note>By default <code>Cache compiled script if available</code> is not checked by default although we advise you to check it and ensure you don't use <code>${varName}</code> syntax to access JMeter variables but <code>vars.get("varName")</code> instead.</note>
 
 <ch_section>Formatted HTML source view in Results Tree View</ch_section>
+<p>
 The HTML source code in the Results Tree View can now be viewed formatted. This is extremely useful, if the code of the webpage has been stripped of all superfluous whitespace.
+</p>
 <figure width="635" height="271" image="html-formatted-tree-view.png">New formatted HTML source view</figure>
+
+<ch_section>Ability to update all timers in Test plan with a new property</ch_section>
+<p>
+A new property <code>timer.factor=1.0f</code> has been introduced which allows you to multiply pause times computed by Gaussian, Uniform and Poisson Timers by it.
+This allows you to update Think Times from one place and let you gain productivity. 
+</p>
 
 <ch_title>Core improvements</ch_title>
 <ul>
@@ -94,6 +113,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <li>Memory usage improvements</li>
 <li>JDBC Request is now able to return Blob/Clob and computes latency and connect time</li>
 <li>CSS Parsing introduced in 3.0 has been optimized by introduction of a parsing cache</li>
+<li>HTTP Request is now able to handle body in GET request, this is useful for Elastic Search requests for example.</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
@@ -155,11 +175,12 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <ul>
     <li><bug>59882</bug>Reduce memory allocations for better throughput. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>217</pr> and <pr>228</pr></li>
     <li><bug>59885</bug>Optimize css parsing for embedded resources download by introducing a cache. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com) through <pr>219</pr></li>
-    <li><bug>60092</bug>Add shortened version of the PUT body to sampler result.</li>
+    <li><bug>60092</bug>View Result Tree: Add shortened version of the PUT body to sampler result.</li>
     <li><bug>60229</bug>Add a new metric : sent_bytes. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>53039</bug>HTTP Request : Be able to handle responses which size exceeds <code>2147483647</code> bytes (that is 2GB)</li>
     <li><bug>60265</bug>HTTP Request : In Files Upload Tab you cannot resize columns</li>
     <li><bug>60318</bug>Ignore CSS warnings when parsing with ph-css library.</li>
+    <li><bug>60358</bug>Http Request : Allow sending Body Data for HTTP GET request</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -213,6 +234,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <h3>I18N</h3>
 <ul>
     <li><pr>214</pr>Add spanish translation for delayed starting of threads. Contributed by Asier Lostalé (asier.lostale at openbravo.com).</li>
+    <li><bug>60348</bug>Change chinese translation for <code>Save as</code>. Contributed by XMeter (support at xmeter.net).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -254,7 +276,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <ul>
     <li>Updated to jsoup-1.10.1 (from 1.8.3)</li>
     <li>Updated to ph-css 4.1.6 (from 4.1.4)</li>
-    <li>Updated to tika-core and tika-parsers 1.13 (from 1.12)</li>
+    <li>Updated to tika-core and tika-parsers 1.14 (from 1.12)</li>
     <li>Updated to commons-io 2.5 (from 2.4)</li>
     <li>Updated to commons-lang3 3.5 (from 3.4)</li>
     <li>Updated to commons-net 3.5 (from 3.4)</li>
@@ -269,6 +291,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
     Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><pr>218</pr>Misc cleanup. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
     <li><pr>216</pr>Re-use pattern when possible. Contributed by Benoit Wiart (b.wiart at ubik-ingenierie.com)</li>
+    <li><bug>60364</bug>Document Test Coverage. Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -289,13 +312,15 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>60361</bug>ModuleController : If a Test plan contains a Module Controller which references an unexistant Controller, JMeter in GUI mode will not stop</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
     <li><bug>59712</bug>Display original query in RequestView when decoding fails. Based on a patch by
          Teemu Vesala (teemu.vesala at qentinel.com)</li>
-    <li><bug>60278</bug>Since 2.13 (and <bug>57514</bug>), Aggregate Graph, Summary Report and Aggregate Report lost precision in the Error, Rate and Bandwidth values saved in the saved file csv</li>
+    <li><bug>60278</bug>Since 2.13 (and <bugzilla>57514</bugzilla>), Aggregate Graph, Summary Report and Aggregate Report lost precision in the Error, Rate and Bandwidth values saved in the saved file csv</li>
+    <li><bug>60360</bug>View Result Tree : Request Tab does not show body of a DELETE request</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -338,6 +363,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
     <li><bug>59439</bug>Report / Dashboard : AbstractOverTimeGraphConsumer.createGroupInfos() should be abstract</li>
     <li><bug>59918</bug>Ant generated HTML report is broken (extras folder)</li>
     <li><bug>60295</bug>JSON Extractor doesn't index array elements when only one element is found. Based on a patch by Roberto Braga (roberto.braga at sociale.it)</li>
+    <li><bug>60299</bug>Thread Group with Scheduler : Weird behaviour when End-Time is in the past</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -359,6 +385,7 @@ The HTML source code in the Results Tree View can now be viewed formatted. This 
 <li>Roberto Braga (roberto.braga at soziale.it)</li>
 <li>jarek102 at gmail.com</li>
 <li>Wyatt Epp (wyatt.epp at gmail.com)</li>
+<li>Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

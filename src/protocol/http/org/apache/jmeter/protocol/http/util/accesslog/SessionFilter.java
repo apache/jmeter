@@ -49,6 +49,10 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     /**
+     * Protects access to managersInUse
+     */
+    private static final Object LOCK = new Object();
+    /**
      * These objects are static across multiple threads in a test, via clone()
      * method.
      */
@@ -159,7 +163,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         CookieManager cm = null;
         // First have to release the cookie we were using so other
         // threads stuck in wait can move on
-        synchronized(managersInUse)
+        synchronized(LOCK)
         {
             if(lastUsed != null)
             {
@@ -175,7 +179,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
         // here is the core routine to find appropriate cookie manager and
         // check it's not being used.  If used, wait until whoever's using it gives
         // it up
-        synchronized(managersInUse)
+        synchronized(LOCK)
         {
             cm = cookieManagers.get(ipAddr);
             if(cm == null)
@@ -210,7 +214,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      */
     @Override
     public void threadFinished() {
-        synchronized(managersInUse)
+        synchronized(LOCK)
         {
             managersInUse.remove(lastUsed);
             managersInUse.notify();

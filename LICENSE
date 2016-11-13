@@ -232,8 +232,8 @@ The following software is provided under the Apache License V 2.0 (as above):
 * logkit-2.0.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.13.jar
-* tika-parsers-1.13.jar
+* tika-core-1.14.jar
+* tika-parsers-1.14.jar
 * xalan-2.7.2.jar
 * xerces-2.11.0.jar
 * xml-apis-1.4.01.jar

@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.ldap.sampler;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -87,7 +88,7 @@ public class LDAPSampler extends AbstractSampler {
 
     // For In build test case using this counter
     // create the new entry in the server
-    private static volatile int counter = 0;
+    private static AtomicInteger COUNTER = new AtomicInteger(0);
 
     private boolean searchFoundEntries;// TODO turn into parameter?
 
@@ -330,13 +331,13 @@ public class LDAPSampler extends AbstractSampler {
         String s3 = "Test"; //$NON-NLS-1$
         String s5 = "user"; //$NON-NLS-1$
         String s6 = "test"; //$NON-NLS-1$
-        counter += 1;
+        COUNTER.incrementAndGet();
         basicattributes.put(new BasicAttribute("givenname", s1)); //$NON-NLS-1$
         basicattributes.put(new BasicAttribute("sn", s3)); //$NON-NLS-1$
-        basicattributes.put(new BasicAttribute("cn", "TestUser" + counter)); //$NON-NLS-1$ //$NON-NLS-2$
+        basicattributes.put(new BasicAttribute("cn", "TestUser" + COUNTER.get())); //$NON-NLS-1$ //$NON-NLS-2$
         basicattributes.put(new BasicAttribute("uid", s5)); //$NON-NLS-1$
         basicattributes.put(new BasicAttribute("userpassword", s6)); //$NON-NLS-1$
-        setProperty(new StringProperty(ADD, "cn=TestUser" + counter)); //$NON-NLS-1$
+        setProperty(new StringProperty(ADD, "cn=TestUser" + COUNTER.get())); //$NON-NLS-1$
         return basicattributes;
     }
 

@@ -588,9 +588,7 @@ public class Proxy extends Thread {
         }
         if (pageEncoding != null) {
             String urlWithoutQuery = getUrlWithoutQuery(result.getURL());
-            synchronized(pageEncodings) {
-                pageEncodings.put(urlWithoutQuery, pageEncoding);
-            }
+            pageEncodings.put(urlWithoutQuery, pageEncoding);
         }
         return pageEncoding;
     }

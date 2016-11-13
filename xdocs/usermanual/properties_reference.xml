@@ -934,15 +934,21 @@ log_level.org.apache.http.client=DEBUG
 </properties>
 </section>
 <section name="&sect-num;.25 Remote batching configuration" anchor="remote_batching_config">
+    <p>
     Configure how SampleResults are sent from server to client when using distributed testing.
+    </p>
     <note>Note that the mode is currently resolved on the client, while other properties
     (e.g. <code>time_threshold</code>) are resolved on the server.</note>
+    <p>
     Since JMeter version 2.9, default is <code>StrippedBatch</code>, which returns samples in
     batch mode (every 100 samples or every minute by default).<br/>
     You can set mode by configuring:
+    </p>
     <source>mode=<em>one of the possible modes below</em></source>
     <note>StrippedBatch strips response data from SampleResult, so if you need the response data, change to another mode.</note>
+    <p>
     Possible modes are:
+    </p>
     <dl>
         <dt><code>Standard</code></dt>
         <dd>Sends SampleResult one by one</dd>

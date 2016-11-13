@@ -67,7 +67,7 @@ Latency is set to the time it takes to login.
         <ul>
         <li>images</li>
         <li>applets</li>
-        <li>stylesheets</li>
+        <li>stylesheets (CSS) and resources referenced from those files</li>
         <li>external scripts</li>
         <li>frames, iframes</li>
         <li>background images (body, table, TD, TR)</li>
@@ -333,7 +333,7 @@ See also the MIME Type above how you can control the <span class="code">content-
 <br>
 For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
-</p><br><p>You have the option to switch to Post Body when a request has only unnamed parameters
+</p><br><p>You have the option to switch to <span class="code">Body Data</span> tab when a request has only unnamed parameters
 (or no parameters at all).
 This option is useful in the following cases (amongst others):</p><ul>
 <li>GWT RPC HTTP Request</li>
@@ -341,27 +341,24 @@ This option is useful in the following cases (amongst others):</p><ul>
 <li>XML REST HTTP Request</li>
 <li>SOAP HTTP Request</li>
 </ul><div class="clear"></div><div class="note">
-Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
+Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the <span class="code">Body Data</span> tab from its data.
 </div><div class="clear"></div><p>
-In Post Body mode, each line will be sent with <span class="code">CRLF</span> appended, apart from the last line.
+In <span class="code">Body Data</span> mode, each line will be sent with <span class="code">CRLF</span> appended, apart from the last line.
 To send a <span class="code">CRLF</span> after the last line of data, just ensure that there is an empty line following it.
 (This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p><figure><a href="../images/screenshots/http-request-raw-single-parameter.png"><img src="../images/screenshots/http-request-raw-single-parameter.png" width="902" height="421" alt="Figure 1 - HTTP Request with one unnamed parameter"></a><figcaption>Figure 1 - HTTP Request with one unnamed parameter</figcaption></figure><figure><a href="../images/screenshots/http-request-confirm-raw-body.png"><img src="../images/screenshots/http-request-confirm-raw-body.png" width="908" height="212" alt="Figure 2 - Confirm dialog to switch"></a><figcaption>Figure 2 - Confirm dialog to switch</figcaption></figure><figure><a href="../images/screenshots/http-request-raw-body.png"><img src="../images/screenshots/http-request-raw-body.png" width="905" height="423" alt="Figure 3 - HTTP Request using Body Data"></a><figcaption>Figure 3 - HTTP Request using Body Data</figcaption></figure><p>
 <b>Method Handling:</b><br>
-The <span class="code">POST</span>, <span class="code">PUT</span> and <span class="code">PATCH</span> request methods work similarly, except that the <span class="code">PUT</span> and <span class="code">PATCH</span> methods do not support multipart requests
+The <span class="code">GET</span>, <span class="code">DELETE</span>, <span class="code">POST</span>, <span class="code">PUT</span> and <span class="code">PATCH</span> request methods work similarly, except that as of 3.1, only <span class="code">POST</span> method supports multipart requests
 or file upload.
 The <span class="code">PUT</span> and <span class="code">PATCH</span> method body must be provided as one of the following:</p><ul>
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
-<li>use the Post Body tab</li>
-</ul><p>
-If you define any parameters with a name in either the sampler or HTTP
-defaults then nothing is sent.
-<span class="code">PUT</span> and <span class="code">PATCH</span> require a Content-Type.
+<li>use the <span class="code">Body Data</span> tab</li>
+</ul><span class="code">GET</span><span class="code">DELETE</span><span class="code">POST</span><span class="code">Parameters</span><p>
+<span class="code">GET</span>, <span class="code">DELETE</span>, <span class="code">PUT</span> and <span class="code">PATCH</span> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
-The <span class="code">GET</span> and <span class="code">DELETE</span> request methods work similarly to each other.
 </p><p>JMeter scan responses from embedded resources. It uses the property <span class="code">HTTPResponse.parsers</span>, which is a list of parser ids,
- e.g. <span class="code">htmlParser</span> and <span class="code">wmlParser</span>. For each id found, JMeter checks two further properties:</p><ul>
+ e.g. <span class="code">htmlParser</span>, <span class="code">cssParser</span> and <span class="code">wmlParser</span>. For each id found, JMeter checks two further properties:</p><ul>
  <li><span class="code">id.types</span> - a list of content types</li>
  <li><span class="code">id.className</span> - the parser to be used to extract the embedded resources</li>
  </ul><p>See <span class="code">jmeter.properties</span> file for the details of the settings.
@@ -2752,11 +2749,11 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <li><span class="code">Sent KB/sec</span> - The throughput measured in sent Kilobytes per second</li>
 </ul>
 <p>Times are in milliseconds.</p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/aggregate_report.png"><img src="../images/screenshots/aggregate_report.png" width="1140" height="266" alt="Screenshot for Control-Panel of Aggregate Report"></a><figcaption>Screenshot of Control-Panel of Aggregate Report</figcaption></figure></div><div align="center">
+</div><div class="screenshot"><figure><a href="../images/screenshots/aggregate_report.png"><img src="../images/screenshots/aggregate_report.png" width="1206" height="306" alt="Screenshot for Control-Panel of Aggregate Report"></a><figcaption>Screenshot of Control-Panel of Aggregate Report</figcaption></figure></div><div align="center">
 <p>
     The figure below shows an example of selecting the "<span class="code">Include group name</span>" checkbox.
 </p>
-<figure><a href="../images/screenshots/aggregate_report_grouped.png"><img src="../images/screenshots/aggregate_report_grouped.png" width="1140" height="276" alt="Sample &quot;"></a><figcaption>Sample "<span class="code">Include group name</span>" display</figcaption></figure>
+<figure><a href="../images/screenshots/aggregate_report_grouped.png"><img src="../images/screenshots/aggregate_report_grouped.png" width="1207" height="298" alt="Sample &quot;"></a><figcaption>Sample "<span class="code">Include group name</span>" display</figcaption></figure>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="View_Results_in_Table">View Results in Table<a class="sectionlink" href="#View_Results_in_Table" title="Link to here">&para;</a></h2><div class="description">This visualizer creates a row for every sample result.  
@@ -2966,11 +2963,11 @@ i.e. 30.0 requests/minute is saved as <span class="code">0.5</span>.
 <li><span class="code">Avg. Bytes</span> - average size of the sample response in bytes.</li>
 </ul>
 <p>Times are in milliseconds.</p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/summary_report.png"><img src="../images/screenshots/summary_report.png" width="926" height="324" alt="Screenshot for Control-Panel of Summary Report"></a><figcaption>Screenshot of Control-Panel of Summary Report</figcaption></figure></div><div align="center">
+</div><div class="screenshot"><figure><a href="../images/screenshots/summary_report.png"><img src="../images/screenshots/summary_report.png" width="1204" height="300" alt="Screenshot for Control-Panel of Summary Report"></a><figcaption>Screenshot of Control-Panel of Summary Report</figcaption></figure></div><div align="center">
 <p>
     The figure below shows an example of selecting the "<span class="code">Include group name</span>" checkbox.
 </p>
-<figure><a href="../images/screenshots/summary_report_grouped.png"><img src="../images/screenshots/summary_report_grouped.png" width="923" height="325" alt="Sample &quot;"></a><figcaption>Sample "<span class="code">Include group name</span>" display</figcaption></figure>
+<figure><a href="../images/screenshots/summary_report_grouped.png"><img src="../images/screenshots/summary_report_grouped.png" width="1208" height="302" alt="Sample &quot;"></a><figcaption>Sample "<span class="code">Include group name</span>" display</figcaption></figure>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Save_Responses_to_a_file">Save Responses to a file<a class="sectionlink" href="#Save_Responses_to_a_file" title="Link to here">&para;</a></h2><div class="description">

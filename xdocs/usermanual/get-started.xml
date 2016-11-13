@@ -286,7 +286,9 @@ The <code>JVM_ARGS</code> environment variable can be used to override or set ad
 <source>
 JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
 </source>
+<p>
 will override the HEAP settings in the script.
+</p>
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <dl>
