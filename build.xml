@@ -580,6 +580,9 @@
     <echo level="info">implementation.version = ${implementation.version}</echo>
   </target>
 
+  <target name="ant-version">
+	    <echo level="info">ant.version = ${ant.version}</echo>
+  </target>
 
   <target name="init-docs" depends="report-anakia-missing">
     <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
@@ -1486,7 +1489,7 @@ run JMeter unless all the JMeter jars are added.
     Creates runtime and source distributions and site documentation
     -->
     <target name="distribution"
-        depends="svnCheck,check-versions,clean,install,docs-printable,docs-api,test,_distribution"
+        depends="ant-version,svnCheck,check-versions,clean,install,docs-printable,docs-api,test,_distribution"
         description="Build JMeter for end-user distribution"/>
 
     <target name="check-versions" unless="disable-check-versions">
@@ -1515,7 +1518,7 @@ run JMeter unless all the JMeter jars are added.
     </target>
     <target
         name="nightly"
-        depends="nightly-setup,init-svnVersion,install,docs-printable,docs-api,test,_distribution"
+        depends="ant-version,nightly-setup,init-svnVersion,install,docs-printable,docs-api,test,_distribution"
         description="Build JMeter for nightly distribution (include docs)"/>
 
     <target name="_eolcheck">
