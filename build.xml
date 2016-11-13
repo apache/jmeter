@@ -3274,7 +3274,7 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${lib.opt}/${rat-tasks.jar}"/>
       </classpath>
     </taskdef>
-  	<mkdir dir="${basedir}/reports/" />
+	<mkdir dir="${basedir}/reports/" />
     <rat:report reportfile="reports/rat-report.txt">
         <fileset dir="." excludesfile="rat-excludes.txt"/>
     </rat:report>
