@@ -65,7 +65,7 @@ install the dependent jars, you can configure Eclipse. The easiest way to do thi
 file with the <code>eclipse.classpath</code> file provided with JMeter. This will set up the source-paths and most of the libraries.
 </p>
 <p>
-Ensure you read <code>eclipse.readme</code> for project configuration.
+Ensure you read <code>eclipse.md</code> for project configuration.
 </p>
 
 

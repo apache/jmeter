@@ -1420,7 +1420,7 @@ run JMeter unless all the JMeter jars are added.
     <exclude name="${dest.jar.jmeter}/testfiles/Sample_*.png"/>
     <include name="eclipse.classpath"/>
     <include name="eclipse.project"/>
-    <include name="eclipse.readme"/>
+    <include name="eclipse.md"/>
     <include name=".gitignore"/>
     <include name=".travis.yml"/>
     <include name="checkstyle.xml"/>
