@@ -1,6 +1,7 @@
 rat-excludes.txt
 .*
 .*/**
+eclipse.md
 README.md
 **/*.jmx
 bin/*.csv
