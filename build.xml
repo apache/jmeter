@@ -379,7 +379,7 @@
   <patternset id="external.jars.notices">
     <include name="LICENSE"/>
     <include name="NOTICE"/>
-    <include name="README"/>
+    <include name="README.md"/>
   </patternset>
 
   <!-- Jars for binary release -->
@@ -1318,7 +1318,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="LICENSE"/>
     <include name="licenses/**"/>
     <include name="NOTICE"/>
-    <include name="README"/>
+    <include name="README.md"/>
     <patternset refid="dist.common.native"/>
     <!-- Help documentation -->
     <include name="${dest.printable_docs}/**"/>
@@ -1390,7 +1390,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Include all the licenses; they are needed to build the distribution -->
     <include name="licenses/**"/>
     <include name="NOTICE"/>
-    <include name="README"/>
+    <include name="README.md"/>
     <include name="${src.dir}/**"/>
     <exclude name="**/messages.metaprops"/>
     <!-- Exclude binary types -->
