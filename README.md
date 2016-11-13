@@ -147,9 +147,9 @@ There is a read-only mirror at GitHub: https://github.com/apache/jmeter
 
 For legal and licensing issues, please look the files:
 
-LICENSE
+[LICENSE](LICENSE)
 
-NOTICE
+[NOTICE](NOTICE)
 
 ## Cryptographic Software Notice
 
