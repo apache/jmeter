@@ -96,20 +96,23 @@ The command to do this is:</p>
 <pre class="source">
 jmeter -n -t script.jmx -r
 </pre>
-or
+<p>or</p>
 <pre class="source">
 jmeter -n -t script.jmx -R server1,server2,&hellip;
 </pre>
+<p>
 Other flags that may be useful:
+</p>
 <dl>
 <dt><span class="code">-Gproperty=value</span></dt><dd>define a property in all the servers (may appear more than once)</dd>
 <dt><span class="code">-X</span></dt><dd>Exit remote servers at the end of the test.</dd>
 </dl>
+<p>
 The first example will start the test on whatever servers are defined in the JMeter property <span class="code">remote_hosts</span>;<br>
 The second example will define <span class="code">remote_hosts</span> from the list of servers and then start the test on the remote servers.
 <br>
 The command-line client will exit when all the remote servers have stopped.
-
+</p>
 <div class="subsection"><h2 id="detail_instructions">14.1 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a></h2>
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).
 Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
