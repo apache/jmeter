@@ -12,7 +12,7 @@ See `Project Preferences/Java Compiler/Building/Output Folder/Filtered Resources
 
 ## Eclipse.classpath
 
-** This has been tested with Eclipse 3.2 up to 4.6.1. It may not work with other versions. **
+**This has been tested with Eclipse 3.2 up to 4.6.1. It may not work with other versions.**
 
 The file `eclipse.classpath` is intended as a starter `.classpath` file 
 for building JMeter using Eclipse version 3 to 4.6.  
@@ -93,4 +93,4 @@ button next to `Other` and enter the following in the text box:
   
  where `jmeter` is the name of the JMeter project.
  
- **It would be nicer to use `${project_loc}/bin` but unfortunately the Eclipse Debug view does not seem to preserve any of the project variables **
+ **It would be nicer to use `${project_loc}/bin` but unfortunately the Eclipse Debug view does not seem to preserve any of the project variables**
