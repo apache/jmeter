@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '20'>
+<!ENTITY sect-num '19'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
@@ -110,7 +110,7 @@ Latency is set to the time it takes to login.
         <ul>
         <li>images</li>
         <li>applets</li>
-        <li>stylesheets</li>
+        <li>stylesheets (CSS) and resources referenced from those files</li>
         <li>external scripts</li>
         <li>frames, iframes</li>
         <li>background images (body, table, TD, TR)</li>
@@ -381,7 +381,7 @@ For other methods, if the name of the parameter is missing,
 then the parameter is ignored. This allows the use of optional parameters defined by variables.
 </p>
 <br/>
-<p>You have the option to switch to Post Body when a request has only unnamed parameters
+<p>You have the option to switch to <code>Body Data</code> tab when a request has only unnamed parameters
 (or no parameters at all).
 This option is useful in the following cases (amongst others):</p>
 <ul>
@@ -391,10 +391,10 @@ This option is useful in the following cases (amongst others):</p>
 <li>SOAP HTTP Request</li>
 </ul>
 <note>
-Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the Post Body tab of data.
+Note that once you leave the Tree node, you cannot switch back to the parameter tab unless you clear the <code>Body Data</code> tab from its data.
 </note>
 <p>
-In Post Body mode, each line will be sent with <code>CRLF</code> appended, apart from the last line.
+In <code>Body Data</code> mode, each line will be sent with <code>CRLF</code> appended, apart from the last line.
 To send a <code>CRLF</code> after the last line of data, just ensure that there is an empty line following it.
 (This cannot be seen, except by noting whether the cursor can be placed on the subsequent line.)
 </p>
@@ -404,23 +404,22 @@ To send a <code>CRLF</code> after the last line of data, just ensure that there 
 
 <p>
 <b>Method Handling:</b><br></br>
-The <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that the <code>PUT</code> and <code>PATCH</code> methods do not support multipart requests
+The <code>GET</code>, <code>DELETE</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code> request methods work similarly, except that as of 3.1, only <code>POST</code> method supports multipart requests
 or file upload.
 The <code>PUT</code> and <code>PATCH</code> method body must be provided as one of the following:</p>
 <ul>
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
-<li>use the Post Body tab</li>
+<li>use the <code>Body Data</code> tab</li>
 </ul>
+
+The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <p>
-If you define any parameters with a name in either the sampler or HTTP
-defaults then nothing is sent.
-<code>PUT</code> and <code>PATCH</code> require a Content-Type.
+<code>GET</code>, <code>DELETE</code>, <code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
-The <code>GET</code> and <code>DELETE</code> request methods work similarly to each other.
 </p>
 <p>JMeter scan responses from embedded resources. It uses the property <code>HTTPResponse.parsers</code>, which is a list of parser ids,
- e.g. <code>htmlParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
+ e.g. <code>htmlParser</code>, <code>cssParser</code> and <code>wmlParser</code>. For each id found, JMeter checks two further properties:</p>
  <ul>
  <li><code>id.types</code> - a list of content types</li>
  <li><code>id.className</code> - the parser to be used to extract the embedded resources</li>
@@ -1141,7 +1140,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
 </component>
 
 
-<component name="BSF Sampler" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
+<component name="BSF Sampler (DEPRECATED)" index="&sect-num;.1.11"  width="848" height="590" screenshot="bsfsampler.png">
     <description><p>This sampler allows you to write a sampler using a BSF scripting language.<br></br>
         See the <a href="http://commons.apache.org/bsf/index.html">Apache Bean Scripting Framework</a>
         website for details of the languages supported.
@@ -1791,7 +1790,7 @@ This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excl
 </note>
 </component>
 
-<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="547" height="409" screenshot="mailreader_sampler.png">
+<component name="Mail Reader Sampler"  index="&sect-num;.1.17"  width="595" height="413" screenshot="mailreader_sampler.png">
 <description>
 <p>
 The Mail Reader Sampler can read (and optionally delete) mail messages using POP3(S) or IMAP(S) protocols.
@@ -2696,7 +2695,7 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell/BSF Listener</li>
+<li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
@@ -2963,7 +2962,7 @@ compiled code must be available to JMeter (e.g. by adding it to the <code>lib/ex
 </div>
 </component>
 
-<component name="Aggregate Report" index="&sect-num;.3.7"  width="1140" height="266" screenshot="aggregate_report.png">
+<component name="Aggregate Report" index="&sect-num;.3.7"  width="1206" height="306" screenshot="aggregate_report.png">
 <description>The aggregate report creates a table row for each differently named request in your
 test.  For each request, it totals the response information and provides request count, min, max,
 average, error rate, approximate throughput (request/second) and Kilobytes per second throughput.
@@ -3026,7 +3025,7 @@ i.e. 30.0 requests/minute is saved as 0.5.
 <p>
     The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="1140" height="276" image="aggregate_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
+<figure width="1207" height="298" image="aggregate_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
@@ -3222,7 +3221,7 @@ vars.putObject("OBJ1",new Object());
 <p>If the property <code>beanshell.listener.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="Summary Report" index="&sect-num;.3.16"  width="926" height="324" screenshot="summary_report.png">
+<component name="Summary Report" index="&sect-num;.3.16"  width="1204" height="300" screenshot="summary_report.png">
 <description>The summary report creates a table row for each differently named request in your
 test. This is similar to the <complink name="Aggregate Report"/> , except that it uses less memory.
 <p>
@@ -3261,7 +3260,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
 <p>
     The figure below shows an example of selecting the "<code>Include group name</code>" checkbox.
 </p>
-<figure width="923" height="325" image="summary_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
+<figure width="1208" height="302" image="summary_report_grouped.png">Sample "<code>Include group name</code>" display</figure>
 </div>
 </component>
 
@@ -3309,7 +3308,7 @@ i.e. 30.0 requests/minute is saved as <code>0.5</code>.
  </properties>
 </component>
 
-<component name="BSF Listener" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
+<component name="BSF Listener (DEPRECATED)" index="&sect-num;.3.18"  width="847" height="634" screenshot="bsf_listener.png">
 <description>
 <p>
 The BSF Listener allows BSF script code to be applied to sample results.
@@ -4044,8 +4043,8 @@ instead. (see figures 12 and 13).</p>
         <property name="Validation Query" required="No">A simple query used to determine if the database is still responding.
         This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
         However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
-        Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
-        This is DBCP behaviour.
+        <note>Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
+        This is DBCP behaviour.</note>
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
@@ -4392,7 +4391,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
     <note>
     Note: Unless documented otherwise, Assertions are not applied to sub-samples (child samples) -
     only to the parent sample.
-    In the case of BSF and BeanShell Assertions, the script can retrieve sub-samples using the method
+    In the case of JSR223 and BeanShell Assertions, the script can retrieve sub-samples using the method
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
     </note>
@@ -4731,7 +4730,7 @@ You reference this file in <code>jmeter.properties</code> file using the propert
 </properties>
 </component>
 
-<component name="BSF Assertion" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
+<component name="BSF Assertion (DEPRECATED)" index="&sect-num;.5.10"  width="847" height="634" screenshot="bsf_assertion.png">
 <description>
 <p>
 The BSF Assertion allows BSF script code to be used to check the status of the previous sample.
@@ -5087,7 +5086,7 @@ vars.putObject("OBJ1",new Object());
 </component>
 
 
-<component name="BSF Timer" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
+<component name="BSF Timer (DEPRECATED)" index="&sect-num;.6.7"  width="844" height="636" screenshot="timers/bsf_timer.png">
 <description>
 <p>
 The BSF Timer can be used to generate a delay using a BSF scripting language.
@@ -5365,7 +5364,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>If the property <code>beanshell.preprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PreProcessor" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
+<component name="BSF PreProcessor (DEPRECATED)" index="&sect-num;.7.8"  width="844" height="632" screenshot="bsf_preprocessor.png">
 <description>
 <p>
 The BSF PreProcessor allows BSF script code to be applied before taking a sample.
@@ -5555,7 +5554,7 @@ can be set to <code>true</code> to use a separate Runnable thread instead of the
     <note>
     Note: Unless documented otherwise, Post-Processors are not applied to sub-samples (child samples) -
     only to the parent sample.
-    In the case of BSF and BeanShell post-processors, the script can retrieve sub-samples using the method
+    In the case of JSR223 and BeanShell post-processors, the script can retrieve sub-samples using the method
     <code>prev.getSubResults()</code> which returns an array of SampleResults.
     The array will be empty if there are none.
     </note>
@@ -5945,7 +5944,7 @@ vars.putObject("OBJ1",new Object());</source></li>
 <p>If the property <code>beanshell.postprocessor.init</code> is defined, this is used to load an initialisation file, which can be used to define methods etc. for use in the BeanShell script.</p>
 </component>
 
-<component name="BSF PostProcessor" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
+<component name="BSF PostProcessor (DEPRECATED)" index="&sect-num;.8.6"  width="844" height="633" screenshot="bsf_postprocessor.png">
 <description>
 <p>
 The BSF PostProcessor allows BSF script code to be applied after taking a sample.

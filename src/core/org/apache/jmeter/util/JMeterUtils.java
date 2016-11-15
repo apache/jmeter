@@ -51,6 +51,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.test.UnitTestManager;
@@ -1200,6 +1201,13 @@ public class JMeterUtils implements UnitTestManager {
             }
         }
         return retVal.toString();
+    }
+    
+    /**
+     * @return true if test is running
+     */
+    public static boolean isTestRunning() {
+        return JMeterContextService.getTestStartTime()>0;
     }
 
     /**

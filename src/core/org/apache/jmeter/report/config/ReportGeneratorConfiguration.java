@@ -72,6 +72,10 @@ public class ReportGeneratorConfiguration {
             + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
 
+    // Exclude Transaction Controller from Top5 Errors by Sampler consumer
+    private static final String REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "exclude_tc_from_top5_errors_by_sampler";
+
     // Sample Filter
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "sample_filter";
@@ -285,6 +289,7 @@ public class ReportGeneratorConfiguration {
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
     private Pattern filteredSamplesPattern;
+    private boolean ignoreTCFromTop5ErrorsBySampler;
     private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
     private Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
@@ -624,6 +629,13 @@ public class ReportGeneratorConfiguration {
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
 
+        final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
+                props, 
+                REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
+                Boolean.TRUE,
+                Boolean.class).booleanValue();
+        configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
+        
         // Load sample filter
         final String sampleFilter = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
@@ -747,5 +759,20 @@ public class ReportGeneratorConfiguration {
      */
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * @return the ignoreTCFromTop5ErrorsBySampler
+     */
+    public boolean isIgnoreTCFromTop5ErrorsBySampler() {
+        return ignoreTCFromTop5ErrorsBySampler;
+    }
+
+    /**
+     * @param ignoreTCFromTop5ErrorsBySampler the ignoreTCFromTop5ErrorsBySampler to set
+     */
+    public void setIgnoreTCFromTop5ErrorsBySampler(
+            boolean ignoreTCFromTop5ErrorsBySampler) {
+        this.ignoreTCFromTop5ErrorsBySampler = ignoreTCFromTop5ErrorsBySampler;
     }
 }

@@ -18,7 +18,7 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '22'>
+<!ENTITY sect-num '21'>
 <!ENTITY ccedil   "&#x000E7;" >
 <!ENTITY eacute   "&#x000E9;" >
 <!ENTITY hellip   "&#x02026;" >
@@ -239,7 +239,7 @@ Alternatively, you can define your script as a variable, e.g. on the Test Plan:
 The script can then be referenced as follows:
 <pre>${__BeanShell(${SCRIPT})}</pre>
 There is no need to escape commas in the <code>SCRIPT</code> variable because the function call is parsed before the variable is replaced with its value.
-This works well in conjunction with the BSF or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
+This works well in conjunction with the JSR223 or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
 </p>
 <p>
 Functions can reference variables and other functions, for example 
@@ -913,15 +913,16 @@ Remember to include any necessary quotes for text strings and JMeter variables t
 <component index="&sect-num;.5.13" name="__groovy">
 <description>
     <p>
-    The g function evaluates <a href="http://groovy-lang.org/" >Apache Groovy</a> scripts passed to it, and returns the result.
+    The <code>__groovy</code> function evaluates <a href="http://groovy-lang.org/" >Apache Groovy</a> scripts passed to it, and returns the result.
 </p>
 <p>
 If the property "<code>groovy.utilities</code>" is defined, it will be loaded by the ScriptEngine. 
 This can be used to define common methods and variables. There is a
-sample init file in the bin directory: <code>utility.groovy</code>.
+sample init file in the <code>bin</code> directory: <code>utility.groovy</code>.
 </p>
 <p>
 The following variables are set before the script is executed:
+</p>
 <ul>
 <li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the groovy function (*)</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
@@ -932,6 +933,7 @@ The following variables are set before the script is executed:
 <li><code>prev</code> - the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
 <li><code>OUT</code> - System.out</li>
 </ul>
+<p>
 (*) means that this is set before the init file, if any, is processed. 
 Other variables vary from invocation to invocation.
 </p>

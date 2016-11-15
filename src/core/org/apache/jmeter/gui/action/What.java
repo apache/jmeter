@@ -41,7 +41,7 @@ import org.apache.log.Logger;
  * Also enables/disables debug for the test element.
  *
  */
-public class What implements Command {
+public class What extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commandSet;

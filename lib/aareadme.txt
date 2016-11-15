@@ -69,7 +69,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.4
+commons-lang3-3.5
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -158,12 +158,12 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.9.2
+jsoup-1.10.1
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-ph-css-4.1.5
+ph-css-4.1.6
 --------
 https://github.com/phax/ph-css
 - CssParser
@@ -227,7 +227,7 @@ http://www.slf4j.org/
 - jodd-core
 - json-path
 
-tika-1.13
+tika-1.14
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor

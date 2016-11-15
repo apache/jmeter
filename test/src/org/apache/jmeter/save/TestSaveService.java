@@ -27,9 +27,12 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -102,11 +105,13 @@ public class TestSaveService extends JMeterTestCase {
 
         for (final String fileName : FILES) {
             final File testFile = findTestFile("testfiles/" + fileName);
-            failed |= loadAndSave(testFile, fileName, true);
+            final File savedFile = findTestFile("testfiles/Saved" + fileName);
+            failed |= loadAndSave(testFile, fileName, true, savedFile);
         }
         for (final String fileName : FILES_LINES) {
             final File testFile = findTestFile("testfiles/" + fileName);
-            failed |= loadAndSave(testFile, fileName, false);
+            final File savedFile = findTestFile("testfiles/Saved" + fileName);
+            failed |= loadAndSave(testFile, fileName, false, savedFile);
         }
         if (failed) // TODO make these separate tests?
         {
@@ -114,48 +119,47 @@ public class TestSaveService extends JMeterTestCase {
         }
     }
 
-    private boolean loadAndSave(File testFile, String fileName, boolean checkSize) throws Exception {
+    private boolean loadAndSave(File testFile, String fileName, boolean checkSize, File savedFile) throws Exception {
         
         boolean failed = false;
 
-        int [] orig = readFile(new BufferedReader(new FileReader(testFile)));
-
-        HashTree tree = SaveService.loadTree(testFile);
+        final FileStats origStats = getFileStats(testFile);
+        final FileStats savedStats = getFileStats(savedFile);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1000000);
         try {
+            HashTree tree = SaveService.loadTree(testFile);
             SaveService.saveTree(tree, out);
         } finally {
             out.close(); // Make sure all the data is flushed out
         }
 
-        ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
-        
-        int [] output = readFile(new BufferedReader(new InputStreamReader(ins)));
+        final FileStats compareStats = savedStats == FileStats.NO_STATS ? origStats : savedStats;
+
+        final FileStats outputStats;
+        try (ByteArrayInputStream ins = new ByteArrayInputStream(out.toByteArray());
+                Reader insReader = new InputStreamReader(ins);
+                BufferedReader bufferedReader = new BufferedReader(insReader)) {
+            outputStats = computeFileStats(bufferedReader);
+        }
         // We only check the length of the result. Comparing the
         // actual result (out.toByteArray==original) will usually
         // fail, because the order of the properties within each
         // test element may change. Comparing the lengths should be
         // enough to detect most problem cases...
-        if ((checkSize && (orig[0] != output[0] ))|| orig[1] != output[1]) {
+        if ((checkSize && !compareStats.isSameSize(outputStats)) || !compareStats.hasSameLinesCount(outputStats)) {
             failed = true;
             System.out.println();
             System.out.println("Loading file testfiles/" + fileName + " and "
-                    + "saving it back changes its size from " + orig[0] + " to " + output[0] + ".");
-            if (orig[1] != output[1]) {
-                System.out.println("Number of lines changes from " + orig[1] + " to " + output[1]);
+                    + "saving it back changes its size from " + compareStats.size + " to " + outputStats.size + ".");
+            if (!origStats.hasSameLinesCount(outputStats)) {
+                System.out.println("Number of lines changes from " + compareStats.lines + " to " + outputStats.lines);
             }
             if (saveOut) {
                 final File outFile = findTestFile("testfiles/" + fileName + ".out");
                 System.out.println("Write " + outFile);
-                FileOutputStream outf = null;
-                try {
-                    outf = new FileOutputStream(outFile);
+                try (FileOutputStream outf = new FileOutputStream(outFile)) {
                     outf.write(out.toByteArray());
-                } finally {
-                    if(outf != null) {
-                        outf.close();
-                    }
                 }
                 System.out.println("Wrote " + outFile);
             }
@@ -167,27 +171,34 @@ public class TestSaveService extends JMeterTestCase {
         // the test file.
         return failed;
     }
-    
+
+    private FileStats getFileStats(File testFile) throws IOException,
+            FileNotFoundException {
+        if (testFile == null || !testFile.exists()) {
+            return FileStats.NO_STATS;
+        }
+        try (FileReader fileReader = new FileReader(testFile);
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            return computeFileStats(bufferedReader);
+        }
+    }
+
     /**
      * Calculate size and line count ignoring EOL and 
      * "jmeterTestPlan" element which may vary because of 
      * different attributes/attribute lengths.
      */
-    private int[] readFile(BufferedReader br) throws Exception {
-        try {
-            int length=0;
-            int lines=0;
-            String line;
-            while((line=br.readLine()) != null) {
-                lines++;
-                if (!line.startsWith("<jmeterTestPlan")) {
-                    length += line.length();
-                }
+    private FileStats computeFileStats(BufferedReader br) throws IOException {
+        int length = 0;
+        int lines = 0;
+        String line;
+        while ((line = br.readLine()) != null) {
+            lines++;
+            if (!line.startsWith("<jmeterTestPlan")) {
+                length += line.length();
             }
-            return new int []{length, lines};
-        } finally {
-            br.close();
         }
+        return new FileStats(length, lines);
     }
 
     @Test
@@ -208,6 +219,32 @@ public class TestSaveService extends JMeterTestCase {
         List<String> missingClasses = SaveService.checkClasses();
         if (missingClasses.size() > 0) {
             fail("One or more classes not found:"+missingClasses);
+        }
+    }
+
+    private static class FileStats {
+        int size;
+        int lines;
+
+        final static FileStats NO_STATS = new FileStats(-1, -1);
+
+        public FileStats(int size, int lines) {
+            this.size = size;
+            this.lines = lines;
+        }
+
+        public boolean isSameSize(FileStats other) {
+            if (other == null) {
+                return false;
+            }
+            return size == other.size;
+        }
+
+        public boolean hasSameLinesCount(FileStats other) {
+            if (other == null) {
+                return false;
+            }
+            return lines == other.lines;
         }
     }
 }

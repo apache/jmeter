@@ -52,6 +52,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public void add(SampleResult sample) {
         final StringBuilder sb = new StringBuilder(100);
         sb.append(sample.getSampleLabel());

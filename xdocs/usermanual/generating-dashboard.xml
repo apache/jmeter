@@ -5,7 +5,7 @@
     under the License. -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '16'>
+<!ENTITY sect-num '15'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
@@ -28,22 +28,28 @@
                 This report provides the following metrics:
                 <ul>
                     <li><a href="https://en.wikipedia.org/wiki/Apdex" title="Application Performance Index" target="_blank">APDEX</a> (Application Performance Index) table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds</li>
-                    <li>A request summary graph showing the Success and failed requests (Transaction Controller Sample Results are not taken into account) percentage: <figure width="1658" height="650" image="dashboard/report_apdex_and_summary.png" ></figure></li>
-                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1376" height="433" image="dashboard/report_statistics.png" ></figure></li>
+                    <li>A request summary graph showing the Success and failed requests (Transaction Controller Sample Results are not taken into account) percentage: <figure width="1636" height="982" image="dashboard/report_apdex_and_summary.png" ></figure></li>
+                    <li>A Statistics table providing in one table a summary of all metrics per transaction including 3 configurable percentiles : <figure width="1639" height="467" image="dashboard/report_statistics.png" ></figure></li>
                     <li>An error table providing a summary of all errors and their proportion in the total requests : <figure width="1344" height="455" image="dashboard/report_errors.png" ></figure></li>
+                    <li>A Top 5 Errors by Sampler table providing for every Sampler (excluding Transaction Controller by default) the top 5 Errors : <figure width="1609" height="508" image="dashboard/top_5_errors_by_sampler.png" ></figure></li>
                     <li>Zoomable chart where you can check/uncheck every transaction to show/hide it for:
                         <ul>
                             <li>Response times Over Time (Includes Transaction Controller Sample Results) : <figure width="1398" height="566" image="dashboard/report_response_times_over_time.png" ></figure></li>
+                            <li>Response times Percentiles Over Time (successful responses only) : <figure width="1640" height="539" image="dashboard/response_time_percentiles_over_time.png" ></figure></li>
+                            <li>Active Threads Over Time : <figure width="1638" height="544" image="dashboard/report_active_threads_over_time.png" ></figure></li>
                             <li>Bytes throughput Over Time (Ignores Transaction Controller Sample Results)  : <figure width="1373" height="543" image="dashboard/report_bytes_throughput_over_time.png" ></figure></li>
                             <li>Latencies Over Time (Includes Transaction Controller Sample Results) : <figure width="1373" height="547" image="dashboard/report_latencies_over_time.png" ></figure></li>
+                            <li>Connect Time Over Time (Includes Transaction Controller Sample Results) : <figure width="1635" height="520" image="dashboard/report_connect_time_over_time.png" ></figure></li>
                             <li>Hits per second (Ignores Transaction Controller Sample Results): <figure width="1375" height="552" image="dashboard/report_hits_per_second.png" ></figure></li>
                             <li>Response codes per second (Ignores Transaction Controller Sample Results): <figure width="1380" height="558" image="dashboard/report_codes_per_second.png" ></figure></li>
                             <li>Transactions per second (Includes Transaction Controller Sample Results): <figure width="1372" height="577" image="dashboard/report_transactions_per_second.png" ></figure></li>
                             <li>Response Time vs Request per second (Ignores Transaction Controller Sample Results): <figure width="1380" height="545" image="dashboard/report_response_time_vs_request.png" ></figure></li>
                             <li>Latency vs Request per second (Ignores Transaction Controller Sample Results): <figure width="1373" height="543" image="dashboard/report_latencies_vs_request.png" ></figure></li>
+                            <li>Response time Overview (Excludes Transaction Controller Sample Results) : <figure width="1645" height="562" image="dashboard/response_time_overview.png" ></figure></li>
                             <li>Response times percentiles (Includes Transaction Controller Sample Results): <figure width="1374" height="551" image="dashboard/report_response_time_percentiles.png" ></figure></li>
-                            <li>Active Threads Over Time : <figure width="1370" height="542" image="dashboard/report_active_threads_over_time.png" ></figure></li>
-                            <li>Times vs Threads (Includes Transaction Controller Sample Results): <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure></li>
+                            <li>Times vs Threads (Includes Transaction Controller Sample Results): <figure width="1373" height="567" image="dashboard/report_time_vs_threads.png" ></figure>
+                            <note>In distributed mode, this graph shows a horizontal axis the number of threads for 1 server. It's a current limitation</note>
+                            </li>
                             <li>Response Time Distribution (Includes Transaction Controller Sample Results): <figure width="1373" height="549" image="dashboard/report_response_time_distribution.png" ></figure></li>
                         </ul>
                     </li>
@@ -66,6 +72,8 @@
                         configuration follows these settings (these are the defaults):
                         <source>
 jmeter.save.saveservice.bytes = true
+# Only available with HttpClient4
+#jmeter.save.saveservice.sent_bytes=true
 jmeter.save.saveservice.label = true
 jmeter.save.saveservice.latency = true
 jmeter.save.saveservice.response_code = true
@@ -101,6 +109,11 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                                 </li>
                             </ul>
                         </note>
+                        <note>When using JMeter distributed mode with multiple jmeter-server instances, ensure you add in your Thread Groups something that uniquely identifies ThreadGroup for every JVM, example:
+                        <source>ThreadXXX_${__P(JVM_ID)}</source>
+                        where you pass a different JVM_ID property for each jmeter-server through:
+                        <source>-JJVM_ID=i</source> where <code>i</code> varies between 1 and the number of jmeter-server you are using. 
+                        </note>
                     </p>
                 </subsection>
 
@@ -125,7 +138,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         <property name="start_date" required="No">
                             Start date of the range of data to use for report.<br/>
                             Date format is defined by date_format property.<br/>
-                            Default: not filled which means data range will be used from the begining
+                            Default: not filled which means data range will be used from the beginning
                         </property>
                         <property name="end_date" required="No">
                             End date of the range of data to use for report.<br/>

@@ -17,7 +17,7 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '9b'>
+<!ENTITY sect-num '8b'>
 <!ENTITY rarr     "&#x02192;" >
 ]>
 
@@ -61,7 +61,9 @@ Take care when using LDAP special characters in the distinguished name, in that 
 distinguished name) you need to escape the character by adding an "<code>\</code>" sign before that character.
 Extra exception: if you want to add a <code>\</code> character in a distinguished name (in an add or rename operation), you need to use 4 backslashes.
 </p>
+<p>
 Examples:
+</p>
 <dl>
 <dt><code>cn=dolf\+smits</code></dt><dd>to add/search an entry with the name like <code>cn=dolf+smits</code></dd>
 <dt><code>cn=dolf \\ smits</code></dt><dd>to search an entry with the name <code>cn=dolf \ smits</code></dd>

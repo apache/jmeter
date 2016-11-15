@@ -18,7 +18,7 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '9a'>
+<!ENTITY sect-num '8a'>
 ]>
 
 <document prev="build-ftp-test-plan.html" next="build-ldapext-test-plan.html" id="$Id$">
@@ -136,7 +136,9 @@ properties</p>
             <li>Rename to "<code>Search</code>" this element</li>
             <li>Select the <code>Search Test</code> radio button in <code>Test Configuration</code> group</li>
         </ol>
+        <p>
         Next, add the Third LDAP Request and edit the following properties
+        </p>
                 <figure image="ldaptest/search.png">
                   Figure &sect-num;.4.2 LDAP Request for Inbuilt Search test</figure>
 
@@ -144,8 +146,9 @@ properties</p>
             <li>Rename to "<code>Modify</code>" this element</li>
             <li>Select the <code>Modify Test</code> radio button in <code>Test Configuration</code> group</li>
         </ol>
+        <p>
         Next, add the fourth LDAP Request and edit the following properties
-                
+        </p>
                 <figure image="ldaptest/modify.png">
                   Figure &sect-num;.4.3 LDAP Request for Inbuilt Modify test</figure>
 

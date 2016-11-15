@@ -51,10 +51,12 @@ import org.apache.jmeter.report.processor.MaxAggregator;
 import org.apache.jmeter.report.processor.MinAggregator;
 import org.apache.jmeter.report.processor.NormalizerSampleConsumer;
 import org.apache.jmeter.report.processor.RequestsSummaryConsumer;
+import org.apache.jmeter.report.processor.SampleConsumer;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.SampleSource;
 import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
 import org.apache.jmeter.report.processor.ThresholdSelector;
+import org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
@@ -95,6 +97,7 @@ public class ReportGenerator {
     public static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
     public static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
     public static final String STATISTICS_SUMMARY_CONSUMER_NAME = "statisticsSummary";
+    public static final String TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME = "top5ErrorsBySampler";
     public static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
 
     private static final Pattern POTENTIAL_CAMEL_CASE_PATTERN = Pattern.compile("_(.)");
@@ -412,6 +415,14 @@ public class ReportGenerator {
         return excludeControllerFilter;
     }
 
+    private SampleConsumer createTop5ErrorsConsumer(ReportGeneratorConfiguration configuration) {
+        Top5ErrorsBySamplerConsumer top5ErrorsBySamplerConsumer = new Top5ErrorsBySamplerConsumer();
+        top5ErrorsBySamplerConsumer.setName(TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME);
+        top5ErrorsBySamplerConsumer.setHasOverallResult(true);
+        top5ErrorsBySamplerConsumer.setIgnoreTransactionController(configuration.isIgnoreTCFromTop5ErrorsBySampler());
+        return top5ErrorsBySamplerConsumer;
+    }
+
     private StatisticsSummaryConsumer createStatisticsSummaryConsumer() {
         StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
         statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
@@ -466,6 +477,7 @@ public class ReportGenerator {
         nameFilter.addSampleConsumer(createApdexSummaryConsumer());
         nameFilter.addSampleConsumer(createRequestsSummaryConsumer());
         nameFilter.addSampleConsumer(createStatisticsSummaryConsumer());
+        nameFilter.addSampleConsumer(createTop5ErrorsConsumer(configuration));
         return nameFilter;
     }
 

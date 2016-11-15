@@ -14,20 +14,20 @@ jmeter.bat(Windows)/jmeter.sh(Linux) [-p property-file]
 To run Apache JMeter in NON_GUI mode:
 Open a command prompt (or Unix shell) and type:
 
-jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l log-file]
+jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l results-file] [-j log-file]
 
 --------------------------------------------------
 
 To run Apache JMeter in NON_GUI mode and generate a report at end :
 Open a command prompt (or Unix shell) and type:
 
-jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l log-file] -e -o [Path to output folder]
+jmeter.bat(Windows)/jmeter.sh(Linux) -n -t test-file [-p property-file] [-l results-file] [-j log-file] -e -o [Path to output folder]
 
 --------------------------------------------------
 To generate a Report from existing CSV file:
 Open a command prompt (or Unix shell) and type:
 
-jmeter.bat(Windows)/jmeter.sh(Linux) -g [log-file] -o [path to output folder (empty or not existing)]
+jmeter.bat(Windows)/jmeter.sh(Linux) -g [csv results file] -o [path to output folder (empty or not existing)]
 
 --------------------------------------------------
 

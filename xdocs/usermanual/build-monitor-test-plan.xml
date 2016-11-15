@@ -17,17 +17,18 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '13'>
+<!ENTITY sect-num '12'>
 ]>
 <document prev="build-jms-topic-test-plan.html" next="listeners.html" id="$Id$">
 
 <properties>
-  <title>User's Manual: Building a Monitor Test Plan</title>
+  <title>User's Manual: Building a Monitor Test Plan (DEPRECATED)</title>
 </properties>
 
 <body>
 
-<section name="&sect-num;. Building a Monitor Test Plan" anchor="building">
+<section name="&sect-num;. Building a Monitor Test Plan (DEPRECATED)" anchor="building">
+<note>Note this feature is deprecated since JMeter 3.1</note>
 <p>In this section, you will learn how to create a 
 <a href="build-test-plan.html">Test Plan</a> to monitor webservers. Monitors
 are useful for a stress testing and system management. Used with stress

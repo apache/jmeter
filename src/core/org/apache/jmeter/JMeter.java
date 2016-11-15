@@ -308,6 +308,10 @@ public class JMeter implements JMeterPlugin {
      * Starts up JMeter in GUI mode
      */
     private void startGui(String testFile) {
+        System.out.println("================================================================================");
+        System.out.println("Don't use GUI mode for load testing, only for Test creation and Test debugging !");
+        System.out.println("For load testing, use NON GUI Mode & adapt Java Heap to your test requirements");
+        System.out.println("================================================================================");
         String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
         try {
             UIManager.setLookAndFeel(jMeterLaf);

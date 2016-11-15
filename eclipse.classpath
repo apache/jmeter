@@ -56,7 +56,7 @@
 	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl3-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.5.jar"/>
@@ -77,21 +77,21 @@
 	<classpathentry kind="lib" path="lib/jodd-props-3.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-smart-2.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/logkit-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
-	<classpathentry kind="lib" path="lib/ph-css-4.1.5.jar"/>
+	<classpathentry kind="lib" path="lib/ph-css-4.1.6.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-6.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.21.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.13.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>

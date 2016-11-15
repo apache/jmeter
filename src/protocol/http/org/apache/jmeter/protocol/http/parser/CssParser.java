@@ -45,6 +45,8 @@ import com.helger.css.handler.LoggingCSSParseExceptionCallback;
 import com.helger.css.parser.ParseException;
 import com.helger.css.reader.CSSReader;
 import com.helger.css.reader.CSSReaderSettings;
+import com.helger.css.reader.errorhandler.DoNothingCSSInterpretErrorHandler;
+import com.helger.css.reader.errorhandler.ICSSInterpretErrorHandler;
 import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 /**
@@ -54,23 +56,24 @@ import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 public class CssParser implements LinkExtractorParser {
     private static final boolean IGNORE_UNRECOVERABLE_PARSING_ERROR = JMeterUtils.getPropDefault("httpsampler.ignore_failed_embedded_resource", false); //$NON-NLS-1$
     private static final Logger LOG = LoggingManager.getLoggerForClass();
-    
+
     /**
-     * 
+     *
      */
     private static final int CSS_URL_CACHE_MAX_SIZE = JMeterUtils.getPropDefault("css.parser.cache.size", 400);
-    
+    private static final boolean IGNORE_ALL_CSS_ERRORS = JMeterUtils.getPropDefault("css.parser.ignore_all_css_errors", true);
+
     /**
-     * 
+     *
      */
     @SuppressWarnings("unchecked")
-    private static Map<String, URLCollection> CSS_URL_CACHE = 
+    private static final Map<String, URLCollection> CSS_URL_CACHE =
             CSS_URL_CACHE_MAX_SIZE > 0 ? Collections.synchronizedMap(new LRUMap(CSS_URL_CACHE_MAX_SIZE)) : null;
 
-    
+
     private static final class CustomLoggingCSSParseExceptionCallback extends LoggingCSSParseExceptionCallback {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = -9111232037888068394L;
         private URL cssUrl;
@@ -86,26 +89,25 @@ public class CssParser implements LinkExtractorParser {
          */
         @Override
         public void onException(ParseException ex) {
-            if(IGNORE_UNRECOVERABLE_PARSING_ERROR) {   
+            if(IGNORE_UNRECOVERABLE_PARSING_ERROR) {
                 LOG.warn("Failed to parse CSS: " + cssUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
             } else {
                 throw new IllegalStateException("Failed to parse CSS: " + cssUrl + ", " + LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
             }
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public CssParser() {
     }
 
     /**
-     * 
+     *
      * @see
      * org.apache.jmeter.protocol.http.parser.LinkExtractorParser#getEmbeddedResourceURLs
-     * (java.lang.String, byte[], java.net.URL,
-     * org.apache.jmeter.protocol.http.parser.URLCollection, java.lang.String)
+     * (java.lang.String, byte[], java.net.URL, java.lang.String)
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] data,
@@ -116,18 +118,26 @@ public class CssParser implements LinkExtractorParser {
             URLCollection urlCollection = null;
             if(cacheEnabled) {
                 md5Key = DigestUtils.md5Hex(data);
-                urlCollection = CSS_URL_CACHE.get(md5Key);                
+                urlCollection = CSS_URL_CACHE.get(md5Key);
             }
-            
+
             if(urlCollection == null) {
                 String cssContent = new String(data, encoding);
-                final CascadingStyleSheet aCSS = CSSReader.readFromStringStream(cssContent,
-                            new CSSReaderSettings()
-                                .setBrowserCompliantMode(true)
-                                .setFallbackCharset(Charset.forName(encoding))
-                                .setCSSVersion (ECSSVersion.CSS30)
-                                .setCustomErrorHandler(new LoggingCSSParseErrorHandler())
-                                .setCustomExceptionHandler (new CustomLoggingCSSParseExceptionCallback(baseUrl)));
+                final CSSReaderSettings cssSettings = new CSSReaderSettings()
+                        .setBrowserCompliantMode(true)
+                        .setFallbackCharset(Charset.forName(encoding))
+                        .setCSSVersion(ECSSVersion.CSS30)
+                        .setCustomErrorHandler(
+                                new LoggingCSSParseErrorHandler())
+                        .setCustomExceptionHandler(
+                                new CustomLoggingCSSParseExceptionCallback(
+                                        baseUrl));
+                if (IGNORE_ALL_CSS_ERRORS) {
+                    cssSettings
+                            .setInterpretErrorHandler(new DoNothingCSSInterpretErrorHandler());
+                }
+                final CascadingStyleSheet aCSS = CSSReader
+                        .readFromStringStream(cssContent, cssSettings);
                 final List<URLString> list = new ArrayList<>();
                 urlCollection = new URLCollection(list);
                 final URLCollection localCollection = urlCollection;
@@ -159,7 +169,7 @@ public class CssParser implements LinkExtractorParser {
                    LOG.warn("Failed parsing url:"+baseUrl+", got null CascadingStyleSheet");
                 }
             }
-            
+
             if(LOG.isDebugEnabled()) {
                 StringBuilder builder = new StringBuilder();
                 for (Iterator<URL> iterator = urlCollection.iterator(); iterator.hasNext();) {
@@ -168,7 +178,7 @@ public class CssParser implements LinkExtractorParser {
                 }
                 LOG.debug("Parsed:"+baseUrl+", got:"+builder.toString());
             }
-            
+
             return urlCollection.iterator();
         } catch (Exception e) {
             throw new LinkExtractorParseException(e);

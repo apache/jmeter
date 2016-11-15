@@ -40,7 +40,7 @@ import org.apache.log.Logger;
 /**
  * Implements the Look and Feel menu item.
  */
-public class LookAndFeelCommand implements Command {
+public class LookAndFeelCommand extends AbstractAction {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
