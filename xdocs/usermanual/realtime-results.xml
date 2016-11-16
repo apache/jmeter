@@ -125,29 +125,24 @@ In this document we will present the configuration setup to graph and historize 
 <subsection name="&sect-num;.2 InfluxDB" anchor="influxdb">
 <p>InfluxDB is an open-source, distributed, time-series database that allows to 
 easily store metrics.
-Installation and configuration is very easy, read this for more details <a href="http://influxdb.com/docs/v0.8/introduction/installation.html" target="_blank" >InfluxDB documentation</a>.<br/>
+Installation and configuration is very easy, read this for more details <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/installation/" target="_blank" >InfluxDB documentation</a>.<br/>
 InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga"  target="_blank">Influga</a> or <a href="http://grafana.org/"  target="_blank">Grafana</a>.
 We will use Grafana in this case.
 </p>
     <subsection name="&sect-num;.2.1 InfluxDB graphite listener configuration" anchor="influxdb_configuration">
     <p>To enable Graphite listener in InfluxDB, edit files <code>/opt/influxdb/shared/config.toml</code> or <code>/usr/local/etc/influxdb.conf</code>,
-    find "<code>input_plugins.graphite</code>" and set this:
+    find "<code>[[graphite]]</code>" and set this:
     </p>
     <source>
 # Configure the graphite api
-[input_plugins.graphite]
+[[graphite]]
 enabled = true
-address = "0.0.0.0" # If not set, is actually set to bind-address.
-port = 2003
+bind-address = ":2003" # If not set, is actually set to bind-address.
 database = "jmeter"  # store graphite data in this database
-# udp_enabled = true # enable udp interface on the same port as the tcp interface
     </source>
-    <p>
-    For later versions of InfluxDb (e.g. 0.12), replace <code>[input_plugins.graphite]</code> with <code>[[graphite]]</code>
-    </p>
     </subsection>
     <subsection name="&sect-num;.2.2 InfluxDB database configuration" anchor="influxdb_db_configuration">
-    <p>Connect to InfluxDB admin console and create two databases:
+    <p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/getting_started/" >influx shell</a> and <a href="https://docs.influxdata.com/influxdb/v1.1/query_language/database_management/" >create two databases</a>:
     <ul>
         <li>grafana : Used by Grafana to store the dashboards we will create</li>
         <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
@@ -165,13 +160,13 @@ database = "jmeter"  # store graphite data in this database
 datasources: {
   influxdb: {
     type: 'influxdb',
-    url: "http://localhost:8086/db/jmeter",
+    url: "http://influx_db_host:8086/db/jmeter",
     username: 'root',
     password: 'root',
   },
   grafana: {
     type: 'influxdb',
-    url: "http://localhost:8086/db/grafana",
+    url: "http://influx_db_host:8086/db/grafana",
     username: 'root',
     password: 'root',
     grafanaDB: true
@@ -189,7 +184,7 @@ datasources: {
 </subsection>
 
 <subsection name="&sect-num;.3 Graphite" anchor="graphite">
-<p>TODO.</p>
+<p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
 </subsection>
 
 
