@@ -303,6 +303,7 @@ This allows you to update Think Times from one place and let you gain productivi
     <li><bug>58888</bug>HTTP(S) Test Script Recorder (ProxyControl) does not add TestElement's returned by <code>SamplerCreator#createChildren()</code></li>
     <li><bug>59902</bug>Https handshake failure when setting <code>httpclient.socket.https.cps</code> property</li>
     <li><bug>60084</bug>JMeter 3.0 embedded resource URL is silently encoded</li>
+    <li><bug>60376</bug>Http Test Script Recorder : If deflate is used by server then recording may break application</li>
  </ul>
 
 <h3>Other Samplers</h3>
