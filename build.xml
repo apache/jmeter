@@ -915,11 +915,14 @@
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
+    <condition property="jacoco_params" value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver">
+      <isset property="jacocoagent"/>
+    </condition>
     <java classname="org.apache.jmeter.NewDriver" fork="true">
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
-      <jvmarg value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver" if:set="jacocoagent" />
+      <jvmarg value="${jacoco_params}"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
   </target>
@@ -2476,6 +2479,9 @@ run JMeter unless all the JMeter jars are added.
     <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
       <isset property="rmi_force_localhost"/>
     </condition>
+    <condition property="jacoco_params" value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}">
+      <isset property="jacocoagent"/>
+    </condition>
     <tstamp>
       <!-- Use variable port to help avoid clashes on CI servers -->
       <format property="rmi_port" pattern="1mmss"/>
@@ -2488,7 +2494,7 @@ run JMeter unless all the JMeter jars are added.
             <fileset dir="${dest.jar}" includes="*.jar"/>
             <path refid="classpath"/>
           </classpath>
-          <jvmarg value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}" if:set="jacocoagent" />
+          <jvmarg value="${jacoco_params}"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
           <!-- quieten the logging; this has to be done first -->
@@ -2591,7 +2597,10 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
       </classpath>
-      <jvmarg value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}" if:set="jacocoagent" />
+      <condition property="jacoco_params" value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}">
+        <isset property="jacocoagent"/>
+      </condition>
+      <jvmarg value="${jacoco_params}"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
       <sysproperty key="user.region" value="US"/>
@@ -2788,8 +2797,11 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${build.test-res}"/>
         <path refid="classpath"/>
       </classpath>
+      <condition property="jacoco_params" value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests">
+        <isset property="jacocoagent"/>
+      </condition>
       <jvmarg value="-server"/>
-      <jvmarg value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests" if:set="jacocoagent" />
+      <jvmarg value="${jacoco_params}"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
@@ -2816,7 +2828,10 @@ run JMeter unless all the JMeter jars are added.
            printsummary="on">
       <formatter type="${test.format}" usefile="yes"/>
       <formatter type="xml"/>
-      <jvmarg value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver" if:set="jacocoagent" />
+      <condition property="jacoco_params" value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver">
+        <isset property="jacocoagent"/>
+      </condition>
+      <jvmarg value="${jacoco_params}"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <!-- Allow headless to be passed in -->
       <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
