@@ -119,6 +119,7 @@
   <property name="findbugs.xslname" value="fancy" />
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="jacoco_params" value="-Djacoco_dummy=not_empty" />
+  <property name="skip.batchtest" value="false" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -2477,6 +2478,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
+    <property name="rmi_hostname_option" value="-Ddummy=true"/>
     <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
       <isset property="rmi_force_localhost"/>
     </condition>
@@ -2541,7 +2543,7 @@ run JMeter unless all the JMeter jars are added.
      </delete>
   </target>
 
-  <target name="batchtest" description="Run the batch test and compare output files">
+  <target name="batchtest" description="Run the batch test and compare output files" unless="${skip.batchtest}">
 
     <!-- will be overwritten by antcall paramaters -->
     <property name="taskname" value="jmeter"/>
@@ -2701,6 +2703,7 @@ run JMeter unless all the JMeter jars are added.
       <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
       <param name="batchtest.name" value="Bug52310"/>
+      <param name="skip.batchtest" value="true" />
     </antcall>
     <antcall target="batchtest">
       <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
