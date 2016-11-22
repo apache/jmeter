@@ -121,6 +121,7 @@
   <property name="jacoco_params" value="-Djacoco_dummy=not_empty" />
   <property name="skip.batchtest" value="false" />
   <property name="skip.bug52310" value="false" />
+  <property name="skip.test_https" value="false" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -2750,6 +2751,7 @@ run JMeter unless all the JMeter jars are added.
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="TEST_HTTPS"/>
+      <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
   </target>
 
