@@ -120,6 +120,7 @@
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="jacoco_params" value="-Djacoco_dummy=not_empty" />
   <property name="skip.batchtest" value="false" />
+  <property name="skip.bug52310" value="false" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -2705,7 +2706,7 @@ run JMeter unless all the JMeter jars are added.
       <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
       <param name="batchtest.name" value="Bug52310"/>
-      <param name="skip.batchtest" value="true" />
+      <param name="skip.batchtest" value="${skip.bug52310}" />
     </antcall>
     <antcall target="batchtest">
       <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
