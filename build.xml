@@ -2478,7 +2478,9 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
-    <property name="rmi_hostname_option" value="-Ddummy=true"/>
+    <condition property="rmi_hostname_option" value="-Ddummy=true">
+      <not><isset property="rmi_force_localhost"/></not>
+    </condition>
     <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
       <isset property="rmi_force_localhost"/>
     </condition>
