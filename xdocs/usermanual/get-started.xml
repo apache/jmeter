@@ -114,8 +114,8 @@ over your Test Plans.</p>
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 7 or 8, we advise that you install latest minor version of those major versions.
-Java 9 is not tested completely as of JMeter 3.1.
+<note>JMeter requires a fully compliant JVM 8, we advise that you install latest minor version of those major versions.
+Java 9 is not tested completely as of JMeter 3.2.
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
@@ -136,7 +136,7 @@ on JMeter wiki.</p>
 
 
 <subsection name="&sect-num;.2.1 Java Compiler" anchor="opt_compiler">
-<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 7 or higher.</p>
+<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 8 or higher.</p>
 </subsection>
 
 <subsection name="&sect-num;.2.2 SAX XML Parser" anchor="opt_sax">

@@ -366,8 +366,8 @@
   <!-- Compilation parameters -->
   <property name="optimize" value="on"/>
   <property name="deprecation" value="off"/>
-  <property name="target.java.version" value="1.7"/>
-  <property name="src.java.version" value="1.7"/>
+  <property name="target.java.version" value="1.8"/>
+  <property name="src.java.version" value="1.8"/>
   <property name="encoding" value="UTF-8"/>
   <!-- Set test encoding to the same default, but allow override -->
   <property name="test.encoding" value="${encoding}"/>
