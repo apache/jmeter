@@ -164,7 +164,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
     }
 
     /**
-     * @return <code>true</code> iff all functors can be found
+     * @return <code>true</code> if all functors can be found
      * @deprecated - only for use in testing
      * */
     @Deprecated
