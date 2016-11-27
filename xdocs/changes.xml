@@ -130,7 +130,7 @@ Fill in some detail.
 
 <h3>General</h3>
 <ul>
-  <li><bug>60415</bug>Drop support for Java 7.</bug>
+  <li><bug>60415</bug>Drop support for Java 7.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
