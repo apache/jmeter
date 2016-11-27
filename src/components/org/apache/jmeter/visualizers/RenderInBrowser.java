@@ -21,7 +21,6 @@ package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -50,21 +49,12 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class RenderInBrowser extends SamplerResultTab implements ResultRenderer {
 
-    private final JFXPanel jfxPanel;
+    private JFXPanel jfxPanel;
     private WebEngine engine;
     private final JLabel lblStatus = new JLabel();
     private final JProgressBar progressBar = new JProgressBar();
 
     private JPanel browserPanel;
-
-    public RenderInBrowser() {
-        // If we are in headless mode, JFXPanel will freeze us, so don't instantiate it.
-        if (GraphicsEnvironment.isHeadless()) {
-            jfxPanel = null;
-        } else {
-            jfxPanel = new JFXPanel();
-        }
-    }
 
     /** {@inheritDoc} */
     @Override
@@ -111,6 +101,8 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
     private JPanel initComponents(String htmlContent) {
         createScene(htmlContent);
 
+        // Create it only in AWT Thread
+        jfxPanel = new JFXPanel();
         progressBar.setPreferredSize(new Dimension(150, 18));
         progressBar.setStringPainted(true);
 
