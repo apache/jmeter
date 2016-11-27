@@ -323,7 +323,6 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener. DEPRECATED</property>
        <property name="Save response as MD5 hash?" required="No">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
@@ -2697,7 +2696,6 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 <li>Simple Data Writer</li>
 <li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
-<li>Monitor Results</li>
 <li>Summary Report</li>
 </ul>
 <p>
@@ -3047,37 +3045,6 @@ recording data by eliminating GUI overhead.
 When running in non-GUI mode, the <code>-l</code> flag can be used to create a data file.
 The fields to save are defined by JMeter properties.
 See the <code>jmeter.properties</code> file for details.
-</description>
-</component>
-
-<component name="Monitor Results (DEPRECATED)" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
-<description>
-<p>Monitor Results is a new Visualizer for displaying server
-status. It is designed for Tomcat 5, but any servlet container
-can port the status servlet and use this monitor. There are two primary
-tabs for the monitor. The first is the "<code>Health</code>" tab, which will show the
-status of one or more servers. The second tab labled "<code>Performance</code>" shows
-the performance for one server for the last 1000 samples. The equations
-used for the load calculation is included in the Visualizer.</p>
-<p>Currently, the primary limitation of the monitor is system memory. A
-quick benchmark of memory usage indicates a buffer of 1000 data points for
-100 servers would take roughly 10Mb of RAM. On a 1.4Ghz centrino
-laptop with 1Gb of ram, the monitor should be able to handle several
-hundred servers.</p>
-<p>As a general rule, monitoring production systems should take care to
-set an appropriate interval. Intervals shorter than 5 seconds are too
-aggressive and have a potential of impacting the server. With a buffer of
-1000 data points at 5 second intervals, the monitor would check the server
-status 12 times a minute or 720 times a hour. This means the buffer shows
-the performance history of each machine for the last hour.</p>
-<note>
-The monitor requires Tomcat 5 or above. 
-Use a browser to check that you can access the Tomcat status servlet OK.
-</note>
-<p>
-For a detailed description of how to use the monitor, please refer to
-<a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
-</p>
 </description>
 </component>
 

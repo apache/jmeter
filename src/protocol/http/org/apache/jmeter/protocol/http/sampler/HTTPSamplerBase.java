@@ -538,14 +538,22 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         this.setProperty(MONITOR, truth);
     }
 
+    /**
+     * @deprecated since 3.2 always returns false
+     */
+    @Deprecated
     public String getMonitor() {
-        return this.getPropertyAsString(MONITOR);
+        return "false";
     }
 
+    /**
+     * @deprecated since 3.2 always returns false
+     */
+    @Deprecated
     public boolean isMonitor() {
-        return this.getPropertyAsBoolean(MONITOR);
+        return false;
     }
-
+    
     public void setImplementation(String value) {
         this.setProperty(IMPLEMENTATION, value);
     }
@@ -921,7 +929,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.setResponseCode(NON_HTTP_RESPONSE_CODE+": " + e.getClass().getName());
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": " + e.getMessage());
         res.setSuccessful(false);
-        res.setMonitor(this.isMonitor());
         return res;
     }
 

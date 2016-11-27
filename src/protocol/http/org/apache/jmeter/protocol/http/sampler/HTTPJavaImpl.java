@@ -453,7 +453,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
 
         res.setSampleLabel(urlStr);
         res.setURL(url);
