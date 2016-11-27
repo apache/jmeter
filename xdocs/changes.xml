@@ -97,7 +97,7 @@ Fill in some detail.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>xxx</bug>...</li>
+    <li><bug>59934</bug>Fix race-conditions in CssParser. Based on a patch by Jerome Loisel (loisel.jerome at gmail.com)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -181,7 +181,7 @@ Fill in some detail.
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-<li>Foo Bar (foo.bar at example.com)</li>
+<li>Jerome Loisel (loisel.jerome at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
