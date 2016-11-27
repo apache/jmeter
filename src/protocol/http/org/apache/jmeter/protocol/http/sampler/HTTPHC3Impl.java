@@ -203,7 +203,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         HttpMethodBase httpMethod = null;
 
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
 
         res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);

@@ -82,13 +82,13 @@ Fill in some detail.
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-    <li>...</li>
+    <li>JMeter requires now at least a JAVA 8 version to run.</li>
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
 <p><note>These elements do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. The JMeter team advises not to use them anymore and migrate to their replacement.</note></p>
 <ul>
-    <li>...</li>
+    <li><bug>60423</bug>Drop Monitor Results listener </li>
 </ul>
 
 <!-- =================== Improvements =================== -->

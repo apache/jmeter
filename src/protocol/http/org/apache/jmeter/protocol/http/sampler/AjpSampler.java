@@ -107,7 +107,6 @@ public class AjpSampler extends HTTPSamplerBase implements Interruptible {
                        boolean frd,
                        int fd) {
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(false);
         res.setSampleLabel(url.toExternalForm());
         res.sampleStart();
         try {

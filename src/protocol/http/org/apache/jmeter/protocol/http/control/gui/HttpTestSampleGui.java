@@ -58,8 +58,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     
     private JTextField concurrentPool; 
 
-    private JCheckBox isMon;
-
     private JCheckBox useMD5;
 
     private JLabeledTextField embeddedRE; // regular expression used to match against embedded resource URLs
@@ -92,7 +90,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         retrieveEmbeddedResources.setSelected(samplerBase.isImageParser());
         concurrentDwn.setSelected(samplerBase.isConcurrentDwn());
         concurrentPool.setText(samplerBase.getConcurrentPool());
-        isMon.setSelected(samplerBase.isMonitor());
         useMD5.setSelected(samplerBase.useMD5());
         embeddedRE.setText(samplerBase.getEmbeddedUrlRE());
         if (!isAJP) {
@@ -125,7 +122,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         enableConcurrentDwn(retrieveEmbeddedResources.isSelected());
         samplerBase.setConcurrentDwn(concurrentDwn.isSelected());
         samplerBase.setConcurrentPool(concurrentPool.getText());
-        samplerBase.setMonitor(isMon.isSelected());
         samplerBase.setMD5(useMD5.isSelected());
         samplerBase.setEmbeddedUrlRE(embeddedRE.getText());
         if (!isAJP) {
@@ -216,11 +212,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
         // Use MD5
         useMD5 = new JCheckBox(JMeterUtils.getResString("response_save_as_md5")); // $NON-NLS-1$
-
-        // Is monitor
-        isMon = new JCheckBox(JMeterUtils.getResString("monitor_is_title")); // $NON-NLS-1$
         checkBoxPanel.add(useMD5);
-        checkBoxPanel.add(isMon);
 
         return checkBoxPanel;
     }
@@ -259,7 +251,6 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         concurrentDwn.setSelected(false);
         concurrentPool.setText(String.valueOf(HTTPSamplerBase.CONCURRENT_POOL_SIZE));
         enableConcurrentDwn(false);
-        isMon.setSelected(false);
         useMD5.setSelected(false);
         urlConfigGui.clear();
         embeddedRE.setText(""); // $NON-NLS-1$
