@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1-SNAPSHOT.20161022">
+<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13.20160310">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Generator2.13" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -1276,7 +1276,7 @@
             <stringProp name="filename"></stringProp>
           </MailerResultCollector>
           <hashTree/>
-          <ResultCollector guiclass="MonitorHealthVisualizer" testclass="ResultCollector" testname="Monitor Results" enabled="true">
+          <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Monitor Results" enabled="true">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
               <name>saveConfig</name>
