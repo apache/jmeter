@@ -523,20 +523,20 @@
     <pathelement location="${lib.dir}/${xstream.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
-  	<fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
+    <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
     <!-- API-only jars-->
     <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
-	
+
   <path id="slf4j_logkit_classpath">
     <!-- Externally produced jars -->
     <pathelement location="${lib.dir}/${logkit.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
   </path>
-	
+
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${lib.doc}/${velocity.jar}"/>
@@ -590,7 +590,7 @@
   </target>
 
   <target name="ant-version" depends="_check_ant-version">
-	    <echo level="info">ant.version = ${ant.version}</echo>
+    <echo level="info">ant.version = ${ant.version}</echo>
   </target>
 
   <target name="_check_ant-version">
@@ -603,7 +603,7 @@
       </condition>
     </fail>
   </target>
-	
+
   <target name="init-docs" depends="report-anakia-missing">
     <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
   </target>
@@ -862,15 +862,15 @@
       </classpath>
     </javac>
   </target>
-	
+
   <target name="compile-slf4j_logkit" description="Compile JMeter slf4j LogKit bootstrap classes.">
     <mkdir dir="${build.slf4j_logkit}"/>
     <javac srcdir="${src.slf4j_logkit}" destdir="${build.slf4j_logkit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-	    <path refid="slf4j_logkit_classpath"/>
-	  </classpath>
+        <path refid="slf4j_logkit_classpath"/>
+      </classpath>
     </javac>
   </target>
 
@@ -1371,7 +1371,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
-  	<include name="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
+    <include name="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <!-- Help documentation, binary files -->
@@ -2698,13 +2698,13 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="HTMLParserTestFile_2"/>
     </antcall>
-  	<!-- Disable Test which seems wrong -->
-  	<!--
+    <!-- Disable Test which seems wrong -->
+    <!--
     <antcall target="batchtest">
       Using the same module controller name in command line mode causes NPE
       <param name="batchtest.name" value="Bug47165"/>
     </antcall>
-  	-->
+    -->
     <antcall target="batchtest">
       <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
@@ -3306,7 +3306,7 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${lib.opt}/${rat-tasks.jar}"/>
       </classpath>
     </taskdef>
-	<mkdir dir="${basedir}/reports/" />
+    <mkdir dir="${basedir}/reports/" />
     <rat:report reportfile="reports/rat-report.txt">
         <fileset dir="." excludesfile="rat-excludes.txt"/>
     </rat:report>
