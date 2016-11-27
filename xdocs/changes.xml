@@ -91,6 +91,9 @@ Fill in some detail.
     <li><bug>60423</bug>Drop Monitor Results listener </li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.system.NativeCommand</code></li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui</code></li>
+    <li>Drop deprecated class <code>org.apache.jmeter.testelement.TestListener</code></li>
+    <li>Drop deprecated class <code>org.apache.jmeter.reporters.FileReporter</code></li>
+    <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.modifier.UserSequence</code></li>
 </ul>
 
 <!-- =================== Improvements =================== -->
