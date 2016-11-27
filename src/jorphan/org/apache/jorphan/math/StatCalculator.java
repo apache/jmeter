@@ -95,15 +95,15 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
 
     /**
      * Add to received bytes
-     * @param newValue 
+     * @param newValue number of newly received bytes
      */
     public void addBytes(long newValue) {
         bytes += newValue;
     }
-    
+
     /**
      * Add to sent bytes
-     * @param newValue
+     * @param newValue number of newly sent bytes
      */
     public void addSentBytes(long newValue) {
         sentBytes += newValue;
