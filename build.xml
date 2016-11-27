@@ -227,8 +227,6 @@
   <property name="src.tcp" value="src/protocol/tcp"/>
   <property name="src.examples" value="src/examples"/>
   <property name="src.mail" value="src/protocol/mail"/>
-  <property name="src.monitor.components" value="src/monitor/components"/>
-  <property name="src.monitor.model" value="src/monitor/model"/>
   <property name="src.jms" value="src/protocol/jms"/>
   <property name="src.native" value="src/protocol/native"/>
   <property name="src.mongodb" value="src/protocol/mongodb"/>
@@ -255,8 +253,6 @@
     <pathelement location="${src.tcp}"/>
     <pathelement location="${src.examples}"/>
     <pathelement location="${src.mail}"/>
-    <pathelement location="${src.monitor.components}"/>
-    <pathelement location="${src.monitor.model}"/>
     <pathelement location="${src.jms}"/>
     <pathelement location="${src.native}"/>
     <pathelement location="${src.mongodb}"/>
@@ -278,8 +274,6 @@
   <property name="build.mail" value="build/protocol/mail"/>
   <property name="build.tcp" value="build/protocol/tcp"/>
   <property name="build.examples" value="build/examples"/>
-  <property name="build.monitor.components" value="build/monitor/components"/>
-  <property name="build.monitor.model" value="build/monitor/model"/>
   <property name="build.jms" value="build/protocol/jms"/>
   <property name="build.native" value="build/protocol/native"/>
   <property name="build.mongodb" value="build/protocol/mongodb"/>
@@ -698,8 +692,6 @@
         <pathelement location="${build.jdbc}"/>
         <pathelement location="${build.ldap}"/>
         <pathelement location="${build.mail}"/>
-        <pathelement location="${build.monitor.components}"/>
-        <pathelement location="${build.monitor.model}"/>
         <pathelement location="${build.tcp}"/>
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
@@ -819,38 +811,6 @@
     </javac>
   </target>
 
-  <target name="compile-monitor" depends="compile-monitor-model,compile-monitor-components"/>
-
-  <target name="compile-monitor-components"
-    depends="compile-jorphan,compile-core,compile-components,compile-monitor-model">
-    <mkdir dir="${build.monitor.components}"/>
-    <javac srcdir="${src.monitor.components}" source="${src.java.version}" destdir="${build.monitor.components}" optimize="${optimize}" debug="on" target="${target.java.version}"
-           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
-      <include name="**/*.java"/>
-      <classpath>
-        <pathelement location="${build.monitor.model}"/>
-        <pathelement location="${build.http}"/>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <pathelement location="${build.components}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="compile-monitor-model" depends="compile-jorphan,compile-core">
-    <mkdir dir="${build.monitor.model}"/>
-    <javac srcdir="${src.monitor.model}" destdir="${build.monitor.model}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
-           includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
-      <include name="**/*.java"/>
-      <classpath>
-        <pathelement location="${build.jorphan}"/>
-        <pathelement location="${build.core}"/>
-        <path refid="classpath"/>
-      </classpath>
-    </javac>
-  </target>
-
   <target name="compile-jorphan" depends="init-version" description="Compile JOrphan utility classes.">
     <mkdir dir="${build.jorphan}"/>
     <javac srcdir="${src.jorphan}" destdir="${build.jorphan}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
@@ -916,7 +876,7 @@
   </target>
 
   <target name="compile"
-  depends="_message_3rdParty,compile-slf4j_logkit,compile-core,compile-components,compile-functions,compile-protocols,compile-monitor,compile-junit,compile-jms,compile-native, compile-mongodb"
+  depends="_message_3rdParty,compile-slf4j_logkit,compile-core,compile-components,compile-functions,compile-protocols,compile-junit,compile-jms,compile-native, compile-mongodb"
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
@@ -3163,8 +3123,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${build.functions}"/>
                 <fileset dir="${build.jorphan}"/>
                 <fileset dir="${build.junit}"/>
-                <fileset dir="${build.monitor.components}"/>
-                <fileset dir="${build.monitor.model}"/>
                 <fileset dir="${build.ftp}"/>
                 <fileset dir="${build.http}"/>
                 <fileset dir="${build.java}"/>
@@ -3184,8 +3142,6 @@ run JMeter unless all the JMeter jars are added.
                 <fileset dir="${src.functions}"/>
                 <fileset dir="${src.jorphan}"/>
                 <fileset dir="${src.junit}"/>
-                <fileset dir="${src.monitor.components}"/>
-                <fileset dir="${src.monitor.model}"/>
                 <fileset dir="${src.ftp}"/>
                 <fileset dir="${src.http}"/>
                 <fileset dir="${src.java}"/>
