@@ -57,13 +57,6 @@ public class TestCompiler implements HashTreeTraverser {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-    /** 
-     * @deprecated since 3.0 will be removed in the next version 3.1. 
-     * Constant is not used since 3.0
-     */
-    @Deprecated
-    public static final boolean IS_USE_STATIC_SET = false;
-
     /**
      * This set keeps track of which ObjectPairs have been seen.
      * It seems to be used to prevent adding a child to a parent if the child has already been added.
