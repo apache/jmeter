@@ -40,7 +40,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
  * @since 3.0
  */
 public class CssParser implements LinkExtractorParser {
-    private static final URLCollection EMPTY_URL_COLLECTION = new URLCollection(Collections.emptyList());
+    private static final URLCollection EMPTY_URL_COLLECTION = new URLCollection(Collections.<URLString>emptyList());
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     /**
