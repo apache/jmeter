@@ -269,6 +269,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         
         /**
          * Launch find text engine on target component
+         * @param pattern text pattern to search
          * @return true if there was a match, false otherwise
          */
         boolean executeAndShowTextFind(Pattern pattern);
