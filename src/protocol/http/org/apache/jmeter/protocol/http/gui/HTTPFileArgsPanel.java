@@ -54,7 +54,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 /**
  * A GUI panel allowing the user to enter file information for http upload.
- * Used by MultipartUrlConfigGui for use in HTTP Samplers.
+ * Used by UrlConfigGui for use in HTTP Samplers.
  */
 public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
