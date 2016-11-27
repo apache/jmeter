@@ -23,7 +23,11 @@
    Eclipse seems to use TABS for indenting the entries.
  -->
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="javafx/**"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="src" output="build/components" path="src/components"/>
 	<classpathentry kind="src" output="build/core" path="src/core"/>
 	<classpathentry kind="src" output="build/examples" path="src/examples"/>
