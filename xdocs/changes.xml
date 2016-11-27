@@ -89,6 +89,8 @@ Fill in some detail.
 <p><note>These elements do not appear anymore in the menu, if you need them modify <code>not_in_menu</code> property. The JMeter team advises not to use them anymore and migrate to their replacement.</note></p>
 <ul>
     <li><bug>60423</bug>Drop Monitor Results listener </li>
+    <li>Drop deprecated class <code>org.apache.jmeter.protocol.system.NativeCommand</code></li>
+    <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui</code></li>
 </ul>
 
 <!-- =================== Improvements =================== -->
