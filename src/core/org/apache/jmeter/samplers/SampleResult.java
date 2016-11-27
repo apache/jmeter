@@ -205,9 +205,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** Should test terminate abruptly? */
     private boolean stopTestNow = false;
 
-    /** Is the sampler acting as a monitor? */
-    private boolean isMonitor = false;
-
     private int sampleCount = 1;
 
     private long bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
@@ -314,7 +311,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         // files is created automatically, and applies per instance
         groupThreads = res.groupThreads;//OK
         idleTime = res.idleTime;
-        isMonitor = res.isMonitor;
         label = res.label;//OK
         latency = res.latency;
         connectTime = res.connectTime;
@@ -1121,18 +1117,23 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *
      * @param monitor
      *            flag whether this sampler is working as a monitor
+     *            
+     * @deprecated since 3.2 NOOP
      */
+    @Deprecated
     public void setMonitor(boolean monitor) {
-        isMonitor = monitor;
+        // NOOP
     }
 
     /**
      * If the sampler is a monitor, method will return true.
      *
      * @return true if the sampler is a monitor
+     * @deprecated since 3.2 always return false
      */
+    @Deprecated
     public boolean isMonitor() {
-        return isMonitor;
+        return false;
     }
 
     /**

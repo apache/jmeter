@@ -257,7 +257,6 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
         httpMethod = new PostMethod(urlStr);
 
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(false);
 
         res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(HTTPConstants.POST);

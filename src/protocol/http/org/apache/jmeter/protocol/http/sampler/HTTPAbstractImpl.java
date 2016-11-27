@@ -366,9 +366,11 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
      * Invokes {@link HTTPSamplerBase#isMonitor()}
      *
      * @return flag whether monitor is enabled
+     * @deprecated since 3.2 always return false
      */
+    @Deprecated
     protected boolean isMonitor() {
-        return testElement.isMonitor();
+        return false;
     }
 
     /**
