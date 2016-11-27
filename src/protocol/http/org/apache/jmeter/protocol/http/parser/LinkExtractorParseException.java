@@ -36,32 +36,32 @@ public class LinkExtractorParseException extends Exception {
     }
 
     /**
-     * @param message
+     * @param message text describing the cause of the exception
      */
     public LinkExtractorParseException(String message) {
         super(message);
     }
 
     /**
-     * @param cause
+     * @param cause of the exception
      */
     public LinkExtractorParseException(Throwable cause) {
         super(cause);
     }
 
     /**
-     * @param message
-     * @param cause
+     * @param message text describing the cause of the exception
+     * @param cause exception, that lead to this exception
      */
     public LinkExtractorParseException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * @param message
-     * @param cause
-     * @param enableSuppression
-     * @param writableStackTrace
+     * @param message text describing the cause of the exception
+     * @param cause exception, that lead to this exception
+     * @param enableSuppression whether or not suppression is enabled
+     * @param writableStackTrace whether or not the stacktrace should be writable
      */
     public LinkExtractorParseException(String message, Throwable cause,
             boolean enableSuppression, boolean writableStackTrace) {
