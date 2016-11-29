@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.util.ConfigMergabilityIndicator;
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
@@ -96,7 +97,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
         } catch (Exception ex) {
             res.setResponseMessage(ex.toString());
             res.setResponseCode("000");
-            res.setResponseData(ex.getMessage().getBytes());
+            res.setResponseData(ObjectUtils.defaultIfNull(ex.getMessage(), "NO MESSAGE").getBytes());
             res.setSuccessful(false);
         } finally {
             close(conn);
