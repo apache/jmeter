@@ -2261,9 +2261,9 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <target name="docs-api" description="Generate the API documentation.">
-    <available property="jdk1.7+" classname="java.lang.AutoCloseable"/>
-    <fail unless="jdk1.7+"
-          message="Must use Java 7 or later for creating the Javadocs"/>
+    <available property="jdk1.8+" classname="java.util.function.Consumer"/>
+    <fail unless="jdk1.8+"
+          message="Must use Java 8 or later for creating the Javadocs"/>
     <tstamp>
       <!-- Used to ensure end-year is up to date -->
       <format property="THISYEAR" pattern="yyyy"/>
@@ -2299,9 +2299,9 @@ run JMeter unless all the JMeter jars are added.
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
       <classpath refid="classpath"/>
-      <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+      <link href="http://docs.oracle.com/javase/8/docs/api/"/>
     </javadoc>
-    <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 7 minimum -->
+    <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 8 minimum -->
   </target>
 
   <!--
