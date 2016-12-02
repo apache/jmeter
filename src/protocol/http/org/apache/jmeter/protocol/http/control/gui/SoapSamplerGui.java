@@ -24,6 +24,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -65,6 +67,13 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         modifyTestElement(sampler);
         return sampler;
     }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
+    }
+
+    
 
     /**
      * Modifies a given TestElement to mirror the data in the gui components.

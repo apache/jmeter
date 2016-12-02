@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -103,6 +105,11 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     @Override
     public String getLabelResource() {
         return "dns_cache_manager_title";
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     /**

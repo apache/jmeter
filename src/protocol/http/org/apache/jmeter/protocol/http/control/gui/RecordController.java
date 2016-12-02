@@ -21,6 +21,8 @@ package org.apache.jmeter.protocol.http.control.gui;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -54,6 +56,11 @@ public class RecordController extends LogicControllerGui implements ActionListen
     @Override
     public String getLabelResource() {
         return "record_controller_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     @Override
