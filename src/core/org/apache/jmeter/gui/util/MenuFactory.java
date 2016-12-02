@@ -19,9 +19,11 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -278,7 +280,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultControllerMenu() {
-        JPopupMenu pop = new JPopupMenu();
+    	JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
@@ -294,7 +296,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultSamplerMenu() {
-        JPopupMenu pop = new JPopupMenu();
+    	JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
@@ -372,9 +374,25 @@ public final class MenuFactory {
      * @return the menu
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
+    	final Map <String, JMenu> subMenusList = new HashMap<String, JMenu>();
         JMenu menu = new JMenu(menuName);
+        
         for (MenuInfo info : menuInfo) {
-            menu.add(makeMenuItem(info, actionCommand));
+        	if (info.getDrawer() == null || info.getDrawer().equals("")) {
+        		menu.add(makeMenuItem(info, actionCommand));
+            } else {
+            	JMenu newSubMenu = subMenusList.get(info.getDrawer());
+            	
+            	if (newSubMenu == null) {
+            		newSubMenu = new JMenu(info.getDrawer());
+            	}
+            	
+            	newSubMenu.add(makeMenuItem(info, actionCommand));
+            	menu.add(newSubMenu);
+            	subMenusList.put(info.getDrawer(), newSubMenu);
+            	
+            	GuiUtils.makeScrollableMenu(newSubMenu);
+            }
         }
         GuiUtils.makeScrollableMenu(menu);
         return menu;
@@ -512,50 +530,88 @@ public final class MenuFactory {
                 } else {
                     elementsToSkip.add(name); // Don't add it again
                 }
+
                 Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
-                    log.debug(name + " participates in no menus.");
-                    continue;
+                	log.debug(name + " participates in no menus.");
+                	continue;
                 }
+
+                Collection<MenuInfo> subMenus = new ArrayList<MenuInfo>();
+                Collection<String> subCategories = item.getSubMenuCategories();
+                if (subCategories == null) {
+                    log.debug(name + " participates in no sub menus.");
+                    subMenus.add(new MenuInfo(item, "", name));
+                } else {
+                    for (String subCategory: subCategories) {
+                    	log.debug(name + " participates in '" + subCategory + "' sub menu.");
+                        subMenus.add(new MenuInfo(item, subCategory, name));
+                    }
+                }
+
                 if (categories.contains(THREADS)) {
-                    threads.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        threads.add(submenu);
+                    }
                 }
+
                 if (categories.contains(FRAGMENTS)) {
-                    fragments.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        fragments.add(submenu);
+                    }
                 }
+
                 if (categories.contains(TIMERS)) {
-                    timers.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        timers.add(submenu);
+                    }
                 }
 
                 if (categories.contains(POST_PROCESSORS)) {
-                    postProcessors.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        postProcessors.add(submenu);
+                    }
                 }
 
                 if (categories.contains(PRE_PROCESSORS)) {
-                    preProcessors.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        preProcessors.add(submenu);
+                    }
                 }
 
                 if (categories.contains(CONTROLLERS)) {
-                    controllers.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                    	controllers.add(submenu);
+                    }
                 }
 
                 if (categories.contains(SAMPLERS)) {
-                    samplers.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                    	samplers.add(submenu);
+                    }
                 }
 
                 if (categories.contains(NON_TEST_ELEMENTS)) {
-                    nonTestElements.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        nonTestElements.add(submenu);
+                    }
                 }
 
                 if (categories.contains(LISTENERS)) {
-                    listeners.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        listeners.add(submenu);
+                    }
                 }
 
                 if (categories.contains(CONFIG_ELEMENTS)) {
-                    configElements.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        configElements.add(submenu);
+                    }
                 }
                 if (categories.contains(ASSERTIONS)) {
-                    assertions.add(new MenuInfo(item, name));
+                    for (MenuInfo submenu: subMenus) {
+                        assertions.add(submenu);
+                    }
                 }
 
             }
@@ -722,8 +778,8 @@ public final class MenuFactory {
         }
         @Override
         public int compare(MenuInfo o1, MenuInfo o2) {
-            String lab1 = o1.getLabel();
-            String lab2 = o2.getLabel();
+            String lab1 = o1.getDrawer() + o1.getLabel();
+            String lab2 = o2.getDrawer() + o2.getLabel();
             if (caseBlind) {
                 return lab1.toLowerCase(Locale.ENGLISH).compareTo(lab2.toLowerCase(Locale.ENGLISH));
             }

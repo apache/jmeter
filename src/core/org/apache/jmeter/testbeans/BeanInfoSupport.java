@@ -136,6 +136,17 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             } else {
                 log.debug("Localized display name not available for bean " + beanClass);                    
             }
+
+            // Use shortDescription to manage sub menu categories related to the bean
+            final String sdKey = "shortDescription";
+            // Localize the bean description
+            if (resourceBundle.containsKey(sdKey)) { // $NON-NLS-1$
+                getBeanDescriptor().setShortDescription(resourceBundle.getString(sdKey)); // $NON-NLS-1$
+                log.debug("Localized short Description for bean " + beanClass + " is " + resourceBundle.getString(sdKey));     
+            } else {
+                log.debug("Localized short Description not available for bean " + beanClass);
+            }
+            
             // Localize the property names and descriptions:
             PropertyDescriptor[] properties = getPropertyDescriptors();
             for (PropertyDescriptor property : properties) {
