@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -107,6 +108,11 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     @Override
     public Collection<String> getMenuCategories() {
         return null;
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     @Override

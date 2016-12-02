@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.ldap.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.JPanel;
 
@@ -26,6 +28,7 @@ import org.apache.jmeter.protocol.ldap.config.gui.LdapExtConfigGui;
 import org.apache.jmeter.protocol.ldap.sampler.LDAPExtSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 /*******************************************************************************
  *
@@ -95,6 +98,11 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     @Override
     public String getLabelResource() {
         return "ldapext_testing_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)

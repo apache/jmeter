@@ -22,6 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -183,6 +185,11 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     @Override
     public String getLabelResource() {
         return "ldapext_sample_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     /**
