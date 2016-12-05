@@ -117,6 +117,12 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
 
     /** {@inheritDoc} */
     @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public TestElement createTestElement() {
         WorkBench wb = new WorkBench();
         modifyTestElement(wb);

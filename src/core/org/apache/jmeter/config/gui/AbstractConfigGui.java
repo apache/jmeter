@@ -63,4 +63,9 @@ public abstract class AbstractConfigGui extends AbstractJMeterGuiComponent {
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.CONFIG_ELEMENTS);
     }
+
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
 }

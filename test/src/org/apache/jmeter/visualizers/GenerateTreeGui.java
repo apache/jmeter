@@ -92,6 +92,11 @@ public class GenerateTreeGui extends AbstractConfigGui implements
     }
 
     @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
+    @Override
     public void actionPerformed(ActionEvent action) {
         GuiPackage guiPackage = GuiPackage.getInstance();
         JMeterTreeModel treeModel = guiPackage.getTreeModel();
