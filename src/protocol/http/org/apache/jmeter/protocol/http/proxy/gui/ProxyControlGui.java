@@ -318,7 +318,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /** {@inheritDoc} */
     @Override
     public Collection<String> getSubMenuCategories() {
-    	return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */

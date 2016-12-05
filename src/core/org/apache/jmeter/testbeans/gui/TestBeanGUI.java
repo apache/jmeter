@@ -399,9 +399,9 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
 
         // Avoid property bean descriptor behavior that uses displayName as description if shortDescription is empty or undefined
         if (bd.getShortDescription().equals(bd.getDisplayName())) {
-        	submenuCategories = Arrays.asList("");
+            submenuCategories = Arrays.asList("");
         } else {
-        	submenuCategories = Arrays.asList(bd.getShortDescription().split(";"));
+            submenuCategories = Arrays.asList(bd.getShortDescription().split(";"));
         }
 
         return submenuCategories;

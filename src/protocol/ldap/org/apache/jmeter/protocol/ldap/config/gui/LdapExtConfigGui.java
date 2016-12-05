@@ -189,7 +189,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     
     @Override
     public Collection<String> getSubMenuCategories() {
-    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
+        return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     /**

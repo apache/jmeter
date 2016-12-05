@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.Serializable;
@@ -280,7 +279,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultControllerMenu() {
-    	JPopupMenu pop = new JPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
@@ -296,7 +295,7 @@ public final class MenuFactory {
     }
 
     public static JPopupMenu getDefaultSamplerMenu() {
-    	JPopupMenu pop = new JPopupMenu();
+        JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenus(MENU_ADD_SAMPLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
@@ -374,24 +373,24 @@ public final class MenuFactory {
      * @return the menu
      */
     public static JMenu makeMenu(Collection<MenuInfo> menuInfo, String actionCommand, String menuName) {
-    	final Map <String, JMenu> subMenusList = new HashMap<String, JMenu>();
+        final Map <String, JMenu> subMenusList = new HashMap<String, JMenu>();
         JMenu menu = new JMenu(menuName);
         
         for (MenuInfo info : menuInfo) {
-        	if (info.getDrawer() == null || info.getDrawer().equals("")) {
-        		menu.add(makeMenuItem(info, actionCommand));
+            if (info.getDrawer() == null || info.getDrawer().equals("")) {
+                menu.add(makeMenuItem(info, actionCommand));
             } else {
-            	JMenu newSubMenu = subMenusList.get(info.getDrawer());
-            	
-            	if (newSubMenu == null) {
-            		newSubMenu = new JMenu(info.getDrawer());
-            	}
-            	
-            	newSubMenu.add(makeMenuItem(info, actionCommand));
-            	menu.add(newSubMenu);
-            	subMenusList.put(info.getDrawer(), newSubMenu);
-            	
-            	GuiUtils.makeScrollableMenu(newSubMenu);
+                JMenu newSubMenu = subMenusList.get(info.getDrawer());
+                
+                if (newSubMenu == null) {
+                    newSubMenu = new JMenu(info.getDrawer());
+                }
+                
+                newSubMenu.add(makeMenuItem(info, actionCommand));
+                menu.add(newSubMenu);
+                subMenusList.put(info.getDrawer(), newSubMenu);
+                
+                GuiUtils.makeScrollableMenu(newSubMenu);
             }
         }
         GuiUtils.makeScrollableMenu(menu);
@@ -533,8 +532,8 @@ public final class MenuFactory {
 
                 Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
-                	log.debug(name + " participates in no menus.");
-                	continue;
+                    log.debug(name + " participates in no menus.");
+                    continue;
                 }
 
                 Collection<MenuInfo> subMenus = new ArrayList<MenuInfo>();
@@ -544,7 +543,7 @@ public final class MenuFactory {
                     subMenus.add(new MenuInfo(item, "", name));
                 } else {
                     for (String subCategory: subCategories) {
-                    	log.debug(name + " participates in '" + subCategory + "' sub menu.");
+                        log.debug(name + " participates in '" + subCategory + "' sub menu.");
                         subMenus.add(new MenuInfo(item, subCategory, name));
                     }
                 }
@@ -581,13 +580,13 @@ public final class MenuFactory {
 
                 if (categories.contains(CONTROLLERS)) {
                     for (MenuInfo submenu: subMenus) {
-                    	controllers.add(submenu);
+                        controllers.add(submenu);
                     }
                 }
 
                 if (categories.contains(SAMPLERS)) {
                     for (MenuInfo submenu: subMenus) {
-                    	samplers.add(submenu);
+                        samplers.add(submenu);
                     }
                 }
 

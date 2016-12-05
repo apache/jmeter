@@ -60,7 +60,7 @@ public class RecordController extends LogicControllerGui implements ActionListen
     
     @Override
     public Collection<String> getSubMenuCategories() {
-    	return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     @Override

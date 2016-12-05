@@ -112,7 +112,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     
     @Override
     public Collection<String> getSubMenuCategories() {
-    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
+        return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     @Override

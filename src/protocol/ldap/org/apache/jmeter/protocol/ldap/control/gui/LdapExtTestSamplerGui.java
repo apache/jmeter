@@ -102,7 +102,7 @@ public class LdapExtTestSamplerGui extends AbstractSamplerGui {
     
     @Override
     public Collection<String> getSubMenuCategories() {
-    	return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
+        return Arrays.asList(JMeterUtils.getResString("ldap_protocol")); // $NON-NLS-1$
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
