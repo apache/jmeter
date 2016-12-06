@@ -3226,7 +3226,7 @@ run JMeter unless all the JMeter jars are added.
   <property name="config_loc" value="."/>
   <target name="checkstyle">
     <available property="checkstyle.jar.available" file="${lib.opt}/${checkstyle-all.jar}"/>
-    <fail message="This task requires checkstlye, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
+    <fail message="This task requires checkstyle, please run download_checkstyle target to download checkstyle" unless="checkstyle.jar.available"/>
 
     <antcall target="_process_checkstyle_jars"></antcall>
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
