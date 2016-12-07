@@ -38,7 +38,7 @@ public class Top5ErrorsSummaryData {
     /**
      */
     public Top5ErrorsSummaryData() {
-        countPerError = new HashMap<String, Long>();
+        countPerError = new HashMap<>();
     }
 
     /**
@@ -87,7 +87,7 @@ public class Top5ErrorsSummaryData {
      * @return array of [String, Long]
      */
     public Object[][] getTop5ErrorsMetrics() {
-        SortedSet<Map.Entry<String, Long>> reverseSortedSet = new TreeSet<Map.Entry<String, Long>>(
+        SortedSet<Map.Entry<String, Long>> reverseSortedSet = new TreeSet<>(
                 new Comparator<Map.Entry<String, Long>>() {
                     @Override
                     public int compare(Map.Entry<String, Long> e1,
