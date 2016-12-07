@@ -39,7 +39,7 @@ public class HostNameSetter {
     private final WeakReference<Method> setter;
 
     private HostNameSetter(Class<?> clazz, Method setter) {
-        this.cls = new WeakReference<Class<?>>(clazz);
+        this.cls = new WeakReference<>(clazz);
         this.setter = setter == null ? null : new WeakReference<>(setter);
     }
 
