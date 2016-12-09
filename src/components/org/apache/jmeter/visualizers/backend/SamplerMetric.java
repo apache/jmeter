@@ -18,6 +18,12 @@
 
 package org.apache.jmeter.visualizers.backend;
 
+import static java.util.Arrays.asList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.samplers.SampleResult;
@@ -28,17 +34,18 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 2.13
  */
 public class SamplerMetric {
-    private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100); //$NON-NLS-1$
     
     // Response times for OK samples
-    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
-    private DescriptiveStatistics okResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private DescriptiveStatistics okResponsesStats = new DescriptiveStatistics();
     // Response times for KO samples
-    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
-    private DescriptiveStatistics koResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private DescriptiveStatistics koResponsesStats = new DescriptiveStatistics();
     // Response times for All samples
-    // Limit to sliding window of SLIDING_WINDOW_SIZE values 
-    private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
+    private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics();
+    // OK, KO, ALL stats
+    private List<DescriptiveStatistics> windowedStats = Collections.emptyList();
+    // Timeboxed percentiles don't makes sense
+    private DescriptiveStatistics pctResponseStats = new DescriptiveStatistics();
+    private WindowMode windowMode;
     private int successes;
     private int failures;
     private int hits;
@@ -46,6 +53,20 @@ public class SamplerMetric {
      * 
      */
     public SamplerMetric() {
+    	windowMode = WindowMode.get();
+
+    	List<DescriptiveStatistics> stats = new ArrayList<>();
+    	stats.add(pctResponseStats);
+    	if (windowMode == WindowMode.FIXED) {
+    		windowedStats = asList(okResponsesStats, koResponsesStats, allResponsesStats);
+    		stats.addAll(windowedStats);
+    	}
+
+    	int slidingWindowSize = JMeterUtils.getPropDefault("backend_metrics_window", 100);
+    	// Limit to sliding window of SLIDING_WINDOW_SIZE values
+		for (DescriptiveStatistics stat : stats) {
+    		stat.setWindowSize(slidingWindowSize);
+    	}
     }
 
     /**
@@ -60,6 +81,7 @@ public class SamplerMetric {
         }
         long time = result.getTime();
         allResponsesStats.addValue(time);
+        pctResponseStats.addValue(time);
         if(result.isSuccessful()) {
             // Should we also compute KO , all response time ?
             // only take successful requests for time computing
@@ -88,8 +110,18 @@ public class SamplerMetric {
      * Reset metric except for percentile related data
      */
     public synchronized void resetForTimeInterval() {
-        // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
-        // http://commons.apache.org/proper/commons-math/userguide/stat.html
+    	switch (windowMode) {
+    		case FIXED:
+                // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
+                // http://commons.apache.org/proper/commons-math/userguide/stat.html
+    			break;
+    		case TIMED:
+    			for (DescriptiveStatistics stat : windowedStats) {
+    				stat.clear();
+    			}
+    			break;
+			default: throw new UnsupportedOperationException(windowMode.name());
+    	}
         successes = 0;
         failures = 0;
         hits = 0;
@@ -242,7 +274,7 @@ public class SamplerMetric {
      *         values.
      */
     public double getAllPercentile(double percentile) {
-        return allResponsesStats.getPercentile(percentile);
+        return pctResponseStats.getPercentile(percentile);
     }
 
     /**
