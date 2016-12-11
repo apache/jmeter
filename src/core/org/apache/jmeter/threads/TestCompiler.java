@@ -140,7 +140,7 @@ public class TestCompiler implements HashTreeTraverser {
             saveTransactionControllerConfigs((TransactionController) child);
         }
         stack.removeLast();
-        if (stack.size() > 0) {
+        if (!stack.isEmpty()) {
             TestElement parent = stack.getLast();
             boolean duplicate = false;
             // Bug 53750: this condition used to be in ObjectPair#addTestElements()
