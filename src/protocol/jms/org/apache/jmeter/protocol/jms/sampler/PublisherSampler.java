@@ -35,6 +35,7 @@ import javax.naming.NamingException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
@@ -259,13 +260,13 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
                 cachedFileName = getInputFile();
                 file_contents = getFileContent(getInputFile());
             }
-            return file_contents;
+            return (new CompoundVariable(file_contents)).execute();
         } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
             // Maybe we should consider creating a global cache for the
             // random files to make JMeter more efficient.
             String fname = FSERVER.getRandomFile(getRandomPath(), new String[] { ".txt", ".obj" })
                     .getAbsolutePath();
-            return getFileContent(fname);
+            return (new CompoundVariable(getFileContent(fname))).execute();
         } else {
             return getTextMessage();
         }
