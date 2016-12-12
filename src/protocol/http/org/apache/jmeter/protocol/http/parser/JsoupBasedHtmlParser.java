@@ -106,8 +106,6 @@ public class JsoupBasedHtmlParser extends HTMLParser {
                     // then we need to download the binary
                     extractAttribute(tag, ATT_SRC);
                 }
-            } else if (tagName.equals(TAG_SCRIPT)) {
-                extractAttribute(tag, ATT_SRC);
                 // Bug 51750
             } else if (tagName.equals(TAG_FRAME) || tagName.equals(TAG_IFRAME)) {
                 extractAttribute(tag, ATT_SRC);
