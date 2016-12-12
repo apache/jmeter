@@ -83,11 +83,14 @@ public class ThreadGroup extends AbstractThreadGroup {
 
     // List of active threads
     private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
+    private final Object addThreadLock = new Object();
 
     /**
      * Is test (still) running?
      */
     private volatile boolean running = false;
+
+    private int numGroup;
 
     /**
      * Are we using delayed startup?
@@ -279,34 +282,30 @@ public class ThreadGroup extends AbstractThreadGroup {
     @Override
     public void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
         running = true;
+        numGroup = groupCount;
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
         float perThreadDelayInMillis = ((float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads());
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group number " + groupCount
+        log.info("Starting thread group number " + numGroup
                 + " threads " + numThreads
                 + " ramp-up " + rampUpPeriodInSeconds
                 + " perThread " + perThreadDelayInMillis
                 + " delayedStart=" + delayedStartup);
         if (delayedStartup) {
-            threadStarter = new Thread(new ThreadStarter(groupCount, notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
+            threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
             threadStarter.setDaemon(true);
             threadStarter.start();
             // N.B. we don't wait for the thread to complete, as that would prevent parallel TGs
         } else {
             long now = System.currentTimeMillis(); // needs to be same time for all threads in the group
             final JMeterContext context = JMeterContextService.getContext();
-            for (int i = 0; running && i < numThreads; i++) {
-                JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, i, context);
-                scheduleThread(jmThread, now); // set start and end time
-                jmThread.setInitialDelay((int)(i * perThreadDelayInMillis));
-                Thread newThread = new Thread(jmThread, jmThread.getThreadName());
-                registerStartedThread(jmThread, newThread);
-                newThread.start();
+            for (int threadNum = 0; running && threadNum < numThreads; threadNum++) {
+                startNewThread(notifier, threadGroupTree, engine, threadNum, context, now, (int)(threadNum * perThreadDelayInMillis));
             }
         }
-        log.info("Started thread group number "+groupCount);
+        log.info("Started thread group number "+numGroup);
     }
 
     /**
@@ -318,7 +317,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         allThreads.put(jMeterThread, newThread);
     }
 
-    private JMeterThread makeThread(int groupCount,
+    private JMeterThread makeThread(
             ListenerNotifier notifier, ListedHashTree threadGroupTree,
             StandardJMeterEngine engine, int i, 
             JMeterContext context) { // N.B. Context needs to be fetched in the correct thread
@@ -331,7 +330,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         jmeterThread.setThreadNum(i);
         jmeterThread.setThreadGroup(this);
         jmeterThread.setInitialContext(context);
-        final String threadName = groupName + " " + (groupCount) + "-" + (i + 1);
+        final String threadName = groupName + " " + (numGroup) + "-" + (i + 1);
         jmeterThread.setThreadName(threadName);
         jmeterThread.setEngine(engine);
         jmeterThread.setOnErrorStopTest(onErrorStopTest);
@@ -339,6 +338,37 @@ public class ThreadGroup extends AbstractThreadGroup {
         jmeterThread.setOnErrorStopThread(onErrorStopThread);
         jmeterThread.setOnErrorStartNextLoop(onErrorStartNextLoop);
         return jmeterThread;
+    }
+
+    private void startNewThread(ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine,
+            int threadNum, final JMeterContext context, long now, int delay) {
+        JMeterThread jmThread = makeThread(notifier, threadGroupTree, engine, threadNum, context);
+        scheduleThread(jmThread, now); // set start and end time
+        jmThread.setInitialDelay(delay);
+        Thread newThread = new Thread(jmThread, jmThread.getThreadName());
+        registerStartedThread(jmThread, newThread);
+        newThread.start();
+    }
+
+    @Override
+    public void addNewThread(int delay, StandardJMeterEngine engine) {
+
+        long now = System.currentTimeMillis();
+
+        // Get any thread from group (for notifier and tree)
+        Map.Entry<JMeterThread, Thread> entry = allThreads.entrySet().iterator().next();
+        JMeterThread anyThread = entry.getKey();
+        ListenerNotifier notifier = anyThread.getNotifier();
+        ListedHashTree threadGroupTree = anyThread.getTestTree();
+
+        JMeterContext context = JMeterContextService.getContext();
+        synchronized (addThreadLock) {
+            int numThread =  getNumThreads();
+            startNewThread(notifier, threadGroupTree, engine, numThread, context, now, delay);
+            setNumThreads( numThread + 1 );
+        }
+        JMeterContextService.addTotalThreads( 1 );
+        log.info("Started new thread in group " + numGroup );
     }
 
     /**
@@ -526,15 +556,13 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     class ThreadStarter implements Runnable {
 
-        private final int groupCount;
         private final ListenerNotifier notifier;
         private final ListedHashTree threadGroupTree;
         private final StandardJMeterEngine engine;
         private final JMeterContext context;
 
-        public ThreadStarter(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
+        public ThreadStarter(ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
             super();
-            this.groupCount = groupCount;
             this.notifier = notifier;
             this.threadGroupTree = threadGroupTree;
             this.engine = engine;
@@ -585,7 +613,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     if (usingScheduler && System.currentTimeMillis() > endtime) {
                         break; // no point continuing beyond the end time
                     }
-                    JMeterThread jmThread = makeThread(groupCount, notifier, threadGroupTree, engine, i, context);
+                    JMeterThread jmThread = makeThread(notifier, threadGroupTree, engine, i, context);
                     jmThread.setInitialDelay(0);   // Already waited
                     if (usingScheduler) {
                         jmThread.setScheduled(true);

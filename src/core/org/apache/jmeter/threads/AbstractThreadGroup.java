@@ -251,6 +251,8 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
 
     public abstract void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine);
 
+    public abstract void addNewThread(int delay, StandardJMeterEngine engine);
+
     public abstract boolean verifyThreadsStopped();
 
     public abstract void waitThreadsStopped();
