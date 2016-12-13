@@ -340,7 +340,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         return jmeterThread;
     }
 
-    private void startNewThread(ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine,
+    private JMeterThread startNewThread(ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine,
             int threadNum, final JMeterContext context, long now, int delay) {
         JMeterThread jmThread = makeThread(notifier, threadGroupTree, engine, threadNum, context);
         scheduleThread(jmThread, now); // set start and end time
@@ -348,10 +348,11 @@ public class ThreadGroup extends AbstractThreadGroup {
         Thread newThread = new Thread(jmThread, jmThread.getThreadName());
         registerStartedThread(jmThread, newThread);
         newThread.start();
+        return jmThread;
     }
 
     @Override
-    public void addNewThread(int delay, StandardJMeterEngine engine) {
+    public JMeterThread addNewThread(int delay, StandardJMeterEngine engine) {
 
         long now = System.currentTimeMillis();
 
@@ -362,13 +363,15 @@ public class ThreadGroup extends AbstractThreadGroup {
         ListedHashTree threadGroupTree = anyThread.getTestTree();
 
         JMeterContext context = JMeterContextService.getContext();
+        JMeterThread newJmThread;
         synchronized (addThreadLock) {
             int numThread =  getNumThreads();
-            startNewThread(notifier, threadGroupTree, engine, numThread, context, now, delay);
+            newJmThread = startNewThread(notifier, threadGroupTree, engine, numThread, context, now, delay);
             setNumThreads( numThread + 1 );
         }
         JMeterContextService.addTotalThreads( 1 );
         log.info("Started new thread in group " + numGroup );
+        return newJmThread;
     }
 
     /**
