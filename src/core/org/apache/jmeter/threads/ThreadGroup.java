@@ -90,7 +90,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private volatile boolean running = false;
 
-    private int numGroup;
+    private int groupNumber;
 
     /**
      * Are we using delayed startup?
@@ -280,15 +280,15 @@ public class ThreadGroup extends AbstractThreadGroup {
     }
 
     @Override
-    public void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
+    public void start(int groupNum, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
         running = true;
-        numGroup = groupCount;
+        groupNumber = groupNum;
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
         float perThreadDelayInMillis = ((float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads());
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group number " + numGroup
+        log.info("Starting thread group number " + groupNumber
                 + " threads " + numThreads
                 + " ramp-up " + rampUpPeriodInSeconds
                 + " perThread " + perThreadDelayInMillis
@@ -305,7 +305,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 startNewThread(notifier, threadGroupTree, engine, threadNum, context, now, (int)(threadNum * perThreadDelayInMillis));
             }
         }
-        log.info("Started thread group number "+numGroup);
+        log.info("Started thread group number "+groupNumber);
     }
 
     /**
@@ -330,7 +330,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         jmeterThread.setThreadNum(i);
         jmeterThread.setThreadGroup(this);
         jmeterThread.setInitialContext(context);
-        final String threadName = groupName + " " + (numGroup) + "-" + (i + 1);
+        final String threadName = groupName + " " + (groupNumber) + "-" + (i + 1);
         jmeterThread.setThreadName(threadName);
         jmeterThread.setEngine(engine);
         jmeterThread.setOnErrorStopTest(onErrorStopTest);
@@ -370,7 +370,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             setNumThreads( numThread + 1 );
         }
         JMeterContextService.addTotalThreads( 1 );
-        log.info("Started new thread in group " + numGroup );
+        log.info("Started new thread in group " + groupNumber );
         return newJmThread;
     }
 
