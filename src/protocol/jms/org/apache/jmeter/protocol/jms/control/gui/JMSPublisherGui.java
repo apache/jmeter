@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -132,6 +134,11 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     @Override
     public String getLabelResource() {
         return "jms_publisher"; //$NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("jms_protocol")); // $NON-NLS-1$
     }
 
     /**

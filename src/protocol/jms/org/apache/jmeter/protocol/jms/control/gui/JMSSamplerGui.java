@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -298,6 +300,11 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     @Override
     public String getLabelResource() {
         return "jms_point_to_point"; //$NON-NLS-1$ // TODO - probably wrong
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("jms_protocol")); // $NON-NLS-1$
     }
 
 }

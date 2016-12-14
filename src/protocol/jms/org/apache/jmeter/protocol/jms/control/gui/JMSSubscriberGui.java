@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.jms.control.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.naming.Context;
 import javax.swing.BoxLayout;
@@ -122,6 +124,11 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     @Override
     public String getLabelResource() {
         return "jms_subscriber_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("jms_protocol")); // $NON-NLS-1$
     }
 
     /**
