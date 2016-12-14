@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Enumeration;
+import java.util.Optional;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -92,6 +93,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
     private static final String SEPARATOR = "jms.separator"; // $NON-NLS-1$
     private static final String SEPARATOR_DEFAULT = ""; // $NON-NLS-1$
+    private static final String ERROR_PAUSE_BETWEEN = "jms_error_pause_between"; // $NON-NLS-1$
+    private static final String ERROR_PAUSE_BETWEEN_DEFAULT = ""; // $NON-NLS-1$
 
     
     private transient boolean START_ON_SAMPLE = false;
@@ -152,6 +155,9 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             result.setSuccessful(false);
             result.setResponseCode("000");
             result.setResponseMessage(exceptionDuringInit.toString());
+
+            handleError(true);
+
             return result; 
         }
         if (stopBetweenSamples){ // If so, we need to start collection here
@@ -183,7 +189,10 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     extractContent(buffer, propBuffer, msg, (read == loop));
                 }
             } catch (JMSException e) {
-                log.warn("Error "+e.toString());
+                String errorCode = Optional.ofNullable(e.getErrorCode()).orElse("");
+                log.warn(String.format("Error [%s] %s", errorCode, e.toString()), e);
+
+                handleError(getIsReconnectErrorCode().test(errorCode));
             }
             now = System.currentTimeMillis();
         }
@@ -220,6 +229,21 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             threadFinished(true);
         }
         return result;
+    }
+
+    private void handleError(boolean reconnect) {
+        if (reconnect) {
+            initClient();
+        }
+
+        if (!reconnect || exceptionDuringInit != null) {
+            try {
+                Thread.sleep(getPauseBetweenErrorsAsLong());
+            } catch (InterruptedException ie) {
+                log.warn(String.format("Interrupted %s", ie.toString()), ie);
+                interrupted = true;
+            }
+        }
     }
 
     /**
@@ -286,6 +310,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public void threadStarted() {
+        setIsReconnectErrorCode();
+
         // Disabled thread start if listen on sample choice
         if (isDestinationStatic() || START_ON_SAMPLE) {
             timeout = getTimeoutAsLong();
@@ -293,6 +319,12 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             exceptionDuringInit = null;
             useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
             stopBetweenSamples = isStopBetweenSamples();
+            initClient();
+        }
+    }
+
+    private void initClient() {
+        exceptionDuringInit = null;
             if (useReceive) {
                 try {
                     initReceiveClient();
@@ -316,7 +348,6 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 log.error("Could not initialise client",exceptionDuringInit);
             }
         }
-    }
     
     public void threadStarted(boolean wts) {
         if (wts) {
@@ -460,6 +491,18 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     public void setStopBetweenSamples(boolean selected) {
         setProperty(STOP_BETWEEN, selected, false);                
+    }
+
+    public void setPauseBetweenErrors(String pause) {
+        setProperty(ERROR_PAUSE_BETWEEN, pause, ERROR_PAUSE_BETWEEN_DEFAULT);
+    }
+
+    public String getPauseBetweenErrors() {
+        return getPropertyAsString(ERROR_PAUSE_BETWEEN, ERROR_PAUSE_BETWEEN_DEFAULT);
+    }
+
+    public long getPauseBetweenErrorsAsLong() {
+        return getPropertyAsLong(ERROR_PAUSE_BETWEEN, DEFAULT_WAIT);
     }
 
     /**

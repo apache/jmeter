@@ -90,6 +90,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
 
+    private final JLabeledTextField jmsErrorReconnectOnCodes =
+            new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
+
     private final JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
     private final JCheckBox useAuth = new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
@@ -169,6 +172,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setConnectionFactory(jndiConnFac.getText());
       sampler.setDestination(jmsDestination.getText());
       sampler.setExpiration(expiration.getText());
+      sampler.setReconnectionErrorCodes(jmsErrorReconnectOnCodes.getText());
       sampler.setPriority(priority.getText());
       sampler.setUsername(jmsUser.getText());
       sampler.setPassword(jmsPwd.getText());
@@ -204,6 +208,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(createDestinationPane());
         mainPanel.add(createAuthPane());
         mainPanel.add(createPriorityAndExpiration());
+        mainPanel.add(jmsErrorReconnectOnCodes);
         mainPanel.add(iterations);
 
         jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
@@ -236,6 +241,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jndiConnFac.setText(""); // $NON-NLS-1$
         jmsDestination.setText(""); // $NON-NLS-1$
         expiration.setText(""); // $NON-NLS-1$
+        jmsErrorReconnectOnCodes.setText("");
         priority.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
@@ -277,6 +283,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         msgChoice.setText(sampler.getMessageChoice());
         iterations.setText(sampler.getIterations());
         expiration.setText(sampler.getExpiration());
+        jmsErrorReconnectOnCodes.setText(sampler.getReconnectionErrorCodes());
         priority.setText(sampler.getPriority());
         useAuth.setSelected(sampler.isUseAuth());
         jmsUser.setEnabled(useAuth.isSelected());

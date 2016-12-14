@@ -18,12 +18,15 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Date;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -70,6 +73,10 @@ public abstract class BaseJMSSampler extends AbstractSampler {
     // Is Destination setup static? else dynamic
     private static final String DESTINATION_STATIC = "jms.destination_static"; // $NON-NLS-1$
     private static final boolean DESTINATION_STATIC_DEFAULT = true; // default to maintain compatibility
+
+    /** Property name for regex of error codes which force reconnection **/
+    private static final String ERROR_RECONNECT_ON_CODES = "jms_error_reconnect_on_codes"; // $NON-NLS-1$
+    private Predicate<String> isReconnectErrorCode = e -> false;
 
     //-- End of JMX file attribute names
 
@@ -375,5 +382,26 @@ public abstract class BaseJMSSampler extends AbstractSampler {
         }
 
         return new String(response);
+    }
+
+    public String getReconnectionErrorCodes() {
+        return getPropertyAsString(ERROR_RECONNECT_ON_CODES);
+    }
+
+    public void setReconnectionErrorCodes(String reconnectionErrorCodes) {
+        setProperty(ERROR_RECONNECT_ON_CODES, reconnectionErrorCodes);
+    }
+
+    public Predicate<String> getIsReconnectErrorCode() {
+        return isReconnectErrorCode;
+    }
+
+    public void setIsReconnectErrorCode() {
+        String regex = StringUtils.trimToEmpty(getReconnectionErrorCodes());
+        if (regex.isEmpty()) {
+            isReconnectErrorCode = e -> false;
+        } else {
+            isReconnectErrorCode = Pattern.compile(regex).asPredicate();
+        }
     }
 }
