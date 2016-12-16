@@ -20,6 +20,7 @@ package org.apache.jmeter;
 
 // N.B. this must only use standard Java packages
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -27,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -85,9 +87,23 @@ public final class NewDriver {
 
         // Add standard jar locations to initial classpath
         StringBuilder classpath = new StringBuilder();
-        File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
+        List<File> libDirs = new LinkedList<>();
+        libDirs.add(new File(jmDir + File.separator + "lib")); // $NON-NLS-1$ $NON-NLS-2$
+        libDirs.add(new File(jmDir + File.separator + "lib" + File.separator + "ext")); // $NON-NLS-1$ $NON-NLS-2$
+        libDirs.add(new File(jmDir + File.separator + "lib" + File.separator + "junit")); // $NON-NLS-1$ $NON-NLS-2$
+
+        // add thirdparty extensions to classpath
+        File thirdpartyRoot = new File(jmDir + File.separator + "lib" + File.separator + "3rdparty");
+        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        });
+        if (thirdpartyDirs != null) {
+            Collections.addAll(libDirs, thirdpartyDirs);
+        }
+
         for (File libDir : libDirs) {
             File[] libJars = libDir.listFiles(new FilenameFilter() {
                 @Override

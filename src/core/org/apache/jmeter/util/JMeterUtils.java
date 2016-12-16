@@ -23,7 +23,9 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,10 +33,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -71,7 +75,7 @@ import org.xml.sax.XMLReader;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggingManager.getLoggerForClass();
-    
+
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -81,7 +85,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     private static final String EXPERT_MODE_PROPERTY = "jmeter.expertMode"; // $NON-NLS-1$
-    
+
     private static final String ENGLISH_LANGUAGE = Locale.ENGLISH.getLanguage();
 
     private static volatile Properties appProperties;
@@ -313,20 +317,49 @@ public class JMeterUtils implements UnitTestManager {
      * The output array always starts with
      * JMETER_HOME/lib/ext
      * and is followed by any paths obtained from the "search_paths" JMeter property.
-     * 
+     *
      * @return array of path strings
      */
     public static String[] getSearchPaths() {
         String p = JMeterUtils.getPropDefault("search_paths", null); // $NON-NLS-1$
-        String[] result = new String[1];
+        List<String> result = new LinkedList<>();
+        result.add(getJMeterHome() + "/lib/ext"); // $NON-NLS-1$
 
+        // add from property
         if (p != null) {
-            String[] paths = p.split(";"); // $NON-NLS-1$
-            result = new String[paths.length + 1];
-            System.arraycopy(paths, 0, result, 1, paths.length);
+            Collections.addAll(result, p.split(";")); // $NON-NLS-1$
         }
-        result[0] = getJMeterHome() + "/lib/ext"; // $NON-NLS-1$
-        return result;
+
+        // add from thirdparty
+        addThirdpartyPaths(result);
+
+        return result.toArray(new String[0]);
+    }
+
+    private static void addThirdpartyPaths(List<String> result) {
+        File thirdpartyRoot = new File(jmDir + File.separator + "lib" + File.separator + "3rdparty");
+        File[] thirdpartyDirs = thirdpartyRoot.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        });
+
+        if (thirdpartyDirs != null) {
+            for (File libDir : thirdpartyDirs) {
+                File[] libJars = libDir.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.endsWith(".jar");// $NON-NLS-1$
+                    }
+                });
+                if (libJars != null) {
+                    for (File libJar : libJars) {
+                        result.add(libJar.getPath());
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -440,7 +473,7 @@ public class JMeterUtils implements UnitTestManager {
     public static String getResString(String key) {
         return getResStringDefault(key, RES_KEY_PFX + key + "]"); // $NON-NLS-1$
     }
-    
+
     /**
      * Gets the resource string for this key in Locale.
      *
@@ -455,7 +488,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getResString(String key, Locale forcedLocale) {
         return getResStringDefault(key, RES_KEY_PFX + key + "]", // $NON-NLS-1$
-                forcedLocale); 
+                forcedLocale);
     }
 
     public static final String RES_KEY_PFX = "[res_key="; // $NON-NLS-1$
@@ -508,7 +541,7 @@ public class JMeterUtils implements UnitTestManager {
                 resString = bundle.getString(resKey);
             } else {
                 log.warn("ERROR! Resource string not found: [" + resKey + "]");
-                resString = defaultValue;                
+                resString = defaultValue;
             }
             if (ignoreResorces ){ // Special mode for debugging resource handling
                 return "["+key+"]";
@@ -525,7 +558,7 @@ public class JMeterUtils implements UnitTestManager {
 
     /**
      * To get I18N label from properties file
-     * 
+     *
      * @param key
      *            in messages.properties
      * @return I18N label without (if exists) last colon ':' and spaces
@@ -534,7 +567,7 @@ public class JMeterUtils implements UnitTestManager {
         String value = JMeterUtils.getResString(key);
         return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
     }
-    
+
     /**
      * Get the locale name as a resource.
      * Does not log an error if the resource does not exist.
@@ -553,10 +586,10 @@ public class JMeterUtils implements UnitTestManager {
     }
     /**
      * This gets the currently defined appProperties. It can only be called
-     * after the {@link #getProperties(String)} or {@link #loadJMeterProperties(String)} 
+     * after the {@link #getProperties(String)} or {@link #loadJMeterProperties(String)}
      * method has been called.
      *
-     * @return The JMeterProperties value, 
+     * @return The JMeterProperties value,
      *         may be null if {@link #loadJMeterProperties(String)} has not been called
      * @see #getProperties(String)
      * @see #loadJMeterProperties(String)
@@ -581,7 +614,7 @@ public class JMeterUtils implements UnitTestManager {
                 return new ImageIcon(url); // $NON-NLS-1$
             } else {
                 log.warn("no icon for " + name);
-                return null;                
+                return null;
             }
         } catch (NoClassDefFoundError | InternalError e) {// Can be returned by headless hosts
             log.info("no icon for " + name + " " + e.getMessage());
@@ -890,7 +923,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getPropDefault(String propName, String defaultVal) {
         String ans = defaultVal;
-        try 
+        try
         {
             String value = appProperties.getProperty(propName, defaultVal);
             if(value != null) {
@@ -902,7 +935,7 @@ public class JMeterUtils implements UnitTestManager {
         }
         return ans;
     }
-    
+
     /**
      * Get the value of a JMeter property.
      *
@@ -1331,10 +1364,10 @@ public class JMeterUtils implements UnitTestManager {
         localHostName=localHost.getHostName();
         localHostFullName=localHost.getCanonicalHostName();
     }
-    
+
     /**
      * Split line into name/value pairs and remove colon ':'
-     * 
+     *
      * @param headers
      *            multi-line string headers
      * @return a map name/value for each header
@@ -1397,7 +1430,7 @@ public class JMeterUtils implements UnitTestManager {
     }
 
     /**
-     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to 
+     * Hack to make matcher clean the two internal buffers it keeps in memory which size is equivalent to
      * the unzipped page size
      * @param matcher {@link Perl5Matcher}
      * @param pattern Pattern
