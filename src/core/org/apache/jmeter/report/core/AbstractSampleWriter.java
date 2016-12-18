@@ -56,8 +56,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
     protected PrintWriter writer;
 
     /**
-     * Set he new writer on which samples will be written by this smaple
-     * writter.<br>
+     * Set he new writer on which samples will be written by this sample writer.<br>
      * If any writer exist on the sample writer, it is flushed and closed before
      * being replaced by the new one.
      * 
