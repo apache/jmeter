@@ -183,6 +183,7 @@ public abstract class AbstractSummaryConsumer<TData> extends
     /**
      * Update the stored data with the data from the specified sample.
      *
+     * @param info SummaryInfo
      * @param sample
      *            the sample
      */

@@ -187,6 +187,9 @@ public class StatisticsSummaryData {
 
     /**
      * Instantiates a new statistics info.
+     * @param percentileIndex1 value of first percentile
+     * @param percentileIndex2 value of second percentile
+     * @param percentileIndex3 value of third percentile
      */
     public StatisticsSummaryData(long percentileIndex1, long percentileIndex2,
             long percentileIndex3) {
