@@ -115,7 +115,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of rows for the text area
      * @param cols
      *            The number of columns for the text area
-	 * @return {@link JSyntaxTextArea}
+     * @return {@link JSyntaxTextArea}
      */
     public static JSyntaxTextArea getInstance(int rows, int cols) {
         return getInstance(rows, cols, false);
