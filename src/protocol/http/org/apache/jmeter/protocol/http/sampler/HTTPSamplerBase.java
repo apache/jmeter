@@ -539,6 +539,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
+     * @return boolean 
      * @deprecated since 3.2 always returns false
      */
     @Deprecated
@@ -547,6 +548,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
+     * @return boolean
      * @deprecated since 3.2 always returns false
      */
     @Deprecated
