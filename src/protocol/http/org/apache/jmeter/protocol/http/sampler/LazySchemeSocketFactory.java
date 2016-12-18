@@ -69,7 +69,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     }
     
     /**
-     * @param params
+     * @param params {@link HttpParams}
      * @return the socket
      * @throws IOException
      * @see org.apache.http.conn.scheme.SchemeSocketFactory#createSocket(org.apache.http.params.HttpParams)
