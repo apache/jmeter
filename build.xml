@@ -3368,10 +3368,6 @@ run JMeter unless all the JMeter jars are added.
     <fileset dir="./lib/opt" includes="**/*.jar" />
   </path>
 
-  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-    <classpath refid="sonar.classpath" />
-  </taskdef>
-
   <property name="sonar.organizationName" value="Apache" />
   <property name="sonar.projectName" value="JMeter" />
 
@@ -3446,6 +3442,11 @@ run JMeter unless all the JMeter jars are added.
       <isset property="env.SONAR_JDBC_PASSWORD" />
     </condition>
     <property name="sonar.java.test.libraries" value="lib/**/*.jar" />
+
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+      <classpath refid="sonar.classpath" />
+    </taskdef>
+
     <sonar:sonar xmlns:sonar="antlib:org.sonar.ant">
     </sonar:sonar>
   </target>
