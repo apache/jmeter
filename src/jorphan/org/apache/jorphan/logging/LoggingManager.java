@@ -181,12 +181,12 @@ public final class LoggingManager {
         try {
             File logFileAsFile = new File(logFile);
             System.out.println("Writing log file to: "+logFileAsFile.getAbsolutePath());
-            wt = new FileWriter(logFile);
+            wt = new FileWriter(logFile); //NOSONAR
         } catch (Exception e) {
             System.out.println(propName + "=" + logFile + " " + e.toString());
             System.out.println("[" + propName + "-> System.out]");
             isWriterSystemOut = true;
-            wt = new PrintWriter(System.out);
+            wt = new PrintWriter(System.out); //NOSONAR
         }
         return wt;
     }
