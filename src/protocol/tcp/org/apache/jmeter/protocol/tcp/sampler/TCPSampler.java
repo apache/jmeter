@@ -444,7 +444,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             Exception exception,
             TCPClient protocolHandler) {
         sampleResult.setResponseData(readResponse, 
-        		protocolHandler != null ? protocolHandler.getCharset() : null);
+                protocolHandler != null ? protocolHandler.getCharset() : null);
         sampleResult.setDataType(SampleResult.TEXT);
         if(exception==null) {
             sampleResult.setResponseCodeOK();
@@ -540,14 +540,14 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     private void tearDown() {
         Map<String, Object> cp = tp.get();
         cp.forEach((k, v) -> {
-        		if(k.startsWith(TCPKEY)) {
-        			try {
-                        ((Socket)v).close();
-                    } catch (IOException e) {
-                        // NOOP
-                    }
-        		}
-        	});
+            if(k.startsWith(TCPKEY)) {
+                try {
+                    ((Socket)v).close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+        });
         cp.clear();
         tp.remove();
     }
@@ -563,16 +563,16 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     @Override
     public boolean interrupt() {
-    	Optional<Socket> sock = Optional.ofNullable(currentSocket); // fetch in case gets nulled later
-    	if(sock.isPresent()) {
-    		try {
-				sock.get().close();
-			} catch (IOException e) {
-				// ignored
-			}
-    		return true;
-    	} else {
-    		return false;
-    	}
+        Optional<Socket> sock = Optional.ofNullable(currentSocket); // fetch in case gets nulled later
+        if(sock.isPresent()) {
+            try {
+                sock.get().close();
+            } catch (IOException e) {
+                // ignored
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
