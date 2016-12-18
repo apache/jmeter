@@ -633,16 +633,15 @@ public class JMeter implements JMeterPlugin {
         if (parser.getArgumentById(PROXY_USERNAME) != null) {
             Properties jmeterProps = JMeterUtils.getJMeterProperties();
             if (parser.getArgumentById(PROXY_PASSWORD) != null) {
-                String u, p;
-                Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
-                        .getArgument(), p = parser.getArgumentById(PROXY_PASSWORD).getArgument()));
+                String u = parser.getArgumentById(PROXY_USERNAME).getArgument();
+                String p = parser.getArgumentById(PROXY_PASSWORD).getArgument();
+                Authenticator.setDefault(new ProxyAuthenticator(u, p));
                 log.info("Set Proxy login: " + u + "/" + p);
                 jmeterProps.setProperty(HTTP_PROXY_USER, u);//for Httpclient
                 jmeterProps.setProperty(HTTP_PROXY_PASS, p);//for Httpclient
             } else {
-                String u;
-                Authenticator.setDefault(new ProxyAuthenticator(u = parser.getArgumentById(PROXY_USERNAME)
-                        .getArgument(), ""));
+                String u = parser.getArgumentById(PROXY_USERNAME).getArgument();
+                Authenticator.setDefault(new ProxyAuthenticator(u, ""));
                 log.info("Set Proxy login: " + u);
                 jmeterProps.setProperty(HTTP_PROXY_USER, u);
             }
