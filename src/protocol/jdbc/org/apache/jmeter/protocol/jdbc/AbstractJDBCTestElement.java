@@ -160,13 +160,10 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      */
     protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException, UnsupportedOperationException {
         log.debug("executing jdbc");
-        Statement stmt = null;
-
-        try {
-            // Based on query return value, get results
-            String _queryType = getQueryType();
-            if (SELECT.equals(_queryType)) {
-                stmt = conn.createStatement();
+        // Based on query return value, get results
+        String _queryType = getQueryType();
+        if (SELECT.equals(_queryType)) {
+            try (Statement stmt = conn.createStatement()) {
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
                 ResultSet rs = null;
                 try {
@@ -176,65 +173,64 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 } finally {
                     close(rs);
                 }
-            } else if (CALLABLE.equals(_queryType)) {
-                try (CallableStatement cstmt = getCallableStatement(conn)) {
-                    int[] out = setArguments(cstmt);
-                    // A CallableStatement can return more than 1 ResultSets
-                    // plus a number of update counts.
-                    boolean hasResultSet = cstmt.execute();
-                    sample.latencyEnd();
-                    String sb = resultSetsToString(cstmt,hasResultSet, out);
-                    return sb.getBytes(ENCODING);
-                }
-            } else if (UPDATE.equals(_queryType)) {
-                stmt = conn.createStatement();
+            }
+        } else if (CALLABLE.equals(_queryType)) {
+            try (CallableStatement cstmt = getCallableStatement(conn)) {
+                int[] out = setArguments(cstmt);
+                // A CallableStatement can return more than 1 ResultSets
+                // plus a number of update counts.
+                boolean hasResultSet = cstmt.execute();
+                sample.latencyEnd();
+                String sb = resultSetsToString(cstmt,hasResultSet, out);
+                return sb.getBytes(ENCODING);
+            }
+        } else if (UPDATE.equals(_queryType)) {
+            try (Statement stmt = conn.createStatement()) {
                 stmt.setQueryTimeout(getIntegerQueryTimeout());
                 stmt.executeUpdate(getQuery());
                 sample.latencyEnd();
                 int updateCount = stmt.getUpdateCount();
                 String results = updateCount + " updates";
                 return results.getBytes(ENCODING);
-            } else if (PREPARED_SELECT.equals(_queryType)) {
-                try (PreparedStatement pstmt = getPreparedStatement(conn)) {
-                    setArguments(pstmt);
-                    ResultSet rs = null;
-                    try {
-                        rs = pstmt.executeQuery();
-                        sample.latencyEnd();
-                        return getStringFromResultSet(rs).getBytes(ENCODING);
-                    } finally {
-                        close(rs);
-                    }
-                }
-            } else if (PREPARED_UPDATE.equals(_queryType)) {
-                try (PreparedStatement pstmt = getPreparedStatement(conn)) {
-                    setArguments(pstmt);
-                    pstmt.executeUpdate();
-                    sample.latencyEnd();
-                    String sb = resultSetsToString(pstmt,false,null);
-                    return sb.getBytes(ENCODING);
-                }
-            } else if (ROLLBACK.equals(_queryType)){
-                conn.rollback();
-                sample.latencyEnd();
-                return ROLLBACK.getBytes(ENCODING);
-            } else if (COMMIT.equals(_queryType)){
-                conn.commit();
-                sample.latencyEnd();
-                return COMMIT.getBytes(ENCODING);
-            } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
-                conn.setAutoCommit(false);
-                sample.latencyEnd();
-                return AUTOCOMMIT_FALSE.getBytes(ENCODING);
-            } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
-                conn.setAutoCommit(true);
-                sample.latencyEnd();
-                return AUTOCOMMIT_TRUE.getBytes(ENCODING);
-            } else { // User provided incorrect query type
-                throw new UnsupportedOperationException("Unexpected query type: "+_queryType);
             }
-        } finally {
-            close(stmt);
+        } else if (PREPARED_SELECT.equals(_queryType)) {
+            try (PreparedStatement pstmt = getPreparedStatement(conn)) {
+                setArguments(pstmt);
+                ResultSet rs = null;
+                try {
+                    rs = pstmt.executeQuery();
+                    sample.latencyEnd();
+                    return getStringFromResultSet(rs).getBytes(ENCODING);
+                } finally {
+                    close(rs);
+                }
+            }
+        } else if (PREPARED_UPDATE.equals(_queryType)) {
+            try (PreparedStatement pstmt = getPreparedStatement(conn)) {
+                setArguments(pstmt);
+                pstmt.executeUpdate();
+                sample.latencyEnd();
+                String sb = resultSetsToString(pstmt,false,null);
+                return sb.getBytes(ENCODING);
+            }
+        } else if (ROLLBACK.equals(_queryType)){
+            conn.rollback();
+            sample.latencyEnd();
+            return ROLLBACK.getBytes(ENCODING);
+        } else if (COMMIT.equals(_queryType)){
+            conn.commit();
+            sample.latencyEnd();
+            return COMMIT.getBytes(ENCODING);
+        } else if (AUTOCOMMIT_FALSE.equals(_queryType)){
+            conn.setAutoCommit(false);
+            sample.latencyEnd();
+            return AUTOCOMMIT_FALSE.getBytes(ENCODING);
+        } else if (AUTOCOMMIT_TRUE.equals(_queryType)){
+            conn.setAutoCommit(true);
+            sample.latencyEnd();
+            return AUTOCOMMIT_TRUE.getBytes(ENCODING);
+        } else { // User provided incorrect query type
+            throw new UnsupportedOperationException("Unexpected query type: "+_queryType);
         }
     }
 
