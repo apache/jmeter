@@ -371,23 +371,6 @@ public class SaveService {
         writer.write('\n');
     }
 
-    private static boolean versionsOK = true;
-
-//  private static void checkVersion(Class clazz, String expected) {
-//
-//      String actual = "*NONE*"; // $NON-NLS-1$
-//      try {
-//          actual = (String) clazz.getMethod("getVersion", null).invoke(null, null);
-//          actual = extractVersion(actual);
-//      } catch (Exception ignored) {
-//          // Not needed
-//      }
-//      if (0 != actual.compareTo(expected)) {
-//          versionsOK = false;
-//          log.warn("Version mismatch: expected '" + expected + "' found '" + actual + "' in " + clazz.getName());
-//      }
-//  }
-
     // Routines for TestSaveService
     static String getPropertyVersion(){
         return SaveService.propertiesVersion;
@@ -416,42 +399,10 @@ public class SaveService {
         return missingClasses;
     }
 
-    static boolean checkVersions() {
-        versionsOK = true;
-        // Disable converter version checks as they are more of a nuisance than helpful
-//      checkVersion(BooleanPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(HashTreeConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(SampleResultConverter.class, "571992"); // $NON-NLS-1$
-//
-//        // Not built until later, so need to use this method:
-//        try {
-//            checkVersion(
-//                    Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
-//                    "514283"); // $NON-NLS-1$
-//        } catch (ClassNotFoundException e) {
-//            versionsOK = false;
-//            log.warn(e.getLocalizedMessage());
-//        }
-//      checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(TestElementConverter.class, "549987"); // $NON-NLS-1$
-//      checkVersion(TestElementPropertyConverter.class, "549987"); // $NON-NLS-1$
-//      checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
-//        checkVersion(SampleSaveConfigurationConverter.class,"549936"); // $NON-NLS-1$
-
+    private static void checkVersions() {
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
             log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
         }
-//        if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
-//            log.warn("Bad _file_version - expected " + FILEVERSION + ", found " + fileVersion +".");
-//        }
-        if (versionsOK) {
-            log.info("All converter versions present and correct");
-        }
-        return versionsOK;
     }
 
     /**
