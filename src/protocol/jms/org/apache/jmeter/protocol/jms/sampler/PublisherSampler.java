@@ -24,9 +24,17 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
@@ -57,6 +65,31 @@ import com.thoughtworks.xstream.XStream;
  */
 public class PublisherSampler extends BaseJMSSampler implements TestStateListener {
 
+    public static final String RAW_DATA         = "<RAW>";
+    public static final String DEFAULT_ENCODING = "<DEFAULT>";
+
+    public static final Set<String> NO_ENCODING = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(RAW_DATA, DEFAULT_ENCODING)));
+
+    public static String[] getSupportedEncodings() {
+        // Only get JVM standard charsets
+        return Stream.concat(
+            NO_ENCODING.stream(),
+            Arrays
+                .stream(StandardCharsets.class.getDeclaredFields())
+                .filter(f -> Modifier.isStatic(f.getModifiers()) && Modifier.isPublic(f.getModifiers()) && f.getType() == Charset.class)
+                .map(f -> {
+                    try {
+                        return (Charset) f.get(null);
+                    } catch (IllegalArgumentException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(Charset::displayName)
+                .sorted()
+         )
+         .toArray(size -> new String[size]);
+    }
+
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -79,6 +112,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final String JMS_PRIORITY = "jms.priority"; // $NON-NLS-1$
 
     private static final String JMS_EXPIRATION = "jms.expiration"; // $NON-NLS-1$
+
+    private static final String JMS_FILE_ENCODING = "jms.file_encoding"; // $NON-NLS-1$
 
     //--
 
@@ -279,7 +314,13 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      * @return the contents of the file
      */
     public String getFileContent(String path) {
-        TextFile tf = new TextFile(path);
+        TextFile tf;
+        String fileEncoding = getFileEncoding();
+        if (NO_ENCODING.contains(fileEncoding)) {
+            tf = new TextFile(path);
+        } else {
+            tf = new TextFile(path, fileEncoding);
+        }
         return tf.getText();
     }
 
@@ -587,5 +628,13 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      */
     public void setJMSProperties(JMSProperties jmsProperties) {
         setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
+    }
+
+    public String getFileEncoding() {
+        return getPropertyAsString(JMS_FILE_ENCODING, RAW_DATA);
+    }
+
+    public void setFileEncoding(String fileEncoding) {
+        setProperty(JMS_FILE_ENCODING, fileEncoding, RAW_DATA);
     }
 }

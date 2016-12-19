@@ -39,6 +39,7 @@ import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledPasswordField;
 import org.apache.jorphan.gui.JLabeledTextField;
 
@@ -108,6 +109,8 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledRadioI18N msgChoice = new JLabeledRadioI18N("jms_message_type", MSGTYPES_ITEMS, TEXT_MSG_RSC); //$NON-NLS-1$
     
+    private JLabeledChoice fileEncoding;
+
     private final JCheckBox useNonPersistentDelivery = new JCheckBox(JMeterUtils.getResString("jms_use_non_persistent_delivery"),false); //$NON-NLS-1$
 
     // These are the names of properties used to define the labels
@@ -176,6 +179,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setInputFile(messageFile.getFilename());
       sampler.setRandomPath(randomFile.getFilename());
       sampler.setConfigChoice(configChoice.getText());
+      sampler.setFileEncoding(fileEncoding.getText());
       sampler.setMessageChoice(msgChoice.getText());
       sampler.setIterations(iterations.getText());
       sampler.setUseAuth(useAuth.isSelected());
@@ -213,6 +217,13 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(configChoice);
         msgChoice.setLayout(new BoxLayout(msgChoice, BoxLayout.X_AXIS));
         mainPanel.add(msgChoice);
+
+        fileEncoding = new JLabeledChoice(JMeterUtils.getResString("content_encoding") + "\u00A0\u00A0", // $NON-NLS-1$
+                PublisherSampler.getSupportedEncodings(), true, false);
+        fileEncoding.setLayout(new BoxLayout(fileEncoding, BoxLayout.X_AXIS));
+        fileEncoding.add(Box.createHorizontalGlue());
+        mainPanel.add(fileEncoding);
+
         mainPanel.add(messageFile);
         mainPanel.add(randomFile);
 
@@ -243,6 +254,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         messageFile.setFilename(""); // $NON-NLS-1$
         randomFile.setFilename(""); // $NON-NLS-1$
         msgChoice.setText(""); // $NON-NLS-1$
+        fileEncoding.setSelectedIndex(0);
         configChoice.setText(USE_TEXT_RSC);
         updateConfig(USE_TEXT_RSC);
         msgChoice.setText(TEXT_MSG_RSC);
@@ -275,6 +287,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         randomFile.setFilename(sampler.getRandomPath());
         configChoice.setText(sampler.getConfigChoice());
         msgChoice.setText(sampler.getMessageChoice());
+        fileEncoding.setText(sampler.getFileEncoding());
         iterations.setText(sampler.getIterations());
         expiration.setText(sampler.getExpiration());
         priority.setText(sampler.getPriority());
@@ -308,6 +321,12 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             jmsPwd.setEnabled(useAuth.isSelected()  && useAuth.isEnabled());
         }
     }
+
+    private void updateFileEncoding() {
+        boolean isTextMode = USE_TEXT_RSC.equals(configChoice.getText());
+        boolean isObjectType = OBJECT_MSG_RSC.equals(msgChoice.getText());
+        fileEncoding.setChoiceListEnabled(!isTextMode && !isObjectType);
+    }
     /**
      * Update choice contains the actual logic for hiding or showing Textarea if Bytes message
      * is selected
@@ -326,6 +345,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             configChoice.resetButtons(CONFIG_ITEMS, oldChoice);
             textMessage.setEnabled(true);
         }
+        updateFileEncoding();
         validate();
     }
     /**
@@ -348,6 +368,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
             messageFile.enableFile(true);
             randomFile.enableFile(false);
         }
+        updateFileEncoding();
     }
     
     /**
