@@ -40,11 +40,10 @@ public class RegexpSearcher implements Searcher {
     public RegexpSearcher(boolean caseSensitive, String regexp) {
         super();
         this.caseSensitive = caseSensitive;
-        String newRegexp = ".*"+regexp+".*";
         if(caseSensitive) {
-            pattern = Pattern.compile(newRegexp);
+            pattern = Pattern.compile(regexp);
         } else {
-            pattern = Pattern.compile(newRegexp, Pattern.CASE_INSENSITIVE);
+            pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
         }
     }
 
