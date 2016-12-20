@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
@@ -46,7 +47,6 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -65,7 +65,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                     "org.apache.jmeter.config.gui.SimpleConfigGui"
             ));
 
-    //++ JMX file constants - do not change
     public static final String SERVER = "TCPSampler.server"; //$NON-NLS-1$
 
     public static final String PORT = "TCPSampler.port"; //$NON-NLS-1$
@@ -92,8 +91,6 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     public static final String EOL_BYTE = "TCPSampler.EolByte"; //$NON-NLS-1$
 
-    //-- JMX file constants - do not change
-
     private static final String TCPKEY = "TCP"; //$NON-NLS-1$ key for HashMap
 
     private static final String ERRKEY = "ERR"; //$NON-NLS-1$ key for HashMap
@@ -105,9 +102,9 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     private static final String STATUS_PROPERTIES = JMeterUtils.getPropDefault("tcp.status.properties", ""); //$NON-NLS-1$
 
-    private static final Properties statusProps = new Properties();
+    private static final Properties STATUS_PROPS = new Properties();
 
-    private static final boolean haveStatusProps;
+    private static final boolean HAVE_STATUS_PROPS;
 
     static {
         boolean hsp = false;
@@ -116,21 +113,17 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         log.debug("Status properties=" + STATUS_PROPERTIES); //$NON-NLS-1$
         if (STATUS_PROPERTIES.length() > 0) {
             File f = new File(STATUS_PROPERTIES);
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream(f);
-                statusProps.load(fis);
+            try (FileInputStream fis = new FileInputStream(f)){
+                STATUS_PROPS.load(fis);
                 log.debug("Successfully loaded properties"); //$NON-NLS-1$
                 hsp = true;
             } catch (FileNotFoundException e) {
                 log.debug("Property file not found"); //$NON-NLS-1$
             } catch (IOException e) {
                 log.debug("Property file error " + e.toString()); //$NON-NLS-1$
-            } finally {
-                JOrphanUtils.closeQuietly(fis);
             }
         }
-        haveStatusProps = hsp;
+        HAVE_STATUS_PROPS = hsp;
     }
 
     /** the cache of TCP Connections */
@@ -413,15 +406,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 res.setSamplerData(req);
                 protocolHandler.write(os, req);
                 String in = protocolHandler.read(is);
-                isSuccessful = setupSampleResult(res, in, null, protocolHandler.getCharset());
+                isSuccessful = setupSampleResult(res, in, null, protocolHandler);
             }
         } catch (ReadException ex) {
             log.error("", ex);
-            isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex,protocolHandler.getCharset());
+            isSuccessful=setupSampleResult(res, ex.getPartialResponse(), ex,protocolHandler);
             closeSocket(socketKey);
         } catch (Exception ex) {
             log.error("", ex);
-            isSuccessful=setupSampleResult(res, "", ex, protocolHandler.getCharset());
+            isSuccessful=setupSampleResult(res, "", ex, protocolHandler);
             closeSocket(socketKey);
         } finally {
             currentSocket = null;
@@ -443,14 +436,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @param sampleResult {@link SampleResult}
      * @param readResponse Response read until error occured
      * @param exception Source exception
-     * @param encoding sample encoding
+     * @param protocolHandler {@link TCPClient}
      * @return boolean if sample is considered as successful
      */
     private boolean setupSampleResult(SampleResult sampleResult,
             String readResponse, 
             Exception exception,
-            String encoding) {
-        sampleResult.setResponseData(readResponse, encoding);
+            TCPClient protocolHandler) {
+        sampleResult.setResponseData(readResponse, 
+                protocolHandler != null ? protocolHandler.getCharset() : null);
         sampleResult.setDataType(SampleResult.TEXT);
         if(exception==null) {
             sampleResult.setResponseCodeOK();
@@ -468,8 +462,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
                 String rc = readResponse.substring(i + STATUS_PREFIX.length(), j);
                 sampleResult.setResponseCode(rc);
                 isSuccessful = isSuccessful && checkResponseCode(rc);
-                if (haveStatusProps) {
-                    sampleResult.setResponseMessage(statusProps.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
+                if (HAVE_STATUS_PROPS) {
+                    sampleResult.setResponseMessage(STATUS_PROPS.getProperty(rc, "Status code not found in properties")); //$NON-NLS-1$
                 } else {
                     sampleResult.setResponseMessage("No status property file");
                 }
@@ -545,15 +539,15 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      */
     private void tearDown() {
         Map<String, Object> cp = tp.get();
-        for (Map.Entry<String, Object> element : cp.entrySet()) {
-            if(element.getKey().startsWith(TCPKEY)) {
+        cp.forEach((k, v) -> {
+            if(k.startsWith(TCPKEY)) {
                 try {
-                    ((Socket)element.getValue()).close();
+                    ((Socket)v).close();
                 } catch (IOException e) {
                     // NOOP
                 }
             }
-        }
+        });
         cp.clear();
         tp.remove();
     }
@@ -569,15 +563,16 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     @Override
     public boolean interrupt() {
-        Socket sock = currentSocket; // fetch in case gets nulled later
-        if (sock != null) {
+        Optional<Socket> sock = Optional.ofNullable(currentSocket); // fetch in case gets nulled later
+        if(sock.isPresent()) {
             try {
-                sock.close();
+                sock.get().close();
             } catch (IOException e) {
                 // ignored
             }
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

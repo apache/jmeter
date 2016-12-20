@@ -186,6 +186,8 @@ Fill in some detail.
     and <code>useRegexpForSamplersList</code> is set to <code>true</code>.
     Based on patch by Liu XP (liu_xp2003 at sina.com)</li>
     <li><bug>60442</bug>Fix a typo in <code>build.xml</code> (gavin at 16degrees.com.au)</li>
+    <li><bug>60449</bug>JMeter Tree : Annoying behaviour when node name is empty</li>
+    <li><bug>60494</bug>Add sonar analysis task to build</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

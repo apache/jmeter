@@ -170,7 +170,7 @@ public class HC4CookieHandler implements CookieHandler {
         if (debugEnabled){
             log.debug("Found "+c.size()+" cookies for "+url.toExternalForm());
         }
-        if (c.size() <= 0) {
+        if (c.isEmpty()) {
             return null;
         }
         List<Header> lstHdr = cookieSpec.formatCookies(c);

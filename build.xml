@@ -134,6 +134,7 @@
               reportlevel="${findbugs.level}"
               excludeFilter="fb-excludes.xml"
               jvmargs="-Xms512m -Xmx512m"
+              omitVisitors="InefficientStringBuffering"
               outputFile="${findbugs.outName}.xml" >
       <sourcePath path="${src.core}" />
       <sourcePath path="${src.http}" />
@@ -516,20 +517,19 @@
     <pathelement location="${lib.dir}/${xstream.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
-  	<fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
+    <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar"/>
     <!-- API-only jars-->
     <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
   </path>
 
-	
   <path id="slf4j_logkit_classpath">
     <!-- Externally produced jars -->
     <pathelement location="${lib.dir}/${logkit.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
   </path>
-	
+
   <!-- Anakia classpath -->
   <path id="anakia.classpath">
     <pathelement location="${lib.doc}/${velocity.jar}"/>
@@ -548,13 +548,14 @@
     <filter token="YEAR" value="${year}"/>
   </filterset>
 
+  <!--
+      JMeter version
+      This is overridden for formal releases.
+  -->
+  <property name="jmeter.version" value="3.2-SNAPSHOT"/>
+
   <target name="init-version">
     <tstamp/>
-    <!--
-        JMeter version
-        This is overridden for formal releases.
-    -->
-    <property name="jmeter.version" value="3.2-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -583,7 +584,7 @@
   </target>
 
   <target name="ant-version" depends="_check_ant-version">
-	    <echo level="info">ant.version = ${ant.version}</echo>
+    <echo level="info">ant.version = ${ant.version}</echo>
   </target>
 
   <target name="_check_ant-version">
@@ -596,7 +597,7 @@
       </condition>
     </fail>
   </target>
-	
+
   <target name="init-docs" depends="report-anakia-missing">
     <echo level="info">eclipse.anakia = ${eclipse.anakia}</echo>
   </target>
@@ -821,15 +822,15 @@
       </classpath>
     </javac>
   </target>
-	
+
   <target name="compile-slf4j_logkit" description="Compile JMeter slf4j LogKit bootstrap classes.">
     <mkdir dir="${build.slf4j_logkit}"/>
     <javac srcdir="${src.slf4j_logkit}" destdir="${build.slf4j_logkit}" source="${src.java.version}" optimize="${optimize}" debug="on" target="${target.java.version}"
            includeAntRuntime="${includeAntRuntime}" deprecation="${deprecation}" encoding="${encoding}">
       <include name="**/*.java"/>
       <classpath>
-	    <path refid="slf4j_logkit_classpath"/>
-	  </classpath>
+        <path refid="slf4j_logkit_classpath"/>
+      </classpath>
     </javac>
   </target>
 
@@ -1320,7 +1321,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${dest.jar}/"/>
     <include name="${lib.dir}/bshclient.jar"/>
     <include name="${lib.dir}/jorphan.jar"/>
-  	<include name="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
+    <include name="${lib.dir}/ApacheJMeter_slf4j_logkit.jar"/>
     <include name="${lib.dir}/junit/test.jar"/>
     <include name="${dest.jar.jmeter}/ApacheJMeter.jar"/>
     <!-- Help documentation, binary files -->
@@ -2646,15 +2647,16 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="HTMLParserTestFile_2"/>
     </antcall>
-  	<!-- Disable Test which seems wrong -->
-  	<!--
+  <!-- Disable Test which seems wrong -->
+  <!--
     <antcall target="batchtest">
       Using the same module controller name in command line mode causes NPE
       <param name="batchtest.name" value="Bug47165"/>
     </antcall>
-  	-->
+  -->
+
     <antcall target="batchtest">
-      <!--  variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
+      <!-- variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
       <param name="batchtest.name" value="Bug52310"/>
       <param name="skip.batchtest" value="${skip.bug52310}" />
@@ -2802,6 +2804,42 @@ run JMeter unless all the JMeter jars are added.
       </classpath>
       <test name="${test.case}" todir="reports"/>
     </junit>
+  </target>
+
+  <target name="complete-junit"  depends="compile-tests"
+    description="Run individual JUnit test (-Dtest.case=org.apache.jorphan.test.AllTests) (-Dtest.format=plain) (-Dtest.showoutput=true)"
+    xmlns:jacoco="antlib:org.jacoco.ant">
+  <mkdir dir="reports"/>
+  <property name="test.format" value="plain"/>
+  <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
+  <property name="test.showoutput" value="false"/>
+  <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+    <classpath refid="sonar.classpath" />
+  </taskdef>
+  <jacoco:coverage destfile="reports/jacoco.exec">
+  <junit fork="true"
+      dir="${basedir}/bin"
+      showoutput="${test.showoutput}"
+      printsummary="on">
+    <formatter type="${test.format}" usefile="yes"/>
+    <formatter type="xml"/>
+    <jvmarg value="-Dfile.encoding=${test.encoding}"/>
+    <!-- Allow headless to be passed in -->
+    <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
+    <classpath>
+      <fileset dir="${dest.jar}" includes="*.jar"/>
+      <pathelement location="${build.test}"/>
+      <pathelement location="${build.test-res}"/>
+      <path refid="classpath"/>
+    </classpath>
+    <batchtest todir="reports" skipNonTests="true">
+        <fileset dir="${src.test}">
+            <include name="**/*Test*.java" />
+            <exclude name="**/AllTests.java" />
+        </fileset>
+    </batchtest>
+  </junit>
+  </jacoco:coverage>
   </target>
 
   <!-- Utility target to collate reports -->
@@ -3029,6 +3067,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
 
   <target name="_process_doc_jars">
@@ -3250,7 +3289,7 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${lib.opt}/${rat-tasks.jar}"/>
       </classpath>
     </taskdef>
-	<mkdir dir="${basedir}/reports/" />
+    <mkdir dir="${basedir}/reports/" />
     <rat:report reportfile="reports/rat-report.txt">
         <fileset dir="." excludesfile="rat-excludes.txt"/>
     </rat:report>
@@ -3324,4 +3363,92 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
     </gpg>
   </target>
+
+  <path id="sonar.classpath">
+    <fileset dir="./lib/opt" includes="**/*.jar" />
+  </path>
+
+  <property name="sonar.organizationName" value="Apache" />
+  <property name="sonar.projectName" value="JMeter" />
+
+  <property name="sonar.projectKey" value="org.apache.jmeter:${sonar.projectName}" />
+  <property name="sonar.projectVersion" value="${jmeter.version}" />
+  <property name="sonar.language" value="java" />
+  <property name="sonar.modules" value="core,http,ftp,java,jdbc,ldap,mail,components,functions,jorphan,tcp,jms,native" />
+  <property name="sonar.java.binaries" value="${build.core},${build.http},${build.core},${build.http},${build.ftp},${build.java},${build.jdbc},${build.ldap},${build.mail},${build.components},${build.functions},${build.jorphan},${build.tcp},${build.jms},${build.native}" />
+  <property name="sonar.java.libraries" value="lib,lib/opt" />
+
+  <property name="sonar.junit.reportsPath" value="reports" />
+  <property name="sonar.jacoco.reportPath" value="reports/jacoco.exec" />
+
+  <property name="core.sonar.projectName" value="core" />
+  <property name="core.sonar.sources" value="${src.core}" />
+  <property name="core.sonar.projectBaseDir" value="./" />
+  <property name="http.sonar.projectName" value="http" />
+  <property name="http.sonar.sources" value="${src.http}" />
+  <property name="http.sonar.projectBaseDir" value="./" />
+  <property name="ftp.sonar.projectName" value="ftp" />
+  <property name="ftp.sonar.sources" value="${src.ftp}" />
+  <property name="ftp.sonar.projectBaseDir" value="./" />
+  <property name="java.sonar.projectName" value="java" />
+  <property name="java.sonar.sources" value="${src.java}" />
+  <property name="java.sonar.projectBaseDir" value="./" />
+  <property name="jdbc.sonar.projectName" value="jdbc" />
+  <property name="jdbc.sonar.sources" value="${src.jdbc}" />
+  <property name="jdbc.sonar.projectBaseDir" value="./" />
+  <property name="ldap.sonar.projectName" value="ldap" />
+  <property name="ldap.sonar.sources" value="${src.ldap}" />
+  <property name="ldap.sonar.projectBaseDir" value="./" />
+  <property name="mail.sonar.projectName" value="mail" />
+  <property name="mail.sonar.sources" value="${src.mail}" />
+  <property name="mail.sonar.projectBaseDir" value="./" />
+  <property name="components.sonar.projectName" value="components" />
+  <property name="components.sonar.sources" value="${src.components}" />
+  <property name="components.sonar.projectBaseDir" value="./" />
+  <property name="functions.sonar.projectName" value="functions" />
+  <property name="functions.sonar.sources" value="${src.functions}" />
+  <property name="functions.sonar.projectBaseDir" value="./" />
+  <property name="jorphan.sonar.projectName" value="jorphan" />
+  <property name="jorphan.sonar.sources" value="${src.jorphan}" />
+  <property name="jorphan.sonar.projectBaseDir" value="./" />
+  <property name="tcp.sonar.projectName" value="tcp" />
+  <property name="tcp.sonar.sources" value="${src.tcp}" />
+  <property name="tcp.sonar.projectBaseDir" value="./" />
+  <property name="jms.sonar.projectName" value="jms" />
+  <property name="jms.sonar.sources" value="${src.jms}" />
+  <property name="jms.sonar.projectBaseDir" value="./" />
+  <property name="native.sonar.projectName" value="native" />
+  <property name="native.sonar.sources" value="${src.native}" />
+  <property name="native.sonar.projectBaseDir" value="./" />
+
+  <target name="sonar" depends="compile, install, complete-junit">
+    <property environment="env" />
+    <condition property="sonar.host.url" value="${env.SONAR_HOST_URL}" else="http://localhost:9000">
+      <isset property="env.SONAR_HOST_URL" />
+    </condition>
+    <condition property="sonar.login" value="${env.SONAR_LOGIN}">
+      <isset property="env.SONAR_LOGIN" />
+    </condition>
+    <condition property="sonar.password" value="${env.SONAR_PASSWORD}">
+      <isset property="env.SONAR_PASSWORD" />
+    </condition>
+    <condition property="sonar.jdbc.url" value="${env.SONAR_JDBC_URL}">
+      <isset property="env.SONAR_JDBC_URL" />
+    </condition>
+    <condition property="sonar.jdbc.username" value="${env.SONAR_JDBC_USERNAME}">
+      <isset property="env.SONAR_JDBC_USERNAME" />
+    </condition>
+    <condition property="sonar.jdbc.password" value="${env.SONAR_JDBC_PASSWORD}">
+      <isset property="env.SONAR_JDBC_PASSWORD" />
+    </condition>
+    <property name="sonar.java.test.libraries" value="lib/**/*.jar" />
+
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+      <classpath refid="sonar.classpath" />
+    </taskdef>
+
+    <sonar:sonar xmlns:sonar="antlib:org.sonar.ant">
+    </sonar:sonar>
+  </target>
+
 </project>

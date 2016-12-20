@@ -355,7 +355,7 @@ public class FileServer {
                 fileEntry.inputOutputObject = reader;
                 if (firstLineIsNames) {
                     // read first line and forget
-                    reader.readLine();
+                    reader.readLine();//NOSONAR
                 }
                 line = reader.readLine();
             }
@@ -388,7 +388,7 @@ public class FileServer {
                 fileEntry.inputOutputObject = reader;
                 if (firstLineIsNames) {
                     // read first line and forget
-                    reader.readLine();
+                    reader.readLine(); //NOSONAR
                 }                
             } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
                 throw new IOException("File " + alias + " already in use");
@@ -403,7 +403,7 @@ public class FileServer {
                         fileEntry.inputOutputObject = reader;
                         if (firstLineIsNames) {
                             // read first line and forget
-                            reader.readLine();
+                            reader.readLine(); //NOSONAR
                         }                
                     } else { // OK, we still have some data, restore it
                         reader.reset();

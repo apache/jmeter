@@ -264,7 +264,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             engine = null;
             if (now) {
                 tellThreadGroupsToStop();
-                pause(10 * countStillActiveThreads());
+                pause(10L * countStillActiveThreads());
                 boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
