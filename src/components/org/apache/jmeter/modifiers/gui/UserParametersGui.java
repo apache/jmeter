@@ -70,7 +70,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
     private int numUserColumns = 1;
 
-    private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton;
+    private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton, moveRowUpButton, moveRowDownButton;
 
     private JCheckBox perIterationCheck;
 
@@ -200,7 +200,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         paramTable = new JTable(tableModel);
         // paramTable.setRowSelectionAllowed(true);
         // paramTable.setColumnSelectionAllowed(true);
-        paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        paramTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);//paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         paramTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         // paramTable.setCellSelectionEnabled(true);
         // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
@@ -228,14 +228,20 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         addUserButton = new JButton(JMeterUtils.getResString("add_user")); // $NON-NLS-1$
         deleteRowButton = new JButton(JMeterUtils.getResString("delete_parameter")); // $NON-NLS-1$
         deleteColumnButton = new JButton(JMeterUtils.getResString("delete_user")); // $NON-NLS-1$
+        moveRowUpButton = new JButton(JMeterUtils.getResString("up")); // $NON-NLS-1$
+        moveRowDownButton = new JButton(JMeterUtils.getResString("down")); // $NON-NLS-1$
         buttonPanel.add(addParameterButton);
         buttonPanel.add(deleteRowButton);
+        buttonPanel.add(moveRowUpButton);
         buttonPanel.add(addUserButton);
         buttonPanel.add(deleteColumnButton);
+        buttonPanel.add(moveRowDownButton);
         addParameterButton.addActionListener(new AddParamAction());
         addUserButton.addActionListener(new AddUserAction());
         deleteRowButton.addActionListener(new DeleteRowAction());
         deleteColumnButton.addActionListener(new DeleteColumnAction());
+        moveRowUpButton.addActionListener(new MoveRowUpAction());
+        moveRowDownButton.addActionListener(new MoveRowDownAction());
         return buttonPanel;
     }
 
@@ -330,26 +336,16 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         public void actionPerformed(ActionEvent e) {
             GuiUtils.cancelEditing(paramTable);
 
-            int rowSelected = paramTable.getSelectedRow();
-            if (rowSelected >= 0) {
-                tableModel.removeRow(rowSelected);
+            int[] rowsSelected = paramTable.getSelectedRows();
+            if (rowsSelected.length > 0) {
+                for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                    tableModel.removeRow(rowsSelected[i]);
+                }
                 tableModel.fireTableDataChanged();
 
                 // Disable DELETE if there are no rows in the table to delete.
                 if (tableModel.getRowCount() == 0) {
                     deleteRowButton.setEnabled(false);
-                }
-
-                // Table still contains one or more rows, so highlight (select)
-                // the appropriate one.
-                else {
-                    int rowToSelect = rowSelected;
-
-                    if (rowSelected >= tableModel.getRowCount()) {
-                        rowToSelect = rowSelected - 1;
-                    }
-
-                    paramTable.setRowSelectionInterval(rowToSelect, rowToSelect);
                 }
             }
         }
@@ -388,6 +384,42 @@ public class UserParametersGui extends AbstractPreProcessorGui {
                     paramTable.setColumnSelectionInterval(colSelected, colSelected);
                 }
                 setColumnWidths();
+            }
+        }
+    }
+
+    private class MoveRowUpAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int[] rowsSelected = paramTable.getSelectedRows();
+            GuiUtils.stopTableEditing(paramTable);
+
+            if (rowsSelected.length > 0 && rowsSelected[0] > 0) {
+                for (int rowSelected : rowsSelected) {
+                    tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected - 1);
+                }
+
+                for (int rowSelected : rowsSelected) {
+                    paramTable.addRowSelectionInterval(rowSelected - 1, rowSelected - 1);
+                }
+            }
+        }
+    }
+
+    private class MoveRowDownAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int[] rowsSelected = paramTable.getSelectedRows();
+            GuiUtils.stopTableEditing(paramTable);
+
+            if (rowsSelected.length > 0 && rowsSelected[rowsSelected.length - 1] < paramTable.getRowCount() - 1) {
+                for (int i = rowsSelected.length - 1; i >= 0; i--) {
+                    int rowSelected = rowsSelected[i];
+                    tableModel.moveRow(rowSelected, rowSelected + 1, rowSelected + 1);
+                }
+                for (int rowSelected : rowsSelected) {
+                    paramTable.addRowSelectionInterval(rowSelected + 1, rowSelected + 1);
+                }
             }
         }
     }
