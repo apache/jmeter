@@ -188,6 +188,7 @@ Fill in some detail.
     <li><bug>60442</bug>Fix a typo in <code>build.xml</code> (gavin at 16degrees.com.au)</li>
     <li><bug>60449</bug>JMeter Tree : Annoying behaviour when node name is empty</li>
     <li><bug>60494</bug>Add sonar analysis task to build</li>
+    <li><bug>60501</bug>Search Feature : Performance issue when regexp is checked</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
