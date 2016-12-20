@@ -118,7 +118,6 @@
   <property name="findbugs.xsldir" value="${findbugs.homedir}/src/xsl" />
   <property name="findbugs.xslname" value="fancy" />
   <property name="findbugs.outName" value="reports/jmeter-fb" />
-  <property name="jacoco_params" value="-Djacoco_dummy=not_empty" />
   <property name="skip.batchtest" value="false" />
   <property name="skip.bug52310" value="false" />
   <property name="skip.test_https" value="false" />
@@ -881,7 +880,7 @@
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
-    <condition property="jacoco_params" value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver">
+    <condition property="jacoco_params" value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver" else="-Djacoco_dummy=not_empty">
       <isset property="jacocoagent"/>
     </condition>
     <java classname="org.apache.jmeter.NewDriver" fork="true">
@@ -2437,7 +2436,7 @@ run JMeter unless all the JMeter jars are added.
     <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
       <isset property="rmi_force_localhost"/>
     </condition>
-    <condition property="jacoco_params" value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}">
+    <condition property="jacoco_params" value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}" else="-Djacoco_dummy=not_empty">
       <isset property="jacocoagent"/>
     </condition>
     <tstamp>
@@ -2549,7 +2548,7 @@ run JMeter unless all the JMeter jars are added.
 
     <deleteworkfiles/>
 
-    <condition property="jacoco_params" value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}">
+    <condition property="jacoco_params" value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}" else="-Djacoco_dummy=not_empty">
       <isset property="jacocoagent"/>
     </condition>
 
@@ -2750,7 +2749,7 @@ run JMeter unless all the JMeter jars are added.
     <delete quiet="true">
       <fileset dir="${basedir}/bin/testfiles" includes="*.jmx.out"/>
     </delete>
-    <condition property="jacoco_params" value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests">
+    <condition property="jacoco_params" value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests" else="-Djacoco_dummy=not_empty">
       <isset property="jacocoagent"/>
     </condition>
     <!-- fork="yes" is required or dir attribute is ignored -->
@@ -2784,7 +2783,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="test.format" value="plain"/>
     <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
     <property name="test.showoutput" value="false"/>
-    <condition property="jacoco_params" value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver">
+    <condition property="jacoco_params" value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver" else="-Djacoco_dummy=not_empty">
       <isset property="jacocoagent"/>
     </condition>
     <junit fork="true"
