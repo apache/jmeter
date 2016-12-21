@@ -482,9 +482,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     // returns false if the file did not contain the terminator
     private static boolean trimLastLine(String filename) {
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(filename, "rw"); // $NON-NLS-1$
+        try (RandomAccessFile raf = new RandomAccessFile(filename, "rw")){ // $NON-NLS-1$
             long len = raf.length();
             if (len < MIN_XML_FILE_LEN) {
                 return false;
@@ -504,25 +502,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             if (line == null) {
                 log.warn("Unexpected EOF trying to find XML end marker in " + filename);
-                raf.close();
                 return false;
             }
             raf.setLength(pos + end);// Truncate the file
-            raf.close();
-            raf = null;
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
             log.warn("Error trying to find XML terminator " + e.toString());
             return false;
-        } finally {
-            try {
-                if (raf != null) {
-                    raf.close();
-                }
-            } catch (IOException e1) {
-                log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
-            }
         }
         return true;
     }
