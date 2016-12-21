@@ -73,10 +73,7 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         if (c instanceof CounterConfig) {
             CounterConfig config = (CounterConfig) c;
             config.setStart(startField.getText());
-            // Bug 22820 if (endField.getText().length() > 0)
-            {
-                config.setEnd(endField.getText());
-            }
+            config.setEnd(endField.getText());
             config.setIncrement(incrField.getText());
             config.setVarName(varNameField.getText());
             config.setFormat(formatField.getText());
