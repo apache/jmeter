@@ -87,6 +87,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+                // FIXME Doing this can lead to sleep not sleeping expected time and random errors
                 Thread.currentThread().interrupt();
                 return;
             }
