@@ -39,7 +39,7 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
 
     private transient List<SampleResult> responses;
 
-    private transient final StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$
+    private final transient StringSubstitution emptySub = new StringSubstitution(""); //$NON-NLS-1$
 
     private boolean compareContent = true;
 
