@@ -195,11 +195,7 @@ public class XPathPanel extends JPanel {
             Element el = testDoc.createElement("root"); //$NON-NLS-1$
             testDoc.appendChild(el);
             XPathUtil.validateXPath(testDoc, xpathString);
-        } catch (IllegalArgumentException e) {
-            log.warn(e.getLocalizedMessage(), e);
-            success = false;
-            ret = e.getLocalizedMessage();
-        } catch (ParserConfigurationException | TransformerException e) {
+        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException e) {
             log.warn(e.getLocalizedMessage(), e);
             success = false;
             ret = e.getLocalizedMessage();

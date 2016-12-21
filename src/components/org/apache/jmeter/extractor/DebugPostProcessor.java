@@ -110,9 +110,7 @@ public class DebugPostProcessor extends AbstractTestElement implements PostProce
                 String m2 =(String)o2.getKey();
                 return m1.compareTo(m2);
             });
-        al.forEach(me -> { 
-            sb.append(me.getKey()).append("=").append(me.getValue()).append("\n");
-        });
+        al.forEach(me -> sb.append(me.getKey()).append("=").append(me.getValue()).append("\n"));
     }
 
     public boolean isDisplayJMeterVariables() {
