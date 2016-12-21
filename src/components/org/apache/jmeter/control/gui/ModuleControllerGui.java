@@ -169,15 +169,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         
         init();
         
-        // the listener is used to hide the error message when a target element is selected
-        TreeSelectionListener tsl = new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                warningLabel.setVisible(false);
-                expandButton.setEnabled(true);
-            }
-        };
-        moduleToRunTreeNodes.addTreeSelectionListener(tsl);
+        moduleToRunTreeNodes.addTreeSelectionListener(
+                evt -> {
+                    warningLabel.setVisible(false);
+                    expandButton.setEnabled(true);    
+                });
     }
 
     /** {@inheritDoc}} */
