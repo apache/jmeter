@@ -18,9 +18,6 @@
 
 package org.apache.jmeter.assertions.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
@@ -33,7 +30,10 @@ import org.apache.jmeter.util.JMeterUtils;
 public class XMLConfPanel extends JPanel {
     private static final long serialVersionUID = 240L;
 
-    private JCheckBox validate, tolerant, whitespace, namespace;
+    private JCheckBox validate;
+    private JCheckBox tolerant;
+    private JCheckBox whitespace;
+    private JCheckBox namespace;
 
     private JCheckBox quiet; // Should Tidy be quiet?
 
@@ -59,12 +59,7 @@ public class XMLConfPanel extends JPanel {
         whitespace = new JCheckBox(JMeterUtils.getResString("xml_whitespace_button")); //$NON-NLS-1$
         validate = new JCheckBox(JMeterUtils.getResString("xml_validate_button")); //$NON-NLS-1$
         tolerant = new JCheckBox(JMeterUtils.getResString("xml_tolerant_button")); //$NON-NLS-1$
-        tolerant.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tolerant();
-            }
-        });
+        tolerant.addActionListener(e -> tolerant());
         downloadDTDs = new JCheckBox(JMeterUtils.getResString("xml_download_dtds")); //$NON-NLS-1$
         Box tidyOptions = Box.createHorizontalBox();
         tidyOptions.setBorder(BorderFactory.createEtchedBorder());
