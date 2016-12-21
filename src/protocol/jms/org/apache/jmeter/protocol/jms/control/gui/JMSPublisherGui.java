@@ -57,7 +57,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
     /** Take source from a random file */
     public static final String USE_RANDOM_RSC = "jms_use_random_file"; //$NON-NLS-1$
     /** Take source from the text area */
-    private static final String USE_TEXT_RSC   = "jms_use_text"; //$NON-NLS-1$
+    public static final String USE_TEXT_RSC   = "jms_use_text"; //$NON-NLS-1$
 
     /** Create a TextMessage */
     public static final String TEXT_MSG_RSC = "jms_text_message"; //$NON-NLS-1$
