@@ -209,7 +209,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             // Send the mail ...
             List<String> addressList = getAddressList();
 
-            if (addressList.size() != 0) {
+            if (!addressList.isEmpty()) {
                 try {
                     sendMail(getFromAddress(), addressList, getFailureSubject(), "URL Failed: "
                             + sample.getSampleLabel(), getSmtpHost(),
@@ -225,24 +225,20 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             }
         }
 
-        if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent) {
-            // Send the mail ...
-            if (successCount > getSuccessLimit()) {
-                List<String> addressList = getAddressList();
-
-                try {
-                    sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
-                            + sample.getSampleLabel(), getSmtpHost(),
-                            getSmtpPort(), getLogin(), getPassword(),
-                            getMailAuthType(), false);
-                } catch (Exception e) {
-                    log.error("Problem sending mail", e);
-                }
-                siteDown = false;
-                successMsgSent = true;
-                failureCount = 0;
-                failureMsgSent = false;
+        if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent && successCount > getSuccessLimit()) {
+            List<String> addressList = getAddressList();
+            try {
+                sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
+                        + sample.getSampleLabel(), getSmtpHost(),
+                        getSmtpPort(), getLogin(), getPassword(),
+                        getMailAuthType(), false);
+            } catch (Exception e) {
+                log.error("Problem sending mail", e);
             }
+            siteDown = false;
+            successMsgSent = true;
+            failureCount = 0;
+            failureMsgSent = false;
         }
 
         if (successMsgSent && failureMsgSent) {
@@ -259,7 +255,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * they are independent of the sampling.
      */
     @Override
-    public synchronized void clear() {// TODO: should this be clearData()?
+    public synchronized void clear() {
         failureCount = 0;
         successCount = 0;
         siteDown = false;
@@ -460,19 +456,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         setProperty(SUCCESS_LIMIT_KEY, limit);
     }
 
-    // private void setSuccessCount(long count)
-    // {
-    // this.successCount = count;
-    // }
-
     public void setFailureLimit(String limit) {
         setProperty(FAILURE_LIMIT_KEY, limit);
     }
-
-    // private void setFailureCount(long count)
-    // {
-    // this.failureCount = count;
-    // }
 
     public String getToAddress() {
         return getPropertyAsString(TO_KEY);
