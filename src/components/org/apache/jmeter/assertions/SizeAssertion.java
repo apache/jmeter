@@ -74,7 +74,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);
-        long resultSize=0;
+        long resultSize;
         if (isScopeVariable()){
             String variableName = getVariableName();
             String value = getThreadContext().getVariables().get(variableName);
@@ -178,31 +178,31 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private String compareSize(long resultSize) {
         String comparatorErrorMessage;
         long allowedSize = Long.parseLong(getAllowedSize());
-        boolean result = false;
+        boolean result;
         int comp = getCompOper();
         switch (comp) {
         case EQUAL:
-            result = (resultSize == allowedSize);
+            result = resultSize == allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
             break;
         case NOTEQUAL:
-            result = (resultSize != allowedSize);
+            result = resultSize != allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
             break;
         case GREATERTHAN:
-            result = (resultSize > allowedSize);
+            result = resultSize > allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
             break;
         case LESSTHAN:
-            result = (resultSize < allowedSize);
+            result = resultSize < allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
             break;
         case GREATERTHANEQUAL:
-            result = (resultSize >= allowedSize);
+            result = resultSize >= allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
             break;
         case LESSTHANEQUAL:
-            result = (resultSize <= allowedSize);
+            result = resultSize <= allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
             break;
         default:
