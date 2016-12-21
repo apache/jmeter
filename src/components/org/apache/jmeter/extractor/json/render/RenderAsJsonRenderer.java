@@ -120,7 +120,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     private String process(String textToParse) {
         try {
             List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
-            if (matchStrings.size() == 0) {
+            if (matchStrings.isEmpty()) {
                 return "NO MATCH"; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
@@ -260,6 +260,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public void setBackgroundColor(Color backGround) {
+        // NOOP
     }
 
 }
