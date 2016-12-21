@@ -633,12 +633,12 @@ public final class JOrphanUtils {
                 java.util.regex.Pattern.compile(regex) :  
                 java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
         String newText = source;
-        replacement = Matcher.quoteReplacement(replacement);
+        final String replacementQuoted = Matcher.quoteReplacement(replacement);
         Matcher matcher = pattern.matcher(newText);
         int totalReplaced = 0;
         while(true) {
             String previousText = newText;
-            newText = matcher.replaceFirst(replacement);
+            newText = matcher.replaceFirst(replacementQuoted);
             matcher = pattern.matcher(newText);
             if(newText.equals(previousText)) {
                 break;
