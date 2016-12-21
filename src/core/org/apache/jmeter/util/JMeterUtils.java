@@ -1371,7 +1371,7 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static void runSafe(boolean synchronous, Runnable runnable) {
         if(SwingUtilities.isEventDispatchThread()) {
-            runnable.run();
+            runnable.run();//NOSONAR
         } else {
             if (synchronous) {
                 try {
