@@ -142,26 +142,23 @@ public class CompareAssertion extends AbstractTestElement implements Assertion, 
         buf.append("\n\n"); //$NON-NLS-1$
     }
 
-    private String filterString(String content) {
-        if (stringsToSkip == null || stringsToSkip.size() == 0) {
+    private String filterString(final String content) {
+        if (stringsToSkip == null || stringsToSkip.isEmpty()) {
             return content;
         } else {
+            String result = content;
             for (SubstitutionElement regex : stringsToSkip) {
                 emptySub.setSubstitution(regex.getSubstitute());
-                content = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
-                        emptySub, content, Util.SUBSTITUTE_ALL);
+                result = Util.substitute(JMeterUtils.getMatcher(), JMeterUtils.getPatternCache().getPattern(regex.getRegex()),
+                        emptySub, result, Util.SUBSTITUTE_ALL);
             }
+            return result;
         }
-        return content;
     }
 
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
         responses = new LinkedList<>();
-    }
-
-    public void iterationEnd(LoopIterationEvent iterEvent) {
-        responses = null;
     }
 
     /**
