@@ -71,9 +71,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     private static final String TEST_TYPE = "Assertion.test_type"; // $NON-NLS-1$
 
-    /*
-     * Mask values for TEST_TYPE TODO: remove either MATCH or CONTAINS - they
-     * are mutually exclusive
+    /**
+     * Mask values for TEST_TYPE 
+     * they are mutually exclusive
      */
     private static final int MATCH = 1; // 1 << 0;
 
@@ -182,8 +182,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     @Override
     public AssertionResult getResult(SampleResult response) {
-        AssertionResult result = evaluateResponse(response);
-        return result;
+        return evaluateResponse(response);
     }
 
     public String getTestField() {
@@ -239,7 +238,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
 
     public void setToNotType() {
-        setTestType((getTestType() | NOT));
+        setTestType(getTestType() | NOT);
     }
 
     public void unsetNotType() {
@@ -263,12 +262,12 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      */
     private AssertionResult evaluateResponse(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
-        String toCheck = ""; // The string to check (Url or data)
 
         if (getAssumeSuccess()) {
             response.setSuccessful(true);// Allow testing of failure codes
         }
 
+        String toCheck; // The string to check (Url or data)
         // What are we testing against?
         if (isScopeVariable()){
             toCheck = getThreadContext().getVariables().get(getVariableName());
@@ -335,12 +334,16 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 }
                 pass = notTest ? !found : found;
                 if (!pass) {
-                    if (debugEnabled){log.debug("Failed: "+stringPattern);}
+                    if (debugEnabled){
+                        log.debug("Failed: "+stringPattern);
+                    }
                     result.setFailure(true);
                     result.setFailureMessage(getFailText(stringPattern,toCheck));
                     break;
                 }
-                if (debugEnabled){log.debug("Passed: "+stringPattern);}
+                if (debugEnabled){
+                    log.debug("Passed: "+stringPattern);
+                }
             }
         } catch (MalformedCachePatternException e) {
             result.setError(true);
@@ -356,7 +359,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      * @param stringPattern
      * @return the message for the assertion report
      */
-    // TODO strings should be resources
     private String getFailText(String stringPattern, String toCheck) {
 
         StringBuilder sb = new StringBuilder(200);
@@ -441,31 +443,26 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
      */
     private static StringBuilder equalsComparisonText(final String received, final String comparison)
     {
-        int                     firstDiff;
-        int                     lastRecDiff = -1;
-        int                     lastCompDiff = -1;
-        final int               recLength = received.length();
-        final int               compLength = comparison.length();
-        final int               minLength = Math.min(recLength, compLength);
-        final String            startingEqSeq;
-        String                  recDeltaSeq = "";
-        String                  compDeltaSeq = "";
-        String                  endingEqSeq = "";
+        final int recLength = received.length();
+        final int compLength = comparison.length();
+        final int minLength = Math.min(recLength, compLength);
 
         final StringBuilder text = new StringBuilder(Math.max(recLength, compLength) * 2);
+        int firstDiff;
         for (firstDiff = 0; firstDiff < minLength; firstDiff++) {
             if (received.charAt(firstDiff) != comparison.charAt(firstDiff)){
                 break;
             }
         }
+        final String            startingEqSeq;
         if (firstDiff == 0) {
             startingEqSeq = "";
         } else {
             startingEqSeq = trunc(false, received.substring(0, firstDiff));
         }
 
-        lastRecDiff = recLength - 1;
-        lastCompDiff = compLength - 1;
+        int lastRecDiff = recLength - 1;
+        int lastCompDiff = compLength - 1;
 
         while ((lastRecDiff > firstDiff) && (lastCompDiff > firstDiff)
                 && received.charAt(lastRecDiff) == comparison.charAt(lastCompDiff))
@@ -473,14 +470,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
             lastRecDiff--;
             lastCompDiff--;
         }
-        endingEqSeq = trunc(true, received.substring(lastRecDiff + 1, recLength));
-        if (endingEqSeq.length() == 0)
-        {
+        String compDeltaSeq;
+        String endingEqSeq = trunc(true, received.substring(lastRecDiff + 1, recLength));
+        String                  recDeltaSeq;
+        if (endingEqSeq.length() == 0) {
             recDeltaSeq = trunc(true, received.substring(firstDiff, recLength));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, compLength));
         }
-        else
-        {
+        else {
             recDeltaSeq = trunc(true, received.substring(firstDiff, lastRecDiff + 1));
             compDeltaSeq = trunc(true, comparison.substring(firstDiff, lastCompDiff + 1));
         }
@@ -488,6 +485,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         for (int i = 0; i < pad.capacity(); i++){
             pad.append(' ');
         }
+        
         if (recDeltaSeq.length() > compDeltaSeq.length()){
             compDeltaSeq += pad.toString();
         } else {
