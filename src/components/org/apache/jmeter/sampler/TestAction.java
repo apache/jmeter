@@ -57,7 +57,6 @@ public class TestAction extends AbstractSampler implements Interruptible {
 
     // Action targets
     public static final int THREAD = 0;
-    // public static final int THREAD_GROUP = 1;
     public static final int TEST = 2;
 
     // Identifiers
@@ -65,7 +64,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
     private static final String ACTION = "ActionProcessor.action"; //$NON-NLS-1$
     private static final String DURATION = "ActionProcessor.duration"; //$NON-NLS-1$
 
-    private volatile transient Thread pauseThread;
+    private transient volatile Thread pauseThread;
 
     public TestAction() {
         super();
@@ -91,8 +90,6 @@ public class TestAction extends AbstractSampler implements Interruptible {
                     log.info("Restarting next loop");
                     context.setRestartNextLoop(true);
                 }
-//             //Not yet implemented
-//            } else if (target==THREAD_GROUP) {
             } else if (target == TEST) {
                 if (action == STOP_NOW) {
                     log.info("Stopping all threads now");
