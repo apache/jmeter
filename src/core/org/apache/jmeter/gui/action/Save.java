@@ -56,7 +56,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -219,9 +218,7 @@ public class Save extends AbstractAction {
             log.warn("Error converting subtree "+err);
         }
 
-        FileOutputStream ostream = null;
-        try {
-            ostream = new FileOutputStream(updateFile);
+        try (FileOutputStream ostream = new FileOutputStream(updateFile)){
             SaveService.saveTree(subTree, ostream);
             if (fullSave) { // Only update the stored copy of the tree for a full save
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
@@ -241,18 +238,14 @@ public class Save extends AbstractAction {
                     log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
                 }
             }
-        } catch (Throwable ex) {
-            log.error("Error saving tree:", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
-        } finally {
-            JOrphanUtils.closeQuietly(ostream);
+        } catch(RuntimeException | Error ex) {
+            throw ex;
         }
+        catch (Throwable ex) {
+            log.error("Error saving tree:", ex);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
+        } 
+
         GuiPackage.getInstance().updateCurrentGui();
     }
     
