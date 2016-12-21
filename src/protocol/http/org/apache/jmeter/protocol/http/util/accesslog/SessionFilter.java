@@ -15,10 +15,6 @@
  * under the License.
  *
  */
-
-/*
- * Created on May 21, 2004
- */
 package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.Serializable;
@@ -56,10 +52,10 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      * These objects are static across multiple threads in a test, via clone()
      * method.
      */
-    protected Map<String, CookieManager> cookieManagers;
-    protected Set<CookieManager> managersInUse;
+    private Map<String, CookieManager> cookieManagers;
+    private Set<CookieManager> managersInUse;
 
-    protected CookieManager lastUsed;
+    private CookieManager lastUsed;
 
     /*
      * (non-Javadoc)
