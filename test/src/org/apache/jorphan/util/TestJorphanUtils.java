@@ -27,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestJorphanUtils {
@@ -355,5 +356,36 @@ public class TestJorphanUtils {
         assertEquals("baulpismuth", JOrphanUtils.rightAlign(in, 6).toString());
         in = new StringBuilder("A");
         assertEquals("       A", JOrphanUtils.rightAlign(in, 8).toString());
+    }
+    
+    @Test
+    public void testReplaceAllWithRegex() {
+        Assert.assertArrayEquals(new Object[] {"toto", 0}, 
+                JOrphanUtils.replaceAllWithRegex("toto","ti", "ta", true));
+        Assert.assertArrayEquals(new Object[] {"toto", 0},
+                JOrphanUtils.replaceAllWithRegex("toto","TO", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TITI", 2},
+                JOrphanUtils.replaceAllWithRegex("toto","TO", "TI", false));
+        Assert.assertArrayEquals(new Object[] {"TITI", 2},
+                JOrphanUtils.replaceAllWithRegex("toto","to", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TITIti", 2},
+                JOrphanUtils.replaceAllWithRegex("tototi","to", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TOTIti", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti","to", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TOTI", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti","to.*", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TOTI", 1},
+                JOrphanUtils.replaceAllWithRegex("TOtoti","to.*ti", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TOTITITITIaTITITIti", 7},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]", "TI", true));
+        Assert.assertArrayEquals(new Object[] {"TOTIaTIti", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","[0-9]+", "TI", true));
+        
+        Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti","123", "${var}", true));
+        
+        Assert.assertArrayEquals(new Object[] {"TO${var}2a${var}ti${var2}", 2},
+                JOrphanUtils.replaceAllWithRegex("TO1232a123ti${var2}","123", "${var}", true));
+
     }
 }
