@@ -26,7 +26,6 @@ import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.processor.PreProcessor;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -191,13 +190,5 @@ public class UserParameters extends AbstractTestElement implements Serializable,
         UserParameters up = (UserParameters) super.clone();
         up.lock = lock; // ensure that clones share the same lock object
         return up;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void mergeIn(TestElement element) {
-        // super.mergeIn(element);
     }
 }
