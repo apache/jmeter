@@ -78,7 +78,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
     // The name of the sampler
     private String name;
 
-    private volatile Thread myThread;
+    private transient volatile Thread myThread;
 
     /**
      * Default constructor for <code>SleepTest</code>.
