@@ -632,13 +632,12 @@ public final class JOrphanUtils {
         java.util.regex.Pattern pattern = caseSensitive ? 
                 java.util.regex.Pattern.compile(regex) :  
                 java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-        String previousText = null;
         String newText = source;
         replacement = Matcher.quoteReplacement(replacement);
         Matcher matcher = pattern.matcher(newText);
         int totalReplaced = 0;
-        while(!newText.equals(previousText)) {
-            previousText = newText;
+        while(true) {
+            String previousText = newText;
             newText = matcher.replaceFirst(replacement);
             matcher = pattern.matcher(newText);
             if(newText.equals(previousText)) {
