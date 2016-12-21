@@ -37,7 +37,9 @@ public class BSFPreProcessor extends BSFTestElement implements Cloneable, PrePro
         BSFManager mgr =null;
         try {
             mgr = getManager();
-            if (mgr == null) { return; }
+            if (mgr == null) { 
+                return; 
+            }
             processFileOrScript(mgr);
         } catch (BSFException e) {
             log.warn("Problem in BSF script "+e);
