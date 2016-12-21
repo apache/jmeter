@@ -117,7 +117,7 @@ public class CSVDataSet extends ConfigTestElement
     public void setProperty(JMeterProperty property) {
         if (property instanceof StringProperty) {
             final String propName = property.getName();
-            if (propName.equals("shareMode")) { // The original name of the property
+            if ("shareMode".equals(propName)) { // The original name of the property
                 final String propValue = property.getStringValue();
                 if (propValue.contains(" ")){ // variables are unlikely to contain spaces, so most likely a translation
                     try {
@@ -149,41 +149,41 @@ public class CSVDataSet extends ConfigTestElement
         FileServer server = FileServer.getFileServer();
         final JMeterContext context = getThreadContext();
         String delim = getDelimiter();
-        if (delim.equals("\\t")) { // $NON-NLS-1$
+        if ("\\t".equals(delim)) { // $NON-NLS-1$
             delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
         } else if (delim.isEmpty()){
             log.warn("Empty delimiter converted to ','");
             delim=",";
         }
         if (vars == null) {
-            String _fileName = getFilename().trim();
+            String fileName = getFilename().trim();
             String mode = getShareMode();
             int modeInt = CSVDataSetBeanInfo.getShareModeAsInt(mode);
             switch(modeInt){
                 case CSVDataSetBeanInfo.SHARE_ALL:
-                    alias = _fileName;
+                    alias = fileName;
                     break;
                 case CSVDataSetBeanInfo.SHARE_GROUP:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThreadGroup());
+                    alias = fileName+"@"+System.identityHashCode(context.getThreadGroup());
                     break;
                 case CSVDataSetBeanInfo.SHARE_THREAD:
-                    alias = _fileName+"@"+System.identityHashCode(context.getThread());
+                    alias = fileName+"@"+System.identityHashCode(context.getThread());
                     break;
                 default:
-                    alias = _fileName+"@"+mode; // user-specified key
+                    alias = fileName+"@"+mode; // user-specified key
                     break;
             }
             final String names = getVariableNames();
             if (names == null || names.length()==0) {
-                String header = server.reserveFile(_fileName, getFileEncoding(), alias, true);
+                String header = server.reserveFile(fileName, getFileEncoding(), alias, true);
                 try {
                     vars = CSVSaveService.csvSplitString(header, delim.charAt(0));
                     firstLineIsNames = true;
                 } catch (IOException e) {
-                    throw new IllegalArgumentException("Could not split CSV header line from file:" + _fileName,e);
+                    throw new IllegalArgumentException("Could not split CSV header line from file:" + fileName,e);
                 }
             } else {
-                server.reserveFile(_fileName, getFileEncoding(), alias);
+                server.reserveFile(fileName, getFileEncoding(), alias);
                 vars = JOrphanUtils.split(names, ","); // $NON-NLS-1$
             }
             trimVarNames(vars);
