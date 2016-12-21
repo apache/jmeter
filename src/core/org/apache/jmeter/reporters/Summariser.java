@@ -209,7 +209,7 @@ public class Summariser extends AbstractTestElement
             writeToLog(format(myName, myDelta, "+"));
 
             // Only if we have updated them
-            if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) {
+            if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) { // NOSONAR
                 writeToLog(format(myName, myTotal, "="));
             }
         }
