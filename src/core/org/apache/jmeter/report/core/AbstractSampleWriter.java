@@ -64,14 +64,14 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The destination writer where samples will be written by this
      *            sample writer
      */
-    public void setWriter(Writer writer) {
-        Validate.notNull(writer, "writer must not be null.");
+    public void setWriter(Writer newWriter) {
+        Validate.notNull(newWriter, "writer must not be null.");
 
         if (this.writer != null) {
             // flush and close previous writer
             JOrphanUtils.closeQuietly(this.writer);
         }
-        this.writer = new PrintWriter(new BufferedWriter(writer, BUF_SIZE), false);
+        this.writer = new PrintWriter(new BufferedWriter(newWriter, BUF_SIZE), false);
     }
 
     /**
@@ -83,7 +83,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-        Validate.notNull(out, "out must not be null.");
+        Validate.notNull(out, "out must not be null."); // NOSONAR
 
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));
@@ -102,7 +102,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
     public void setOutputFile(File output) {
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(output);
+            fos = new FileOutputStream(output); // NOSONAR
         } catch (Exception e) {
             throw new SampleException(e.getMessage(), e);
         }
