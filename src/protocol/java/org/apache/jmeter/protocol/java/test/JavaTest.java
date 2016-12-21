@@ -149,7 +149,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
     /** The name used to store the Success Status parameter. */
     private static final String SUCCESS_NAME = "Status";
 
-    private volatile Thread myThread;
+    private transient volatile Thread myThread;
 
     /**
      * Default constructor for <code>JavaTest</code>.
