@@ -99,10 +99,9 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
     }
 
     private JPanel initComponents(String htmlContent) {
-        createScene(htmlContent);
-
         // Create it only in AWT Thread
         jfxPanel = new JFXPanel();
+        createScene(htmlContent);
         progressBar.setPreferredSize(new Dimension(150, 18));
         progressBar.setStringPainted(true);
 
