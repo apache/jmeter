@@ -297,7 +297,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      *             if any of the addresses is wrong
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
-            throws AddressException, MessagingException {
+            throws MessagingException {
         sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null, false);
     }
 
@@ -330,7 +330,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             final String password,
             MailAuthType mailAuthType,
             boolean debug)
-            throws AddressException, MessagingException{
+            throws MessagingException{
 
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
@@ -388,7 +388,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @throws AddressException If mail address is wrong
      * @throws MessagingException If building MimeMessage fails
      */
-    public synchronized void sendTestMail() throws AddressException, MessagingException {
+    public synchronized void sendTestMail() throws MessagingException {
         String to = getToAddress();
         String from = getFromAddress();
         String subject = "Testing mail-addresses";
