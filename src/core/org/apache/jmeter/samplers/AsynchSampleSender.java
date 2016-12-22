@@ -161,6 +161,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
                     }
                 }
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             log.debug("Worker ended");
         }
