@@ -46,7 +46,9 @@ public class RunningSample {
 
     private long runningSum;
 
-    private long max, min;
+    private long max;
+    
+    private long min;
 
     private long errorCount;
 
@@ -176,7 +178,7 @@ public class RunningSample {
     public String getRateString() {
         double rate = getRate();
 
-        if (rate == Double.MAX_VALUE) {
+        if (Double.compare(rate, Double.MAX_VALUE) == 0) {
             return "N/A";
         }
 
