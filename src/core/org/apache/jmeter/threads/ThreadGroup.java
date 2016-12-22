@@ -98,15 +98,16 @@ public class ThreadGroup extends AbstractThreadGroup {
      * No-arg constructor.
      */
     public ThreadGroup() {
+        super();
     }
 
     /**
      * Set whether scheduler is being used
      *
-     * @param Scheduler true is scheduler is to be used
+     * @param scheduler true is scheduler is to be used
      */
-    public void setScheduler(boolean Scheduler) {
-        setProperty(new BooleanProperty(SCHEDULER, Scheduler));
+    public void setScheduler(boolean scheduler) {
+        setProperty(new BooleanProperty(SCHEDULER, scheduler));
     }
 
     /**
@@ -255,33 +256,12 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
     }
 
-
-    /**
-     * Wait for delay with RAMPUP_GRANULARITY
-     * @param delay delay in ms
-     */
-    private void delayBy(long delay) {
-        if (delay > 0) {
-            long start = System.currentTimeMillis();
-            long end = start + delay;
-            long now=0;
-            long pause = RAMPUP_GRANULARITY; // maximum pause to use
-            while(running && (now = System.currentTimeMillis()) < end) {
-                long togo = end - now;
-                if (togo < pause) {
-                    pause = togo;
-                }
-                pause(pause); // delay between checks
-            }
-        }
-    }
-
     @Override
     public void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine) {
         running = true;
         int numThreads = getNumThreads();
         int rampUpPeriodInSeconds = getRampUp();
-        float perThreadDelayInMillis = ((float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads());
+        float perThreadDelayInMillis = (float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads();
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
         log.info("Starting thread group number " + groupCount
@@ -372,10 +352,8 @@ public class ThreadGroup extends AbstractThreadGroup {
     private void stopThread(JMeterThread thrd, Thread t, boolean interrupt) {
         thrd.stop();
         thrd.interrupt(); // interrupt sampler if possible
-        if (interrupt) {
-            if (t != null) { // Bug 49734
-                t.interrupt(); // also interrupt JVM thread
-            }
+        if (interrupt && t != null) { // Bug 49734
+            t.interrupt(); // also interrupt JVM thread
         }
     }
 
@@ -403,7 +381,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
-                log.warn("Exception occured interrupting ThreadStarter");
+                log.warn("Exception occured interrupting ThreadStarter", e);
             }
         }
         
@@ -426,7 +404,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
-                log.warn("Exception occured interrupting ThreadStarter");
+                log.warn("Exception occured interrupting ThreadStarter", e);
             }            
         }
         for (JMeterThread item : allThreads.keySet()) {
@@ -464,16 +442,15 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     private boolean verifyThreadStopped(Thread thread) {
         boolean stopped = true;
-        if (thread != null) {
+        if (thread != null && thread.isAlive()) {
+            try {
+                thread.join(WAIT_TO_DIE);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             if (thread.isAlive()) {
-                try {
-                    thread.join(WAIT_TO_DIE);
-                } catch (InterruptedException e) {
-                }
-                if (thread.isAlive()) {
-                    stopped = false;
-                    log.warn("Thread won't exit: " + thread.getName());
-                }
+                stopped = false;
+                log.warn("Thread won't exit: " + thread.getName());
             }
         }
         return stopped;
@@ -502,6 +479,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 try {
                     thread.join(WAIT_TO_DIE);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
         }
@@ -517,7 +495,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         try {
             TimeUnit.MILLISECONDS.sleep(ms);
         } catch (InterruptedException e) {
-            // TODO Is this silent exception intended
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -541,6 +519,27 @@ public class ThreadGroup extends AbstractThreadGroup {
             // Store context from Root Thread to pass it to created threads
             this.context = JMeterContextService.getContext();
             
+        }
+        
+
+        /**
+         * Wait for delay with RAMPUP_GRANULARITY
+         * @param delay delay in ms
+         */
+        private void delayBy(long delay) {
+            if (delay > 0) {
+                long start = System.currentTimeMillis();
+                long end = start + delay;
+                long now;
+                long pause = RAMPUP_GRANULARITY; // maximum pause to use
+                while(running && (now = System.currentTimeMillis()) < end) {
+                    long togo = end - now;
+                    if (togo < pause) {
+                        pause = togo;
+                    }
+                    pause(pause); // delay between checks
+                }
+            }
         }
         
         @Override
@@ -577,7 +576,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     }
                 }
                 final int numThreads = getNumThreads();
-                final int perThreadDelayInMillis = Math.round(((float) (getRampUp() * 1000) / (float) numThreads));
+                final int perThreadDelayInMillis = Math.round((float) (getRampUp() * 1000) / (float) numThreads);
                 for (int i = 0; running && i < numThreads; i++) {
                     if (i > 0) {
                         pause(perThreadDelayInMillis); // ramp-up delay (except first)
