@@ -70,7 +70,7 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
             Bindings bindings = scriptEngine.createBindings();
             bindings.put("SampleResult",result);
             Object ret = processFileOrScript(scriptEngine, bindings);
-            if (ret != null && (result.getResponseData() == null || result.getResponseData()==EMPTY_BA)){
+            if (ret != null && (result.getResponseData() == null || result.getResponseData().length==0)){
                 result.setResponseData(ret.toString(), null);
             }
         } catch (IOException | ScriptException e) {
