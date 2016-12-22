@@ -137,11 +137,12 @@ Fill in some detail.
 
 <h3>General</h3>
 <ul>
-  <li><bug>60415</bug>Drop support for Java 7.</li>
+    <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to xxx-1.1 (from 0.2)</li>
 </ul>
 
