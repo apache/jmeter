@@ -45,8 +45,12 @@ class FileKey {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof FileKey)) return false;
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof FileKey)) {
+            return false;
+        }
 
         FileKey that = (FileKey) obj;
 
