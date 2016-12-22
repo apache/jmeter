@@ -28,7 +28,7 @@ public class ConfigTestElement extends AbstractTestElement implements Serializab
 
     public static final String USERNAME = "ConfigTestElement.username";
 
-    public static final String PASSWORD = "ConfigTestElement.password";
+    public static final String PASSWORD = "ConfigTestElement.password"; //NOSONAR this is not a hardcoded password
 
     public ConfigTestElement() {
     }
