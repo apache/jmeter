@@ -396,10 +396,18 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * Update the GUI for the currently selected node. The GUI component is
      * configured to reflect the settings in the current tree node.
-     *
      */
     public void updateCurrentGui() {
         updateCurrentNode();
+        refreshCurrentGui();
+    }
+
+    /**
+     * Refresh GUI from node state. 
+     * This method does not update the current node from GUI at the 
+     * difference of {@link GuiPackage#updateCurrentGui()}
+     */
+    public void refreshCurrentGui() {
         currentNode = treeListener.getCurrentNode();
         TestElement element = currentNode.getTestElement();
         JMeterGUIComponent comp = getGui(element);
