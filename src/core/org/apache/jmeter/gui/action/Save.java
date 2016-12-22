@@ -367,7 +367,7 @@ public class Save extends AbstractAction {
         });
         // backup name is of the form
         // {baseName}{versionSeparator}{version}{jmxExtension}
-        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1) + JMX_FILE_EXTENSION;
+        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {
