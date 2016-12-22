@@ -37,7 +37,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
 
     private static final String USERNAME = "Authorization.username"; // $NON-NLS-1$
 
-    private static final String PASSWORD = "Authorization.password"; // $NON-NLS-1$
+    private static final String PASSWORD = "Authorization.password"; // $NON-NLS-1$ NOSONAR no hard coded password
 
     private static final String DOMAIN = "Authorization.domain"; // $NON-NLS-1$
 
