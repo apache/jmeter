@@ -96,7 +96,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String LOGIN = "MailerModel.login"; //$NON-NLS-1$
 
-    private static final String PASSWORD = "MailerModel.password"; //$NON-NLS-1$
+    private static final String PASSWORD = "MailerModel.password"; //$NON-NLS-1$ NOSONAR no hardcoded password
 
     private static final String MAIL_AUTH_TYPE = "MailerModel.authType"; //$NON-NLS-1$
 
@@ -104,7 +104,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String DEFAULT_SMTP_PORT = "25";
 
-    private static final String DEFAULT_PASSWORD_VALUE = ""; //$NON-NLS-1$
+    private static final String DEFAULT_PASSWORD_VALUE = ""; //$NON-NLS-1$ NOSONAR no hardcoded password
 
     private static final String DEFAULT_MAIL_AUTH_TYPE_VALUE = MailAuthType.NONE.toString(); //$NON-NLS-1$
 
