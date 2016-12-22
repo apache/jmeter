@@ -17,14 +17,13 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
-
 import java.util.AbstractMap;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
+import org.apache.jmeter.test.ResourceLocator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextServiceHelper;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -62,7 +61,7 @@ public abstract class MessageRendererTest<T> {
     protected abstract MessageRenderer<T> getRenderer();
 
     protected String getResourceFile(String resource) {
-        return format("test/resources/%s/%s", getClass().getPackage().getName().replace('.', '/'), resource);
+        return ResourceLocator.getResource(this, resource);
     }
 
     protected void assertValueFromFile(Consumer<T> assertion, String resource, boolean hasVariable) {
