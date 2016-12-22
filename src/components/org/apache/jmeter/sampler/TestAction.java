@@ -120,7 +120,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
                 throw new IllegalArgumentException("Configured sleep is negative:"+millis);
             } // else == 0 we do nothing
         } catch (InterruptedException e) {
-            // NOOP
+            Thread.currentThread().interrupt();
         } finally {
             pauseThread = null;
         }
