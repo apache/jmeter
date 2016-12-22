@@ -44,7 +44,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * 
  * @since 3.0
  */
-abstract public class AbstractSampleWriter extends SampleWriter {
+public abstract class AbstractSampleWriter extends SampleWriter {
 
     private static final int BUF_SIZE = 10000;
 
@@ -65,7 +65,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            sample writer
      */
     public void setWriter(Writer newWriter) {
-        Validate.notNull(newWriter, "writer must not be null.");
+        Validate.notNull(newWriter, "writer must not be null."); // NOSONAR
 
         if (this.writer != null) {
             // flush and close previous writer
@@ -120,12 +120,11 @@ abstract public class AbstractSampleWriter extends SampleWriter {
         this.writer = null;
     }
 
-    public void flush() {
-        try {
-            writer.flush();
-        } catch (Exception e) {
-            // ignore
-        }
+    /**
+     * flush writer.
+     * Only used for Tests
+     */
+    void flush() {
+        writer.flush();
     }
-
 }
