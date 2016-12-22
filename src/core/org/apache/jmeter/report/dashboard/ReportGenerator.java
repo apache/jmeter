@@ -35,10 +35,7 @@ import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.ControllerSamplePredicate;
 import org.apache.jmeter.report.core.ConvertException;
 import org.apache.jmeter.report.core.Converters;
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
-import org.apache.jmeter.report.core.SamplePredicate;
-import org.apache.jmeter.report.core.SampleSelector;
 import org.apache.jmeter.report.core.StringConverter;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.AggregateConsumer;
@@ -55,7 +52,6 @@ import org.apache.jmeter.report.processor.SampleConsumer;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.SampleSource;
 import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
-import org.apache.jmeter.report.processor.ThresholdSelector;
 import org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
@@ -165,7 +161,7 @@ public class ReportGenerator {
             props.load(inStream);
         } catch (IOException e) {
             LOG.error("Problem loading properties from file ", e);
-            System.err.println("Problem loading properties " + e);
+            System.err.println("Problem loading properties " + e); // NOSONAR
         }
         return props;
     }
@@ -184,7 +180,7 @@ public class ReportGenerator {
      */
     private static String getSetterName(String propertyKey) {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
-        StringBuffer buffer = new StringBuffer(); // Unfortunately Matcher does not support StringBuilder
+        StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
         while (matcher.find()) {
             matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
         }
@@ -248,7 +244,7 @@ public class ReportGenerator {
         // Generate data
         LOG.debug("Start samples processing");
         try {
-            source.run();
+            source.run(); // NOSONAR
         } catch (SampleException ex) {
             throw new GenerationException("Error while processing samples:"+ex.getMessage(), ex);
         }
@@ -278,13 +274,10 @@ public class ReportGenerator {
     private FilterConsumer createFilterByDateRange() {
         FilterConsumer dateRangeFilter = new FilterConsumer();
         dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
-        dateRangeFilter.setSamplePredicate(new SamplePredicate() {
-
-            @Override
-            public boolean matches(Sample sample) {
+        dateRangeFilter.setSamplePredicate(sample -> {
                 long sampleStartTime = sample.getStartTime();
                 if(configuration.getStartDate() != null) {
-                    if((sampleStartTime >= configuration.getStartDate().getTime())) {
+                    if(sampleStartTime >= configuration.getStartDate().getTime()) {
                         if(configuration.getEndDate() != null) {
                             return sampleStartTime <= configuration.getEndDate().getTime();                             
                         } else {
@@ -299,8 +292,7 @@ public class ReportGenerator {
                         return true;                            
                     }
                 }
-            }
-        });     
+            });     
         return dateRangeFilter;
     }
 
@@ -440,17 +432,13 @@ public class ReportGenerator {
         ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
         apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
         apdexSummaryConsumer.setHasOverallResult(true);
-        apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
-
-            @Override
-            public ApdexThresholdsInfo select(String sampleName) {
+        apdexSummaryConsumer.setThresholdSelector(sampleName -> {
                 ApdexThresholdsInfo info = new ApdexThresholdsInfo();
                 info.setSatisfiedThreshold(configuration
                         .getApdexSatisfiedThreshold());
                 info.setToleratedThreshold(configuration
                         .getApdexToleratedThreshold());
                 return info;
-            }
         });
         return apdexSummaryConsumer;
     }
@@ -461,10 +449,7 @@ public class ReportGenerator {
     private FilterConsumer createNameFilter() {
         FilterConsumer nameFilter = new FilterConsumer();
         nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
-        nameFilter.setSamplePredicate(new SamplePredicate() {
-
-            @Override
-            public boolean matches(Sample sample) {
+        nameFilter.setSamplePredicate(sample -> {
                 // Get filtered samples from configuration
                 Pattern filteredSamplesPattern = configuration
                         .getFilteredSamplesPattern();
@@ -472,7 +457,6 @@ public class ReportGenerator {
                 // or if its name matches the filter pattern
                 return filteredSamplesPattern == null 
                         || filteredSamplesPattern.matcher(sample.getName()).matches();
-            }
         });
         nameFilter.addSampleConsumer(createApdexSummaryConsumer());
         nameFilter.addSampleConsumer(createRequestsSummaryConsumer());
@@ -486,13 +470,7 @@ public class ReportGenerator {
      */
     private AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
-                new MaxAggregator(), new SampleSelector<Double>() {
-
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getEndTime());
-                    }
-                });
+                new MaxAggregator(), sample -> Double.valueOf(sample.getEndTime()));
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);
         return endDateConsumer;
     }
@@ -502,13 +480,7 @@ public class ReportGenerator {
      */
     private AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
-                new MinAggregator(), new SampleSelector<Double>() {
-
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getStartTime());
-                    }
-                });
+                new MinAggregator(), sample -> Double.valueOf(sample.getStartTime()));
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
         return beginDateConsumer;
     }
