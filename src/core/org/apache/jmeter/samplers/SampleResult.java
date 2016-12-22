@@ -1456,7 +1456,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             
         }
 
-        private void getOffset(long wait) {
+        private static void getOffset(long wait) {
             try {
                 TimeUnit.MILLISECONDS.sleep(wait);
                 long clock = System.currentTimeMillis();
