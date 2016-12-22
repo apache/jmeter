@@ -99,13 +99,7 @@ public class BackendListener extends AbstractTestElement
     public static final String DEFAULT_QUEUE_SIZE = "5000";
 
     // Create unique object as marker for end of queue
-    private transient static final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
-
-    // Name of the test element. Set up by testStarted().
-    private transient String myName;
-
-    // Holds listenerClientData for this test element
-    private transient ListenerClientData listenerClientData;
+    private static transient final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
 
     /*
      * This is needed for distributed testing where there is 1 instance
@@ -114,6 +108,12 @@ public class BackendListener extends AbstractTestElement
     //@GuardedBy("LOCK") - needed to ensure consistency between this and instanceCount
     private static final Map<String, ListenerClientData> queuesByTestElementName =
             new ConcurrentHashMap<>();
+
+    // Name of the test element. Set up by testStarted().
+    private transient String myName;
+
+    // Holds listenerClientData for this test element
+    private transient ListenerClientData listenerClientData;
 
     /**
      * Create a BackendListener.
@@ -244,7 +244,7 @@ public class BackendListener extends AbstractTestElement
                         }
                     }
                 } catch (InterruptedException e) {
-                    // NOOP
+                    Thread.currentThread().interrupt();
                 }
                 // We may have been interrupted
                 sendToListener(backendListenerClient, context, sampleResults);
@@ -265,7 +265,7 @@ public class BackendListener extends AbstractTestElement
             final BackendListenerClient backendListenerClient,
             final BackendListenerContext context,
             final List<SampleResult> sampleResults) {
-        if (sampleResults.size() > 0) {
+        if (!sampleResults.isEmpty()) {
             backendListenerClient.handleSampleResults(sampleResults, context);
             sampleResults.clear();
         }
@@ -357,12 +357,12 @@ public class BackendListener extends AbstractTestElement
     @Override
     public void testEnded(String host) {
         synchronized (LOCK) {
-            ListenerClientData listenerClientData = queuesByTestElementName.get(myName);
+            ListenerClientData listenerClientDataForName = queuesByTestElementName.get(myName);
             if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("testEnded called on instance "+myName+"#"+listenerClientData.instanceCount);
+                LOGGER.debug("testEnded called on instance "+myName+"#"+listenerClientDataForName.instanceCount);
             }
-            listenerClientData.instanceCount--;
-            if (listenerClientData.instanceCount > 0){
+            listenerClientDataForName.instanceCount--;
+            if (listenerClientDataForName.instanceCount > 0){
                 // Not the last instance of myName
                 return;
             }
