@@ -82,7 +82,7 @@ public class DistributedRunner {
                 try {
                     Thread.sleep(retriesDelay);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException("Interrupted while initializing remote", e);
+                    throw new RuntimeException("Interrupted while initializing remote", e); // NOSONAR
                 }
             }
 
@@ -100,16 +100,16 @@ public class DistributedRunner {
                 }
             }
 
-            if (addrs.size() == 0) {
+            if (addrs.isEmpty()) {
                 break;
             }
         }
 
-        if (addrs.size() > 0) {
+        if (!addrs.isEmpty()) {
             String msg = "Following remote engines could not be configured:" + addrs;
             if (!continueOnFail || engines.size() == 0) {
                 stop();
-                throw new RuntimeException(msg);
+                throw new RuntimeException(msg); // NOSONAR
             } else {
                 println(msg);
                 println("Continuing without failed engines...");
@@ -134,7 +134,7 @@ public class DistributedRunner {
                     log.warn("Host not found in list of active engines: " + address);
                 }
             } catch (IllegalStateException | JMeterEngineException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
+                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$ NOSONAR already reported to user 
             }
         }
         println("Remote engines have been started");
@@ -245,7 +245,7 @@ public class DistributedRunner {
     private void errln(String s, Exception e) {
         log.error(s, e);
         stderr.println(s + ": ");
-        e.printStackTrace(stderr);
+        e.printStackTrace(stderr); // NOSONAR
     }
 
     public void setStdout(PrintStream stdout) {
