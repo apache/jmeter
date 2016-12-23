@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.logging.LoggingManager;
@@ -134,9 +133,8 @@ public class ObjectTableModel extends DefaultTableModel {
     }
 
     public void clearData() {
-        int size = getRowCount();
         objects.clear();
-        super.fireTableRowsDeleted(0, size);
+        super.fireTableDataChanged();
     }
 
     public void addRow(Object value) {
@@ -149,12 +147,12 @@ public class ObjectTableModel extends DefaultTableModel {
             }
         }
         objects.add(value);
-        super.fireTableRowsInserted(objects.size() - 1, objects.size());
+        super.fireTableRowsInserted(objects.size() - 1, objects.size() - 1);
     }
 
     public void insertRow(Object value, int index) {
         objects.add(index, value);
-        super.fireTableRowsInserted(index, index + 1);
+        super.fireTableRowsInserted(index, index);
     }
 
     /** {@inheritDoc} */
@@ -202,12 +200,11 @@ public class ObjectTableModel extends DefaultTableModel {
     /** {@inheritDoc} */
     @Override
     public void moveRow(int start, int end, int to) {
-        List<Object> subList = new ArrayList<>(objects.subList(start, end));
-        for (int x = end - 1; x >= start; x--) {
-            objects.remove(x);
-        }
-        objects.addAll(to, subList);
-        super.fireTableChanged(new TableModelEvent(this));
+        List<Object> subList = objects.subList(start, end);
+        List<Object> backup  = new ArrayList<>(subList);
+        subList.clear();
+        objects.addAll(to, backup);
+        super.fireTableDataChanged();
     }
 
     /** {@inheritDoc} */
