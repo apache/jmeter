@@ -70,12 +70,4 @@ public abstract class RandomTimer extends ConstantTimer implements ModifiableTim
     protected Random getRandom() {
         return ThreadLocalRandom.current();
     }
-
-    /**
-     * @see org.apache.jmeter.timers.ModifiableTimer#isModifiable()
-     */
-    @Override
-    public boolean isModifiable() {
-        return true;
-    }
 }
