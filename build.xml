@@ -3380,6 +3380,16 @@ run JMeter unless all the JMeter jars are added.
   <property name="sonar.junit.reportsPath" value="reports" />
   <property name="sonar.jacoco.reportPath" value="reports/jacoco.exec" />
 
+  <property name="sonar.issue.ignore.multicriteria" value="c1,c2" />
+  <property name="sonar.issue.ignore.multicriteria.c1.ruleKey"
+         value="squid:S1948" />
+  <property name="sonar.issue.ignore.multicriteria.c1.resourceKey"
+         value="**/*.java" />
+  <property name="sonar.issue.ignore.multicriteria.c2.ruleKey"
+         value="squid:S00112" />
+  <property name="sonar.issue.ignore.multicriteria.c2.resourceKey"
+         value="**/*.java" />
+
   <property name="core.sonar.projectName" value="core" />
   <property name="core.sonar.sources" value="${src.core}" />
   <property name="core.sonar.projectBaseDir" value="./" />
