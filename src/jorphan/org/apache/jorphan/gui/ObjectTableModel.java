@@ -49,7 +49,7 @@ public class ObjectTableModel extends DefaultTableModel {
     private transient ArrayList<Functor> writeFunctors = new ArrayList<>();
 
     private transient Class<?> objectClass = null; // if provided
-    
+
     private transient boolean cellEditable = true;
 
     /**
@@ -66,7 +66,7 @@ public class ObjectTableModel extends DefaultTableModel {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
     }
-    
+
     /**
      * The ObjectTableModel is a TableModel whose rows are objects;
      * columns are defined as Functors on the object.
@@ -78,7 +78,7 @@ public class ObjectTableModel extends DefaultTableModel {
      * @param editorClasses - class for each column
      * @param cellEditable - if cell must editable (false to allow double click on cell)
      */
-    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors, 
+    public ObjectTableModel(String[] headers, Class<?> _objClass, Functor[] readFunctors,
             Functor[] writeFunctors, Class<?>[] editorClasses, boolean cellEditable) {
         this(headers, readFunctors, writeFunctors, editorClasses);
         this.objectClass=_objClass;
@@ -289,7 +289,7 @@ public class ObjectTableModel extends DefaultTableModel {
         return status;
     }
 
-    public Object getObjectList() { // used by TableEditor
+    public List<Object> getObjectList() { // used by TableEditor
         return objects;
     }
 
