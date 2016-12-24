@@ -78,7 +78,7 @@ public class SmtpSampler extends AbstractSampler {
     public static final String SERVER_CONNECTION_TIMEOUT = "SMTPSampler.serverConnectionTimeout"; // $NON-NLS-1$
     public static final String USE_AUTH             = "SMTPSampler.useAuth"; // $NON-NLS-1$
     public static final String USERNAME             = "SMTPSampler.username"; // $NON-NLS-1$
-    public static final String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$
+    public static final String PASSWORD             = "SMTPSampler.password"; // $NON-NLS-1$ NOSONAR not a hardcoded password
     public static final String MAIL_FROM            = "SMTPSampler.mailFrom"; // $NON-NLS-1$
     public static final String MAIL_REPLYTO         = "SMTPSampler.replyTo"; // $NON-NLS-1$
     public static final String RECEIVER_TO          = "SMTPSampler.receiverTo"; // $NON-NLS-1$
