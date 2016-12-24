@@ -928,7 +928,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.setSampleLabel(res.getSampleLabel());
         res.setDataType(SampleResult.TEXT);
         ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-        e.printStackTrace(new PrintStream(text));
+        e.printStackTrace(new PrintStream(text)); // NOSONAR Stacktrace will be used in the response
         res.setResponseData(text.toByteArray());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE+": " + e.getClass().getName());
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": " + e.getMessage());
