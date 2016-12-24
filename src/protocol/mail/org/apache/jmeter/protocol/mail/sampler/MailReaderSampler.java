@@ -73,7 +73,7 @@ public class MailReaderSampler extends AbstractSampler implements Interruptible 
     private static final String SERVER = "host"; // $NON-NLS-1$
     private static final String PORT = "port"; // $NON-NLS-1$
     private static final String USERNAME = "username"; // $NON-NLS-1$
-    private static final String PASSWORD = "password"; // $NON-NLS-1$
+    private static final String PASSWORD = "password"; // $NON-NLS-1$ NOSONAR not a hardcoded password
     private static final String FOLDER = "folder"; // $NON-NLS-1$
     private static final String DELETE = "delete"; // $NON-NLS-1$
     private static final String NUM_MESSAGES = "num_messages"; // $NON-NLS-1$
