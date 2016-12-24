@@ -185,7 +185,7 @@ public class ProxyControl extends GenericController {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
-    private static final long sampleGap =
+    private static final long SAMPLE_GAP =
         JMeterUtils.getPropDefault("proxy.pause", 5000); // $NON-NLS-1$
     // Detect if user has pressed a new link
 
@@ -1143,7 +1143,7 @@ public class ProxyControl extends GenericController {
             long now = System.currentTimeMillis();
             long deltaT = now - lastTime;
             int cachedGroupingMode = groupingMode;
-            if (deltaT > sampleGap) {
+            if (deltaT > SAMPLE_GAP) {
                 if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
                 }
