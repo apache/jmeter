@@ -206,10 +206,10 @@ public class ProxyControl extends GenericController {
 
     private static final String CERT_PATH_ABS = CERT_PATH.getAbsolutePath();
 
-    private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$
+    private static final String DEFAULT_PASSWORD = "password"; // $NON-NLS-1$ NOSONAR only default password, if user has not defined one
 
     // Keys for user preferences
-    private static final String USER_PASSWORD_KEY = "proxy_cert_password";
+    private static final String USER_PASSWORD_KEY = "proxy_cert_password"; // NOSONAR not a hardcoded password
 
     private static final Preferences PREFERENCES = Preferences.userNodeForPackage(ProxyControl.class);
     // Note: Windows user preferences are stored relative to: HKEY_CURRENT_USER\Software\JavaSoft\Prefs
