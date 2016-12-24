@@ -28,6 +28,7 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
 
 /**
  *
@@ -371,7 +372,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
             response.append("\n\n");
 
         } catch (JMSException e) {
-            e.printStackTrace();
+            LoggingManager.getLoggerForClass().warn(
+                    "Can't extract message headers", e);
         }
 
         return new String(response);
