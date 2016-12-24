@@ -30,9 +30,9 @@ import org.jCharts.properties.PointChartProperties;
 
 public class StatGraphProperties {
 
-    public static final String[] fontSize = { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32"};
+    static final String[] FONT_SIZE = { "8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "32"};
 
-    public static final String[] strokeWidth = { "1.0f", "1.5f", "2.0f", "2.5f", "3.0f", "3.5f", "4.0f", "4.5f", "5.0f", "5.5f", "6.0f", "6.5f"};
+    static final String[] STROKE_WIDTH = { "1.0f", "1.5f", "2.0f", "2.5f", "3.0f", "3.5f", "4.0f", "4.5f", "5.0f", "5.5f", "6.0f", "6.5f"};
 
     public static Map<String, String> getFontNameMap() {
         Map<String, String> fontNameMap = new LinkedHashMap<>(2);
