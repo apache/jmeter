@@ -376,6 +376,6 @@ public abstract class BaseJMSSampler extends AbstractSampler {
                     "Can't extract message headers", e);
         }
 
-        return new String(response);
+        return response.toString();
     }
 }
