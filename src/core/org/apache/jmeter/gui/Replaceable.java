@@ -30,9 +30,9 @@ public interface Replaceable {
     /**
      * Replace in object  by replaceBy
      *
-     * @param regex Regular expression
-     * @param replaceBy Text replacing
-     * @param caseSensitive
+     * @param regex Regular expression to search for
+     * @param replaceBy Text used as replacement
+     * @param caseSensitive flag, whether search should be done case sensitive
      * @return number of replacements
      * @throws Exception
      *             when something fails while replacing
