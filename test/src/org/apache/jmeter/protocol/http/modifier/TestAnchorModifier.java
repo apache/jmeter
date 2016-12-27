@@ -19,6 +19,7 @@
 package org.apache.jmeter.protocol.http.modifier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -265,7 +266,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             jmctx.setPreviousResult(result);
             parser.process();
             String newUrl = config.getUrl().toString();
-            assertTrue(!"http://www.apache.org/home/index.html?param1=value1".equals(newUrl));
+            assertNotEquals("http://www.apache.org/home/index.html?param1=value1", newUrl);
             assertEquals(config.getUrl().toString(), newUrl);
         }
 
