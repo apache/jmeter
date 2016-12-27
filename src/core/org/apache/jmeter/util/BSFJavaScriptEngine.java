@@ -87,15 +87,12 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
 
             retval =
                 ((Function) fun).call(cx, global, global, args);
-
-//                ScriptRuntime.call(cx, fun, global, args, global);
-
             if (retval instanceof Wrapper) {
                 retval = ((Wrapper) retval).unwrap();
             }
         }
         catch (Throwable t) {
-            handleError(t);
+            handleError(t); //NOSONAR We handle correctly Error case in function
         }
         finally {
             Context.exit();
@@ -149,7 +146,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
 
         }
         catch (Throwable t) { // includes JavaScriptException, rethrows Errors
-            handleError(t);
+            handleError(t); // NOSONAR We handle correctly Error case in function
         }
         finally {
             Context.exit();
@@ -231,7 +228,7 @@ public class BSFJavaScriptEngine extends BSFEngineImpl {
             }
         }
         catch (Throwable t) {
-            handleError(t);
+            handleError(t); // NOSONAR We handle correctly Error case in function
         }
         finally {
             Context.exit();
