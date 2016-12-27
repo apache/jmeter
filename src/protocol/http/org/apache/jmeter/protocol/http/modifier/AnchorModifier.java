@@ -87,7 +87,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         addAnchorUrls(html, result, sampler, potentialLinks);
         addFormUrls(html, result, sampler, potentialLinks);
         addFramesetUrls(html, result, sampler, potentialLinks);
-        if (potentialLinks.size() > 0) {
+        if (!potentialLinks.isEmpty()) {
             HTTPSamplerBase url = potentialLinks.get(ThreadLocalRandom.current().nextInt(potentialLinks.size()));
             if (log.isDebugEnabled()) {
                 log.debug("Selected: "+url.toString());
