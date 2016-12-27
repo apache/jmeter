@@ -229,9 +229,9 @@ public class DistributedRunner {
      *
      * @param address address for engine
      * @return engine instance
-     * @throws RemoteException
-     * @throws NotBoundException
-     * @throws MalformedURLException
+     * @throws RemoteException if registry can't be contacted
+     * @throws NotBoundException when name for address can't be found
+     * @throws MalformedURLException when address can't be converted to valid URL
      */
     protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
         return new ClientJMeterEngine(address);
