@@ -56,7 +56,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -123,7 +122,7 @@ public class Save extends AbstractAction {
 
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-        HashTree subTree = null;
+        HashTree subTree;
         boolean fullSave = false; // are we saving the whole tree?
         if (!commands.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
@@ -219,9 +218,7 @@ public class Save extends AbstractAction {
             log.warn("Error converting subtree "+err);
         }
 
-        FileOutputStream ostream = null;
-        try {
-            ostream = new FileOutputStream(updateFile);
+        try (FileOutputStream ostream = new FileOutputStream(updateFile)){
             SaveService.saveTree(subTree, ostream);
             if (fullSave) { // Only update the stored copy of the tree for a full save
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
@@ -241,18 +238,14 @@ public class Save extends AbstractAction {
                     log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
                 }
             }
-        } catch (Throwable ex) {
-            log.error("Error saving tree:", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
-        } finally {
-            JOrphanUtils.closeQuietly(ostream);
+        } catch(RuntimeException ex) {
+            throw ex;
         }
+        catch (Exception ex) {
+            log.error("Error saving tree:", ex);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
+        } 
+
         GuiPackage.getInstance().updateCurrentGui();
     }
     
@@ -374,7 +367,7 @@ public class Save extends AbstractAction {
         });
         // backup name is of the form
         // {baseName}{versionSeparator}{version}{jmxExtension}
-        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1) + JMX_FILE_EXTENSION;
+        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {

@@ -58,6 +58,7 @@ public class SimpleDataWriter extends AbstractVisualizer {
      */
     @Override
     public void clearData() {
+        // NOOP
     }
 
     /**
@@ -67,5 +68,6 @@ public class SimpleDataWriter extends AbstractVisualizer {
      */
     @Override
     public void add(SampleResult sample) {
+        // NOOP
     }
 }

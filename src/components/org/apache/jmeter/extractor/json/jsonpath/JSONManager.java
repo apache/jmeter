@@ -72,7 +72,7 @@ public class JSONManager {
      * @param jsonString JSON String from which data is extracted
      * @param jsonPath JSON-PATH expression
      * @return List of JSON Strings of the extracted data
-     * @throws ParseException
+     * @throws ParseException when parsing fails
      */
     public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
             throws ParseException {

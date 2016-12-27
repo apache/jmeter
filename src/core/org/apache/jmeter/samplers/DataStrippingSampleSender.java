@@ -37,6 +37,9 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
 
     private static final long serialVersionUID = -5556040298982085715L;
 
+    /** empty array which can be returned instead of null */
+    private static final byte[] EMPTY_BA = new byte[0];
+
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final boolean DEFAULT_STRIP_ALSO_ON_ERROR = true;
@@ -118,7 +121,7 @@ public class DataStrippingSampleSender extends AbstractSampleSender implements S
      */
     private void stripResponse(SampleResult result) {
         result.setBytes(result.getBytesAsLong());
-        result.setResponseData(SampleResult.EMPTY_BA);
+        result.setResponseData(EMPTY_BA);
     }
 
     /**

@@ -46,6 +46,7 @@ import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
+import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.protocol.http.control.AuthManager;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.Cookie;
@@ -93,7 +94,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  */
 public abstract class HTTPSamplerBase extends AbstractSampler
-    implements TestStateListener, TestIterationListener, ThreadListener, HTTPConstantsInterface {
+    implements TestStateListener, TestIterationListener, ThreadListener, HTTPConstantsInterface,
+        Replaceable {
 
     private static final long serialVersionUID = 241L;
 
@@ -538,14 +540,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         this.setProperty(MONITOR, truth);
     }
 
+    /**
+     * @return boolean 
+     * @deprecated since 3.2 always returns false
+     */
+    @Deprecated
     public String getMonitor() {
-        return this.getPropertyAsString(MONITOR);
+        return "false";
     }
 
+    /**
+     * @return boolean
+     * @deprecated since 3.2 always returns false
+     */
+    @Deprecated
     public boolean isMonitor() {
-        return this.getPropertyAsBoolean(MONITOR);
+        return false;
     }
-
+    
     public void setImplementation(String value) {
         this.setProperty(IMPLEMENTATION, value);
     }
@@ -916,12 +928,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.setSampleLabel(res.getSampleLabel());
         res.setDataType(SampleResult.TEXT);
         ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-        e.printStackTrace(new PrintStream(text));
+        e.printStackTrace(new PrintStream(text)); // NOSONAR Stacktrace will be used in the response
         res.setResponseData(text.toByteArray());
         res.setResponseCode(NON_HTTP_RESPONSE_CODE+": " + e.getClass().getName());
         res.setResponseMessage(NON_HTTP_RESPONSE_MESSAGE+": " + e.getMessage());
         res.setSuccessful(false);
-        res.setMonitor(this.isMonitor());
         return res;
     }
 
@@ -2026,5 +2037,40 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public boolean applies(ConfigTestElement configElement) {
         String guiClass = configElement.getProperty(TestElement.GUI_CLASS).getStringValue();
         return APPLIABLE_CONFIG_CLASSES.contains(guiClass);
+    }
+
+    /**
+     * Replace by replaceBy in path and body (arguments) properties
+     */
+    @Override
+    public int replace(String regex, String replaceBy, boolean caseSensitive) throws Exception {
+        int totalReplaced = 0;
+        for (JMeterProperty jMeterProperty : getArguments()) {
+            HTTPArgument arg = (HTTPArgument) jMeterProperty.getObjectValue();
+            String value = arg.getValue();
+            if(!StringUtils.isEmpty(value)) {
+                Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+                // check if there is anything to replace
+                int nbReplaced = ((Integer)result[1]).intValue();
+                if (nbReplaced>0) {
+                    String replacedText = (String) result[0];
+                    arg.setValue(replacedText);
+                    totalReplaced += nbReplaced;
+                }
+            }
+        }
+        String value = getPath();
+        if(!StringUtils.isEmpty(value)) {
+            Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+            // check if there is anything to replace
+            int nbReplaced = ((Integer)result[1]).intValue();
+            if (nbReplaced>0) {
+                totalReplaced += nbReplaced;
+                String replacedText = (String) result[0];
+                setPath(replacedText);
+                totalReplaced += nbReplaced;
+            }
+        }
+        return totalReplaced;
     }
 }

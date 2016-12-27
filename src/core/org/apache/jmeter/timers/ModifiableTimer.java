@@ -28,5 +28,8 @@ public interface ModifiableTimer extends Timer {
     /**
      * @return true if factor can be applied to it
      */
-    boolean isModifiable();
+    @Override
+    default boolean isModifiable() {
+        return true;
+    }
 }

@@ -378,7 +378,7 @@ public class RespTimeGraphChart extends JPanel {
             divValueStr.append("0"); //$NON-NLS-1$
         }
         int divValueInt = Integer.parseInt(divValueStr.toString());
-        BigDecimal round = new BigDecimal(value / divValueInt);
+        BigDecimal round = BigDecimal.valueOf(value / divValueInt);
         round = round.setScale(0, roundMode);
         int topValue = round.intValue() * divValueInt;
         return topValue;

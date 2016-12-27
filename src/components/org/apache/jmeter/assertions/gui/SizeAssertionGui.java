@@ -58,8 +58,12 @@ public class SizeAssertionGui extends AbstractAssertionGui implements ActionList
 
     private JTextField size;
 
-    private JRadioButton equalButton, notequalButton, greaterthanButton, lessthanButton, greaterthanequalButton,
-            lessthanequalButton;
+    private JRadioButton equalButton;
+    private JRadioButton notequalButton;
+    private JRadioButton greaterthanButton;
+    private JRadioButton lessthanButton;
+    private JRadioButton greaterthanequalButton;
+    private JRadioButton lessthanequalButton;
 
     private int execState; // store the operator
 

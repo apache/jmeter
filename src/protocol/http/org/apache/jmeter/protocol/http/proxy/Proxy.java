@@ -464,7 +464,7 @@ public class Proxy extends Thread {
         if (result == null) {
             result = new SampleResult();
             ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-            e.printStackTrace(new PrintStream(text));
+            e.printStackTrace(new PrintStream(text)); // NOSONAR we store the Stacktrace in the result
             result.setResponseData(text.toByteArray());
             result.setSamplerData(request.getFirstLine());
             result.setSampleLabel(request.getUrl());
@@ -530,8 +530,11 @@ public class Proxy extends Thread {
                     continue;
                 }
                 if (HTTPConstants.HEADER_CONTENT_ENCODING.equalsIgnoreCase(parts[0])
-                    &&
-                    HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
+                    && (HTTPConstants.ENCODING_GZIP.equalsIgnoreCase(parts[1])
+                            || HTTPConstants.ENCODING_DEFLATE.equalsIgnoreCase(parts[1])
+                            // TODO BROTLI not supported by HC4, so no uncompression would occur, add it once available
+                            // || HTTPConstants.ENCODING_BROTLI.equalsIgnoreCase(parts[1]) 
+                            )
                 ){
                     headerLines[i] = null; // We don't want this passed on to browser
                     fixContentLength = true;

@@ -46,7 +46,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private static final long serialVersionUID = 240L;
 
     // Only create the map if it is required
-    private transient final ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
+    private final transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
 
     private static final Object DUMMY = new Object();
 

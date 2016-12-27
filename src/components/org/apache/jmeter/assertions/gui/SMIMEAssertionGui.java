@@ -28,8 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.assertions.SMIMEAssertionTestElement;
 import org.apache.jmeter.testelement.TestElement;
@@ -110,12 +108,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils
             .getResString("smime_assertion_signature"))); // $NON-NLS-1$
-        notSigned.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                verifySignature.setEnabled(!notSigned.isSelected());
-            }
-        });
+        notSigned.addChangeListener(
+                evt -> verifySignature.setEnabled(!notSigned.isSelected()));
 
         panel.add(verifySignature);
         panel.add(notSigned);
@@ -138,15 +132,13 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         panel.add(signerNoCheck);
 
         panel.add(signerCheckConstraints);
-        signerCheckConstraints.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                signerDnField.setEnabled(signerCheckConstraints.isSelected());
-                signerSerialNumberField.setEnabled(signerCheckConstraints.isSelected());
-                signerEmailField.setEnabled(signerCheckConstraints.isSelected());
-                issuerDnField.setEnabled(signerCheckConstraints.isSelected());
-            }
-        });
+        signerCheckConstraints.addChangeListener(evt -> {
+                boolean signerCC = signerCheckConstraints.isSelected();
+                signerDnField.setEnabled(signerCC);
+                signerSerialNumberField.setEnabled(signerCC);
+                signerEmailField.setEnabled(signerCC);
+                issuerDnField.setEnabled(signerCC);
+                });
         Box box = Box.createHorizontalBox();
         box.add(new JLabel(JMeterUtils.getResString("smime_assertion_signer_dn"))); // $NON-NLS-1$
         box.add(Box.createHorizontalStrut(5));
@@ -171,13 +163,8 @@ import org.apache.jorphan.gui.layout.VerticalLayout;
         box.add(signerSerialNumberField);
         panel.add(box);
 
-        // panel.add(signerCheckByFile);
-        signerCheckByFile.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                signerCertFile.setEnabled(signerCheckByFile.isSelected());
-            }
-        });
+        signerCheckByFile.addChangeListener(
+                evt -> signerCertFile.setEnabled(signerCheckByFile.isSelected()));
         box = Box.createHorizontalBox();
         box.add(signerCheckByFile);
         box.add(Box.createHorizontalStrut(5));

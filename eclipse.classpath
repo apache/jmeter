@@ -23,15 +23,17 @@
    Eclipse seems to use TABS for indenting the entries.
  -->
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="javafx/**"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="src" output="build/components" path="src/components"/>
 	<classpathentry kind="src" output="build/core" path="src/core"/>
 	<classpathentry kind="src" output="build/examples" path="src/examples"/>
 	<classpathentry kind="src" output="build/functions" path="src/functions"/>
 	<classpathentry kind="src" output="build/jorphan" path="src/jorphan"/>
 	<classpathentry kind="src" output="build/junit" path="src/junit"/>
-	<classpathentry kind="src" output="build/monitor/components" path="src/monitor/components"/>
-	<classpathentry kind="src" output="build/monitor/model" path="src/monitor/model"/>
 	<classpathentry kind="src" output="build/protocol/ftp" path="src/protocol/ftp"/>
 	<classpathentry kind="src" output="build/protocol/http" path="src/protocol/http"/>
 	<classpathentry kind="src" output="build/protocol/java" path="src/protocol/java"/>
@@ -49,6 +51,7 @@
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
+	<classpathentry kind="lib" path="lib/caffeine-2.3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-dbcp2-2.1.1.jar"/>

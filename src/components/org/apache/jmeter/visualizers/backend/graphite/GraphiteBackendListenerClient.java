@@ -323,8 +323,10 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         }
         // Send last set of data before ending
         sendMetrics();
-        
-        samplersToFilter.clear();
+
+        if (samplersToFilter != null) {
+            samplersToFilter.clear();
+        }
         graphiteMetricsManager.destroy();
         super.teardownTest(context);
     }

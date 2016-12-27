@@ -182,7 +182,7 @@ public class Top5ErrorsBySamplerConsumer extends
     }
 
     /**
-     * @param ignoreTCFromTop5ErrorsBySampler
+     * @param ignoreTCFromTop5ErrorsBySampler ignore transaction controller sampler results when computing top 5
      */
     public void setIgnoreTransactionController(
             boolean ignoreTCFromTop5ErrorsBySampler) {

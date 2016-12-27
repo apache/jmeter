@@ -323,7 +323,6 @@ so unsafe characters may need to be encoded to avoid errors such as <code>URISyn
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </property>
-        <property name="Use as monitor" required="No">For use with the <complink name="Monitor Results"/> listener. DEPRECATED</property>
        <property name="Save response as MD5 hash?" required="No">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
@@ -465,7 +464,7 @@ You may encounter the following error: <code>java.security.cert.CertificateExcep
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
  algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
 </p><p>
-This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
+This error is related to increased security in Java 8.
 </p><p>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
@@ -569,7 +568,7 @@ the additional variables for rows four, five and six will be removed.
         <property name="Parameter types" required="Yes, if a prepared or callable statement has parameters">
         Comma-separated list of SQL parameter types (e.g. <code>INTEGER</code>, <code>DATE</code>, <code>VARCHAR</code>, <code>DOUBLE</code>) or integer values of Constants. Those integer values can be used, when you use custom database types proposed by driver (For example <code>OracleTypes.CURSOR</code> could be represented by its integer value <code>-10</code>).<br/>
         These are defined as fields in the class <code>java.sql.Types</code>, see for example:<br/>
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br/>
         <note>Note: JMeter will use whatever types are defined by the runtime JVM,
         so if you are running on a different JVM, be sure to check the appropriate documentation</note>
         <b>If the callable statement has <code>INOUT</code> or <code>OUT</code> parameters, then these must be indicated by prefixing the
@@ -2697,7 +2696,6 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 <li>Simple Data Writer</li>
 <li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
-<li>Monitor Results</li>
 <li>Summary Report</li>
 </ul>
 <p>
@@ -3047,37 +3045,6 @@ recording data by eliminating GUI overhead.
 When running in non-GUI mode, the <code>-l</code> flag can be used to create a data file.
 The fields to save are defined by JMeter properties.
 See the <code>jmeter.properties</code> file for details.
-</description>
-</component>
-
-<component name="Monitor Results (DEPRECATED)" index="&sect-num;.3.10"  width="762" height="757" screenshot="monitor_screencap.png">
-<description>
-<p>Monitor Results is a new Visualizer for displaying server
-status. It is designed for Tomcat 5, but any servlet container
-can port the status servlet and use this monitor. There are two primary
-tabs for the monitor. The first is the "<code>Health</code>" tab, which will show the
-status of one or more servers. The second tab labled "<code>Performance</code>" shows
-the performance for one server for the last 1000 samples. The equations
-used for the load calculation is included in the Visualizer.</p>
-<p>Currently, the primary limitation of the monitor is system memory. A
-quick benchmark of memory usage indicates a buffer of 1000 data points for
-100 servers would take roughly 10Mb of RAM. On a 1.4Ghz centrino
-laptop with 1Gb of ram, the monitor should be able to handle several
-hundred servers.</p>
-<p>As a general rule, monitoring production systems should take care to
-set an appropriate interval. Intervals shorter than 5 seconds are too
-aggressive and have a potential of impacting the server. With a buffer of
-1000 data points at 5 second intervals, the monitor would check the server
-status 12 times a minute or 720 times a hour. This means the buffer shows
-the performance history of each machine for the last hour.</p>
-<note>
-The monitor requires Tomcat 5 or above. 
-Use a browser to check that you can access the Tomcat status servlet OK.
-</note>
-<p>
-For a detailed description of how to use the monitor, please refer to
-<a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
-</p>
 </description>
 </component>
 
@@ -6317,7 +6284,7 @@ the browser. Effectively JMeter has to pretend to be the target server.
 <p>
 JMeter will generate its own certificate(s).
 These are generated with a validity period defined by the property <code>proxy.cert.validity</code>, default 7 days, and random passwords.
-If JMeter detects that it is running under Java 7 or later, it will generate certificates for each target server as necessary (dynamic mode)
+If JMeter detects that it is running under Java 8 or later, it will generate certificates for each target server as necessary (dynamic mode)
 unless the following property is defined: <code>proxy.cert.dynamic_keys=false</code>.
 When using dynamic mode, the certificate will be for the correct host name, and will be signed by a JMeter-generated CA certificate.
 By default, this CA certificate won't be trusted by the browser, however it can be installed as a trusted certificate.
@@ -6389,7 +6356,7 @@ This setting will also be needed when running the generated test plan.
 <a name="install_cert"/>
 <h4>Installing the JMeter CA certificate for HTTPS recording</h4>
 <p>
-As mentioned above, when run under Java 7, JMeter can generate certificates for each server.
+As mentioned above, when run under Java 8, JMeter can generate certificates for each server.
 For this to work smoothly, the root CA signing certificate used by JMeter needs to be trusted by the browser.
 The first time that the recorder is started, it will generate the certificates if necessary. 
 The root CA certificate is exported into a file with the name <code>ApacheJMeterTemporaryRootCA</code> in the current launch directory.

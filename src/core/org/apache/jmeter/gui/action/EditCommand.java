@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
-import org.apache.jmeter.gui.NamePanel;
 
 /**
  * Implements the Edit menu item.
@@ -45,16 +44,8 @@ public class EditCommand extends AbstractAction {
         JMeterGUIComponent currentGui = guiPackage.getCurrentGui();
         guiPackage.getMainFrame().setMainPanel((javax.swing.JComponent) currentGui);
         guiPackage.getMainFrame().setEditMenu(guiPackage.getTreeListener().getCurrentNode().createPopupMenu());
-        // TODO: I believe the following code (to the end of the method) is
-        // obsolete,
-        // since NamePanel no longer seems to be the GUI for any component:
-        if (!(currentGui instanceof NamePanel)) {
-            guiPackage.getMainFrame().setFileLoadEnabled(true);
-            guiPackage.getMainFrame().setFileSaveEnabled(true);
-        } else {
-            guiPackage.getMainFrame().setFileLoadEnabled(false);
-            guiPackage.getMainFrame().setFileSaveEnabled(false);
-        }
+        guiPackage.getMainFrame().setFileLoadEnabled(true);
+        guiPackage.getMainFrame().setFileSaveEnabled(true);
     }
 
     @Override

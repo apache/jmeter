@@ -70,7 +70,10 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
     private int numUserColumns = 1;
 
-    private JButton addParameterButton, addUserButton, deleteRowButton, deleteColumnButton;
+    private JButton addParameterButton;
+    private JButton addUserButton;
+    private JButton deleteRowButton;
+    private JButton deleteColumnButton;
 
     private JCheckBox perIterationCheck;
 
@@ -128,7 +131,7 @@ public class UserParametersGui extends AbstractPreProcessorGui {
     @Override
     public void modifyTestElement(TestElement params) {
         GuiUtils.stopTableEditing(paramTable);
-        UserParameters userParams = ((UserParameters) params);
+        UserParameters userParams = (UserParameters) params;
         userParams.setNames(new CollectionProperty(UserParameters.NAMES, tableModel.getColumnData(NAME_COL_RESOURCE)));
         CollectionProperty threadLists = new CollectionProperty(UserParameters.THREAD_VALUES, new ArrayList<>());
         log.debug("making threadlists from gui");
@@ -198,13 +201,8 @@ public class UserParametersGui extends AbstractPreProcessorGui {
         JLabel tableLabel = new JLabel(JMeterUtils.getResString("user_parameters_table")); // $NON-NLS-1$
         initTableModel();
         paramTable = new JTable(tableModel);
-        // paramTable.setRowSelectionAllowed(true);
-        // paramTable.setColumnSelectionAllowed(true);
         paramTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         paramTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        // paramTable.setCellSelectionEnabled(true);
-        // paramTable.setPreferredScrollableViewportSize(new Dimension(100,
-        // 70));
         JMeterUtils.applyHiDPI(paramTable);
 
         paramPanel = new JPanel(new BorderLayout());

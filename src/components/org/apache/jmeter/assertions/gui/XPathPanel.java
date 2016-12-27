@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.assertions.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 
 import javax.swing.Box;
@@ -144,12 +142,7 @@ public class XPathPanel extends JPanel {
     public JButton getCheckXPathButton() {
         if (checkXPath == null) {
             checkXPath = new JButton(JMeterUtils.getResString("xpath_assertion_button")); //$NON-NLS-1$
-            checkXPath.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    validXPath(xpath.getText(), true);
-                }
-            });
+            checkXPath.addActionListener(e -> validXPath(xpath.getText(), true));
         }
         return checkXPath;
     }
@@ -202,19 +195,18 @@ public class XPathPanel extends JPanel {
             Element el = testDoc.createElement("root"); //$NON-NLS-1$
             testDoc.appendChild(el);
             XPathUtil.validateXPath(testDoc, xpathString);
-        } catch (IllegalArgumentException e) {
-            log.warn(e.getLocalizedMessage());
-            success = false;
-            ret = e.getLocalizedMessage();
-        } catch (ParserConfigurationException | TransformerException e) {
+        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException e) {
+            log.warn(e.getLocalizedMessage(), e);
             success = false;
             ret = e.getLocalizedMessage();
         }
         if (showDialog) {
-            JOptionPane.showMessageDialog(null, (success) ? JMeterUtils.getResString("xpath_assertion_valid") : ret, //$NON-NLS-1$
-                    (success) ? JMeterUtils.getResString("xpath_assertion_valid") : JMeterUtils //$NON-NLS-1$
-                            .getResString("xpath_assertion_failed"), (success) ? JOptionPane.INFORMATION_MESSAGE //$NON-NLS-1$
-                            : JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, 
+                    success ? JMeterUtils.getResString("xpath_assertion_valid") : ret, //$NON-NLS-1$
+                    success ? JMeterUtils.getResString("xpath_assertion_valid") : //$NON-NLS-1$
+                        JMeterUtils.getResString("xpath_assertion_failed"), //$NON-NLS-1$
+                        success ? JOptionPane.INFORMATION_MESSAGE //$NON-NLS-1$
+                                : JOptionPane.ERROR_MESSAGE);
         }
         return success;
 

@@ -99,6 +99,7 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
             int matchNumber = matchNumbers[i];
             String currentRefName = refNames[i].trim();
             String currentJsonPath = jsonPathExpressions[i].trim();
+            clearOldRefVars(vars, currentRefName);
             try {
                 if (jsonResponse.isEmpty()) {
                     vars.put(currentRefName, defaultValues[i]);
@@ -167,7 +168,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                                 vars.put(currentRefName + ALL_SUFFIX, vars.get(currentRefName));
                             }
                         }
-                        vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
+                        if (matchNumber != 0) {
+                            vars.put(currentRefName + REF_MATCH_NR, Integer.toString(extractedValues.size()));
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -180,6 +183,13 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                 }
                 vars.put(currentRefName, defaultValues[i]);
             }
+        }
+    }
+
+    private void clearOldRefVars(JMeterVariables vars, String refName) {
+        vars.remove(refName + REF_MATCH_NR);
+        for (int i=1; vars.get(refName + "_" + i) != null; i++) {
+            vars.remove(refName + "_" + i);
         }
     }
 

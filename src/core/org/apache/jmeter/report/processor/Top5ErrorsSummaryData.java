@@ -38,7 +38,7 @@ public class Top5ErrorsSummaryData {
     /**
      */
     public Top5ErrorsSummaryData() {
-        countPerError = new HashMap<String, Long>();
+        countPerError = new HashMap<>();
     }
 
     /**
@@ -87,14 +87,9 @@ public class Top5ErrorsSummaryData {
      * @return array of [String, Long]
      */
     public Object[][] getTop5ErrorsMetrics() {
-        SortedSet<Map.Entry<String, Long>> reverseSortedSet = new TreeSet<Map.Entry<String, Long>>(
-                new Comparator<Map.Entry<String, Long>>() {
-                    @Override
-                    public int compare(Map.Entry<String, Long> e1,
-                            Map.Entry<String, Long> e2) {
-                        return -e1.getValue().compareTo(e2.getValue());
-                    }
-                });
+        SortedSet<Map.Entry<String, Long>> reverseSortedSet = new TreeSet<>(
+                (Map.Entry<String, Long> e1,Map.Entry<String, Long> e2) 
+                    -> e2.getValue().compareTo(e1.getValue()));
         
         reverseSortedSet.addAll(countPerError.entrySet());
         Object[][] result = new Object[Top5ErrorsBySamplerConsumer.MAX_NUMBER_OF_ERRORS_IN_TOP][2];

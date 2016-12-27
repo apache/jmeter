@@ -264,7 +264,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             engine = null;
             if (now) {
                 tellThreadGroupsToStop();
-                pause(10 * countStillActiveThreads());
+                pause(10L * countStillActiveThreads());
                 boolean stopped = verifyThreadsStopped();
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
@@ -418,7 +418,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterContextService.clearTotalThreads();
             log.info("Starting tearDown thread groups");
             if (mainGroups && !running) { // i.e. shutdown/stopped during main thread groups
-                running = shutdown & tearDownOnShutdown; // re-enable for tearDown if necessary
+                running = shutdown && tearDownOnShutdown; // re-enable for tearDown if necessary
             }
             while (running && postIter.hasNext()) {//for each setup thread group
                 AbstractThreadGroup group = postIter.next();

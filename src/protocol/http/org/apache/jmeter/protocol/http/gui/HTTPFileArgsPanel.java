@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -30,7 +29,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -54,15 +52,11 @@ import org.apache.jorphan.reflect.Functor;
  */
 /**
  * A GUI panel allowing the user to enter file information for http upload.
- * Used by MultipartUrlConfigGui for use in HTTP Samplers.
+ * Used by UrlConfigGui for use in HTTP Samplers.
  */
 public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 240L;
-
-    /** The title label for this component. */
-    @Deprecated
-    private JLabel tableLabel;
 
     /** The table containing the list of files. */
     private transient JTable table;
@@ -101,19 +95,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
      * Create a new HTTPFileArgsPanel as an embedded component
      */
     public HTTPFileArgsPanel() {
-        init();
-    }
-    
-    /**
-     * Create a new HTTPFileArgsPanel as an embedded component, using the
-     * specified title.
-     *
-     * @param label the title for the component.
-     * @deprecated will be removed in the next version
-     */
-    @Deprecated
-    public HTTPFileArgsPanel(String label) {
-        tableLabel = new JLabel(label);
         init();
     }
 
@@ -335,17 +316,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Create a panel containing the title label for the table.
-     * @return a panel containing the title label
-     */
-    @Deprecated
-    private Component makeLabelPanel() {
-        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        labelPanel.add(tableLabel);
-        return labelPanel;
-    }
-
-    /**
      * Create a panel containing the add and delete buttons.
      *
      * @return a GUI panel containing the buttons
@@ -382,10 +352,6 @@ public class HTTPFileArgsPanel extends JPanel implements ActionListener {
 
         p.setLayout(new BorderLayout());
 
-        // retro compatibility, will be removed in the next version
-        if(tableLabel != null) {
-            p.add(makeLabelPanel(), BorderLayout.NORTH);
-        }
         p.add(makeMainPanel(), BorderLayout.CENTER);
         // Force a minimum table height of 70 pixels
         p.add(Box.createVerticalStrut(70), BorderLayout.WEST);

@@ -175,27 +175,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         guiPack.undoHistory.add(treeModel, "Created");
         GuiPackage.guiPack = guiPack;
     }
-    
-    /**
-     * When GuiPackage is requested for the first time, it should be given
-     * handles to JMeter's Tree Listener and TreeModel.
-     *
-     * @param listener
-     *            the TreeListener for JMeter's test tree
-     * @param treeModel
-     *            the model for JMeter's test tree
-     *
-     * @return GuiPackage
-     * @deprecated  Will be removed in next version. Use {@link GuiPackage#initInstance(JMeterTreeListener, JMeterTreeModel)}
-     */
-    @Deprecated
-    public static GuiPackage getInstance(JMeterTreeListener listener, JMeterTreeModel treeModel) {
-        if(guiPack == null) {
-            initInstance(listener, treeModel);
-        }
-        return GuiPackage.guiPack;
-    }
-    
+   
 
     /**
      * Get a JMeterGUIComponent for the specified test element. If the GUI has
@@ -416,10 +396,18 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /**
      * Update the GUI for the currently selected node. The GUI component is
      * configured to reflect the settings in the current tree node.
-     *
      */
     public void updateCurrentGui() {
         updateCurrentNode();
+        refreshCurrentGui();
+    }
+
+    /**
+     * Refresh GUI from node state. 
+     * This method does not update the current node from GUI at the 
+     * difference of {@link GuiPackage#updateCurrentGui()}
+     */
+    public void refreshCurrentGui() {
         currentNode = treeListener.getCurrentNode();
         TestElement element = currentNode.getTestElement();
         JMeterGUIComponent comp = getGui(element);

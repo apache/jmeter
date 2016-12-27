@@ -44,6 +44,7 @@ public interface LinkExtractorParser {
      *            Base URL from which the HTML code was obtained
      * @param encoding Charset
      * @return an Iterator for the resource URLs
+     * @throws LinkExtractorParseException when extracting the links fails
      */
     Iterator<URL> getEmbeddedResourceURLs(
             String userAgent, byte[] responseData, URL baseUrl, String encoding) 

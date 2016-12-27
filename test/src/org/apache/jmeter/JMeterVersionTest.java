@@ -115,9 +115,11 @@ public class JMeterVersionTest extends JMeterTestCase {
         versions.remove("rat");
         propNames.remove("rat-tasks");
         versions.remove("rat-tasks");
-        // remove optional jacoco jars (required for coverage reporting, not required for jmeter)
-        propNames.remove("jacocoant");
-        versions.remove("jacocoant");
+        // remove optional jacoco and sonar jars (required for coverage reporting, not required for jmeter)
+        for (String optLib : Arrays.asList("jacocoant", "sonarqube-ant-task")) {
+            propNames.remove(optLib);
+            versions.remove(optLib);
+        }
         prop = buildProp;
         final File licencesDir = getFileFromHome("licenses/bin");
         licencesDir.list(new FilenameFilter() {

@@ -13,20 +13,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package org.apache.jmeter.monitor.model;
-
-import java.util.List;
+package org.apache.jmeter.gui;
 
 /**
- * @version $Revision$
- *
- * @deprecated since 3.1
+ * Interface for nodes that have replaceable content.
+ * <p>
+ * A {@link Replaceable} component will get asked for tokens, that should be used
+ * in a search. These tokens will then be matched against a user given search
+ * string.
+ * @since 3.2
  */
-@Deprecated
-public interface Workers {
-
-    List<Worker> getWorker();
-
+public interface Replaceable {
+    /**
+     * Replace in object  by replaceBy
+     *
+     * @param regex Regular expression
+     * @param replaceBy Text replacing
+     * @param caseSensitive
+     * @return number of replacements
+     * @throws Exception
+     *             when something fails while replacing
+     */
+    int replace(String regex, String replaceBy, boolean caseSensitive)
+        throws Exception;
 }
