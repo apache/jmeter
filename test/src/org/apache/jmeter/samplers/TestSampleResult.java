@@ -20,6 +20,7 @@ package org.apache.jmeter.samplers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -124,7 +125,7 @@ public class TestSampleResult {
             res.samplePause();
             assertEquals(0, wr.toString().length());
             res.samplePause();
-            assertFalse(wr.toString().length() == 0);
+            assertNotEquals(0, wr.toString().length());
         }
 
         @Test
@@ -135,7 +136,7 @@ public class TestSampleResult {
             res.samplePause();
             assertEquals(0, wr.toString().length());
             res.samplePause();
-            assertFalse(wr.toString().length() == 0);
+            assertNotEquals(0, wr.toString().length());
         }
         
         @Test
