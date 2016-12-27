@@ -60,7 +60,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
      * If any writer exists on the sample writer, it is flushed and closed before
      * being replaced by the new one.
      * 
-     * @param writer
+     * @param newWriter
      *            The destination writer where samples will be written by this
      *            sample writer
      */
