@@ -123,7 +123,7 @@ public class CSVDataSet extends ConfigTestElement
                     try {
                         final BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
                         final ResourceBundle rb = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
-                        for(String resKey : CSVDataSetBeanInfo.SHARE_TAGS) {
+                        for(String resKey : CSVDataSetBeanInfo.getShareTags()) {
                             if (propValue.equals(rb.getString(resKey))) {
                                 if (log.isDebugEnabled()) {
                                     log.debug("Converted " + propName + "=" + propValue + " to " + resKey  + " using Locale: " + rb.getLocale());
