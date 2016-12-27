@@ -29,7 +29,7 @@ rem   =====================================================
 setlocal
 
 rem Minimal version to run JMeter
-set MINIMAL_VERSION=1.7.0
+set MINIMAL_VERSION=1.8.0
 
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
     rem @echo Debug Output: %%g
