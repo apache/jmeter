@@ -335,7 +335,7 @@
   <!-- Directory where Jacoco libraries live -->
   <!-- I'm to lazy to fix this now, so I tag along with rat & checkstyle,
     which already live there. But: none of these should apear on the classpath
-    of Jmeter, neither runtime, nor compiletime. These are only required on the 
+    of Jmeter, neither runtime, nor compiletime. These are only required on the
     Ant classpath, so judging from comments elsewhere, this is the wrong place.
   -->
   <property name="lib.coverage" location="lib/opt"/>
@@ -3141,10 +3141,10 @@ run JMeter unless all the JMeter jars are added.
      <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${lib.coverage}/${jacocoant.jar}"/>
      </taskdef>
-     <jacoco:agent property="jacocoagent" 
+     <jacoco:agent property="jacocoagent"
                    destfile="reports/jacoco.exec"
                    includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder"
-                   sessionid="" 
+                   sessionid=""
      />
   </target>
 
