@@ -33,8 +33,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * This class implements an SSLSocketFactory which supports a local truststore.
  */
