@@ -38,7 +38,7 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
     private static final String[] LANGUAGE_TAGS;
 
-    public static final String[][] LANGUAGE_NAMES;
+    private static final String[][] LANGUAGE_NAMES;
 
     static {
         Map<String, ScriptEngineFactory> nameMap = new HashMap<>();
