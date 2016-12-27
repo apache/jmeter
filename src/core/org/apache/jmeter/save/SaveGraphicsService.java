@@ -28,12 +28,12 @@ import java.io.OutputStream;
 
 import javax.swing.JComponent;
 
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.xmlgraphics.image.codec.png.PNGEncodeParam;
 import org.apache.xmlgraphics.image.codec.png.PNGImageEncoder;
 import org.apache.xmlgraphics.image.codec.tiff.TIFFEncodeParam;
 import org.apache.xmlgraphics.image.codec.tiff.TIFFImageEncoder;
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Class is responsible for taking a component and saving it as a JPEG, PNG or
@@ -169,10 +169,9 @@ public class SaveGraphicsService {
             encoder.encode(image);
         } catch (IOException e) {
             JMeterUtils.reportErrorToUser("TIFFImageEncoder reported: "+e.getMessage(), "Problem creating image file");
-        // Yuck: TIFFImageEncoder uses Error to report runtime problems
-        } catch (Error e) {
+        } catch (Error e) { // NOSONAR TIFFImageEncoder uses Error to report runtime problems
             JMeterUtils.reportErrorToUser("TIFFImageEncoder reported: "+e.getMessage(), "Problem creating image file");
-            if (e.getClass() != Error.class){// rethrow other errors
+            if (e.getClass() != Error.class){// NOSONAR rethrow other errors
                 throw e;
             }
         } finally {
