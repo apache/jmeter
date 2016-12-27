@@ -30,7 +30,6 @@ import java.io.Serializable;
  * Lars-Erik Helander provided the idea (and original implementation) for the
  * caching functionality (sampleStore).
  */
-
 public class HoldSampleSender extends AbstractSampleSender implements Serializable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -89,7 +88,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
      * @throws ObjectStreamException
      *             never
      */
-    private Object readResolve() throws ObjectStreamException{
+    protected Object readResolve() throws ObjectStreamException{
         log.warn("Using HoldSampleSender for this test run, ensure you have configured enough memory (-Xmx) for your test"); // server        
         return this;
     }
