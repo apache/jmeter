@@ -310,8 +310,6 @@ public class JMeter implements JMeterPlugin {
             D_REPORT_OUTPUT_FOLDER_OPT,
     };
     
-    private JMeter parent;
-
     /** Properties to be sent to remote servers */
     private Properties remoteProps; 
 
@@ -859,7 +857,6 @@ public class JMeter implements JMeterPlugin {
         JMeter driver = new JMeter();// TODO - why does it create a new instance?
         driver.remoteProps = this.remoteProps;
         driver.remoteStop = this.remoteStop;
-        driver.parent = this;
         PluginManager.install(this, false);
 
         String remoteHostsString = null;
