@@ -1134,7 +1134,7 @@ public class SmtpPanel extends JPanel {
 
     private void removeHeaderActionPerformed(ActionEvent evt){
         final Object source = evt.getSource();
-        if(source != null && source instanceof JButton){
+        if(source instanceof JButton){
             if(headerFields.size() == 1){
                 headerFieldName.setVisible(false);
                 headerFieldValue.setVisible(false);
@@ -1151,7 +1151,7 @@ public class SmtpPanel extends JPanel {
     }
     private void emptySubjectActionPerformed(ChangeEvent evt) {
         final Object source = evt.getSource();
-        if(source != null && source instanceof JCheckBox){
+        if(source instanceof JCheckBox){
             if(cbSuppressSubject.isSelected()){
                 tfSubject.setEnabled(false);
                 cbIncludeTimestamp.setEnabled(false);
