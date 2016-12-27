@@ -612,7 +612,7 @@ public class JMeter implements JMeterPlugin {
         if (bshport > 0) {
             log.info("Starting Beanshell server (" + bshport + "," + bshfile + ")");
             Runnable t = new BeanShellServer(bshport, bshfile);
-            t.run();
+            t.run(); // NOSONAR we just evaluate some code here
         }
 
         // Should we run a beanshell script on startup?
