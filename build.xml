@@ -18,7 +18,6 @@
 <project name="JMeter" default="install" basedir="."
     xmlns:rat="antlib:org.apache.rat.anttasks"
     xmlns:jacoco="antlib:org.jacoco.ant"
-    xmlns:if="ant:if"
     xmlns="antlib:org.apache.tools.ant" >
   <description>
 
