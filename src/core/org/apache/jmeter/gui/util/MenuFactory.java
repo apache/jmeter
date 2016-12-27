@@ -481,7 +481,7 @@ public final class MenuFactory {
 
                 boolean hideBean = false; // Should the TestBean be hidden?
 
-                JMeterGUIComponent item;
+                JMeterGUIComponent item = null;
                 try {
                     Class<?> c = Class.forName(name);
                     if (TestBean.class.isAssignableFrom(c)) {
@@ -492,18 +492,16 @@ public final class MenuFactory {
                         item = (JMeterGUIComponent) c.newInstance();
                     }
                 } catch (NoClassDefFoundError e) {
-                    log.warn("Missing jar? Could not create " + name + ". " + e);
+                    log.warn("Configuration error, probably corrupt or missing third party library(jar) ? Could not create class:" + name + ". " + e, 
+                            e);
                     continue;
-                } catch (Throwable e) {
-                    log.warn("Could not instantiate " + name, e);
-                    if (e instanceof Error){
-                        throw (Error) e;
-                    }
-                    if (e instanceof RuntimeException){
-                        if (!(e instanceof HeadlessException)) { // Allow headless testing
-                            throw (RuntimeException) e;
-                        }
-                    }
+                } catch(HeadlessException e) {
+                    log.warn("Could not instantiate class:" + name, e); // NOSONAR
+                    continue;
+                } catch(RuntimeException e) {
+                    throw (RuntimeException) e;
+                } catch (Exception e) {
+                    log.warn("Could not instantiate class:" + name, e); // NOSONAR
                     continue;
                 }
                 if (hideBean || elementsToSkip.contains(item.getStaticLabel())) {
