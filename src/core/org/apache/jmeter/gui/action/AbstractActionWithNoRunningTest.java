@@ -48,7 +48,7 @@ public abstract class AbstractActionWithNoRunningTest extends AbstractAction {
     /**
      * Called to handle {@link ActionEvent} only if no test is running
      * @param e {@link ActionEvent}
-     * @throws IllegalUserActionException
+     * @throws IllegalUserActionException when user action is invalid
      */
     protected abstract void doActionAfterCheck(ActionEvent e) throws IllegalUserActionException;
 }
