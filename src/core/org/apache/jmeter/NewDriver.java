@@ -257,7 +257,7 @@ public final class NewDriver {
             Object instance = initialClass.newInstance();
             Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
             startup.invoke(instance, new Object[] { args });
-        } catch(Throwable e){
+        } catch(Throwable e){ // NOSONAR We want to log home directory in case of exception
             e.printStackTrace(); // NOSONAR No logger at this step
             System.err.println("JMeter home directory was detected as: "+jmDir);
         }
