@@ -175,7 +175,7 @@ public class Sample implements Serializable, Comparable<Sample> {
     @Override
     public int compareTo(Sample o) {
         Sample oo = o;
-        return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));
+        return Long.compare(count,  oo.count);
     }
 
     // TODO should equals and hashCode depend on field other than count?
