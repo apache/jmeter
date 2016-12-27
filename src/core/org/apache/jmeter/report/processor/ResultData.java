@@ -29,7 +29,9 @@ public interface ResultData {
      *
      * @param visitor
      *            the visitor (must not be {@code null})
-     * @paran <T> type of the results of the {@link ResultDataVisitor}
+     * @param <T>
+     *            type of the results of the {@link ResultDataVisitor}
+     * @return result of the vist
      */
     <T> T accept(ResultDataVisitor<T> visitor);
 }
