@@ -879,14 +879,14 @@
   description="Compile everything."/>
 
   <target name="run_gui" depends="package" description="Run the JMeter GUI off the jar files">
-    <condition property="jacoco_params" value="${jacocoagent}run_gui:java(server) org.apache.jmeter.NewDriver" else="-Djacoco_dummy=not_empty">
+    <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
       <isset property="jacocoagent"/>
     </condition>
     <java classname="org.apache.jmeter.NewDriver" fork="true">
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
-      <jvmarg value="${jacoco_params}"/>
+      <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
   </target>
@@ -2435,7 +2435,7 @@ run JMeter unless all the JMeter jars are added.
     <condition property="rmi_hostname_option" value="-Djava.rmi.server.hostname=localhost">
       <isset property="rmi_force_localhost"/>
     </condition>
-    <condition property="jacoco_params" value="${jacocoagent}batchtest:daemon:java(server) -Djava.awt.headless=true org.apache.jmeter.NewDriver -j ${batchtestserver.out}/${batchtestserver.log} -Dserver_port=${rmi_port}" else="-Djacoco_dummy=not_empty">
+    <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
       <isset property="jacocoagent"/>
     </condition>
     <tstamp>
@@ -2450,7 +2450,7 @@ run JMeter unless all the JMeter jars are added.
             <fileset dir="${dest.jar}" includes="*.jar"/>
             <path refid="classpath"/>
           </classpath>
-          <jvmarg value="${jacoco_params}"/>
+          <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
           <!-- quieten the logging; this has to be done first -->
@@ -2547,7 +2547,7 @@ run JMeter unless all the JMeter jars are added.
 
     <deleteworkfiles/>
 
-    <condition property="jacoco_params" value="${jacocoagent}batchtest:java(${taskname}) -Djava.awt.headless=false org.apache.jmeter.NewDriver -ttestfiles/${batchtest.name}.jmx ${remote}" else="-Djacoco_dummy=not_empty">
+    <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
       <isset property="jacocoagent"/>
     </condition>
 
@@ -2557,7 +2557,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
       </classpath>
-      <jvmarg value="${jacoco_params}"/>
+      <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
       <sysproperty key="user.region" value="US"/>
@@ -2748,7 +2748,7 @@ run JMeter unless all the JMeter jars are added.
     <delete quiet="true">
       <fileset dir="${basedir}/bin/testfiles" includes="*.jmx.out"/>
     </delete>
-    <condition property="jacoco_params" value="${jacocoagent}_test:java -Djava.awt.headless=${test.headless} org.apache.jorphan.test.AllTests" else="-Djacoco_dummy=not_empty">
+    <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
       <isset property="jacocoagent"/>
     </condition>
     <!-- fork="yes" is required or dir attribute is ignored -->
@@ -2761,7 +2761,7 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
       </classpath>
       <jvmarg value="-server"/>
-      <jvmarg value="${jacoco_params}"/>
+      <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
@@ -2782,7 +2782,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="test.format" value="plain"/>
     <property name="test.case" value="org.apache.jorphan.test.AllTests"/>
     <property name="test.showoutput" value="false"/>
-    <condition property="jacoco_params" value="${jacocoagent}run_gui:junit -Djava.awt.headless=${java.awt.headless} org.apache.jmeter.NewDriver" else="-Djacoco_dummy=not_empty">
+    <condition property="jacoco_params" value="${jacocoagent}" else="-Djacoco_dummy=">
       <isset property="jacocoagent"/>
     </condition>
     <junit fork="true"
@@ -2791,7 +2791,7 @@ run JMeter unless all the JMeter jars are added.
            printsummary="on">
       <formatter type="${test.format}" usefile="yes"/>
       <formatter type="xml"/>
-      <jvmarg value="${jacoco_params}"/>
+      <jvmarg value="${jacoco_params}run_gui:junit"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
       <!-- Allow headless to be passed in -->
       <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
@@ -3142,7 +3142,7 @@ run JMeter unless all the JMeter jars are added.
         <classpath path="${lib.coverage}/${jacocoant.jar}"/>
      </taskdef>
      <jacoco:agent property="jacocoagent" 
-                   destfile="${build.dir}/jacoco.exec"
+                   destfile="reports/jacoco.exec"
                    includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder"
                    sessionid="" 
      />
@@ -3151,7 +3151,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="_coverage.report" depends="_coverage.prepare, init-svnVersion, init-version">
     <jacoco:report>
         <executiondata>
-            <file file="${build.dir}/jacoco.exec"/>
+            <file file="reports/jacoco.exec"/>
         </executiondata>
         <structure name="JMeter ${jmeter.version} ${implementation.version}">
             <classfiles>
@@ -3429,7 +3429,7 @@ run JMeter unless all the JMeter jars are added.
   <property name="native.sonar.sources" value="${src.native}" />
   <property name="native.sonar.projectBaseDir" value="./" />
 
-  <target name="sonar" depends="compile, install, complete-junit">
+  <target name="sonar" depends="compile, install, coverage">
     <property environment="env" />
     <condition property="sonar.host.url" value="${env.SONAR_HOST_URL}" else="http://localhost:9000">
       <isset property="env.SONAR_HOST_URL" />
