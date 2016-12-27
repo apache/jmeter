@@ -53,5 +53,10 @@ public interface CookieHandler {
      * @return Cookie default policy name
      */
     String getDefaultPolicy();
+    
+    /**
+     * @return Supported cookie policies
+     */
+    String[] getPolicies();
 
 }

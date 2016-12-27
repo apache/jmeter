@@ -40,6 +40,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
@@ -47,7 +48,6 @@ import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.Cookie;
 import org.apache.jmeter.protocol.http.control.CookieHandler;
 import org.apache.jmeter.protocol.http.control.CookieManager;
-import org.apache.jmeter.protocol.http.control.HC3CookieHandler;
 import org.apache.jmeter.protocol.http.control.HC4CookieHandler;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -238,13 +238,14 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      * @return cookie policies
      */
     private static String[] getPolicies(String className) {
-        // TODO it would be better if CookieHandler had a method getSupportedPolicies() and empty constructor 
-        if(HC3CookieHandler.class.getName().equals(className)) {
-            return HC3CookieHandler.AVAILABLE_POLICIES;
-        } else if(HC4CookieHandler.class.getName().equals(className)) {
-            return HC4CookieHandler.AVAILABLE_POLICIES;
+        try {
+            CookieHandler cookieHandler = (CookieHandler) 
+                    ClassUtils.getClass(className).newInstance();
+            return cookieHandler.getPolicies();
+        } catch (Exception e) {
+            log.error("Error getting cookie policies from implementation:"+className, e);
+            return getPolicies(DEFAULT_IMPLEMENTATION);
         }
-        return HC4CookieHandler.AVAILABLE_POLICIES;
     }
 
     private void addCookieToTable(Cookie cookie) {
