@@ -45,11 +45,13 @@ public abstract class AbstractDataExporter implements DataExporter {
      *            the name of the data containing the value
      * @param root
      *            the root of the tree
+     * @param <T>
+     *            type of value to be found
      * @return the value matching the data name
      */
-    protected static <TValue> TValue findValue(Class<TValue> clazz, String data,
+    protected static <T> T findValue(Class<T> clazz, String data,
             ResultData root) {
-        TValue value = null;
+        T value = null;
         ResultData result = findData(data, root);
         if (result instanceof ValueResultData) {
             ValueResultData valueResult = (ValueResultData) result;
