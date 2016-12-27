@@ -127,7 +127,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
             }
         }
 
-        if (possibleReplacements.size() > 0) {
+        if (!possibleReplacements.isEmpty()) {
             replacementArg = possibleReplacements.get(ThreadLocalRandom.current().nextInt(possibleReplacements.size()));
             arg.setName(replacementArg.getName());
             arg.setValue(replacementArg.getValue());
