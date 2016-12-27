@@ -35,7 +35,7 @@ import org.apache.jorphan.collections.HashTree;
 
 public class RemoteStart extends AbstractAction {
 
-    private static final String LOCAL_HOST = "127.0.0.1"; // $NON-NLS-1$
+    private static final String LOCAL_HOST = "127.0.0.1"; // NOSONAR $NON-NLS-1$
 
     private static final String REMOTE_HOSTS = "remote_hosts"; // $NON-NLS-1$ jmeter.properties
 
