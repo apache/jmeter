@@ -46,9 +46,6 @@ public class JSR223Sampler extends JSR223TestElement implements Cloneable, Sampl
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    /** empty array which can be returned instead of null */
-    private static final byte[] EMPTY_BA = new byte[0];
-
     @Override
     public SampleResult sample(Entry entry) {
         SampleResult result = new SampleResult();
