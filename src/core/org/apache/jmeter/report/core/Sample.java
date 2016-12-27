@@ -99,14 +99,20 @@ public class Sample {
      *            the target class of the data
      * @param index
      *            the rank of the column
-     * @param fieldName Field name
+     * @param fieldName
+     *            Field name
+     * @param <T>
+     *            type of data to be fetched
      * @return the converted value of the data
      */
-    public <TData> TData getData(Class<TData> clazz, int index, String fieldName) {
+    public <T> T getData(Class<T> clazz, int index, String fieldName) {
         try {
             return Converters.convert(clazz, data[index]);
         } catch (ConvertException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + (row+1) + " converting field:"+fieldName+" at column:"+index+" to:"+clazz.getName()+", fieldValue:'"+data[index]+"'", ex);
+            throw new SampleException(ERROR_ON_SAMPLE + (row + 1)
+                    + " converting field:" + fieldName + " at column:" + index
+                    + " to:" + clazz.getName() + ", fieldValue:'" + data[index]
+                    + "'", ex);
         }
     }
 
@@ -118,9 +124,11 @@ public class Sample {
      *            the target class of the data
      * @param name
      *            the name of the column
+     * @param <T>
+     *            type of data to be fetched
      * @return the converted value of the data
      */
-    public <TData> TData getData(Class<TData> clazz, String name) {
+    public <T> T getData(Class<T> clazz, String name) {
         return getData(clazz, metadata.ensureIndexOf(name), name);
     }
 
