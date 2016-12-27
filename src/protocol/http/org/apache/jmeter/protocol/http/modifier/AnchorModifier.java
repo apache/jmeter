@@ -67,7 +67,7 @@ public class AnchorModifier extends AbstractTestElement implements PreProcessor,
         SampleResult res = context.getPreviousResult();
         HTTPSamplerBase sampler = null;
         HTTPSampleResult result = null;
-        if (res == null || !(sam instanceof HTTPSamplerBase) || !(res instanceof HTTPSampleResult)) {
+        if (!(sam instanceof HTTPSamplerBase) || !(res instanceof HTTPSampleResult)) {
             log.info("Can't apply HTML Link Parser when the previous" + " sampler run is not an HTTP Request.");
             return;
         } else {

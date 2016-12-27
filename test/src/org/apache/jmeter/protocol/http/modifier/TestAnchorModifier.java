@@ -33,6 +33,7 @@ import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -101,6 +102,27 @@ public class TestAnchorModifier extends JMeterTestCase {
         @Test
         public void testModifySamplerWithBaseHRef() throws Exception {
             testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
+        }
+
+        @Test
+        public void testNullSampler() {
+            jmctx.setCurrentSampler(null);
+            jmctx.setPreviousResult(new HTTPSampleResult());
+            parser.process(); // should do nothing
+        }
+
+        @Test
+        public void testNullResult() throws Exception {
+            jmctx.setCurrentSampler(makeContext("http://www.apache.org/subdir/previous.html"));
+            jmctx.setPreviousResult(null);
+            parser.process(); // should do nothing
+        }
+
+        @Test
+        public void testWrongResultClass() throws Exception {
+            jmctx.setCurrentSampler(makeContext("http://www.apache.org/subdir/previous.html"));
+            jmctx.setPreviousResult(new SampleResult());
+            parser.process(); // should do nothing
         }
 
         @Test
