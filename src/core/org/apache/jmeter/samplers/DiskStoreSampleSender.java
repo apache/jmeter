@@ -86,6 +86,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             }
         } catch (InterruptedException e1) {
             log.error("Executor did not terminate in a timely fashion", e1);
+            Thread.currentThread().interrupt();
         }
         ObjectInputStream ois = null;
         try {
