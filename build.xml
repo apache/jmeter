@@ -3429,7 +3429,7 @@ run JMeter unless all the JMeter jars are added.
   <property name="native.sonar.sources" value="${src.native}" />
   <property name="native.sonar.projectBaseDir" value="./" />
 
-  <target name="sonar" depends="compile, install, coverage">
+  <target name="_sonar">
     <property environment="env" />
     <condition property="sonar.host.url" value="${env.SONAR_HOST_URL}" else="http://localhost:9000">
       <isset property="env.SONAR_HOST_URL" />
@@ -3458,5 +3458,9 @@ run JMeter unless all the JMeter jars are added.
     <sonar:sonar xmlns:sonar="antlib:org.sonar.ant">
     </sonar:sonar>
   </target>
+
+  <target name="sonar" depends="compile, install, coverage, _sonar" />
+
+  <target name="nightlysonar" depends="_coverage.prepare, nightly, _coverage.report, _sonar" />
 
 </project>
