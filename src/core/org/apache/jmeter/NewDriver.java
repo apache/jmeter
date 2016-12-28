@@ -96,7 +96,7 @@ public final class NewDriver {
                 }
             });
             if (libJars == null) {
-                new Throwable("Could not access " + libDir).printStackTrace();
+                new Throwable("Could not access " + libDir).printStackTrace(); // NOSONAR No logging here
                 continue;
             }
             Arrays.sort(libJars); // Bug 50708 Ensure predictable order of jars
