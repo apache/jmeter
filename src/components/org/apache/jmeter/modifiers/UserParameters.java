@@ -176,12 +176,10 @@ public class UserParameters extends AbstractTestElement implements Serializable,
         }
     }
 
-    /*
-     * (non-Javadoc) A new instance is created for each thread group, and the
+    /**
+     * A new instance is created for each thread group, and the
      * clone() method is then called to create copies for each thread in a
-     * thread group. This means that the lock object is common to a thread
-     * group; separate thread groups have separate locks. If this is not
-     * intended, the lock object could be made static.
+     * thread group. This means that the lock object is common to all instances
      *
      * @see java.lang.Object#clone()
      */
