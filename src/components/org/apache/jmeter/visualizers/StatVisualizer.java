@@ -173,9 +173,9 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.COLUMNS_MSG_PARAMETERS));
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.getColumnsMsgParameters()));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.RENDERERS);
+        RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.getRenderers());
         myScrollPane = new JScrollPane(myJTable);
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(myScrollPane, BorderLayout.CENTER);
@@ -209,7 +209,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
                 return;
             }
             try (FileWriter writer = new FileWriter(chooser.getSelectedFile());){  // TODO Charset ?
-                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.FORMATS),
+                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.getFormatters()),
                         writer,
                         saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns()) : null);
             } catch (IOException e) {

@@ -123,7 +123,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
     };
     
-    static final Object[][] COLUMNS_MSG_PARAMETERS = { null, 
+    static final Object[][] getColumnsMsgParameters() { 
+        Object[][] result =  { null, 
             null,
             null,
             null,
@@ -136,6 +137,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             null,
             null,
             null};
+        return result;
+    }
 
     private final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
             "aggregate_report_median",        //$NON-NLS-1$
@@ -326,8 +329,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     }
 
     // Column formats
-    static final Format[] FORMATS =
-        new Format[]{
+    static final Format[] getFormatters() {
+        return new Format[]{
             null, // Label
             null, // count
             null, // Mean
@@ -342,10 +345,11 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new DecimalFormat("#0.00"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00")    // pageSize   //$NON-NLS-1$
         };
+    }
     
     // Column renderers
-    static final TableCellRenderer[] RENDERERS =
-        new TableCellRenderer[]{
+    static final TableCellRenderer[] getRenderers() {
+        return new TableCellRenderer[]{
             null, // Label
             null, // count
             null, // Mean
@@ -360,6 +364,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new NumberRenderer("#0.00"),      // Received bytes per sec //$NON-NLS-1$
             new NumberRenderer("#0.00"),    // Sent bytes per sec   //$NON-NLS-1$
         };
+    }
 
     public static boolean testFunctors(){
         StatGraphVisualizer instance = new StatGraphVisualizer();
@@ -430,9 +435,9 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(COLUMNS_MSG_PARAMETERS));
+        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(getColumnsMsgParameters()));
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        RendererUtils.applyRenderers(myJTable, RENDERERS);
+        RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);
 
         settingsPane = new VerticalPanel();
@@ -657,7 +662,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             FileWriter writer = null;
             try {
                 writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
-                CSVSaveService.saveCSVStats(getAllTableData(model, FORMATS),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
+                CSVSaveService.saveCSVStats(getAllTableData(model, getFormatters()),writer,saveHeaders.isSelected() ? getLabels(COLUMNS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
             } finally {
@@ -735,7 +740,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     static String[] getLabels(String[] keys) {
         String[] labels = new String[keys.length];
         for (int i = 0; i < labels.length; i++) {
-            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), COLUMNS_MSG_PARAMETERS[i]);
+            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), getColumnsMsgParameters()[i]);
         }
         return labels;
     }
