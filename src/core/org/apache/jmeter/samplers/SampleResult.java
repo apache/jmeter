@@ -226,6 +226,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** elapsed time */
     private long elapsedTime = 0;
 
+    /** elapsed time in nanoseconds */
+    private long elapsedInNanos = 0;
+
     /** time to first response */
     private long latency = 0;
 
@@ -291,6 +294,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         this.nanoTimeOffset = initOffset();
     }
 
+    public void elapsedInNanos(long nanoDuration){
+        this.elapsedInNanos = nanoDuration;
+    }
+
+    public long elapsedInNanos(){
+        return elapsedInNanos;
+    }
+
     /**
      * Copy constructor.
      * 
@@ -338,6 +349,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         success = res.success;//OK
         threadName = res.threadName;//OK
         elapsedTime = res.elapsedTime;
+        elapsedInNanos = res.elapsedInNanos;
         timeStamp = res.timeStamp;
     }
     
