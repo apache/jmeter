@@ -213,13 +213,13 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private final JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.FONT_SIZE);
+    private final JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
     private final JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private final JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.FONT_SIZE);
+    private final JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.getFontSize());
 
     private final JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
@@ -227,7 +227,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
     
     private final JComboBox<String> pointShapeLine = new JComboBox<>(StatGraphProperties.getPointShapeMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.STROKE_WIDTH);
+    private final JComboBox<String> strokeWidthList = new JComboBox<>(StatGraphProperties.getStrokeWidth());
 
     private final JCheckBox numberShowGrouping = new JCheckBox(JMeterUtils.getResString("aggregate_graph_number_grouping"), // $NON-NLS-1$
             DEFAULT_NUMBER_SHOW_GROUPING); // Default checked
@@ -819,7 +819,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         titleFontNameList.setSelectedIndex(DEFAULT_TITLE_FONT_NAME);
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 titleFontSizeList));
-        titleFontSizeList.setSelectedItem(StatGraphProperties.FONT_SIZE[DEFAULT_TITLE_FONT_SIZE]);
+        titleFontSizeList.setSelectedItem(StatGraphProperties.getFontSize()[DEFAULT_TITLE_FONT_SIZE]);
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 titleFontStyleList));
         titleFontStyleList.setSelectedIndex(DEFAULT_TITLE_FONT_STYLE);
@@ -840,7 +840,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 JMeterUtils.getResString("graph_resp_time_settings_line"))); // $NON-NLS-1$
         lineStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("graph_resp_time_stroke_width"), //$NON-NLS-1$
                 strokeWidthList));
-        strokeWidthList.setSelectedItem(StatGraphProperties.STROKE_WIDTH[DEFAULT_STROKE_WIDTH_LIST]);
+        strokeWidthList.setSelectedItem(StatGraphProperties.getStrokeWidth()[DEFAULT_STROKE_WIDTH_LIST]);
         lineStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("graph_resp_time_shape_label"), //$NON-NLS-1$
                 pointShapeLine));
         pointShapeLine.setSelectedIndex(DEFAULT_LINE_SHAPE_POINT);
@@ -916,7 +916,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         fontNameList.setSelectedIndex(DEFAULT_LEGEND_FONT);
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 fontSizeList));
-        fontSizeList.setSelectedItem(StatGraphProperties.FONT_SIZE[DEFAULT_LEGEND_SIZE]);
+        fontSizeList.setSelectedItem(StatGraphProperties.getFontSize()[DEFAULT_LEGEND_SIZE]);
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
         fontStyleList.setSelectedIndex(DEFAULT_LEGEND_STYLE);

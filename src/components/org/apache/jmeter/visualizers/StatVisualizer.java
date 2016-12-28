@@ -47,7 +47,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
@@ -209,15 +208,12 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
             if (chooser == null) {
                 return;
             }
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(chooser.getSelectedFile()); // TODO Charset ?
-                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.FORMATS),writer,
-                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.COLUMNS) : null);
+            try (FileWriter writer = new FileWriter(chooser.getSelectedFile());){  // TODO Charset ?
+                CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, StatGraphVisualizer.FORMATS),
+                        writer,
+                        saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(StatGraphVisualizer.getColumns()) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
-            } finally {
-                JOrphanUtils.closeQuietly(writer);
             }
         }
     }
