@@ -51,6 +51,16 @@ public class KeyToolUtils {
 
     /** Name of property that can be used to override the default keytool location */
     private static final String KEYTOOL_DIRECTORY = "keytool.directory"; // $NON-NLS-1$
+    
+    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
+
+    public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
+    private static final String ROOT_CACERT_CRT = ROOT_CACERT_CRT_PFX + ".crt"; // $NON-NLS-1$ (Firefox and Windows)
+    private static final String ROOT_CACERT_USR = ROOT_CACERT_CRT_PFX + ".usr"; // $NON-NLS-1$ (Opera)
+
+    private static final String ROOTCA_ALIAS = ":root_ca:";  // $NON-NLS-1$
+    private static final String INTERMEDIATE_CA_ALIAS = ":intermediate_ca:";  // $NON-NLS-1$
+
 
     /**
      * Where to find the keytool application.
@@ -58,13 +68,6 @@ public class KeyToolUtils {
      */
     private static final String KEYTOOL_PATH;
 
-    private static void addElement(StringBuilder sb, String prefix, String value) {
-        if (value != null) {
-            sb.append(", ");
-            sb.append(prefix);
-            sb.append(value);
-        }
-    }
 
     static {
         StringBuilder sb = new StringBuilder();
@@ -108,19 +111,20 @@ public class KeyToolUtils {
         KEYTOOL_PATH = keytoolPath;
     }
 
-    private static final String DNAME_INTERMEDIATE_CA_KEY  = "cn=DO NOT INSTALL THIS CERTIFICATE (JMeter Intermediate CA)"; // $NON-NLS-1$
-
-    public static final String ROOT_CACERT_CRT_PFX = "ApacheJMeterTemporaryRootCA"; // $NON-NLS-1$ (do not change)
-    private static final String ROOT_CACERT_CRT = ROOT_CACERT_CRT_PFX + ".crt"; // $NON-NLS-1$ (Firefox and Windows)
-    private static final String ROOT_CACERT_USR = ROOT_CACERT_CRT_PFX + ".usr"; // $NON-NLS-1$ (Opera)
-
-    private static final String ROOTCA_ALIAS = ":root_ca:";  // $NON-NLS-1$
-    private static final String INTERMEDIATE_CA_ALIAS = ":intermediate_ca:";  // $NON-NLS-1$
 
     private KeyToolUtils() {
         // not instantiable
     }
 
+
+    private static void addElement(StringBuilder sb, String prefix, String value) {
+        if (value != null) {
+            sb.append(", ");
+            sb.append(prefix);
+            sb.append(value);
+        }
+    }
+    
     /**
      * Generate a self-signed keypair using the algorithm "RSA".
      *
@@ -166,7 +170,7 @@ public class KeyToolUtils {
                     + "\nCommand failed, code: " + exitVal
                     + "\n'" + formatCommand(arguments)+"'");
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e) { // NOSONAR
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
@@ -189,9 +193,9 @@ public class KeyToolUtils {
                 builder.append("\"");
             }
             builder.append(" ");
-            redact = string.equals("-storepass") || string.equals("-keypass");
+            redact = "-storepass".equals(string) || "-keypass".equals(string);
         }
-        if (arguments.size() > 0) {
+        if (!arguments.isEmpty()) {
             builder.setLength(builder.length() - 1); // trim trailing space
         }
         return builder.toString();
@@ -333,7 +337,7 @@ public class KeyToolUtils {
             if (exitVal != 0) {
                 throw new IOException("Command failed, code: " + exitVal + "\n" + nativeCommand.getOutResult());
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e) { // NOSONAR 
             throw new IOException("Command was interrupted\n" + nativeCommand.getOutResult(), e);
         }
     }
@@ -440,8 +444,9 @@ public class KeyToolUtils {
              */
             return status == 0 || status == 1; // TODO this is rather fragile
         } catch (IOException ioe) {
+            log.error("Exception checking for keytool existence, will return false", ioe);
             return false;
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e) { // NOSONAR
             log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);
             return false;
         }
