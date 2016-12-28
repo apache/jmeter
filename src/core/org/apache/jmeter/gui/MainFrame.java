@@ -874,7 +874,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private void setWindowTitle() {
         Class<?> xtoolkit = Toolkit.getDefaultToolkit().getClass();
-        if (xtoolkit.getName().equals("sun.awt.X11.XToolkit")) { // $NON-NLS-1$
+        if (xtoolkit.getName().equals("sun.awt.X11.XToolkit")) { // NOSONAR (we don't want to depend on native LAF) $NON-NLS-1$
             try {
                 final Field awtAppClassName = xtoolkit.getDeclaredField("awtAppClassName"); // $NON-NLS-1$
                 awtAppClassName.setAccessible(true);
