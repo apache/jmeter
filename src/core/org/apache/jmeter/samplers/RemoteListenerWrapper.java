@@ -31,8 +31,6 @@ import org.apache.log.Logger;
  *
  * Lars-Erik Helander provided the idea (and original implementation) for the
  * caching functionality (sampleStore).
- *
- * @version $Revision$
  */
 public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestStateListener, Serializable,
         NoThreadClone {
