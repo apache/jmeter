@@ -159,14 +159,11 @@ public final class MenuFactory {
 
             initializeMenus();
             sortPluginMenus();
-        } catch (Throwable e) {
-            log.error("", e);
-            if (e instanceof Error){
-                throw (Error) e;
-            }
-            if (e instanceof RuntimeException){
-                throw (RuntimeException) e;
-            }
+        } catch (Error | RuntimeException ex) { // NOSONAR We want to log Errors in jmeter.log 
+            log.error("Error initializing menus in static bloc, check configuration if using 3rd party libraries", ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Error initializing menus in static bloc, check configuration if using 3rd party libraries", ex);
         }
     }
 
