@@ -61,16 +61,12 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         log.debug("Test Started()");
         try {
             listener.testStarted();
-        } catch (Throwable ex) {
-            log.warn("testStarted()", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
+        } catch (Error | RuntimeException ex) { // NOSONAR We want to have errors logged in log file
+            log.error("testStarted()", ex);
+            throw ex;
+        } catch (Exception ex) {
+            log.error("testStarted()", ex);
         }
-
     }
 
     @Override
@@ -83,14 +79,11 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
         log.debug("Test Started on " + host);
         try {
             listener.testStarted(host);
-        } catch (Throwable ex) {
-            log.error("testStarted(host)", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
+        } catch (Error | RuntimeException ex) { // NOSONAR We want to have errors logged in log file
+            log.error("testStarted(host) on "+host, ex);
+            throw ex;
+        } catch(Exception ex) {
+            log.error("testStarted(host) on "+host, ex);
         }
     }
 
