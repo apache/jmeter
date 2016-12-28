@@ -380,7 +380,7 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
             throw new IllegalArgumentException();
         }
         else if (n > 254) {
-            double x = n + 1;
+            double x = n + 1d;
             return (x - 0.5)*Math.log(x) - x + 0.5*Math.log(2*Math.PI) + 1.0/(12.0*x);
         }
         else {

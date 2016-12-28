@@ -16,20 +16,27 @@
  *
  */
 
-package org.apache.jmeter.timers;
-
+package org.apache.jmeter.gui;
 
 /**
- * This interface identifies Modifiable timers to which a factor can be applied
- * @since 3.1
+ * Interface for nodes that have replaceable content.
+ * <p>
+ * A {@link Replaceable} component will get asked for tokens, that should be used
+ * in a search. These tokens will then be matched against a user given search
+ * string.
+ * @since 3.2
  */
-public interface ModifiableTimer extends Timer {
-
+public interface Replaceable {
     /**
-     * @return true if factor can be applied to it
+     * Replace in object  by replaceBy
+     *
+     * @param regex Regular expression
+     * @param replaceBy Text replacing
+     * @param caseSensitive
+     * @return number of replacements
+     * @throws Exception
+     *             when something fails while replacing
      */
-    @Override
-    default boolean isModifiable() {
-        return true;
-    }
+    int replace(String regex, String replaceBy, boolean caseSensitive)
+        throws Exception;
 }

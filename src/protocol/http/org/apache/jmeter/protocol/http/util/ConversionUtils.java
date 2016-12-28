@@ -172,11 +172,15 @@ public class ConversionUtils {
      */
     public static String removeSlashDotDot(String url)
     {
-        if (url == null || (url = url.trim()).length() < 4 || !url.contains(SLASHDOTDOT))
-        {
+        if (url == null) {
             return url;
         }
-
+        
+        url = url.trim();
+        if(url.length() < 4 || !url.contains(SLASHDOTDOT)) {
+            return url;
+        }
+        
         /**
          * http://auth@host:port/path1/path2/path3/?query#anchor
          */

@@ -44,7 +44,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * 
  * @since 3.0
  */
-abstract public class AbstractSampleWriter extends SampleWriter {
+public abstract class AbstractSampleWriter extends SampleWriter {
 
     private static final int BUF_SIZE = 10000;
 
@@ -56,23 +56,22 @@ abstract public class AbstractSampleWriter extends SampleWriter {
     protected PrintWriter writer;
 
     /**
-     * Set he new writer on which samples will be written by this smaple
-     * writter.<br>
-     * If any writer exist on the sample writer, it is flushed and closed before
+     * Set the new writer on which samples will be written by this sample writer.<br>
+     * If any writer exists on the sample writer, it is flushed and closed before
      * being replaced by the new one.
      * 
      * @param writer
      *            The destination writer where samples will be written by this
      *            sample writer
      */
-    public void setWriter(Writer writer) {
-        Validate.notNull(writer, "writer must not be null.");
+    public void setWriter(Writer newWriter) {
+        Validate.notNull(newWriter, "writer must not be null."); // NOSONAR
 
         if (this.writer != null) {
             // flush and close previous writer
             JOrphanUtils.closeQuietly(this.writer);
         }
-        this.writer = new PrintWriter(new BufferedWriter(writer, BUF_SIZE), false);
+        this.writer = new PrintWriter(new BufferedWriter(newWriter, BUF_SIZE), false);
     }
 
     /**
@@ -84,7 +83,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
      *            The output stream on which sample should be written
      */
     public void setOutputStream(OutputStream out) {
-        Validate.notNull(out, "out must not be null.");
+        Validate.notNull(out, "out must not be null."); // NOSONAR
 
         try {
             setWriter(new OutputStreamWriter(out, CHARSET));
@@ -103,7 +102,7 @@ abstract public class AbstractSampleWriter extends SampleWriter {
     public void setOutputFile(File output) {
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(output);
+            fos = new FileOutputStream(output); // NOSONAR
         } catch (Exception e) {
             throw new SampleException(e.getMessage(), e);
         }
@@ -121,12 +120,11 @@ abstract public class AbstractSampleWriter extends SampleWriter {
         this.writer = null;
     }
 
-    public void flush() {
-        try {
-            writer.flush();
-        } catch (Exception e) {
-            // ignore
-        }
+    /**
+     * flush writer.
+     * Only used for Tests
+     */
+    void flush() {
+        writer.flush();
     }
-
 }

@@ -137,11 +137,12 @@ Fill in some detail.
 
 <h3>General</h3>
 <ul>
-  <li><bug>60415</bug>Drop support for Java 7.</li>
+    <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to xxx-1.1 (from 0.2)</li>
 </ul>
 
@@ -186,6 +187,10 @@ Fill in some detail.
     and <code>useRegexpForSamplersList</code> is set to <code>true</code>.
     Based on patch by Liu XP (liu_xp2003 at sina.com)</li>
     <li><bug>60442</bug>Fix a typo in <code>build.xml</code> (gavin at 16degrees.com.au)</li>
+    <li><bug>60449</bug>JMeter Tree : Annoying behaviour when node name is empty</li>
+    <li><bug>60494</bug>Add sonar analysis task to build</li>
+    <li><bug>60501</bug>Search Feature : Performance issue when regexp is checked</li>
+    <li><bug>60444</bug>Intermittent failure of TestHTTPMirrorThread#testSleep(). Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -198,6 +203,7 @@ Fill in some detail.
 <li>Liu XP (liu_xp2003 at sina.com)</li>
 <li>Qi Chen (qi.chensh at ele.me)</li>
 <li>(gavin at 16degrees.com.au)</li>
+<li>Thomas Schapitz (ts-nospam12 at online.de)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

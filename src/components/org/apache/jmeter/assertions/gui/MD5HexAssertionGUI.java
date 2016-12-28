@@ -61,7 +61,6 @@ public class MD5HexAssertionGUI extends AbstractAssertionGui {
         md5HexPanel.add(new JLabel(JMeterUtils.getResString("md5hex_assertion_label"))); //$NON-NLS-1$
 
         md5HexInput = new JTextField(25);
-        // md5HexInput.addFocusListener(this);
         md5HexPanel.add(md5HexInput);
 
         mainPanel.add(md5HexPanel, BorderLayout.NORTH);

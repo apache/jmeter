@@ -238,19 +238,19 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private JComboBox<String> titleFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.fontSize);
+    private JComboBox<String> titleFontSizeList = new JComboBox<>(StatGraphProperties.FONT_SIZE);
 
     private JComboBox<String> titleFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private JComboBox<String> valueFontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private JComboBox<String> valueFontSizeList = new JComboBox<>(StatGraphProperties.fontSize);
+    private JComboBox<String> valueFontSizeList = new JComboBox<>(StatGraphProperties.FONT_SIZE);
 
     private JComboBox<String> valueFontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
     private JComboBox<String> fontNameList = new JComboBox<>(StatGraphProperties.getFontNameMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
-    private JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.fontSize);
+    private JComboBox<String> fontSizeList = new JComboBox<>(StatGraphProperties.FONT_SIZE);
 
     private JComboBox<String> fontStyleList = new JComboBox<>(StatGraphProperties.getFontStyleMap().keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY));
 
@@ -867,7 +867,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         titleFontNameList.setSelectedIndex(0); // default: sans serif
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 titleFontSizeList));
-        titleFontSizeList.setSelectedItem(StatGraphProperties.fontSize[6]); // default: 16
+        titleFontSizeList.setSelectedItem(StatGraphProperties.FONT_SIZE[6]); // default: 16
         titleStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 titleFontStyleList));
         titleFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.bold"));  // $NON-NLS-1$ // default: bold
@@ -888,7 +888,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         valueFontNameList.setSelectedIndex(0); // default: sans serif
         fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 valueFontSizeList));
-        valueFontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
+        valueFontSizeList.setSelectedItem(StatGraphProperties.FONT_SIZE[2]); // default: 10
         fontValueStylePane.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 valueFontStyleList));
         valueFontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal")); // default: normal //$NON-NLS-1$
@@ -962,7 +962,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         fontNameList.setSelectedIndex(0); // default: sans serif
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_size"), //$NON-NLS-1$
                 fontSizeList));
-        fontSizeList.setSelectedItem(StatGraphProperties.fontSize[2]); // default: 10
+        fontSizeList.setSelectedItem(StatGraphProperties.FONT_SIZE[2]); // default: 10
         legendPanel.add(GuiUtils.createLabelCombo(JMeterUtils.getResString("aggregate_graph_style"), //$NON-NLS-1$
                 fontStyleList));
         fontStyleList.setSelectedItem(JMeterUtils.getResString("fontstyle.normal"));  // $NON-NLS-1$ // default: normal

@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * This interface defines those methods that must be implemented by timer
  * plugins.
- *
  */
 public interface Timer extends Serializable {
     /**
@@ -33,4 +32,11 @@ public interface Timer extends Serializable {
      * @return the computed delay value.
      */
     long delay();
+    
+    /**
+     * @return true if factor can be applied to it
+     */
+    default boolean isModifiable() {
+        return false;
+    }
 }

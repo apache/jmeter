@@ -18,10 +18,7 @@
 
 package org.apache.jmeter.control.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -133,14 +130,11 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         styleModel.addElement(BYNUMBER_LABEL);
         styleModel.addElement(BYPERCENT_LABEL);
         styleBox = new JComboBox<>(styleModel);
-        styleBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (((String) styleBox.getSelectedItem()).equals(BYNUMBER_LABEL)) {
-                    style = ThroughputController.BYNUMBER;
-                } else {
-                    style = ThroughputController.BYPERCENT;
-                }
+        styleBox.addActionListener(evt -> {
+            if (((String) styleBox.getSelectedItem()).equals(BYNUMBER_LABEL)) {
+                style = ThroughputController.BYNUMBER;
+            } else {
+                style = ThroughputController.BYPERCENT;
             }
         });
         add(styleBox);
@@ -154,20 +148,16 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         throughput = new JTextField(15);
         tpPanel.add(throughput);
         throughput.setText("1"); // $NON-NLS-1$
-        // throughput.addActionListener(this);
         tpPanel.add(throughput);
         add(tpPanel);
 
         // PERTHREAD FIELD
         perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
-        perthread.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent event) {
-                if (event.getStateChange() == ItemEvent.SELECTED) {
-                    isPerThread = true;
-                } else {
-                    isPerThread = false;
-                }
+        perthread.addItemListener(evt -> {
+            if (evt.getStateChange() == ItemEvent.SELECTED) {
+                isPerThread = true;
+            } else {
+                isPerThread = false;
             }
         });
         add(CheckBoxPanel.wrap(perthread));

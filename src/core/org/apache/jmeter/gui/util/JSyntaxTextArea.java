@@ -65,6 +65,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of columns for the text area
      * @param disableUndo
      *            true to disable undo manager
+     * @return {@link JSyntaxTextArea}
      */
     public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
         try {
@@ -114,6 +115,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of rows for the text area
      * @param cols
      *            The number of columns for the text area
+     * @return {@link JSyntaxTextArea}
      */
     public static JSyntaxTextArea getInstance(int rows, int cols) {
         return getInstance(rows, cols, false);

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -615,5 +616,40 @@ public final class JOrphanUtils {
                         +folder.getAbsolutePath()+"' as folder does not exist and parent folder is not writable");
             }
         }
+    }
+
+    /**
+     * Replace in source all matches of regex by replacement taking 
+     * into account case if caseSensitive is true
+     * @param source Source text
+     * @param regex Regular expression
+     * @param replacement Replacement text to which function applies a quoting
+     * @param caseSensitive is case taken into account
+     * @return array of Object where first row is the replaced text, second row is the number of replacement that occured
+     */
+    public static Object[] replaceAllWithRegex(
+            String source, String regex, String replacement, boolean caseSensitive) {
+        java.util.regex.Pattern pattern = caseSensitive ? 
+                java.util.regex.Pattern.compile(regex) :  
+                java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
+        String newText = source;
+        final String replacementQuoted = Matcher.quoteReplacement(replacement);
+        Matcher matcher = pattern.matcher(newText);
+        int totalReplaced = 0;
+        while(true) {
+            String previousText = newText;
+            newText = matcher.replaceFirst(replacementQuoted);
+            matcher = pattern.matcher(newText);
+            if(newText.equals(previousText)) {
+                break;
+            } else {
+                totalReplaced++;
+            }
+        }
+
+        return new Object[]{
+                newText,
+                totalReplaced
+        };
     }
 }

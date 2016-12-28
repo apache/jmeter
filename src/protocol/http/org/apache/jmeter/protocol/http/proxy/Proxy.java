@@ -464,7 +464,7 @@ public class Proxy extends Thread {
         if (result == null) {
             result = new SampleResult();
             ByteArrayOutputStream text = new ByteArrayOutputStream(200);
-            e.printStackTrace(new PrintStream(text));
+            e.printStackTrace(new PrintStream(text)); // NOSONAR we store the Stacktrace in the result
             result.setResponseData(text.toByteArray());
             result.setSamplerData(request.getFirstLine());
             result.setSampleLabel(request.getUrl());

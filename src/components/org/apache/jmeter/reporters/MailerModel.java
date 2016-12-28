@@ -96,7 +96,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String LOGIN = "MailerModel.login"; //$NON-NLS-1$
 
-    private static final String PASSWORD = "MailerModel.password"; //$NON-NLS-1$
+    private static final String PASSWORD = "MailerModel.password"; //$NON-NLS-1$ NOSONAR no hardcoded password
 
     private static final String MAIL_AUTH_TYPE = "MailerModel.authType"; //$NON-NLS-1$
 
@@ -104,7 +104,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
 
     private static final String DEFAULT_SMTP_PORT = "25";
 
-    private static final String DEFAULT_PASSWORD_VALUE = ""; //$NON-NLS-1$
+    private static final String DEFAULT_PASSWORD_VALUE = ""; //$NON-NLS-1$ NOSONAR no hardcoded password
 
     private static final String DEFAULT_MAIL_AUTH_TYPE_VALUE = MailAuthType.NONE.toString(); //$NON-NLS-1$
 
@@ -161,7 +161,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             while (next.hasMoreTokens()) {
                 String theToken = next.nextToken().trim();
 
-                if (theToken.indexOf('@') > 0) { //$NON-NLS-1$
+                if (theToken.indexOf('@') > 0) { //NOSONAR $NON-NLS-1$ 
                     addressList.add(theToken);
                 } else {
                     log.warn("Ignored unexpected e-mail address: "+theToken);
@@ -209,7 +209,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             // Send the mail ...
             List<String> addressList = getAddressList();
 
-            if (addressList.size() != 0) {
+            if (!addressList.isEmpty()) {
                 try {
                     sendMail(getFromAddress(), addressList, getFailureSubject(), "URL Failed: "
                             + sample.getSampleLabel(), getSmtpHost(),
@@ -225,24 +225,20 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             }
         }
 
-        if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent) {
-            // Send the mail ...
-            if (successCount > getSuccessLimit()) {
-                List<String> addressList = getAddressList();
-
-                try {
-                    sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
-                            + sample.getSampleLabel(), getSmtpHost(),
-                            getSmtpPort(), getLogin(), getPassword(),
-                            getMailAuthType(), false);
-                } catch (Exception e) {
-                    log.error("Problem sending mail", e);
-                }
-                siteDown = false;
-                successMsgSent = true;
-                failureCount = 0;
-                failureMsgSent = false;
+        if (sendMails && siteDown && (sample.getTime() != -1) && !successMsgSent && successCount > getSuccessLimit()) {
+            List<String> addressList = getAddressList();
+            try {
+                sendMail(getFromAddress(), addressList, getSuccessSubject(), "URL Restarted: "
+                        + sample.getSampleLabel(), getSmtpHost(),
+                        getSmtpPort(), getLogin(), getPassword(),
+                        getMailAuthType(), false);
+            } catch (Exception e) {
+                log.error("Problem sending mail", e);
             }
+            siteDown = false;
+            successMsgSent = true;
+            failureCount = 0;
+            failureMsgSent = false;
         }
 
         if (successMsgSent && failureMsgSent) {
@@ -259,7 +255,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * they are independent of the sampling.
      */
     @Override
-    public synchronized void clear() {// TODO: should this be clearData()?
+    public synchronized void clear() {
         failureCount = 0;
         successCount = 0;
         siteDown = false;
@@ -301,7 +297,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      *             if any of the addresses is wrong
      */
     public void sendMail(String from, List<String> vEmails, String subject, String attText, String smtpHost)
-            throws AddressException, MessagingException {
+            throws MessagingException {
         sendMail(from, vEmails, subject, attText, smtpHost, DEFAULT_SMTP_PORT, null, null, null, false);
     }
 
@@ -334,7 +330,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
             final String password,
             MailAuthType mailAuthType,
             boolean debug)
-            throws AddressException, MessagingException{
+            throws MessagingException{
 
         InternetAddress[] address = new InternetAddress[vEmails.size()];
 
@@ -392,7 +388,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
      * @throws AddressException If mail address is wrong
      * @throws MessagingException If building MimeMessage fails
      */
-    public synchronized void sendTestMail() throws AddressException, MessagingException {
+    public synchronized void sendTestMail() throws MessagingException {
         String to = getToAddress();
         String from = getFromAddress();
         String subject = "Testing mail-addresses";
@@ -460,19 +456,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         setProperty(SUCCESS_LIMIT_KEY, limit);
     }
 
-    // private void setSuccessCount(long count)
-    // {
-    // this.successCount = count;
-    // }
-
     public void setFailureLimit(String limit) {
         setProperty(FAILURE_LIMIT_KEY, limit);
     }
-
-    // private void setFailureCount(long count)
-    // {
-    // this.failureCount = count;
-    // }
 
     public String getToAddress() {
         return getPropertyAsString(TO_KEY);

@@ -63,19 +63,15 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
     private static volatile boolean functionalMode = false;
 
     public TestPlan() {
-        // this("Test Plan");
-        // setFunctionalMode(false);
-        // setSerialized(false);
+        super();
     }
 
     public TestPlan(String name) {
         setName(name);
-        // setFunctionalMode(false);
-        // setSerialized(false);
     }
 
     // create transient item
-    private Object readResolve(){
+    protected Object readResolve(){
         threadGroups = new LinkedList<>();
         return this;
     }
