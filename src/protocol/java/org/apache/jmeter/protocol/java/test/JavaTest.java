@@ -173,7 +173,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
 
         responseCode = context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
 
-        success = context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT).equalsIgnoreCase("OK");
+        success = "OK".equalsIgnoreCase(context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT));
 
         label = context.getParameter(LABEL_NAME, "");
         if (label.length() == 0) {
@@ -309,6 +309,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
             }
             results.setSuccessful(success);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.warn("JavaTest: interrupted.");
             results.setSuccessful(false);
         } catch (Exception e) {
