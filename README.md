@@ -190,4 +190,4 @@ may be subject to export controls on cryptographic software:
 
 **Thank you for using Apache JMeter.**
 
-Just to close PR 236
+Just to close PR 232
