@@ -44,13 +44,13 @@ public class UserParameters extends AbstractTestElement implements Serializable,
 
     public static final String PER_ITERATION = "UserParameters.per_iteration";// $NON-NLS-1$
 
-    /*
+    /**
      * Although the lock appears to be an instance lock, in fact the lock is
-     * shared between all threads in a thread group, but different thread groups
-     * have different locks - see the clone() method below
+     * shared between all threads see the clone() method below
      *
      * The lock ensures that all the variables are processed together, which is
      * important for functions such as __CSVRead and _StringFromFile.
+     * But it has a performance drawback.
      */
     private transient Object lock = new Object();
 
