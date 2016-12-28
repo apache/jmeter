@@ -129,15 +129,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final boolean START_TIMESTAMP = 
             JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
-    // Allow read-only access from test code
-    private static final boolean USENANOTIME = 
+    /**
+     * Allow read-only access from test code
+     */
+    private static final boolean USE_NANO_TIME = 
             JMeterUtils.getPropDefault("sampleresult.useNanoTime", true);  // $NON-NLS-1$
     
     /**
      * How long between checks of nanotime; default 5000ms; set to <=0 to disable the thread
      */
     private static final long NANOTHREAD_SLEEP = 
-            JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$;
+            JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$
 
     static {
         if (START_TIMESTAMP) {
@@ -146,10 +148,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             log.info("Note: Sample TimeStamps are END times");
         }
         log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
-        log.info("sampleresult.useNanoTime="+USENANOTIME);
+        log.info("sampleresult.useNanoTime="+USE_NANO_TIME);
         log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
 
-        if (USENANOTIME && NANOTHREAD_SLEEP > 0) {
+        if (USE_NANO_TIME && NANOTHREAD_SLEEP > 0) {
             // Make sure we start with a reasonable value
             NanoOffset.nanoOffset = System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
             NanoOffset nanoOffset = new NanoOffset();
@@ -182,8 +184,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private String requestHeaders = "";
 
-    // TODO timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
-    /** the time stamp - can be start or end */
+    /**
+     * timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
+     * the time stamp - can be start or end 
+     */
     private long timeStamp = 0;
 
     private long startTime = 0;
@@ -268,6 +272,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     final long nanoThreadSleep;
     
     private long sentBytes;
+    
+    private URL location;
 
     /**
      * Cache for responseData as string to avoid multiple computations
@@ -275,7 +281,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private transient volatile String responseDataAsString;
 
     public SampleResult() {
-        this(USENANOTIME, NANOTHREAD_SLEEP);
+        this(USE_NANO_TIME, NANOTHREAD_SLEEP);
     }
 
     // Allow test code to change the default useNanoTime setting
@@ -1320,7 +1326,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         this.timeStamp = timeStamp;
     }
 
-    private URL location;
 
     public void setURL(URL location) {
         this.location = location;
@@ -1414,6 +1419,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     /**
      * @return the body size in bytes
+     * @deprecated replaced by getBodySizeAsLong()
      */
     @Deprecated
     public int getBodySize() {
@@ -1469,6 +1475,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 nanoOffset = clock - nano;
             } catch (InterruptedException ignore) {
                 // ignored
+                Thread.currentThread().interrupt();
             }
         }
         
