@@ -1966,7 +1966,7 @@ If omitted, output is captured and returned as the response data.</property>
 <property name="Standard error (stderr)" required="No">Name of output file for standard error (<code>STDERR</code>). 
 If omitted, output is captured and returned as the response data.</property>
 <property name="Check Return Code" required="No">If checked, sampler will compare return code with <code>Expected Return Code</code>.</property>
-<property name="Expected Return Code" required="No">Expected return code for System Call, required if "<code>Check Return Code</code>" is checked.</property>
+<property name="Expected Return Code" required="No">Expected return code for System Call, required if "<code>Check Return Code</code>" is checked. Note 500 is used as an error indicator in JMeter so you should not use it.</property>
 <property name="Timeout" required="No">Timeout for command in milliseconds, defaults to <code>0</code>, which means <em>no</em> timeout.
 If the timeout expires before the command finishes, JMeter will attempt to kill the OS process.
 </property>
