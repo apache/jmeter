@@ -376,7 +376,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
             try {
                 newLeft = jobLeft.getResult();
                 newRight = jobRight.getResult();
-            } catch (InterruptedException ie) {
+            } catch (InterruptedException ie) { // NOSONAR we throw another exception
                 throw new SampleException("Unexpected interruption !", ie);
             }
         } else {
@@ -457,7 +457,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
                 try {
                     leftFile = leftJob.getResult();
                     rightFile = rightJob.getResult();
-                } catch (InterruptedException ie) {
+                } catch (InterruptedException ie) { // NOSONAR We throw an exception
                     throw new SampleException("Unexpected interruption !", ie);
                 }
             } else {
