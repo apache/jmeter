@@ -22,8 +22,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.Map;
@@ -54,7 +56,6 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
@@ -274,16 +275,13 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             if (chooser == null) {
                 return;
             }
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(chooser.getSelectedFile());
+            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
+                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
                         saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
-            } finally {
-                JOrphanUtils.closeQuietly(writer);
-            }
+            } 
         }
     }
 }
