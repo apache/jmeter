@@ -278,8 +278,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         GuiPackage.getInstance().updateCurrentNode();
         // reset previous result
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
-        Searcher searcher = null;
-        String regex = null;
+        Searcher searcher;
+        String regex;
         if (isRegexpCB.isSelected()) {
             regex = wordToSearch;
             searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), wordToSearch);
