@@ -1090,22 +1090,50 @@ public class JMeterUtils implements UnitTestManager {
      * @param errorMsg - the error message.
      */
     public static void reportErrorToUser(String errorMsg) {
-        reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title")); // $NON-NLS-1$
+        reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title"), null); // $NON-NLS-1$
     }
 
     /**
-     * Report an error through a dialog box.
+     * Report an error through a dialog box in GUI mode 
+     * or in logs and stdout in Non GUI mode
      *
      * @param errorMsg - the error message.
      * @param titleMsg - title string
      */
     public static void reportErrorToUser(String errorMsg, String titleMsg) {
+        reportErrorToUser(errorMsg, titleMsg, null);
+    }
+
+    /**
+     * Report an error through a dialog box.
+     * Title defaults to "error_title" resource string
+     * @param errorMsg - the error message.
+     * @param exception {@link Exception}
+     */
+    public static void reportErrorToUser(String errorMsg, Exception exception) {
+        reportErrorToUser(errorMsg, JMeterUtils.getResString("error_title"), exception);
+    }
+
+    /**
+     * Report an error through a dialog box in GUI mode 
+     * or in logs and stdout in Non GUI mode
+     *
+     * @param errorMsg - the error message.
+     * @param titleMsg - title string
+     * @param exception Exception
+     */
+    public static void reportErrorToUser(String errorMsg, String titleMsg, Exception exception) {
         if (errorMsg == null) {
             errorMsg = "Unknown error - see log file";
             log.warn("Unknown error", new Throwable("errorMsg == null"));
         }
         GuiPackage instance = GuiPackage.getInstance();
         if (instance == null) {
+            if(exception != null) {
+                log.error(errorMsg, exception);
+            } else {
+                log.error(errorMsg);
+            }
             System.out.println(errorMsg);
             return; // Done
         }
