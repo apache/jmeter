@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Authenticator;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -414,14 +413,12 @@ public class JMeter implements JMeterPlugin {
                         , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
             }
 
-            Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {                
-                @Override
-                public void uncaughtException(Thread t, Throwable e) {
+            Thread.setDefaultUncaughtExceptionHandler(
+                    (Thread t, Throwable e) -> {
                     if (!(e instanceof ThreadDeath)) {
                         log.error("Uncaught exception: ", e);
                         System.err.println("Uncaught Exception " + e + ". See log file for details.");//NOSONAR
                     }
-                }
             });
 
             log.info(JMeterUtils.getJMeterCopyright());
@@ -474,12 +471,12 @@ public class JMeter implements JMeterPlugin {
                 // Start the server
                 try {
                     RemoteJMeterEngineImpl.startServer(JMeterUtils.getPropDefault("server_port", 0)); // $NON-NLS-1$
+                    startOptionalServers();
                 } catch (Exception ex) {
                     System.err.println("Server failed to start: "+ex);//NOSONAR
                     log.error("Giving up, as server failed with:", ex);
                     throw ex;
                 }
-                startOptionalServers();
             } else {
                 String testFile=null;
                 CLOption testFileOpt = parser.getArgumentById(TESTFILE_OPT);
@@ -560,7 +557,7 @@ public class JMeter implements JMeterPlugin {
                 String text = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
                 System.out.println(text);//NOSONAR
             }
-        } catch (Exception e1) {
+        } catch (Exception e1) { //NOSONAR No logging here
             System.out.println(JMeterUtils.getJMeterCopyright());//NOSONAR
             System.out.println("Version " + JMeterUtils.getJMeterVersion());//NOSONAR
         }
@@ -1033,7 +1030,7 @@ public class JMeter implements JMeterPlugin {
         ReplaceableController rc;
         // TODO this bit of code needs to be tidied up
         // Unfortunately ModuleController is in components, not core
-        if ("org.apache.jmeter.control.ModuleController".equals(item.getClass().getName())){ // Bug 47165
+        if ("org.apache.jmeter.control.ModuleController".equals(item.getClass().getName())){ // NOSONAR (comparison is intentional) Bug 47165
             rc = (ReplaceableController) item;
         } else {
             // HACK: force the controller to load its tree
@@ -1277,18 +1274,22 @@ public class JMeter implements JMeterPlugin {
                     String command = new String(request.getData(), request.getOffset(), request.getLength(),"ASCII");
                     System.out.println("Command: "+command+" received from "+address);//NOSONAR
                     log.info("Command: "+command+" received from "+address);
-                    if (command.equals("StopTestNow")){
-                        for(JMeterEngine engine : engines) {
-                            engine.stopTest(true);
-                        }
-                    } else if (command.equals("Shutdown")) {
-                        for(JMeterEngine engine : engines) {
-                            engine.stopTest(false);
-                        }
-                    } else if (command.equals("HeapDump")) {
-                        HeapDumper.dumpHeap();
-                    } else {
-                        System.out.println("Command: "+command+" not recognised ");//NOSONAR
+                    switch(command) {
+                        case "StopTestNow" :
+                            for(JMeterEngine engine : engines) {
+                                engine.stopTest(true);
+                            }
+                            break;
+                        case "Shutdown" :
+                            for(JMeterEngine engine : engines) {
+                                engine.stopTest(false);
+                            }
+                            break;
+                        case "HeapDump" :
+                            HeapDumper.dumpHeap();
+                            break;
+                        default:
+                            System.out.println("Command: "+command+" not recognised ");//NOSONAR                            
                     }
                 }
             }
