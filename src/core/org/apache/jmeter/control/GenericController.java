@@ -261,15 +261,6 @@ public class GenericController extends AbstractTestElement implements Controller
     public void triggerEndOfLoop() {
         reInitialize();
     }
-
-    /**
-     * Called to re-initialize a index of controller's elements (Bug 50032)
-     * @deprecated replaced by GeneriController#initializeSubControllers
-     */
-    @Deprecated
-    protected void reInitializeSubController() {
-        initializeSubControllers();
-    }
     
     /**
      * If the controller is done, remove it from the list,
