@@ -320,6 +320,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             scheduler.awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOGGER.error("Error waiting for end of scheduler");
+            Thread.currentThread().interrupt();
         }
         // Send last set of data before ending
         sendMetrics();
