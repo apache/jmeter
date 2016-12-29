@@ -227,10 +227,26 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 JMeterUtils.reportErrorToUser(ex.getMessage(), "Error saving cookies");
             }
         } else if (action.equals(HANDLER_COMMAND)) {
-            String currentPolicy = policy.getText();
-            policy.setValues(getPolicies(handlerMap.get(selectHandlerPanel.getSelectedItem())));
-            policy.setText(currentPolicy);
+            String cookieHandlerClass = handlerMap.get(selectHandlerPanel.getSelectedItem());
+            CookieHandler handlerImpl = getCookieHandler(cookieHandlerClass);
+            policy.setValues(handlerImpl.getPolicies());
+            policy.setText(handlerImpl.getDefaultPolicy());
          }
+    }
+
+    /**
+     * @param cookieHandlerClass CookieHandler class name
+     * @return {@link CookieHandler}
+     */
+    private static CookieHandler getCookieHandler(String cookieHandlerClass) {
+        try {
+            CookieHandler cookieHandler = (CookieHandler) 
+                    ClassUtils.getClass(cookieHandlerClass).newInstance();
+            return cookieHandler;
+        } catch (Exception e) {
+            log.error("Error creating implementation:"+cookieHandlerClass+ ", will default to:"+DEFAULT_IMPLEMENTATION, e);
+            return getCookieHandler(DEFAULT_IMPLEMENTATION);
+        }
     }
 
     /**
@@ -239,9 +255,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      */
     private static String[] getPolicies(String className) {
         try {
-            CookieHandler cookieHandler = (CookieHandler) 
-                    ClassUtils.getClass(className).newInstance();
-            return cookieHandler.getPolicies();
+            return getCookieHandler(className).getPolicies();
         } catch (Exception e) {
             log.error("Error getting cookie policies from implementation:"+className, e);
             return getPolicies(DEFAULT_IMPLEMENTATION);
@@ -429,8 +443,11 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
             if (DEFAULT_IMPLEMENTATION.equals(clazz)) {
                 tmpName = shortClazz;
             }
-            selectHandlerPanel.addItem(shortClazz);
             handlerMap.put(shortClazz, clazz);
+        }
+        // Only add to selectHandlerPanel after handlerMap has been initialized
+        for (String shortClazz : handlerMap.keySet()) {
+            selectHandlerPanel.addItem(shortClazz);
         }
         nodesModel.setSelectedItem(tmpName); // preset to default impl
         return selectHandlerPanel;
