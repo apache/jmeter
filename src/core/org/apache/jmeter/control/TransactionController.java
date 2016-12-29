@@ -126,28 +126,6 @@ public class TransactionController extends GenericController implements SampleLi
     }
 
     /**
-     * @deprecated use {@link TransactionController#isGenerateParentSample()}
-     *             instead
-     * @return {@code true} if a parent sample will be generated
-     */
-    @Deprecated
-    public boolean isParent() {
-        return isGenerateParentSample();
-    }
-
-    /**
-     * @deprecated use
-     *             {@link TransactionController#setGenerateParentSample(boolean)}
-     *             instead
-     * @param _parent
-     *            flag whether a parent sample should be generated
-     */
-    @Deprecated
-    public void setParent(boolean _parent) {
-        setGenerateParentSample(_parent);
-    }
-
-    /**
      * @see org.apache.jmeter.control.Controller#next()
      */
     @Override
