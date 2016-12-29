@@ -319,8 +319,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 new Functor("getSentKBPerSecond") },            //$NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null, null, null, null, null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
-                            Long.class, Long.class, Long.class, Long.class, String.class, 
-                            String.class, String.class, String.class});
+                            Long.class, Long.class, Long.class, Long.class, Double.class,
+                            Double.class, Double.class, Double.class});
     }
 
     // Column formats

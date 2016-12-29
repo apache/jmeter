@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -45,6 +46,7 @@ import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -238,6 +240,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
+        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5, Comparator.nullsFirst(SampleSucessComparator.INSTANCE)));
         JMeterUtils.applyHiDPI(table);
         HeaderAsPropertyRenderer.install(table);
         RendererUtils.applyRenderers(table, RENDERERS);
@@ -321,6 +324,24 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Add the main panel and the graph
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
+    }
+
+    public static enum SampleSucessComparator implements Comparator<ImageIcon> {
+        INSTANCE;
+
+        @Override
+        public int compare(ImageIcon o1, ImageIcon o2) {
+            if (o1 == o2) {
+                return 0;
+            }
+            if (o1 == imageSuccess) {
+                return -1;
+            }
+            if (o1 == imageFailure) {
+                return 1;
+            }
+            throw new IllegalArgumentException("Only success and failure images can be compared");
+        }
     }
 
     public static class SampleSuccessFunctor extends Functor {
