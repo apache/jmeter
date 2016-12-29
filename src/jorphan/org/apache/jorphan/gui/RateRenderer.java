@@ -30,7 +30,7 @@ package org.apache.jorphan.gui;
  * <p>
  * Examples: "34.2/sec" "0.1/sec" "43.0/hour" "15.9/min"
  */
-public class RateRenderer extends NumberRenderer{
+public class RateRenderer extends NumberRenderer{ // NOSONAR 7 parents is OK in this case
 
     private static final long serialVersionUID = 240L;
 
@@ -41,12 +41,12 @@ public class RateRenderer extends NumberRenderer{
     @Override
     public void setValue(Object value) {
         if (!(value instanceof Double)) {
-            setText("#N/A"); // TODO: should this just call super()?
+            setText("#N/A");
             return;
         }
         double rate = ((Double) value).doubleValue();
-        if (rate == Double.MAX_VALUE){
-            setText("#N/A"); // TODO: should this just call super()?
+        if (Double.compare(rate,Double.MAX_VALUE)==0){
+            setText("#N/A");
             return;
         }
 
