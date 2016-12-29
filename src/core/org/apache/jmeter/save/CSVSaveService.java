@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -678,11 +679,11 @@ public final class CSVSaveService {
      * @param data
      *            List of data rows
      * @param writer
-     *            output file
+     *            output writer
      * @throws IOException
      *             when writing to <code>writer</code> fails
      */
-    public static void saveCSVStats(List<?> data, FileWriter writer)
+    public static void saveCSVStats(List<?> data, Writer writer)
             throws IOException {
         saveCSVStats(data, writer, null);
     }
@@ -702,7 +703,7 @@ public final class CSVSaveService {
      * @throws IOException
      *             when writing to <code>writer</code> fails
      */
-    public static void saveCSVStats(List<?> data, FileWriter writer,
+    public static void saveCSVStats(List<?> data, Writer writer,
             String[] headers) throws IOException {
         final char DELIM = ',';
         final char[] SPECIALS = new char[] { DELIM, QUOTING_CHAR };

@@ -36,7 +36,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
     private static final String SHAREMODE = "shareMode";             //$NON-NLS-1$
 
     // Access needed from CSVDataSet
-    static final String[] SHARE_TAGS = new String[3];
+    private static final String[] SHARE_TAGS = new String[3];
     static final int SHARE_ALL    = 0;
     static final int SHARE_GROUP  = 1;
     static final int SHARE_THREAD = 2;
@@ -105,5 +105,14 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
             }
         }
         return -1;
+    }
+
+    /**
+     * @return array of String for possible sharing modes
+     */
+    public static String[] getShareTags() {
+        String[] copy = new String[SHARE_TAGS.length];
+        System.arraycopy(SHARE_TAGS, 0, copy, 0, SHARE_TAGS.length);
+        return copy;
     }
 }

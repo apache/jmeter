@@ -39,7 +39,7 @@ public class HC3CookieHandler implements CookieHandler {
    private static final Logger log = LoggingManager.getLoggerForClass();
 
    static final String DEFAULT_POLICY_NAME = "compatibility";
-   public static final String[] AVAILABLE_POLICIES = new String[] {
+   private static final String[] AVAILABLE_POLICIES = new String[] { 
        DEFAULT_POLICY_NAME,
        "default",
        "rfc2109",
@@ -50,6 +50,13 @@ public class HC3CookieHandler implements CookieHandler {
 
     private final transient CookieSpec cookieSpec;
 
+    /**
+     * Default constructor that uses {@link HC3CookieHandler#DEFAULT_POLICY_NAME}
+     */
+    public HC3CookieHandler() {
+        this(DEFAULT_POLICY_NAME);
+    }
+    
     /**
      * @param policy
      *            cookie policy to which to conform (see
@@ -211,5 +218,10 @@ public class HC3CookieHandler implements CookieHandler {
     @Override
     public String getDefaultPolicy() {
         return DEFAULT_POLICY_NAME; 
+    }
+
+    @Override
+    public String[] getPolicies() {
+        return AVAILABLE_POLICIES;
     }
 }

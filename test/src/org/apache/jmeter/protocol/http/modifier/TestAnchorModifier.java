@@ -19,18 +19,21 @@
 package org.apache.jmeter.protocol.http.modifier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.sampler.HTTPNullSampler;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
@@ -99,6 +102,27 @@ public class TestAnchorModifier extends JMeterTestCase {
         @Test
         public void testModifySamplerWithBaseHRef() throws Exception {
             testProcessingHTMLFile("/testfiles/jmeter_home_page_with_base_href.html");
+        }
+
+        @Test
+        public void testNullSampler() {
+            jmctx.setCurrentSampler(null);
+            jmctx.setPreviousResult(new HTTPSampleResult());
+            parser.process(); // should do nothing
+        }
+
+        @Test
+        public void testNullResult() throws Exception {
+            jmctx.setCurrentSampler(makeContext("http://www.apache.org/subdir/previous.html"));
+            jmctx.setPreviousResult(null);
+            parser.process(); // should do nothing
+        }
+
+        @Test
+        public void testWrongResultClass() throws Exception {
+            jmctx.setCurrentSampler(makeContext("http://www.apache.org/subdir/previous.html"));
+            jmctx.setPreviousResult(new SampleResult());
+            parser.process(); // should do nothing
         }
 
         @Test
@@ -265,7 +289,7 @@ public class TestAnchorModifier extends JMeterTestCase {
             jmctx.setPreviousResult(result);
             parser.process();
             String newUrl = config.getUrl().toString();
-            assertTrue(!"http://www.apache.org/home/index.html?param1=value1".equals(newUrl));
+            assertNotEquals("http://www.apache.org/home/index.html?param1=value1", newUrl);
             assertEquals(config.getUrl().toString(), newUrl);
         }
 
@@ -314,7 +338,7 @@ public class TestAnchorModifier extends JMeterTestCase {
         @Test
         public void testSpecialCharParse() throws Exception {
         String specialChars = "-_.!~*'()%25";// These are some of the special characters
-        String htmlEncodedFixture = URLEncoder.encode(specialChars, "UTF-8");
+        String htmlEncodedFixture = URLEncoder.encode(specialChars, StandardCharsets.UTF_8.name());
         
         HTTPSamplerBase config = makeUrlConfig(".*index.html");
         config.addArgument("test", ".*");

@@ -126,7 +126,7 @@ public class LogFunction extends AbstractFunction {
         if (t != null) {
             sb.append(' ');
             ps.print(sb.toString());
-            t.printStackTrace(ps);
+            t.printStackTrace(ps); // NOSONAR we're printing stack trace to log
         } else {
             ps.println(sb.toString());
         }

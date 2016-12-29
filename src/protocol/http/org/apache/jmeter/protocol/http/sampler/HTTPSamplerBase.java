@@ -203,29 +203,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     private static final boolean IGNORE_EMBEDDED_RESOURCES_DATA =
             JMeterUtils.getPropDefault("httpsampler.embedded_resources_use_md5", false); // $NON-NLS-1$ // default value: false
 
-    public enum SourceType {
-        HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
-        DEVICE("web_testing_source_ip_device"), //$NON-NLS-1$
-        DEVICE_IPV4("web_testing_source_ip_device_ipv4"), //$NON-NLS-1$
-        DEVICE_IPV6("web_testing_source_ip_device_ipv6"); //$NON-NLS-1$
-
-        public final String propertyName;
-        SourceType(String propertyName) {
-            this.propertyName = propertyName;
-        }
-    }
-
     public static final int SOURCE_TYPE_DEFAULT = HTTPSamplerBase.SourceType.HOSTNAME.ordinal();
-
-    // Use for ComboBox Source Address Type. Preserve order (specially with localization)
-    public static String[] getSourceTypeList() {
-        final SourceType[] types = SourceType.values();
-        final String[] displayStrings = new String[types.length];
-        for(int i = 0; i < types.length; i++) {
-            displayStrings[i] = JMeterUtils.getResString(types[i].propertyName);
-        }
-        return displayStrings;
-    }
 
     public static final String DEFAULT_METHOD = HTTPConstants.GET; // $NON-NLS-1$
 
@@ -310,13 +288,24 @@ public abstract class HTTPSamplerBase extends AbstractSampler
 
     protected static final int MAX_FRAME_DEPTH = JMeterUtils.getPropDefault("httpsampler.max_frame_depth", 5); // $NON-NLS-1$
 
-
     // Derive the mapping of content types to parsers
     private static final Map<String, String> PARSERS_FOR_CONTENT_TYPE = new HashMap<>();
     // Not synch, but it is not modified after creation
 
     private static final String RESPONSE_PARSERS = // list of parsers
             JMeterUtils.getProperty("HTTPResponse.parsers");//$NON-NLS-1$
+    
+    // Bug 49083
+    /** Whether to remove '/pathsegment/..' from redirects; default true */
+    private static final boolean REMOVESLASHDOTDOT =
+            JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
+    
+    private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP+"://"; // $NON-NLS-1$
+    private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
+
+    // Bug 51939
+    private static final boolean SEPARATE_CONTAINER =
+            JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
 
     static {
         String[] parsers = JOrphanUtils.split(RESPONSE_PARSERS, " " , true);// returns empty array for null
@@ -340,18 +329,34 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             }
         }
     }
-
-    // Bug 49083
-    /** Whether to remove '/pathsegment/..' from redirects; default true */
-    private static final boolean REMOVESLASHDOTDOT =
-            JMeterUtils.getPropDefault("httpsampler.redirect.removeslashdotdot", true);
-
+    
     ////////////////////// Code ///////////////////////////
 
     public HTTPSamplerBase() {
         setArguments(new Arguments());
     }
 
+    public enum SourceType {
+        HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
+        DEVICE("web_testing_source_ip_device"), //$NON-NLS-1$
+        DEVICE_IPV4("web_testing_source_ip_device_ipv4"), //$NON-NLS-1$
+        DEVICE_IPV6("web_testing_source_ip_device_ipv6"); //$NON-NLS-1$
+
+        public final String propertyName;
+        SourceType(String propertyName) {
+            this.propertyName = propertyName;
+        }
+    }
+
+    // Use for ComboBox Source Address Type. Preserve order (specially with localization)
+    public static String[] getSourceTypeList() {
+        final SourceType[] types = SourceType.values();
+        final String[] displayStrings = new String[types.length];
+        for(int i = 0; i < types.length; i++) {
+            displayStrings[i] = JMeterUtils.getResString(types[i].propertyName);
+        }
+        return displayStrings;
+    }
     /**
      * Determine if the file should be sent as the entire Content body,
      * i.e. without any additional wrapping.
@@ -935,13 +940,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         res.setSuccessful(false);
         return res;
     }
-
-    private static final String HTTP_PREFIX = HTTPConstants.PROTOCOL_HTTP+"://"; // $NON-NLS-1$
-    private static final String HTTPS_PREFIX = HTTPConstants.PROTOCOL_HTTPS+"://"; // $NON-NLS-1$
-
-    // Bug 51939
-    private static final boolean SEPARATE_CONTAINER =
-            JMeterUtils.getPropDefault("httpsampler.separate.container", true); // $NON-NLS-1$
 
 
     /**
@@ -1778,7 +1776,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public byte[] readResponse(SampleResult sampleResult, InputStream in, long length) throws IOException {
         
         OutputStream w = null;
-        try {
+        try { // NOSONAR No try with resource as performance is critical here
             byte[] readBuffer = new byte[8192]; // 8kB is the (max) size to have the latency ('the first packet')
             int bufferSize = 32;// Enough for MD5
 

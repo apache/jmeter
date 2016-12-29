@@ -33,8 +33,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * This class implements an SSLSocketFactory which supports a local truststore.
  */
@@ -46,12 +44,9 @@ public class LocalTrustStoreSSLSocketFactory extends SSLSocketFactory  {
         SSLContext sslcontext = null;
         try {
             KeyStore ks = KeyStore.getInstance("JKS"); // $NON-NLS-1$
-            InputStream stream = null;
-            try {
-                stream = new BufferedInputStream(new FileInputStream(truststore));
+            try (FileInputStream fileStream = new FileInputStream(truststore);
+                    InputStream stream = new BufferedInputStream(fileStream)) {
                 ks.load(stream, null);
-            } finally {
-                IOUtils.closeQuietly(stream);
             }
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());

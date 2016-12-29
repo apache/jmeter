@@ -20,8 +20,10 @@ package org.apache.jmeter.gui.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.collections.Data;
@@ -111,6 +113,26 @@ public class PowerTableModel extends DefaultTableModel {
         for (int i = 0; i < data.length; i++) {
             model.addColumnValue(model.getHeaders()[i], data[i]);
         }
+    }
+
+    @Override
+    public void moveRow(int start, int end, int to) {
+        ArrayList<Object[]> rows = new ArrayList<>();
+        for(int i=0; i < getRowCount(); i++){
+            rows.add(getRowData(i));
+        }
+
+        List<Object[]> subList = new ArrayList<>(rows.subList(start, end));
+        for (int x = end - 1; x >= start; x--) {
+            rows.remove(x);
+        }
+
+        rows.addAll(to, subList);
+        for(int i = 0; i < rows.size(); i++){
+            setRowValues(i, rows.get(i));
+        }
+
+        super.fireTableChanged(new TableModelEvent(this));
     }
 
     public void addNewRow() {

@@ -278,8 +278,8 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         GuiPackage.getInstance().updateCurrentNode();
         // reset previous result
         ActionRouter.getInstance().doActionNow(new ActionEvent(e.getSource(), e.getID(), ActionNames.SEARCH_RESET));
-        Searcher searcher = null;
-        String regex = null;
+        Searcher searcher;
+        String regex;
         if (isRegexpCB.isSelected()) {
             regex = wordToSearch;
             searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), wordToSearch);
@@ -297,20 +297,18 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                 Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
                 List<String> searchableTokens = searchable.getSearchableTokens();
                 boolean result = searcher.search(searchableTokens);
-                if (result) {
-                    if(jMeterTreeNode.getUserObject() instanceof Replaceable) {
-                        Replaceable replaceable = (Replaceable) jMeterTreeNode.getUserObject();
-                        int numberOfReplacements = replaceable.replace(regex, wordToReplace, caseSensitiveReplacement);
-                        if(logger.isInfoEnabled()) {
-                            logger.info("Replaced "+numberOfReplacements+" in element:"
-                                    +((TestElement)jMeterTreeNode.getUserObject()).getName());
-                        }
-                        totalReplaced += numberOfReplacements;
-                        if(numberOfReplacements > 0) {
-                            List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                            nodes.addAll(matchingNodes);
-                        }
-                    }   
+                if (result && jMeterTreeNode.getUserObject() instanceof Replaceable) {
+                    Replaceable replaceable = (Replaceable) jMeterTreeNode.getUserObject();
+                    int numberOfReplacements = replaceable.replace(regex, wordToReplace, caseSensitiveReplacement);
+                    if(logger.isInfoEnabled()) {
+                        logger.info("Replaced "+numberOfReplacements+" in element:"
+                                +((TestElement)jMeterTreeNode.getUserObject()).getName());
+                    }
+                    totalReplaced += numberOfReplacements;
+                    if(numberOfReplacements > 0) {
+                        List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
+                        nodes.addAll(matchingNodes);
+                    }
                 }
             } catch (Exception ex) {
                 logger.error("Error occured replacing data in node:"+jMeterTreeNode.getName(), ex);

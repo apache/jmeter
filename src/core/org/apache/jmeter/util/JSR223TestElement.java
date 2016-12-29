@@ -36,7 +36,6 @@ import javax.script.ScriptException;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -51,10 +50,29 @@ import org.apache.log.Logger;
 public abstract class JSR223TestElement extends ScriptingTestElement
     implements Serializable, TestStateListener
 {
+    private static final long serialVersionUID = 231L;
+        
+    /**
+     * Cache of compiled scripts
+     */
+    @SuppressWarnings("unchecked") // LRUMap does not support generics (yet)
+    private static final Map<String, CompiledScript> compiledScriptsCache = 
+            Collections.synchronizedMap(
+                    new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
+
+    /** If not empty then script in ScriptText will be compiled and cached */
+    private String cacheKey = "";
+    
+    /** md5 of the script, used as an unique key for the cache */
+    private String scriptMd5 = null;
+    
     /**
      * Initialization On Demand Holder pattern
      */
     private static class LazyHolder {
+        private LazyHolder() {
+            super();
+        }
         public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
  
@@ -64,22 +82,6 @@ public abstract class JSR223TestElement extends ScriptingTestElement
     public static ScriptEngineManager getInstance() {
             return LazyHolder.INSTANCE;
     }
-    
-    private static final long serialVersionUID = 231L;
-    
-    /** If not empty then script in ScriptText will be compiled and cached */
-    private String cacheKey = "";
-    
-    /** md5 of the script, used as an unique key for the cache */
-    private String scriptMd5 = null;
-    
-    /**
-     * Cache of compiled scripts
-     */
-    @SuppressWarnings("unchecked") // LRUMap does not support generics (yet)
-    private static final Map<String, CompiledScript> compiledScriptsCache = 
-            Collections.synchronizedMap(
-                    new LRUMap(JMeterUtils.getPropDefault("jsr223.compiled_scripts_cache_size", 100)));
 
     public JSR223TestElement() {
         super();
@@ -134,7 +136,7 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         Properties props = JMeterUtils.getJMeterProperties();
         bindings.put("props", props); // $NON-NLS-1$ (this name is fixed)
         // For use in debugging:
-        bindings.put("OUT", System.out); // $NON-NLS-1$ (this name is fixed)
+        bindings.put("OUT", System.out); // NOSONAR $NON-NLS-1$ (this name is fixed)
 
         // Most subclasses will need these:
         Sampler sampler = jmctx.getCurrentSampler();
@@ -162,41 +164,38 @@ public abstract class JSR223TestElement extends ScriptingTestElement
         File scriptFile = new File(getFilename()); 
         // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws "java.lang.Error: unimplemented"
         boolean supportsCompilable = scriptEngine instanceof Compilable 
-                && !(scriptEngine.getClass().getName().equals("bsh.engine.BshScriptEngine")); // $NON-NLS-1$
+                && !("bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName())); // NOSONAR $NON-NLS-1$
         if (!StringUtils.isEmpty(getFilename())) {
             if (scriptFile.exists() && scriptFile.canRead()) {
-                BufferedReader fileReader = null;
-                try {
-                    if (supportsCompilable) {
-                        String cacheKey = 
-                                getScriptLanguage()+"#"+ // $NON-NLS-1$
-                                scriptFile.getAbsolutePath()+"#"+  // $NON-NLS-1$
-                                        scriptFile.lastModified();
-                        CompiledScript compiledScript = 
-                                compiledScriptsCache.get(cacheKey);
-                        if (compiledScript==null) {
-                            synchronized (compiledScriptsCache) {
-                                compiledScript = 
-                                        compiledScriptsCache.get(cacheKey);
-                                if (compiledScript==null) {
-                                    // TODO Charset ?
-                                    fileReader = new BufferedReader(new FileReader(scriptFile), 
-                                            (int)scriptFile.length()); 
+                if (supportsCompilable) {
+                    String cacheKey = 
+                            getScriptLanguage()+"#"+ // $NON-NLS-1$
+                            scriptFile.getAbsolutePath()+"#"+  // $NON-NLS-1$
+                                    scriptFile.lastModified();
+                    CompiledScript compiledScript = 
+                            compiledScriptsCache.get(cacheKey);
+                    if (compiledScript==null) {
+                        synchronized (compiledScriptsCache) {
+                            compiledScript = 
+                                    compiledScriptsCache.get(cacheKey);
+                            if (compiledScript==null) {
+                                // TODO Charset ?
+                                try ( BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile), 
+                                        (int)scriptFile.length())) {
                                     compiledScript = 
                                             ((Compilable) scriptEngine).compile(fileReader);
                                     compiledScriptsCache.put(cacheKey, compiledScript);
                                 }
                             }
                         }
-                        return compiledScript.eval(bindings);
-                    } else {
-                        // TODO Charset ?
-                        fileReader = new BufferedReader(new FileReader(scriptFile), 
-                                (int)scriptFile.length()); 
-                        return scriptEngine.eval(fileReader, bindings);                    
                     }
-                } finally {
-                    IOUtils.closeQuietly(fileReader);
+                    return compiledScript.eval(bindings);
+                } else {
+                    // TODO Charset ?
+                    try ( BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile), 
+                            (int)scriptFile.length())) {
+                        return scriptEngine.eval(fileReader, bindings);
+                    }
                 }
             }  else {
                 throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
