@@ -22,10 +22,9 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.IntegerProperty;
 
-//For unit tests, @see TestHttpMirrorControl
-
 /**
  * Test element that implements the Workbench HTTP Mirror function
+ * For unit tests, @see TestHttpMirrorControl
  */
 public class HttpMirrorControl extends AbstractTestElement {
 
@@ -144,6 +143,7 @@ public class HttpMirrorControl extends AbstractTestElement {
             try {
                 server.join(1000); // wait for server to stop
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             server = null;
         }
