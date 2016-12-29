@@ -154,7 +154,8 @@ Fill in some detail.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
- </ul>
+    <li><bug>60531</bug>HTTP Cookie Manager : changing Implementation does not update Cookie Policy</li>
+</ul>
 
 <h3>Other Samplers</h3>
 <ul>
