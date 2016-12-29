@@ -81,8 +81,8 @@ public class DistributedRunner {
                 println("Pausing before retry for " + retriesDelay + "ms");
                 try {
                     Thread.sleep(retriesDelay);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException("Interrupted while initializing remote", e); // NOSONAR
+                } catch (InterruptedException e) {  // NOSONAR
+                    throw new RuntimeException("Interrupted while initializing remote", e);
                 }
             }
 
@@ -133,8 +133,8 @@ public class DistributedRunner {
                 } else {
                     log.warn("Host not found in list of active engines: " + address);
                 }
-            } catch (IllegalStateException | JMeterEngineException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$ NOSONAR already reported to user 
+            } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
+                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$  
             }
         }
         println("Remote engines have been started");
