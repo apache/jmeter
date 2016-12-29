@@ -422,25 +422,6 @@ public class SaveService {
         JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
         inputStreamReader.close();
     }
-
-    /**
-     * Load a Test tree (JMX file)
-     * @param inputStream the JMX file as an {@link InputStream}
-     * @return the loaded tree or null if an error occurs
-     * @throws IOException if there is a problem reading the file or processing it
-     * @deprecated use {@link SaveService}{@link #loadTree(File)}
-     */
-    @Deprecated
-    public static HashTree loadTree(InputStream inputStream) throws IOException {
-        try {
-            return readTree(inputStream, null);
-        } catch(IllegalArgumentException e) {
-            log.error("Problem loading XML, message:"+e.getMessage(), e);
-            return null;
-        } finally {
-            JOrphanUtils.closeQuietly(inputStream);
-        }
-    }
     
     /**
      * Load a Test tree (JMX file)
