@@ -121,23 +121,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             "aggregate_report_bandwidth",     //$NON-NLS-1$
             "aggregate_report_sent_bytes_per_sec"  //$NON-NLS-1$
     };
-    
-    static final Object[][] getColumnsMsgParameters() { 
-        Object[][] result =  { null, 
-            null,
-            null,
-            null,
-            new Object[]{PCT1_LABEL},
-            new Object[]{PCT2_LABEL},
-            new Object[]{PCT3_LABEL},
-            null,
-            null,
-            null,
-            null,
-            null,
-            null};
-        return result;
-    }
 
     private static final String[] GRAPH_COLUMNS = {"average",//$NON-NLS-1$
             "aggregate_report_median",        //$NON-NLS-1$
@@ -284,6 +267,23 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         init();
     }
     
+    static final Object[][] getColumnsMsgParameters() { 
+        Object[][] result =  { null, 
+            null,
+            null,
+            null,
+            new Object[]{PCT1_LABEL},
+            new Object[]{PCT2_LABEL},
+            new Object[]{PCT3_LABEL},
+            null,
+            null,
+            null,
+            null,
+            null,
+            null};
+        return result;
+    }
+    
     /**
      * @return array of String containing column names
      */
@@ -359,6 +359,47 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             new NumberRenderer("#0.00"),      // Received bytes per sec //$NON-NLS-1$
             new NumberRenderer("#0.00"),    // Sent bytes per sec   //$NON-NLS-1$
         };
+    }
+    
+    /**
+     * 
+     * @param keys I18N keys
+     * @return labels
+     */
+    static String[] getLabels(String[] keys) {
+        String[] labels = new String[keys.length];
+        for (int i = 0; i < labels.length; i++) {
+            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), getColumnsMsgParameters()[i]);
+        }
+        return labels;
+    }
+    
+    /**
+     * We use this method to get the data, since we are using
+     * ObjectTableModel, so the calling getDataVector doesn't
+     * work as expected.
+     * @param model {@link ObjectTableModel}
+     * @param formats Array of {@link Format} array can contain null formatters in this case value is added as is
+     * @return the data from the model
+     */
+    public static List<List<Object>> getAllTableData(ObjectTableModel model, Format[] formats) {
+        List<List<Object>> data = new ArrayList<>();
+        if (model.getRowCount() > 0) {
+            for (int rw=0; rw < model.getRowCount(); rw++) {
+                int cols = model.getColumnCount();
+                List<Object> column = new ArrayList<>();
+                data.add(column);
+                for (int idx=0; idx < cols; idx++) {
+                    Object val = model.getValueAt(rw,idx);
+                    if(formats[idx] != null) {
+                        column.add(formats[idx].format(val));
+                    } else {
+                        column.add(val);
+                    }
+                }
+            }
+        }
+        return data;
     }
 
     public static boolean testFunctors(){
@@ -599,34 +640,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         }
         return i;
     }
-    
-    /**
-     * We use this method to get the data, since we are using
-     * ObjectTableModel, so the calling getDataVector doesn't
-     * work as expected.
-     * @param model {@link ObjectTableModel}
-     * @param formats Array of {@link Format} array can contain null formatters in this case value is added as is
-     * @return the data from the model
-     */
-    public static List<List<Object>> getAllTableData(ObjectTableModel model, Format[] formats) {
-        List<List<Object>> data = new ArrayList<>();
-        if (model.getRowCount() > 0) {
-            for (int rw=0; rw < model.getRowCount(); rw++) {
-                int cols = model.getColumnCount();
-                List<Object> column = new ArrayList<>();
-                data.add(column);
-                for (int idx=0; idx < cols; idx++) {
-                    Object val = model.getValueAt(rw,idx);
-                    if(formats[idx] != null) {
-                        column.add(formats[idx].format(val));
-                    } else {
-                        column.add(val);
-                    }
-                }
-            }
-        }
-        return data;
-    }
 
     @Override
     public void actionPerformed(ActionEvent event) {
@@ -717,19 +730,6 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 } 
             }
         }
-    }
-
-    /**
-     * 
-     * @param keys I18N keys
-     * @return labels
-     */
-    static String[] getLabels(String[] keys) {
-        String[] labels = new String[keys.length];
-        for (int i = 0; i < labels.length; i++) {
-            labels[i]=MessageFormat.format(JMeterUtils.getResString(keys[i]), getColumnsMsgParameters()[i]);
-        }
-        return labels;
     }
 
     private void actionMakeGraph() {
