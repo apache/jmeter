@@ -49,13 +49,14 @@ public class CPSPauser{
      */
     public void pause(int bytes){
         long sleepMS = (bytes*MS_PER_SEC)/charactersPerSecond;
-        int sleepNS = Long.valueOf(sleepMS % NS_PER_MS).intValue();
+        int sleepNS = Long.valueOf(sleepMS % NS_PER_MS).intValue(); // NOSONAR Where is the boxing to Long
         try {
             if(sleepMS>0 || sleepNS>0) {
                 Thread.sleep(sleepMS,sleepNS);
             }
         } catch (InterruptedException ignored) {
             // NOOP
+            Thread.currentThread().interrupt();
         }
     }
 }
