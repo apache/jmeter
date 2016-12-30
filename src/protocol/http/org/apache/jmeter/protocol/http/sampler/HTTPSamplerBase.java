@@ -1480,7 +1480,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     @Override
     public Object clone() {
-        return (HTTPSamplerBase) super.clone();
+        return super.clone();
     }
 
     /**
