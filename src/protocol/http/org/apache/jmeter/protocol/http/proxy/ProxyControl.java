@@ -361,15 +361,6 @@ public class ProxyControl extends GenericController {
         setProperty(new BooleanProperty(ADD_ASSERTIONS, b));
     }
 
-    /**
-     * @param samplerTypeName
-     * @deprecated replaced by {@link ProxyControl#setSamplerTypeName(String)}
-     */
-    @Deprecated
-    public void setSamplerTypeName(int samplerTypeName) {
-        setProperty(new IntegerProperty(SAMPLER_TYPE_NAME, samplerTypeName));
-    }
-
     public void setSamplerTypeName(String samplerTypeName) {
         setProperty(new StringProperty(SAMPLER_TYPE_NAME, samplerTypeName));
     }

@@ -107,6 +107,7 @@ public class FixedQueueExecutor implements QueueExecutor {
 
         } catch (InterruptedException e) {
             log.warn("Interrupt exception caught", e);
+            Thread.currentThread().interrupt();
         }
         return admin.get(id);
     }

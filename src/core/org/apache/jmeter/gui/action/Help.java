@@ -98,7 +98,7 @@ public class Help extends AbstractAction {
         try {
             helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
         } catch (IOException ioe) {
-            log.error(ioe.toString());
+            log.error("Error setting page for url"+url, ioe);
             helpDoc.setText("<html><head><title>Problem loading help page</title>"
                     + "<style><!--"
                     + ".note { background-color: #ffeeee; border: 1px solid brown; }"
