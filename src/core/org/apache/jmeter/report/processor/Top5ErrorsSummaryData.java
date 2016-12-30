@@ -29,7 +29,7 @@ import java.util.TreeSet;
  */
 public class Top5ErrorsSummaryData {
 
-    private static final Long ONE = new Long(1);
+    private static final Long ONE = (long) 1;
     private Map<String, Long> countPerError;
     private long total;
     private long errors;
