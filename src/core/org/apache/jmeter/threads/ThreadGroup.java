@@ -84,7 +84,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     // List of active threads
     private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
     
-    private final Object addThreadLock = new Object();
+    private transient final Object addThreadLock = new Object();
 
     /**
      * Is test (still) running?
