@@ -68,7 +68,6 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
     @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         PatternMatcher pm = JMeterUtils.getMatcher();
-        Pattern pattern = null;
         PatternCompiler compiler = new Perl5Compiler();
         String input = prop.getStringValue();
         if(input == null) {
@@ -79,7 +78,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             String value = entry.getValue();
             if (regexMatch) {
                 try {
-                    pattern = compiler.compile(constructPattern(value));
+                    Pattern pattern = compiler.compile(constructPattern(value));
                     input = Util.substitute(pm, pattern,
                             new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX),
                             input, Util.SUBSTITUTE_ALL);
