@@ -290,7 +290,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
                 statsBuff.append("ContentType: ").append(sampleResult.getContentType()).append(NL); //$NON-NLS-1$
                 statsBuff.append("DataEncoding: ").append(sampleResult.getDataEncodingNoDefault()).append(NL); //$NON-NLS-1$
                 statsDoc.insertString(statsDoc.getLength(), statsBuff.toString(), null);
-                statsBuff = null; // Done
+                statsBuff = null; // NOSONAR Help gc
                 
                 // Tabbed results: fill table
                 resultModel.addRow(new RowResult(JMeterUtils.getParsedLabel("view_results_thread_name"), sampleResult.getThreadName())); //$NON-NLS-1$
