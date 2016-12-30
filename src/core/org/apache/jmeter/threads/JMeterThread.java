@@ -50,6 +50,7 @@ import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
+import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
@@ -675,6 +676,10 @@ public class JMeterThread implements Runnable, Interruptible {
         return threadName;
     }
 
+    /**
+     * Set running flag to false which will interrupt JMeterThread on next flag test.
+     * This is a clean shutdown.
+     */
     public void stop() { // Called by StandardJMeterEngine, TestAction and AccessLogSampler
         running = false;
         log.info("Stopping: " + threadName);
@@ -975,6 +980,20 @@ public class JMeterThread implements Runnable, Interruptible {
 
     public void setThreadGroup(AbstractThreadGroup group) {
         this.threadGroup = group;
+    }
+
+    /**
+     * @return {@link ListedHashTree}
+     */
+    public ListedHashTree getTestTree() {
+        return (ListedHashTree) testTree;
+    }
+
+    /**
+     * @return {@link ListenerNotifier}
+     */
+    public ListenerNotifier getNotifier() {
+        return notifier;
     }
 
 }

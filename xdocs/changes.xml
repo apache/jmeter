@@ -140,6 +140,7 @@ Fill in some detail.
 <h3>General</h3>
 <ul>
     <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
+    <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize and Maxime Chassagneux</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -208,6 +209,8 @@ Fill in some detail.
 <li>(gavin at 16degrees.com.au)</li>
 <li>Thomas Schapitz (ts-nospam12 at online.de)</li>
 <li>Murdecai777 (https://github.com/Murdecai777)</li>
+<li>Logan Mauzaize (https://github.com/loganmzz)</li>
+<li>Maxime Chassagneux (https://github.com/max3163)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
