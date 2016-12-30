@@ -106,7 +106,7 @@ public class RandomVariableConfig extends ConfigTestElement
     /** {@inheritDoc} */
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
-        Random randGen=null;
+        Random randGen;
         if (getPerThread()){
             randGen = perThreadRandom.get();
         } else {
