@@ -39,15 +39,14 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
-// @see org.apache.jmeter.assertions.ResponseAssertionTest for unit tests
-
 /**
  * Test element to handle Response Assertions, @see AssertionGui
+ * see org.apache.jmeter.assertions.ResponseAssertionTest for unit tests
  */
 public class ResponseAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 
@@ -85,7 +84,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     private static final int SUBSTRING = 1 << 4;
 
-    // Mask should contain all types (but not NOT)
+    private static final int OR = 1 << 5;
+
+    // Mask should contain all types (but not NOT nor OR)
     private static final int TYPE_MASK = CONTAINS | EQUALS | MATCH | SUBSTRING;
 
     private static final int  EQUALS_SECTION_DIFF_LEN
@@ -220,6 +221,10 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     public boolean isNotType() {
         return (getTestType() & NOT) != 0;
     }
+    
+    public boolean isOrType() {
+        return (getTestType() & OR) != 0;
+    }
 
     public void setToContainsType() {
         setTestTypeMasked(CONTAINS);
@@ -243,6 +248,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
 
     public void unsetNotType() {
         setTestType(getTestType() & ~NOT);
+    }
+    
+    public void setToOrType() {
+        setTestType((getTestType() | OR));
+    }
+
+    public void unsetOrType() {
+        setTestType(getTestType() & ~OR);
     }
 
     public boolean getAssumeSuccess() {
@@ -290,9 +303,9 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         }
 
         result.setFailure(false);
-        result.setError(false);
-
+        result.setError(false); 
         boolean notTest = (NOT & getTestType()) > 0;
+        boolean orTest = (OR & getTestType()) > 0;
         boolean contains = isContainsType(); // do it once outside loop
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
@@ -300,6 +313,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         boolean debugEnabled = log.isDebugEnabled();
         if (debugEnabled){
             log.debug("Type:" + (contains?"Contains" : "Match") + (notTest? "(not)" : ""));
+            log.debug("Type:" + (contains?"Contains" : "Match") + (orTest? "(or)" : ""));
         }
 
         if (StringUtils.isEmpty(toCheck)) {
@@ -313,6 +327,8 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         }
 
         boolean pass = true;
+        boolean hasTrue = false;
+        ArrayList<String> allCheckMessage = new ArrayList<>();
         try {
             // Get the Matcher for this thread
             Perl5Matcher localMatcher = JMeterUtils.getMatcher();
@@ -333,17 +349,37 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     found = localMatcher.matches(toCheck, pattern);
                 }
                 pass = notTest ? !found : found;
-                if (!pass) {
-                    if (debugEnabled){
-                        log.debug("Failed: "+stringPattern);
+                if (orTest) {
+                    if (!pass) {
+                        if (debugEnabled) {
+                            log.debug("Failed: "+stringPattern);
+                        }
+                        allCheckMessage.add(getFailText(stringPattern,toCheck));
+                    } else {
+                        hasTrue=true;
+                        break;
                     }
-                    result.setFailure(true);
-                    result.setFailureMessage(getFailText(stringPattern,toCheck));
-                    break;
+                } else {
+                    if (!pass) {
+                        if (debugEnabled){
+                            log.debug("Failed: "+stringPattern);
+                        }
+                        result.setFailure(true);
+                        result.setFailureMessage(getFailText(stringPattern,toCheck));
+                        break;
+                    }
+                    if (debugEnabled){
+                        log.debug("Passed: "+stringPattern);
+                    }
                 }
-                if (debugEnabled){
-                    log.debug("Passed: "+stringPattern);
+            }
+            if (orTest && !hasTrue){
+                StringBuilder errorMsg = new StringBuilder();
+                for(String tmp : allCheckMessage){
+                    errorMsg.append(tmp).append('\t');
                 }
+                result.setFailure(true);
+                result.setFailureMessage(errorMsg.toString());   
             }
         } catch (MalformedCachePatternException e) {
             result.setError(true);
@@ -415,7 +451,6 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         }
 
         sb.append("/");
-
         return sb.toString();
     }
 
