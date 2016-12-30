@@ -240,9 +240,8 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
      */
     private static CookieHandler getCookieHandler(String cookieHandlerClass) {
         try {
-            CookieHandler cookieHandler = (CookieHandler) 
+            return (CookieHandler) 
                     ClassUtils.getClass(cookieHandlerClass).newInstance();
-            return cookieHandler;
         } catch (Exception e) {
             log.error("Error creating implementation:"+cookieHandlerClass+ ", will default to:"+DEFAULT_IMPLEMENTATION, e);
             return getCookieHandler(DEFAULT_IMPLEMENTATION);
