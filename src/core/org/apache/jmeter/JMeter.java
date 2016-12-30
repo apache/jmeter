@@ -564,13 +564,13 @@ public class JMeter implements JMeterPlugin {
     }
 
     // Update classloader if necessary
-    private void updateClassLoader() {
+    private void updateClassLoader() throws MalformedURLException {
         updatePath("search_paths",";", true); //$NON-NLS-1$//$NON-NLS-2$
         updatePath("user.classpath",File.pathSeparator, true);//$NON-NLS-1$
         updatePath("plugin_dependency_paths",";", false);//$NON-NLS-1$
     }
 
-    private void updatePath(String property, String sep, boolean cp) {
+    private void updatePath(String property, String sep, boolean cp) throws MalformedURLException {
         String userpath= JMeterUtils.getPropDefault(property,"");// $NON-NLS-1$
         if (userpath.length() <= 0) { 
             return; 
@@ -585,11 +585,7 @@ public class JMeter implements JMeterPlugin {
             } else {
                 if (cp) {
                     log.info("Adding to classpath and loader: "+path);
-                    try {
-                        NewDriver.addPath(path);
-                    } catch (MalformedURLException e) {
-                        log.warn("Error adding: "+path+" "+e.getLocalizedMessage());
-                    }
+                    NewDriver.addPath(path);
                 } else {
                     log.info("Adding to loader: "+path);
                     NewDriver.addURL(path);
