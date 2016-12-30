@@ -251,7 +251,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
     }
     
     public void setToOrType() {
-        setTestType((getTestType() | OR));
+        setTestType(getTestType() | OR);
     }
 
     public void unsetOrType() {
