@@ -238,21 +238,10 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     }
 
     private Pattern createPattern(String textToFind) {
-        String textToFindQ = null;
-        if (regexpChkBox.isSelected()) {
-            textToFindQ = textToFind;
-        }
-        else {
-            // desactivate or not specials regexp char
-            textToFindQ = Pattern.quote(textToFind);
-        }
-        
-        Pattern pattern = null;
-        if (caseChkBox.isSelected()) {
-            pattern = Pattern.compile(textToFindQ);
-        } else {
-            pattern = Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
-        }
+        // desactivate or not specials regexp char
+        String textToFindQ = regexpChkBox.isSelected() ? textToFind : Pattern.quote(textToFind);        
+        Pattern pattern = caseChkBox.isSelected() ? Pattern.compile(textToFindQ) :
+            Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
         return pattern;
     }
     
