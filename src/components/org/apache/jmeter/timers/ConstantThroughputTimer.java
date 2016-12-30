@@ -172,7 +172,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     // Calculate the delay based on the mode
     private long calculateDelay() {
-        long delay = 0;
+        long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
         double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
         switch (mode) {

@@ -107,7 +107,7 @@ public class CriticalSectionController extends GenericController implements
     private ReentrantLock getOrCreateLock() {
         String lockName = getLockName();
         ReentrantLock lock = LOCK_MAP.get(lockName);
-        ReentrantLock prev = null;
+        ReentrantLock prev;
         if (lock != null) {
             return lock;
         }
