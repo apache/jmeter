@@ -248,7 +248,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         lastSelectionEvent = e;
-        DefaultMutableTreeNode node = null;
+        DefaultMutableTreeNode node;
         synchronized (this) {
             node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
         }
