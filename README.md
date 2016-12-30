@@ -189,6 +189,3 @@ may be subject to export controls on cryptographic software:
 
 
 **Thank you for using Apache JMeter.**
-
-To close PR 238
-New Revision: 1776612
