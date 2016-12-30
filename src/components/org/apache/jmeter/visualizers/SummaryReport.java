@@ -185,7 +185,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                Calculator row = null;
+                Calculator row;
                 synchronized (lock) {
                     row = tableRows.get(sampleLabel);
                     if (row == null) {

@@ -118,7 +118,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                SamplingStatCalculator row = null;
+                SamplingStatCalculator row;
                 final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
                 synchronized (lock) {
                     row = tableRows.get(sampleLabel);

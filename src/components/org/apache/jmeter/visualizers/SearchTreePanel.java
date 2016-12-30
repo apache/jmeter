@@ -138,13 +138,9 @@ public class SearchTreePanel extends JPanel implements ActionListener {
         if (StringUtils.isEmpty(wordToSearch)) {
             return;
         }
-        Searcher searcher = null;
-        if (isRegexpCB.isSelected()) {
-            searcher = new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
-        } else {
-            searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
-        }
-        
+        Searcher searcher = isRegexpCB.isSelected() ?
+            new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText()) : 
+            new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());        
         searchInNode(searcher, (SearchableTreeNode)defaultMutableTreeNode);
     }
 
@@ -157,7 +153,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
         Object userObject = node.getUserObject();
         
         try {
-            Searchable searchable = null;
+            Searchable searchable;
             if(userObject instanceof Searchable) {
                 searchable = (Searchable) userObject;
             } else {

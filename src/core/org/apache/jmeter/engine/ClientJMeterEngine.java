@@ -129,7 +129,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             String scriptName = FileServer.getFileServer().getScriptName();
             synchronized(LOCK)
             {
-                methodName="rconfigure()";
+                methodName="rconfigure()"; // NOSONAR Used for tracing
                 remote.rconfigure(testTree, host, baseDirRelative, scriptName);
             }
             log.info("sent test to " + host + " basedir='"+baseDirRelative+"'"); // $NON-NLS-1$
@@ -138,7 +138,7 @@ public class ClientJMeterEngine implements JMeterEngine {
             }
             log.info("Sending properties "+savep);
             try {
-                methodName="rsetProperties()";
+                methodName="rsetProperties()";// NOSONAR Used for tracing
                 remote.rsetProperties(savep);
             } catch (RemoteException e) {
                 log.warn("Could not set properties: " + e.toString());
