@@ -73,12 +73,9 @@ public class RenderAsXML extends SamplerResultTab
             }
         }
 
-        // there is also a javax.swing.text.Document class.
-        org.w3c.dom.Document document = null;
-
         StringWriter sw = new StringWriter();
         Tidy tidy = XPathUtil.makeTidyParser(true, true, true, sw);
-        document = tidy.parseDOM(baIS, null);
+        org.w3c.dom.Document document = tidy.parseDOM(baIS, null);
         document.normalize();
         if (tidy.getParseErrors() > 0) {
             showErrorMessageDialog(sw.toString(),
