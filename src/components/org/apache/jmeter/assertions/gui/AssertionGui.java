@@ -112,7 +112,7 @@ public class AssertionGui extends AbstractAssertionGui {
     private JCheckBox notBox;
     
     /**
-	 * Add new OR checkbox.
+     * Add new OR checkbox.
      */
     private JCheckBox orBox;
 
