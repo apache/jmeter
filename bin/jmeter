@@ -110,12 +110,6 @@ HEAP="-Xms512m -Xmx512m"
 #
 TENURING="-XX:MaxTenuringThreshold=2"
 
-# Java 8 remove Permanent generation, don't settings the PermSize
-if [ $current_version -lt "8" ]; then
-    # Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
-    PERM="-XX:PermSize=64m -XX:MaxPermSize=128m"
-fi
-
 CLASS_UNLOAD="-XX:+CMSClassUnloadingEnabled"
 
 # Finally, some tracing to help in case things go astray:
