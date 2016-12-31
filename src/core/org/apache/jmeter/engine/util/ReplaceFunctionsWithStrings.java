@@ -47,9 +47,13 @@ import org.apache.oro.text.regex.Util;
 public class ReplaceFunctionsWithStrings extends AbstractTransformer {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Functions are wrapped in ${ and }
+    /**
+     * Functions are wrapped in ${ and }
+     */
     private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
-
+    /**
+     * Functions are wrapped in ${ and }
+     */
     private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
     private final boolean regexMatch;// Should we match using regexes?
