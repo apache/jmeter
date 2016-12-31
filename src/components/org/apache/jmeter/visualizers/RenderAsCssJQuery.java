@@ -78,13 +78,10 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     @Override
     public void clearData() {
         this.cssJqueryDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep cssJquery
-        // cssJqueryField.setText(""); // $NON-NLS-1$
         this.cssJqueryResultField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep attribute
-        // this.attributeField.setText(""); // $NON-NLS-1$
+        // don't set cssJqueryField to empty to keep it
+        // don't set attribute to empty to keep it 
         // don't change impl
-        // this.cssJqueryLabeledChoice.setText(HtmlExtractor.DEFAULT_EXTRACTOR);
     }
 
     /** {@inheritDoc} */

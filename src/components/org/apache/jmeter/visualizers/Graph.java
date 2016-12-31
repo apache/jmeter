@@ -85,7 +85,6 @@ public class Graph extends JComponent implements Scrollable, Clearable {
     @Override
     public Dimension getPreferredScrollableViewportSize() {
         return this.getPreferredSize();
-        // return new Dimension(width, 400);
     }
 
     /**
@@ -208,7 +207,6 @@ public class Graph extends JComponent implements Scrollable, Clearable {
     }
 
     private void drawSample(long x, Sample oneSample, Graphics g) {
-        // int width = getWidth();
         int height = getHeight();
         log.debug("Drawing a sample at " + x);
         int adjustedWidth = (int)(x % WIDTH); // will always be within range of an int: as must be < width
