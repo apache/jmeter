@@ -55,7 +55,8 @@ public class HttpMirrorControlGui extends LogicControllerGui
 
     private JTextField maxQueueSizeField;
 
-    private JButton stop, start;
+    private JButton stop;
+    private JButton start;
 
     private static final String ACTION_STOP = "stop"; // $NON-NLS-1$
 

@@ -189,7 +189,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private static final String CHANGE_TARGET = "change_target"; // $NON-NLS-1$
 
-    private JButton stop, start, restart;
+    private JButton stop;
+    private JButton start;
+    private JButton restart;
 
     //+ action names
     private static final String STOP = "stop"; // $NON-NLS-1$

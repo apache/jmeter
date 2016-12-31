@@ -534,8 +534,6 @@ public class SmtpPanel extends JPanel {
      * Main method of class, builds all gui-components for SMTP-sampler.
      */
     private void initComponents() {
-        GridBagConstraints gridBagConstraints, gridBagConstraintsMain;
-
         jlAddressReplyTo = new JLabel(JMeterUtils.getResString("smtp_replyto")); // $NON-NLS-1$
         jlAddressFrom = new JLabel(JMeterUtils.getResString("smtp_from")); // $NON-NLS-1$
         jlAddressTo = new JLabel(JMeterUtils.getResString("smtp_to")); // $NON-NLS-1$
@@ -609,12 +607,12 @@ public class SmtpPanel extends JPanel {
 
         setLayout(new GridBagLayout());
 
-        gridBagConstraintsMain = new GridBagConstraints();
+        GridBagConstraints gridBagConstraintsMain = new GridBagConstraints();
         gridBagConstraintsMain.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraintsMain.anchor = GridBagConstraints.WEST;
         gridBagConstraintsMain.weightx = 0.5;
 
-        gridBagConstraints = new GridBagConstraints();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
