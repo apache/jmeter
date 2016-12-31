@@ -53,7 +53,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 public class Load extends AbstractActionWithNoRunningTest {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
+    private static final boolean EXPAND_TREE = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -202,7 +202,7 @@ public class Load extends AbstractActionWithNoRunningTest {
 
         ActionRouter.getInstance().actionPerformed(actionEvent);
         final JTree jTree = guiInstance.getMainFrame().getTree();
-        if (expandTree && !merging) { // don't automatically expand when merging
+        if (EXPAND_TREE && !merging) { // don't automatically expand when merging
             for(int i = 0; i < jTree.getRowCount(); i++) {
                 jTree.expandRow(i);
             }
