@@ -177,7 +177,13 @@ public class SamplingStatCalculator {
      *
      */
     public Sample addSample(SampleResult res) {
-        long rtime, cmean, cstdv, cmedian, cpercent, eCount, endTime;
+        long rtime;
+        long cmean;
+        long cstdv;
+        long cmedian;
+        long cpercent;
+        long eCount;
+        long endTime;
         double throughput;
         boolean rbool;
         synchronized (calculator) {
