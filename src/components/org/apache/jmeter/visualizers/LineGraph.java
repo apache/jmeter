@@ -54,9 +54,13 @@ public class LineGraph extends JPanel {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     protected double[][] data = null;
-    protected String title, xAxisTitle, yAxisTitle;
-    protected String[] xAxisLabels, yAxisLabel;
-    protected int width, height;
+    protected String title;
+    protected String xAxisTitle;
+    protected String yAxisTitle;
+    protected String[] xAxisLabels;
+    protected String[] yAxisLabel;
+    protected int width;
+    protected int height;
 
     private static final Shape[] SHAPE_ARRAY = {PointChartProperties.SHAPE_CIRCLE,
             PointChartProperties.SHAPE_DIAMOND,PointChartProperties.SHAPE_SQUARE,
