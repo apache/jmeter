@@ -70,18 +70,9 @@ public class Help extends AbstractAction {
      */
     @Override
     public void doAction(ActionEvent e) {
-        if (helpWindow == null) {
-            helpWindow = new EscapeDialog(new Frame(),// independent frame to
-                                                    // allow it to be overlaid
-                                                    // by the main frame
-                    JMeterUtils.getResString("help"),//$NON-NLS-1$
-                    false);
-            helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
-            helpWindow.getContentPane().removeAll();
-            helpWindow.getContentPane().add(scroller);
-            ComponentUtil.centerComponentInWindow(helpWindow, 60);
-        }
-        helpWindow.setVisible(true); // set the window visible immediately
+        JDialog dialog = initHelpWindow();
+        dialog.setVisible(true); // set the window visible immediately
+
         /*
          * This means that a new page will be shown before rendering is complete,
          * however the correct location will be displayed.
@@ -111,6 +102,24 @@ public class Help extends AbstractAction {
                     + "<div>See log for more info</div>"
                     + "</body>");
         }
+    }
+
+    /**
+     * @return {@link JDialog} Help window and initializes it if necessary
+     */
+    private static JDialog initHelpWindow() {
+        if (helpWindow == null) {
+            helpWindow = new EscapeDialog(new Frame(),// independent frame to
+                                                    // allow it to be overlaid
+                                                    // by the main frame
+                    JMeterUtils.getResString("help"),//$NON-NLS-1$
+                    false);
+            helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
+            helpWindow.getContentPane().removeAll();
+            helpWindow.getContentPane().add(scroller);
+            ComponentUtil.centerComponentInWindow(helpWindow, 60);
+        }
+        return helpWindow;
     }
 
     /**
