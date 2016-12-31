@@ -3392,6 +3392,10 @@ run JMeter unless all the JMeter jars are added.
 	     value="squid:MaximumInheritanceDepth" />
   <property name="sonar.issue.ignore.multicriteria.c3.resourceKey"
 	     value="**/*.java" />
+  <property name="sonar.issue.ignore.multicriteria.c4.ruleKey"
+         value="squid:S134" />
+  <property name="sonar.issue.ignore.multicriteria.c4.resourceKey"
+         value="**/*.java" />
   <property name="core.sonar.projectName" value="core" />
   <property name="core.sonar.sources" value="${src.core}" />
   <property name="core.sonar.projectBaseDir" value="./" />
