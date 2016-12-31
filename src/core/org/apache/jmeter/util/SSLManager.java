@@ -64,7 +64,7 @@ public abstract class SSLManager {
     //@GuardedBy("this")
     private static SSLManager manager;
 
-    private static final boolean isSSLSupported = true;
+    private static final boolean IS_SSL_SUPPORTED = true;
 
     /** Cache the KeyStore instance */
     private volatile JmeterKeyStore keyStore;
@@ -264,7 +264,7 @@ public abstract class SSLManager {
      * @return flag whether SSL is supported
      */
     public static boolean isSSLSupported() {
-        return SSLManager.isSSLSupported;
+        return SSLManager.IS_SSL_SUPPORTED;
     }
 
     /**
