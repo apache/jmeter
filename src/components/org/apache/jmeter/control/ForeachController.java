@@ -228,7 +228,6 @@ public class ForeachController extends GenericController implements Serializable
         if (endOfArguments() // no more variables to iterate
                 ||loopCount >= getEndIndex() // we reached end index
                 ) {
-            // setDone(true);
             resetLoopCount();
             return null;
         }
