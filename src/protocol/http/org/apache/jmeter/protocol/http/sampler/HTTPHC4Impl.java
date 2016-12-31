@@ -996,7 +996,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private void writeResponseHeader(StringBuilder headerBuffer, Header responseHeader) {
         if(responseHeader instanceof BufferedHeader) {
             CharArrayBuffer buffer = ((BufferedHeader)responseHeader).getBuffer();
-            headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$;
+            headerBuffer.append(buffer.buffer(), 0, buffer.length()).append('\n'); // $NON-NLS-1$
         }
         else {
             headerBuffer.append(responseHeader.getName())
