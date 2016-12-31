@@ -38,7 +38,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
-/*
+/**
  * N.B. to add a new field, remember the following
  * - static _xyz
  * - instance xyz=_xyz
@@ -56,8 +56,6 @@ import org.apache.log.Logger;
  * - take screenshot sample_result_config.png
  * - update listeners.xml and component_reference.xml with new dimensions (might not change)
  *
- */
-/**
  * Holds details of which sample attributes to save.
  *
  * The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
@@ -226,15 +224,33 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // N.B. Remember to update the equals and hashCode methods when adding new variables.
 
     // Initialise values from properties
-    private boolean time = _time, latency = _latency, connectTime=_connectTime, timestamp = _timestamp, success = _success, label = _label,
-            code = _code, message = _message, threadName = _threadName, dataType = _dataType, encoding = _encoding,
-            assertions = _assertions, subresults = _subresults, responseData = _responseData,
-            samplerData = _samplerData, xml = _xml, fieldNames = _fieldNames, responseHeaders = _responseHeaders,
-            requestHeaders = _requestHeaders, responseDataOnError = _responseDataOnError;
+    private boolean time = _time;
+    private boolean latency = _latency;
+    private boolean connectTime=_connectTime;
+    private boolean timestamp = _timestamp;
+    private boolean success = _success;
+    private boolean label = _label;
+    private boolean code = _code;
+    private boolean message = _message;
+    private boolean threadName = _threadName;
+    private boolean dataType = _dataType;
+    private boolean encoding = _encoding;
+    private boolean assertions = _assertions;
+    private boolean subresults = _subresults;
+    private boolean responseData = _responseData;
+    private boolean samplerData = _samplerData;
+    private boolean xml = _xml;
+    private boolean fieldNames = _fieldNames;
+    private boolean responseHeaders = _responseHeaders;
+    private boolean requestHeaders = _requestHeaders;
+    private boolean responseDataOnError = _responseDataOnError;
 
     private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
 
-    private boolean url = _url, bytes = _bytes , sentBytes = _sentBytes, fileName = _fileName;
+    private boolean url = _url;
+    private boolean bytes = _bytes;
+    private boolean sentBytes = _sentBytes;
+    private boolean fileName = _fileName;
 
     private boolean hostname = _hostname;
 
@@ -259,9 +275,25 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      */
 
     // Defaults from properties:
-    private static final boolean _time, _timestamp, _success, _label, _code, _message, _threadName, _xml,
-            _responseData, _dataType, _encoding, _assertions, _latency, _connectTime, _subresults, _samplerData, _fieldNames,
-            _responseHeaders, _requestHeaders;
+    private static final boolean _time;
+    private static final boolean _timestamp;
+    private static final boolean _success;
+    private static final boolean _label;
+    private static final boolean _code;
+    private static final boolean _message;
+    private static final boolean _threadName;
+    private static final boolean _xml;
+    private static final boolean _responseData;
+    private static final boolean _dataType;
+    private static final boolean _encoding;
+    private static final boolean _assertions;
+    private static final boolean _latency;
+    private static final boolean _connectTime;
+    private static final boolean _subresults;
+    private static final boolean _samplerData;
+    private static final boolean _fieldNames;
+    private static final boolean _responseHeaders;
+    private static final boolean _requestHeaders;
 
     private static final boolean _responseDataOnError;
 
