@@ -55,8 +55,6 @@ import org.apache.jorphan.reflect.Functor;
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
- * created March 10, 2002
- *
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
@@ -242,7 +240,6 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         table = new JTable(model);
         JMeterUtils.applyHiDPI(table);
         table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        // table.getTableHeader().setReorderingAllowed(false);
         RendererUtils.applyRenderers(table, RENDERERS);
 
         tableScrollPanel = new JScrollPane(table);
