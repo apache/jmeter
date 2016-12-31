@@ -47,20 +47,20 @@ import org.apache.log.Logger;
 public class TCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final int eolInt = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
-    private static final String charset = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
+    private static final int EOL_INT = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
+    private static final String CHARSET = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
     // default is not in range of a byte
 
     public TCPClientImpl() {
         super();
-        setEolByte(eolInt);
+        setEolByte(EOL_INT);
         if (useEolByte) {
             log.info("Using eolByte=" + eolByte);
         }
-        setCharset(charset);
+        setCharset(CHARSET);
         String configuredCharset = JMeterUtils.getProperty("tcp.charset");
         if(StringUtils.isEmpty(configuredCharset)) {
-            log.info("Using platform default charset:"+charset);
+            log.info("Using platform default charset:"+CHARSET);
         } else {
             log.info("Using charset:"+configuredCharset);
         }
@@ -74,7 +74,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         if(log.isDebugEnabled()) {
             log.debug("WriteS: " + showEOL(s));
         }
-        os.write(s.getBytes(charset)); 
+        os.write(s.getBytes(CHARSET)); 
         os.flush();
     }
 
@@ -86,7 +86,7 @@ public class TCPClientImpl extends AbstractTCPClient {
         byte[] buff = new byte[512];
         while(is.read(buff) > 0){
             if(log.isDebugEnabled()) {
-                log.debug("WriteIS: " + showEOL(new String(buff, charset)));
+                log.debug("WriteIS: " + showEOL(new String(buff, CHARSET)));
             }
             os.write(buff);
             os.flush();
@@ -115,7 +115,7 @@ public class TCPClientImpl extends AbstractTCPClient {
             if(log.isDebugEnabled()) {
                 log.debug("Read: " + w.size() + "\n" + w.toString());
             }
-            return w.toString(charset);
+            return w.toString(CHARSET);
         } catch (IOException e) {
             throw new ReadException("Error reading from server, bytes read: " + w.size(), e, w.toString());
         }
