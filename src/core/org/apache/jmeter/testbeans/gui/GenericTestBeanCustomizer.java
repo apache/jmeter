@@ -698,12 +698,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
 
         @Override
         public int compare(PropertyDescriptor d1, PropertyDescriptor d2) {
-            int result;
-
-            String g1 = group(d1), g2 = group(d2);
+            String g1 = group(d1);
+            String g2 = group(d2);
             Integer go1 = groupOrder(g1), go2 = groupOrder(g2);
 
-            result = go1.compareTo(go2);
+            int result = go1.compareTo(go2);
             if (result != 0) {
                 return result;
             }
@@ -713,7 +712,8 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 return result;
             }
 
-            Integer po1 = propertyOrder(d1), po2 = propertyOrder(d2);
+            Integer po1 = propertyOrder(d1);
+            Integer po2 = propertyOrder(d2);
             result = po1.compareTo(po2);
             if (result != 0) {
                 return result;
