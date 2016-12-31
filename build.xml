@@ -3372,6 +3372,10 @@ run JMeter unless all the JMeter jars are added.
   <property name="sonar.projectKey" value="org.apache.jmeter:${sonar.projectName}" />
   <property name="sonar.projectVersion" value="${jmeter.version}" />
   <property name="sonar.language" value="java" />
+  <property name="sonar.links.homepage" value="http://jmeter.apache.org" />
+  <property name="sonar.links.ci" value="https://builds.apache.org/job/JMeter-trunk/" />
+  <property name="sonar.links.scm" value="http://jmeter.apache.org/svnindex.html" />
+  <property name="sonar.links.issue" value="http://jmeter.apache.org/issues.html" />
   <property name="sonar.modules" value="core,http,ftp,java,jdbc,ldap,mail,components,functions,jorphan,tcp,jms,native" />
   <property name="sonar.java.binaries" value="${build.core},${build.http},${build.core},${build.http},${build.ftp},${build.java},${build.jdbc},${build.ldap},${build.mail},${build.components},${build.functions},${build.jorphan},${build.tcp},${build.jms},${build.native}" />
   <property name="sonar.java.libraries" value="lib,lib/opt" />
@@ -3395,6 +3399,10 @@ run JMeter unless all the JMeter jars are added.
   <property name="sonar.issue.ignore.multicriteria.c4.ruleKey"
          value="squid:S134" />
   <property name="sonar.issue.ignore.multicriteria.c4.resourceKey"
+         value="**/*.java" />
+  <property name="sonar.issue.ignore.multicriteria.c5.ruleKey"
+         value="squid:S1192" />
+  <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
          value="**/*.java" />
   <property name="core.sonar.projectName" value="core" />
   <property name="core.sonar.sources" value="${src.core}" />
