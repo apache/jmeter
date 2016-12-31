@@ -28,9 +28,11 @@ import org.apache.jmeter.util.BSFTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
+ */
 public class BSFListener extends BSFTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
-// N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -76,5 +78,10 @@ public class BSFListener extends BSFTestElement
     @Override
     public boolean isStats() {
         return false;
+    }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
     }
 }
