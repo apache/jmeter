@@ -288,8 +288,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
 
-    private static final SampleSaveConfiguration STATIC_SAVE_CONFIGURATION = new SampleSaveConfiguration();
-
     /**
      * Read in the properties having to do with saving from a properties file.
      */
@@ -393,6 +391,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
         IDLE_TIME=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, TRUE));
     }
+
+    private static final SampleSaveConfiguration STATIC_SAVE_CONFIGURATION = new SampleSaveConfiguration();
 
     // N.B. Remember to update the equals and hashCode methods when adding new variables.
 
