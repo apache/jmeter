@@ -109,14 +109,7 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
                     .toString()));
             result.setError(false);
         }
-        /*
-         * To avoid class loading problems when the BSH jar is missing, we don't
-         * try to catch this error separately catch (bsh.EvalError ex) {
-         * log.debug("",ex); result.setError(true);
-         * result.setFailureMessage(ex.toString()); }
-         */
-        // but we do trap this error to make tests work better
-        catch (NoClassDefFoundError ex) {
+        catch (NoClassDefFoundError ex) { // NOSONAR explicitely trap this error to make tests work better 
             log.error("BeanShell Jar missing? " + ex.toString());
             result.setError(true);
             result.setFailureMessage("BeanShell Jar missing? " + ex.toString());
