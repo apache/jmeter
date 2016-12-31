@@ -223,87 +223,35 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     private static final String SAVE_SAMPLE_COUNT    = "jmeter.save.saveservice.sample_count"; // $NON_NLS-1$
 
     private static final String SAVE_IDLE_TIME       = "jmeter.save.saveservice.idle_time"; // $NON_NLS-1$
-    // N.B. Remember to update the equals and hashCode methods when adding new variables.
-
-    // Initialise values from properties
-    private boolean time = _time;
-    private boolean latency = _latency;
-    private boolean connectTime=_connectTime;
-    private boolean timestamp = _timestamp;
-    private boolean success = _success;
-    private boolean label = _label;
-    private boolean code = _code;
-    private boolean message = _message;
-    private boolean threadName = _threadName;
-    private boolean dataType = _dataType;
-    private boolean encoding = _encoding;
-    private boolean assertions = _assertions;
-    private boolean subresults = _subresults;
-    private boolean responseData = _responseData;
-    private boolean samplerData = _samplerData;
-    private boolean xml = _xml;
-    private boolean fieldNames = _fieldNames;
-    private boolean responseHeaders = _responseHeaders;
-    private boolean requestHeaders = _requestHeaders;
-    private boolean responseDataOnError = _responseDataOnError;
-
-    private boolean saveAssertionResultsFailureMessage = _saveAssertionResultsFailureMessage;
-
-    private boolean url = _url;
-    private boolean bytes = _bytes;
-    private boolean sentBytes = _sentBytes;
-    private boolean fileName = _fileName;
-
-    private boolean hostname = _hostname;
-
-    private boolean threadCounts = _threadCounts;
-
-    private boolean sampleCount = _sampleCount;
-
-    private boolean idleTime = _idleTime;
-
-    // Does not appear to be used (yet)
-    private int assertionsResultsToSave = _assertionsResultsToSave;
-
-
-    // Don't save this, as it is derived from the time format
-    private boolean printMilliseconds = _printMilliseconds;
-
-    /** A formatter for the time stamp. */
-    private transient DateFormat formatter = _formatter;
-    /* Make transient as we don't want to save the SimpleDataFormat class
-     * Also, there's currently no way to change the value via the GUI, so changing it
-     * later means editting the JMX, or recreating the Listener.
-     */
-
+    
     // Defaults from properties:
-    private static final boolean _time;
-    private static final boolean _timestamp;
-    private static final boolean _success;
-    private static final boolean _label;
-    private static final boolean _code;
-    private static final boolean _message;
-    private static final boolean _threadName;
-    private static final boolean _xml;
-    private static final boolean _responseData;
-    private static final boolean _dataType;
-    private static final boolean _encoding;
-    private static final boolean _assertions;
-    private static final boolean _latency;
-    private static final boolean _connectTime;
-    private static final boolean _subresults;
-    private static final boolean _samplerData;
-    private static final boolean _fieldNames;
-    private static final boolean _responseHeaders;
-    private static final boolean _requestHeaders;
+    private static final boolean TIME;
+    private static final boolean TIMESTAMP;
+    private static final boolean SUCCESS;
+    private static final boolean LABEL;
+    private static final boolean CODE;
+    private static final boolean MESSAGE;
+    private static final boolean THREAD_NAME;
+    private static final boolean IS_XML;
+    private static final boolean RESPONSE_DATA;
+    private static final boolean DATATYPE;
+    private static final boolean ENCODING;
+    private static final boolean ASSERTIONS;
+    private static final boolean LATENCY;
+    private static final boolean CONNECT_TIME;
+    private static final boolean SUB_RESULTS;
+    private static final boolean SAMPLER_DATA;
+    private static final boolean FIELD_NAMES;
+    private static final boolean RESPONSE_HEADERS;
+    private static final boolean REQUEST_HEADERS;
 
-    private static final boolean _responseDataOnError;
+    private static final boolean RESPONSE_DATA_ON_ERROR;
 
-    private static final boolean _saveAssertionResultsFailureMessage;
+    private static final boolean SAVE_ASSERTION_RESULTS_FAILURE_MESSAGE;
 
-    private static final String _timeStampFormat;
+    private static final String TIMESTAMP_FORMAT;
 
-    private static final int _assertionsResultsToSave;
+    private static final int ASSERTIONS_RESULT_TO_SAVE;
 
     // TODO turn into method?
     public static final int SAVE_NO_ASSERTIONS = 0;
@@ -312,33 +260,35 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     public static final int SAVE_ALL_ASSERTIONS = SAVE_FIRST_ASSERTION + 1;
 
-    private static final boolean _printMilliseconds;
+    private static final boolean PRINT_MILLISECONDS;
 
-    private static final boolean _bytes;
+    private static final boolean BYTES;
     
-    private static final boolean _sentBytes;
+    private static final boolean SENT_BYTES;
 
-    private static final boolean _url;
+    private static final boolean URL;
 
-    private static final boolean _fileName;
+    private static final boolean FILE_NAME;
 
-    private static final boolean _hostname;
+    private static final boolean HOST_NAME;
 
-    private static final boolean _threadCounts;
+    private static final boolean THREAD_COUNTS;
 
-    private static final boolean _sampleCount;
+    private static final boolean SAMPLE_COUNT;
 
-    private static final DateFormat _formatter;
+    private static final DateFormat DATE_FORMATTER;
 
     /**
      * The string used to separate fields when stored to disk, for example, the
      * comma for CSV files.
      */
-    private static final String _delimiter;
+    private static final String DELIMITER;
 
-    private static final boolean _idleTime;
+    private static final boolean IDLE_TIME;
 
     public static final String DEFAULT_DELIMITER = ","; // $NON_NLS-1$
+
+    private static final SampleSaveConfiguration STATIC_SAVE_CONFIGURATION = new SampleSaveConfiguration();
 
     /**
      * Read in the properties having to do with saving from a properties file.
@@ -346,14 +296,14 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     static {
         Properties props = JMeterUtils.getJMeterProperties();
 
-        _subresults      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
-        _assertions      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
-        _latency         = TRUE.equalsIgnoreCase(props.getProperty(LATENCY_PROP, TRUE));
-        _connectTime     = TRUE.equalsIgnoreCase(props.getProperty(CONNECT_TIME_PROP, TRUE));
-        _samplerData     = TRUE.equalsIgnoreCase(props.getProperty(SAMPLERDATA_PROP, FALSE));
-        _responseHeaders = TRUE.equalsIgnoreCase(props.getProperty(RESPONSEHEADERS_PROP, FALSE));
-        _requestHeaders  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
-        _encoding        = TRUE.equalsIgnoreCase(props.getProperty(ENCODING_PROP, FALSE));
+        SUB_RESULTS      = TRUE.equalsIgnoreCase(props.getProperty(SUBRESULTS_PROP, TRUE));
+        ASSERTIONS      = TRUE.equalsIgnoreCase(props.getProperty(ASSERTIONS_PROP, TRUE));
+        LATENCY         = TRUE.equalsIgnoreCase(props.getProperty(LATENCY_PROP, TRUE));
+        CONNECT_TIME     = TRUE.equalsIgnoreCase(props.getProperty(CONNECT_TIME_PROP, TRUE));
+        SAMPLER_DATA     = TRUE.equalsIgnoreCase(props.getProperty(SAMPLERDATA_PROP, FALSE));
+        RESPONSE_HEADERS = TRUE.equalsIgnoreCase(props.getProperty(RESPONSEHEADERS_PROP, FALSE));
+        REQUEST_HEADERS  = TRUE.equalsIgnoreCase(props.getProperty(REQUESTHEADERS_PROP, FALSE));
+        ENCODING        = TRUE.equalsIgnoreCase(props.getProperty(ENCODING_PROP, FALSE));
 
         String dlm = JMeterUtils.getDelimiter(props.getProperty(DEFAULT_DELIMITER_PROP, DEFAULT_DELIMITER));
         char ch = dlm.charAt(0);
@@ -366,92 +316,185 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             throw new JMeterError("Delimiter (code "+(int)ch+") must be printable.");
         }
 
-        _delimiter = dlm;
+        DELIMITER = dlm;
 
-        _fieldNames = TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP, TRUE));
+        FIELD_NAMES = TRUE.equalsIgnoreCase(props.getProperty(PRINT_FIELD_NAMES_PROP, TRUE));
 
-        _dataType = TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP, TRUE));
+        DATATYPE = TRUE.equalsIgnoreCase(props.getProperty(SAVE_DATA_TYPE_PROP, TRUE));
 
-        _label = TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
+        LABEL = TRUE.equalsIgnoreCase(props.getProperty(SAVE_LABEL_PROP, TRUE));
 
-        _code = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
+        CODE = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_CODE_PROP, TRUE));
 
-        _responseData = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
+        RESPONSE_DATA = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_PROP, FALSE));
 
-        _responseDataOnError = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_ON_ERROR_PROP, FALSE));
+        RESPONSE_DATA_ON_ERROR = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_DATA_ON_ERROR_PROP, FALSE));
 
-        _message = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_MESSAGE_PROP, TRUE));
+        MESSAGE = TRUE.equalsIgnoreCase(props.getProperty(SAVE_RESPONSE_MESSAGE_PROP, TRUE));
 
-        _success = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
+        SUCCESS = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SUCCESSFUL_PROP, TRUE));
 
-        _threadName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
+        THREAD_NAME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_NAME_PROP, TRUE));
 
-        _bytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, TRUE));
+        BYTES = TRUE.equalsIgnoreCase(props.getProperty(SAVE_BYTES_PROP, TRUE));
         
-        _sentBytes = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SENT_BYTES_PROP, TRUE));
+        SENT_BYTES = TRUE.equalsIgnoreCase(props.getProperty(SAVE_SENT_BYTES_PROP, TRUE));
 
-        _url = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
+        URL = TRUE.equalsIgnoreCase(props.getProperty(SAVE_URL_PROP, FALSE));
 
-        _fileName = TRUE.equalsIgnoreCase(props.getProperty(SAVE_FILENAME_PROP, FALSE));
+        FILE_NAME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_FILENAME_PROP, FALSE));
 
-        _hostname = TRUE.equalsIgnoreCase(props.getProperty(SAVE_HOSTNAME_PROP, FALSE));
+        HOST_NAME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_HOSTNAME_PROP, FALSE));
 
-        _time = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
+        TIME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
-        _timeStampFormat = props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
+        TIMESTAMP_FORMAT = props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
 
-        _printMilliseconds = MILLISECONDS.equalsIgnoreCase(_timeStampFormat);
+        PRINT_MILLISECONDS = MILLISECONDS.equalsIgnoreCase(TIMESTAMP_FORMAT);
 
         // Prepare for a pretty date
-        // FIXME Can _timeStampFormat be null ? it does not appear to me .
-        if (!_printMilliseconds && !NONE.equalsIgnoreCase(_timeStampFormat) && (_timeStampFormat != null)) {
-            _formatter = new SimpleDateFormat(_timeStampFormat);
+        // FIXME Can TIMESTAMP_FORMAT be null ? it does not appear to me .
+        if (!PRINT_MILLISECONDS && !NONE.equalsIgnoreCase(TIMESTAMP_FORMAT) && (TIMESTAMP_FORMAT != null)) {
+            DATE_FORMATTER = new SimpleDateFormat(TIMESTAMP_FORMAT);
         } else {
-            _formatter = null;
+            DATE_FORMATTER = null;
         }
 
-        _timestamp = !NONE.equalsIgnoreCase(_timeStampFormat);// reversed compare allows for null
+        TIMESTAMP = !NONE.equalsIgnoreCase(TIMESTAMP_FORMAT);// reversed compare allows for null
 
-        _saveAssertionResultsFailureMessage = TRUE.equalsIgnoreCase(props.getProperty(
+        SAVE_ASSERTION_RESULTS_FAILURE_MESSAGE = TRUE.equalsIgnoreCase(props.getProperty(
                 ASSERTION_RESULTS_FAILURE_MESSAGE_PROP, TRUE));
 
         String whichAssertionResults = props.getProperty(ASSERTION_RESULTS_PROP, NONE);
         if (NONE.equals(whichAssertionResults)) {
-            _assertionsResultsToSave = SAVE_NO_ASSERTIONS;
+            ASSERTIONS_RESULT_TO_SAVE = SAVE_NO_ASSERTIONS;
         } else if (FIRST.equals(whichAssertionResults)) {
-            _assertionsResultsToSave = SAVE_FIRST_ASSERTION;
+            ASSERTIONS_RESULT_TO_SAVE = SAVE_FIRST_ASSERTION;
         } else if (ALL.equals(whichAssertionResults)) {
-            _assertionsResultsToSave = SAVE_ALL_ASSERTIONS;
+            ASSERTIONS_RESULT_TO_SAVE = SAVE_ALL_ASSERTIONS;
         } else {
-            _assertionsResultsToSave = 0;
+            ASSERTIONS_RESULT_TO_SAVE = 0;
         }
 
         String howToSave = props.getProperty(OUTPUT_FORMAT_PROP, CSV);
 
         if (XML.equals(howToSave)) {
-            _xml = true;
+            IS_XML = true;
         } else {
             if (!CSV.equals(howToSave)) {
                 log.warn(OUTPUT_FORMAT_PROP + " has unexepected value: '" + howToSave + "' - assuming 'csv' format");
             }
-            _xml = false;
+            IS_XML = false;
         }
 
-        _threadCounts=TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_COUNTS, TRUE));
+        THREAD_COUNTS=TRUE.equalsIgnoreCase(props.getProperty(SAVE_THREAD_COUNTS, TRUE));
 
-        _sampleCount=TRUE.equalsIgnoreCase(props.getProperty(SAVE_SAMPLE_COUNT, FALSE));
+        SAMPLE_COUNT=TRUE.equalsIgnoreCase(props.getProperty(SAVE_SAMPLE_COUNT, FALSE));
 
-        _idleTime=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, TRUE));
+        IDLE_TIME=TRUE.equalsIgnoreCase(props.getProperty(SAVE_IDLE_TIME, TRUE));
     }
 
+    // N.B. Remember to update the equals and hashCode methods when adding new variables.
+
+    // Initialise values from properties
+    private boolean time = TIME;
+    private boolean latency = LATENCY;
+    private boolean connectTime=CONNECT_TIME;
+    private boolean timestamp = TIMESTAMP;
+    private boolean success = SUCCESS;
+    private boolean label = LABEL;
+    private boolean code = CODE;
+    private boolean message = MESSAGE;
+    private boolean threadName = THREAD_NAME;
+    private boolean dataType = DATATYPE;
+    private boolean encoding = ENCODING;
+    private boolean assertions = ASSERTIONS;
+    private boolean subresults = SUB_RESULTS;
+    private boolean responseData = RESPONSE_DATA;
+    private boolean samplerData = SAMPLER_DATA;
+    private boolean xml = IS_XML;
+    private boolean fieldNames = FIELD_NAMES;
+    private boolean responseHeaders = RESPONSE_HEADERS;
+    private boolean requestHeaders = REQUEST_HEADERS;
+    private boolean responseDataOnError = RESPONSE_DATA_ON_ERROR;
+
+    private boolean saveAssertionResultsFailureMessage = SAVE_ASSERTION_RESULTS_FAILURE_MESSAGE;
+
+    private boolean url = URL;
+    private boolean bytes = BYTES;
+    private boolean sentBytes = SENT_BYTES;
+    private boolean fileName = FILE_NAME;
+
+    private boolean hostname = HOST_NAME;
+
+    private boolean threadCounts = THREAD_COUNTS;
+
+    private boolean sampleCount = SAMPLE_COUNT;
+
+    private boolean idleTime = IDLE_TIME;
+
+    // Does not appear to be used (yet)
+    private int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
+
+
+    // Don't save this, as it is derived from the time format
+    private boolean printMilliseconds = PRINT_MILLISECONDS;
+
+    /** A formatter for the time stamp. */
+    private transient DateFormat formatter = DATE_FORMATTER;
+    /* Make transient as we don't want to save the SimpleDataFormat class
+     * Also, there's currently no way to change the value via the GUI, so changing it
+     * later means editting the JMX, or recreating the Listener.
+     */
+
     // Don't save this, as not settable via GUI
-    private String delimiter = _delimiter;
+    private String delimiter = DELIMITER;
 
     // Don't save this - only needed for processing CSV headers currently
     private transient int varCount = 0;
 
-    private static final SampleSaveConfiguration _static = new SampleSaveConfiguration();
+    
+    public SampleSaveConfiguration() {
+    }
 
+    /**
+     * Alternate constructor for use by CsvSaveService
+     *
+     * @param value initial setting for boolean fields used in Config dialogue
+     */
+    public SampleSaveConfiguration(boolean value) {
+        assertions = value;
+        bytes = value;
+        code = value;
+        connectTime = value;
+        dataType = value;
+        encoding = value;
+        fieldNames = value;
+        fileName = value;
+        hostname = value;
+        idleTime = value;
+        label = value;
+        latency = value;
+        message = value;
+        printMilliseconds = PRINT_MILLISECONDS;//is derived from properties only
+        requestHeaders = value;
+        responseData = value;
+        responseDataOnError = value;
+        responseHeaders = value;
+        sampleCount = value;
+        samplerData = value;
+        saveAssertionResultsFailureMessage = value;
+        sentBytes = value;
+        subresults = value;
+        success = value;
+        threadCounts = value;
+        threadName = value;
+        time = value;
+        timestamp = value;
+        url = value;
+        xml = value;
+    }
+    
     public int getVarCount() { // Only for use by CSVSaveService
         return varCount;
     }
@@ -462,7 +505,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // Give access to initial configuration
     public static SampleSaveConfiguration staticConfig() {
-        return _static;
+        return STATIC_SAVE_CONFIGURATION;
     }
 
     // for test code only
@@ -527,50 +570,9 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         "Subresults", // XML
         "Assertions", // XML
     }));
-    
-    public SampleSaveConfiguration() {
-    }
-
-    /**
-     * Alternate constructor for use by CsvSaveService
-     *
-     * @param value initial setting for boolean fields used in Config dialogue
-     */
-    public SampleSaveConfiguration(boolean value) {
-        assertions = value;
-        bytes = value;
-        code = value;
-        connectTime = value;
-        dataType = value;
-        encoding = value;
-        fieldNames = value;
-        fileName = value;
-        hostname = value;
-        idleTime = value;
-        label = value;
-        latency = value;
-        message = value;
-        printMilliseconds = _printMilliseconds;//is derived from properties only
-        requestHeaders = value;
-        responseData = value;
-        responseDataOnError = value;
-        responseHeaders = value;
-        sampleCount = value;
-        samplerData = value;
-        saveAssertionResultsFailureMessage = value;
-        sentBytes = value;
-        subresults = value;
-        success = value;
-        threadCounts = value;
-        threadName = value;
-        time = value;
-        timestamp = value;
-        url = value;
-        xml = value;
-    }
 
     private Object readResolve(){
-       formatter = _formatter;
+       formatter = DATE_FORMATTER;
        return this;
     }
 
@@ -943,13 +945,13 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     // Used by SampleSaveConfigurationConverter.unmarshall()
     public void setDefaultDelimiter() {
-        delimiter=_delimiter;
+        delimiter=DELIMITER;
     }
 
     // Used by SampleSaveConfigurationConverter.unmarshall()
     public void setDefaultTimeStampFormat() {
-        printMilliseconds=_printMilliseconds;
-        formatter=_formatter;
+        printMilliseconds=PRINT_MILLISECONDS;
+        formatter=DATE_FORMATTER;
     }
 
     public boolean saveHostname(){
