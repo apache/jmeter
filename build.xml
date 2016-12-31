@@ -3383,7 +3383,7 @@ run JMeter unless all the JMeter jars are added.
   <property name="sonar.junit.reportsPath" value="reports" />
   <property name="sonar.jacoco.reportPath" value="reports/jacoco.exec" />
 
-  <property name="sonar.issue.ignore.multicriteria" value="c1,c2" />
+  <property name="sonar.issue.ignore.multicriteria" value="c1,c2,c3,c4,c5" />
   <property name="sonar.issue.ignore.multicriteria.c1.ruleKey"
          value="squid:S1948" />
   <property name="sonar.issue.ignore.multicriteria.c1.resourceKey"
@@ -3393,9 +3393,9 @@ run JMeter unless all the JMeter jars are added.
   <property name="sonar.issue.ignore.multicriteria.c2.resourceKey"
          value="**/*.java" />
   <property name="sonar.issue.ignore.multicriteria.c3.ruleKey"
-	     value="squid:MaximumInheritanceDepth" />
+         value="squid:MaximumInheritanceDepth" />
   <property name="sonar.issue.ignore.multicriteria.c3.resourceKey"
-	     value="**/*.java" />
+         value="**/*.java" />
   <property name="sonar.issue.ignore.multicriteria.c4.ruleKey"
          value="squid:S134" />
   <property name="sonar.issue.ignore.multicriteria.c4.resourceKey"
