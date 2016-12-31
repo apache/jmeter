@@ -61,11 +61,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * This enum defines the calculation modes used by the ConstantThroughputTimer.
      */
     public enum Mode {
-        ThisThreadOnly("calcMode.1"),
-        AllActiveThreads("calcMode.2"),
-        AllActiveThreadsInCurrentThreadGroup("calcMode.3"),
-        AllActiveThreads_Shared("calcMode.4"),
-        AllActiveThreadsInCurrentThreadGroup_Shared("calcMode.5"),
+        ThisThreadOnly("calcMode.1"), // NOSONAR Keep naming for compatibility
+        AllActiveThreads("calcMode.2"), // NOSONAR Keep naming for compatibility
+        AllActiveThreadsInCurrentThreadGroup("calcMode.3"), // NOSONAR Keep naming for compatibility
+        AllActiveThreads_Shared("calcMode.4"), // NOSONAR Keep naming for compatibility
+        AllActiveThreadsInCurrentThreadGroup_Shared("calcMode.5"), // NOSONAR Keep naming for compatibility
         ;
 
         private final String propertyName; // The property name to be used to look up the display string
