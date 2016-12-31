@@ -282,9 +282,6 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
         int rowSelected = table.getSelectedRow();
 
         if (rowSelected >= 0) {
-
-            // removeProperty(tableModel.getValueAt (
-            // table.getSelectedRow(),0).toString());
             tableModel.removeRow(rowSelected);
             tableModel.fireTableDataChanged();
 
