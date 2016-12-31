@@ -40,7 +40,7 @@ public class IncludeController extends GenericController implements ReplaceableC
 
     private static final String INCLUDE_PATH = "IncludeController.includepath"; //$NON-NLS-1$
 
-    private static  final String prefix =
+    private static  final String PREFIX =
         JMeterUtils.getPropDefault(
                 "includecontroller.prefix", //$NON-NLS-1$
                 ""); //$NON-NLS-1$
@@ -121,7 +121,7 @@ public class IncludeController extends GenericController implements ReplaceableC
         final String includePath = getIncludePath();
         HashTree tree = null;
         if (includePath != null && includePath.length() > 0) {
-            String fileName=prefix+includePath;
+            String fileName=PREFIX+includePath;
             try {
                 File file = new File(fileName.trim());
                 final String absolutePath = file.getAbsolutePath();
