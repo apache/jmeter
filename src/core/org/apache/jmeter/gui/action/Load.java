@@ -164,7 +164,6 @@ public class Load extends AbstractActionWithNoRunningTest {
      */
     // Does not appear to be used externally; called by #loadProjectFile()
     public static boolean insertLoadedTree(final int id, final HashTree tree, final boolean merging) throws IllegalUserActionException {
-        // convertTree(tree);
         if (tree == null) {
             throw new IllegalUserActionException("Empty TestPlan or error reading test plan - see log file");
         }
