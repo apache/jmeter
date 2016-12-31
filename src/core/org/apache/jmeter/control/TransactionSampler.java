@@ -63,7 +63,7 @@ public class TransactionSampler extends AbstractSampler {
      */
     @Deprecated
     public TransactionSampler(){
-        //log.warn("Constructor only intended for use in testing");
+        super();
     }
 
     public TransactionSampler(TransactionController controller, String name) {
