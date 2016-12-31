@@ -171,8 +171,6 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
         mainPanel.add(makeTitlePanel());
 
-        // SortFilterModel mySortedModel =
-        // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
         myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.getColumnsMsgParameters()));

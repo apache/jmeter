@@ -433,7 +433,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                     nanBegin = nanLast;
                     data[s][idx] = Double.NaN;
                 }
-                // log.debug("data["+s+"]["+idx+"]: " + data[s][idx]);
                 idx++;
             }
             s++;
