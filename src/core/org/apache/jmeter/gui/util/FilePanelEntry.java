@@ -82,7 +82,7 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
             listeners.add(listener);
         }
         if (exts != null && 
-          !(exts.length == 1 && exts[0] == null) // String null is converted to String[]{null}
+          !(exts.length == 1 && exts[0] == null) // String null is converted to String[]{null} NOSONAR it's not code
             ) {
             this.filetypes = new String[exts.length];
             System.arraycopy(exts, 0, this.filetypes, 0, exts.length);
