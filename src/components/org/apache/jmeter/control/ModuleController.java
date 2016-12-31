@@ -70,7 +70,8 @@ public class ModuleController extends GenericController implements ReplaceableCo
         if (selectedNode == null) {
             this.restoreSelected();
         }
-        clone.selectedNode = selectedNode; // TODO ?? (JMeterTreeNode) selectedNode.clone();
+        // TODO Should we clone instead the selectedNode?
+        clone.selectedNode = selectedNode; 
         return clone;
     }
 
