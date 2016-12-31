@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.gui.tree;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -94,16 +93,6 @@ public class JMeterTreeListener implements TreeSelectionListener, MouseListener,
      */
     public void setJTree(JTree tree) {
         this.tree = tree;
-    }
-
-    /**
-     * Sets the EndWindow attribute of the JMeterTreeListener object.
-     *
-     * @param window
-     *            the new EndWindow value
-     */
-    public void setEndWindow(Container window) {
-        // endWindow = window;
     }
 
     /**
