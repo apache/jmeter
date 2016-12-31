@@ -32,9 +32,12 @@ import org.apache.jmeter.util.JSR223TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
+/**
+ * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
+ *
+ */
 public class JSR223Listener extends JSR223TestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
-// N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -71,5 +74,10 @@ public class JSR223Listener extends JSR223TestElement
     @Override
     public boolean isStats() {
         return false;
+    }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
     }
 }
