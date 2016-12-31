@@ -848,7 +848,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (proxyUser.length() > 0) {                   
                     ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
                             new AuthScope(proxyHost, proxyPort),
-                            new NTCredentials(proxyUser, proxyPass, localHost, PROXY_DOMAIN));
+                            new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
                 }
             }
 
@@ -1132,7 +1132,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             ((AbstractHttpClient) client).getCredentialsProvider();
         if (authManager != null) {
             if(authManager.hasAuthForURL(url)) {
-                authManager.setupCredentials(client, url, credentialsProvider, localHost);
+                authManager.setupCredentials(client, url, credentialsProvider, LOCALHOST);
             } else {
                 credentialsProvider.clear();
             }
