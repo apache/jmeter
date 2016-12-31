@@ -59,13 +59,13 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
 
     protected static final InetAddress localAddress;
 
-    protected static final String localHost;
+    protected static final String LOCALHOST;
 
     protected static final Set<String> nonProxyHostFull = new HashSet<>();
 
     protected static final List<String> nonProxyHostSuffix = new ArrayList<>();
 
-    protected static final int nonProxyHostSuffixSize;
+    protected static final int NON_PROXY_HOST_SUFFIX_SIZE;
 
     protected static final int CPS_HTTP = JMeterUtils.getPropDefault("httpclient.socket.http.cps", 0);
     
@@ -98,7 +98,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
                 }
             }
         }
-        nonProxyHostSuffixSize=nonProxyHostSuffix.size();
+        NON_PROXY_HOST_SUFFIX_SIZE=nonProxyHostSuffix.size();
 
         InetAddress inet=null;
         String localHostOrIP =
@@ -115,8 +115,8 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
             localHostOrIP = JMeterUtils.getLocalHostName();
         }
         localAddress = inet;
-        localHost = localHostOrIP;
-        log.info("Local host = "+localHost);
+        LOCALHOST = localHostOrIP;
+        log.info("Local host = "+LOCALHOST);
 
     }
 
@@ -129,7 +129,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
     }
 
     protected static boolean isPartialMatch(String host) {
-        for (int i=0;i<nonProxyHostSuffixSize;i++){
+        for (int i=0;i<NON_PROXY_HOST_SUFFIX_SIZE;i++){
             if (host.endsWith(nonProxyHostSuffix.get(i))) {
                 return true;
             }
