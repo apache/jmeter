@@ -49,7 +49,8 @@ public class CompoundVariable implements Function {
     // Created during class init; not modified thereafter 
     private static final Map<String, Class<? extends Function>> functions = new HashMap<>();
 
-    private boolean hasFunction, isDynamic;
+    private boolean hasFunction;
+    private boolean isDynamic;
 
     private String permanentResults;
 
