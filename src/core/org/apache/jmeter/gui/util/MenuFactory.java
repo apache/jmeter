@@ -123,9 +123,17 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static final List<MenuInfo> timers, controllers, samplers, threads, 
-        fragments,configElements, assertions, listeners, nonTestElements,
-        postProcessors, preProcessors;
+    private static final List<MenuInfo> timers;
+    private static final List<MenuInfo> controllers;
+    private static final List<MenuInfo> samplers;
+    private static final List<MenuInfo> threads;
+    private static final List<MenuInfo> fragments;
+    private static final List<MenuInfo> configElements;
+    private static final List<MenuInfo> assertions;
+    private static final List<MenuInfo> listeners;
+    private static final List<MenuInfo> nonTestElements;
+    private static final List<MenuInfo> postProcessors;
+    private static final List<MenuInfo> preProcessors;
 
     static {
         threads = new LinkedList<>();
