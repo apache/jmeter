@@ -38,7 +38,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
-/**
+/*
  * N.B. to add a new field, remember the following
  * - static _xyz
  * - instance xyz=_xyz
@@ -55,7 +55,9 @@ import org.apache.log.Logger;
  * - update listeners.xml to add new property, CSV and XML names etc.
  * - take screenshot sample_result_config.png
  * - update listeners.xml and component_reference.xml with new dimensions (might not change)
- *
+ */
+
+/**
  * Holds details of which sample attributes to save.
  *
  * The pop-up dialogue for this is created by the class SavePropertyDialog, which assumes:
