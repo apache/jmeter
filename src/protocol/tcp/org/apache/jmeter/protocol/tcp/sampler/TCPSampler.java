@@ -104,6 +104,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
 
     private static final Properties STATUS_PROPS = new Properties();
 
+    private static final String PROTO_PREFIX = "org.apache.jmeter.protocol.tcp.sampler."; //$NON-NLS-1$
+
     private static final boolean HAVE_STATUS_PROPS;
 
     static {
@@ -316,15 +318,13 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
         return ("tcp://" + this.getServer() + ":" + this.getPort());//$NON-NLS-1$ $NON-NLS-2$
     }
 
-    private static final String protoPrefix = "org.apache.jmeter.protocol.tcp.sampler."; //$NON-NLS-1$
-
     private Class<?> getClass(String className) {
         Class<?> c = null;
         try {
             c = Class.forName(className, false, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
             try {
-                c = Class.forName(protoPrefix + className, false, Thread.currentThread().getContextClassLoader());
+                c = Class.forName(PROTO_PREFIX + className, false, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e1) {
                 log.error("Could not find protocol class '" + className+"'"); //$NON-NLS-1$
             }
