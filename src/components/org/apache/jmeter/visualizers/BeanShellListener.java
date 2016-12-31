@@ -86,4 +86,8 @@ public class BeanShellListener extends BeanShellTestElement
         return false;
     }
 
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
 }

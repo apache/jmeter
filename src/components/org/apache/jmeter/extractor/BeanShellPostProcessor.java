@@ -35,7 +35,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 4;
-
+    
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.postprocessor.init"; //$NON-NLS-1$
 
@@ -44,7 +44,7 @@ public class BeanShellPostProcessor extends BeanShellTestElement
         return INIT_FILE;
     }
 
-     @Override
+    @Override
     public void process() {
         JMeterContext jmctx = JMeterContextService.getContext();
 
@@ -65,5 +65,10 @@ public class BeanShellPostProcessor extends BeanShellTestElement
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
+    }
+     
+    @Override
+    public Object clone() {
+        return super.clone();
     }
 }
