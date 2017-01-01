@@ -252,7 +252,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         super.configure(el);
         if (el instanceof Arguments) {
             tableModel.clearData();
-            for (JMeterProperty jMeterProperty : ((Arguments) el)) {
+            for (JMeterProperty jMeterProperty : (Arguments) el) {
                 Argument arg = (Argument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }
