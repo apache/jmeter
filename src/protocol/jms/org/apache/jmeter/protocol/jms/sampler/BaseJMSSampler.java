@@ -347,8 +347,8 @@ public abstract class BaseJMSSampler extends AbstractSampler {
             final Destination destination = message.getJMSDestination();
 
             response.append("\n   Destination: ");
-            response.append((destination == null ? null : destination
-                .toString()));
+            response.append(destination == null ? null : destination
+                .toString());
 
             response.append("\n   Expiration: ");
             response.append(new Date(message.getJMSExpiration()));
@@ -364,7 +364,7 @@ public abstract class BaseJMSSampler extends AbstractSampler {
 
             final Destination replyTo = message.getJMSReplyTo();
             response.append("\n   Reply to: ");
-            response.append((replyTo == null ? null : replyTo.toString()));
+            response.append(replyTo == null ? null : replyTo.toString());
 
             response.append("\n   Timestamp: ");
             response.append(new Date(message.getJMSTimestamp()));

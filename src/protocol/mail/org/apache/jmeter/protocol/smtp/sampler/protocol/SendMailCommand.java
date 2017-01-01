@@ -729,7 +729,7 @@ public class SendMailCommand {
      * @return Protocol that is used to transport message
      */
     private String getProtocol() {
-        return (useSSL) ? "smtps" : "smtp";
+        return useSSL ? "smtps" : "smtp";
     }
 
     /**
