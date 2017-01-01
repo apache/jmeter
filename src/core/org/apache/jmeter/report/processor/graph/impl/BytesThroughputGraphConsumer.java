@@ -81,7 +81,7 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
                         // We ignore Transaction Controller results
                         if(!sample.isController()) {
                             return Double.valueOf(
-                                (RECEIVED_BYTES_SERIES_LABEL.equals(series)) ? sample
+                                RECEIVED_BYTES_SERIES_LABEL.equals(series) ? sample
                                 .getReceivedBytes() : sample.getSentBytes());
                         } else {
                             return null;

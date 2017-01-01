@@ -54,7 +54,7 @@ public class CollectionProperty extends MultiProperty {
 
     @Override
     public int hashCode() {
-        return (value == null ? 0 : value.hashCode());
+        return value == null ? 0 : value.hashCode();
     }
 
     public void remove(String prop) {
