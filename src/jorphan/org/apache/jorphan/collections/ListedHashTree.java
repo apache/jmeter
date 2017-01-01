@@ -204,7 +204,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
             return false;
         }
         ListedHashTree lht = (ListedHashTree) o;
-        return (super.equals(lht) && order.equals(lht.order));
+        return super.equals(lht) && order.equals(lht.order);
     }
 
 

@@ -356,7 +356,7 @@ public class Data implements Serializable {
      * @return True if there is another row. False if there are no more rows.
      */
     public boolean next() {
-        return (++currentPos < size);
+        return ++currentPos < size;
     }
 
     /**
@@ -397,7 +397,7 @@ public class Data implements Serializable {
      * @return True if there is another row. False if there are no more rows.
      */
     public boolean previous() {
-        return (--currentPos >= 0);
+        return --currentPos >= 0;
     }
 
     /**
