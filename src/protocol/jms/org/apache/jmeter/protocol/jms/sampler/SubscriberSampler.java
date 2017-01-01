@@ -180,7 +180,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 msg = SUBSCRIBER.getMessage(calculateWait(until, now));
                 if (msg != null){
                     read++;
-                    extractContent(buffer, propBuffer, msg, (read == loop));
+                    extractContent(buffer, propBuffer, msg, read == loop);
                 }
             } catch (JMSException e) {
                 log.warn("Error "+e.toString());
