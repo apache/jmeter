@@ -90,7 +90,7 @@ public class TimeFunction extends AbstractFunction {
             }
             if (DIVISOR_PATTERN.matcher(fmt).matches()) { // divisor is a positive number
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
-                datetime = Long.toString((System.currentTimeMillis() / div));
+                datetime = Long.toString(System.currentTimeMillis() / div);
             } else {
                 SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
                 datetime = df.format(new Date());

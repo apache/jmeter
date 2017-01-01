@@ -51,9 +51,9 @@ public final class CLUtil {
             final String name = option.getName();
             String description = option.getDescription();
             int flags = option.getFlags();
-            boolean argumentOptional = ((flags & CLOptionDescriptor.ARGUMENT_OPTIONAL) == CLOptionDescriptor.ARGUMENT_OPTIONAL);
-            boolean argumentRequired = ((flags & CLOptionDescriptor.ARGUMENT_REQUIRED) == CLOptionDescriptor.ARGUMENT_REQUIRED);
-            boolean twoArgumentsRequired = ((flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2);
+            boolean argumentOptional = (flags & CLOptionDescriptor.ARGUMENT_OPTIONAL) == CLOptionDescriptor.ARGUMENT_OPTIONAL;
+            boolean argumentRequired = (flags & CLOptionDescriptor.ARGUMENT_REQUIRED) == CLOptionDescriptor.ARGUMENT_REQUIRED;
+            boolean twoArgumentsRequired = (flags & CLOptionDescriptor.ARGUMENTS_REQUIRED_2) == CLOptionDescriptor.ARGUMENTS_REQUIRED_2;
             boolean needComma = false;
             if (twoArgumentsRequired) {
                 argumentRequired = true;
