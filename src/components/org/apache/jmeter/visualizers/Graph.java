@@ -228,27 +228,27 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             int average = (int) (oneSample.getAverage() * height / graphMax);
 
             g.setColor(Color.blue);
-            g.drawLine(adjustedWidth, height - average, adjustedWidth, (height - average - 1));
+            g.drawLine(adjustedWidth, height - average, adjustedWidth, height - average - 1);
         }
 
         if (wantMedian) {
             int median = (int) (oneSample.getMedian() * height / graphMax);
 
             g.setColor(JMeterColor.PURPLE);
-            g.drawLine(adjustedWidth, height - median, adjustedWidth, (height - median - 1));
+            g.drawLine(adjustedWidth, height - median, adjustedWidth, height - median - 1);
         }
 
         if (wantDeviation) {
             int deviation = (int) (oneSample.getDeviation() * height / graphMax);
 
             g.setColor(Color.red);
-            g.drawLine(adjustedWidth, height - deviation, adjustedWidth, (height - deviation - 1));
+            g.drawLine(adjustedWidth, height - deviation, adjustedWidth, height - deviation - 1);
         }
         if (wantThroughput) {
             int throughput = (int) (oneSample.getThroughput() * height / throughputMax);
 
             g.setColor(JMeterColor.DARK_GREEN);
-            g.drawLine(adjustedWidth, height - throughput, adjustedWidth, (height - throughput - 1));
+            g.drawLine(adjustedWidth, height - throughput, adjustedWidth, height - throughput - 1);
         }
     }
 
