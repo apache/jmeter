@@ -52,9 +52,9 @@ public final class JMeterVersion {
     private static final String VERSION = "3.2-SNAPSHOT";
 
     private static final String IMPLEMENTATION;
-    
+
     // Same applies to copyright string
-    private static final String COPYRIGHT = "Copyright (c) 1998-2016 The Apache Software Foundation";
+    private static final String COPYRIGHT = "Copyright (c) 1998-2017 The Apache Software Foundation";
 
     static {
         String impl=null;
