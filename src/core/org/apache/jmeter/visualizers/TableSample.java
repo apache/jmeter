@@ -123,17 +123,15 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     @Override
     public int compareTo(TableSample o) {
         TableSample oo = o;
-        return ((totalSamples - oo.totalSamples) < 0 ? -1 : (totalSamples == oo.totalSamples ? 0 : 1));
+        return (totalSamples - oo.totalSamples) < 0 ? -1 : (totalSamples == oo.totalSamples ? 0 : 1);
     }
 
     // TODO should equals and hashCode depend on field other than count?
     
     @Override
     public boolean equals(Object o){
-        return (
-                (o instanceof TableSample) &&
-                (this.compareTo((TableSample) o) == 0)
-                );
+        return (o instanceof TableSample) &&
+                (this.compareTo((TableSample) o) == 0);
     }
 
     @Override

@@ -202,7 +202,7 @@ public class TestCompiler implements HashTreeTraverser {
             List<PreProcessor>  tempPre = new LinkedList<>();
             List<PostProcessor> tempPost = new LinkedList<>();
             for (Object item : testTree.list(stack.subList(0, i))) {
-                if ((item instanceof ConfigTestElement)) {
+                if (item instanceof ConfigTestElement) {
                     configs.add((ConfigTestElement) item);
                 }
                 if (item instanceof SampleListener) {
