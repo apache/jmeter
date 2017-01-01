@@ -315,7 +315,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @return a formatted string label describing this sampler
      */
     public String getLabel() {
-        return ("tcp://" + this.getServer() + ":" + this.getPort());//$NON-NLS-1$ $NON-NLS-2$
+        return "tcp://" + this.getServer() + ":" + this.getPort();//$NON-NLS-1$ $NON-NLS-2$
     }
 
     private Class<?> getClass(String className) {
