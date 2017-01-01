@@ -128,6 +128,14 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     public void setFunctionalMode(boolean funcMode) {
         setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
+        setGlobalFunctionalMode(funcMode);
+    }
+
+    /**
+     * Set JMeter in functional mode
+     * @param funcMode boolean functional mode
+     */
+    private static void setGlobalFunctionalMode(boolean funcMode) {
         functionalMode = funcMode;
     }
 
