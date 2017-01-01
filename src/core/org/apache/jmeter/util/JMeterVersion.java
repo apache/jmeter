@@ -59,7 +59,7 @@ public final class JMeterVersion {
     static {
         String impl=null;
         final Class<?> myClass = JMeterVersion.class;
-        // This assumes that the JMV treats a class file as a resource (not all do).
+        // This assumes that the JVM treats a class file as a resource (not all do).
         URL resource = myClass.getResource("JMeterVersion.class");
         // For example:
         // jar:file:/JMeter/lib/ext/ApacheJMeter_core.jar!/org/apache/jmeter/util/JMeterVersion.class
