@@ -46,7 +46,7 @@ public final class Base64Encoder {
         StringBuilder out = new StringBuilder();
         int bl = bs.length;
         for (int i = 0; i < bl; i += 3) {
-            out.append(encodeAtom(bs, i, (bl - i)));
+            out.append(encodeAtom(bs, i, bl - i));
         }
         return out.toString();
     }
