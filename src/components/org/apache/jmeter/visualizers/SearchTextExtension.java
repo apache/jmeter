@@ -306,7 +306,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 Matcher matcher = null;
                 try {
                     Document contentDoc = results.getDocument();
-                    String body = contentDoc.getText(lastPosition, (contentDoc.getLength() - lastPosition));
+                    String body = contentDoc.getText(lastPosition, contentDoc.getLength() - lastPosition);
                     matcher = pattern.matcher(body);
 
                     if ((matcher != null) && (matcher.find())) {

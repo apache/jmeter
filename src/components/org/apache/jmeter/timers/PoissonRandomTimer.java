@@ -360,7 +360,7 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
             }
             double v = Math.random();
             double y = alpha - beta*x;
-            double lhs = y + Math.log(v/Math.pow((1.0 + Math.exp(y)),2));
+            double lhs = y + Math.log(v/Math.pow(1.0 + Math.exp(y),2));
             double rhs = k + n*Math.log(lambda) -logFactorial(n);
             if (lhs <= rhs) {
                 return n;
