@@ -423,7 +423,7 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                         for (int cnt = 0; cnt < nlsize; cnt++) {
                             int pos = idx - (nlsize - cnt);
                             if (pos < 0) { pos = 0; }
-                            valPrev = (valPrev + ((nanLast - nanBegin) / (nlsize + 2)));
+                            valPrev = valPrev + ((nanLast - nanBegin) / (nlsize + 2));
                             data[s][pos] = valPrev;
                         }
                         nanList.clear();

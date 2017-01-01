@@ -174,7 +174,7 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     private long calculateDelay() {
         long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
-        double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
+        double msPerRequest = MILLISEC_PER_MIN / getThroughput();
         switch (mode) {
         case AllActiveThreads: // Total number of threads
             delay = Math.round(JMeterContextService.getNumberOfThreads() * msPerRequest);
