@@ -145,7 +145,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
      * @return {@code true} iff both ProxyPort and ProxyHost are defined.
      */
     protected boolean isDynamicProxy(String proxyHost, int proxyPort){
-        return (!JOrphanUtils.isBlank(proxyHost) && proxyPort > 0);        
+        return !JOrphanUtils.isBlank(proxyHost) && proxyPort > 0;        
     }
 
     /**

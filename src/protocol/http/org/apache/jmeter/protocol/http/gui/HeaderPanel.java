@@ -294,7 +294,7 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
     }
 
     private JPanel createButtonPanel() {
-        boolean tableEmpty = (tableModel.getRowCount() == 0);
+        boolean tableEmpty = tableModel.getRowCount() == 0;
 
         JButton addButton = createButton("add", 'A', ADD_COMMAND, true); // $NON-NLS-1$
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); // $NON-NLS-1$

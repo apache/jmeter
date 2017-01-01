@@ -104,11 +104,11 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     private HashMap<String, String> handlerMap = new HashMap<>();
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
-        ("name"),   //$NON-NLS-1$
-        ("value"),  //$NON-NLS-1$
-        ("domain"), //$NON-NLS-1$
-        ("path"),   //$NON-NLS-1$
-        ("secure"), //$NON-NLS-1$
+        "name",   //$NON-NLS-1$
+        "value",  //$NON-NLS-1$
+        "domain", //$NON-NLS-1$
+        "path",   //$NON-NLS-1$
+        "secure", //$NON-NLS-1$
         // removed expiration because it's just an annoyance for static cookies
     };
 
@@ -403,7 +403,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
     }
 
     private JPanel createButtonPanel() {
-        boolean tableEmpty = (tableModel.getRowCount() == 0);
+        boolean tableEmpty = tableModel.getRowCount() == 0;
 
         addButton = createButton("add", 'A', ADD_COMMAND, true); //$NON-NLS-1$
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); //$NON-NLS-1$
