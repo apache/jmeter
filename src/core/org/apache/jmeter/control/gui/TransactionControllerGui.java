@@ -65,7 +65,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
     public void modifyTestElement(TestElement el) {
         configureTestElement(el);
         ((TransactionController) el).setGenerateParentSample(generateParentSample.isSelected());
-        TransactionController tc = ((TransactionController) el);
+        TransactionController tc = (TransactionController) el;
         tc.setGenerateParentSample(generateParentSample.isSelected());
         tc.setIncludeTimers(includeTimers.isSelected());
     }

@@ -113,7 +113,7 @@ public class JMeterTreeModel extends DefaultTreeModel {
                 addSubTree(subTree.getTree(item), current);
             } else if (item instanceof WorkBench) {
                 current = (JMeterTreeNode) ((JMeterTreeNode) getRoot()).getChildAt(1);
-                final TestElement testElement = ((TestElement) current.getUserObject());
+                final TestElement testElement = (TestElement) current.getUserObject();
                 testElement.addTestElement(item);
                 testElement.setName(item.getName());
                 addSubTree(subTree.getTree(item), current);

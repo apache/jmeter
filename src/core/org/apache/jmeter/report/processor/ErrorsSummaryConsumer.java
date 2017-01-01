@@ -63,7 +63,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         result.addResult(new ValueResultData(key != null ? key : JMeterUtils
                 .getResString("reportgenerator_summary_total")));
         result.addResult(new ValueResultData(data));
-        result.addResult(new ValueResultData(Double.valueOf(((double) data.longValue() * 100 / errorCount))));
+        result.addResult(new ValueResultData(Double.valueOf((double) data.longValue() * 100 / errorCount)));
         result.addResult(new ValueResultData(Double.valueOf((double) data.longValue() * 100
                 / getOverallInfo().getData().doubleValue())));
         return result;
@@ -139,7 +139,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         if (StringUtils.isNumeric(codeAsString)) {
             try {
                 int code = Integer.parseInt(codeAsString);
-                return (code >= 200 && code <= 399);
+                return code >= 200 && code <= 399;
             } catch (NumberFormatException ex) {
                 return false;
             }

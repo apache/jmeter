@@ -74,7 +74,7 @@ public final class GUIFactory {
      */
     public static ImageIcon getIcon(Class<?> elementClass, boolean enabled) {
         String key = elementClass.getName();
-        ImageIcon icon = (enabled ? ICON_MAP.get(key) : DISABLED_ICON_MAP.get(key));
+        ImageIcon icon = enabled ? ICON_MAP.get(key) : DISABLED_ICON_MAP.get(key);
 
         if (icon != null) {
             return icon;

@@ -914,7 +914,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      *            milliseconds since epoch will be printed
      */
     public void setFormatter(DateFormat fmt){
-        printMilliseconds = (fmt == null); // maintain relationship
+        printMilliseconds = fmt == null; // maintain relationship
         formatter = fmt;
     }
 
