@@ -86,7 +86,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     private ButtonGroup providerDNSradioGroup = new ButtonGroup();
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
-        (JMeterUtils.getResString("dns_hostname_or_ip")), //$NON-NLS-1$
+        JMeterUtils.getResString("dns_hostname_or_ip"), //$NON-NLS-1$
     };
     private static final Class<?>[] columnClasses = {
         String.class };
@@ -237,7 +237,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     }
 
     private JPanel createButtonPanel() {
-        boolean tableEmpty = (dnsServersTableModel.getRowCount() == 0);
+        boolean tableEmpty = dnsServersTableModel.getRowCount() == 0;
 
         addButton = createButton("add", 'A', ADD_COMMAND, custResButton.isSelected()); // $NON-NLS-1$
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); // $NON-NLS-1$

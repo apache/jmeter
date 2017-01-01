@@ -321,7 +321,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
             Thread.yield();
             SampleResult results = new SampleResult();
             results.setSuccessful(false);
-            results.setResponseData(("Class not found: " + getClassname()), null);
+            results.setResponseData("Class not found: " + getClassname(), null);
             results.setSampleLabel("ERROR: " + getClassname());
             return results;
         }
