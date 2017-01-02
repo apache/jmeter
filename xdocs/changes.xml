@@ -122,6 +122,7 @@ Fill in some detail.
 <h3>Listeners</h3>
 <ul>
     <li><bug>60144</bug>View Results Tree : Add a more up to date Browser Renderer to replace old Render</li>
+    <li><bug>60542</bug>View Results Tree : Allow Upper Panel to be collapsed. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -217,6 +218,7 @@ Fill in some detail.
 <li>Logan Mauzaize (https://github.com/loganmzz)</li>
 <li>Maxime Chassagneux (https://github.com/max3163)</li>
 <li>忻隆 (298015902 at qq.com)</li>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

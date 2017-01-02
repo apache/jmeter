@@ -225,7 +225,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         log.debug("init() - pass");
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
 
         leftSide = createLeftPanel();
         // Prepare the common tab
@@ -238,7 +237,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         JSplitPane searchAndMainSP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
                 new SearchTreePanel(root), mainSplit);
         searchAndMainSP.setOneTouchExpandable(true);
-        add(searchAndMainSP, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), searchAndMainSP);
+        splitPane.setOneTouchExpandable(true);
+        add(splitPane);
+
         // init right side with first render
         resultsRender.setRightSide(rightSide);
         resultsRender.init();
