@@ -385,7 +385,7 @@ public class AssertionGui extends AbstractAssertionGui {
     private JPanel createStringPanel() {
         tableModel = new PowerTableModel(new String[] { COL_RESOURCE_NAME }, new Class[] { String.class });
         stringTable = new JTable(tableModel);
-        stringTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(stringTable);
         stringTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JMeterUtils.applyHiDPI(stringTable);
 

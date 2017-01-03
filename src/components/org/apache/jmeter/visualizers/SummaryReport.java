@@ -240,7 +240,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);

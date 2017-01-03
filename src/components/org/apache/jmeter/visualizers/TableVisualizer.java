@@ -185,10 +185,10 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                     calc.addSample(res);
                     int count = calc.getCount();
                     TableSample newS = new TableSample(
-                            count, 
-                            res.getSampleCount(), 
-                            res.getStartTime(), 
-                            res.getThreadName(), 
+                            count,
+                            res.getSampleCount(),
+                            res.getStartTime(),
+                            res.getThreadName(),
                             res.getSampleLabel(),
                             res.getTime(),
                             res.isSuccessful(),
@@ -239,7 +239,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Set up the table itself
         table = new JTable(model);
         JMeterUtils.applyHiDPI(table);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(table);
         RendererUtils.applyRenderers(table, RENDERERS);
 
         tableScrollPanel = new JScrollPane(table);

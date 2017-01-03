@@ -469,7 +469,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(getColumnsMsgParameters()));
+        HeaderAsPropertyRenderer.install(myJTable, getColumnsMsgParameters());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);

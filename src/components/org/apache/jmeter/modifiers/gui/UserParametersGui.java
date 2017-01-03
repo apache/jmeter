@@ -161,21 +161,24 @@ public class UserParametersGui extends AbstractPreProcessorGui {
 
         initTableModel();
         paramTable.setModel(tableModel);
-        HeaderAsPropertyRenderer defaultRenderer = new HeaderAsPropertyRenderer(){
-            private static final long serialVersionUID = 240L;
+        TableCellRenderer defaultHeaderRenderer = paramTable.getTableHeader().getDefaultRenderer();
+        if (!(defaultHeaderRenderer instanceof HeaderAsPropertyRenderer)) {
+            HeaderAsPropertyRenderer defaultRenderer = new HeaderAsPropertyRenderer(defaultHeaderRenderer) {
+                private static final long serialVersionUID = 240L;
 
-            @Override
-            protected String getText(Object value, int row, int column) {
-                if (column >= 1){ // Don't process the NAME column
-                    String val = value.toString();
-                    if (val.startsWith(USER_COL_RESOURCE+UNDERSCORE)){
-                        return JMeterUtils.getResString(USER_COL_RESOURCE)+val.substring(val.indexOf(UNDERSCORE));
+                @Override
+                protected String getText(Object value, int row, int column) {
+                    if (column >= 1){ // Don't process the NAME column
+                        String val = value.toString();
+                        if (val.startsWith(USER_COL_RESOURCE+UNDERSCORE)){
+                            return JMeterUtils.getResString(USER_COL_RESOURCE)+val.substring(val.indexOf(UNDERSCORE));
+                        }
                     }
+                    return super.getText(value, row, column);
                 }
-                return super.getText(value, row, column);
-            }
-        };
-        paramTable.getTableHeader().setDefaultRenderer(defaultRenderer);
+            };
+            paramTable.getTableHeader().setDefaultRenderer(defaultRenderer);
+        }
         perIterationCheck.setSelected(false);
     }
 

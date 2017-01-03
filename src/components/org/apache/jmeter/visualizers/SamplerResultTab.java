@@ -420,8 +420,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         tableResHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResHeaders.addMouseListener(new TextBoxDoubleClick(tableResHeaders));
         setFirstColumnPreferredSize(tableResHeaders);
-        tableResHeaders.getTableHeader().setDefaultRenderer(
-                new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(tableResHeaders);
         RendererUtils.applyRenderers(tableResHeaders, RENDERERS_HEADERS);
 
         // Set up the 3rd table 
@@ -430,8 +429,7 @@ public abstract class SamplerResultTab implements ResultRenderer {
         tableResFields.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableResFields.addMouseListener(new TextBoxDoubleClick(tableResFields));
         setFirstColumnPreferredSize(tableResFields);
-        tableResFields.getTableHeader().setDefaultRenderer(
-                new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(tableResFields);
         RendererUtils.applyRenderers(tableResFields, RENDERERS_FIELDS);
 
         // Prepare the Results tabbed pane
