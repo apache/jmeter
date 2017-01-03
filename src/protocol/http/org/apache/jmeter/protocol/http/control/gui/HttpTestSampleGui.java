@@ -30,6 +30,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -202,12 +203,9 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         tabbedPane.add(JMeterUtils
                 .getResString("web_testing_advanced"), advancedPanel);
 
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setMaximumSize(new Dimension());
-
-        add(makeTitlePanel(), BorderLayout.NORTH);
-        add(tabbedPane, BorderLayout.CENTER);
-        add(emptyPanel, BorderLayout.SOUTH);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), tabbedPane);
+        splitPane.setOneTouchExpandable(true);
+        add(splitPane);
     }
 
     private JPanel getTimeOutPanel() {
