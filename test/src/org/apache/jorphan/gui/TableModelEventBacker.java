@@ -31,47 +31,92 @@ import java.util.function.ToIntFunction;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+/**
+ * Listener implementation that stores {@link TableModelEvent} and can make assertions against them.
+ */
 public class TableModelEventBacker implements TableModelListener {
 
+    /**
+     * Makes assertions for a single {@link TableModelEvent}.
+     */
     public class EventAssertion {
         private List<ObjIntConsumer<TableModelEvent>> assertions = new ArrayList<>();
 
+        /**
+         * Adds an assertion first args is table model event, second one is event index.
+         * @return <code>this</code>
+         */
         public EventAssertion add(ObjIntConsumer<TableModelEvent> assertion) {
             assertions.add(assertion);
             return this;
         }
 
+        /**
+         * Adds assertion based on a {@link ToIntFunction to-int} transformation (examples: <code>TableModelEvent::getType</code>).
+         * @param name Label for assertion reason
+         * @param expected Expected value.
+         * @param f {@link ToIntFunction to-int} transformation (examples: <code>TableModelEvent::getType</code>).
+         * @return <code>this</code>
+         */
         public EventAssertion addInt(String name, int expected, ToIntFunction<TableModelEvent> f) {
             return add((e,i) -> assertEquals(format("%s[%d]", name, i), expected, f.applyAsInt(e)));
         }
 
+        /**
+         * Adds {@link TableModelEvent#getSource()} assertion.
+         * @return <code>this</code>
+         */
         public EventAssertion source(Object expected) {
             return add((e,i) -> assertSame(format("source[%d]",i), expected, e.getSource()));
         }
 
+        /**
+         * Adds {@link TableModelEvent#getType()} assertion.
+         * @return <code>this</code>
+         */
         public EventAssertion type(int expected) {
             return addInt("type", expected, TableModelEvent::getType);
         }
 
+        /**
+         * Adds {@link TableModelEvent#getColumn()} assertion.
+         * @return <code>this</code>
+         */
         public EventAssertion column(int expected) {
             return addInt("column", expected, TableModelEvent::getColumn);
         }
 
+        /**
+         * Adds {@link TableModelEvent#getFirstRow()} assertion.
+         * @return <code>this</code>
+         */
         public EventAssertion firstRow(int expected) {
             return addInt("firstRow", expected, TableModelEvent::getFirstRow);
         }
 
+        /**
+         * Adds {@link TableModelEvent#getLastRow()} assertion.
+         * @return <code>this</code>
+         */
         public EventAssertion lastRow(int expected) {
             return addInt("lastRow", expected, TableModelEvent::getLastRow);
         }
 
-        protected void assertEvent(TableModelEvent e, int i) {
-            assertions.forEach(a -> a.accept(e, i));
+        /**
+         * Check assertion against provided value.
+         * @param event Event to check
+         * @param index Index.
+         */
+        protected void assertEvent(TableModelEvent event, int index) {
+            assertions.forEach(a -> a.accept(event, index));
         }
     }
 
     private Deque<TableModelEvent> events = new LinkedList<>();
 
+    /**
+     * Stores event.
+     */
     @Override
     public void tableChanged(TableModelEvent e) {
         events.add(e);
@@ -81,19 +126,28 @@ public class TableModelEventBacker implements TableModelListener {
         return events;
     }
 
+    /**
+     * Creates a new event assertion.
+     * @see #assertEvents(EventAssertion...)
+     */
     public EventAssertion assertEvent() {
         return new EventAssertion();
     }
 
+    /**
+     * Checks each event assertion against each backed event in order. Event storage is cleared after it.
+     */
     public void assertEvents(EventAssertion... assertions) {
-        assertEquals("event count", assertions.length, events.size());
+        try {
+            assertEquals("event count", assertions.length, events.size());
 
-        int i = 0;
-        for (TableModelEvent event : events) {
-            assertions[i].assertEvent(event, i++);
+            int i = 0;
+            for (TableModelEvent event : events) {
+                assertions[i].assertEvent(event, i++);
+            }
+        } finally {
+            events.clear();
         }
-
-        events.clear();
     }
 
 
