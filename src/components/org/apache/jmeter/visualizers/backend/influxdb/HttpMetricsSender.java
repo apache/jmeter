@@ -42,119 +42,119 @@ import org.apache.log.Logger;
  * represents a single point in InfluxDB. Line Protocol is whitespace sensitive.
  */
 class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
-	private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-	private List<MetricTuple> metrics = new ArrayList<>();
+    private List<MetricTuple> metrics = new ArrayList<>();
 
-	private HttpPost httpRequest = null;
+    private HttpPost httpRequest = null;
 
-	private CloseableHttpClient httpClient = null;
+    private CloseableHttpClient httpClient = null;
 
-	private HttpResponse response = null;
+    private HttpResponse response = null;
 
-	private URL url;
+    private URL url;
 
-	HttpMetricsSender() {
-		super();
-	}
-
-    /**
-	 * The HTTP API is the primary means of writing data into InfluxDB, by
-	 * sending POST requests to the /write endpoint. Initiate the HttpClient
-	 * client with a HttpPost request from influxdb url
-	 * 
-	 * @param influxdbUrl
-	 *            example : http://localhost:8086/write?db=myd&rp=one_week
-	 * @see org.apache.jmeter.visualizers.backend.influxdb.InfluxdbMetricsSender#setup(java.lang.String)
-	 */
-	@Override
-	public void setup(String influxdbUrl) {
-
-		try {
-			httpClient = HttpClients.createDefault();
-			url = new URL(influxdbUrl);
-			httpRequest = new HttpPost(url.toString());
-			httpRequest.setHeader("User-Agent", "JMeter/1.0");
-
-			if (LOG.isInfoEnabled()) {
-				LOG.info("Created InfluxDBMetricsSender with url:" + influxdbUrl);
-			}
-
-		} catch (MalformedURLException e) {
-			LOG.error("Malformed URL Exception : " + influxdbUrl);
-		}
-
-	}
-
-	@Override
-	public void addMetric(String mesurment, String tag, String field) {
-
-		metrics.add(new MetricTuple(mesurment, tag, field));
-
-	}
-
-     /**
-	 * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
-	 *      writeAndSendMetrics()
-	 */
-	@Override
-	public void writeAndSendMetrics() {
-
-		if (metrics.size() > 0 && httpRequest != null) {
-
-			try {
-				StringBuffer sb = new StringBuffer();
-				for (MetricTuple metric : metrics) {
-					// We let the Influxdb server fill the timestamp so we don't
-					// add epoch time on each point
-					sb.append(metric.measurment + metric.tag + " " + metric.field + "\n");
-				}
-
-				StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
-
-				httpRequest.setEntity(entity);
-				response = httpClient.execute(httpRequest);
-
-				if (LOG.isDebugEnabled()) {
-					int code = response.getStatusLine().getStatusCode();
-					/*
-					 * HTTP response summary 2xx: If your write request received
-					 * HTTP 204 No Content, it was a success! 4xx: InfluxDB
-					 * could not understand the request. 5xx: The system is
-					 * overloaded or significantly impaired.
-					 */
-					switch (code) {
-					case 204:
-						LOG.debug("Success, number of metric wrote : " + metrics.size());
-						break;
-					default:
-						LOG.debug("Error : " + code);
-					}
-
-				}
-				EntityUtils.consumeQuietly(response.getEntity());
-
-			} catch (Exception e) {
-				LOG.error("Error writing to InfluxDB : " + e.getLocalizedMessage());
-			}
-		}
-
-		// We drop metrics in all cases
-		metrics.clear();
-	}
+    HttpMetricsSender() {
+        super();
+    }
 
     /**
-	 * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
-	 *      destroy()
-	 */
-	@Override
-	public void destroy() {
-		try {
-			httpClient.close();
-		} catch (IOException e) {
-			LOG.error("Error during close httpClient : " + e.getLocalizedMessage());
+     * The HTTP API is the primary means of writing data into InfluxDB, by
+     * sending POST requests to the /write endpoint. Initiate the HttpClient
+     * client with a HttpPost request from influxdb url
+     * 
+     * @param influxdbUrl
+     *            example : http://localhost:8086/write?db=myd&rp=one_week
+     * @see org.apache.jmeter.visualizers.backend.influxdb.InfluxdbMetricsSender#setup(java.lang.String)
+     */
+    @Override
+    public void setup(String influxdbUrl) {
 
-		}
-	}
+        try {
+            httpClient = HttpClients.createDefault();
+            url = new URL(influxdbUrl);
+            httpRequest = new HttpPost(url.toString());
+            httpRequest.setHeader("User-Agent", "JMeter/1.0");
+
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Created InfluxDBMetricsSender with url:" + influxdbUrl);
+            }
+
+        } catch (MalformedURLException e) {
+            LOG.error("Malformed URL Exception : " + influxdbUrl);
+        }
+
+    }
+
+    @Override
+    public void addMetric(String mesurment, String tag, String field) {
+
+        metrics.add(new MetricTuple(mesurment, tag, field));
+
+    }
+
+    /**
+     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
+     *      writeAndSendMetrics()
+     */
+    @Override
+    public void writeAndSendMetrics() {
+
+        if (metrics.size() > 0 && httpRequest != null) {
+
+            try {
+                StringBuffer sb = new StringBuffer();
+                for (MetricTuple metric : metrics) {
+                    // We let the Influxdb server fill the timestamp so we don't
+                    // add epoch time on each point
+                    sb.append(metric.measurment + metric.tag + " " + metric.field + "\n");
+                }
+
+                StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
+
+                httpRequest.setEntity(entity);
+                response = httpClient.execute(httpRequest);
+
+                if (LOG.isDebugEnabled()) {
+                    int code = response.getStatusLine().getStatusCode();
+                    /*
+                     * HTTP response summary 2xx: If your write request received
+                     * HTTP 204 No Content, it was a success! 4xx: InfluxDB
+                     * could not understand the request. 5xx: The system is
+                     * overloaded or significantly impaired.
+                     */
+                    switch (code) {
+                    case 204:
+                        LOG.debug("Success, number of metric wrote : " + metrics.size());
+                        break;
+                    default:
+                        LOG.debug("Error : " + code);
+                    }
+
+                }
+                EntityUtils.consumeQuietly(response.getEntity());
+
+            } catch (Exception e) {
+                LOG.error("Error writing to InfluxDB : " + e.getLocalizedMessage());
+            }
+        }
+
+        // We drop metrics in all cases
+        metrics.clear();
+    }
+
+    /**
+     * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
+     *      destroy()
+     */
+    @Override
+    public void destroy() {
+        try {
+            httpClient.close();
+        } catch (IOException e) {
+            LOG.error("Error during close httpClient : " + e.getLocalizedMessage());
+
+        }
+    }
 
 }
