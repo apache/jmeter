@@ -41,9 +41,6 @@ import org.apache.jmeter.visualizers.backend.SamplerMetric;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-/**
- * 
- */
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
 	private static final Logger LOGGER = LoggingManager.getLoggerForClass();
@@ -107,8 +104,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 		sendMetrics();
 	}
 
-	/**
-	 * Send metrics to Graphite
+    /**
+	 * Send metrics
 	 */
 	protected void sendMetrics() {
 
@@ -142,7 +139,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 		influxdbMetricsManager.writeAndSendMetrics();
 	}
 
-	/**
+    /**
 	 * Add request metrics to metrics manager.
 	 * 
 	 * @param metric
@@ -217,14 +214,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 		}
 	}
 
-	/**
+    /**
 	 * @return the samplersList
 	 */
 	public String getSamplersRegex() {
 		return samplersRegex;
 	}
 
-	/**
+    /**
 	 * @param samplersList
 	 *            the samplersList to set
 	 */

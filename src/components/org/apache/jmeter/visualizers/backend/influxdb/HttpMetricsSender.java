@@ -58,7 +58,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 		super();
 	}
 
-	/**
+    /**
 	 * The HTTP API is the primary means of writing data into InfluxDB, by
 	 * sending POST requests to the /write endpoint. Initiate the HttpClient
 	 * client with a HttpPost request from influxdb url
@@ -93,7 +93,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 
 	}
 
-	/**
+     /**
 	 * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
 	 *      writeAndSendMetrics()
 	 */
@@ -143,7 +143,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 		metrics.clear();
 	}
 
-	/**
+    /**
 	 * @see org.apache.jmeter.visualizers.backend.graphite.GraphiteMetricsSender#
 	 *      destroy()
 	 */

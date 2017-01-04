@@ -24,7 +24,7 @@ package org.apache.jmeter.visualizers.backend.influxdb;
  */
 abstract class AbstractInfluxdbMetricsSender implements InfluxdbMetricsSender {
 
-	/**
+     /**
 	 * For tag keys, tag values, and field keys always use a backslash character
 	 * \ to escape 
 	 * List of special characters : commas , equal sign = spaces
