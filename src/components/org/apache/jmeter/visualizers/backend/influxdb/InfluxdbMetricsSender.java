@@ -18,41 +18,42 @@
 
 package org.apache.jmeter.visualizers.backend.influxdb;
 
-
 interface InfluxdbMetricsSender {
 
 	/**
-	 * One data point in InfluxDB is represented by a measurement name, a tag set and a field set ( optionally a timestamp )
+	 * One data point in InfluxDB is represented by a measurement name, a tag
+	 * set and a field set ( optionally a timestamp )
 	 */
-    final class MetricTuple {
-        String measurment;
-        String tag;
-        String field;
-        
-        MetricTuple(String measurment , String tag, String field) {
-            this.measurment = measurment;
-            this.tag = tag;
-            this.field = field;
-        }
-    }
-    /**
-     * 
-     */
-    public abstract void addMetric(String measurment, String tag, String field);
+	final class MetricTuple {
+		String measurment;
+		String tag;
+		String field;
 
-    /**
-     * 
-     */
-    public void setup(String influxdbUrl);
-    
-    /**
-     * Write metrics to Influxdb with HTTP API with InfluxDB’s Line Protocol
-     */
-    public abstract void writeAndSendMetrics();
+		MetricTuple(String measurment, String tag, String field) {
+			this.measurment = measurment;
+			this.tag = tag;
+			this.field = field;
+		}
+	}
 
-    /**
-     * Destroy sender
-     */
-    public abstract void destroy();
+	/**
+	 * 
+	 */
+	public abstract void addMetric(String measurment, String tag, String field);
+
+	/**
+	 * 
+	 */
+	public void setup(String influxdbUrl);
+
+	/**
+	 * Write metrics to Influxdb with HTTP API with InfluxDB’s Line Protocol
+	 */
+	public abstract void writeAndSendMetrics();
+
+	/**
+	 * Destroy sender
+	 */
+	public abstract void destroy();
 
 }
