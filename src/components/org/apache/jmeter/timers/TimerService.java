@@ -18,29 +18,18 @@
 
 package org.apache.jmeter.timers;
 
-import java.io.Serializable;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterThread;
+import org.apache.jorphan.util.JMeterStopThreadException;
 
-import org.apache.jmeter.util.JMeterUtils;
+public class TimerService {
 
-/**
- * This class implements those methods needed by RandomTimer to be instantiable
- * and implements a random delay with an average value and a uniformly
- * distributed variation.
- *
- */
-public class UniformRandomTimer extends RandomTimer implements Serializable {
-    private static final long serialVersionUID = 241L;
-
-    @Override
-    public long delay() {
-        long delay = (long) Math.abs((getRandom().nextDouble() * getRange()) + super.delay());
-        TimerService.checkDelay(delay);
-        return delay;
-    }
-
-    @Override
-    public String toString() {
-        return JMeterUtils.getResString("uniform_timer_memo"); //$NON-NLS-1$
+    public static void checkDelay(long delay) {
+        JMeterThread thread = JMeterContextService.getContext().getThread();
+        long endTime = thread != null ? thread.getEndTime() : 0;
+        if (endTime != 0 && System.currentTimeMillis() + delay > thread.getEndTime()) {
+            throw new JMeterStopThreadException("Wait is over thread end time [" + thread.getThreadName() + "]");
+        }
     }
 
 }

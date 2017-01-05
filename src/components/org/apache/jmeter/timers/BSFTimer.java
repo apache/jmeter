@@ -50,6 +50,7 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
                 mgr.terminate();
             }
         }
+        TimerService.checkDelay(delay);
         return delay;
     }
     

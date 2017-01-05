@@ -86,6 +86,7 @@ public class ConstantTimer extends AbstractTestElement implements Timer, Seriali
      */
     @Override
     public long delay() {
+        TimerService.checkDelay(delay);
         return delay;
     }
 

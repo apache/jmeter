@@ -58,7 +58,9 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             log.warn("Problem in BeanShell script "+e);
         }
         try {
-            return Long.decode(ret).longValue();
+            long delay = Long.decode(ret).longValue();
+            TimerService.checkDelay(delay);
+            return delay;
         } catch (NumberFormatException e){
             log.warn(e.getLocalizedMessage());
             return 0;

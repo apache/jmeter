@@ -301,7 +301,9 @@ public class PoissonRandomTimer extends RandomTimer implements Serializable {
      */
     @Override
     public long delay() {
-        return Math.abs(randomPoisson((int)Math.round(getRange())) + super.delay());
+        long delay = Math.abs(randomPoisson((int)Math.round(getRange())) + super.delay());
+        TimerService.checkDelay(delay);
+        return delay;
     }
 
     /**
