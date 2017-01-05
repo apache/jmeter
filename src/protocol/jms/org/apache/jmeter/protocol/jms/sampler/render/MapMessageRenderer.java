@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 
 public class MapMessageRenderer implements MessageRenderer<Map<String,Object>> {
 
@@ -66,7 +66,7 @@ public class MapMessageRenderer implements MessageRenderer<Map<String,Object>> {
     }
 
     @Override
-    public Map<String, Object> getValueFromFile(String filename, String encoding, boolean hasVariable, Cache cache) {
+    public Map<String, Object> getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
         String text = delegate.getValueFromFile(filename, encoding, hasVariable, cache);
         return getValueFromText(text);
     }

@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import javax.jms.DeliveryMode;
@@ -39,7 +40,6 @@ import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
 import org.apache.jmeter.protocol.jms.sampler.render.MessageRenderer;
 import org.apache.jmeter.protocol.jms.sampler.render.Renderers;
 import org.apache.jmeter.samplers.SampleResult;
@@ -49,6 +49,9 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * This class implements the JMS Publisher sampler.
@@ -123,7 +126,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final FileServer FSERVER = FileServer.getFileServer();
 
     /** File cache handler **/
-    private Cache fileCache = null;
+    private Cache<Object,Object> fileCache = null;
 
     /**
      * the implementation calls testStarted() without any parameters.
@@ -177,14 +180,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      */
     @Override
     public SampleResult sample() {
+        String configChoice = getConfigChoice();
         if (fileCache == null) {
-            switch (getConfigChoice()) {
-                case JMSPublisherGui.USE_FILE_RSC:
-                    fileCache = Cache.newSingleInstance();
-                    break;
-                default:
-                    fileCache = Cache.getNoopCache();
-            }
+            Cache<Object, Object> newCache = buildCache(configChoice);
+            fileCache = newCache;
         }
 
         SampleResult result = new SampleResult();
@@ -243,12 +242,25 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             result.setSampleCount(loop);
             result.setRequestHeaders(propBuffer.toString());
         } catch (Exception e) {
-            log.error(String.format("Can't sent %s message from %s", type, getConfigChoice()), e);
+            log.error(String.format("Can't sent %s message from %s", type, configChoice), e);
             result.setResponseMessage(e.toString());
         } finally {
             result.sampleEnd();
         }
         return result;
+    }
+
+    protected static Cache<Object, Object> buildCache(String configChoice) {
+        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
+        switch (configChoice) {
+            case JMSPublisherGui.USE_FILE_RSC:
+                cacheBuilder.maximumSize(1);
+                break;
+            default:
+                cacheBuilder.expireAfterWrite(0, TimeUnit.MILLISECONDS).maximumSize(0);
+        }
+        Cache<Object, Object> newCache = cacheBuilder.build();
+        return newCache;
     }
 
     /** Gets file path to use **/

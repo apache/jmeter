@@ -17,11 +17,11 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 
 public interface MessageRenderer<T> {
     /** Convert text to expected type **/
     T getValueFromText(String text);
     /** Read text from file, eventually replace variables, then convert it. Cached content depends if variabilisation is active or not. **/
-    T getValueFromFile(String filename, String encoding, boolean hasVariable, Cache cache);
+    T getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache);
 }

@@ -29,8 +29,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.thoughtworks.xstream.XStream;
 
 class ObjectMessageRenderer implements MessageRenderer<Serializable> {
@@ -42,12 +42,12 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
     }
 
     @Override
-    public Serializable getValueFromFile(String filename, String encoding, boolean hasVariable, Cache cache) {
+    public Serializable getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
         Serializable value;
         if (hasVariable) {
             value = getInterpretedContent(filename, encoding, hasVariable, cache);
         } else {
-            value = cache.get(filename, this::getContent);
+            value = (Serializable) cache.get(filename, _p -> getContent(filename));
         }
 
         return value;
@@ -78,7 +78,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
      * <p>If encoding {@link PublisherSampler#DEFAULT_ENCODING isn't provided}, try to find it.</p>
      * <p>Only raw text is cached, neither interpreted text, neither parsed object.</p>
      */
-    protected Serializable getInterpretedContent(String filename, String encoding, boolean hasVariable, Cache cache) {
+    protected Serializable getInterpretedContent(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
         Serializable value;
         if (PublisherSampler.DEFAULT_ENCODING.equals(encoding)) {
             encoding = findEncoding(filename);

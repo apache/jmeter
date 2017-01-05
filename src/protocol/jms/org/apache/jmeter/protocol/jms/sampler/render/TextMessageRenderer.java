@@ -18,8 +18,9 @@
 package org.apache.jmeter.protocol.jms.sampler.render;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
 import org.apache.jorphan.io.TextFile;
+
+import com.github.benmanes.caffeine.cache.Cache;
 
 class TextMessageRenderer implements MessageRenderer<String> {
 
@@ -29,8 +30,8 @@ class TextMessageRenderer implements MessageRenderer<String> {
     }
 
     @Override
-    public String getValueFromFile(String filename, String encoding, boolean hasVariable, Cache cache) {
-        String text = cache.get(new FileKey(filename, encoding), this::getContent);
+    public String getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
+        String text = (String) cache.get(new FileKey(filename, encoding), key -> getContent((FileKey)key));
         if (hasVariable) {
             text = new CompoundVariable(text).execute();
         }

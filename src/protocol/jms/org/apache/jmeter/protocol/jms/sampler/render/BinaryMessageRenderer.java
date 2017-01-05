@@ -25,7 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
+
+import com.github.benmanes.caffeine.cache.Cache;
 
 class BinaryMessageRenderer implements MessageRenderer<byte[]> {
 
@@ -41,7 +42,7 @@ class BinaryMessageRenderer implements MessageRenderer<byte[]> {
     }
 
     @Override
-    public byte[] getValueFromFile(String filename, String encoding, boolean hasVariable, Cache cache) {
+    public byte[] getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache) {
         byte[] bytes;
 
         if (hasVariable) {
@@ -52,7 +53,7 @@ class BinaryMessageRenderer implements MessageRenderer<byte[]> {
                 throw new RuntimeException(e);
             }
         } else {
-            bytes = cache.get(filename, this::getContent);
+            bytes = (byte[]) cache.get(filename, _p -> getContent(filename));
         }
 
         return bytes;
