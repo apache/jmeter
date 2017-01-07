@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="204.04666mm"
+   height="108.09111mm"
+   viewBox="0 0 722.99998 383"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="distributed-jmeter.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.1286307"
+     inkscape:cx="378.16613"
+     inkscape:cy="156.05882"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="719"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-107.07143,159.1378)">
+    <g
+       id="g4421">
+      <g
+         id="g4144-5"
+         transform="translate(280,75.290758)">
+        <rect
+           ry="41.293694"
+           style="opacity:1;fill:#ffff00;fill-opacity:1;stroke:#ff0000;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3336-62"
+           width="199.73024"
+           height="82.587387"
+           x="88.706306"
+           y="-84.222267" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="123.98876"
+           y="-49.735706"
+           id="text4138-9"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan4140-1"
+             x="123.98876"
+             y="-49.735706">jmeter</tspan><tspan
+             sodipodi:role="line"
+             x="123.98876"
+             y="-18.617388"
+             id="tspan4142-2">192.168.0.2</tspan></text>
+      </g>
+      <g
+         transform="translate(20,-54.285714)"
+         id="g4279">
+        <g
+           id="g4144"
+           transform="translate(0,-18.994936)">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.10</tspan></text>
+        </g>
+        <g
+           transform="translate(520,-18.994936)"
+           id="g4144-6">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336-2"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138-6"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140-18"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142-7"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.12</tspan></text>
+        </g>
+        <g
+           transform="translate(260,-18.994936)"
+           id="g4144-9">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336-20"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138-2"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140-3"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142-75"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.11</tspan></text>
+        </g>
+      </g>
+      <g
+         id="g4279-9"
+         transform="translate(20,242.85714)">
+        <g
+           id="g4144-2"
+           transform="translate(0,-18.994936)">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336-28"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138-97"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140-36"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142-1"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.13</tspan></text>
+        </g>
+        <g
+           transform="translate(520,-18.994936)"
+           id="g4144-6-2">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336-2-9"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138-6-3"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140-18-1"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142-7-9"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.15</tspan></text>
+        </g>
+        <g
+           transform="translate(260,-18.994936)"
+           id="g4144-9-4">
+          <rect
+             y="-84.222267"
+             x="88.706306"
+             height="82.587387"
+             width="199.73024"
+             id="rect3336-20-7"
+             style="opacity:1;fill:#00ffff;fill-opacity:1;stroke:#0000ff;stroke-width:3.26976013;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="125%"
+             id="text4138-2-8"
+             y="-49.735706"
+             x="110.06452"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.89465523px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               y="-49.735706"
+               x="110.06452"
+               id="tspan4140-3-4"
+               sodipodi:role="line">jmeter-server</tspan><tspan
+               id="tspan4142-75-5"
+               y="-18.617388"
+               x="110.06452"
+               sodipodi:role="line">192.168.0.14</tspan></text>
+        </g>
+      </g>
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356"
+         d="M 204.67279,-72.895148 472.25368,-9.98706"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356-0"
+         d="M 738.94853,-73.338163 471.36764,-10.430075"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356-3"
+         d="M 208.65992,138.20136 476.24081,75.293271"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356-0-6"
+         d="M 742.93566,138.64437 475.35477,75.736286"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356-1"
+         d="m 470.25367,-72.452134 0.88604,59.363971"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4356-1-0"
+         d="m 475.12684,77.286834 0.88604,59.363976"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

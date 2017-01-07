@@ -21,7 +21,7 @@
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document next="junitsampler_tutorial.html" id="$Id$">
+<document prev="jmeter_distributed_testing_step_by_step.html" next="junitsampler_tutorial.html" id="$Id$">
 
 <properties>
   <author email="dev@jmeter.apache.org">JMeter developers</author>
