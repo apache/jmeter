@@ -50,7 +50,7 @@ Once you've made sure the systems are ready, it's time to setup remote testing. 
 have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
 </p>
 
-<figure width="408" height="216" image="distributed-jmeter.svg">Diagram 1</figure>
+<figure width="610" height="462" image="distributed-jmeter.svg">One master controlls multiple slaves</figure>
 
 <subsection name="&sect-num;.1 Terminology" anchor="terminology">
 
@@ -65,7 +65,7 @@ Before we dive into the step-by-step instructions, it's a good idea to define th
   <dt>Target</dt><dd>the webserver we plan to stress test</dd>
 </dl>
 
-<figure width="544" height="324" image="distributed-names.svg">Categories of systems</figure>
+<figure width="602" height="360" image="distributed-names.svg">Categories of systems</figure>
 
 </subsection>
 
