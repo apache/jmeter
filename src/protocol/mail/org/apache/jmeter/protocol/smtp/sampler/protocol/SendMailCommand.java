@@ -278,13 +278,11 @@ public class SendMailCommand {
      *            Message previously prepared by prepareMessage()
      * @throws MessagingException
      *             when problems sending the mail arise
-     * @throws IOException
-     *             TODO can not see how
      * @throws InterruptedException
      *             when interrupted while waiting for delivery in synchronous
-     *             modus
+     *             mode
      */
-    public void execute(Message message) throws MessagingException, IOException, InterruptedException {
+    public void execute(Message message) throws MessagingException, InterruptedException {
 
         Transport tr = null;
         try {
@@ -319,7 +317,6 @@ public class SendMailCommand {
         }
 
         logger.debug("message sent");
-        return;
     }
 
     /**
