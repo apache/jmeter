@@ -27,8 +27,8 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <code>SleepTest</code> class is a simple example class for a JMeter
@@ -50,7 +50,7 @@ import org.apache.log.Logger;
  */
 public class SleepTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(SleepTest.class);
 
     private static final long serialVersionUID = 240L;
 

@@ -37,8 +37,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.BSFTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A sampler which understands BSF
@@ -51,7 +51,7 @@ public class BSFSampler extends BSFTestElement implements Sampler, TestBean, Con
 
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BSFSampler.class);
 
     public BSFSampler() {
         super();

@@ -22,8 +22,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JavaSamplerContext is used to provide context information to a
@@ -46,7 +46,7 @@ public class JavaSamplerContext {
      */
 
     /** Logging */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JavaSamplerContext.class);
 
     /**
      * Map containing the initialization parameters for the JavaSamplerClient.
