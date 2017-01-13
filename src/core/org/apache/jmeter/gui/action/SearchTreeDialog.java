@@ -98,7 +98,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     private JButton replaceButton;
 
     public SearchTreeDialog() {
-        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), true); //$NON-NLS-1$
+        super((JFrame) null, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
         init();
     }
 
