@@ -343,7 +343,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
-            } catch (Exception e) {
+            } catch (Exception | NoClassDefFoundError e) { // NOSONAR See bug 60583
                 log.warn("Error loading result renderer:" + clazz, e);
             }
         }
