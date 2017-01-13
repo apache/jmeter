@@ -75,15 +75,15 @@ Before we dive into the step-by-step instructions, it's a good idea to define th
   <li>On the slave systems, go to <code>jmeter/bin</code> directory and execute
      <code>jmeter-server.bat</code> (<code>jmeter-server</code> on unix).
      <note> On windows, you should see a dos window appear with
-     <code>jre\<em>[version]</em>\bin\rmiregistry.exe</code>.
+     <code>jre\[version]\bin\rmiregistry.exe</code>.
      If this doesn't happen, it means either the environment settings are not right, or
-     there are multiple JRE installed on the system. Note: <code><em>[version]</em></code> would
+     there are multiple JRE installed on the system. Note: <code>[version]</code> would
      be the JRE version installed on the system.
      <ol>
        <li>Open <code>jmeter-server.bat</code> in a text editor</li>
        <li>go to line <code>44</code> and find <code>:setCP</code></li>
        <li>edit <code>START rmiregistry</code> to the full path. Example:
-           <source>START C:\<em>&lt;JAVA_HOME&gt;</em>\jre\bin\rmiregistry</source>
+           <source>START C:\&lt;JAVA_HOME&gt;\jre\bin\rmiregistry</source>
        </li>
     </ol>
     </note>
