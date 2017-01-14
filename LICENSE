@@ -255,7 +255,7 @@ For details, please see the files under: licenses/bin
 
 * asm-5.1.jar (?)
 * beanshell-2.0b5.jar (SPL)
-* dnsjava-2.1.7.jar (BSD)
+* dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
 * jcharts-0.7.5.jar (?)

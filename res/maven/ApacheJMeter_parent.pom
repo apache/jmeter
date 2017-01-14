@@ -73,7 +73,7 @@ under the License.
       <commons-math3.version>3.6.1</commons-math3.version>
       <commons-net.version>3.5</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
-      <dnsjava.version>2.1.7</dnsjava.version>
+      <dnsjava.version>2.1.8</dnsjava.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
       <freemarker.version>2.3.23</freemarker.version>
       <groovy-all.version>2.4.7</groovy-all.version>
