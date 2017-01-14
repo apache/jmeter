@@ -94,7 +94,7 @@ commons-pool2-2.4.2
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
-dnsjava-2.1.7
+dnsjava-2.1.8
 -----------------
 http://www.dnsjava.org/download/
 - DNSCacheManager
