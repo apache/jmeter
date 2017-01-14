@@ -76,7 +76,7 @@ under the License.
       <dnsjava.version>2.1.8</dnsjava.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
       <freemarker.version>2.3.23</freemarker.version>
-      <groovy-all.version>2.4.7</groovy-all.version>
+      <groovy-all.version>2.4.8</groovy-all.version>
       <hamcrest-core.version>1.3</hamcrest-core.version>
       <httpclient.version>4.5.2</httpclient.version>
       <httpcore.version>4.4.5</httpcore.version>

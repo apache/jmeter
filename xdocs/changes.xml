@@ -156,6 +156,7 @@ Fill in some detail.
 <ul>
     <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
+    <li>Updated to groovy 2.4.8 (from 2.4.7)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
