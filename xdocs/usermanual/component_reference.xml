@@ -1461,6 +1461,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
       The priority level of the message. There are ten priority levels from <code>0</code> (lowest) to <code>9</code> (highest). 
       If you do not specify a priority level, the default level is <code>4</code>. 
   </property>
+  <property name="Reconnect on error codes (regex)" required="No">Regular expression for JMSException error codes which force reconnection. If empty no reconnection will be done</property>
   <property name="Number of samples to aggregate" required="Yes">Number of samples to aggregate</property>
   <property name="Message source" required="Yes">Where to obtain the message:
   <dl>
@@ -1584,6 +1585,8 @@ The following table shows some values which may be useful when configuring JMS:
   Separator used to separate messages when there is more than one (related to setting Number of samples to aggregate).
   Note that <code>\n</code>, <code>\r</code>, <code>\t</code> are accepted.
   </property>
+  <property name="Reconnect on error codes (regex)" required="No">Regular expression for JMSException error codes which force reconnection. If empty no reconnection will be done</property>
+  <property name="Pause between errors (ms)" required="No">Pause in milliseconds that Subscriber will make when an error occurs</property>
 </properties>
 </component>
 
