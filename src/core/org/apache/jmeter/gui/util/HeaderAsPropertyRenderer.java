@@ -78,6 +78,19 @@ public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
      * @return the text
      */
     protected String getText(Object value, int row, int column) {
+        return getText(value, row, column, columnsMsgParameters);
+    }
+    
+    /**
+     * Get the text for the value as the translation of the resource name.
+     *
+     * @param value value for which to get the translation
+     * @param column index which column message parameters should be used
+     * @param row not used
+     * @param columnsMsgParameters
+     * @return the text
+     */
+    static String getText(Object value, int row, int column, Object[][] columnsMsgParameters) {
         if (value == null){
             return "";
         }

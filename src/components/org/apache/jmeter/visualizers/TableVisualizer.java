@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -37,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.JMeter;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -45,6 +46,7 @@ import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -58,7 +60,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
 
@@ -185,10 +187,10 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                     calc.addSample(res);
                     int count = calc.getCount();
                     TableSample newS = new TableSample(
-                            count, 
-                            res.getSampleCount(), 
-                            res.getStartTime(), 
-                            res.getThreadName(), 
+                            count,
+                            res.getSampleCount(),
+                            res.getStartTime(),
+                            res.getThreadName(),
                             res.getSampleLabel(),
                             res.getTime(),
                             res.isSuccessful(),
@@ -238,8 +240,22 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
+        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5, 
+                Comparator.nullsFirst(
+                        (ImageIcon o1, ImageIcon o2) -> {
+                            if (o1 == o2) {
+                                return 0;
+                            }
+                            if (o1 == imageSuccess) {
+                                return -1;
+                            }
+                            if (o1 == imageFailure) {
+                                return 1;
+                            }
+                            throw new IllegalArgumentException("Only success and failure images can be compared");
+                        })));
         JMeterUtils.applyHiDPI(table);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(table);
         RendererUtils.applyRenderers(table, RENDERERS);
 
         tableScrollPanel = new JScrollPane(table);
