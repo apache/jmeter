@@ -191,7 +191,7 @@ junit 4.12
 -----------
 - unit tests, JUnit sampler
 
-HttpComponents (HttpComponents Core 4.4.x and HttpComponents Client 4.5.x)
+HttpComponents (HttpComponents Core 4.4.6 and HttpComponents Client 4.5.2)
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler 
