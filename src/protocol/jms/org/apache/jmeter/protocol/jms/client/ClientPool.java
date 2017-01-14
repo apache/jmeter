@@ -80,4 +80,12 @@ public class ClientPool {
     public static Object get(Object key) {
         return client_map.get(key);
     }
+
+    /**
+     * Remove publisher from clients
+     * @param publisher {@link Publisher}
+     */
+    public static synchronized void removeClient(Publisher publisher) {
+        clients.remove(publisher);
+    }
 }
