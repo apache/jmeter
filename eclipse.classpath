@@ -92,7 +92,7 @@
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
