@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.swing.RowSorter;
@@ -88,7 +87,9 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         this.model = model;
 
         this.valueComparators = new Comparator<?>[this.model.getColumnCount()];
-        IntStream.range(0, this.valueComparators.length).forEach(i -> this.setValueComparator(i, null));
+        for (int i = 0; i < valueComparators.length; i++) {
+            this.setValueComparator(i, null);
+        }
 
         setFallbackComparator(null);
     }
@@ -330,6 +331,9 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         return Comparator.comparing(getValueAt, comparator);
     }
 
+    /**
+     * Sort table
+     */
     protected void sort() {
         if (comparator == null) {
             comparator = Stream.concat(
@@ -342,15 +346,23 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         }
 
         viewToModel.clear();
-        viewToModel.ensureCapacity(model.getRowCount());
-        IntStream.range(0, model.getRowCount()).mapToObj(i -> new Row(i)).forEach(viewToModel::add);
+        int rowCount = model.getRowCount();
+        viewToModel.ensureCapacity(rowCount);
+        for (int i = 0; i < rowCount; i++) {
+            viewToModel.add(new Row(i));
+        }
         Collections.sort(viewToModel, comparator);
 
         updateModelToView();
     }
 
+    /**
+     * fill in modelToView list with index of view
+     */
     protected void updateModelToView() {
         modelToView = new int[viewToModel.size()];
-        IntStream.range(0, viewToModel.size()).forEach(viewIndex -> modelToView[viewToModel.get(viewIndex).getIndex()] = viewIndex);
+        for(int i=0; i<viewToModel.size();i++) {
+            modelToView[viewToModel.get(i).getIndex()] = i;
+        }
     }
 }
