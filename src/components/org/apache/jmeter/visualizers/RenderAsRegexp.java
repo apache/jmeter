@@ -144,10 +144,11 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         return sb.toString();
 
     }
+
     /** {@inheritDoc} */
-   @Override
-public void renderResult(SampleResult sampleResult) {
-       clearData();
+    @Override
+    public void renderResult(SampleResult sampleResult) {
+        clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         regexpDataField.setText(response);
         regexpDataField.setCaretPosition(0);
