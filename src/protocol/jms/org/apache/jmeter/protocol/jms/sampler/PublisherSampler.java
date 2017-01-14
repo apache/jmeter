@@ -21,12 +21,15 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
@@ -139,6 +142,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      *
      */
     private void initClient() throws JMSException, NamingException {
+        configureIsReconnectErrorCode();
         publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), 
                 getProviderUrl(), getConnectionFactory(), getDestination(), isUseAuth(), getUsername(),
                 getPassword(), isDestinationStatic());
@@ -161,11 +165,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         if (publisher == null) {
             try {
                 initClient();
-            } catch (JMSException e) {
-                result.setResponseMessage(e.toString());
-                return result;
-            } catch (NamingException e) {
-                result.setResponseMessage(e.toString());
+            } catch (JMSException | NamingException e) {
+                handleError(result, e, false);
                 return result;
             }
         }
@@ -209,12 +210,44 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             result.setSamplerData(buffer.toString());
             result.setSampleCount(loop);
             result.setRequestHeaders(propBuffer.toString());
+        } catch (JMSException e) {
+            handleError(result, e, true);
         } catch (Exception e) {
-            result.setResponseMessage(e.toString());
+            handleError(result, e, false);
         } finally {
             result.sampleEnd();            
         }
         return result;
+    }
+
+    /**
+     * Fills in result and decide wether to reconnect or not depending on checkForReconnect 
+     * and underlying {@link JMSException#getErrorCode()}
+     * @param result {@link SampleResult}
+     * @param e {@link Exception}
+     * @param checkForReconnect if true and exception is a {@link JMSException}
+     */
+    private void handleError(SampleResult result, Exception e, boolean checkForReconnect) {
+        result.setSuccessful(false);
+        result.setResponseMessage(e.toString());
+
+        if (e instanceof JMSException) {
+            JMSException jms = (JMSException)e;
+
+            String errorCode = Optional.ofNullable(jms.getErrorCode()).orElse("");
+            if (checkForReconnect && publisher != null 
+                    && getIsReconnectErrorCode().test(errorCode)) {
+                ClientPool.removeClient(publisher);
+                IOUtils.closeQuietly(publisher);
+                publisher = null;
+            }
+
+            result.setResponseCode(errorCode);
+        }
+
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer)); // NOSONAR We're getting it to put it in ResponseData 
+        result.setResponseData(writer.toString(), "UTF-8");
     }
 
     private Map<String, Object> getMapContent() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {

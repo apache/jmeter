@@ -87,6 +87,12 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
     private final JLabeledTextField timeout = 
         new JLabeledTextField(JMeterUtils.getResString("jms_timeout")); //$NON-NLS-1$
 
+    private final JLabeledTextField jmsErrorPauseBetween =
+        new JLabeledTextField(JMeterUtils.getResString("jms_error_pause_between")); // $NON-NLS-1$
+
+    private final JLabeledTextField jmsErrorReconnectOnCodes =
+        new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
+
     private final JLabeledTextField separator = 
         new JLabeledTextField(JMeterUtils.getResString("jms_separator")); //$NON-NLS-1$
 
@@ -159,6 +165,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         sampler.setClientChoice(clientChoice.getText());
         sampler.setStopBetweenSamples(stopBetweenSamples.isSelected());
         sampler.setTimeout(timeout.getText());
+        sampler.setReconnectionErrorCodes(jmsErrorReconnectOnCodes.getText());
+        sampler.setPauseBetweenErrors(jmsErrorPauseBetween.getText());
         sampler.setDestinationStatic(destSetup.getText().equals(DEST_SETUP_STATIC));
         sampler.setSeparator(separator.getText());
     }
@@ -201,6 +209,9 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         mainPanel.add(choice);
         mainPanel.add(separator);
         
+        mainPanel.add(jmsErrorReconnectOnCodes);
+        mainPanel.add(jmsErrorPauseBetween);
+
         useProperties.addChangeListener(this);
         useAuth.addChangeListener(this);
     }
@@ -232,6 +243,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         timeout.setText(sampler.getTimeout());
         separator.setText(sampler.getSeparator());
         destSetup.setText(sampler.isDestinationStatic() ? DEST_SETUP_STATIC : DEST_SETUP_DYNAMIC);
+        jmsErrorReconnectOnCodes.setText(sampler.getReconnectionErrorCodes());
+        jmsErrorPauseBetween.setText(sampler.getPauseBetweenErrors());
     }
 
     @Override
@@ -257,6 +270,8 @@ public class JMSSubscriberGui extends AbstractSamplerGui implements ChangeListen
         clientChoice.setText(RECEIVE_RSC);
         stopBetweenSamples.setSelected(false);
         destSetup.setText(DEST_SETUP_STATIC);
+        jmsErrorReconnectOnCodes.setText("");
+        jmsErrorPauseBetween.setText("");
     }
 
     /**
