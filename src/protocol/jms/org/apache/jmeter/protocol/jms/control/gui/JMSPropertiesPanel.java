@@ -186,7 +186,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         // create the JTable that holds JMSProperty per row
         jmsPropertiesTable = new JTable(tableModel);
         JMeterUtils.applyHiDPI(jmsPropertiesTable);
-        jmsPropertiesTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(jmsPropertiesTable);
         jmsPropertiesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jmsPropertiesTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 

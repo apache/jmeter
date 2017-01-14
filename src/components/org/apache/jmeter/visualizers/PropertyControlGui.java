@@ -155,7 +155,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(table);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JMeterUtils.applyHiDPI(table);
         return makeScrollPane(table);

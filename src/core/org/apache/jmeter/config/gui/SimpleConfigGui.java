@@ -202,7 +202,7 @@ public class SimpleConfigGui extends AbstractConfigGui implements ActionListener
 
         table = new JTable(tableModel);
         JMeterUtils.applyHiDPI(table);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(table);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return makeScrollPane(table);
     }

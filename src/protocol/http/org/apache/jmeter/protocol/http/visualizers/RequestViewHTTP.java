@@ -382,7 +382,7 @@ public class RequestViewHTTP implements RequestView {
         tableParams.addMouseListener(new TextBoxDoubleClick(tableParams));
         TableColumn column = tableParams.getColumnModel().getColumn(0);
         column.setPreferredWidth(160);
-        tableParams.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(tableParams);
         RendererUtils.applyRenderers(tableParams, RENDERERS_PARAMS);
 
         // Set up the 3rd table 
@@ -391,8 +391,7 @@ public class RequestViewHTTP implements RequestView {
         tableHeaders.setToolTipText(JMeterUtils.getResString("textbox_tooltip_cell")); // $NON-NLS-1$
         tableHeaders.addMouseListener(new TextBoxDoubleClick(tableHeaders));
         setFirstColumnPreferredAndMaxWidth(tableHeaders);
-        tableHeaders.getTableHeader().setDefaultRenderer(
-                new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(tableHeaders);
         RendererUtils.applyRenderers(tableHeaders, RENDERERS_HEADERS);
 
         // Create the split pane

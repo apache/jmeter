@@ -265,7 +265,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         // create the JTable that holds auth per row
         authTable = new JTable(tableModel);
         JMeterUtils.applyHiDPI(authTable);
-        authTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(authTable);
         authTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         authTable.setPreferredScrollableViewportSize(new Dimension(100, 70));
 

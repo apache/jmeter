@@ -864,7 +864,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         includeModel = new PowerTableModel(new String[] { INCLUDE_COL }, new Class[] { String.class });
         includeTable = new JTable(includeModel);
         JMeterUtils.applyHiDPI(includeTable);
-        includeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(includeTable);
         includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -881,7 +881,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         excludeModel = new PowerTableModel(new String[] { EXCLUDE_COL }, new Class[] { String.class });
         excludeTable = new JTable(excludeModel);
         JMeterUtils.applyHiDPI(excludeTable);
-        excludeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(excludeTable);
         excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
 
         JPanel panel = new JPanel(new BorderLayout());

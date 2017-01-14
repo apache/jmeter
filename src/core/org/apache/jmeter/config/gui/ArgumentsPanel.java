@@ -616,7 +616,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     private Component makeMainPanel() {
         initializeTableModel();
         table = new JTable(tableModel);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRenderer.install(table);
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (this.background != null) {
             table.setBackground(this.background);

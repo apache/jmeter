@@ -319,8 +319,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
                 new Functor("getSentKBPerSecond") },            //$NON-NLS-1$
                 new Functor[] { null, null, null, null, null, null, null, null, null, null, null, null, null },
                 new Class[] { String.class, Long.class, Long.class, Long.class, Long.class, 
-                            Long.class, Long.class, Long.class, Long.class, String.class, 
-                            String.class, String.class, String.class});
+                            Long.class, Long.class, Long.class, Long.class, Double.class,
+                            Double.class, Double.class, Double.class});
     }
 
     // Column formats
@@ -469,7 +469,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         myJTable = new JTable(model);
         JMeterUtils.applyHiDPI(myJTable);
         // Fix centering of titles
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(getColumnsMsgParameters()));
+        HeaderAsPropertyRenderer.install(myJTable, getColumnsMsgParameters());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, getRenderers());
         myScrollPane = new JScrollPane(myJTable);

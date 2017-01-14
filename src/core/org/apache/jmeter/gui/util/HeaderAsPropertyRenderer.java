@@ -19,54 +19,52 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
+import java.io.Serializable;
 import java.text.MessageFormat;
 
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Renders items in a JTable by converting from resource names.
  */
-public class HeaderAsPropertyRenderer extends DefaultTableCellRenderer {
+public class HeaderAsPropertyRenderer implements TableCellRenderer, Serializable {
 
     private static final long serialVersionUID = 240L;
     private Object[][] columnsMsgParameters;
 
-    /**
-     * 
-     */
-    public HeaderAsPropertyRenderer() {
-        this(null);
+    private TableCellRenderer delegate;
+
+    public static void install(JTable table) {
+        install(table, null);
     }
-    
+
+    public static void install(JTable table, Object[][] columnsMsgParameters) {
+        TableCellRenderer defaultRenderer = table.getTableHeader().getDefaultRenderer();
+        if (!(defaultRenderer instanceof HeaderAsPropertyRenderer)) {
+            HeaderAsPropertyRenderer newRenderer = new HeaderAsPropertyRenderer(defaultRenderer, columnsMsgParameters);
+            table.getTableHeader().setDefaultRenderer(newRenderer);
+        }
+    }
+
     /**
      * @param columnsMsgParameters Optional parameters of i18n keys
      */
-    public HeaderAsPropertyRenderer(Object[][] columnsMsgParameters) {
-        super();
+    public HeaderAsPropertyRenderer(TableCellRenderer renderer, Object[][] columnsMsgParameters) {
+        this(renderer);
         this.columnsMsgParameters = columnsMsgParameters;
+    }
+
+    public HeaderAsPropertyRenderer(TableCellRenderer renderer) {
+        this.delegate = renderer;
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        if (table != null) {
-            JTableHeader header = table.getTableHeader();
-            if (header != null){
-                setForeground(header.getForeground());
-                setBackground(header.getBackground());
-                setFont(header.getFont());
-            }
-            setText(getText(value, row, column));
-            setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-            setHorizontalAlignment(SwingConstants.CENTER);
-        }
-        return this;
+        return delegate.getTableCellRendererComponent(table, getText(value, row, column), isSelected, hasFocus, row, column);
     }
 
     /**
