@@ -163,12 +163,12 @@ jsoup-1.10.2
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-ph-css-4.1.6
+ph-css-5.0.3
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-6.2.4
+ph-commons-8.6.0
 --------
 https://github.com/phax/ph-commons
 - CssParser
