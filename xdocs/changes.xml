@@ -159,6 +159,7 @@ Fill in some detail.
     <li>Updated to groovy 2.4.8 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
+    <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
