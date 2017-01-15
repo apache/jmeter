@@ -253,7 +253,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin
 
-* asm-5.1.jar (?)
+* asm-5.2.jar (BSD)
 * beanshell-2.0b5.jar (SPL)
 * dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
