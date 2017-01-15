@@ -60,7 +60,7 @@ Summary
 
 <ch_section>IMPORTANT CHANGE</ch_section>
 <p>
-Fill in some detail.
+JMeter now requires Java 8. Ensure you use most up to date version.
 </p>
 
 <ch_title>Core improvements</ch_title>
@@ -70,8 +70,7 @@ Fill in some detail.
 
 <ch_title>Documentation improvements</ch_title>
 <ul>
-<li>Documentation review and improvements for easier startup</li>
-<li>New <a href="usermanual/properties_reference.html">properties reference</a> documentation section</li>
+<li>PDF Documentations have been migrated to HTML user manual</li>
 </ul>
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
@@ -252,17 +251,6 @@ the total number of threads only applies to a locally run test, otherwise it wil
 </li>
 
 <li>
-Note that there is a <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6396599 ">bug in Java</a>
-on some Linux systems that manifests itself as the following error when running the test cases or JMeter itself:
-<source>
- [java] WARNING: Couldn't flush user prefs:
- java.util.prefs.BackingStoreException:
- java.lang.IllegalArgumentException: Not supported: indent-number
-</source>
-This does not affect JMeter operation. This issue is fixed since Java 7b05.
-</li>
-
-<li>
 Note that under some windows systems you may have this WARNING:
 <source>
 java.util.prefs.WindowsPreferences
@@ -270,12 +258,6 @@ WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
 x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
 </source>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
-</li>
-
-<li>
-With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry.
-This is a known Java bug, see Bug <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
-A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
 
 <li>
@@ -296,14 +278,14 @@ See  <bugzilla>56357</bugzilla> for details.
 <li>
 Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
 This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
-The fix is to use JDK7_u79, JDK8_u45 or later.
+The fix is to use JDK8_u45 or later.
 </li>
 
 <li>
 View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
 This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
 See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
-The fix is to use JDK9 b65 or later.
+The fix is to use JDK9 b65 or later (but be aware that Java 9 is not certified yet for JMeter).
 </li>
 
 <li>
