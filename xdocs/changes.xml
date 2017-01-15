@@ -163,6 +163,7 @@ Fill in some detail.
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
     <li>Updated to slf4j-api 1.7.22 (from 1.7.21)</li>
+    <li>Converted the old pdf tutorials to xml.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
