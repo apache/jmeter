@@ -43,12 +43,12 @@
         <item name="JMeter Wiki"         href="http://wiki.apache.org/jmeter"/>
          <item name="FAQ (Wiki)"             href="http://wiki.apache.org/jmeter/JMeterFAQ"/>
      </menu>
-     <menu name="Tutorials (PDF format)">
-        <item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.pdf"/>
-        <item name="Recording Tests"     href="/usermanual/jmeter_proxy_step_by_step.pdf"/>
-        <item name="JUnit Sampler"         href="/usermanual/junitsampler_tutorial.pdf"/>
-        <item name="Access Log Sampler"     href="/usermanual/jmeter_accesslog_sampler_step_by_step.pdf"/>
-        <item name="Extending JMeter"     href="/extending/jmeter_tutorial.pdf"/>
+     <menu name="Tutorials">
+        <item name="Distributed Testing" href="/usermanual/jmeter_distributed_testing_step_by_step.html"/>
+        <item name="Recording Tests"     href="/usermanual/jmeter_proxy_step_by_step.html"/>
+        <item name="JUnit Sampler"         href="/usermanual/junitsampler_tutorial.html"/>
+        <item name="Access Log Sampler"     href="/usermanual/jmeter_accesslog_sampler_step_by_step.html"/>
+        <item name="Extending JMeter"     href="/usermanual/jmeter_tutorial.html"/>
      </menu>
      <menu name="Community">
         <item name="Issue Tracking"      href="/issues.html"/>
