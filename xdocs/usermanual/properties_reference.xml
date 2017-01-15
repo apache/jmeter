@@ -1129,6 +1129,15 @@ log_level.org.apache.http.client=DEBUG
     and <code>Max</code>.<br/>
     Defaults to: <code>100</code>
 </property>
+<property name="backend_metrics_window">
+    Backend metrics window mode.
+    Possible values:
+    <ul>
+        <li><code>fixed</code> : fixed-size window</li>
+        <li><code>timed</code> : time boxed</li>
+    </ul>
+    Defaults to: <code>fixed</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.32 BeanShell configuration" anchor="beanshell">
