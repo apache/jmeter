@@ -47,7 +47,7 @@
 	<classpathentry kind="src" output="build/slf4j-logkit" path="src/slf4j-logkit"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
 	<classpathentry kind="lib" path="lib/accessors-smart-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/asm-5.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-4.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
