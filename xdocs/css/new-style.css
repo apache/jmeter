@@ -126,7 +126,6 @@ h1, h2, h3, h4, h5, .title {
 
 .menu {
   border: 1px solid lightgray;
-  box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.3);
   list-style: none;
   margin: 0.5em;
   padding: 0.5em;
@@ -222,8 +221,12 @@ figure {
   margin: 1em 2em;
 }
 
+figcaption {
+  font-family: "Merriweather";
+  font-style: italic;
+}
+
 figure>a>img, .screenshot>a>img {
-  box-shadow: 10px 10px 10px 0 rgba(50, 50, 50, 0.25);
   overflow: auto;
   width: auto;
   max-width: 100%;
@@ -341,9 +344,9 @@ table {
   display: table;
   margin-bottom: 1rem;
   width: 100%;
-  box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.1);
   padding: 0.1rem 0em 0.2rem 0em;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid lightgray;
 }
 
 .header>div {
@@ -376,8 +379,7 @@ table {
 }
 
 .pagelinks>li {
-  border: 1px solid #bbb;
-  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+  border: 1px solid lightgray;
   padding: 0.5em 1em;
 }
 
@@ -396,8 +398,7 @@ table {
 .section-index>li {
   margin: 1em;
   padding: 1em;
-  border: 1px solid #bbb;
-  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+  border: 1px solid lightgray;
 }
 
 .hidden {
@@ -411,7 +412,7 @@ table {
 
 .keysym {
   background-color: #f0f0f0;
-  border: 1px solid #bbb;
+  border: 1px solid lightgray;
   border-radius: 0.3rem;
   padding: 0.1rem;
   font-style: normal;
@@ -426,8 +427,8 @@ table {
   .nav {
   width: 100%;
   max-width: 100%;
-  border-bottom: 1px solid #808080;
-  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.2);
+  border-bottom: 1px solid lightgray;
+  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.1);
 }
 .header {
   box-shadow: none;
@@ -507,8 +508,8 @@ table {
     display: block;
     width: 100%;
     max-width: 100%;
-    border-bottom: 1px solid #808080;
-    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.2);
+    border-bottom: 1px solid lightgray;
+    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.1);
   }
   .menu {
     box-shadow: none;
