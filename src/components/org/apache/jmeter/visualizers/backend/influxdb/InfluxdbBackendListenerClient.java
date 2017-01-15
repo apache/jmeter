@@ -55,8 +55,6 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     
     // Name of the measurement
     private static final String DEFAULT_MEASUREMENT = "jmeter";
-    // Name of the application tested
-    private static String application = "";
 
     private static final String TAG_TRANSACTION = ",transaction=";
 
@@ -97,6 +95,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
     private String testTitle;
+    // Name of the application tested
+    private String application = "";
 
     private InfluxdbMetricsSender influxdbMetricsManager;
 
@@ -329,6 +329,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             scheduler.awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOGGER.error("Error waiting for end of scheduler");
+            Thread.currentThread().interrupt();
         }
         // Annotation of the end of the run ( usefull with Grafana )
         influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application,
