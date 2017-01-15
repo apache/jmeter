@@ -25,16 +25,16 @@ import org.apache.jmeter.util.JMeterUtils;
  * @since 3.2
  */
 public enum WindowMode {
-	/** Fixed-size sliding window. **/
-	FIXED,
-	/** Time boxed. **/
-	TIMED;
+    /** Fixed-size sliding window. **/
+    FIXED,
+    /** Time boxed. **/
+    TIMED;
 
-	/**
-	 * Gets defined JMeter mode.
-	 */
-	public static WindowMode get() {
-		String name = JMeterUtils.getPropDefault("backend_metrics_window_mode", FIXED.name());
-		return WindowMode.valueOf(name.toUpperCase());
-	}
+    /**
+     * Gets defined JMeter mode.
+     */
+    public static WindowMode get() {
+        String name = JMeterUtils.getPropDefault("backend_metrics_window_mode", FIXED.name());
+        return WindowMode.valueOf(name.toUpperCase());
+    }
 }

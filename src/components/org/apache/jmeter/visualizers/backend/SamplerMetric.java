@@ -65,14 +65,13 @@ public class SamplerMetric {
      * 
      */
     public SamplerMetric() {
-    	List<DescriptiveStatistics> stats = new ArrayList<>(4);
-    	stats.add(pctResponseStats);
-    	stats.addAll(windowedStats);
-
-    	// Limit to sliding window of SLIDING_WINDOW_SIZE values
-		for (DescriptiveStatistics stat : stats) {
-    		stat.setWindowSize(SLIDING_WINDOW_SIZE);
-    	}
+        List<DescriptiveStatistics> stats = new ArrayList<>(4);
+        stats.add(pctResponseStats);
+        stats.addAll(windowedStats);
+        // Limit to sliding window of SLIDING_WINDOW_SIZE values
+        for (DescriptiveStatistics stat : stats) {
+            stat.setWindowSize(SLIDING_WINDOW_SIZE);
+        }
     }
 
     /**
@@ -127,19 +126,19 @@ public class SamplerMetric {
      * Reset metric except for percentile related data
      */
     public synchronized void resetForTimeInterval() {
-    	switch (WINDOW_MODE) {
-    		case FIXED:
-                // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
-                // http://commons.apache.org/proper/commons-math/userguide/stat.html
-    			break;
-    		case TIMED:
-    			for (DescriptiveStatistics stat : windowedStats) {
-    				stat.clear();
-    			}
-    			break;
-			default: 
-			    // This cannot happen
-    	}
+        switch (WINDOW_MODE) {
+        case FIXED:
+            // We don't clear responsesStats nor usersStats as it will slide as per my understanding of 
+            // http://commons.apache.org/proper/commons-math/userguide/stat.html
+            break;
+        case TIMED:
+            for (DescriptiveStatistics stat : windowedStats) {
+                stat.clear();
+            }
+            break;
+        default: 
+            // This cannot happen
+        }
         successes = 0;
         failures = 0;
         hits = 0;
