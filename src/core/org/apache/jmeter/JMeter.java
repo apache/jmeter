@@ -326,7 +326,8 @@ public class JMeter implements JMeterPlugin {
     private void startGui(String testFile) {
         System.out.println("================================================================================");//NOSONAR
         System.out.println("Don't use GUI mode for load testing, only for Test creation and Test debugging !");//NOSONAR
-        System.out.println("For load testing, use NON GUI Mode & adapt Java Heap to your test requirements");//NOSONAR
+        System.out.println("For load testing, use NON GUI Mode (jmeter -n -t my_test.jmx -l log.jtl)");//NOSONAR
+        System.out.println("& adapt Java Heap to your test requirements");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
         String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
         try {
