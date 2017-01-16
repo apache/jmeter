@@ -68,6 +68,7 @@ public class AddToTree extends AbstractAction {
             TestElement testElement = guiPackage.createTestElement(((JComponent) e.getSource()).getName());
             JMeterTreeNode parentNode = guiPackage.getCurrentNode();
             JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+            guiPackage.getNamingPolicy().nameOnCreation(node);
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
         } catch (Exception err) {
             log.error("", err); // $NON-NLS-1$
