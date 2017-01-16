@@ -51,7 +51,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 
     private DefaultMutableTreeNode root;
 
-    private JTextPane base, secondary;
+    private JTextPane base;
+    private JTextPane secondary;
 
     public ComparisonVisualizer() {
         super();

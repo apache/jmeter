@@ -83,7 +83,7 @@ class SMIMEAssertion {
         checkForBouncycastle();
         AssertionResult res = new AssertionResult(name);
         try {
-            MimeMessage msg = null;
+            MimeMessage msg;
             final int msgPos = testElement.getSpecificMessagePositionAsInt();
             if (msgPos < 0){ // means counting from end
                 SampleResult[] subResults = response.getSubResults();

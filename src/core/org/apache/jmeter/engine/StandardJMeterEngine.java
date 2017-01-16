@@ -111,9 +111,23 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
     public StandardJMeterEngine(String host) {
         this.host = host;
         // Hack to allow external control
-        engine = this;
+        initSingletonEngine(this);
+    }
+    /**
+     * Set the shared engine
+     * @param standardJMeterEngine 
+     */
+    private static void initSingletonEngine(StandardJMeterEngine standardJMeterEngine) {
+        StandardJMeterEngine.engine = standardJMeterEngine; 
     }
     
+    /**
+     * set the shared engine to null
+     */
+    private static void resetSingletonEngine() {
+        StandardJMeterEngine.engine = null;
+    }
+
     public static void stopEngineNow() {
         if (engine != null) {// May be null if called from Unit test
             engine.stopTest(true);
@@ -307,7 +321,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         @Override
         public void run() {
             running = false;
-            engine = null;
+            resetSingletonEngine();
             if (now) {
                 tellThreadGroupsToStop();
                 pause(10L * countStillActiveThreads());

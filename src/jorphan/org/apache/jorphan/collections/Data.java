@@ -51,7 +51,8 @@ public class Data implements Serializable {
     private List<String> header;
 
     // saves current position in data List
-    private int currentPos, size;
+    private int currentPos; 
+    private int size;
 
     /**
      * Constructor - takes no arguments.
@@ -212,7 +213,8 @@ public class Data implements Serializable {
      *            ending index (for quicksort algorithm).
      */
     private void sortData(String column, int start, int end) {
-        int x = start, y = end - 1;
+        int x = start;
+        int y = end - 1;
         String basis = data.get(column).get((x + y) / 2).toString();
         if (x == y) {
             return;
@@ -354,7 +356,7 @@ public class Data implements Serializable {
      * @return True if there is another row. False if there are no more rows.
      */
     public boolean next() {
-        return (++currentPos < size);
+        return ++currentPos < size;
     }
 
     /**
@@ -395,7 +397,7 @@ public class Data implements Serializable {
      * @return True if there is another row. False if there are no more rows.
      */
     public boolean previous() {
-        return (--currentPos >= 0);
+        return --currentPos >= 0;
     }
 
     /**

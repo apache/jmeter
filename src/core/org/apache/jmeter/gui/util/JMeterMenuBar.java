@@ -517,10 +517,6 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         fileExit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
 
         fileMerge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
-        // file_merge.setAccelerator(
-        // KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
-        // Set default SAVE menu item to disabled since the default node that
-        // is selected is ROOT, which does not allow items to be inserted.
         fileMerge.setEnabled(false);
 
         fileMenu.add(fileClose);

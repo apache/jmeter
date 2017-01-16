@@ -357,7 +357,7 @@ public class LDAPSampler extends AbstractSampler {
      * @return a formatted string label describing this sampler
      */
     public String getLabel() {
-        return ("ldap://" + this.getServername() + ":" + getPort() + "/" + this.getRootdn());
+        return "ldap://" + this.getServername() + ":" + getPort() + "/" + this.getRootdn();
     }
 
     /**

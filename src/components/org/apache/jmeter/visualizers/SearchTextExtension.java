@@ -238,22 +238,10 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     }
 
     private Pattern createPattern(String textToFind) {
-        String textToFindQ = null;
-        if (regexpChkBox.isSelected()) {
-            textToFindQ = textToFind;
-        }
-        else {
-            // desactivate or not specials regexp char
-            textToFindQ = Pattern.quote(textToFind);
-        }
-        
-        Pattern pattern = null;
-        if (caseChkBox.isSelected()) {
-            pattern = Pattern.compile(textToFindQ);
-        } else {
-            pattern = Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
-        }
-        return pattern;
+        // desactivate or not specials regexp char
+        String textToFindQ = regexpChkBox.isSelected() ? textToFind : Pattern.quote(textToFind);        
+        return caseChkBox.isSelected() ? Pattern.compile(textToFindQ) :
+            Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
     }
     
     /**
@@ -318,7 +306,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 Matcher matcher = null;
                 try {
                     Document contentDoc = results.getDocument();
-                    String body = contentDoc.getText(lastPosition, (contentDoc.getLength() - lastPosition));
+                    String body = contentDoc.getText(lastPosition, contentDoc.getLength() - lastPosition);
                     matcher = pattern.matcher(body);
 
                     if ((matcher != null) && (matcher.find())) {

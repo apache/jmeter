@@ -46,7 +46,8 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 
     private final ArrayList<ChangeListener> mChangeListeners = new ArrayList<>(3);
 
-    private JButton delete, add;
+    private JButton delete;
+    private JButton add;
 
     /**
      * Default constructor, The label and the Text field are left empty.

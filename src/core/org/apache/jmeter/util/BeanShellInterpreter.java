@@ -55,7 +55,10 @@ public class BeanShellInterpreter {
 
     static {
         // Temporary copies, so can set the final ones
-        Method get = null, eval = null, set = null, source = null;
+        Method get = null;
+        Method eval = null;
+        Method set = null;
+        Method source = null;
         Class<?> clazz = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {

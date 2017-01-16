@@ -233,7 +233,8 @@ public class XPathUtil {
     }
 
     static class MyErrorHandler implements ErrorHandler {
-        private final boolean val, tol;
+        private final boolean val;
+        private final boolean tol;
 
         private final String type;
 

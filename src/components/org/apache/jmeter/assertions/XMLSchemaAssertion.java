@@ -101,9 +101,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
      */
     private void setSchemaResult(AssertionResult result, String xmlStr, String xsdFileName) {
         try {
-            // boolean toReturn = true;
-
-            // Document doc = null;
             DocumentBuilderFactory parserFactory = DocumentBuilderFactory.newInstance();
             parserFactory.setValidating(true);
             parserFactory.setNamespaceAware(true);
@@ -113,8 +110,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             // create a parser:
             DocumentBuilder parser = parserFactory.newDocumentBuilder();
             parser.setErrorHandler(new SAXErrorHandler(result));
-
-            // doc =
             parser.parse(new InputSource(new StringReader(xmlStr)));
             // if everything went fine then xml schema validation is valid
         } catch (SAXParseException e) {
@@ -189,7 +184,6 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
          */
         @Override
         public void fatalError(SAXParseException exception) throws SAXParseException {
-
             String msg = "fatal: " + errorDetails(exception);
             log.debug(msg);
             result.setFailureMessage(msg);
@@ -202,13 +196,9 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
          */
         @Override
         public void warning(SAXParseException exception) throws SAXParseException {
-
             String msg = "warning: " + errorDetails(exception);
             log.debug(msg);
             result.setFailureMessage(msg);
-            // result.setError(true); // TODO is this the correct strategy?
-            // throw exception; // allow assertion to pass
-
         }
     }
 }

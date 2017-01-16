@@ -123,9 +123,17 @@ public final class MenuFactory {
     private static final String[] MENU_PARENT_SAMPLER = new String[] {
         MenuFactory.CONTROLLERS };
 
-    private static final List<MenuInfo> timers, controllers, samplers, threads, 
-        fragments,configElements, assertions, listeners, nonTestElements,
-        postProcessors, preProcessors;
+    private static final List<MenuInfo> timers;
+    private static final List<MenuInfo> controllers;
+    private static final List<MenuInfo> samplers;
+    private static final List<MenuInfo> threads;
+    private static final List<MenuInfo> fragments;
+    private static final List<MenuInfo> configElements;
+    private static final List<MenuInfo> assertions;
+    private static final List<MenuInfo> listeners;
+    private static final List<MenuInfo> nonTestElements;
+    private static final List<MenuInfo> postProcessors;
+    private static final List<MenuInfo> preProcessors;
 
     static {
         threads = new LinkedList<>();
@@ -279,12 +287,19 @@ public final class MenuFactory {
         pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
-        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
+        pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
+                ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
+
+        pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
+                ActionNames.APPLY_NAMING_CONVENTION));
+        
         pop.add(makeMenus(MENU_PARENT_CONTROLLER,
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
+
+        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+                ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;

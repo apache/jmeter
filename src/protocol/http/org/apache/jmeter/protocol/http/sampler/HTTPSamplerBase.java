@@ -1476,14 +1476,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object clone() {
-        return (HTTPSamplerBase) super.clone();
-    }
-
-    /**
      * Iteratively download the redirect targets of a redirect response.
      * <p>
      * The returned result will contain one subsample for each request issued,

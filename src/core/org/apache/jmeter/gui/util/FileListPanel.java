@@ -127,7 +127,6 @@ public class FileListPanel extends JPanel implements ActionListener {
         browse.addActionListener(this);
         clear.addActionListener(this);
         delete.addActionListener(this);
-        //this.setPreferredSize(new Dimension(400,150));
     }
 
     /**

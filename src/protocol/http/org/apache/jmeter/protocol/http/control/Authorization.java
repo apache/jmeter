@@ -19,10 +19,11 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.Base64;
 
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
-import org.apache.jmeter.protocol.http.util.Base64Encoder;
 import org.apache.jmeter.testelement.AbstractTestElement;
 
 /**
@@ -131,6 +132,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public String toBasicHeader(){
-        return "Basic " + Base64Encoder.encode(getUser() + ":" + getPass());
+        return new String(Base64.getEncoder().encode((getUser() + ":" + getPass()).
+                getBytes(Charset.defaultCharset())), Charset.defaultCharset());
     }
 }

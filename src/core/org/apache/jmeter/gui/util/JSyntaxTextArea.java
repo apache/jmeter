@@ -38,7 +38,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 210L;
 
-    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
+    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
     private final boolean disableUndo;
     private static final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);

@@ -22,14 +22,15 @@ package org.apache.jmeter.protocol.http.util;
  * This class provides an implementation of Base64 encoding without relying on
  * the sun.* packages.
  *
- * @version $Revision$
+ * @deprecated as exists now in java.util.Base64, will be removed in next version 3.3
  */
+@Deprecated
 public final class Base64Encoder {
     private static final char[] pem_array = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
             83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
             112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 43, 47 };
 
-    private static final char eq = 61;
+    private static final char EQ = 61;
 
     /**
      * Private constructor to prevent instantiation.
@@ -45,7 +46,7 @@ public final class Base64Encoder {
         StringBuilder out = new StringBuilder();
         int bl = bs.length;
         for (int i = 0; i < bl; i += 3) {
-            out.append(encodeAtom(bs, i, (bl - i)));
+            out.append(encodeAtom(bs, i, bl - i));
         }
         return out.toString();
     }
@@ -57,8 +58,8 @@ public final class Base64Encoder {
             int k = 0;
             out.append(String.valueOf(pem_array[b1 >>> 2 & 63]));
             out.append(String.valueOf(pem_array[(b1 << 4 & 48) + (k >>> 4 & 15)]));
-            out.append(String.valueOf(eq));
-            out.append(String.valueOf(eq));
+            out.append(String.valueOf(EQ));
+            out.append(String.valueOf(EQ));
             return out.toString();
         }
         if (left == 2) {
@@ -68,7 +69,7 @@ public final class Base64Encoder {
             out.append(String.valueOf(pem_array[b2 >>> 2 & 63]));
             out.append(String.valueOf(pem_array[(b2 << 4 & 48) + (b4 >>> 4 & 15)]));
             out.append(String.valueOf(pem_array[(b4 << 2 & 60) + (l >>> 6 & 3)]));
-            out.append(String.valueOf(eq));
+            out.append(String.valueOf(EQ));
             return out.toString();
         }
         byte b3 = b[strt];

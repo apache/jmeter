@@ -224,9 +224,9 @@ The following software is provided under the Apache License V 2.0 (as above):
 * commons-net-3.5.jar
 * commons-pool2-2.4.2.jar
 * excalibur-logger-1.1.jar
-* groovy-all-2.4.7.jar
+* groovy-all-2.4.8.jar
 * httpclient-4.5.2.jar
-* httpcore-4.4.5.jar
+* httpcore-4.4.6.jar
 * jakarta-oro-2.0.8.jar
 * jms-1.1.1.jar
 * logkit-2.0.jar
@@ -247,28 +247,28 @@ The following software is provided under the Apache License V 2.0 (as above):
 * json-path-2.2.0.jar
 * json-smart-2.2.1.jar
 * mongo-java-driver-2.11.3.jar
-* ph-commons-6.2.4.jar
-* ph-css-4.1.6.jar
+* ph-commons-8.6.0.jar
+* ph-css-5.0.3.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
 For details, please see the files under: licenses/bin
 
-* asm-5.1.jar (?)
+* asm-5.2.jar (BSD)
 * beanshell-2.0b5.jar (SPL)
-* dnsjava-2.1.7.jar (BSD)
+* dnsjava-2.1.8.jar (BSD)
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
 * jcharts-0.7.5.jar (?)
-* jsoup-1.10.1.jar (MIT)
-* jodd-core-3.7.1.jar (Simplified BSD)
-* jodd-lagarto-3.7.1.jar (Simplified BSD)
-* jodd-log-3.7.1.jar (Simplified BSD)
-* jodd-props-3.7.1.jar (Simplified BSD)
+* jsoup-1.10.2.jar (MIT)
+* jodd-core-3.8.1.jar (Simplified BSD)
+* jodd-lagarto-3.8.1.jar (Simplified BSD)
+* jodd-log-3.8.1.jar (Simplified BSD)
+* jodd-props-3.8.1.jar (Simplified BSD)
 * jtidy-r938.jar (?)
 * junit-4.12.jar (BSD)
 * rhino-1.7.7.1.jar (MPL 2.0)
 * rsyntaxtextarea-2.6.0.jar (BSD)
-* slf4j-api-1.7.21.jar (MIT)
+* slf4j-api-1.7.22.jar (MIT)
 * xmlpull-1.1.3.1.jar (Public Domain)
 * xpp3-1.1.4c.jar (Indiana University Extreme! Lab Software License 1.1.1)
 * xstream-1.4.9.jar (BSD)

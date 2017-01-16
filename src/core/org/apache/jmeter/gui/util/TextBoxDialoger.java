@@ -56,7 +56,7 @@ public class TextBoxDialoger implements ActionListener {
     
     private static final String CLOSE_COMMAND = "close_dialog"; // $NON-NLS-1$
     
-    private static JDialog dialog;
+    private JDialog dialog;
     
     private JEditorPane textBox;
     

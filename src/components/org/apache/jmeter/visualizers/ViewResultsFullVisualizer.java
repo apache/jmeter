@@ -105,15 +105,15 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     protected static final String COMBO_CHANGE_COMMAND = "change_combo"; // $NON-NLS-1$
 
-    private static final String iconSize = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+    private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
 
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-                    "vrt/" + iconSize + "/security-high-2.png")); //$NON-NLS-1$ $NON-NLS-2$
+                    "vrt/" + ICON_SIZE + "/security-high-2.png")); //$NON-NLS-1$ $NON-NLS-2$
 
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-                    "vrt/" + iconSize + "/security-low-2.png")); //$NON-NLS-1$ $NON-NLS-2$
+                    "vrt/" + ICON_SIZE + "/security-low-2.png")); //$NON-NLS-1$ $NON-NLS-2$
 
     // Maximum size that we will display
     // Default limited to 10 megabytes
@@ -225,7 +225,6 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         log.debug("init() - pass");
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);
 
         leftSide = createLeftPanel();
         // Prepare the common tab
@@ -238,7 +237,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         JSplitPane searchAndMainSP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
                 new SearchTreePanel(root), mainSplit);
         searchAndMainSP.setOneTouchExpandable(true);
-        add(searchAndMainSP, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, makeTitlePanel(), searchAndMainSP);
+        splitPane.setOneTouchExpandable(true);
+        add(splitPane);
+
         // init right side with first render
         resultsRender.setRightSide(rightSide);
         resultsRender.init();
@@ -248,7 +250,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         lastSelectionEvent = e;
-        DefaultMutableTreeNode node = null;
+        DefaultMutableTreeNode node;
         synchronized (this) {
             node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
         }
@@ -341,7 +343,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 }
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
-            } catch (Exception e) {
+            } catch (Exception | NoClassDefFoundError e) { // NOSONAR See bug 60583
                 log.warn("Error loading result renderer:" + clazz, e);
             }
         }

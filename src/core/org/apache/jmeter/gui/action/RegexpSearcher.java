@@ -55,12 +55,9 @@ public class RegexpSearcher implements Searcher {
     public boolean search(List<String> textTokens) {
         for (String searchableToken : textTokens) {
             if(!StringUtils.isEmpty(searchableToken)) {
-                Matcher matcher = null;
-                if(caseSensitive) {
-                    matcher = pattern.matcher(searchableToken);
-                } else {
-                    matcher = pattern.matcher(searchableToken.toLowerCase());
-                }
+                Matcher matcher = caseSensitive ? 
+                    pattern.matcher(searchableToken) : 
+                    pattern.matcher(searchableToken.toLowerCase());
                 if(matcher.find()) {
                     return true;
                 }

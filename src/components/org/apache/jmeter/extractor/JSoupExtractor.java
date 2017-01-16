@@ -55,7 +55,7 @@ public class JSoupExtractor implements Extractor {
     public int extract(String expression, String attribute, int matchNumber,
             String inputString, List<String> result, int found,
             String cacheKey) {
-        Document document = null;
+        Document document;
         if (cacheKey != null) {
             document = (Document) 
                     JMeterContextService.getContext().getSamplerContext().get(CACHE_KEY_PREFIX+cacheKey);

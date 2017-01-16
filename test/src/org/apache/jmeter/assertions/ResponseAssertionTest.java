@@ -122,7 +122,56 @@ public class ResponseAssertionTest {
         assertion.addTestString("line 2");
         result = assertion.getResult(sample);
         assertPassed();
+        
+        assertion.clearTestStrings();
+        assertion.addTestString("line 2");
+        assertion.addTestString("NOTINSAMPLEDATA");
+        result = assertion.getResult(sample);
+        assertFailed();
+        
+        assertion.clearTestStrings();
+        assertion.setToOrType();
+        assertion.addTestString("line 2");
+        assertion.addTestString("NOTINSAMPLEDATA");
+        result = assertion.getResult(sample);
+        assertPassed();
+        assertion.unsetOrType();
+        
+        assertion.clearTestStrings();
+        assertion.setToOrType();
+        assertion.addTestString("NOTINSAMPLEDATA");
+        assertion.addTestString("line 2");
+        result = assertion.getResult(sample);
+        assertPassed();
+        assertion.unsetOrType();
+        
+        assertion.clearTestStrings();
+        assertion.setToOrType();
+        assertion.addTestString("NOTINSAMPLEDATA");
+        assertion.addTestString("NOTINSAMPLEDATA2");
+        result = assertion.getResult(sample);
+        assertFailed();
+        assertion.unsetOrType();
+        
+        assertion.clearTestStrings();
+        assertion.setToOrType();
+        assertion.setToNotType();
+        assertion.addTestString("line 2");
+        assertion.addTestString("NOTINSAMPLEDATA2");
+        result = assertion.getResult(sample);
+        assertPassed();
+        assertion.unsetOrType();
+        assertion.unsetNotType();
 
+        
+        assertion.clearTestStrings();
+        assertion.setToNotType();
+        assertion.addTestString("NOTINSAMPLEDATA");
+        result = assertion.getResult(sample);
+        assertPassed();
+        assertion.unsetNotType();
+        
+        
         assertion.clearTestStrings();
         assertion.addTestString("(?s)line \\d+.*EOF");
         result = assertion.getResult(sample);

@@ -43,7 +43,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -53,6 +53,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
@@ -63,7 +64,7 @@ import org.apache.jorphan.reflect.Functor;
  */
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
@@ -158,8 +159,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                     new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
                 new Functor[] { null, null, null, null, null, null, null, null , null, null, null },
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              String.class, String.class, String.class, String.class, String.class, String.class });
+                new Class[] { String.class, Integer.class, Long.class, Long.class, Long.class, 
+                        Double.class, Double.class, Double.class, Double.class, Double.class, Double.class });
         clearData();
         init();
     }
@@ -185,7 +186,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                Calculator row = null;
+                Calculator row;
                 synchronized (lock) {
                     row = tableRows.get(sampleLabel);
                     if (row == null) {
@@ -239,8 +240,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
+        myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);

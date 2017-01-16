@@ -44,4 +44,9 @@ public class JSR223PostProcessor extends JSR223TestElement implements Cloneable,
             log.error("Problem in JSR223 script "+getName(), e);
         }
     }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
 }

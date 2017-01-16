@@ -20,6 +20,7 @@ package org.apache.jmeter.testelement;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,14 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
 
     public void setFunctionalMode(boolean funcMode) {
         setProperty(new BooleanProperty(FUNCTIONAL_MODE, funcMode));
+        setGlobalFunctionalMode(funcMode);
+    }
+
+    /**
+     * Set JMeter in functional mode
+     * @param funcMode boolean functional mode
+     */
+    private static void setGlobalFunctionalMode(boolean funcMode) {
         functionalMode = funcMode;
     }
 
@@ -253,8 +262,13 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         // we set the classpath
         String[] paths = this.getTestPlanClasspathArray();
         for (String path : paths) {
-            NewDriver.addURL(path);
-            log.info("add " + path + " to classpath");
+            try {
+                NewDriver.addURL(path);
+                log.info("added " + path + " to classpath");
+            } catch (MalformedURLException e) {
+                // TODO Should we continue the test or fail ?
+                log.error("Error adding " + path + " to classpath", e);
+            }
         }
     }
 

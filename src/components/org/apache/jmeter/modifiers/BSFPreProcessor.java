@@ -49,4 +49,9 @@ public class BSFPreProcessor extends BSFTestElement implements Cloneable, PrePro
             }
         }
     }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
 }

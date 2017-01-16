@@ -494,8 +494,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (STRIP_PORT) {
             return true;
         }
-        return (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
-                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT);
+        return url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
+                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT;
     }
 
     /**

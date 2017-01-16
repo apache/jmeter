@@ -47,11 +47,11 @@ import org.apache.log.Logger;
 public class BinaryTCPClientImpl extends AbstractTCPClient {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final int eomInt = JMeterUtils.getPropDefault("tcp.BinaryTCPClient.eomByte", 1000); // $NON_NLS-1$
+    private static final int EOM_INT = JMeterUtils.getPropDefault("tcp.BinaryTCPClient.eomByte", 1000); // $NON_NLS-1$
 
     public BinaryTCPClientImpl() {
         super();
-        setEolByte(eomInt);
+        setEolByte(EOM_INT);
         if (useEolByte) {
             log.info("Using eomByte=" + eolByte);
         }

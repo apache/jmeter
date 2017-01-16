@@ -40,7 +40,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -48,6 +48,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 
 /**
@@ -59,7 +60,7 @@ import org.apache.jorphan.gui.RendererUtils;
  */
 public class StatVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
@@ -118,7 +119,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                SamplingStatCalculator row = null;
+                SamplingStatCalculator row;
                 final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
                 synchronized (lock) {
                     row = tableRows.get(sampleLabel);
@@ -171,11 +172,10 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
         mainPanel.add(makeTitlePanel());
 
-        // SortFilterModel mySortedModel =
-        // new SortFilterModel(myStatTableModel);
         myJTable = new JTable(model);
+        myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer(StatGraphVisualizer.getColumnsMsgParameters()));
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable, StatGraphVisualizer.getColumnsMsgParameters());
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, StatGraphVisualizer.getRenderers());
         myScrollPane = new JScrollPane(myJTable);
@@ -221,4 +221,3 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         }
     }
 }
-

@@ -61,7 +61,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     // Should we create our own copy of the RMI registry?
-    private static final boolean createServer =
+    private static final boolean CREATE_SERVER =
         JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
 
     private final Object LOCK = new Object();
@@ -109,7 +109,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                     + "\tCan be overridden by defining the system property 'java.rmi.server.hostname' - see jmeter-server script file");
         }
         log.debug("This = " + this);
-        if (createServer){
+        if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
                 LocateRegistry.createRegistry(this.rmiPort);

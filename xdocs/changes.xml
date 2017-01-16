@@ -60,7 +60,7 @@ Summary
 
 <ch_section>IMPORTANT CHANGE</ch_section>
 <p>
-Fill in some detail.
+JMeter now requires Java 8. Ensure you use most up to date version.
 </p>
 
 <ch_title>Core improvements</ch_title>
@@ -70,8 +70,7 @@ Fill in some detail.
 
 <ch_title>Documentation improvements</ch_title>
 <ul>
-<li>Documentation review and improvements for easier startup</li>
-<li>New <a href="usermanual/properties_reference.html">properties reference</a> documentation section</li>
+<li>PDF Documentations have been migrated to HTML user manual</li>
 </ul>
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
@@ -84,6 +83,8 @@ Fill in some detail.
 <ul>
     <li>JMeter requires now at least a JAVA 8 version to run.</li>
     <li>Process Sampler now returns error code 500 when an error occurs. It previously returned an empty value.</li>
+    <li>In <code>org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</code> 2 protected static fields (localhost and nonProxyHostSuffixSize) have been renamed to (LOCALHOST and NON_PROXY_HOST_SUFFIX_SIZE) 
+        to follow static fields naming convention</li>
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
@@ -96,6 +97,7 @@ Fill in some detail.
     <li>Drop deprecated class <code>org.apache.jmeter.reporters.FileReporter</code></li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.modifier.UserSequence</code></li>
     <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.parser.HTMLParseError</code></li>
+    <li><code>org.apache.jmeter.protocol.http.util.Base64Encode</code> has been deprecated, you can use <code>java.util.Base64</code> as a replacement</li>
 </ul>
 
 <!-- =================== Improvements =================== -->
@@ -105,10 +107,13 @@ Fill in some detail.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>59934</bug>Fix race-conditions in CssParser. Based on a patch by Jerome Loisel (loisel.jerome at gmail.com)</li>
+    <li><bug>60543</bug>HTTP Request / Http Request Defaults UX: Move to advanced panel Timeouts, Implementation, Proxy. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60548</bug>HTTP Request : Allow Upper Panel to be collapsed</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -118,11 +123,17 @@ Fill in some detail.
 <h3>Listeners</h3>
 <ul>
     <li><bug>60144</bug>View Results Tree : Add a more up to date Browser Renderer to replace old Render</li>
+    <li><bug>60542</bug>View Results Tree : Allow Upper Panel to be collapsed. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>52962</bug>Allow sorting by columns for View Results in Table, Summary Report, Aggregate Report and Aggregate Graph. Based on a <pr>245</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60590</bug>BackendListener : Add Influxdb BackendListenerClient implementation to JMeter. Partly based on <pr>246</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60591</bug>BackendListener : Add a time boxed sampling. Based on a <pr>237</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>60154</bug>User Parameters GUI: allow rows to be moved up &amp; down in the list. Contributed by Murdecai777 (https://github.com/Murdecai777).</li>
+    <li><bug>60507</bug>Added '<code>Or</code>' Function into ResponseAssertion. Based on a contribution from 忻隆 (298015902 at qq.com)</li>
+    <li><bug>58943</bug>Create a Better Think Time experience. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -140,12 +151,23 @@ Fill in some detail.
 <h3>General</h3>
 <ul>
     <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
+    <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60514</bug>Ability to apply a naming convention on Children of a Transaction Controller. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><bug>60415</bug>Drop support for Java 7.</li>
-    <li>Updated to xxx-1.1 (from 0.2)</li>
+    <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
+    <li>Updated to groovy 2.4.8 (from 2.4.7)</li>
+    <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
+    <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
+    <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
+    <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
+    <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
+    <li>Updated to slf4j-api 1.7.22 (from 1.7.21)</li>
+    <li>Updated to asm 5.2 (from 5.1)</li>
+    <li>Converted the old pdf tutorials to xml.</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -208,6 +230,10 @@ Fill in some detail.
 <li>(gavin at 16degrees.com.au)</li>
 <li>Thomas Schapitz (ts-nospam12 at online.de)</li>
 <li>Murdecai777 (https://github.com/Murdecai777)</li>
+<li>Logan Mauzaize (logan.mauzaize at gmail.com)</li>
+<li>Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
+<li>忻隆 (298015902 at qq.com)</li>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
@@ -230,17 +256,6 @@ the total number of threads only applies to a locally run test, otherwise it wil
 </li>
 
 <li>
-Note that there is a <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6396599 ">bug in Java</a>
-on some Linux systems that manifests itself as the following error when running the test cases or JMeter itself:
-<source>
- [java] WARNING: Couldn't flush user prefs:
- java.util.prefs.BackingStoreException:
- java.lang.IllegalArgumentException: Not supported: indent-number
-</source>
-This does not affect JMeter operation. This issue is fixed since Java 7b05.
-</li>
-
-<li>
 Note that under some windows systems you may have this WARNING:
 <source>
 java.util.prefs.WindowsPreferences
@@ -248,12 +263,6 @@ WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
 x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
 </source>
 The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
-</li>
-
-<li>
-With Oracle Java 7 and Mac Book Pro Retina Display, the JMeter GUI may look blurry.
-This is a known Java bug, see Bug <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8000629" >JDK-8000629</a>.
-A workaround is to use a Java 7 update 40 runtime which fixes this issue.
 </li>
 
 <li>
@@ -274,14 +283,14 @@ See  <bugzilla>56357</bugzilla> for details.
 <li>
 Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
 This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
-The fix is to use JDK7_u79, JDK8_u45 or later.
+The fix is to use JDK8_u45 or later.
 </li>
 
 <li>
 View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
 This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
 See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
-The fix is to use JDK9 b65 or later.
+The fix is to use JDK9 b65 or later (but be aware that Java 9 is not certified yet for JMeter).
 </li>
 
 <li>

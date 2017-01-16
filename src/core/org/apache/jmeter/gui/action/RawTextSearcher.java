@@ -50,7 +50,7 @@ public class RawTextSearcher implements Searcher {
      */
     @Override
     public boolean search(List<String> textTokens) {
-        boolean result = false;
+        boolean result;
         for (String searchableToken : textTokens) {
             if(!StringUtils.isEmpty(searchableToken)) {
                 if(caseSensitive) {

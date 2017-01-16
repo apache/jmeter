@@ -13,7 +13,7 @@ Which jars are used by which modules?
 ====================================
 [not exhaustive]
 
-asm-5.1 (org.ow2.asm)
+asm-5.2 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
@@ -94,7 +94,7 @@ commons-pool2-2.4.2
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
-dnsjava-2.1.7
+dnsjava-2.1.8
 -----------------
 http://www.dnsjava.org/download/
 - DNSCacheManager
@@ -103,7 +103,7 @@ excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
 --------------------
 - LoggingManager
 
-groovy-all-2.4.7
+groovy-all-2.4.8
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
@@ -126,22 +126,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-3.7.1
+jodd-core-3.8.1
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.7.1
+jodd-lagarto-3.8.1
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-3.7.1
+jodd-log-3.8.1
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-3.7.1
+jodd-props-3.8.1
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
@@ -158,17 +158,17 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.10.1
+jsoup-1.10.2
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-ph-css-4.1.6
+ph-css-5.0.3
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-6.2.4
+ph-commons-8.6.0
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -191,7 +191,7 @@ junit 4.12
 -----------
 - unit tests, JUnit sampler
 
-HttpComponents (HttpComponents Core 4.4.x and HttpComponents Client 4.5.x)
+HttpComponents (HttpComponents Core 4.4.6 and HttpComponents Client 4.5.2)
 -----------
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler 
@@ -221,7 +221,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.21
+slf4j-api-1.7.22
 ----------------
 http://www.slf4j.org/
 - jodd-core
