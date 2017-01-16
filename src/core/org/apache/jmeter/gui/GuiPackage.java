@@ -37,6 +37,8 @@ import javax.swing.SwingUtilities;
 import org.apache.jmeter.engine.util.ValueReplacer;
 import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.UndoHistory.HistoryListener;
+import org.apache.jmeter.gui.action.TreeNodeNamingPolicy;
+import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -68,6 +70,10 @@ import org.apache.log.Logger;
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
+
+    private static final String NAMING_POLICY_IMPLEMENTATION = 
+            JMeterUtils.getPropDefault("naming_policy_impl", //$NON-NLS-1$ 
+                    DefaultTreeNodeNamingPolicy.class.getName());
 
     /** Singleton instance. */
     private static GuiPackage guiPack;
@@ -653,6 +659,8 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
 
     private final List<Stoppable> stoppables = Collections.synchronizedList(new ArrayList<Stoppable>());
 
+    private TreeNodeNamingPolicy namingPolicy;
+
     /**
      * Sets the filepath of the current test plan. It's shown in the main frame
      * title and used on saving.
@@ -854,6 +862,23 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     @Override
     public void notifyChangeInHistory(UndoHistory history) {
         ((JMeterToolBar)toolbar).updateUndoRedoIcons(history.canUndo(), history.canRedo());
+    }
+
+    /**
+     * @return {@link TreeNodeNamingPolicy}
+     */
+    public TreeNodeNamingPolicy getNamingPolicy() {
+        if(namingPolicy == null) {
+            try {
+                Class<?> implementationClass = Class.forName(NAMING_POLICY_IMPLEMENTATION);
+                this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
+                
+            } catch (Exception ex) {
+                log.error("Failed to create configured naming policy:"+NAMING_POLICY_IMPLEMENTATION+", will use default one", ex);
+                this.namingPolicy = new DefaultTreeNodeNamingPolicy();
+            }
+        }
+        return namingPolicy;
     }
 
 }

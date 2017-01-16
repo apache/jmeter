@@ -290,6 +290,9 @@ public final class MenuFactory {
         pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
                 ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
 
+        pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
+                ActionNames.APPLY_NAMING_CONVENTION));
+        
         pop.add(makeMenus(MENU_PARENT_CONTROLLER,
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
