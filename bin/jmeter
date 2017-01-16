@@ -67,10 +67,7 @@ done
 
 PRGDIR=`dirname "$PRG"`
 
-# The following should be reasonably good values for most tests running
-# on Sun JVMs. Following is the analysis on which it is based. If it's total
-# gibberish to you, please study my article at
-# http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
+#
 # Original page has disappeared, it is now only available at: 
 # https://web.archive.org/web/20060614151434/http://www.atg.com/portal/myatg/developer?paf_dm=full&paf_gear_id=1100010&detailArticle=true&id=9606
 #
@@ -90,36 +87,18 @@ PRGDIR=`dirname "$PRG"`
 # system's memory availability:
 HEAP="-Xms512m -Xmx512m"
 
-# There's an awful lot of per-sample objects allocated during test run, so we
-# need a large eden to avoid too frequent scavenges -- you'll need to tune this
-# down proportionally if you modify the HEAP values above, below example is fine for 512m of Heap:
-# NEW="-XX:NewSize=128m -XX:MaxNewSize=128m"
-
-# This ratio and target have been proven OK in tests with a specially high
-# amount of per-sample objects (the HtmlParserHTMLParser tests):
-# SURVIVOR="-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50"
-
-# Think about it: trying to keep per-run objects in tenuring definitely
-# represents a cost, but where's the benefit? They won't disappear before
-# the test is over, and at that point we will no longer care about performance.
-#
-# So we will have JMeter do an explicit Full GC before starting a test run,
-# but then we won't make any effort (or spend any CPU) to keep objects
-# in tenuring longer than the life of per-sample objects -- which is hopefully
-# shorter than the period between two scavenges):
-#
-TENURING="-XX:MaxTenuringThreshold=2"
-
-CLASS_UNLOAD="-XX:+CMSClassUnloadingEnabled"
+#VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
 
 # Finally, some tracing to help in case things go astray:
-#DEBUG="-verbose:gc -XX:+PrintTenuringDistribution"
+GC_ALGO="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
+
+CLASS_UNLOAD="-XX:+CMSClassUnloadingEnabled"
 
 # Always dump on OOM (does not cost anything unless triggered)
 DUMP="-XX:+HeapDumpOnOutOfMemoryError"
 
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $NEW $SURVIVOR $TENURING $PERM $CLASS_UNLOAD"
+ARGS="$SERVER $DUMP $HEAP $CLASS_UNLOAD $VERBOSE_GC $GC_ALGO"
 
 java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"

@@ -153,6 +153,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
     <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60514</bug>Ability to apply a naming convention on Children of a Transaction Controller. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60593</bug>Switch to G1 GC algorithm</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
