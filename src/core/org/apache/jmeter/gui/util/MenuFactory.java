@@ -287,12 +287,16 @@ public final class MenuFactory {
         pop.add(MenuFactory.makeMenus(MENU_ADD_CONTROLLER,
                 JMeterUtils.getResString("add"),// $NON-NLS-1$
                 ActionNames.ADD));
-        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
-                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
-                ActionNames.ADD_PARENT));
+        pop.add(MenuFactory.makeMenuItemRes("add_think_times",// $NON-NLS-1$
+                ActionNames.ADD_THINK_TIME_BETWEEN_EACH_STEP));
+
         pop.add(makeMenus(MENU_PARENT_CONTROLLER,
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
+
+        pop.add(makeMenus(MENU_PARENT_CONTROLLER,
+                JMeterUtils.getResString("insert_parent"),// $NON-NLS-1$
+                ActionNames.ADD_PARENT));
         MenuFactory.addEditMenu(pop, true);
         MenuFactory.addFileMenu(pop);
         return pop;
