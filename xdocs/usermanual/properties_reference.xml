@@ -1791,6 +1791,23 @@ log_level.org.apache.http.client=DEBUG
     </ul>
     Defaults to: <code>1.0f</code>
 </property>
+<property name="think_time_creator.impl">
+    Default implementation that create the Timer structure to add to Test Plan. 
+    Implementation of interface org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator
+    Defaults to: <code><a href="../api/org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></a></code>
+</property>
+<property name="think_time_creator.default_timer_implementation">
+    Default Timer GUI class added to Test Plan by DefaultThinkTimeCreator
+    Defaults to: <code><a href="../api/org/apache/jmeter/timers/gui/UniformRandomTimerGui.html"><code>org.apache.jmeter.timers.gui.UniformRandomTimerGui</code></a></code>
+</property>
+<property name="think_time_creator.default_constant_pause">
+    Default constant pause of Timer
+    Defaults to: <code>1000</code>
+</property>
+<property name="think_time_creator.default_range">
+    Default range pause of Timer
+    Defaults to: <code>100</code>
+</property>
 </properties>
 <a href="#">^</a>
 </section>
