@@ -1793,12 +1793,12 @@ log_level.org.apache.http.client=DEBUG
 </property>
 <property name="think_time_creator.impl">
     Default implementation that create the Timer structure to add to Test Plan. 
-    Implementation of interface org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator
-    Defaults to: <code><a href="../api/org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></a></code>
+    Implementation of interface <a href="../api/org/apache/jmeter/gui/action/thinktime/ThinkTimeCreator.html"><code>org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator</code></a>
+    Defaults to: <a href="../api/org/apache/jmeter/thinktime/DefaultThinkTimeCreator.html"><code>org.apache.jmeter.thinktime.DefaultThinkTimeCreator</code></a>
 </property>
 <property name="think_time_creator.default_timer_implementation">
     Default Timer GUI class added to Test Plan by DefaultThinkTimeCreator
-    Defaults to: <code><a href="../api/org/apache/jmeter/timers/gui/UniformRandomTimerGui.html"><code>org.apache.jmeter.timers.gui.UniformRandomTimerGui</code></a></code>
+    Defaults to: <a href="../api/org/apache/jmeter/timers/gui/UniformRandomTimerGui.html"><code>org.apache.jmeter.timers.gui.UniformRandomTimerGui</code></a>
 </property>
 <property name="think_time_creator.default_constant_pause">
     Default constant pause of Timer
@@ -1811,6 +1811,28 @@ log_level.org.apache.http.client=DEBUG
 </properties>
 <a href="#">^</a>
 </section>
+
+<section name="&sect-num;.44 Naming Policy" anchor="naming_policy">
+<description>Timer are used to introduce think time in your plan.</description>
+<properties>
+<property name="naming_policy.prefix">
+    Prefix used when naming elements.
+    Defaults to empty prefix
+</property>
+<property name="naming_policy.suffix">
+    Prefix used when naming elements.
+    Defaults to empty suffix
+</property>
+<property name="naming_policy.impl">
+    Implementation of interface <a href="../api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.TreeNodeNamingPolicy</code></a>
+    Default implementation that create the Timer structure to add to Test Plan. 
+    Implementation of interface org.apache.jmeter.gui.action.thinktime.ThinkTimeCreator
+    Defaults to: <a href="../api/org/apache/jmeter/gui/action/impl/DefaultTreeNodeNamingPolicy.html"><code>org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy</code></a>
+</property>
+</properties>
+<a href="#">^</a>
+</section>
+
 <!-- 
 <section name="&sect-num;.10 Reports" anchor="Reports">
 <description>
