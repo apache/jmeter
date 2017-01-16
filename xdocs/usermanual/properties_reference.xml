@@ -1729,6 +1729,18 @@ log_level.org.apache.http.client=DEBUG
     Indicates whether only controller samples are displayed on graphs that support it.<br/>
     Defaults to: <code>false</code>
 </property>
+<property name="jmeter.reportgenerator.date_format">
+    Date format of report using by start_date and end_date properties.<br/>
+    Defaults to: <code>yyyyMMddHHmmss</code>
+</property>
+<property name="jmeter.reportgenerator.start_date">
+    Start date of report using date_format property.<br/>
+    Defaults to: nothing
+</property>
+<property name="jmeter.reportgenerator.end_date">
+    End date of report using date_format property.<br/>
+    Defaults to: nothing
+</property>
 </properties>
 </section>
 <section name="&sect-num;.41 Additional property files to load" anchor="properties">
