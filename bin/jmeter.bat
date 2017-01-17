@@ -82,7 +82,6 @@ rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:
 
 set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
 
-set CLASS_UNLOAD=-XX:+CMSClassUnloadingEnabled
 
 rem Always dump on OOM (does not cost anything unless triggered)
 set DUMP=-XX:+HeapDumpOnOutOfMemoryError
@@ -102,7 +101,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %CLASS_UNLOAD% %VERBOSE_GC% %GC_ALGO% %DDRAW%
+set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
