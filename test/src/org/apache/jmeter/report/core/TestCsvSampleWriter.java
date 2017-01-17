@@ -33,7 +33,10 @@ public class TestCsvSampleWriter {
     @Before
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
-        JMeterUtils.loadJMeterProperties("jmeter.properties");
+        if (JMeterUtils.getJMeterHome() == null) {
+            JMeterUtils.setJMeterHome(System.getenv("JMETER_HOME"));
+        }
+        JMeterUtils.loadJMeterProperties(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
     }
 
     SampleMetadata metadata = new SampleMetadata(',', "a", "b");
