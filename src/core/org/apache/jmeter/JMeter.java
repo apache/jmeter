@@ -329,22 +329,29 @@ public class JMeter implements JMeterPlugin {
         System.out.println("For load testing, use NON GUI Mode (jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder])");//NOSONAR
         System.out.println("& adapt Java Heap to your test requirements");//NOSONAR
         System.out.println("================================================================================");//NOSONAR
+        
+        SplashScreen splash = new SplashScreen();
+        splash.showScreen();
         String jMeterLaf = LookAndFeelCommand.getJMeterLaf();
         try {
             UIManager.setLookAndFeel(jMeterLaf);
         } catch (Exception ex) {
             log.warn("Could not set LAF to:"+jMeterLaf, ex);
         }
-
+        splash.setProgress(10);
         PluginManager.install(this, true);
 
         JMeterTreeModel treeModel = new JMeterTreeModel();
+        splash.setProgress(20);
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
         final ActionRouter instance = ActionRouter.getInstance();
         instance.populateCommandMap();
+        splash.setProgress(30);
         treeLis.setActionHandler(instance);
         GuiPackage.initInstance(treeLis, treeModel);
+        splash.setProgress(60);
         MainFrame main = new MainFrame(treeModel, treeLis);
+        splash.setProgress(80);
         ComponentUtil.centerComponentInWindow(main, 80);
         main.setVisible(true);
         instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
@@ -372,6 +379,8 @@ public class JMeter implements JMeterPlugin {
             jTree.setSelectionPath(path);
             FocusRequester.requestFocus(jTree);
         }
+        splash.setProgress(100);
+        splash.close();
     }
 
     /**
