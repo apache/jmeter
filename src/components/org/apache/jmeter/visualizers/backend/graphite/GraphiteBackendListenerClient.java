@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
@@ -108,7 +109,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String METRIC_ALL_HITS_COUNT        = METRIC_HITS_PREFIX+METRIC_SEPARATOR+METRIC_COUNT;
 
-    private static final long ONE_SECOND = 1L;
+    private static final long POLLING_RATE = JMeterUtils.getPropDefault("backend_polling_rate", 5);
     private static final int MAX_POOL_SIZE = 1;
     private static final String DEFAULT_PERCENTILES = "90;95;99";
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
@@ -306,7 +307,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
         }
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Don't change this as metrics are per second
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, ONE_SECOND, ONE_SECOND, TimeUnit.SECONDS);
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, POLLING_RATE, POLLING_RATE, TimeUnit.SECONDS);
     }
 
     @Override
