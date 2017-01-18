@@ -330,16 +330,16 @@ public class FileServer {
         return readLine(filename, recycle, false);
     }
    /**
-     * Get the next line of the named file.
+     * Get the next line of the named file
      *
      * @param filename the filename or alias that was used to reserve the file
      * @param recycle - should file be restarted at EOF?
-     * @param firstLineIsNames - 1st line is fields names
+     * @param ignoreFirstLine - Ignore first line
      * @return String containing the next line in the file (null if EOF reached and not recycle)
      * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public synchronized String readLine(String filename, boolean recycle, 
-            boolean firstLineIsNames) throws IOException {
+            boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
@@ -353,7 +353,7 @@ public class FileServer {
                 reader.close();
                 reader = createBufferedReader(fileEntry);
                 fileEntry.inputOutputObject = reader;
-                if (firstLineIsNames) {
+                if (ignoreFirstLine) {
                     // read first line and forget
                     reader.readLine();//NOSONAR
                 }
@@ -369,24 +369,33 @@ public class FileServer {
      * 
      * @param alias the file name or alias
      * @param recycle whether the file should be re-started on EOF
-     * @param firstLineIsNames whether the file contains a file header
+     * @param ignoreFirstLine whether the file contains a file header which will be ignored
      * @param delim the delimiter to use for parsing
      * @return the parsed line, will be empty if the file is at EOF
      * @throws IOException when reading of the aliased file fails, or the file was not reserved properly
      */
-    public synchronized String[] getParsedLine(String alias, boolean recycle, boolean firstLineIsNames, char delim) throws IOException {
-        BufferedReader reader = getReader(alias, recycle, firstLineIsNames);
+    public synchronized String[] getParsedLine(String alias, boolean recycle, boolean ignoreFirstLine, char delim) throws IOException {
+        BufferedReader reader = getReader(alias, recycle, ignoreFirstLine);
         return CSVSaveService.csvReadFile(reader, delim);
     }
 
-    private BufferedReader getReader(String alias, boolean recycle, boolean firstLineIsNames) throws IOException {
+    /**
+     * Return BufferedReader handling close if EOF reached and recycle is true 
+     * and ignoring first line if ignoreFirstLine is true
+     * @param alias String alias
+     * @param recycle Recycle at eof
+     * @param ignoreFirstLine Ignore first line
+     * @return {@link BufferedReader}
+     * @throws IOException
+     */
+    private BufferedReader getReader(String alias, boolean recycle, boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(alias);
         if (fileEntry != null) {
             BufferedReader reader;
             if (fileEntry.inputOutputObject == null) {
                 reader = createBufferedReader(fileEntry);
                 fileEntry.inputOutputObject = reader;
-                if (firstLineIsNames) {
+                if (ignoreFirstLine) {
                     // read first line and forget
                     reader.readLine(); //NOSONAR
                 }                
@@ -401,7 +410,7 @@ public class FileServer {
                         reader.close();
                         reader = createBufferedReader(fileEntry);
                         fileEntry.inputOutputObject = reader;
-                        if (firstLineIsNames) {
+                        if (ignoreFirstLine) {
                             // read first line and forget
                             reader.readLine(); //NOSONAR
                         }                
