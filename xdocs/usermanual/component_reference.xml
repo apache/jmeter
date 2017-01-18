@@ -5605,7 +5605,7 @@ generate the template string, and store the result into the given variable name.
         <property name="Template" required="Yes">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '<code>$1$</code>' to refer to
         group <code>1</code>, '<code>$2$</code>' to refer to group <code>2</code>, etc. <code>$0$</code> refers to whatever the entire expression matches.</property>
-        <property name="Match No." required="Yes">Indicates which match to use.  The regular expression may match multiple times.  
+        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The regular expression may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number N means to select the n<sup>th</sup> match.</li>
@@ -5719,7 +5719,7 @@ extracting the node as text or attribute value and store the result into the giv
             If empty this is the equivalent of <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">Element#text()</a> function for JSoup if not value is set for attribute.
             <figure width="825" height="275" image="css_extractor_noattr.png">CSS Extractor with no attribute set</figure>
         </property>
-        <property name="Match No." required="Yes">Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
+        <property name="Match No. (0 for Random)" required="Yes">Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number <code>N</code> means to select the n<sup>th</sup> match.</li>
@@ -5815,6 +5815,13 @@ extracting the node as text or attribute value and store the result into the giv
     </property>
     <property name="Reference Name" required="Yes">The name of the JMeter variable in which to store the result.</property>
     <property name="XPath Query" required="Yes">Element query in XPath language. Can return more than one match.</property>
+    <property name="Match No. (0 for Random)" required="No">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <ul>
+        <li><code>0</code> : means random</li>
+        <li><code>-1</code> means extract all results (default value), they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>
+        <li><code>X</code> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+    </ul>
+    </property>
     <property name="Default Value" required="">Default value returned when no match found. 
     It is also returned if the node has no value and the fragment option is not selected.</property>
    </properties>
@@ -6051,7 +6058,7 @@ It will allow you to extract in a very easy way text content, see <a href="http:
     <property name="Variable Names" required="Yes">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</property>
     <property name="JSON Path Expressions" required="Yes">Semi-colon separated JSON-PATH expressions (must match number of variables)</property>
     <property name="Default Values" required="No">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</property>
-    <property name="Match Numbers" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <property name="Match No. (0 for Random)" required="No">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
         <li><code>0</code> : means random (Default Value)</li>
         <li><code>-1</code> means extract all results, they will be named as <code><em>&lt;variable name&gt;</em>_N</code> (where <code>N</code> goes from 1 to Number of results)</li>

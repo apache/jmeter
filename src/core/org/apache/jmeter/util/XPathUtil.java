@@ -309,12 +309,34 @@ public class XPathUtil {
     public static void putValuesForXPathInList(Document document, 
             String xPathQuery,
             List<String> matchStrings, boolean fragment) throws TransformerException {
+        putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
+    }
+    
+    
+    /**
+     * Put in matchStrings results of evaluation
+     * @param document XML document
+     * @param xPathQuery XPath Query
+     * @param matchStrings List of strings that will be filled
+     * @param fragment return fragment
+     * @param matchNumber match number
+     * @throws TransformerException when the internally used xpath engine fails
+     */
+    public static void putValuesForXPathInList(Document document, 
+            String xPathQuery,
+            List<String> matchStrings, boolean fragment, 
+            int matchNumber) throws TransformerException {
         String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
             NodeList matches = xObject.nodelist();
             int length = matches.getLength();
+            int indexToMatch = matchNumber;
+            if(matchNumber == 0 && length>0) {
+                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+            } 
+            boolean storeAllValues = matchNumber < 0;
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
                 if ( match instanceof Element){
@@ -332,7 +354,9 @@ public class XPathUtil {
                 } else {
                    val = match.getNodeValue();
                 }
-                matchStrings.add(val);
+                if(storeAllValues || indexToMatch == (i+1)) {
+                    matchStrings.add(val);
+                }
             }
         } else if (objectType == XObject.CLASS_NULL
                 || objectType == XObject.CLASS_UNKNOWN
