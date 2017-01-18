@@ -3606,6 +3606,10 @@ By default, a Graphite implementation is provided.
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
   The names must be separated by the delimiter character. They can be quoted using double-quotes.
   </property>
+  <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
+  Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
+  if Variable Names is empty the first line must contain the headers.
+  </property>
   <property name="Delimiter" required="Yes">Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</property>
