@@ -336,10 +336,12 @@ public class XPathUtil {
             if(matchNumber == 0 && length>0) {
                 indexToMatch = JMeterUtils.getRandomInt(length)+1;
             } 
-            boolean storeAllValues = matchNumber < 0;
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
-                if ( match instanceof Element){
+                if(indexToMatch >= 0 && indexToMatch != (i+1)) {
+                    continue;
+                }
+                if ( match instanceof Element ){
                     if (fragment){
                         val = getValueForNode(match);
                     } else {
@@ -354,9 +356,7 @@ public class XPathUtil {
                 } else {
                    val = match.getNodeValue();
                 }
-                if(storeAllValues || indexToMatch == (i+1)) {
-                    matchStrings.add(val);
-                }
+                matchStrings.add(val);
             }
         } else if (objectType == XObject.CLASS_NULL
                 || objectType == XObject.CLASS_UNKNOWN
