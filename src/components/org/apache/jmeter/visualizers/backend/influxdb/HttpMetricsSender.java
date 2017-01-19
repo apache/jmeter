@@ -23,7 +23,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -52,7 +51,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private List<MetricTuple> metrics = new ArrayList<>();
 
     private HttpPost httpRequest;
-    private final CountDownLatch latch = new CountDownLatch(1);
+    
     private CloseableHttpAsyncClient httpClient;
 
     private URL url;
@@ -117,9 +116,10 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                     httpRequest = createRequest(url);
                 }
                 StringBuilder sb = new StringBuilder(metrics.size()*20);
+                String timestamp = System.currentTimeMillis()  + "000000";
                 for (MetricTuple metric : metrics) {
                     // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
-                    sb.append(metric.measurement + metric.tag + " " + metric.field + " " + System.currentTimeMillis()  + "000000\n");
+                    sb.append(metric.measurement + metric.tag + " " + metric.field + timestamp + "\n");
                 }
 
                 StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
@@ -146,21 +146,19 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                                 LOG.debug("Error writing metrics to influxDB Url: "+ url+", responseCode: " + code);
                             }
                         }
-                        latch.countDown();
                     }
 
                     public void failed(final Exception ex) {
-                        latch.countDown();
                         LOG.error("failed to connect to influxDB server : " + ex.getMessage());
                     }
 
                     public void cancelled() {
-                        latch.countDown();
+
                     }
 
                 });
-                latch.await();
-            }catch (InterruptedException|URISyntaxException ex ) {
+               
+            }catch (URISyntaxException ex ) {
                 LOG.error(ex.getMessage());
             }
         }
