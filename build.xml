@@ -426,6 +426,11 @@
     <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
+    <include name="${lib.dir}/${jcl-over-slf4j.jar}"/>
+    <include name="${lib.dir}/${log4j-api.jar}"/>
+    <include name="${lib.dir}/${log4j-core.jar}"/>
+    <include name="${lib.dir}/${log4j-1.2-api.jar}"/>
+    <include name="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <include name="${lib.dir}/${jtidy.jar}"/>
     <include name="${lib.dir}/${tika-core.jar}"/>
     <include name="${lib.dir}/${tika-parsers.jar}"/>
@@ -503,6 +508,7 @@
     <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-api.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
