@@ -199,6 +199,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <ul>
     <li><bug>60438</bug><pr>235</pr>Clear old variables before extracting new ones in JSON Extractor.
     Based on a patch by Qi Chen (qi.chensh at ele.me)</li>
+    <li><bug>60607</bug>DNS Cache Manager configuration is ignored</li>
 </ul>
 
 <h3>Functions</h3>

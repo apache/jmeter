@@ -347,5 +347,12 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
         return this.pool.getStats(route);
     }
 
+    /**
+     * @return the dnsResolver
+     */
+    protected DnsResolver getDnsResolver() {
+        return dnsResolver;
+    }
+
 }
 
