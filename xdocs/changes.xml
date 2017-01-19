@@ -143,6 +143,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 
 <h3>I18N</h3>
 <ul>
+    <li>Improve translation "save_as" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
