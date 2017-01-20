@@ -2713,6 +2713,10 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.name" value="TEST_HTTPS"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
+  	
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="Bug60607"/>
+    </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->

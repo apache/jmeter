@@ -72,7 +72,7 @@ public class MeasuringConnectionManager extends JMeterPoolingClientConnectionMan
     @Override
     protected ClientConnectionOperator createConnectionOperator(
             SchemeRegistry schreg) {
-        return new JMeterClientConnectionOperator(schreg);
+        return new JMeterClientConnectionOperator(schreg, getDnsResolver());
     }
 
 
