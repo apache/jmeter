@@ -244,9 +244,10 @@ public final class NewDriver {
             System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT));
         } else {
             Thread.currentThread().setContextClassLoader(loader);
-            if (System.getProperty("log4j.configuration") == null) {// $NON-NLS-1$ $NON-NLS-2$
-                File conf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j.conf");// $NON-NLS-1$ $NON-NLS-2$
-                System.setProperty("log4j.configuration", "file:" + conf);
+
+            if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$ $NON-NLS-2$
+                File conf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+                System.setProperty("log4j.configurationFile", "file:" + conf);
             }
     
             try {
