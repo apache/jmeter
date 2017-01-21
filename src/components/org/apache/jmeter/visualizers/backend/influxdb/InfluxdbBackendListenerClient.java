@@ -296,7 +296,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
         influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
                         "text=\"" +  AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(testTitle + " started") + "\"" );
+                        .fieldToStringValue(testTitle + " started") + "\"" 
+                        + ",tags=\"" + AbstractInfluxdbMetricsSender
+                        .fieldToStringValue(application) + "\"");
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
         // Start scheduler and put the pooling ( 5 seconds by default )
@@ -336,9 +338,13 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // Annotation of the end of the run ( usefull with Grafana )
         // Never double or single quotes in influxdb except for string field
         // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=JMETER", 
-                        "text=\"" +  AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(testTitle + " ended") + "\"" );
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
+                "text=\"" +  AbstractInfluxdbMetricsSender
+                .fieldToStringValue(testTitle + " ended") + "\""
+                + ",tags=\"" + AbstractInfluxdbMetricsSender
+                .fieldToStringValue(application) + "\"");
+
+
         
         // Send last set of data before ending
         sendMetrics();
