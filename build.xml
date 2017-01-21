@@ -1644,6 +1644,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.groovy"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.properties"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="jaas.conf"/>
@@ -1653,6 +1654,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.dtd"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
   </target>
 
