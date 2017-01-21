@@ -23,6 +23,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -59,6 +63,8 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private CloseableHttpAsyncClient httpClient;
 
     private URL url;
+
+    private Future<HttpResponse> lastRequest;
 
     HttpMetricsSender() {
         super();
@@ -147,6 +153,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                         .append(metric.tag)
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
+                        .append(" ")
                         .append(timestamp) 
                         .append("\n"); //$NON-NLS-1$
                 }
@@ -154,7 +161,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
                 
                 httpRequest.setEntity(entity);
-                httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
+                lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
 
                     public void completed(final HttpResponse response) {
                         int code = response.getStatusLine().getStatusCode();
@@ -178,11 +185,11 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                     }
 
                     public void failed(final Exception ex) {
-                        LOG.error("failed to connect to influxDB server : " + ex.getMessage());
+                        LOG.error("failed to send data to influxDB server : " + ex.getMessage());
                     }
 
                     public void cancelled() {
-
+                        LOG.warn("Request to influxDB server was cancelled");
                     }
 
                 });
@@ -202,6 +209,12 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      */
     @Override
     public void destroy() {
+        // Give some time to send last metrics before shutting down
+        try {
+            lastRequest.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOG.error("Error waiting for last request to be send to InfluxDB", e);
+        }
         if(httpRequest != null) {
             httpRequest.abort();
         }
