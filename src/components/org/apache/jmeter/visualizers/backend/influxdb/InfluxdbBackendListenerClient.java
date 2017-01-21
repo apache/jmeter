@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
@@ -81,7 +82,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final String TAG_ALL = "all";
 
     private static final String CUMULATED_METRICS = "all";
-    private static final long FIVE_SECOND = 5L;
+    private static final long POLLING_RATE = JMeterUtils.getPropDefault("backend_polling_rate", 5);
     private static final int MAX_POOL_SIZE = 1;
     private static final String SEPARATOR = ";"; //$NON-NLS-1$
     private static final Object LOCK = new Object();
@@ -123,7 +124,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 if (entry.getKey().equals(CUMULATED_METRICS)) {
                     addCumulatedMetrics(metric);
                 } else {
-                    addMetrics(AbstractInfluxdbMetricsSender.toStringValue(entry.getKey()), metric);
+                    addMetrics(AbstractInfluxdbMetricsSender.tagToStringValue(entry.getKey()), metric);
                 }
                 // We are computing on interval basis so cleanup
                 metric.resetForTimeInterval();
@@ -259,10 +260,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         influxdbUrl = context.getParameter("influxdbUrl");
         summaryOnly = context.getBooleanParameter("summaryOnly", false);
         samplersRegex = context.getParameter("samplersRegex", "");
-        application = AbstractInfluxdbMetricsSender.toStringValue(context.getParameter("application", ""));
+        application = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("application", ""));
         measurement = AbstractInfluxdbMetricsSender
-                .toStringValue(context.getParameter("measurement", DEFAULT_MEASUREMENT));
-        testTitle = AbstractInfluxdbMetricsSender.toStringValue(context.getParameter("testTitle", "Test"));
+                .tagToStringValue(context.getParameter("measurement", DEFAULT_MEASUREMENT));
+        testTitle = context.getParameter("testTitle", "Test");
         String percentilesAsString = context.getParameter("percentiles", "");
         String[] percentilesStringArray = percentilesAsString.split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
@@ -273,11 +274,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             if (!StringUtils.isEmpty(percentilesStringArray[i].trim())) {
                 try {
                     Float percentileValue = Float.valueOf(percentilesStringArray[i].trim());
-                    okPercentiles.put(AbstractInfluxdbMetricsSender.toStringValue(format.format(percentileValue)),
+                    okPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
                             percentileValue);
-                    koPercentiles.put(AbstractInfluxdbMetricsSender.toStringValue(format.format(percentileValue)),
+                    koPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
                             percentileValue);
-                    allPercentiles.put(AbstractInfluxdbMetricsSender.toStringValue(format.format(percentileValue)),
+                    allPercentiles.put(AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue)),
                             percentileValue);
 
                 } catch (Exception e) {
@@ -290,15 +291,16 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         influxdbMetricsManager.setup(influxdbUrl);
         samplersToFilter = Pattern.compile(samplersRegex);
 
-        // Annotation of the start of the run
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application, 
-                "title=\"JMETER\""
-                        +",text=\"" + testTitle + " started\""
-                        + ",tags=\"" + application + "\"");
+        // Annotation of the start of the run ( usefull with Grafana )
+        // Never double or single quotes in influxdb except for string field
+        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=JMETER", 
+                        "text=\"" +  AbstractInfluxdbMetricsSender
+                        .fieldToStringValue(testTitle + " started") + "\"" );
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start scheduler and put the pooling to 5 seconds
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, FIVE_SECOND, FIVE_SECOND, TimeUnit.SECONDS);
+        // Start scheduler and put the pooling ( 5 seconds by default )
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, POLLING_RATE, POLLING_RATE, TimeUnit.SECONDS);
 
     }
 
@@ -332,10 +334,12 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             Thread.currentThread().interrupt();
         }
         // Annotation of the end of the run ( usefull with Grafana )
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application,
-                "title=\"JMETER\""
-                        +",text=\"" + testTitle + " ended\""
-                        + ",tags=\"" + application + "\"");
+        // Never double or single quotes in influxdb except for string field
+        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=JMETER", 
+                        "text=\"" +  AbstractInfluxdbMetricsSender
+                        .fieldToStringValue(testTitle + " ended") + "\"" );
+        
         // Send last set of data before ending
         sendMetrics();
 
