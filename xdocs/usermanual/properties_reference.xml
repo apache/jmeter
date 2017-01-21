@@ -1129,7 +1129,7 @@ log_level.org.apache.http.client=DEBUG
     and <code>Max</code>.<br/>
     Defaults to: <code>100</code>
 </property>
-<property name="backend_metrics_window">
+<property name="backend_metrics_window_mode">
     Backend metrics window mode.
     Possible values:
     <ul>
