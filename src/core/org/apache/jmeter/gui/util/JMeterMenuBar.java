@@ -81,8 +81,6 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
     private JMenuItem fileExit;
 
-    private JMenuItem fileClose;
-
     private JMenu editMenu;
 
     private JMenu editAdd;
@@ -512,14 +510,14 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         templates = makeMenuItemRes("template_menu", 'T', ActionNames.TEMPLATES); //$NON-NLS-1$
         templates.setEnabled(true);
 
-        fileClose = makeMenuItemRes("menu_close", 'C', ActionNames.CLOSE, KeyStrokes.CLOSE); //$NON-NLS-1$
+        
 
         fileExit = makeMenuItemRes("exit", 'X', ActionNames.EXIT, KeyStrokes.EXIT); //$NON-NLS-1$
 
         fileMerge = makeMenuItemRes("menu_merge", 'M', ActionNames.MERGE); //$NON-NLS-1$
         fileMerge.setEnabled(false);
 
-        fileMenu.add(fileClose);
+        
         fileMenu.add(fileLoad);
         fileMenu.add(templates);
         fileMenu.add(fileMerge);
