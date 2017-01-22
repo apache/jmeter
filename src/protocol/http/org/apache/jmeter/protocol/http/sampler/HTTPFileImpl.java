@@ -95,8 +95,6 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             return res;
-        } catch (FileNotFoundException e) {
-            return errorResult(e, res);
         } catch (IOException e) {
             return errorResult(e, res);
         } finally {
