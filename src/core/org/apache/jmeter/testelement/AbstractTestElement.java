@@ -115,11 +115,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AbstractTestElement) {
-            return ((AbstractTestElement) o).propMap.equals(propMap);
-        } else {
-            return false;
-        }
+        return o instanceof AbstractTestElement && ((AbstractTestElement) o).propMap.equals(propMap);
     }
 
     // TODO temporary hack to avoid unnecessary bug reports for subclasses
@@ -531,11 +527,7 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public boolean isTemporary(JMeterProperty property) {
-        if (temporaryProperties == null) {
-            return false;
-        } else {
-            return temporaryProperties.contains(property);
-        }
+        return temporaryProperties != null && temporaryProperties.contains(property);
     }
 
     /**

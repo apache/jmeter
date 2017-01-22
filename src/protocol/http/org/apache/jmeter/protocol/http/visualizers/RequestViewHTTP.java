@@ -281,10 +281,7 @@ public class RequestViewHTTP implements RequestView {
      */
     private boolean isMultipart(LinkedHashMap<String, String> headers) {
         String contentType = headers.get(HTTPConstants.HEADER_CONTENT_TYPE);
-        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
-            return true;
-        }
-        return false;
+        return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
     /**

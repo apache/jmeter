@@ -60,7 +60,6 @@ public class StringPropertyConverter implements Converter {
             return null;
         }
         final String value = ConversionHelp.getPropertyValue(reader, context, name);
-        StringProperty prop = new StringProperty(name, value);
-        return prop;
+        return new StringProperty(name, value);
     }
 }

@@ -174,7 +174,7 @@ public class ThroughputController extends GenericController implements Serializa
         }
         return retVal;
     }
-
+    
     @SuppressWarnings("SynchronizeOnNonFinalField")
     private int getExecutions() {
         if (!isPerThread()) {
@@ -211,12 +211,10 @@ public class ThroughputController extends GenericController implements Serializa
      */
     @Override
     public boolean isDone() {
-        if (subControllersAndSamplers.isEmpty()) {
-            return true;
-        } else {
-            return getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size();
-        }
+        return getSubControllers().isEmpty()
+                || (getStyle() == BYNUMBER
+                && getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size());
     }
 
     @Override
@@ -275,7 +273,7 @@ public class ThroughputController extends GenericController implements Serializa
     public void testEnded(String host) {
         // NOOP
     }
-
+    
     @Override
     protected Object readResolve(){
         super.readResolve();

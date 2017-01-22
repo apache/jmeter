@@ -464,91 +464,77 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
          */
         public void setSelectedIndex(int index, boolean check) {
             int oldSelectedIndex = this.getSelectedIndex();
-            if(!check || oldSelectedIndex == -1) {
+            if (!check || oldSelectedIndex == -1) {
                 super.setSelectedIndex(index);
-            }
-            else if(index != oldSelectedIndex)
-            {
+            } else if (index != oldSelectedIndex) {
                 // If there is no data, then switching between Parameters/file upload and Raw should be
                 // allowed with no further user interaction.
-                if(noData(oldSelectedIndex)) {
+                if (noData(oldSelectedIndex)) {
                     argsPanel.clear();
                     postBodyContent.setInitialText("");
-                    if(showFileUploadPane) {
+                    if (showFileUploadPane) {
                         filesPanel.clear();
                     }
                     super.setSelectedIndex(index);
-                }
-                else {
+                } else {
                     boolean filePanelHasData = false;
-                    if(showFileUploadPane) {
+                    if (showFileUploadPane) {
                         filePanelHasData = filesPanel.hasData();
                     }
-                    
-                    if(oldSelectedIndex == tabRawBodyIndex) {
-                        
+
+                    if (oldSelectedIndex == tabRawBodyIndex) {
+
                         // If RAW data and Parameters match we allow switching
-                        if(index == TAB_PARAMETERS && postBodyContent.getText().equals(computePostBody((Arguments)argsPanel.createTestElement()).trim())) {
+                        if (index == TAB_PARAMETERS && postBodyContent.getText().equals(computePostBody((Arguments) argsPanel.createTestElement()).trim())) {
                             super.setSelectedIndex(index);
-                        }
-                        else {
+                        } else {
                             // If there is data in the Raw panel, then the user should be 
                             // prevented from switching (that would be easy to track).
                             JOptionPane.showConfirmDialog(this,
                                     JMeterUtils.getResString("web_cannot_switch_tab"), // $NON-NLS-1$
                                     JMeterUtils.getResString("warning"), // $NON-NLS-1$
-                                    JOptionPane.DEFAULT_OPTION, 
+                                    JOptionPane.DEFAULT_OPTION,
                                     JOptionPane.ERROR_MESSAGE);
-                            return;
                         }
-                    }
-                    else {
+                    } else {
                         // can switch from parameter to fileupload
-                        if((oldSelectedIndex == TAB_PARAMETERS
-                                && index == tabFileUploadIndex)
-                             || (oldSelectedIndex == tabFileUploadIndex
-                                     && index == TAB_PARAMETERS)) {
+                        if ((oldSelectedIndex == TAB_PARAMETERS && index == tabFileUploadIndex)
+                                || (oldSelectedIndex == tabFileUploadIndex && index == TAB_PARAMETERS)) {
                             super.setSelectedIndex(index);
-                            return;
-                        }
-                        
-                        // If the Parameter data can be converted (i.e. no names) and there is no data in file upload
-                        // we warn the user that the Parameter data will be lost.
-                        if(oldSelectedIndex == TAB_PARAMETERS && !filePanelHasData && canConvertParameters()) {
+                        } else if (oldSelectedIndex == TAB_PARAMETERS
+                                && !filePanelHasData
+                                && canConvertParameters()) {
+                            // If the Parameter data can be converted (i.e. no names) and there is no data in file upload
+                            // we warn the user that the Parameter data will be lost.
                             Object[] options = {
                                     JMeterUtils.getResString("confirm"), // $NON-NLS-1$
                                     JMeterUtils.getResString("cancel")}; // $NON-NLS-1$
                             int n = JOptionPane.showOptionDialog(this,
-                                JMeterUtils.getResString("web_parameters_lost_message"), // $NON-NLS-1$
-                                JMeterUtils.getResString("warning"), // $NON-NLS-1$
-                                JOptionPane.YES_NO_CANCEL_OPTION,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                options,
-                                options[1]);
-                            if(n == JOptionPane.YES_OPTION) {
+                                    JMeterUtils.getResString("web_parameters_lost_message"), // $NON-NLS-1$
+                                    JMeterUtils.getResString("warning"), // $NON-NLS-1$
+                                    JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    options,
+                                    options[1]);
+                            if (n == JOptionPane.YES_OPTION) {
                                 convertParametersToRaw();
                                 super.setSelectedIndex(index);
                             }
-                            else{
-                                return;
-                            }
-                        }
-                        else {
+                        } else {
                             // If the Parameter data cannot be converted to Raw, then the user should be
                             // prevented from doing so raise an error dialog
-                            String messageKey = filePanelHasData?"web_cannot_switch_tab":"web_cannot_convert_parameters_to_raw";
+                            String messageKey = filePanelHasData ? "web_cannot_switch_tab" : "web_cannot_convert_parameters_to_raw";
                             JOptionPane.showConfirmDialog(this,
                                     JMeterUtils.getResString(messageKey), // $NON-NLS-1$
                                     JMeterUtils.getResString("warning"), // $NON-NLS-1$
-                                    JOptionPane.DEFAULT_OPTION, 
+                                    JOptionPane.DEFAULT_OPTION,
                                     JOptionPane.ERROR_MESSAGE);
-                            return;
                         }
                     }
                 }
             }
-        }   
+        }
     }
     // autoRedirects and followRedirects cannot both be selected
     @Override
@@ -569,7 +555,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
             useMultipartForPost.setEnabled(isPostMethod);    
         }
     }
-
 
     /**
      * Convert Parameters to Raw Body
@@ -600,18 +585,12 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      * @return true if neither Parameters tab nor Raw Body tab contain data
      */
     boolean noData(int oldSelectedIndex) {
-        if(oldSelectedIndex == tabRawBodyIndex) {
+        if (oldSelectedIndex == tabRawBodyIndex) {
             return StringUtils.isEmpty(postBodyContent.getText().trim());
-        }
-        else {
-            boolean noData = true;
-            Arguments element = (Arguments) argsPanel.createTestElement();
-            
-            if(showFileUploadPane) {
-                noData &= !filesPanel.hasData();
-            }
-            
-            return noData && StringUtils.isEmpty(computePostBody(element));
+        } else {
+            boolean hasData = showFileUploadPane && filesPanel.hasData();
+            String postBody = computePostBody((Arguments) argsPanel.createTestElement());
+            return !hasData && StringUtils.isEmpty(postBody);
         }
     }
 }

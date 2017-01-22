@@ -59,7 +59,6 @@ public class IntegerPropertyConverter implements Converter {
         if (name == null) {
             return null;
         }
-        IntegerProperty prop = new IntegerProperty(name, Integer.parseInt(reader.getValue()));
-        return prop;
+        return new IntegerProperty(name, Integer.parseInt(reader.getValue()));
     }
 }

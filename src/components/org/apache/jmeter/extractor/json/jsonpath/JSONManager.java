@@ -54,13 +54,9 @@ public class JSONManager {
     private final Map<String, JsonPath> expressionToJsonPath = new HashMap<>(2);
 
     private JsonPath getJsonPath(String jsonPathExpression) {
-        JsonPath jsonPath = expressionToJsonPath.get(jsonPathExpression);
-        if (jsonPath == null) {
-            jsonPath = JsonPath.compile(jsonPathExpression);
-            expressionToJsonPath.put(jsonPathExpression, jsonPath);
-        }
-
-        return jsonPath;
+        return expressionToJsonPath.computeIfAbsent(
+                jsonPathExpression,
+                k -> JsonPath.compile(jsonPathExpression));
     }
     
     public void reset() {

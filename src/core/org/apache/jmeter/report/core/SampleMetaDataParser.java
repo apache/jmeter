@@ -17,8 +17,6 @@
  */
 package org.apache.jmeter.report.core;
 
-import org.apache.jmeter.report.core.SampleMetadata;
-
 /**
  * Simple parser to get a {@link SampleMetadata} instance<br>
  * 
@@ -34,7 +32,6 @@ public class SampleMetaDataParser {
 
     public SampleMetadata parse(String headRow) {
         String[] cols = headRow.split(Character.toString(separator));
-        SampleMetadata out = new SampleMetadata(separator, cols);
-        return out;
+        return new SampleMetadata(separator, cols);
     }
 }

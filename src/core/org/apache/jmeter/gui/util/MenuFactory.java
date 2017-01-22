@@ -626,23 +626,17 @@ public final class MenuFactory {
 
         // Force TestFragment to only be pastable under a Test Plan
         if (foundClass(nodes, new Class[]{org.apache.jmeter.control.TestFragmentController.class})){
-            if (parent instanceof TestPlan) {
-                return true;
-            }
-            return false;
+            return parent instanceof TestPlan;
         }
 
         if (parent instanceof WorkBench) {// allow everything else
             return true;
         }
         if (parent instanceof TestPlan) {
-            if (foundClass(nodes,
-                     new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
-                     org.apache.jmeter.threads.AbstractThreadGroup.class)  // but AbstractThreadGroup (Controller) is OK
-                ){
-                return false;
-            }
-            return true;
+            return !foundClass(
+                    nodes,
+                    new Class[]{Sampler.class, Controller.class}, // Samplers and Controllers need not apply ...
+                    org.apache.jmeter.threads.AbstractThreadGroup.class);
         }
         // AbstractThreadGroup is only allowed under a TestPlan
         if (foundClass(nodes, new Class[]{org.apache.jmeter.threads.AbstractThreadGroup.class})){
@@ -652,10 +646,7 @@ public final class MenuFactory {
             return true;
         }
         if (parent instanceof Sampler) {// Samplers and Controllers need not apply ...
-            if (foundClass(nodes, new Class[]{Sampler.class, Controller.class})){
-                return false;
-            }
-            return true;
+            return !foundClass(nodes, new Class[]{Sampler.class, Controller.class});
         }
         // All other
         return false;

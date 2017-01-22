@@ -261,10 +261,7 @@ public class HttpRequestHdr {
     }
 
     private boolean isMultipart(String contentType) {
-        if (contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA)) {
-            return true;
-        }
-        return false;
+        return contentType != null && contentType.startsWith(HTTPConstants.MULTIPART_FORM_DATA);
     }
 
     public MultipartUrlConfig getMultipartConfig(String contentType) {

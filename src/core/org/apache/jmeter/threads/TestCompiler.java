@@ -293,20 +293,18 @@ public class TestCompiler implements HashTreeTraverser {
         /** {@inheritDoc} */
         @Override
         public boolean equals(Object o) {
-            if (o instanceof ObjectPair) {
-                return child == ((ObjectPair) o).child && parent == ((ObjectPair) o).parent;
-            }
-            return false;
+            return o instanceof ObjectPair
+                    && child == ((ObjectPair) o).child
+                    && parent == ((ObjectPair) o).parent;
         }
     }
 
     private void configureWithConfigElements(Sampler sam, List<ConfigTestElement> configs) {
         sam.clearTestElementChildren();
-        for (ConfigTestElement config  : configs) {
-            if (!(config instanceof NoConfigMerge)) 
-            {
-                if(sam instanceof ConfigMergabilityIndicator) {
-                    if(((ConfigMergabilityIndicator)sam).applies(config)) {
+        for (ConfigTestElement config : configs) {
+            if (!(config instanceof NoConfigMerge)) {
+                if (sam instanceof ConfigMergabilityIndicator) {
+                    if (((ConfigMergabilityIndicator) sam).applies(config)) {
                         sam.addTestElement(config);
                     }
                 } else {

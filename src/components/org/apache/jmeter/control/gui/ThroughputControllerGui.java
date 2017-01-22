@@ -153,13 +153,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
 
         // PERTHREAD FIELD
         perthread = new JCheckBox(PERTHREAD_LABEL, isPerThread);
-        perthread.addItemListener(evt -> {
-            if (evt.getStateChange() == ItemEvent.SELECTED) {
-                isPerThread = true;
-            } else {
-                isPerThread = false;
-            }
-        });
+        perthread.addItemListener(evt -> isPerThread = evt.getStateChange() == ItemEvent.SELECTED);
         add(CheckBoxPanel.wrap(perthread));
     }
 }

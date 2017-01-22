@@ -806,11 +806,7 @@ public class ProxyControl extends GenericController {
 
         // Check if the exclude pattern is matched
         matched = testPattern(excludeExp, sampleContentType, false);
-        if(!matched) {
-            return false;
-        }
-
-        return true;
+        return matched;
     }
 
     /**

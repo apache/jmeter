@@ -59,7 +59,6 @@ public class LongPropertyConverter implements Converter {
         if (name == null) {
             return null;
         }
-        LongProperty prop = new LongProperty(name, Long.parseLong(reader.getValue()));
-        return prop;
+        return new LongProperty(name, Long.parseLong(reader.getValue()));
     }
 }

@@ -339,10 +339,7 @@ public class JavaSampler extends AbstractSampler implements TestStateListener, I
 
     @Override
     public boolean interrupt() {
-        if (javaClient instanceof Interruptible) {
-            return ((Interruptible) javaClient).interrupt();
-            
-        }
-        return false;
+        return javaClient instanceof Interruptible
+                && ((Interruptible) javaClient).interrupt();
     }
 }

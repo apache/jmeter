@@ -95,8 +95,7 @@ public class ConversionHelp {
             return p;
         }
         try {
-            String p1 = URLEncoder.encode(p, CHAR_SET);
-            return p1;
+            return URLEncoder.encode(p, CHAR_SET);
         } catch (UnsupportedEncodingException e) {
             log.warn("System doesn't support {}", CHAR_SET, e);
             return p;
@@ -139,10 +138,7 @@ public class ConversionHelp {
      *             when the bytes can not be encoded using <code>encoding</code>
      */
     public static String cdata(byte[] chars, String encoding) throws UnsupportedEncodingException {
-        StringBuilder buf = new StringBuilder("<![CDATA[");
-        buf.append(new String(chars, encoding));
-        buf.append("]]>");
-        return buf.toString();
+        return "<![CDATA[" + new String(chars, encoding) + "]]>";
     }
 
     /**

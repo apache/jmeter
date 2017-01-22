@@ -86,10 +86,7 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
 
     @Override
     public boolean interrupt() {
-        if (impl != null) {
-            return impl.interrupt(); // Forward to sampler
-        }
-        return false;
+        return impl != null && impl.interrupt(); // Forward to sampler if not null
     }
 
     /* (non-Javadoc)

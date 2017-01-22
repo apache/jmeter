@@ -66,34 +66,31 @@ public class ConversionUtils {
      *             if the found charset is not supported
      */
     public static String getEncodingFromContentType(String contentType){
-        String charSet = null;
         if (contentType != null) {
             int charSetStartPos = contentType.toLowerCase(java.util.Locale.ENGLISH).indexOf(CHARSET_EQ);
             if (charSetStartPos >= 0) {
-                charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
-                if (charSet != null) {
-                    // Remove quotes from charset name, see bug 55852
-                    charSet = StringUtils.replaceChars(charSet, "\'\"", null);
-                    charSet = charSet.trim();
-                    if (charSet.length() > 0) {
-                        // See Bug 44784
-                        int semi = charSet.indexOf(';');
-                        if (semi == 0){
-                            return null;
-                        }
-                        if (semi != -1) {
-                            charSet = charSet.substring(0,semi);
-                        }
-                        if (!Charset.isSupported(charSet)){
-                            return null;
-                        }
-                        return charSet;
+                String charSet = contentType.substring(charSetStartPos + CHARSET_EQ_LEN);
+                // Remove quotes from charset name, see bug 55852
+                charSet = StringUtils.replaceChars(charSet, "\'\"", null);
+                charSet = charSet.trim();
+                if (charSet.length() > 0) {
+                    // See Bug 44784
+                    int semi = charSet.indexOf(';');
+                    if (semi == 0){
+                        return null;
                     }
-                    return null;
+                    if (semi != -1) {
+                        charSet = charSet.substring(0,semi);
+                    }
+                    if (!Charset.isSupported(charSet)){
+                        return null;
+                    }
+                    return charSet;
                 }
+                return null;
             }
         }
-        return charSet;
+        return null;
     }
 
     /**

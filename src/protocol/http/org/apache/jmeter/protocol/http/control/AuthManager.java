@@ -485,11 +485,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @return <code>true</code> when port should omitted in SPN
      */
     private boolean isStripPort(URL url) {
-        if (STRIP_PORT) {
-            return true;
-        }
-        return url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
-                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT;
+        return STRIP_PORT
+                || url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT
+                || url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT;
     }
 
     /**
@@ -498,11 +496,10 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
      * @param b {@link Authorization}
      * @return true if a and b match
      */
-    private boolean match(Authorization a, Authorization b){
-        return
-                a.getURL().equals(b.getURL())&&
-                a.getDomain().equals(b.getDomain())&&
-                a.getRealm().equals(b.getRealm())&&
+    private boolean match(Authorization a, Authorization b) {
+        return a.getURL().equals(b.getURL()) &&
+                a.getDomain().equals(b.getDomain()) &&
+                a.getRealm().equals(b.getRealm()) &&
                 a.getMechanism().equals(b.getMechanism());
     }
 

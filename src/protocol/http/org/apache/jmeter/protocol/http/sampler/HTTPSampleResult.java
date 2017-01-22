@@ -128,11 +128,9 @@ public class HTTPSampleResult extends SampleResult {
         // the user agent MUST NOT automatically redirect the request unless it can be confirmed by the user,
         // since this might change the conditions under which the request was issued.
         // See Bug 54119
-        if (HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) && 
-                (HTTPConstants.GET.equals(getHTTPMethod()) || HTTPConstants.HEAD.equals(getHTTPMethod()))) {
-            return true;
-        }
-        return false;
+        return HTTPConstants.SC_TEMPORARY_REDIRECT.equals(code) &&
+                (HTTPConstants.GET.equals(getHTTPMethod())
+                        || HTTPConstants.HEAD.equals(getHTTPMethod()));
     }
 
     /**

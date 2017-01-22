@@ -117,10 +117,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * @return true if contentType is part of binary declared types
      */
     protected boolean isBinaryContent(String contentType) {
-        if (contentType == null) {
-            return false;
-        }
-        return BINARY_CONTENT_TYPES.contains(contentType);
+        return contentType != null && BINARY_CONTENT_TYPES.contains(contentType);
     }
     
     /**

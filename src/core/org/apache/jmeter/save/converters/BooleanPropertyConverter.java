@@ -60,7 +60,6 @@ public class BooleanPropertyConverter implements Converter {
         if (name == null) {
             return null;
         }
-        BooleanProperty prop = new BooleanProperty(name, Boolean.valueOf(reader.getValue()).booleanValue());
-        return prop;
+        return new BooleanProperty(name, Boolean.valueOf(reader.getValue()).booleanValue());
     }
 }

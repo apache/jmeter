@@ -40,9 +40,9 @@ public abstract class AbstractActionWithNoRunningTest extends AbstractAction {
                     JMeterUtils.getResString("action_check_message"),  //$NON-NLS-1$
                     JMeterUtils.getResString("action_check_title"),  //$NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);
-            return;
+        } else {
+            doActionAfterCheck(e);
         }
-        doActionAfterCheck(e);
     }
 
     /**

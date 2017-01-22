@@ -65,10 +65,9 @@ public class RunTime extends GenericController implements Serializable {
      */
     @Override
     public boolean isDone() {
-        if (getRuntime() > 0 && getSubControllers().size() > 0) {
-            return super.isDone();
-        }
-        return true; // Runtime is zero - no point staying around
+        return getRuntime() <= 0
+                || getSubControllers().size() <= 0
+                || super.isDone();
     }
 
     private boolean endOfLoop() {

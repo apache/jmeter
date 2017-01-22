@@ -747,8 +747,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @return a renderer to draw the test tree nodes
      */
     private TreeCellRenderer getCellRenderer() {
-        DefaultTreeCellRenderer rend = new JMeterCellRenderer();
-        return rend;
+        return new JMeterCellRenderer();
     }
 
     /**

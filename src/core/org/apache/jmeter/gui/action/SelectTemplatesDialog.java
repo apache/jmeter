@@ -208,7 +208,6 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
         final Object source = e.getSource();
         if (source == cancelButton) {
             this.setVisible(false);
-            return;
         } else if (source == applyTemplateButton) {
             checkDirtyAndLoad(e);            
         } else if (source == reloadTemplateButton) {

@@ -206,10 +206,7 @@ public class Argument extends AbstractTestElement implements Serializable {
             return true; // Skip parameters with a blank name (allows use of optional variables in parameter lists)
         }
         // TODO: improve this test
-        if (parameterName.trim().startsWith("${") && parameterName.endsWith("}")){// $NON-NLS-1$ $NON-NLS-2$
-            return true; // Missing variable name
-        }
-        return false;
+        return parameterName.trim().startsWith("${") && parameterName.endsWith("}");
     }
 
 }

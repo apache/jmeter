@@ -68,19 +68,15 @@ public class SampleSenderFactory {
                         "Property hold_samples is deprecated and will be removed in upcomping version, use mode={} instead",
                         MODE_HOLD);
             }
-            HoldSampleSender h = new HoldSampleSender(listener);
-            return h;
+            return new HoldSampleSender(listener);
         } else if (type.equalsIgnoreCase(MODE_BATCH)) {
-            BatchSampleSender b = new BatchSampleSender(listener);
-            return b;
+            return new BatchSampleSender(listener);
         }  else if(type.equalsIgnoreCase(MODE_STRIPPED_BATCH)) {
             return new DataStrippingSampleSender(new BatchSampleSender(listener));
         } else if (type.equalsIgnoreCase(MODE_STATISTICAL)) {
-            StatisticalSampleSender s = new StatisticalSampleSender(listener);
-            return s;
+            return new StatisticalSampleSender(listener);
         } else if (type.equalsIgnoreCase(MODE_STANDARD)) {
-            StandardSampleSender s = new StandardSampleSender(listener);
-            return s;
+            return new StandardSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_STRIPPED)){
             return new DataStrippingSampleSender(listener);
         } else if(type.equalsIgnoreCase(MODE_ASYNCH)){

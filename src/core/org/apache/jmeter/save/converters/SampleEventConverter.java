@@ -59,9 +59,7 @@ public class SampleEventConverter implements Converter {
     /** {@inheritDoc} */
     // TODO does not work yet; need to determine the sample type
     @Override
-    public Object unmarshal(HierarchicalStreamReader reader,
-            UnmarshallingContext context) {
-        SampleEvent evt = new SampleEvent();
-        return evt;
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        return new SampleEvent();
     }
 }

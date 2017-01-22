@@ -201,7 +201,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         if (e.getSource()==cancelButton) {
             searchTF.requestFocusInWindow();
             this.setVisible(false);
-            return;
         } else if(e.getSource() == searchButton ||
                 e.getSource() == searchAndExpandButton) {
             doSearch(e);

@@ -476,13 +476,8 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
      * @return whether this represents success or not
      */
     private boolean checkResponseCode(String rc) {
-        if (rc.compareTo("400") >= 0 && rc.compareTo("499") <= 0) { //$NON-NLS-1$ $NON-NLS-2$
-            return false;
-        }
-        if (rc.compareTo("500") >= 0 && rc.compareTo("599") <= 0) { //$NON-NLS-1$ $NON-NLS-2$
-            return false;
-        }
-        return true;
+        return !(rc.compareTo("400") >= 0 && rc.compareTo("499") <= 0) //$NON-NLS-1$ $NON-NLS-2$
+                && !(rc.compareTo("500") >= 0 && rc.compareTo("599") <= 0); //$NON-NLS-1$ $NON-NLS-2$
     }
 
     @Override

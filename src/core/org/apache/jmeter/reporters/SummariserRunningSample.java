@@ -216,8 +216,7 @@ class SummariserRunningSample {
         if (counter == 0) {
             return 0.0;
         }
-        double rval = (double) errorCount / (double) counter;
-        return rval;
+        return (double) errorCount / (double) counter;
     }
 
     /**

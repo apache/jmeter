@@ -582,8 +582,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public String getSampleLabel(boolean includeGroup) {
         if (includeGroup) {
-            StringBuilder sb = new StringBuilder(threadName.substring(0,threadName.lastIndexOf(' '))); //$NON-NLS-1$
-            return sb.append(":").append(label).toString(); //$NON-NLS-1$
+            return threadName.substring(0, threadName.lastIndexOf(' ')) + ":" + label; //$NON-NLS-1$
         }
         return label;
     }
