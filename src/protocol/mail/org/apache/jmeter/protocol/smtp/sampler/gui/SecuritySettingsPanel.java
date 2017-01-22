@@ -168,7 +168,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbUseLocalTrustStoreActionPerformed(
+    private void cbUseLocalTrustStoreActionPerformed( // NOSONAR This method is used through lambda
             ActionEvent evt) {
         final boolean selected = cbUseLocalTrustStore.isSelected();
         tfTrustStoreToUse.setEditable(selected); // must follow the checkbox setting
@@ -182,7 +182,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbTrustAllCertsActionPerformed(
+    private void cbTrustAllCertsActionPerformed( // NOSONAR This method is used through lambda
             ActionEvent evt) {
         final boolean selected = cbTrustAllCerts.isSelected();
         if (selected) {
@@ -198,7 +198,8 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbEnforceStartTLSActionPerformed(ActionEvent evt) {
+    private void cbEnforceStartTLSActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
+        // NOOP
     }
 
     /**
@@ -207,7 +208,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ItemEvent to be handled
      */
-    private void rbSecuritySettingsItemStateChanged(ItemEvent evt) {
+    private void rbSecuritySettingsItemStateChanged(ItemEvent evt) { // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
         if (source == rbUseNone) {
             cbTrustAllCerts.setEnabled(false);

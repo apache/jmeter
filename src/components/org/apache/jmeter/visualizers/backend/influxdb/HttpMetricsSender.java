@@ -162,7 +162,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                 
                 httpRequest.setEntity(entity);
                 lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
-
+                    @Override
                     public void completed(final HttpResponse response) {
                         int code = response.getStatusLine().getStatusCode();
                         /*
@@ -183,15 +183,14 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                             }
                         }
                     }
-
+                    @Override
                     public void failed(final Exception ex) {
                         LOG.error("failed to send data to influxDB server : " + ex.getMessage());
                     }
-
+                    @Override
                     public void cancelled() {
                         LOG.warn("Request to influxDB server was cancelled");
                     }
-
                 });
                
             }catch (URISyntaxException ex ) {
