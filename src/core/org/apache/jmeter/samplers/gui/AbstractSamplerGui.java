@@ -62,4 +62,9 @@ public abstract class AbstractSamplerGui extends AbstractJMeterGuiComponent {
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.SAMPLERS);
     }
+
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
 }

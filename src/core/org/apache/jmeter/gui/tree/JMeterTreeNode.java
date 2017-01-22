@@ -151,6 +151,15 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         }
     }
 
+    public Collection<String> getSubMenuCategories() {
+        try {
+            return GuiPackage.getInstance().getGui(getTestElement()).getSubMenuCategories();
+        } catch (Exception e) {
+            log.error("Can't get popup sub menu for gui", e);
+            return null;
+        }
+    }
+
     public JPopupMenu createPopupMenu() {
         try {
             return GuiPackage.getInstance().getGui(getTestElement()).createPopupMenu();

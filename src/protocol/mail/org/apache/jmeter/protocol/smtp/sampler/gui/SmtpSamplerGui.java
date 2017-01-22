@@ -21,12 +21,15 @@ package org.apache.jmeter.protocol.smtp.sampler.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * Class to build superstructure-gui for SMTP-panel, sets/gets value for a JMeter's testElement-object (i.e. also for save/load-purposes).
@@ -55,6 +58,11 @@ public class SmtpSamplerGui extends AbstractSamplerGui {
     @Override
     public String getLabelResource() {
         return "smtp_sampler_title";
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("mail_protocol")); // $NON-NLS-1$
     }
 
     /**

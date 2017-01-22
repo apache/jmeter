@@ -27,18 +27,22 @@ public class MenuInfo {
 
     private final String label;
 
+    private final String drawer;
+
     private final String className;
 
     private final JMeterGUIComponent guiComp;
 
-    public MenuInfo(String displayLabel, String classFullName) {
+    public MenuInfo(String displayLabel, String displayDrawer, String classFullName) {
         label = displayLabel;
+        drawer = displayDrawer;
         className = classFullName;
         guiComp = null;
     }
 
-    public MenuInfo(JMeterGUIComponent item, String classFullName) {
+    public MenuInfo(JMeterGUIComponent item, String displayDrawer, String classFullName) {
         label = item.getStaticLabel();
+        drawer = displayDrawer;
         className = classFullName;
         guiComp = item;
     }
@@ -48,6 +52,10 @@ public class MenuInfo {
             return guiComp.getStaticLabel();
         }
         return label;
+    }
+
+    public String getDrawer(){
+        return drawer;
     }
 
     public String getClassName(){

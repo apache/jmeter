@@ -208,7 +208,7 @@ public class TestBeanGUI extends AbstractJMeterGuiComponent implements JMeterGUI
      * {@inheritDoc}
      */
    @Override
-public TestElement createTestElement() {
+   public TestElement createTestElement() {
         try {
             TestElement element = (TestElement) testBeanClass.newInstance();
             // In other GUI component, clearGUI resets the value to defaults one as there is one GUI per Element
@@ -383,6 +383,28 @@ public TestElement createTestElement() {
             log.error("More than 1 GUI class found for " + testBeanClass.getName());
         }
         return menuCategories;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        List<String> submenuCategories = new LinkedList<String>();
+        BeanDescriptor bd = beanInfo.getBeanDescriptor();
+
+        // We don't want to show expert beans in the menus unless we're
+        // in expert mode:
+        if (bd.isExpert() && !JMeterUtils.isExpertMode()) {
+            return null;
+        }
+
+        // Avoid property bean descriptor behavior that uses displayName as description if shortDescription is empty or undefined
+        if (bd.getShortDescription().equals(bd.getDisplayName())) {
+            submenuCategories = Arrays.asList("");
+        } else {
+            submenuCategories = Arrays.asList(bd.getShortDescription().split(";"));
+        }
+
+        return submenuCategories;
     }
 
     /**

@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.ftp.config.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -72,6 +74,11 @@ public class FtpConfigGui extends AbstractConfigGui {
     @Override
     public String getLabelResource() {
         return "ftp_sample_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("ftp_protocol")); // $NON-NLS-1$
     }
 
     @Override

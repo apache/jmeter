@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.JCheckBox;
 
@@ -47,6 +49,11 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     @Override
     public String getLabelResource() {
         return "http_url_rewriting_modifier_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     public URLRewritingModifierGui() {

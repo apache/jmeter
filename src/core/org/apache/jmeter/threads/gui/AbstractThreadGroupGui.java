@@ -66,6 +66,11 @@ public abstract class AbstractThreadGroupGui extends AbstractJMeterGuiComponent 
     }
 
     @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
+    @Override
     public JPopupMenu createPopupMenu() {
         JPopupMenu pop = new JPopupMenu();
         pop.add(MenuFactory.makeMenus(new String[] {

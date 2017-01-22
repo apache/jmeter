@@ -40,4 +40,9 @@ public abstract class AbstractPreProcessorGui extends AbstractJMeterGuiComponent
         return Arrays.asList(MenuFactory.PRE_PROCESSORS);
     }
 
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
 }

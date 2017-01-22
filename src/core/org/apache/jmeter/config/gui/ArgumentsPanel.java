@@ -204,6 +204,14 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
         return null;
     }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        if (standalone) {
+            return super.getSubMenuCategories();
+        }
+        return null;
+    }
 
     @Override
     public String getLabelResource() {

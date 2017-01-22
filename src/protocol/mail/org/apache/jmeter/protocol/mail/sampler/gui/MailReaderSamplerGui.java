@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -112,6 +114,11 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
     @Override
     public String getLabelResource() {
         return "mail_reader_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("mail_protocol")); // $NON-NLS-1$
     }
 
     /**

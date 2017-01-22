@@ -23,6 +23,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -176,6 +178,11 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
     @Override
     public String getLabelResource() {
         return "web_testing_title"; // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     private void init() {// called from ctor, so must not be overridable

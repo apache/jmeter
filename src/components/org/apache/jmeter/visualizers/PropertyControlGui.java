@@ -92,6 +92,11 @@ public class PropertyControlGui extends AbstractConfigGui implements
     }
 
     @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
+    @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
         
@@ -112,7 +117,7 @@ public class PropertyControlGui extends AbstractConfigGui implements
         modifyTestElement(el);
         return el;
     }
-    
+
     @Override
     public void configure(TestElement element) {
         super.configure(element);

@@ -144,6 +144,11 @@ public class TestPlanGui extends AbstractJMeterGuiComponent {
         return null;
     }
 
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
     /**
      * A newly created component can be initialized with the contents of a Test
      * Element object by calling this method. The component is responsible for

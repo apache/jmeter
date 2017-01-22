@@ -104,6 +104,11 @@ public class HttpMirrorControlGui extends LogicControllerGui
     public Collection<String> getMenuCategories() {
         return Arrays.asList(MenuFactory.NON_TEST_ELEMENTS);
     }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
+    }
 
     @Override
     public void configure(TestElement element) {

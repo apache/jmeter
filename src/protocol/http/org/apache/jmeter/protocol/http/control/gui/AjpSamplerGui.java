@@ -17,6 +17,9 @@
 
 package org.apache.jmeter.protocol.http.control.gui;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.apache.jmeter.protocol.http.control.gui.HttpTestSampleGui;
 import org.apache.jmeter.protocol.http.sampler.AjpSampler;
 import org.apache.jmeter.testelement.TestElement;
@@ -41,6 +44,11 @@ public class AjpSamplerGui extends HttpTestSampleGui {
     @Override
     public String getStaticLabel() {
         return JMeterUtils.getResString("ajp_sampler_title"); // $NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     @Override

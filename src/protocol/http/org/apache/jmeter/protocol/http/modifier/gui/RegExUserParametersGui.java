@@ -21,6 +21,8 @@ package org.apache.jmeter.protocol.http.modifier.gui;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Box;
@@ -57,6 +59,11 @@ public class RegExUserParametersGui extends AbstractPreProcessorGui {
     @Override
     public String getLabelResource() {
         return "regex_params_title"; //$NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     @Override

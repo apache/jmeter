@@ -19,10 +19,13 @@
 package org.apache.jmeter.protocol.http.modifier.gui;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.jmeter.processor.gui.AbstractPreProcessorGui;
 import org.apache.jmeter.protocol.http.modifier.AnchorModifier;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.util.JMeterUtils;
 
 public class AnchorModifierGui extends AbstractPreProcessorGui {
     private static final long serialVersionUID = 240L;
@@ -34,6 +37,11 @@ public class AnchorModifierGui extends AbstractPreProcessorGui {
     @Override
     public String getLabelResource() {
         return "anchor_modifier_title"; //$NON-NLS-1$
+    }
+    
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return Arrays.asList(JMeterUtils.getResString("http_protocol")); // $NON-NLS-1$
     }
 
     @Override

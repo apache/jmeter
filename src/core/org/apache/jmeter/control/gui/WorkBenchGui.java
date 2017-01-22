@@ -64,6 +64,19 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
         return null;
     }
 
+    /**
+     * This is the list of sub menu categories this gui component will be available
+     * under. This implementation returns null, since the WorkBench appears at
+     * the top level of the tree and cannot be added elsewhere.
+     *
+     * @return a Collection of Strings, where each element is one of the
+     *         constants defined in MenuFactory
+     */
+    @Override
+    public Collection<String> getSubMenuCategories() {
+        return null;
+    }
+
     /* Implements JMeterGUIComponent.createTestElement() */
     @Override
     public TestElement createTestElement() {
