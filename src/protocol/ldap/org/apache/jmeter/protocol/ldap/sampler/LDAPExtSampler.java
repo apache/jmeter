@@ -950,16 +950,11 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     }
 
     private void sortAttributes(final List<Attribute> sortedAttrs) {
-        Collections.sort(sortedAttrs, new Comparator<Attribute>()
-        {
-            @Override
-            public int compare(Attribute o1, Attribute o2)
-            {
-                String nm1 = o1.getID();
-                String nm2 = o2.getID();
+        sortedAttrs.sort((o1, o2) -> {
+            String nm1 = o1.getID();
+            String nm2 = o2.getID();
 
-                return nm1.compareTo(nm2);
-            }
+            return nm1.compareTo(nm2);
         });
     }
 

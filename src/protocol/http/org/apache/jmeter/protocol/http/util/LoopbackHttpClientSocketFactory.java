@@ -80,19 +80,16 @@ public class LoopbackHttpClientSocketFactory implements ProtocolSocketFactory {
         Protocol.registerProtocol(LOOPBACK, new Protocol(LOOPBACK,new LoopbackHttpClientSocketFactory(),1));
 
         // Now allow the URL handling to work.
-        URLStreamHandlerFactory ushf = new URLStreamHandlerFactory(){
-            @Override
-            public URLStreamHandler createURLStreamHandler(String protocol) {
-                if (protocol.equalsIgnoreCase(LOOPBACK)){
-                    return new URLStreamHandler(){
-                        @Override
-                        protected URLConnection openConnection(URL u) throws IOException {
-                            return null;// not needed for HttpClient
-                        }
-                    };
-                }
-                return null;
+        URLStreamHandlerFactory ushf = protocol -> {
+            if (protocol.equalsIgnoreCase(LOOPBACK)){
+                return new URLStreamHandler(){
+                    @Override
+                    protected URLConnection openConnection(URL u) throws IOException {
+                        return null;// not needed for HttpClient
+                    }
+                };
             }
+            return null;
         };
 
         java.net.URL.setURLStreamHandlerFactory(ushf);
