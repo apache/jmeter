@@ -959,17 +959,14 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     }
 
     private void sortResults(final List<SearchResult> sortedResults) {
-        Collections.sort(sortedResults, new Comparator<SearchResult>()
-        {
-            private int compareToReverse(final String s1, final String s2)
-            {
+        sortedResults.sort(new Comparator<SearchResult>() {
+            private int compareToReverse(final String s1, final String s2) {
                 int len1 = s1.length();
                 int len2 = s2.length();
                 int s1i = len1 - 1;
                 int s2i = len2 - 1;
 
-                for ( ; (s1i >= 0) && (s2i >= 0); s1i--, s2i--)
-                {
+                for (; (s1i >= 0) && (s2i >= 0); s1i--, s2i--) {
                     char c1 = s1.charAt(s1i);
                     char c2 = s2.charAt(s2i);
 
