@@ -384,7 +384,6 @@ public class SmtpPanel extends JPanel {
         tfAuthUsername.setEditable(selected); // ensure correctly set on initial display
     }
 
-
     public boolean isEnableDebug() {
         return cbEnableDebug.isSelected();
     }
@@ -392,8 +391,6 @@ public class SmtpPanel extends JPanel {
     public void setEnableDebug(boolean selected){
         cbEnableDebug.setSelected(selected);
     }
-
-
 
     /**
      * Returns if an .eml-message is sent instead of the content of message-text
@@ -902,8 +899,6 @@ public class SmtpPanel extends JPanel {
         tfAuthPassword.setEditable(cbUseAuth.isSelected());
     }
 
-
-
     /**
      * ActionPerformed-method for filechoser "attachmentFileChoser", creates
      * FileChoser-Object
@@ -913,18 +908,17 @@ public class SmtpPanel extends JPanel {
      */
     private void attachmentFolderFileChooserActionPerformed(ActionEvent evt) {
         File chosen = attachmentFileChooser.getSelectedFile();
-        if (chosen == null){
+        if (chosen == null) {
             return;
         }
         final String attachments = tfAttachment.getText().trim();
-        if (null != attachments && attachments.length() > 0) {
+        if (attachments.length() > 0) {
             tfAttachment.setText(attachments
                             + SmtpSampler.FILENAME_SEPARATOR
                             + chosen.getAbsolutePath());
         } else {
             tfAttachment.setText(chosen.getAbsolutePath());
         }
-
     }
 
     /**
@@ -985,8 +979,6 @@ public class SmtpPanel extends JPanel {
     private void emlBrowseButtonActionPerformed(ActionEvent evt) {
         emlFileChooser.showOpenDialog(this);
     }
-
-
 
     /**
      * Reset all the Gui fields.
