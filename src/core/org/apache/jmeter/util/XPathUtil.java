@@ -302,13 +302,12 @@ public class XPathUtil {
      * @param fragment return fragment
      * @throws TransformerException when the internally used xpath engine fails
      */
-    public static void putValuesForXPathInList(Document document, 
+    public static void putValuesForXPathInList(Document document,
             String xPathQuery,
             List<String> matchStrings, boolean fragment) throws TransformerException {
         putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
     }
-    
-    
+
     /**
      * Put in matchStrings results of evaluation
      * @param document XML document

@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import org.apache.jmeter.samplers.SampleResult;
 
@@ -79,7 +78,7 @@ public class LoopbackHTTPSocket extends Socket {
         this();
     }
 
-    public LoopbackHTTPSocket(String host, int port) throws UnknownHostException, IOException {
+    public LoopbackHTTPSocket(String host, int port) throws IOException {
         this();
     }
 

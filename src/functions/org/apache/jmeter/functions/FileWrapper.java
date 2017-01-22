@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -102,7 +101,7 @@ public final class FileWrapper {
         }
     }
 
-    private static FileRowColContainer getFile(String file, String alias) throws FileNotFoundException, IOException {
+    private static FileRowColContainer getFile(String file, String alias) throws IOException {
         FileRowColContainer frcc;
         if ((frcc = fileContainers.get(alias)) == null) {
             frcc = new FileRowColContainer(file);

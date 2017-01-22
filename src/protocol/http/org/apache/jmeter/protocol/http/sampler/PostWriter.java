@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
@@ -446,16 +445,12 @@ public class PostWriter {
         out.write(getMultipartDivider());
     }
 
-    private void write(OutputStream out, String value)
-    throws UnsupportedEncodingException, IOException
-    {
+    private void write(OutputStream out, String value) throws IOException {
         out.write(value.getBytes(ENCODING));
     }
 
 
-    private void writeln(OutputStream out, String value)
-    throws UnsupportedEncodingException, IOException
-    {
+    private void writeln(OutputStream out, String value) throws IOException {
         out.write(value.getBytes(ENCODING));
         out.write(CRLF);
     }

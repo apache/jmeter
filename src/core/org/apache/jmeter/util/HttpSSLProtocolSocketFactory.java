@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
  *
  * Used by JsseSSLManager to set up the Java https socket handling
  */
-
 public class HttpSSLProtocolSocketFactory
     extends SSLSocketFactory {// for java sockets
 
@@ -118,7 +117,7 @@ public class HttpSSLProtocolSocketFactory
      * @see javax.net.SocketFactory#createSocket()
      */
     @Override
-    public Socket createSocket() throws IOException, UnknownHostException {
+    public Socket createSocket() throws IOException {
         SSLSocketFactory sslfac = getSSLSocketFactory();
         Socket sock = sslfac.createSocket();
         setSocket(sock);

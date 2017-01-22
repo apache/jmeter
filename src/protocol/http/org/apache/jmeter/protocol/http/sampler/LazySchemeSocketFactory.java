@@ -21,10 +21,8 @@ package org.apache.jmeter.protocol.http.sampler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.SchemeLayeredSocketFactory;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -86,14 +84,12 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
      * @param params {@link HttpParams}
      * @return the socket
      * @throws IOException when the socket creation fails
-     * @throws UnknownHostException when the remote or local addresses can't be resolved
-     * @throws ConnectTimeoutException when the connection times out
      * @see org.apache.http.conn.scheme.SchemeSocketFactory#connectSocket(java.net.Socket, java.net.InetSocketAddress, java.net.InetSocketAddress, org.apache.http.params.HttpParams)
      */
     @Override
     public Socket connectSocket(Socket sock, InetSocketAddress remoteAddress,
             InetSocketAddress localAddress, HttpParams params)
-            throws IOException, UnknownHostException, ConnectTimeoutException {
+            throws IOException {
         return AdapteeHolder.getINSTANCE().connectSocket(sock, remoteAddress, localAddress, params);
     }
     
@@ -114,10 +110,11 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
      * @param port int port of socket
      * @param params {@link HttpParams}
      * @return the socket
+     * @throws IOException
      */
     @Override
     public Socket createLayeredSocket(Socket socket, String target, int port,
-            HttpParams params) throws IOException, UnknownHostException {
+            HttpParams params) throws IOException {
         return AdapteeHolder.getINSTANCE().createLayeredSocket(socket, target, port, params);
     }
 }

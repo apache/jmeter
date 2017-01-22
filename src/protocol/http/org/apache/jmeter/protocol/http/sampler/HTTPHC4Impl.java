@@ -59,7 +59,6 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -611,11 +610,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @param url the target url (will be used to look up a possible subject for the execution)
      * @return the result of the execution of the httpRequest
      * @throws IOException
-     * @throws ClientProtocolException
      */
     private HttpResponse executeRequest(final HttpClient httpClient,
             final HttpRequestBase httpRequest, final HttpContext localContext, final URL url)
-            throws IOException, ClientProtocolException {
+            throws IOException {
         AuthManager authManager = getAuthManager();
         if (authManager != null) {
             Subject subject = authManager.getSubjectForUrl(url);
@@ -636,7 +634,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                     HttpHost target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
                     // Create AuthCache instance
                     AuthCache authCache = new BasicAuthCache();
-                    // Generate BASIC scheme object and 
+                    // Generate BASIC scheme object and
                     // add it to the local auth cache
                     BasicScheme basicAuth = new BasicScheme();
                     authCache.put(target, basicAuth);

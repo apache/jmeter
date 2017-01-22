@@ -20,7 +20,6 @@ package org.apache.jmeter.functions;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -54,9 +53,9 @@ public class XPathFileContainer {
         return nextRow;
     }
 
-    public XPathFileContainer(String file, String xpath) throws FileNotFoundException, IOException,
+    public XPathFileContainer(String file, String xpath) throws IOException,
             ParserConfigurationException, SAXException, TransformerException {
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("XPath(" + file + ") xpath " + xpath);
         }
         fileName = file;
@@ -64,7 +63,7 @@ public class XPathFileContainer {
         nodeList=load(xpath);
     }
 
-    private NodeList load(String xpath) throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
+    private NodeList load(String xpath) throws IOException, ParserConfigurationException, SAXException,
             TransformerException {
         NodeList nl = null;
         try ( FileInputStream fis = new FileInputStream(fileName);
@@ -78,7 +77,7 @@ public class XPathFileContainer {
                 | ParserConfigurationException | IOException e) {
             log.warn(e.toString());
             throw e;
-        } 
+        }
         return nl;
     }
 
@@ -91,7 +90,6 @@ public class XPathFileContainer {
      * round
      *
      * @return the first free (unread) row
-     *
      */
     public int nextRow() {
         int row = nextRow;

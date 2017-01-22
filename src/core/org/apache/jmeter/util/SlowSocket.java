@@ -94,7 +94,7 @@ public class SlowSocket extends Socket {
      *             <code>localPort</code> values lie outside of the allowed
      *             range between <code>0</code> and <code>65535</code>
      */
-    public SlowSocket(int cps, String host, int port) throws UnknownHostException, IOException {
+    public SlowSocket(int cps, String host, int port) throws IOException {
         super(host, port);
         if (cps <=0) {
             throw new IllegalArgumentException("Speed (cps) <= 0");

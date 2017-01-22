@@ -53,7 +53,7 @@ public class FileRowColContainer {
     /** Delimiter for this file */
     private final String delimiter;
 
-    public FileRowColContainer(String file, String delim) throws IOException, FileNotFoundException {
+    public FileRowColContainer(String file, String delim) throws IOException {
         log.debug("FRCC(" + file + "," + delim + ")");
         fileName = file;
         delimiter = delim;
@@ -62,7 +62,7 @@ public class FileRowColContainer {
         load();
     }
 
-    public FileRowColContainer(String file) throws IOException, FileNotFoundException {
+    public FileRowColContainer(String file) throws IOException {
         log.debug("FRCC(" + file + ")[" + DELIMITER + "]");
         fileName = file;
         delimiter = DELIMITER;
@@ -71,7 +71,7 @@ public class FileRowColContainer {
         load();
     }
 
-    private void load() throws IOException, FileNotFoundException {
+    private void load() throws IOException {
         try ( FileReader fis = new FileReader(fileName);
                 BufferedReader myBread = new BufferedReader(fis);) {
             String line = myBread.readLine();

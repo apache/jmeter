@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.util;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 
 import javax.net.ssl.SSLSocket;
@@ -81,7 +80,7 @@ public class HC4TrustAllSSLSocketFactory extends SSLSocketFactory {
      */
     @Override
     public Socket createLayeredSocket(Socket socket, String host, int port,
-            boolean autoClose) throws IOException, UnknownHostException {
+            boolean autoClose) throws IOException {
         SSLSocket sslSocket = (SSLSocket) this.factory.createSocket(
                 socket,
                 host,
