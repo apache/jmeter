@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,14 +37,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.smtp.sampler.SmtpSampler;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -510,7 +507,7 @@ public class SmtpPanel extends JPanel {
     public void setHeaderFields(CollectionProperty fields) {
         clearHeaderFields();
         for (int i = 0; i < fields.size(); i++) {
-            Argument argument = (Argument)((TestElementProperty)fields.get(i)).getObjectValue();
+            Argument argument = (Argument) fields.get(i).getObjectValue();
             String name = argument.getName();
             JButton removeButton = addHeaderActionPerformed(null);
             JTextField nameTF = removeButtons.get(removeButton);
