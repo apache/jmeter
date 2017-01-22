@@ -978,8 +978,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             }
 
             @Override
-            public int compare(SearchResult o1, SearchResult o2)
-            {
+            public int compare(SearchResult o1, SearchResult o2) {
                 String nm1 = o1.getName();
                 String nm2 = o2.getName();
 
