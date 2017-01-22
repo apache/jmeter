@@ -1322,12 +1322,8 @@ public class ProxyControl extends GenericController {
         ValueReplacer replacer = new ValueReplacer();
         for (Arguments variable : variables) {
             final Map<String, String> map = variable.getArgumentsAsMap();
-            for (Iterator<String> vals = map.values().iterator(); vals.hasNext(); ) {
-                final Object next = vals.next();
-                if ("".equals(next)) {// Drop any empty values (Bug 45199)
-                    vals.remove();
-                }
-            }
+            // Drop any empty values (Bug 45199)
+            map.values().removeIf(""::equals);
             replacer.addVariables(map);
         }
 
