@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.protocol.http.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.JMenuItem;
