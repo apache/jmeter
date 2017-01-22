@@ -313,8 +313,8 @@ public class ProxyControl extends GenericController {
 
     public ProxyControl() {
         setPort(DEFAULT_PORT);
-        setExcludeList(new HashSet<String>());
-        setIncludeList(new HashSet<String>());
+        setExcludeList(new HashSet<>());
+        setIncludeList(new HashSet<>());
         setCaptureHttpHeaders(true); // maintain original behaviour
     }
 

@@ -430,7 +430,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         selectHandlerPanel.addActionListener(this);
 
         // if no results render in jmeter.properties, load Standard (default)
-        List<String> classesToAdd = Collections.<String>emptyList();
+        List<String> classesToAdd = Collections.emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(CookieHandler.class);
         } catch (IOException e1) {
