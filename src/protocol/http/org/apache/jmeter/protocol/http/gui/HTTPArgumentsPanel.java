@@ -172,12 +172,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         JTable table = getTable();
         final JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem variabilizeItem = new JMenuItem(JMeterUtils.getResString("transform_into_variable"));
-        variabilizeItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transformNameIntoVariable();
-            }
-        });
+        variabilizeItem.addActionListener(e -> transformNameIntoVariable());
         popupMenu.add(variabilizeItem);
         table.setComponentPopupMenu(popupMenu);
     }

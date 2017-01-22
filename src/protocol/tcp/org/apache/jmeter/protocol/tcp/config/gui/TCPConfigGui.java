@@ -161,14 +161,11 @@ public class TCPConfigGui extends AbstractConfigGui {
         JLabel label = new JLabel(JMeterUtils.getResString("reuseconnection")); //$NON-NLS-1$
 
         reUseConnection = new JCheckBox("", true);
-        reUseConnection.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    closeConnection.setEnabled(true);
-                } else {
-                    closeConnection.setEnabled(false);
-                }
+        reUseConnection.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                closeConnection.setEnabled(true);
+            } else {
+                closeConnection.setEnabled(false);
             }
         });
         label.setLabelFor(reUseConnection);
