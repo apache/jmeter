@@ -894,7 +894,7 @@ public class SmtpPanel extends JPanel {
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbUseAuthActionPerformed(ActionEvent evt) {
+    private void cbUseAuthActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         tfAuthUsername.setEditable(cbUseAuth.isSelected());
         tfAuthPassword.setEditable(cbUseAuth.isSelected());
     }
@@ -906,7 +906,7 @@ public class SmtpPanel extends JPanel {
      * @param evt
      *            ActionEvent to be handled
      */
-    private void attachmentFolderFileChooserActionPerformed(ActionEvent evt) {
+    private void attachmentFolderFileChooserActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         File chosen = attachmentFileChooser.getSelectedFile();
         if (chosen == null) {
             return;
@@ -927,32 +927,20 @@ public class SmtpPanel extends JPanel {
      * @param evt
      *            ActionEvent to be handled
      */
-    private void browseButtonActionPerformed(ActionEvent evt) {
+    private void browseButtonActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         attachmentFileChooser.showOpenDialog(this);
     }
 
-    private void cbUseEmlMessageActionPerformed(ActionEvent evt) {
+    private void cbUseEmlMessageActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         if (cbUseEmlMessage.isSelected()) {
             tfEmlMessage.setEnabled(true);
             emlBrowseButton.setEnabled(true);
-
-            /*tfMailFrom.setEnabled(false);
-            tfMailTo.setEnabled(false);
-            tfMailToCC.setEnabled(false);
-            tfMailToBCC.setEnabled(false);
-            tfSubject.setEnabled(false);*/
             taMessage.setEnabled(false);
             tfAttachment.setEnabled(false);
             browseButton.setEnabled(false);
         } else {
             tfEmlMessage.setEnabled(false);
             emlBrowseButton.setEnabled(false);
-
-            /*tfMailFrom.setEnabled(true);
-            tfMailTo.setEnabled(true);
-            tfMailToCC.setEnabled(true);
-            tfMailToBCC.setEnabled(true);
-            tfSubject.setEnabled(true);*/
             taMessage.setEnabled(true);
             tfAttachment.setEnabled(true);
             browseButton.setEnabled(true);
@@ -966,7 +954,7 @@ public class SmtpPanel extends JPanel {
      * @param evt
      *            ActionEvent to be handled
      */
-    private void emlFileChooserActionPerformed(ActionEvent evt) {
+    private void emlFileChooserActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         tfEmlMessage.setText(emlFileChooser.getSelectedFile().getAbsolutePath());
     }
 
@@ -976,7 +964,7 @@ public class SmtpPanel extends JPanel {
      * @param evt
      *            ActionEvent to be handled
      */
-    private void emlBrowseButtonActionPerformed(ActionEvent evt) {
+    private void emlBrowseButtonActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
         emlFileChooser.showOpenDialog(this);
     }
 
@@ -1074,7 +1062,7 @@ public class SmtpPanel extends JPanel {
         this.securitySettingsPanel = securitySettingsPanel;
     }
 
-    private void removeHeaderActionPerformed(ActionEvent evt){
+    private void removeHeaderActionPerformed(ActionEvent evt){ // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
         if(source instanceof JButton){
             if(headerFields.size() == 1){
@@ -1091,7 +1079,8 @@ public class SmtpPanel extends JPanel {
             validate();
         }
     }
-    private void emptySubjectActionPerformed(ChangeEvent evt) {
+    
+    private void emptySubjectActionPerformed(ChangeEvent evt) { // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
         if(source instanceof JCheckBox){
             if(cbSuppressSubject.isSelected()){
