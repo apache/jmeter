@@ -117,12 +117,7 @@ class RegexpHTMLParser extends HTMLParser {
      * Thread-local input:
      */
     private static final ThreadLocal<PatternMatcherInput> localInput =
-        new ThreadLocal<PatternMatcherInput>() {
-        @Override
-        protected PatternMatcherInput initialValue() {
-            return new PatternMatcherInput(new char[0]);
-        }
-    };
+            ThreadLocal.withInitial(() -> new PatternMatcherInput(new char[0]));
 
     /**
      * Make sure to compile the regular expression upon instantiation:

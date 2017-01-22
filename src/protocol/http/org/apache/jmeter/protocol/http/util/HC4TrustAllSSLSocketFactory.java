@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLSocket;
 

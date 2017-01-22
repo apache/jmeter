@@ -131,12 +131,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /** the cache of TCP Connections */
     // KEY = TCPKEY or ERRKEY, Entry= Socket or String
     private static final ThreadLocal<Map<String, Object>> tp =
-        new ThreadLocal<Map<String, Object>>() {
-        @Override
-        protected Map<String, Object> initialValue() {
-            return new HashMap<>();
-        }
-    };
+            ThreadLocal.withInitial(HashMap::new);
 
     private transient TCPClient protocolHandler;
     

@@ -102,13 +102,8 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final boolean CAN_SET_PREEMPTIVE; // OK to set pre-emptive auth?
 
-    private static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients = 
-        new ThreadLocal<Map<HostConfiguration, HttpClient>>(){
-        @Override
-        protected Map<HostConfiguration, HttpClient> initialValue() {
-            return new HashMap<>();
-        }
-    };
+    private static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients =
+            ThreadLocal.withInitial(HashMap::new);
 
     // Needs to be accessible by HTTPSampler2
     volatile HttpClient savedClient;
