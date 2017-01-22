@@ -232,7 +232,7 @@ public class IfController extends GenericController implements Serializable, Thr
         // For subsequent calls, we are inside the IfControllerGroup,
         // so then we just pass the control to the next item inside the if control
         boolean result = true;
-        if(isEvaluateAll() || isFirst()) {
+        if (isEvaluateAll() || isFirst()) {
             result = isUseExpression() ? 
                     evaluateExpression(getCondition())
                     :
@@ -243,12 +243,8 @@ public class IfController extends GenericController implements Serializable, Thr
             return super.next();
         }
         // If-test is false, need to re-initialize indexes
-        try {
-            initializeSubControllers();
-            return nextIsNull();
-        } catch (NextIsNullException e1) {
-            return null;
-        }
+        initializeSubControllers();
+        return nextIsNull();
     }
     
     /**

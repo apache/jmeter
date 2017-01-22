@@ -23,7 +23,6 @@ import java.awt.HeadlessException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -171,13 +170,6 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         guiTitles.put("Example Sampler", Boolean.FALSE);
     }
 
-    /**
-     * @return
-     * @throws ParserConfigurationException
-     * @throws IOException 
-     * @throws SAXException 
-     * @throws FileNotFoundException 
-     */
     private Element getBodyFromXMLDocument(InputStream stream)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -237,13 +229,11 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         return unseen;
     }
 
-    public void checkGuiSet() throws Exception {
+    public void checkGuiSet() {
         guiTitles.remove("Example Sampler");// We don't mind if this is left over
         guiTitles.remove("Sample_Result_Save_Configuration");// Ditto, not a sampler
         assertEquals("Should not have any names left over, check name of components in EN (default) Locale, which must match name attribute of component", 0, scanprintMap(guiTitles, "GUI"));
     }
-
-    
 
     /*
      * Test GUI elements - create the suite of tests
@@ -272,7 +262,6 @@ public class JMeterTest extends JMeterTestCaseJUnit {
         return suite;
     }
 
-
     /*
      * Test GUI elements - create the suite of tests
      */
@@ -297,7 +286,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     /*
      * Test GUI elements - run the test
      */
-    public void runGUITitle() throws Exception {
+    public void runGUITitle() {
         if (guiTitles.size() > 0) {
             String title = guiItem.getDocAnchor();
             boolean ct = guiTitles.containsKey(title);
@@ -324,7 +313,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     /*
      * Test GUI elements - run for all components
      */
-    public void GUIComponents1() throws Exception {
+    public void GUIComponents1() {
         String name = guiItem.getClass().getName();
 
         assertEquals("Name should be same as static label for " + name, guiItem.getStaticLabel(), guiItem.getName());
@@ -400,7 +389,7 @@ public class JMeterTest extends JMeterTestCaseJUnit {
     /*
      * Test serializable elements - test the object
      */
-    public void runSerialTest() throws Exception {
+    public void runSerialTest() {
         if (!(serObj instanceof Component)) {// 
             try {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -417,7 +406,6 @@ public class JMeterTest extends JMeterTestCaseJUnit {
             }
         }
     }
-
 
     public void readAliases() throws Exception {
         nameMap = SaveService.loadProperties();

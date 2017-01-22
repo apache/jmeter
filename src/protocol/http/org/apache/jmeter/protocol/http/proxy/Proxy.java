@@ -600,17 +600,9 @@ public class Proxy extends Thread {
      * @param pageEncoding the encoding used for the sample result page
      */
     private void addFormEncodings(SampleResult result, String pageEncoding) {
-        FormCharSetFinder finder = new FormCharSetFinder();
-        if (!result.getContentType().startsWith("text/")){ // TODO perhaps make more specific than this?
-            return; // no point parsing anything else, e.g. GIF ...
-        }
-        try {
+        if (result.getContentType().startsWith("text/")){ // TODO perhaps make more specific than this?
+            FormCharSetFinder finder = new FormCharSetFinder();
             finder.addFormActionsAndCharSet(result.getResponseDataAsString(), formEncodings, pageEncoding);
-        }
-        catch (HTMLParseException parseException) {
-            if (log.isDebugEnabled()) {
-                log.debug(port + "Unable to parse response, could not find any form character set encodings");
-            }
         }
     }
 

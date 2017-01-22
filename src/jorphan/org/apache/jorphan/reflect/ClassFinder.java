@@ -423,8 +423,7 @@ public final class ClassFinder {
         return strClassName;
     }
 
-    
-    private static void findClassesInOnePath(String strPath, Set<String> listClasses, ClassFilter filter) throws IOException {
+    private static void findClassesInOnePath(String strPath, Set<String> listClasses, ClassFilter filter) {
         File file = new File(strPath);
         if (file.isDirectory()) {
             findClassesInPathsDir(strPath, file, listClasses, filter);
@@ -446,17 +445,16 @@ public final class ClassFinder {
                 log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage(),e);
             }
             finally {
-                if(zipFile != null) {
+                if (zipFile != null) {
                     try {zipFile.close();} catch (Exception e) {}
                 }
             }
         }
     }
 
-
-    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
+    private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) {
         String[] list = dir.list();
-        if(list == null) {
+        if (list == null) {
             log.warn(dir.getAbsolutePath()+" is not a folder");
             return;
         }

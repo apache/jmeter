@@ -84,7 +84,7 @@ public class TestLoad extends JMeterTestCaseJUnit {
         }
     }
     
-    public void checkTestFile() throws Exception{
+    public void checkTestFile() {
         HashTree tree = null;
         try {
             tree =getTree(testFile);
@@ -94,7 +94,7 @@ public class TestLoad extends JMeterTestCaseJUnit {
         assertTree(tree);
     }
     
-    private void assertTree(HashTree tree) throws Exception {
+    private void assertTree(HashTree tree) {
         assertNotNull(parent+": "+ testFile.getName()+" caused null tree: ",tree);
         final Object object = tree.getArray()[0];
         final String name = testFile.getName();

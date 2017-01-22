@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.extractor.json.jsonpath;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -68,10 +67,8 @@ public class JSONManager {
      * @param jsonString JSON String from which data is extracted
      * @param jsonPath JSON-PATH expression
      * @return List of JSON Strings of the extracted data
-     * @throws ParseException when parsing fails
      */
-    public List<Object> extractWithJsonPath(String jsonString, String jsonPath)
-            throws ParseException {
+    public List<Object> extractWithJsonPath(String jsonString, String jsonPath) {
         JsonPath jsonPathParser = getJsonPath(jsonPath);
         List<Object> extractedObjects;
         try {

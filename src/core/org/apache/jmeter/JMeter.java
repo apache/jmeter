@@ -884,7 +884,7 @@ public class JMeter implements JMeterPlugin {
     }
 
     private void startNonGui(String testFile, String logFile, CLOption remoteStart, boolean generateReportDashboard)
-            throws IllegalUserActionException, ConfigurationException {
+            throws IllegalUserActionException {
         // add a system property so samplers can check to see if JMeter
         // is running in NonGui mode
         System.setProperty(JMETER_NON_GUI, "true");// $NON-NLS-1$

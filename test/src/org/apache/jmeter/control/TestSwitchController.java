@@ -88,7 +88,7 @@ public class TestSwitchController extends JMeterTestCase {
             runSimpleTest2("X", "one", "Default"); // should match the default entry
         }
 
-        private void runSimpleTests(String cond, String exp) throws Exception {
+        private void runSimpleTests(String cond, String exp) {
             runSimpleTest(cond, exp);
             runSimpleTest2(cond, exp, "one");
         }
@@ -104,7 +104,7 @@ public class TestSwitchController extends JMeterTestCase {
          *  + + Sampler "three"
          *  + Sampler "after"
          */
-        private void runSimpleTest(String cond, String exp) throws Exception {
+        private void runSimpleTest(String cond, String exp) {
             GenericController controller = new GenericController();
 
             SwitchController switch_cont = new SwitchController();
@@ -146,7 +146,7 @@ public class TestSwitchController extends JMeterTestCase {
          * + + + three
          * + After
          */
-        private void runSimpleTest2(String cond, String exp, String sub1Name) throws Exception {
+        private void runSimpleTest2(String cond, String exp, String sub1Name) {
             GenericController controller = new GenericController();
             GenericController sub_1 = new GenericController();
             GenericController sub_2 = new GenericController();
@@ -209,7 +209,7 @@ public class TestSwitchController extends JMeterTestCase {
          * cond  = Switch condition 
          * exp[] = expected results
          */
-        private void runTest2(String cond, String exp[]) throws Exception {
+        private void runTest2(String cond, String exp[]) {
             int loops = 3;
             LoopController controller = new LoopController();
             controller.setLoops(loops);

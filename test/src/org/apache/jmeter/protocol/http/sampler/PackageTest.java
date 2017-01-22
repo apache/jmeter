@@ -36,12 +36,12 @@ import org.junit.experimental.categories.Category;
 public class PackageTest {
 
     @Test
-    public void testConfiguring() throws Exception {
+    public void testConfiguring() {
         HTTPSamplerBase sampler = (HTTPSamplerBase) new HttpTestSampleGui().createTestElement();
         configure(sampler);
     }
 
-    private void configure(HTTPSamplerBase sampler) throws Exception {
+    private void configure(HTTPSamplerBase sampler) {
         sampler.addArgument("arg1", "val1");
         ConfigTestElement config = (ConfigTestElement) new HttpDefaultsGui().createTestElement();
         ((Arguments) config.getProperty(HTTPSamplerBase.ARGUMENTS).getObjectValue()).addArgument(new HTTPArgument(

@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 public class DistributedRunnerTest {
 
-    public static void createJmeterEnv() throws IOException {
+    public static void createJmeterEnv() {
         File propsFile;
         try {
             propsFile = File.createTempFile("jmeter", ".properties");

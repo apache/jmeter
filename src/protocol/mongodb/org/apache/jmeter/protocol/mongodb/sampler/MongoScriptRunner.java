@@ -42,11 +42,8 @@ public class MongoScriptRunner {
      * @param script
      *            script to evaluate on the database
      * @return result of evaluation on the database
-     * @throws Exception
-     *             when evaluation on the database fails
      */
-    public Object evaluate(DB db, String script)
-        throws Exception {
+    public Object evaluate(DB db, String script) {
 
         if(log.isDebugEnabled()) {
             log.debug("database: " + db.getName()+", script: " + script);

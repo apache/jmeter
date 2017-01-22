@@ -262,14 +262,14 @@ public class ResponseAssertionTest {
 
 //TODO - need a lot more tests
     
-    private void assertPassed() throws Exception{
+    private void assertPassed() {
         assertNull(result.getFailureMessage(),result.getFailureMessage());
         assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());
         assertFalse("Not expecting error",result.isError());
         assertFalse("Not expecting failure",result.isFailure());        
     }
     
-    private void assertFailed() throws Exception{
+    private void assertFailed() {
         assertNotNull(result.getFailureMessage());
         assertFalse("Should not be: Response was null","Response was null".equals(result.getFailureMessage()));
         assertFalse("Not expecting error: "+result.getFailureMessage(),result.isError());

@@ -138,7 +138,7 @@ public class LoopController extends GenericController implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         reInitialize();
         if (endOfLoop()) {
             if (!getContinueForever()) {

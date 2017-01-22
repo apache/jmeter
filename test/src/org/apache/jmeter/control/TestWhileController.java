@@ -90,7 +90,7 @@ public class TestWhileController extends JMeterTestCase {
             runtestPrevOK(OTHER);
         }
 
-        private void runtestPrevOK(String type) throws Exception {
+        private void runtestPrevOK(String type) {
             GenericController controller = new GenericController();
             WhileController while_cont = new WhileController();
             setLastSampleStatus(true);
@@ -286,7 +286,7 @@ public class TestWhileController extends JMeterTestCase {
             runTestPrevFailed("False");
         }
 
-        private void runTestPrevFailed(String s) throws Exception {
+        private void runTestPrevFailed(String s) {
             GenericController controller = new GenericController();
             WhileController while_cont = new WhileController();
             setLastSampleStatus(false);
@@ -313,7 +313,7 @@ public class TestWhileController extends JMeterTestCase {
         }
 
         // Should behave the same for blank and LAST because success on input
-        private void runTestLastFailed(String s) throws Exception {
+        private void runTestLastFailed(String s) {
             GenericController controller = new GenericController();
             controller.addTestElement(new TestSampler("1"));
             WhileController while_cont = new WhileController();

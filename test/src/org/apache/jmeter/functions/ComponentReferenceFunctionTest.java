@@ -115,14 +115,14 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
         }
     }
     
-    public void checkFunctionSet() throws Exception {
+    public void checkFunctionSet() {
         assertEquals("Should not have any names left over", 0, JMeterTest.scanprintMap(funcTitles, "Function"));
     }
     
     /*
      * run the function test
      */
-    public void runFunction() throws Exception {
+    public void runFunction() {
         if (funcTitles.size() > 0) {
             String title = funcItem.getReferenceKey();
             boolean ct = funcTitles.containsKey(title);
@@ -144,7 +144,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
     /*
      * Check that function descriptions are OK
      */
-    public void runFunction2() throws Exception {
+    public void runFunction2() {
         for (Object o : funcItem.getArgumentDesc()) {
             assertTrue("Description must be a String", o instanceof String);
             assertFalse("Description must not start with [refkey", ((String) o).startsWith("[refkey"));

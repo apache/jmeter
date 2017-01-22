@@ -53,7 +53,7 @@ public class OnceOnlyController extends GenericController implements Serializabl
     }
 
     @Override
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         return null;
     }
 }

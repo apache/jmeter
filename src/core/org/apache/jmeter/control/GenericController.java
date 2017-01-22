@@ -232,9 +232,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * @param element
      *            the current <em>next</em> element
      * @return input element
-     * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
+    protected Sampler nextIsASampler(Sampler element) {
         incrementCurrent();
         return element;
     }
@@ -244,9 +243,8 @@ public class GenericController extends AbstractTestElement implements Controller
      * Reinitialises the controller.
      *
      * @return null (always, for this class)
-     * @throws NextIsNullException when the end of the list has already been reached
      */
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         reInitialize();
         return null;
     }

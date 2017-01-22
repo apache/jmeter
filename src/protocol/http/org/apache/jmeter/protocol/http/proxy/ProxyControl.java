@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -103,7 +102,6 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Class handles storing of generated samples, etc
@@ -881,9 +879,8 @@ public class ProxyControl extends GenericController {
      * Construct AuthManager
      * @param authorization
      * @return AuthManager
-     * @throws IllegalUserActionException
      */
-    private AuthManager newAuthorizationManager(Authorization authorization) throws IllegalUserActionException {
+    private AuthManager newAuthorizationManager(Authorization authorization) {
         AuthManager authManager = new AuthManager();
         authManager.setProperty(TestElement.GUI_CLASS, AUTH_PANEL);
         authManager.setProperty(TestElement.TEST_CLASS, AUTH_MANAGER);
@@ -926,11 +923,8 @@ public class ProxyControl extends GenericController {
      *            Node in the tree where we will add the Controller
      * @param name
      *            A name for the Controller
-     * @throws InvocationTargetException
-     * @throws InterruptedException
      */
-    private void addSimpleController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
-            throws InterruptedException, InvocationTargetException {
+    private void addSimpleController(final JMeterTreeModel model, final JMeterTreeNode node, String name) {
         final GenericController sc = new GenericController();
         sc.setProperty(TestElement.GUI_CLASS, LOGIC_CONTROLLER_GUI);
         sc.setName(name);
@@ -946,11 +940,8 @@ public class ProxyControl extends GenericController {
      *            Node in the tree where we will add the Controller
      * @param name
      *            A name for the Controller
-     * @throws InvocationTargetException
-     * @throws InterruptedException
      */
-    private void addTransactionController(final JMeterTreeModel model, final JMeterTreeNode node, String name)
-            throws InterruptedException, InvocationTargetException {
+    private void addTransactionController(final JMeterTreeModel model, final JMeterTreeNode node, String name) {
         final TransactionController sc = new TransactionController();
         sc.setIncludeTimers(false);
         sc.setProperty(TestElement.GUI_CLASS, TRANSACTION_CONTROLLER_GUI);

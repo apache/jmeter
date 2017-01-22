@@ -231,7 +231,7 @@ public class ForeachController extends GenericController implements Serializable
      * {@inheritDoc}
      */
     @Override
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         reInitialize();
         // Conditions to reset the loop count
         if (endOfArguments() // no more variables to iterate

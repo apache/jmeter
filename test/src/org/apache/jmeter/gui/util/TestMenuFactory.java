@@ -28,7 +28,7 @@ import org.junit.experimental.categories.Category;
 @Category(NeedGuiTests.class)
 public final class TestMenuFactory extends JMeterTestCase {
 
-    private static void check(String s, int i) throws Exception {
+    private static void check(String s, int i) {
         assertFalse("The number of " + s + " should not be 0", 0 == i);
     }
 

@@ -40,9 +40,8 @@ class StreamCopier extends Thread {
     /**
      * @param is {@link InputStream}
      * @param os {@link OutputStream}
-     * @throws IOException 
      */
-    StreamCopier(InputStream is, OutputStream os) throws IOException {
+    StreamCopier(InputStream is, OutputStream os) {
         this.is = is;
         this.os = os;
     }

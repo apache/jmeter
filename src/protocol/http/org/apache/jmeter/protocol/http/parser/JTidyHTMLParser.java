@@ -33,11 +33,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.SAXException;
 
 /**
  * HtmlParser implementation using JTidy.
- *
  */
 class JTidyHTMLParser extends HTMLParser {
     private static final Logger log = LoggerFactory.getLogger(JTidyHTMLParser.class);
@@ -51,17 +49,9 @@ class JTidyHTMLParser extends HTMLParser {
      */
     @Override
     public Iterator<URL> getEmbeddedResourceURLs(String userAgent, byte[] html, URL baseUrl, URLCollection urls, String encoding) throws HTMLParseException {
-        Document dom = null;
-        try {
-            dom = (Document) getDOM(html, encoding);
-        } catch (SAXException se) {
-            throw new HTMLParseException(se);
-        }
-
+        Document dom = (Document) getDOM(html, encoding);
         // Now parse the DOM tree
-
         scanNodes(dom, urls, baseUrl);
-
         return urls.iterator();
     }
 
@@ -228,11 +218,8 @@ class JTidyHTMLParser extends HTMLParser {
      * @param text
      *            an xml document (as a byte array)
      * @return a node representing a whole xml
-     *
-     * @throws SAXException
-     *             indicates an error parsing the xml document
      */
-    private static Node getDOM(byte[] text, String encoding) throws SAXException {
+    private static Node getDOM(byte[] text, String encoding) {
         log.debug("Start : getDOM");
         Node node = getTidyParser(encoding).parseDOM(new ByteArrayInputStream(text), null);
         if (log.isDebugEnabled()) {

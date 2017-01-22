@@ -138,7 +138,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         }
     }
     
-    private List<Object> extractWithJSonPath(String textToParse, String expression) throws ParseException {
+    private List<Object> extractWithJSonPath(String textToParse, String expression) {
         JSONManager jsonManager = new JSONManager();
         return jsonManager.extractWithJsonPath(textToParse, expression);
     }

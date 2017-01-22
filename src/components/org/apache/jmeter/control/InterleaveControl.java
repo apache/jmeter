@@ -120,7 +120,7 @@ public class InterleaveControl extends GenericController implements Serializable
      * {@inheritDoc}
      */
     @Override
-    protected Sampler nextIsASampler(Sampler element) throws NextIsNullException {
+    protected Sampler nextIsASampler(Sampler element) {
         skipNext = true;
         incrementCurrent();
         return element;

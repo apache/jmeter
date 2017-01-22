@@ -74,7 +74,7 @@ public class WhileController extends GenericController implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    protected Sampler nextIsNull() throws NextIsNullException {
+    protected Sampler nextIsNull() {
         reInitialize();
         if (endOfLoop(true)){
             return null;

@@ -384,16 +384,12 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Aggregate a value to the aggregator defined by the specified parameters.
-     *
-     * @param groupData
-     *            the map
-     * @param key
-     *            the key
-     * @param value
-     *            the value
+     * @param factory
+     * @param data
+     * @param key the key
+     * @param value the value
      */
-    private void aggregateValue(AggregatorFactory factory, SeriesData data,
-            Double key, double value) {
+    private void aggregateValue(AggregatorFactory factory, SeriesData data, Double key, double value) {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
