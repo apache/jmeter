@@ -20,7 +20,6 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
@@ -45,13 +44,7 @@ public class TimeVSThreadGraphConsumer extends AbstractGraphConsumer {
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
-
-            @Override
-            public Double select(Sample sample) {
-                return Double.valueOf(sample.getAllThreads());
-            }
-        };
+        return sample -> Double.valueOf(sample.getAllThreads());
     }
 
     /*

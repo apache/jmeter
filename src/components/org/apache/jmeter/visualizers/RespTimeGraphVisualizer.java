@@ -302,44 +302,38 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         if ((matcher == null) || (matcher.find())) {
             final long startTimeMS = sampleResult.getStartTime();
             final long startTimeInterval = startTimeMS / intervalValue;
-            JMeterUtils.runSafe(false, new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (lock) {
-                        // Use for x-axis scale
-                        if (startTimeInterval < minStartTime) {
-                            minStartTime = startTimeInterval;
-                        } else if (startTimeInterval > maxStartTime) {
-                            maxStartTime = startTimeInterval;
+            JMeterUtils.runSafe(false, () -> {
+                synchronized (lock) {
+                    // Use for x-axis scale
+                    if (startTimeInterval < minStartTime) {
+                        minStartTime = startTimeInterval;
+                    } else if (startTimeInterval > maxStartTime) {
+                        maxStartTime = startTimeInterval;
+                    }
+                    // Generate x-axis label and associated color
+                    if (!seriesNames.containsKey(sampleLabel)) {
+                        seriesNames.put(sampleLabel,
+                                new RespTimeGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
+                        // reset colors index
+                        if (colorIdx >= listColors.size()) {
+                            colorIdx = 0;
                         }
-                        // Generate x-axis label and associated color
-                        if (!seriesNames.containsKey(sampleLabel)) {
-                            seriesNames.put(sampleLabel, 
-                                    new RespTimeGraphLineBean(sampleLabel, listColors.get(colorIdx++)));
-                            // reset colors index
-                            if (colorIdx >= listColors.size()) {
-                                colorIdx = 0;
-                            }
-                        }
-                        // List of value by sampler
-                        Map<Long, StatCalculatorLong> subList = pList.get(sampleLabel);
-                        final Long startTimeIntervalLong = Long.valueOf(startTimeInterval);
-                        if (subList != null) {
-                            long respTime = sampleResult.getTime();
-                            StatCalculatorLong value = subList.get(startTimeIntervalLong);
-                            if (value==null) {
-                                value = new StatCalculatorLong();
-                                subList.put(startTimeIntervalLong, value);
-                            }
-                            value.addValue(respTime, 1);
-                        } else {
-                            // We want to retain insertion order, so LinkedHashMap is necessary
-                            Map<Long, StatCalculatorLong> newSubList = new LinkedHashMap<>(5);
-                            StatCalculatorLong helper = new StatCalculatorLong();
-                            helper.addValue(Long.valueOf(sampleResult.getTime()),1);
-                            newSubList.put(startTimeIntervalLong,  helper);
-                            pList.put(sampleLabel, newSubList);
-                        }
+                    }
+                    // List of value by sampler
+                    Map<Long, StatCalculatorLong> subList = pList.get(sampleLabel);
+                    final Long startTimeIntervalLong = Long.valueOf(startTimeInterval);
+                    if (subList != null) {
+                        long respTime = sampleResult.getTime();
+                        StatCalculatorLong value = subList.computeIfAbsent(
+                                startTimeIntervalLong, k -> new StatCalculatorLong());
+                        value.addValue(respTime, 1);
+                    } else {
+                        // We want to retain insertion order, so LinkedHashMap is necessary
+                        Map<Long, StatCalculatorLong> newSubList = new LinkedHashMap<>(5);
+                        StatCalculatorLong helper = new StatCalculatorLong();
+                        helper.addValue(Long.valueOf(sampleResult.getTime()),1);
+                        newSubList.put(startTimeIntervalLong,  helper);
+                        pList.put(sampleLabel, newSubList);
                     }
                 }
             });
@@ -494,15 +488,12 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_settings"), settingsPane); //$NON-NLS-1$
         tabbedGraph.addTab(JMeterUtils.getResString("aggregate_graph_tab_graph"), graphPanel); //$NON-NLS-1$
         
-        // If clic on the Graph tab, make the graph (without apply interval or filter)
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
-                int index = srcTab.getSelectedIndex();
-                if (srcTab.getTitleAt(index).equals(JMeterUtils.getResString("aggregate_graph_tab_graph"))) { //$NON-NLS-1$
-                    actionMakeGraph();
-                }
+        // If click on the Graph tab, make the graph (without apply interval or filter)
+        ChangeListener changeListener = changeEvent -> {
+            JTabbedPane srcTab = (JTabbedPane) changeEvent.getSource();
+            int index = srcTab.getSelectedIndex();
+            if (srcTab.getTitleAt(index).equals(JMeterUtils.getResString("aggregate_graph_tab_graph"))) { //$NON-NLS-1$
+                actionMakeGraph();
             }
         };
         tabbedGraph.addChangeListener(changeListener);

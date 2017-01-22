@@ -114,7 +114,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
-        Arrays.sort(functionNames, (o1, o2) -> o1.compareToIgnoreCase(o2));
+        Arrays.sort(functionNames, String::compareToIgnoreCase);
         functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
         functionList.addChangeListener(this);
     }

@@ -284,9 +284,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
          */
         private void stopAllThreadGroups() {
             // ConcurrentHashMap does not need synch. here
-            for (AbstractThreadGroup threadGroup : groups) {
-                threadGroup.stop();
-            }
+            groups.forEach(AbstractThreadGroup::stop);
         }
         
         /**
@@ -300,26 +298,20 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
         
         /**
-         * @return boolean true if all threads of all Threead Groups stopped
+         * @return boolean true if all threads of all Thread Groups stopped
          */
         private boolean verifyThreadsStopped() {
-            boolean stoppedAll = true;
-            // ConcurrentHashMap does not need synch. here
-            for (AbstractThreadGroup threadGroup : groups) {
-                stoppedAll = stoppedAll && threadGroup.verifyThreadsStopped();
-            }
-            return stoppedAll;
+            return groups.stream()
+                    .allMatch(AbstractThreadGroup::verifyThreadsStopped);
         }
 
         /**
          * @return total of active threads in all Thread Groups
          */
         private int countStillActiveThreads() {
-            int reminingThreads= 0;
-            for (AbstractThreadGroup threadGroup : groups) {
-                reminingThreads += threadGroup.numberOfActiveThreads();
-            }            
-            return reminingThreads; 
+            return groups.stream()
+                    .mapToInt(AbstractThreadGroup::numberOfActiveThreads)
+                    .sum();
         }
         
         @Override
@@ -542,9 +534,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
      */
     private void waitThreadsStopped() {
         // ConcurrentHashMap does not need synch. here
-        for (AbstractThreadGroup threadGroup : groups) {
-            threadGroup.waitThreadsStopped();
-        }
+        groups.forEach(AbstractThreadGroup::waitThreadsStopped);
     }
 
     /**
@@ -569,15 +559,12 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         if (REMOTE_SYSTEM_EXIT) { // default is false
             log.warn("About to run System.exit(0) on "+host);
             // Needs to be run in a separate thread to allow RMI call to return OK
-            Thread t = new Thread() {
-                @Override
-                public void run() {
-                    pause(1000); // Allow RMI to complete
-                    log.info("Bye from "+host);
-                    System.out.println("Bye from "+host); // NOSONAR Intentional
-                    System.exit(0); // NOSONAR Intentional
-                }
-            };
+            Thread t = new Thread(() -> {
+                pause(1000); // Allow RMI to complete
+                log.info("Bye from " + host);
+                System.out.println("Bye from " + host); // NOSONAR Intentional
+                System.exit(0); // NOSONAR Intentional
+            });
             t.start();
         }
     }

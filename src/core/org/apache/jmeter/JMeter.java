@@ -1214,22 +1214,18 @@ public class JMeter implements JMeterPlugin {
                     JMeterUtils.getPropDefault("jmeter.exit.check.pause", 2000); // $NON-NLS-1$ 
             
             if (pauseToCheckForRemainingThreads > 0) {
-                Thread daemon = new Thread(){
-                    @Override
-                    public void run(){
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(pauseToCheckForRemainingThreads); // Allow enough time for JVM to exit
-                        } catch (InterruptedException ignored) {
-                            Thread.currentThread().interrupt();
-                        }
-                        // This is a daemon thread, which should only reach here if there are other
-                        // non-daemon threads still active
-                        System.out.println("The JVM should have exited but did not.");//NOSONAR
-                        System.out.println("The following non-daemon threads are still running (DestroyJavaVM is OK):");//NOSONAR
-                        JOrphanUtils.displayThreads(false);
+                Thread daemon = new Thread(() -> {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(pauseToCheckForRemainingThreads); // Allow enough time for JVM to exit
+                    } catch (InterruptedException ignored) {
+                        Thread.currentThread().interrupt();
                     }
-    
-                };
+                    // This is a daemon thread, which should only reach here if there are other
+                    // non-daemon threads still active
+                    System.out.println("The JVM should have exited but did not.");//NOSONAR
+                    System.out.println("The following non-daemon threads are still running (DestroyJavaVM is OK):");//NOSONAR
+                    JOrphanUtils.displayThreads(false);
+                });
                 daemon.setDaemon(true);
                 daemon.start();
             } else if (pauseToCheckForRemainingThreads<=0) {

@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.processor;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -93,7 +92,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
         final String inputExtension = getFileExtension(inputFile.getName());
 
         // Find secondary inputs by regex match
-        File[] secondaryInputs = null;
+        File[] secondaryInputs;
         try {
             final Pattern pattern = Pattern.compile(inputRootName
                     + "-[0-9]+\\." + inputExtension);
@@ -101,8 +100,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                     .listFiles(pathname -> pathname.isFile()
                             && pattern.matcher(pathname.getName()).matches());
         } catch (PatternSyntaxException e) {
-            throw new SampleException("Could not locate input sample files !",
-                    e);
+            throw new SampleException("Could not locate input sample files !", e);
         }
         if (secondaryInputs == null) {
             secondaryInputs = new File[0];

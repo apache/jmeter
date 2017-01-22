@@ -31,7 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.JMenu;
@@ -739,8 +738,7 @@ public final class MenuFactory {
      * [This is so Thread Group appears before setUp and tearDown]
      */
     private static void sortPluginMenus() {
-        for(Entry<String, List<MenuInfo>> me : menuMap.entrySet()){
-            Collections.sort(me.getValue(), new MenuInfoComparator(!me.getKey().equals(THREADS)));
-        }
+        menuMap.forEach((key, menuInfos) ->
+                menuInfos.sort(new MenuInfoComparator(!THREADS.equals(key))));
     }
 }

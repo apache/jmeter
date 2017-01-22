@@ -22,6 +22,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -570,12 +571,8 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
      */
     boolean canConvertParameters() {
         Arguments arguments = (Arguments) argsPanel.createTestElement();
-        for (int i = 0; i < arguments.getArgumentCount(); i++) {
-            if(!StringUtils.isEmpty(arguments.getArgument(i).getName())) {
-                return false;
-            }
-        }
-        return true;
+        return IntStream.range(0, arguments.getArgumentCount())
+                .allMatch(i -> StringUtils.isEmpty(arguments.getArgument(i).getName()));
     }
 
     /**

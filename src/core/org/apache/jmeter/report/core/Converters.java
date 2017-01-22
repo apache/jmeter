@@ -32,97 +32,65 @@ public final class Converters {
 
     static {
 
-        StringConverter<Character> characterConverter = new StringConverter<Character>() {
-
-            @Override
-            public Character convert(String value) throws ConvertException {
-                try {
-                    return Character.valueOf(value.charAt(0));
-                } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Character.class.getName(),
-                            ex);
-                }
+        StringConverter<Character> characterConverter = value -> {
+            try {
+                return Character.valueOf(value.charAt(0));
+            } catch (NumberFormatException ex) {
+                throw new ConvertException(value, Character.class.getName(),
+                        ex);
             }
         };
         CONVERTER_MAP.put(Character.class, characterConverter);
         CONVERTER_MAP.put(char.class, characterConverter);
 
-        StringConverter<Double> doubleConverter = new StringConverter<Double>() {
-
-            @Override
-            public Double convert(String value) throws ConvertException {
-                try {
-                    return Double.valueOf(value);
-                } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Double.class.getName(),
-                            ex);
-                }
+        StringConverter<Double> doubleConverter = value -> {
+            try {
+                return Double.valueOf(value);
+            } catch (NumberFormatException ex) {
+                throw new ConvertException(value, Double.class.getName(),
+                        ex);
             }
         };
         CONVERTER_MAP.put(Double.class, doubleConverter);
         CONVERTER_MAP.put(double.class, doubleConverter);
 
-        StringConverter<Float> floatConverter = new StringConverter<Float>() {
-
-            @Override
-            public Float convert(String value) throws ConvertException {
-                try {
-                    return Float.valueOf(value);
-                } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Float.class.getName(),
-                            ex);
-                }
+        StringConverter<Float> floatConverter = value -> {
+            try {
+                return Float.valueOf(value);
+            } catch (NumberFormatException ex) {
+                throw new ConvertException(value, Float.class.getName(),
+                        ex);
             }
         };
         CONVERTER_MAP.put(Float.class, floatConverter);
         CONVERTER_MAP.put(float.class, floatConverter);
 
-        StringConverter<Integer> integerConverter = new StringConverter<Integer>() {
-
-            @Override
-            public Integer convert(String value) throws ConvertException {
-                try {
-                    return Integer.valueOf(value);
-                } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Integer.class.getName(),
-                            ex);
-                }
+        StringConverter<Integer> integerConverter = value -> {
+            try {
+                return Integer.valueOf(value);
+            } catch (NumberFormatException ex) {
+                throw new ConvertException(value, Integer.class.getName(),
+                        ex);
             }
         };
         CONVERTER_MAP.put(Integer.class, integerConverter);
         CONVERTER_MAP.put(int.class, integerConverter);
 
-        StringConverter<Long> longConverter = new StringConverter<Long>() {
-
-            @Override
-            public Long convert(String value) throws ConvertException {
-                try {
-                    return Long.valueOf(value);
-                } catch (NumberFormatException ex) {
-                    throw new ConvertException(value, Long.class.getName(), ex);
-                }
+        StringConverter<Long> longConverter = value -> {
+            try {
+                return Long.valueOf(value);
+            } catch (NumberFormatException ex) {
+                throw new ConvertException(value, Long.class.getName(), ex);
             }
         };
         CONVERTER_MAP.put(Long.class, longConverter);
         CONVERTER_MAP.put(long.class, longConverter);
 
-        StringConverter<Boolean> booleanConverter = new StringConverter<Boolean>() {
-
-            @Override
-            public Boolean convert(String value) {
-                return Boolean.valueOf(value);
-            }
-        };
+        StringConverter<Boolean> booleanConverter = Boolean::valueOf;
         CONVERTER_MAP.put(Boolean.class, booleanConverter);
         CONVERTER_MAP.put(boolean.class, booleanConverter);
 
-        CONVERTER_MAP.put(File.class, new StringConverter<File>() {
-
-            @Override
-            public File convert(String value) throws ConvertException {
-                return new File(value);
-            }
-        });
+        CONVERTER_MAP.put(File.class, File::new);
     }
     
     private Converters() {

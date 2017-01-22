@@ -20,7 +20,6 @@ package org.apache.jmeter.report.processor.graph.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.processor.MapResultData;
 import org.apache.jmeter.report.processor.SumAggregatorFactory;
 import org.apache.jmeter.report.processor.ValueResultData;
@@ -67,13 +66,10 @@ public class ResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
+        return sample -> {
+            long elapsed = sample.getElapsedTime();
+            return Double.valueOf((double) elapsed - elapsed % granularity);
 
-            @Override
-            public Double select(Sample sample) {
-                long elapsed = sample.getElapsedTime();
-                return Double.valueOf((double) elapsed - elapsed % granularity);
-            }
         };
     }
 

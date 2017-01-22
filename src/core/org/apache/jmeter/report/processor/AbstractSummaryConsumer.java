@@ -230,12 +230,8 @@ public abstract class AbstractSummaryConsumer<TData> extends
         String key = getKeyFromSample(sample);
 
         // Get the object to store counters or create it if it does not exist.
-        SummaryInfo info = infos.get(key);
-        if (info == null) {
-            info = new SummaryInfo(supportsControllersDiscrimination
-                    && sample.isController());
-            infos.put(key, info);
-        }
+        SummaryInfo info = infos.computeIfAbsent(key, k ->
+                new SummaryInfo(supportsControllersDiscrimination && sample.isController()));
         updateData(info, sample);
         super.produce(sample, channel);
     }

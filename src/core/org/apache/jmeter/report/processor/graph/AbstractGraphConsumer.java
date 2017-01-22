@@ -397,11 +397,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
         Map<Double, Aggregator> aggInfo = data.getAggregatorInfo();
 
         // Get or create aggregator
-        Aggregator aggregator = aggInfo.get(key);
-        if (aggregator == null) {
-            aggregator = factory.createValueAggregator();
-            aggInfo.put(key, aggregator);
-        }
+        Aggregator aggregator = aggInfo.computeIfAbsent(key, k -> factory.createValueAggregator());
 
         // Add the value to the aggregator
         aggregator.addValue(value);
@@ -497,23 +493,18 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
             boolean aggregatedKeysSeries = groupInfo
                     .enablesAggregatedKeysSeries();
 
-            for (String seriesName : groupInfo.getSeriesSelector()
-                    .select(sample)) {
+            for (String seriesName : groupInfo.getSeriesSelector().select(sample)) {
                 Map<String, SeriesData> seriesInfo = groupData.getSeriesInfo();
-                SeriesData seriesData = seriesInfo.get(seriesName);
-                if (seriesData == null) {
-                    seriesData = new SeriesData(factory, aggregatedKeysSeries,
-                            groupInfo.getSeriesSelector()
-                                    .allowsControllersDiscrimination()
-                                            ? sample.isController() : false,
-                            false);
-                    seriesInfo.put(seriesName, seriesData);
-                }
+                SeriesData seriesData = seriesInfo.computeIfAbsent(seriesName, k -> {
+                    final boolean isControllersSeries = groupInfo.getSeriesSelector().allowsControllersDiscrimination() && sample.isController();
+                    final boolean isOverallSeries = false;
+                    return new SeriesData(factory, aggregatedKeysSeries, isControllersSeries, isOverallSeries);
+                });
 
                 // Get the value to aggregate and dispatch it to the groupData
                 Double value = groupInfo.getValueSelector().select(seriesName,
                         sample);
-                if(value != null) {
+                if (value != null) {
                     aggregateValue(factory, seriesData, key, value);
                     if (overallSeries) {
                         SeriesData overallData = groupData.getOverallSeries();

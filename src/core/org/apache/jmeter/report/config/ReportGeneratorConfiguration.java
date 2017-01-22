@@ -539,11 +539,7 @@ public class ReportGeneratorConfiguration {
             int index = key.indexOf(KEY_DELIMITER);
             if (index > 0) {
                 String name = key.substring(0, index);
-                TSubConf subConfiguration = subConfigurations.get(name);
-                if (subConfiguration == null) {
-                    subConfiguration = factory.createSubConfiguration();
-                    subConfigurations.put(name, subConfiguration);
-                }
+                subConfigurations.computeIfAbsent(name, k -> factory.createSubConfiguration());
             } else {
                 log.warn("Invalid property '{}', skip it.", key);
             }

@@ -94,16 +94,10 @@ public class PropertyControlGui extends AbstractConfigGui implements
     @Override
     public void actionPerformed(ActionEvent action) {
         String command = action.getActionCommand();
-        
-        if (SYSTEM.equals(command)){
-            setUpData();
-            return;
-        }
-        else if (JMETER.equals(command)){
-            setUpData();
-            return;
-        }
 
+        if (SYSTEM.equals(command) || JMETER.equals(command)) {
+            setUpData();
+        }
     }
 
     @Override

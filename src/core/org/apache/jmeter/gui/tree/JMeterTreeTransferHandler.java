@@ -106,18 +106,14 @@ public class JMeterTreeTransferHandler extends TransferHandler {
         
         return null;
     }
-    
+
 
     private static void sortTreePathByRow(TreePath[] paths, final JTree tree) {
-        Comparator<TreePath> cp = new Comparator<TreePath>() {
+        Comparator<TreePath> cp = (o1, o2) -> {
+            int row1 = tree.getRowForPath(o1);
+            int row2 = tree.getRowForPath(o2);
 
-            @Override
-            public int compare(TreePath o1, TreePath o2) {
-                int row1 = tree.getRowForPath(o1);
-                int row2 = tree.getRowForPath(o2);
-                
-                return row1<row2 ? -1 : (row1==row2 ? 0 : 1);
-            }
+            return row1 < row2 ? -1 : (row1 == row2 ? 0 : 1);
         };
         
         Arrays.sort(paths, cp);

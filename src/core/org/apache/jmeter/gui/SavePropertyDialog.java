@@ -120,9 +120,6 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
     protected JRootPane createRootPane() {
         JRootPane rootPane = new JRootPane();
         Action escapeAction = new AbstractAction("ESCAPE") {
-            /**
-             * 
-             */
             private static final long serialVersionUID = 2208129319916921772L;
 
             @Override

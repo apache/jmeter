@@ -70,7 +70,6 @@ import javax.swing.KeyStroke;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -186,12 +185,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
     
-    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
+    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000,
             this::computeTestDuration);
-    
+
     public AtomicInteger errorOrFatal = new AtomicInteger(0);
 
-    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000, 
+    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000,
             this::refreshErrors);
 
     /**
@@ -260,12 +259,12 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * @param evt {@link ActionEvent}
      */
     private void refreshErrors(ActionEvent evt) {
-        if(errorOrFatal.get()>0) {
+        if (errorOrFatal.get() > 0) {
             errorsOrFatalsLabel.setForeground(Color.RED);
             errorsOrFatalsLabel.setText(Long.toString(errorOrFatal.get()));
         }
     }
-    
+
     protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {
@@ -408,16 +407,16 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
         SwingUtilities.invokeLater(() -> {
-                if (stoppingMessage != null) { // TODO - how can this be null?
-                    stoppingMessage.setVisible(true);
-                }
+            if (stoppingMessage != null) { // TODO - how can this be null?
+                stoppingMessage.setVisible(true);
+            }
         });
     }
 
     public void updateCounts() {
         SwingUtilities.invokeLater(() -> {
-                activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
-                totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
+            activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
+            totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
         });
     }
 
@@ -855,7 +854,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                     errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
                 });
         }
-
     }
 
 

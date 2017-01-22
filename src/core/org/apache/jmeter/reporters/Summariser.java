@@ -279,11 +279,7 @@ public class Summariser extends AbstractTestElement
     public void testStarted(String host) {
         synchronized (LOCK) {
             myName = getName();
-            myTotals = ACCUMULATORS.get(myName);
-            if (myTotals == null){
-                myTotals = new Totals();
-                ACCUMULATORS.put(myName, myTotals);
-            }
+            myTotals = ACCUMULATORS.computeIfAbsent(myName, k -> new Totals());
             INSTANCE_COUNT++;
         }
     }

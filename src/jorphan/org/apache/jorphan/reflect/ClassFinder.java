@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 
 /**
  * This class finds classes that extend one of a set of parent classes
- *
  */
 public final class ClassFinder {
     private static final Logger log = LoggerFactory.getLogger(ClassFinder.class);

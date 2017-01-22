@@ -51,7 +51,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -109,14 +108,7 @@ public class XPathUtil {
         DocumentBuilder builder = makeDocumentBuilderFactory(validate, whitespace, namespace).newDocumentBuilder();
         builder.setErrorHandler(new MyErrorHandler(validate, false));
         if (!downloadDTDs){
-            EntityResolver er = new EntityResolver(){
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId)
-                        throws SAXException, IOException {
-                    return new InputSource(new ByteArrayInputStream(new byte[]{}));
-                }
-            };
-            builder.setEntityResolver(er);
+            builder.setEntityResolver((publicId, systemId) -> new InputSource(new ByteArrayInputStream(new byte[]{})));
         }
         return builder;
     }

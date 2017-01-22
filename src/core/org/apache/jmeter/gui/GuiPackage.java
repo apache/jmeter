@@ -24,7 +24,6 @@ import java.beans.Introspector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -388,11 +387,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             IllegalAccessException {
         JMeterGUIComponent comp;
         if (guiClass == TestBeanGUI.class) {
-            comp = testBeanGUIs.get(testClass);
-            if (comp == null) {
-                comp = new TestBeanGUI(testClass);
-                testBeanGUIs.put(testClass, comp);
-            }
+            comp = testBeanGUIs.computeIfAbsent(testClass, k -> new TestBeanGUI(testClass));
         } else {
             comp = guis.get(guiClass);
             if (comp == null) {
@@ -740,22 +735,16 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (guiPack == null) {
             return ;
         }
-        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
-
+        SwingUtilities.invokeLater(() ->
+                JOptionPane.showMessageDialog(null, message, title, type));
     }
 
     /**
      * Unregister stoppable
-     * @param stoppable Stoppable
+     * @param stoppableToRemove Stoppable
      */
-    public void unregister(Stoppable stoppable) {
-        for (Iterator<Stoppable> iterator = stoppables .iterator(); iterator.hasNext();) {
-            Stoppable stopable = iterator.next();
-            if(stopable == stoppable)
-            {
-                iterator.remove();
-            }
-        }
+    public void unregister(Stoppable stoppableToRemove) {
+        stoppables.removeIf(stoppable -> stoppable == stoppableToRemove);
     }
 
     /**

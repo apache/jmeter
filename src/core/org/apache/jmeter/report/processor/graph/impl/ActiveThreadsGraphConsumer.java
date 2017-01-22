@@ -27,7 +27,6 @@ import org.apache.jmeter.report.processor.MeanAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
-import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -65,30 +64,26 @@ public class ActiveThreadsGraphConsumer extends AbstractOverTimeGraphConsumer {
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new AbstractSeriesSelector() {
 
-                    @Override
-                    public Iterable<String> select(Sample sample) {
-                        if(!sample.isEmptyController()) {
-                            String threadName = sample.getThreadName();
-                            int index = threadName.lastIndexOf(" ");
-                            if (index >= 0) {
-                                threadName = threadName.substring(0, index);
-                            }
-                            return Arrays.asList(new String[] { threadName });
-                        } else {
-                            return Collections.<String>emptyList();
-                        }
+            @Override
+            public Iterable<String> select(Sample sample) {
+                if (!sample.isEmptyController()) {
+                    String threadName = sample.getThreadName();
+                    int index = threadName.lastIndexOf(" ");
+                    if (index >= 0) {
+                        threadName = threadName.substring(0, index);
                     }
-                }, new GraphValueSelector() {
-
-                    @Override
-                    public Double select(String series, Sample sample) {
-                        if(!sample.isEmptyController()) {
-                            return Double.valueOf(sample.getGroupThreads());
-                        } else {
-                            return null;
-                        }
-                    }
-                }, false, false));
+                    return Arrays.asList(threadName);
+                } else {
+                    return Collections.emptyList();
+                }
+            }
+        }, (series, sample) -> {
+            if (!sample.isEmptyController()) {
+                return Double.valueOf(sample.getGroupThreads());
+            } else {
+                return null;
+            }
+        }, false, false));
         return groupInfos;
     }
 

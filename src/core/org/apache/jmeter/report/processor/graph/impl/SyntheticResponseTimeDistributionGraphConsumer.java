@@ -75,22 +75,18 @@ public class SyntheticResponseTimeDistributionGraphConsumer extends
      */
     @Override
     protected final GraphKeysSelector createKeysSelector() {
-        return new GraphKeysSelector() {
-
-            @Override
-            public Double select(Sample sample) {
-                if(sample.getSuccess()) {
-                    long elapsedTime = sample.getElapsedTime();
-                    if(elapsedTime<=satisfiedThreshold) {
-                        return Double.valueOf(0);
-                    } else if(elapsedTime <= toleratedThreshold) {
-                        return Double.valueOf(1);
-                    } else {
-                        return Double.valueOf(2);
-                    }
+        return sample -> {
+            if (sample.getSuccess()) {
+                long elapsedTime = sample.getElapsedTime();
+                if (elapsedTime <= satisfiedThreshold) {
+                    return Double.valueOf(0);
+                } else if (elapsedTime <= toleratedThreshold) {
+                    return Double.valueOf(1);
                 } else {
-                    return Double.valueOf(3);
+                    return Double.valueOf(2);
                 }
+            } else {
+                return Double.valueOf(3);
             }
         };
     }

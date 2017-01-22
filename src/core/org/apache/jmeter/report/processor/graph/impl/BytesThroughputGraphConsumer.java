@@ -26,7 +26,6 @@ import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractSeriesSelector;
-import org.apache.jmeter.report.processor.graph.GraphValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -74,18 +73,14 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
                     public Iterable<String> select(Sample sample) {
                         return values;
                     }
-                }, new GraphValueSelector() {
-
-                    @Override
-                    public Double select(String series, Sample sample) {
-                        // We ignore Transaction Controller results
-                        if(!sample.isController()) {
-                            return Double.valueOf(
-                                RECEIVED_BYTES_SERIES_LABEL.equals(series) ? sample
-                                .getReceivedBytes() : sample.getSentBytes());
-                        } else {
-                            return null;
-                        }
+                }, (series, sample) -> {
+                    // We ignore Transaction Controller results
+                    if(!sample.isController()) {
+                        return Double.valueOf(
+                            RECEIVED_BYTES_SERIES_LABEL.equals(series) ? sample
+                            .getReceivedBytes() : sample.getSentBytes());
+                    } else {
+                        return null;
                     }
                 }, false, false));
         return groupInfos;
