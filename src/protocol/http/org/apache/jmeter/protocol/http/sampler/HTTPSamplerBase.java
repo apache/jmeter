@@ -1355,7 +1355,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                             }
                         }
                         res.addSubResult(binRes.getResult());
-                        setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() != null ? binRes.getResult().isSuccessful():true));
+                        setParentSampleSuccess(res, res.isSuccessful() && (binRes.getResult() == null || binRes.getResult().isSuccessful()));
                     }
                 } catch (InterruptedException ie) {
                     log.warn("Interrupted fetching embedded resources", ie); // $NON-NLS-1$

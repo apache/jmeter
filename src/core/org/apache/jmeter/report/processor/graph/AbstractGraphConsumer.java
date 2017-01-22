@@ -321,10 +321,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
                 // Create result storage for coordinates
                 ListResultData coordResult = new ListResultData();
 
-                if (!revertsKeysAndValues) {
-                    key = entry.getKey();
-                    value = Double.valueOf(entry.getValue().getResult());
-                } else {
+                if (revertsKeysAndValues) {
                     key = Double.valueOf(entry.getValue().getResult());
                     value = entry.getKey();
                 }

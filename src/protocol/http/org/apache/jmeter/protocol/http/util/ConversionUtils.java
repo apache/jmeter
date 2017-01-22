@@ -262,9 +262,8 @@ public class ConversionUtils {
 
             // append '/' if this isn't the last token or it is but the original
             // path terminated w/ a '/'
-            boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
-            if (appendSlash)
-            {
+            boolean appendSlash = i < (tokens.size() - 1) || endsWithSlash;
+            if (appendSlash) {
                 newPath.append(SLASH);
             }
         }

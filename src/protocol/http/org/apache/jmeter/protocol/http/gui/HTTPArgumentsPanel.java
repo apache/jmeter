@@ -156,7 +156,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
                 if (clipboardCols.length > 3) {
                     Boolean useEqual = BooleanUtils.toBooleanObject(clipboardCols[3]);
                     // default to true if the string is not a boolean
-                    argument.setUseEquals(useEqual!=null?useEqual.booleanValue():true);
+                    argument.setUseEquals(useEqual == null || useEqual);
                 }
             }
         }
