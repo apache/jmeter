@@ -98,7 +98,7 @@ public class XPathFileContainer {
         {
             nextRow = 0;
         }
-        log.debug(new StringBuilder("Row: ").append(row).toString());
+        log.debug("Row: " + row);
         return row;
     }
 

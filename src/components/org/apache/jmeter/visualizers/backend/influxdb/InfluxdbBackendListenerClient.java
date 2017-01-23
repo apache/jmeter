@@ -344,7 +344,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     }
 
     /**
-     * Add Annotation at start or end of the run ( usefull with Grafana )
+     * Add Annotation at start or end of the run ( useful with Grafana )
      * Grafana will let you send HTML in the “Text” such as a link to the release notes
      * Tags are separated by spaces in grafana
      * Tags is put as InfluxdbTag for better query performance on it
@@ -353,14 +353,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      * * @param startOrEnd boolean true for start, false for end
      */
     private void addAnnotation(boolean startOrEnd) {
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION,
                 TAG_APPLICATION + application + ",title=ApacheJMeter"+
-                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
-                TEXT +  
+                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""),
+                TEXT +
                         AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
                                 (startOrEnd ? " started" : " ended")) + "\"" );
     }
-    
+
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
