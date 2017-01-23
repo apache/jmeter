@@ -304,9 +304,6 @@ public class ObjectTableModel extends DefaultTableModel {
 
     public void setRows(Iterable<?> rows) { // used by TableEditor
         clearData();
-        for(Object val : rows)
-        {
-            addRow(val);
-        }
+        rows.forEach(this::addRow);
     }
 }

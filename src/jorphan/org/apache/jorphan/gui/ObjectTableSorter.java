@@ -358,7 +358,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         for (int i = 0; i < rowCount; i++) {
             viewToModel.add(new Row(i));
         }
-        Collections.sort(viewToModel, comparator);
+        viewToModel.sort(comparator);
 
         updateModelToView();
     }

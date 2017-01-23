@@ -94,9 +94,7 @@ public class RequestPanel {
      * Clear data in all request view
      */
     public void clearData() {
-        for (RequestView requestView : listRequestView) {
-            requestView.clearData();
-        }
+        listRequestView.forEach(RequestView::clearData);
     }
 
     /**

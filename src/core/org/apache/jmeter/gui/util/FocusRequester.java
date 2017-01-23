@@ -25,11 +25,11 @@ import javax.swing.SwingUtilities;
 /*
  * Note: This helper class appeared in JavaWorld in June 2001
  * (http://www.javaworld.com) and was originally written by Michael Daconta.
- * It has since been simplified.
+ * It has since been simplified (a lot).
  */
 public class FocusRequester {
 
     public static void requestFocus(final Component comp) {
-        SwingUtilities.invokeLater(() -> comp.requestFocusInWindow());
+        SwingUtilities.invokeLater(comp::requestFocusInWindow);
     }
 }
