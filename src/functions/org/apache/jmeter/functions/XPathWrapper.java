@@ -48,17 +48,11 @@ final class XPathWrapper {
      * The key is the concatenation of the file name and the XPath string
      */
     //@GuardedBy("fileContainers")
-    private static final Map<String, XPathFileContainer> fileContainers =
-            new HashMap<>();
+    private static final Map<String, XPathFileContainer> fileContainers = new HashMap<>();
 
     /* The cache of file packs - for faster local access */
     private static final ThreadLocal<Map<String, XPathFileContainer>> filePacks =
-        new ThreadLocal<Map<String, XPathFileContainer>>() {
-        @Override
-        protected Map<String, XPathFileContainer> initialValue() {
-            return new HashMap<>();
-        }
-    };
+            ThreadLocal.withInitial(HashMap::new);
 
     private XPathWrapper() {// Prevent separate instantiation
         super();

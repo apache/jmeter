@@ -54,12 +54,8 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
     private static final String SEPARATOR = ";"; // $NON-NLS-1$
     public static final boolean COMPUTE_CONCATENATION_DEFAULT_VALUE = false;
     
-    private static final ThreadLocal<JSONManager> localMatcher = new ThreadLocal<JSONManager>() {
-        @Override
-        protected JSONManager initialValue() {
-            return new JSONManager();
-        }
-    };
+    private static final ThreadLocal<JSONManager> localMatcher =
+            ThreadLocal.withInitial(JSONManager::new);
 
     @Override
     public void process() {

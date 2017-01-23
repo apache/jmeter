@@ -48,7 +48,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
             try {
                 return XMLReaderFactory.createXMLReader();
             } catch (SAXException e) {
-                log.error("Error initializing XMLReader in XMLAssertion", e); 
+                log.error("Error initializing XMLReader in XMLAssertion", e);
                 return null;
             }
         }
