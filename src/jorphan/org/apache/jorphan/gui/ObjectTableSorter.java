@@ -345,7 +345,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         if (comparator == null) {
             comparator = Stream.concat(
                     Stream.concat(
-                            getPrimaryComparator() != null ? Stream.of(getPrimaryComparator()) : Stream.<Comparator<Row>>empty(),
+                            getPrimaryComparator() != null ? Stream.of(getPrimaryComparator()) : Stream.empty(),
                             getSortKeys().stream().filter(sk -> sk != null && sk.getSortOrder() != SortOrder.UNSORTED).map(this::getComparatorFromSortKey)
                     ),
                     Stream.of(getFallbackComparator())

@@ -390,7 +390,7 @@ public TestElement createTestElement() {
      * @return number of matches
      */
     public int setupGuiClasses() {
-        return setupGuiClasses(new ArrayList<String>());
+        return setupGuiClasses(new ArrayList<>());
     }
     
     /**

@@ -37,7 +37,7 @@ public class FilePanel extends FilePanelEntry {
     }
     
     public FilePanel(String title, boolean onlyDirectories) {
-        this(title, (String) null, onlyDirectories);
+        this(title, null, onlyDirectories);
     }
 
     public FilePanel(String title, String filetype) {

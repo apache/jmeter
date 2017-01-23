@@ -131,7 +131,7 @@ public class ThroughputControllerGui extends AbstractControllerGui {
         styleModel.addElement(BYPERCENT_LABEL);
         styleBox = new JComboBox<>(styleModel);
         styleBox.addActionListener(evt -> {
-            if (((String) styleBox.getSelectedItem()).equals(BYNUMBER_LABEL)) {
+            if (styleBox.getSelectedItem().equals(BYNUMBER_LABEL)) {
                 style = ThroughputController.BYNUMBER;
             } else {
                 style = ThroughputController.BYPERCENT;

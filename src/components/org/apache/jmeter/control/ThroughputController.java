@@ -135,7 +135,7 @@ public class ThroughputController extends GenericController implements Serializa
         JMeterProperty prop = getProperty(MAXTHROUGHPUT);
         int retVal = 1;
         if (prop instanceof IntegerProperty) {
-            retVal = ((IntegerProperty) prop).getIntValue();
+            retVal = prop.getIntValue();
         } else {
             String valueString = prop.getStringValue();
             try {
@@ -163,7 +163,7 @@ public class ThroughputController extends GenericController implements Serializa
         JMeterProperty prop = getProperty(PERCENTTHROUGHPUT);
         float retVal = 100;
         if (prop instanceof FloatProperty) {
-            retVal = ((FloatProperty) prop).getFloatValue();
+            retVal = prop.getFloatValue();
         } else {
             String valueString = prop.getStringValue();
             try {

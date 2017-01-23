@@ -162,7 +162,7 @@ public class TestActionGui extends AbstractSamplerGui {
         targetModel.addElement(testTarget);
         targetBox = new JComboBox<>(targetModel);
         targetBox.addActionListener(evt -> {
-            if (((String) targetBox.getSelectedItem()).equals(threadTarget)) {
+            if (targetBox.getSelectedItem().equals(threadTarget)) {
                 target = TestAction.THREAD;
             } else {
                 target = TestAction.TEST;

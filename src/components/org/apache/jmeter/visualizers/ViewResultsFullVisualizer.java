@@ -349,7 +349,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         selectRenderPanel.addActionListener(this);
 
         // if no results render in jmeter.properties, load Standard (default)
-        List<String> classesToAdd = Collections.<String>emptyList();
+        List<String> classesToAdd = Collections.emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(ResultRenderer.class);
         } catch (IOException e1) {

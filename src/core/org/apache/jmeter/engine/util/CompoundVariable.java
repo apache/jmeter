@@ -144,7 +144,7 @@ public class CompoundVariable implements Function {
                     log.debug("Invalid variable: {}", item, e);
                 }
             } else if (item instanceof SimpleVariable) {
-                results.append(((SimpleVariable) item).toString());
+                results.append(item.toString());
             } else {
                 results.append(item);
             }

@@ -149,7 +149,7 @@ class FunctionParser {
                 } else if (current[0] == '}') {// variable, or function with no parameter list
                     function = CompoundVariable.getNamedFunction(buffer.toString());
                     if (function instanceof Function){// ensure that setParameters() is called.
-                        ((Function) function).setParameters(new LinkedList<CompoundVariable>());
+                        ((Function) function).setParameters(new LinkedList<>());
                     }
                     buffer.setLength(0);
                     return function;

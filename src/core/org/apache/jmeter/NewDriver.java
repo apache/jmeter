@@ -244,7 +244,7 @@ public final class NewDriver {
             try {
                 Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
                 Object instance = initialClass.newInstance();
-                Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
+                Method startup = initialClass.getMethod("start", new Class[] { String[].class });// $NON-NLS-1$
                 startup.invoke(instance, new Object[] { args });
             } catch(Throwable e){ // NOSONAR We want to log home directory in case of exception
                 e.printStackTrace(); // NOSONAR No logger at this step

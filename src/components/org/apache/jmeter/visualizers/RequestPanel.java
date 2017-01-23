@@ -47,12 +47,12 @@ public class RequestPanel {
     private final JPanel panel;
 
     /**
-     * Find and instanciate all class that extend RequestView
+     * Find and instantiate all class that extend RequestView
      * and Create Request Panel
      */
     public RequestPanel() {
         listRequestView = new LinkedList<>();
-        List<String> classesToAdd = Collections.<String> emptyList();
+        List<String> classesToAdd = Collections.emptyList();
         try {
             classesToAdd = JMeterUtils.findClassesThatExtend(RequestView.class);
         } catch (IOException e1) {

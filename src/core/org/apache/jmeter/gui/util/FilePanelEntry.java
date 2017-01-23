@@ -65,11 +65,11 @@ public class FilePanelEntry extends HorizontalPanel implements ActionListener {
     }
 
     public FilePanelEntry(String label, String ... exts) {
-        this(label, (ChangeListener) null, exts);
+        this(label, null, exts);
     }
 
     public FilePanelEntry(String label, boolean onlyDirectories, String ... exts) {
-        this(label, onlyDirectories, (ChangeListener) null, exts);
+        this(label, onlyDirectories, null, exts);
     }
 
     public FilePanelEntry(String label, ChangeListener listener, String ... exts) {

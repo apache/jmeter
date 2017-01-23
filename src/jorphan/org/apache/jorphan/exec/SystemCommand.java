@@ -53,7 +53,7 @@ public class SystemCommand {
      * @param directory File working directory (may be null)
      */
     public SystemCommand(File directory, Map<String, String> env) {
-        this(directory, 0L, POLL_INTERVAL, env, (InputStream) null, (OutputStream) null, (OutputStream) null);
+        this(directory, 0L, POLL_INTERVAL, env, null, null, (OutputStream) null);
     }
 
     /**

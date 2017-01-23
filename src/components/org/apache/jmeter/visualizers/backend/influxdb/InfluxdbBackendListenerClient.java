@@ -165,10 +165,10 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                 metric.getAllMaxTime(), allPercentiles.values());
         // FOR OK STATUS
         addMetric(transaction, metric, metric.getSuccesses(), false, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
-                metric.getOkMaxTime(), Collections.<Float> emptySet());
+                metric.getOkMaxTime(), Collections.emptySet());
         // FOR KO STATUS
         addMetric(transaction, metric, metric.getFailures(), true, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
-                metric.getKoMaxTime(), Collections.<Float> emptySet());
+                metric.getKoMaxTime(), Collections.emptySet());
     }
 
     private void addMetric(String transaction, SamplerMetric metric, int count, boolean includeResponseCode,
