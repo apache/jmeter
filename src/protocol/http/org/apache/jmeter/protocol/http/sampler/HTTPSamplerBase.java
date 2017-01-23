@@ -1030,7 +1030,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         
         CollectionProperty arguments = getArguments().getArguments();
         // Optimisation : avoid building useless objects if empty arguments
-        if(arguments.size() == 0) {
+        if (arguments.size() == 0) {
             return "";
         }
         String lContentEncoding = contentEncoding;
@@ -1044,7 +1044,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         PropertyIterator iter = arguments.iterator();
         boolean first = true;
         while (iter.hasNext()) {
-            HTTPArgument item = null;
+            HTTPArgument item;
             /*
              * N.B. Revision 323346 introduced the ClassCast check, but then used iter.next()
              * to fetch the item to be cast, thus skipping the element that did not cast.
@@ -1184,9 +1184,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      * @return results of the sampling
      */
     public SampleResult sample() {
-        SampleResult res = null;
         try {
-            res = sample(getUrl(), getMethod(), false, 0);
+            SampleResult res = sample(getUrl(), getMethod(), false, 0);
             if (res != null) {
                 res.setSampleLabel(getName());
             }

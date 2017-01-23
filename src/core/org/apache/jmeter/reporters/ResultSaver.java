@@ -161,14 +161,10 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      */
     private void saveSample(SampleResult s, int num) {
         // Should we save the sample?
-        if (s.isSuccessful()){
-            if (getErrorsOnly()){
-                return;
-            }
-        } else {
-            if (getSuccessOnly()){
-                return;
-            }
+        if (s.isSuccessful() && getErrorsOnly()) {
+            return;
+        } else if (getSuccessOnly()) {
+            return;
         }
 
         String fileName = makeFileName(s.getContentType(), getSkipAutoNumber(), getSkipSuffix());
@@ -177,11 +173,9 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         }
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
-        if (variable.length()>0){
+        if (variable.length() > 0) {
             if (num > 0) {
-                StringBuilder sb = new StringBuilder(variable);
-                sb.append(num);
-                variable=sb.toString();
+                variable = variable + num;
             }
             JMeterContextService.getContext().getVariables().put(variable, fileName);
         }

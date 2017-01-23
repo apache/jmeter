@@ -306,7 +306,7 @@ public class SendMailCommand {
                 listener.attend(); // listener cannot be null here
             }
         } finally {
-            if(tr != null) {
+            if (tr != null) {
                 try {
                     tr.close();
                 } catch (Exception e) {

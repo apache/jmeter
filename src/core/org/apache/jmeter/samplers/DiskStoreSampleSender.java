@@ -113,7 +113,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             } catch (RemoteException e) {
                 log.error("returning sample", e);
             }
-            if(!temporaryFile.delete()) {
+            if (!temporaryFile.delete()) {
                 if (log.isWarnEnabled()) {
                     log.warn("Could not delete file: {}", temporaryFile.getAbsolutePath());
                 }

@@ -327,11 +327,8 @@ public class Save extends AbstractAction {
                     backupDir.getAbsolutePath()); //$NON-NLS-2$
         }
 
-        /**
-         *  select files matching
-         * {baseName}{versionSeparator}{version}{jmxExtension}
-         * where {version} is a 6 digits number
-         */
+        // select files matching {baseName}{versionSeparator}{version}{jmxExtension}
+        // where {version} is a 6 digits number
         String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
         // create a file filter that select files matching a given regex pattern
@@ -372,10 +369,7 @@ public class Save extends AbstractAction {
             // contract
             return diff < 0 ? -1 : diff > 0 ? 1 : 0;
         });
-        /**
-         *  backup name is of the form 
-         * {baseName}{versionSeparator}{version}{jmxExtension}
-         */
+        // backup name is of the form {baseName}{versionSeparator}{version}{jmxExtension}
         String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
@@ -435,7 +429,7 @@ public class Save extends AbstractAction {
         private Pattern pattern;
         
         public PrivatePatternFileFilter(Pattern pattern) {
-            if(pattern == null) {
+            if (pattern == null) {
                 throw new IllegalArgumentException("pattern cannot be null !"); //$NON-NLS-1$
             }
             this.pattern = pattern;

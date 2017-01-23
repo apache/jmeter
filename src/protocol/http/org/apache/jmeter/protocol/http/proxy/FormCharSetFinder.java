@@ -57,28 +57,28 @@ public class FormCharSetFinder {
         Elements forms = document.select("form");
         for (Element element : forms) {
             String action = element.attr("action");
-            if( !(StringUtils.isEmpty(action)) ) {
+            if (!(StringUtils.isEmpty(action))) {
                 // We use the page encoding where the form resides, as the
                 // default encoding for the form
                 String formCharSet = pageEncoding;
                 String acceptCharSet = element.attr("accept-charset");
                 // Check if we found an accept-charset attribute on the form
-                if(acceptCharSet != null) {
+                if (acceptCharSet != null) {
                     String[] charSets = JOrphanUtils.split(acceptCharSet, ",");
                     // Just use the first one of the possible many charsets
-                    if(charSets.length > 0) {
+                    if (charSets.length > 0) {
                         formCharSet = charSets[0].trim();
-                        if(formCharSet.length() == 0) {
+                        if (formCharSet.length() == 0) {
                             formCharSet = null;
                         }
                     }
                 }
-                if(formCharSet != null) {
+                if (formCharSet != null) {
                     synchronized (formEncodings) {
                         formEncodings.put(action, formCharSet);
                     }
                 }
-            }      
+            }
         }
     }
 }

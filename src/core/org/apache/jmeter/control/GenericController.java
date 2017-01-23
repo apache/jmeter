@@ -104,7 +104,7 @@ public class GenericController extends AbstractTestElement implements Controller
      */
     protected void initializeSubControllers() {
         for (TestElement te : subControllersAndSamplers) {
-            if(te instanceof GenericController) {
+            if (te instanceof GenericController) {
                 ((Controller) te).initialize();
             }
         }
@@ -118,7 +118,6 @@ public class GenericController extends AbstractTestElement implements Controller
      * <li>sets first=true</li>
      * <li>recoverRunningVersion() to set the controller back to the initial state</li>
      * </ul>
-     *
      */
     protected void reInitialize() {
         resetCurrent();

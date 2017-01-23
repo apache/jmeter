@@ -102,28 +102,26 @@ public class SaveGraphics extends AbstractAction {
         // Get the string given from the choose and check
         // the file extension.
         filename = chooser.getSelectedFile().getAbsolutePath();
-        if (filename != null) {
-            File f = new File(filename);
-            if(f.exists()) {
-                int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
-                        JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
-                        JMeterUtils.getResString("save?"),  // $NON-NLS-1$
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
-                    return ; // Do not save, user does not want to overwrite
-                }
+        File f = new File(filename);
+        if (f.exists()) {
+            int response = JOptionPane.showConfirmDialog(GuiPackage.getInstance().getMainFrame(),
+                    JMeterUtils.getResString("save_overwrite_existing_file"), // $NON-NLS-1$
+                    JMeterUtils.getResString("save?"),  // $NON-NLS-1$
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.CLOSED_OPTION || response == JOptionPane.NO_OPTION) {
+                return ; // Do not save, user does not want to overwrite
             }
-            SaveGraphicsService save = new SaveGraphicsService();
-            String ext = filename.substring(filename.length() - 4);
-            String name = filename.substring(0, filename.length() - 4);
-            if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
-                save.saveJComponent(name, SaveGraphicsService.PNG, comp);
-            } else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
-                save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
-            } else {
-                save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
-            }
+        }
+        SaveGraphicsService save = new SaveGraphicsService();
+        String ext = filename.substring(filename.length() - 4);
+        String name = filename.substring(0, filename.length() - 4);
+        if (ext.equals(SaveGraphicsService.PNG_EXTENSION)) {
+            save.saveJComponent(name, SaveGraphicsService.PNG, comp);
+        } else if (ext.equals(SaveGraphicsService.TIFF_EXTENSION)) {
+            save.saveJComponent(name, SaveGraphicsService.TIFF, comp);
+        } else {
+            save.saveJComponent(filename, SaveGraphicsService.PNG, comp);
         }
 
     }

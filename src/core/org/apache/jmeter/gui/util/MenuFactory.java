@@ -70,7 +70,7 @@ public final class MenuFactory {
      *  and also for resource lookup in messages.properties
     */
     public static final String THREADS = "menu_threads"; //$NON-NLS-1$
-    
+
     public static final String FRAGMENTS = "menu_fragments"; //$NON-NLS-1$
 
     public static final String TIMERS = "menu_timer"; //$NON-NLS-1$
@@ -205,7 +205,7 @@ public final class MenuFactory {
 
     /**
      * @param menu JPopupMenu
-     * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true 
+     * @param addSaveTestFragmentMenu Add Save as Test Fragment menu if true
      */
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         // the undo/redo as a standard goes first in Edit menus
@@ -292,7 +292,7 @@ public final class MenuFactory {
 
         pop.add(MenuFactory.makeMenuItemRes("apply_naming",// $NON-NLS-1$
                 ActionNames.APPLY_NAMING_CONVENTION));
-        
+
         pop.add(makeMenus(MENU_PARENT_CONTROLLER,
                 JMeterUtils.getResString("change_parent"),// $NON-NLS-1$
                 ActionNames.CHANGE_PARENT));
@@ -493,7 +493,7 @@ public final class MenuFactory {
 
                 boolean hideBean = false; // Should the TestBean be hidden?
 
-                JMeterGUIComponent item = null;
+                JMeterGUIComponent item;
                 try {
                     Class<?> c = Class.forName(name);
                     if (TestBean.class.isAssignableFrom(c)) {
@@ -504,8 +504,7 @@ public final class MenuFactory {
                         item = (JMeterGUIComponent) c.newInstance();
                     }
                 } catch (NoClassDefFoundError e) {
-                    log.warn(
-                            "Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}. {}",
+                    log.warn("Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}. {}",
                             name, e, e);
                     continue;
                 } catch(HeadlessException e) {

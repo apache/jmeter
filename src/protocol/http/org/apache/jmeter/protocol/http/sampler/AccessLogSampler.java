@@ -132,9 +132,8 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     public SampleResult sampleWithParser() {
         initFilter();
         instantiateParser();
-        SampleResult res = null;
+        SampleResult res;
         try {
-
             if (parser == null) {
                 throw new JMeterException("No Parser available");
             }
@@ -146,8 +145,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             // huge gigabyte log file and they only want to
             // use a quarter of the entries.
             int thisCount = parser.parseAndConfigure(1, this);
-            if (thisCount < 0) // Was there an error?
-            {
+            if (thisCount < 0) { // Was there an error?
                 return errorResult(new Error("Problem parsing the log file"), new HTTPSampleResult());
             }
             if (thisCount == 0) {
@@ -167,7 +165,7 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             }
             count = thisCount;
             res = sample();
-            if(res != null) {
+            if (res != null) {
                 res.setSampleLabel(toString());
             }
         } catch (Exception e) {
@@ -373,11 +371,11 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
      */
     @Override
     public void threadFinished() {
-        if(parser instanceof ThreadListener) {
-            ((ThreadListener)parser).threadFinished();
+        if (parser instanceof ThreadListener) {
+            ((ThreadListener) parser).threadFinished();
         }
-        if(filter instanceof ThreadListener) {
-            ((ThreadListener)filter).threadFinished();
+        if (filter instanceof ThreadListener) {
+            ((ThreadListener) filter).threadFinished();
         }
     }
 }

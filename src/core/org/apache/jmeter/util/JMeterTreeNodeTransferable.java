@@ -53,19 +53,18 @@ public class JMeterTreeNodeTransferable implements Transferable {
 
     @Override
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-        if(!isDataFlavorSupported(flavor)) {
+        if (!isDataFlavorSupported(flavor)) {
             throw new UnsupportedFlavorException(flavor);
         }
-        if(data != null) {
+        if (data != null) {
             ObjectInput ois = null;
             try {
                 ois = new ObjectInputStream(new ByteArrayInputStream(data));
-                JMeterTreeNode[] nodes = (JMeterTreeNode[]) ois.readObject();
-                return nodes;
+                return ois.readObject();
             } catch (ClassNotFoundException cnfe) {
                 throw new IOException("Failed to read object stream.", cnfe);
             } finally {
-                if(ois != null) {
+                if (ois != null) {
                     try {
                         ois.close();
                     } catch (Exception e) {

@@ -182,7 +182,7 @@ class JTidyHTMLParser extends HTMLParser {
 
     /*
      * Helper method to get an attribute value, if it exists @param attrs list
-     * of attributs @param attname attribute name @return
+     * of attribute @param attname attribute name @return
      */
     private String getValue(NamedNodeMap attrs, String attname) {
         String v = null;

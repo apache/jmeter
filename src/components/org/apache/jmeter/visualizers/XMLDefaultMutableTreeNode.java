@@ -54,13 +54,11 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
         super(root.getNodeName());
         initAttributeNode(root, this);
         initRoot(root);
-
     }
 
     public XMLDefaultMutableTreeNode(String name, Node xmlNode) {
         super(name);
         this.xmlNode = xmlNode;
-
     }
 
     /**
@@ -76,7 +74,6 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
             Node childNode = childNodes.item(i);
             initNode(childNode, this);
         }
-
     }
 
     /**
@@ -107,9 +104,7 @@ public class XMLDefaultMutableTreeNode extends DefaultMutableTreeNode {
         default:
             // if other node type, we will just skip it
             break;
-
         }
-
     }
 
     /**

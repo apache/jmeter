@@ -81,7 +81,8 @@ public class XPathUtil {
      */
     private static synchronized DocumentBuilderFactory makeDocumentBuilderFactory(boolean validate, boolean whitespace,
             boolean namespace) {
-        if (XPathUtil.documentBuilderFactory == null || documentBuilderFactory.isValidating() != validate
+        if (XPathUtil.documentBuilderFactory == null
+                || documentBuilderFactory.isValidating() != validate
                 || documentBuilderFactory.isNamespaceAware() != namespace
                 || documentBuilderFactory.isIgnoringElementContentWhitespace() != whitespace) {
             // configure the document builder factory
@@ -321,7 +322,7 @@ public class XPathUtil {
             String xPathQuery,
             List<String> matchStrings, boolean fragment, 
             int matchNumber) throws TransformerException {
-        String val = null;
+        String val;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {

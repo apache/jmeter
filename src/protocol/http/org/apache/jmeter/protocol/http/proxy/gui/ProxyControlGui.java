@@ -357,7 +357,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     /*
-     * Handles groupingMode. actionPerfomed is not suitable, as that seems to be
+     * Handles groupingMode. actionPerformed is not suitable, as that seems to be
      * activated whenever the Proxy is selected in the Test Plan
      * Also handles samplerTypeName
      */
@@ -460,7 +460,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     protected void addSuggestedExcludes(JTable table) {
         GuiUtils.stopTableEditing(table);
         int rowCount = table.getRowCount();
-        PowerTableModel model = null;
+        PowerTableModel model;
         String[] exclusions = SUGGESTED_EXCLUSIONS.split(";"); // $NON-NLS-1$
         if (exclusions.length>0) {
             model = (PowerTableModel) table.getModel();
@@ -956,14 +956,14 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         deleteButton.addActionListener(this);
         buttonPanel.add(deleteButton);
 
-        /** A button for adding new excludes/includes to the table from the clipboard. */
+        // A button for adding new excludes/includes to the table from the clipboard.
         JButton addFromClipboard = new JButton(JMeterUtils.getResString("add_from_clipboard")); // $NON-NLS-1$
         addFromClipboard.setActionCommand(copyFromClipboard);
         addFromClipboard.addActionListener(this);
         buttonPanel.add(addFromClipboard);
 
         if(addSuggestedExcludes != null) {
-            /** A button for adding suggested excludes. */
+            // A button for adding suggested excludes.
             JButton addFromSuggestedExcludes = new JButton(JMeterUtils.getResString("add_from_suggested_excludes")); // $NON-NLS-1$
             addFromSuggestedExcludes.setActionCommand(addSuggestedExcludes);
             addFromSuggestedExcludes.addActionListener(this);
@@ -1017,7 +1017,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                  * java.lang.ThreadGroup However, that does not work correctly;
                  * whereas treating it as a Controller does. if (te instanceof
                  * ThreadGroup) { name.append(parent_name);
-                 * name.append(cur.getName()); name.append(seperator);
+                 * name.append(cur.getName()); name.append(separator);
                  * buildNodesModel(cur, name.toString(), level); } else
                  */
                 if (te instanceof Controller) {

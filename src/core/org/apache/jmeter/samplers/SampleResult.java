@@ -618,7 +618,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *            the {@link SampleResult} to be added
      */
     public void addSubResult(SampleResult subResult) {
-        if(subResult == null) {
+        if (subResult == null) {
             // see https://bz.apache.org/bugzilla/show_bug.cgi?id=54778
             return;
         }
@@ -756,8 +756,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     public String getResponseDataAsString() {
         try {
-            if(responseDataAsString == null) {
-                responseDataAsString= new String(responseData,getDataEncodingWithDefault());
+            if (responseDataAsString == null) {
+                responseDataAsString = new String(responseData, getDataEncodingWithDefault());
             }
             return responseDataAsString;
         } catch (UnsupportedEncodingException e) {
@@ -1460,7 +1460,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         public void run() {
             // Wait longer than a clock pulse (generally 10-15ms)
             getOffset(30L); // Catch an early clock pulse to reduce slop.
-            while(true) {
+            while (true) {
                 getOffset(NANOTHREAD_SLEEP); // Can now afford to wait a bit longer between checks
             }
             

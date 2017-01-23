@@ -477,7 +477,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             
             // Handle search related rendering
             SearchableTreeNode node = (SearchableTreeNode) value;
-            if(node.isNodeHasMatched()) {
+            if (node.isNodeHasMatched()) {
                 setBorder(RED_BORDER);
             } else if (node.isChildrenNodesHaveMatched()) {
                 setBorder(BLUE_BORDER);

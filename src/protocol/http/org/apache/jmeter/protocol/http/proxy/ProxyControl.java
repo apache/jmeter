@@ -775,30 +775,28 @@ public class ProxyControl extends GenericController {
         String includeExp = getContentTypeInclude();
         String excludeExp = getContentTypeExclude();
         // If no expressions are specified, we let the sample pass
-        if((includeExp == null || includeExp.length() == 0) &&
-                (excludeExp == null || excludeExp.length() == 0)
-                )
-        {
+        if ((includeExp == null || includeExp.length() == 0) &&
+                (excludeExp == null || excludeExp.length() == 0)) {
             return true;
         }
 
         // Check that we have a content type
         String sampleContentType = result.getContentType();
-        if(sampleContentType == null || sampleContentType.length() == 0) {
-            if(log.isDebugEnabled()) {
+        if (sampleContentType == null || sampleContentType.length() == 0) {
+            if (log.isDebugEnabled()) {
                 log.debug("No Content-type found for : " + result.getUrlAsString());
             }
 
             return true;
         }
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Content-type to filter : " + sampleContentType);
         }
 
         // Check if the include pattern is matched
         boolean matched = testPattern(includeExp, sampleContentType, true);
-        if(!matched) {
+        if (!matched) {
             return false;
         }
 
@@ -814,15 +812,16 @@ public class ProxyControl extends GenericController {
      * @return boolean true if Matching expression
      */
     private boolean testPattern(String expression, String sampleContentType, boolean expectedToMatch) {
-        if(expression != null && expression.length() > 0) {
-            if(log.isDebugEnabled()) {
-                log.debug("Testing Expression : " + expression + " on sampleContentType:"+sampleContentType+", expected to match:"+expectedToMatch);
+        if (expression != null && expression.length() > 0) {
+            if (log.isDebugEnabled()) {
+                log.debug("Testing Expression : " + expression + " on sampleContentType:"
+                        + sampleContentType + ", expected to match:" + expectedToMatch);
             }
 
-            Pattern pattern = null;
             try {
-                pattern = JMeterUtils.getPatternCache().getPattern(expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
-                if(JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
+                Pattern pattern = JMeterUtils.getPatternCache().getPattern(
+                        expression, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.SINGLELINE_MASK);
+                if (JMeterUtils.getMatcher().contains(sampleContentType, pattern) != expectedToMatch) {
                     return false;
                 }
             } catch (MalformedCachePatternException e) {

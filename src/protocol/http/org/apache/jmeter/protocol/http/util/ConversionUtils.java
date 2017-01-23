@@ -170,15 +170,15 @@ public class ConversionUtils {
     public static String removeSlashDotDot(String url)
     {
         if (url == null) {
-            return url;
+            return null;
         }
-        
+
         url = url.trim();
-        if(url.length() < 4 || !url.contains(SLASHDOTDOT)) {
+        if (url.length() < 4 || !url.contains(SLASHDOTDOT)) {
             return url;
         }
         
-        /**
+        /*
          * http://auth@host:port/path1/path2/path3/?query#anchor
          */
 
@@ -189,12 +189,10 @@ public class ConversionUtils {
 
         int dotSlashSlashIndex = url.indexOf(COLONSLASHSLASH);
         final int pathStartIndex;
-        if (dotSlashSlashIndex >= 0)
-        {
+        if (dotSlashSlashIndex >= 0) {
             // absolute URL
             pathStartIndex = url.indexOf(SLASH, dotSlashSlashIndex + COLONSLASHSLASH.length());
-        } else
-        {
+        } else {
             // document or context-relative URL like:
             // '/path/to'
             // OR '../path/to'
@@ -206,13 +204,11 @@ public class ConversionUtils {
         int pathEndIndex = url.length();
 
         int questionMarkIdx = url.indexOf('?');
-        if (questionMarkIdx > 0)
-        {
+        if (questionMarkIdx > 0) {
             pathEndIndex = questionMarkIdx;
         } else {
             int anchorIdx = url.indexOf('#');
-            if (anchorIdx > 0)
-            {
+            if (anchorIdx > 0) {
                 pathEndIndex = anchorIdx;
             }
         }
@@ -226,38 +222,31 @@ public class ConversionUtils {
 
         StringTokenizer st = new StringTokenizer(currentPath, SLASH);
         List<String> tokens = new ArrayList<>();
-        while (st.hasMoreTokens())
-        {
+        while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
         }
 
-        for (int i = 0; i < tokens.size(); i++)
-        {
-            if (i < tokens.size() - 1)
-            {
+        for (int i = 0; i < tokens.size(); i++) {
+            if (i < tokens.size() - 1) {
                 final String thisToken = tokens.get(i);
 
                 // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT))
-                {
+                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
                     tokens.remove(i);
                     tokens.remove(i);
                     i = i - 2;
-                    if (i < -1)
-                    {
+                    if (i < -1) {
                         i = -1;
                     }
                 }
             }
-
         }
 
         StringBuilder newPath = new StringBuilder();
         if (startsWithSlash) {
             newPath.append(SLASH);
         }
-        for (int i = 0; i < tokens.size(); i++)
-        {
+        for (int i = 0; i < tokens.size(); i++) {
             newPath.append(tokens.get(i));
 
             // append '/' if this isn't the last token or it is but the original

@@ -625,8 +625,8 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_REPORT_TITLE, String.class);
         configuration.setReportTitle(reportTitle);
 
-        Date reportStartDate = null;
-        Date reportEndDate = null;
+        Date reportStartDate;
+        Date reportEndDate;
         final String startDateValue = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_START_DATE, String.class);
         final String endDateValue = getOptionalProperty(props,

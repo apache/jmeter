@@ -553,7 +553,6 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         refreshErrorsTimer.start();
     }
 
-
     /**
      * Support for Test Plan Dnd
      * see BUG 52281 (when JDK6 will be minimum JDK target)

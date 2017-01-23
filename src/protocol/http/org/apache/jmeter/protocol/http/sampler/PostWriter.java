@@ -278,7 +278,7 @@ public class PostWriter {
 
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
-                String postBody = null;
+                String postBody;
                 if(!sampler.getSendParameterValuesAsPostBody()) {
                     // Set the content type
                     if(!hasContentTypeHeader) {
@@ -292,7 +292,7 @@ public class PostWriter {
                     // Allow the mimetype of the file to control the content type
                     // This is not obvious in GUI if you are not uploading any files,
                     // but just sending the content of nameless parameters
-                    // TODO: needs a multiple file upload scenerio
+                    // TODO: needs a multiple file upload scenario
                     if(!hasContentTypeHeader) {
                         HTTPFileArg file = files.length > 0? files[0] : null;
                         if(file != null && file.getMimeType() != null && file.getMimeType().length() > 0) {

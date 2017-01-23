@@ -196,7 +196,7 @@ public class SaveService {
                     + JMeterUtils.getPropDefault(SAVESERVICE_PROPERTIES,
                     SAVESERVICE_PROPERTIES_FILE));
                 BufferedReader reader = new BufferedReader(fileReader)) {
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 md.update(line.getBytes());
             }
@@ -355,7 +355,7 @@ public class SaveService {
         try {
             return "class:"+result.getClass()+",content:"+ToStringBuilder.reflectionToString(result);
         } catch(Exception e) {
-            return "Exception occured creating debug from event, message:"+e.getMessage();
+            return "Exception occurred creating debug from event, message:"+e.getMessage();
         }
     }
 
@@ -435,7 +435,7 @@ public class SaveService {
      */
     private static HashTree readTree(InputStream inputStream, File file)
             throws IOException {
-        ScriptWrapper wrapper = null;
+        ScriptWrapper wrapper;
         try {
             // Get the InputReader to use
             InputStreamReader inputStreamReader = getInputStreamReader(inputStream);

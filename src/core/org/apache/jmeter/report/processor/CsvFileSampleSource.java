@@ -175,7 +175,7 @@ public class CsvFileSampleSource extends AbstractSampleSource {
                     inputFiles[i]);
             producer.startProducing();
             try {
-                Sample s = null;
+                Sample s;
                 while ((s = csvReader.readSample()) != null) {
                     producer.produce(s, i);
                     sampleCount++;

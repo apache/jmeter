@@ -123,7 +123,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
     @Override
     protected void exportDone(JComponent source, Transferable data, int action) {
         
-        if(this.nodesForRemoval != null
+        if (this.nodesForRemoval != null
                 && ((action & MOVE) == MOVE))  {
             GuiPackage guiInstance = GuiPackage.getInstance();
             for (JMeterTreeNode jMeterTreeNode : nodesForRemoval) {

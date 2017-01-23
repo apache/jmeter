@@ -222,7 +222,6 @@ public class ConversionHelp {
     public static String getPropertyName(HierarchicalStreamReader reader, UnmarshallingContext context) {
         String name = ConversionHelp.decode(reader.getAttribute(ATT_NAME));
         return getUpgradePropertyName(name, context);
-        
     }
 
     /**
@@ -240,7 +239,6 @@ public class ConversionHelp {
     public static String getPropertyValue(HierarchicalStreamReader reader, UnmarshallingContext context, String name) {
         String value = ConversionHelp.decode(reader.getValue());
         return getUpgradePropertyValue(name, value, context);
-        
     }
 
     /**
@@ -275,7 +273,6 @@ public class ConversionHelp {
         String testClass = (String) context.get(SaveService.TEST_CLASS_NAME);
         return NameUpdater.getCurrentName(value, name, testClass);
     }
-
 
     /**
      * Save the special properties:

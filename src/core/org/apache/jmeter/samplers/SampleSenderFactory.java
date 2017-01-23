@@ -89,7 +89,7 @@ public class SampleSenderFactory {
             return new DataStrippingSampleSender(new DiskStoreSampleSender(listener));
         } else {
             // should be a user provided class name
-            SampleSender s = null;
+            SampleSender s;
             try {
                 Class<?> clazz = Class.forName(type);
                 Constructor<?> cons = clazz.getConstructor(new Class[] {RemoteSampleListener.class});

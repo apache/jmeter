@@ -207,7 +207,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Gets the title of the graph.
-     * 
+     *
      * @return the title of the graph
      */
     public final String getTitle() {
@@ -216,7 +216,7 @@ public abstract class AbstractGraphConsumer extends AbstractSampleConsumer {
 
     /**
      * Sets the title of the graph.
-     * 
+     *
      * @param title
      *            the title to set
      */

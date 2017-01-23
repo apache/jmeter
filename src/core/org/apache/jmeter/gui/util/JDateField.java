@@ -93,7 +93,7 @@ public class JDateField extends JTextField {
         setText(myString);
     }
 
-    // Dummy constructor to allo JUnit tests to work
+    // Dummy constructor to allow JUnit tests to work
     public JDateField() {
         this(new Date());
     }
@@ -190,7 +190,7 @@ public class JDateField extends JTextField {
 
         @Override
         public void focusLost(FocusEvent e) {
-            if(getText() == null || getText().isEmpty()) {
+            if (getText() == null || getText().isEmpty()) {
                 return;
             }
             try {

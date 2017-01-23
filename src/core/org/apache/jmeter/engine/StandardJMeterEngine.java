@@ -364,7 +364,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             JMeterUtils.reportErrorToUser("Error occurred compiling the tree: - see log file", e);
             return; // no point continuing
         }
-        /**
+        /*
          * Notification of test listeners needs to happen after function
          * replacement, but before setting RunningVersion to true.
          */
@@ -439,8 +439,8 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
             AbstractThreadGroup group = iter.next();
             //ignore Setup and Post here.  We could have filtered the searcher. but then
             //future Thread Group objects wouldn't execute.
-            if (group instanceof SetupThreadGroup ||
-                    group instanceof PostThreadGroup) {
+            if (group instanceof SetupThreadGroup
+                    || group instanceof PostThreadGroup) {
                 continue;
             }
             groupCount++;

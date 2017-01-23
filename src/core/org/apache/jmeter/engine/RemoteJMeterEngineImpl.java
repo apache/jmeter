@@ -83,7 +83,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
 
     private void init() throws RemoteException {
         log.info("Starting backing engine on {}", this.rmiPort);
-        InetAddress localHost=null;
+        InetAddress localHost;
         // Bug 47980 - allow override of local hostname
         String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
         try {

@@ -244,9 +244,8 @@ public final class ClassFinder {
             log.debug("contains: " + contains + " notContains: " + notContains);
         }
 
-        
-        ClassFilter filter = null;
-        if(annotations) {
+        ClassFilter filter;
+        if (annotations) {
             @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
             final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
             filter = new AnnoClassFilter(annoclassNames, innerClasses);
@@ -298,8 +297,7 @@ public final class ClassFinder {
      */
     private static List<String> getClasspathMatches(String[] strPathsOrJars) {
         final String javaClassPath = System.getProperty("java.class.path"); // $NON-NLS-1$
-        StringTokenizer stPaths =
-            new StringTokenizer(javaClassPath, File.pathSeparator);
+        StringTokenizer stPaths = new StringTokenizer(javaClassPath, File.pathSeparator);
         if (log.isDebugEnabled()) {
             log.debug("Classpath = " + javaClassPath);
             for (int i = 0; i < strPathsOrJars.length; i++) {
@@ -309,9 +307,8 @@ public final class ClassFinder {
 
         // find all jar files or paths that end with strPathOrJar
         List<String> listPaths = new ArrayList<>();
-        String strPath = null;
         while (stPaths.hasMoreTokens()) {
-            strPath = fixPathEntry(stPaths.nextToken());
+            String strPath = fixPathEntry(stPaths.nextToken());
             if (strPathsOrJars == null) {
                 log.debug("Adding: " + strPath);
                 listPaths.add(strPath);
@@ -406,7 +403,6 @@ public final class ClassFinder {
         return false;
     }
 
-
     /*
      * Converts a class file from the text stored in a Jar file to a version
      * that can be used in Class.forName().
@@ -436,17 +432,19 @@ public final class ClassFinder {
                     String strEntry = entries.nextElement().toString();
                     if (strEntry.endsWith(DOT_CLASS)) {
                         String fixedClassName = fixClassName(strEntry);
-                        if(filter.accept(fixedClassName)) {
+                        if (filter.accept(fixedClassName)) {
                             listClasses.add(fixedClassName);
                         }
                     }
                 }
             } catch (IOException e) {
-                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage(),e);
-            }
-            finally {
+                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage(), e);
+            } finally {
                 if (zipFile != null) {
-                    try {zipFile.close();} catch (Exception e) {}
+                    try {
+                        zipFile.close();
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
@@ -470,7 +468,7 @@ public final class ClassFinder {
                 String className = path.substring(strPathElement.length() + 1,
                         path.lastIndexOf('.')) // $NON-NLS-1$
                         .replace(File.separator.charAt(0), '.');// $NON-NLS-1$
-                if(filter.accept(className)) {
+                if (filter.accept(className)) {
                     listClasses.add(className);
                 }
             }
