@@ -30,6 +30,9 @@ import org.slf4j.Logger;
  * @since 3.0
  */
 public class LogkitLoggerFactory implements ILoggerFactory {
+
+    private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
+
     // key: name (String), value: a Log4jLogger;
     private final Map<String, Logger> loggerMap;
 
@@ -58,12 +61,25 @@ public class LogkitLoggerFactory implements ILoggerFactory {
                 if (name.equalsIgnoreCase(Logger.ROOT_LOGGER_NAME)) {
                     logkitLogger = Hierarchy.getDefaultHierarchy().getRootLogger();
                 } else {
-                    logkitLogger = Hierarchy.getDefaultHierarchy().getLoggerFor(name);
+                    logkitLogger = Hierarchy.getDefaultHierarchy().getLoggerFor(removePrefix(name));
                 }
                 slf4jLogger = new LogkitLoggerAdapter(logkitLogger);
                 loggerMap.put(name, slf4jLogger);
             }
         }
         return slf4jLogger;
+    }
+
+    /**
+     * Removes the standard prefix, i.e. "org.apache.".
+     *
+     * @param name from which to remove the prefix
+     * @return the name with the prefix removed
+     */
+    private static String removePrefix(String name){
+        if (name.startsWith(PACKAGE_PREFIX)) { // remove the package prefix
+            name = name.substring(PACKAGE_PREFIX.length());
+        }
+        return name;
     }
 }
