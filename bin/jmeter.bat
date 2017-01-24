@@ -101,7 +101,9 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS% %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
+set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS%
+
+%JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 
 rem If the errorlevel is not zero, then display it and pause
 
