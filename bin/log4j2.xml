@@ -25,7 +25,7 @@
       </PatternLayout>
     </Console>
 
-    <File name="jmeter-log" fileName="jmeter.log">
+    <File name="jmeter-log" fileName="jmeter.log" append="false">
       <PatternLayout>
         <pattern>%d %p %c{1.}: %m%n</pattern>
       </PatternLayout>

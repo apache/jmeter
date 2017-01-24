@@ -58,7 +58,6 @@
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl3-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
@@ -71,6 +70,7 @@
 	<classpathentry kind="lib" path="lib/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.22.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-core-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-log-3.8.1.jar"/>
@@ -90,6 +90,9 @@
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-api-2.7.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.7.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.7.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.7.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>

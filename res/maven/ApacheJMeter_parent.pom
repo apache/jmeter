@@ -55,7 +55,6 @@ under the License.
       <accessors-smart.version>1.1</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
       <asm.version>5.2</asm.version>
-      <avalon-framework.version>4.1.4</avalon-framework.version>
       <beanshell.version>2.0b5</beanshell.version>
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
@@ -69,12 +68,10 @@ under the License.
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-jexl3.version>3.0</commons-jexl3.version>
       <commons-lang3.version>3.5</commons-lang3.version>
-      <commons-logging.version>1.2</commons-logging.version>
       <commons-math3.version>3.6.1</commons-math3.version>
       <commons-net.version>3.5</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
       <dnsjava.version>2.1.8</dnsjava.version>
-      <excalibur-logger.version>1.1</excalibur-logger.version>
       <freemarker.version>2.3.23</freemarker.version>
       <groovy-all.version>2.4.8</groovy-all.version>
       <hamcrest-core.version>1.3</hamcrest-core.version>
@@ -82,6 +79,7 @@ under the License.
       <httpcore.version>4.4.6</httpcore.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
+      <jcl-over-slf4j.version>1.7.22</jcl-over-slf4j.version>
       <jodd-core.version>3.8.1</jodd-core.version>
       <jodd-lagarto.version>3.8.1</jodd-lagarto.version>
       <jodd-log.version>3.8.1</jodd-log.version>
@@ -91,12 +89,15 @@ under the License.
       <jsoup.version>1.10.2</jsoup.version>
       <rhino.version>1.7.7.1</rhino.version>
       <junit.version>4.12</junit.version>
-      <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <ph-css.version>5.0.3</ph-css.version>
       <ph-commons.version>8.6.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.0</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.22</slf4j-api.version>
+      <log4j-api.version>2.7</log4j-api.version>
+      <log4j-core.version>2.7</log4j-core.version>
+      <log4j-slf4j-impl.version>2.7</log4j-slf4j-impl.version>
+      <log4j-1.2-api.version>2.7</log4j-1.2-api.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.14</tika-core.version>
       <tika-parsers.version>1.14</tika-parsers.version>
@@ -127,11 +128,6 @@ under the License.
         <groupId>bsf</groupId>
         <artifactId>bsf</artifactId>
         <version>${apache-bsf.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>avalon-framework</groupId>
-        <artifactId>avalon-framework</artifactId>
-        <version>${avalon-framework.version}</version>
       </dependency>
       <dependency>
         <groupId>org.beanshell</groupId>
@@ -199,11 +195,6 @@ under the License.
         <version>${commons-lang3.version}</version>
       </dependency>
       <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>${commons-logging.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>
         <version>${commons-math3.version}</version>
@@ -222,11 +213,6 @@ under the License.
         <groupId>dnsjava</groupId>
         <artifactId>dnsjava</artifactId>
         <version>${dnsjava.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>excalibur-logger</groupId>
-        <artifactId>excalibur-logger</artifactId>
-        <version>${excalibur-logger.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
@@ -267,11 +253,6 @@ under the License.
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>logkit</groupId>
-        <artifactId>logkit</artifactId>
-        <version>${logkit.version}</version>
       </dependency>
       <dependency>
         <groupId>net.sf.jtidy</groupId>
@@ -397,6 +378,31 @@ under the License.
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${jcl-over-slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${log4j-slf4j-impl.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-1.2-api</artifactId>
+        <version>${log4j-1.2-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.freemarker</groupId>

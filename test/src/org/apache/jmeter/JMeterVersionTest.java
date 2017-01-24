@@ -202,7 +202,8 @@ public class JMeterVersionTest extends JMeterTestCase {
         final BufferedReader maven = new BufferedReader(
                 new FileReader(getFileFromHome("res/maven/ApacheJMeter_parent.pom"))); // assume default charset is OK here
 //      <apache-bsf.version>2.4.0</apache-bsf.version>
-        final Pattern p = Pattern.compile("\\s+<([^\\.]+)\\.version>([^<]+)<.*");
+//      <log4j-1.2-api.version>2.7</log4j-1.2-api.version>
+        final Pattern p = Pattern.compile("\\s+<([^\\<\\>]+)\\.version>([^<]+)<.*");
 
         String line;
         while((line=maven.readLine()) != null){

@@ -246,8 +246,11 @@ public final class NewDriver {
             Thread.currentThread().setContextClassLoader(loader);
 
             if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$ $NON-NLS-2$
-                File conf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
-                System.setProperty("log4j.configurationFile", "file:" + conf);
+                File loggingConf = new File("log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+                if (!loggingConf.isFile()) {
+                    loggingConf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+                }
+                System.setProperty("log4j.configurationFile", loggingConf.toURI().toString());
             }
     
             try {
