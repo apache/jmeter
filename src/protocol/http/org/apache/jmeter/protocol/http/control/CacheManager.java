@@ -476,7 +476,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 // Bug 51942 - this map may be used from multiple threads
                 @SuppressWarnings("unchecked") // LRUMap is not generic currently
                 Map<String, CacheEntry> map = new LRUMap(getMaxSize());
-                return Collections.<String, CacheEntry>synchronizedMap(map);
+                return Collections.synchronizedMap(map);
             }
         };
     }

@@ -37,9 +37,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 /**
  * GUI for XPathExtractor class.
  */
- /* This file is inspired by RegexExtractor.
- * See Bugzilla: 37183
- */
 public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private static final long serialVersionUID = 240L;
@@ -49,6 +46,9 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
 
     private final JLabeledTextField xpathQueryField =
         new JLabeledTextField(JMeterUtils.getResString("xpath_extractor_query"));//$NON-NLS-1$
+
+    private final JLabeledTextField matchNumberField =
+            new JLabeledTextField(JMeterUtils.getResString("match_num_field"));//$NON-NLS-1$
 
     private final JLabeledTextField refNameField =
         new JLabeledTextField(JMeterUtils.getResString("ref_name_field"));//$NON-NLS-1$
@@ -77,6 +77,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xpathQueryField.setText(xpe.getXPathQuery());
         defaultField.setText(xpe.getDefaultValue());
         refNameField.setText(xpe.getRefName());
+        matchNumberField.setText(xpe.getMatchNumberAsString());
         getFragment.setSelected(xpe.getFragment());
         xml.configure(xpe);
     }
@@ -97,6 +98,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
             saveScopeSettings(xpath);
             xpath.setDefaultValue(defaultField.getText());
             xpath.setRefName(refNameField.getText());
+            xpath.setMatchNumber(matchNumberField.getText());
             xpath.setXPathQuery(xpathQueryField.getText());
             xpath.setFragment(getFragment.isSelected());
             xml.modifyTestElement(xpath);
@@ -113,6 +115,7 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         xpathQueryField.setText(""); // $NON-NLS-1$
         defaultField.setText(""); // $NON-NLS-1$
         refNameField.setText(""); // $NON-NLS-1$
+        matchNumberField.setText(XPathExtractor.DEFAULT_VALUE_AS_STRING); // $NON-NLS-1$
         xml.setDefaultValues();
     }
 
@@ -139,6 +142,8 @@ public class XPathExtractorGui extends AbstractPostProcessorGui {
         addField(panel, refNameField, gbc);
         resetContraints(gbc);
         addField(panel, xpathQueryField, gbc);
+        resetContraints(gbc);
+        addField(panel, matchNumberField, gbc);
         resetContraints(gbc);
         gbc.weighty = 1;
         addField(panel, defaultField, gbc);

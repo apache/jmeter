@@ -18,7 +18,6 @@
 
 package org.apache.jmeter.protocol.http.sampler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -95,8 +94,6 @@ public class HTTPFileImpl extends HTTPAbstractImpl {
             res = resultProcessing(areFollowingRedirect, frameDepth, res);
 
             return res;
-        } catch (FileNotFoundException e) {
-            return errorResult(e, res);
         } catch (IOException e) {
             return errorResult(e, res);
         } finally {

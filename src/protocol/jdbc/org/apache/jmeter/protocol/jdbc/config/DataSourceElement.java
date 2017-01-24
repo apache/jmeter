@@ -254,12 +254,7 @@ public class DataSourceElement extends AbstractTestElement
 
     // used to hold per-thread singleton connection pools
     private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
-        new ThreadLocal<Map<String, BasicDataSource>>(){
-        @Override
-        protected Map<String, BasicDataSource> initialValue() {
-            return new HashMap<>();
-        }
-    };
+            ThreadLocal.withInitial(HashMap::new);
 
     /*
      * Wrapper class to allow getConnection() to be implemented for both shared

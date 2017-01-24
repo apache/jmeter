@@ -22,7 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -161,14 +160,11 @@ public class TCPConfigGui extends AbstractConfigGui {
         JLabel label = new JLabel(JMeterUtils.getResString("reuseconnection")); //$NON-NLS-1$
 
         reUseConnection = new JCheckBox("", true);
-        reUseConnection.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    closeConnection.setEnabled(true);
-                } else {
-                    closeConnection.setEnabled(false);
-                }
+        reUseConnection.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                closeConnection.setEnabled(true);
+            } else {
+                closeConnection.setEnabled(false);
             }
         });
         label.setLabelFor(reUseConnection);

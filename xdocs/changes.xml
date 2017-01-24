@@ -134,6 +134,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60154</bug>User Parameters GUI: allow rows to be moved up &amp; down in the list. Contributed by Murdecai777 (https://github.com/Murdecai777).</li>
     <li><bug>60507</bug>Added '<code>Or</code>' Function into ResponseAssertion. Based on a contribution from 忻隆 (298015902 at qq.com)</li>
     <li><bug>58943</bug>Create a Better Think Time experience. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60602</bug>XPath Extractor : Add Match No. to allow extraction randomly, by index or all matches</li>
 </ul>
 
 <h3>Functions</h3>
@@ -142,6 +143,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 
 <h3>I18N</h3>
 <ul>
+    <li>Improve translation "save_as" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -153,6 +155,9 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
     <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60514</bug>Ability to apply a naming convention on Children of a Transaction Controller. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60593</bug>Switch to G1 GC algorithm</li>
+    <li><bug>60595</bug>Add a SplashScreen at the start of JMeter GUI. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>55258</bug>Drop "Close" icon from toolbar and add "New" to menu. Partly based on contribution from Sanduni Kanishka (https://github.com/SanduniKanishka)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -168,6 +173,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>Updated to slf4j-api 1.7.22 (from 1.7.21)</li>
     <li>Updated to asm 5.2 (from 5.1)</li>
     <li>Converted the old pdf tutorials to xml.</li>
+    <li><pr>255</pr>Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -177,6 +183,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>60531</bug>HTTP Cookie Manager : changing Implementation does not update Cookie Policy</li>
+    <li><bug>60575</bug>HTTP GET Requests could have a content-type header without a body.</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -196,6 +203,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <ul>
     <li><bug>60438</bug><pr>235</pr>Clear old variables before extracting new ones in JSON Extractor.
     Based on a patch by Qi Chen (qi.chensh at ele.me)</li>
+    <li><bug>60607</bug>DNS Cache Manager configuration is ignored</li>
 </ul>
 
 <h3>Functions</h3>
@@ -216,6 +224,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60494</bug>Add sonar analysis task to build</li>
     <li><bug>60501</bug>Search Feature : Performance issue when regexp is checked</li>
     <li><bug>60444</bug>Intermittent failure of TestHTTPMirrorThread#testSleep(). Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
+    <li><bug>60621</bug>The "report-template" folder is missing from ApacheJMeter_config-3.1.jar in maven central</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -234,6 +243,8 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <li>Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
 <li>忻隆 (298015902 at qq.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Graham Russell (graham at ham1.co.uk)</li>
+<li>Sanduni Kanishka (https://github.com/SanduniKanishka)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

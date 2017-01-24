@@ -34,8 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -213,21 +211,15 @@ public class MailReaderSamplerGui extends AbstractSamplerGui implements ActionLi
         numMessagesPanel.add(new JLabel(numMessagesLabel));
         ButtonGroup nmbg = new ButtonGroup();
         allMessagesButton = new JRadioButton(allMessagesLabel);
-        allMessagesButton.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (allMessagesButton.isSelected()) {
-                    someMessagesField.setEnabled(false);
-                }
+        allMessagesButton.addChangeListener(e -> {
+            if (allMessagesButton.isSelected()) {
+                someMessagesField.setEnabled(false);
             }
         });
         someMessagesButton = new JRadioButton();
-        someMessagesButton.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (someMessagesButton.isSelected()) {
-                    someMessagesField.setEnabled(true);
-                }
+        someMessagesButton.addChangeListener(e -> {
+            if (someMessagesButton.isSelected()) {
+                someMessagesField.setEnabled(true);
             }
         });
         nmbg.add(allMessagesButton);

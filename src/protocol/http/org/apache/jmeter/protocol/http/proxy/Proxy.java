@@ -333,10 +333,7 @@ public class Proxy extends Thread {
                     hashAlias = alias;
                     keyAlias = alias;
                 }
-            } catch (IOException e) {
-                log.error(port + "Problem with keystore", e);
-                return null;
-            } catch (GeneralSecurityException e) {
+            } catch (IOException | GeneralSecurityException e) {
                 log.error(port + "Problem with keystore", e);
                 return null;
             }

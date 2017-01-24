@@ -21,9 +21,7 @@ package org.apache.jmeter.protocol.smtp.sampler.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -116,35 +114,15 @@ public class SecuritySettingsPanel extends JPanel{
         gridBagConstraints.gridy = 0;
         this.add(rbUseStartTLS, gridBagConstraints);
 
-        rbUseNone.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
-        rbUseSSL.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
-        rbUseStartTLS.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent evt) {
-                rbSecuritySettingsItemStateChanged(evt);
-            }
-        });
+        rbUseNone.addItemListener(this::rbSecuritySettingsItemStateChanged);
+        rbUseSSL.addItemListener(this::rbSecuritySettingsItemStateChanged);
+        rbUseStartTLS.addItemListener(this::rbSecuritySettingsItemStateChanged);
 
         cbTrustAllCerts.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbTrustAllCerts.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbTrustAllCerts.setEnabled(false);
         cbTrustAllCerts.setToolTipText(JMeterUtils.getResString("smtp_trustall_tooltip")); // $NON-NLS-1$
-        cbTrustAllCerts.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                cbTrustAllCertsActionPerformed(evt);
-            }
-        });
+        cbTrustAllCerts.addActionListener(this::cbTrustAllCertsActionPerformed);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -153,12 +131,7 @@ public class SecuritySettingsPanel extends JPanel{
         cbEnforceStartTLS.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbEnforceStartTLS.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbEnforceStartTLS.setEnabled(false);
-        cbEnforceStartTLS.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        cbEnforceStartTLSActionPerformed(evt);
-                    }
-                });
+        cbEnforceStartTLS.addActionListener(this::cbEnforceStartTLSActionPerformed);
         cbEnforceStartTLS.setToolTipText(JMeterUtils.getResString("smtp_enforcestarttls_tooltip")); // $NON-NLS-1$
 
         gridBagConstraints.gridx = 2;
@@ -168,12 +141,7 @@ public class SecuritySettingsPanel extends JPanel{
         cbUseLocalTrustStore.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbUseLocalTrustStore.setMargin(new java.awt.Insets(0, 0, 0, 0));
         cbUseLocalTrustStore.setEnabled(false);
-        cbUseLocalTrustStore.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        cbUseLocalTrustStoreActionPerformed(evt);
-                    }
-                });
+        cbUseLocalTrustStore.addActionListener(this::cbUseLocalTrustStoreActionPerformed);
 
         cbUseLocalTrustStore.setToolTipText(JMeterUtils.getResString("smtp_usetruststore_tooltip")); // $NON-NLS-1$
 
@@ -200,7 +168,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbUseLocalTrustStoreActionPerformed(
+    private void cbUseLocalTrustStoreActionPerformed( // NOSONAR This method is used through lambda
             ActionEvent evt) {
         final boolean selected = cbUseLocalTrustStore.isSelected();
         tfTrustStoreToUse.setEditable(selected); // must follow the checkbox setting
@@ -214,7 +182,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbTrustAllCertsActionPerformed(
+    private void cbTrustAllCertsActionPerformed( // NOSONAR This method is used through lambda
             ActionEvent evt) {
         final boolean selected = cbTrustAllCerts.isSelected();
         if (selected) {
@@ -230,7 +198,8 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ActionEvent to be handled
      */
-    private void cbEnforceStartTLSActionPerformed(ActionEvent evt) {
+    private void cbEnforceStartTLSActionPerformed(ActionEvent evt) { // NOSONAR This method is used through lambda
+        // NOOP
     }
 
     /**
@@ -239,7 +208,7 @@ public class SecuritySettingsPanel extends JPanel{
      * @param evt
      *            ItemEvent to be handled
      */
-    private void rbSecuritySettingsItemStateChanged(ItemEvent evt) {
+    private void rbSecuritySettingsItemStateChanged(ItemEvent evt) { // NOSONAR This method is used through lambda
         final Object source = evt.getSource();
         if (source == rbUseNone) {
             cbTrustAllCerts.setEnabled(false);

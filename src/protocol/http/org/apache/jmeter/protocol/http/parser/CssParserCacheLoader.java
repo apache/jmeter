@@ -69,7 +69,7 @@ public class CssParserCacheLoader implements
         final CascadingStyleSheet aCSS = CSSReader.readFromStringReader(
                 cssContent, readerSettings);
 
-        final URLCollection urls = new URLCollection(new ArrayList<URLString>());
+        final URLCollection urls = new URLCollection(new ArrayList<>());
 
         if (aCSS == null) {
             LOG.warn("Failed parsing CSS: " + baseUrl
