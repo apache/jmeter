@@ -418,6 +418,7 @@
     <include name="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
+    <include name="${lib.dir}/${slf4j-ext.jar}"/>
     <include name="${lib.dir}/${jcl-over-slf4j.jar}"/>
     <include name="${lib.dir}/${log4j-api.jar}"/>
     <include name="${lib.dir}/${log4j-core.jar}"/>
@@ -497,6 +498,7 @@
     <pathelement location="${lib.dir}/${rsyntaxtextarea.jar}"/>
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
+    <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
     <pathelement location="${lib.dir}/${log4j-api.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
@@ -3011,6 +3013,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="rsyntaxtextarea"/>
     <process_jarfile jarname="serializer"/>
     <process_jarfile jarname="slf4j-api"/>
+    <process_jarfile jarname="slf4j-ext"/>
     <process_jarfile jarname="jcl-over-slf4j"/>
     <process_jarfile jarname="log4j-api"/>
     <process_jarfile jarname="log4j-core"/>
