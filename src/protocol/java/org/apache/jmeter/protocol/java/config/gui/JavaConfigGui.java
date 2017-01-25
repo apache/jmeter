@@ -247,11 +247,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             classNameLabeledChoice.addValue(className);
         }
         
-        if(!classOk(className)) {
-            warningLabel.setVisible(true);
-        } else {
-            warningLabel.setVisible(false);
-        }
+        warningLabel.setVisible(!classOk(className));
         classNameLabeledChoice.setText(className);
     }
 
@@ -264,6 +260,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         try {
             JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
                     Thread.currentThread().getContextClassLoader()).newInstance();
+            // Just to use client
             return client != null;
         } catch (Exception ex) {
             log.error("Error creating class:'"+className+"' in JavaSampler "+getName()
