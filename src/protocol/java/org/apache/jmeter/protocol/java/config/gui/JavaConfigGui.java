@@ -248,7 +248,6 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         }
         
         if(!classOk(className)) {
-            log.error("Error setting class:'"+className+"' in JavaSampler "+getName()+", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
             warningLabel.setVisible(true);
         } else {
             warningLabel.setVisible(false);
@@ -261,12 +260,14 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
      * @param className String class name
      * @return true if class is ok (exist in classpath and instanceof {@link JavaSamplerClient}
      */
-    private static boolean classOk(String className) {
+    private boolean classOk(String className) {
         try {
             JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
                     Thread.currentThread().getContextClassLoader()).newInstance();
-            return client instanceof JavaSamplerClient;
+            return client != null;
         } catch (Exception ex) {
+            log.error("Error creating class:'"+className+"' in JavaSampler "+getName()
+                +", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
             return false;
         }
     }
