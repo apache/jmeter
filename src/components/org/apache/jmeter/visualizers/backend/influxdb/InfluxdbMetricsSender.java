@@ -33,11 +33,12 @@ interface InfluxdbMetricsSender {
         String measurement;
         String tag;
         String field;
-
-        MetricTuple(String measurement, String tag, String field) {
+        long timestamp;
+        MetricTuple(String measurement, String tag, String field, long timestamp) {
             this.measurement = measurement;
             this.tag = tag;
             this.field = field;
+            this.timestamp = timestamp;
         }
     }
 
