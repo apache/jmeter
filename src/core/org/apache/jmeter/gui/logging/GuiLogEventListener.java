@@ -19,10 +19,15 @@ package org.apache.jmeter.gui.logging;
 
 import java.util.EventListener;
 
-import org.apache.logging.log4j.core.LogEvent;
-
+/**
+ * GUI Log Event Listener.
+ */
 public interface GuiLogEventListener extends EventListener {
 
+    /**
+     * Invoked when a log event occurs.
+     * @param logEventObject log event object
+     */
     public void log(LogEventObject logEventObject);
 
 }

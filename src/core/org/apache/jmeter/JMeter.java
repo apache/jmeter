@@ -96,6 +96,8 @@ import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 
@@ -161,6 +163,7 @@ public class JMeter implements JMeterPlugin {
     
     private static final String JMX_SUFFIX = ".JMX"; // $NON-NLS-1$
 
+    private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -412,16 +415,6 @@ public class JMeter implements JMeterPlugin {
         }
         try {
             initializeProperties(parser); // Also initialises JMeter logging
-            /*
-             * The following is needed for HTTPClient.
-             * (originally tried doing this in HTTPSampler2,
-             * but it appears that it was done too late when running in GUI mode)
-             * Set the commons logging default to Avalon Logkit, if not already defined
-             */
-            if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
-                System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
-                        , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
-            }
 
             Thread.setDefaultUncaughtExceptionHandler(
                     (Thread t, Throwable e) -> {
@@ -816,10 +809,24 @@ public class JMeter implements JMeterPlugin {
             case LOGLEVEL:
                 if (value.length() > 0) { // Set category
                     log.info("LogLevel: " + name + "=" + value);
-                    LoggingManager.setPriority(value, name);
+                    final Level logLevel = Level.getLevel(value);
+                    if (logLevel != null) {
+                        String loggerName = name;
+                        if (!name.startsWith(PACKAGE_PREFIX)) {
+                            loggerName = PACKAGE_PREFIX + name;
+                        }
+                        Configurator.setLevel(loggerName, logLevel);
+                    } else {
+                        log.warn("Invalid log level, '" + value + "' for '" + name + "'.");
+                    }
                 } else { // Set root level
                     log.warn("LogLevel: " + name);
-                    LoggingManager.setPriority(name);
+                    final Level logLevel = Level.getLevel(name);
+                    if (logLevel != null) {
+                        Configurator.setRootLevel(logLevel);
+                    } else {
+                        log.warn("Invalid log level, '" + name + "' for the root logger.");
+                    }
                 }
                 break;
             case REMOTE_STOP:
