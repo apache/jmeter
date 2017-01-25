@@ -190,13 +190,6 @@ $(document).ready(function() {
             // Mean
             case 4:
             // Mean
-                item = item.toFixed(2);
-                break;
-            case 5:
-            // Min
-            case 6:
-            // Max
-                break;
             case 7:
             // Percentile 1
             case 8:
