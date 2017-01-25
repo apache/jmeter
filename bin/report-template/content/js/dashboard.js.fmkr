@@ -19,15 +19,54 @@ var seriesFilter = ${seriesFilter!"undefined"};
 var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
 
 /*
+ * Add header in statistics table to group metrics by category
+ * format
+ *
+ */
+function summaryTableHeader(header) {
+    var newRow = header.insertRow(-1);
+    newRow.className = "tablesorter-no-sort";
+    var cell = document.createElement('th');
+    cell.setAttribute("data-sorter", false);
+    cell.colSpan = 1;
+    cell.innerHTML = "Requests";
+    newRow.appendChild(cell);
+   
+    cell = document.createElement('th');
+    cell.setAttribute("data-sorter", false);
+    cell.colSpan = 3;
+    cell.innerHTML = "Executions";
+    newRow.appendChild(cell);
+   
+    cell = document.createElement('th');
+    cell.setAttribute("data-sorter", false);
+    cell.colSpan = 7;
+    cell.innerHTML = "Response Times (ms)";
+    newRow.appendChild(cell);
+
+    cell = document.createElement('th');
+    cell.setAttribute("data-sorter", false);
+    cell.colSpan = 2;
+    cell.innerHTML = "Network (KB/sec)";
+    newRow.appendChild(cell);
+}
+
+/*
  * Populates the table identified by id parameter with the specified data and
  * format
  *
  */
-function createTable(table, info, formatter, defaultSorts, seriesIndex) {
+function createTable(table, info, formatter, defaultSorts, seriesIndex, headerCreator) {
     var tableRef = table[0];
 
     // Create header and populate it with data.titles array
     var header = tableRef.createTHead();
+    
+    // Call callback is available
+    if(headerCreator) {
+        headerCreator(header);
+    }
+    
     var newRow = header.insertRow(-1);
     for (var index = 0; index < info.titles.length; index++) {
         var cell = document.createElement('th');
@@ -150,23 +189,24 @@ $(document).ready(function() {
                 break;
             // Mean
             case 4:
-            // Percentile 1
-            case 5:
-            // Percentile 2
-            case 6:
-            // Percentile 3
+            // Mean
             case 7:
-            // Throughput
+            // Percentile 1
             case 8:
-            // Kbytes/s
+            // Percentile 2
             case 9:
-            // Sent Kbytes/s
+            // Percentile 3
             case 10:
+            // Throughput
+            case 11:
+            // Kbytes/s
+            case 12:
+            // Sent Kbytes/s
                 item = item.toFixed(2);
                 break;
         }
         return item;
-    }, [[0, 0]], 0);
+    }, [[0, 0]], 0, summaryTableHeader);
     
     // Create error table
     createTable($("#errorsTable"), ${errorsSummary!"{}"}, function(index, item){

@@ -149,6 +149,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>60637</bug>Improve Statistics table design <figure image="dashboard/report_statistics.png" ></figure></li>
 </ul>
 
 <h3>General</h3>
