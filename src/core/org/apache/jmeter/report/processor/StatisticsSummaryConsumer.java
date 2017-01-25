@@ -137,14 +137,14 @@ public class StatisticsSummaryConsumer extends
         result.addResult(new ValueResultData(Long.valueOf(errors)));
         result.addResult(new ValueResultData(Double.valueOf((double) errors * 100 / total)));
         result.addResult(new ValueResultData(Double.valueOf(data.getMean().getResult())));
+        result.addResult(new ValueResultData(Long.valueOf(data.getMin())));
+        result.addResult(new ValueResultData(Long.valueOf(data.getMax())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile1().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile2().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getPercentile3().getResult())));
         result.addResult(new ValueResultData(Double.valueOf(data.getThroughput())));
         result.addResult(new ValueResultData(Double.valueOf(data.getKBytesPerSecond())));
         result.addResult(new ValueResultData(Double.valueOf(data.getSentKBytesPerSecond())));
-        result.addResult(new ValueResultData(Long.valueOf(data.getMin())));
-        result.addResult(new ValueResultData(Long.valueOf(data.getMax())));
         return result;
     }
 
@@ -180,6 +180,8 @@ public class StatisticsSummaryConsumer extends
             JMeterUtils.getResString("reportgenerator_summary_statistics_error_percent")));
         titles.addResult(new ValueResultData(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_mean")));
+        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_min")));
+        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_max")));
         titles.addResult(new ValueResultData(
             String.format(
                 JMeterUtils.getResString("reportgenerator_summary_statistics_percentile_fmt"),
@@ -195,8 +197,7 @@ public class StatisticsSummaryConsumer extends
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_throughput")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_kbytes")));
         titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_sent_kbytes")));
-        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_min")));
-        titles.addResult(new ValueResultData(JMeterUtils.getResString("reportgenerator_summary_statistics_max")));
+
         return titles;
     }
 
