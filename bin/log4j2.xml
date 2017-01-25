@@ -19,12 +19,6 @@
 
   <Appenders>
 
-    <Console name="STDOUT">
-      <PatternLayout>
-        <pattern>%d %p %c{1.}: %m%n</pattern>
-      </PatternLayout>
-    </Console>
-
     <File name="jmeter-log" fileName="jmeter.log" append="false">
       <PatternLayout>
         <pattern>%d %p %c{1.}: %m%n</pattern>
@@ -40,16 +34,6 @@
   </Appenders>
 
   <Loggers>
-
-    <Logger name="org.apache.jmeter" level="info" additivity="false">
-      <AppenderRef ref="jmeter-log" />
-      <AppenderRef ref="gui-log-event" />
-    </Logger>
-
-    <Logger name="org.apache.jorphan" level="info" additivity="false">
-      <AppenderRef ref="jmeter-log" />
-      <AppenderRef ref="gui-log-event" />
-    </Logger>
 
     <Root level="info">
       <AppenderRef ref="jmeter-log" />
