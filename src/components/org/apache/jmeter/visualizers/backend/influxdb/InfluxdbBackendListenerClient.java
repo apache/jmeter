@@ -347,6 +347,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
         
         // Send last set of data before ending
+        LOGGER.info("Sending last metrics");
         sendMetrics();
 
         influxdbMetricsManager.destroy();
