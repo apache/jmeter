@@ -63,7 +63,31 @@ import org.apache.log.Logger;
  */
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
         TestStateListener, Remoteable, NoThreadClone {
+    /**
+     * Keep track of the file writer and the configuration,
+     * as the instance used to close them is not the same as the instance that creates
+     * them. This means one cannot use the saved PrintWriter or use getSaveConfig()
+     */
+    private static class FileEntry{
+        final PrintWriter pw;
+        final SampleSaveConfiguration config;
+        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
+            pw =_pw;
+            config = _config;
+        }
+    }
+    
+    private static final class ShutdownHook implements Runnable {
 
+        @Override
+        public void run() {
+            log.info("Shutdown hook started");
+            synchronized (LOCK) {
+                flushFileOutput();                    
+            }
+            log.info("Shutdown hook ended");
+        }     
+    }
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 233L;
@@ -110,19 +134,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     //@GuardedBy("LOCK")
     private static Thread shutdownHook;
 
-    /*
-     * Keep track of the file writer and the configuration,
-     * as the instance used to close them is not the same as the instance that creates
-     * them. This means one cannot use the saved PrintWriter or use getSaveConfig()
-     */
-    private static class FileEntry{
-        final PrintWriter pw;
-        final SampleSaveConfiguration config;
-        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
-            pw =_pw;
-            config = _config;
-        }
-    }
 
     /**
      * The instance count is used to keep track of whether any tests are currently running.
@@ -137,24 +148,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private transient volatile PrintWriter out;
 
+    /**
+     * Is a test running ?
+     */
     private volatile boolean inTest = false;
 
     private volatile boolean isStats = false;
 
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
-
-    private static final class ShutdownHook implements Runnable {
-
-        @Override
-        public void run() {
-            log.info("Shutdown hook started");
-            synchronized (LOCK) {
-                flushFileOutput();                    
-            }
-            log.info("Shutdown hook ended");
-        }     
-    }
     
     /**
      * No-arg constructor.
@@ -633,6 +635,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         files.clear();
+        out = null;
     }
 
     /**
