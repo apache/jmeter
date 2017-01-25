@@ -18,8 +18,6 @@
 
 package org.apache.jmeter.protocol.http.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.JMenuItem;
@@ -172,12 +170,7 @@ public class HTTPArgumentsPanel extends ArgumentsPanel {
         JTable table = getTable();
         final JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem variabilizeItem = new JMenuItem(JMeterUtils.getResString("transform_into_variable"));
-        variabilizeItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transformNameIntoVariable();
-            }
-        });
+        variabilizeItem.addActionListener(e -> transformNameIntoVariable());
         popupMenu.add(variabilizeItem);
         table.setComponentPopupMenu(popupMenu);
     }

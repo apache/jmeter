@@ -396,7 +396,9 @@
     <include name="${lib.dir}/${groovy-all.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
+    <include name="${lib.dir}/${httpasyncclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
+  	<include name="${lib.dir}/${httpcore.jar.jar}"/>
     <include name="${lib.dir}/${httpmime.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
@@ -476,7 +478,9 @@
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
+  	<pathelement location="${lib.dir}/${httpasyncclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
+  	<pathelement location="${lib.dir}/${httpcore-nio.jar}"/>
     <pathelement location="${lib.dir}/${httpmime.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
@@ -1603,6 +1607,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset file="${resources.meta-inf}/default.license"
           fullpath="META-INF/LICENSE" />
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.bshrc"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.groovy"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.parameters"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="*.properties"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="jaas.conf"/>
@@ -1611,6 +1616,7 @@ run JMeter unless all the JMeter jars are added.
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="proxyserver.jks"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.dtd"/>
       <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="users.xml"/>
+      <zipfileset dir="${dest.jar.jmeter}" prefix="bin" includes="report-template/**/*.*" />
     </jar>
   </target>
 
@@ -2991,7 +2997,9 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="groovy-all"/>
     <process_jarfile jarname="hamcrest-core"/>
     <process_jarfile jarname="httpclient"/>
+  	<process_jarfile jarname="httpasyncclient"/>
     <process_jarfile jarname="httpcore"/>
+  	<process_jarfile jarname="httpcore-nio"/>
     <process_jarfile jarname="httpmime"/>
     <process_jarfile jarname="jakarta-oro"/>
     <process_jarfile jarname="javamail"/>

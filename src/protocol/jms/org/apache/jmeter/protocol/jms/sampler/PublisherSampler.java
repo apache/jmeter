@@ -270,7 +270,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
                 obj = value;
             } else {
                 Class <?> clazz = Class.forName(type);
-                Method method = clazz.getMethod("valueOf", new Class<?>[]{String.class});
+                Method method = clazz.getMethod("valueOf", String.class);
                 obj = method.invoke(clazz, value);                
             }
             m.put(name, obj);

@@ -95,9 +95,9 @@ GC_ALGO="-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20"
 
 # Always dump on OOM (does not cost anything unless triggered)
 DUMP="-XX:+HeapDumpOnOutOfMemoryError"
-
+SYSTEM_PROPS="-Djava.security.egd=file:/dev/urandom"
 SERVER="-server"
 
-ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO"
+ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS"
 
 java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"

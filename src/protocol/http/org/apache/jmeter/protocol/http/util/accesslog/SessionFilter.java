@@ -61,7 +61,7 @@ public class SessionFilter implements Filter, Serializable, TestCloneable,Thread
      * Creates a new SessionFilter and initializes its fields to new collections
      */
     public SessionFilter() {
-        this(new ConcurrentHashMap<String, CookieManager>(), Collections.synchronizedSet(new HashSet<CookieManager>()));
+        this(new ConcurrentHashMap<>(), Collections.synchronizedSet(new HashSet<>()));
     }
 
     /**

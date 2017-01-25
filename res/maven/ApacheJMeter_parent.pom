@@ -75,8 +75,10 @@ under the License.
       <freemarker.version>2.3.23</freemarker.version>
       <groovy-all.version>2.4.8</groovy-all.version>
       <hamcrest-core.version>1.3</hamcrest-core.version>
+      <httpasyncclient.version>4.1.2</httpasyncclient.version>
       <httpclient.version>4.5.2</httpclient.version>
       <httpcore.version>4.4.6</httpcore.version>
+      <httpcore-nio.version>4.4.6</httpcore-nio.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jcl-over-slf4j.version>1.7.22</jcl-over-slf4j.version>
@@ -222,6 +224,11 @@ under the License.
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpasyncclient</artifactId>
+        <version>${httpasyncclient.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
@@ -234,6 +241,11 @@ under the License.
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpcore</artifactId>
         <version>${httpcore.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore-nio</artifactId>
+        <version>${httpcore-nio.version}</version>
       </dependency>
       <dependency>
         <groupId>oro</groupId>

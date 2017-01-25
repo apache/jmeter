@@ -235,11 +235,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
             xmlReader.setErrorHandler(detectionHandler);
             xmlReader.parse(new InputSource(new StringReader(postData)));
             return !detectionHandler.isErrorDetected();
-        } catch (ParserConfigurationException e) {
-            return false;
-        } catch (SAXException e) {
-            return false;
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             return false;
         }
     }

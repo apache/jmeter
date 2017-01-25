@@ -621,22 +621,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         AuthManager authManager = getAuthManager();
         if (authManager != null) {
             Subject subject = authManager.getSubjectForUrl(url);
-            if(subject != null) {
+            if (subject != null) {
                 try {
                     return Subject.doAs(subject,
-                            new PrivilegedExceptionAction<HttpResponse>() {
-    
-                                @Override
-                                public HttpResponse run() throws Exception {
-                                    return httpClient.execute(httpRequest,
-                                            localContext);
-                                }
-                            });
+                            (PrivilegedExceptionAction<HttpResponse>) () ->
+                                    httpClient.execute(httpRequest, localContext));
                 } catch (PrivilegedActionException e) {
-                    log.error(
-                            "Can't execute httpRequest with subject:"+subject,
-                            e);
-                    throw new RuntimeException("Can't execute httpRequest with subject:"+subject, e);
+                    log.error("Can't execute httpRequest with subject:" + subject, e);
+                    throw new RuntimeException("Can't execute httpRequest with subject:" + subject, e);
                 }
             }
         }
