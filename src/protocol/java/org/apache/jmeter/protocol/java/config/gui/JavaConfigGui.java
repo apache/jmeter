@@ -266,7 +266,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
                     Thread.currentThread().getContextClassLoader()).newInstance();
             return client != null;
-        } catch (Exception ex) {
+        } catch (Exception ex) { // NOSONAR We already log this
             return false;
         }
     }
