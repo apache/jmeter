@@ -18,7 +18,11 @@
 
 package org.apache.jmeter.util;
 
+import java.awt.Dialog;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.HeadlessException;
+import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +39,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -42,6 +47,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.gui.GuiPackage;
@@ -1144,4 +1150,50 @@ public class JMeterUtils implements UnitTestManager {
         return delimiterValue;
     }
 
+    /**
+     * Apply HiDPI scale factor on font if HiDPI mode is enabled
+     */
+    public static void applyHiDPIOnFonts() {
+        if (!getHiDPIMode()) {
+            return;
+        }
+        applyScaleOnFonts((float) getHiDPIScaleFactor());
+    }
+    
+    /**
+     * Apply HiDPI scale factor on fonts
+     * @param scale flot scale to apply
+     */
+    public static void applyScaleOnFonts(final float scale) {
+        log.info("Applying HiDPI scale:"+scale);
+        SwingUtilities.invokeLater(() -> {
+            Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+            Object[] keys = keySet.toArray(new Object[keySet.size()]);
+            for (Object key : keys) {
+                if (key != null && key.toString().toLowerCase().contains("font")) {
+                    Font font = UIManager.getDefaults().getFont(key);
+                    if (font != null) {
+                        font = font.deriveFont(font.getSize() * scale);
+                        UIManager.put(key, font);
+                    }
+                }
+            } 
+            JMeterUtils.refreshUI();
+        });
+    }
+    
+    /**
+     * Refresh UI after LAF change or resizing
+     */
+    public static final void refreshUI() {
+        for (Window w : Window.getWindows()) {
+            SwingUtilities.updateComponentTreeUI(w);
+            if (w.isDisplayable() &&
+                (w instanceof Frame ? !((Frame)w).isResizable() :
+                w instanceof Dialog ? !((Dialog)w).isResizable() :
+                true)) {
+                w.pack();
+            }
+        }
+    }
 }
