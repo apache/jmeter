@@ -622,6 +622,7 @@
       <include name="**/*.java"/>
       <classpath>
         <pathelement location="${build.jorphan}"/>
+        <pathelement location="${lib.dir}/${log4j-core.jar}"/>
         <path refid="classpath"/>
       </classpath>
     </javac>

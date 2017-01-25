@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<Configuration status="WARN">
+<Configuration status="WARN" packages="org.apache.jmeter.gui.logging">
 
   <Appenders>
 
@@ -31,20 +31,29 @@
       </PatternLayout>
     </File>
 
+    <GuiLogEvent name="gui-log-event">
+      <PatternLayout>
+        <pattern>%d %p %c{1.}: %m%n</pattern>
+      </PatternLayout>
+    </GuiLogEvent>
+
   </Appenders>
 
   <Loggers>
 
     <Logger name="org.apache.jmeter" level="info" additivity="false">
       <AppenderRef ref="jmeter-log" />
+      <AppenderRef ref="gui-log-event" />
     </Logger>
 
     <Logger name="org.apache.jorphan" level="info" additivity="false">
       <AppenderRef ref="jmeter-log" />
+      <AppenderRef ref="gui-log-event" />
     </Logger>
 
     <Root level="info">
       <AppenderRef ref="jmeter-log" />
+      <AppenderRef ref="gui-log-event" />
     </Root>
 
   </Loggers>

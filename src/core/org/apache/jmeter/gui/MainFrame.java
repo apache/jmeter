@@ -513,10 +513,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         logPanel = createLoggerPanel();
         errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
-        LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
-                logPanel,
-                errorsAndFatalsCounterLogTarget
-        });
+//        LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
+//                logPanel,
+//                errorsAndFatalsCounterLogTarget
+//        });
+        GuiPackage.getInstance().getLogEventBus().registerEventListener(logPanel);
 
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);

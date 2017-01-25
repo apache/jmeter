@@ -39,6 +39,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.UndoHistory.HistoryListener;
 import org.apache.jmeter.gui.action.TreeNodeNamingPolicy;
 import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
+import org.apache.jmeter.gui.logging.GuiLogEventBus;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -133,6 +134,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * History for tree states
      */
     private UndoHistory undoHistory = new UndoHistory();
+
+    /**
+     * GUI Logging Event Bus.
+     */
+    private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
     /**
      * Private constructor to permit instantiation only from within this class.
@@ -881,4 +887,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         return namingPolicy;
     }
 
+    /**
+     * Return {@link GuiLogEventBus}.
+     * @return {@link GuiLogEventBus}
+     */
+    public GuiLogEventBus getLogEventBus() {
+        return logEventBus;
+    }
 }
