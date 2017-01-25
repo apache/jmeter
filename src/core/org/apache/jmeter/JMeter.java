@@ -339,6 +339,7 @@ public class JMeter implements JMeterPlugin {
             log.warn("Could not set LAF to:"+jMeterLaf, ex);
         }
         splash.setProgress(10);
+        JMeterUtils.applyHiDPIOnFonts();
         PluginManager.install(this, true);
 
         JMeterTreeModel treeModel = new JMeterTreeModel();
