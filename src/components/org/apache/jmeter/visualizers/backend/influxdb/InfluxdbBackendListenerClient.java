@@ -96,6 +96,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
     private String testTitle;
+    private String testTags;
     // Name of the application tested
     private String application = "";
 
@@ -264,6 +265,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         measurement = AbstractInfluxdbMetricsSender
                 .tagToStringValue(context.getParameter("measurement", DEFAULT_MEASUREMENT));
         testTitle = context.getParameter("testTitle", "Test");
+        testTags = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("eventTags", "TestTags"));
         String percentilesAsString = context.getParameter("percentiles", "");
         String[] percentilesStringArray = percentilesAsString.split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
@@ -291,18 +293,20 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         influxdbMetricsManager.setup(influxdbUrl);
         samplersToFilter = Pattern.compile(samplersRegex);
 
-        // Annotation of the start of the run ( usefull with Grafana )
-        // Never double or single quotes in influxdb except for string field
-        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
+        /* Annotation of the start of the run ( usefull with Grafana )
+        * Grafana will let you send HTML in the “Text” such as a link to the release notes
+        * Tags are separated by spaces in grafana
+        * Tags is put as InfluxdbTag for better query performance on it
+        * Never double or single quotes in influxdb except for string field
+        * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+        */
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter,tags="+ testTags, 
                         "text=\"" +  AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(testTitle + " started") + "\"" 
-                        + ",tags=\"" + AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(application) + "\"");
+                        .fieldToStringValue(testTitle + " started") + "\"" );
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start scheduler and put the pooling ( 5 seconds by default )
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, SEND_INTERVAL, SEND_INTERVAL, TimeUnit.SECONDS);
+        // Start immediately the scheduler and put the pooling ( 5 seconds by default )
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
 
     }
 
@@ -335,14 +339,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             LOGGER.error("Error waiting for end of scheduler");
             Thread.currentThread().interrupt();
         }
-        // Annotation of the end of the run ( usefull with Grafana )
-        // Never double or single quotes in influxdb except for string field
-        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
-                "text=\"" +  AbstractInfluxdbMetricsSender
-                .fieldToStringValue(testTitle + " ended") + "\""
-                + ",tags=\"" + AbstractInfluxdbMetricsSender
-                .fieldToStringValue(application) + "\"");
+        
+        /* Annotation of the end of the run ( usefull with Grafana )
+        * Grafana will let you send HTML in the “Text” such as a link to the release notes
+        * Tags are separated by spaces in grafana
+        * Tags is put as InfluxdbTag for better query performance on it
+        * Never double or single quotes in influxdb except for string field
+        * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+        */
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter,tags="+ testTags, 
+                        "text=\"" +  AbstractInfluxdbMetricsSender
+                        .fieldToStringValue(testTitle + " ended") + "\"" );
 
 
         
@@ -365,6 +372,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         arguments.addArgument("samplersRegex", ".*");
         arguments.addArgument("percentiles", "99,95,90");
         arguments.addArgument("testTitle", "Test name");
+        arguments.addArgument("eventTags", "TagName");
         return arguments;
     }
 }
