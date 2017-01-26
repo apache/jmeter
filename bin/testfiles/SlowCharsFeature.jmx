@@ -56,7 +56,8 @@
           <stringProp name="script">import org.apache.jmeter.util.JMeterUtils;
 
 JMeterUtils.setProperty(&quot;httpclient.socket.http.cps&quot;,&quot;1500&quot;);
-JMeterUtils.setProperty(&quot;httpclient.socket.https.cps&quot;,&quot;1500&quot;);</stringProp>
+JMeterUtils.setProperty(&quot;httpclient.socket.https.cps&quot;,&quot;1500&quot;);
+SampleResult.setBytes(0);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Sampler>
         <hashTree/>
