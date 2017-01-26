@@ -264,7 +264,8 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
             return client != null;
         } catch (Exception ex) {
             log.error("Error creating class:'"+className+"' in JavaSampler "+getName()
-                +", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
+                +", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+                ex);
             return false;
         }
     }
