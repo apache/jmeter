@@ -28,8 +28,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -245,14 +247,8 @@ public final class NewDriver {
         } else {
             Thread.currentThread().setContextClassLoader(loader);
 
-            if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$ $NON-NLS-2$
-                File loggingConf = new File("log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
-                if (!loggingConf.isFile()) {
-                    loggingConf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
-                }
-                System.setProperty("log4j.configurationFile", loggingConf.toURI().toString());
-            }
-    
+            setLoggingProperties(args);
+
             try {
                 Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
                 Object instance = initialClass.newInstance();
@@ -279,5 +275,84 @@ public final class NewDriver {
                 .append("\r\n");
         }
         return builder.toString();
+    }
+
+    private static void setLoggingProperties(String[] args) {
+        String jmlogfile = getCommandLineArgument(args, (int) 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
+
+        if (jmlogfile != null && !jmlogfile.isEmpty()) {
+            jmlogfile = replaceDateFormatInFileName(jmlogfile);
+            System.setProperty("jmeter.logfile", jmlogfile);// $NON-NLS-1$
+        } else if (System.getProperty("jmeter.logfile") == null) {// $NON-NLS-1$
+            System.setProperty("jmeter.logfile", "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
+        }
+
+        if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
+            File loggingConf = new File("log4j2.xml");// $NON-NLS-1$
+            if (!loggingConf.isFile()) {
+                loggingConf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+            }
+            System.setProperty("log4j.configurationFile", loggingConf.toURI().toString());// $NON-NLS-1$
+        }
+    }
+
+    private static String getCommandLineArgument(String [] args, int id, String name) {
+        String value = null;
+        final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
+        final String longArgName = "--" + name;// $NON-NLS-1$
+
+        for (int i = 0; i < args.length - 1; i++) {
+            if (shortArgName.equals(args[i]) || longArgName.equals(args[i])) {
+                String argValue = args[i + 1].trim();
+                if (!argValue.startsWith("-")) {// $NON-NLS-1$
+                    value = argValue;
+                }
+            }
+        }
+
+        return value;
+    }
+
+    /*
+     * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
+     */
+    private static String replaceDateFormatInFileName(String fileName) {
+        try {
+            StringBuilder builder = new StringBuilder();
+
+            final Date date = new Date();
+            int fromIndex = 0;
+            int begin = fileName.indexOf('\'', fromIndex);
+            int end;
+
+            String format;
+            SimpleDateFormat dateFormat;
+
+            while (begin != -1) {
+                builder.append(fileName.substring(fromIndex, begin));
+
+                fromIndex = begin + 1;
+                end = fileName.indexOf('\'', fromIndex);
+                if (end == -1) {
+                    throw new IllegalArgumentException("Invalid pairs of single-quotes in the file name: " + fileName);
+                }
+
+                format = fileName.substring(begin + 1, end);
+                dateFormat = new SimpleDateFormat(format);
+                builder.append(dateFormat.format(date));
+
+                fromIndex = end + 1;
+                begin = fileName.indexOf('\'', fromIndex);
+            }
+
+            if (fromIndex < fileName.length() - 1) {
+                builder.append(fileName.substring(fromIndex));
+            }
+
+            return builder.toString();
+        } catch (Exception ignored) {
+        }
+
+        return fileName;
     }
 }

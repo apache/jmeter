@@ -688,13 +688,6 @@ public class JMeter implements JMeterPlugin {
                     + "jmeter.properties");// $NON-NLS-1$
         }
 
-        if (parser.getArgumentById(JMLOGFILE_OPT) != null){
-            String jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
-            jmlogfile = processLAST(jmlogfile, ".log");// $NON-NLS-1$
-            JMeterUtils.setProperty(LoggingManager.LOG_FILE,jmlogfile);
-        }
-
-        JMeterUtils.initLogging();
         JMeterUtils.initLocale();
         // Bug 33845 - allow direct override of Home dir
         if (parser.getArgumentById(JMETER_HOME_OPT) == null) {
@@ -716,7 +709,6 @@ public class JMeter implements JMeterPlugin {
                     Properties tmp = new Properties();
                     tmp.load(fis);
                     jmeterProps.putAll(tmp);
-                    LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
                 } catch (IOException e) {
                     log.warn("Error loading user property file: " + userProp, e);
                 }
@@ -756,7 +748,6 @@ public class JMeter implements JMeterPlugin {
                     Properties tmp = new Properties();
                     tmp.load(fis);
                     jmeterProps.putAll(tmp);
-                    LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
                 } catch (FileNotFoundException e) { // NOSONAR
                     log.warn("Can't find additional property file: " + name, e);
                 } catch (IOException e) { // NOSONAR
@@ -816,7 +807,7 @@ public class JMeter implements JMeterPlugin {
                         if (!name.startsWith(PACKAGE_PREFIX)) {
                             loggerName = PACKAGE_PREFIX + name;
                         }
-                        Configurator.setLevel(loggerName, logLevel);
+                        Configurator.setAllLevels(loggerName, logLevel);
                     } else {
                         log.warn("Invalid log level, '" + value + "' for '" + name + "'.");
                     }
