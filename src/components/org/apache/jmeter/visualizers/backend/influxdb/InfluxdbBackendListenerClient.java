@@ -301,8 +301,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                         .fieldToStringValue(application) + "\"");
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start scheduler and put the pooling ( 5 seconds by default )
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, SEND_INTERVAL, SEND_INTERVAL, TimeUnit.SECONDS);
+        // Start immediately the scheduler and put the pooling ( 5 seconds by default )
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
 
     }
 
