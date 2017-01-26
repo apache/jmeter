@@ -19,6 +19,8 @@
 package org.apache.jmeter.protocol.jdbc;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -315,13 +317,16 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
             final Clob clob) throws SQLException {
         try {
             if (clob.length() > MAX_RETAIN_SIZE) {
-                jmvars.put(
-                        name,
-                        IOUtils.toString(clob.getCharacterStream(0,
-                                MAX_RETAIN_SIZE))
-                                + "<result cut off, it is too big>");
+                try (Reader reader = clob.getCharacterStream(0,MAX_RETAIN_SIZE)) {
+                    jmvars.put(
+                            name,
+                            IOUtils.toString(reader)
+                            + "<result cut off, it is too big>");
+                }
             } else {
-                jmvars.put(name, IOUtils.toString(clob.getCharacterStream()));
+                try (Reader reader = clob.getCharacterStream()) {
+                    jmvars.put(name, IOUtils.toString(reader));
+                }
             }
         } catch (IOException e) {
             log.warn("Could not read CLOB into " + name, e);
@@ -343,8 +348,9 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
         } else {
             try {
                 long length = Math.max(blob.length(), MAX_RETAIN_SIZE);
-                jmvars.put(name, IOUtils.toString(
-                        blob.getBinaryStream(0, length), ENCODING));
+                try (InputStream is = blob.getBinaryStream(0, length)) {
+                    jmvars.put(name, IOUtils.toString(is, ENCODING));
+                }
             } catch (IOException e) {
                 log.warn("Can't convert BLOB to String using " + ENCODING, e);
             }
