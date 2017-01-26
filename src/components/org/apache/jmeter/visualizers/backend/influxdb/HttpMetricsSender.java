@@ -56,6 +56,8 @@ import org.apache.log.Logger;
 class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
+    private final Object lock = new Object();
+
     private List<MetricTuple> metrics = new ArrayList<>();
 
     private HttpPost httpRequest;
@@ -130,7 +132,9 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
 
     @Override
     public void addMetric(String mesurement, String tag, String field) {
-        metrics.add(new MetricTuple(mesurement, tag, field));
+        synchronized (lock) {
+            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));            
+        }
     }
 
     /**
@@ -139,22 +143,29 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        if (!metrics.isEmpty()) {
+        List<MetricTuple> tempMetrics = null;
+        synchronized (lock) {
+            if(metrics.isEmpty()) {
+                return;
+            }
+            tempMetrics = metrics;
+            metrics = new ArrayList<>(tempMetrics.size());            
+        }
+        final List<MetricTuple> copyMetrics = tempMetrics;
+        if (!copyMetrics.isEmpty()) {
             try {
-               
                 if(httpRequest == null) {
                     httpRequest = createRequest(url);
                 }
-                StringBuilder sb = new StringBuilder(metrics.size()*35);
-                String timestamp = System.currentTimeMillis()  + "000000";
-                for (MetricTuple metric : metrics) {
+                StringBuilder sb = new StringBuilder(copyMetrics.size()*35);
+                for (MetricTuple metric : copyMetrics) {
                     // Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
                     sb.append(metric.measurement)
                         .append(metric.tag)
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
                         .append(" ")
-                        .append(timestamp) 
+                        .append(metric.timestamp+"000000") 
                         .append("\n"); //$NON-NLS-1$
                 }
 
@@ -174,7 +185,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                         switch (code) {
                         case 204:
                             if(LOG.isDebugEnabled()) {
-                                LOG.debug("Success, number of metrics written : " + metrics.size());
+                                LOG.debug("Success, number of metrics written : " + copyMetrics.size());
                             }
                             break;
                         default:
@@ -199,7 +210,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         }
 
         // We drop metrics in all cases
-        metrics.clear();
+        copyMetrics.clear();
     }
 
     /**
@@ -209,6 +220,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     @Override
     public void destroy() {
         // Give some time to send last metrics before shutting down
+        LOG.info("Destroying ");
         try {
             lastRequest.get(5, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
