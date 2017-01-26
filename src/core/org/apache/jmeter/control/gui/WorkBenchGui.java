@@ -100,7 +100,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
     @Override
     public void clearGui() {
         super.clearGui();
-        saveWorkBench.setSelected(false);
+        saveWorkBench.setSelected(true);
     }
     
     /**
@@ -152,6 +152,7 @@ public class WorkBenchGui extends AbstractJMeterGuiComponent {
         VerticalPanel workBenchPropsPanel = new VerticalPanel(5, 0);
 
         saveWorkBench = new JCheckBox(JMeterUtils.getResString("save_workbench"));
+        saveWorkBench.setSelected(true);
         workBenchPropsPanel.add(saveWorkBench);
         add(workBenchPropsPanel, BorderLayout.CENTER);
     }
