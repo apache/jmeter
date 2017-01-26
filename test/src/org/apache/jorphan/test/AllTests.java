@@ -249,7 +249,7 @@ public final class AllTests {
             Properties props = new Properties();
             InputStream inputStream = null;
             try {
-                System.out.println("Setting up logging props using file: " + args[1]);
+                System.out.println("Setting up props using file: " + args[1]);
                 inputStream = new FileInputStream(args[1]);
                 props.load(inputStream);
                 LoggingManager.initializeLogging(props);

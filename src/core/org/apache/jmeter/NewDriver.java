@@ -311,16 +311,25 @@ public final class NewDriver {
      * Find command line argument option value by the id and name.
      */
     private static String getCommandLineArgument(String [] args, int id, String name) {
-        String value = null;
         final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
         final String longArgName = "--" + name;// $NON-NLS-1$
 
-        for (int i = 0; i < args.length - 1; i++) {
-            if (shortArgName.equals(args[i]) || longArgName.equals(args[i])) {
-                String argValue = args[i + 1].trim();
-                if (!argValue.startsWith("-")) {// $NON-NLS-1$
-                    value = argValue;
+        String value = null;
+
+        for (int i = 0; i < args.length; i++) {
+            if (shortArgName.equals(args[i]) && i < args.length - 1) {
+                if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
+                    value = args[i + 1];
                 }
+                break;
+            } else if (!shortArgName.equals(args[i]) && args[i].startsWith(shortArgName)) {
+                value = args[i].substring(shortArgName.length());
+                break;
+            } else if (longArgName.equals(args[i])) {
+                if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
+                    value = args[i + 1];
+                }
+                break;
             }
         }
 

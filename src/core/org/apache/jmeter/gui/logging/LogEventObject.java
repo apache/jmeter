@@ -32,22 +32,37 @@ public class LogEventObject extends EventObject {
     private Level level;
     private String seralizedString;
 
+    public LogEventObject(Object source) {
+        this(source, null);
+    }
+
     public LogEventObject(Object source, String seralizedString) {
         super(source);
-        level = ((LogEvent) source).getLevel();
+        if (source instanceof LogEvent) {
+            level = ((LogEvent) source).getLevel();
+        }
         this.seralizedString = seralizedString;
     }
 
     public boolean isMoreSpecificThanError() {
-        return level.isMoreSpecificThan(Level.ERROR);
+        if (level != null) {
+            return level.isMoreSpecificThan(Level.ERROR);
+        }
+        return false;
     }
 
     public boolean isMoreSpecificThanWarn() {
-        return level.isMoreSpecificThan(Level.WARN);
+        if (level != null) {
+            return level.isMoreSpecificThan(Level.WARN);
+        }
+        return false;
     }
 
     public boolean isMoreSpecificThanInfo() {
-        return level.isMoreSpecificThan(Level.INFO);
+        if (level != null) {
+            return level.isMoreSpecificThan(Level.INFO);
+        }
+        return false;
     }
 
     @Override
@@ -55,7 +70,6 @@ public class LogEventObject extends EventObject {
         if (seralizedString != null) {
             return seralizedString;
         }
-
         return super.toString();
     }
 }

@@ -421,11 +421,7 @@
     <include name="${lib.dir}/${serializer.jar}"/>
     <include name="${lib.dir}/${slf4j-api.jar}"/>
     <include name="${lib.dir}/${slf4j-ext.jar}"/>
-    <include name="${lib.dir}/${jcl-over-slf4j.jar}"/>
     <include name="${lib.dir}/${log4j-api.jar}"/>
-    <include name="${lib.dir}/${log4j-core.jar}"/>
-    <include name="${lib.dir}/${log4j-1.2-api.jar}"/>
-    <include name="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <include name="${lib.dir}/${jtidy.jar}"/>
     <include name="${lib.dir}/${tika-core.jar}"/>
     <include name="${lib.dir}/${tika-parsers.jar}"/>
@@ -485,7 +481,6 @@
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
     <pathelement location="${lib.dir}/${jcharts.jar}"/>
-    <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
     <pathelement location="${lib.dir}/${jms.jar}"/>
     <pathelement location="${lib.dir}/${rhino.jar}"/>
     <pathelement location="${lib.dir}/${jodd-core.jar}"/>
@@ -503,7 +498,6 @@
     <pathelement location="${lib.dir}/${serializer.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-api.jar}"/>
     <pathelement location="${lib.dir}/${slf4j-ext.jar}"/>
-    <pathelement location="${lib.dir}/${log4j-api.jar}"/>
     <pathelement location="${lib.dir}/${jtidy.jar}"/>
     <pathelement location="${lib.dir}/${tika-core.jar}"/>
     <pathelement location="${lib.dir}/${tika-parsers.jar}"/>
@@ -520,6 +514,15 @@
     <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
     <fileset dir="${lib.opt}" includes="*.jar"/>
+  </path>
+
+  <!-- Logging classpath -->
+  <path id="logging.classpath">
+    <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-api.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-core.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-1.2-api.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-slf4j-impl.jar}"/>
   </path>
 
   <!-- Anakia classpath -->
@@ -624,6 +627,7 @@
         <pathelement location="${build.jorphan}"/>
         <pathelement location="${lib.dir}/${log4j-core.jar}"/>
         <path refid="classpath"/>
+        <path refid="logging.classpath"/>
       </classpath>
     </javac>
   </target>
@@ -665,6 +669,7 @@
         <pathelement location="${build.core}"/>
         <pathelement location="${build.components}"/>
         <path refid="classpath"/>
+        <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -2416,6 +2421,7 @@ run JMeter unless all the JMeter jars are added.
             <fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
             <fileset dir="${dest.jar}" includes="*.jar"/>
             <path refid="classpath"/>
+            <path refid="logging.classpath"/>
           </classpath>
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
@@ -2426,6 +2432,8 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-qjmeter.properties"/>
           <!-- reset the logging and other parameters -->
           <arg value="-qtestfiles/jmeter-batch.properties"/>
+          <arg value="-i"/>
+          <arg value="testfiles/log4j2-batch.xml"/>
           <arg value="-j"/>
           <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
           <arg value="-Dserver_port=${rmi_port}"/>
@@ -2523,6 +2531,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar.jmeter}" includes="*.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
+        <path refid="logging.classpath"/>
       </classpath>
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
@@ -2538,6 +2547,8 @@ run JMeter unless all the JMeter jars are added.
       <arg value="-qtestfiles/jmeter-batch.properties"/>
       <arg value="-n"/>
       <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+      <arg value="-i"/>
+      <arg value="testfiles/log4j2-batch.xml"/>
       <arg value="-j"/>
       <arg value="${batchtest.name}.log"/>
       <arg value="-l"/>
@@ -2730,6 +2741,7 @@ run JMeter unless all the JMeter jars are added.
         <pathelement location="${build.test}"/>
         <pathelement location="${build.test-res}"/>
         <path refid="classpath"/>
+        <path refid="logging.classpath"/>
       </classpath>
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
@@ -2737,6 +2749,7 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="java.awt.headless" value="${test.headless}"/>
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
+      <sysproperty key="log4j.configurationFile" value="${basedir}/bin/log4j2.xml" />
       <arg value="${build.test}"/>
       <arg value="${basedir}/bin/jmeter.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
@@ -2770,6 +2783,7 @@ run JMeter unless all the JMeter jars are added.
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <pathelement location="${build.test}"/>
         <path refid="classpath"/>
+        <path refid="logging.classpath"/>
       </classpath>
       <test name="${test.case}" todir="reports"/>
     </junit>
@@ -2800,6 +2814,7 @@ run JMeter unless all the JMeter jars are added.
       <pathelement location="${build.test}"/>
       <pathelement location="${build.test-res}"/>
       <path refid="classpath"/>
+      <path refid="logging.classpath"/>
     </classpath>
     <batchtest todir="reports" skipNonTests="true">
         <fileset dir="${src.test}">
