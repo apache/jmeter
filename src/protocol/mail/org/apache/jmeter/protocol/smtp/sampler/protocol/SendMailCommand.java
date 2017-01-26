@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -207,12 +208,9 @@ public class SendMailCommand {
                (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
-                    InputStream is = null;
-                    try {
-                        is = new BufferedInputStream(new FileInputStream(first));
-                        message.setText(IOUtils.toString(is));
-                    } finally {
-                        IOUtils.closeQuietly(is);
+                    try (FileInputStream fis = new FileInputStream(first);
+                            InputStream is = new BufferedInputStream(fis)){
+                        message.setText(IOUtils.toString(is, Charset.defaultCharset()));
                     }
                 } else {
                     message.setText(mailBody);
