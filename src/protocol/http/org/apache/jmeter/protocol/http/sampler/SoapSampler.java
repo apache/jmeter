@@ -184,13 +184,10 @@ public class SoapSampler extends HTTPSampler2 implements Interruptible { // Impl
 
                 @Override
                 public void writeRequest(OutputStream out) throws IOException {
-                    InputStream in = null;
-                    try{
-                        in = new BufferedInputStream(new FileInputStream(xmlFile));
+                    try (InputStream fileStream = new FileInputStream(xmlFile);
+                            InputStream in = new BufferedInputStream(fileStream)) {
                         IOUtils.copy(in, out);
                         out.flush();
-                    } finally {
-                        IOUtils.closeQuietly(in);
                     }
                 }
 

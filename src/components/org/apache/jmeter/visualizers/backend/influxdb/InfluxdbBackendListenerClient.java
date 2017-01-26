@@ -39,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
+import org.apache.jmeter.visualizers.backend.UserMetric;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -54,6 +55,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
     
+    private static final String TAGS = ",tags=";
+    private static final String TEXT = "text=\"";
+
     // Name of the measurement
     private static final String DEFAULT_MEASUREMENT = "jmeter";
 
@@ -96,6 +100,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private Map<String, Float> koPercentiles;
     private Map<String, Float> allPercentiles;
     private String testTitle;
+    private String testTags;
     // Name of the application tested
     private String application = "";
 
@@ -131,17 +136,17 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             }
         }
 
-
+        UserMetric userMetrics = getUserMetrics();
         // For JMETER context
         StringBuilder tag = new StringBuilder(60);
         tag.append(TAG_APPLICATION).append(application);
         tag.append(TAG_TRANSACTION).append("internal");
         StringBuilder field = new StringBuilder(80);
-        field.append(METRIC_MINAT).append(getUserMetrics().getMinActiveThreads()).append(",");
-        field.append(METRIC_MAXAT).append(getUserMetrics().getMaxActiveThreads()).append(",");
-        field.append(METRIC_MEANAT).append(getUserMetrics().getMeanActiveThreads()).append(",");
-        field.append(METRIC_STARTEDT).append(getUserMetrics().getStartedThreads()).append(",");
-        field.append(METRIC_ENDEDT).append(getUserMetrics().getFinishedThreads());
+        field.append(METRIC_MINAT).append(userMetrics.getMinActiveThreads()).append(",");
+        field.append(METRIC_MAXAT).append(userMetrics.getMaxActiveThreads()).append(",");
+        field.append(METRIC_MEANAT).append(userMetrics.getMeanActiveThreads()).append(",");
+        field.append(METRIC_STARTEDT).append(userMetrics.getStartedThreads()).append(",");
+        field.append(METRIC_ENDEDT).append(userMetrics.getFinishedThreads());
 
         influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
 
@@ -241,8 +246,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void handleSampleResults(List<SampleResult> sampleResults, BackendListenerContext context) {
         synchronized (LOCK) {
+            UserMetric userMetrics = getUserMetrics();
             for (SampleResult sampleResult : sampleResults) {
-                getUserMetrics().add(sampleResult);
+                userMetrics.add(sampleResult);
                 Matcher matcher = samplersToFilter.matcher(sampleResult.getSampleLabel());
                 if (!summaryOnly && (matcher.find())) {
                     SamplerMetric samplerMetric = getSamplerMetricInfluxdb(sampleResult.getSampleLabel());
@@ -264,6 +270,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         measurement = AbstractInfluxdbMetricsSender
                 .tagToStringValue(context.getParameter("measurement", DEFAULT_MEASUREMENT));
         testTitle = context.getParameter("testTitle", "Test");
+        testTags = AbstractInfluxdbMetricsSender.tagToStringValue(context.getParameter("eventTags", ""));
         String percentilesAsString = context.getParameter("percentiles", "");
         String[] percentilesStringArray = percentilesAsString.split(SEPARATOR);
         okPercentiles = new HashMap<>(percentilesStringArray.length);
@@ -290,19 +297,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         this.influxdbMetricsManager = (InfluxdbMetricsSender) clazz.newInstance();
         influxdbMetricsManager.setup(influxdbUrl);
         samplersToFilter = Pattern.compile(samplersRegex);
-
-        // Annotation of the start of the run ( usefull with Grafana )
-        // Never double or single quotes in influxdb except for string field
-        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
-                        "text=\"" +  AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(testTitle + " started") + "\"" 
-                        + ",tags=\"" + AbstractInfluxdbMetricsSender
-                        .fieldToStringValue(application) + "\"");
+        addAnnotation(true);
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start scheduler and put the pooling ( 5 seconds by default )
-        this.timerHandle = scheduler.scheduleAtFixedRate(this, SEND_INTERVAL, SEND_INTERVAL, TimeUnit.SECONDS);
+        // Start immediately the scheduler and put the pooling ( 5 seconds by default )
+        this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
 
     }
 
@@ -335,17 +334,9 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
             LOGGER.error("Error waiting for end of scheduler");
             Thread.currentThread().interrupt();
         }
-        // Annotation of the end of the run ( usefull with Grafana )
-        // Never double or single quotes in influxdb except for string field
-        // see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, TAG_APPLICATION + application + ",title=ApacheJMeter", 
-                "text=\"" +  AbstractInfluxdbMetricsSender
-                .fieldToStringValue(testTitle + " ended") + "\""
-                + ",tags=\"" + AbstractInfluxdbMetricsSender
-                .fieldToStringValue(application) + "\"");
 
+        addAnnotation(false);
 
-        
         // Send last set of data before ending
         LOGGER.info("Sending last metrics");
         sendMetrics();
@@ -354,6 +345,24 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         super.teardownTest(context);
     }
 
+    /**
+     * Add Annotation at start or end of the run ( usefull with Grafana )
+     * Grafana will let you send HTML in the “Text” such as a link to the release notes
+     * Tags are separated by spaces in grafana
+     * Tags is put as InfluxdbTag for better query performance on it
+     * Never double or single quotes in influxdb except for string field
+     * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+     * * @param startOrEnd boolean true for start, false for end
+     */
+    private void addAnnotation(boolean startOrEnd) {
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
+                TAG_APPLICATION + application + ",title=ApacheJMeter"+
+                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
+                TEXT +  
+                        AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
+                                (startOrEnd ? " started" : " ended")) + "\"" );
+    }
+    
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
@@ -365,6 +374,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         arguments.addArgument("samplersRegex", ".*");
         arguments.addArgument("percentiles", "99,95,90");
         arguments.addArgument("testTitle", "Test name");
+        arguments.addArgument("eventTags", "");
         return arguments;
     }
 }
