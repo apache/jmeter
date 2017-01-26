@@ -39,6 +39,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
+import org.apache.jmeter.visualizers.backend.UserMetric;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -162,11 +163,12 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                 metric.resetForTimeInterval();
             }
         }        
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMinActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMaxActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(getUserMetrics().getMeanActiveThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(getUserMetrics().getStartedThreads()));
-        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_FINISHED_THREADS, Integer.toString(getUserMetrics().getFinishedThreads()));
+        UserMetric userMetric = getUserMetrics();
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MIN_ACTIVE_THREADS, Integer.toString(userMetric.getMinActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MAX_ACTIVE_THREADS, Integer.toString(userMetric.getMaxActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_MEAN_ACTIVE_THREADS, Integer.toString(userMetric.getMeanActiveThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_STARTED_THREADS, Integer.toString(userMetric.getStartedThreads()));
+        graphiteMetricsManager.addMetric(timestampInSeconds, TEST_CONTEXT_NAME, METRIC_FINISHED_THREADS, Integer.toString(userMetric.getFinishedThreads()));
 
         graphiteMetricsManager.writeAndSendMetrics();
     }
@@ -237,8 +239,9 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
             BackendListenerContext context) {
         boolean samplersToFilterMatch;
         synchronized (LOCK) {
+            UserMetric userMetrics = getUserMetrics();
             for (SampleResult sampleResult : sampleResults) {
-                getUserMetrics().add(sampleResult);
+                userMetrics.add(sampleResult);
                 
                 if(!summaryOnly) {
                     if (useRegexpForSamplersList) {
