@@ -24,6 +24,7 @@ import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.backend.Backend;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -39,10 +40,16 @@ public class TreeClonerForValidation extends TreeCloner {
      * Number of Threads to configure when running a Thread Group during a validation
      */
     protected static final int VALIDATION_NUMBER_OF_THREADS = JMeterUtils.getPropDefault("testplan_validation.nb_threads_per_thread_group", 1); //$NON-NLS-1$
+
     /**
      * Ignore or not timers during a Thread Group validation
      */
     protected static final boolean VALIDATION_IGNORE_TIMERS = JMeterUtils.getPropDefault("testplan_validation.ignore_timers", true); //$NON-NLS-1$
+
+    /**
+     * Ignore or not Backend during a Thread Group validation
+     */
+    protected static final boolean VALIDATION_IGNORE_BACKENDS = JMeterUtils.getPropDefault("testplan_validation.ignore_backends", true); //$NON-NLS-1$
 
     /**
      * Number of iterations to run during a Thread Group validation
@@ -70,8 +77,9 @@ public class TreeClonerForValidation extends TreeCloner {
      */
     @Override
     protected Object addNodeToTree(Object node) {
-        if(VALIDATION_IGNORE_TIMERS && node instanceof Timer) {
-            return node; // don't add the timer
+        if((VALIDATION_IGNORE_TIMERS && node instanceof Timer) || 
+                (VALIDATION_IGNORE_BACKENDS && node instanceof Backend)) {
+            return node; // don't add timer or backend
         } else {
             Object clonedNode = super.addNodeToTree(node);
             if(clonedNode instanceof org.apache.jmeter.threads.ThreadGroup) {

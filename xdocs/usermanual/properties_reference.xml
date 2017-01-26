@@ -1781,6 +1781,10 @@ log_level.org.apache.http.client=DEBUG
     Ignore timers when validating the thread group of plan.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="testplan_validation.ignore_backends">
+    Ignore BackendListener when validating the thread group of plan.<br/>
+    Defaults to: <code>true</code>
+</property>
 <property name="testplan_validation.number_iterations">
     Number of iterations to use to validate a Thread Group.<br/>
     Defaults to: <code>1</code>
