@@ -62,6 +62,8 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
         LOGGER.debug(getClass().getName() + ": setupTest");
+        metricsPerSampler.clear();
+        userMetrics.clear();
     }
 
     /* Implements BackendListenerClient.teardownTest(BackendListenerContext) */
@@ -69,6 +71,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     public void teardownTest(BackendListenerContext context) throws Exception {
         LOGGER.debug(getClass().getName() + ": teardownTest");
         metricsPerSampler.clear();
+        userMetrics.clear();
     }
 
     /* Implements BackendListenerClient.getDefaultParameters() */
