@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.sampler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -1455,8 +1456,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if(entityEntry.isRepeatable()) {
                 entityBody = new StringBuilder(1000);
                 // FIXME Charset
-                entityBody.append(IOUtils.toString(new BoundedInputStream(
-                        entityEntry.getContent(), MAX_BODY_RETAIN_SIZE)));
+                try (InputStream in = entityEntry.getContent();
+                        InputStream bounded = new BoundedInputStream(in, MAX_BODY_RETAIN_SIZE)) {
+                    entityBody.append(IOUtils.toString(bounded));
+                }
                 if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
                     entityBody.append("<actual file content shortened>");
                 }
