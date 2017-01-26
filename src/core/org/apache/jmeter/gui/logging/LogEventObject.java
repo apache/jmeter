@@ -19,6 +19,9 @@ package org.apache.jmeter.gui.logging;
 
 import java.util.EventObject;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.LogEvent;
+
 /**
  * Log event object.
  */
@@ -26,11 +29,25 @@ public class LogEventObject extends EventObject {
 
     private static final long serialVersionUID = 1L;
 
+    private Level level;
     private String seralizedString;
 
     public LogEventObject(Object source, String seralizedString) {
         super(source);
+        level = ((LogEvent) source).getLevel();
         this.seralizedString = seralizedString;
+    }
+
+    public boolean isMoreSpecificThanError() {
+        return level.isMoreSpecificThan(Level.ERROR);
+    }
+
+    public boolean isMoreSpecificThanWarn() {
+        return level.isMoreSpecificThan(Level.WARN);
+    }
+
+    public boolean isMoreSpecificThanInfo() {
+        return level.isMoreSpecificThan(Level.INFO);
     }
 
     @Override

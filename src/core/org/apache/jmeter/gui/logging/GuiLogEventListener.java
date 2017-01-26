@@ -25,9 +25,9 @@ import java.util.EventListener;
 public interface GuiLogEventListener extends EventListener {
 
     /**
-     * Invoked when a log event occurs.
+     * Process a log event object.
      * @param logEventObject log event object
      */
-    public void log(LogEventObject logEventObject);
+    public void processLogEvent(LogEventObject logEventObject);
 
 }

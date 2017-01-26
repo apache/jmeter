@@ -139,10 +139,11 @@ public final class LoggingManager {
      * @param category - the full name of the logger category, this will have the prefix removed.
      *
      * @return Logger
+     * @deprecated
      */
+    @Deprecated
     public static Logger getLoggerForShortName(String category) {
-        // FIXME
-        return new Slf4jLogkitLogger(LoggerFactory.getLogger(removePrefix(category)));
+        return getLoggerFor(category);
     }
 
     /**

@@ -72,7 +72,7 @@ public class GuiLogEventBus {
     public void postEvent(LogEventObject logEventObject) {
         if (listeners != null) {
             for (GuiLogEventListener listener : listeners) {
-                listener.log(logEventObject);
+                listener.processLogEvent(logEventObject);
             }
         }
     }

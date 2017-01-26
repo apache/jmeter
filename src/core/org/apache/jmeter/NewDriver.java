@@ -277,25 +277,39 @@ public final class NewDriver {
         return builder.toString();
     }
 
+    /*
+     * Set logging related system properties.
+     */
     private static void setLoggingProperties(String[] args) {
-        String jmlogfile = getCommandLineArgument(args, (int) 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
+        String jmLogFile = getCommandLineArgument(args, (int) 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
 
-        if (jmlogfile != null && !jmlogfile.isEmpty()) {
-            jmlogfile = replaceDateFormatInFileName(jmlogfile);
-            System.setProperty("jmeter.logfile", jmlogfile);// $NON-NLS-1$
+        if (jmLogFile != null && !jmLogFile.isEmpty()) {
+            jmLogFile = replaceDateFormatInFileName(jmLogFile);
+            System.setProperty("jmeter.logfile", jmLogFile);// $NON-NLS-1$
         } else if (System.getProperty("jmeter.logfile") == null) {// $NON-NLS-1$
             System.setProperty("jmeter.logfile", "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
         }
 
-        if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
-            File loggingConf = new File("log4j2.xml");// $NON-NLS-1$
-            if (!loggingConf.isFile()) {
-                loggingConf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+        String jmLogConf = getCommandLineArgument(args, (int) 'i', "jmeterlogconf");// $NON-NLS-1$ $NON-NLS-2$
+        File logConfFile = null;
+
+        if (jmLogConf != null && !jmLogConf.isEmpty()) {
+            logConfFile = new File(jmLogConf);
+        } else if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
+            logConfFile = new File("log4j2.xml");// $NON-NLS-1$
+            if (!logConfFile.isFile()) {
+                logConfFile = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
             }
-            System.setProperty("log4j.configurationFile", loggingConf.toURI().toString());// $NON-NLS-1$
+        }
+
+        if (logConfFile != null) {
+            System.setProperty("log4j.configurationFile", logConfFile.toURI().toString());// $NON-NLS-1$
         }
     }
 
+    /*
+     * Find command line argument option value by the id and name.
+     */
     private static String getCommandLineArgument(String [] args, int id, String name) {
         String value = null;
         final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
@@ -322,7 +336,7 @@ public final class NewDriver {
 
             final Date date = new Date();
             int fromIndex = 0;
-            int begin = fileName.indexOf('\'', fromIndex);
+            int begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
             int end;
 
             String format;
@@ -332,9 +346,9 @@ public final class NewDriver {
                 builder.append(fileName.substring(fromIndex, begin));
 
                 fromIndex = begin + 1;
-                end = fileName.indexOf('\'', fromIndex);
+                end = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
                 if (end == -1) {
-                    throw new IllegalArgumentException("Invalid pairs of single-quotes in the file name: " + fileName);
+                    throw new IllegalArgumentException("Invalid pairs of single-quotes in the file name: " + fileName);// $NON-NLS-1$
                 }
 
                 format = fileName.substring(begin + 1, end);
@@ -342,7 +356,7 @@ public final class NewDriver {
                 builder.append(dateFormat.format(date));
 
                 fromIndex = end + 1;
-                begin = fileName.indexOf('\'', fromIndex);
+                begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
             }
 
             if (fromIndex < fileName.length() - 1) {

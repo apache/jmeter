@@ -26,6 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.ext.LoggerWrapper;
 
+/**
+ * Logger wrapper to keep the log event for the record and delegate to the internal logger.
+ */
 public class LogRecordingDelegatingLogger extends LoggerWrapper {
 
     private static final String FQCN = LogRecordingDelegatingLogger.class.getName();

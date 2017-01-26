@@ -20,6 +20,9 @@ package org.apache.jmeter.util;
 import org.slf4j.Marker;
 import org.slf4j.spi.LocationAwareLogger;
 
+/**
+ * Log record.
+ */
 public class LogRecord {
 
     public static final int TRACE = LocationAwareLogger.TRACE_INT;
