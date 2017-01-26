@@ -53,11 +53,11 @@ import org.apache.log.Logger;
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
 
     private static final Logger log = LoggingManager.getLoggerForClass();
-
+    private JavaSamplerContext  context;
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
     @Override
     public void setupTest(JavaSamplerContext context) {
-        log.debug(getClass().getName() + ": setupTest");
+        this.context=context;
     }
 
     /* Implements JavaSamplerClient.teardownTest(JavaSamplerContext) */
@@ -69,7 +69,13 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
     /* Implements JavaSamplerClient.getDefaultParameters() */
     @Override
     public Arguments getDefaultParameters() {
-        return null;
+        Iterator<String> it=context.getParameterNamesIterator();
+    	Arguments params = new Arguments();
+    	while(it.hasNext()){
+    		String key=it.next();
+    		params.addArgument(key, context.getParameter(key));
+    	}
+    	return params;
     }
 
     /**
