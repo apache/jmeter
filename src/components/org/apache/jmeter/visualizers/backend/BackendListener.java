@@ -48,7 +48,8 @@ import org.apache.log.Logger;
  * @since 2.13
  */
 public class BackendListener extends AbstractTestElement
-    implements Serializable, SampleListener, TestStateListener, NoThreadClone, Remoteable  {
+    implements Backend, Serializable, SampleListener, 
+        TestStateListener, NoThreadClone, Remoteable {
 
     /**
      * 

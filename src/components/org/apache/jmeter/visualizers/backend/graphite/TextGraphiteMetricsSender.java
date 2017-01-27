@@ -86,7 +86,7 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
      */
     @Override
     public void writeAndSendMetrics() {
-        List<MetricTuple> tempMetrics = null;
+        List<MetricTuple> tempMetrics;
         synchronized (lock) {
             if(metrics.isEmpty()) {
                 return;
