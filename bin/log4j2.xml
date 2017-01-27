@@ -116,6 +116,12 @@
     -->
 
     <!--
+      # Reporting logging configuration examples
+    -->
+    <!-- # If you want to debug reporting, uncomment this line -->
+    <!-- <Logger name="org.apache.jmeter.report" level="debug" /> -->
+
+    <!--
       # More user specific logging configuration examples.
     -->
     <!-- <Logger name="org.apache.jorphan.reflect" level="debug" /> -->
