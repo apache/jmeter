@@ -115,6 +115,24 @@
     <Logger name="org.apache.http.client" level="debug" />
     -->
 
+    <!--
+      # More user specific logging configuration examples.
+    -->
+    <!-- <Logger name="org.apache.jorphan.reflect" level="debug" /> -->
+    <!--
+      # Warning: Enabling the next debug line causes javax.net.ssl.SSLException: Received fatal alert: unexpected_message
+                 for certain sites when used with the default HTTP Sampler
+    -->
+    <!--
+    <Logger name="org.apache.jmeter.util.HttpSSLProtocolSocketFactory" level="debug" />
+    <Logger name="org.apache.jmeter.util.JsseSSLManager" level="debug" />
+    -->
+
+    <!--
+      # Enable Proxy request debug
+    -->
+    <!-- <Logger name="org.apache.jmeter.protocol.http.proxy.HttpRequestHdr" level="debug" /> -->
+
   </Loggers>
 
 </Configuration>
