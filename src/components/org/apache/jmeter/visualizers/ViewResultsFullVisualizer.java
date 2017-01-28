@@ -141,12 +141,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     /** {@inheritDoc} */
     @Override
     public void add(final SampleResult sample) {
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                updateGui(sample);
-            }
-        });
+        JMeterUtils.runSafe(false, ()-> updateGui(sample));
     }
 
     /**
