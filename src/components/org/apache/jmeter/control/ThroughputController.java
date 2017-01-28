@@ -172,7 +172,7 @@ public class ThroughputController extends GenericController implements Serializa
         }
         return retVal;
     }
-    
+
     @SuppressWarnings("SynchronizeOnNonFinalField")
     private int getExecutions() {
         if (!isPerThread()) {
@@ -273,7 +273,7 @@ public class ThroughputController extends GenericController implements Serializa
     public void testEnded(String host) {
         // NOOP
     }
-    
+
     @Override
     protected Object readResolve(){
         super.readResolve();
