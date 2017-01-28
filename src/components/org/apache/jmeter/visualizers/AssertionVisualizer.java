@@ -101,6 +101,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         // TEXTAREA LABEL
         JLabel textAreaLabel =
             new JLabel(JMeterUtils.getResString("assertion_textarea_label")); // $NON-NLS-1$
+        textAreaLabel.setLabelFor(textArea);
         Box mainPanel = Box.createVerticalBox();
         mainPanel.add(textAreaLabel);
 
