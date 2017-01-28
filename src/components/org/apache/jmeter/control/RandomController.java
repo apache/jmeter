@@ -35,10 +35,10 @@ public class RandomController extends InterleaveControl implements Serializable 
      */
     @Override
     protected void resetCurrent() {
-        if (getSubControllers().size() > 0) {
-            current = ThreadLocalRandom.current().nextInt(this.getSubControllers().size());
-        } else {
+        if (getSubControllers().isEmpty()) {
             current = 0;
+        } else {
+            current = ThreadLocalRandom.current().nextInt(this.getSubControllers().size());
         }
     }
 
