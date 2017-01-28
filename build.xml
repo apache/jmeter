@@ -2717,6 +2717,10 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="SlowCharsFeature"/>
     </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+    </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
