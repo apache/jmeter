@@ -58,13 +58,10 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         sb.append(sample.getSampleLabel());
         sb.append(getAssertionResult(sample));
         sb.append("\n"); // $NON-NLS-1$
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                synchronized (textArea) {
-                    textArea.append(sb.toString());
-                    textArea.setCaretPosition(textArea.getText().length());
-                }                
+        JMeterUtils.runSafe(false, () -> {
+            synchronized (textArea) {
+                textArea.append(sb.toString());
+                textArea.setCaretPosition(textArea.getText().length());
             }
         });
     }
