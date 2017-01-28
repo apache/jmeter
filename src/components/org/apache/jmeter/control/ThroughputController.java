@@ -211,11 +211,9 @@ public class ThroughputController extends GenericController implements Serializa
     public boolean isDone() {
         if (subControllersAndSamplers.isEmpty()) {
             return true;
-        } else if (getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
-                && current >= getSubControllers().size()) {
-            return true;
         } else {
-            return false;
+            return getStyle() == BYNUMBER && getExecutions() >= getMaxThroughputAsInt()
+                && current >= getSubControllers().size();
         }
     }
 
