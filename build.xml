@@ -406,7 +406,7 @@
     <include name="${lib.dir}/${httpclient.jar}"/>
     <include name="${lib.dir}/${httpasyncclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
-  	<include name="${lib.dir}/${httpcore-nio.jar}"/>
+    <include name="${lib.dir}/${httpcore-nio.jar}"/>
     <include name="${lib.dir}/${httpmime.jar}"/>
     <include name="${lib.dir}/${jakarta-oro.jar}"/>
     <include name="${lib.dir}/${javamail.jar}"/>
@@ -483,9 +483,9 @@
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
-  	<pathelement location="${lib.dir}/${httpasyncclient.jar}"/>
+    <pathelement location="${lib.dir}/${httpasyncclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
-  	<pathelement location="${lib.dir}/${httpcore-nio.jar}"/>
+    <pathelement location="${lib.dir}/${httpcore-nio.jar}"/>
     <pathelement location="${lib.dir}/${httpmime.jar}"/>
     <pathelement location="${lib.dir}/${jakarta-oro.jar}"/>
     <pathelement location="${lib.dir}/${javamail.jar}"/>
@@ -2709,7 +2709,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.name" value="TEST_HTTPS"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
-  	
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
     </antcall>
@@ -3043,9 +3043,9 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="groovy-all"/>
     <process_jarfile jarname="hamcrest-core"/>
     <process_jarfile jarname="httpclient"/>
-  	<process_jarfile jarname="httpasyncclient"/>
+    <process_jarfile jarname="httpasyncclient"/>
     <process_jarfile jarname="httpcore"/>
-  	<process_jarfile jarname="httpcore-nio"/>
+    <process_jarfile jarname="httpcore-nio"/>
     <process_jarfile jarname="httpmime"/>
     <process_jarfile jarname="jakarta-oro"/>
     <process_jarfile jarname="javamail"/>
