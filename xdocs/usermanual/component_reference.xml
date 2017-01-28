@@ -662,7 +662,7 @@ This will not have any impact on existing Test plans.
     </properties>
 </component>
 
-<component name="SOAP/XML-RPC Request" index="&sect-num;.1.5"  width="426" height="276" screenshot="soap_sampler.png">
+<component name="SOAP/XML-RPC Request (DEPRECATED)" index="&sect-num;.1.5"  width="426" height="276" screenshot="soap_sampler.png">
 <note>
 See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
 </note>
