@@ -82,6 +82,7 @@ under the License.
       <httpclient.version>4.5.3</httpclient.version>
       <httpcore.version>4.4.6</httpcore.version>
       <httpcore-nio.version>4.4.6</httpcore-nio.version>
+      <httpmime.version>4.5.3</httpmime.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
       <jodd-core.version>3.8.1</jodd-core.version>
@@ -248,7 +249,7 @@ under the License.
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpmime</artifactId>
-        <version>${httpclient.version}</version>
+        <version>${httpmime.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>

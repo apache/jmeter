@@ -54,7 +54,6 @@ public class JMeterVersionTest extends JMeterTestCase {
         JAR_TO_BUILD_PROP.put("bsf", "apache-bsf");
         JAR_TO_BUILD_PROP.put("bsh", "beanshell");
         JAR_TO_BUILD_PROP.put("geronimo-jms_1.1_spec", "jms");
-        JAR_TO_BUILD_PROP.put("httpmime", "httpclient"); // two jars same version
         JAR_TO_BUILD_PROP.put("mail", "javamail");
         JAR_TO_BUILD_PROP.put("oro", "jakarta-oro");
         JAR_TO_BUILD_PROP.put("xercesImpl", "xerces");
