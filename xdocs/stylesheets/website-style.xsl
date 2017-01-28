@@ -108,9 +108,9 @@
             </div>
           </xsl:if>
           <div class="banner">
-            <iframe src="http://www.apache.org/ads/bannerbar.html"
-              style="border-width:0;" frameborder="0" scrolling="no"
-            ></iframe>
+            <a href="http://www.apache.org/events/current-event.html">
+              <img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser" />
+            </a>
             <div class="clear"></div>
           </div>
         </div>
