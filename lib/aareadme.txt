@@ -198,7 +198,8 @@ HttpComponents
 - HttpComponents Core NIO 4.4.6
 -----------
 http://hc.apache.org/
-- httpclient 4 implementation for HTTP sampler 
+- httpclient 4 implementation for HTTP sampler
+- httpasyncclient implementation for InfluxDB Backend Listener Client
 
 logkit-2.0
 ----------
