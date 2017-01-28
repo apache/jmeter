@@ -3382,86 +3382,86 @@ run JMeter unless all the JMeter jars are added.
     <fileset dir="./lib/opt" includes="**/*.jar" />
   </path>
 
-  <property name="sonar.organizationName" value="Apache" />
-  <property name="sonar.projectName" value="JMeter" />
-
-  <property name="sonar.projectKey" value="org.apache.jmeter:${sonar.projectName}" />
-  <property name="sonar.projectVersion" value="${jmeter.version}" />
-  <property name="sonar.language" value="java" />
-  <property name="sonar.links.homepage" value="http://jmeter.apache.org" />
-  <property name="sonar.links.ci" value="https://builds.apache.org/job/JMeter-trunk/" />
-  <property name="sonar.links.scm" value="http://jmeter.apache.org/svnindex.html" />
-  <property name="sonar.links.issue" value="http://jmeter.apache.org/issues.html" />
-  <property name="sonar.modules" value="core,http,ftp,java,jdbc,ldap,mail,components,functions,jorphan,tcp,jms,native" />
-  <property name="sonar.java.binaries" value="${build.core},${build.http},${build.core},${build.http},${build.ftp},${build.java},${build.jdbc},${build.ldap},${build.mail},${build.components},${build.functions},${build.jorphan},${build.tcp},${build.jms},${build.native}" />
-  <property name="sonar.java.libraries" value="lib,lib/opt" />
-
-  <property name="sonar.junit.reportsPath" value="reports" />
-  <property name="sonar.jacoco.reportPath" value="reports/jacoco.exec" />
-
-  <property name="sonar.issue.ignore.multicriteria" value="c1,c2,c3,c4,c5" />
-  <property name="sonar.issue.ignore.multicriteria.c1.ruleKey"
-         value="squid:S1948" />
-  <property name="sonar.issue.ignore.multicriteria.c1.resourceKey"
-         value="**/*.java" />
-  <property name="sonar.issue.ignore.multicriteria.c2.ruleKey"
-         value="squid:S00112" />
-  <property name="sonar.issue.ignore.multicriteria.c2.resourceKey"
-         value="**/*.java" />
-  <property name="sonar.issue.ignore.multicriteria.c3.ruleKey"
-         value="squid:MaximumInheritanceDepth" />
-  <property name="sonar.issue.ignore.multicriteria.c3.resourceKey"
-         value="**/*.java" />
-  <property name="sonar.issue.ignore.multicriteria.c4.ruleKey"
-         value="squid:S134" />
-  <property name="sonar.issue.ignore.multicriteria.c4.resourceKey"
-         value="**/*.java" />
-  <property name="sonar.issue.ignore.multicriteria.c5.ruleKey"
-         value="squid:S1192" />
-  <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
-         value="**/*.java" />
-  <property name="core.sonar.projectName" value="core" />
-  <property name="core.sonar.sources" value="${src.core}" />
-  <property name="core.sonar.projectBaseDir" value="./" />
-  <property name="http.sonar.projectName" value="http" />
-  <property name="http.sonar.sources" value="${src.http}" />
-  <property name="http.sonar.projectBaseDir" value="./" />
-  <property name="ftp.sonar.projectName" value="ftp" />
-  <property name="ftp.sonar.sources" value="${src.ftp}" />
-  <property name="ftp.sonar.projectBaseDir" value="./" />
-  <property name="java.sonar.projectName" value="java" />
-  <property name="java.sonar.sources" value="${src.java}" />
-  <property name="java.sonar.projectBaseDir" value="./" />
-  <property name="jdbc.sonar.projectName" value="jdbc" />
-  <property name="jdbc.sonar.sources" value="${src.jdbc}" />
-  <property name="jdbc.sonar.projectBaseDir" value="./" />
-  <property name="ldap.sonar.projectName" value="ldap" />
-  <property name="ldap.sonar.sources" value="${src.ldap}" />
-  <property name="ldap.sonar.projectBaseDir" value="./" />
-  <property name="mail.sonar.projectName" value="mail" />
-  <property name="mail.sonar.sources" value="${src.mail}" />
-  <property name="mail.sonar.projectBaseDir" value="./" />
-  <property name="components.sonar.projectName" value="components" />
-  <property name="components.sonar.sources" value="${src.components}" />
-  <property name="components.sonar.projectBaseDir" value="./" />
-  <property name="functions.sonar.projectName" value="functions" />
-  <property name="functions.sonar.sources" value="${src.functions}" />
-  <property name="functions.sonar.projectBaseDir" value="./" />
-  <property name="jorphan.sonar.projectName" value="jorphan" />
-  <property name="jorphan.sonar.sources" value="${src.jorphan}" />
-  <property name="jorphan.sonar.projectBaseDir" value="./" />
-  <property name="tcp.sonar.projectName" value="tcp" />
-  <property name="tcp.sonar.sources" value="${src.tcp}" />
-  <property name="tcp.sonar.projectBaseDir" value="./" />
-  <property name="jms.sonar.projectName" value="jms" />
-  <property name="jms.sonar.sources" value="${src.jms}" />
-  <property name="jms.sonar.projectBaseDir" value="./" />
-  <property name="native.sonar.projectName" value="native" />
-  <property name="native.sonar.sources" value="${src.native}" />
-  <property name="native.sonar.projectBaseDir" value="./" />
 
   <target name="_sonar">
     <property environment="env" />
+    <property name="sonar.organizationName" value="Apache" />
+    <property name="sonar.projectName" value="JMeter" />
+
+    <property name="sonar.projectKey" value="org.apache.jmeter:${sonar.projectName}" />
+    <property name="sonar.projectVersion" value="${jmeter.version}" />
+    <property name="sonar.language" value="java" />
+    <property name="sonar.links.homepage" value="http://jmeter.apache.org" />
+    <property name="sonar.links.ci" value="https://builds.apache.org/job/JMeter-trunk/" />
+    <property name="sonar.links.scm" value="http://jmeter.apache.org/svnindex.html" />
+    <property name="sonar.links.issue" value="http://jmeter.apache.org/issues.html" />
+    <property name="sonar.modules" value="core,http,ftp,java,jdbc,ldap,mail,components,functions,jorphan,tcp,jms,native" />
+    <property name="sonar.java.binaries" value="${build.core},${build.http},${build.core},${build.http},${build.ftp},${build.java},${build.jdbc},${build.ldap},${build.mail},${build.components},${build.functions},${build.jorphan},${build.tcp},${build.jms},${build.native}" />
+    <property name="sonar.java.libraries" value="lib,lib/opt" />
+
+    <property name="sonar.junit.reportsPath" value="reports" />
+    <property name="sonar.jacoco.reportPath" value="reports/jacoco.exec" />
+
+    <property name="sonar.issue.ignore.multicriteria" value="c1,c2,c3,c4,c5" />
+    <property name="sonar.issue.ignore.multicriteria.c1.ruleKey"
+           value="squid:S1948" />
+    <property name="sonar.issue.ignore.multicriteria.c1.resourceKey"
+           value="**/*.java" />
+    <property name="sonar.issue.ignore.multicriteria.c2.ruleKey"
+           value="squid:S00112" />
+    <property name="sonar.issue.ignore.multicriteria.c2.resourceKey"
+           value="**/*.java" />
+    <property name="sonar.issue.ignore.multicriteria.c3.ruleKey"
+           value="squid:MaximumInheritanceDepth" />
+    <property name="sonar.issue.ignore.multicriteria.c3.resourceKey"
+           value="**/*.java" />
+    <property name="sonar.issue.ignore.multicriteria.c4.ruleKey"
+           value="squid:S134" />
+    <property name="sonar.issue.ignore.multicriteria.c4.resourceKey"
+           value="**/*.java" />
+    <property name="sonar.issue.ignore.multicriteria.c5.ruleKey"
+           value="squid:S1192" />
+    <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
+           value="**/*.java" />
+    <property name="core.sonar.projectName" value="core" />
+    <property name="core.sonar.sources" value="${src.core}" />
+    <property name="core.sonar.projectBaseDir" value="./" />
+    <property name="http.sonar.projectName" value="http" />
+    <property name="http.sonar.sources" value="${src.http}" />
+    <property name="http.sonar.projectBaseDir" value="./" />
+    <property name="ftp.sonar.projectName" value="ftp" />
+    <property name="ftp.sonar.sources" value="${src.ftp}" />
+    <property name="ftp.sonar.projectBaseDir" value="./" />
+    <property name="java.sonar.projectName" value="java" />
+    <property name="java.sonar.sources" value="${src.java}" />
+    <property name="java.sonar.projectBaseDir" value="./" />
+    <property name="jdbc.sonar.projectName" value="jdbc" />
+    <property name="jdbc.sonar.sources" value="${src.jdbc}" />
+    <property name="jdbc.sonar.projectBaseDir" value="./" />
+    <property name="ldap.sonar.projectName" value="ldap" />
+    <property name="ldap.sonar.sources" value="${src.ldap}" />
+    <property name="ldap.sonar.projectBaseDir" value="./" />
+    <property name="mail.sonar.projectName" value="mail" />
+    <property name="mail.sonar.sources" value="${src.mail}" />
+    <property name="mail.sonar.projectBaseDir" value="./" />
+    <property name="components.sonar.projectName" value="components" />
+    <property name="components.sonar.sources" value="${src.components}" />
+    <property name="components.sonar.projectBaseDir" value="./" />
+    <property name="functions.sonar.projectName" value="functions" />
+    <property name="functions.sonar.sources" value="${src.functions}" />
+    <property name="functions.sonar.projectBaseDir" value="./" />
+    <property name="jorphan.sonar.projectName" value="jorphan" />
+    <property name="jorphan.sonar.sources" value="${src.jorphan}" />
+    <property name="jorphan.sonar.projectBaseDir" value="./" />
+    <property name="tcp.sonar.projectName" value="tcp" />
+    <property name="tcp.sonar.sources" value="${src.tcp}" />
+    <property name="tcp.sonar.projectBaseDir" value="./" />
+    <property name="jms.sonar.projectName" value="jms" />
+    <property name="jms.sonar.sources" value="${src.jms}" />
+    <property name="jms.sonar.projectBaseDir" value="./" />
+    <property name="native.sonar.projectName" value="native" />
+    <property name="native.sonar.sources" value="${src.native}" />
+    <property name="native.sonar.projectBaseDir" value="./" />
     <condition property="sonar.host.url" value="${env.SONAR_HOST_URL}" else="http://localhost:9000">
       <isset property="env.SONAR_HOST_URL" />
     </condition>
