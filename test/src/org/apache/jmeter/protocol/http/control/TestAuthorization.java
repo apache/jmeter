@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.protocol.http.control;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
 import org.hamcrest.CoreMatchers;
