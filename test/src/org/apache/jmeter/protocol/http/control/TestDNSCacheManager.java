@@ -66,6 +66,24 @@ public class TestDNSCacheManager extends JMeterTestCase {
             original.resolve("jmeter.apache.org");
             Assert.assertNotNull(original.resolver);
             Assert.assertTrue(((ExtendedResolver)original.resolver).getResolvers().length==1);
+            Assert.assertTrue(original.cache.size()==1);
+            // OK
+        } catch (UnknownHostException e) {
+            fail("System DNS server should have been used");
+        }
+    }
+    
+    @Test
+    public void testUseCache() throws UnknownHostException {
+        DNSCacheManager original = new DNSCacheManager();
+        original.addServer(VALID_DNS_SERVER);
+        original.setCustomResolver(true);
+        original.setTimeoutMs(100);
+        try {
+            InetAddress[] expectedResult = new InetAddress[0];
+            original.cache.put("jmeter.apache.org", new InetAddress[0]);
+            InetAddress[] actual = original.resolve("jmeter.apache.org");
+            Assert.assertArrayEquals(expectedResult, actual);
             // OK
         } catch (UnknownHostException e) {
             fail("System DNS server should have been used");
