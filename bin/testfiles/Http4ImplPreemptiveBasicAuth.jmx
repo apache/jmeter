@@ -450,7 +450,6 @@ if(mustHaveAuthHeader) {
             <responseDataOnError>false</responseDataOnError>
             <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
           </value>
         </objProp>
         <stringProp name="filename">Http4ImplPreemptiveBasicAuth.xml</stringProp>
