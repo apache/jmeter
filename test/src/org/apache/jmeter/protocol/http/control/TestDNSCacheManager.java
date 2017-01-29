@@ -86,7 +86,15 @@ public class TestDNSCacheManager extends JMeterTestCase {
             Assert.assertArrayEquals(expectedResult, actual);
             // OK
         } catch (UnknownHostException e) {
-            fail("System DNS server should have been used");
+            fail("Cache should have been used");
+        }
+        
+        try {
+            original.cache.put("jmeter.apache.org", null);
+            Assert.assertNull(original.resolve("jmeter.apache.org"));
+            // OK
+        } catch (UnknownHostException e) {
+            fail("Cache should have been used");
         }
     }
     
