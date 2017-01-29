@@ -77,7 +77,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     private final transient SystemDefaultDnsResolver systemDefaultDnsResolver;
 
-    private final Map<String, InetAddress[]> cache;
+    final Map<String, InetAddress[]> cache;
 
     transient Resolver resolver;
 
