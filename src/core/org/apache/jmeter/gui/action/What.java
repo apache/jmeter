@@ -32,6 +32,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.HeapDumper;
 import org.apache.log.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 
 /**
  *
@@ -66,9 +68,9 @@ public class What extends AbstractAction {
             System.out.println(guiClassName);
             log.info("TestElement:"+te.getClass().getName()+", guiClassName:"+guiClassName);
         } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
-            LoggingManager.setPriorityFullName("DEBUG",te.getClass().getName());//$NON-NLS-1$
+            Configurator.setAllLevels(te.getClass().getName(), Level.DEBUG);
         } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
-            LoggingManager.setPriorityFullName("INFO",te.getClass().getName());//$NON-NLS-1$
+            Configurator.setAllLevels(te.getClass().getName(), Level.INFO);
         } else if (ActionNames.HEAP_DUMP.equals(e.getActionCommand())){
             try {
                 String s = HeapDumper.dumpHeap();

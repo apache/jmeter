@@ -694,6 +694,7 @@
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
         <path refid="classpath"/>
+        <path refid="logging.classpath"/>
       </classpath>
     </javac>
   </target>
