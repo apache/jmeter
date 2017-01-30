@@ -132,7 +132,7 @@ public class Authorization extends AbstractTestElement implements Serializable {
     }
 
     public String toBasicHeader(){
-        return new String(Base64.getEncoder().encode((getUser() + ":" + getPass()).
+        return "Basic " + new String(Base64.getEncoder().encode((getUser() + ":" + getPass()).
                 getBytes(Charset.defaultCharset())), Charset.defaultCharset());
     }
 }

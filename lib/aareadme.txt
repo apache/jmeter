@@ -193,12 +193,13 @@ junit 4.12
 
 HttpComponents
 - HttpComponents Core 4.4.6 
-- HttpComponents Client 4.5.2
+- HttpComponents Client 4.5.3
 - HttpComponents AsyncClient 4.1.2
 - HttpComponents Core NIO 4.4.6
 -----------
 http://hc.apache.org/
-- httpclient 4 implementation for HTTP sampler 
+- httpclient 4 implementation for HTTP sampler
+- httpasyncclient implementation for InfluxDB Backend Listener Client
 
 logkit-2.0
 ----------

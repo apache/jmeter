@@ -58,6 +58,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
@@ -93,7 +94,9 @@ import org.apache.http.entity.mime.MIME;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultClientConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -114,6 +117,8 @@ import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.AuthManager.Mechanism;
+import org.apache.jmeter.protocol.http.control.Authorization;
 import org.apache.jmeter.protocol.http.control.CacheManager;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HeaderManager;
@@ -154,6 +159,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final int VALIDITY_AFTER_INACTIVITY_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.validate_after_inactivity", 2000);
     
     private static final int TIME_TO_LIVE = JMeterUtils.getPropDefault("httpclient4.time_to_live", 2000);
+
+    /** Preemptive Basic Auth */
+    private static final boolean BASIC_AUTH_PREEMPTIVE = JMeterUtils.getPropDefault("httpclient4.auth.preemptive", true);
 
     private static final String CONTEXT_METRICS = "jmeter_metrics"; // TODO hack for metrics related to HTTPCLIENT-1081, to be removed later
     
@@ -630,6 +638,21 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 } catch (PrivilegedActionException e) {
                     log.error("Can't execute httpRequest with subject:" + subject, e);
                     throw new RuntimeException("Can't execute httpRequest with subject:" + subject, e);
+                }
+            }
+
+            if(BASIC_AUTH_PREEMPTIVE) {
+                Authorization authorization = authManager.getAuthForURL(url);
+                if(authorization != null && Mechanism.BASIC_DIGEST.equals(authorization.getMechanism())) {
+                    HttpHost target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
+                    // Create AuthCache instance
+                    AuthCache authCache = new BasicAuthCache();
+                    // Generate BASIC scheme object and 
+                    // add it to the local auth cache
+                    BasicScheme basicAuth = new BasicScheme();
+                    authCache.put(target, basicAuth);
+                    // Add AuthCache to the execution context
+                    localContext.setAttribute(HttpClientContext.AUTH_CACHE, authCache);
                 }
             }
         }

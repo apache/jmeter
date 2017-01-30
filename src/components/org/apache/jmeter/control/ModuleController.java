@@ -135,7 +135,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
     public void resolveReplacementSubTree(JMeterTreeNode context) {
         if (selectedNode == null) {
             List<?> nodePathList = getNodePath();
-            if (nodePathList != null && nodePathList.size() > 0) {
+            if (nodePathList != null && !nodePathList.isEmpty()) {
                 traverse(context, nodePathList, 1);
             }
 
@@ -144,7 +144,7 @@ public class ModuleController extends GenericController implements ReplaceableCo
             }
         }
     }
-    
+
     /**
      * In GUI Mode replacement occurs when test start
      * In Non GUI Mode replacement occurs before test runs
