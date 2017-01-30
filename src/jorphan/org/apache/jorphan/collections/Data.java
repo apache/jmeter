@@ -19,9 +19,6 @@
 package org.apache.jorphan.collections;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -181,21 +178,15 @@ public class Data implements Serializable {
      *
      * @param column
      *            name of column to use as sorting criteria.
-     * @param asc
-     *            boolean value indicating whether to sort ascending or
-     *            descending. True for asc, false for desc. Currently this
-     *            feature is not enabled and all sorts are asc.
      */
-    public void sort(String column, boolean asc) {
+    public void sort(String column) {
         sortData(column, 0, size);
     }
 
     private void swapRows(int row1, int row2) {
-        List<Object> temp;
-        Object o;
-        for (String s : data.keySet()) {
-            temp = data.get(s);
-            o = temp.get(row1);
+        for (Map.Entry<String, List<Object>> entry : data.entrySet()) {
+            List<Object> temp = entry.getValue();
+            Object o = temp.get(row1);
             temp.set(row1, temp.get(row2));
             temp.set(row2, o);
         }
@@ -360,38 +351,6 @@ public class Data implements Serializable {
     }
 
     /**
-     * Gets a Data object from a ResultSet.
-     *
-     * @param rs
-     *            ResultSet passed in from a database query
-     * @return a Data object
-     * @throws java.sql.SQLException when database access errors occur
-     */
-    public static Data getDataFromResultSet(ResultSet rs) throws SQLException {
-        ResultSetMetaData meta = rs.getMetaData();
-        Data data = new Data();
-
-        int numColumns = meta.getColumnCount();
-        String[] dbCols = new String[numColumns];
-        for (int i = 0; i < numColumns; i++) {
-            dbCols[i] = meta.getColumnName(i + 1);
-            data.addHeader(dbCols[i]);
-        }
-
-        while (rs.next()) {
-            data.next();
-            for (int i = 0; i < numColumns; i++) {
-                Object o = rs.getObject(i + 1);
-                if (o instanceof byte[]) {
-                    o = new String((byte[]) o); // TODO - charset?
-                }
-                data.addColumnValue(dbCols[i], o);
-            }
-        }
-        return data;
-    }
-
-    /**
      * Sets the current position of the Data set to the previous row.
      *
      * @return True if there is another row. False if there are no more rows.
@@ -460,9 +419,8 @@ public class Data implements Serializable {
      *            these must be distinct - duplicates will cause incorrect behaviour
      */
     public void setHeaders(String[] h) {
-        int x = 0;
         header = new ArrayList<>(h.length);
-        for (x = 0; x < h.length; x++) {
+        for (int x = 0; x < h.length; x++) {
             header.add(h[x]);
             data.put(h[x], new ArrayList<>());
         }
@@ -548,14 +506,6 @@ public class Data implements Serializable {
             setLine(JOrphanUtils.split(contents[x++], delimiter));
         }
     }
-
-    /*
-     * Deletes a header from the Data object. Takes the column name as input. It
-     * will delete the entire column.
-     *
-     * public void deleteHeader(String s) {
-     *  }
-     */
 
     /**
      * Sets the data for every row in the column.
