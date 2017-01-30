@@ -670,6 +670,8 @@
         <pathelement location="${build.components}"/>
         <path refid="classpath"/>
         <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
+        <pathelement location="${lib.dir}/${log4j-api.jar}"/>
+        <pathelement location="${lib.dir}/${log4j-core.jar}"/>
       </classpath>
     </javac>
   </target>

@@ -29,6 +29,8 @@ import org.apache.jmeter.gui.Stoppable;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 
 /**
  * Server daemon thread.
@@ -164,8 +166,7 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         if (args.length > 0){
             port = Integer.parseInt(args[0]);
         }
-        LoggingManager.setPriority("INFO"); // default level
-        LoggingManager.setLoggingLevels(System.getProperties() ); // allow override by system properties
+        Configurator.setRootLevel(Level.INFO);
         HttpMirrorServer serv = new HttpMirrorServer(port);
         serv.start();
     }
