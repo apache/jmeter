@@ -208,7 +208,7 @@ public class SmtpSampler extends AbstractSampler {
                 .collect(Collectors.toList());
     }
 
-    private File attachmentToFile(String attachment) {
+    private File attachmentToFile(String attachment) { // NOSONAR False positive saying not used
         File file = new File(attachment);
         if (!file.isAbsolute() && !file.exists()) {
             if(log.isDebugEnabled()) {
