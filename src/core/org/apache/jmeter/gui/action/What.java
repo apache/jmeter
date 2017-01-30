@@ -69,8 +69,10 @@ public class What extends AbstractAction {
             log.info("TestElement:"+te.getClass().getName()+", guiClassName:"+guiClassName);
         } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
             Configurator.setAllLevels(te.getClass().getName(), Level.DEBUG);
+            log.info("Log level set to DEBUG for " + te.getClass().getName());
         } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
             Configurator.setAllLevels(te.getClass().getName(), Level.INFO);
+            log.info("Log level set to INFO for " + te.getClass().getName());
         } else if (ActionNames.HEAP_DUMP.equals(e.getActionCommand())){
             try {
                 String s = HeapDumper.dumpHeap();
