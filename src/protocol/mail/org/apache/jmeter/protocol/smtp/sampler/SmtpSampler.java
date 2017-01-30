@@ -203,7 +203,7 @@ public class SmtpSampler extends AbstractSampler {
 
     private List<File> getAttachmentFiles() {
         final String[] attachments = getPropertyAsString(ATTACH_FILE).split(FILENAME_SEPARATOR);
-        return Arrays.stream(attachments)
+        return Arrays.stream(attachments) // NOSONAR No need to close
                 .map(this::attachmentToFile)
                 .collect(Collectors.toList());
     }
