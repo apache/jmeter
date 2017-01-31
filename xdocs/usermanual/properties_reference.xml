@@ -1371,11 +1371,11 @@ log_level.org.apache.http.client=DEBUG
     Defaults to: <code>cookies</code>
 </property>
 <property name="javascript.use_rhino">
-    Ability to switch to Nashorn as default Javascript Engine used by <code>IfController</code>
+    Ability to switch to Rhino as default Javascript Engine used by <code>IfController</code>
     and <code>__javaScript</code> function.<br/>
-    <note>JMeter will prefer to use Rhino even if it detects a JRE 8 or higher.
-    If you want to use Nashorn, set this value to <code>false</code></note>
-    Defaults to: <code>true</code>
+    <note>JMeter will prefer to use Nashorn since 3.2 version.
+    If you want to use Rhino, set this value to <code>true</code></note>
+    Defaults to: <code>false</code>
 </property>
 <property name="jmeterengine.threadstop.wait">
     Number of milliseconds to wait for a thread to stop.<br/>
