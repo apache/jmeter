@@ -44,6 +44,11 @@ public class GuiLogEventAppender extends AbstractAppender {
 
     @Override
     public void append(LogEvent logEvent) {
+        // Note: GuiPackage class access SHOULD be always successful.
+        //       For example, if it fails to get GuiPackage#getInstance() due to static member initialization failure
+        //       (e.g, accessing JMeterUtils#getPropDefault(...) without initializing application properties),
+        //       the error log can be detected as "Recursive call to appender ..." by Log4j2 LoggerControl,
+        //       resulting in no meaningful error logs in the log appender targets.
         GuiPackage instance = GuiPackage.getInstance();
 
         if (instance != null) {

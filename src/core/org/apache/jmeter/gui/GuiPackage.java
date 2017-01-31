@@ -72,10 +72,6 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String NAMING_POLICY_IMPLEMENTATION = 
-            JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
-                    DefaultTreeNodeNamingPolicy.class.getName());
-
     /** Singleton instance. */
     private static GuiPackage guiPack;
 
@@ -875,6 +871,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public TreeNodeNamingPolicy getNamingPolicy() {
         if(namingPolicy == null) {
+            final String NAMING_POLICY_IMPLEMENTATION = 
+                    JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
+                            DefaultTreeNodeNamingPolicy.class.getName());
+
             try {
                 Class<?> implementationClass = Class.forName(NAMING_POLICY_IMPLEMENTATION);
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
