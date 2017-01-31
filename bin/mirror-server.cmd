@@ -20,12 +20,15 @@ rem   P1 = port to use (default 8080)
 
 setlocal
 
+rem On NT/2K grab all arguments at once
+set JMETER_CMD_LINE_ARGS=%*
+
 cd /D %~dp0
 
 set CP=..\lib\ext\ApacheJMeter_http.jar;..\lib\ext\ApacheJMeter_core.jar;..\lib\jorphan.jar;..\lib\oro-2.0.8.jar
 set CP=%CP%;..\lib\slf4j-api-1.7.22.jar;..\lib\jcl-over-slf4j-1.7.22.jar;..\lib\log4j-slf4j-impl-2.7.jar
 set CP=%CP%;..\lib\log4j-api-2.7.jar;..\lib\log4j-core-2.7.jar;..\lib\log4j-1.2-api-2.7.jar
 
-java -cp %CP% org.apache.jmeter.protocol.http.control.HttpMirrorServer %1
+java -cp %CP% org.apache.jmeter.protocol.http.control.HttpMirrorServer %JMETER_CMD_LINE_ARGS%
 
 pause

@@ -21,16 +21,21 @@ package org.apache.jmeter.protocol.http.control;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.avalon.CLArgsParser;
+import org.apache.commons.cli.avalon.CLOption;
+import org.apache.commons.cli.avalon.CLOptionDescriptor;
+import org.apache.commons.cli.avalon.CLUtil;
 import org.apache.jmeter.gui.Stoppable;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Server daemon thread.
@@ -39,7 +44,33 @@ import org.apache.logging.log4j.core.config.Configurator;
  *
  */
 public class HttpMirrorServer extends Thread implements Stoppable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+
+    // Make sure this logger being initialized and used only after logging framework initialized.
+    private static Logger _log;
+
+    private static final int OPTIONS_OPT        = '?';// $NON-NLS-1$
+    private static final int PORT_OPT           = 'P';// $NON-NLS-1$
+    private static final int LOGLEVEL_OPT       = 'L';// $NON-NLS-1$
+
+    /**
+     * Define the understood options.
+     */
+    private static final CLOptionDescriptor D_OPTIONS_OPT =
+            new CLOptionDescriptor("?", CLOptionDescriptor.ARGUMENT_DISALLOWED, OPTIONS_OPT,
+                "print command line options and exit");
+    private static final CLOptionDescriptor D_PORT_OPT =
+            new CLOptionDescriptor("port", CLOptionDescriptor.ARGUMENT_REQUIRED, PORT_OPT,
+                    "Set server port for HttpMirrorServer to use");
+    private static final CLOptionDescriptor D_LOGLEVEL_OPT =
+            new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
+                    | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL_OPT,
+                    "[category=]level e.g. INFO or DEBUG");
+
+    private static final CLOptionDescriptor[] options = new CLOptionDescriptor[] {
+            D_OPTIONS_OPT,
+            D_PORT_OPT,
+            D_LOGLEVEL_OPT,
+    };
 
     /**
      * The time (in milliseconds) to wait when accepting a client connection.
@@ -114,10 +145,10 @@ public class HttpMirrorServer extends Thread implements Stoppable {
             threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         }
         try {
-            log.info("Creating HttpMirror ... on port " + daemonPort);
+            getLogger().info("Creating HttpMirror ... on port " + daemonPort);
             mainSocket = new ServerSocket(daemonPort);
             mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
-            log.info("HttpMirror up and running!");
+            getLogger().info("HttpMirror up and running!");
             while (running) {
                 try {
                     // Listen on main socket
@@ -128,11 +159,11 @@ public class HttpMirrorServer extends Thread implements Stoppable {
                             threadPoolExecutor.execute(new HttpMirrorThread(clientSocket));
                         } else {
                             Thread thd = new Thread(new HttpMirrorThread(clientSocket));
-                            log.debug("Starting new Mirror thread");
+                            getLogger().debug("Starting new Mirror thread");
                             thd.start();
                         }
                     } else {
-                        log.warn("Server not running");
+                        getLogger().warn("Server not running");
                         JOrphanUtils.closeQuietly(clientSocket);
                     }
                 } catch (InterruptedIOException e) {
@@ -140,10 +171,10 @@ public class HttpMirrorServer extends Thread implements Stoppable {
                     // told to stop running.
                 }
             }
-            log.info("HttpMirror Server stopped");
+            getLogger().info("HttpMirror Server stopped");
         } catch (Exception e) {
             except = e;
-            log.warn("HttpMirror Server stopped", e);
+            getLogger().warn("HttpMirror Server stopped", e);
         } finally {
             if(threadPoolExecutor != null) {
                 threadPoolExecutor.shutdownNow();
@@ -161,13 +192,84 @@ public class HttpMirrorServer extends Thread implements Stoppable {
         return except;
     }
 
-    public static void main(String[] args){
-        int port = HttpMirrorControl.DEFAULT_PORT;
-        if (args.length > 0){
-            port = Integer.parseInt(args[0]);
+    public static void main(String[] args) {
+        CLArgsParser parser = new CLArgsParser(args, options);
+        String error = parser.getErrorString();
+        if (error != null) {
+            System.err.println("Error: " + error);//NOSONAR
+            System.out.println("Usage");//NOSONAR
+            System.out.println(CLUtil.describeOptions(options).toString());//NOSONAR
+            // repeat the error so no need to scroll back past the usage to see it
+            System.out.println("Error: " + error);//NOSONAR
+            return;
         }
-        Configurator.setRootLevel(Level.INFO);
+
+        if (parser.getArgumentById(OPTIONS_OPT) != null) {
+            System.out.println(CLUtil.describeOptions(options).toString());//NOSONAR
+            return;
+        }
+
+        int port = HttpMirrorControl.DEFAULT_PORT;
+
+        if (parser.getArgumentById(PORT_OPT) != null) {
+            CLOption option = parser.getArgumentById(PORT_OPT);
+            String value = option.getArgument(0);
+            try {
+                port = Integer.parseInt(value);
+            } catch (NumberFormatException ignored) {
+            }
+        } else if (args.length > 0) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
+            Configurator.setRootLevel(Level.INFO);
+        }
+
+        List<CLOption> clOptions = parser.getArguments();
+
+        for (CLOption option : clOptions) {
+            String name = option.getArgument(0);
+            String value = option.getArgument(1);
+
+            switch (option.getDescriptor().getId()) {
+            case LOGLEVEL_OPT:
+                if (!value.isEmpty()) { // Set category
+                    final Level logLevel = Level.getLevel(value);
+                    if (logLevel != null) {
+                        String loggerName = name;
+                        if (name.startsWith("jmeter") || name.startsWith("jorphan")) {
+                            loggerName = "org.apache." + name;// $NON-NLS-1$
+                        }
+                        getLogger().info("Setting log level to " + value + " for " + loggerName);// $NON-NLS-1$ // $NON-NLS-2$
+                        Configurator.setAllLevels(loggerName, logLevel);
+                    } else {
+                        getLogger().warn("Invalid log level, '" + value + "' for '" + name + "'.");// $NON-NLS-1$ // $NON-NLS-2$
+                    }
+                } else { // Set root level
+                    final Level logLevel = Level.getLevel(name);
+                    if (logLevel != null) {
+                        getLogger().info("Setting root log level to " + name);// $NON-NLS-1$
+                        Configurator.setRootLevel(logLevel);
+                    } else {
+                        getLogger().warn("Invalid log level, '" + name + "' for the root logger.");// $NON-NLS-1$ // $NON-NLS-2$
+                    }
+                }
+                break;
+            }
+        }
+
         HttpMirrorServer serv = new HttpMirrorServer(port);
         serv.start();
+    }
+
+    private static Logger getLogger() {
+        if (_log == null) {
+            _log = LoggerFactory.getLogger(HttpMirrorServer.class);
+        }
+        return _log;
     }
 }

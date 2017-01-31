@@ -24,4 +24,4 @@ CP=../lib/ext/ApacheJMeter_http.jar:../lib/ext/ApacheJMeter_core.jar:../lib/jorp
 CP=${CP}:../lib/slf4j-api-1.7.22.jar:../lib/jcl-over-slf4j-1.7.22.jar:../lib/log4j-slf4j-impl-2.7.jar
 CP=${CP}:../lib/log4j-api-2.7.jar:../lib/log4j-core-2.7.jar:../lib/log4j-1.2-api-2.7.jar
 
-java -cp $CP org.apache.jmeter.protocol.http.control.HttpMirrorServer $1
+java -cp $CP org.apache.jmeter.protocol.http.control.HttpMirrorServer "$@"
