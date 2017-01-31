@@ -86,6 +86,9 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>Process Sampler now returns error code 500 when an error occurs. It previously returned an empty value.</li>
     <li>In <code>org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</code> 2 protected static fields (localhost and nonProxyHostSuffixSize) have been renamed to (LOCALHOST and NON_PROXY_HOST_SUFFIX_SIZE) 
         to follow static fields naming convention</li>
+    <li>JMeter now uses by default Oracle Nashorn engine instead of Mozilla Rhino for better performances. This should not have an impact unless
+    you use some advanced features. You can revert back to Rhino by settings property <code>javascript.use_rhino=true</code>. 
+    You can read this <a href="https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide">migration guide</a> for more details on Nashorn. See <bugzilla>60672</bugzilla></li>
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
@@ -122,6 +125,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>60672</bug>JavaScript function / IfController : use Nashorn engine by default</li>
 </ul>
 
 <h3>Listeners</h3>

@@ -77,7 +77,7 @@ public class IfController extends GenericController implements Serializable, Thr
     private static final String USE_RHINO_ENGINE_PROPERTY = "javascript.use_rhino"; //$NON-NLS-1$
 
     private static final boolean USE_RHINO_ENGINE = 
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) ||
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) ||
             getInstance().getEngineByName(NASHORN_ENGINE_NAME) == null;
 
     
