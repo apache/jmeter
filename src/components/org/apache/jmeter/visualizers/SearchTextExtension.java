@@ -65,6 +65,8 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
+    public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
+
     private JLabel label;
 
     private JButton findButton;
@@ -104,6 +106,8 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
             // new search?
             if (lastTextTofind != null && !lastTextTofind.equals(textToFind)) {
                 searchProvider.resetTextToFind();
+                textToFindField.setBackground(Color.WHITE);
+                textToFindField.setForeground(Color.BLACK);
             }
             
             try {
@@ -112,14 +116,13 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 if(found) {
                     findButton.setText(JMeterUtils.getResString("search_text_button_next"));// $NON-NLS-1$
                     lastTextTofind = textToFind;
+                    textToFindField.setBackground(Color.WHITE);
+                    textToFindField.setForeground(Color.BLACK);
                 }
                 else {
                     findButton.setText(JMeterUtils.getResString("search_text_button_find"));// $NON-NLS-1$
-                    // Display not found message
-                    JOptionPane.showMessageDialog(null, JMeterUtils
-                            .getResString("search_text_msg_not_found"),// $NON-NLS-1$
-                            JMeterUtils.getResString("search_text_title_not_found"), // $NON-NLS-1$
-                            JOptionPane.INFORMATION_MESSAGE);
+                    textToFindField.setBackground(LIGHT_RED);
+                    textToFindField.setForeground(Color.WHITE);
                 }
             } catch (PatternSyntaxException pse) {
                 JOptionPane.showMessageDialog(null, 
