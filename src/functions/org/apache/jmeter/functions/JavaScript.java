@@ -58,7 +58,7 @@ public class JavaScript extends AbstractFunction {
     }
  
     private static final boolean USE_RHINO_ENGINE = 
-            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, true) || 
+            JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) || 
             (getInstance().getEngineByName(JavaScript.NASHORN_ENGINE_NAME) == null);
 
     /**
