@@ -187,9 +187,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
     
-    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, e -> { 
-        computeTestDuration();
-    });
+    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
+            this::computeTestDuration);
 
     /**
      * Create a new JMeter frame.
@@ -239,7 +238,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
-    protected void computeTestDuration() {
+    protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {
             long elapsedSec = (System.currentTimeMillis()-startTime + 500) / 1000; // rounded seconds
