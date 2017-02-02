@@ -20,9 +20,12 @@ package org.apache.jmeter.timers;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.UUID;
+
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
+import org.apache.jmeter.util.ScriptingTestElement;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 import org.junit.Test;
@@ -81,19 +84,31 @@ public class ConstantThroughputTimerTest {
             return;
         }
         BeanShellTimer timer = new BeanShellTimer();
-        long delay;
         
         timer.setScript("\"60\"");
-        delay = timer.delay();
-        assertEquals(60,delay);
+        assertEquals(60, timer.delay());
         
         timer.setScript("60");
-        delay = timer.delay();
-        assertEquals(60,delay);
+        assertEquals(60, timer.delay());
         
         timer.setScript("5*3*4");
-        delay = timer.delay();
-        assertEquals(60,delay);
+        assertEquals(60,timer.delay());
+    }
+    
+    @Test
+    public void testTimerJSR223Timer() throws Exception {
+        JSR223Timer timer = new JSR223Timer();
+        timer.setScriptLanguage(ScriptingTestElement.DEFAULT_SCRIPT_LANGUAGE);
+        timer.setCacheKey(UUID.randomUUID().toString());
+        
+        timer.setScript("\"60\"");
+        assertEquals(60, timer.delay());
+        
+        timer.setScript("60");
+        assertEquals(60, timer.delay());
+        
+        timer.setScript("5*3*4");
+        assertEquals(60,timer.delay());
     }
 
 }
