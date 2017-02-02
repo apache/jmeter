@@ -39,7 +39,6 @@ import org.apache.jorphan.util.JOrphanUtils;
  * This class provides an interface to headers file to pass HTTP headers along
  * with a request.
  *
- * @version $Revision$
  */
 public class HeaderManager extends ConfigTestElement implements Serializable {
 
@@ -53,14 +52,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         };
 
     private static final int COLUMN_COUNT = COLUMN_RESOURCE_NAMES.length;
-
-
-    /**
-     * Apache SOAP driver does not provide an easy way to get and set the cookie
-     * or HTTP header. Therefore it is necessary to store the SOAPHTTPConnection
-     * object and reuse it.
-     */
-    private Object SOAPHeader = null;
 
     public HeaderManager() {
         setProperty(new CollectionProperty(HEADERS, new ArrayList<>()));
@@ -230,26 +221,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         for (Integer indice : removeIndices) {
             getHeaders().remove(indice.intValue());
         }
-    }
-
-    /**
-     * Added support for SOAP related header stuff. 1-29-04 Peter Lin
-     *
-     * @return the SOAP header Object
-     */
-    public Object getSOAPHeader() {
-        return this.SOAPHeader;
-    }
-
-    /**
-     * Set the SOAPHeader with the SOAPHTTPConnection object. We may or may not
-     * want to rename this to setHeaderObject(Object). Conceivably, other
-     * samplers may need this kind of functionality. 1-29-04 Peter Lin
-     *
-     * @param header soap header
-     */
-    public void setSOAPHeader(Object header) {
-        this.SOAPHeader = header;
     }
 
     /**
