@@ -343,16 +343,16 @@ public class JMeter implements JMeterPlugin {
         PluginManager.install(this, true);
 
         JMeterTreeModel treeModel = new JMeterTreeModel();
-        splash.setProgress(20);
+        splash.setProgress(30);
         JMeterTreeListener treeLis = new JMeterTreeListener(treeModel);
         final ActionRouter instance = ActionRouter.getInstance();
         instance.populateCommandMap();
-        splash.setProgress(30);
+        splash.setProgress(60);
         treeLis.setActionHandler(instance);
         GuiPackage.initInstance(treeLis, treeModel);
-        splash.setProgress(60);
-        MainFrame main = new MainFrame(treeModel, treeLis);
         splash.setProgress(80);
+        MainFrame main = new MainFrame(treeModel, treeLis);
+        splash.setProgress(100);
         ComponentUtil.centerComponentInWindow(main, 80);
         main.setVisible(true);
         instance.actionPerformed(new ActionEvent(main, 1, ActionNames.ADD_ALL));
