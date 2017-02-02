@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
+import org.apache.jmeter.gui.Replaceable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
@@ -40,7 +42,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  * with a request.
  *
  */
-public class HeaderManager extends ConfigTestElement implements Serializable {
+public class HeaderManager extends ConfigTestElement implements Serializable, Replaceable {
 
     private static final long serialVersionUID = 240L;
 
@@ -279,5 +281,27 @@ public class HeaderManager extends ConfigTestElement implements Serializable {
         merged.setName(merged.getName() + ":" + other.getName());
 
         return merged;
+    }
+
+    @Override
+    public int replace(String regex, String replaceBy, boolean caseSensitive) throws Exception {
+        final CollectionProperty hdrs = getHeaders();
+        int totalReplaced = 0;
+        for (int i = 0; i < hdrs.size(); i++) {
+            final JMeterProperty hdr = hdrs.get(i);
+            Header head = (Header) hdr.getObjectValue();
+            String value = head.getValue();
+            if(!StringUtils.isEmpty(value)) {
+                Object[] result = JOrphanUtils.replaceAllWithRegex(value, regex, replaceBy, caseSensitive);
+                // check if there is anything to replace
+                int nbReplaced = ((Integer)result[1]).intValue();
+                if (nbReplaced>0) {
+                    String replacedText = (String) result[0];
+                    head.setValue(replacedText);
+                    totalReplaced += nbReplaced;
+                }
+            }
+        }
+        return totalReplaced;
     }
 }
