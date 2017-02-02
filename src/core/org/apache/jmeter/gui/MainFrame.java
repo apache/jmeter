@@ -187,12 +187,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      */
     private transient ErrorsAndFatalsCounterLogTarget errorsAndFatalsCounterLogTarget;
     
-    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            computeTestDuration();
-        }
+    private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, e -> { 
+        computeTestDuration();
     });
 
     /**
