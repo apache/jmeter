@@ -106,7 +106,16 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
         this.schemeRegistry = schemeRegistry;
         this.dnsResolver  = dnsResolver;
         this.operator = createConnectionOperator(schemeRegistry);
-        this.pool = new HttpConnPool(this.log, this.operator, 2, 20, timeToLive, tunit);
+        this.pool = new HttpConnPool(this.log, this.operator, 2, 20, timeToLive, tunit) {
+            /**
+             * @see org.apache.http.pool.AbstractConnPool#validate(org.apache.http.pool.PoolEntry)
+             */
+            @Override
+            protected boolean validate(HttpPoolEntry entry) {
+                return !entry.getConnection().isStale();
+            }
+            
+        };
         pool.setValidateAfterInactivity(validateAfterInactivity);
     }
     
