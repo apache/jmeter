@@ -57,7 +57,7 @@ import org.apache.http.util.Asserts;
 @Deprecated
 public class JMeterPoolingClientConnectionManager implements ClientConnectionManager, ConnPoolControl<HttpRoute> {
 
-    private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 2000;
+    private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 1700;
 
     private final Log log = LogFactory.getLog(getClass());
     

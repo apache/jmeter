@@ -531,13 +531,13 @@ log_level.org.apache.http.client=DEBUG
     Defaults to: <code>0</code>
 </property>
 <property name="httpclient4.idletimeout">
-    Idle connection timeout (in milliseconds) to apply if the server does not send <code>Keep-Alive</code> headers.<br/>
-    Defaults to: <code>0</code> (no suggested duration for <code>Keep-Alive</code>)
+    Idle connection timeout (in milliseconds) to apply if the server does not send <code>Keep-Alive</code> timeout headers.<br/>
+    Defaults to: <code>0</code> (no suggested duration for <code>Keep-Alived</code> connections)
 </property>
 <property name="httpclient4.validate_after_inactivity">
-    Check connections if the elapsed time (in milliseconds) since the last use of the connection
+    Check connection if the elapsed time (in milliseconds) since the last use of the connection
     exceeds this value.<br/>
-    Defaults to: <code>2000</code>
+    Defaults to: <code>1700</code>
 </property>
 <property name="httpclient4.time_to_live">
     <abbr title="time to live">TTL</abbr> (in milliseconds) represents an absolute value.
