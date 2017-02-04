@@ -188,13 +188,14 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonDataField.setWrapStyleWord(true);
 
         this.jsonDataPane = GuiUtils.makeScrollPane(jsonDataField);
-        jsonDataPane.setMinimumSize(new Dimension(100, 200));
+        jsonDataPane.setPreferredSize(new Dimension(100, 200));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 jsonDataPane, createJSonPathExtractorTasksPanel());
         mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         panel.add(mainSplit, BorderLayout.CENTER);
         return panel;
     }

@@ -172,13 +172,14 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         cssJqueryDataField.setWrapStyleWord(true);
 
         JScrollPane cssJqueryDataPane = GuiUtils.makeScrollPane(cssJqueryDataField);
-        cssJqueryDataPane.setMinimumSize(new Dimension(0, 200));
+        cssJqueryDataPane.setPreferredSize(new Dimension(0, 200));
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 cssJqueryDataPane, createCssJqueryTasksPanel());
-        mainSplit.setDividerLocation(300);
+        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
     }
