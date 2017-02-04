@@ -220,13 +220,14 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
         xmlDataField.setWrapStyleWord(true);
 
         this.xmlDataPane = GuiUtils.makeScrollPane(xmlDataField);
-        xmlDataPane.setMinimumSize(new Dimension(0, 400));
+        xmlDataPane.setPreferredSize(new Dimension(0, 200));
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 xmlDataPane, createXpathExtractorTasksPanel());
-        mainSplit.setDividerLocation(400);
+        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
     }
