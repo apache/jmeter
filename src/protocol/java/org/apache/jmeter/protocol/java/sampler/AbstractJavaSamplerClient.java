@@ -86,7 +86,6 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
         return log;
     }
     
-    @Deprecated
     protected org.slf4j.Logger getNewLogger() {
         return logger;
     }
