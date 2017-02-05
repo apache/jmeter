@@ -21,7 +21,9 @@ import java.util.EventListener;
 
 /**
  * GUI Log Event Listener.
+ * @since 3.2
  */
+@FunctionalInterface
 public interface GuiLogEventListener extends EventListener {
 
     /**
