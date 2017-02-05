@@ -96,6 +96,8 @@ import org.apache.jorphan.util.HeapDumper;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 
@@ -132,6 +134,8 @@ public class JMeter implements JMeterPlugin {
     private static final int JMETER_HOME_OPT    = 'd';// $NON-NLS-1$
     private static final int HELP_OPT           = 'h';// $NON-NLS-1$
     private static final int OPTIONS_OPT        = '?';// $NON-NLS-1$
+    // logging configuration file
+    private static final int JMLOGCONF_OPT      = 'i';// $NON-NLS-1$
     // jmeter.log
     private static final int JMLOGFILE_OPT      = 'j';// $NON-NLS-1$
     // sample result log file
@@ -161,6 +165,7 @@ public class JMeter implements JMeterPlugin {
     
     private static final String JMX_SUFFIX = ".JMX"; // $NON-NLS-1$
 
+    private static final String PACKAGE_PREFIX = "org.apache."; //$NON_NLS-1$
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -195,6 +200,9 @@ public class JMeter implements JMeterPlugin {
     private static final CLOptionDescriptor D_LOGFILE_OPT =
             new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
                     "the file to log samples to");
+    private static final CLOptionDescriptor D_JMLOGCONF_OPT =
+            new CLOptionDescriptor("jmeterlogconf", CLOptionDescriptor.ARGUMENT_REQUIRED, JMLOGCONF_OPT,
+                    "jmeter logging configuration file (log4j2.xml)");
     private static final CLOptionDescriptor D_JMLOGFILE_OPT =
             new CLOptionDescriptor("jmeterlogfile", CLOptionDescriptor.ARGUMENT_REQUIRED, JMLOGFILE_OPT,
                     "jmeter run log file (jmeter.log)");
@@ -287,6 +295,7 @@ public class JMeter implements JMeterPlugin {
             D_PROPFILE2_OPT,
             D_TESTFILE_OPT,
             D_LOGFILE_OPT,
+            D_JMLOGCONF_OPT,
             D_JMLOGFILE_OPT,
             D_NONGUI_OPT,
             D_SERVER_OPT,
@@ -413,16 +422,6 @@ public class JMeter implements JMeterPlugin {
         }
         try {
             initializeProperties(parser); // Also initialises JMeter logging
-            /*
-             * The following is needed for HTTPClient.
-             * (originally tried doing this in HTTPSampler2,
-             * but it appears that it was done too late when running in GUI mode)
-             * Set the commons logging default to Avalon Logkit, if not already defined
-             */
-            if (System.getProperty("org.apache.commons.logging.Log") == null) { // $NON-NLS-1$
-                System.setProperty("org.apache.commons.logging.Log" // $NON-NLS-1$
-                        , "org.apache.commons.logging.impl.LogKitLogger"); // $NON-NLS-1$
-            }
 
             Thread.setDefaultUncaughtExceptionHandler(
                     (Thread t, Throwable e) -> {
@@ -695,13 +694,6 @@ public class JMeter implements JMeterPlugin {
                     + "jmeter.properties");// $NON-NLS-1$
         }
 
-        if (parser.getArgumentById(JMLOGFILE_OPT) != null){
-            String jmlogfile=parser.getArgumentById(JMLOGFILE_OPT).getArgument();
-            jmlogfile = processLAST(jmlogfile, ".log");// $NON-NLS-1$
-            JMeterUtils.setProperty(LoggingManager.LOG_FILE,jmlogfile);
-        }
-
-        JMeterUtils.initLogging();
         JMeterUtils.initLocale();
         // Bug 33845 - allow direct override of Home dir
         if (parser.getArgumentById(JMETER_HOME_OPT) == null) {
@@ -723,7 +715,6 @@ public class JMeter implements JMeterPlugin {
                     Properties tmp = new Properties();
                     tmp.load(fis);
                     jmeterProps.putAll(tmp);
-                    LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
                 } catch (IOException e) {
                     log.warn("Error loading user property file: " + userProp, e);
                 }
@@ -763,7 +754,6 @@ public class JMeter implements JMeterPlugin {
                     Properties tmp = new Properties();
                     tmp.load(fis);
                     jmeterProps.putAll(tmp);
-                    LoggingManager.setLoggingLevels(tmp);//Do what would be done earlier
                 } catch (FileNotFoundException e) { // NOSONAR
                     log.warn("Can't find additional property file: " + name, e);
                 } catch (IOException e) { // NOSONAR
@@ -817,10 +807,24 @@ public class JMeter implements JMeterPlugin {
             case LOGLEVEL:
                 if (value.length() > 0) { // Set category
                     log.info("LogLevel: " + name + "=" + value);
-                    LoggingManager.setPriority(value, name);
+                    final Level logLevel = Level.getLevel(value);
+                    if (logLevel != null) {
+                        String loggerName = name;
+                        if (name.startsWith("jmeter") || name.startsWith("jorphan")) {
+                            loggerName = PACKAGE_PREFIX + name;
+                        }
+                        Configurator.setAllLevels(loggerName, logLevel);
+                    } else {
+                        log.warn("Invalid log level, '" + value + "' for '" + name + "'.");
+                    }
                 } else { // Set root level
                     log.warn("LogLevel: " + name);
-                    LoggingManager.setPriority(name);
+                    final Level logLevel = Level.getLevel(name);
+                    if (logLevel != null) {
+                        Configurator.setRootLevel(logLevel);
+                    } else {
+                        log.warn("Invalid log level, '" + name + "' for the root logger.");
+                    }
                 }
                 break;
             case REMOTE_STOP:
