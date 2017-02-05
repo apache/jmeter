@@ -27,7 +27,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
