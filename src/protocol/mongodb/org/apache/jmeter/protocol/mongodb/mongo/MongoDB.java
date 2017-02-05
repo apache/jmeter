@@ -20,8 +20,8 @@ package org.apache.jmeter.protocol.mongodb.mongo;
 
 import java.util.List;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
@@ -33,7 +33,7 @@ import com.mongodb.ServerAddress;
  */
 public class MongoDB {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MongoDB.class);
 
     // Mongo is Thread Safe
     private Mongo mongo = null;
