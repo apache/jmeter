@@ -24,7 +24,7 @@ package org.apache.log;
  * interface will be rewritten as a abstract class.
  *
  * @author Peter Donald
- * @deprecated
+ * @deprecated Will be dropped in 3.3 
  */
 @Deprecated
 public interface LogTarget
