@@ -17,9 +17,8 @@
  */
 package org.apache.jmeter.gui.logging;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GUI Log Event Bus.
@@ -30,7 +29,7 @@ public class GuiLogEventBus {
     /**
      * Registered GUI log event listeners array.
      */
-    private GuiLogEventListener [] listeners;
+    private List<GuiLogEventListener> listeners = new ArrayList<>();
 
     /**
      * Default constructor.
@@ -44,14 +43,7 @@ public class GuiLogEventBus {
      * @param listener a GUI log event listener ({@link GuiLogEventListener})
      */
     public void registerEventListener(GuiLogEventListener listener) {
-        if (listeners == null) {
-            listeners = new GuiLogEventListener[] { listener };
-        } else {
-            Set<GuiLogEventListener> set = new LinkedHashSet<>(Arrays.asList(listeners));
-            set.add(listener);
-            GuiLogEventListener [] arr = new GuiLogEventListener[set.size()];
-            listeners = set.toArray(arr);
-        }
+        listeners.add(listener);
     }
 
     /**
@@ -59,12 +51,7 @@ public class GuiLogEventBus {
      * @param listener a GUI log event listener ({@link GuiLogEventListener})
      */
     public void unregisterEventListener(GuiLogEventListener listener) {
-        if (listeners != null) {
-            Set<GuiLogEventListener> set = new LinkedHashSet<>(Arrays.asList(listeners));
-            set.remove(listener);
-            GuiLogEventListener [] arr = new GuiLogEventListener[set.size()];
-            listeners = set.toArray(arr);
-        }
+        listeners.remove(listener);
     }
 
     /**
@@ -72,10 +59,8 @@ public class GuiLogEventBus {
      * @param logEvent log event object
      */
     public void postEvent(LogEventObject logEventObject) {
-        if (listeners != null) {
-            for (GuiLogEventListener listener : listeners) {
-                listener.processLogEvent(logEventObject);
-            }
+        for (GuiLogEventListener listener : listeners) {
+            listener.processLogEvent(logEventObject);
         }
     }
 }
