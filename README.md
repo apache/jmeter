@@ -5,7 +5,7 @@
 
 Apache JMeter is a 100% pure Java application designed to test
 and measure performance.  It may be used as a highly portable 
-server benchmark as well as multiclient load generator.
+server benchmark as well as multi-client load generator.
 
 Apache JMeter features include:
 
@@ -20,17 +20,17 @@ Ability to load and performance test many different server/protocol types:
  -  Native commands or shell scripts
  -  TCP
 
-Full multithreading framework allows concurrent sampling by many threads
+Full multi-threading framework allows concurrent sampling by many threads
 and simultaneous sampling of different functions by separate thread groups.
 Careful GUI design allows faster Test Plan building and debugging.
 Caching and offline analysis/replaying of test results.
 
 Highly Extensible core:
  -  Pluggable Samplers allow unlimited testing capabilities.
- -  Several load statistics may be chosen with pluggable timers .
- -  Data analysis and visualization plugins allow great extensibility as well as personalization.
+ -  Several load statistics may be chosen with pluggable timers.
+ -  Data analysis and visualization plugins allow great extensibility and personalization.
  -  Functions can be used to provide dynamic input to a test or provide data manipulation.
- -  Scriptable Samplers (BeanShell, BSF- and JSR223- compatible languages)
+ -  Scriptable Samplers (Groovy, BeanShell, BSF- and JSR223- compatible languages)
 
 
 ## The Latest Version
@@ -42,49 +42,48 @@ Project web site (http://jmeter.apache.org/).
 
 The following requirements exist for running Apache JMeter:
 
- -  Java Interpreter:
+*  Java Interpreter:
 
     A fully compliant Java 8 (or later) Runtime Environment is required 
     for Apache JMeter to execute.
 
- -  Optional jars:
+*  Optional jars:
 
     Some jars are not included with JMeter.
     If required, these should be downloaded and placed in the lib directory
 
-    + JDBC - available from database supplier
-    + JMS - available from the JMS provider
-    + Bouncy Castle - available from http://www.bouncycastle.org/latest_releases.html
+    * JDBC - available from the database supplier
+    * JMS - available from the JMS provider
+    * [Bouncy Castle](http://www.bouncycastle.org/latest_releases.html) - 
+    only needed for SMIME Assertion
 
-      (currently only needed for SMIME Assertion)
-
- -  Java Compiler [OPTIONAL]:
+*  Java Compiler (OPTIONAL):
 
     A Java compiler is not needed since the distribution includes a
     precompiled Java binary archive. _Note that a compiler is required
-    if you plan to build plugins for Apache JMeter._
+    to build plugins for Apache JMeter._
 
 ## Installation Instructions
 
 _Note that spaces in directory names can cause problems._
 
- - Release builds
+ * Release builds
 
    Unpack the binary archive into a suitable directory structure.
 
 ## Running JMeter
 
-Change to the bin directory
-Run the jmeter (Un\*x) or jmeter.bat (Windows) file.
+1. Change to the `bin` directory
+2. Run the `jmeter` (Un\*x) or `jmeter.bat` (Windows) file.
 
-For Windows there are also some other scripts.
-Drag-drop a JMX file onto one of them:
+### Windows
 
-`jmeter-n.cmd` - runs the file as a non-GUI test
+For Windows there are also some other scripts which you can drag-and-drop
+a JMX file onto:
 
-`jmeter-n-r.cmd` - runs the file as a non-GUI remote (client-server) test
-
-`jmeter-t.cmd` - loads the file ready to run it as a GUI test
+* `jmeter-n.cmd` - runs the file as a non-GUI test
+* `jmeter-n-r.cmd` - runs the file as a non-GUI remote (client-server) test
+* `jmeter-t.cmd` - loads the file ready to run it as a GUI test
 
 ## Documentation
 
@@ -94,12 +93,12 @@ and it may be browsed starting from the file called `index.html`.
 
 ## Build instructions
 
- - Release builds
+### Release builds
 
-   Unpack the source archive into a suitable directory structure.
-   Most of the 3rd party library files can be extracted from the binary archive
-   by unpacking it into the same directory structure.
-   You can also use Ant to download the required library files:
+Unpack the source archive into a suitable directory structure.
+Most of the 3rd party library files can be extracted from the binary archive
+by unpacking it into the same directory structure.
+You can also use Ant to download the required library files:
 
 ```sh
 ant download_jars
@@ -107,11 +106,13 @@ ant download_jars
 
 Any optional jars (see above) should be placed in `lib/opt` and/or `lib`.
 
-Jars in `lib/opt` will be used for building JMeter and running the unit test,
+Jars in `lib/opt` will be used for building JMeter and running the unit tests,
 but won't be used at run-time.
 
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
+
+### Test builds
 
 JMeter is built using Ant.
 
@@ -120,13 +121,13 @@ Change to the top-level directory and issue the command:
 ```sh
 ant download_jars
 ```
-_Only needs to be done once; will download any missing 3rd party jars_
+_This only needs to be done once; it will download any missing 3rd party jars._
 
 ```sh
 ant
 ```
 
-This will compile the application and enable you to run jmeter from the `bin`
+This will compile the application and enable you to run `jmeter` from the `bin`
 directory.
 
 ```sh
@@ -143,13 +144,13 @@ The code is maintained in SVN at https://svn.apache.org/repos/asf/jmeter/trunk
 
 There is a read-only mirror at GitHub: https://github.com/apache/jmeter
 
-## Licensing and legal issues
+## Licensing and legal information
 
-For legal and licensing issues, please look the files:
+For legal and licensing information, please see the following files:
 
-[LICENSE](LICENSE)
+* [LICENSE](LICENSE)
 
-[NOTICE](NOTICE)
+* [NOTICE](NOTICE)
 
 ## Cryptographic Software Notice
 
@@ -189,5 +190,3 @@ may be subject to export controls on cryptographic software:
 
 
 **Thank you for using Apache JMeter.**
-
-This closes #249
