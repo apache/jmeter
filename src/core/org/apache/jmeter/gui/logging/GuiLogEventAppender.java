@@ -33,6 +33,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
  * Posts log events to a {@link GuiLogEventBus}.
+ * @since 3.2
  */
 @Plugin(name = "GuiLogEvent", category = "Core", elementType = "appender", printObject = true)
 public class GuiLogEventAppender extends AbstractAppender {
