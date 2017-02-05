@@ -86,6 +86,13 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
         return log;
     }
     
+    /**
+     * Get a Logger instance which can be used by subclasses to log information.
+     * This is the same Logger which is used by the base JavaSampler classes
+     * (jmeter.protocol.java).
+     *
+     * @return {@link org.slf4j.Logger}  instance which can be used for logging
+     */
     protected org.slf4j.Logger getNewLogger() {
         return logger;
     }
