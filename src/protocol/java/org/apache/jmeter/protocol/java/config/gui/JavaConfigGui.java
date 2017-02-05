@@ -48,9 +48,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <code>JavaConfigGui</code> class provides the user interface for the
@@ -61,7 +61,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     private static final long serialVersionUID = 241L;
 
     /** Logging */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JavaConfigGui.class);
 
     /** A combo box allowing the user to choose a test class. */
     private JLabeledChoice classNameLabeledChoice;
