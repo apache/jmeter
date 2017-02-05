@@ -20,8 +20,9 @@ package org.apache.jmeter.protocol.smtp.sampler.protocol;
 
 import javax.mail.event.TransportAdapter;
 import javax.mail.event.TransportEvent;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger; // this comes out of logkit.jar and not
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a listener for SMTP events and a monitor for all
@@ -31,7 +32,7 @@ import org.apache.log.Logger; // this comes out of logkit.jar and not
  */
 public class SynchronousTransportListener extends TransportAdapter {
 
-    private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger logger = LoggerFactory.getLogger(SynchronousTransportListener.class);
 
     private boolean finished = false;
 
