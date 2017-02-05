@@ -28,8 +28,8 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <code>JavaTest</code> class is a simple sampler which is intended for
@@ -70,9 +70,9 @@ import org.apache.log.Logger;
 
 public class JavaTest extends AbstractJavaSamplerClient implements Serializable, Interruptible {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(JavaTest.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     /** The base number of milliseconds to sleep during each sample. */
     private long sleepTime;

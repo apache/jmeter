@@ -31,7 +31,6 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
  * {@link org.apache.jmeter.protocol.java.sampler.JavaSamplerClient} instance to
  * perform performance test samples.
  *
- * @version $Revision$
  */
 public class JavaConfig extends ConfigTestElement implements Serializable {
 
