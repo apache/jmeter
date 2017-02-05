@@ -56,8 +56,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GuiPackage is a static class that provides convenient access to information
@@ -70,7 +70,7 @@ import org.apache.log.Logger;
  */
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(GuiPackage.class);
 
     /** Singleton instance. */
     private static GuiPackage guiPack;
@@ -871,16 +871,16 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public TreeNodeNamingPolicy getNamingPolicy() {
         if(namingPolicy == null) {
-            final String NAMING_POLICY_IMPLEMENTATION = 
+            final String namingPolicyImplementation = 
                     JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
                             DefaultTreeNodeNamingPolicy.class.getName());
 
             try {
-                Class<?> implementationClass = Class.forName(NAMING_POLICY_IMPLEMENTATION);
+                Class<?> implementationClass = Class.forName(namingPolicyImplementation);
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
                 
             } catch (Exception ex) {
-                log.error("Failed to create configured naming policy:"+NAMING_POLICY_IMPLEMENTATION+", will use default one", ex);
+                log.error("Failed to create configured naming policy:"+namingPolicyImplementation+", will use default one", ex);
                 this.namingPolicy = new DefaultTreeNodeNamingPolicy();
             }
         }
