@@ -45,9 +45,6 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpMirrorServer extends Thread implements Stoppable {
 
-    // Make sure this logger being initialized and used only after logging framework initialized.
-    private static Logger _log;
-
     private static final int OPTIONS_OPT        = '?';// $NON-NLS-1$
     private static final int PORT_OPT           = 'P';// $NON-NLS-1$
     private static final int LOGLEVEL_OPT       = 'L';// $NON-NLS-1$
@@ -81,6 +78,13 @@ public class HttpMirrorServer extends Thread implements Stoppable {
     private static final int ACCEPT_TIMEOUT = 1000;
 
     private static final long KEEP_ALIVE_TIME = 10;
+
+    /**
+     * Initialization On Demand Holder pattern
+     */
+    private static class LazyHolder {
+        public static final Logger LOGGER = LoggerFactory.getLogger(HttpMirrorServer.class);
+    }
 
     /** The port to listen on. */
     private final int daemonPort;
@@ -267,9 +271,6 @@ public class HttpMirrorServer extends Thread implements Stoppable {
     }
 
     private static Logger getLogger() {
-        if (_log == null) {
-            _log = LoggerFactory.getLogger(HttpMirrorServer.class);
-        }
-        return _log;
+        return LazyHolder.LOGGER;
     }
 }
