@@ -24,6 +24,7 @@ import org.apache.logging.log4j.core.LogEvent;
 
 /**
  * Log event object.
+ * @since 3.2
  */
 public class LogEventObject extends EventObject {
 

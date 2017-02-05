@@ -23,6 +23,7 @@ import java.util.Set;
 
 /**
  * GUI Log Event Bus.
+ * @since 3.2
  */
 public class GuiLogEventBus {
 
@@ -35,6 +36,7 @@ public class GuiLogEventBus {
      * Default constructor.
      */
     public GuiLogEventBus() {
+        super();
     }
 
     /**
