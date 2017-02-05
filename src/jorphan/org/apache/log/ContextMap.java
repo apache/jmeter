@@ -37,7 +37,7 @@ import java.util.Hashtable;
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @author Peter Donald
- * @deprecated
+ * @deprecated Will be dropped in 3.3 
  */
 @Deprecated
 public final class ContextMap
