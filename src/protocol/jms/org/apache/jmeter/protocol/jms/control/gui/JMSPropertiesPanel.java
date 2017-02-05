@@ -35,7 +35,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
-import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperty;
 import org.apache.jmeter.testelement.TestElement;
