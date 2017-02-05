@@ -47,8 +47,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class performs all tasks necessary to send a message (build message,
@@ -59,8 +59,8 @@ import org.apache.log.Logger;
 public class SendMailCommand {
 
     // local vars
-    private static final Logger logger = LoggingManager.getLoggerForClass();
-
+    private static final Logger logger = LoggerFactory.getLogger(SendMailCommand.class);
+ 
     // Use the actual class so the name must be correct.
     private static final String TRUST_ALL_SOCKET_FACTORY = TrustAllSSLSocketFactory.class.getName();
 
