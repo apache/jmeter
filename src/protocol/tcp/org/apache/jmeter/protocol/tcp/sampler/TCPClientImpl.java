@@ -34,8 +34,8 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sample TCPClient implementation.
@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  * The EOL byte is defined by the property "tcp.eolByte".
  */
 public class TCPClientImpl extends AbstractTCPClient {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TCPClientImpl.class);
 
     private static final int EOL_INT = JMeterUtils.getPropDefault("tcp.eolByte", 1000); // $NON-NLS-1$
     private static final String CHARSET = JMeterUtils.getPropDefault("tcp.charset", Charset.defaultCharset().name()); // $NON-NLS-1$
