@@ -21,8 +21,8 @@ package org.apache.jmeter.protocol.ldap.sampler;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.NamingException;
 import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
@@ -31,8 +31,8 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*******************************************************************************
  *
@@ -43,11 +43,10 @@ import org.apache.log.Logger;
  * company Siemens Netherlands N.V..
  *
  * Based on the work of: author T.Elanjchezhiyan(chezhiyan@siptech.co.in)
- * created Apr 29 2003 11:00 AM company Sip Technologies and Exports Ltd.
  *
  ******************************************************************************/
 public class LdapExtClient {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LdapExtClient.class);
 
     private static final String CONTEXT_IS_NULL = "Context is null";
 
