@@ -150,9 +150,8 @@ public class TestDNSCacheManager extends JMeterTestCase {
             InetAddress[] result = original.resolve("www.example.org");
             Assert.assertNotNull(result);
             Assert.assertNull(original.resolver);
-            // IPv4 and IPv6
-            // Disable this test because error if no IPv6 network available
-            //Assert.assertTrue(result.length == 2);
+            // IPv4 and/or IPv6
+            Assert.assertTrue(result.length>0);
         } catch (UnknownHostException e) {
             Assert.fail("Should not have failed");
         }
