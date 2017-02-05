@@ -80,6 +80,8 @@ import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.LoadDraggedFile;
+import org.apache.jmeter.gui.logging.GuiLogEventListener;
+import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.tree.JMeterCellRenderer;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -98,10 +100,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.LogEvent;
-import org.apache.log.LogTarget;
 import org.apache.log.Logger;
-import org.apache.log.Priority;
 
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
@@ -508,10 +507,8 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
 
         logPanel = createLoggerPanel();
         errorsAndFatalsCounterLogTarget = new ErrorsAndFatalsCounterLogTarget();
-        LoggingManager.addLogTargetToRootLogger(new LogTarget[]{
-                logPanel,
-                errorsAndFatalsCounterLogTarget
-        });
+        GuiPackage.getInstance().getLogEventBus().registerEventListener(logPanel);
+        GuiPackage.getInstance().getLogEventBus().registerEventListener(errorsAndFatalsCounterLogTarget);
 
         topAndDown.setTopComponent(mainPanel);
         topAndDown.setBottomComponent(logPanel);
@@ -814,15 +811,14 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     }
 
     /**
-     *
+     * ErrorsAndFatalsCounterLogTarget.
      */
-    public final class ErrorsAndFatalsCounterLogTarget implements LogTarget, Clearable {
+    public final class ErrorsAndFatalsCounterLogTarget implements GuiLogEventListener, Clearable {
         public AtomicInteger errorOrFatal = new AtomicInteger(0);
 
         @Override
-        public void processEvent(LogEvent event) {
-            if(event.getPriority().equals(Priority.ERROR) ||
-                    event.getPriority().equals(Priority.FATAL_ERROR)) {
+        public void processLogEvent(LogEventObject logEventObject) {
+            if (logEventObject.isMoreSpecificThanError()) {
                 final int newValue = errorOrFatal.incrementAndGet();
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -845,6 +841,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 }
             });
         }
+
     }
 
 

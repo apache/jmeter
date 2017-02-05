@@ -25,14 +25,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.StringWriter;
-
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.Calculator;
-import org.apache.log.LogTarget;
-import org.apache.log.format.Formatter;
-import org.apache.log.format.RawFormatter;
-import org.apache.log.output.io.WriterTarget;
+import org.apache.jmeter.util.LogRecordingDelegatingLogger;
 import org.junit.Test;
 
 // TODO need more tests - particularly for the new functions
@@ -107,14 +102,16 @@ public class TestSampleResult {
             }
         }
 
-        private static final Formatter fmt = new RawFormatter();
-
-        private StringWriter wr = null;
+        private LogRecordingDelegatingLogger recordLogger;
 
         private void divertLog() {// N.B. This needs to divert the log for SampleResult
-            wr = new StringWriter(1000);
-            LogTarget[] lt = { new WriterTarget(wr, fmt) };
-            SampleResult.log.setLogTargets(lt);
+            if (SampleResult.log instanceof LogRecordingDelegatingLogger) {
+                recordLogger = (LogRecordingDelegatingLogger) SampleResult.log;
+            } else {
+                recordLogger = new LogRecordingDelegatingLogger(SampleResult.log);
+                SampleResult.log = recordLogger;
+            }
+            recordLogger.clearLogRecords();
         }
 
         @Test
@@ -123,9 +120,9 @@ public class TestSampleResult {
             SampleResult res = new SampleResult(true);
             res.sampleStart();
             res.samplePause();
-            assertEquals(0, wr.toString().length());
+            assertEquals(0, recordLogger.getLogRecordCount());
             res.samplePause();
-            assertNotEquals(0, wr.toString().length());
+            assertNotEquals(0, recordLogger.getLogRecordCount());
         }
 
         @Test
@@ -134,9 +131,9 @@ public class TestSampleResult {
             SampleResult res = new SampleResult(false);
             res.sampleStart();
             res.samplePause();
-            assertEquals(0, wr.toString().length());
+            assertEquals(0, recordLogger.getLogRecordCount());
             res.samplePause();
-            assertNotEquals(0, wr.toString().length());
+            assertNotEquals(0, recordLogger.getLogRecordCount());
         }
         
         @Test
