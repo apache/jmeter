@@ -55,9 +55,9 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.XMLBuffer;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*******************************************************************************
  * Ldap Sampler class is main class for the LDAP test. This will control all the
@@ -65,7 +65,7 @@ import org.apache.log.Logger;
  ******************************************************************************/
 public class LDAPExtSampler extends AbstractSampler implements TestStateListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LDAPExtSampler.class);
 
     private static final long serialVersionUID = 240L;
 
