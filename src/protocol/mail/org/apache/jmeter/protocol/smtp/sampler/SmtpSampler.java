@@ -51,8 +51,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sampler-Class for JMeter - builds, starts and interprets the results of the
@@ -68,7 +68,7 @@ public class SmtpSampler extends AbstractSampler {
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SmtpSampler.class);
 
     //+JMX file attribute names - do not change any values!
     public static final String SERVER               = "SMTPSampler.server"; // $NON-NLS-1$
