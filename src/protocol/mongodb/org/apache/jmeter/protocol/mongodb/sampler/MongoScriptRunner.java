@@ -18,8 +18,9 @@
 
 package org.apache.jmeter.protocol.mongodb.sampler;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mongodb.DB;
 
@@ -27,7 +28,7 @@ import com.mongodb.DB;
  */
 public class MongoScriptRunner {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MongoScriptRunner.class);
 
     public MongoScriptRunner() {
         super();
