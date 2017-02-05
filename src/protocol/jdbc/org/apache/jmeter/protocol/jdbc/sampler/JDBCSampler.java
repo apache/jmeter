@@ -34,9 +34,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 
 /**
  * A sampler which understands JDBC database requests.
@@ -48,8 +46,6 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
     
     private static final long serialVersionUID = 234L;
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
-
     /**
      * Creates a JDBCSampler.
      */
@@ -58,8 +54,6 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
 
     @Override
     public SampleResult sample(Entry e) {
-        log.debug("sampling jdbc");
-
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.setSamplerData(toString());

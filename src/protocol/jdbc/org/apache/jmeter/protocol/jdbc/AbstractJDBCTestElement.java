@@ -50,8 +50,8 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A base class for all JDBC test elements handling the basics of a SQL request.
@@ -60,7 +60,7 @@ import org.apache.log.Logger;
 public abstract class AbstractJDBCTestElement extends AbstractTestElement implements TestStateListener{
     private static final long serialVersionUID = 235L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AbstractJDBCTestElement.class);
 
     private static final String COMMA = ","; // $NON-NLS-1$
     private static final char COMMA_CHAR = ',';
@@ -161,7 +161,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
      * @throws UnsupportedOperationException if the user provided incorrect query type
      */
     protected byte[] execute(Connection conn, SampleResult sample) throws SQLException, IOException, UnsupportedOperationException {
-        log.debug("executing jdbc");
+        log.debug("executing jdbc:{}", getQuery());
         // Based on query return value, get results
         String _queryType = getQueryType();
         if (SELECT.equals(_queryType)) {
@@ -329,7 +329,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 }
             }
         } catch (IOException e) {
-            log.warn("Could not read CLOB into " + name, e);
+            log.warn("Could not read CLOB into {}", name, e);
         }
     }
 
@@ -341,7 +341,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 jmvars.putObject(name,
                         IOUtils.toByteArray(blob.getBinaryStream(0, length)));
             } catch (IOException e) {
-                log.warn("Could not read BLOB into " + name + " as object.", e);
+                log.warn("Could not read BLOB into {} as object.", name, e);
             }
         } else if (RS_COUNT_RECORDS.equals(resultSetHandler)) {
             jmvars.put(name, blob.length() + " bytes");
@@ -352,7 +352,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                     jmvars.put(name, IOUtils.toString(is, ENCODING));
                 }
             } catch (IOException e) {
-                log.warn("Can't convert BLOB to String using " + ENCODING, e);
+                log.warn("Can't convert BLOB to String using {}", ENCODING, e);
             }
         }
     }
@@ -597,7 +597,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 s.close();
             }
         } catch (SQLException e) {
-            log.warn("Error closing Statement " + (s != null ? s.toString() : "null"), e);
+            log.warn("Error closing Statement {}", (s != null ? s.toString() : "null"), e);
         }
     }
 
