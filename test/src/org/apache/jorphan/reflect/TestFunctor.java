@@ -25,8 +25,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -92,7 +93,7 @@ public class TestFunctor extends JMeterTestCase {
     
     @Before
     public void setUp(){
-        LoggingManager.setPriority("FATAL_ERROR",LoggingManager.removePrefix(Functor.class.getName()));     
+        Configurator.setAllLevels(Functor.class.getName(), Level.FATAL);
     }
 
     @Test
