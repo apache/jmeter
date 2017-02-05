@@ -141,21 +141,20 @@ public class JMeterUtils implements UnitTestManager {
      * @return the Properties from the file
      * @see #getJMeterProperties()
      * @see #loadJMeterProperties(String)
-     * @see #initLogging()
      * @see #initLocale()
      */
     public static Properties getProperties(String file) {
         loadJMeterProperties(file);
-        initLogging();
         initLocale();
         return appProperties;
     }
 
     /**
      * Initialise JMeter logging
+     * @deprecated
      */
+    @Deprecated
     public static void initLogging() {
-        LoggingManager.initializeLogging(appProperties);
     }
 
     /**

@@ -27,25 +27,21 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import org.apache.jmeter.gui.logging.GuiLogEventListener;
+import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.LogEvent;
-import org.apache.log.LogTarget;
-import org.apache.log.format.PatternFormatter;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  * Panel that shows log events
  */
-public class LoggerPanel extends JPanel implements LogTarget {
+public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     private static final long serialVersionUID = 6911128494402594429L;
 
     private final JTextArea textArea;
-
-    private final PatternFormatter format;
 
     // Limit length of log content
     private static final int LOGGER_PANEL_MAX_LENGTH =
@@ -60,7 +56,6 @@ public class LoggerPanel extends JPanel implements LogTarget {
      */
     public LoggerPanel() {
         textArea = init();
-        format = new PatternFormatter(LoggingManager.DEFAULT_PATTERN + "\n"); // $NON-NLS-1$
     }
 
     private JTextArea init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -93,19 +88,19 @@ public class LoggerPanel extends JPanel implements LogTarget {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.log.LogTarget#processEvent(org.apache.log.LogEvent)
+     * @see org.apache.jmeter.gui.logging.GuiLogEventListener#processLogEvent(org.apache.jmeter.gui.logging.LogEventObject)
      */
     @Override
-    public void processEvent(final LogEvent logEvent) {
+    public void processLogEvent(final LogEventObject logEventObject) {
         if(!LOGGER_PANEL_RECEIVE_WHEN_CLOSED && !GuiPackage.getInstance().getMenuItemLoggerPanel().getModel().isSelected()) {
             return;
         }
-        
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 synchronized (textArea) {
-                    textArea.append(format.format(logEvent));
+                    textArea.append(logEventObject.toString());
                     int currentLength = textArea.getText().length();
                     // If LOGGER_PANEL_MAX_LENGTH is 0, it means all log events are kept
                     if(LOGGER_PANEL_MAX_LENGTH != 0 && currentLength> LOGGER_PANEL_MAX_LENGTH) {

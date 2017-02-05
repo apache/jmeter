@@ -39,6 +39,7 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.UndoHistory.HistoryListener;
 import org.apache.jmeter.gui.action.TreeNodeNamingPolicy;
 import org.apache.jmeter.gui.action.impl.DefaultTreeNodeNamingPolicy;
+import org.apache.jmeter.gui.logging.GuiLogEventBus;
 import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
@@ -70,10 +71,6 @@ import org.apache.log.Logger;
 public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     /** Logging. */
     private static final Logger log = LoggingManager.getLoggerForClass();
-
-    private static final String NAMING_POLICY_IMPLEMENTATION = 
-            JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
-                    DefaultTreeNodeNamingPolicy.class.getName());
 
     /** Singleton instance. */
     private static GuiPackage guiPack;
@@ -133,6 +130,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * History for tree states
      */
     private UndoHistory undoHistory = new UndoHistory();
+
+    /**
+     * GUI Logging Event Bus.
+     */
+    private GuiLogEventBus logEventBus = new GuiLogEventBus();
 
     /**
      * Private constructor to permit instantiation only from within this class.
@@ -869,6 +871,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public TreeNodeNamingPolicy getNamingPolicy() {
         if(namingPolicy == null) {
+            final String NAMING_POLICY_IMPLEMENTATION = 
+                    JMeterUtils.getPropDefault("naming_policy.impl", //$NON-NLS-1$ 
+                            DefaultTreeNodeNamingPolicy.class.getName());
+
             try {
                 Class<?> implementationClass = Class.forName(NAMING_POLICY_IMPLEMENTATION);
                 this.namingPolicy = (TreeNodeNamingPolicy) implementationClass.newInstance();
@@ -881,4 +887,11 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         return namingPolicy;
     }
 
+    /**
+     * Return {@link GuiLogEventBus}.
+     * @return {@link GuiLogEventBus}
+     */
+    public GuiLogEventBus getLogEventBus() {
+        return logEventBus;
+    }
 }
