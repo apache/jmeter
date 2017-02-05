@@ -39,8 +39,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements the JMS Subscriber sampler.
@@ -59,7 +59,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SubscriberSampler.class);
 
     // Default wait (ms) for a message if timeouts are not enabled
     // This is the maximum time the sampler can be blocked.
@@ -187,7 +187,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 }
             } catch (JMSException e) {
                 String errorCode = Optional.ofNullable(e.getErrorCode()).orElse("");
-                log.warn(String.format("Error [%s] %s", errorCode, e.toString()), e);
+                log.warn("Error [{}] {}", errorCode, e.toString(), e);
 
                 handleErrorAndAddTemporize(getIsReconnectErrorCode().test(errorCode));
             }
@@ -245,7 +245,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                     Thread.sleep(pause);
                 }
             } catch (InterruptedException ie) {
-                log.warn(String.format("Interrupted %s", ie.toString()), ie);
+                log.warn("Interrupted {}", ie.toString(), ie);
                 Thread.currentThread().interrupt();
                 interrupted = true;
             }
