@@ -27,8 +27,8 @@ import org.apache.jmeter.protocol.mongodb.mongo.MongoUtils;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mongodb.MongoClientOptions;
 import com.mongodb.WriteConcern;
@@ -44,7 +44,7 @@ public class MongoSourceElement
      */
     private static final long serialVersionUID = 2100L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MongoSourceElement.class);
 
     private String connection;
     private String source;

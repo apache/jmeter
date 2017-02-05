@@ -25,8 +25,8 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mongodb.DB;
 
@@ -38,7 +38,7 @@ public class MongoScriptSampler
 
     private static final long serialVersionUID = -7789012234636439896L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MongoScriptSampler.class);
 
     public final static String SOURCE = "MongoScriptSampler.source"; //$NON-NLS-1$
 
