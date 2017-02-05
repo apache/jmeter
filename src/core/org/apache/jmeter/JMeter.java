@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -147,6 +148,7 @@ public class JMeter implements JMeterPlugin {
     private static final int REPORT_GENERATING_OPT  = 'g';// $NON-NLS-1$
     private static final int REPORT_AT_END_OPT      = 'e';// $NON-NLS-1$
     private static final int REPORT_OUTPUT_FOLDER_OPT      = 'o';// $NON-NLS-1$
+    private static final int FORCE_DELETE_RESULT_FILE      = 'f';// $NON-NLS-1$
     
     private static final int SYSTEM_PROPERTY    = 'D';// $NON-NLS-1$
     private static final int JMETER_GLOBAL_PROP = 'G';// $NON-NLS-1$
@@ -160,7 +162,6 @@ public class JMeter implements JMeterPlugin {
     private static final int REMOTE_STOP        = 'X';// $NON-NLS-1$
     
     private static final String JMX_SUFFIX = ".JMX"; // $NON-NLS-1$
-
 
     /**
      * Define the understood options. Each CLOptionDescriptor contains:
@@ -264,6 +265,10 @@ public class JMeter implements JMeterPlugin {
             new CLOptionDescriptor("reportoutputfolder",
                     CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_OUTPUT_FOLDER_OPT,
                     "output folder for report dashboard");
+    private static final CLOptionDescriptor D_FORCE_DELETE_RESULT_FILE =
+            new CLOptionDescriptor("forceDeleteResultFile",
+                    CLOptionDescriptor.ARGUMENT_DISALLOWED, FORCE_DELETE_RESULT_FILE,
+                    "force delete existing result file before start the test");
 
     private static final String[][] DEFAULT_ICONS = {
             { "org.apache.jmeter.control.gui.TestPlanGui",               "org/apache/jmeter/images/beaker.gif" },     //$NON-NLS-1$ $NON-NLS-2$
@@ -299,6 +304,7 @@ public class JMeter implements JMeterPlugin {
             D_JMETER_GLOBAL_PROP,
             D_SYSTEM_PROPERTY,
             D_SYSTEM_PROPFILE,
+            D_FORCE_DELETE_RESULT_FILE,
             D_LOGLEVEL,
             D_REMOTE_OPT,
             D_REMOTE_OPT_PARAM,
@@ -313,7 +319,10 @@ public class JMeter implements JMeterPlugin {
     private Properties remoteProps; 
 
     /** should remote engines be stopped at end of non-GUI test? */
-    private boolean remoteStop; 
+    private boolean remoteStop;
+
+    /** should delete result file before start ? */
+	private boolean deleteResultFile; 
 
     public JMeter() {
         super();
@@ -826,6 +835,9 @@ public class JMeter implements JMeterPlugin {
             case REMOTE_STOP:
                 remoteStop = true;
                 break;
+            case FORCE_DELETE_RESULT_FILE:
+                deleteResultFile = true;
+                break;
             default:
                 // ignored
                 break;
@@ -907,6 +919,19 @@ public class JMeter implements JMeterPlugin {
             // Remove the disabled items
             // For GUI runs this is done in Start.java
             convertSubTree(tree);
+            
+            if (deleteResultFile) {
+                SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
+                tree.traverse(resultListeners);
+                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
+                while (irc.hasNext()) {
+                    ResultCollector rc = irc.next();
+                    File resultFile = new File(rc.getFilename());
+                    if (resultFile.exists()) {
+                        resultFile.delete();
+                    }
+                }
+            }
 
             Summariser summer = null;
             String summariserName = JMeterUtils.getPropDefault("summariser.name", "");//$NON-NLS-1$
@@ -934,7 +959,7 @@ public class JMeter implements JMeterPlugin {
             // Summariser uses this feature to compute correctly number of threads 
             // when NON GUI mode is used
             tree.add(tree.getArray()[0], new RemoteThreadsListenerTestElement());
-
+            
             List<JMeterEngine> engines = new LinkedList<>();
             tree.add(tree.getArray()[0], new ListenToTest(remoteStart && remoteStop ? engines : null, reportGenerator));
             println("Created the tree successfully using "+testFile);
