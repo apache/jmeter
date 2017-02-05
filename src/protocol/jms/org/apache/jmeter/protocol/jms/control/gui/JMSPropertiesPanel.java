@@ -35,13 +35,14 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperty;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles input for Jms Properties
@@ -51,7 +52,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = -2893899384410289131L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JMSPropertiesPanel.class);
 
     private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
 
@@ -311,9 +312,7 @@ public class JMSPropertiesPanel extends JPanel implements ActionListener {
         @Override
         public void setValueAt(Object value, int row, int column) {
             JMSProperty property = jmsProperties.getJmsProperty(row);
-            if(log.isDebugEnabled()) {
-                log.debug("Setting jms property value: " + value);
-            }
+            log.debug("Setting jms property value: {}", value);
             switch (column){
                 case COL_NAME:
                     property.setName((String)value);

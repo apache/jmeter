@@ -45,8 +45,8 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements the JMS Point-to-Point sampler
@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
 
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger LOGGER = LoggerFactory.getLogger(JMSSampler.class);
 
     private static final long serialVersionUID = 233L;
 
@@ -330,7 +330,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (!(obj instanceof QueueConnectionFactory)) {
                 String msg = "QueueConnectionFactory expected, but got "
                     + (obj != null ? obj.getClass().getName() : "null");
-                LOGGER.fatalError(msg);
+                LOGGER.error(msg);
                 throw new IllegalStateException(msg);
             }
             QueueConnectionFactory factory = (QueueConnectionFactory) obj;
@@ -357,9 +357,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
 
             session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Session created");
-            }
+            LOGGER.debug("Session created");
 
             if (isOneway()) {
                 producer = session.createSender(sendQueue);
@@ -377,15 +375,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                     executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
                 }
             }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Starting connection");
-            }
+            LOGGER.debug("Starting connection");
 
             connection.start();
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Connection started");
-            }
+            LOGGER.debug("Connection started");
         } catch (Exception | NoClassDefFoundError e) {
             thrown = e;
             LOGGER.error(e.getLocalizedMessage(), e);
@@ -396,15 +390,11 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         Hashtable<String, String> table = new Hashtable<>();
 
         if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Using InitialContext [" + getInitialContextFactory() + "]");
-            }
+            LOGGER.debug("Using InitialContext [{}]", getInitialContextFactory());
             table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
         }
         if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Using Provider [" + getContextProvider() + "]");
-            }
+            LOGGER.debug("Using Provider [{}]", getContextProvider());
             table.put(Context.PROVIDER_URL, getContextProvider());
         }
         Map<String, String> map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
@@ -412,7 +402,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if (map.isEmpty()) {
                 LOGGER.debug("Empty JNDI properties");
             } else {
-                LOGGER.debug("Number of JNDI properties: " + map.size());
+                LOGGER.debug("Number of JNDI properties: {}", map.size());
             }
         }
         for (Map.Entry<String, String> me : map.entrySet()) {
@@ -432,7 +422,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             if(env != null) {
                 LOGGER.debug("Initial Context Properties");
                 for (Map.Entry<?, ?> entry : env.entrySet()) {
-                    LOGGER.debug(entry.getKey() + "=" + entry.getValue());
+                    LOGGER.debug("{}={}", entry.getKey(), entry.getValue());
                 }
             } else {
                 LOGGER.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
@@ -488,7 +478,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
      */
     @Override
     public void threadFinished() {
-        LOGGER.debug("Thread ended " + new Date());
+        LOGGER.debug("Thread ended {}", new Date());
 
         if (context != null) {
             try {

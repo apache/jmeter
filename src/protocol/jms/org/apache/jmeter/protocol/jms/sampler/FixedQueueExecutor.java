@@ -25,8 +25,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Request/reply executor with a fixed reply queue. <br>
@@ -36,7 +36,7 @@ import org.apache.log.Logger;
  */
 public class FixedQueueExecutor implements QueueExecutor {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(FixedQueueExecutor.class);
 
     /** Sender. */
     private final MessageProducer producer;
@@ -89,9 +89,9 @@ public class FixedQueueExecutor implements QueueExecutor {
         }
 
         try {
-            if (log.isDebugEnabled()) {
-                log.debug(Thread.currentThread().getName()+" will wait for reply " + id + " started on " + System.currentTimeMillis());
-            }
+            log.debug("{} will wait for reply {} started on {}", 
+                    Thread.currentThread().getName(), id, System.currentTimeMillis());
+            
             // This used to be request.wait(timeout_ms), where 0 means forever
             // However 0 means return immediately for the latch
             if (timeout == 0){
@@ -101,10 +101,9 @@ public class FixedQueueExecutor implements QueueExecutor {
                     log.debug("Timeout reached before getting a reply message");
                 }
             }
-            if (log.isDebugEnabled()) {
-                log.debug(Thread.currentThread().getName()+" done waiting for " + id + " on "+request+" ended on " + System.currentTimeMillis());
-            }
-
+            log.debug("{} done waiting for {} on {} ended on {}",
+                    Thread.currentThread().getName(), 
+                    id, request, System.currentTimeMillis());
         } catch (InterruptedException e) {
             log.warn("Interrupt exception caught", e);
             Thread.currentThread().interrupt();
