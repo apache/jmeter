@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Class representing and holding constants for priority.
  *
  * @author Peter Donald
- * @deprecated
+ * @deprecated Will be dropped in 3.3 
  */
 @Deprecated
 public final class Priority
