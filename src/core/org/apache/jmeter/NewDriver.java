@@ -373,7 +373,8 @@ public final class NewDriver {
             }
 
             return builder.toString();
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            System.err.println("Error replacing date format in file name:"+fileName+", error:"+ex.getMessage()); // NOSONAR
         }
 
         return fileName;
