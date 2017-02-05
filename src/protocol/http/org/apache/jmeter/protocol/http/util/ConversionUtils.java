@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -47,6 +48,11 @@ public class ConversionUtils {
     private static final String DOTDOT = ".."; // $NON-NLS-1$
     private static final String SLASH = "/"; // $NON-NLS-1$
     private static final String COLONSLASHSLASH = "://"; // $NON-NLS-1$
+    
+    /**
+     * Match /../[../] etc.
+     */
+    private static final Pattern MAKE_RELATIVE_PATTERN = Pattern.compile("^/((?:\\.\\./)+)"); // $NON-NLS-1$
 
     /**
      * Extract the encoding (charset) from the Content-Type, e.g.
@@ -109,9 +115,7 @@ public class ConversionUtils {
             return initial;
         }
         String path = initial.getPath();
-        // Match /../[../] etc.
-        Pattern p = Pattern.compile("^/((?:\\.\\./)+)"); // $NON-NLS-1$
-        Matcher m = p.matcher(path);
+        Matcher m = MAKE_RELATIVE_PATTERN.matcher(path);
         if (m.lookingAt()){
             String prefix = m.group(1); // get ../ or ../../ etc.
             if (location.startsWith(prefix)){
@@ -127,7 +131,7 @@ public class ConversionUtils {
      * @throws Exception when given <code>url</code> leads to a malformed URL or URI
      */
     public static String escapeIllegalURLCharacters(String url) throws Exception{
-        String decodeUrl = URLDecoder.decode(url,"UTF-8");
+        String decodeUrl = URLDecoder.decode(url,StandardCharsets.UTF_8.name());
         URL urlString = new URL(decodeUrl);
         URI uri = new URI(urlString.getProtocol(), urlString.getUserInfo(), urlString.getHost(), urlString.getPort(), urlString.getPath(), urlString.getQuery(), urlString.getRef());
         return uri.toString();
@@ -168,11 +172,15 @@ public class ConversionUtils {
      */
     public static String removeSlashDotDot(String url)
     {
-        if (url == null || (url = url.trim()).length() < 4 || !url.contains(SLASHDOTDOT))
-        {
+        if (url == null) {
             return url;
         }
-
+        
+        url = url.trim();
+        if(url.length() < 4 || !url.contains(SLASHDOTDOT)) {
+            return url;
+        }
+        
         /**
          * http://auth@host:port/path1/path2/path3/?query#anchor
          */

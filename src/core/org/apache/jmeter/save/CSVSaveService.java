@@ -25,6 +25,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,6 +82,7 @@ public final class CSVSaveService {
 
     public static final String CSV_ELAPSED = "elapsed"; // $NON-NLS-1$
     public static final String CSV_BYTES = "bytes"; // $NON-NLS-1$
+    public static final String CSV_SENT_BYTES = "sentBytes"; // $NON-NLS-1$
     public static final String CSV_THREAD_COUNT1 = "grpThreads"; // $NON-NLS-1$
     public static final String CSV_THREAD_COUNT2 = "allThreads"; // $NON-NLS-1$
     public static final String CSV_SAMPLE_COUNT = "SampleCount"; // $NON-NLS-1$
@@ -138,7 +141,7 @@ public final class CSVSaveService {
         final boolean successOnly = resultCollector.isSuccessOnlyLogging();
         try {
             dataReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(filename), SaveService.getFileEncoding("UTF-8"))); 
+                    new FileInputStream(filename), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())));
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();
@@ -297,7 +300,13 @@ public final class CSVSaveService {
             if (saveConfig.saveBytes()) {
                 field = CSV_BYTES;
                 text = parts[i++];
-                result.setBytes(Integer.parseInt(text));
+                result.setBytes(Long.parseLong(text));
+            }
+
+            if (saveConfig.saveSentBytes()) {
+                field = CSV_SENT_BYTES;
+                text = parts[i++];
+                result.setSentBytes(Long.parseLong(text));
             }
 
             if (saveConfig.saveThreadCounts()) {
@@ -446,6 +455,11 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
+        if (saveConfig.saveSentBytes()) {
+            text.append(CSV_SENT_BYTES);
+            text.append(delim);
+        }
+
         if (saveConfig.saveThreadCounts()) {
             text.append(CSV_THREAD_COUNT1);
             text.append(delim);
@@ -532,6 +546,7 @@ public final class CSVSaveService {
         headerLabelMethods.put(FAILURE_MESSAGE, new Functor(
                 "setAssertionResultsFailureMessage"));
         headerLabelMethods.put(CSV_BYTES, new Functor("setBytes"));
+        headerLabelMethods.put(CSV_SENT_BYTES, new Functor("setSentBytes"));
         // Both these are needed in the list even though they set the same
         // variable
         headerLabelMethods.put(CSV_THREAD_COUNT1,
@@ -629,6 +644,7 @@ public final class CSVSaveService {
             }
             int current = headerLabelMethods.indexOf(label);
             if (current == -1) {
+                log.warn("Unknown column name " + label);
                 return null; // unknown column name
             }
             if (current <= previous) {
@@ -663,11 +679,11 @@ public final class CSVSaveService {
      * @param data
      *            List of data rows
      * @param writer
-     *            output file
+     *            output writer
      * @throws IOException
      *             when writing to <code>writer</code> fails
      */
-    public static void saveCSVStats(List<?> data, FileWriter writer)
+    public static void saveCSVStats(List<?> data, Writer writer)
             throws IOException {
         saveCSVStats(data, writer, null);
     }
@@ -687,7 +703,7 @@ public final class CSVSaveService {
      * @throws IOException
      *             when writing to <code>writer</code> fails
      */
-    public static void saveCSVStats(List<?> data, FileWriter writer,
+    public static void saveCSVStats(List<?> data, Writer writer,
             String[] headers) throws IOException {
         final char DELIM = ',';
         final char[] SPECIALS = new char[] { DELIM, QUOTING_CHAR };
@@ -921,7 +937,11 @@ public final class CSVSaveService {
         }
 
         if (saveConfig.saveBytes()) {
-            text.append(sample.getBytes());
+            text.append(sample.getBytesAsLong());
+        }
+
+        if (saveConfig.saveSentBytes()) {
+            text.append(sample.getSentBytes());
         }
 
         if (saveConfig.saveThreadCounts()) {

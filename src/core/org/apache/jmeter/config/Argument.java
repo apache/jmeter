@@ -186,7 +186,12 @@ public class Argument extends AbstractTestElement implements Serializable {
 
     @Override
     public String toString() {
-        return getName() + getMetaData() + getValue();
+        final String desc = getDescription();
+        if (DFLT_DESCRIPTION.equals(desc)) {
+            return getName() + getMetaData() + getValue();
+        } else {
+            return getName() + getMetaData() + getValue() + " //" + getDescription();            
+        }
     }
 
     /**

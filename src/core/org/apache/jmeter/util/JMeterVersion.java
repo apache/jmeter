@@ -49,17 +49,17 @@ public final class JMeterVersion {
      * This ensures that JMeterUtils always gets the correct
      * version, even if JMeterUtils is not re-compiled during the build.
      */
-    private static final String VERSION = "3.0-SNAPSHOT";
+    private static final String VERSION = "3.2-SNAPSHOT";
 
     private static final String IMPLEMENTATION;
-    
+
     // Same applies to copyright string
-    private static final String COPYRIGHT = "Copyright (c) 1998-2016 The Apache Software Foundation";
+    private static final String COPYRIGHT = "Copyright (c) 1998-2017 The Apache Software Foundation";
 
     static {
         String impl=null;
         final Class<?> myClass = JMeterVersion.class;
-        // This assumes that the JMV treats a class file as a resource (not all do).
+        // This assumes that the JVM treats a class file as a resource (not all do).
         URL resource = myClass.getResource("JMeterVersion.class");
         // For example:
         // jar:file:/JMeter/lib/ext/ApacheJMeter_core.jar!/org/apache/jmeter/util/JMeterVersion.class

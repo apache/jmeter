@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,15 +57,37 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
-import com.thoughtworks.xstream.converters.ConversionException;
-
 /**
  * This class handles all saving of samples.
  * The class must be thread-safe because it is shared between threads (NoThreadClone).
  */
 public class ResultCollector extends AbstractListenerElement implements SampleListener, Clearable, Serializable,
         TestStateListener, Remoteable, NoThreadClone {
+    /**
+     * Keep track of the file writer and the configuration,
+     * as the instance used to close them is not the same as the instance that creates
+     * them. This means one cannot use the saved PrintWriter or use getSaveConfig()
+     */
+    private static class FileEntry{
+        final PrintWriter pw;
+        final SampleSaveConfiguration config;
+        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
+            pw =_pw;
+            config = _config;
+        }
+    }
+    
+    private static final class ShutdownHook implements Runnable {
 
+        @Override
+        public void run() {
+            log.info("Shutdown hook started");
+            synchronized (LOCK) {
+                flushFileOutput();                    
+            }
+            log.info("Shutdown hook ended");
+        }     
+    }
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 233L;
@@ -80,6 +103,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private static final String TESTRESULTS_END = "</testResults>"; // $NON-NLS-1$
 
+    // we have to use version 1.0, see bug 59973
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; // $NON-NLS-1$
 
     private static final int MIN_XML_FILE_LEN = XML_HEADER.length() + TESTRESULTS_START.length()
@@ -110,19 +134,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     //@GuardedBy("LOCK")
     private static Thread shutdownHook;
 
-    /*
-     * Keep track of the file writer and the configuration,
-     * as the instance used to close them is not the same as the instance that creates
-     * them. This means one cannot use the saved PrintWriter or use getSaveConfig()
-     */
-    private static class FileEntry{
-        final PrintWriter pw;
-        final SampleSaveConfiguration config;
-        FileEntry(PrintWriter _pw, SampleSaveConfiguration _config){
-            pw =_pw;
-            config = _config;
-        }
-    }
 
     /**
      * The instance count is used to keep track of whether any tests are currently running.
@@ -137,24 +148,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     private transient volatile PrintWriter out;
 
+    /**
+     * Is a test running ?
+     */
     private volatile boolean inTest = false;
 
     private volatile boolean isStats = false;
 
     /** the summarizer to which this result collector will forward the samples */
     private volatile Summariser summariser;
-
-    private static final class ShutdownHook implements Runnable {
-
-        @Override
-        public void run() {
-            log.info("Shutdown hook started");
-            synchronized (LOCK) {
-                flushFileOutput();                    
-            }
-            log.info("Shutdown hook ended");
-        }     
-    }
     
     /**
      * No-arg constructor.
@@ -386,16 +388,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                             SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
-                        } catch (ConversionException e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
                         } catch (Exception e) {
-                            log.warn("Failed to load "+filename+" using XStream. Error was: "+e);
+                            log.warn("Failed to load " + filename + " using XStream. Error was: " + e);
                         }
                     }
                 }
             } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
                 // FIXME Why do we catch OOM ?
-                log.warn("Problem reading JTL file: "+file);
+                log.warn("Problem reading JTL file: " + file);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
@@ -470,7 +470,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
-                    trimmed)), SaveService.getFileEncoding("UTF-8")), SAVING_AUTOFLUSH); // $NON-NLS-1$
+                    trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
             log.debug("Opened file: "+filename);
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
@@ -484,9 +484,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
 
     // returns false if the file did not contain the terminator
     private static boolean trimLastLine(String filename) {
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(filename, "rw"); // $NON-NLS-1$
+        try (RandomAccessFile raf = new RandomAccessFile(filename, "rw")){ // $NON-NLS-1$
             long len = raf.length();
             if (len < MIN_XML_FILE_LEN) {
                 return false;
@@ -506,25 +504,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             if (line == null) {
                 log.warn("Unexpected EOF trying to find XML end marker in " + filename);
-                raf.close();
                 return false;
             }
             raf.setLength(pos + end);// Truncate the file
-            raf.close();
-            raf = null;
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
             log.warn("Error trying to find XML terminator " + e.toString());
             return false;
-        } finally {
-            try {
-                if (raf != null) {
-                    raf.close();
-                }
-            } catch (IOException e1) {
-                log.info("Could not close " + filename + " " + e1.getLocalizedMessage());
-            }
         }
         return true;
     }
@@ -648,6 +635,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
         }
         files.clear();
+        out = null;
     }
 
     /**

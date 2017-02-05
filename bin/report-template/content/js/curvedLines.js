@@ -266,7 +266,7 @@ ____________________________________________________
 					}
 				}
 			} else {
-				// Cardinal spline with t € [0,1]
+				// Cardinal spline with t â‚¬ [0,1]
 				// Catmull-Rom for t = 0
 				for (var i = ps; i < points.length - ps; i += ps) {
 					var curX = i;
@@ -480,3 +480,4 @@ ____________________________________________________
 	});
 
 })(jQuery);
+

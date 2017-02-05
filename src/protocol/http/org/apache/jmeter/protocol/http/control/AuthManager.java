@@ -469,7 +469,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                 log.debug(username + " > D="+domain+" R="+realm + " M="+auth.getMechanism());
             }
             if (Mechanism.KERBEROS.equals(auth.getMechanism())) {
-                ((AbstractHttpClient) client).getAuthSchemes().register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory(isStripPort(url)));
+                ((AbstractHttpClient) client).getAuthSchemes().register(
+                        AuthSchemes.SPNEGO,
+                        new SPNegoSchemeFactory(isStripPort(url)));
                 credentialsProvider.setCredentials(new AuthScope(null, -1, null), USE_JAAS_CREDENTIALS);
             } else {
                 credentialsProvider.setCredentials(
@@ -493,8 +495,8 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (STRIP_PORT) {
             return true;
         }
-        return (url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
-                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT);
+        return url.getPort() == HTTPConstants.DEFAULT_HTTP_PORT ||
+                url.getPort() == HTTPConstants.DEFAULT_HTTPS_PORT;
     }
 
     /**

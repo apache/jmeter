@@ -18,6 +18,7 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Enumeration;
+import java.util.Optional;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -27,6 +28,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
@@ -92,6 +94,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     private static final String STOP_BETWEEN = "jms.stop_between_samples"; // $NON-NLS-1$
     private static final String SEPARATOR = "jms.separator"; // $NON-NLS-1$
     private static final String SEPARATOR_DEFAULT = ""; // $NON-NLS-1$
+    private static final String ERROR_PAUSE_BETWEEN = "jms_error_pause_between"; // $NON-NLS-1$
+    private static final String ERROR_PAUSE_BETWEEN_DEFAULT = ""; // $NON-NLS-1$
 
     
     private transient boolean START_ON_SAMPLE = false;
@@ -113,7 +117,6 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         SUBSCRIBER = new ReceiveSubscriber(0, getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(),
                     getProviderUrl(), getConnectionFactory(), getDestination(), getDurableSubscriptionId(),
                     getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
-        setupSeparator();
         log.debug("SubscriberSampler.initListenerClient called");
     }
 
@@ -126,7 +129,6 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         SUBSCRIBER = new ReceiveSubscriber(getUseJNDIPropertiesAsBoolean(),
                 getJNDIInitialContextFactory(), getProviderUrl(), getConnectionFactory(), getDestination(),
                 getDurableSubscriptionId(), getClientId(), getJmsSelector(), isUseAuth(), getUsername(), getPassword());
-        setupSeparator();
         log.debug("SubscriberSampler.initReceiveClient called");
     }
 
@@ -152,6 +154,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             result.setSuccessful(false);
             result.setResponseCode("000");
             result.setResponseMessage(exceptionDuringInit.toString());
+            handleErrorAndAddTemporize(true);
             return result; 
         }
         if (stopBetweenSamples){ // If so, we need to start collection here
@@ -180,10 +183,13 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
                 msg = SUBSCRIBER.getMessage(calculateWait(until, now));
                 if (msg != null){
                     read++;
-                    extractContent(buffer, propBuffer, msg, (read == loop));
+                    extractContent(buffer, propBuffer, msg, read == loop);
                 }
             } catch (JMSException e) {
-                log.warn("Error "+e.toString());
+                String errorCode = Optional.ofNullable(e.getErrorCode()).orElse("");
+                log.warn(String.format("Error [%s] %s", errorCode, e.toString()), e);
+
+                handleErrorAndAddTemporize(getIsReconnectErrorCode().test(errorCode));
             }
             now = System.currentTimeMillis();
         }
@@ -191,7 +197,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
         if (getReadResponseAsBoolean()) {
             result.setResponseData(buffer.toString().getBytes()); // TODO - charset?
         } else {
-            result.setBytes(buffer.toString().length());
+            result.setBytes((long)buffer.toString().length());
         }
         result.setResponseHeaders(propBuffer.toString());
         if (read == 0) {
@@ -220,6 +226,37 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             threadFinished(true);
         }
         return result;
+    }
+
+    /**
+     * Try to reconnect if configured to or temporize if not or an exception occured
+     * @param reconnect
+     */
+    private void handleErrorAndAddTemporize(boolean reconnect) {
+        if (reconnect) {
+            cleanup();
+            initClient();
+        }
+
+        if (!reconnect || exceptionDuringInit != null) {
+            try {
+                long pause = getPauseBetweenErrorsAsLong();
+                if(pause > 0) {
+                    Thread.sleep(pause);
+                }
+            } catch (InterruptedException ie) {
+                log.warn(String.format("Interrupted %s", ie.toString()), ie);
+                Thread.currentThread().interrupt();
+                interrupted = true;
+            }
+        }
+    }
+
+    /**
+     * 
+     */
+    private void cleanup() {
+        IOUtils.closeQuietly(SUBSCRIBER);
     }
 
     /**
@@ -286,6 +323,8 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
      */
     @Override
     public void threadStarted() {
+        configureIsReconnectErrorCode();
+
         // Disabled thread start if listen on sample choice
         if (isDestinationStatic() || START_ON_SAMPLE) {
             timeout = getTimeoutAsLong();
@@ -293,31 +332,32 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
             exceptionDuringInit = null;
             useReceive = getClientChoice().equals(JMSSubscriberGui.RECEIVE_RSC);
             stopBetweenSamples = isStopBetweenSamples();
-            if (useReceive) {
-                try {
-                    initReceiveClient();
-                    if (!stopBetweenSamples){ // Don't start yet if stop between samples
-                        SUBSCRIBER.start();
-                    }
-                } catch (NamingException | JMSException e) {
-                    exceptionDuringInit = e;
-                }
-            } else {
-                try {
-                    initListenerClient();
-                    if (!stopBetweenSamples){ // Don't start yet if stop between samples
-                        SUBSCRIBER.start();
-                    }
-                } catch (JMSException | NamingException e) {
-                    exceptionDuringInit = e;
-                }
-            }
-            if (exceptionDuringInit != null){
-                log.error("Could not initialise client",exceptionDuringInit);
-            }
+            setupSeparator();
+            initClient();
         }
     }
-    
+
+    private void initClient() {
+        exceptionDuringInit = null;
+        try {
+            if(useReceive) {
+                initReceiveClient();
+            } else {
+                initListenerClient();
+            }
+            if (!stopBetweenSamples) { // Don't start yet if stop between
+                                       // samples
+                SUBSCRIBER.start();
+            }
+        } catch (NamingException | JMSException e) {
+            exceptionDuringInit = e;
+        }
+        
+        if (exceptionDuringInit != null) {
+            log.error("Could not initialise client", exceptionDuringInit);
+        }
+    }
+
     public void threadStarted(boolean wts) {
         if (wts) {
             START_ON_SAMPLE = true; // listen on sample 
@@ -333,7 +373,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     @Override
     public void threadFinished() {
         if (SUBSCRIBER != null){ // Can be null if init fails
-            SUBSCRIBER.close();
+            cleanup();
         }
     }
     
@@ -460,6 +500,18 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
 
     public void setStopBetweenSamples(boolean selected) {
         setProperty(STOP_BETWEEN, selected, false);                
+    }
+
+    public void setPauseBetweenErrors(String pause) {
+        setProperty(ERROR_PAUSE_BETWEEN, pause, ERROR_PAUSE_BETWEEN_DEFAULT);
+    }
+
+    public String getPauseBetweenErrors() {
+        return getPropertyAsString(ERROR_PAUSE_BETWEEN, ERROR_PAUSE_BETWEEN_DEFAULT);
+    }
+
+    public long getPauseBetweenErrorsAsLong() {
+        return getPropertyAsLong(ERROR_PAUSE_BETWEEN, DEFAULT_WAIT);
     }
 
     /**

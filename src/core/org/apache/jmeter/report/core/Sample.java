@@ -17,9 +17,9 @@
  */
 package org.apache.jmeter.report.core;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents a sample read from a CSV source.
@@ -35,6 +35,8 @@ public class Sample {
     private static final String ERROR_ON_SAMPLE = "Error in sample at line:";
 
     private static final String CONTROLLER_PATTERN = "Number of samples in transaction";
+    
+    private static final String EMPTY_CONTROLLER_PATTERN = "Number of samples in transaction : 0";
 
     private final boolean storesStartTimeStamp;
     private final SampleMetadata metadata;
@@ -97,14 +99,20 @@ public class Sample {
      *            the target class of the data
      * @param index
      *            the rank of the column
-     * @param fieldName Field name
+     * @param fieldName
+     *            Field name
+     * @param <T>
+     *            type of data to be fetched
      * @return the converted value of the data
      */
-    public <TData> TData getData(Class<TData> clazz, int index, String fieldName) {
+    public <T> T getData(Class<T> clazz, int index, String fieldName) {
         try {
             return Converters.convert(clazz, data[index]);
         } catch (ConvertException ex) {
-            throw new SampleException(ERROR_ON_SAMPLE + (row+1) + " converting field:"+fieldName+" at column:"+index+" to:"+clazz.getName()+", fieldValue:'"+data[index]+"'", ex);
+            throw new SampleException(ERROR_ON_SAMPLE + (row + 1)
+                    + " converting field:" + fieldName + " at column:" + index
+                    + " to:" + clazz.getName() + ", fieldValue:'" + data[index]
+                    + "'", ex);
         }
     }
 
@@ -116,9 +124,11 @@ public class Sample {
      *            the target class of the data
      * @param name
      *            the name of the column
+     * @param <T>
+     *            type of data to be fetched
      * @return the converted value of the data
      */
-    public <TData> TData getData(Class<TData> clazz, String name) {
+    public <T> T getData(Class<T> clazz, String name) {
         return getData(clazz, metadata.ensureIndexOf(name), name);
     }
 
@@ -234,6 +244,19 @@ public class Sample {
     public long getLatency() {
         return getData(long.class, CSVSaveService.CSV_LATENCY).longValue();
     }
+    
+    /**
+     * Gets the connect time stored in the sample.
+     *
+     * @return the connect time stored in the sample or 0 is column is not in results
+     */
+    public long getConnectTime() {
+        if(metadata.indexOf(CSVSaveService.CSV_CONNECT_TIME) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_CONNECT_TIME).longValue();
+        } else {
+            return 0L;
+        }
+    }
 
     /**
      * Gets the success status stored in the sample.
@@ -245,12 +268,25 @@ public class Sample {
     }
 
     /**
-     * Gets the number of sent bytes stored in the sample.
+     * Gets the number of received bytes stored in the sample.
      *
+     * @return the number of received bytes stored in the sample
+     */
+    public long getReceivedBytes() {
+        return getData(long.class, CSVSaveService.CSV_BYTES).longValue();
+    }
+
+    /**
+     * Gets the number of sent bytes stored in the sample.
+     * If column is not in results, we return 0
      * @return the number of sent bytes stored in the sample
      */
-    public int getSentBytes() {
-        return getData(int.class, CSVSaveService.CSV_BYTES).intValue();
+    public long getSentBytes() {
+        if(metadata.indexOf(CSVSaveService.CSV_SENT_BYTES) >= 0) {
+            return getData(long.class, CSVSaveService.CSV_SENT_BYTES).longValue();
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -289,5 +325,16 @@ public class Sample {
     public boolean isController() {
         String message = getResponseMessage();
         return message != null && message.startsWith(CONTROLLER_PATTERN);
+    }
+    
+    /**
+     * Checks if this sample is an empty controller.
+     *
+     * @return {@code true}, if this sample is a controller; otherwise
+     *         {@code false}
+     */
+    public boolean isEmptyController() {
+        String message = getResponseMessage();
+        return message != null && message.startsWith(EMPTY_CONTROLLER_PATTERN);
     }
 }

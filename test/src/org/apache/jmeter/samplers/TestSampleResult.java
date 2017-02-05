@@ -20,6 +20,7 @@ package org.apache.jmeter.samplers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -124,7 +125,7 @@ public class TestSampleResult {
             res.samplePause();
             assertEquals(0, wr.toString().length());
             res.samplePause();
-            assertFalse(wr.toString().length() == 0);
+            assertNotEquals(0, wr.toString().length());
         }
 
         @Test
@@ -135,7 +136,7 @@ public class TestSampleResult {
             res.samplePause();
             assertEquals(0, wr.toString().length());
             res.samplePause();
-            assertFalse(wr.toString().length() == 0);
+            assertNotEquals(0, wr.toString().length());
         }
         
         @Test
@@ -143,10 +144,10 @@ public class TestSampleResult {
             SampleResult res = new SampleResult();
             
             res.sampleStart();
-            res.setBytes(100);
+            res.setBytes(100L);
             res.setSampleLabel("sample of size 100 bytes");
             res.sampleEnd();
-            assertEquals(100, res.getBytes());
+            assertEquals(100, res.getBytesAsLong());
             assertEquals("sample of size 100 bytes", res.getSampleLabel());
         }
 
@@ -217,7 +218,7 @@ public class TestSampleResult {
 
             parent.sampleStart();
             Thread.sleep(100);
-            parent.setBytes(300);
+            parent.setBytes(300L);
             parent.setSampleLabel("Parent Sample");
             parent.setSuccessful(true);
             parent.sampleEnd();
@@ -227,14 +228,14 @@ public class TestSampleResult {
             SampleResult child1 = new SampleResult(nanoTime);            
             child1.sampleStart();
             Thread.sleep(100);
-            child1.setBytes(100);
+            child1.setBytes(100L);
             child1.setSampleLabel("Child1 Sample");
             child1.setSuccessful(true);
             child1.sampleEnd();
             long child1Elapsed = child1.getTime();
 
             assertTrue(child1.isSuccessful());
-            assertEquals(100, child1.getBytes());
+            assertEquals(100, child1.getBytesAsLong());
             assertEquals("Child1 Sample", child1.getSampleLabel());
             assertEquals(1, child1.getSampleCount());
             assertEquals(0, child1.getSubResults().length);
@@ -250,14 +251,14 @@ public class TestSampleResult {
             SampleResult child2 = new SampleResult(nanoTime);            
             child2.sampleStart();
             Thread.sleep(100);
-            child2.setBytes(200);
+            child2.setBytes(200L);
             child2.setSampleLabel("Child2 Sample");
             child2.setSuccessful(true);
             child2.sampleEnd();
             long child2Elapsed = child2.getTime();
 
             assertTrue(child2.isSuccessful());
-            assertEquals(200, child2.getBytes());
+            assertEquals(200, child2.getBytesAsLong());
             assertEquals("Child2 Sample", child2.getSampleLabel());
             assertEquals(1, child2.getSampleCount());
             assertEquals(0, child2.getSubResults().length);
@@ -266,7 +267,7 @@ public class TestSampleResult {
             parent.addSubResult(child1);
             parent.addSubResult(child2);
             assertTrue(parent.isSuccessful());
-            assertEquals(600, parent.getBytes());
+            assertEquals(600, parent.getBytesAsLong());
             assertEquals("Parent Sample", parent.getSampleLabel());
             assertEquals(1, parent.getSampleCount());
             assertEquals(2, parent.getSubResults().length);
@@ -282,7 +283,7 @@ public class TestSampleResult {
              */
             
             long diff = parentElapsedTotal - sumSamplesTimes;
-            long maxDiff = nanoTime ? 2 : 16; // TimeMillis has granularity of 10-20
+            long maxDiff = nanoTime ? 3 : 16; // TimeMillis has granularity of 10-20
             if (diff < 0 || diff > maxDiff) {
                 fail("ParentElapsed: " + parentElapsedTotal + " - " + " sum(samples): " + sumSamplesTimes
                         + " = " + diff + " not in [0," + maxDiff + "]; nanotime=" + nanoTime);

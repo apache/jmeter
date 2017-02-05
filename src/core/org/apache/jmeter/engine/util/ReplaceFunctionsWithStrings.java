@@ -47,9 +47,13 @@ import org.apache.oro.text.regex.Util;
 public class ReplaceFunctionsWithStrings extends AbstractTransformer {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    // Functions are wrapped in ${ and }
+    /**
+     * Functions are wrapped in ${ and }
+     */
     private static final String FUNCTION_REF_PREFIX = "${"; //$NON-NLS-1$
-
+    /**
+     * Functions are wrapped in ${ and }
+     */
     private static final String FUNCTION_REF_SUFFIX = "}"; //$NON-NLS-1$
 
     private final boolean regexMatch;// Should we match using regexes?
@@ -68,7 +72,6 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
     @Override
     public JMeterProperty transformValue(JMeterProperty prop) throws InvalidVariableException {
         PatternMatcher pm = JMeterUtils.getMatcher();
-        Pattern pattern = null;
         PatternCompiler compiler = new Perl5Compiler();
         String input = prop.getStringValue();
         if(input == null) {
@@ -79,7 +82,7 @@ public class ReplaceFunctionsWithStrings extends AbstractTransformer {
             String value = entry.getValue();
             if (regexMatch) {
                 try {
-                    pattern = compiler.compile(constructPattern(value));
+                    Pattern pattern = compiler.compile(constructPattern(value));
                     input = Util.substitute(pm, pattern,
                             new StringSubstitution(FUNCTION_REF_PREFIX + key + FUNCTION_REF_SUFFIX),
                             input, Util.SUBSTITUTE_ALL);

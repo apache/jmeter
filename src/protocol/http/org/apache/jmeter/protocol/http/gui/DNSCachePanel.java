@@ -32,7 +32,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.jmeter.config.gui.AbstractConfigGui;
 import org.apache.jmeter.gui.util.PowerTableModel;
@@ -87,7 +86,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     private ButtonGroup providerDNSradioGroup = new ButtonGroup();
 
     private static final String[] COLUMN_RESOURCE_NAMES = {
-        (JMeterUtils.getResString("dns_hostname_or_ip")), //$NON-NLS-1$
+        JMeterUtils.getResString("dns_hostname_or_ip"), //$NON-NLS-1$
     };
     private static final Class<?>[] columnClasses = {
         String.class };
@@ -238,7 +237,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     }
 
     private JPanel createButtonPanel() {
-        boolean tableEmpty = (dnsServersTableModel.getRowCount() == 0);
+        boolean tableEmpty = dnsServersTableModel.getRowCount() == 0;
 
         addButton = createButton("add", 'A', ADD_COMMAND, custResButton.isSelected()); // $NON-NLS-1$
         deleteButton = createButton("delete", 'D', DELETE_COMMAND, !tableEmpty); // $NON-NLS-1$
@@ -282,11 +281,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
             if (dnsServersTableModel.getRowCount() > 0) {
                 // If a table cell is being edited, we must cancel the editing
                 // before deleting the row.
-                if (dnsServersTable.isEditing()) {
-                    TableCellEditor cellEditor = dnsServersTable.getCellEditor(dnsServersTable.getEditingRow(),
-                            dnsServersTable.getEditingColumn());
-                    cellEditor.cancelCellEditing();
-                }
+                GuiUtils.cancelEditing(dnsServersTable);
 
                 int rowSelected = dnsServersTable.getSelectedRow();
 

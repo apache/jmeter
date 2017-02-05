@@ -23,6 +23,8 @@ import java.awt.HeadlessException;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RUndoManager;
@@ -36,15 +38,16 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
 
     private static final long serialVersionUID = 210L;
 
-    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$;
+    private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
     private final boolean disableUndo;
     private static final boolean WRAP_STYLE_WORD = JMeterUtils.getPropDefault("jsyntaxtextarea.wrapstyleword", true);
     private static final boolean LINE_WRAP       = JMeterUtils.getPropDefault("jsyntaxtextarea.linewrap", true);
     private static final boolean CODE_FOLDING    = JMeterUtils.getPropDefault("jsyntaxtextarea.codefolding", true);
     private static final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
-    private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", RSyntaxTextArea.getDefaultFont().getName());
-    private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", RSyntaxTextArea.getDefaultFont().getSize());
+    private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
+    private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
+    private static final Logger log              = LoggingManager.getLoggerForClass();
 
     /**
      * Creates the default syntax highlighting text area. The following are set:
@@ -62,6 +65,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of columns for the text area
      * @param disableUndo
      *            true to disable undo manager
+     * @return {@link JSyntaxTextArea}
      */
     public static JSyntaxTextArea getInstance(int rows, int cols, boolean disableUndo) {
         try {
@@ -111,6 +115,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
      *            The number of rows for the text area
      * @param cols
      *            The number of columns for the text area
+     * @return {@link JSyntaxTextArea}
      */
     public static JSyntaxTextArea getInstance(int rows, int cols) {
         return getInstance(rows, cols, false);
@@ -175,7 +180,13 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
         super.setLineWrap(LINE_WRAP);
         super.setWrapStyleWord(WRAP_STYLE_WORD);
         this.disableUndo = disableUndo;
-        setFont(new Font(USER_FONT_FAMILY, Font.PLAIN, USER_FONT_SIZE));
+        if (USER_FONT_FAMILY != null) {
+            int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
+            setFont(new Font(USER_FONT_FAMILY, Font.PLAIN, fontSize));
+            if (log.isDebugEnabled()) {
+                log.debug("Font is set to: " + getFont());
+            }
+        }
         if(disableUndo) {
             // We need to do this to force recreation of undoManager which
             // will use the disableUndo otherwise it would always be false

@@ -31,8 +31,8 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
- * per second.
+ * The class HitsPerSecondGraphConsumer provides a graph to visualize bytes throughput 
+ * per time period (defined by granularity)
  *
  * @since 3.0
  */
@@ -77,10 +77,15 @@ public class BytesThroughputGraphConsumer extends AbstractOverTimeGraphConsumer 
                 }, new GraphValueSelector() {
 
                     @Override
-                    public double select(String series, Sample sample) {
-                        // TODO Add Received bytes support
-                        return (SENT_BYTES_SERIES_LABEL.equals(series)) ? sample
-                                .getSentBytes() : 0;
+                    public Double select(String series, Sample sample) {
+                        // We ignore Transaction Controller results
+                        if(!sample.isController()) {
+                            return Double.valueOf(
+                                RECEIVED_BYTES_SERIES_LABEL.equals(series) ? sample
+                                .getReceivedBytes() : sample.getSentBytes());
+                        } else {
+                            return null;
+                        }
                     }
                 }, false, false));
         return groupInfos;

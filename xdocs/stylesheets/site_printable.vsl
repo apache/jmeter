@@ -82,7 +82,7 @@
 <td bgcolor="$tabletdbg" #if ($colspan)colspan="$colspan"#end #if ($rowspan)rowspan="$rowspan"#end valign="top" align="left">
 <font color="#000000" size="-1" face="arial,helvetica,sanserif">
 #if ($value.getText().length() != 0 || $value.getChildren().size() > 0)
-$value.content
+#runloop($value)
 #else
 &nbsp;
 #end
@@ -133,7 +133,7 @@ $value.content
 #end
 
 #macro ( code $value)
-<tt class="code">$escape.getText($value.getText())</tt>
+<tt class="code">#runloop($value)</tt>
 #end
 
 #macro ( source $value)
@@ -146,7 +146,7 @@ $value.content
 </tr>
 <tr>
 <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
-<td bgcolor="#ffffff"><pre>$escape.getText($value.getText())</pre></td>
+<td bgcolor="#ffffff"><pre>#runloop($value)</pre></td>
 <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
 </tr>
 <tr>
@@ -233,6 +233,10 @@ No
 <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=$id.getText()">Bug $id.getText()</a>
 #end
 
+#macro ( pr $id)
+<a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a> - ##
+#end
+
 ## Shorthand - automatically adds " - " before remaining text
 #macro ( bug $id)
 #bugzilla($id) - ##
@@ -286,6 +290,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #bugzilla ($node)
 #elseif ($node.getName().equals("bug"))
 #bug ($node)
+#elseif ($node.getName().equals("pr"))
+#pr ($node)
 #elseif ($node.getName().equals("contributor"))
 #contributor ($node)
 #elseif ($node.getName().equals("ch_section"))
@@ -527,7 +533,7 @@ $comp.getAttributeValue("index")
 #set ( $logoHeight = $project.getChild("logo").getAttributeValue("height") )
 #set ( $logoWidth  = $project.getChild("logo").getAttributeValue("width") )
 <td align="left">
-<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img style="margin: 0px 30px 0px 0px" title="Apache Software Foundation" width="261" height="106" src="$imgdir/asf-logo.png" border="0"/></a>
 </td>
 <td align="right">
 #if ( $logoString.startsWith("/") )
@@ -538,7 +544,7 @@ $comp.getAttributeValue("index")
 </td>
 #else
 <td colspan="2">
-<a href="http://www.apache.org"><img title="Apache Software Foundation" width="215" height="88" src="$imgdir/asf-logo.png" border="0"/></a>
+<a href="http://www.apache.org"><img title="Apache Software Foundation" width="261" height="106" src="$imgdir/asf-logo.png" border="0"/></a>
 </td>
 #end
 #end

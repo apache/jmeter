@@ -22,8 +22,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.Map;
@@ -41,7 +43,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.gui.util.FileDialoger;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.save.CSVSaveService;
@@ -51,10 +53,10 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.NumberRenderer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.jorphan.util.JOrphanUtils;
 
 /**
  * Simpler (lower memory) version of Aggregate Report (StatVisualizer).
@@ -62,7 +64,7 @@ import org.apache.jorphan.util.JOrphanUtils;
  */
 public class SummaryReport extends AbstractVisualizer implements Clearable, ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String USE_GROUP_NAME = "useGroupName"; //$NON-NLS-1$
 
@@ -78,6 +80,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             "aggregate_report_error%",     //$NON-NLS-1$
             "aggregate_report_rate",       //$NON-NLS-1$
             "aggregate_report_bandwidth",  //$NON-NLS-1$
+            "aggregate_report_sent_bytes_per_sec",  //$NON-NLS-1$
             "average_bytes",               //$NON-NLS-1$
             };
 
@@ -118,11 +121,12 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             new NumberRenderer("#0.00%"), // Error %age //$NON-NLS-1$
             new RateRenderer("#.0"),      // Throughput //$NON-NLS-1$
             new NumberRenderer("#0.00"),  // kB/sec //$NON-NLS-1$
+            new NumberRenderer("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new NumberRenderer("#.0"),    // avg. pageSize //$NON-NLS-1$
         };
     
     // Column formats
-    static final Format[] FORMATS =
+    private static final Format[] FORMATS =
         new Format[]{
             null, // Label
             null, // count
@@ -130,9 +134,10 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             null, // Min
             null, // Max
             new DecimalFormat("#0.00"), // Std Dev. //$NON-NLS-1$
-            new DecimalFormat("#0.00%"), // Error %age //$NON-NLS-1$
-            new DecimalFormat("#.0"),      // Throughput //$NON-NLS-1$
+            new DecimalFormat("#0.000%"), // Error %age //$NON-NLS-1$
+            new DecimalFormat("#.00000"),      // Throughput //$NON-NLS-1$
             new DecimalFormat("#0.00"),  // kB/sec //$NON-NLS-1$
+            new DecimalFormat("#0.00"),  // sent kB/sec //$NON-NLS-1$
             new DecimalFormat("#.0"),    // avg. pageSize //$NON-NLS-1$
         };
 
@@ -150,17 +155,18 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
                     new Functor("getErrorPercentage"),    //$NON-NLS-1$
                     new Functor("getRate"),               //$NON-NLS-1$
                     new Functor("getKBPerSecond"),        //$NON-NLS-1$
+                    new Functor("getSentKBPerSecond"),        //$NON-NLS-1$
                     new Functor("getAvgPageBytes"),       //$NON-NLS-1$
                 },
-                new Functor[] { null, null, null, null, null, null, null, null , null, null },
-                new Class[] { String.class, Long.class, Long.class, Long.class, Long.class,
-                              String.class, String.class, String.class, String.class, String.class });
+                new Functor[] { null, null, null, null, null, null, null, null , null, null, null },
+                new Class[] { String.class, Integer.class, Long.class, Long.class, Long.class, 
+                        Double.class, Double.class, Double.class, Double.class, Double.class, Double.class });
         clearData();
         init();
     }
 
     /**
-     * @return <code>true</code> iff all functors can be found
+     * @return <code>true</code> if all functors can be found
      * @deprecated - only for use in testing
      * */
     @Deprecated
@@ -180,7 +186,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                Calculator row = null;
+                Calculator row;
                 synchronized (lock) {
                     row = tableRows.get(sampleLabel);
                     if (row == null) {
@@ -234,8 +240,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         mainPanel.add(makeTitlePanel());
 
         myJTable = new JTable(model);
+        myJTable.setRowSorter(new ObjectTableSorter(model).fixLastRow());
         JMeterUtils.applyHiDPI(myJTable);
-        myJTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(myJTable);
         myJTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         RendererUtils.applyRenderers(myJTable, RENDERERS);
         myScrollPane = new JScrollPane(myJTable);
@@ -270,16 +277,13 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             if (chooser == null) {
                 return;
             }
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(chooser.getSelectedFile());
+            try (FileOutputStream fo = new FileOutputStream(chooser.getSelectedFile());
+                    OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
                 CSVSaveService.saveCSVStats(StatGraphVisualizer.getAllTableData(model, FORMATS),writer, 
                         saveHeaders.isSelected() ? StatGraphVisualizer.getLabels(COLUMNS) : null);
             } catch (IOException e) {
                 JMeterUtils.reportErrorToUser(e.getMessage(), "Error saving data");
-            } finally {
-                JOrphanUtils.closeQuietly(writer);
-            }
+            } 
         }
     }
 }

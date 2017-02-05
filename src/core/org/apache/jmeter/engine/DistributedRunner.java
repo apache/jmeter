@@ -81,7 +81,7 @@ public class DistributedRunner {
                 println("Pausing before retry for " + retriesDelay + "ms");
                 try {
                     Thread.sleep(retriesDelay);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException e) {  // NOSONAR
                     throw new RuntimeException("Interrupted while initializing remote", e);
                 }
             }
@@ -100,16 +100,16 @@ public class DistributedRunner {
                 }
             }
 
-            if (addrs.size() == 0) {
+            if (addrs.isEmpty()) {
                 break;
             }
         }
 
-        if (addrs.size() > 0) {
+        if (!addrs.isEmpty()) {
             String msg = "Following remote engines could not be configured:" + addrs;
             if (!continueOnFail || engines.size() == 0) {
                 stop();
-                throw new RuntimeException(msg);
+                throw new RuntimeException(msg); // NOSONAR
             } else {
                 println(msg);
                 println("Continuing without failed engines...");
@@ -133,8 +133,8 @@ public class DistributedRunner {
                 } else {
                     log.warn("Host not found in list of active engines: " + address);
                 }
-            } catch (IllegalStateException | JMeterEngineException e) {
-                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$
+            } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
+                JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$  
             }
         }
         println("Remote engines have been started");
@@ -229,9 +229,9 @@ public class DistributedRunner {
      *
      * @param address address for engine
      * @return engine instance
-     * @throws RemoteException
-     * @throws NotBoundException
-     * @throws MalformedURLException
+     * @throws RemoteException if registry can't be contacted
+     * @throws NotBoundException when name for address can't be found
+     * @throws MalformedURLException when address can't be converted to valid URL
      */
     protected JMeterEngine createEngine(String address) throws RemoteException, NotBoundException, MalformedURLException {
         return new ClientJMeterEngine(address);
@@ -245,7 +245,7 @@ public class DistributedRunner {
     private void errln(String s, Exception e) {
         log.error(s, e);
         stderr.println(s + ": ");
-        e.printStackTrace(stderr);
+        e.printStackTrace(stderr); // NOSONAR
     }
 
     public void setStdout(PrintStream stdout) {

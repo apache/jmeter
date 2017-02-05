@@ -24,7 +24,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.Test;
@@ -130,10 +133,10 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
     public void testFormatter() throws Exception {
         SampleSaveConfiguration a = new SampleSaveConfiguration(false);
         SampleSaveConfiguration b = new SampleSaveConfiguration(false);
-        a.setFormatter(null);
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
+        a.setFormatter(null);
         b.setFormatter(null);
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
@@ -143,6 +146,31 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
+    }
+
+    @Test
+    // Checks that all the saveXX() and setXXX(boolean) methods are in the list
+    public void testSaveConfigNames() throws Exception {
+        List<String> getMethodNames = new ArrayList<>();
+        List<String> setMethodNames = new ArrayList<>();
+        Method[] methods = SampleSaveConfiguration.class.getMethods();
+        for(Method method : methods) {
+            String name = method.getName();
+            if (name.startsWith(SampleSaveConfiguration.CONFIG_GETTER_PREFIX) && method.getParameterTypes().length == 0) {
+                name = name.substring(SampleSaveConfiguration.CONFIG_GETTER_PREFIX.length());
+                getMethodNames.add(name);
+                assertTrue("SAVE_CONFIG_NAMES should contain save" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
+            }
+            if (name.startsWith(SampleSaveConfiguration.CONFIG_SETTER_PREFIX) && method.getParameterTypes().length == 1 && boolean.class.equals(method.getParameterTypes()[0])) {
+                name = name.substring(SampleSaveConfiguration.CONFIG_SETTER_PREFIX.length());
+                setMethodNames.add(name);
+                assertTrue("SAVE_CONFIG_NAMES should contain set" + name, SampleSaveConfiguration.SAVE_CONFIG_NAMES.contains(name));
+            }
+        }
+        for (String name : SampleSaveConfiguration.SAVE_CONFIG_NAMES) {
+            assertTrue("SAVE_CONFIG_NAMES should NOT contain save" + name, getMethodNames.contains(name));
+            assertTrue("SAVE_CONFIG_NAMES should NOT contain set" + name, setMethodNames.contains(name));
+        }
     }
 
  }

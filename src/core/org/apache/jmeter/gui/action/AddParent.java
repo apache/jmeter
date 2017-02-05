@@ -32,7 +32,7 @@ import org.apache.log.Logger;
 /**
  * Implements the Add Parent menu command
  */
-public class AddParent implements Command {
+public class AddParent extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();

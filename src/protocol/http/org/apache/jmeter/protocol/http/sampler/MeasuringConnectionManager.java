@@ -51,7 +51,6 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class MeasuringConnectionManager extends JMeterPoolingClientConnectionManager {
 
-    
     public MeasuringConnectionManager(SchemeRegistry schemeRegistry, 
             DnsResolver resolver, 
             int timeToLiveMs,
@@ -62,10 +61,9 @@ public class MeasuringConnectionManager extends JMeterPoolingClientConnectionMan
     @Override
     public ClientConnectionRequest requestConnection(final HttpRoute route, final Object state) {
         ClientConnectionRequest res = super.requestConnection(route, state);
-        MeasuringConnectionRequest measuredConnection = new MeasuringConnectionRequest(res);
-        return measuredConnection;
+        return new MeasuringConnectionRequest(res);
     }
-    
+
     /**
      * Overriden to use {@link JMeterClientConnectionOperator} and fix SNI issue 
      * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=57935"
@@ -74,7 +72,7 @@ public class MeasuringConnectionManager extends JMeterPoolingClientConnectionMan
     @Override
     protected ClientConnectionOperator createConnectionOperator(
             SchemeRegistry schreg) {
-        return new JMeterClientConnectionOperator(schreg);
+        return new JMeterClientConnectionOperator(schreg, getDnsResolver());
     }
 
 

@@ -46,7 +46,7 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
     private static final long serialVersionUID = 240L;
 
     // Only create the map if it is required
-    private transient final ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
+    private final transient ConcurrentMap<TestElement, Object> children = new ConcurrentHashMap<>();
 
     private static final Object DUMMY = new Object();
 
@@ -245,17 +245,54 @@ public abstract class AbstractThreadGroup extends AbstractTestElement
         return getPropertyAsString(AbstractThreadGroup.ON_SAMPLE_ERROR).equalsIgnoreCase(ON_SAMPLE_ERROR_STOPTEST_NOW);
     }
 
+    /**
+     * Hard or graceful stop depending on now flag
+     * @param threadName String thread name
+     * @param now if true interrupt {@link Thread} 
+     * @return boolean true if stop succeeded
+     */
     public abstract boolean stopThread(String threadName, boolean now);
 
+    /**
+     * @return int number of active threads 
+     */
     public abstract int numberOfActiveThreads();
 
+    /**
+     * Start the {@link ThreadGroup}
+     * @param groupCount group number
+     * @param notifier {@link ListenerNotifier}
+     * @param threadGroupTree {@link ListedHashTree}
+     * @param engine {@link StandardJMeterEngine}
+     */
     public abstract void start(int groupCount, ListenerNotifier notifier, ListedHashTree threadGroupTree, StandardJMeterEngine engine);
 
+    /**
+     * Add a new {@link JMeterThread} to this {@link ThreadGroup} for engine
+     * @param delay Delay in milliseconds
+     * @param engine {@link StandardJMeterEngine}
+     * @return {@link JMeterThread}
+     */
+    public abstract JMeterThread addNewThread(int delay, StandardJMeterEngine engine);
+
+    /**
+     * @return true if threads were correctly stopped
+     */
     public abstract boolean verifyThreadsStopped();
 
+    /**
+     * Wait for all Group Threads to stop after a graceful stop
+     */
     public abstract void waitThreadsStopped();
 
+    /**
+     * Ask threads to stop gracefully
+     */
     public abstract void tellThreadsToStop();
 
+    /**
+     * This immediately stop threads of Group by interrupting them
+     * It differs from {@link AbstractThreadGroup#tellThreadsToStop()} by being a hard stop
+     */
     public abstract void stop();
 }

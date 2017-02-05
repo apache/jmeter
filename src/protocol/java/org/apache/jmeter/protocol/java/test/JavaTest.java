@@ -149,7 +149,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
     /** The name used to store the Success Status parameter. */
     private static final String SUCCESS_NAME = "Status";
 
-    private volatile Thread myThread;
+    private transient volatile Thread myThread;
 
     /**
      * Default constructor for <code>JavaTest</code>.
@@ -173,7 +173,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
 
         responseCode = context.getParameter(RESPONSE_CODE_NAME, RESPONSE_CODE_DEFAULT);
 
-        success = context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT).equalsIgnoreCase("OK");
+        success = "OK".equalsIgnoreCase(context.getParameter(SUCCESS_NAME, SUCCESS_DEFAULT));
 
         label = context.getParameter(LABEL_NAME, "");
         if (label.length() == 0) {
@@ -280,7 +280,9 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
         if (samplerData != null && samplerData.length() > 0) {
             results.setSamplerData(samplerData);
         }
-
+        if(samplerData != null) {
+            results.setSentBytes(samplerData.length());
+        }
         if (resultData != null && resultData.length() > 0) {
             results.setResponseData(resultData, null);
         }
@@ -307,6 +309,7 @@ public class JavaTest extends AbstractJavaSamplerClient implements Serializable,
             }
             results.setSuccessful(success);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             LOG.warn("JavaTest: interrupted.");
             results.setSuccessful(false);
         } catch (Exception e) {

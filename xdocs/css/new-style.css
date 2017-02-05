@@ -19,6 +19,60 @@
   width: 60em;
 }
 
+.social-media {
+  display: inline-block;
+  float: right;
+}
+
+.social-media-links {
+  display: inline-block;
+}
+
+.social-media-links li {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.3rem;
+  background-color: #bbb;
+}
+
+.share-links ul {
+  display: inline-block;
+}
+
+.share-links li {
+  display: inline-block;
+  margin-right: 1rem;
+  background-color: #bbb;
+  padding: 0.3rem;
+}
+
+.social-media-links a, .share-links a,
+.social-media-links :visited, .share-links :visited,
+.social-media-links :hover, .share-links :hover,
+.social-media-links :link, .share-links :link {
+  color: white !important;
+}
+
+.social-media-links i, .share-links i {
+  padding-right: 0.2rem;
+}
+
+.gplus {
+  background-color: #d34836 !important;
+}
+
+.twitter {
+  background-color: #55acee !important;
+}
+
+.fb {
+  background-color: #3b5998 !important;
+}
+
+.github {
+  background-color: #333333 !important;
+}
+
 a {
   color: brown;
 }
@@ -37,6 +91,16 @@ img {
   max-width: 95%;
   height: auto;
 }
+
+img.logo {
+  max-height: 88px;
+}
+
+img.asf-logo {
+  width: 217px;
+  max-height: 88px;
+}
+
 
 .menu, h1, h2, h3, h4, h5, .go-top, .title {
   font-family: "Merriweather";
@@ -62,7 +126,6 @@ h1, h2, h3, h4, h5, .title {
 
 .menu {
   border: 1px solid lightgray;
-  box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.3);
   list-style: none;
   margin: 0.5em;
   padding: 0.5em;
@@ -86,8 +149,12 @@ h1, h2, h3, h4, h5, .title {
   padding-left: 1.5rem;
 }
 
+.menu-title {
+  font-size: 105%;
+}
+
 .banner>iframe {
-  width: 240px;
+  width: 270px;
   height: 70px;
 }
 .banner>iframe>body {
@@ -154,8 +221,12 @@ figure {
   margin: 1em 2em;
 }
 
+figcaption {
+  font-family: "Merriweather";
+  font-style: italic;
+}
+
 figure>a>img, .screenshot>a>img {
-  box-shadow: 10px 10px 10px 0 rgba(50, 50, 50, 0.25);
   overflow: auto;
   width: auto;
   max-width: 100%;
@@ -273,14 +344,16 @@ table {
   display: table;
   margin-bottom: 1rem;
   width: 100%;
-  box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.2);
-  padding: 0.1rem 0em 0.2rem 2em;
-  border-bottom: 1px solid gray;
+  box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.1);
+  padding: 0.1rem 0em 0.2rem 0em;
+  border-bottom: 1px solid lightgray;
 }
 
 .header>div {
   display: table-cell;
   vertical-align: middle;
+  text-align: center;
+
 }
 
 .header>div+.header>div {
@@ -306,8 +379,7 @@ table {
 }
 
 .pagelinks>li {
-  border: 1px solid #bbb;
-  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+  border: 1px solid lightgray;
   padding: 0.5em 1em;
 }
 
@@ -326,8 +398,7 @@ table {
 .section-index>li {
   margin: 1em;
   padding: 1em;
-  border: 1px solid #bbb;
-  box-shadow: 5px 5px 5px rgba(20, 20, 20, 0.2);
+  border: 1px solid lightgray;
 }
 
 .hidden {
@@ -341,7 +412,7 @@ table {
 
 .keysym {
   background-color: #f0f0f0;
-  border: 1px solid #bbb;
+  border: 1px solid lightgray;
   border-radius: 0.3rem;
   padding: 0.1rem;
   font-style: normal;
@@ -356,8 +427,8 @@ table {
   .nav {
   width: 100%;
   max-width: 100%;
-  border-bottom: 1px solid #808080;
-  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.2);
+  border-bottom: 1px solid lightgray;
+  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.1);
 }
 .header {
   box-shadow: none;
@@ -386,7 +457,21 @@ table {
   display: block;
   background: white;
 }
- .main {
+
+.social {
+  display: block;
+}
+
+.social > div {
+  display: inline-block;
+  margin-right: 0.2em;
+}
+
+.social div img {
+  vertical-align: inherit !important;
+}
+
+.main {
  width: auto;
  max-width: 95%;
  margin: 0.5rem;
@@ -416,12 +501,15 @@ table {
     margin-bottom: 0px;
     padding: 0px;
   }
+  .header > div:first-child {
+    padding: 0px;
+  }
   .nav {
     display: block;
     width: 100%;
     max-width: 100%;
-    border-bottom: 1px solid #808080;
-    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.2);
+    border-bottom: 1px solid lightgray;
+    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.1);
   }
   .menu {
     box-shadow: none;
@@ -519,10 +607,14 @@ table {
     width: 100%;
     text-align: center;
   }
+
+  .share-links li, .social-media-links li {
+    margin-right: 0.5rem;
+  }
 }
 
 @media print {
-  .nav, .header, .footer, .pagelinks, .go-top {
+  .nav, .header, .footer, .pagelinks, .go-top, .social-media, .share-links {
     display: none;
   }
 

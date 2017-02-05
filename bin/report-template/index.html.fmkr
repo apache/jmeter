@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>JMeter Dashboard</title>
+    <title>${reportTitle!"Apache JMeter Dashboard"}</title>
 
      <!-- Bootstrap Core CSS -->
     <link href="sbadmin2-1.0.7/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">JMeter Dashboard</a>
+                <a class="navbar-brand" href="index.html">${reportTitle!"Apache JMeter Dashboard"}</a>
             </div>
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -73,18 +73,45 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
-                    <p>( ${testFile!""} start : ${beginDate!""} - end : ${endDate!""} )</p>
-                    <#if overallFilter?has_content>
-                        <p>( Filter : ${overallFilter} )</p>
-                    </#if>
+                     <div class="panel panel-default" >
+                        <div class="panel-heading" style="text-align:center;">
+                           <p class="dashboard-title">Test and Report informations</p>
+                        </div>
+                        <div class="panel-body">
+                        <table id="generalInfos" class="table table-bordered table-condensed " >
+                            <tr>
+                                <td>File:</td>
+                                <td>${testFile!""}</td>
+                            </tr>
+                            <tr>
+                                <td>Start Time:</td>
+                                <td>${beginDate!""}</td>
+                            </tr>
+                            <tr>
+                                <td>End Time:</td>
+                                <td>${endDate!""}</td>
+                            </tr>
+                            <#if overallFilter?has_content>
+                                <tr>
+                                    <td>Filter for computing:</td>
+                                    <td>${overallFilter}</td>
+                                </tr>
+                            </#if>
+                            <#if seriesFilter?has_content>
+                                <tr>
+                                    <td>Filter for display:</td>
+                                    <td>${seriesFilter}</td>
+                                </tr>
+                            </#if>
+                        </table>
+                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="panel panel-default" style="text-align:center;">
                         <div class="panel-heading">
-                           <p class="dashboard-title">APDEX</p>
+                           <p class="dashboard-title"><a href="https://en.wikipedia.org/wiki/Apdex" target="_blank">APDEX (Application Performance Index)</a></p>
                         </div>
                         <div class="panel-body">
                             <section id="apdex" class="col-md-12 table-responsive">
@@ -127,6 +154,19 @@
                     <div class="panel-body">
                         <section class="col-md-12 table-responsive">
                             <table id="errorsTable" class="table table-bordered table-condensed tablesorter ">
+                            </table>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="panel panel-default" style="text-align:center;">
+                    <div class="panel-heading">
+                        <p class="dashboard-title">Top 5 Errors by sampler</p>
+                    </div>
+                    <div class="panel-body">
+                        <section class="col-md-12 table-responsive">
+                            <table id="top5ErrorsBySamplerTable" class="table table-bordered table-condensed tablesorter ">
                             </table>
                         </section>
                     </div>

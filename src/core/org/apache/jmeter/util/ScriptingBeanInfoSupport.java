@@ -29,6 +29,7 @@ import java.util.UUID;
 import javax.swing.JCheckBox;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.gui.ClearGui;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.FileEditor;
@@ -49,10 +50,15 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
 
         p = property("scriptLanguage"); // $NON-NLS-1$
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        if (JSR223TestElement.class.isAssignableFrom(beanClass) ) {
+            p.setValue(DEFAULT, "groovy"); // $NON-NLS-1$
+        } else {
+            p.setValue(DEFAULT, ""); // $NON-NLS-1$
+        }
         if (rb != null) {
             p.setValue(RESOURCE_BUNDLE, rb);
         }
+        
         p.setValue(TAGS, languageTags);
 
         createPropertyGroup("scriptingLanguage", // $NON-NLS-1$
@@ -116,7 +122,7 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         
     }
     
-    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener {
+    public static class JSR223ScriptCacheCheckboxEditor extends PropertyEditorSupport implements ActionListener, ClearGui {
 
         private final JCheckBox checkbox;
 
@@ -197,6 +203,12 @@ public abstract class ScriptingBeanInfoSupport extends BeanInfoSupport {
         @Override
         public boolean supportsCustomEditor() {
             return true;
+        }
+
+        @Override
+        public void clearGui() {
+            initialValue = null;
+            checkbox.setSelected(false);
         }
     }
 }

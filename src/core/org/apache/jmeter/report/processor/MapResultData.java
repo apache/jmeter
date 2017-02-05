@@ -40,7 +40,7 @@ public class MapResultData implements ResultData {
      * .report.processor.ResultDataVisitor)
      */
     @Override
-    public <TVisit> TVisit accept(ResultDataVisitor<TVisit> visitor) {
+    public <T> T accept(ResultDataVisitor<T> visitor) {
         return visitor.visitMapResult(this);
     }
 

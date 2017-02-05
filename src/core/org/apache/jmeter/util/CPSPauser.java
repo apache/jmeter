@@ -23,12 +23,12 @@ package org.apache.jmeter.util;
  * Generate appropriate pauses for a given CPS (characters per second)
  */
 public class CPSPauser{
-    private final int CPS; // Characters per second to emulate
+    private final int charactersPerSecond; // Characters per second to emulate
 
     // Conversions for milli and nano seconds
-    private static final int MS_PER_SEC = 1000;
-    private static final int NS_PER_SEC = 1000000000;
-    private static final int NS_PER_MS  = NS_PER_SEC/MS_PER_SEC;
+    private static final long MS_PER_SEC = 1000L;
+    private static final long NS_PER_SEC = 1000000000L;
+    private static final long NS_PER_MS  = NS_PER_SEC/MS_PER_SEC;
 
     /**
      * Create a pauser with the appropriate speed settings.
@@ -39,7 +39,7 @@ public class CPSPauser{
         if (cps <=0) {
             throw new IllegalArgumentException("Speed (cps) <= 0");
         }
-        CPS=cps;
+        charactersPerSecond=cps;
     }
 
     /**
@@ -48,13 +48,15 @@ public class CPSPauser{
      * @param bytes number of bytes being transferred
      */
     public void pause(int bytes){
-        long sleepMS = (bytes*MS_PER_SEC)/CPS;
-        int  sleepNS = ((bytes*MS_PER_SEC)/CPS) % NS_PER_MS;
+        long sleepMS = (bytes*MS_PER_SEC)/charactersPerSecond;
+        int sleepNS = Long.valueOf(sleepMS % NS_PER_MS).intValue(); // NOSONAR Where is the boxing to Long
         try {
             if(sleepMS>0 || sleepNS>0) {
                 Thread.sleep(sleepMS,sleepNS);
             }
         } catch (InterruptedException ignored) {
+            // NOOP
+            Thread.currentThread().interrupt();
         }
     }
 }

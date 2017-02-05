@@ -33,10 +33,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-//import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-//import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -138,9 +136,8 @@ public class PropertyControlGui extends AbstractConfigGui implements
         Collections.sort(al, new Comparator<Map.Entry<Object, Object>>(){
             @Override
             public int compare(Map.Entry<Object, Object> o1, Map.Entry<Object, Object> o2) {
-                String m1, m2;
-                m1 = (String) o1.getKey();
-                m2 = (String) o2.getKey();
+                String m1 = (String) o1.getKey();
+                String m2 = (String) o2.getKey();
                 return m1.compareTo(m2);
             }
         });

@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
@@ -101,8 +101,8 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 log.debug("xml mode: " + isXML());
             }
             tidy = new Tidy();
-            tidy.setInputEncoding("UTF8");
-            tidy.setOutputEncoding("UTF8");
+            tidy.setInputEncoding(StandardCharsets.UTF_8.name());
+            tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
             tidy.setQuiet(false);
             tidy.setShowWarnings(true);
             tidy.setOnlyErrors(isErrorsOnly());
@@ -120,7 +120,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 log.debug("HTMLAssertions.getResult(): Tidy instance created!");
             }
 
-        } catch (Exception e) {//TODO replace with proper Exception
+        } catch (Exception e) {
             log.error("Unable to instantiate tidy parser", e);
             result.setFailure(true);
             result.setFailureMessage("Unable to instantiate tidy parser");
@@ -136,8 +136,6 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
             StringWriter errbuf = new StringWriter();
             tidy.setErrout(new PrintWriter(errbuf));
-            // Node node = tidy.parseDOM(new
-            // ByteArrayInputStream(response.getResponseData()), null);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             log.debug("Start : parse");
             Node node = tidy.parse(new ByteArrayInputStream(inResponse.getResponseData()), os);
@@ -174,7 +172,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
                 result.setFailure(false);
             }
 
-        } catch (Exception e) {//TODO replace with proper Exception
+        } catch (Exception e) {
             // return with an error
             log.warn("Cannot parse result content", e);
             result.setFailure(true);
@@ -193,27 +191,15 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
 
         // check if filename defined
         if ((lFilename != null) && (!"".equals(lFilename.trim()))) {
-            FileWriter lOutputWriter = null;
-            try {
-
-                // open file
-                lOutputWriter = new FileWriter(lFilename, false);
-
+            
+            try (FileWriter lOutputWriter = new FileWriter(lFilename, false)){
                 // write to file
                 lOutputWriter.write(inOutput);
-
-                // flush
-                lOutputWriter.flush();
-
                 if (log.isDebugEnabled()) {
                     log.debug("writeOutput() -> output successfully written to file " + lFilename);
                 }
-
             } catch (IOException ex) {
                 log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
-            } finally {
-                // close file
-                IOUtils.closeQuietly(lOutputWriter);
             }
         }
     }

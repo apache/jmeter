@@ -22,8 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -142,12 +140,7 @@ public class SoapSamplerGui extends AbstractSamplerGui {
         mainPanel.add(soapXml, BorderLayout.CENTER);
         mainPanel.add(soapXmlFile, BorderLayout.SOUTH);
 
-        sendSoapAction.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                soapAction.setEnabled(sendSoapAction.isSelected());
-            }
-            });
+        sendSoapAction.addActionListener(e -> soapAction.setEnabled(sendSoapAction.isSelected()));
 
         add(mainPanel, BorderLayout.CENTER);
     }

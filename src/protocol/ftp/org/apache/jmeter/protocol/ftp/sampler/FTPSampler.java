@@ -210,47 +210,51 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         if (contents.length() > 0){
                             byte[] bytes = contents.getBytes(); // TODO - charset?
                             input = new ByteArrayInputStream(bytes);
-                            res.setBytes(bytes.length);
+                            res.setBytes((long)bytes.length);
                         } else {
                             File infile = new File(local);
-                            res.setBytes((int)infile.length());
+                            res.setBytes(infile.length());
                             input = new BufferedInputStream(new FileInputStream(infile));
                         }
                         ftpOK = ftp.storeFile(remote, input);
                     } else {
                         final boolean saveResponse = isSaveResponse();
                         ByteArrayOutputStream baos=null; // No need to close this
-                        OutputStream target=null; // No need to close this
-                        if (saveResponse){
-                            baos  = new ByteArrayOutputStream();
-                            target=baos;
-                        }
-                        if (local.length()>0){
-                            output=new FileOutputStream(local);
-                            if (target==null) {
-                                target=output;
-                            } else {
-                                target = new TeeOutputStream(output,baos);
+                        OutputStream target=null; 
+                        try {
+                            if (saveResponse){
+                                baos  = new ByteArrayOutputStream();
+                                target=baos;
                             }
-                        }
-                        if (target == null){
-                            target=new NullOutputStream();
-                        }
-                        input = ftp.retrieveFileStream(remote);
-                        if (input == null){// Could not access file or other error
-                            res.setResponseCode(Integer.toString(ftp.getReplyCode()));
-                            res.setResponseMessage(ftp.getReplyString());
-                        } else {
-                            long bytes = IOUtils.copy(input,target);
-                            ftpOK = bytes > 0;
-                            if (saveResponse && baos != null){
-                                res.setResponseData(baos.toByteArray());
-                                if (!binaryTransfer) {
-                                    res.setDataType(SampleResult.TEXT);
+                            if (local.length()>0){
+                                output=new FileOutputStream(local);
+                                if (target==null) {
+                                    target=output;
+                                } else {
+                                    target = new TeeOutputStream(output,baos);
                                 }
-                            } else {
-                                res.setBytes((int) bytes);
                             }
+                            if (target == null){
+                                target=new NullOutputStream();
+                            }
+                            input = ftp.retrieveFileStream(remote);
+                            if (input == null){// Could not access file or other error
+                                res.setResponseCode(Integer.toString(ftp.getReplyCode()));
+                                res.setResponseMessage(ftp.getReplyString());
+                            } else {
+                                long bytes = IOUtils.copy(input,target);
+                                ftpOK = bytes > 0;
+                                if (saveResponse && baos != null){
+                                    res.setResponseData(baos.toByteArray());
+                                    if (!binaryTransfer) {
+                                        res.setDataType(SampleResult.TEXT);
+                                    }
+                                } else {
+                                    res.setBytes(bytes);
+                                }
+                            }
+                        } finally {
+                            IOUtils.closeQuietly(target);
                         }
                     }
 

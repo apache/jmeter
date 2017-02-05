@@ -30,7 +30,7 @@ import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
  * The class LatencyOverTimeGraphConsumer provides a graph to visualize latency
- * rate over time.
+ * per time period (defined by granularity)
  *
  * @since 3.0
  */
@@ -61,7 +61,8 @@ public class LatencyOverTimeGraphConsumer extends AbstractOverTimeGraphConsumer 
         HashMap<String, GroupInfo> groupInfos = new HashMap<>();
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new LatencyValueSelector(), false, false));
+                // We ignore Transaction Controller results
+                new LatencyValueSelector(false), false, false));
         return groupInfos;
     }
 }

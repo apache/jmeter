@@ -52,62 +52,80 @@ under the License.
 
     <properties>
       <!-- these must agree with the definitions in build.properties -->
+      <accessors-smart.version>1.1</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
+      <asm.version>5.2</asm.version>
       <avalon-framework.version>4.1.4</avalon-framework.version>
       <beanshell.version>2.0b5</beanshell.version>
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
       <bcpkix.version>1.49</bcpkix.version>
+      <caffeine.version>2.3.5</caffeine.version>
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
       <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
       <commons-httpclient.version>3.1</commons-httpclient.version>
-      <commons-io.version>2.4</commons-io.version>
-      <commons-jexl.version>1.1</commons-jexl.version>
+      <commons-io.version>2.5</commons-io.version>
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-jexl3.version>3.0</commons-jexl3.version>
-      <commons-lang3.version>3.4</commons-lang3.version>
+      <commons-lang3.version>3.5</commons-lang3.version>
       <commons-logging.version>1.2</commons-logging.version>
-      <commons-math3.version>3.5</commons-math3.version>
-      <commons-net.version>3.4</commons-net.version>
+      <commons-math3.version>3.6.1</commons-math3.version>
+      <commons-net.version>3.5</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
-      <dnsjava.version>2.1.7</dnsjava.version>
+      <dnsjava.version>2.1.8</dnsjava.version>
       <excalibur-logger.version>1.1</excalibur-logger.version>
       <freemarker.version>2.3.23</freemarker.version>
-      <groovy-all.version>2.4.6</groovy-all.version>
+      <groovy-all.version>2.4.8</groovy-all.version>
       <hamcrest-core.version>1.3</hamcrest-core.version>
-      <httpclient.version>4.5.2</httpclient.version>
-      <httpcore.version>4.4.4</httpcore.version>
+      <httpasyncclient.version>4.1.2</httpasyncclient.version>
+      <httpclient.version>4.5.3</httpclient.version>
+      <httpcore.version>4.4.6</httpcore.version>
+      <httpcore-nio.version>4.4.6</httpcore-nio.version>
+      <httpmime.version>4.5.3</httpmime.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
-      <jodd-core.version>3.6.7</jodd-core.version>
-      <jodd-lagarto.version>3.6.7</jodd-lagarto.version>
-      <jodd-log.version>3.6.7</jodd-log.version>
-      <jodd-props.version>3.6.7</jodd-props.version>
-      <json-path.version>2.1.0</json-path.version>
+      <jodd-core.version>3.8.1</jodd-core.version>
+      <jodd-lagarto.version>3.8.1</jodd-lagarto.version>
+      <jodd-log.version>3.8.1</jodd-log.version>
+      <jodd-props.version>3.8.1</jodd-props.version>
+      <json-path.version>2.2.0</json-path.version>
       <json-smart.version>2.2.1</json-smart.version>
-      <jsoup.version>1.8.3</jsoup.version>
+      <jsoup.version>1.10.2</jsoup.version>
       <rhino.version>1.7.7.1</rhino.version>
       <junit.version>4.12</junit.version>
       <logkit.version>2.0</logkit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
-      <rsyntaxtextarea.version>2.5.8</rsyntaxtextarea.version>
-      <slf4j-api.version>1.7.13</slf4j-api.version>
-      <slf4j-nop.version>1.7.13</slf4j-nop.version>
+      <ph-css.version>5.0.3</ph-css.version>
+      <ph-commons.version>8.6.0</ph-commons.version>
+      <rsyntaxtextarea.version>2.6.0</rsyntaxtextarea.version>
+      <slf4j-api.version>1.7.22</slf4j-api.version>
       <jtidy.version>r938</jtidy.version>
-      <tika-core.version>1.12</tika-core.version>
-      <tika-parsers.version>1.12</tika-parsers.version>
-      <xstream.version>1.4.8</xstream.version>
+      <tika-core.version>1.14</tika-core.version>
+      <tika-parsers.version>1.14</tika-parsers.version>
+      <xmlpull.version>1.1.3.1</xmlpull.version>
+      <xstream.version>1.4.9</xstream.version>
+      <xpp3.version>1.1.4c</xpp3.version>
       <xalan.version>2.7.2</xalan.version>
       <serializer.version>2.7.2</serializer.version>
       <xerces.version>2.11.0</xerces.version>
       <xml-apis.version>1.4.01</xml-apis.version>
-      <xmlgraphics-commons.version>2.0.1</xmlgraphics-commons.version>
+      <xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
       <javamail.version>1.5.0-b01</javamail.version>
       <jms.version>1.1.1</jms.version>
     </properties>
 
     <dependencies>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.minidev</groupId>
+        <artifactId>accessors-smart</artifactId>
+        <version>${accessors-smart.version}</version>
+      </dependency>
       <dependency>
         <groupId>bsf</groupId>
         <artifactId>bsf</artifactId>
@@ -139,6 +157,11 @@ under the License.
         <version>${bcpkix.version}</version>
       </dependency>
       <dependency>
+      <groupId>com.github.ben-manes.caffeine</groupId>
+        <artifactId>caffeine</artifactId>
+        <version>${caffeine.version}</version>
+      </dependency>
+      <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>${commons-codec.version}</version>
@@ -162,11 +185,6 @@ under the License.
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-jexl</groupId>
-        <artifactId>commons-jexl</artifactId>
-        <version>${commons-jexl.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -220,18 +238,28 @@ under the License.
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpasyncclient</artifactId>
+        <version>${httpasyncclient.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpmime</artifactId>
-        <version>${httpclient.version}</version>
+        <version>${httpmime.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpcore</artifactId>
         <version>${httpcore.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore-nio</artifactId>
+        <version>${httpcore-nio.version}</version>
       </dependency>
       <dependency>
         <groupId>oro</groupId>
@@ -277,6 +305,16 @@ under the License.
         <groupId>com.thoughtworks.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>${xstream.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>xmlpull</groupId>
+        <artifactId>xmlpull</artifactId>
+        <version>${xmlpull.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>xpp3</groupId>
+        <artifactId>xpp3_min</artifactId>
+        <version>${xpp3.version}</version>
       </dependency>
       <dependency>
         <groupId>xalan</groupId>
@@ -354,6 +392,16 @@ under the License.
         <version>${mongo-java-driver.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-css</artifactId>
+        <version>${ph-css.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-commons</artifactId>
+        <version>${ph-commons.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.fifesoft</groupId>
         <artifactId>rsyntaxtextarea</artifactId>
         <version>${rsyntaxtextarea.version}</version>
@@ -362,11 +410,6 @@ under the License.
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-nop</artifactId>
-        <version>${slf4j-nop.version}</version>
       </dependency>
       <dependency>
         <groupId>org.freemarker</groupId>

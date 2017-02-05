@@ -30,6 +30,8 @@ public class InterleaveControlGui extends AbstractControllerGui {
     private static final long serialVersionUID = 240L;
 
     private JCheckBox style;
+    
+    private JCheckBox accrossThreads;
 
     public InterleaveControlGui() {
         init();
@@ -38,11 +40,13 @@ public class InterleaveControlGui extends AbstractControllerGui {
     @Override
     public void configure(TestElement el) {
         super.configure(el);
-        if (((InterleaveControl) el).getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
+        InterleaveControl controller = (InterleaveControl) el;
+        if (controller.getStyle() == InterleaveControl.IGNORE_SUB_CONTROLLERS) {
             style.setSelected(true);
         } else {
             style.setSelected(false);
         }
+        accrossThreads.setSelected(controller.getInterleaveAccrossThreads());
     }
 
     @Override
@@ -60,11 +64,14 @@ public class InterleaveControlGui extends AbstractControllerGui {
     @Override
     public void modifyTestElement(TestElement ic) {
         configureTestElement(ic);
+        InterleaveControl controller = (InterleaveControl) ic;
         if (style.isSelected()) {
-            ((InterleaveControl) ic).setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
+            controller.setStyle(InterleaveControl.IGNORE_SUB_CONTROLLERS);
         } else {
-            ((InterleaveControl) ic).setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
+            controller.setStyle(InterleaveControl.USE_SUB_CONTROLLERS);
         }
+        
+        controller.setInterleaveAccrossThreads(accrossThreads.isSelected());
     }
 
     /**
@@ -74,6 +81,7 @@ public class InterleaveControlGui extends AbstractControllerGui {
     public void clearGui() {
         super.clearGui();
         style.setSelected(false);
+        accrossThreads.setSelected(false);
     }
 
     @Override
@@ -89,5 +97,8 @@ public class InterleaveControlGui extends AbstractControllerGui {
 
         style = new JCheckBox(JMeterUtils.getResString("ignore_subcontrollers")); // $NON-NLS-1$
         add(CheckBoxPanel.wrap(style));
+        
+        accrossThreads = new JCheckBox(JMeterUtils.getResString("interleave_accross_threads")); // $NON-NLS-1$
+        add(CheckBoxPanel.wrap(accrossThreads));
     }
 }

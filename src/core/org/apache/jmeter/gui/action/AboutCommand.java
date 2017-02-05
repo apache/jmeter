@@ -47,7 +47,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * protocols, config options, etc.
  *
  */
-public class AboutCommand implements Command {
+public class AboutCommand extends AbstractAction {
     private static final Set<String> commandSet;
 
     private static JDialog about;
@@ -85,6 +85,22 @@ public class AboutCommand implements Command {
      */
     void about() {
         JFrame mainFrame = GuiPackage.getInstance().getMainFrame();
+        JDialog dialog = initDialog(mainFrame);
+
+        // NOTE: these lines center the about dialog in the current window. 
+        Point p = mainFrame.getLocationOnScreen();
+        Dimension d1 = mainFrame.getSize();
+        Dimension d2 = dialog.getSize();
+        dialog.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
+        dialog.pack();
+        dialog.setVisible(true);
+    }
+
+    /**
+     * @param mainFrame {@link JFrame}
+     * @return {@link JDialog} initializing it if necessary
+     */
+    private static final JDialog initDialog(JFrame mainFrame) {
         if (about == null) {
             about = new EscapeDialog(mainFrame, "About Apache JMeter...", false);
             about.addMouseListener(new MouseAdapter() {
@@ -94,7 +110,7 @@ public class AboutCommand implements Command {
                 }
             });
 
-            JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.jpg"));
+            JLabel jmeter = new JLabel(JMeterUtils.getImage("jmeter.png"));
             JLabel copyright = new JLabel(JMeterUtils.getJMeterCopyright(), SwingConstants.CENTER);
             JLabel rights = new JLabel("All Rights Reserved.", SwingConstants.CENTER);
             JLabel version = new JLabel("Apache JMeter Version " + JMeterUtils.getJMeterVersion(), SwingConstants.CENTER);
@@ -111,13 +127,6 @@ public class AboutCommand implements Command {
             panel.add(jmeter, BorderLayout.NORTH);
             panel.add(infos, BorderLayout.SOUTH);
         }
-
-        // NOTE: these lines center the about dialog in the current window. 
-        Point p = mainFrame.getLocationOnScreen();
-        Dimension d1 = mainFrame.getSize();
-        Dimension d2 = about.getSize();
-        about.setLocation(p.x + (d1.width - d2.width) / 2, p.y + (d1.height - d2.height) / 2);
-        about.pack();
-        about.setVisible(true);
+        return about;
     }
 }

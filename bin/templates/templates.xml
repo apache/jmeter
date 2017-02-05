@@ -18,7 +18,7 @@
 <!-- 
     See the DTD for allowable elements and attributes.
  -->
-<!DOCTYPE templates SYSTEM "templates.dtd">
+ <!DOCTYPE templates SYSTEM "templates.dtd">
 <templates>
     <template isTestPlan="true">
         <name>Recording</name>
@@ -84,6 +84,22 @@
         ]]></description>
     </template>
     <template isTestPlan="false">
+        <name>JSR223 Sampler using Groovy</name>
+        <fileName>GroovyJSR223Sampler.jmx</fileName>
+        <description><![CDATA[
+        <h1>Sample JSR223 Sampler using Groovy</h1>
+        <h2>Overview</h2>
+        This is a sample JSR223 sampler which shows how to use some of its features with Apache Groovy language
+        <br/>
+        Please select a suitable location in the tree - e.g. Thread Group or WorkBench - before merging.
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#JSR223_Sampler" >JSR223 Sampler</a></li>
+                <li><a href="http://groovy-lang.org/documentation.html" >Apache Groovy</a></li>
+            </ul>
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
         <name>BeanShell Sampler</name>
         <fileName>BeanShellSampler.jmx</fileName>
         <description><![CDATA[
@@ -105,9 +121,6 @@
         <![CDATA[<h1>Template showing how to Load Test MongoDB code using MongoDB Java Driver</h1>
         <h2>JMeter Configuration</h2>
             <ul>
-                <li>Download groovy from <a href="http://groovy-lang.org/download.html" >Groovy Download</a></li>
-                <li>Add the groovy-all-XXX.jar in jmeter/lib folder, it is usually located in embeddable folder</li>
-                <li>Restart JMeter</li>
                 <li>Configure the <b>Server address list</b>, and tune <b>MongoDB options</b> in MongoDB Source Config</li>
                 <li>Modify the JSR223 samples (<b>Insert into testCollection</b> and <b>Count from testCollection</b>) to match your needs</li>
             </ul>
@@ -198,6 +211,22 @@
             <ul>
                 <li><a href="http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html" >http://jmeter.apache.org/usermanual/build-ldapext-test-plan.html</a></li>
             </ul>       
+        ]]></description>
+    </template>
+    <template isTestPlan="false">
+        <name>Think Time at a point</name>
+        <fileName>ThinkTime.jmx</fileName>
+        <description><![CDATA[
+        <h1>Think Time between 2 samplers</h1>
+        <h2>Overview</h2>
+        This shows how to introduce a Think Time of 1s+/- 100 ms between 2 samplers 
+        <br/>
+        Please select a suitable location in the tree - e.g. Thread Group or Controller - before merging.
+        <h2>Useful links</h2>
+            <ul>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Test_Action" >Test Action</a></li>
+                <li><a href="http://jmeter.apache.org/usermanual/component_reference.html#Uniform_Random_Timer" >Uniform Random Timer</a></li>
+            </ul>
         ]]></description>
     </template>
 </templates>

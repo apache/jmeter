@@ -33,8 +33,14 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
+    static final boolean ASSERTION_RESULTS_FAILURE_MESSAGE = 
+            JMeterUtils
+                .getPropDefault(
+                        SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
+                        true);
+            
+    static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private static final Long ZERO = Long.valueOf(0);
-    private static final String ASSERTION_FAILED = "Assertion failed"; //$NON-NLS-1$
     private long errorCount = 0L;
 
     /**
@@ -57,7 +63,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         result.addResult(new ValueResultData(key != null ? key : JMeterUtils
                 .getResString("reportgenerator_summary_total")));
         result.addResult(new ValueResultData(data));
-        result.addResult(new ValueResultData(Double.valueOf(((double) data.longValue() * 100 / errorCount))));
+        result.addResult(new ValueResultData(Double.valueOf((double) data.longValue() * 100 / errorCount)));
         result.addResult(new ValueResultData(Double.valueOf((double) data.longValue() * 100
                 / getOverallInfo().getData().doubleValue())));
         return result;
@@ -72,20 +78,20 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      */
     @Override
     protected String getKeyFromSample(Sample sample) {
-        String code = sample.getResponseCode();
-        if (isSuccessCode(code)) {
-            code = ASSERTION_FAILED;
-            if (JMeterUtils
-                    .getPropDefault(
-                            SampleSaveConfiguration.ASSERTION_RESULTS_FAILURE_MESSAGE_PROP,
-                            false)) {
+        String responseCode = sample.getResponseCode();
+        String responseMessage = sample.getResponseMessage();
+        String key = responseCode + (!StringUtils.isEmpty(responseMessage) ? 
+                 "/" + StringEscapeUtils.escapeJson(responseMessage) : "");
+        if (isSuccessCode(responseCode)) {
+            key = ASSERTION_FAILED;
+            if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
                 if (!StringUtils.isEmpty(msg)) {
-                    code = StringEscapeUtils.escapeJson(msg);
+                    key = StringEscapeUtils.escapeJson(msg);
                 }
             }
         }
-        return code;
+        return key;
     }
 
     /*
@@ -112,7 +118,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
 
             Long data = info.getData();
             if (data == null) {
-                data = Long.valueOf(1);
+                data = ZERO;
             }
             info.setData(Long.valueOf(data.longValue() + 1));
         }
@@ -129,11 +135,11 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      *         FIXME Duplicates HTTPSamplerBase#isSuccessCode but it's in http
      *         protocol
      */
-    protected boolean isSuccessCode(String codeAsString) {
+    static boolean isSuccessCode(String codeAsString) {
         if (StringUtils.isNumeric(codeAsString)) {
             try {
                 int code = Integer.parseInt(codeAsString);
-                return (code >= 200 && code <= 399);
+                return code >= 200 && code <= 399;
             } catch (NumberFormatException ex) {
                 return false;
             }

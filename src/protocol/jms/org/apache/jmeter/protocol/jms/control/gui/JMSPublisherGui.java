@@ -48,9 +48,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
  */
 public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListener {
 
-    private static final long serialVersionUID = 240L;
-
-    private static final String ALL_FILES = "*.*"; //$NON-NLS-1$
+    private static final long serialVersionUID = 241L;
 
     //++ These names are used in the JMX files, and must not be changed
     /** Take source from the named file */
@@ -92,6 +90,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledTextField expiration = new JLabeledTextField(JMeterUtils.getResString("jms_expiration"),10); //$NON-NLS-1$
 
+    private final JLabeledTextField jmsErrorReconnectOnCodes =
+            new JLabeledTextField(JMeterUtils.getResString("jms_error_reconnect_on_codes")); // $NON-NLS-1$
+
     private final JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
     private final JCheckBox useAuth = new JCheckBox(JMeterUtils.getResString("jms_use_auth"), false); //$NON-NLS-1$
@@ -102,9 +103,9 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
 
     private final JLabeledTextField iterations = new JLabeledTextField(JMeterUtils.getResString("jms_itertions")); //$NON-NLS-1$
 
-    private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file"), ALL_FILES); //$NON-NLS-1$
+    private final FilePanel messageFile = new FilePanel(JMeterUtils.getResString("jms_file")); //$NON-NLS-1$
 
-    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), ALL_FILES); //$NON-NLS-1$
+    private final FilePanel randomFile = new FilePanel(JMeterUtils.getResString("jms_random_file"), true); //$NON-NLS-1$
 
     private final JSyntaxTextArea textMessage = JSyntaxTextArea.getInstance(10, 50); // $NON-NLS-1$
 
@@ -171,6 +172,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
       sampler.setConnectionFactory(jndiConnFac.getText());
       sampler.setDestination(jmsDestination.getText());
       sampler.setExpiration(expiration.getText());
+      sampler.setReconnectionErrorCodes(jmsErrorReconnectOnCodes.getText());
       sampler.setPriority(priority.getText());
       sampler.setUsername(jmsUser.getText());
       sampler.setPassword(jmsPwd.getText());
@@ -206,6 +208,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         mainPanel.add(createDestinationPane());
         mainPanel.add(createAuthPane());
         mainPanel.add(createPriorityAndExpiration());
+        mainPanel.add(jmsErrorReconnectOnCodes);
         mainPanel.add(iterations);
 
         jmsPropertiesPanel = new JMSPropertiesPanel(); //$NON-NLS-1$
@@ -238,6 +241,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         jndiConnFac.setText(""); // $NON-NLS-1$
         jmsDestination.setText(""); // $NON-NLS-1$
         expiration.setText(""); // $NON-NLS-1$
+        jmsErrorReconnectOnCodes.setText("");
         priority.setText(""); // $NON-NLS-1$
         jmsUser.setText(""); // $NON-NLS-1$
         jmsPwd.setText(""); // $NON-NLS-1$
@@ -279,6 +283,7 @@ public class JMSPublisherGui extends AbstractSamplerGui implements ChangeListene
         msgChoice.setText(sampler.getMessageChoice());
         iterations.setText(sampler.getIterations());
         expiration.setText(sampler.getExpiration());
+        jmsErrorReconnectOnCodes.setText(sampler.getReconnectionErrorCodes());
         priority.setText(sampler.getPriority());
         useAuth.setSelected(sampler.isUseAuth());
         jmsUser.setEnabled(useAuth.isSelected());

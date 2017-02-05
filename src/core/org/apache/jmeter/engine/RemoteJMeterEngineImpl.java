@@ -61,7 +61,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     // Should we create our own copy of the RMI registry?
-    private static final boolean createServer =
+    private static final boolean CREATE_SERVER =
         JMeterUtils.getPropDefault("server.rmi.create", true); // $NON-NLS-1$
 
     private final Object LOCK = new Object();
@@ -109,7 +109,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                     + "\tCan be overridden by defining the system property 'java.rmi.server.hostname' - see jmeter-server script file");
         }
         log.debug("This = " + this);
-        if (createServer){
+        if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
                 LocateRegistry.createRegistry(this.rmiPort);
@@ -195,8 +195,16 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      */
     @Override
     public void rexit() throws RemoteException {
-        log.info("Exitting");
-        backingEngine.exit();
+        log.info("Exiting");
+        // Bug 59400 - allow rexit() to return
+        Thread et = new Thread() {
+            @Override
+            public void run() {
+                log.info("Stopping the backing engine");
+                backingEngine.exit();
+            }  
+        };
+        et.setDaemon(false);
         // Tidy up any objects we created
         Registry reg = LocateRegistry.getRegistry(this.rmiPort);        
         try {
@@ -207,6 +215,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         log.info("Unbound from registry");
         // Help with garbage control
         JMeterUtils.helpGC();
+        et.start();
     }
 
     @Override

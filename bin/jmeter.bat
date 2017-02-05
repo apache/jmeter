@@ -29,7 +29,7 @@ rem   =====================================================
 setlocal
 
 rem Minimal version to run JMeter
-set MINIMAL_VERSION=1.7.0
+set MINIMAL_VERSION=1.8.0
 
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do (
     rem @echo Debug Output: %%g
@@ -71,31 +71,23 @@ rem On NT/2K grab all arguments at once
 set JMETER_CMD_LINE_ARGS=%*
 
 rem The following link describes the -XX options:
-rem http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
-rem http://java.sun.com/developer/TechTips/2000/tt1222.html has some more descriptions
-rem Unfortunately TechTips no longer seem to be available, except via:
-rem https://web.archive.org/web/20090614101951/http://java.sun.com/developer/TechTips/2000/tt1222.html
+rem http://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html
 
 rem See the unix startup file for the rationale of the following parameters,
 rem including some tuning recommendations
 set HEAP=-Xms512m -Xmx512m
-set NEW=-XX:NewSize=128m -XX:MaxNewSize=128m
-set SURVIVOR=-XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=50%
-set TENURING=-XX:MaxTenuringThreshold=2
-rem Java 8 remove Permanent generation, don't settings the PermSize
-if %current_minor% LEQ "8" (
-    rem Increase MaxPermSize if you use a lot of Javascript in your Test Plan :
-    set PERM=-XX:PermSize=64m -XX:MaxPermSize=128m
-)
 
-set CLASS_UNLOAD=-XX:+CMSClassUnloadingEnabled
-rem set DEBUG=-verbose:gc -XX:+PrintTenuringDistribution
+rem Uncomment this to generate GC verbose file
+rem set VERBOSE_GC=-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps
 
+set GC_ALGO=-XX:+UseG1GC -XX:MaxGCPauseMillis=250 -XX:G1ReservePercent=20
+
+set SYSTEM_PROPS=-Djava.security.egd=file:/dev/urandom
 rem Always dump on OOM (does not cost anything unless triggered)
 set DUMP=-XX:+HeapDumpOnOutOfMemoryError
 
 rem Additional settings that might help improve GUI performance on some platforms
-rem See: http://java.sun.com/products/java-media/2D/perf_graphics.html
+rem See: http://www.oracle.com/technetwork/java/perf-graphics-135933.html
 
 set DDRAW=
 rem  Setting this flag to true turns off DirectDraw usage, which sometimes helps to get rid of a lot of rendering problems on Win32.
@@ -109,7 +101,7 @@ rem set DDRAW=%DDRAW% -Dsun.java2d.ddscale=true
 
 rem Server mode
 rem Collect the settings defined above
-set ARGS=%DUMP% %HEAP% %NEW% %SURVIVOR% %TENURING% %PERM% %CLASS_UNLOAD% %DDRAW%
+set ARGS=%DUMP% %HEAP% %VERBOSE_GC% %GC_ALGO% %DDRAW% %SYSTEM_PROPS%
 
 %JM_START% %JM_LAUNCH% %ARGS% %JVM_ARGS% -jar "%JMETER_BIN%ApacheJMeter.jar" %JMETER_CMD_LINE_ARGS%
 

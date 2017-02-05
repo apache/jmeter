@@ -61,11 +61,11 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
      * This enum defines the calculation modes used by the ConstantThroughputTimer.
      */
     public enum Mode {
-        ThisThreadOnly("calcMode.1"),
-        AllActiveThreads("calcMode.2"),
-        AllActiveThreadsInCurrentThreadGroup("calcMode.3"),
-        AllActiveThreads_Shared("calcMode.4"),
-        AllActiveThreadsInCurrentThreadGroup_Shared("calcMode.5"),
+        ThisThreadOnly("calcMode.1"), // NOSONAR Keep naming for compatibility
+        AllActiveThreads("calcMode.2"), // NOSONAR Keep naming for compatibility
+        AllActiveThreadsInCurrentThreadGroup("calcMode.3"), // NOSONAR Keep naming for compatibility
+        AllActiveThreads_Shared("calcMode.4"), // NOSONAR Keep naming for compatibility
+        AllActiveThreadsInCurrentThreadGroup_Shared("calcMode.5"), // NOSONAR Keep naming for compatibility
         ;
 
         private final String propertyName; // The property name to be used to look up the display string
@@ -172,9 +172,9 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
 
     // Calculate the delay based on the mode
     private long calculateDelay() {
-        long delay = 0;
+        long delay;
         // N.B. we fetch the throughput each time, as it may vary during a test
-        double msPerRequest = (MILLISEC_PER_MIN / getThroughput());
+        double msPerRequest = MILLISEC_PER_MIN / getThroughput();
         switch (mode) {
         case AllActiveThreads: // Total number of threads
             delay = Math.round(JMeterContextService.getNumberOfThreads() * msPerRequest);
@@ -217,8 +217,8 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
         //Synchronize on the info object's MUTEX to ensure
         //Multiple threads don't update the scheduled time simultaneously
         synchronized (info.MUTEX) {
-            final long nextRequstTime = info.lastScheduledTime + milliSecPerRequest;
-            info.lastScheduledTime = Math.max(now, nextRequstTime);
+            final long nextRequestTime = info.lastScheduledTime + milliSecPerRequest;
+            info.lastScheduledTime = Math.max(now, nextRequestTime);
             calculatedDelay = info.lastScheduledTime - now;
         }
 
@@ -329,5 +329,4 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
     void setMode(Mode newMode) {
         mode = newMode;
     }
-
 }

@@ -22,12 +22,16 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
@@ -63,7 +67,26 @@ public class TemplateManager {
     }
     
     private XStream initXStream() {
-        XStream xstream = new XStream(new DomDriver());
+        XStream xstream = new XStream(new DomDriver(){
+            /**
+             * Create the DocumentBuilderFactory instance.
+             * See https://blog.compass-security.com/2012/08/secure-xml-parser-configuration/
+             * See https://github.com/x-stream/xstream/issues/25
+             * @return the new instance
+             */
+            @Override
+            protected DocumentBuilderFactory createDocumentBuilderFactory() {
+                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                try {
+                    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                } catch (ParserConfigurationException e) {
+                    throw new StreamException(e);
+                }
+                factory.setExpandEntityReferences(false);
+                return factory;
+            }
+        });
         xstream.alias("template", Template.class);
         xstream.alias("templates", Templates.class);
         xstream.useAttributeFor(Template.class, "isTestPlan");

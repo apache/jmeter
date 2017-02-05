@@ -78,7 +78,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
     // The name of the sampler
     private String name;
 
-    private volatile Thread myThread;
+    private transient volatile Thread myThread;
 
     /**
      * Default constructor for <code>SleepTest</code>.
@@ -162,6 +162,7 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
             LOG.warn("SleepTest: interrupted.");
             results.setSuccessful(false);
             results.setResponseMessage(e.toString());
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             LOG.error("SleepTest: error during sample", e);
             results.setSuccessful(false);
@@ -207,8 +208,8 @@ public class SleepTest extends AbstractJavaSamplerClient implements Serializable
     private void listParameters(JavaSamplerContext context) {
         Iterator<String> argsIt = context.getParameterNamesIterator();
         while (argsIt.hasNext()) {
-            String name = argsIt.next();
-            LOG.debug(name + "=" + context.getParameter(name));
+            String lName = argsIt.next();
+            LOG.debug(lName + "=" + context.getParameter(lName));
         }
     }
 

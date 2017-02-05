@@ -52,18 +52,16 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
     }
 
     @Override
+    @SuppressWarnings("SynchronizeOnNonFinalField")
     public void add(SampleResult sample) {
         final StringBuilder sb = new StringBuilder(100);
         sb.append(sample.getSampleLabel());
         sb.append(getAssertionResult(sample));
         sb.append("\n"); // $NON-NLS-1$
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                synchronized (textArea) {
-                    textArea.append(sb.toString());
-                    textArea.setCaretPosition(textArea.getText().length());
-                }                
+        JMeterUtils.runSafe(false, () -> {
+            synchronized (textArea) {
+                textArea.append(sb.toString());
+                textArea.setCaretPosition(textArea.getText().length());
             }
         });
     }
@@ -103,6 +101,7 @@ public class AssertionVisualizer extends AbstractVisualizer implements Clearable
         // TEXTAREA LABEL
         JLabel textAreaLabel =
             new JLabel(JMeterUtils.getResString("assertion_textarea_label")); // $NON-NLS-1$
+        textAreaLabel.setLabelFor(textArea);
         Box mainPanel = Box.createVerticalBox();
         mainPanel.add(textAreaLabel);
 

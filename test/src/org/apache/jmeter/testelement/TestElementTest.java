@@ -20,7 +20,6 @@ package org.apache.jmeter.testelement;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTest;
@@ -46,9 +45,8 @@ public class TestElementTest extends JMeterTestCaseJUnit3 {
      */
     public static Test suite() throws Exception {
         TestSuite suite = new TestSuite("TestElements");
-        Iterator<Object> iter = JMeterTest.getObjects(TestElement.class).iterator();
-        while (iter.hasNext()) {
-            TestElement item = (TestElement) iter.next();
+        for (Object o : JMeterTest.getObjects(TestElement.class)) {
+            TestElement item = (TestElement) o;
             TestSuite ts = new TestSuite(item.getClass().getName());
             ts.addTest(new TestElementTest("runTestElement", item));
             suite.addTest(ts);

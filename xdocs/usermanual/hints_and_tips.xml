@@ -92,23 +92,38 @@ It provides search with following options:
 will match any component that contains test in searchable elements of the component</dd>
 </dl>
 
-<figure width="663" height="300" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
-<figure width="667" height="319" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
-<figure width="642" height="307" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
-<figure width="596" height="328" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
+<figure width="768" height="339" image="searching/raw-search.png">Figure 1 - Search raw text in TreeView</figure>
+<figure width="767" height="316" image="searching/raw-search-result.png">Figure 2 - Result in TreeView</figure>
+<figure width="772" height="319" image="searching/regexp-search.png">Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figure>
+<figure width="771" height="302" image="searching/regexp-search-result.png">Figure 4 - Result in TreeView</figure>
 
 </subsection>
 
-<subsection name="&sect-num;.4 Toolbar icons size" anchor="toolbar">
+<subsection name="&sect-num;.4 JMeter with a HiDPI screen on Linux or Windows" anchor="hidpi">
 <description>
     <p>
-You can change the size of icons in the toolbar using the property <source>jmeter.toolbar.icons.size</source> with these
-values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code>.
+    The HiDPI mode isn't currently support by the Swing API in Java on Linux, MacOS or Windows. Therefore
+    JMeter can be very hard to read with a HiDPI screen (little icons and chars).
     </p>
+    <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
+    <dl>
+      <dt><code>jmeter.hidpi.mode</code></dt>
+      <dd>set to <code>true</code> to activate a '<em>pseudo</em>'-hidpi mode allowing to increase size of some UI elements</dd>
+      <dt><code>jmeter.hidpi.scale.factor</code></dt>
+      <dd>set to <code>2.0</code> to scale the size of some UI elements</dd>
+      <dt><code>jmeter.toolbar.icons.size</code></dt>
+      <dd>with these values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</code> (Suggested value for HiDPI)</dd>
+      <dt><code>jmeter.tree.icons.size</code></dt>
+      <dd>with these values: <code>19x19</code> (default size), <code>24x24</code>, <code>32x32</code> (Suggested value for HiDPI) or <code>48x48</code></dd>
+    </dl>
+    <note>This is not a full HiDPI support and only affects
+      <ul>
+        <li>JMeter tree nodes</li>
+        <li>icons in the menus</li>
+        <li>Tables content</li>
+      </ul>
+    </note>
 </description>
-<figure width="296" height="95" image="icons-22x22.jpg">Icons with the size <code>22x22</code>.</figure>
-<figure width="300" height="106" image="icons-32x32.jpg">Icons with the size <code>32x32</code>.</figure>
-<figure width="365" height="120" image="icons-48x48.jpg">Icons with the size <code>48x48</code>.</figure>
 </subsection>
 
 <subsection name="&sect-num;.5 Autosave process configuration" anchor="autosave">
@@ -197,6 +212,7 @@ values: <code>22x22</code> (default size), <code>32x32</code> or <code>48x48</co
             </dt>
             <dd>View Results Tree</dd>
         </dl>
+        <note>The binding above are made for Windows QWERTY keyboards. For other platforms and keyboards ensure you adapt those values.</note>
         <p>
             To change these binding, please find "<code>gui.quick_*</code>" properties within <code>jmeter.properties</code> file as example,
             it is recommended to put overrides for them into <code>user.properties</code> file.

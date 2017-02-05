@@ -51,7 +51,8 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 
     private DefaultMutableTreeNode root;
 
-    private JTextPane base, secondary;
+    private JTextPane base;
+    private JTextPane secondary;
 
     public ComparisonVisualizer() {
         super();
@@ -60,14 +61,11 @@ public class ComparisonVisualizer extends AbstractVisualizer implements Clearabl
 
     @Override
     public void add(final SampleResult sample) {
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
-                treeModel.insertNodeInto(currNode, root, root.getChildCount());
-                if (root.getChildCount() == 1) {
-                    resultsTree.expandPath(new TreePath(root));
-                }                
+        JMeterUtils.runSafe(false, () -> {
+            DefaultMutableTreeNode currNode = new DefaultMutableTreeNode(sample);
+            treeModel.insertNodeInto(currNode, root, root.getChildCount());
+            if (root.getChildCount() == 1) {
+                resultsTree.expandPath(new TreePath(root));
             }
         });
     }

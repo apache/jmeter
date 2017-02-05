@@ -250,17 +250,16 @@ public class FileServer {
      * Creates an association between a filename and a File inputOutputObject,
      * and stores it for later use - unless it is already stored.
      *
-     * @param filename - relative (to base) or absolute file name (must not be null)
+     * @param filename - relative (to base) or absolute file name (must not be null or empty)
      * @param charsetName - the character set encoding to use for the file (may be null)
      * @param alias - the name to be used to access the object (must not be null)
      * @param hasHeader true if the file has a header line describing the contents
      * @return the header line; may be null
-     * @throws EOFException if eof reached
-     * @throws IllegalArgumentException if header could not be read
+     * @throws IllegalArgumentException if header could not be read or filename is null or empty
      */
     public synchronized String reserveFile(String filename, String charsetName, String alias, boolean hasHeader) {
-        if (filename == null){
-            throw new IllegalArgumentException("Filename must not be null");
+        if (filename == null || filename.isEmpty()){
+            throw new IllegalArgumentException("Filename must not be null or empty");
         }
         if (alias == null){
             throw new IllegalArgumentException("Alias must not be null");
@@ -274,20 +273,20 @@ public class FileServer {
                 log.info("Stored: "+filename+" Alias: "+alias);
             }
             files.put(alias, fileEntry);
-            if (hasHeader){
+            if (hasHeader) {
                 try {
-                    fileEntry.headerLine=readLine(alias, false);
-                } catch (IOException e) {
+                    fileEntry.headerLine = readLine(alias, false);
+                    if (fileEntry.headerLine == null) {
+                        fileEntry.exception = new EOFException("File is empty: " + fileEntry.file);
+                    }
+                } catch (IOException | IllegalArgumentException e) {
                     fileEntry.exception = e;
-                    throw new IllegalArgumentException("Could not read file header line",e);
-                }
-                if (fileEntry.headerLine == null) {
-                    fileEntry.exception = new EOFException("File is empty: " + fileEntry.file);                    
                 }
             }
         }
         if (hasHeader && fileEntry.headerLine == null) {
-            throw new IllegalArgumentException("Could not read file header line", fileEntry.exception);            
+            throw new IllegalArgumentException("Could not read file header line for file " + filename,
+                    fileEntry.exception);
         }
         return fileEntry.headerLine;
     }
@@ -331,16 +330,16 @@ public class FileServer {
         return readLine(filename, recycle, false);
     }
    /**
-     * Get the next line of the named file.
+     * Get the next line of the named file
      *
      * @param filename the filename or alias that was used to reserve the file
      * @param recycle - should file be restarted at EOF?
-     * @param firstLineIsNames - 1st line is fields names
+     * @param ignoreFirstLine - Ignore first line
      * @return String containing the next line in the file (null if EOF reached and not recycle)
      * @throws IOException when reading of the file fails, or the file was not reserved properly
      */
     public synchronized String readLine(String filename, boolean recycle, 
-            boolean firstLineIsNames) throws IOException {
+            boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(filename);
         if (fileEntry != null) {
             if (fileEntry.inputOutputObject == null) {
@@ -354,9 +353,9 @@ public class FileServer {
                 reader.close();
                 reader = createBufferedReader(fileEntry);
                 fileEntry.inputOutputObject = reader;
-                if (firstLineIsNames) {
+                if (ignoreFirstLine) {
                     // read first line and forget
-                    reader.readLine();
+                    reader.readLine();//NOSONAR
                 }
                 line = reader.readLine();
             }
@@ -370,26 +369,35 @@ public class FileServer {
      * 
      * @param alias the file name or alias
      * @param recycle whether the file should be re-started on EOF
-     * @param firstLineIsNames whether the file contains a file header
+     * @param ignoreFirstLine whether the file contains a file header which will be ignored
      * @param delim the delimiter to use for parsing
      * @return the parsed line, will be empty if the file is at EOF
      * @throws IOException when reading of the aliased file fails, or the file was not reserved properly
      */
-    public synchronized String[] getParsedLine(String alias, boolean recycle, boolean firstLineIsNames, char delim) throws IOException {
-        BufferedReader reader = getReader(alias, recycle, firstLineIsNames);
+    public synchronized String[] getParsedLine(String alias, boolean recycle, boolean ignoreFirstLine, char delim) throws IOException {
+        BufferedReader reader = getReader(alias, recycle, ignoreFirstLine);
         return CSVSaveService.csvReadFile(reader, delim);
     }
 
-    private BufferedReader getReader(String alias, boolean recycle, boolean firstLineIsNames) throws IOException {
+    /**
+     * Return BufferedReader handling close if EOF reached and recycle is true 
+     * and ignoring first line if ignoreFirstLine is true
+     * @param alias String alias
+     * @param recycle Recycle at eof
+     * @param ignoreFirstLine Ignore first line
+     * @return {@link BufferedReader}
+     * @throws IOException
+     */
+    private BufferedReader getReader(String alias, boolean recycle, boolean ignoreFirstLine) throws IOException {
         FileEntry fileEntry = files.get(alias);
         if (fileEntry != null) {
             BufferedReader reader;
             if (fileEntry.inputOutputObject == null) {
                 reader = createBufferedReader(fileEntry);
                 fileEntry.inputOutputObject = reader;
-                if (firstLineIsNames) {
+                if (ignoreFirstLine) {
                     // read first line and forget
-                    reader.readLine();
+                    reader.readLine(); //NOSONAR
                 }                
             } else if (!(fileEntry.inputOutputObject instanceof Reader)) {
                 throw new IOException("File " + alias + " already in use");
@@ -402,9 +410,9 @@ public class FileServer {
                         reader.close();
                         reader = createBufferedReader(fileEntry);
                         fileEntry.inputOutputObject = reader;
-                        if (firstLineIsNames) {
+                        if (ignoreFirstLine) {
                             // read first line and forget
-                            reader.readLine();
+                            reader.readLine(); //NOSONAR
                         }                
                     } else { // OK, we still have some data, restore it
                         reader.reset();
@@ -418,6 +426,9 @@ public class FileServer {
     }
 
     private BufferedReader createBufferedReader(FileEntry fileEntry) throws IOException {
+        if (!fileEntry.file.canRead() || !fileEntry.file.isFile()) {
+            throw new IllegalArgumentException("File "+ fileEntry.file.getName()+ " must exist and be readable");
+        }
         FileInputStream fis = new FileInputStream(fileEntry.file);
         InputStreamReader isr = null;
         // If file encoding is specified, read using that encoding, otherwise use default platform encoding

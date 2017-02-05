@@ -83,7 +83,7 @@ class SMIMEAssertion {
         checkForBouncycastle();
         AssertionResult res = new AssertionResult(name);
         try {
-            MimeMessage msg = null;
+            MimeMessage msg;
             final int msgPos = testElement.getSpecificMessagePositionAsInt();
             if (msgPos < 0){ // means counting from end
                 SampleResult[] subResults = response.getSubResults();
@@ -302,7 +302,7 @@ class SMIMEAssertion {
 
         final SampleResult sampleResult = subResults[messageNumber];
         if (log.isDebugEnabled()) {
-            log.debug("Bytes: "+sampleResult.getBytes()+" CT: "+sampleResult.getContentType());
+            log.debug("Bytes: "+sampleResult.getBytesAsLong()+" CT: "+sampleResult.getContentType());
         }
         byte[] data = sampleResult.getResponseData();
         Session session = Session.getDefaultInstance(new Properties());

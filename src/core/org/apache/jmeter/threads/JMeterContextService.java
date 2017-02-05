@@ -134,7 +134,7 @@ public final class JMeterContextService {
         testStart = 0;
     }
 
-    public static synchronized long getTestStartTime() {// NOT USED
+    public static synchronized long getTestStartTime() {
         return testStart;
     }
 

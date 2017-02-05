@@ -68,17 +68,14 @@ public class RenderAsXML extends SamplerResultTab
         final ByteArrayInputStream baIS = new ByteArrayInputStream(source);
         for(int i=0; i<source.length-XML_PFX.length; i++){
             if (JOrphanUtils.startsWith(source, XML_PFX, i)){
-                baIS.skip(i);// Skip the leading bytes (if any)
+                baIS.skip(i);// NOSONAR Skip the leading bytes (if any)
                 break;
             }
         }
 
-        // there is also a javax.swing.text.Document class.
-        org.w3c.dom.Document document = null;
-
         StringWriter sw = new StringWriter();
         Tidy tidy = XPathUtil.makeTidyParser(true, true, true, sw);
-        document = tidy.parseDOM(baIS, null);
+        org.w3c.dom.Document document = tidy.parseDOM(baIS, null);
         document.normalize();
         if (tidy.getParseErrors() > 0) {
             showErrorMessageDialog(sw.toString(),

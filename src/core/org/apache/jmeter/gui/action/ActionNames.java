@@ -33,7 +33,9 @@ public final class ActionNames {
     public static final String ADD              = "Add"; // $NON-NLS-1$
     public static final String ADD_ALL          = "add_all"; // $NON-NLS-1$
     public static final String ADD_PARENT       = "Add Parent"; // $NON-NLS-1$
+    public static final String ADD_THINK_TIME_BETWEEN_EACH_STEP    = "Add Think Time between each step"; // $NON-NLS-1$
     public static final String ANALYZE_FILE     = "Analyze File"; // $NON-NLS-1$
+    public static final String APPLY_NAMING_CONVENTION    = "Apply Naming Convention"; // $NON-NLS-1$
     public static final String CHANGE_LANGUAGE  = "change_language"; // $NON-NLS-1$
     public static final String CHANGE_PARENT    = "Change Parent"; // $NON-NLS-1$
     public static final String CHECK_DIRTY      = "check_dirty"; // $NON-NLS-1$
@@ -99,9 +101,12 @@ public final class ActionNames {
     public static final String QUICK_COMPONENT  = "quick_component"; // $NON-NLS-1$
     public static final String COLLAPSE         = "collapse"; // $NON-NLS-1$
     public static final String EXPAND           = "expand"; // $NON-NLS-1$
+    public static final String RUN_TG           = "run_tg"; // $NON-NLS-1$
+    public static final String RUN_TG_NO_TIMERS = "run_tg_no_timers"; // $NON-NLS-1$
+    public static final String VALIDATE_TG      = "validate_tg"; //$NON-NLS-1$
+    public static final String ZOOM_IN          = "zoom_in"; //$NON-NLS-1$
+    public static final String ZOOM_OUT         = "zoom_out"; //$NON-NLS-1$
 
     // Prevent instantiation
-    private ActionNames(){
-        
-    }
+    private ActionNames() {}
 }

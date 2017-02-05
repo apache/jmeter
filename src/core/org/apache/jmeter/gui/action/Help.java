@@ -39,7 +39,7 @@ import org.apache.log.Logger;
 /**
  * Implements the Help menu item.
  */
-public class Help implements Command {
+public class Help extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commands = new HashSet<>();
@@ -70,18 +70,9 @@ public class Help implements Command {
      */
     @Override
     public void doAction(ActionEvent e) {
-        if (helpWindow == null) {
-            helpWindow = new EscapeDialog(new Frame(),// independent frame to
-                                                    // allow it to be overlaid
-                                                    // by the main frame
-                    JMeterUtils.getResString("help"),//$NON-NLS-1$
-                    false);
-            helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
-            helpWindow.getContentPane().removeAll();
-            helpWindow.getContentPane().add(scroller);
-            ComponentUtil.centerComponentInWindow(helpWindow, 60);
-        }
-        helpWindow.setVisible(true); // set the window visible immediately
+        JDialog dialog = initHelpWindow();
+        dialog.setVisible(true); // set the window visible immediately
+
         /*
          * This means that a new page will be shown before rendering is complete,
          * however the correct location will be displayed.
@@ -98,9 +89,37 @@ public class Help implements Command {
         try {
             helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
         } catch (IOException ioe) {
-            log.error(ioe.toString());
-            JMeterUtils.reportErrorToUser("Problem loading a help page - see log for details");
+            log.error("Error setting page for url"+url, ioe);
+            helpDoc.setText("<html><head><title>Problem loading help page</title>"
+                    + "<style><!--"
+                    + ".note { background-color: #ffeeee; border: 1px solid brown; }"
+                    + "div { padding: 10; margin: 10; }"
+                    + "--></style></head>"
+                    + "<body><div class='note'>"
+                    + "<h1>Problem loading help page</h1>"
+                    + "<div>Can't load url: &quot;<em>"
+                    + url.toString() + "</em>&quot;</div>"
+                    + "<div>See log for more info</div>"
+                    + "</body>");
         }
+    }
+
+    /**
+     * @return {@link JDialog} Help window and initializes it if necessary
+     */
+    private static JDialog initHelpWindow() {
+        if (helpWindow == null) {
+            helpWindow = new EscapeDialog(new Frame(),// independent frame to
+                                                    // allow it to be overlaid
+                                                    // by the main frame
+                    JMeterUtils.getResString("help"),//$NON-NLS-1$
+                    false);
+            helpWindow.getContentPane().setLayout(new GridLayout(1, 1));
+            helpWindow.getContentPane().removeAll();
+            helpWindow.getContentPane().add(scroller);
+            ComponentUtil.centerComponentInWindow(helpWindow, 60);
+        }
+        return helpWindow;
     }
 
     /**

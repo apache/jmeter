@@ -34,7 +34,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ClientConnectionOperator;
 import org.apache.http.conn.ClientConnectionRequest;
@@ -53,13 +52,12 @@ import org.apache.http.util.Asserts;
  * extracted from {@link PoolingHttpClientConnectionManager} to allow using 
  * better validation mechanism introduced in 4.4
  * TODO : Remove when full upgrade to new HttpClient 4.5.X API is finished
- * @deprecated Will be removed in 3.1, DO NOT USE
+ * @deprecated Will be removed in 3.2, DO NOT USE
  */
 @Deprecated
-@ThreadSafe
 public class JMeterPoolingClientConnectionManager implements ClientConnectionManager, ConnPoolControl<HttpRoute> {
 
-    private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 2000;
+    private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 1700;
 
     private final Log log = LogFactory.getLog(getClass());
     
@@ -108,7 +106,16 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
         this.schemeRegistry = schemeRegistry;
         this.dnsResolver  = dnsResolver;
         this.operator = createConnectionOperator(schemeRegistry);
-        this.pool = new HttpConnPool(this.log, this.operator, 2, 20, timeToLive, tunit);
+        this.pool = new HttpConnPool(this.log, this.operator, 2, 20, timeToLive, tunit) {
+            /**
+             * @see org.apache.http.pool.AbstractConnPool#validate(org.apache.http.pool.PoolEntry)
+             */
+            @Override
+            protected boolean validate(HttpPoolEntry entry) {
+                return !entry.getConnection().isStale();
+            }
+            
+        };
         pool.setValidateAfterInactivity(validateAfterInactivity);
     }
     
@@ -347,6 +354,13 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
     @Override
     public PoolStats getStats(final HttpRoute route) {
         return this.pool.getStats(route);
+    }
+
+    /**
+     * @return the dnsResolver
+     */
+    protected DnsResolver getDnsResolver() {
+        return dnsResolver;
     }
 
 }

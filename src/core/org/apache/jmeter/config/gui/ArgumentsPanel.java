@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
@@ -223,9 +222,8 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
     @Override
     public void modifyTestElement(TestElement args) {
         GuiUtils.stopTableEditing(table);
-        Arguments arguments = null;
         if (args instanceof Arguments) {
-            arguments = (Arguments) args;
+            Arguments arguments = (Arguments) args;
             arguments.clear();
             @SuppressWarnings("unchecked") // only contains Argument (or HTTPArgument)
             Iterator<Argument> modelData = (Iterator<Argument>) tableModel.iterator();
@@ -254,7 +252,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         super.configure(el);
         if (el instanceof Arguments) {
             tableModel.clearData();
-            for (JMeterProperty jMeterProperty : ((Arguments) el)) {
+            for (JMeterProperty jMeterProperty : (Arguments) el) {
                 Argument arg = (Argument) jMeterProperty.getObjectValue();
                 tableModel.addRow(arg);
             }
@@ -296,17 +294,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      */
     protected JButton getAddButton() {
         return add;
-    }
-
-    /**
-     * Enable or disable the delete button depending on whether or not there is
-     * a row to be deleted.
-     */
-    @Deprecated
-    protected void checkDeleteStatus() {
-       checkButtonsStatus();
-    }
-    
+    }    
     
     protected void checkButtonsStatus() {
         // Disable DELETE if there are no rows in the table to delete.
@@ -368,17 +356,6 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
         }
     }
 
-    /**
-     * Cancel cell editing if it is being edited
-     */
-    private void cancelEditing() {
-        // If a table cell is being edited, we must cancel the editing before
-        // deleting the row
-        if (table.isEditing()) {
-            TableCellEditor cellEditor = table.getCellEditor(table.getEditingRow(), table.getEditingColumn());
-            cellEditor.cancelCellEditing();
-        }
-    }
     
     /**
      * Move a row down
@@ -477,7 +454,7 @@ public class ArgumentsPanel extends AbstractConfigGui implements ActionListener 
      * Remove the currently selected argument from the table.
      */
     protected void deleteArgument() {
-        cancelEditing();
+        GuiUtils.cancelEditing(table);
 
         int[] rowsSelected = table.getSelectedRows();
         int anchorSelection = table.getSelectionModel().getAnchorSelectionIndex();

@@ -61,4 +61,9 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             log.warn("Problem in BeanShell script "+e);
         }
     }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
 }

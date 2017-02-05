@@ -17,7 +17,7 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '5'>
+<!ENTITY sect-num '4'>
 <!ENTITY rarr     "&#x02192;" >
 ]>
 
@@ -70,7 +70,7 @@ in the tree, if you have not already selected it. You should now see the Thread
 Group Control Panel in the right section of the JMeter window (see Figure &sect-num;.1
 below)</p>
 
-<figure width="609" height="289" image="webtest/threadgroup.png">
+<figure width="640" height="416" image="webtest/threadgroup.png">
 Figure &sect-num;.1. Thread Group with Default Values</figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
@@ -100,7 +100,7 @@ leave the Control Panel (for example, when selecting another tree element).</not
 
 <p>See Figure &sect-num;.2 for the completed JMeter Users Thread Group.</p>
 
-<figure width="1045" height="359" image="webtest/threadgroup2.png">
+<figure width="1206" height="414" image="webtest/threadgroup2.png">
 Figure &sect-num;.2. JMeter Users Thread Group</figure>
 
 </section>
@@ -116,7 +116,7 @@ to get the Add menu, and then select Add &rarr; Config Element &rarr; HTTP Reque
 Defaults. Then select this new element to view its Control Panel (see Figure &sect-num;.3).
 </p>
 
-<figure width="1037" height="511" image="webtest/http-defaults1.png">
+<figure width="1211" height="669" image="webtest/http-defaults1.png">
 Figure &sect-num;.3. HTTP Request Defaults</figure>
 
 <p>
@@ -136,7 +136,7 @@ HTTP Request elements use.</note>
 
 <p>See Figure &sect-num;.4 for the completed HTTP Request Defaults element</p>
 
-<figure width="1036" height="513" image="webtest/http-defaults2.png">
+<figure width="1210" height="666" image="webtest/http-defaults2.png">
 Figure &sect-num;.4. HTTP Defaults for our Test Plan</figure>
 
 </section>
@@ -175,7 +175,7 @@ element.</li>
 </ol>
 </p>
 
-<figure width="1140" height="693" image="webtest/http-request1.png">
+<figure width="1209" height="675" image="webtest/http-request1.png">
 Figure &sect-num;.5. HTTP Request for JMeter Home Page</figure>
 
 <p>Next, add the second HTTP Request and edit the following properties (see
@@ -186,7 +186,7 @@ Figure &sect-num;.6:
 </ol>
 </p>
 
-<figure width="1145" height="695" image="webtest/http-request2.png">
+<figure width="1212" height="668" image="webtest/http-request2.png">
 Figure &sect-num;.6. HTTP Request for JMeter Changes Page</figure>
 
 </section>
@@ -224,7 +224,7 @@ Click the Add button twice and enter the username and password details.
 Sometimes the login form contains additional hidden fields.
 These will need to be added as well.
 </p>
-<figure width="898" height="682" image="webtest/http_login.png">
+<figure width="948" height="665" image="webtest/http_login.png">
 Figure &sect-num;.8. Sample HTTP login request</figure>
 
 </section>

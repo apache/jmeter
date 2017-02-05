@@ -46,8 +46,7 @@
                                 A chain of items, named consumers, that operate
                                 on the samples
                                 that go through the chain
-                                (e.g. Filtering, sorting, calculation,
-                                ...).
+                                (e.g. Filtering, sorting, calculation, &hellip;).
                             </li>
                             <li>
                                 An execution context, named sample context, where the results
@@ -146,81 +145,42 @@
                         <a href="http://freemarker.org/">freemarker</a>
                         to produce html pages.
                         <br />
-                        Templated files are located in the template
+                        Template files are located in the template
                         directory defined by
                         the JMeter property
-                        "jmeter.reportgenerator.template_dir"
+                        "<code>jmeter.reportgenerator.template_dir</code>"
                         and have
-                        the extension ".fmkr".
+                        the extension "<code>.fmkr</code>".
                     </p>
                     <p>
-                        The graph references in the templated
+                        The graph references in the template
                         files use the syntax :
-                        ${&lt;graph_id&gt;.&lt;value&gt;} where :
-                        <ul>
-                            <li>"graph_id"
-                                is the identifier of the graph matching the jmeter
-                                properties
-                                definition</li>
-                            <li>"value" is the name of the value where data are stored.</li>
-                        </ul>
+                        <code>${&lt;graph_id&gt;.&lt;value&gt;}</code> where :
+                        <dl>
+                            <dt><code>graph_id</code></dt>
+                            <dd>is the identifier of the graph matching the JMeter
+                                properties definition</dd>
+                            <dt><code>value</code></dt>
+                            <dd>is the name of the value where data are stored.</dd>
+                        </dl>
                     </p>
                     <p>
                         Each graph produces the following values :
-                        <ul>
-                            <li>
-                                <p>
-                                    <code>maxX</code>
-                                    :
-                                    <br />
-                                    The maximum abscissa of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>maxY</code>
-                                    :
-                                    <br />
-                                    The maximum ordinate of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>minX</code>
-                                    :
-                                    <br />
-                                    The minimum abscissa of the graph
-                                    (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>minY</code>
-                                    :
-                                    <br />
-                                    The maximum ordinate
-                                    of the graph (double).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>title</code>
-                                    :
-                                    <br />
-                                    The
-                                    title of the graph (string).
-                                </p>
-                            </li>
-                            <li>
-                                <p>
-                                    <code>values</code>
-                                    :
-                                    <br />
-                                    A json object representing the data of the graph series
-                                    (string).
-                                </p>
-                            </li>
-                        </ul>
+                        <dl>
+                            <dt><code>maxX</code>:</dt>
+                            <dd>The maximum abscissa of the graph (double).</dd>
+                            <dt><code>maxY</code>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><code>minX</code>:</dt>
+                            <dd>The minimum abscissa of the graph (double).</dd>
+                            <dt><code>minY</code>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><code>title</code>:</dt>
+                            <dd>The title of the graph (string).</dd>
+                            <dt><code>values</code>:</dt>
+                            <dd>A JSON object representing the data of the graph series
+                                  (string).</dd>
+                        </dl>
                     </p>
                     <!-- <note> -->
                     <!-- Graph can provide some other values, see -->
@@ -235,15 +195,15 @@
                         template directory.
                     </p>
                     <p>
-                        If you want to add a graph to the dahsboard,
+                        If you want to add a graph to the dashboard,
                         you have to
                         <a href="#configure_graph">declare it among the JMeter properties</a>
-                        and use its references in the templated files.
+                        and use its references in the template files.
                     </p>
                     <p>If you want to remove
                         a graph from the dashboard, you must remove
                         all its references in
-                        the templated
+                        the template
                         files and clear JMeter
                         properties.</p>
                 </subsection>
@@ -263,7 +223,7 @@
                             or use one of the implementations provided
                             in the package
                             <code>org.apache.jmeter.report.processor.graph.impl</code>
-                            ”.
+                            .
                             This could be enhanced by making concrete the base class and
                             give
                             public access to additional properties (like selectors). But

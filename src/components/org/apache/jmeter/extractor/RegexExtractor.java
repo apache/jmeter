@@ -466,6 +466,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
     
     /**
      * Do we set default value to "" value when if it's empty
+     * @return true if we should set default value to "" if variable cannot be extracted
      */
     public boolean isEmptyDefaultValue() {
         return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE, DEFAULT_VALUE_FOR_DEFAULT_EMPTY_VALUE);

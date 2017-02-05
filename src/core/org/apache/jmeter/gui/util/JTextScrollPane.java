@@ -60,8 +60,7 @@ public class JTextScrollPane extends RTextScrollPane {
     }
 
     /**
-     * 
-     * @param scriptField
+     * @param scriptField syntax text are to wrap
      * @deprecated use {@link #getInstance(JSyntaxTextArea)} instead
      */
     @Deprecated
@@ -71,7 +70,8 @@ public class JTextScrollPane extends RTextScrollPane {
 
     /**
      * 
-     * @param scriptField
+     * @param scriptField syntax text are to wrap
+     * @param foldIndicatorEnabled flag, whether fold indicator should be enabled
      * @deprecated use {@link #getInstance(JSyntaxTextArea, boolean)} instead
      */
     @Deprecated

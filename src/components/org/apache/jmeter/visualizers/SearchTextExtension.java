@@ -65,6 +65,8 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
 
+    public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
+
     private JLabel label;
 
     private JButton findButton;
@@ -104,6 +106,8 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
             // new search?
             if (lastTextTofind != null && !lastTextTofind.equals(textToFind)) {
                 searchProvider.resetTextToFind();
+                textToFindField.setBackground(Color.WHITE);
+                textToFindField.setForeground(Color.BLACK);
             }
             
             try {
@@ -112,14 +116,13 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 if(found) {
                     findButton.setText(JMeterUtils.getResString("search_text_button_next"));// $NON-NLS-1$
                     lastTextTofind = textToFind;
+                    textToFindField.setBackground(Color.WHITE);
+                    textToFindField.setForeground(Color.BLACK);
                 }
                 else {
                     findButton.setText(JMeterUtils.getResString("search_text_button_find"));// $NON-NLS-1$
-                    // Display not found message
-                    JOptionPane.showMessageDialog(null, JMeterUtils
-                            .getResString("search_text_msg_not_found"),// $NON-NLS-1$
-                            JMeterUtils.getResString("search_text_title_not_found"), // $NON-NLS-1$
-                            JOptionPane.INFORMATION_MESSAGE);
+                    textToFindField.setBackground(LIGHT_RED);
+                    textToFindField.setForeground(Color.WHITE);
                 }
             } catch (PatternSyntaxException pse) {
                 JOptionPane.showMessageDialog(null, 
@@ -238,22 +241,10 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     }
 
     private Pattern createPattern(String textToFind) {
-        String textToFindQ = null;
-        if (regexpChkBox.isSelected()) {
-            textToFindQ = textToFind;
-        }
-        else {
-            // desactivate or not specials regexp char
-            textToFindQ = Pattern.quote(textToFind);
-        }
-        
-        Pattern pattern = null;
-        if (caseChkBox.isSelected()) {
-            pattern = Pattern.compile(textToFindQ);
-        } else {
-            pattern = Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
-        }
-        return pattern;
+        // desactivate or not specials regexp char
+        String textToFindQ = regexpChkBox.isSelected() ? textToFind : Pattern.quote(textToFind);        
+        return caseChkBox.isSelected() ? Pattern.compile(textToFindQ) :
+            Pattern.compile(textToFindQ, Pattern.CASE_INSENSITIVE);
     }
     
     /**
@@ -269,6 +260,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
         
         /**
          * Launch find text engine on target component
+         * @param pattern text pattern to search
          * @return true if there was a match, false otherwise
          */
         boolean executeAndShowTextFind(Pattern pattern);
@@ -317,7 +309,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 Matcher matcher = null;
                 try {
                     Document contentDoc = results.getDocument();
-                    String body = contentDoc.getText(lastPosition, (contentDoc.getLength() - lastPosition));
+                    String body = contentDoc.getText(lastPosition, contentDoc.getLength() - lastPosition);
                     matcher = pattern.matcher(body);
 
                     if ((matcher != null) && (matcher.find())) {

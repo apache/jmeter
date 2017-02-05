@@ -78,13 +78,10 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
     @Override
     public void clearData() {
         this.cssJqueryDataField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep cssJquery
-        // cssJqueryField.setText(""); // $NON-NLS-1$
         this.cssJqueryResultField.setText(""); // $NON-NLS-1$
-        // don't set empty to keep attribute
-        // this.attributeField.setText(""); // $NON-NLS-1$
+        // don't set cssJqueryField to empty to keep it
+        // don't set attribute to empty to keep it 
         // don't change impl
-        // this.cssJqueryLabeledChoice.setText(HtmlExtractor.DEFAULT_EXTRACTOR);
     }
 
     /** {@inheritDoc} */
@@ -175,13 +172,14 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         cssJqueryDataField.setWrapStyleWord(true);
 
         JScrollPane cssJqueryDataPane = GuiUtils.makeScrollPane(cssJqueryDataField);
-        cssJqueryDataPane.setMinimumSize(new Dimension(0, 200));
+        cssJqueryDataPane.setPreferredSize(new Dimension(0, 200));
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 cssJqueryDataPane, createCssJqueryTasksPanel());
-        mainSplit.setDividerLocation(300);
+        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
     }
@@ -207,7 +205,6 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         Border margin = new EmptyBorder(5, 5, 0, 5);
         cssJqueryActionPanel.setBorder(margin);
         cssJqueryField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_tester_field")); // $NON-NLS-1$
-        cssJqueryField.setPreferredSize(new Dimension(300, 30));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx=0;
         c.gridy=0;
@@ -216,21 +213,18 @@ public class RenderAsCssJQuery implements ResultRenderer, ActionListener {
         cssJqueryLabeledChoice = new JLabeledChoice(
                 JMeterUtils.getResString("cssjquery_impl"), // $NON-NLS-1$
                 getImplementations()); 
-        cssJqueryLabeledChoice.setPreferredSize(new Dimension(300, 30));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx=1;
         c.gridy=0;
         cssJqueryActionPanel.add(cssJqueryLabeledChoice, c);
                 
         attributeField = new JLabeledTextField(JMeterUtils.getResString("cssjquery_attribute")); // $NON-NLS-1$
-        attributeField.setPreferredSize(new Dimension(300, 30));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx=0;
         c.gridy=1;
         cssJqueryActionPanel.add(attributeField, c);
 
         JButton cssJqueryTester = new JButton(JMeterUtils.getResString("cssjquery_tester_button_test")); // $NON-NLS-1$
-        cssJqueryTester.setPreferredSize(new Dimension(100, 30));
         cssJqueryTester.setActionCommand(CSSJQUEY_TESTER_COMMAND);
         cssJqueryTester.addActionListener(this);
         c.fill = GridBagConstraints.HORIZONTAL;

@@ -57,8 +57,7 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.DataHolder;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
@@ -81,7 +80,7 @@ public class SaveService {
 
     private static final class XStreamWrapper extends XStream {
         private XStreamWrapper(ReflectionProvider reflectionProvider) {
-            super(reflectionProvider, new StaxDriver());
+            super(reflectionProvider);
         }
 
         // Override wrapMapper in order to insert the Wrapper in the chain
@@ -149,13 +148,13 @@ public class SaveService {
     
     // Must match _version property value in saveservice.properties
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String PROPVERSION = "2.9";// Expected version $NON-NLS-1$
+    static final String PROPVERSION = "3.2";// Expected version $NON-NLS-1$
 
     // Internal information only
     private static String fileVersion = ""; // computed from saveservice.properties file// $NON-NLS-1$
     // Must match the sha1 checksum of the file saveservice.properties (without newline character),
     // used to ensure saveservice.properties and SaveService are updated simultaneously
-    static final String FILEVERSION = "2e0ec2b2360e52cd5de4e0f20fa51c1809f6895c"; // Expected value $NON-NLS-1$
+    static final String FILEVERSION = "2b8bbf6ee18f324d63d4c69981561fd9e125dd99"; // Expected value $NON-NLS-1$
 
     private static String fileEncoding = ""; // read from properties file// $NON-NLS-1$
 
@@ -302,7 +301,7 @@ public class SaveService {
         // Use deprecated method, to avoid duplicating code
         ScriptWrapper wrapper = new ScriptWrapper();
         wrapper.testPlan = tree;
-        JMXSAVER.marshal(wrapper, new PrettyPrintWriter(outputStreamWriter));
+        JMXSAVER.toXML(wrapper, outputStreamWriter);
         outputStreamWriter.write('\n');// Ensure terminated properly
         outputStreamWriter.close();
     }
@@ -313,7 +312,7 @@ public class SaveService {
         OutputStreamWriter outputStreamWriter = getOutputStreamWriter(out);
         writeXmlHeader(outputStreamWriter);
         // Use deprecated method, to avoid duplicating code
-        JMXSAVER.marshal(el, new PrettyPrintWriter(outputStreamWriter));
+        JMXSAVER.toXML(el, outputStreamWriter);
         outputStreamWriter.close();
     }
 
@@ -341,7 +340,7 @@ public class SaveService {
         // This is effectively the same as saver.toXML(Object, Writer) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
         try {
-            JTLSAVER.marshal(evt.getResult(), new PrettyPrintWriter(writer), dh);
+            JTLSAVER.marshal(evt.getResult(), new XppDriver().createWriter(writer), dh);
         } catch(RuntimeException e) {
             throw new IllegalArgumentException("Failed marshalling:"+(evt.getResult() != null ? showDebuggingInfo(evt.getResult()) : "null"), e);
         }
@@ -372,23 +371,6 @@ public class SaveService {
         writer.write('\n');
     }
 
-    private static boolean versionsOK = true;
-
-//  private static void checkVersion(Class clazz, String expected) {
-//
-//      String actual = "*NONE*"; // $NON-NLS-1$
-//      try {
-//          actual = (String) clazz.getMethod("getVersion", null).invoke(null, null);
-//          actual = extractVersion(actual);
-//      } catch (Exception ignored) {
-//          // Not needed
-//      }
-//      if (0 != actual.compareTo(expected)) {
-//          versionsOK = false;
-//          log.warn("Version mismatch: expected '" + expected + "' found '" + actual + "' in " + clazz.getName());
-//      }
-//  }
-
     // Routines for TestSaveService
     static String getPropertyVersion(){
         return SaveService.propertiesVersion;
@@ -417,42 +399,10 @@ public class SaveService {
         return missingClasses;
     }
 
-    static boolean checkVersions() {
-        versionsOK = true;
-        // Disable converter version checks as they are more of a nuisance than helpful
-//      checkVersion(BooleanPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(HashTreeConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(IntegerPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(LongPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(MultiPropertyConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(SampleResultConverter.class, "571992"); // $NON-NLS-1$
-//
-//        // Not built until later, so need to use this method:
-//        try {
-//            checkVersion(
-//                    Class.forName("org.apache.jmeter.protocol.http.util.HTTPResultConverter"), // $NON-NLS-1$
-//                    "514283"); // $NON-NLS-1$
-//        } catch (ClassNotFoundException e) {
-//            versionsOK = false;
-//            log.warn(e.getLocalizedMessage());
-//        }
-//      checkVersion(StringPropertyConverter.class, "493779"); // $NON-NLS-1$
-//      checkVersion(TestElementConverter.class, "549987"); // $NON-NLS-1$
-//      checkVersion(TestElementPropertyConverter.class, "549987"); // $NON-NLS-1$
-//      checkVersion(ScriptWrapperConverter.class, "514283"); // $NON-NLS-1$
-//      checkVersion(TestResultWrapperConverter.class, "514283"); // $NON-NLS-1$
-//        checkVersion(SampleSaveConfigurationConverter.class,"549936"); // $NON-NLS-1$
-
+    private static void checkVersions() {
         if (!PROPVERSION.equalsIgnoreCase(propertiesVersion)) {
             log.warn("Bad _version - expected " + PROPVERSION + ", found " + propertiesVersion + ".");
         }
-//        if (!FILEVERSION.equalsIgnoreCase(fileVersion)) {
-//            log.warn("Bad _file_version - expected " + FILEVERSION + ", found " + fileVersion +".");
-//        }
-        if (versionsOK) {
-            log.info("All converter versions present and correct");
-        }
-        return versionsOK;
     }
 
     /**
@@ -469,27 +419,8 @@ public class SaveService {
         dh.put(RESULTCOLLECTOR_HELPER_OBJECT, resultCollectorHelper); // Allow TestResultWrapper to feed back the samples
         // This is effectively the same as saver.fromXML(InputStream) except we get to provide the DataHolder
         // Don't know why there is no method for this in the XStream class
-        JTLSAVER.unmarshal(new StaxDriver().createReader(reader), null, dh);
+        JTLSAVER.unmarshal(new XppDriver().createReader(reader), null, dh);
         inputStreamReader.close();
-    }
-
-    /**
-     * Load a Test tree (JMX file)
-     * @param reader the JMX file as an {@link InputStream}
-     * @return the loaded tree or null if an error occurs
-     * @throws IOException if there is a problem reading the file or processing it
-     * @deprecated use {@link SaveService}{@link #loadTree(File)}
-     */
-    @Deprecated
-    public static HashTree loadTree(InputStream reader) throws IOException {
-        try {
-            return readTree(reader, null);
-        } catch(IllegalArgumentException e) {
-            log.error("Problem loading XML, message:"+e.getMessage(), e);
-            return null;
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
-        }
     }
     
     /**
@@ -500,28 +431,26 @@ public class SaveService {
      */
     public static HashTree loadTree(File file) throws IOException {
         log.info("Loading file: " + file);
-        try (InputStream reader = new FileInputStream(file)){
-            return readTree(reader, file);
+        try (InputStream inputStream = new FileInputStream(file);
+                BufferedInputStream bufferedInputStream = 
+                    new BufferedInputStream(inputStream)){
+            return readTree(bufferedInputStream, file);
         }
     }
 
     /**
      * 
-     * @param reader {@link InputStream} 
+     * @param inputStream {@link InputStream} 
      * @param file the JMX file used only for debug, can be null
      * @return the loaded tree
      * @throws IOException if there is a problem reading the file or processing it
      */
-    private static HashTree readTree(InputStream reader, File file)
+    private static HashTree readTree(InputStream inputStream, File file)
             throws IOException {
-        if (!reader.markSupported()) {
-            reader = new BufferedInputStream(reader);
-        }
-        reader.mark(Integer.MAX_VALUE);
         ScriptWrapper wrapper = null;
         try {
             // Get the InputReader to use
-            InputStreamReader inputStreamReader = getInputStreamReader(reader);
+            InputStreamReader inputStreamReader = getInputStreamReader(inputStream);
             wrapper = (ScriptWrapper) JMXSAVER.fromXML(inputStreamReader);
             inputStreamReader.close();
             if (wrapper == null){

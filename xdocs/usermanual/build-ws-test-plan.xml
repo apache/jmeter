@@ -17,7 +17,7 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '10'>
+<!ENTITY sect-num '9'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
@@ -70,7 +70,7 @@ Change the following:
 <ol>
 <li>In "<code>HTTP Request Defaults</code>" change "<code>Server Name of IP</code>"</li>
 <li>In "<code>Soap Request</code>", change "<code>Path:</code>"
-<figure width="998" height="734" image="ws_http_request.png">Figure &sect-num;.1.1 Webservice Path</figure>
+<figure width="955" height="501" image="ws_http_request.png">Figure &sect-num;.1.1 Webservice Path</figure>
 </li>
 </ol>
 </p>
@@ -83,7 +83,7 @@ Currently, only .NET uses SOAPAction, so it is normal to have a blank SOAPAction
 
 <p>The last step is to paste the SOAP message in the "<code>Body Data</code>"
 text area.</p>
-<figure width="998" height="734" image="ws_http_request.png">Figure &sect-num;.1.3 Webservice Body</figure>
+<figure width="955" height="501" image="ws_http_request.png">Figure &sect-num;.1.3 Webservice Body</figure>
 
 
 </section>

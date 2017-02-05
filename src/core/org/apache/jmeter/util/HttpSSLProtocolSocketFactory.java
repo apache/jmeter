@@ -47,6 +47,17 @@ public class HttpSSLProtocolSocketFactory
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
+    private static final String PROTOCOL_LIST =
+            JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
+
+    private static final String[] protocols = PROTOCOL_LIST.split(" "); // $NON-NLS-1$
+
+    static {
+        if (!PROTOCOL_LIST.isEmpty()){
+            log.info("Using protocol list: "+PROTOCOL_LIST);
+        }
+    }
+
     private final JsseSSLManager sslManager;
 
     private final int CPS; // Characters per second to emulate
@@ -61,27 +72,17 @@ public class HttpSSLProtocolSocketFactory
         CPS=cps;
     }
 
-    private static final String protocolList =
-        JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
-
-    static {
-        if (protocolList.length()>0){
-            log.info("Using protocol list: "+protocolList);
-        }
-    }
-
-    private static final String[] protocols = protocolList.split(" "); // $NON-NLS-1$
 
     private void setSocket(Socket socket){
         if (!(socket instanceof SSLSocket)) {
             throw new IllegalArgumentException("Expected SSLSocket");
         }
         SSLSocket sock = (SSLSocket) socket;
-        if (protocolList.length() > 0) {
+        if (!PROTOCOL_LIST.isEmpty()) {
             try {
                 sock.setEnabledProtocols(protocols);
             } catch (IllegalArgumentException e) {
-                log.warn("Could not set protocol list: " + protocolList + ".");
+                log.warn("Could not set protocol list: " + PROTOCOL_LIST + ".");
                 log.warn("Valid protocols are: " + join(sock.getSupportedProtocols()));
             }
         }
@@ -91,7 +92,7 @@ public class HttpSSLProtocolSocketFactory
         StringBuilder sb = new StringBuilder();
         for (int i=0;i<strings.length;i++){
             if (i>0) {
-                sb.append(" ");
+                sb.append(' ');
             }
             sb.append(strings[i]);
         }

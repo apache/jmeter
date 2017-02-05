@@ -56,7 +56,7 @@ public class TextBoxDialoger implements ActionListener {
     
     private static final String CLOSE_COMMAND = "close_dialog"; // $NON-NLS-1$
     
-    private static JDialog dialog;
+    private JDialog dialog;
     
     private JEditorPane textBox;
     
@@ -192,7 +192,7 @@ public class TextBoxDialoger implements ActionListener {
             if (e.getClickCount() == 2) { // double click
                 TableModel tm = table.getModel();
                 Object value = tm.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
-                new TextBoxDialoger(value.toString(), false); // view only
+                new TextBoxDialoger(value.toString(), false); // view only NOSONAR this instanciation opens a popup
             }
         }
     }

@@ -26,10 +26,10 @@ $(document).ready(function() {
 
     // Ugly code while this script is shared among several pages
     try{
-        refreshHitsPerSecond();
+        refreshHitsPerSecond(true);
     } catch(e){}
     try{
-        refreshResponseTimeOverTime();
+        refreshResponseTimeOverTime(true);
     } catch(e){}
     try{
         refreshResponseTimePercentiles();
@@ -37,7 +37,6 @@ $(document).ready(function() {
     $(".portlet-header").css("cursor", "auto");
 });
 
-var percentileThreshold = 0;
 var showControllersOnly = ${showControllersOnly?c!"false"};
 var seriesFilter = ${seriesFilter!"undefined"};
 var filtersOnlySampleSeries = ${filtersOnlySampleSeries?c!"false"};
@@ -134,7 +133,11 @@ function prepareOptions(options, data) {
 }
 
 // Filter, mark series and sort data
-function prepareSeries(data){
+/**
+ * @param data
+ * @param noMatchColor if defined and true, series.color are not matched with index
+ */
+function prepareSeries(data, noMatchColor){
     var result = data.result;
 
     // Keep only series when needed
@@ -156,7 +159,9 @@ function prepareSeries(data){
     // Sort data and mark series
     $.each(result.series, function(index, series) {
         series.data.sort(compareByXCoordinate);
-        series.color = index;
+        if(!(noMatchColor && noMatchColor===true)) {
+	        series.color = index;
+	    }
     });
 }
 
@@ -251,20 +256,14 @@ var responseTimePercentilesInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x.2 was %y"
+                    content: "%s : %x.2 percentile was %y ms"
                 },
                 selection: { mode: "xy" },
             };
         },
         createGraph: function() {
             var data = this.data;
-            var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"), function(series){
-                series.curvedLines = {apply: true, tension: 1};
-                series.threshold = {
-                        below: percentileThreshold,
-                        color: $("#slider-vertical").children("div").css("background-color")
-                };
-            });
+            var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentiles"));
             var options = this.getOptions();
             prepareOptions(options, data);
             $.plot($("#flotResponseTimesPercentiles"), dataset, options);
@@ -355,13 +354,87 @@ function refreshResponseTimeDistribution() {
     }
 };
 
+
+var syntheticResponseTimeDistributionInfos = {
+        data: ${syntheticResponseTimeDistribution!"{}"},
+        getOptions: function() {
+            return {
+                legend: {
+                    noColumns: 2,
+                    show: true,
+                    container: '#legendSyntheticResponseTimeDistribution'
+                },
+                xaxis:{
+                    axisLabel: "Response times ranges",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                    tickLength:0,
+                    min:-0.5,
+                    max:3.5
+                },
+                yaxis: {
+                    axisLabel: "Number of responses",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                bars : {
+                    show: true,
+                    align: "center",
+                    barWidth: 0.25,
+                    fill:.75
+                },
+                grid: {
+                    hoverable: true // IMPORTANT! this is needed for tooltip to
+                                    // work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: function(label, xval, yval, flotItem){
+                        return yval + " " + label;
+                    }
+                },
+                colors: ["#9ACD32", "yellow", "orange", "#FF6347"]                
+            };
+        },
+        createGraph: function() {
+            var data = this.data;
+            var options = this.getOptions();
+            prepareOptions(options, data);
+            options.xaxis.ticks = data.result.ticks;
+            $.plot($("#flotSyntheticResponseTimeDistribution"), prepareData(data.result.series, $("#choicesSyntheticResponseTimeDistribution")), options);
+        }
+
+};
+
+// Response time distribution
+function refreshSyntheticResponseTimeDistribution() {
+    var infos = syntheticResponseTimeDistributionInfos;
+    prepareSeries(infos.data, true);
+    if (isGraph($("#flotSyntheticResponseTimeDistribution"))){
+        infos.createGraph();
+    }else{
+        var choiceContainer = $("#choicesSyntheticResponseTimeDistribution");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        $('#footerSyntheticResponseTimeDistribution .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+
 var activeThreadsOverTimeInfos = {
         data: ${activeThreadsOverTime!"{}"},
         getOptions: function() {
             return {
                 series: {
+                    stack: true,
                     lines: {
-                        show: true
+                        show: true,
+                        fill: true
                     },
                     points: {
                         show: true
@@ -397,7 +470,7 @@ var activeThreadsOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : At %x there were %y active threads"
                 }
             };
         },
@@ -413,10 +486,12 @@ var activeThreadsOverTimeInfos = {
 };
 
 // Active Threads Over Time
-function refreshActiveThreadsOverTime() {
+function refreshActiveThreadsOverTime(fixTimestamps) {
     var infos = activeThreadsOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotActiveThreadsOverTime"))) {
         infos.createGraph();
     }else{
@@ -428,128 +503,6 @@ function refreshActiveThreadsOverTime() {
             $(this).clone().prependTo(choiceContainer.find("li").eq(i));
         });
     }
-};
-
-var responseTimePerSampleInfos = {
-        data: ${responseTimePerSample!"{}"},
-        getOptions: function() {
-            var ticks = [];
-            $.each(this.data.result.sampleNames, function(index, item){
-                ticks.push([index, item]);
-            });
-
-            return {
-                series: {
-                    bars: {
-                        show: true
-                    }
-                },
-                bars: {
-                    align: "center",
-                    barWidth: 0.5,
-                    horizontal: true,
-                    fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] },
-                    lineWidth: 1
-                },
-                xaxis: {
-                    axisLabel: "Response Time in ms",
-                    axisLabelUseCanvas: true,
-                    axisLabelFontSizePixels: 12,
-                    axisLabelFontFamily: 'Verdana, Arial',
-                    axisLabelPadding: 20,
-                    tickColor: "white",
-                    tickFormatter: function (v, axis) {
-                        return $.formatNumber(v, { format: "#,###", locale: "us" });
-                    },
-                    color: "black"
-                },
-                yaxis: {
-                    tickColor: "white",
-                    ticks: ticks,
-                    color: "black"
-                },
-                legend: {
-                    noColumns: 0,
-                    labelBoxBorderColor: "#858585",
-                    container: '#legendHorizontalBar'
-                },
-                grid: {
-                    hoverable: true,
-                    borderWidth: 2,
-                    backgroundColor: { colors: ["white", "white"] }
-                }
-            };
-        },
-        createGraph: function() {
-            var data = this.data;
-            var options = this.getOptions();
-            prepareOptions(options, data);
-            $.plot($("#flotResponseTimePerSample"), prepareData(data.result.series, $("#choicesResponseTimePerSample")), options);
-        }
-
-};
-
-// Response Time Per Sample
-function refreshResponseTimePerSample() {
-    var infos = responseTimePerSampleInfos;
-    prepareSeries(infos.data);
-    if (isGraph($("#flotResponseTimePerSample"))){
-        infos.createGraph();
-    } else {
-        var choiceContainer = $("#choicesResponseTimePerSample");
-        createLegend(choiceContainer, infos);
-        infos.createGraph();
-        $('#footerResponseTimePerSample .legendColorBox > div').each(function(i){
-            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
-        });
-    }
-
-    var previousPoint = null, previousLabel = null;
-
-    $.fn.UseTooltip = function () {
-        $(this).bind("plothover", function (event, pos, item) {
-            if (item) {
-                if ((previousLabel != item.series.label) ||
-                    (previousPoint != item.dataIndex)) {
-                    previousPoint = item.dataIndex;
-                    previousLabel = item.series.label;
-                    $("#tooltip").remove();
-
-                    var x = item.datapoint[0];
-                    var y = item.datapoint[1];
-
-                    var color = item.series.color;
-
-                    showTooltip(item.pageX,
-                        item.pageY,
-                        color,
-                        "<strong>" + item.series.label + "</strong><br>" + item.series.yaxis.ticks[y].label +
-                        " : <strong>" + $.formatNumber(x, { format: "#,###", locale: "us" }) + "</strong> ms");
-                }
-            } else {
-                $("#tooltip").remove();
-                previousPoint = null;
-            }
-        });
-    };
-
-    function showTooltip(x, y, color, contents) {
-        $('<div id="tooltip">' + contents + '</div>').css({
-            position: 'absolute',
-            display: 'none',
-            top: y - 10,
-            left: x + 10,
-            border: '2px solid ' + color,
-            padding: '3px',
-            'font-size': '9px',
-            'border-radius': '5px',
-            'background-color': '#fff',
-            'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
-            opacity: 0.9
-        }).appendTo("body").fadeIn(200);
-    }
-
-    $("#flotResponseTimePerSample").UseTooltip();
 };
 
 var timeVsThreadsInfos = {
@@ -587,7 +540,7 @@ var timeVsThreadsInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x.2 was %y.2"
+                    content: "%s: At %x.2 active threads, Average response time was %y.2 ms"
                 }
             };
         },
@@ -661,7 +614,7 @@ var bytesThroughputOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s at %x was %y"
                 }
             };
         },
@@ -677,10 +630,12 @@ var bytesThroughputOverTimeInfos = {
 };
 
 // Bytes throughput Over Time
-function refreshBytesThroughputOverTime() {
+function refreshBytesThroughputOverTime(fixTimestamps) {
     var infos = bytesThroughputOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotBytesThroughputOverTime"))){
         infos.createGraph();
     }else{
@@ -736,7 +691,7 @@ var responseTimesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : at %x Average response time was %y ms"
                 }
             };
         },
@@ -752,10 +707,12 @@ var responseTimesOverTimeInfos = {
 };
 
 // Response Times Over Time
-function refreshResponseTimeOverTime() {
+function refreshResponseTimeOverTime(fixTimestamps) {
     var infos = responseTimesOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotResponseTimesOverTime"))){
         infos.createGraph();
     }else{
@@ -811,7 +768,7 @@ var latenciesOverTimeInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s : at %x Average latency was %y ms"
                 }
             };
         },
@@ -827,10 +784,12 @@ var latenciesOverTimeInfos = {
 };
 
 // Latencies Over Time
-function refreshLatenciesOverTime() {
+function refreshLatenciesOverTime(fixTimestamps) {
     var infos = latenciesOverTimeInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotLatenciesOverTime"))) {
         infos.createGraph();
     }else {
@@ -843,6 +802,162 @@ function refreshLatenciesOverTime() {
         });
     }
 };
+
+var connectTimeOverTimeInfos = {
+        data: ${connectTimeOverTime!"{}"},
+        getOptions: function() {
+            return {
+                series: {
+                    lines: {
+                        show: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                xaxis: {
+                    mode: "time",
+                    timeformat: "%H:%M:%S",
+                    axisLabel: getConnectTimeLabel(this.data.result.granularity),
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                yaxis: {
+                    axisLabel: "Average Connect Time in ms",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                legend: {
+                    noColumns: 2,
+                    show: true,
+                    container: '#legendConnectTimeOverTime'
+                },
+                selection: {
+                    mode: 'xy'
+                },
+                grid: {
+                    hoverable: true // IMPORTANT! this is needed for tooltip to
+                                    // work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%s : at %x Average connect time was %y ms"
+                }
+            };
+        },
+        createGraph: function () {
+            var data = this.data;
+            var dataset = prepareData(data.result.series, $("#choicesConnectTimeOverTime"));
+            var options = this.getOptions();
+            prepareOptions(options, data);
+            $.plot($("#flotConnectTimeOverTime"), dataset, options);
+            // setup overview
+            $.plot($("#overviewConnectTimeOverTime"), dataset, prepareOverviewOptions(options));
+        }
+};
+
+// Connect Time Over Time
+function refreshConnectTimeOverTime(fixTimestamps) {
+    var infos = connectTimeOverTimeInfos;
+    prepareSeries(infos.data);
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
+    if(isGraph($("#flotConnectTimeOverTime"))) {
+        infos.createGraph();
+    }else {
+        var choiceContainer = $("#choicesConnectTimeOverTime");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        setGraphZoomable("#flotConnectTimeOverTime", "#overviewConnectTimeOverTime");
+        $('#footerConnectTimeOverTime .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+
+var responseTimePercentilesOverTimeInfos = {
+        data: ${responseTimePercentilesOverTime!"{}"},
+        getOptions: function() {
+            return {
+                series: {
+                    lines: {
+                        show: true,
+                        fill: true
+                    },
+                    points: {
+                        show: true
+                    }
+                },
+                xaxis: {
+                    mode: "time",
+                    timeformat: "%H:%M:%S",
+                    axisLabel: getElapsedTimeLabel(this.data.result.granularity),
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                yaxis: {
+                    axisLabel: "Response Time in ms",
+                    axisLabelUseCanvas: true,
+                    axisLabelFontSizePixels: 12,
+                    axisLabelFontFamily: 'Verdana, Arial',
+                    axisLabelPadding: 20,
+                },
+                legend: {
+                    noColumns: 2,
+                    show: true,
+                    container: '#legendResponseTimePercentilesOverTime'
+                },
+                selection: {
+                    mode: 'xy'
+                },
+                grid: {
+                    hoverable: true // IMPORTANT! this is needed for tooltip to
+                                    // work
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%s : at %x Response time was %y ms"
+                }
+            };
+        },
+        createGraph: function () {
+            var data = this.data;
+            var dataset = prepareData(data.result.series, $("#choicesResponseTimePercentilesOverTime"));
+            var options = this.getOptions();
+            prepareOptions(options, data);
+            $.plot($("#flotResponseTimePercentilesOverTime"), dataset, options);
+            // setup overview
+            $.plot($("#overviewResponseTimePercentilesOverTime"), dataset, prepareOverviewOptions(options));
+        }
+};
+
+// Response Time Percentiles Over Time
+function refreshResponseTimePercentilesOverTime(fixTimestamps) {
+    var infos = responseTimePercentilesOverTimeInfos;
+    prepareSeries(infos.data);
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
+    if(isGraph($("#flotResponseTimePercentilesOverTime"))) {
+        infos.createGraph();
+    }else {
+        var choiceContainer = $("#choicesResponseTimePercentilesOverTime");
+        createLegend(choiceContainer, infos);
+        infos.createGraph();
+        setGraphZoomable("#flotResponseTimePercentilesOverTime", "#overviewResponseTimePercentilesOverTime");
+        $('#footerResponseTimePercentilesOverTime .legendColorBox > div').each(function(i){
+            $(this).clone().prependTo(choiceContainer.find("li").eq(i));
+        });
+    }
+};
+
 
 var responseTimeVsRequestInfos = {
     data: ${responseTimeVsRequest!"{}"},
@@ -864,7 +979,7 @@ var responseTimeVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Response Time",
+                axisLabel: "Median Response Time (ms)",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -883,8 +998,9 @@ var responseTimeVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s for %x was %y"
-            }
+                content: "%s : Median response time at %x req/s was %y ms"
+            },
+            colors: ["#9ACD32", "#FF6347"]
         };
     },
     createGraph: function () {
@@ -937,7 +1053,7 @@ var latenciesVsRequestInfos = {
                 axisLabelPadding: 20,
             },
             yaxis: {
-                axisLabel: "Median Latency",
+                axisLabel: "Median Latency (ms)",
                 axisLabelUseCanvas: true,
                 axisLabelFontSizePixels: 12,
                 axisLabelFontFamily: 'Verdana, Arial',
@@ -952,8 +1068,9 @@ var latenciesVsRequestInfos = {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s for %x was %y"
-            }
+                content: "%s : Median response time at %x req/s was %y ms"
+            },
+            colors: ["#9ACD32", "#FF6347"]
         };
     },
     createGraph: function () {
@@ -1026,7 +1143,7 @@ var hitsPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y.2"
+                    content: "%s at %x was %y.2 hits/sec"
                 }
             };
         },
@@ -1042,10 +1159,12 @@ var hitsPerSecondInfos = {
 };
 
 // Hits per second
-function refreshHitsPerSecond() {
+function refreshHitsPerSecond(fixTimestamps) {
     var infos = hitsPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if (isGraph($("#flotHitsPerSecond"))){
         infos.createGraph();
     }else{
@@ -1101,7 +1220,7 @@ var codesPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y.2"
+                    content: "Number of Response Codes %s at %x was %y.2 responses / sec"
                 }
             };
         },
@@ -1117,10 +1236,12 @@ var codesPerSecondInfos = {
 };
 
 // Codes per second
-function refreshCodesPerSecond() {
+function refreshCodesPerSecond(fixTimestamps) {
     var infos = codesPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotCodesPerSecond"))){
         infos.createGraph();
     }else{
@@ -1176,7 +1297,7 @@ var transactionsPerSecondInfos = {
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "%s for %x was %y"
+                    content: "%s at %x was %y transactions / sec"
                 }
             };
         },
@@ -1192,10 +1313,12 @@ var transactionsPerSecondInfos = {
 };
 
 // Transactions per second
-function refreshTransactionsPerSecond() {
+function refreshTransactionsPerSecond(fixTimestamps) {
     var infos = transactionsPerSecondInfos;
     prepareSeries(infos.data);
-    fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    if(fixTimestamps) {
+        fixTimeStamps(infos.data.result.series, ${(timeZoneOffset?c)!0});
+    }
     if(isGraph($("#flotTransactionsPerSecond"))){
         infos.createGraph();
     }else{
@@ -1218,29 +1341,39 @@ function collapse(elem, collapsed){
         $(elem).parent().find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-up");
         if (elem.id == "bodyBytesThroughputOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshBytesThroughputOverTime();
+                refreshBytesThroughputOverTime(true);
             }
-            document.location.href="#responseTimesOverTime";
-        } else if (elem.id == "bodyLantenciesOverTime") {
+            document.location.href="#bytesThroughputOverTime";
+        } else if (elem.id == "bodyLatenciesOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshLatenciesOverTime();
+                refreshLatenciesOverTime(true);
             }
             document.location.href="#latenciesOverTime";
+        } else if (elem.id == "bodyConnectTimeOverTime") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshConnectTimeOverTime(true);
+            }
+            document.location.href="#connectTimeOverTime";
+        } else if (elem.id == "bodyResponseTimePercentilesOverTime") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshResponseTimePercentilesOverTime(true);
+            }
+            document.location.href="#responseTimePercentilesOverTime";
         } else if (elem.id == "bodyResponseTimeDistribution") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshResponseTimeDistribution();
             }
             document.location.href="#responseTimeDistribution" ;
+        } else if (elem.id == "bodySyntheticResponseTimeDistribution") {
+            if (isGraph($(elem).find('.flot-chart-content')) == false) {
+                refreshSyntheticResponseTimeDistribution();
+            }
+            document.location.href="#syntheticResponseTimeDistribution" ;
         } else if (elem.id == "bodyActiveThreadsOverTime") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshActiveThreadsOverTime();
+                refreshActiveThreadsOverTime(true);
             }
             document.location.href="#activeThreadsOverTime";
-        } else if (elem.id == "bodyResponseTimePerSample") {
-            if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshResponseTimePerSample();
-            }
-            document.location.href="#responseTimePerSample" ;
         } else if (elem.id == "bodyTimeVsThreads") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
                 refreshTimeVsThreads();
@@ -1248,12 +1381,12 @@ function collapse(elem, collapsed){
             document.location.href="#timeVsThreads" ;
         } else if (elem.id == "bodyCodesPerSecond") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshCodesPerSecond();
+                refreshCodesPerSecond(true);
             }
             document.location.href="#codesPerSecond";
         } else if (elem.id == "bodyTransactionsPerSecond") {
             if (isGraph($(elem).find('.flot-chart-content')) == false) {
-                refreshTransactionsPerSecond();
+                refreshTransactionsPerSecond(true);
             }
             document.location.href="#transactionsPerSecond";
         } else if (elem.id == "bodyResponseTimeVsRequest") {
@@ -1296,44 +1429,49 @@ function toggleAll(id, checked){
     var placeholder = document.getElementById(id);
 
     var cases = $(placeholder).find(':checkbox');
-
-    cases.attr('checked', checked);
+    cases.prop('checked', checked);
     $(cases).parent().children().children().toggleClass("legend-disabled", !checked);
 
     var choiceContainer;
     if ( id == "choicesBytesThroughputOverTime"){
         choiceContainer = $("#choicesBytesThroughputOverTime");
-        refreshBytesThroughputOverTime();
+        refreshBytesThroughputOverTime(false);
     } else if(id == "choicesResponseTimesOverTime"){
         choiceContainer = $("#choicesResponseTimesOverTime");
-        refreshResponseTimeOverTime();
+        refreshResponseTimeOverTime(false);
     } else if ( id == "choicesLatenciesOverTime"){
         choiceContainer = $("#choicesLatenciesOverTime");
-        refreshLatenciesOverTime();
+        refreshLatenciesOverTime(false);
+    } else if ( id == "choicesConnectTimeOverTime"){
+        choiceContainer = $("#choicesConnectTimeOverTime");
+        refreshConnectTimeOverTime(false);
+    } else if ( id == "responseTimePercentilesOverTime"){
+        choiceContainer = $("#choicesResponseTimePercentilesOverTime");
+        refreshResponseTimePercentilesOverTime(false);
     } else if ( id == "choicesResponseTimePercentiles"){
         choiceContainer = $("#choicesResponseTimePercentiles");
         refreshResponseTimePercentiles();
     } else if(id == "choicesActiveThreadsOverTime"){
         choiceContainer = $("#choicesActiveThreadsOverTime");
-        refreshActiveThreadsOverTime();
+        refreshActiveThreadsOverTime(false);
     } else if ( id == "choicesTimeVsThreads"){
         choiceContainer = $("#choicesTimeVsThreads");
         refreshTimeVsThreads();
+    } else if ( id == "choicesSyntheticResponseTimeDistribution"){
+        choiceContainer = $("#choicesSyntheticResponseTimeDistribution");
+        refreshSyntheticResponseTimeDistribution();
     } else if ( id == "choicesResponseTimeDistribution"){
         choiceContainer = $("#choicesResponseTimeDistribution");
         refreshResponseTimeDistribution();
-    } else if ( id == "choicesResponseTimePerSample"){
-        choiceContainer = $("#choicesResponseTimePerSample");
-        refreshResponseTimePerSample();
     } else if ( id == "choicesHitsPerSecond"){
         choiceContainer = $("#choicesHitsPerSecond");
-        refreshHitsPerSecond();
+        refreshHitsPerSecond(false);
     } else if(id == "choicesCodesPerSecond"){
         choiceContainer = $("#choicesCodesPerSecond");
-        refreshCodesPerSecond();
+        refreshCodesPerSecond(false);
     } else if ( id == "choicesTransactionsPerSecond"){
         choiceContainer = $("#choicesTransactionsPerSecond");
-        refreshTransactionsPerSecond();
+        refreshTransactionsPerSecond(false);
     } else if ( id == "choicesResponseTimeVsRequest"){
         choiceContainer = $("#choicesResponseTimeVsRequest");
         refreshResponseTimeVsRequest();
@@ -1377,26 +1515,6 @@ function prepareData(series, choiceContainer, customizeSeries){
     });
     return datasets;
 }
-
-// create slider
-$(function() {
-    $( "#slider-vertical" ).slider({
-      orientation: "vertical",
-      range: "min",
-      min: responseTimePercentilesInfos.data.result.minY,
-      max: responseTimePercentilesInfos.data.result.maxY,
-      value: 0,
-      stop: function(event, ui ) {
-       percentileThreshold= ui.value;
-       refreshResponseTimePercentiles();
-       $("#amount").val(percentileThreshold);
-      }
-    });
-    $("#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
-    $("#slider-vertical").children("div").css("background-color","purple");
-    $("#amount" ).css("color", $("#slider-vertical").children("div").css("background-color"));
-    $("#slider-vertical").children("div").css("opacity","0.3");
-});
 
 /*
  * Ignore case comparator

@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -219,8 +220,8 @@ public class XPathUtil {
      */
     public static Tidy makeTidyParser(boolean quiet, boolean showWarnings, boolean isXml, StringWriter stringWriter) {
         Tidy tidy = new Tidy();
-        tidy.setInputEncoding("UTF8");
-        tidy.setOutputEncoding("UTF8");
+        tidy.setInputEncoding(StandardCharsets.UTF_8.name());
+        tidy.setOutputEncoding(StandardCharsets.UTF_8.name());
         tidy.setQuiet(quiet);
         tidy.setShowWarnings(showWarnings);
         tidy.setMakeClean(true);
@@ -232,7 +233,8 @@ public class XPathUtil {
     }
 
     static class MyErrorHandler implements ErrorHandler {
-        private final boolean val, tol;
+        private final boolean val;
+        private final boolean tol;
 
         private final String type;
 
@@ -307,15 +309,39 @@ public class XPathUtil {
     public static void putValuesForXPathInList(Document document, 
             String xPathQuery,
             List<String> matchStrings, boolean fragment) throws TransformerException {
+        putValuesForXPathInList(document, xPathQuery, matchStrings, fragment, -1);
+    }
+    
+    
+    /**
+     * Put in matchStrings results of evaluation
+     * @param document XML document
+     * @param xPathQuery XPath Query
+     * @param matchStrings List of strings that will be filled
+     * @param fragment return fragment
+     * @param matchNumber match number
+     * @throws TransformerException when the internally used xpath engine fails
+     */
+    public static void putValuesForXPathInList(Document document, 
+            String xPathQuery,
+            List<String> matchStrings, boolean fragment, 
+            int matchNumber) throws TransformerException {
         String val = null;
         XObject xObject = XPathAPI.eval(document, xPathQuery, getPrefixResolver(document));
         final int objectType = xObject.getType();
         if (objectType == XObject.CLASS_NODESET) {
             NodeList matches = xObject.nodelist();
             int length = matches.getLength();
+            int indexToMatch = matchNumber;
+            if(matchNumber == 0 && length>0) {
+                indexToMatch = JMeterUtils.getRandomInt(length)+1;
+            } 
             for (int i = 0 ; i < length; i++) {
                 Node match = matches.item(i);
-                if ( match instanceof Element){
+                if(indexToMatch >= 0 && indexToMatch != (i+1)) {
+                    continue;
+                }
+                if ( match instanceof Element ){
                     if (fragment){
                         val = getValueForNode(match);
                     } else {

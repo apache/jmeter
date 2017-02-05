@@ -24,7 +24,7 @@
         </elementProp>
         <longProp name="ThreadGroup.end_time">1172922900000</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">40</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">20</stringProp>
         <stringProp name="TestPlan.comments">N.B. The ramp-up period is set so that the first thread will finish before the second.
 This is to ensure the test output is predictable, whilst still allowing testing of unshared counter etc</stringProp>
       </ThreadGroup>
@@ -49,7 +49,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
-                  <stringProp name="Argument.value">100</stringProp>
+                  <stringProp name="Argument.value">1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
@@ -103,7 +103,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
-                  <stringProp name="Argument.value">100</stringProp>
+                  <stringProp name="Argument.value">1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
@@ -156,7 +156,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -209,7 +209,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                   <collectionProp name="Arguments.arguments">
                     <elementProp name="Sleep_Time" elementType="Argument">
                       <stringProp name="Argument.name">Sleep_Time</stringProp>
-                      <stringProp name="Argument.value">100</stringProp>
+                      <stringProp name="Argument.value">1</stringProp>
                       <stringProp name="Argument.metadata">=</stringProp>
                     </elementProp>
                     <elementProp name="Sleep_Mask" elementType="Argument">
@@ -432,7 +432,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -480,7 +480,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -534,7 +534,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -582,7 +582,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -631,7 +631,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
-                  <stringProp name="Argument.value">100</stringProp>
+                  <stringProp name="Argument.value">1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
@@ -684,7 +684,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
-                  <stringProp name="Argument.value">100</stringProp>
+                  <stringProp name="Argument.value">1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
@@ -904,7 +904,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -952,7 +952,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1000,7 +1000,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1048,7 +1048,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1126,7 +1126,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1258,7 +1258,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1308,7 +1308,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
               <collectionProp name="Arguments.arguments">
                 <elementProp name="Sleep_Time" elementType="Argument">
                   <stringProp name="Argument.name">Sleep_Time</stringProp>
-                  <stringProp name="Argument.value">100</stringProp>
+                  <stringProp name="Argument.value">1</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1364,7 +1364,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1414,7 +1414,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1468,7 +1468,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="Sleep_Time" elementType="Argument">
                     <stringProp name="Argument.name">Sleep_Time</stringProp>
-                    <stringProp name="Argument.value">100</stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                   <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1693,7 +1693,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1829,7 +1829,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">
@@ -1976,7 +1976,7 @@ We use this file, which has eol=LF - but of course any changes need to be reflec
             <collectionProp name="Arguments.arguments">
               <elementProp name="Sleep_Time" elementType="Argument">
                 <stringProp name="Argument.name">Sleep_Time</stringProp>
-                <stringProp name="Argument.value">100</stringProp>
+                <stringProp name="Argument.value">1</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
               <elementProp name="Sleep_Mask" elementType="Argument">

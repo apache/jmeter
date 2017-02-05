@@ -111,7 +111,7 @@ Does it happen every time?
 </li>
 <li>Add yourself in <code>CC</code> List to be notified when JMeter Team requires more information (in this case bug will be marked as <code>NEEDINFO</code>)</li>
 <li>When a bug is market as <code>NEEDINFO</code>, please provide as soon as possible the required information so that bug can be understood and fixed. Be aware that if 
-no information is provided after team requires more information and bug is not reproductible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
+no information is provided after team requires more information and bug is not reproducible, then bug will be closed as <code>WORKSFORME</code>. You can always reopen it later once you provide the required information.</li>
 <li>Select accurately the IMPORTANCE level, <code>ENHANCEMENT</code> means it's not a BUG while others mean it's a BUG</li>
 <li>If you are providing a patch to fix a bug, please ensure it is in unified diff format.
 If using Eclipse, please set the patch root to "<code>Project</code>", not the default "<code>Workspace</code>" which is harder to apply.</li>

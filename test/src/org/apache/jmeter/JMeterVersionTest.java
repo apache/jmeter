@@ -54,22 +54,28 @@ public class JMeterVersionTest extends JMeterTestCase {
         JAR_TO_BUILD_PROP.put("bsf", "apache-bsf");
         JAR_TO_BUILD_PROP.put("bsh", "beanshell");
         JAR_TO_BUILD_PROP.put("geronimo-jms_1.1_spec", "jms");
-        JAR_TO_BUILD_PROP.put("httpmime", "httpclient"); // two jars same version
         JAR_TO_BUILD_PROP.put("mail", "javamail");
         JAR_TO_BUILD_PROP.put("oro", "jakarta-oro");
         JAR_TO_BUILD_PROP.put("xercesImpl", "xerces");
+        JAR_TO_BUILD_PROP.put("xpp3_min", "xpp3");
     }
 
     private static final File JMETER_HOME = new File(JMeterUtils.getJMeterHome());
 
     /**
-     * Versions of libraries mentioned in build.properties
+     * Versions of all libraries mentioned in build.properties (except checkstyle-all)
      */
     private final Map<String, String> versions = new HashMap<>();
+
     /**
-     * Libraries mentioned in build.properties
+     * Names of library.version entries in build.properties, excluding jars not bundled (used for docs only)
      */
     private final Set<String> propNames = new HashSet<>();
+
+    /**
+     * License file names found under license/bin (WITHOUT the .txt suffix)
+     */
+    private final Set<String> liceFiles = new HashSet<>();
 
     private File getFileFromHome(String relativeFile) {
         return new File(JMETER_HOME, relativeFile);
@@ -98,12 +104,33 @@ public class JMeterVersionTest extends JMeterTestCase {
         // remove docs-only jars
         propNames.remove("jdom");
         propNames.remove("velocity");
-        propNames.remove("commons-lang");
+        propNames.remove("commons-lang"); // lang3 is bundled, lang2 is doc-only
         // remove optional checkstyle name
         propNames.remove("checkstyle-all"); // not needed in Maven
         buildProp.remove("checkstyle-all.loc"); // not a Maven download
         versions.remove("checkstyle-all");
+        // remove option RAT jars
+        propNames.remove("rat");
+        versions.remove("rat");
+        propNames.remove("rat-tasks");
+        versions.remove("rat-tasks");
+        // remove optional jacoco and sonar jars (required for coverage reporting, not required for jmeter)
+        for (String optLib : Arrays.asList("jacocoant", "sonarqube-ant-task")) {
+            propNames.remove(optLib);
+            versions.remove(optLib);
+        }
         prop = buildProp;
+        final File licencesDir = getFileFromHome("licenses/bin");
+        licencesDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                if (! name.equalsIgnoreCase("README.txt") 
+                        && !name.equals(".svn")) { // Allow for old-style SVN workspaces
+                    liceFiles.add(name.replace(".txt",""));
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -204,20 +231,72 @@ public class JMeterVersionTest extends JMeterTestCase {
         Set<String> liceNames = new HashSet<>();
         for (Map.Entry<String, String> me : versions.entrySet()) {
         final String key = me.getKey();
-            liceNames.add(key+"-"+me.getValue()+".txt");
+            liceNames.add(key+"-"+me.getValue());
         }
-        File licencesDir = getFileFromHome("licenses/bin");
-        String [] lice = licencesDir.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return ! name.equalsIgnoreCase("README.txt") 
-                        && !name.equals(".svn"); // Allow for old-style SVN workspaces
-            }
-        });
-        assertTrue("Expected at least one license file",lice.length > 0);
-        for(String l : lice) {
+        assertTrue("Expected at least one license file", liceFiles.size() > 0);
+        for(String l : liceFiles) {
             if (!liceNames.remove(l)) {
                 fail("Mismatched version in license file " + l);
+            }
+        }
+    }
+
+    @Test
+    public void testLICENSE() throws Exception {
+        HashSet<String> buildOnly = new HashSet<>();
+        buildOnly.addAll(Arrays.asList(new String[]{"bcprov","bcmail","bcpkix"}));
+        // Build set of names expected to be mentioned in LICENSE
+        final HashSet<String> binaryJarNames = new HashSet<>();
+        for(Map.Entry<String, String> me : versions.entrySet()) {
+            final String key = me.getKey();
+            final String jarName = key + "-" + me.getValue();
+            if (propNames.contains(key) && !buildOnly.contains(key)) {
+              binaryJarNames.add(jarName);                
+            }
+        }
+        // Extract the jar names fron LICENSE
+        final BufferedReader license = new BufferedReader(
+                new FileReader(getFileFromHome("LICENSE"))); // assume default charset is OK here
+        final Pattern p = Pattern.compile("^\\* (\\S+?)\\.jar(.*)");
+
+        final HashSet<String> namesInLicenseFile = new HashSet<>(); // names documented in LICENSE
+        final HashSet<String> externalNamesinLicenseFile = new HashSet<>(); // names documented in LICENSE with licenses/bin entries
+
+        String line;
+        while((line=license.readLine()) != null){
+            final Matcher m = p.matcher(line);
+            if (m.matches()) {
+                final String name = m.group(1);
+                assertTrue("Duplicate jar in LICENSE file " + line, namesInLicenseFile.add(name));
+                if (!binaryJarNames.contains(name)) {
+                    fail("Unexpected entry in LICENCE file: " + line);                    
+                }
+                final String comment = m.group(2);
+                if (comment.length() > 0) { // must be in external list
+                    externalNamesinLicenseFile.add(name);
+                }
+            }
+        }
+        license.close();
+
+        // Check all build.properties entries are in LICENSE file
+        for(String s : binaryJarNames) {
+            if (!namesInLicenseFile.contains(s)) {
+                fail("LICENSE does not contain entry for " + s);
+            }
+        }
+
+        // Check that external license files are present
+        for(String s : externalNamesinLicenseFile) {
+            if (!liceFiles.contains(s)) {
+                fail("bin/licenses does not contain a file for " + s);
+            }
+        }
+
+        // Check that there are no license/bin files not mentioned in LICENSE
+        for(String s : liceFiles) {
+            if (!namesInLicenseFile.contains(s)) {
+                fail("LICENSE does not contain entry for " + s);
             }
         }
     }

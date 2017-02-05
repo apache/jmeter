@@ -43,6 +43,8 @@ public class Calculator {
 
     private long bytes = 0;
 
+    private long sentBytes = 0;
+
     private long maximum = Long.MIN_VALUE;
 
     private long minimum = Long.MAX_VALUE;
@@ -50,6 +52,10 @@ public class Calculator {
     private int errors = 0;
 
     private final String label;
+
+    private long startTime = 0;
+
+    private long elapsedTime = 0;
 
     public Calculator() {
         this("");
@@ -67,11 +73,16 @@ public class Calculator {
         mean = 0;
         deviation = 0;
         count = 0;
+        bytes = 0;
+        sentBytes = 0;
+        errors = 0;
+        startTime = 0;
+        elapsedTime = 0;
     }
 
     /**
      * Add the value for (possibly multiple) samples.
-     * Updates the count, sum, min, max, sumOfSqaures, mean and deviation.
+     * Updates the count, sum, min, max, sumOfSquares, mean and deviation.
      * 
      * @param newValue the total value for all the samples.
      * @param sampleCount number of samples included in the value
@@ -96,21 +107,14 @@ public class Calculator {
         deviation = Math.sqrt((sumOfSquares / count) - (mean * mean));
     }
 
-
-    public void addBytes(long newValue) {
-        bytes += newValue;
-    }
-
-    private long startTime = 0;
-    private long elapsedTime = 0;
-
     /**
      * Add details for a sample result, which may consist of multiple samples.
-     * Updates the number of bytes read, error count, startTime and elapsedTime
+     * Updates the number of bytes read and sent, error count, startTime and elapsedTime
      * @param res the sample result; might represent multiple values
      */
     public void addSample(SampleResult res) {
-        addBytes(res.getBytes());
+        addBytes(res.getBytesAsLong());
+        addSentBytes(res.getSentBytes());
         addValue(res.getTime(),res.getSampleCount());
         errors+=res.getErrorCount(); // account for multiple samples
         if (startTime == 0){ // not yet intialised
@@ -120,7 +124,22 @@ public class Calculator {
         }
         elapsedTime = Math.max(elapsedTime, res.getEndTime()-startTime);
     }
+    
+    /**
+     * add received bytes
+     * @param newValue received bytes
+     */
+    public void addBytes(long newValue) {
+        bytes += newValue;
+    }
 
+    /**
+     * add Sent bytes
+     * @param value sent bytes
+     */
+    private void addSentBytes(long value) {
+        sentBytes += value;
+    }
 
     public long getTotalBytes() {
         return bytes;
@@ -166,10 +185,10 @@ public class Calculator {
         double rval = 0.0;
 
         if (count == 0) {
-            return (rval);
+            return rval;
         }
         rval = (double) errors / (double) count;
-        return (rval);
+        return rval;
     }
 
     /**
@@ -181,11 +200,7 @@ public class Calculator {
      * @return throughput associated to this sampler in requests per second
      */
     public double getRate() {
-        if (elapsedTime == 0) {
-            return 0.0;
-        }
-
-        return ((double) count / (double) elapsedTime ) * 1000;
+        return getRatePerSecond(count); 
     }
 
     /**
@@ -207,19 +222,46 @@ public class Calculator {
      * @return throughput in bytes/second
      */
     public double getBytesPerSecond() {
-        if (elapsedTime > 0) {
-            return bytes / ((double) elapsedTime / 1000); // 1000 = millisecs/sec
-        }
-        return 0.0;
+        return getRatePerSecond(bytes);
     }
-
+    
     /**
-     * Throughput in kilobytes / second
+     * Sent Throughput in kilobytes / second
      *
-     * @return Throughput in kilobytes / second
+     * @return Sent Throughput in kilobytes / second
      */
     public double getKBPerSecond() {
         return getBytesPerSecond() / 1024; // 1024=bytes per kb
+    }
+    
+    /**
+     * Sent bytes / second
+     *
+     * @return throughput in bytes/second
+     */
+    public double getSentBytesPerSecond() {
+        return getRatePerSecond(sentBytes);
+    }
+    
+    /**
+     * Sent bytes throughput in kilobytes / second
+     *
+     * @return Throughput in kilobytes / second
+     */
+    public double getSentKBPerSecond() {
+        return getSentBytesPerSecond() / 1024; // 1024=bytes per kb
+    }
+
+    /**
+     * 
+     * @param value value for which we compute rate
+     * @return double rate
+     */
+    private double getRatePerSecond(long value) {
+        if (elapsedTime > 0) {
+            return value / ((double) elapsedTime / 1000); // 1000 = millisecs/sec
+        }
+        return 0.0;
     }
 
 }

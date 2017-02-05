@@ -50,10 +50,10 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * Handles the Open (load a new file) and Merge commands.
  *
  */
-public class Load implements Command {
+public class Load extends AbstractActionWithNoRunningTest {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final boolean expandTree = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
+    private static final boolean EXPAND_TREE = JMeterUtils.getPropDefault("onload.expandtree", false); //$NON-NLS-1$
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -72,7 +72,7 @@ public class Load implements Command {
     }
 
     @Override
-    public void doAction(final ActionEvent e) {
+    public void doActionAfterCheck(final ActionEvent e) {
         final JFileChooser chooser = FileDialoger.promptToOpenFile(new String[] { ".jmx" }); //$NON-NLS-1$
         if (chooser == null) {
             return;
@@ -164,7 +164,6 @@ public class Load implements Command {
      */
     // Does not appear to be used externally; called by #loadProjectFile()
     public static boolean insertLoadedTree(final int id, final HashTree tree, final boolean merging) throws IllegalUserActionException {
-        // convertTree(tree);
         if (tree == null) {
             throw new IllegalUserActionException("Empty TestPlan or error reading test plan - see log file");
         }
@@ -203,7 +202,7 @@ public class Load implements Command {
 
         ActionRouter.getInstance().actionPerformed(actionEvent);
         final JTree jTree = guiInstance.getMainFrame().getTree();
-        if (expandTree && !merging) { // don't automatically expand when merging
+        if (EXPAND_TREE && !merging) { // don't automatically expand when merging
             for(int i = 0; i < jTree.getRowCount(); i++) {
                 jTree.expandRow(i);
             }

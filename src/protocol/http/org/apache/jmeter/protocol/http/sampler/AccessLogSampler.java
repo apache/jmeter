@@ -75,8 +75,9 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
     /* private members used by class */
     private transient LogParser parser = null;
 
-    // NOTUSED private Class PARSERCLASS = null;
-    private String logFile, parserClassName, filterClassName;
+    private String logFile;
+    private String parserClassName;
+    private String filterClassName;
 
     private transient Filter filter;
 
@@ -138,9 +139,6 @@ public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadList
             if (parser == null) {
                 throw new JMeterException("No Parser available");
             }
-            /*
-             * samp.setDomain(this.getDomain()); samp.setPort(this.getPort());
-             */
             // we call parse with 1 to get only one.
             // this also means if we change the implementation
             // to use 2, it would use every other entry and

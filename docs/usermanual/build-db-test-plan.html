@@ -1,34 +1,11 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
 <html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
           -
-          User's Manual: Building a Simple Database Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+          User's Manual: Building a Simple Database Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
             APACHE LOGO
-          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" width="290" height="75" src="../images/asf-logo.png" alt="Logo ASF"></a></div><!--
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
-            --><div><a href="http://jmeter.apache.org/"><img src="../images/logo.jpg" alt="Apache JMeter"></a></div><div class="twitter"><div><a href="https://twitter.com/share" class="twitter-share-button" data-text="Powerful Load Testing with Apache #JMeter" data-via="ApacheJMeter" data-lang="en-gb" data-size="large">Tweet</a><script>
-            (function(d,s,id){
-              var js,
-                  fjs=d.getElementsByTagName(s)[0],
-                  p=/^http:/.test(d.location)?'http':'https';
-              if (!d.getElementById(id)) {
-                  js=d.createElement(s);
-                  js.id=id;
-                  js.src=p+'://platform.twitter.com/widgets.js';
-                  fjs.parentNode.insertBefore(js,fjs);
-              }
-            })(document, 'script', 'twitter-wjs');
-              </script></div><div><a href="https://twitter.com/ApacheJMeter" class="twitter-follow-button" data-show-count="false" data-lang="en-gb" data-size="large">Follow</a><script>(function(d,s,id){
-                var js,
-                    fjs=d.getElementsByTagName(s)[0],
-                    p=/^http:/.test(d.location)?'http':'https';
-                if (!d.getElementById(id)) {
-                    js=d.createElement(s);
-                    js.id=id;
-                    js.src=p+'://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js,fjs);
-                }
-            })(document, 'script', 'twitter-wjs');
-              </script></div></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://twitter.com/ApacheJMeter">JMeter on Twitter<img src="../images/twitter.png" alt="Icon for JMeter on Twitter"></a></li><li><a href="../issues.html">Issue Tracking</a></li><li><a href="http://projects.apache.org/feeds/rss/jmeter.xml">Subscribe to What's New</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../nightly.html">Developer (Nightly) Builds</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Documentation</div><ul><li><a href="../changes.html">Changes per version</a></li><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="../building.html">Building JMeter and Add-Ons</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Community</div><ul><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">SVN Repositories</a></li></ul></li></ul><ul class="menu"><li><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><ul class="pagelinks"><li><a href="build-adv-web-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ftp-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">7. Building a Database Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="build-adv-web-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ftp-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">6. Building a Database Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
 <p>In this section, you will learn how to create a basic
 <a href="build-test-plan.html">Test Plan</a> to test a database server.
 You will create fifty users that send 2 SQL requests to the database server.
@@ -43,15 +20,15 @@ To use this driver, its containing .jar file (ex. mysql-connector-java-X.X.X-bin
 <b>./lib</b> directory (see <a href="get-started.html#classpath">JMeter's Classpath</a>
 for more details).</div><div class="clear"></div>
 
-</div><div class="section"><h1 id="adding_users">7.1 Adding Users<a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="adding_users">6.1 Adding Users<a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></h1>
 <p>The first step you want to do with every JMeter Test Plan is to add a
 <a href="test_plan.html#thread_group">Thread Group</a> element. The Thread Group
 tells JMeter the number of users you want to simulate, how often the users should
 send requests, and the how many requests they should send.</p>
 
 <p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
-clicking your right mouse button to get the Add menu, and then select
-<b>Add</b> --&gt; <b>ThreadGroup</b>.</p>
+clicking your right mouse button to get the <span class="code">Add</span> menu, and then select
+<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">ThreadGroup</span></span>.</p>
 
 <p>You should now see the Thread Group element under Test Plan. If you do not
 see the element, then "expand" the Test Plan tree by clicking on the
@@ -59,12 +36,12 @@ Test Plan element.</p>
 
 <p>Next, you need to modify the default properties. Select the Thread Group element
 in the tree, if you have not already selected it. You should now see the Thread
-Group Control Panel in the right section of the JMeter window (see Figure 7.1
+Group Control Panel in the right section of the JMeter window (see Figure 6.1
 below)</p>
 
 <figure><a href="../images/screenshots/jdbctest/threadgroup1.png"><img src="../images/screenshots/jdbctest/threadgroup1.png" width="" height="" alt="
-Figure 7.1. Thread Group with Default Values"></a><figcaption>
-Figure 7.1. Thread Group with Default Values</figcaption></figure>
+Figure 6.1. Thread Group with Default Values"></a><figcaption>
+Figure 6.1. Thread Group with Default Values</figcaption></figure>
 
 <p>Start by providing a more descriptive name for our Thread Group. In the name
 field, enter JDBC Users.</p>
@@ -75,7 +52,7 @@ table. In the example shown here, the database is 'cloud' and the table name is
 
 <p>Next, increase the number of users to 50.</p>
 
-<p>In the next field, the Ramp-Up Period, leave the the value of 10
+<p>In the next field, the Ramp-Up Period, leave the value of 10
 seconds.  This property tells JMeter how long to delay between starting each
 user. For example, if you enter a Ramp-Up Period of 10 seconds, JMeter will
 finish starting all of your users by the end of the 10 seconds.  So, if we have
@@ -94,20 +71,20 @@ automatically accepts your changes as you make them.  If you change the
 name of an element, the tree will be updated with the new text after you
 leave the Control Panel (for example, when selecting another tree element).</div><div class="clear"></div>
 
-<p>See Figure 7.2 for the completed JDBC Users Thread Group.</p>
+<p>See Figure 6.2 for the completed JDBC Users Thread Group.</p>
 
 <figure><a href="../images/screenshots/jdbctest/threadgroup2.png"><img src="../images/screenshots/jdbctest/threadgroup2.png" width="" height="" alt="
-Figure 7.2. JDBC Users Thread Group"></a><figcaption>
-Figure 7.2. JDBC Users Thread Group</figcaption></figure>
+Figure 6.2. JDBC Users Thread Group"></a><figcaption>
+Figure 6.2. JDBC Users Thread Group</figcaption></figure>
 
-</div><div class="section"><h1 id="adding_requests">7.2 Adding JDBC Requests<a class="sectionlink" href="#adding_requests" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="adding_requests">6.2 Adding JDBC Requests<a class="sectionlink" href="#adding_requests" title="Link to here">&para;</a></h1>
 <p>Now that we have defined our users, it is time to define the tasks that they
 will be performing.  In this section, you will specify the JDBC requests to
 perform.</p>
 
 <p>Begin by selecting the JDBC Users element. Click your right mouse button
-to get the w<b>Add</b> menu, and then select <b>Add</b> --&gt; <b>Config Element</b> --&gt; <b>JDBC Connection Configuration</b>.
-Then, select this new element to view its Control Panel (see Figure 7.3).</p>
+to get the <b>Add</b> menu, and then select <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Config Element</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JDBC Connection Configuration</span></span>.
+Then, select this new element to view its Control Panel (see Figure 6.3).</p>
 
 <p>Set up the following fields (these assume we will be using a MySQL database called 'cloud'):</p>
 <ul>
@@ -125,16 +102,16 @@ Every JDBC Request must refer to a JDBC Configuration pool.
 More than one JDBC Request can refer to the same pool.
 </p>
 <figure><a href="../images/screenshots/jdbctest/jdbc-config.png"><img src="../images/screenshots/jdbctest/jdbc-config.png" width="" height="" alt="
-Figure 7.3. JDBC Configuration"></a><figcaption>
-Figure 7.3. JDBC Configuration</figcaption></figure>
+Figure 6.3. JDBC Configuration"></a><figcaption>
+Figure 6.3. JDBC Configuration</figcaption></figure>
 
 <p>Selecting the JDBC Users element again. Click your right mouse button
-to get the <b>Add</b> menu, and then select <b>Add</b> --&gt; <b>Sampler</b> --&gt; <b>JDBC Request</b>.
-Then, select this new element to view its Control Panel (see Figure 7.4).</p>
+to get the <b>Add</b> menu, and then select <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JDBC Request</span></span>.
+Then, select this new element to view its Control Panel (see Figure 6.4).</p>
 
 <figure><a href="../images/screenshots/jdbctest/JDBCRequest.png"><img src="../images/screenshots/jdbctest/JDBCRequest.png" width="" height="" alt="
-Figure 7.4. JDBC Request"></a><figcaption>
-Figure 7.4. JDBC Request</figcaption></figure>
+Figure 6.4. JDBC Request"></a><figcaption>
+Figure 6.4. JDBC Request</figcaption></figure>
 
 <p>In our Test Plan, we will make two JDBC requests. The first one is for
 select all 'Running' VM instances, and the second is to select 'Expunging' VM instance (obviously you should
@@ -143,7 +120,7 @@ are illustrated below.</p>
 
 <div class="clear"></div><div class="note">JMeter sends requests in the order that you add them to the tree.</div><div class="clear"></div>
 
-<p>Start by editing the following properties (see Figure 7.5):
+<p>Start by editing the following properties (see Figure 6.5):
 <ul>
 <li>Change the Name to 'VM Running'.</li>
 <li>Enter the Pool Name: 'myDatabase' (same as in the configuration element)</li>
@@ -154,11 +131,11 @@ are illustrated below.</p>
 </p>
 
 <figure><a href="../images/screenshots/jdbctest/JDBCRequest2.png"><img src="../images/screenshots/jdbctest/JDBCRequest2.png" width="" height="" alt="
-Figure 7.5. JDBC Request for the first SQL request"></a><figcaption>
-Figure 7.5. JDBC Request for the first SQL request</figcaption></figure>
+Figure 6.5. JDBC Request for the first SQL request"></a><figcaption>
+Figure 6.5. JDBC Request for the first SQL request</figcaption></figure>
 
 <p>Next, add the second JDBC Request and edit the following properties (see
-Figure 7.6):
+Figure 6.6):
 <ul>
 <li>Change the Name to 'VM Expunging'.</li>
 <li>Change the value of Parameter values to 'Expunging'.</li>
@@ -166,33 +143,52 @@ Figure 7.6):
 </p>
 
 <figure><a href="../images/screenshots/jdbctest/JDBCRequest3.png"><img src="../images/screenshots/jdbctest/JDBCRequest3.png" width="" height="" alt="
-Figure 7.6. JDBC Request for the second request"></a><figcaption>
-Figure 7.6. JDBC Request for the second request</figcaption></figure>
+Figure 6.6. JDBC Request for the second request"></a><figcaption>
+Figure 6.6. JDBC Request for the second request</figcaption></figure>
 
-</div><div class="section"><h1 id="adding_listener">7.3 Adding a Listener to View/Store the Test Results<a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="adding_listener">6.3 Adding a Listener to View/Store the Test Results<a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></h1>
 <p>The final element you need to add to your Test Plan is a
 <a href="component_reference.html#listeners">Listener</a>. This element is
 responsible for storing all of the results of your JDBC requests in a file
 and presenting the results.</p>
 
 <p>Select the <i>JDBC Users</i> element and add a <a href="../usermanual/component_reference.html#Summary_Report">Summary Report</a>
-listener (<b>Add</b> --&gt; <b>Listener</b> --&gt; <b>Summary Report</b>).</p>
+listener (<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Summary Report</span></span>).</p>
 
-<p>Save the test plan, and run the test with the menu <b>Run</b> --&gt; <b>Start</b> or <b>Ctrl+R</b></p>
+<p>Save the test plan, and run the test with the menu
+<span class="menuchoice"><span class="guimenuitem">Run</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Start</span></span> or
+<span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">R</span></span>
+</p>
 
 <p>The listener shows the results.</p>
 
 <figure><a href="../images/screenshots/jdbctest/jdbc-results.png"><img src="../images/screenshots/jdbctest/jdbc-results.png" width="" height="" alt="
-Figure 7.7. Graph results Listener"></a><figcaption>
-Figure 7.7. Graph results Listener</figcaption></figure>
+Figure 6.7. Graph results Listener"></a><figcaption>
+Figure 6.7. Graph results Listener</figcaption></figure>
 
-</div><ul class="pagelinks"><li><a href="build-adv-web-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ftp-test-plan.html">Next &gt;</a></li></ul></div><div class="footer"><div class="copyright">
+</div><ul class="pagelinks"><li><a href="build-adv-web-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-ftp-test-plan.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2015
+            2016
             , Apache Software Foundation
           </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
             feather, and the Apache JMeter logo are
             trademarks of the
             Apache Software Foundation.
-          </div></div></body></html>
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

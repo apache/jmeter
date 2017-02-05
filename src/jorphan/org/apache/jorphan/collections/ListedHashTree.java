@@ -31,8 +31,7 @@ import org.apache.jorphan.util.JMeterError;
 /**
  * ListedHashTree is a different implementation of the {@link HashTree}
  * collection class. In the ListedHashTree, the order in which values are added
- * is preserved (not to be confused with {@link SortedHashTree}, which sorts
- * the order of the values using the compare() function). Any listing of nodes
+ * is preserved . Any listing of nodes
  * or iteration through the list of nodes of a ListedHashTree will be given in
  * the order in which the nodes were added to the tree.
  *
@@ -204,7 +203,7 @@ public class ListedHashTree extends HashTree implements Serializable, Cloneable 
             return false;
         }
         ListedHashTree lht = (ListedHashTree) o;
-        return (super.equals(lht) && order.equals(lht.order));
+        return super.equals(lht) && order.equals(lht.order);
     }
 
 

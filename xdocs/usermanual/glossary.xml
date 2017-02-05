@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '24'>
 ]>
-<document prev="hints_and_tips.html" id="$Id$">
+<document prev="hints_and_tips.html" next="history_future.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Glossary</title>
@@ -49,6 +49,8 @@ browser or other application client.
 
 <p>
 <a name="Connect"><b>Connect Time</b></a>. JMeter measures the time it took to establish the connection, including SSL handshake. Note that connect time is not automatically subtracted from <a href="#Latency">latency</a>.
+In case of connection error, the metric will be equal to the time it took to face the error, for example in case of Timeout, it should be equal to connection timeout. 
+<note>As of JMeter 3.1, this metric is only computed for TCP Sampler, HTTP Request and JDBC Request.</note> 
 </p>
 
 <p>

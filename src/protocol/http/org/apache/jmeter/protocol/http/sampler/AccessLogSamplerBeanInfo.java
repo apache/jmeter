@@ -84,6 +84,7 @@ public class AccessLogSamplerBeanInfo extends BeanInfoSupport {
             p = property("protocol"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);
             p.setValue(DEFAULT, "http"); // $NON-NLS-1$
+            p.setValue(DEFAULT_NOT_SAVED, Boolean.TRUE);
 
             p = property("portString"); // $NON-NLS-1$
             p.setValue(NOT_UNDEFINED, Boolean.TRUE);

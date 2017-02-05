@@ -73,15 +73,15 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$;
+    private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$
 
     private final HtmlPane helpDoc = new HtmlPane();
 
-    private final JButton reloadTemplateButton = new JButton(JMeterUtils.getResString("template_reload")); //$NON-NLS-1$;
+    private final JButton reloadTemplateButton = new JButton(JMeterUtils.getResString("template_reload")); //$NON-NLS-1$
 
     private final JButton applyTemplateButton = new JButton();
 
-    private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$;
+    private final JButton cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
     
     private final JScrollPane scroller = new JScrollPane(helpDoc);
 

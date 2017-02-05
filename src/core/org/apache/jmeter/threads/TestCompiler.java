@@ -57,13 +57,6 @@ public class TestCompiler implements HashTreeTraverser {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
-    /** 
-     * @deprecated since 3.0 will be removed in the next version 3.1. 
-     * Constant is not used since 3.0
-     */
-    @Deprecated
-    public static final boolean IS_USE_STATIC_SET = false;
-
     /**
      * This set keeps track of which ObjectPairs have been seen.
      * It seems to be used to prevent adding a child to a parent if the child has already been added.
@@ -147,7 +140,7 @@ public class TestCompiler implements HashTreeTraverser {
             saveTransactionControllerConfigs((TransactionController) child);
         }
         stack.removeLast();
-        if (stack.size() > 0) {
+        if (!stack.isEmpty()) {
             TestElement parent = stack.getLast();
             boolean duplicate = false;
             // Bug 53750: this condition used to be in ObjectPair#addTestElements()
@@ -209,7 +202,7 @@ public class TestCompiler implements HashTreeTraverser {
             List<PreProcessor>  tempPre = new LinkedList<>();
             List<PostProcessor> tempPost = new LinkedList<>();
             for (Object item : testTree.list(stack.subList(0, i))) {
-                if ((item instanceof ConfigTestElement)) {
+                if (item instanceof ConfigTestElement) {
                     configs.add((ConfigTestElement) item);
                 }
                 if (item instanceof SampleListener) {

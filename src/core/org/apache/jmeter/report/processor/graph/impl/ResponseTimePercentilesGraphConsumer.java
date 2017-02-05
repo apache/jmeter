@@ -30,7 +30,8 @@ import org.apache.jmeter.report.processor.graph.GroupInfo;
 import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 
 /**
- * The Class ResponseTimePercentilesGraphConsumer.
+ * The Class ResponseTimePercentilesGraphConsumer computes percentile 
+ * graph for each samples
  *
  * @since 3.0
  */
@@ -72,7 +73,8 @@ public class ResponseTimePercentilesGraphConsumer extends AbstractGraphConsumer 
 
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new SumAggregatorFactory(), new NameSeriesSelector(),
-                new CountValueSelector(), false, false));
+                // We include Transaction Controller results
+                new CountValueSelector(false), false, false));
 
         return groupInfos;
     }

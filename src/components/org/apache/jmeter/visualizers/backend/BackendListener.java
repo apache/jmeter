@@ -39,6 +39,7 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.visualizers.backend.graphite.GraphiteBackendListenerClient;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -47,7 +48,8 @@ import org.apache.log.Logger;
  * @since 2.13
  */
 public class BackendListener extends AbstractTestElement
-    implements Serializable, SampleListener, TestStateListener, NoThreadClone, Remoteable  {
+    implements Backend, Serializable, SampleListener, 
+        TestStateListener, NoThreadClone, Remoteable {
 
     /**
      * 
@@ -98,13 +100,7 @@ public class BackendListener extends AbstractTestElement
     public static final String DEFAULT_QUEUE_SIZE = "5000";
 
     // Create unique object as marker for end of queue
-    private transient static final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
-
-    // Name of the test element. Set up by testStarted().
-    private transient String myName;
-
-    // Holds listenerClientData for this test element
-    private transient ListenerClientData listenerClientData;
+    private static transient final SampleResult FINAL_SAMPLE_RESULT = new SampleResult();
 
     /*
      * This is needed for distributed testing where there is 1 instance
@@ -113,6 +109,12 @@ public class BackendListener extends AbstractTestElement
     //@GuardedBy("LOCK") - needed to ensure consistency between this and instanceCount
     private static final Map<String, ListenerClientData> queuesByTestElementName =
             new ConcurrentHashMap<>();
+
+    // Name of the test element. Set up by testStarted().
+    private transient String myName;
+
+    // Holds listenerClientData for this test element
+    private transient ListenerClientData listenerClientData;
 
     /**
      * Create a BackendListener.
@@ -136,13 +138,14 @@ public class BackendListener extends AbstractTestElement
         return clone;
     }
 
-    private void initClass() {
+    private Class<?> initClass() {
         String name = getClassname().trim();
         try {
-            clientClass = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());
         } catch (Exception e) {
             LOGGER.error(whoAmI() + "\tException initialising: " + name, e);
         }
+        return null;
     }
 
     /**
@@ -242,7 +245,7 @@ public class BackendListener extends AbstractTestElement
                         }
                     }
                 } catch (InterruptedException e) {
-                    // NOOP
+                    Thread.currentThread().interrupt();
                 }
                 // We may have been interrupted
                 sendToListener(backendListenerClient, context, sampleResults);
@@ -263,7 +266,7 @@ public class BackendListener extends AbstractTestElement
             final BackendListenerClient backendListenerClient,
             final BackendListenerContext context,
             final List<SampleResult> sampleResults) {
-        if (sampleResults.size() > 0) {
+        if (!sampleResults.isEmpty()) {
             backendListenerClient.handleSampleResults(sampleResults, context);
             sampleResults.clear();
         }
@@ -318,7 +321,7 @@ public class BackendListener extends AbstractTestElement
             if (listenerClientData == null){
                 // We need to do this to ensure in Distributed testing 
                 // that only 1 instance of BackendListenerClient is used
-                initClass();
+                clientClass = initClass(); // may be null
                 BackendListenerClient backendListenerClient = createBackendListenerClientImpl(clientClass);
                 BackendListenerContext context = new BackendListenerContext((Arguments)getArguments().clone());
 
@@ -355,12 +358,12 @@ public class BackendListener extends AbstractTestElement
     @Override
     public void testEnded(String host) {
         synchronized (LOCK) {
-            ListenerClientData listenerClientData = queuesByTestElementName.get(myName);
+            ListenerClientData listenerClientDataForName = queuesByTestElementName.get(myName);
             if(LOGGER.isDebugEnabled()) {
-                LOGGER.debug("testEnded called on instance "+myName+"#"+listenerClientData.instanceCount);
+                LOGGER.debug("testEnded called on instance "+myName+"#"+listenerClientDataForName.instanceCount);
             }
-            listenerClientData.instanceCount--;
-            if (listenerClientData.instanceCount > 0){
+            listenerClientDataForName.instanceCount--;
+            if (listenerClientDataForName.instanceCount > 0){
                 // Not the last instance of myName
                 return;
             }
@@ -434,6 +437,9 @@ public class BackendListener extends AbstractTestElement
      *            the new arguments. These replace any existing arguments.
      */
     public void setArguments(Arguments args) {
+        // Bug 59173 - don't save new default argument
+        args.removeArgument(GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST, 
+                GraphiteBackendListenerClient.USE_REGEXP_FOR_SAMPLERS_LIST_DEFAULT);
         setProperty(new TestElementProperty(ARGUMENTS, args));
     }
 

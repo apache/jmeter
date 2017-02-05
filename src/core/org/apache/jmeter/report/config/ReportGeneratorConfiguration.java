@@ -18,17 +18,20 @@
 package org.apache.jmeter.report.config;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
-
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import java.util.regex.Pattern;
 
 import jodd.props.Props;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jorphan.logging.LoggingManager;
+import org.apache.log.Logger;
 
 /**
  * The class ReportGeneratorConfiguration describes the configuration of the
@@ -40,8 +43,14 @@ public class ReportGeneratorConfiguration {
 
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
+    private static final String RANGE_DATE_FORMAT_DEFAULT = "yyyyMMddHHmmss"; //$NON-NLS-1$
+
     public static final char KEY_DELIMITER = '.';
     public static final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
+    
+    public static final String REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "date_format";
+    
     public static final String REPORT_GENERATOR_GRAPH_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "graph";
     public static final String REPORT_GENERATOR_EXPORTER_KEY_PREFIX = REPORT_GENERATOR_KEY_PREFIX
@@ -53,9 +62,9 @@ public class ReportGeneratorConfiguration {
     private static final File REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT = new File(
             "temp");
 
-    // Apdex Satified Threshold
+    // Apdex Satisfied Threshold
     private static final String REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
-            + KEY_DELIMITER + "apdex_statisfied_threshold";
+            + KEY_DELIMITER + "apdex_satisfied_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT = Long.valueOf(500L);
 
     // Apdex Tolerated Threshold
@@ -63,9 +72,25 @@ public class ReportGeneratorConfiguration {
             + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
 
+    // Exclude Transaction Controller from Top5 Errors by Sampler consumer
+    private static final String REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "exclude_tc_from_top5_errors_by_sampler";
+
     // Sample Filter
     private static final String REPORT_GENERATOR_KEY_SAMPLE_FILTER = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "sample_filter";
+
+    // report title
+    private static final String REPORT_GENERATOR_KEY_REPORT_TITLE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "report_title";
+    
+    // start date for which report must be generated
+    private static final String REPORT_GENERATOR_KEY_START_DATE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "start_date";
+    
+    // end date for which report must be generated
+    private static final String REPORT_GENERATOR_KEY_END_DATE = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "end_date";
 
     private static final String LOAD_EXPORTER_FMT = "Load configuration for exporter \"%s\"";
     private static final String LOAD_GRAPH_FMT = "Load configuration for graph \"%s\"";
@@ -84,7 +109,7 @@ public class ReportGeneratorConfiguration {
     // Required exporter properties
     // Filters only sample series ?
     public static final String EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES = "filters_only_sample_series";
-    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.FALSE;
+    public static final Boolean EXPORTER_KEY_FILTERS_ONLY_SAMPLE_SERIES_DEFAULT = Boolean.TRUE;
 
     // Series filter
     public static final String EXPORTER_KEY_SERIES_FILTER = "series_filter";
@@ -256,12 +281,15 @@ public class ReportGeneratorConfiguration {
         void initialize(String subConfId, T subConfiguration)
                 throws ConfigurationException;
     }
-
+    private String reportTitle;
+    private Date startDate;
+    private Date endDate;
     private String sampleFilter;
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
-    private List<String> filteredSamples = new ArrayList<>();
+    private Pattern filteredSamplesPattern;
+    private boolean ignoreTCFromTop5ErrorsBySampler;
     private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
     private Map<String, GraphConfiguration> graphConfigurations = new HashMap<>();
 
@@ -281,15 +309,7 @@ public class ReportGeneratorConfiguration {
      *            the new overall sample filter
      */
     public final void setSampleFilter(String sampleFilter) {
-        if (!Objects.equals(this.sampleFilter, sampleFilter)) {
-            this.sampleFilter = sampleFilter;
-            filteredSamples.clear();
-            if (sampleFilter != null) {
-                for (String item: sampleFilter.split(",")) {
-                    filteredSamples.add(item.trim());
-                }
-            }
-        }
+        this.sampleFilter = sampleFilter;
     }
 
     /**
@@ -347,15 +367,6 @@ public class ReportGeneratorConfiguration {
      */
     public final void setApdexToleratedThreshold(long apdexToleratedThreshold) {
         this.apdexToleratedThreshold = apdexToleratedThreshold;
-    }
-
-    /**
-     * Gets the filtered samples.
-     *
-     * @return the filteredSamples
-     */
-    public final List<String> getFilteredSamples() {
-        return filteredSamples;
     }
 
     /**
@@ -604,7 +615,7 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_TEMP_DIR_DEFAULT, File.class);
         configuration.setTempDirectory(tempDirectory);
 
-        // Load apdex statified threshold
+        // Load apdex statisfied threshold
         final long apdexSatisfiedThreshold = getRequiredProperty(props,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD,
                 REPORT_GENERATOR_KEY_APDEX_SATISFIED_THRESHOLD_DEFAULT,
@@ -618,10 +629,55 @@ public class ReportGeneratorConfiguration {
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
 
+        final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
+                props, 
+                REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER,
+                Boolean.TRUE,
+                Boolean.class).booleanValue();
+        configuration.setIgnoreTCFromTop5ErrorsBySampler(ignoreTCFromTop5ErrorsBySampler);
+        
         // Load sample filter
         final String sampleFilter = getOptionalProperty(props,
                 REPORT_GENERATOR_KEY_SAMPLE_FILTER, String.class);
         configuration.setSampleFilter(sampleFilter);
+
+        final String reportTitle = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_REPORT_TITLE, String.class);
+        configuration.setReportTitle(reportTitle);
+
+        Date reportStartDate = null;
+        Date reportEndDate = null;
+        final String startDateValue = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_START_DATE, String.class);
+        final String endDateValue = getOptionalProperty(props,
+                REPORT_GENERATOR_KEY_END_DATE, String.class);
+
+        String rangeDateFormat = getOptionalProperty(props, REPORT_GENERATOR_KEY_RANGE_DATE_FORMAT, String.class);
+        if (StringUtils.isEmpty(rangeDateFormat)) {
+            rangeDateFormat = RANGE_DATE_FORMAT_DEFAULT;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat(rangeDateFormat, Locale.ENGLISH);
+
+        try {
+            if(!StringUtils.isEmpty(startDateValue)) {
+                reportStartDate = dateFormat.parse(startDateValue);
+                configuration.setStartDate(reportStartDate);
+            }
+        } catch (ParseException e) {
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_START_DATE + " with value: " + startDateValue
+                    + " using format: " + rangeDateFormat, e);
+        }
+        try {
+            if(!StringUtils.isEmpty(endDateValue)) {
+                reportEndDate = dateFormat.parse(endDateValue);
+                configuration.setEndDate(reportEndDate);
+            }
+        } catch (ParseException e) {
+            LOG.error("Error parsing property " + REPORT_GENERATOR_KEY_END_DATE + " with value: " + endDateValue 
+                    + " using format: " + rangeDateFormat, e);
+        }
+        
+        LOG.info("Will use date range start date: " + startDateValue + ", end date: " + endDateValue);
 
         // Find graph identifiers and load a configuration for each
         final Map<String, GraphConfiguration> graphConfigurations = configuration
@@ -648,5 +704,75 @@ public class ReportGeneratorConfiguration {
         LOG.debug(END_LOADING_MSG);
 
         return configuration;
+    }
+
+    /**
+     * @return the reportTitle
+     */
+    public String getReportTitle() {
+        return reportTitle;
+    }
+
+    /**
+     * @param reportTitle the reportTitle to set
+     */
+    public void setReportTitle(String reportTitle) {
+        this.reportTitle = reportTitle;
+    }
+
+    /**
+     * @return the filteredSamplesPattern
+     */
+    public Pattern getFilteredSamplesPattern() {
+        if(StringUtils.isEmpty(sampleFilter)) {
+            return null;
+        }
+        if(filteredSamplesPattern == null) {
+            filteredSamplesPattern = Pattern.compile(sampleFilter);
+        }
+        return filteredSamplesPattern;
+    }
+
+    /**
+     * @return the start date to use to generate the report
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the start date to use to generate the report
+     */
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the end date to use to generate the report
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the end date to use to generate the report
+     */
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    /**
+     * @return the ignoreTCFromTop5ErrorsBySampler
+     */
+    public boolean isIgnoreTCFromTop5ErrorsBySampler() {
+        return ignoreTCFromTop5ErrorsBySampler;
+    }
+
+    /**
+     * @param ignoreTCFromTop5ErrorsBySampler the ignoreTCFromTop5ErrorsBySampler to set
+     */
+    public void setIgnoreTCFromTop5ErrorsBySampler(
+            boolean ignoreTCFromTop5ErrorsBySampler) {
+        this.ignoreTCFromTop5ErrorsBySampler = ignoreTCFromTop5ErrorsBySampler;
     }
 }

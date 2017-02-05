@@ -129,16 +129,24 @@ public class TestFileServer extends JMeterTestCase {
 
         try {
             FS.reserveFile(missing,charsetName,alias,true);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertTrue("Expected FNF", e.getCause() instanceof java.io.FileNotFoundException);
+            fail("Bad filename passed to FileService.reserveFile -> IllegalArgumentException: Could not read file header line for file no-such-file");
+        } catch (IllegalArgumentException ignored) {
+            assertEquals("Bad filename passed to FileService.reserveFile -> exception",
+                    "Could not read file header line for file no-such-file",
+                    ignored.getMessage());
+            assertEquals("Bad filename passed to FileService.reserveFile -> exception",
+                    "File no-such-file must exist and be readable", ignored.getCause().getMessage());
         }
         // Ensure second invocation gets same behaviour
         try {
             FS.reserveFile(missing,charsetName,alias,true);
-            fail("Expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertTrue("Expected FNF", e.getCause() instanceof java.io.FileNotFoundException);
+            fail("Bad filename passed to FileService.reserveFile -> IllegalArgumentException: Could not read file header line for file no-such-file");
+        } catch (IllegalArgumentException ignored) {
+            assertEquals("Bad filename passed to FileService.reserveFile -> exception",
+                    "Could not read file header line for file no-such-file",
+                    ignored.getMessage());
+            assertEquals("Bad filename passed to FileService.reserveFile -> exception",
+                    "File no-such-file must exist and be readable", ignored.getCause().getMessage());
         }
     }
 

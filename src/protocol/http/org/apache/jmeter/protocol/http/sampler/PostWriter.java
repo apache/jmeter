@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
@@ -49,7 +50,7 @@ public class PostWriter {
 
     private static final byte[] CRLF = { 0x0d, 0x0A };
 
-    public static final String ENCODING = "ISO-8859-1"; // $NON-NLS-1$
+    public static final String ENCODING = StandardCharsets.ISO_8859_1.name();
 
     /** The form data that is going to be sent as url encoded */
     protected byte[] formDataUrlEncoded;

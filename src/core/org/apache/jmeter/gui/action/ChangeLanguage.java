@@ -30,9 +30,9 @@ import org.apache.jorphan.util.JMeterError;
 import org.apache.log.Logger;
 
 /**
- * @version $Revision$
+ * Change language
  */
-public class ChangeLanguage implements Command {
+public class ChangeLanguage extends AbstractActionWithNoRunningTest {
     private static final Set<String> commands = new HashSet<>();
 
     private static final Logger log = LoggingManager.getLoggerForClass();
@@ -42,10 +42,10 @@ public class ChangeLanguage implements Command {
     }
 
     /**
-     * @see org.apache.jmeter.gui.action.Command#doAction(ActionEvent)
+     * @see org.apache.jmeter.gui.action.AbstractActionWithNoRunningTest#doActionAfterCheck(ActionEvent)
      */
     @Override
-    public void doAction(ActionEvent e) {
+    public void doActionAfterCheck(ActionEvent e) {
         String locale = ((Component) e.getSource()).getName();
         Locale loc;
 

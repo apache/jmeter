@@ -123,7 +123,7 @@ public class PackageTest extends TestCase {
                          * JMeterUtils.getResString() converts space to _ and lowercases
                          * the key, so make sure all keys pass the test
                          */
-                        if ((key.indexOf(' ') >= 0) || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
+                        if (key.contains(" ") || !key.toLowerCase(java.util.Locale.ENGLISH).equals(key)) {
                             System.out.println("Invalid key for JMeterUtils " + key);
                             fails++;
                         }
@@ -136,9 +136,9 @@ public class PackageTest extends TestCase {
                      * parameters and check if there is a { in the output. A bit
                      * crude, but should be enough for now.
                      */
-                    if (val.indexOf("{0}") > 0 && val.indexOf('\'') > 0) {
+                    if (val.contains("{0}") && val.contains("'")) {
                         String m = java.text.MessageFormat.format(val, DUMMY_PARAMS);
-                        if (m.indexOf('{') > 0) {
+                        if (m.contains("{")) {
                             fails++;
                             System.out.println("Incorrect message format ? (input/output) for: "+key);
                             System.out.println(val);

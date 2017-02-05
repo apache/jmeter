@@ -17,11 +17,11 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '15'>
+<!ENTITY sect-num '14'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="listeners.html" next="realtime-results.html" id="$Id$">
+<document prev="listeners.html" next="generating-dashboard.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Remote (Distributed) Testing</title>
@@ -111,7 +111,7 @@ See also the <code>-X</code> flag (described below)
 use the script "<code>bin/jmeter</code>".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
 (see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
 normal JMeter start and stop menu items.</p>
-<figure image="remote/run-menu00.gif" width="232" height="156">Figure 1 - Run Menu</figure>
+<figure image="remote/run-menu00.png" width="487" height="295">Figure 1 - Run Menu</figure>
 
 <p><b>Step 3b: Start the JMeter from a non-GUI Client</b></p>
 <p>
@@ -120,20 +120,23 @@ The command to do this is:</p>
 <source>
 jmeter -n -t script.jmx -r
 </source>
-or
+<p>or</p>
 <source>
 jmeter -n -t script.jmx -R server1,server2,&hellip;
 </source>
+<p>
 Other flags that may be useful:
+</p>
 <dl>
 <dt><code>-Gproperty=value</code></dt><dd>define a property in all the servers (may appear more than once)</dd>
 <dt><code>-X</code></dt><dd>Exit remote servers at the end of the test.</dd>
 </dl>
+<p>
 The first example will start the test on whatever servers are defined in the JMeter property <code>remote_hosts</code>;<br/>
 The second example will define <code>remote_hosts</code> from the list of servers and then start the test on the remote servers.
 <br/>
 The command-line client will exit when all the remote servers have stopped.
-
+</p>
 <subsection name="&sect-num;.1 Doing it Manually" anchor="detail_instructions">
 <p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).
 Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>

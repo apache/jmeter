@@ -21,24 +21,39 @@ package org.apache.jmeter.protocol.http.sampler;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URLConnection;
+
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.junit.Test;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 
 public class PutWriterTest {
 
-
     @Test
-    public void testSetHeaders() throws Exception {
+    public void testSetHeadersWithNoParams() throws Exception {
         URLConnection uc = new NullURLConnection();
         HTTPSampler sampler = new HTTPSampler();
-        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("file1", "", "mime1")});
+        sampler.setHTTPFiles(new HTTPFileArg[] { new HTTPFileArg("file1", "",
+                "mime1") });
         PutWriter pw = new PutWriter();
         pw.setHeaders(uc, sampler);
-        assertEquals("mime1", uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
-        uc = new NullURLConnection();
-        sampler.setHTTPFiles(new HTTPFileArg[]{new HTTPFileArg("file2", "param2", "mime2")});
+        assertEquals("mime1",
+                uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
+    }
+
+    @Test
+    public void testSetHeadersWithParams() throws Exception {
+        URLConnection uc = new NullURLConnection();
+        HTTPSampler sampler = new HTTPSampler();
+        sampler.setHTTPFiles(new HTTPFileArg[] { new HTTPFileArg("file2",
+                "param2", "mime2") });
+        Arguments arguments = new Arguments();
+        arguments.addArgument(new HTTPArgument("", "parameter with no name"));
+        sampler.setArguments(arguments);
+        PutWriter pw = new PutWriter();
         pw.setHeaders(uc, sampler);
-        assertEquals("mime2", uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
+        assertEquals("mime2",
+                uc.getRequestProperty(HTTPConstants.HEADER_CONTENT_TYPE));
     }
 }

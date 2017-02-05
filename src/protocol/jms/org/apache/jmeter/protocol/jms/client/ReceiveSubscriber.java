@@ -329,6 +329,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
                 }
             } catch (InterruptedException e) {
                 // Ignored
+                Thread.currentThread().interrupt();
             }
             return message;
         }
@@ -352,7 +353,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
                 connectionStarted = false;
             }
         } catch (JMSException e) {
-            log.warn("Stopping connection throws exception, message:"+e.getMessage());
+            log.warn("Stopping connection throws exception, message:"+e.getMessage(), e);
         }
         Utils.close(subscriber, log);
         Utils.close(session, log);
@@ -378,6 +379,6 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
      * @return True if input is null, an empty string, or a white space-only string
      */
     private boolean isEmpty(String s1) {
-        return (s1 == null || s1.trim().isEmpty());
+        return s1 == null || s1.trim().isEmpty();
     }
 }

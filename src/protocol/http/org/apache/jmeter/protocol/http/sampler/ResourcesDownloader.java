@@ -25,7 +25,6 @@ import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -91,21 +90,17 @@ public class ResourcesDownloader {
     
     private void init() {
         LOG.info("Creating ResourcesDownloader with keepalive_inseconds:"+THREAD_KEEP_ALIVE_TIME);
-        ThreadPoolExecutor exec = new ThreadPoolExecutor(
+        concurrentExecutor = new ThreadPoolExecutor(
                 MIN_POOL_SIZE, MAX_POOL_SIZE, THREAD_KEEP_ALIVE_TIME, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(),
-                new ThreadFactory() {
-                    @Override
-                    public Thread newThread(final Runnable r) {
-                        Thread t = new Thread(r);
-                        t.setName("ResDownload-" + t.getName()); //$NON-NLS-1$
-                        t.setDaemon(true);
-                        return t;
-                    }
+                new SynchronousQueue<>(),
+                r -> {
+                    Thread t = new Thread(r);
+                    t.setName("ResDownload-" + t.getName()); //$NON-NLS-1$
+                    t.setDaemon(true);
+                    return t;
                 }) {
 
         };
-        concurrentExecutor = exec;
     }
     
     /**
@@ -148,7 +143,7 @@ public class ResourcesDownloader {
      * @param maxConcurrentDownloads max concurrent downloads
      * @param list list of resources to download
      * @return list tasks that have been scheduled
-     * @throws InterruptedException
+     * @throws InterruptedException when interrupted while waiting
      */
     public List<Future<AsynSamplerResultHolder>> invokeAllAndAwaitTermination(int maxConcurrentDownloads, List<Callable<AsynSamplerResultHolder>> list) throws InterruptedException {
         List<Future<AsynSamplerResultHolder>> submittedTasks = new ArrayList<>();

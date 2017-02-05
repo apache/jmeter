@@ -1,0 +1,13 @@
+label,responseCode,responseMessage,threadName,dataType,success
+HTTP-Request-WithNoMatchingAuth,200,OK,Thread Group 1-1,text,true
+HTTP-Request-WithNoMatchingAuth,200,OK,Thread Group 1-1,text,true
+HTTPS-Request-WithNoMatchingAuth,200,OK,Thread Group 2-1,text,true
+HTTPS-Request-WithNoMatchingAuth,200,OK,Thread Group 2-1,text,true
+HTTP-Request-NoAuthManager,200,OK,Thread Group 3-1,text,true
+HTTP-Request-NoAuthManager,200,OK,Thread Group 3-1,text,true
+HTTPS-Request-NoAuthManager,200,OK,Thread Group 4-1,text,true
+HTTPS-Request-NoAuthManager,200,OK,Thread Group 4-1,text,true
+HTTP-Request-WithMatchingBasicAuth,200,OK,Thread Group 5-1,text,true
+HTTP-Request-WithMatchingBasicAuth,200,OK,Thread Group 5-1,text,true
+HTTPS-Request-WithMatchingBasicAuth,200,OK,Thread Group 6-1,text,true
+HTTPS-Request-WithMatchingBasicAuth,200,OK,Thread Group 6-1,text,true

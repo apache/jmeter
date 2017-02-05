@@ -127,7 +127,7 @@ public class SystemSampler extends AbstractSampler {
             env.put(arg.getName(), arg.getPropertyAsString(Argument.VALUE));
         }
         
-        File directory = null;
+        File directory;
         if(StringUtils.isEmpty(getDirectory())) {
             directory = new File(FileServer.getDefaultBase());
             if(log.isDebugEnabled()) {
@@ -141,13 +141,13 @@ public class SystemSampler extends AbstractSampler {
         }
         
         if(log.isDebugEnabled()) {
-            log.debug("Will run :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
-                    " with environment:"+env);
+            log.debug("Will run : "+cmdLine + " using working directory:"+directory.getAbsolutePath()+
+                    " with environment: "+env);
         }
 
-        results.setSamplerData("Working Directory:"+directory.getAbsolutePath()+
-                "\nEnvironment:"+env+
-                "\nExecuting:" + cmdLine.toString());
+        results.setSamplerData("Working Directory: "+directory.getAbsolutePath()+
+                "\nEnvironment: "+env+
+                "\nExecuting: " + cmdLine.toString());
 
         SystemCommand nativeCommand = null;
         try {
@@ -155,15 +155,15 @@ public class SystemSampler extends AbstractSampler {
             results.sampleStart();
             int returnCode = nativeCommand.run(cmds);
             results.sampleEnd();
-            results.setResponseCode(Integer.toString(returnCode)); // TODO is this the best way to do this?
+            results.setResponseCode(Integer.toString(returnCode));
             if(log.isDebugEnabled()) {
-                log.debug("Ran :"+cmdLine + " using working directory:"+directory.getAbsolutePath()+
-                        " with execution environment:"+nativeCommand.getExecutionEnvironment()+ " => " + returnCode);
+                log.debug("Ran : "+cmdLine + " using working directory: "+directory.getAbsolutePath()+
+                        " with execution environment: "+nativeCommand.getExecutionEnvironment()+ " => " + returnCode);
             }
 
             if (checkReturnCode && (returnCode != expectedReturnCode)) {
                 results.setSuccessful(false);
-                results.setResponseMessage("Uexpected return code.  Expected ["+expectedReturnCode+"]. Actual ["+returnCode+"].");
+                results.setResponseMessage("Unexpected return code.  Expected ["+expectedReturnCode+"]. Actual ["+returnCode+"].");
             } else {
                 results.setSuccessful(true);
                 results.setResponseMessage("OK");
@@ -171,13 +171,14 @@ public class SystemSampler extends AbstractSampler {
         } catch (IOException ioe) {
             results.sampleEnd();
             results.setSuccessful(false);
-            // results.setResponseCode("???"); TODO what code should be set here?
-            results.setResponseMessage("Exception occured whilst executing System Call: " + ioe);
+            results.setResponseCode("500"); //$NON-NLS-1$
+            results.setResponseMessage("Exception occurred whilst executing system call: " + ioe);
         } catch (InterruptedException ie) {
             results.sampleEnd();
             results.setSuccessful(false);
-            // results.setResponseCode("???"); TODO what code should be set here?
-            results.setResponseMessage("System Sampler Interupted whilst executing System Call: " + ie);
+            results.setResponseCode("500"); //$NON-NLS-1$
+            results.setResponseMessage("System Sampler interrupted whilst executing system call: " + ie);
+            Thread.currentThread().interrupt();
         }
 
         if (nativeCommand != null) {

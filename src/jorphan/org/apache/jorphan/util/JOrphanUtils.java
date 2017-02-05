@@ -19,6 +19,7 @@
 package org.apache.jorphan.util;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -167,9 +169,8 @@ public final class JOrphanUtils {
     }
 
 
-    private static final String SPACES = "                                 ";
-
-    private static final int SPACES_LEN = SPACES.length();
+    private static final char[] SPACES_CHARS = "                                 ".toCharArray();
+    private static final int SPACES_LEN = SPACES_CHARS.length;
 
     /**
      * Right aligns some text in a StringBuilder N.B. modifies the input buffer
@@ -188,7 +189,7 @@ public final class JOrphanUtils {
         if (pfx > SPACES_LEN) {
             pfx = SPACES_LEN;
         }
-        in.insert(0, SPACES.substring(0, pfx));
+        in.insert(0, SPACES_CHARS, 0, pfx);
         return in;
     }
 
@@ -209,7 +210,7 @@ public final class JOrphanUtils {
         if (sfx > SPACES_LEN) {
             sfx = SPACES_LEN;
         }
-        in.append(SPACES.substring(0, sfx));
+        in.append(SPACES_CHARS, 0, sfx);
         return in;
     }
 
@@ -251,7 +252,7 @@ public final class JOrphanUtils {
     /**
      * Version of String.replaceAll() for JDK1.3
      * See below for another version which replaces strings rather than chars
-     *
+     * and provides a fast path which does not allocate memory
      * @param source
      *            input string
      * @param search
@@ -261,15 +262,22 @@ public final class JOrphanUtils {
      * @return the output string
      */
     public static String replaceAllChars(String source, char search, String replace) {
+        int indexOf = source.indexOf(search);
+        if(indexOf == -1) {
+            return source;
+        }
+        
+        int offset = 0;
         char[] chars = source.toCharArray();
         StringBuilder sb = new StringBuilder(source.length()+20);
-        for(char c : chars){
-            if (c == search){
-                sb.append(replace);
-            } else {
-                sb.append(c);
-            }
+        while(indexOf != -1) {
+            sb.append(chars, offset, indexOf-offset);
+            sb.append(replace);
+            offset = indexOf +1;
+            indexOf = source.indexOf(search, offset);
         }
+        sb.append(chars, offset, chars.length- offset);
+        
         return sb.toString();
     }
 
@@ -323,7 +331,7 @@ public final class JOrphanUtils {
      * @return slice from the input array
      */
     public static byte[] getByteArraySlice(byte[] array, int begin, int end) {
-        byte[] slice = new byte[(end - begin + 1)];
+        byte[] slice = new byte[end - begin + 1];
         System.arraycopy(array, begin, slice, 0, slice.length);
         return slice;
     }
@@ -419,7 +427,7 @@ public final class JOrphanUtils {
         for (byte b : ba) {
             int j = b & 0xff;
             if (j < 16) {
-                sb.append("0"); // $NON-NLS-1$ add zero padding
+                sb.append('0'); // $NON-NLS-1$ add zero padding
             }
             sb.append(Integer.toHexString(j));
         }
@@ -441,7 +449,7 @@ public final class JOrphanUtils {
             }
             int j = ba[i] & 0xff;
             if (j < 16) {
-                sb.append("0"); // $NON-NLS-1$ add zero padding
+                sb.append('0'); // $NON-NLS-1$ add zero padding
             }
             sb.append(Integer.toHexString(j));
         }
@@ -486,7 +494,7 @@ public final class JOrphanUtils {
     public static int read(InputStream is, byte[] buffer, int offset, int length) throws IOException {
         int remaining = length;
         while ( remaining > 0 ) {
-            int location = ( length - remaining );
+            int location = length - remaining;
             int count = is.read( buffer, location, remaining );
             if ( -1 == count ) { // EOF
                 break;
@@ -499,7 +507,7 @@ public final class JOrphanUtils {
     /**
      * Display currently running threads on system.out
      * This may be expensive to run.
-     * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exitting.
+     * Mainly designed for use at the end of a non-GUI test to check for threads that might prevent the JVM from exiting.
      *
      * @param includeDaemons whether to include daemon threads or not.
      */
@@ -517,7 +525,7 @@ public final class JOrphanUtils {
                     builder.append(stackTraceElement.getClassName()+"#"+stackTraceElement.getMethodName()+
                             (lineNumber >=0 ? " at line:"+ stackTraceElement.getLineNumber() : "")+lineSeparator);
                 }
-                System.out.println(e.getKey().toString()+((daemon ? " (daemon)" : ""))+", stackTrace:"+ builder.toString());
+                System.out.println(e.getKey().toString()+(daemon ? " (daemon)" : "")+", stackTrace:"+ builder.toString());
             }
         }
     }
@@ -576,5 +584,72 @@ public final class JOrphanUtils {
     public static String formatDuration(long elapsedSec) {
         return String.format("%02d:%02d:%02d",
                 elapsedSec / 3600, (elapsedSec % 3600) / 60, elapsedSec % 60);
+    }
+
+    /**
+     * Throw {@link IllegalArgumentException} if folder cannot be written to either:
+     * <ul>
+     *  <li>Because it exists but is not a folder</li>
+     *  <li>Because it exists but is not empty</li>
+     *  <li>Because it does not exist but cannot be created</li>
+     * </ul>
+     * @param folder {@link File}
+     * @throws IllegalArgumentException when folder can't be written to
+     */
+    public static void canSafelyWriteToFolder(File folder)
+            throws IllegalArgumentException {
+        if(folder.exists()) {
+            if (folder.isFile()) {
+                throw new IllegalArgumentException("Cannot write to '"
+                        +folder.getAbsolutePath()+"' as it is an existing file");
+            } else {
+                File[] listedFiles = folder.listFiles();
+                if(listedFiles != null && listedFiles.length > 0) {
+                    throw new IllegalArgumentException("Cannot write to '"
+                            +folder.getAbsolutePath()+"' as folder is not empty");
+                }
+            }
+        } else {
+            // check we can create it
+            if(!folder.getAbsoluteFile().getParentFile().canWrite()) {
+                throw new IllegalArgumentException("Cannot write to '"
+                        +folder.getAbsolutePath()+"' as folder does not exist and parent folder is not writable");
+            }
+        }
+    }
+
+    /**
+     * Replace in source all matches of regex by replacement taking 
+     * into account case if caseSensitive is true
+     * @param source Source text
+     * @param regex Regular expression
+     * @param replacement Replacement text to which function applies a quoting
+     * @param caseSensitive is case taken into account
+     * @return array of Object where first row is the replaced text, second row is the number of replacement that occured
+     */
+    public static Object[] replaceAllWithRegex(
+            String source, String regex, String replacement, boolean caseSensitive) {
+        java.util.regex.Pattern pattern = caseSensitive ? 
+                java.util.regex.Pattern.compile(regex) :  
+                java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
+        String newText = source;
+        final String replacementQuoted = Matcher.quoteReplacement(replacement);
+        Matcher matcher = pattern.matcher(newText);
+        int totalReplaced = 0;
+        while(true) {
+            String previousText = newText;
+            newText = matcher.replaceFirst(replacementQuoted);
+            matcher = pattern.matcher(newText);
+            if(newText.equals(previousText)) {
+                break;
+            } else {
+                totalReplaced++;
+            }
+        }
+
+        return new Object[]{
+                newText,
+                totalReplaced
+        };
     }
 }

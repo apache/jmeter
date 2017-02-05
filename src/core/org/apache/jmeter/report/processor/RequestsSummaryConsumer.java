@@ -54,9 +54,11 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
      */
     @Override
     public void consume(Sample sample, int channel) {
-        count++;
-        if (!sample.getSuccess()) {
-            errorCount++;
+        if(!sample.isController()) {
+            count++;
+            if (!sample.getSuccess()) {
+                errorCount++;
+            }
         }
         super.produce(sample, channel);
     }
@@ -69,10 +71,10 @@ public class RequestsSummaryConsumer extends AbstractSampleConsumer {
     @Override
     public void stopConsuming() {
         MapResultData result = new MapResultData();
-        result.setResult("KoPercent", new ValueResultData(Double.valueOf(((double) errorCount
-                * 100 / count))));
+        result.setResult("KoPercent", new ValueResultData(Double.valueOf((double) errorCount
+                * 100 / count)));
         result.setResult("OkPercent", new ValueResultData(
-                Double.valueOf(((double) (count - errorCount) * 100 / count))));
+                Double.valueOf((double) (count - errorCount) * 100 / count)));
         setDataToContext(getName(), result);
         super.stopProducing();
     }

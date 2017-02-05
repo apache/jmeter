@@ -33,7 +33,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
-public class AddToTree implements Command {
+public class AddToTree extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final Set<String> commandSet;
@@ -68,6 +68,7 @@ public class AddToTree implements Command {
             TestElement testElement = guiPackage.createTestElement(((JComponent) e.getSource()).getName());
             JMeterTreeNode parentNode = guiPackage.getCurrentNode();
             JMeterTreeNode node = guiPackage.getTreeModel().addComponent(testElement, parentNode);
+            guiPackage.getNamingPolicy().nameOnCreation(node);
             guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
         } catch (Exception err) {
             log.error("", err); // $NON-NLS-1$

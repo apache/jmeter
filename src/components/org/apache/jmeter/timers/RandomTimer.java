@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.property.StringProperty;
  * method, is abstract and must be extended to provide full functionality.
  *
  */
-public abstract class RandomTimer extends ConstantTimer implements Timer, Serializable {
+public abstract class RandomTimer extends ConstantTimer implements ModifiableTimer, Serializable {
     private static final long serialVersionUID = 241L;
 
     public static final String RANGE = "RandomTimer.range";

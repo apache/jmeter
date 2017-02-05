@@ -120,13 +120,15 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     private String process(String textToParse) {
         try {
             List<Object> matchStrings = extractWithJSonPath(textToParse, jsonPathExpressionField.getText());
-            if (matchStrings.size() == 0) {
+            if (matchStrings.isEmpty()) {
                 return "NO MATCH"; //$NON-NLS-1$
             } else {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
-                for (Object text : matchStrings) {
-                    builder.append("Result[").append(i++).append("]=").append("" + text).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+                for (Object obj : matchStrings) {
+                    String objAsString =
+                            obj != null ? obj.toString() : ""; //$NON-NLS-1$
+                    builder.append("Result[").append(i++).append("]=").append(objAsString).append("\n"); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
                 }
 
                 return builder.toString();
@@ -186,13 +188,14 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonDataField.setWrapStyleWord(true);
 
         this.jsonDataPane = GuiUtils.makeScrollPane(jsonDataField);
-        jsonDataPane.setMinimumSize(new Dimension(0, 400));
+        jsonDataPane.setPreferredSize(new Dimension(100, 200));
 
         JPanel panel = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 jsonDataPane, createJSonPathExtractorTasksPanel());
-        mainSplit.setDividerLocation(400);
+        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         panel.add(mainSplit, BorderLayout.CENTER);
         return panel;
     }
@@ -219,6 +222,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
         jsonPathResultField.setEditable(false);
         jsonPathResultField.setLineWrap(true);
         jsonPathResultField.setWrapStyleWord(true);
+        jsonPathResultField.setMinimumSize(new Dimension(100, 150));
 
         JPanel xpathTasksPanel = new JPanel(new BorderLayout(0, 5));
         xpathTasksPanel.add(jsonPathActionPanel, BorderLayout.NORTH);
@@ -257,6 +261,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
     /** {@inheritDoc} */
     @Override
     public void setBackgroundColor(Color backGround) {
+        // NOOP
     }
 
 }

@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -37,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.jmeter.JMeter;
-import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
+import org.apache.jmeter.gui.util.HeaderAsPropertyRendererWrapper;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -45,6 +46,7 @@ import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
 import org.apache.jorphan.gui.ObjectTableModel;
+import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RendererUtils;
 import org.apache.jorphan.gui.RightAlignRenderer;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -55,25 +57,23 @@ import org.apache.jorphan.reflect.Functor;
  * and the standard deviation of the sampling process. The samples are displayed
  * in a JTable, and the statistics are displayed at the bottom of the table.
  *
- * created March 10, 2002
- *
  */
 public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final String iconSize = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+    private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
 
     // Note: the resource string won't respond to locale-changes,
     // however this does not matter as it is only used when pasting to the clipboard
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.success",  //$NON-NLS-1$
-                                       "vrt/" + iconSize + "/security-high-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
+                                       "vrt/" + ICON_SIZE + "/security-high-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
             JMeterUtils.getResString("table_visualizer_success")); //$NON-NLS-1$
 
     private static final ImageIcon imageFailure = JMeterUtils.getImage(
             JMeterUtils.getPropDefault("viewResultsTree.failure",  //$NON-NLS-1$
-                                       "vrt/" + iconSize + "/security-low-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
+                                       "vrt/" + ICON_SIZE + "/security-low-2.png"),    //$NON-NLS-1$ $NON-NLS-2$
             JMeterUtils.getResString("table_visualizer_warning")); //$NON-NLS-1$
 
     private static final String[] COLUMNS = new String[] {
@@ -84,6 +84,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             "table_visualizer_sample_time", // $NON-NLS-1$
             "table_visualizer_status",      // $NON-NLS-1$
             "table_visualizer_bytes",       // $NON-NLS-1$
+            "table_visualizer_sent_bytes",       // $NON-NLS-1$
             "table_visualizer_latency",     // $NON-NLS-1$
             "table_visualizer_connect"};    // $NON-NLS-1$
 
@@ -105,7 +106,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private JCheckBox childSamples = null;
 
-    private transient Calculator calc = new Calculator();
+    private final transient Calculator calc = new Calculator();
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
@@ -137,11 +138,12 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 new Functor("getElapsed"),             // $NON-NLS-1$
                 new SampleSuccessFunctor("isSuccess"), // $NON-NLS-1$
                 new Functor("getBytes"),               // $NON-NLS-1$
+                new Functor("getSentBytes"),               // $NON-NLS-1$
                 new Functor("getLatency"),             // $NON-NLS-1$
                 new Functor("getConnectTime") },       // $NON-NLS-1$
-                new Functor[] { null, null, null, null, null, null, null, null, null },
+                new Functor[] { null, null, null, null, null, null, null, null, null, null },
                 new Class[] {
-                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class, Long.class });
+                String.class, String.class, String.class, String.class, Long.class, ImageIcon.class, Long.class, Long.class, Long.class, Long.class });
         init();
     }
 
@@ -185,14 +187,15 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                     calc.addSample(res);
                     int count = calc.getCount();
                     TableSample newS = new TableSample(
-                            count, 
-                            res.getSampleCount(), 
-                            res.getStartTime(), 
-                            res.getThreadName(), 
+                            count,
+                            res.getSampleCount(),
+                            res.getStartTime(),
+                            res.getThreadName(),
                             res.getSampleLabel(),
                             res.getTime(),
                             res.isSuccessful(),
-                            res.getBytes(),
+                            res.getBytesAsLong(),
+                            res.getSentBytes(),
                             res.getLatency(),
                             res.getConnectTime()
                             );
@@ -237,9 +240,22 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
+        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5, 
+                Comparator.nullsFirst(
+                        (ImageIcon o1, ImageIcon o2) -> {
+                            if (o1 == o2) {
+                                return 0;
+                            }
+                            if (o1 == imageSuccess) {
+                                return -1;
+                            }
+                            if (o1 == imageFailure) {
+                                return 1;
+                            }
+                            throw new IllegalArgumentException("Only success and failure images can be compared");
+                        })));
         JMeterUtils.applyHiDPI(table);
-        table.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        // table.getTableHeader().setReorderingAllowed(false);
+        HeaderAsPropertyRendererWrapper.setupDefaultRenderer(table);
         RendererUtils.applyRenderers(table, RENDERERS);
 
         tableScrollPanel = new JScrollPane(table);

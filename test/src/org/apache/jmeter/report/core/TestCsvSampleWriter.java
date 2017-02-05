@@ -28,10 +28,15 @@ import org.junit.Test;
 
 public class TestCsvSampleWriter {
 
+    private static final String LINE_SEP = System.getProperty("line.separator"); // $NON-NLS-1$
+
     @Before
     public void setUp() throws Exception {
         // We have to initialize JMeterUtils
-        JMeterUtils.loadJMeterProperties("jmeter.properties");
+        if (JMeterUtils.getJMeterHome() == null) {
+            JMeterUtils.setJMeterHome(System.getenv("JMETER_HOME"));
+        }
+        JMeterUtils.loadJMeterProperties(JMeterUtils.getJMeterBinDir() + "/jmeter.properties");
     }
 
     SampleMetadata metadata = new SampleMetadata(',', "a", "b");
@@ -50,7 +55,7 @@ public class TestCsvSampleWriter {
                         metadata)) {
             csvWriter.writeHeader();
             csvWriter.flush();
-            assertEquals("a,b\n", writer.toString());
+            assertEquals("a,b" + LINE_SEP, writer.toString());
         }
     }
 
@@ -91,7 +96,7 @@ public class TestCsvSampleWriter {
                     .build();
             csvWriter.write(sample);
             csvWriter.flush();
-            assertEquals("a1,b1\n", writer.toString());
+            assertEquals("a1,b1" + LINE_SEP, writer.toString());
         }
     }
 

@@ -249,12 +249,22 @@ public TestElement createTestElement() {
             log.debug("Modify " + name + " to " + value);
             if (value == null) {
                 if (GenericTestBeanCustomizer.notNull(desc)) { // cannot be null
-                    setPropertyInElement(element, name, desc.getValue(GenericTestBeanCustomizer.DEFAULT));
+                    if (GenericTestBeanCustomizer.noSaveDefault(desc)) {
+                        log.debug("Did not set DEFAULT for " + name);
+                        element.removeProperty(name);
+                    } else {
+                        setPropertyInElement(element, name, desc.getValue(GenericTestBeanCustomizer.DEFAULT));
+                    }
                 } else {
                     element.removeProperty(name);
                 }
             } else {
-                setPropertyInElement(element, name, value);
+                if (GenericTestBeanCustomizer.noSaveDefault(desc) && value.equals(desc.getValue(GenericTestBeanCustomizer.DEFAULT))) {
+                    log.debug("Did not set " + name + " to the default: " + value);
+                    element.removeProperty(name);
+                } else {
+                    setPropertyInElement(element, name, value);
+                }
             }
         }
     }

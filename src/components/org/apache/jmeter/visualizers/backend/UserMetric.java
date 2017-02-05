@@ -90,4 +90,11 @@ public class UserMetric {
     public int getStartedThreads() {
         return JMeterContextService.getThreadCounts().startedThreads;
     }
+    
+    /**
+     * Clear stats
+     */
+    public void clear() {
+        this.usersStats.clear();
+    }
 }

@@ -56,7 +56,6 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
 
 /**
@@ -65,7 +64,7 @@ import org.apache.log.Logger;
  * Save TestPlan As
  * Save (Selection) As
  */
-public class Save implements Command {
+public class Save extends AbstractAction {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();
@@ -123,7 +122,7 @@ public class Save implements Command {
 
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
-        HashTree subTree = null;
+        HashTree subTree;
         boolean fullSave = false; // are we saving the whole tree?
         if (!commands.contains(e.getActionCommand())) {
             throw new IllegalUserActionException("Invalid user command:" + e.getActionCommand());
@@ -219,9 +218,7 @@ public class Save implements Command {
             log.warn("Error converting subtree "+err);
         }
 
-        FileOutputStream ostream = null;
-        try {
-            ostream = new FileOutputStream(updateFile);
+        try (FileOutputStream ostream = new FileOutputStream(updateFile)){
             SaveService.saveTree(subTree, ostream);
             if (fullSave) { // Only update the stored copy of the tree for a full save
                 subTree = GuiPackage.getInstance().getTreeModel().getTestPlan(); // refetch, because convertSubTree affects it
@@ -241,18 +238,14 @@ public class Save implements Command {
                     log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
                 }
             }
-        } catch (Throwable ex) {
-            log.error("Error saving tree:", ex);
-            if (ex instanceof Error){
-                throw (Error) ex;
-            }
-            if (ex instanceof RuntimeException){
-                throw (RuntimeException) ex;
-            }
-            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
-        } finally {
-            JOrphanUtils.closeQuietly(ostream);
+        } catch(RuntimeException ex) {
+            throw ex;
         }
+        catch (Exception ex) {
+            log.error("Error saving tree:", ex);
+            throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
+        } 
+
         GuiPackage.getInstance().updateCurrentGui();
     }
     
@@ -331,9 +324,11 @@ public class Save implements Command {
             log.error("Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <" + backupDir.getAbsolutePath() + ">"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        // select files matching
-        // {baseName}{versionSeparator}{version}{jmxExtension}
-        // where {version} is a 6 digits number
+        /**
+         *  select files matching
+         * {baseName}{versionSeparator}{version}{jmxExtension}
+         * where {version} is a 6 digits number
+         */
         String backupPatternRegex = Pattern.quote(baseName + versionSeparator) + "([\\d]{6})" + Pattern.quote(JMX_FILE_EXTENSION); //$NON-NLS-1$
         Pattern backupPattern = Pattern.compile(backupPatternRegex);
         // create a file filter that select files matching a given regex pattern
@@ -372,9 +367,11 @@ public class Save implements Command {
                 return diff < 0 ? -1 : diff > 0 ? 1 : 0;
             }
         });
-        // backup name is of the form
-        // {baseName}{versionSeparator}{version}{jmxExtension}
-        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1) + JMX_FILE_EXTENSION;
+        /**
+         *  backup name is of the form 
+         * {baseName}{versionSeparator}{version}{jmxExtension}
+         */
+        String backupName = baseName + versionSeparator + BACKUP_VERSION_FORMATER.format(lastVersionNumber + 1L) + JMX_FILE_EXTENSION;
         File backupFile = new File(backupDir, backupName);
         // create file backup
         try {

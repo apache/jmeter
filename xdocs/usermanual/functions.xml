@@ -26,7 +26,7 @@
 <!ENTITY yen      "&#x000A5;" >
 ]>
 
-<document prev="component_reference.html" next="regular_expressions.html" id="$Id$">
+<document prev="properties_reference.html" next="regular_expressions.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Functions and Variables</title>
@@ -122,11 +122,12 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomFromMultipleVars">RandomFromMultipleVars</a></td><td>extracts an element from the values of a set of variables separated by <code>|</code></td><td>3.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td><td>2.6</td></tr>
         <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__groovy">groovy</a></td><td>run a Groovy script</td><td>3.1</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
         <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td><td>1.9</td></tr>
-        <tr><td>Scripting</td><td> <a href="#__jexl">jexl</a></td><td>evaluate a Commons Jexl expression. This function is DEPRECATED as of JMeter 3.0, it will be removed in 3.1 version.</td><td>jexl1(1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
@@ -189,8 +190,9 @@ The following functions should work OK on the test plan:
 <li>longSum</li>
 <li>machineName</li>
 <li>BeanShell</li>
+<li>groovy</li>
 <li>javaScript</li>
-<li>jexl</li>
+<li>jexl2/jexl3</li>
 <li>random</li>
 <li>time</li>
 <li>property functions</li>
@@ -225,7 +227,7 @@ be omitted.</p>
 
 <p><b>Argument values that themselves contain commas should be escaped as necessary.
 If you need to include a comma in your parameter value, escape it like so: '<code>\,</code>'.</b>
-This applies for example to the scripting functions - Javascript, Beanshell, Jexl - where it is necessary to escape any commas
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl, groovy - where it is necessary to escape any commas
 that may be needed in script method calls - e.g.
 </p>
 <pre>
@@ -237,7 +239,7 @@ Alternatively, you can define your script as a variable, e.g. on the Test Plan:
 The script can then be referenced as follows:
 <pre>${__BeanShell(${SCRIPT})}</pre>
 There is no need to escape commas in the <code>SCRIPT</code> variable because the function call is parsed before the variable is replaced with its value.
-This works well in conjunction with the BSF or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
+This works well in conjunction with the JSR223 or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
 </p>
 <p>
 Functions can reference variables and other functions, for example 
@@ -407,7 +409,7 @@ The reference name is optional, but it must not be a valid integer.
 </component>
 
 <component index="&sect-num;.5.4b" name="__longSum">
-<description><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenver you know your values will not 
+<description><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenever you know your values will not 
 be in the interval -2147483648 to 2147483647.
 </p></description>
 
@@ -565,13 +567,13 @@ For details of the language, please see <a href="http://www.mozilla.org/rhino/ov
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 </ul>
 <p>
 Rhinoscript allows access to static methods via its Packages object.
@@ -627,7 +629,7 @@ the comma after <code>7</code> is escaped.</note>
 
 <p>Examples:
 <source>${__Random(0,10)}</source> will return a random number between 0 and 10<br/>
-<source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in MYVAR. ${MYVAR} will contain the random number<br/>
+<source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in <code>MYVAR</code>. <code>${MYVAR}</code> will contain the random number<br/>
 </p>
 </component>
 
@@ -642,11 +644,39 @@ the comma after <code>7</code> is escaped.</note>
 </properties>
 <p>Examples:
 <source>${__RandomString(5)}</source> will return a random string of 5 characters which can be readable or not<br/>
-<source>${__RandomString(10,abcdefg)}</source> will return a random string of 10 characters pcked from <code>abcdefg</code> set, like cdbgdbeebd or adbfeggfad...<br/>
-<source>${__RandomString(6,a12zeczclk, MYVAR)}</source> will return a random string of 6 characters pcked from <code>a12zeczclk</code> set and store the result in MYVAR, MYVAR will contain
-string like 2z22ak or z11kce...<br/>
+<source>${__RandomString(10,abcdefg)}</source> will return a random string of 10 characters picked from <code>abcdefg</code> set, like <code>cdbgdbeebd</code> or <code>adbfeggfad</code>, &hellip;<br/>
+<source>${__RandomString(6,a12zeczclk, MYVAR)}</source> will return a random string of 6 characters picked from <code>a12zeczclk</code> set and store the result in <code>MYVAR</code>, <code>MYVAR</code> will contain
+string like <code>2z22ak</code> or <code>z11kce</code>, &hellip;<br/>
 </p>
 </component>
+
+<component index="&sect-num;.5.8" name="__RandomFromMultipleVars">
+<description><p>The RandomFromMultipleVars function returns a random value based on the variable values provided by <code>Source Variables</code>.</p>
+The variables can be simple or multi-valued as they can be generated by the following extractors:
+<ul>
+    <li><a href="component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a></li>
+    <li><a href="component_reference.html#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li>
+    <li><a href="component_reference.html#JSON_Extractor">JSON Extractor</a></li>
+    <li><a href="component_reference.html#XPath_Assertion">XPath Assertion</a></li>
+</ul>
+
+Multi-value vars are the ones that are extracted when you set <code>-1</code> for <code>Match Numbers</code>. 
+This leads to creation of match number variable called <code>varName_matchNr</code> and for each value to the creation of variable <code>varName_n</code> where n = 1, 2, 3 etc.
+
+</description>
+
+<properties>
+        <property name="Source Variables" required="Yes">Variable names separated by <code>|</code> that contain the values that will be used as input for random computation</property>
+        <property name="Variable Name" required="No">A reference name for reusing the value
+                computed by this function.</property>
+</properties>
+<p>Examples:
+<source>${__RandomFromMultipleVars(val)}</source> will return a random string based on content of variable val taking into account wether they are multi-value or not<br/>
+<source>${__RandomFromMultipleVars(val1|val2)}</source> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not<br/>
+<source>${__RandomFromMultipleVars(val1|val2, MYVAR)}</source> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not and store the result in <code>MYVAR</code><br/>
+</p>
+</component>
+
 
 <component index="&sect-num;.5.8" name="__UUID">
 <description>
@@ -655,7 +685,7 @@ string like 2z22ak or z11kce...<br/>
 <properties>
 </properties>
 <p>Examples:
-<source>${UUID()}</source> will return UUIs with this format : c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd <br/>
+<source>${UUID()}</source> will return UUIDs with this format : <code>c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</code> <br/>
 </p>
 </component>
 
@@ -849,13 +879,13 @@ sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li><code>log</code> - the logger for the BeanShell function (*)</li>
-<li><code>ctx</code> - the current JMeter context variable</li>
-<li><code>vars</code> - the current JMeter variables</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the BeanShell function (*)</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - the threadName (String)</li>
-<li><code>Sampler</code> - the current Sampler, if any</li>
-<li><code>SampleResult</code> - the current SampleResult, if any</li>
+<li><code>Sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><code>SampleResult</code> - the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
 </ul>
 (*) means that this is set before the init file, if any, is processed. 
 Other variables vary from invocation to invocation.
@@ -879,6 +909,58 @@ Example:
 Remember to include any necessary quotes for text strings and JMeter variables that represent text strings.
 </note>
 </component>
+
+<component index="&sect-num;.5.13" name="__groovy">
+<description>
+    <p>
+    The <code>__groovy</code> function evaluates <a href="http://groovy-lang.org/" >Apache Groovy</a> scripts passed to it, and returns the result.
+</p>
+<p>
+If the property "<code>groovy.utilities</code>" is defined, it will be loaded by the ScriptEngine. 
+This can be used to define common methods and variables. There is a
+sample init file in the <code>bin</code> directory: <code>utility.groovy</code>.
+</p>
+<p>
+The following variables are set before the script is executed:
+</p>
+<ul>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the groovy function (*)</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
+<li><code>threadName</code> - the threadName (String)</li>
+<li><code>sampler</code> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><code>prev</code> - the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
+<li><code>OUT</code> - System.out</li>
+</ul>
+<p>
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+</p>
+</description>
+
+<properties>
+        <property name="Expression to evaluate" required="Yes">A groovy script (not a file name)
+        <note>Argument values that themselves contain commas should be escaped as necessary. 
+        If you need to include a comma in your parameter value, escape it like this: '<code>\,</code>'</note>
+        </property>
+        <property name="Name of variable" required="No">A reference name for reusing the value
+               computed by this function.</property>
+        
+</properties>
+<p>
+Example:
+<dl>
+<dt><code>${__groovy(123*456)}</code></dt><dd>returns <code>56088</code></dd>
+<dt><code>${__groovy("${var}".substring(0\,2))}</code></dt><dd>If var's value is <code>JMeter</code>, it will return <code>JM</code> as it runs <code>String.substring(0,2)</code>. Note
+that <code>,</code> has been escaped to <code>\,</code> </dd>
+</dl>
+</p>
+<note>
+Remember to include any necessary quotes for text strings and JMeter variables that represent text strings.
+</note>
+</component>
+
 
 <component index="&sect-num;.5.14" name="__split">
 <description>
@@ -995,58 +1077,6 @@ The following shorthand aliases are provided:
 </p>
 </component>
 
-<component index="&sect-num;.5.18" name="__jexl">
-<description>
-    <p>The jexl function returns the result of evaluating a 
-    <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>. 
-    See links below for more information on JEXL expressions.
-    </p>
-    <p>The <code>__jexl</code> function uses Commons JEXL</p>
-    <ul>
-    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
-    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
-    </ul>
-    <note>THIS FUNCTION IS DEPRECATED and should not be used, it will be dropped in next JMeter version</note>
-    </description>
-
-<properties>
-        <property name="Expression" required="Yes">
-        The expression to be evaluated. For example, <code>6*(5+2)</code>
-        </property>
-        <property name="Name of variable" required="No">The name of the variable to set.</property>
-</properties>
-<p>
-The following variables are made available to the script:
-</p>
-<ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
-<li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
-<li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
-</ul>
-    <p>
-    Jexl can also create classes and call methods on them, for example:
-    </p>
-    <p>
-    <source>
-Systemclass=log.class.forName("java.lang.System");
-now=Systemclass.currentTimeMillis();
-</source>
-    Note that the Jexl documentation on the web-site wrongly suggests that "<code>div</code>" does integer division.
-    In fact "<code>div</code>" and "<code>/</code>" both perform normal division. One can get the same effect
-    as follows:
-    <source>
-i= 5 / 2;
-i.intValue(); // or use i.longValue()
-</source>
-    </p>
-    <note>JMeter allows the expression to contain multiple statements.</note>
-</component>
-
 <component index="&sect-num;.5.18" name="__jexl2">
 <description>
     <p>The jexl function returns the result of evaluating a 
@@ -1070,13 +1100,13 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
@@ -1121,13 +1151,13 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the logger for the function</li>
-<li><code>ctx</code> - JMeterContext object</li>
-<li><code>vars</code> - JMeterVariables object</li>
-<li><code>props</code> - JMeter Properties object</li>
+<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
-<li><code>sampler</code> - current Sampler object (if any)</li>
-<li><code>sampleResult</code> - previous SampleResult object (if any)</li>
+<li><code>sampler</code> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><code>sampleResult</code> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
 <li><code>OUT</code> - System.out - e.g. <code>OUT.println("message")</code></li>
 </ul>
     <p>
@@ -1171,7 +1201,7 @@ i.intValue(); // or use i.longValue()
 
 <component index="&sect-num;.5.21" name="__evalVar">
 <description>
-    <p>The eval function returns the result of evaluating an expression stored in a variable.
+    <p>The evalVar function returns the result of evaluating an expression stored in a variable.
     </p>
     <p>
     This allows one to read a string from a file, and process any variable references in it.

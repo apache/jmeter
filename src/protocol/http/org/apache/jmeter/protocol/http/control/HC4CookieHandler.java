@@ -55,9 +55,9 @@ public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     // Needed by CookiePanel
-    public static String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; 
+    public static final String DEFAULT_POLICY_NAME = CookieSpecs.STANDARD; // NOSONAR 
 
-    public static final String[] AVAILABLE_POLICIES = new String[]{
+    private static final String[] AVAILABLE_POLICIES = new String[]{ 
         DEFAULT_POLICY_NAME,
         CookieSpecs.STANDARD_STRICT,
         CookieSpecs.IGNORE_COOKIES,
@@ -87,6 +87,13 @@ public class HC4CookieHandler implements CookieHandler {
             .register(CookieSpecs.NETSCAPE, new NetscapeDraftSpecProvider())
             .build();
 
+    /**
+     * Default constructor that uses {@link HC4CookieHandler#DEFAULT_POLICY_NAME}
+     */
+    public HC4CookieHandler() {
+        this(DEFAULT_POLICY_NAME);
+    }
+    
     public HC4CookieHandler(String policy) {
         super();
         if (policy.equals(org.apache.commons.httpclient.cookie.CookiePolicy.DEFAULT)) { // tweak diff HC3 vs HC4
@@ -170,7 +177,7 @@ public class HC4CookieHandler implements CookieHandler {
         if (debugEnabled){
             log.debug("Found "+c.size()+" cookies for "+url.toExternalForm());
         }
-        if (c.size() <= 0) {
+        if (c.isEmpty()) {
             return null;
         }
         List<Header> lstHdr = cookieSpec.formatCookies(c);
@@ -249,5 +256,10 @@ public class HC4CookieHandler implements CookieHandler {
     @Override
     public String getDefaultPolicy() {
         return DEFAULT_POLICY_NAME; 
+    }
+
+    @Override
+    public String[] getPolicies() {
+        return AVAILABLE_POLICIES;
     }
 }

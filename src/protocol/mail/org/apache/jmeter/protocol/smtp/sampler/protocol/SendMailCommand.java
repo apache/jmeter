@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -46,7 +47,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
@@ -208,12 +208,9 @@ public class SendMailCommand {
                (attachmentCount == 0 ||  (mailBody.length() == 0 && attachmentCount == 1))) {
                 if (attachmentCount == 1) { // i.e. mailBody is empty
                     File first = attachments.get(0);
-                    InputStream is = null;
-                    try {
-                        is = new BufferedInputStream(new FileInputStream(first));
-                        message.setText(IOUtils.toString(is));
-                    } finally {
-                        IOUtils.closeQuietly(is);
+                    try (FileInputStream fis = new FileInputStream(first);
+                            InputStream is = new BufferedInputStream(fis)){
+                        message.setText(IOUtils.toString(is, Charset.defaultCharset()));
                     }
                 } else {
                     message.setText(mailBody);
@@ -265,7 +262,7 @@ public class SendMailCommand {
         }
 
         for (int i = 0; i < headerFields.size(); i++) {
-            Argument argument = (Argument)((TestElementProperty)headerFields.get(i)).getObjectValue();
+            Argument argument = (Argument) headerFields.get(i).getObjectValue();
             message.setHeader(argument.getName(), argument.getValue());
         }
 
@@ -281,39 +278,45 @@ public class SendMailCommand {
      *            Message previously prepared by prepareMessage()
      * @throws MessagingException
      *             when problems sending the mail arise
-     * @throws IOException
-     *             TODO can not see how
      * @throws InterruptedException
      *             when interrupted while waiting for delivery in synchronous
-     *             modus
+     *             mode
      */
-    public void execute(Message message) throws MessagingException, IOException, InterruptedException {
+    public void execute(Message message) throws MessagingException, InterruptedException {
 
-        Transport tr = session.getTransport(getProtocol());
-        SynchronousTransportListener listener = null;
+        Transport tr = null;
+        try {
+            tr = session.getTransport(getProtocol());
+            SynchronousTransportListener listener = null;
 
-        if (synchronousMode) {
-            listener = new SynchronousTransportListener();
-            tr.addTransportListener(listener);
+            if (synchronousMode) {
+                listener = new SynchronousTransportListener();
+                tr.addTransportListener(listener);
+            }
+    
+            if (useAuthentication) {
+                tr.connect(smtpServer, username, password);
+            } else {
+                tr.connect();
+            }
+
+            tr.sendMessage(message, message.getAllRecipients());
+
+            if (listener != null /*synchronousMode==true*/) {
+                listener.attend(); // listener cannot be null here
+            }
+        } finally {
+            if(tr != null) {
+                try {
+                    tr.close();
+                } catch (Exception e) {
+                    // NOOP
+                }
+            }
+            logger.debug("transport closed");
         }
-
-        if (useAuthentication) {
-            tr.connect(smtpServer, username, password);
-        } else {
-            tr.connect();
-        }
-
-        tr.sendMessage(message, message.getAllRecipients());
-
-        if (listener != null /*synchronousMode==true*/) {
-            listener.attend(); // listener cannot be null here
-        }
-
-        tr.close();
-        logger.debug("transport closed");
 
         logger.debug("message sent");
-        return;
     }
 
     /**
@@ -720,7 +723,7 @@ public class SendMailCommand {
      * @return Protocol that is used to transport message
      */
     private String getProtocol() {
-        return (useSSL) ? "smtps" : "smtp";
+        return useSSL ? "smtps" : "smtp";
     }
 
     /**

@@ -72,7 +72,8 @@ public class StatisticalSampleResult extends SampleResult implements
         // Add Sample Counter
         setSampleCount(getSampleCount() + res.getSampleCount());
 
-        setBytes(getBytes() + res.getBytes());
+        setBytes(getBytesAsLong() + res.getBytesAsLong());
+        setSentBytes(getSentBytes() + res.getSentBytes());
 
         // Add Error Counter
         if (!res.isSuccessful()) {

@@ -23,7 +23,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.samplers.Interruptible;
@@ -49,28 +48,28 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
 
     private static final String TIMEOUT = "InterruptTimer.timeout"; //$NON-NLS-1$
 
+    private ScheduledFuture<?> future;
+    
+    private final transient ScheduledExecutorService execService;
+    
+    private final boolean debug;
+
     private static class TPOOLHolder {
+        private TPOOLHolder() {
+            // NOOP
+        }
         static final ScheduledExecutorService EXEC_SERVICE =
                 Executors.newScheduledThreadPool(1,
-                        new ThreadFactory() {
-                            @Override
-                            public Thread newThread(Runnable r) {
-                                Thread t = Executors.defaultThreadFactory().newThread(r);
-                                t.setDaemon(true); // also ensures that Executor thread is daemon
-                                return t;
-                            }
+                        (Runnable r) -> {
+                            Thread t = Executors.defaultThreadFactory().newThread(r);
+                            t.setDaemon(true); // also ensures that Executor thread is daemon
+                            return t;
                         });
     }
 
     private static ScheduledExecutorService getExecutorService() {
         return TPOOLHolder.EXEC_SERVICE;
     }
-
-    private ScheduledFuture<?> future;
-    
-    private final transient ScheduledExecutorService execService;
-    
-    private final boolean debug;
 
     /**
      * No-arg constructor.
@@ -126,21 +125,18 @@ public class SampleTimeout extends AbstractTestElement implements Serializable, 
         }
         final Interruptible sampler = (Interruptible) samp;
 
-        Callable<Object> call = new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                long start = System.nanoTime();
-                boolean interrupted = sampler.interrupt();
-                String elapsed = Double.toString((double)(System.nanoTime()-start)/ 1000000000)+" secs";
-                if (interrupted) {
-                    LOG.warn("Call Done interrupting " + getInfo(samp) + " took " + elapsed);
-                } else {
-                    if (debug) {
-                        LOG.debug("Call Didn't interrupt: " + getInfo(samp) + " took " + elapsed);
-                    }
+        Callable<Object> call = () -> {
+            long start = System.nanoTime();
+            boolean interrupted = sampler.interrupt();
+            String elapsed = Double.toString((double)(System.nanoTime()-start)/ 1000000000)+" secs";
+            if (interrupted) {
+                LOG.warn("Call Done interrupting " + getInfo(samp) + " took " + elapsed);
+            } else {
+                if (debug) {
+                    LOG.debug("Call Didn't interrupt: " + getInfo(samp) + " took " + elapsed);
                 }
-                return null;
             }
+            return null;
         };
         // schedule the interrupt to occur and save for possible cancellation 
         future = execService.schedule(call, timeout, TimeUnit.MILLISECONDS);

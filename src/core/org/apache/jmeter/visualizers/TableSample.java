@@ -43,6 +43,8 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     private final boolean success;
 
     private final long bytes;
+    
+    private final long sentBytes;
 
     private final long latency;
 
@@ -53,12 +55,12 @@ public class TableSample implements Serializable, Comparable<TableSample> {
      */
     @Deprecated
     public TableSample() {
-        this(0, 1, 0, "", "", 0, true, 0, 0, 0);
+        this(0, 1, 0, "", "", 0, true, 0, 0, 0, 0);
     }
 
     public TableSample(long totalSamples, int sampleCount, long startTime, String threadName,
             String label,
-            long elapsed, boolean success, long bytes, long latency, long connect) {
+            long elapsed, boolean success, long bytes, long sentBytes, long latency, long connect) {
         this.totalSamples = totalSamples;
         this.sampleCount = sampleCount;
         this.startTime = startTime;
@@ -67,6 +69,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
         // SampleCount can be equal to 0, see SubscriberSampler#sample
         this.elapsed = (sampleCount > 0) ? elapsed/sampleCount : 0;
         this.bytes =  (sampleCount > 0) ? bytes/sampleCount : 0;
+        this.sentBytes = (sampleCount > 0) ? sentBytes/sampleCount : 0;
         this.success = success;
         this.latency = latency;
         this.connect = connect;
@@ -120,17 +123,15 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     @Override
     public int compareTo(TableSample o) {
         TableSample oo = o;
-        return ((totalSamples - oo.totalSamples) < 0 ? -1 : (totalSamples == oo.totalSamples ? 0 : 1));
+        return (totalSamples - oo.totalSamples) < 0 ? -1 : (totalSamples == oo.totalSamples ? 0 : 1);
     }
 
     // TODO should equals and hashCode depend on field other than count?
     
     @Override
     public boolean equals(Object o){
-        return (
-                (o instanceof TableSample) &&
-                (this.compareTo((TableSample) o) == 0)
-                );
+        return (o instanceof TableSample) &&
+                (this.compareTo((TableSample) o) == 0);
     }
 
     @Override
@@ -150,5 +151,12 @@ public class TableSample implements Serializable, Comparable<TableSample> {
      */
     public long getConnectTime() {
         return connect;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
     }
 }

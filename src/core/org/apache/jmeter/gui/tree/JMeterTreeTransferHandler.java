@@ -116,7 +116,7 @@ public class JMeterTreeTransferHandler extends TransferHandler {
                 int row1 = tree.getRowForPath(o1);
                 int row2 = tree.getRowForPath(o2);
                 
-                return (row1<row2 ? -1 : (row1==row2 ? 0 : 1));
+                return row1<row2 ? -1 : (row1==row2 ? 0 : 1);
             }
         };
         

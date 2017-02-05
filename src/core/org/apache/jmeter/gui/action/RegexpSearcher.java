@@ -40,11 +40,10 @@ public class RegexpSearcher implements Searcher {
     public RegexpSearcher(boolean caseSensitive, String regexp) {
         super();
         this.caseSensitive = caseSensitive;
-        String newRegexp = ".*"+regexp+".*";
         if(caseSensitive) {
-            pattern = Pattern.compile(newRegexp);
+            pattern = Pattern.compile(regexp);
         } else {
-            pattern = Pattern.compile(newRegexp, Pattern.CASE_INSENSITIVE);
+            pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
         }
     }
 
@@ -56,12 +55,9 @@ public class RegexpSearcher implements Searcher {
     public boolean search(List<String> textTokens) {
         for (String searchableToken : textTokens) {
             if(!StringUtils.isEmpty(searchableToken)) {
-                Matcher matcher = null;
-                if(caseSensitive) {
-                    matcher = pattern.matcher(searchableToken);
-                } else {
-                    matcher = pattern.matcher(searchableToken.toLowerCase());
-                }
+                Matcher matcher = caseSensitive ? 
+                    pattern.matcher(searchableToken) : 
+                    pattern.matcher(searchableToken.toLowerCase());
                 if(matcher.find()) {
                     return true;
                 }

@@ -31,7 +31,6 @@ public abstract class AbstractSampleSource implements SampleSource {
      * Instantiates a new abstract sample source.
      */
     protected AbstractSampleSource() {
-        // TODO Auto-generated constructor stub
     }
 
     /*

@@ -173,19 +173,16 @@ public class Sample implements Serializable, Comparable<Sample> {
 
     /** {@inheritDoc} */
     @Override
-    public int compareTo(Sample o) {
-        Sample oo = o;
-        return ((count - oo.count) < 0 ? -1 : (count == oo.count ? 0 : 1));
+    public int compareTo(Sample otherSample) {
+        return Long.compare(count, otherSample.count);
     }
 
     // TODO should equals and hashCode depend on field other than count?
     
     @Override
     public boolean equals(Object o){
-        return (
-                (o instanceof Sample) &&
-                (this.compareTo((Sample) o) == 0)
-                );
+        return (o instanceof Sample) &&
+                (this.compareTo((Sample) o) == 0);
     }
 
     @Override

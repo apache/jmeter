@@ -102,12 +102,12 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
     @Override
     public void modifyTestElement(TestElement modifier) {
         super.configureTestElement(modifier);
-        URLRewritingModifier rewritingModifier = ((URLRewritingModifier) modifier);
+        URLRewritingModifier rewritingModifier = (URLRewritingModifier) modifier;
         rewritingModifier.setArgumentName(argumentName.getText());
         rewritingModifier.setPathExtension(pathExt.isSelected());
         rewritingModifier.setPathExtensionNoEquals(pathExtNoEquals.isSelected());
         rewritingModifier.setPathExtensionNoQuestionmark(pathExtNoQuestionmark.isSelected());
-        rewritingModifier.setShouldCache((shouldCache.isSelected()));
+        rewritingModifier.setShouldCache(shouldCache.isSelected());
         rewritingModifier.setEncode(encode.isSelected());
     }
 
@@ -131,7 +131,7 @@ public class URLRewritingModifierGui extends AbstractPreProcessorGui {
      */
     @Override
     public void configure(TestElement el) {
-        URLRewritingModifier rewritingModifier = ((URLRewritingModifier) el);
+        URLRewritingModifier rewritingModifier = (URLRewritingModifier) el;
         argumentName.setText(rewritingModifier.getArgumentName());
         pathExt.setSelected(rewritingModifier.isPathExtension());
         pathExtNoEquals.setSelected(rewritingModifier.isPathExtensionNoEquals());

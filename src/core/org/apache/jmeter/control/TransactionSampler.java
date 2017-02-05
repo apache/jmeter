@@ -36,7 +36,7 @@ import org.apache.jmeter.testelement.TestElement;
 
 /**
  * Transaction Sampler class to measure transaction times
- * (not exposed a a GUI class, as it is only used internally by TransactionController in Generate Parent sample mode)
+ * (not exposed as a GUI class, as it is only used internally by TransactionController in Generate Parent sample mode)
  */
 public class TransactionSampler extends AbstractSampler {
     private static final long serialVersionUID = 240L;
@@ -63,7 +63,7 @@ public class TransactionSampler extends AbstractSampler {
      */
     @Deprecated
     public TransactionSampler(){
-        //log.warn("Constructor only intended for use in testing");
+        super();
     }
 
     public TransactionSampler(TransactionController controller, String name) {

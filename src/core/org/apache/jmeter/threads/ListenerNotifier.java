@@ -42,9 +42,10 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /**
- * Processes sample events.
+ * Processes sample events. <br/>
  * The current implementation processes events in the calling thread
- * using {@link #notifyListeners(SampleEvent, List)}
+ * using {@link #notifyListeners(SampleEvent, List)} <br/>
+ * Thread safe class 
  */
 public class ListenerNotifier {
     private static final Logger log = LoggingManager.getLoggerForClass();

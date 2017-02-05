@@ -144,10 +144,11 @@ public class RenderAsRegexp implements ResultRenderer, ActionListener {
         return sb.toString();
 
     }
+
     /** {@inheritDoc} */
-   @Override
-public void renderResult(SampleResult sampleResult) {
-       clearData();
+    @Override
+    public void renderResult(SampleResult sampleResult) {
+        clearData();
         String response = ViewResultsFullVisualizer.getResponseAsString(sampleResult);
         regexpDataField.setText(response);
         regexpDataField.setCaretPosition(0);
@@ -173,13 +174,14 @@ public void renderResult(SampleResult sampleResult) {
         regexpDataField.setWrapStyleWord(true);
 
         JScrollPane regexpDataPane = GuiUtils.makeScrollPane(regexpDataField);
-        regexpDataPane.setMinimumSize(new Dimension(0, 200));
+        regexpDataPane.setPreferredSize(new Dimension(0, 200));
 
         JPanel pane = new JPanel(new BorderLayout(0, 5));
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 regexpDataPane, createRegexpTasksPanel());
-        mainSplit.setDividerLocation(300);
+        mainSplit.setDividerLocation(0.6d);
+        mainSplit.setOneTouchExpandable(true);
         pane.add(mainSplit, BorderLayout.CENTER);
         return pane;
     }

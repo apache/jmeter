@@ -29,11 +29,13 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.log.Logger;
 
+/**
+ * We must implement Visualizer so that TestBeanGUI can find the correct GUI class
+ *
+ */
 public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
-    // N.B. Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
-    // TODO - remove UnsharedComponent ? Probably does not make sense for a TestBean.
-
+    
     private static final Logger log = LoggingManager.getLoggerForClass();
 
     private static final long serialVersionUID = 4;
@@ -84,4 +86,8 @@ public class BeanShellListener extends BeanShellTestElement
         return false;
     }
 
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
 }

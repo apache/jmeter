@@ -39,24 +39,13 @@ import org.apache.log.Logger;
  */
 public class HtmlExtractor extends AbstractScopedTestElement implements PostProcessor, Serializable {
 
+    private static final long serialVersionUID = 3978073849365558131L;
+
     public static final String EXTRACTOR_JSOUP = "JSOUP"; //$NON-NLS-1$
 
     public static final String EXTRACTOR_JODD = "JODD"; //$NON-NLS-1$
 
-    /**
-     * Get the possible extractor implementations
-     * @return Array containing the names of the possible extractors.
-     */
-    public static String[] getImplementations(){
-        return new String[]{EXTRACTOR_JSOUP,EXTRACTOR_JODD};
-    }
-
     public static final String DEFAULT_EXTRACTOR = ""; // $NON-NLS-1$
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 3978073849365558131L;
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -76,7 +65,18 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     
     private static final String UNDERSCORE = "_";  // $NON-NLS-1$
     
+    private static final String DEFAULT_EMPTY_VALUE = "HtmlExtractor.default_empty_value"; // $NON-NLS-1$
+
     private Extractor extractor;
+    
+    /**
+     * Get the possible extractor implementations
+     * @return Array containing the names of the possible extractors.
+     */
+    public static String[] getImplementations(){
+        return new String[]{EXTRACTOR_JSOUP,EXTRACTOR_JODD};
+    }
+
 
     /**
      * Parses the response data using CSS/JQuery expressions and saving the results
@@ -91,7 +91,9 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         if (previousResult == null) {
             return;
         }
-        log.debug("HtmlExtractor "+getName()+":processing result");
+        if(log.isDebugEnabled()) {
+            log.debug("HtmlExtractor "+getName()+":processing result");
+        }
 
         // Fetch some variables
         JMeterVariables vars = context.getVariables();
@@ -102,7 +104,7 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
         int matchNumber = getMatchNumber();
         final String defaultValue = getDefaultValue();
         
-        if (defaultValue.length() > 0){// Only replace default if it is provided
+        if (defaultValue.length() > 0  || isEmptyDefaultValue()){// Only replace default if it is provided or empty default value is explicitly requested
             vars.put(refName, defaultValue);
         }
         
@@ -133,15 +135,15 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 for (int i = 1; i <= matchCount; i++) {
                     match = getCorrectMatch(matches, i);
                     if (match != null) {
-                        final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
-                        vars.put(refName_n, match);
+                        final String refNameN = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                        vars.put(refNameN, match);
                     }
                 }
             }
             // Remove any left-over variables
             for (int i = matchCount + 1; i <= prevCount; i++) {
-                final String refName_n = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
-                vars.remove(refName_n);
+                final String refNameN = new StringBuilder(refName).append(UNDERSCORE).append(i).toString();
+                vars.remove(refNameN);
             }
         } catch (RuntimeException e) {
             log.warn(getName()+":Error while generating result " + e);
@@ -307,10 +309,24 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
     }
 
     /**
+     * @param defaultEmptyValue boolean set value to "" if not found
+     */
+    public void setDefaultEmptyValue(boolean defaultEmptyValue) {
+        setProperty(DEFAULT_EMPTY_VALUE, defaultEmptyValue);
+    }
+    
+    /**
      * Get the default value for the variable if no matches are found
      * @return The default value for the variable
      */
     public String getDefaultValue() {
         return getPropertyAsString(DEFAULT);
+    }
+    
+    /**
+     * @return boolean set value to "" if not found
+     */
+    public boolean isEmptyDefaultValue() {
+        return getPropertyAsBoolean(DEFAULT_EMPTY_VALUE);
     }
 }

@@ -21,6 +21,7 @@ package org.apache.jmeter.functions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +38,7 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class UrlEncode extends AbstractFunction {
 
-    private static final String CHARSET_ENCODING = "UTF-8"; //$NON-NLS-1$
+    private static final String CHARSET_ENCODING = StandardCharsets.UTF_8.name();
     
     private static final List<String> desc = new LinkedList<>();
 

@@ -100,15 +100,10 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
     private static final String HTTP_AUTHENTICATION_PREEMPTIVE = "http.authentication.preemptive"; // $NON-NLS-1$
 
-    private static final boolean canSetPreEmptive; // OK to set pre-emptive auth?
+    private static final boolean CAN_SET_PREEMPTIVE; // OK to set pre-emptive auth?
 
-    private static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients = 
-        new ThreadLocal<Map<HostConfiguration, HttpClient>>(){
-        @Override
-        protected Map<HostConfiguration, HttpClient> initialValue() {
-            return new HashMap<>();
-        }
-    };
+    private static final ThreadLocal<Map<HostConfiguration, HttpClient>> httpClients =
+            ThreadLocal.withInitial(HashMap::new);
 
     // Needs to be accessible by HTTPSampler2
     volatile HttpClient savedClient;
@@ -144,7 +139,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
         // If the pre-emptive parameter is undefined, then we can set it as needed
         // otherwise we should do what the user requested.
-        canSetPreEmptive =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
+        CAN_SET_PREEMPTIVE =  params.getParameter(HTTP_AUTHENTICATION_PREEMPTIVE) == null;
 
         // Handle old-style JMeter properties
         try {
@@ -203,7 +198,6 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
         HttpMethodBase httpMethod = null;
 
         HTTPSampleResult res = new HTTPSampleResult();
-        res.setMonitor(isMonitor());
 
         res.setSampleLabel(urlStr); // May be replaced later
         res.setHTTPMethod(method);
@@ -285,9 +279,9 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                     Header responseHeader = httpMethod.getResponseHeader(HTTPConstants.HEADER_CONTENT_ENCODING);
                     if (responseHeader!= null && HTTPConstants.ENCODING_GZIP.equals(responseHeader.getValue())) {
                         InputStream tmpInput = new GZIPInputStream(instream); // tmp inputstream needs to have a good counting
-                        res.setResponseData(readResponse(res, tmpInput, (int) httpMethod.getResponseContentLength()));                        
+                        res.setResponseData(readResponse(res, tmpInput, httpMethod.getResponseContentLength()));                        
                     } else {
-                        res.setResponseData(readResponse(res, instream, (int) httpMethod.getResponseContentLength()));
+                        res.setResponseData(readResponse(res, instream, httpMethod.getResponseContentLength()));
                     }
                 } finally {
                     JOrphanUtils.closeQuietly(instream);
@@ -328,12 +322,12 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             // record some sizes to allow HTTPSampleResult.getBytes() with different options
             if (instream != null) {
-                res.setBodySize(((CountingInputStream) instream).getCount());
+                res.setBodySize(((CountingInputStream) instream).getByteCount());
             }
             res.setHeadersSize(calculateHeadersSize(httpMethod));
             if (log.isDebugEnabled()) {
-                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySize()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySize()));
+                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySizeAsLong()
+                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
             }
             
             // If we redirected automatically, the URL may have changed
@@ -354,21 +348,14 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
 
             log.debug("End : sample");
             return res;
-        } catch (IllegalArgumentException e) { // e.g. some kinds of invalid URL
+        } catch (IllegalArgumentException // e.g. some kinds of invalid URL
+                | IOException e) { 
             res.sampleEnd();
             // pick up headers if failed to execute the request
             // httpMethod can be null if method is unexpected
             if(httpMethod != null) {
                 res.setRequestHeaders(getConnectionHeaders(httpMethod));
             }
-            errorResult(e, res);
-            return res;
-        } catch (IOException e) {
-            res.sampleEnd();
-            // pick up headers if failed to execute the request
-            // httpMethod cannot be null here, otherwise 
-            // it would have been caught in the previous catch block
-            res.setRequestHeaders(getConnectionHeaders(httpMethod));
             errorResult(e, res);
             return res;
         } finally {
@@ -501,7 +488,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
             if (user.length() > 0){
                 httpClient.getState().setProxyCredentials(
                         new AuthScope(proxyHost,proxyPort,null,AuthScope.ANY_SCHEME),
-                        new NTCredentials(user,getProxyPass(),localHost,PROXY_DOMAIN)
+                        new NTCredentials(user,getProxyPass(),LOCALHOST,PROXY_DOMAIN)
                     );
             } else {
                 httpClient.getState().clearProxyCredentials();
@@ -511,7 +498,7 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                 if (PROXY_USER.length() > 0){
                     httpClient.getState().setProxyCredentials(
                         new AuthScope(PROXY_HOST,PROXY_PORT,null,AuthScope.ANY_SCHEME),
-                        new NTCredentials(PROXY_USER,PROXY_PASS,localHost,PROXY_DOMAIN)
+                        new NTCredentials(PROXY_USER,PROXY_PASS,LOCALHOST,PROXY_DOMAIN)
                     );
                 }
             } else {
@@ -707,17 +694,17 @@ public class HTTPHC3Impl extends HTTPHCAbstractImpl {
                             new NTCredentials(
                                     username,
                                     auth.getPass(),
-                                    localHost,
+                                    LOCALHOST,
                                     domain
                             ));
                     // We have credentials - should we set pre-emptive authentication?
-                    if (canSetPreEmptive){
+                    if (CAN_SET_PREEMPTIVE){
                         log.debug("Setting Pre-emptive authentication");
                         params.setAuthenticationPreemptive(true);
                     }
             } else {
                 state.clearCredentials();
-                if (canSetPreEmptive){
+                if (CAN_SET_PREEMPTIVE){
                     params.setAuthenticationPreemptive(false);
                 }
             }

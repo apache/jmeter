@@ -19,12 +19,88 @@
   width: 60em;
 }
 
+.social-media {
+  display: inline-block;
+  float: right;
+}
+
+.social-media-links {
+  display: inline-block;
+}
+
+.social-media-links li {
+  display: inline-block;
+  margin-left: 1rem;
+  padding: 0.3rem;
+  background-color: #bbb;
+}
+
+.share-links ul {
+  display: inline-block;
+}
+
+.share-links li {
+  display: inline-block;
+  margin-right: 1rem;
+  background-color: #bbb;
+  padding: 0.3rem;
+}
+
+.social-media-links a, .share-links a,
+.social-media-links :visited, .share-links :visited,
+.social-media-links :hover, .share-links :hover,
+.social-media-links :link, .share-links :link {
+  color: white !important;
+}
+
+.social-media-links i, .share-links i {
+  padding-right: 0.2rem;
+}
+
+.gplus {
+  background-color: #d34836 !important;
+}
+
+.twitter {
+  background-color: #55acee !important;
+}
+
+.fb {
+  background-color: #3b5998 !important;
+}
+
+.github {
+  background-color: #333333 !important;
+}
+
+a {
+  color: brown;
+}
+
+.menu a {
+  text-decoration-line: none;
+}
+
+a:hover {
+  color: black;
+}
+
 img {
   border: 0;
   width: auto;
   max-width: 95%;
   height: auto;
 }
+
+img.logo {
+  max-height: 88px;
+}
+
+img.asf-logo {
+  width: 217px;
+  max-height: 88px;
+}
+
 
 .menu, h1, h2, h3, h4, h5, .go-top, .title {
   font-family: "Merriweather";
@@ -51,9 +127,10 @@ h1, h2, h3, h4, h5, .title {
 .menu {
   border: 1px solid lightgray;
   box-shadow: 5px 5px 10px rgba(20, 20, 20, 0.3);
-  list-style: outside none none;
+  list-style: none;
   margin: 0.5em;
   padding: 0.5em;
+  font-size: 90%;
 }
 
 .menu+.menu {
@@ -68,8 +145,17 @@ h1, h2, h3, h4, h5, .title {
   height: auto;
 }
 
+.menu ul {
+  list-style: outside;
+  padding-left: 1.5rem;
+}
+
+.menu-title {
+  font-size: 105%;
+}
+
 .banner>iframe {
-  width: 240px;
+  width: 270px;
   height: 70px;
 }
 .banner>iframe>body {
@@ -87,9 +173,9 @@ body {
   padding: 0px;
 }
 
-.section
-          pre {
-  background: none repeat scroll 0 0 lightblue;
+.section pre, .source {
+  background: none repeat scroll 0 0 black;
+  color: orange;
   border: 1px solid gray;
   padding: 0.3rem;
   margin: 0.3rem;
@@ -98,8 +184,9 @@ body {
 }
 
 .code {
-  background: none repeat scroll 0 0 lightblue;
   padding: 0.1em;
+  font-weight: bold;
+  color: brown;
   font-family: dejavu sans mono, monospace, sans-serif;
 }
 
@@ -164,9 +251,9 @@ figure>a>img, .screenshot>a>img {
   margin: 1em;
 }
 
-.property .name, .property
-          .description, .property
-          .required {
+.property .name,
+.property .description,
+.property .required {
   display: inline-block;
 }
 
@@ -180,6 +267,11 @@ figure>a>img, .screenshot>a>img {
 .property .description {
   vertical-align: top;
   width: 60%;
+  /* add padding so description does not run into side columns */
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  /* treat padding as part of the content, so we don't need to adjust width to compensate */
+  box-sizing: border-box;
 }
 
 .property .required {
@@ -232,9 +324,9 @@ table {
 
 .nav {
   display: inline-block;
-  max-width: 20em;
+  max-width: 20rem;
   vertical-align: top;
-  width: 33%;
+  width: 25%;
 }
 
 .main {
@@ -250,13 +342,15 @@ table {
   margin-bottom: 1rem;
   width: 100%;
   box-shadow: 0px 5px 33px 0px rgba(0, 0, 0, 0.2);
-  padding: 0.1rem 0em 0.2rem;
+  padding: 0.1rem 0em 0.2rem 0em;
   border-bottom: 1px solid gray;
 }
 
 .header>div {
   display: table-cell;
   vertical-align: middle;
+  text-align: center;
+
 }
 
 .header>div+.header>div {
@@ -310,11 +404,122 @@ table {
   display: none;
 }
 
-@media screen and (max-width: 900px) {
+.menuchoice > span {
+  color: brown;
+  font-style: italic;
+}
+
+.keysym {
+  background-color: #f0f0f0;
+  border: 1px solid #bbb;
+  border-radius: 0.3rem;
+  padding: 0.1rem;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.example .keysym {
+  background-color: white;
+}
+
+@media screen and (max-width: 1000px) {
+  .nav {
+  width: 100%;
+  max-width: 100%;
+  border-bottom: 1px solid #808080;
+  box-shadow: 0px 20px 15px -15px rgba(20,20,20,0.2);
+}
+.header {
+  box-shadow: none;
+  margin-bottom: 0px;
+}
+.menu {
+  display: inline-block;
+  width: auto;
+  border: 0px;
+  box-shadow: none;
+  margin: 0px;
+}
+.menu + .menu {
+  margin-top: 0.2rem;
+}
+.menu ul {
+  display: none;
+  position: absolute;
+  padding: 1rem;
+  box-shadow: 10px 10px 10px rgba(20,20,20,0.2);
+  border: 1px solid #808080;
+  list-style: none;
+}
+
+.menu li:hover ul {
+  display: block;
+  background: white;
+}
+
+.social {
+  display: block;
+}
+
+.social > div {
+  display: inline-block;
+  margin-right: 0.2em;
+}
+
+.social div img {
+  vertical-align: inherit !important;
+}
+
+.main {
+ width: auto;
+ max-width: 95%;
+ margin: 0.5rem;
+ }
+ .header {
+    display: block;
+  }
+  .header span {
+    display: inline;
+  }
+  .pagelinks li {
+    margin: 0.5rem;
+  }
+  .header>div {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%
+  }
+  .header>div+.header>div {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    box-shadow: none;
+    margin-bottom: 0px;
+    padding: 0px;
+  }
+  .header > div:first-child {
+    padding: 0px;
+  }
   .nav {
     display: block;
-    width: 95%;
-    max-width: 95%;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 1px solid #808080;
+    box-shadow: 0px 15px 10px -10px rgba(20,20,20,0.2);
+  }
+  .menu {
+    box-shadow: none;
+    display: block;
+    border: 0px;
+    padding: 0.2rem 0.5rem;
+    margin: 0.2rem 0.5rem;
+  }
+  .menu + .menu {
+    margin-top: 0.2rem;
+    border-top: 1px solid orange;
   }
   .main {
     display: block;
@@ -332,11 +537,13 @@ table {
   .properties {
     margin: 1rem 0px;
   }
-  .property .name, .property
-          .description, .property
-          .required {
+  .property .name, 
+  .property .description,
+  .property .required {
     display: block;
     width: 100%;
+    /* lose the padding applied for wider screens */
+    padding: 0;
   }
   .property .required {
     border-bottom: 1px solid #ddd;
@@ -369,6 +576,10 @@ table {
   }
   .menu ul {
     display: none;
+    position: relative;
+    box-shadow: none;
+    border: 0px;
+    padding: 0.1rem 1rem;
   }
   .menu li:hover>ul {
     display: block;
@@ -394,5 +605,40 @@ table {
   .header > .banner {
     width: 100%;
     text-align: center;
+  }
+
+  .share-links li, .social-media-links li {
+    margin-right: 0.5rem;
+  }
+}
+
+@media print {
+  .nav, .header, .footer, .pagelinks, .go-top, .social-media, .share-links {
+    display: none;
+  }
+
+  #content {
+    display: block;
+    width: 70rem;
+    max-width: 70rem;
+  }
+
+  .section pre, .source {
+    background-color: none;
+    color: brown;
+  }
+
+  .menu, figure > a > img, .screenshot > a > img, .section-index > li {
+    box-shadow: none;
+  }
+
+  .section-index {
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+  }
+
+  .section-index > li {
+    border: none;
   }
 }

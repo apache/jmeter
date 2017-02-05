@@ -1,0 +1,3 @@
+http://www.xmlpull.org/
+
+The XmlPull API is in public domain

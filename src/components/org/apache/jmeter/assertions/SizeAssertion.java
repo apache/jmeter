@@ -74,12 +74,12 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     public AssertionResult getResult(SampleResult response) {
         AssertionResult result = new AssertionResult(getName());
         result.setFailure(false);
-        long resultSize=0;
+        long resultSize;
         if (isScopeVariable()){
             String variableName = getVariableName();
             String value = getThreadContext().getVariables().get(variableName);
             try {
-                resultSize = Integer.parseInt(value);
+                resultSize = Long.parseLong(value);
             } catch (NumberFormatException e) {
                 result.setFailure(true);
                 result.setFailureMessage("Error parsing variable name: "+variableName+" value: "+value);
@@ -88,13 +88,13 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
         } else if (isTestFieldResponseHeaders()) {
             resultSize = response.getHeadersSize();
         }  else if (isTestFieldResponseBody()) {
-            resultSize = response.getBodySize();
+            resultSize = response.getBodySizeAsLong();
         } else if (isTestFieldResponseCode()) {
             resultSize = response.getResponseCode().length();
         } else if (isTestFieldResponseMessage()) {
             resultSize = response.getResponseMessage().length();
         } else {
-            resultSize = response.getBytes();
+            resultSize = response.getBytesAsLong();
         }
         // is the Sample the correct size?
         final String msg = compareSize(resultSize);
@@ -168,7 +168,7 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     }
 
     /**
-     * Compares the the size of a return result to the set allowed size using a
+     * Compares the size of a return result to the set allowed size using a
      * logical comparator set in setLogicalComparator().
      * 
      * Possible values are: equal, not equal, greater than, less than, greater
@@ -178,31 +178,31 @@ public class SizeAssertion extends AbstractScopedAssertion implements Serializab
     private String compareSize(long resultSize) {
         String comparatorErrorMessage;
         long allowedSize = Long.parseLong(getAllowedSize());
-        boolean result = false;
+        boolean result;
         int comp = getCompOper();
         switch (comp) {
         case EQUAL:
-            result = (resultSize == allowedSize);
+            result = resultSize == allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_equal"); //$NON-NLS-1$
             break;
         case NOTEQUAL:
-            result = (resultSize != allowedSize);
+            result = resultSize != allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_notequal"); //$NON-NLS-1$
             break;
         case GREATERTHAN:
-            result = (resultSize > allowedSize);
+            result = resultSize > allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greater"); //$NON-NLS-1$
             break;
         case LESSTHAN:
-            result = (resultSize < allowedSize);
+            result = resultSize < allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_less"); //$NON-NLS-1$
             break;
         case GREATERTHANEQUAL:
-            result = (resultSize >= allowedSize);
+            result = resultSize >= allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_greaterequal"); //$NON-NLS-1$
             break;
         case LESSTHANEQUAL:
-            result = (resultSize <= allowedSize);
+            result = resultSize <= allowedSize;
             comparatorErrorMessage = JMeterUtils.getResString("size_assertion_comparator_error_lessequal"); //$NON-NLS-1$
             break;
         default:

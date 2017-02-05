@@ -17,11 +17,11 @@
 -->
 
 <!DOCTYPE document[
-<!ENTITY sect-num '2'>
+<!ENTITY sect-num '1'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 
-<document prev="intro.html" next="build-test-plan.html" id="$Id$">
+<document next="build-test-plan.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Getting Started</title>
@@ -29,6 +29,50 @@
 <body>
 
 <section name="&sect-num;. Getting Started" anchor="get_started">
+<section name="&sect-num;.0 Overview" anchor="overview">
+When using JMeter you will usually follow this process:
+<subsection name="&sect-num;.0.1 Test plan building" anchor="test_plan_building">
+<p>To do that, you will <a href="get-started.html#running">run JMeter in GUI Mode.</a><br/>
+Then you can either choose to record the application from a browser, or native application.
+You can use for that the menu <menuchoice><guimenuitem>File</guimenuitem><guimenuitem>Templates...</guimenuitem><guimenuitem>Recording</guimenuitem></menuchoice><br/>
+</p>
+<p>
+Note you can also manually build your plan. Ensure you read this <a href="test_plan.html">documentation</a> to understand major concepts.
+</p>
+You will also debug it using one of these options:
+<ul>
+    <li><menuchoice><guimenuitem>Run</guimenuitem><guimenuitem>Start no pauses</guimenuitem></menuchoice></li>
+    <li><menuchoice><guimenuitem>Run</guimenuitem><guimenuitem>Start</guimenuitem></menuchoice></li>
+    <li><menuchoice><guimenuitem>Validate</guimenuitem></menuchoice> on <a href="component_reference.html#Thread_Group">Thread Group</a></li>
+</ul>
+<p>
+and <a href="component_reference.html#View_Results_Tree">View Results Tree</a> renderers or Testers (CSS/JQUERY, JSON, Regexp, XPath).<br/>
+Ensure you follow <a href="best-practices.html" >best-practices</a> when building your Test Plan.
+</p>
+</subsection>
+<subsection name="&sect-num;.0.2 Load Test running" anchor="load_test_running">
+<p>Once your Test Plan is ready, you can start your Load Test.
+The first step is to configure the injectors that will run JMeter, this as for any other Load Testing tool includes:
+<ul>
+    <li>Correct machine sizing in terms of CPU, memory and network</li>
+    <li>OS Tuning</li>
+    <li>Java setup: Ensure you install the latest version of Java supported by JMeter</li>
+    <li><b>Correct sizing of Java Heap</b>. By default JMeter runs with a heap of 512MB, this might not be enough for your test and depends on your test plan and number of threads you want to run</li>
+</ul> 
+
+Once everything is ready, you will use Command-line mode (called <a href="#non_gui">Non-GUI mode</a>) to run it for the Load Test. 
+<note>Don't run load test using GUI mode !</note><br/>
+Using Non-GUI mode, you can generate a CSV (or XML) file containing results and have JMeter <a href="generating-dashboard.html">generate an HTML report</a> at end of Load Test.
+JMeter will by default provide a summary of load test while it's running. <br/>
+You can also have <a href="realtime-results.html" >real-time results</a> during your test using <a href="component_reference.html#Backend_Listener">Backend Listener</a>.
+</p>
+</subsection>
+<subsection name="&sect-num;.0.3 Load Test analysis" anchor="load_test_analysis">
+Once your Load Test is finished, you can use the HTML report to analyze your load test. <br/>
+</subsection>
+</section>
+
+<subsection name="&sect-num;.0.4 Let's start" anchor="lets_start">
 <p>The easiest way to begin using JMeter is to first
 <a href="http://jmeter.apache.org/download_jmeter.cgi">download the latest production release</a> and install it.
 The release contains all of the files you need to build and run most types of tests,
@@ -63,14 +107,15 @@ The other specific Test Plan sections are:
 <p>Once you are comfortable with building and running JMeter Test Plans, you can look into the
 various configuration elements (timers, listeners, assertions, and others) which give you more control
 over your Test Plans.</p>
-
+</subsection>
 </section>
 
 <section name="&sect-num;.1 Requirements" anchor="requirements">
 <p>JMeter requires that your computing environment meets some minimum requirements.</p>
 
 <subsection name="&sect-num;.1.1 Java Version" anchor="java_versions">
-<note>JMeter requires a fully compliant JVM 7 or higher.  
+<note>JMeter requires a fully compliant JVM 8, we advise that you install latest minor version of those major versions.
+Java 9 is not tested completely as of JMeter 3.2.
 </note>
 <p>Because JMeter uses only standard Java APIs, please do not file bug reports if your JRE fails to run
 JMeter because of JRE implementation issues.</p>
@@ -91,7 +136,7 @@ on JMeter wiki.</p>
 
 
 <subsection name="&sect-num;.2.1 Java Compiler" anchor="opt_compiler">
-<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 7 or higher.</p>
+<p>If you want to build the JMeter source or develop JMeter plugins, then you will need a fully compliant JDK 8 or higher.</p>
 </subsection>
 
 <subsection name="&sect-num;.2.2 SAX XML Parser" anchor="opt_sax">
@@ -192,6 +237,7 @@ You can rename the parent directory (i.e. <code>apache-jmeter-X.Y</code>) if you
 <p>To run JMeter, run the <code>jmeter.bat</code> (for Windows) or <code>jmeter</code> (for Unix) file.
 These files are found in the bin directory.
 After a short time, the JMeter GUI should appear.
+<note>GUI mode should only be used for creating the test script, NON GUI mode must be used for load testing</note>
 </p>
 
 <p>
@@ -240,7 +286,9 @@ The <code>JVM_ARGS</code> environment variable can be used to override or set ad
 <source>
 JVM_ARGS="-Xms1024m -Xmx1024m" jmeter -t test.jmx [etc.]
 </source>
+<p>
 will override the HEAP settings in the script.
+</p>
 <subsection name="&sect-num;.4.1 JMeter's Classpath" anchor="classpath">
 <p>JMeter automatically finds classes from jars in the following directories:</p>
 <dl>
@@ -335,7 +383,7 @@ This is not to be confused with the proxy settings described above, which are us
 </subsection>
 
 <subsection name="&sect-num;.4.4 Non-GUI Mode (Command Line mode)" anchor="non_gui">
-<p>For non-interactive testing, you may choose to run JMeter without the GUI. To do so, use
+<p>For load testing, you must run JMeter in this mode (Without the GUI) to get the optimal results from it. To do so, use
 the following command options:</p>
 <dl>
 <dt><code>-n</code></dt><dd>This specifies JMeter is to run in non-gui mode</dd>

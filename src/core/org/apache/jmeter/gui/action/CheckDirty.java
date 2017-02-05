@@ -116,7 +116,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
                 wholeTree.traverse(this);
                 
                 // check the workbench for modification
-                if(!dirty) {
+                if(!dirty) { // NOSONAR
                     if (isWorkbenchSaveable()) {
                         HashTree workbench = GuiPackage.getInstance().getTreeModel().getWorkBench();
                         workbench.traverse(this);

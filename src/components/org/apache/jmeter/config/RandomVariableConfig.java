@@ -56,6 +56,10 @@ public class RandomVariableConfig extends ConfigTestElement
 
     private boolean perThread;
 
+    private int range;
+    
+    private long minimum;
+
     // This class is not cloned per thread, so this is shared
     private Random globalRandom = null;
 
@@ -71,9 +75,6 @@ public class RandomVariableConfig extends ConfigTestElement
                     return new Random(getRandomSeedAsLong());
                 }};
     }
-
-    private int n;
-    private long minimum;
 
     private Object readResolve(){
         perThreadRandom = initThreadLocal();
@@ -92,20 +93,20 @@ public class RandomVariableConfig extends ConfigTestElement
         long rangeL=maximum-minimum+1; // This can overflow
         if (minimum >= maximum){
             log.error("maximum("+maxAsString+") must be > minimum"+minAsString+")");
-            n=0;// This is used as an error indicator
+            range=0;// This is used as an error indicator
             return;
         }
         if (rangeL > Integer.MAX_VALUE || rangeL <= 0){// check for overflow too
             log.warn("maximum("+maxAsString+") - minimum"+minAsString+") must be <="+Integer.MAX_VALUE);
             rangeL=Integer.MAX_VALUE;
         }
-        n = (int)rangeL;
+        range = (int)rangeL;
     }
 
     /** {@inheritDoc} */
     @Override
     public void iterationStart(LoopIterationEvent iterEvent) {
-        Random randGen=null;
+        Random randGen;
         if (getPerThread()){
             randGen = perThreadRandom.get();
         } else {
@@ -117,10 +118,10 @@ public class RandomVariableConfig extends ConfigTestElement
                 randGen=globalRandom;
             }
         }
-        if (n <=0){
+        if (range <=0){
             return;
         }
-       long nextRand = minimum + randGen.nextInt(n);
+       long nextRand = minimum + randGen.nextInt(range);
        // Cannot use getThreadContext() as we are not cloned per thread
        JMeterVariables variables = JMeterContextService.getContext().getVariables();
        variables.put(getVariableName(), formatNumber(nextRand));
@@ -193,7 +194,7 @@ public class RandomVariableConfig extends ConfigTestElement
      * @return the randomSeed as a long
      */
     private synchronized long getRandomSeedAsLong() {
-        long seed = 0;
+        long seed;
         if (randomSeed.length()==0){
             seed = System.currentTimeMillis();
         }  else {

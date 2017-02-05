@@ -18,7 +18,7 @@
 
 package org.apache.jmeter.protocol.ldap.sampler;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -950,31 +950,23 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     }
 
     private void sortAttributes(final List<Attribute> sortedAttrs) {
-        Collections.sort(sortedAttrs, new Comparator<Attribute>()
-        {
-            @Override
-            public int compare(Attribute o1, Attribute o2)
-            {
-                String nm1 = o1.getID();
-                String nm2 = o2.getID();
+        sortedAttrs.sort((o1, o2) -> {
+            String nm1 = o1.getID();
+            String nm2 = o2.getID();
 
-                return nm1.compareTo(nm2);
-            }
+            return nm1.compareTo(nm2);
         });
     }
 
     private void sortResults(final List<SearchResult> sortedResults) {
-        Collections.sort(sortedResults, new Comparator<SearchResult>()
-        {
-            private int compareToReverse(final String s1, final String s2)
-            {
+        sortedResults.sort(new Comparator<SearchResult>() {
+            private int compareToReverse(final String s1, final String s2) {
                 int len1 = s1.length();
                 int len2 = s2.length();
                 int s1i = len1 - 1;
                 int s2i = len2 - 1;
 
-                for ( ; (s1i >= 0) && (s2i >= 0); s1i--, s2i--)
-                {
+                for (; (s1i >= 0) && (s2i >= 0); s1i--, s2i--) {
                     char c1 = s1.charAt(s1i);
                     char c2 = s2.charAt(s2i);
 
@@ -986,8 +978,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             }
 
             @Override
-            public int compare(SearchResult o1, SearchResult o2)
-            {
+            public int compare(SearchResult o1, SearchResult o2) {
                 String nm1 = o1.getName();
                 String nm2 = o2.getName();
 
@@ -1031,14 +1022,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
             return StringEscapeUtils.escapeXml10((String)value);
         }
         if (value instanceof byte[]) {
-            try
-            {
-                return StringEscapeUtils.escapeXml10(new String((byte[])value, "UTF-8")); //$NON-NLS-1$
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                log.error("this can't happen: UTF-8 character encoding not supported", e);
-            }
+            return StringEscapeUtils.escapeXml10(new String((byte[])value, StandardCharsets.UTF_8));
         }
         return StringEscapeUtils.escapeXml10(value.toString());
     }

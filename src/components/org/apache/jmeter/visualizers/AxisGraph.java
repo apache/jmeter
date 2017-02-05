@@ -70,7 +70,8 @@ public class AxisGraph extends JPanel {
     protected String yAxisLabel;
     protected int maxLength;
     protected String[] xAxisLabels;
-    protected int width, height;
+    protected int width;
+    protected int height;
     
     protected String[] legendLabels = { JMeterUtils.getResString("aggregate_graph_legend") }; // $NON-NLS-1$
     
@@ -401,7 +402,7 @@ public class AxisGraph extends JPanel {
 
             // Y Axis
             try {
-                BigDecimal round = new BigDecimal(max / 1000d);
+                BigDecimal round = BigDecimal.valueOf(max / 1000d);
                 round = round.setScale(0, BigDecimal.ROUND_UP);
                 double topValue = round.doubleValue() * 1000;
                 yaxis.setUserDefinedScale(0, 500);

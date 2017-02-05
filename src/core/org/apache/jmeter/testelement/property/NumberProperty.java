@@ -67,14 +67,6 @@ public abstract class NumberProperty extends AbstractProperty {
      */
     @Override
     public int compareTo(JMeterProperty arg0) {
-        double compareValue = getDoubleValue() - arg0.getDoubleValue();
-
-        if (compareValue < 0) {
-            return -1;
-        } else if (compareValue == 0) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return Double.compare(getDoubleValue(), arg0.getDoubleValue());
     }
 }

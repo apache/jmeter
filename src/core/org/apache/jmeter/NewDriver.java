@@ -22,10 +22,13 @@ package org.apache.jmeter;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +52,9 @@ public final class NewDriver {
     private static final DynamicClassLoader loader;
 
     /** The directory JMeter is installed in. */
-    private static final String jmDir;
+    private static final String JMETER_INSTALLATION_DIRECTORY;
+
+    private static final List<Exception> EXCEPTIONS_IN_INIT = new ArrayList<>();
 
     static {
         final List<URL> jars = new LinkedList<>();
@@ -75,7 +80,7 @@ public final class NewDriver {
                 tmpDir = userDir.getAbsoluteFile().getParent();
             }
         }
-        jmDir=tmpDir;
+        JMETER_INSTALLATION_DIRECTORY=tmpDir;
 
         /*
          * Does the system support UNC paths? If so, may need to fix them up
@@ -85,9 +90,9 @@ public final class NewDriver {
 
         // Add standard jar locations to initial classpath
         StringBuilder classpath = new StringBuilder();
-        File[] libDirs = new File[] { new File(jmDir + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
-                new File(jmDir + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
+        File[] libDirs = new File[] { new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib"),// $NON-NLS-1$ $NON-NLS-2$
+                new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
+                new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
         for (File libDir : libDirs) {
             File[] libJars = libDir.listFiles(new FilenameFilter() {
                 @Override
@@ -96,7 +101,7 @@ public final class NewDriver {
                 }
             });
             if (libJars == null) {
-                new Throwable("Could not access " + libDir).printStackTrace();
+                new Throwable("Could not access " + libDir).printStackTrace(); // NOSONAR No logging here
                 continue;
             }
             Arrays.sort(libJars); // Bug 50708 Ensure predictable order of jars
@@ -116,8 +121,8 @@ public final class NewDriver {
                     jars.add(new File(s).toURI().toURL());// See Java bug 4496398
                     classpath.append(CLASSPATH_SEPARATOR);
                     classpath.append(s);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                } catch (MalformedURLException e) { // NOSONAR
+                    EXCEPTIONS_IN_INIT.add(new Exception("Error adding jar:"+libJar.getAbsolutePath(), e));
                 }
             }
         }
@@ -166,21 +171,14 @@ public final class NewDriver {
      * Add a URL to the loader classpath only; does not update the system classpath.
      *
      * @param path to be added.
+     * @throws MalformedURLException 
      */
-    public static void addURL(String path) {
+    public static void addURL(String path) throws MalformedURLException {
         File furl = new File(path);
-        try {
-            loader.addURL(furl.toURI().toURL()); // See Java bug 4496398
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        loader.addURL(furl.toURI().toURL()); // See Java bug 4496398
         File[] jars = listJars(furl);
         for (File jar : jars) {
-            try {
-                loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
         }
     }
 
@@ -216,13 +214,9 @@ public final class NewDriver {
         sb.append(path);
         File[] jars = listJars(file);
         for (File jar : jars) {
-            try {
-                loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
-                sb.append(CLASSPATH_SEPARATOR);
-                sb.append(jar.getPath());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            loader.addURL(jar.toURI().toURL()); // See Java bug 4496398
+            sb.append(CLASSPATH_SEPARATOR);
+            sb.append(jar.getPath());
         }
 
         // ClassFinder needs this
@@ -236,7 +230,7 @@ public final class NewDriver {
      * @return the directory where JMeter is installed.
      */
     public static String getJMeterDir() {
-        return jmDir;
+        return JMETER_INSTALLATION_DIRECTORY;
     }
 
     /**
@@ -246,20 +240,40 @@ public final class NewDriver {
      *            the command line arguments
      */
     public static void main(String[] args) {
-        Thread.currentThread().setContextClassLoader(loader);
-        if (System.getProperty("log4j.configuration") == null) {// $NON-NLS-1$ $NON-NLS-2$
-            File conf = new File(jmDir, "bin" + File.separator + "log4j.conf");// $NON-NLS-1$ $NON-NLS-2$
-            System.setProperty("log4j.configuration", "file:" + conf);
+        if(!EXCEPTIONS_IN_INIT.isEmpty()) {
+            System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT));
+        } else {
+            Thread.currentThread().setContextClassLoader(loader);
+            if (System.getProperty("log4j.configuration") == null) {// $NON-NLS-1$ $NON-NLS-2$
+                File conf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j.conf");// $NON-NLS-1$ $NON-NLS-2$
+                System.setProperty("log4j.configuration", "file:" + conf);
+            }
+    
+            try {
+                Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
+                Object instance = initialClass.newInstance();
+                Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
+                startup.invoke(instance, new Object[] { args });
+            } catch(Throwable e){ // NOSONAR We want to log home directory in case of exception
+                e.printStackTrace(); // NOSONAR No logger at this step
+                System.err.println("JMeter home directory was detected as: "+JMETER_INSTALLATION_DIRECTORY);
+            }
         }
+    }
 
-        try {
-            Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
-            Object instance = initialClass.newInstance();
-            Method startup = initialClass.getMethod("start", new Class[] { new String[0].getClass() });// $NON-NLS-1$
-            startup.invoke(instance, new Object[] { args });
-        } catch(Throwable e){
-            e.printStackTrace();
-            System.err.println("JMeter home directory was detected as: "+jmDir);
+    /**
+     * @param exceptionsInInit List of {@link Exception}
+     * @return String
+     */
+    private static String exceptionsToString(List<Exception> exceptionsInInit) {
+        StringBuilder builder = new StringBuilder();
+        for (Exception exception : exceptionsInInit) {
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            exception.printStackTrace(printWriter); // NOSONAR 
+            builder.append(stringWriter.toString())
+                .append("\r\n");
         }
+        return builder.toString();
     }
 }

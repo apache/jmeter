@@ -51,7 +51,9 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
         }
         try {
             Object o = processFileOrScript(bshInterpreter);
-            if (o != null) { ret=o.toString(); }
+            if (o != null) { 
+                ret=o.toString(); 
+            }
         } catch (JMeterException e) {
             log.warn("Problem in BeanShell script "+e);
         }
@@ -61,5 +63,10 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
             log.warn(e.getLocalizedMessage());
             return 0;
         }
+    }
+    
+    @Override
+    public Object clone() {
+        return super.clone();
     }
 }

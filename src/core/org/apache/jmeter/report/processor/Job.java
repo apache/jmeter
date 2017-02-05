@@ -30,7 +30,7 @@ abstract class Job<T> implements Runnable {
 
     private volatile boolean resultReady = false;
 
-    private Object lock = new Object();
+    private final Object lock = new Object();
 
     private volatile T result;
 

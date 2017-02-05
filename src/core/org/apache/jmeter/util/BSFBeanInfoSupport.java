@@ -32,12 +32,11 @@ public abstract class BSFBeanInfoSupport extends ScriptingBeanInfoSupport {
 
     static {
         Properties languages = JMeterUtils.loadProperties("org/apache/bsf/Languages.properties"); // $NON-NLS-1$
-        LANGUAGE_TAGS = new String[languages.size() + 1];
+        LANGUAGE_TAGS = new String[languages.size()];
         int i = 0;
         for (Object language : languages.keySet()) {
             LANGUAGE_TAGS[i++] = language.toString();
         }
-        LANGUAGE_TAGS[i] = "jexl"; // $NON-NLS-1$
         Arrays.sort(LANGUAGE_TAGS);
     }
 

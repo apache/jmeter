@@ -122,7 +122,7 @@ public class LogFilter implements Filter, Serializable {
     public void setReplaceExtension(String oldext, String newext) {
         if (oldext != null && newext != null) {
             this.CHANGEEXT = true;
-            if (oldext.indexOf('.') < 0 && newext.indexOf('.') < 0) {
+            if (!oldext.contains(".") && !newext.contains(".")) {
                 this.OLDEXT = "." + oldext;
                 this.NEWEXT = "." + newext;
             } else {

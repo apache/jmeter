@@ -38,8 +38,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -169,15 +167,11 @@ public class ModuleControllerGui extends AbstractControllerGui implements Action
         
         init();
         
-        // the listener is used to hide the error message when a target element is selected
-        TreeSelectionListener tsl = new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-                warningLabel.setVisible(false);
-                expandButton.setEnabled(true);
-            }
-        };
-        moduleToRunTreeNodes.addTreeSelectionListener(tsl);
+        moduleToRunTreeNodes.addTreeSelectionListener(
+                evt -> {
+                    warningLabel.setVisible(false);
+                    expandButton.setEnabled(true);    
+                });
     }
 
     /** {@inheritDoc}} */

@@ -18,8 +18,9 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '14'>
+<!ENTITY sect-num '13'>
 <!ENTITY hellip   "&#x02026;" >
+<!ENTITY vellip   "&#x022EE;" >
 ]>
 
 <document prev="build-monitor-test-plan.html" next="remote-test.html" id="$Id$">
@@ -134,12 +135,13 @@ The full set of properties that affect result file output is shown below.
 #jmeter.save.saveservice.subresults=true
 #jmeter.save.saveservice.assertions=true
 #jmeter.save.saveservice.latency=true
-#jmeter.save.saveservice.connect_time=false
+#jmeter.save.saveservice.connect_time=true
 #jmeter.save.saveservice.samplerData=false
 #jmeter.save.saveservice.responseHeaders=false
 #jmeter.save.saveservice.requestHeaders=false
 #jmeter.save.saveservice.encoding=false
 #jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.sent_bytes=true
 #jmeter.save.saveservice.url=false
 #jmeter.save.saveservice.filename=false
 #jmeter.save.saveservice.hostname=false
@@ -267,7 +269,7 @@ Most of the listeners currently keep a copy of every sample they display, apart 
 </p>
 <ul>
 <li>Simple Data Writer</li>
-<li>BeanShell/BSF Listener</li>
+<li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
 <li>Monitor Results</li>
 <li>Summary Report</li>
@@ -301,6 +303,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li><code>success</code> - <code>true</code> or <code>false</code></li>
 <li><code>failureMessage</code> - if any</li>
 <li><code>bytes</code> - number of bytes in the sample</li>
+<li><code>sentBytes</code> - number of bytes sent for the sample</li>
 <li><code>grpThreads</code> - number of active threads in this thread group</li>
 <li><code>allThreads</code> - total number of active threads in all groups</li>
 <li><code>URL</code></li>
@@ -335,7 +338,7 @@ The format of the updated XML (2.1) is as follows (line breaks will be different
         tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
-&hellip;
+&vellip;
 Content-Type: text/css
 &lt;/responseHeader&gt;
     &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
@@ -345,7 +348,7 @@ Content-Type: text/css
     color: black;
     background-color: white;
 }
-&hellip;
+&vellip;
 &lt;/responseData&gt;
     &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
     &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
@@ -357,7 +360,7 @@ Content-Type: text/css
      rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866"&gt;
     &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:14 GMT
-&hellip;
+&vellip;
 Content-Type: image/gif
 &lt;/responseHeader&gt;
     &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
@@ -370,19 +373,19 @@ Content-Type: image/gif
   &lt;/httpSample&gt;
   &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
 Date: Fri, 07 Apr 2006 00:50:13 GMT
-&hellip;
+&vellip;
 Content-Type: text/html; charset=ISO-8859-1
 &lt;/responseHeader&gt;
   &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
   &lt;responseData class="java.lang.String"&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
                &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-&hellip;
+&vellip;
 &lt;html&gt;
  &lt;head&gt;
-&hellip;
+&vellip;
  &lt;/head&gt;
  &lt;body&gt;        
-&hellip;
+&vellip;
  &lt;/body&gt;
 &lt;/html&gt;
 &lt;/responseData&gt;
@@ -423,6 +426,7 @@ The sample attributes have the following meaning:
 <table>
 <tr><th>Attribute</th><th>Content</th></tr>
 <tr><td><code>by</code></td><td>Bytes</td></tr>
+<tr><td><code>sby</code></td><td>Sent Bytes</td></tr>
 <tr><td><code>de</code></td><td>Data encoding</td></tr>
 <tr><td><code>dt</code></td><td>Data type</td></tr>
 <tr><td><code>ec</code></td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
@@ -505,7 +509,7 @@ before loading the file.
 listener in the left panel. Click
   <menuchoice>
     <guimenuitem>Edit</guimenuitem>
-    <guimenuitem>Save As Image</guimenuitem>
+    <guimenuitem>Save Node As Image</guimenuitem>
   </menuchoice>.
 A file dialog will
 appear. Enter the desired name and save the listener.
@@ -516,7 +520,7 @@ Select the desired cells in the table, and use the OS Copy short-cut (normally <
 The data will be saved to the clipboard, from where it can be pasted into another application,
 e.g. a spreadsheet or text editor.
 </p>
-<figure image="save_image.png">Figure 1 - <menuchoice><guimenuitem>Edit</guimenuitem><guimenuitem>Save As Image</guimenuitem></menuchoice></figure>
+<figure image="save_image.png">Figure 1 - <menuchoice><guimenuitem>Edit</guimenuitem><guimenuitem>Save Node As Image</guimenuitem></menuchoice></figure>
 
 </section>
 </body>

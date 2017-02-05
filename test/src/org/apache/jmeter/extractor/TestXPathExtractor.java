@@ -23,10 +23,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -107,6 +110,29 @@ public class TestXPathExtractor {
             assertEquals("two", vars.get(VAL_NAME+"_2"));
             assertNull(vars.get(VAL_NAME+"_3"));
             
+            // Test match 1
+            extractor.setXPathQuery("/book/page");
+            extractor.setMatchNumber(1);
+            extractor.process();
+            assertEquals("one", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("one", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+            assertNull(vars.get(VAL_NAME+"_3"));
+            
+            // Test match Random
+            extractor.setXPathQuery("/book/page");
+            extractor.setMatchNumber(0);
+            extractor.process();
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME)));
+            Assert.assertTrue(StringUtils.isNoneEmpty(vars.get(VAL_NAME+"_1")));
+            assertNull(vars.get(VAL_NAME+"_2"));
+            assertNull(vars.get(VAL_NAME+"_3"));
+            
+            // Put back default value
+            extractor.setMatchNumber(-1);
+            
             extractor.setXPathQuery("/book/page[2]");
             extractor.process();
             assertEquals("two", vars.get(VAL_NAME));
@@ -140,6 +166,25 @@ public class TestXPathExtractor {
             extractor.process();
             assertEquals("Default", vars.get(VAL_NAME));
 
+            // No text all matches
+            extractor.setXPathQuery("//a");
+            extractor.process();
+            extractor.setMatchNumber(-1);
+            assertEquals("Default", vars.get(VAL_NAME));
+
+            // No text match second
+            extractor.setXPathQuery("//a");
+            extractor.process();
+            extractor.setMatchNumber(2);
+            assertEquals("Default", vars.get(VAL_NAME));
+
+            // No text match random
+            extractor.setXPathQuery("//a");
+            extractor.process();
+            extractor.setMatchNumber(0);
+            assertEquals("Default", vars.get(VAL_NAME));
+
+            extractor.setMatchNumber(-1);
             // Test fragment
             extractor.setXPathQuery("/book/page[2]");
             extractor.setFragment(true);

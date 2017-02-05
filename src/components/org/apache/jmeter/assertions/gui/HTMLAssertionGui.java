@@ -21,7 +21,6 @@ package org.apache.jmeter.assertions.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -260,59 +259,6 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
         mainPanel.add(assertionPanel, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
-    }
-
-    /**
-     * This method is called if one of the threshold field looses the focus
-     *
-     * @param inEvent The {@link FocusEvent} with detailed information about the focus loss
-     */
-    public void focusLost(FocusEvent inEvent) {
-        log.debug("HTMLAssertionGui.focusLost() called");
-
-        String errorThresholdString = errorThresholdField.getText();
-        if (errorThresholdString != null) {
-            if (!isThresholdValid(errorThresholdString)) {
-                log.warn("HTMLAssertionGui: Error threshold Not a valid number!");
-                JOptionPane.showMessageDialog(null, "Threshold for errors is invalid", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-        String warningThresholdString = warningThresholdField.getText();
-        if (warningThresholdString != null) {
-            if (!isThresholdValid(warningThresholdString)) {
-                log.warn("HTMLAssertionGui: Warning threshold Not a valid number!");
-                JOptionPane.showMessageDialog(null, "Threshold for warnings is invalid", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    /**
-     * @param errorThresholdString Threshold as String
-     * @return boolean
-     */
-    private boolean isThresholdValid(String errorThresholdString) {
-        boolean isValid = true;
-        try {
-            if (Long.parseLong(errorThresholdString) < 0) {
-                isValid = false;
-            }
-        } catch (NumberFormatException ex) {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    /**
-     * Method gets called when one of the threshold fields gains focus
-     * 
-     * @param e The {@link FocusEvent} with detailed information about the focus gain
-     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-     */
-    public void focusGained(FocusEvent e) {
-        // NOOP
     }
 
     /**

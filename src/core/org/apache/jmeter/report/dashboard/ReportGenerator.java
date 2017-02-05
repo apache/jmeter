@@ -18,11 +18,12 @@
 package org.apache.jmeter.report.dashboard;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,10 +35,7 @@ import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.report.core.ControllerSamplePredicate;
 import org.apache.jmeter.report.core.ConvertException;
 import org.apache.jmeter.report.core.Converters;
-import org.apache.jmeter.report.core.Sample;
 import org.apache.jmeter.report.core.SampleException;
-import org.apache.jmeter.report.core.SamplePredicate;
-import org.apache.jmeter.report.core.SampleSelector;
 import org.apache.jmeter.report.core.StringConverter;
 import org.apache.jmeter.report.processor.AbstractSampleConsumer;
 import org.apache.jmeter.report.processor.AggregateConsumer;
@@ -50,12 +48,14 @@ import org.apache.jmeter.report.processor.MaxAggregator;
 import org.apache.jmeter.report.processor.MinAggregator;
 import org.apache.jmeter.report.processor.NormalizerSampleConsumer;
 import org.apache.jmeter.report.processor.RequestsSummaryConsumer;
+import org.apache.jmeter.report.processor.SampleConsumer;
 import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.SampleSource;
 import org.apache.jmeter.report.processor.StatisticsSummaryConsumer;
-import org.apache.jmeter.report.processor.ThresholdSelector;
+import org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
+import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
@@ -67,6 +67,8 @@ import org.apache.log.Logger;
  * @since 3.0
  */
 public class ReportGenerator {
+    private static final String REPORTGENERATOR_PROPERTIES = "reportgenerator.properties";
+
     private static final Logger LOG = LoggingManager.getLoggerForClass();
 
     private static final boolean CSV_OUTPUT_FORMAT = "csv"
@@ -74,7 +76,9 @@ public class ReportGenerator {
                     "jmeter.save.saveservice.output_format", "csv"));
 
     private static final char CSV_DEFAULT_SEPARATOR =
-            JMeterUtils.getPropDefault("jmeter.save.saveservice.default_delimiter", ",").charAt(0); //$NON-NLS-1$ //$NON-NLS-2$
+            // We cannot use JMeterUtils#getPropDefault as it applies a trim on value
+            JMeterUtils.getDelimiter(
+                    JMeterUtils.getJMeterProperties().getProperty(SampleSaveConfiguration.DEFAULT_DELIMITER_PROP, SampleSaveConfiguration.DEFAULT_DELIMITER)).charAt(0);
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
@@ -84,10 +88,12 @@ public class ReportGenerator {
     public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
     public static final String END_DATE_CONSUMER_NAME = "endDate";
     public static final String NAME_FILTER_CONSUMER_NAME = "nameFilter";
+    public static final String DATE_RANGE_FILTER_CONSUMER_NAME = "dateRangeFilter";
     public static final String APDEX_SUMMARY_CONSUMER_NAME = "apdexSummary";
     public static final String ERRORS_SUMMARY_CONSUMER_NAME = "errorsSummary";
     public static final String REQUESTS_SUMMARY_CONSUMER_NAME = "requestsSummary";
     public static final String STATISTICS_SUMMARY_CONSUMER_NAME = "statisticsSummary";
+    public static final String TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME = "top5ErrorsBySampler";
     public static final String START_INTERVAL_CONTROLLER_FILTER_CONSUMER_NAME = "startIntervalControlerFilter";
 
     private static final Pattern POTENTIAL_CAMEL_CASE_PATTERN = Pattern.compile("_(.)");
@@ -136,8 +142,28 @@ public class ReportGenerator {
         }
         this.resultCollector = resultCollector;
         this.testFile = file;
-        configuration = ReportGeneratorConfiguration
-                .loadFromProperties(JMeterUtils.getJMeterProperties());
+        final Properties merged = new Properties();
+        File rgp = new File(JMeterUtils.getJMeterBinDir(), REPORTGENERATOR_PROPERTIES);
+        if(LOG.isInfoEnabled()) {
+            LOG.info("Reading report generator properties from:"+rgp.getAbsolutePath());
+        }
+        merged.putAll(loadProps(rgp));
+        if(LOG.isInfoEnabled()) {
+            LOG.info("Merging with JMeter properties");
+        }
+        merged.putAll(JMeterUtils.getJMeterProperties());
+        configuration = ReportGeneratorConfiguration.loadFromProperties(merged);
+    }
+
+    private static Properties loadProps(File file) {
+        final Properties props = new Properties();
+        try (FileInputStream inStream = new FileInputStream(file)) {
+            props.load(inStream);
+        } catch (IOException e) {
+            LOG.error("Problem loading properties from file ", e);
+            System.err.println("Problem loading properties " + e); // NOSONAR
+        }
+        return props;
     }
 
     /**
@@ -154,7 +180,7 @@ public class ReportGenerator {
      */
     private static String getSetterName(String propertyKey) {
         Matcher matcher = POTENTIAL_CAMEL_CASE_PATTERN.matcher(propertyKey);
-        StringBuffer buffer = new StringBuffer(); // Unfortunately Matcher does not support StringBuilder
+        StringBuffer buffer = new StringBuffer(); // NOSONAR Unfortunately Matcher does not support StringBuilder
         while (matcher.find()) {
             matcher.appendReplacement(buffer, matcher.group(1).toUpperCase());
         }
@@ -182,16 +208,15 @@ public class ReportGenerator {
         // Build consumers chain
         SampleContext sampleContext = new SampleContext();
         sampleContext.setWorkingDirectory(tmpDir);
-        SampleSource source = new CsvFileSampleSource(testFile, JMeterUtils
-                .getPropDefault("jmeter.save.saveservice.default_delimiter",
-                        ",").charAt(0));
+        SampleSource source = new CsvFileSampleSource(testFile, CSV_DEFAULT_SEPARATOR);
         source.setSampleContext(sampleContext);
 
         NormalizerSampleConsumer normalizer = new NormalizerSampleConsumer();
         normalizer.setName(NORMALIZER_CONSUMER_NAME);
-
-        normalizer.addSampleConsumer(createBeginDateConsumer());
-        normalizer.addSampleConsumer(createEndDateConsumer());
+        
+        FilterConsumer dateRangeConsumer = createFilterByDateRange();
+        dateRangeConsumer.addSampleConsumer(createBeginDateConsumer());
+        dateRangeConsumer.addSampleConsumer(createEndDateConsumer());
 
         FilterConsumer nameFilter = createNameFilter();
 
@@ -199,8 +224,10 @@ public class ReportGenerator {
 
         nameFilter.addSampleConsumer(excludeControllerFilter);
 
-        normalizer.addSampleConsumer(nameFilter);
-
+        dateRangeConsumer.addSampleConsumer(nameFilter);
+        
+        normalizer.addSampleConsumer(dateRangeConsumer);
+        
         source.addSampleConsumer(normalizer);
 
         // Get graph configurations
@@ -217,7 +244,7 @@ public class ReportGenerator {
         // Generate data
         LOG.debug("Start samples processing");
         try {
-            source.run();
+            source.run(); // NOSONAR
         } catch (SampleException ex) {
             throw new GenerationException("Error while processing samples:"+ex.getMessage(), ex);
         }
@@ -239,6 +266,34 @@ public class ReportGenerator {
 
         LOG.debug("End of report generation");
 
+    }
+
+    /**
+     * @return {@link FilterConsumer} that filter data based on date range
+     */
+    private FilterConsumer createFilterByDateRange() {
+        FilterConsumer dateRangeFilter = new FilterConsumer();
+        dateRangeFilter.setName(DATE_RANGE_FILTER_CONSUMER_NAME);
+        dateRangeFilter.setSamplePredicate(sample -> {
+                long sampleStartTime = sample.getStartTime();
+                if(configuration.getStartDate() != null) {
+                    if(sampleStartTime >= configuration.getStartDate().getTime()) {
+                        if(configuration.getEndDate() != null) {
+                            return sampleStartTime <= configuration.getEndDate().getTime();                             
+                        } else {
+                            return true;                            
+                        }
+                    }
+                    return false;
+                } else {
+                    if(configuration.getEndDate() != null) {
+                        return sampleStartTime <= configuration.getEndDate().getTime(); 
+                    } else {
+                        return true;                            
+                    }
+                }
+            });     
+        return dateRangeFilter;
     }
 
     private void removeTempDir(File tmpDir, boolean tmpDirCreated) {
@@ -352,6 +407,14 @@ public class ReportGenerator {
         return excludeControllerFilter;
     }
 
+    private SampleConsumer createTop5ErrorsConsumer(ReportGeneratorConfiguration configuration) {
+        Top5ErrorsBySamplerConsumer top5ErrorsBySamplerConsumer = new Top5ErrorsBySamplerConsumer();
+        top5ErrorsBySamplerConsumer.setName(TOP5_ERRORS_BY_SAMPLER_CONSUMER_NAME);
+        top5ErrorsBySamplerConsumer.setHasOverallResult(true);
+        top5ErrorsBySamplerConsumer.setIgnoreTransactionController(configuration.isIgnoreTCFromTop5ErrorsBySampler());
+        return top5ErrorsBySamplerConsumer;
+    }
+
     private StatisticsSummaryConsumer createStatisticsSummaryConsumer() {
         StatisticsSummaryConsumer statisticsSummaryConsumer = new StatisticsSummaryConsumer();
         statisticsSummaryConsumer.setName(STATISTICS_SUMMARY_CONSUMER_NAME);
@@ -369,65 +432,55 @@ public class ReportGenerator {
         ApdexSummaryConsumer apdexSummaryConsumer = new ApdexSummaryConsumer();
         apdexSummaryConsumer.setName(APDEX_SUMMARY_CONSUMER_NAME);
         apdexSummaryConsumer.setHasOverallResult(true);
-        apdexSummaryConsumer.setThresholdSelector(new ThresholdSelector() {
-
-            @Override
-            public ApdexThresholdsInfo select(String sampleName) {
+        apdexSummaryConsumer.setThresholdSelector(sampleName -> {
                 ApdexThresholdsInfo info = new ApdexThresholdsInfo();
                 info.setSatisfiedThreshold(configuration
                         .getApdexSatisfiedThreshold());
                 info.setToleratedThreshold(configuration
                         .getApdexToleratedThreshold());
                 return info;
-            }
         });
         return apdexSummaryConsumer;
     }
 
+    /**
+     * @return a {@link FilterConsumer} that filters samplers based on their name
+     */
     private FilterConsumer createNameFilter() {
         FilterConsumer nameFilter = new FilterConsumer();
         nameFilter.setName(NAME_FILTER_CONSUMER_NAME);
-        nameFilter.setSamplePredicate(new SamplePredicate() {
-
-            @Override
-            public boolean matches(Sample sample) {
+        nameFilter.setSamplePredicate(sample -> {
                 // Get filtered samples from configuration
-                List<String> filteredSamples = configuration
-                        .getFilteredSamples();
-                // Sample is kept if none filter is set or if the filter
-                // contains its name
-                return filteredSamples.isEmpty()
-                        || filteredSamples.contains(sample.getName());
-            }
+                Pattern filteredSamplesPattern = configuration
+                        .getFilteredSamplesPattern();
+                // Sample is kept if no filter is set 
+                // or if its name matches the filter pattern
+                return filteredSamplesPattern == null 
+                        || filteredSamplesPattern.matcher(sample.getName()).matches();
         });
         nameFilter.addSampleConsumer(createApdexSummaryConsumer());
         nameFilter.addSampleConsumer(createRequestsSummaryConsumer());
         nameFilter.addSampleConsumer(createStatisticsSummaryConsumer());
+        nameFilter.addSampleConsumer(createTop5ErrorsConsumer(configuration));
         return nameFilter;
     }
 
+    /**
+     * @return Consumer that compute the end date of the test
+     */
     private AggregateConsumer createEndDateConsumer() {
         AggregateConsumer endDateConsumer = new AggregateConsumer(
-                new MaxAggregator(), new SampleSelector<Double>() {
-
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getEndTime());
-                    }
-                });
+                new MaxAggregator(), sample -> Double.valueOf(sample.getEndTime()));
         endDateConsumer.setName(END_DATE_CONSUMER_NAME);
         return endDateConsumer;
     }
 
+    /**
+     * @return Consumer that compute the begining date of the test
+     */
     private AggregateConsumer createBeginDateConsumer() {
         AggregateConsumer beginDateConsumer = new AggregateConsumer(
-                new MinAggregator(), new SampleSelector<Double>() {
-
-                    @Override
-                    public Double select(Sample sample) {
-                        return Double.valueOf(sample.getStartTime());
-                    }
-                });
+                new MinAggregator(), sample -> Double.valueOf(sample.getStartTime()));
         beginDateConsumer.setName(BEGIN_DATE_CONSUMER_NAME);
         return beginDateConsumer;
     }

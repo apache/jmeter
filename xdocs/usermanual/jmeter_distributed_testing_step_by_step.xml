@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '26'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document next="jmeter_proxy_step_by_step.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>Apache JMeter Distributed Testing Step-by-step</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Apache JMeter Distributed Testing Step-by-step" anchor="distributed-testing">
+
+<p>
+This short tutorial explains how to use multiple systems to perform stress testing. Before we start, there are a couple of things to check.
+</p>
+
+<ul>
+  <li>the firewalls on the systems are turned off.</li>
+  <li>all the clients are on the same subnet.</li>
+  <li>the server is in the same subnet, if <code>192.x.x.x</code> or <code>10.x.x.x</code> IP addresses are used.
+      If the server doesn't use <code>192.xx</code> or <code>10.xx</code> IP address, there shouldn't be any problems.</li>
+  <li>Make sure JMeter can access the server.</li>
+  <li>Make sure you use the same version of JMeter on all the systems. Mixing versions may not work correctly.</li>
+</ul>
+
+<p>
+Once you've made sure the systems are ready, it's time to setup remote testing. The tutorial assumes you already
+have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
+</p>
+
+<figure width="610" height="462" image="distributed-jmeter.svg">One master controlls multiple slaves</figure>
+
+<subsection name="&sect-num;.1 Terminology" anchor="terminology">
+
+<p>
+Before we dive into the step-by-step instructions, it's a good idea to define the terms and make sure the definition is clear.
+</p>
+
+<dl>
+  <dt>Master</dt><dd>the system running JMeter GUI, which controls the test</dd>
+  <dt>Slave</dt><dd>the system running <code>jmeter-server</code>, which takes commands from
+      the GUI and send requests to the target system(s)</dd>
+  <dt>Target</dt><dd>the webserver we plan to stress test</dd>
+</dl>
+
+<figure width="602" height="360" image="distributed-names.svg">Categories of systems</figure>
+
+</subsection>
+
+<subsection name="&sect-num;.2 Step-by-Step" anchor="step-by-step">
+
+<ol>
+  <li>On the slave systems, go to <code>jmeter/bin</code> directory and execute
+     <code>jmeter-server.bat</code> (<code>jmeter-server</code> on unix).
+     <note> On windows, you should see a dos window appear with
+     <code>jre\[version]\bin\rmiregistry.exe</code>.
+     If this doesn't happen, it means either the environment settings are not right, or
+     there are multiple JRE installed on the system. Note: <code>[version]</code> would
+     be the JRE version installed on the system.
+     <ol>
+       <li>Open <code>jmeter-server.bat</code> in a text editor</li>
+       <li>go to line <code>44</code> and find <code>:setCP</code></li>
+       <li>edit <code>START rmiregistry</code> to the full path. Example:
+           <source>START C:\&lt;JAVA_HOME&gt;\jre\bin\rmiregistry</source>
+       </li>
+    </ol>
+    </note>
+  </li>
+  <li>On master system acting as the console, open windows explorer and go to
+      <code>jmeter/bin</code> directory</li>
+  <li>Open <code>jmeter.properties</code> in a text editor</li>
+  <li>Edit the line <code>remote_hosts=127.0.0.1</code></li>
+  <li>Add the IP address. For example, if I have JMeter server running on <code>192.168.0.10</code>,
+    &hellip;, <code>192.168.0.15</code>, the entry would like like this:
+    <source>remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14</source>
+  </li>
+  <li>Start JMeter.</li>
+  <li>Open the test plan you want to use</li>
+</ol>
+
+<figure width="483" height="266" image="example-simple-plan.png">Simple test plan</figure>
+
+</subsection>
+
+<subsection name="&sect-num;.2 Starting the Test" anchor="starting">
+
+<p>
+At this point, you are ready to start load testing. If you want to double check
+the slave systems are working, open <code>jmeter.log</code> in your editor. You should see the following in the log.
+</p>
+
+<source>
+Jmeter.engine.RemoteJMeterEngineImpl:  Starting backing engine
+</source>
+
+<p>
+If you do not see this message, it means <code>jmeter-server</code> did not start correctly. For tips on
+debugging the issue, <a href="#tips">go to the tips section</a>. There are two ways to
+initiate the test: a single system and all systems.
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.3 Start a single clients" anchor="start-single-client">
+
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start</li>
+  <li>Select the IP address</li>
+</ol>
+
+<figure width="490" height="196" image="example-remote-start.png">Start a single slave</figure>
+
+</subsection>
+
+<subsection name="&sect-num;.4 Start all clients" anchor="start-all-clients">
+
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start all or use <keycombo><keysym>Ctrl</keysym><keysym>Shift</keysym><keysym>R</keysym></keycombo></li>
+</ol>
+
+<figure width="410" height="155" image="example-remote-start-all.png">Start all slaves</figure>
+
+</subsection>
+
+<subsection name="&sect-num;.5 Limitations" anchor="limitations">
+
+<p>
+There are some basic limitations for distributed testing. Here's the list of the known items in no specific order.
+</p>
+
+<ol>
+  <li>RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy.</li>
+  <li>Since JMeter sends all the test results to the controlling console, it is easy to saturate
+      the network IO. It is a good idea to use the simple data writer to save the results and view the file
+      later with one of the graph listeners.</li>
+  <li>Unless the server is a large multi processor system, in most cases 1-2 clients is sufficient to overwhelm the server.</li>
+  <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 300-600 threads depending on the type of test.
+      (The exception is the webservices). XML processing is CPU intensive and will rapidly consume all the CPU cycles.
+      As a general rule, the performance of XML centric applications will perform 4-10 times slower than applications
+      using binary protocols.</li>
+</ol>
+
+</subsection>
+
+<subsection name="&sect-num;.6 Additional resources" anchor="additional-resources">
+
+<p>
+  <a href="http://wiki.apache.org/jmeter/JMeterFAQ#How_to_do_remote_testing_the_.27proper_way.27.3F">Wiki page on remote testing</a>
+</p>
+
+<p>
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p>
+
+</subsection>
+
+<subsection name="&sect-num;.7 Tips" anchor="tips">
+
+<p>
+In some cases, the firewall may still be blocking RMI traffic.
+</p>
+
+<h3>Symantec Anti Virus and Firewall</h3>
+
+<p>
+In some cases, Symantec firewall needs to be stopped from windows services.
+</p>
+
+<ol>
+  <li>Open control panel</li>
+  <li>Open administrative tools</li>
+  <li>Double click services</li>
+  <li>Go to down to Symantec anti virus, right click and select stop</li>
+</ol>
+
+<h3>Windows firewall</h3>
+
+<ol>
+  <li>Open network connections</li>
+  <li>Select the network connection</li>
+  <li>Right click and select properties</li>
+  <li>Select advanced tab</li>
+  <li>Uncheck internet connection firewall</li>
+</ol>
+
+<h3>Linux</h3>
+
+<p>
+On SUSE Linux, iptables is turned on by default. For instructions, please refer to the
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p>
+
+<p>
+On RedHat (or derivatives), iptables is turned on by default. Execute
+<source>service iptables stop</source>
+to stop the Linux firewall.
+</p>
+
+</subsection>
+
+</section>
+
+</body>
+
+</document>

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
@@ -41,6 +42,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class TimeFunction extends AbstractFunction {
 
     private static final String KEY = "__time"; // $NON-NLS-1$
+    
+    private static final Pattern DIVISOR_PATTERN = Pattern.compile("/\\d+");
 
     private static final List<String> desc = new LinkedList<>();
 
@@ -85,10 +88,9 @@ public class TimeFunction extends AbstractFunction {
             if (fmt == null) {
                 fmt = format;// Not found
             }
-            // TODO: avoid regexp parsing in loop
-            if (fmt.matches("/\\d+")) { // divisor is a positive number
+            if (DIVISOR_PATTERN.matcher(fmt).matches()) { // divisor is a positive number
                 long div = Long.parseLong(fmt.substring(1)); // should never case NFE
-                datetime = Long.toString((System.currentTimeMillis() / div));
+                datetime = Long.toString(System.currentTimeMillis() / div);
             } else {
                 SimpleDateFormat df = new SimpleDateFormat(fmt);// Not synchronised, so can't be shared
                 datetime = df.format(new Date());

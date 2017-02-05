@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigElement;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.TestBeanHelper;
@@ -209,7 +210,12 @@ public class DataSourceElement extends AbstractTestElement
 
         if(isKeepAlive()) {
             dataSource.setTestWhileIdle(true);
-            dataSource.setValidationQuery(getCheckQuery());
+            String validationQuery = getCheckQuery();
+            if (StringUtils.isBlank(validationQuery)) {
+                dataSource.setValidationQuery(null);
+            } else {
+                dataSource.setValidationQuery(validationQuery);
+            }
             dataSource.setSoftMinEvictableIdleTimeMillis(Long.parseLong(getConnectionAge()));
             dataSource.setTimeBetweenEvictionRunsMillis(Integer.parseInt(getTrimInterval()));
         }
@@ -248,12 +254,7 @@ public class DataSourceElement extends AbstractTestElement
 
     // used to hold per-thread singleton connection pools
     private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
-        new ThreadLocal<Map<String, BasicDataSource>>(){
-        @Override
-        protected Map<String, BasicDataSource> initialValue() {
-            return new HashMap<>();
-        }
-    };
+            ThreadLocal.withInitial(HashMap::new);
 
     /*
      * Wrapper class to allow getConnection() to be implemented for both shared
@@ -274,7 +275,7 @@ public class DataSourceElement extends AbstractTestElement
 
         /**
          * @return Connection
-         * @throws SQLException
+         * @throws SQLException if database access error occurrs
          */
         public Connection getConnection() throws SQLException {
             Connection conn = null;

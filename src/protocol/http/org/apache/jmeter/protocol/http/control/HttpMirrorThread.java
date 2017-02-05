@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -57,7 +59,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public class HttpMirrorThread implements Runnable {
     private static final Logger log = LoggingManager.getLoggerForClass();
 
-    private static final String ISO_8859_1 = "ISO-8859-1"; //$NON-NLS-1$
+    private static final Charset ISO_8859_1 = StandardCharsets.ISO_8859_1;
+
     private static final byte[] CRLF = { 0x0d, 0x0a };
 
     private static final String REDIRECT = "redirect"; //$NON-NLS-1$

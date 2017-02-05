@@ -34,7 +34,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
 
 /*
- * Extend JUnit TestCase to provide common setup
+ * Common setup for JUnit4 test cases
  */
 public abstract class JMeterTestCase {
     // Used by findTestFile
@@ -52,7 +52,7 @@ public abstract class JMeterTestCase {
      */
     static {
         if (JMeterUtils.getJMeterProperties() == null) {
-            String file = "testfiles/jmetertest.properties";
+            String file = "jmeter.properties";
             File f = new File(file);
             if (!f.canRead()) {
                 System.out.println("Can't find " + file + " - trying bin directory");
@@ -88,6 +88,7 @@ public abstract class JMeterTestCase {
             logprop("user.variant");
             System.out.println("Locale="+Locale.getDefault().toString());
             logprop("java.class.version");
+            logprop("java.awt.headless");
             logprop("os.name");
             logprop("os.version");
             logprop("os.arch");

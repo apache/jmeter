@@ -26,11 +26,11 @@ import org.apache.oro.text.perl.Perl5Util;
 public final class ArgumentDecoder {
     private static final Perl5Util util = new Perl5Util();
 
-    private static final String expression = "s#[\\\\](.)#$1#g"; // $NON-NLS-1$
+    private static final String REGULAR_EXPRESSION = "s#[\\\\](.)#$1#g"; // $NON-NLS-1$
 
-// TODO does not appear to be used
+    // TODO does not appear to be used
     public static String decode(String s) {
-        return util.substitute(expression, s);
+        return util.substitute(REGULAR_EXPRESSION, s);
     }
 
     /**

@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +55,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * The default encoding to be used if not overridden.
      * The value is ISO-8859-1.
      */
-    public static final String DEFAULT_HTTP_ENCODING = "ISO-8859-1";  // $NON-NLS-1$
+    public static final String DEFAULT_HTTP_ENCODING = StandardCharsets.ISO_8859_1.name();
+    
+    private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
+    private static final String OK_MSG = "OK"; // $NON-NLS-1$
+
 
     // Bug 33196 - encoding ISO-8859-1 is only suitable for Western countries
     // However the suggested System.getProperty("file.encoding") is Cp1252 on
@@ -70,7 +75,9 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             = JMeterUtils.getPropDefault("sampleresult.default.encoding", // $NON-NLS-1$
             DEFAULT_HTTP_ENCODING);
 
-    /* The default used by {@link #setResponseData(String, String)} */
+    /**
+     * The default used by {@link #setResponseData(String, String)}
+     */
     private static final String DEFAULT_CHARSET = Charset.defaultCharset().name();
 
     /**
@@ -88,9 +95,23 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @see #setDataType(java.lang.String)
      */
     public static final String BINARY = "bin"; // $NON-NLS-1$
+    
+    // List of types that are known to be binary
+    private static final String[] BINARY_TYPES = {
+        "image/",       //$NON-NLS-1$
+        "audio/",       //$NON-NLS-1$
+        "video/",       //$NON-NLS-1$
+        };
+
+    // List of types that are known to be ascii, although they may appear to be binary
+    private static final String[] NON_BINARY_TYPES = {
+        "audio/x-mpegurl",  //$NON-NLS-1$ (HLS Media Manifest)
+        "video/f4m"         //$NON-NLS-1$ (Flash Media Manifest)
+        };
+
 
     /** empty array which can be returned instead of null */
-    public static final byte[] EMPTY_BA = new byte[0];
+    private static final byte[] EMPTY_BA = new byte[0];
 
     private static final SampleResult[] EMPTY_SR = new SampleResult[0];
 
@@ -105,21 +126,43 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     private static final boolean GETBYTES_NETWORK_SIZE =
             GETBYTES_HEADERS_SIZE && GETBYTES_BODY_REALSIZE;
 
-    private SampleSaveConfiguration saveConfig;
-
-    private SampleResult parent = null;
+    private static final boolean START_TIMESTAMP = 
+            JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
 
     /**
-     * @param propertiesToSave
-     *            The propertiesToSave to set.
+     * Allow read-only access from test code
      */
-    public void setSaveConfig(SampleSaveConfiguration propertiesToSave) {
-        this.saveConfig = propertiesToSave;
-    }
+    private static final boolean USE_NANO_TIME = 
+            JMeterUtils.getPropDefault("sampleresult.useNanoTime", true);  // $NON-NLS-1$
+    
+    /**
+     * How long between checks of nanotime; default 5000ms; set to <=0 to disable the thread
+     */
+    private static final long NANOTHREAD_SLEEP = 
+            JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$
 
-    public SampleSaveConfiguration getSaveConfig() {
-        return saveConfig;
+    static {
+        if (START_TIMESTAMP) {
+            log.info("Note: Sample TimeStamps are START times");
+        } else {
+            log.info("Note: Sample TimeStamps are END times");
+        }
+        log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
+        log.info("sampleresult.useNanoTime="+USE_NANO_TIME);
+        log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
+
+        if (USE_NANO_TIME && NANOTHREAD_SLEEP > 0) {
+            // Make sure we start with a reasonable value
+            NanoOffset.nanoOffset = System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
+            NanoOffset nanoOffset = new NanoOffset();
+            nanoOffset.setDaemon(true);
+            nanoOffset.setName("NanoOffset");
+            nanoOffset.start();
+        }
     }
+    private SampleSaveConfiguration saveConfig;
+
+    private SampleResult parent;
 
     private byte[] responseData = EMPTY_BA;
 
@@ -139,12 +182,12 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     private String responseHeaders = ""; // Never return null
 
-    private String contentType = ""; // e.g. text/html; charset=utf-8
-
     private String requestHeaders = "";
 
-    // TODO timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
-    /** the time stamp - can be start or end */
+    /**
+     * timeStamp == 0 means either not yet initialised or no stamp available (e.g. when loading a results file)
+     * the time stamp - can be start or end 
+     */
     private long timeStamp = 0;
 
     private long startTime = 0;
@@ -178,8 +221,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     private final Set<String> files = new HashSet<>(3);
 
+    // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
     private String dataEncoding;// (is this really the character set?) e.g.
                                 // ISO-8895-1, UTF-8
+
+    private String contentType = ""; // e.g. text/html; charset=utf-8
 
     /** elapsed time */
     private long elapsedTime = 0;
@@ -204,56 +250,19 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /** Should test terminate abruptly? */
     private boolean stopTestNow = false;
 
-    /** Is the sampler acting as a monitor? */
-    private boolean isMonitor = false;
-
     private int sampleCount = 1;
 
-    private int bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
+    private long bytes = 0; // Allows override of sample size in case sampler does not want to store all the data
     
     private int headersSize = 0;
     
-    private int bodySize = 0;
+    private long bodySize = 0;
 
     /** Currently active threads in this thread group */
     private volatile int groupThreads = 0;
 
     /** Currently active threads in all thread groups */
     private volatile int allThreads = 0;
-
-    // TODO do contentType and/or dataEncoding belong in HTTPSampleResult instead?
-
-    private static final boolean startTimeStamp
-        = JMeterUtils.getPropDefault("sampleresult.timestamp.start", false);  // $NON-NLS-1$
-
-    // Allow read-only access from test code
-    static final boolean USENANOTIME
-    = JMeterUtils.getPropDefault("sampleresult.useNanoTime", true);  // $NON-NLS-1$
-
-    // How long between checks of nanotime; default 5000ms; set to <=0 to disable the thread
-    private static final long NANOTHREAD_SLEEP = 
-            JMeterUtils.getPropDefault("sampleresult.nanoThreadSleep", 5000);  // $NON-NLS-1$;
-
-    static {
-        if (startTimeStamp) {
-            log.info("Note: Sample TimeStamps are START times");
-        } else {
-            log.info("Note: Sample TimeStamps are END times");
-        }
-        log.info("sampleresult.default.encoding is set to " + DEFAULT_ENCODING);
-        log.info("sampleresult.useNanoTime="+USENANOTIME);
-        log.info("sampleresult.nanoThreadSleep="+NANOTHREAD_SLEEP);
-
-        if (USENANOTIME && NANOTHREAD_SLEEP > 0) {
-            // Make sure we start with a reasonable value
-            NanoOffset.nanoOffset = System.currentTimeMillis() - SampleResult.sampleNsClockInMs();
-            NanoOffset nanoOffset = new NanoOffset();
-            nanoOffset.setDaemon(true);
-            nanoOffset.setName("NanoOffset");
-            nanoOffset.start();
-        }
-    }
-
 
     private final long nanoTimeOffset;
 
@@ -262,21 +271,17 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     
     final long nanoThreadSleep;
     
+    private long sentBytes;
+    
+    private URL location;
+
     /**
      * Cache for responseData as string to avoid multiple computations
      */
-    private volatile transient String responseDataAsString;
-    
-    private long initOffset(){
-        if (useNanoTime){
-            return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
-        } else {
-            return Long.MIN_VALUE;
-        }
-    }
+    private transient volatile String responseDataAsString;
 
     public SampleResult() {
-        this(USENANOTIME, NANOTHREAD_SLEEP);
+        this(USE_NANO_TIME, NANOTHREAD_SLEEP);
     }
 
     // Allow test code to change the default useNanoTime setting
@@ -300,7 +305,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public SampleResult(SampleResult res) {
         this();
         allThreads = res.allThreads;//OK
-        assertionResults = res.assertionResults;// TODO ??
+        assertionResults = res.assertionResults;
         bytes = res.bytes;
         headersSize = res.headersSize;
         bodySize = res.bodySize;
@@ -311,12 +316,11 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         // files is created automatically, and applies per instance
         groupThreads = res.groupThreads;//OK
         idleTime = res.idleTime;
-        isMonitor = res.isMonitor;
         label = res.label;//OK
         latency = res.latency;
         connectTime = res.connectTime;
         location = res.location;//OK
-        parent = res.parent; // TODO ??
+        parent = res.parent; 
         pauseTime = res.pauseTime;
         requestHeaders = res.requestHeaders;//OK
         responseCode = res.responseCode;//OK
@@ -324,26 +328,25 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         responseDataAsString = null;
         responseHeaders = res.responseHeaders;//OK
         responseMessage = res.responseMessage;//OK
-        // Don't copy this; it is per instance resultFileName = res.resultFileName;
+        /** 
+         * Don't copy this; it is per instance resultFileName = res.resultFileName;
+         */
         sampleCount = res.sampleCount;
         samplerData = res.samplerData;
         saveConfig = res.saveConfig;
+        sentBytes = res.sentBytes;
         startTime = res.startTime;//OK
         stopTest = res.stopTest;
         stopTestNow = res.stopTestNow;
         stopThread = res.stopThread;
         startNextThreadLoop = res.startNextThreadLoop;
-        subResults = res.subResults; // TODO ??
+        subResults = res.subResults; 
         success = res.success;//OK
         threadName = res.threadName;//OK
         elapsedTime = res.elapsedTime;
         timeStamp = res.timeStamp;
     }
-
-    public boolean isStampedAtStart() {
-        return startTimeStamp;
-    }
-
+    
     /**
      * Create a sample with a specific elapsed time but don't allow the times to
      * be changed later
@@ -363,6 +366,48 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         } else {
             setTimes(now, now + elapsed);
         }
+    }
+
+    /**
+     * Allow users to create a sample with specific timestamp and elapsed times
+     * for cloning purposes, but don't allow the times to be changed later
+     *
+     * Currently used by CSVSaveService and
+     * StatisticalSampleResult
+     *
+     * @param stamp
+     *            this may be a start time or an end time (both in
+     *            milliseconds)
+     * @param elapsed
+     *            time in milliseconds
+     */
+    public SampleResult(long stamp, long elapsed) {
+        this();
+        stampAndTime(stamp, elapsed);
+    }
+    
+    private long initOffset(){
+        if (useNanoTime){
+            return nanoThreadSleep > 0 ? NanoOffset.getNanoOffset() : System.currentTimeMillis() - sampleNsClockInMs();
+        } else {
+            return Long.MIN_VALUE;
+        }
+    }
+    
+    /**
+     * @param propertiesToSave
+     *            The propertiesToSave to set.
+     */
+    public void setSaveConfig(SampleSaveConfiguration propertiesToSave) {
+        this.saveConfig = propertiesToSave;
+    }
+
+    public SampleSaveConfiguration getSaveConfig() {
+        return saveConfig;
+    }
+
+    public boolean isStampedAtStart() {
+        return START_TIMESTAMP;
     }
 
     /**
@@ -397,24 +442,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         return createTestSample(now, now + elapsed);
     }
 
-    /**
-     * Allow users to create a sample with specific timestamp and elapsed times
-     * for cloning purposes, but don't allow the times to be changed later
-     *
-     * Currently used by CSVSaveService and
-     * StatisticalSampleResult
-     *
-     * @param stamp
-     *            this may be a start time or an end time (both in
-     *            milliseconds)
-     * @param elapsed
-     *            time in milliseconds
-     */
-    public SampleResult(long stamp, long elapsed) {
-        this();
-        stampAndTime(stamp, elapsed);
-    }
-
     private static long sampleNsClockInMs() {
         return System.nanoTime() / 1000000;
     }
@@ -439,7 +466,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     // Helper method to maintain timestamp relationships
     private void stampAndTime(long stamp, long elapsed) {
-        if (startTimeStamp) {
+        if (START_TIMESTAMP) {
             startTime = stamp;
             endTime = stamp + elapsed;
         } else {
@@ -481,9 +508,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public String getResponseCode() {
         return responseCode;
     }
-
-    private static final String OK_CODE = Integer.toString(HttpURLConnection.HTTP_OK);
-    private static final String OK_MSG = "OK"; // $NON-NLS-1$
 
     /**
      * Set response code to OK, i.e. "200"
@@ -609,9 +633,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         // Extend the time to the end of the added sample
         setEndTime(Math.max(getEndTime(), subResult.getEndTime() + nanoTimeOffset - subResult.nanoTimeOffset)); // Bug 51855
         // Include the byte count for the added sample
-        setBytes(getBytes() + subResult.getBytes());
+        setBytes(getBytesAsLong() + subResult.getBytesAsLong());
+        setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
-        setBodySize(getBodySize() + subResult.getBodySize());
+        setBodySize(getBodySizeAsLong() + subResult.getBodySizeAsLong());
         addRawSubResult(subResult);
     }
     
@@ -686,7 +711,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             responseData = response.getBytes(getDataEncodingWithDefault());
         } catch (UnsupportedEncodingException e) {
             log.warn("Could not convert string, using default encoding. "+e.getLocalizedMessage());
-            responseData = response.getBytes(); // N.B. default charset is used deliberately here
+            responseData = response.getBytes(Charset.defaultCharset()); // N.B. default charset is used deliberately here
         }
     }
 
@@ -706,7 +731,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         } catch (UnsupportedEncodingException e) {
             log.warn("Could not convert string using '"+encodeUsing+
                     "', using default encoding: "+DEFAULT_CHARSET,e);
-            responseData = response.getBytes(); // N.B. default charset is used deliberately here
+            responseData = response.getBytes(Charset.defaultCharset()); // N.B. default charset is used deliberately here
             setDataEncoding(DEFAULT_CHARSET);
         }
     }
@@ -738,7 +763,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             return responseDataAsString;
         } catch (UnsupportedEncodingException e) {
             log.warn("Using platform default as "+getDataEncodingWithDefault()+" caused "+e);
-            return new String(responseData); // N.B. default charset is used deliberately here
+            return new String(responseData,Charset.defaultCharset()); // N.B. default charset is used deliberately here
         }
     }
 
@@ -798,10 +823,10 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             // N.B. The meta tag:
             // <META http-equiv="content-type" content="text/html; charset=foobar">
             // is now processed by HTTPSampleResult#getDataEncodingWithDefault
-            final String CS_PFX = "charset="; // $NON-NLS-1$
-            int cset = ct.toLowerCase(java.util.Locale.ENGLISH).indexOf(CS_PFX);
+            final String charsetPrefix = "charset="; // $NON-NLS-1$
+            int cset = ct.toLowerCase(java.util.Locale.ENGLISH).indexOf(charsetPrefix);
             if (cset >= 0) {
-                String charSet = ct.substring(cset + CS_PFX.length());
+                String charSet = ct.substring(cset + charsetPrefix.length());
                 // handle: ContentType: text/plain; charset=ISO-8859-1; format=flowed
                 int semiColon = charSet.indexOf(';');
                 if (semiColon >= 0) {
@@ -821,19 +846,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             }
         }
     }
-
-    // List of types that are known to be binary
-    private static final String[] BINARY_TYPES = {
-        "image/",       //$NON-NLS-1$
-        "audio/",       //$NON-NLS-1$
-        "video/",       //$NON-NLS-1$
-        };
-
-    // List of types that are known to be ascii, although they may appear to be binary
-    private static final String[] NON_BINARY_TYPES = {
-        "audio/x-mpegurl",  //$NON-NLS-1$ (HLS Media Manifest)
-        "video/f4m"         //$NON-NLS-1$ (Flash Media Manifest)
-        };
 
     /*
      * Determine if content-type is known to be binary, i.e. not displayable as text.
@@ -1032,14 +1044,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      */
     protected final void setStartTime(long start) {
         startTime = start;
-        if (startTimeStamp) {
+        if (START_TIMESTAMP) {
             timeStamp = startTime;
         }
     }
 
     public void setEndTime(long end) {
         endTime = end;
-        if (!startTimeStamp) {
+        if (!START_TIMESTAMP) {
             timeStamp = endTime;
         }
         if (startTime == 0) {
@@ -1116,18 +1128,23 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *
      * @param monitor
      *            flag whether this sampler is working as a monitor
+     *            
+     * @deprecated since 3.2 NOOP
      */
+    @Deprecated
     public void setMonitor(boolean monitor) {
-        isMonitor = monitor;
+        // NOOP
     }
 
     /**
      * If the sampler is a monitor, method will return true.
      *
      * @return true if the sampler is a monitor
+     * @deprecated since 3.2 always return false
      */
+    @Deprecated
     public boolean isMonitor() {
-        return isMonitor;
+        return false;
     }
 
     /**
@@ -1181,6 +1198,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * errors in remote statistical batch mode.
      *
      */
+    
     /**
      * In the event the sampler does want to pass back the actual contents, we
      * still want to calculate the throughput. The bytes are the bytes of the
@@ -1189,8 +1207,48 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      * @param length
      *            the number of bytes of the response data for this sample
      */
-    public void setBytes(int length) {
+    public void setBytes(long length) {
         bytes = length;
+    }
+    
+    /**
+     * In the event the sampler does want to pass back the actual contents, we
+     * still want to calculate the throughput. The bytes are the bytes of the
+     * response data.
+     *
+     * @param length
+     *            the number of bytes of the response data for this sample
+     * @deprecated use setBytes(long)
+     */
+    @Deprecated 
+    public void setBytes(int length) {
+        setBytes((long) length);
+    }
+    
+    /**
+     * 
+     * @param sentBytesCount long sent bytes
+     */
+    public void setSentBytes(long sentBytesCount) {
+        sentBytes = sentBytesCount;
+    }
+
+    /**
+     * @return the sentBytes
+     */
+    public long getSentBytes() {
+        return sentBytes;
+    }
+    
+    /**
+     * return the bytes returned by the response.
+     *
+     * @return byte count
+     * @deprecated use getBytesAsLong 
+     */
+    @Deprecated
+    public int getBytes() {
+        return (int) getBytesAsLong();
     }
 
     /**
@@ -1198,14 +1256,14 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
      *
      * @return byte count
      */
-    public int getBytes() {
+    public long getBytesAsLong() {
         if (GETBYTES_NETWORK_SIZE) {
-            int tmpSum = this.getHeadersSize() + this.getBodySize();
+            long tmpSum = this.getHeadersSize() + this.getBodySizeAsLong();
             return tmpSum == 0 ? bytes : tmpSum;
         } else if (GETBYTES_HEADERS_SIZE) {
             return this.getHeadersSize();
         } else if (GETBYTES_BODY_REALSIZE) {
-            return this.getBodySize();
+            return this.getBodySizeAsLong();
         }
         return bytes == 0 ? responseData.length : bytes;
     }
@@ -1268,7 +1326,6 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         this.timeStamp = timeStamp;
     }
 
-    private URL location;
 
     public void setURL(URL location) {
         this.location = location;
@@ -1362,14 +1419,32 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
 
     /**
      * @return the body size in bytes
+     * @deprecated replaced by getBodySizeAsLong()
      */
+    @Deprecated
     public int getBodySize() {
+        return (int) getBodySizeAsLong();
+    }
+    
+    /**
+     * @return the body size in bytes
+     */
+    public long getBodySizeAsLong() {
         return bodySize == 0 ? responseData.length : bodySize;
     }
 
     /**
      * @param bodySize the body size to set
      */
+    public void setBodySize(long bodySize) {
+        this.bodySize = bodySize;
+    }
+    
+    /**
+     * @param bodySize the body size to set
+     * @deprecated use setBodySize(long)
+     */
+    @Deprecated
     public void setBodySize(int bodySize) {
         this.bodySize = bodySize;
     }
@@ -1392,7 +1467,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
             
         }
 
-        private void getOffset(long wait) {
+        private static void getOffset(long wait) {
             try {
                 TimeUnit.MILLISECONDS.sleep(wait);
                 long clock = System.currentTimeMillis();
@@ -1400,6 +1475,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
                 nanoOffset = clock - nano;
             } catch (InterruptedException ignore) {
                 // ignored
+                Thread.currentThread().interrupt();
             }
         }
         
@@ -1439,7 +1515,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     public List<String> getSearchableTokens() throws Exception {
         List<String> datasToSearch = new ArrayList<>(4);
         datasToSearch.add(getSampleLabel());
-        datasToSearch.add(getDataEncodingNoDefault());
+        datasToSearch.add(getResponseDataAsString());
         datasToSearch.add(getRequestHeaders());
         datasToSearch.add(getResponseHeaders());
         return datasToSearch;

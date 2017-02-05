@@ -29,8 +29,8 @@ import org.apache.jmeter.report.processor.graph.NameSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
 /**
- * The class HitsPerSecondGraphConsumer provides a graph to visualize hits rate
- * per second.
+ * The class ResponseTimeOverTimeGraphConsumer provides a graph to visualize mean 
+ * response time per time period (defined by granularity)
  *
  * @since 3.0
  */
@@ -62,7 +62,8 @@ public class ResponseTimeOverTimeGraphConsumer extends
         HashMap<String, GroupInfo> groupInfos = new HashMap<>(1);
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new MeanAggregatorFactory(), new NameSeriesSelector(),
-                new ElapsedTimeValueSelector(), false, false));
+                // We include Transaction Controller results
+                new ElapsedTimeValueSelector(false), false, false));
         return groupInfos;
     }
 }

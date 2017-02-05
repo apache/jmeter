@@ -17,7 +17,7 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '12'>
+<!ENTITY sect-num '11'>
 ]>
 <document prev="build-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" id="$Id$">
 
