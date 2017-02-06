@@ -362,8 +362,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // Some servers fail if Content-Length is equal to 0
                 // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
                 // otherwise we use HttpGetWithEntity
-                if ( (!hasArguments() && getSendFileAsPostBody()) 
-                        || getSendParameterValuesAsPostBody() ) {
+                if ( !areFollowingRedirect 
+                        && ((!hasArguments() && getSendFileAsPostBody()) 
+                        || getSendParameterValuesAsPostBody()) ) {
                     httpRequest = new HttpGetWithEntity(uri);
                 } else {
                     httpRequest = new HttpGet(uri);
