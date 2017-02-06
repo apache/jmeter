@@ -42,8 +42,8 @@ import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Handles HTTP Caching
@@ -52,9 +52,9 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private static final Date EXPIRED_DATE = new Date(0L);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
     private static final String[] CACHEABLE_METHODS = JMeterUtils.getPropDefault("cacheable_methods", "GET").split("[ ,]");
 
