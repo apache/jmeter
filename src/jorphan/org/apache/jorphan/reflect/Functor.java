@@ -21,9 +21,9 @@ package org.apache.jorphan.reflect;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements function call-backs.
@@ -64,7 +64,7 @@ import org.apache.log.Logger;
  * </pre>
  */
 public class Functor {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Functor.class);
 
     /*
      * If non-null, then any object provided to invoke() is ignored.
