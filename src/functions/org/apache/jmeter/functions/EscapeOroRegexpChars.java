@@ -27,16 +27,16 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Escape ORO meta characters
  * @since 2.9
  */
 public class EscapeOroRegexpChars extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(EscapeOroRegexpChars.class);
 
     private static final List<String> desc = new LinkedList<>();
 

@@ -34,8 +34,8 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A function which understands Commons JEXL3
@@ -44,7 +44,7 @@ import org.apache.log.Logger;
 // For unit tests, see TestJexlFunction
 public class Jexl3Function extends AbstractFunction implements ThreadListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Jexl3Function.class);
 
     private static final String KEY = "__jexl3"; //$NON-NLS-1$
 
