@@ -36,16 +36,16 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 
 /**
  * This class finds classes that extend one of a set of parent classes
  *
  */
 public final class ClassFinder {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ClassFinder.class);
 
     private static final String DOT_JAR = ".jar"; // $NON-NLS-1$
     private static final String DOT_CLASS = ".class"; // $NON-NLS-1$
