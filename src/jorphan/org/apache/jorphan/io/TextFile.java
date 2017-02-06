@@ -30,9 +30,9 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class to handle text files as a single lump of text.
@@ -40,12 +40,11 @@ import org.apache.log.Logger;
  * Note this is just as memory-inefficient as handling a text file can be. Use
  * with restraint.
  *
- * @version $Revision$
  */
 public class TextFile extends File {
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TextFile.class);
 
     /**
      * File encoding. null means use the platform's default.
