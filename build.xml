@@ -414,9 +414,9 @@
     <include name="${lib.dir}/${json-smart.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
-  	<include name="${lib.dir}/${log4j-1.2-api.jar}"/>
-  	<include name="${lib.dir}/${log4j-core.jar}"/>
-  	<include name="${lib.dir}/${log4j-slf4j-impl.jar}"/>
+    <include name="${lib.dir}/${log4j-1.2-api.jar}"/>
+    <include name="${lib.dir}/${log4j-core.jar}"/>
+    <include name="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <include name="${lib.dir}/${mongo-java-driver.jar}"/>
     <include name="${lib.dir}/${ph-css.jar}"/>
     <include name="${lib.dir}/${ph-commons.jar}"/>
@@ -494,9 +494,9 @@
     <pathelement location="${lib.dir}/${json-smart.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
-  	<pathelement location="${lib.dir}/${log4j-1.2-api.jar}"/>
-  	<pathelement location="${lib.dir}/${log4j-core.jar}"/>
-  	<pathelement location="${lib.dir}/${log4j-slf4j-impl.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-1.2-api.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-core.jar}"/>
+    <pathelement location="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <pathelement location="${lib.dir}/${mongo-java-driver.jar}"/>
     <pathelement location="${lib.dir}/${ph-css.jar}"/>
     <pathelement location="${lib.dir}/${ph-commons.jar}"/>
