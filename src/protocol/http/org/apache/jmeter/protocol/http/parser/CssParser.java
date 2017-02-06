@@ -28,8 +28,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -41,7 +41,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
  */
 public class CssParser implements LinkExtractorParser {
     private static final URLCollection EMPTY_URL_COLLECTION = new URLCollection(Collections.emptyList());
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(CssParser.class);
 
     /**
      *
