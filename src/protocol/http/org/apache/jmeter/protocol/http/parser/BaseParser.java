@@ -21,8 +21,8 @@ package org.apache.jmeter.protocol.http.parser;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * BaseParser is the base class for {@link LinkExtractorParser}
@@ -30,7 +30,7 @@ import org.apache.log.Logger;
  * @since 3.0
  */
 public abstract class BaseParser implements LinkExtractorParser {
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(BaseParser.class);
     // Cache of parsers - parsers must be re-usable
     private static final ConcurrentMap<String, LinkExtractorParser> PARSERS = new ConcurrentHashMap<>(5);
 

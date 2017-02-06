@@ -22,9 +22,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.http.parser.HTMLParseException;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +35,7 @@ import org.jsoup.select.Elements;
  */
 // made public see Bug 49976
 public class FormCharSetFinder {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(FormCharSetFinder.class);
 
     public FormCharSetFinder() {
         super();
