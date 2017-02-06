@@ -34,8 +34,8 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 // For JUnit tests, @see TestTCLogParser
 
@@ -75,7 +75,7 @@ import org.apache.log.Logger;
  */
 
 public class TCLogParser implements LogParser {
-    protected static final Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggerFactory.getLogger(TCLogParser.class);
 
     /*
      * TODO should these fields be public?
