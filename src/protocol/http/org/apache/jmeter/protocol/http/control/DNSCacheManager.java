@@ -34,8 +34,8 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.xbill.DNS.ARecord;
 import org.xbill.DNS.Cache;
 import org.xbill.DNS.ExtendedResolver;
@@ -57,9 +57,9 @@ import org.xbill.DNS.Type;
  */
 
 public class DNSCacheManager extends ConfigTestElement implements TestIterationListener, Serializable, DnsResolver {
-    private static final long serialVersionUID = 2120L;
+    private static final long serialVersionUID = 2121L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DNSCacheManager.class);
 
     public static final boolean DEFAULT_CLEAR_CACHE_EACH_ITER = false;
 
