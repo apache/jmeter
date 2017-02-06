@@ -414,6 +414,9 @@
     <include name="${lib.dir}/${json-smart.jar}"/>
     <include name="${lib.dir}/${jsoup.jar}"/>
     <include name="${lib.dir}/${junit.jar}"/>
+  	<include name="${lib.dir}/${log4j-1.2-api.jar}"/>
+  	<include name="${lib.dir}/${log4j-core.jar}"/>
+  	<include name="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <include name="${lib.dir}/${mongo-java-driver.jar}"/>
     <include name="${lib.dir}/${ph-css.jar}"/>
     <include name="${lib.dir}/${ph-commons.jar}"/>
@@ -491,6 +494,9 @@
     <pathelement location="${lib.dir}/${json-smart.jar}"/>
     <pathelement location="${lib.dir}/${jsoup.jar}"/>
     <pathelement location="${lib.dir}/${junit.jar}"/>
+  	<pathelement location="${lib.dir}/${log4j-1.2-api.jar}"/>
+  	<pathelement location="${lib.dir}/${log4j-core.jar}"/>
+  	<pathelement location="${lib.dir}/${log4j-slf4j-impl.jar}"/>
     <pathelement location="${lib.dir}/${mongo-java-driver.jar}"/>
     <pathelement location="${lib.dir}/${ph-css.jar}"/>
     <pathelement location="${lib.dir}/${ph-commons.jar}"/>
@@ -3051,8 +3057,8 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="slf4j-ext"/>
     <process_jarfile jarname="jcl-over-slf4j"/>
     <process_jarfile jarname="log4j-api"/>
-    <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-1.2-api"/>
+    <process_jarfile jarname="log4j-core"/>
     <process_jarfile jarname="log4j-slf4j-impl"/>
     <process_jarfile jarname="jtidy"/>
     <process_jarfile jarname="tika-core"/>
