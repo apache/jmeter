@@ -30,9 +30,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.jmeter.util.XPathUtil;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  */
 public class XPathFileContainer {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XPathFileContainer.class);
 
     private final NodeList nodeList;
 

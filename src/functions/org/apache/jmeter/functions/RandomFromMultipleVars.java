@@ -30,8 +30,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Provides a RandomFromMultiResult function which returns a random element from a multi valued extracted variable.
@@ -44,7 +44,7 @@ import org.apache.log.Logger;
  * @since 3.1
  */
 public class RandomFromMultipleVars extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RandomFromMultipleVars.class);
 
     private static final List<String> desc = new LinkedList<>();
     private static final String KEY = "__RandomFromMultipleVars"; //$NON-NLS-1$
