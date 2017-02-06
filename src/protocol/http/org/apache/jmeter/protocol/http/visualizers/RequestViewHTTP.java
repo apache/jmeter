@@ -54,9 +54,9 @@ import org.apache.jmeter.visualizers.SearchTextExtension.ISearchTextExtensionPro
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 
 /**
  * Specializer panel to view a HTTP request parsed
@@ -64,7 +64,7 @@ import org.apache.log.Logger;
  */
 public class RequestViewHTTP implements RequestView {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RequestViewHTTP.class);
 
     private static final String KEY_LABEL = "view_results_table_request_tab_http"; //$NON-NLS-1$
     

@@ -55,8 +55,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * This is the GUI for Cookie Manager
@@ -67,9 +67,9 @@ import org.apache.log.Logger;
  */
 public class CookiePanel extends AbstractConfigGui implements ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CookiePanel.class);
 
     //++ Action command names
     private static final String ADD_COMMAND = "Add"; //$NON-NLS-1$
