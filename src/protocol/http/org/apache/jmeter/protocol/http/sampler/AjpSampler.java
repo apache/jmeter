@@ -37,9 +37,9 @@ import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Selector for the AJP/1.3 protocol
@@ -50,9 +50,9 @@ import org.apache.log.Logger;
  */
 public class AjpSampler extends HTTPSamplerBase implements Interruptible {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
-    private static final Logger log= LoggingManager.getLoggerForClass();
+    private static final Logger log= LoggerFactory.getLogger(AjpSampler.class);
 
     private static final char NEWLINE = '\n';
     private static final String COLON_SPACE = ": ";//$NON-NLS-1$

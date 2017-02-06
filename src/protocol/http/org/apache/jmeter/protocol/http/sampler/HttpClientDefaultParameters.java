@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.NewDriver;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Utility class to set up default HttpClient parameters from a file.
@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  */
 public class HttpClientDefaultParameters {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HttpClientDefaultParameters.class);
 
     // Non-instantiable
     private HttpClientDefaultParameters(){

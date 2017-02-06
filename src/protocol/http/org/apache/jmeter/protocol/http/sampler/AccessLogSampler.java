@@ -29,9 +29,9 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Description: <br>
@@ -62,13 +62,12 @@ import org.apache.log.Logger;
  * traffic using production logs. This way, JMeter can record when problems
  * occur and provide a way to match the server logs.
  * <p>
- * Created on: Jun 26, 2003
  *
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AccessLogSampler.class);
 
-    private static final long serialVersionUID = 232L; // Remember to change this when the class changes ...
+    private static final long serialVersionUID = 233L; // Remember to change this when the class changes ...
 
     public static final String DEFAULT_CLASS = "org.apache.jmeter.protocol.http.util.accesslog.TCLogParser"; // $NON-NLS-1$
 

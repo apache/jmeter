@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages the parallel http resources download.<br>
@@ -66,7 +66,7 @@ import org.apache.log.Logger;
  */
 public class ResourcesDownloader {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(ResourcesDownloader.class);
     
     /** this is the maximum time that excess idle threads will wait for new tasks before terminating */
     private static final long THREAD_KEEP_ALIVE_TIME = JMeterUtils.getPropDefault("httpsampler.parallel_download_thread_keepalive_inseconds", 60L);
