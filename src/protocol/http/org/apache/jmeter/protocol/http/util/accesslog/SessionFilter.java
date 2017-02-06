@@ -30,8 +30,8 @@ import org.apache.jmeter.testelement.TestCloneable;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
@@ -41,8 +41,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
  *
  */
 public class SessionFilter implements Filter, Serializable, TestCloneable,ThreadListener {
-    private static final long serialVersionUID = 232L;
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final long serialVersionUID = 233L;
+    private static final Logger log = LoggerFactory.getLogger(SessionFilter.class);
 
     /**
      * Protects access to managersInUse
