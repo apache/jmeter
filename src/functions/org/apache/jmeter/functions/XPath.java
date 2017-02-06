@@ -48,10 +48,6 @@ import org.slf4j.Logger;
 public class XPath extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(XPath.class);
 
-    // static {
-    // LoggingManager.setPriority("DEBUG","jmeter");
-    // LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-    // }
     private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
     private static final List<String> desc = new LinkedList<>();
