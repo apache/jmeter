@@ -289,6 +289,17 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertNotNull(s);
             assertEquals("test=1", s);
         }
+        
+        // Test HttpOnly cookie is parsed correctly
+        @Test
+        public void testHttpOnlyCookie() throws Exception {
+            URL url = new URL("http://a.b.c/");
+            man.addCookieFromHeader("mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI; Path=/; Expires=Tue, 07 Feb 2017 09:13:14 GMT; HttpOnly", url);
+            assertEquals(1,man.getCookieCount());
+            String s = man.getCookieHeaderForURL(url);
+            assertNotNull(s);
+            assertEquals("mySASession=s%3AcafPSGf6UJguyhddGFFeLdHBy9CYbzIS.NhYyA26LGTAVoLxhCQUK%2F2Bs34MW5kGHmErKzG6r3XI", s);
+        }
 
         // Test multi-cookie header handling
         @Test
