@@ -32,9 +32,9 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterStopThreadException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 
 /**
  * StringFromFile Function to read a String from a text file.
@@ -64,7 +64,7 @@ import org.apache.log.Logger;
  * @since 1.9
  */
 public class StringFromFile extends AbstractFunction implements TestStateListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StringFromFile.class);
 
     // Only modified by static block so no need to synchronize subsequent read-only access
     private static final List<String> desc = new LinkedList<>();

@@ -26,8 +26,8 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The function represented by this class allows data to be read from CSV files.
@@ -51,7 +51,7 @@ import org.apache.log.Logger;
  * @since 1.9
  */
 public class CSVRead extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CSVRead.class);
 
     private static final String KEY = "__CSVRead"; // Function name //$NON-NLS-1$
 

@@ -22,10 +22,10 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JMeterException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * BeanShell setup function - encapsulates all the access to the BeanShell
@@ -39,7 +39,7 @@ import org.apache.log.Logger;
  */
 
 public class BeanShellInterpreter {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BeanShellInterpreter.class);
 
     private static final Method bshGet;
 
