@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Example Sampler (non-Bean version)
@@ -38,13 +38,12 @@ import org.apache.log.Logger;
  *
  * However, access to class fields must be synchronized.
  *
- * @version $Revision$
  */
 public class ExampleSampler extends AbstractSampler {
 
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ExampleSampler.class);
 
     // The name of the property used to hold our data
     public static final String DATA = "ExampleSampler.data"; //$NON-NLS-1$
