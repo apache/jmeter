@@ -36,8 +36,8 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Takes in charge Kerberos auth mechanism
@@ -47,7 +47,7 @@ public class KerberosManager implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(KerberosManager.class);
 
     private static final String JAAS_APPLICATION = JMeterUtils.getPropDefault("kerberos_jaas_application", "JMeter"); //$NON-NLS-1$ $NON-NLS-2$
     private final ConcurrentMap<String, Future<Subject>> subjects = new ConcurrentHashMap<>();
