@@ -20,17 +20,19 @@ package org.apache.jmeter.assertions.gui;
 
 
 import java.awt.BorderLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import org.apache.jmeter.assertions.XMLSchemaAssertion;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * XMLSchemaAssertionGUI.java
@@ -38,9 +40,9 @@ import org.apache.log.Logger;
  */
 public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     // class attributes
-     private static final Logger log = LoggingManager.getLoggerForClass();
+     private static final Logger log = LoggerFactory.getLogger(XMLSchemaAssertionGUI.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private JTextField xmlSchema;
 
