@@ -21,17 +21,17 @@ package org.apache.jmeter.assertions;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An Assertion which understands BeanShell
  *
  */
 public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BeanShellAssertion.class);
 
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
 
     public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
 

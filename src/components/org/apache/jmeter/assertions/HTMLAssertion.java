@@ -34,8 +34,8 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.tidy.Node;
 import org.w3c.tidy.Tidy;
 
@@ -44,9 +44,9 @@ import org.w3c.tidy.Tidy;
  */
 public class HTMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HTMLAssertion.class);
 
     public static final String DEFAULT_DOCTYPE = "omit"; //$NON-NLS-1$
 
@@ -90,15 +90,11 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
         // create parser
         Tidy tidy = null;
         try {
-            if (log.isDebugEnabled()){
-                log.debug("HTMLAssertions.getResult(): Setup tidy ...");
-                log.debug("doctype: " + getDoctype());
-                log.debug("errors only: " + isErrorsOnly());
-                log.debug("error threshold: " + getErrorThreshold());
-                log.debug("warning threshold: " + getWarningThreshold());
-                log.debug("html mode: " + isHTML());
-                log.debug("xhtml mode: " + isXHTML());
-                log.debug("xml mode: " + isXML());
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "Setting up tidy... doctype: {}, errors only: {}, error threshold: {}, warning threshold: {}, html mode: {}, xhtml mode: {}, xml mode: {}.",
+                        getDoctype(), isErrorsOnly(), getErrorThreshold(), getWarningThreshold(), isHTML(), isXHTML(),
+                        isXML());
             }
             tidy = new Tidy();
             tidy.setInputEncoding(StandardCharsets.UTF_8.name());
@@ -115,9 +111,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             tidy.setErrfile(getFilename());
 
             if (log.isDebugEnabled()) {
-                log.debug("err file: " + getFilename());
-                log.debug("getParser : tidy parser created - " + tidy);
-                log.debug("HTMLAssertions.getResult(): Tidy instance created!");
+                log.debug("Tidy instance created... err file: {}, tidy parser: {}", getFilename(), tidy);
             }
 
         } catch (Exception e) {
@@ -137,14 +131,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             StringWriter errbuf = new StringWriter();
             tidy.setErrout(new PrintWriter(errbuf));
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            log.debug("Start : parse");
+            log.debug("Parsing with tidy starting...");
             Node node = tidy.parse(new ByteArrayInputStream(inResponse.getResponseData()), os);
-            if (log.isDebugEnabled()) {
-                log.debug("node : " + node);
-                log.debug("End   : parse");
-                log.debug("HTMLAssertions.getResult(): parsing with tidy done!");
-                log.debug("Output: " + os.toString());
-            }
+            log.debug("Parsing with tidy done! node: {}, output: {}", node, os);
 
             // write output to file
             writeOutput(errbuf.toString());
@@ -152,10 +141,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             // evaluate result
             if ((tidy.getParseErrors() > getErrorThreshold())
                     || (!isErrorsOnly() && (tidy.getParseWarnings() > getWarningThreshold()))) {
-                if (log.isDebugEnabled()) {
-                    log.debug("HTMLAssertions.getResult(): errors/warnings detected:");
-                    log.debug(errbuf.toString());
-                }
+                log.debug("Errors/warnings detected while parsing with tidy: {}", errbuf);
                 result.setFailure(true);
                 result.setFailureMessage(MessageFormat.format("Tidy Parser errors:   " + tidy.getParseErrors()
                         + " (allowed " + getErrorThreshold() + ") " + "Tidy Parser warnings: "
@@ -195,11 +181,9 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
             try (FileWriter lOutputWriter = new FileWriter(lFilename, false)){
                 // write to file
                 lOutputWriter.write(inOutput);
-                if (log.isDebugEnabled()) {
-                    log.debug("writeOutput() -> output successfully written to file " + lFilename);
-                }
+                log.debug("writeOutput() -> output successfully written to file: {}", lFilename);
             } catch (IOException ex) {
-                log.warn("writeOutput() -> could not write output to file " + lFilename, ex);
+                log.warn("writeOutput() -> could not write output to file: {}", lFilename, ex);
             }
         }
     }
