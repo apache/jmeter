@@ -25,8 +25,8 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ForeachController that iterates over a list of variables named XXXX_NN stored in {@link JMeterVariables}
@@ -36,9 +36,9 @@ import org.apache.log.Logger;
  *
  */
 public class ForeachController extends GenericController implements Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ForeachController.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String INPUTVAL = "ForeachController.inputVal";// $NON-NLS-1$
 
@@ -163,7 +163,9 @@ public class ForeachController extends GenericController implements Serializable
         if (currentVariable != null) {
             variables.putObject(getReturnVal(), currentVariable);
             if (log.isDebugEnabled()) {
-                log.debug("ForEach resultstring isDone=" + variables.get(getReturnVal()));
+                log.debug("{} : Found in vars:{}, isDone:{}", 
+                        getName(), inputVariable, false);
+
             }
             return false;
         }
@@ -177,10 +179,16 @@ public class ForeachController extends GenericController implements Serializable
         JMeterContext context = getThreadContext();
         String inputVariable = getInputVal() + getSeparator() + (loopCount + 1);
         if (context.getVariables().getObject(inputVariable) != null) {
-            log.debug("ForEach resultstring eofArgs= false");
+            if(log.isDebugEnabled()) {
+                log.debug("{} : Found in vars:{}, not end of Arguments", 
+                        getName(), inputVariable);
+            }
             return false;
         }
-        log.debug("ForEach resultstring eofArgs= true");
+        if(log.isDebugEnabled()) {
+            log.debug("{} : Did not find in vars:{}, End of Arguments reached", 
+                    getName(), inputVariable);
+        }
         return true;
     }
 
@@ -213,7 +221,8 @@ public class ForeachController extends GenericController implements Serializable
             return false;
         }
         if (log.isDebugEnabled()) {
-            log.debug("No entries found - null first entry: " + inputVariable);
+            log.debug("{} No entries found - null first entry: {}", 
+                    getName(), inputVariable);
         }
         return true;
     }
