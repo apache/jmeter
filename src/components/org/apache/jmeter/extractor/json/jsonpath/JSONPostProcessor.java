@@ -29,9 +29,9 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JSON-PATH based extractor
@@ -39,8 +39,8 @@ import org.apache.log.Logger;
  */
 public class JSONPostProcessor extends AbstractScopedTestElement implements Serializable, PostProcessor, ThreadListener{
 
-    private static final long serialVersionUID = 1320798545214331506L;
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final long serialVersionUID = 1L;
+    private static final Logger log = LoggerFactory.getLogger(JSONPostProcessor.class);
 
     private static final String JSON_PATH_EXPRESSIONS = "JSONPostProcessor.jsonPathExprs"; // $NON-NLS-1$
     private static final String REFERENCE_NAMES = "JSONPostProcessor.referenceNames"; // $NON-NLS-1$
@@ -68,18 +68,14 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         String jsonResponse;
         if (isScopeVariable()) {
             jsonResponse = vars.get(getVariableName());
-            if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor is using variable:" + getVariableName() + " which content is:" + jsonResponse);
-            }
+            log.debug("JSON Extractor is using variable: {}, which content is: {}", getVariableName(), jsonResponse);
         } else {
             SampleResult previousResult = context.getPreviousResult();
             if (previousResult == null) {
                 return;
             }
             jsonResponse = previousResult.getResponseDataAsString();
-            if (log.isDebugEnabled()) {
-                log.debug("JSON Extractor " + getName() + " working on Response:" + jsonResponse);
-            }
+            log.debug("JSON Extractor {} working on Response: {}", getName(), jsonResponse);
         }
         String[] refNames = getRefNames().split(SEPARATOR);
         String[] jsonPathExpressions = getJsonPathExpressions().split(SEPARATOR);
@@ -112,8 +108,7 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                         vars.put(currentRefName, defaultValues[i]);
                         vars.put(currentRefName + REF_MATCH_NR, "0"); //$NON-NLS-1$
                         if (matchNumber < 0 && getComputeConcatenation()) {
-                            log.debug("No value extracted, storing empty in:" //$NON-NLS-1$
-                                    + currentRefName + ALL_SUFFIX);
+                            log.debug("No value extracted, storing empty in: {}{}", currentRefName, ALL_SUFFIX);
                             vars.put(currentRefName + ALL_SUFFIX, "");
                         }
                     } else {
@@ -149,12 +144,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
                             } else {
                                 // extract at position
                                 if (matchNumber > extractedValues.size()) {
-                                    if (log.isDebugEnabled()) {
-                                        log.debug("matchNumber(" + matchNumber
-                                                + ") exceeds number of items found("
-                                                + extractedValues.size()
-                                                + "), default value will be used");
-                                    }
+                                    log.debug(
+                                            "matchNumber({}) exceeds number of items found({}), default value will be used",
+                                            matchNumber, extractedValues.size());
                                     vars.put(currentRefName, defaultValues[i]);
                                 } else {
                                     placeObjectIntoVars(vars, currentRefName, extractedValues, matchNumber - 1);
@@ -176,10 +168,9 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
             } catch (Exception e) {
                 // if something wrong, default value added
                 if (log.isDebugEnabled()) {
-                    log.error("Error processing JSON content in "+ getName()+", message:"+e.getLocalizedMessage(),e);
+                    log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage(), e);
                 } else {
-                    log.error("Error processing JSON content in "+ getName()+", message:"+e.getLocalizedMessage());
-                    
+                    log.error("Error processing JSON content in {}, message: {}", getName(), e.getLocalizedMessage());
                 }
                 vars.put(currentRefName, defaultValues[i]);
             }

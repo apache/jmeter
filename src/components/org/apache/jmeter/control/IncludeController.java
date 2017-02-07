@@ -30,13 +30,13 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IncludeController extends GenericController implements ReplaceableController {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(IncludeController.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final String INCLUDE_PATH = "IncludeController.includepath"; //$NON-NLS-1$
 
@@ -125,15 +125,14 @@ public class IncludeController extends GenericController implements ReplaceableC
             try {
                 File file = new File(fileName.trim());
                 final String absolutePath = file.getAbsolutePath();
-                log.info("loadIncludedElements -- try to load included module: "+absolutePath);
+                log.info("loadIncludedElements -- try to load included module: {}", absolutePath);
                 if(!file.exists() && !file.isAbsolute()){
-                    log.info("loadIncludedElements -failed for: "+absolutePath);
+                    log.info("loadIncludedElements -failed for: {}", absolutePath);
                     file = new File(FileServer.getFileServer().getBaseDir(), includePath);
-                    log.info("loadIncludedElements -Attempting to read it from: " + file.getAbsolutePath());
+                    log.info("loadIncludedElements -Attempting to read it from: {}", absolutePath);
                     if(!file.canRead() || !file.isFile()){
-                        log.error("Include Controller \""
-                                + this.getName()+"\" can't load \"" 
-                                + fileName+"\" - see log for details");
+                        log.error("Include Controller '{}' can't load '{}' - see log for details", this.getName(),
+                                fileName);
                         throw new IOException("loadIncludedElements -failed for: " + absolutePath +
                                 " and " + file.getAbsolutePath());
                     }

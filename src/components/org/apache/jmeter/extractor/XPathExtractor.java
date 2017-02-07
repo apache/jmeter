@@ -37,10 +37,10 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -64,9 +64,9 @@ import org.xml.sax.SAXException;
  */
 public class XPathExtractor extends AbstractScopedTestElement implements
         PostProcessor, Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XPathExtractor.class);
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
     
     private static final int DEFAULT_VALUE = -1;
     public static final String DEFAULT_VALUE_AS_STRING = Integer.toString(DEFAULT_VALUE);
@@ -134,7 +134,8 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                         getValuesForXPath(d,getXPathQuery(), matches, matchNumber);
                     }
                 } else {
-                    log.warn("No variable '"+getVariableName()+"' found to process by XPathExtractor '"+getName()+"', skipping processing");
+                    log.warn("No variable '{}' found to process by XPathExtractor '{}', skipping processing",
+                            getVariableName(), getName());
                 }
             } else {
                 List<SampleResult> samples = getSampleList(previousResult);
@@ -163,8 +164,7 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                 vars.remove(concat(refName,i));
             }
         }catch(IOException e){// e.g. DTD not reachable
-            final String errorMessage = "IOException on ("+getXPathQuery()+")";
-            log.error(errorMessage,e);
+            log.error("IOException on ({})", getXPathQuery(), e);
             AssertionResult ass = new AssertionResult(getName());
             ass.setError(true);
             ass.setFailureMessage(new StringBuilder("IOException: ").append(e.getLocalizedMessage()).toString());
@@ -175,10 +175,10 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             log.error(errrorMessage,e);
             throw new JMeterError(errrorMessage,e);
         } catch (SAXException e) {// Can happen for bad input document
-            log.warn("SAXException while processing ("+getXPathQuery()+") "+e.getLocalizedMessage());
+            log.warn("SAXException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
             addAssertionFailure(previousResult, e, false); // Should this also fail the sample?
         } catch (TransformerException e) {// Can happen for incorrect XPath expression
-            log.warn("TransformerException while processing ("+getXPathQuery()+") "+e.getLocalizedMessage());
+            log.warn("TransformerException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
             addAssertionFailure(previousResult, e, false);
         } catch (TidyException e) {
             // Will already have been logged by XPathUtil
