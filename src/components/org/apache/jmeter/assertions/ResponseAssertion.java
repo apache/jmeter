@@ -32,19 +32,19 @@ import org.apache.jmeter.testelement.property.NullProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.Document;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test element to handle Response Assertions, @see AssertionGui
  * see org.apache.jmeter.assertions.ResponseAssertionTest for unit tests
  */
 public class ResponseAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ResponseAssertion.class);
 
     private static final long serialVersionUID = 241L;
 
@@ -310,19 +310,14 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
         boolean equals = isEqualsType();
         boolean substring = isSubstringType();
         boolean matches = isMatchType();
-        boolean debugEnabled = log.isDebugEnabled();
-        if (debugEnabled){
-            log.debug("Type:" + (contains?"Contains" : "Match") + (notTest? "(not)" : ""));
-            log.debug("Type:" + (contains?"Contains" : "Match") + (orTest? "(or)" : ""));
-        }
+
+        log.debug("Test Type Info: contains={}, notTest={}, orTest={}", contains, notTest, orTest);
 
         if (StringUtils.isEmpty(toCheck)) {
             if (notTest) { // Not should always succeed against an empty result
                 return result;
             }
-            if (debugEnabled){
-                log.debug("Not checking empty response field in: "+response.getSampleLabel());
-            }
+            log.debug("Not checking empty response field in: {}", response.getSampleLabel());
             return result.setResultForNull();
         }
 
@@ -351,9 +346,7 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                 pass = notTest ? !found : found;
                 if (orTest) {
                     if (!pass) {
-                        if (debugEnabled) {
-                            log.debug("Failed: "+stringPattern);
-                        }
+                        log.debug("Failed: {}", stringPattern);
                         allCheckMessage.add(getFailText(stringPattern,toCheck));
                     } else {
                         hasTrue=true;
@@ -361,16 +354,12 @@ public class ResponseAssertion extends AbstractScopedAssertion implements Serial
                     }
                 } else {
                     if (!pass) {
-                        if (debugEnabled){
-                            log.debug("Failed: "+stringPattern);
-                        }
+                        log.debug("Failed: {}", stringPattern);
                         result.setFailure(true);
                         result.setFailureMessage(getFailText(stringPattern,toCheck));
                         break;
                     }
-                    if (debugEnabled){
-                        log.debug("Passed: "+stringPattern);
-                    }
+                    log.debug("Passed: {}", stringPattern);
                 }
             }
             if (orTest && !hasTrue){

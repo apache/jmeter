@@ -27,8 +27,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -53,7 +53,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
 
     public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XMLSchemaAssertion.class);
 
     public static final String XSD_FILENAME_KEY = "xmlschema_assertion_filename";
 
@@ -72,10 +72,7 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
         }
 
         String xsdFileName = getXsdFileName();
-        if (log.isDebugEnabled()) {
-            log.debug("xmlString: " + resultData);
-            log.debug("xsdFileName: " + xsdFileName);
-        }
+        log.debug("xmlString: {}, xsdFileName: {}", resultData, xsdFileName);
         if (xsdFileName == null || xsdFileName.length() == 0) {
             result.setResultForFailure(FILE_NAME_IS_REQUIRED);
         } else {

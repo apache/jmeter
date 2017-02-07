@@ -25,8 +25,8 @@ import java.io.StringReader;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -37,7 +37,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  */
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XMLAssertion.class);
 
     private static final long serialVersionUID = 241L;
 
@@ -48,7 +48,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
             try {
                 return XMLReaderFactory.createXMLReader();
             } catch (SAXException e) {
-                LOG.error("Error initializing XMLReader in XMLAssertion", e); 
+                log.error("Error initializing XMLReader in XMLAssertion", e); 
                 return null;
             }
         }
