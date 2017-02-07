@@ -96,7 +96,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String USE_DEFAULT_HTTP_IMPL = ""; // $NON-NLS-1$
 
     private static final String SUGGESTED_EXCLUSIONS =
-            JMeterUtils.getPropDefault("proxy.excludes.suggested", "(?i).*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)"); // $NON-NLS-1$
+            JMeterUtils.getPropDefault("proxy.excludes.suggested", "(?i).*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff|woff2)"); // $NON-NLS-1$
 
     private JTextField portField;
 
@@ -380,9 +380,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             samplerFollowRedirects.setSelected(false);
         }
 
-        // System.err.println(action.paramString()+" "+command+ "
-        // "+action.getModifiers());
-
         if (command.equals(STOP)) {
             model.stopProxy();
             stop.setEnabled(false);
@@ -560,7 +557,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private void enableRestart() {
         if (stop.isEnabled()) {
-            // System.err.println("Enable Restart");
             restart.setEnabled(true);
         }
     }

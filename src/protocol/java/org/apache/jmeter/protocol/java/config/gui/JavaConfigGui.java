@@ -176,51 +176,58 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent evt) {
         if (evt.getSource() == classNameLabeledChoice) {
-            String className = classNameLabeledChoice.getText().trim();
+            configureClassName();
+        }
+    }
+
+    /**
+     * 
+     */
+    private void configureClassName() {
+        String className = classNameLabeledChoice.getText().trim();
+        try {
+            JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
+                    Thread.currentThread().getContextClassLoader()).newInstance();
+
+            Arguments currArgs = new Arguments();
+            argsPanel.modifyTestElement(currArgs);
+            Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
+
+            Arguments newArgs = new Arguments();
+            Arguments testParams = null;
             try {
-                JavaSamplerClient client = (JavaSamplerClient) Class.forName(className, true,
-                        Thread.currentThread().getContextClassLoader()).newInstance();
-
-                Arguments currArgs = new Arguments();
-                argsPanel.modifyTestElement(currArgs);
-                Map<String, String> currArgsMap = currArgs.getArgumentsAsMap();
-
-                Arguments newArgs = new Arguments();
-                Arguments testParams = null;
-                try {
-                    testParams = client.getDefaultParameters();
-                } catch (AbstractMethodError e) {
-                    log.warn("JavaSamplerClient doesn't implement "
-                            + "getDefaultParameters.  Default parameters won't "
-                            + "be shown.  Please update your client class: " + className);
-                }
-
-                if (testParams != null) {
-                    for (JMeterProperty jMeterProperty : testParams.getArguments()) {
-                        Argument arg = (Argument) jMeterProperty.getObjectValue();
-                        String name = arg.getName();
-                        String value = arg.getValue();
-
-                        // If a user has set parameters in one test, and then
-                        // selects a different test which supports the same
-                        // parameters, those parameters should have the same
-                        // values that they did in the original test.
-                        if (currArgsMap.containsKey(name)) {
-                            String newVal = currArgsMap.get(name);
-                            if (newVal != null && newVal.length() > 0) {
-                                value = newVal;
-                            }
-                        }
-                        newArgs.addArgument(name, value);
-                    }
-                }
-
-                argsPanel.configure(newArgs);
-                warningLabel.setVisible(false);
-            } catch (Exception e) {
-                log.error("Error getting argument list for " + className, e);
-                warningLabel.setVisible(true);
+                testParams = client.getDefaultParameters();
+            } catch (AbstractMethodError e) {
+                log.warn("JavaSamplerClient doesn't implement "
+                        + "getDefaultParameters.  Default parameters won't "
+                        + "be shown.  Please update your client class: " + className);
             }
+
+            if (testParams != null) {
+                for (JMeterProperty jMeterProperty : testParams.getArguments()) {
+                    Argument arg = (Argument) jMeterProperty.getObjectValue();
+                    String name = arg.getName();
+                    String value = arg.getValue();
+
+                    // If a user has set parameters in one test, and then
+                    // selects a different test which supports the same
+                    // parameters, those parameters should have the same
+                    // values that they did in the original test.
+                    if (currArgsMap.containsKey(name)) {
+                        String newVal = currArgsMap.get(name);
+                        if (newVal != null && newVal.length() > 0) {
+                            value = newVal;
+                        }
+                    }
+                    newArgs.addArgument(name, value);
+                }
+            }
+
+            argsPanel.configure(newArgs);
+            warningLabel.setVisible(false);
+        } catch (Exception e) {
+            log.error("Error getting argument list for " + className, e);
+            warningLabel.setVisible(true);
         }
     }
 
@@ -249,6 +256,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
         
         warningLabel.setVisible(!classOk(className));
         classNameLabeledChoice.setText(className);
+        configureClassName();
     }
 
     /**
