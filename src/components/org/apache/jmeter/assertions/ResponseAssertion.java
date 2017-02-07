@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class ResponseAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggerFactory.getLogger(ResponseAssertion.class);
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final String TEST_FIELD = "Assertion.test_field";  // $NON-NLS-1$
 

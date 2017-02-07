@@ -30,7 +30,7 @@ public class BSFAssertion extends BSFTestElement implements Cloneable, Assertion
 {
     private static final Logger log = LoggerFactory.getLogger(BSFAssertion.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     @Override
     public AssertionResult getResult(SampleResult response) {

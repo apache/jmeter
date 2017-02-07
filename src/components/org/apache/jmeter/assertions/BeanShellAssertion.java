@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class BeanShellAssertion extends BeanShellTestElement implements Assertion {
     private static final Logger log = LoggerFactory.getLogger(BeanShellAssertion.class);
 
-    private static final long serialVersionUID = 3;
+    private static final long serialVersionUID = 4;
 
     public static final String FILENAME = "BeanShellAssertion.filename"; //$NON-NLS-1$
 

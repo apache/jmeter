@@ -42,7 +42,7 @@ public class XMLSchemaAssertionGUI extends AbstractAssertionGui {
     // class attributes
      private static final Logger log = LoggerFactory.getLogger(XMLSchemaAssertionGUI.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private JTextField xmlSchema;
 

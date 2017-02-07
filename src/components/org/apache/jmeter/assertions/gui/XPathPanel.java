@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
  *
  */
 public class XPathPanel extends JPanel {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggerFactory.getLogger(XPathPanel.class);
 

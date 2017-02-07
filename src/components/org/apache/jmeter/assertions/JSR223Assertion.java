@@ -34,7 +34,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
 {
     private static final Logger log = LoggerFactory.getLogger(JSR223Assertion.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     @Override
     public AssertionResult getResult(SampleResult response) {

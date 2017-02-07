@@ -44,7 +44,7 @@ import org.w3c.tidy.Tidy;
  */
 public class HTMLAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Logger log = LoggerFactory.getLogger(HTMLAssertion.class);
 

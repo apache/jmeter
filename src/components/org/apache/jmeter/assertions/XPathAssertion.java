@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
 public class XPathAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
     private static final Logger log = LoggerFactory.getLogger(XPathAssertion.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     //+ JMX file attributes
     private static final String XPATH_KEY         = "XPath.xpath"; // $NON-NLS-1$

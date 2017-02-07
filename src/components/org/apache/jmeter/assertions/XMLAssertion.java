@@ -39,7 +39,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class XMLAssertion extends AbstractTestElement implements Serializable, Assertion, ThreadListener {
     private static final Logger log = LoggerFactory.getLogger(XMLAssertion.class);
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     // one builder for all requests in a thread
     private static final ThreadLocal<XMLReader> XML_READER = new ThreadLocal<XMLReader>() {

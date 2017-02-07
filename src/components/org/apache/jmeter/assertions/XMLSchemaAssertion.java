@@ -43,7 +43,7 @@ import org.xml.sax.SAXParseException;
  */
 public class XMLSchemaAssertion extends AbstractTestElement implements Serializable, Assertion {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     public static final String FILE_NAME_IS_REQUIRED = "FileName is required";
 

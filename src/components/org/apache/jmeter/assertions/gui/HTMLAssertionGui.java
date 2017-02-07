@@ -50,7 +50,7 @@ public class HTMLAssertionGui extends AbstractAssertionGui implements KeyListene
 
     private static final Logger log = LoggerFactory.getLogger(HTMLAssertionGui.class);
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     // Names for the fields
     private static final String WARNING_THRESHOLD_FIELD = "warningThresholdField"; // $NON-NLS-1$
