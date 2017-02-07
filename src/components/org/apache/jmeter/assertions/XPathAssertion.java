@@ -32,9 +32,9 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -44,9 +44,9 @@ import org.xml.sax.SAXException;
  *
  */
 public class XPathAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XPathAssertion.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     //+ JMX file attributes
     private static final String XPATH_KEY         = "XPath.xpath"; // $NON-NLS-1$
@@ -91,31 +91,28 @@ public class XPathAssertion extends AbstractScopedAssertion implements Serializa
             if (responseData == null || responseData.length == 0) {
                 return result.setResultForNull();
             }
-    
-            if (log.isDebugEnabled()) {
-                log.debug(new StringBuilder("Validation is set to ").append(isValidating()).toString());
-                log.debug(new StringBuilder("Whitespace is set to ").append(isWhitespace()).toString());
-                log.debug(new StringBuilder("Tolerant is set to ").append(isTolerant()).toString());
+
+            if(log.isDebugEnabled()) {
+                log.debug("Validation is set to {}, Whitespace is set to {}, Tolerant is set to {}", isValidating(),
+                    isWhitespace(), isTolerant());
             }
-    
-    
             boolean isXML = JOrphanUtils.isXML(responseData);
 
             doc = XPathUtil.makeDocument(new ByteArrayInputStream(responseData), isValidating(),
                     isWhitespace(), isNamespace(), isTolerant(), isQuiet(), showWarnings() , reportErrors(), isXML
                     , isDownloadDTDs());
         } catch (SAXException e) {
-            log.debug("Caught sax exception: " + e);
+            log.debug("Caught sax exception.", e);
             result.setError(true);
             result.setFailureMessage(new StringBuilder("SAXException: ").append(e.getMessage()).toString());
             return result;
         } catch (IOException e) {
-            log.warn("Cannot parse result content", e);
+            log.warn("Cannot parse result content.", e);
             result.setError(true);
             result.setFailureMessage(new StringBuilder("IOException: ").append(e.getMessage()).toString());
             return result;
         } catch (ParserConfigurationException e) {
-            log.warn("Cannot parse result content", e);
+            log.warn("Cannot parse result content.", e);
             result.setError(true);
             result.setFailureMessage(new StringBuilder("ParserConfigurationException: ").append(e.getMessage())
                     .toString());

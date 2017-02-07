@@ -27,14 +27,14 @@ import javax.script.ScriptException;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSR223Assertion extends JSR223TestElement implements Cloneable, Assertion, TestBean
 {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JSR223Assertion.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     @Override
     public AssertionResult getResult(SampleResult response) {
@@ -47,7 +47,7 @@ public class JSR223Assertion extends JSR223TestElement implements Cloneable, Ass
             processFileOrScript(scriptEngine, bindings);
             result.setError(false);
         } catch (IOException | ScriptException e) {
-            log.error("Problem in JSR223 script "+getName(), e);
+            log.error("Problem in JSR223 script: {}", getName(), e);
             result.setError(true);
             result.setFailureMessage(e.toString());
         }
