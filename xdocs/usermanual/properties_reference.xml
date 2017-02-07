@@ -776,7 +776,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="proxy.excludes.suggested">
     List of URL patterns that will be added to URL Patterns to exclude.<br/>
     Separate multiple lines with <code>;</code><br/>
-    Defaults to: <code>.*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff)</code>
+    Defaults to: <code>.*\\.(bmp|css|js|gif|ico|jpe?g|png|swf|woff|woff2)</code>
 </property>
 <property name="jmeter.httpsampler">
     Change the default HTTP Sampler.<br/>
