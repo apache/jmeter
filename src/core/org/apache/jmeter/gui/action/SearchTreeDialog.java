@@ -58,8 +58,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.apache.jorphan.gui.layout.VerticalLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FIXME Why is searchTF not getting focus correctly after having been setVisible(false) once
@@ -68,7 +69,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = -4436834972710248247L;
 
-    private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger logger = LoggerFactory.getLogger(SearchTreeDialog.class);
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
@@ -144,8 +145,9 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
 
         replaceTF = new JLabeledTextField(JMeterUtils.getResString("search_text_replace"), 20); //$NON-NLS-1$
-        statusLabel = new JLabel();
-        statusLabel.setMinimumSize(new Dimension(100, 30));
+        statusLabel = new JLabel(" ");
+        statusLabel.setPreferredSize(new Dimension(100, 20));
+        statusLabel.setMinimumSize(new Dimension(100, 20));
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), true); //$NON-NLS-1$
         
@@ -178,10 +180,10 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         buttonsPanel.add(cancelButton);
 
         JPanel searchAndReplacePanel = new JPanel();
-        searchAndReplacePanel.setLayout(new BorderLayout());
-        searchAndReplacePanel.add(searchPanel, BorderLayout.NORTH);
-        searchAndReplacePanel.add(searchCriterionPanel, BorderLayout.CENTER);
-        searchAndReplacePanel.add(buttonsPanel, BorderLayout.SOUTH);
+        searchAndReplacePanel.setLayout(new VerticalLayout());
+        searchAndReplacePanel.add(searchPanel);
+        searchAndReplacePanel.add(searchCriterionPanel);
+        searchAndReplacePanel.add(buttonsPanel);
         this.getContentPane().add(searchAndReplacePanel);
         searchTF.requestFocusInWindow();
 
@@ -258,9 +260,9 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         }
         GuiPackage.getInstance().getMainFrame().repaint();
         searchTF.requestFocusInWindow();
-        if(numberOfMatches > 0) {
-            statusLabel.setText(MessageFormat.format("{0} nodes match the search", new Object[]{numberOfMatches}));
-        }
+        statusLabel.setText(
+                MessageFormat.format(
+                        JMeterUtils.getResString("search_tree_matches"),new Object[]{numberOfMatches}));
     }
     
     /**
