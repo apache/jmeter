@@ -380,9 +380,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             samplerFollowRedirects.setSelected(false);
         }
 
-        // System.err.println(action.paramString()+" "+command+ "
-        // "+action.getModifiers());
-
         if (command.equals(STOP)) {
             model.stopProxy();
             stop.setEnabled(false);
@@ -560,7 +557,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
 
     private void enableRestart() {
         if (stop.isEnabled()) {
-            // System.err.println("Enable Restart");
             restart.setEnabled(true);
         }
     }
