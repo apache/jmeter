@@ -23,14 +23,14 @@ import org.apache.bsf.BSFManager;
 import org.apache.jmeter.processor.PostProcessor;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostProcessor, TestBean
 {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BSFPostProcessor.class);
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     @Override
     public void process(){
@@ -39,7 +39,7 @@ public class BSFPostProcessor extends BSFTestElement implements Cloneable, PostP
             mgr = getManager();
             processFileOrScript(mgr);
         } catch (BSFException e) {
-            log.warn("Problem in BSF script "+e);
+            log.warn("Problem in BSF script {}", e.toString());
         } finally {
             if (mgr != null) {
                 mgr.terminate();

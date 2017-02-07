@@ -37,10 +37,10 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopThreadException;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Read lines from a file and split int variables.
@@ -69,9 +69,9 @@ import org.apache.log.Logger;
  */
 public class CSVDataSet extends ConfigTestElement 
     implements TestBean, LoopIterationListener, NoConfigMerge {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CSVDataSet.class);
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     private static final String EOFVALUE = // value to return at EOF
         JMeterUtils.getPropDefault("csvdataset.eofstring", "<EOF>"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -129,7 +129,7 @@ public class CSVDataSet extends ConfigTestElement
                         for(String resKey : CSVDataSetBeanInfo.getShareTags()) {
                             if (propValue.equals(rb.getString(resKey))) {
                                 if (log.isDebugEnabled()) {
-                                    log.debug("Converted " + propName + "=" + propValue + " to " + resKey  + " using Locale: " + rb.getLocale());
+                                    log.debug("Converted {}={} to {} using Locale: {}", propName, propValue, resKey, rb.getLocale());
                                 }
                                 ((StringProperty) property).setValue(resKey); // reset the value
                                 super.setProperty(property);
@@ -137,7 +137,7 @@ public class CSVDataSet extends ConfigTestElement
                             }
                         }
                         // This could perhaps be a variable name
-                        log.warn("Could not translate " + propName + "=" + propValue + " using Locale: " + rb.getLocale());
+                        log.warn("Could not translate {}={} using Locale: {}", propName, propValue, rb.getLocale());
                     } catch (IntrospectionException e) {
                         log.error("Could not find BeanInfo; cannot translate shareMode entries", e);
                     }
