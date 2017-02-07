@@ -23,17 +23,17 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.SSLManager;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopTestException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configure Keystore
  */
 public class KeystoreConfig extends ConfigTestElement implements TestBean, TestStateListener {
 
-    private static final long serialVersionUID = -5781402012242794890L;
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final long serialVersionUID = 1L;
+    private static final Logger log = LoggerFactory.getLogger(KeystoreConfig.class);
 
     private static final String KEY_STORE_START_INDEX = "https.keyStoreStartIndex"; // $NON-NLS-1$
     private static final String KEY_STORE_END_INDEX   = "https.keyStoreEndIndex"; // $NON-NLS-1$
@@ -76,7 +76,8 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
             try {
                 startIndexAsInt = Integer.parseInt(this.startIndex);
             } catch(NumberFormatException e) {
-                log.warn("Failed parsing startIndex :'"+this.startIndex+"', will default to:'"+startIndexAsInt+"', error message:"+ e.getMessage(), e);
+                log.warn("Failed parsing startIndex: {}, will default to: {}, error message: {}", this.startIndex,
+                        startIndexAsInt, e, e);
             }
         } 
         
@@ -84,15 +85,16 @@ public class KeystoreConfig extends ConfigTestElement implements TestBean, TestS
             try {
                 endIndexAsInt = Integer.parseInt(this.endIndex);
             } catch(NumberFormatException e) {
-                log.warn("Failed parsing endIndex :'"+this.endIndex+"', will default to:'"+endIndexAsInt+"', error message:"+ e.getMessage(), e);
+                log.warn("Failed parsing endIndex: {}, will default to: {}, error message: {}", this.endIndex,
+                        endIndexAsInt, e, e);
             }
         } 
         if(startIndexAsInt>endIndexAsInt) {
             throw new JMeterStopTestException("Keystore Config error : Alias start index must be lower than Alias end index");
         }
-        log.info("Configuring Keystore with (preload:"+preload+", startIndex:"+
-                startIndexAsInt+", endIndex:"+endIndexAsInt+
-                ", clientCertAliasVarName:'" + clientCertAliasVarName +"')");
+        log.info(
+                "Configuring Keystore with (preload: '{}', startIndex: {}, endIndex: {}, clientCertAliasVarName: '{}')",
+                preload, startIndexAsInt, endIndexAsInt, clientCertAliasVarName);
 
         SSLManager.getInstance().configureKeystore(Boolean.parseBoolean(preload),
                 startIndexAsInt, 

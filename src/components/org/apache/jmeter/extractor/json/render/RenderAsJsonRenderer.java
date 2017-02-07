@@ -44,8 +44,8 @@ import org.apache.jmeter.visualizers.ResultRenderer;
 import org.apache.jmeter.visualizers.ViewResultsFullVisualizer;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  */
 public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
 
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RenderAsJsonRenderer.class);
 
     private static final String TAB_SEPARATOR = "    "; //$NON-NLS-1$
     
@@ -153,7 +153,7 @@ public class RenderAsJsonRenderer implements ResultRenderer, ActionListener {
             jsonDataField.setText(response == null ? "" : RenderAsJSON.prettyJSON(response, TAB_SEPARATOR));  //$NON-NLS-1$
             jsonDataField.setCaretPosition(0);
         } catch (Exception e) {
-            LOGGER.error("Exception converting to XML: "+response+ ", message: "+e.getMessage(),e); //$NON-NLS-1$ $NON-NLS-2$
+            log.error("Exception converting to XML: {}, message: {}", response, e.getMessage(), e); //$NON-NLS-1$ $NON-NLS-2$
             jsonDataField.setText("Exception converting to XML: "+response+ ", message: "+e.getMessage()); //$NON-NLS-1$ $NON-NLS-2$
             jsonDataField.setCaretPosition(0);
         }
