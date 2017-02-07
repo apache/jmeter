@@ -26,8 +26,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a Critical Section Controller; it will execute the set of statements
@@ -61,12 +61,9 @@ import org.apache.log.Logger;
 public class CriticalSectionController extends GenericController implements
         ThreadListener, TestStateListener {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 4362876132435968088L;
+    private static final long serialVersionUID = 1L;
 
-    private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CriticalSectionController.class);
 
     private static final String LOCK_NAME = "CriticalSectionController.lockName"; //$NON-NLS-1$
 
@@ -129,8 +126,7 @@ public class CriticalSectionController extends GenericController implements
     @Override
     public Sampler next() {
         if (StringUtils.isEmpty(getLockName())) {
-            logger.warn("Empty lock name in Critical Section Controller:"
-                    + getName());
+            log.warn("Empty lock name in Critical Section Controller: {}", getName());
             return super.next();
         }
         if (isFirst()) {
@@ -141,11 +137,9 @@ public class CriticalSectionController extends GenericController implements
             }
             this.currentLock.lock();
             long endTime = System.currentTimeMillis();
-            if (logger.isDebugEnabled()) {
-                logger.debug(Thread.currentThread().getName()
-                        + " acquired lock:'" + getLockName()
-                        + "' in Critical Section Controller " + getName()
-                        + " in:" + (endTime - startTime) + " ms");
+            if (log.isDebugEnabled()) {
+                log.debug("Thread ('{}') acquired lock: '{}' in Critical Section Controller {}  in: {} ms",
+                        Thread.currentThread(), getLockName(), getName(), endTime - startTime);
             }
         }
         return super.next();
@@ -176,8 +170,7 @@ public class CriticalSectionController extends GenericController implements
     public void threadFinished() {
         if (this.currentLock != null
                 && this.currentLock.isHeldByCurrentThread()) {
-            logger.warn("Lock " + getLockName() + " not released in:"
-                    + getName() + ", releasing in threadFinished");
+            log.warn("Lock '{}' not released in: {}, releasing in threadFinished", getLockName(), getName());
             this.currentLock.unlock();
         }
         this.currentLock = null;
