@@ -21,14 +21,14 @@ package org.apache.jmeter.timers;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BeanShellTimer extends BeanShellTestElement implements Cloneable, Timer, TestBean {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BeanShellTimer.class);
 
-    private static final long serialVersionUID = 4;
+    private static final long serialVersionUID = 5;
 
     // can be specified in jmeter.properties
     private static final String INIT_FILE = "beanshell.timer.init"; //$NON-NLS-1$
@@ -55,7 +55,7 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
                 ret=o.toString(); 
             }
         } catch (JMeterException e) {
-            log.warn("Problem in BeanShell script "+e);
+            log.warn("Problem in BeanShell script. {}", e.toString());
         }
         try {
             return Long.decode(ret).longValue();
