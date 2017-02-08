@@ -1455,6 +1455,10 @@ log_level.org.apache.http.client=DEBUG
     for the Console Logger panel.<br/>
     Defaults to: <code>true</code>
 </property>
+<property name="view.results.tree.max_results">
+    Maximum number of main samples, that should be stored and displayed.<br/>
+    Defaults to: <code>500</code>
+</property>
 <property name="view.results.tree.max_size">
     Maximum size (in bytes) of HTML page that can be displayed.<br/>
     Set to zero to disable the size check and display the whole response.<br/>
@@ -1468,6 +1472,9 @@ log_level.org.apache.http.client=DEBUG
     Defaults to:
     <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
 </property>
+<property name="view.results.tree.refresh_period">
+    Interval in <code>ms</code> after which the results should be updated.<br/>
+    Defaults to: <code>500</code></property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>

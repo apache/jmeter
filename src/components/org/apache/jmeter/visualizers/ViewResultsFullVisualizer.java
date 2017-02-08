@@ -33,6 +33,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -55,6 +57,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.apache.commons.collections.buffer.BoundedFifoBuffer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -124,11 +127,17 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final String VIEWERS_ORDER =
         JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("view.results.tree.refresh_period", 500);
+
     private ResultRenderer resultsRender = null;
 
     private TreeSelectionEvent lastSelectionEvent;
 
     private JCheckBox autoScrollCB;
+
+    private BoundedFifoBuffer buffer = new BoundedFifoBuffer(JMeterUtils.getPropDefault("view.results.tree.max_results", 500));
+
+    private boolean dataChanged;
 
     /**
      * Constructor
@@ -136,30 +145,52 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     public ViewResultsFullVisualizer() {
         super();
         init();
+        new Timer(REFRESH_PERIOD, e -> {
+            updateGui();
+        }).start();
     }
 
     /** {@inheritDoc} */
     @Override
     public void add(final SampleResult sample) {
-        JMeterUtils.runSafe(false, ()-> updateGui(sample));
+        synchronized (buffer) {
+            if (buffer.isFull()) {
+                buffer.remove();
+            }
+            buffer.add(sample);
+            dataChanged = true;
+        }
     }
 
     /**
      * Update the visualizer with new data.
      */
-    private synchronized void updateGui(SampleResult res) {
-        // Add sample
-        DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
-        treeModel.insertNodeInto(currNode, root, root.getChildCount());
-        addSubResults(currNode, res);
-        // Add any assertion that failed as children of the sample node
-        AssertionResult[] assertionResults = res.getAssertionResults();
-        int assertionIndex = currNode.getChildCount();
-        for (AssertionResult assertionResult : assertionResults) {
-            if (assertionResult.isFailure() || assertionResult.isError()) {
-                DefaultMutableTreeNode assertionNode = new SearchableTreeNode(assertionResult, treeModel);
-                treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
+    private void updateGui() {
+        synchronized (buffer) {
+            if (!dataChanged) {
+                return;
             }
+            root.removeAllChildren();
+            @SuppressWarnings("unchecked")
+            Iterator<SampleResult> samplers = buffer.iterator();
+            while (samplers.hasNext()) {
+                SampleResult res = (SampleResult) samplers.next();
+                // Add sample
+                DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
+                treeModel.insertNodeInto(currNode, root, root.getChildCount());
+                addSubResults(currNode, res);
+                // Add any assertion that failed as children of the sample node
+                AssertionResult[] assertionResults = res.getAssertionResults();
+                int assertionIndex = currNode.getChildCount();
+                for (AssertionResult assertionResult : assertionResults) {
+                    if (assertionResult.isFailure() || assertionResult.isError()) {
+                        DefaultMutableTreeNode assertionNode = new SearchableTreeNode(assertionResult, treeModel);
+                        treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
+                    }
+                }
+            }
+            treeModel.nodeStructureChanged(root);
+            dataChanged = false;
         }
 
         if (root.getChildCount() == 1) {
@@ -196,11 +227,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void clearData() {
-        while (root.getChildCount() > 0) {
-            // the child to be removed will always be 0 'cos as the nodes are
-            // removed the nth node will become (n-1)th
-            treeModel.removeNodeFromParent((DefaultMutableTreeNode) root.getChildAt(0));
+    public void clearData() {
+        synchronized (buffer) {
+            buffer.clear();
+            dataChanged = true;
         }
         resultsRender.clearData();
     }
