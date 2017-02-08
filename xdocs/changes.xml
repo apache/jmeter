@@ -163,6 +163,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>58943</bug>Create a Better Think Time experience. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60602</bug>XPath Extractor : Add Match No. to allow extraction randomly, by index or all matches</li>
     <li><bug>60710</bug>XPath Extractor : When content on which assertion applies is not XML, in View Results Tree the extractor is marked in Red and named SAXParseException. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60712</bug>Response Assertion : Improve Renderer of Patterns</li>
 </ul>
 
 <h3>Functions</h3>

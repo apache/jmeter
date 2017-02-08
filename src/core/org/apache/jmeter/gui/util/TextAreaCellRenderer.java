@@ -18,36 +18,45 @@
 
 package org.apache.jmeter.gui.util;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.table.TableCellRenderer;
 
 public class TextAreaCellRenderer implements TableCellRenderer {
 
-    private JTextArea rend = new JTextArea("");
+    private JSyntaxTextArea rend = createRenderer(""); //$NON-NLS-1$ 
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus,
             int row, int column) {
         if(value != null) {
-            rend = new JTextArea(value.toString());
+            rend = createRenderer((String)value);
         } else {
-            rend = new JTextArea();
+            rend = createRenderer(""); //$NON-NLS-1$
         }
-        // Use two rows, so that we have room for horisontal scrollbar, if the text is one long line. Fix for 40371
-        // This is not an optimal solution, but makes it possible to see the line if it is long
-        rend.setRows(2);
-        rend.revalidate();
-        if (!hasFocus && !isSelected) {
-            rend.setBackground(JMeterColor.LAVENDER);
+        if (hasFocus || isSelected) {
+            rend.setBackground(Color.blue);
+            rend.setForeground(Color.white);
         }
         if (table.getRowHeight(row) < getPreferredHeight()) {
             table.setRowHeight(row, getPreferredHeight());
         }
-        return rend;
+        JTextScrollPane scrollPane = JTextScrollPane.getInstance(rend);
+        return scrollPane;
+    }
+
+    /**
+     * @param value initial value
+     * @return {@link JSyntaxTextArea}
+     */
+    private JSyntaxTextArea createRenderer(String value) {
+        JSyntaxTextArea textArea = JSyntaxTextArea.getInstance(2, 50);
+        textArea.setLanguage("text"); //$NON-NLS-1$
+        textArea.setInitialText(value.toString());
+        return textArea;
     }
 
     public int getPreferredHeight() {
