@@ -181,7 +181,9 @@ public class SyncTimer extends AbstractTestElement implements Timer, Serializabl
             } catch (InterruptedException | BrokenBarrierException e) {
                 return 0;
             } catch (TimeoutException e) {
-                log.warn("SyncTimer {} timeouted waiting for users after: {}ms", getName(), getTimeoutInMs());
+                if (log.isWarnEnabled()) {
+                    log.warn("SyncTimer {} timeouted waiting for users after: {}ms", getName(), getTimeoutInMs());
+                }
                 return 0;
             } finally {
                 if(arrival == 0) {

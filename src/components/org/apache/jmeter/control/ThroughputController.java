@@ -137,10 +137,11 @@ public class ThroughputController extends GenericController implements Serializa
         if (prop instanceof IntegerProperty) {
             retVal = ((IntegerProperty) prop).getIntValue();
         } else {
+            String valueString = prop.getStringValue();
             try {
-                retVal = Integer.parseInt(prop.getStringValue());
+                retVal = Integer.parseInt(valueString);
             } catch (NumberFormatException e) {
-                log.warn("Error parsing {}", prop.getStringValue(), e);
+                log.warn("Error parsing '{}'", valueString, e);
             }
         }
         return retVal;
@@ -164,10 +165,11 @@ public class ThroughputController extends GenericController implements Serializa
         if (prop instanceof FloatProperty) {
             retVal = ((FloatProperty) prop).getFloatValue();
         } else {
+            String valueString = prop.getStringValue();
             try {
-                retVal = Float.parseFloat(prop.getStringValue());
+                retVal = Float.parseFloat(valueString);
             } catch (NumberFormatException e) {
-                log.warn("Error parsing {}", prop.getStringValue(),e);
+                log.warn("Error parsing '{}'", valueString, e);
             }
         }
         return retVal;

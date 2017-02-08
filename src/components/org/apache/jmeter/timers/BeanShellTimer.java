@@ -55,12 +55,14 @@ public class BeanShellTimer extends BeanShellTestElement implements Cloneable, T
                 ret=o.toString(); 
             }
         } catch (JMeterException e) {
-            log.warn("Problem in BeanShell script. {}", e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("Problem in BeanShell script. {}", e.toString());
+            }
         }
         try {
             return Long.decode(ret).longValue();
         } catch (NumberFormatException e){
-            log.warn(e.getLocalizedMessage());
+            log.warn("Number format exception while decoding number: '{}'", ret);
             return 0;
         }
     }

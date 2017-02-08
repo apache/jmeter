@@ -129,7 +129,9 @@ public class IncludeController extends GenericController implements ReplaceableC
                 if(!file.exists() && !file.isAbsolute()){
                     log.info("loadIncludedElements -failed for: {}", absolutePath);
                     file = new File(FileServer.getFileServer().getBaseDir(), includePath);
-                    log.info("loadIncludedElements -Attempting to read it from: {}", file.getAbsolutePath());
+                    if (log.isInfoEnabled()) {
+                        log.info("loadIncludedElements -Attempting to read it from: {}", file.getAbsolutePath());
+                    }
                     if(!file.canRead() || !file.isFile()){
                         log.error("Include Controller '{}' can't load '{}' - see log for details", this.getName(),
                                 fileName);

@@ -118,7 +118,9 @@ public class BeanShellAssertion extends BeanShellTestElement implements Assertio
         {
             result.setError(true);
             result.setFailureMessage(ex.toString());
-            log.warn(ex.toString());
+            if (log.isWarnEnabled()) {
+                log.warn(ex.toString());
+            }
         }
 
         return result;
