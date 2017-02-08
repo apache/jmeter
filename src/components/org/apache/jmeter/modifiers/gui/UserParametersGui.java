@@ -347,6 +347,11 @@ public class UserParametersGui extends AbstractPreProcessorGui {
                 if (tableModel.getRowCount() == 0) {
                     deleteRowButton.setEnabled(false);
                 }
+            } else {
+                if(tableModel.getRowCount()>0) {
+                    tableModel.removeRow(0);
+                    tableModel.fireTableDataChanged();
+                }
             }
         }
     }

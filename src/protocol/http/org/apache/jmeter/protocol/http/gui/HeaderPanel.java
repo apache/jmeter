@@ -174,6 +174,12 @@ public class HeaderPanel extends AbstractConfigGui implements ActionListener
             }
 
             checkButtonsStatus();
+        } else {
+            if(tableModel.getRowCount()>0) {
+                tableModel.removeRow(0);
+                tableModel.fireTableDataChanged();
+                headerTable.setRowSelectionInterval(0, 0);
+            }
         }
     }
 
