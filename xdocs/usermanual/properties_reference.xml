@@ -158,8 +158,11 @@ The <code>system.properties</code> file gives more flexibility.</note>
     <note>Note this has some impact on performances, but as GUI mode must not be used for Load Test it is acceptable</note>
     Defaults to: <code>true</code></property>
 <property name="jmeter.loggerpanel.maxlength">
-     Max characters kept in LoggerPanel, <code>0</code> means no limit.<br/>
-     Defaults to: <code>80000</code></property>
+     Max lines kept in LoggerPanel, <code>0</code> means no limit.<br/>
+     Defaults to: <code>1000</code></property>
+<property name="jmeter.loggerpanel.refresh_period">
+    Interval in <code>ms</code> to refresh the log entries in the panel.<br/>
+    Defaults to: <code>500</code></property>
 </properties>
 </section>
 <section name="&sect-num;.5 Toolbar display" anchor="toolbar_display">
