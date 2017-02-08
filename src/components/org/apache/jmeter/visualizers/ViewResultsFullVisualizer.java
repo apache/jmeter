@@ -63,8 +63,8 @@ import org.apache.jmeter.samplers.Clearable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base for ViewResults
@@ -73,9 +73,9 @@ import org.apache.log.Logger;
 public class ViewResultsFullVisualizer extends AbstractVisualizer
 implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
-    private static final long serialVersionUID = 7338676747296593842L;
+    private static final long serialVersionUID = 1L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ViewResultsFullVisualizer.class);
 
     public static final Color SERVER_ERROR_COLOR = Color.red;
 
@@ -177,9 +177,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         int leafIndex = 0;
 
         for (SampleResult child : subResults) {
-            if (log.isDebugEnabled()) {
-                log.debug("updateGui1 : child sample result - " + child);
-            }
+            log.debug("updateGui1 : child sample result - {}", child);
             DefaultMutableTreeNode leafNode = new SearchableTreeNode(child, treeModel);
 
             treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
@@ -339,7 +337,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 renderer.setBackgroundColor(getBackground());
                 map.put(renderer.getClass().getName(), renderer);
             } catch (Exception | NoClassDefFoundError e) { // NOSONAR See bug 60583
-                log.warn("Error loading result renderer:" + clazz, e);
+                log.warn("Error loading result renderer: {}", clazz, e);
             }
         }
         if(VIEWERS_ORDER.length()>0) {
@@ -352,8 +350,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 if(renderer != null) {
                     selectRenderPanel.addItem(renderer);
                 } else {
-                    log.warn("Missing (check spelling error in renderer name) or already added(check doublon) " +
-                            "result renderer, check property 'view.results.tree.renderers_order', renderer name:'"+key+"'");
+                    log.warn(
+                            "Missing (check spelling error in renderer name) or already added(check doublon) "
+                                    + "result renderer, check property 'view.results.tree.renderers_order', renderer name: '{}'",
+                            key);
                 }
             }
         }
@@ -385,7 +385,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     mainSplit.add(rightSide);
                     resultsRender.setRightSide(rightSide);
                     resultsRender.setLastSelectedTab(selectedTab);
-                    log.debug("selectedTab=" + selectedTab);
+                    log.debug("selectedTab={}", selectedTab);
                     resultsRender.init();
                     // To display current sampler result before change
                     this.valueChanged(lastSelectionEvent);
