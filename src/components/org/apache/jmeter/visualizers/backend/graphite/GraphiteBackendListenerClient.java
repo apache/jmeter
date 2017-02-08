@@ -40,8 +40,8 @@ import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
 import org.apache.jmeter.visualizers.backend.UserMetric;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Graphite based Listener using Pickle Protocol
@@ -67,7 +67,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     private static final String TEST_CONTEXT_NAME = "test";
     private static final String ALL_CONTEXT_NAME = "all";
 
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(GraphiteBackendListenerClient.class);
     private static final String DEFAULT_METRICS_PREFIX = "jmeter."; //$NON-NLS-1$
     private static final String CUMULATED_METRICS = "__cumulated__"; //$NON-NLS-1$
     // User Metrics
@@ -294,7 +294,7 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
                             percentileValue);
 
                 } catch (Exception e) {
-                    LOGGER.error("Error parsing percentile:'" + percentilesString + "'", e);
+                    log.error("Error parsing percentile: '{}'", percentilesString, e);
                 }
             }
         }
@@ -316,14 +316,12 @@ public class GraphiteBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
         boolean cancelState = timerHandle.cancel(false);
-        if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Canceled state:"+cancelState);
-        }
+        log.debug("Canceled state: {}", cancelState);
         scheduler.shutdown();
         try {
             scheduler.awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            LOGGER.error("Error waiting for end of scheduler");
+            log.error("Error waiting for end of scheduler");
             Thread.currentThread().interrupt();
         }
         // Send last set of data before ending

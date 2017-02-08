@@ -41,8 +41,8 @@ import org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.nio.reactor.ConnectingIOReactor;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Influxdb sender base on The Line Protocol. The Line Protocol is a text based
@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  * @since 3.2
  */
 class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HttpMetricsSender.class);
 
     private final Object lock = new Object();
 
@@ -124,9 +124,7 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
         
         HttpPost httpRequest = new HttpPost(url.toURI());
         httpRequest.setConfig(defaultRequestConfig);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Created InfluxDBMetricsSender with url:" + url);
-        }
+        log.debug("Created InfluxDBMetricsSender with url: {}", url);
         return httpRequest;
     }
 
@@ -184,28 +182,26 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                          */
                         switch (code) {
                         case 204:
-                            if(LOG.isDebugEnabled()) {
-                                LOG.debug("Success, number of metrics written : " + copyMetrics.size());
+                            if (log.isDebugEnabled()) {
+                                log.debug("Success, number of metrics written: {}", copyMetrics.size());
                             }
                             break;
                         default:
-                            if(LOG.isDebugEnabled()) {
-                                LOG.debug("Error writing metrics to influxDB Url: "+ url+", responseCode: " + code);
-                            }
+                            log.debug("Error writing metrics to influxDB Url: {}, responseCode: {}", url, code);
                         }
                     }
                     @Override
                     public void failed(final Exception ex) {
-                        LOG.error("failed to send data to influxDB server : " + ex.getMessage());
+                        log.error("failed to send data to influxDB server : {}", ex.getMessage());
                     }
                     @Override
                     public void cancelled() {
-                        LOG.warn("Request to influxDB server was cancelled");
+                        log.warn("Request to influxDB server was cancelled");
                     }
                 });
                
             }catch (URISyntaxException ex ) {
-                LOG.error(ex.getMessage());
+                log.error(ex.getMessage());
             }
         }
 
@@ -220,11 +216,11 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
     @Override
     public void destroy() {
         // Give some time to send last metrics before shutting down
-        LOG.info("Destroying ");
+        log.info("Destroying ");
         try {
             lastRequest.get(5, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOG.error("Error waiting for last request to be send to InfluxDB", e);
+            log.error("Error waiting for last request to be send to InfluxDB", e);
         }
         if(httpRequest != null) {
             httpRequest.abort();

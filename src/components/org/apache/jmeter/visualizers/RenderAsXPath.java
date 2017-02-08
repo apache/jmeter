@@ -50,9 +50,9 @@ import org.apache.jmeter.util.TidyException;
 import org.apache.jmeter.util.XPathUtil;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -62,7 +62,7 @@ import org.xml.sax.SAXException;
  */
 public class RenderAsXPath implements ResultRenderer, ActionListener {
 
-    private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RenderAsXPath.class);
 
     private static final String XPATH_TESTER_COMMAND = "xpath_tester"; // $NON-NLS-1$
 
@@ -186,7 +186,7 @@ public class RenderAsXPath implements ResultRenderer, ActionListener {
             xmlDataField.setText(response == null ? "" : response);
             xmlDataField.setCaretPosition(0);
         } catch (Exception e) {
-            logger.error("Exception converting to XML:"+response+ ", message:"+e.getMessage(),e);
+            log.error("Exception converting to XML: {}, message: {}", response, e.getMessage(), e);
             xmlDataField.setText("Exception converting to XML:"+response+ ", message:"+e.getMessage());
             xmlDataField.setCaretPosition(0);
         }
