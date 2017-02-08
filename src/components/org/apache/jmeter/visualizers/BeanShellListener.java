@@ -25,9 +25,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.BeanShellTestElement;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * We must implement Visualizer so that TestBeanGUI can find the correct GUI class
@@ -36,7 +36,7 @@ import org.apache.log.Logger;
 public class BeanShellListener extends BeanShellTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer, UnsharedComponent  {
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BeanShellListener.class);
 
     private static final long serialVersionUID = 4;
 
@@ -62,7 +62,7 @@ public class BeanShellListener extends BeanShellTestElement
             bshInterpreter.set("sampleResult", samp);//$NON-NLS-1$
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
-            log.warn("Problem in BeanShell script "+e);
+            log.warn("Problem in BeanShell script. {}", e.toString());
         }
     }
 

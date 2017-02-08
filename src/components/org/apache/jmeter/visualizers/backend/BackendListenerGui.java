@@ -42,9 +42,9 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.gui.AbstractListenerGui;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link BackendListenerGui} class provides the user interface for the
@@ -56,10 +56,10 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
     /**
      * 
      */
-    private static final long serialVersionUID = 4331668988576438604L;
+    private static final long serialVersionUID = 1L;
 
     /** Logging */
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BackendListenerGui.class);
 
     /** A combo box allowing the user to choose a backend class. */
     private JComboBox<String> classnameCombo;
@@ -123,7 +123,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
             possibleClasses.remove(BackendListener.class.getName() + "$ErrorBackendListenerClient");
         } catch (Exception e) {
-            LOGGER.debug("Exception getting interfaces.", e);
+            log.debug("Exception getting interfaces.", e);
         }
 
         JLabel label = new JLabel(JMeterUtils.getResString("backend_listener_classname")); // $NON-NLS-1$
@@ -175,9 +175,9 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
                 try {
                     testParams = client.getDefaultParameters();
                 } catch (AbstractMethodError e) {
-                    LOGGER.warn("BackendListenerClient doesn't implement "
+                    log.warn("BackendListenerClient doesn't implement "
                             + "getDefaultParameters.  Default parameters won't "
-                            + "be shown.  Please update your client class: " + className);
+                            + "be shown.  Please update your client class: {}", className);
                 }
 
                 if (testParams != null) {
@@ -202,7 +202,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
 
                 argsPanel.configure(newArgs);
             } catch (Exception e) {
-                LOGGER.error("Error getting argument list for " + className, e);
+                log.error("Error getting argument list for {}", className, e);
             }
         }
     }
@@ -229,8 +229,9 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
         if(checkContainsClassName(classnameCombo.getModel(), className)) {
             classnameCombo.setSelectedItem(className);
         } else {
-            LOGGER.error("Error setting class:'"+className+"' in BackendListener: "+getName()+
-                    ", check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties");
+            log.error(
+                    "Error setting class: '{}' in BackendListener: {}, check for a missing jar in your jmeter 'search_paths' and 'plugin_dependency_paths' properties",
+                    className, getName());
         }
         queueSize.setText(((BackendListener)config).getQueueSize());
     }

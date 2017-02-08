@@ -23,8 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract implementation of the BackendListenerClient interface. This
@@ -53,7 +53,7 @@ import org.apache.log.Logger;
  */
 public abstract class AbstractBackendListenerClient implements BackendListenerClient {
 
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AbstractBackendListenerClient.class);
     private UserMetric userMetrics = new UserMetric();
     
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
@@ -61,7 +61,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     /* Implements BackendListenerClient.setupTest(BackendListenerContext) */
     @Override
     public void setupTest(BackendListenerContext context) throws Exception {
-        LOGGER.debug(getClass().getName() + ": setupTest");
+        log.debug("{}: setupTest", AbstractBackendListenerClient.class);
         metricsPerSampler.clear();
         userMetrics.clear();
     }
@@ -69,7 +69,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
     /* Implements BackendListenerClient.teardownTest(BackendListenerContext) */
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
-        LOGGER.debug(getClass().getName() + ": teardownTest");
+        log.debug("{}: teardownTest", AbstractBackendListenerClient.class);
         metricsPerSampler.clear();
         userMetrics.clear();
     }
@@ -87,7 +87,7 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
      * @return a Logger instance which can be used for logging
      */
     protected Logger getLogger() {
-        return LOGGER;
+        return log;
     }
 
     /**

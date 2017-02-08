@@ -40,8 +40,8 @@ import org.apache.jmeter.visualizers.backend.AbstractBackendListenerClient;
 import org.apache.jmeter.visualizers.backend.BackendListenerContext;
 import org.apache.jmeter.visualizers.backend.SamplerMetric;
 import org.apache.jmeter.visualizers.backend.UserMetric;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using 
@@ -50,7 +50,7 @@ import org.apache.log.Logger;
  */
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
 
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(InfluxdbBackendListenerClient.class);
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
@@ -289,7 +289,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
                             percentileValue);
 
                 } catch (Exception e) {
-                    LOGGER.error("Error parsing percentile:'" + percentilesStringArray[i] + "'", e);
+                    log.error("Error parsing percentile: '{}'", percentilesStringArray[i], e);
                 }
             }
         }
@@ -324,21 +324,19 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     @Override
     public void teardownTest(BackendListenerContext context) throws Exception {
         boolean cancelState = timerHandle.cancel(false);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Canceled state:" + cancelState);
-        }
+        log.debug("Canceled state: {}", cancelState);
         scheduler.shutdown();
         try {
             scheduler.awaitTermination(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            LOGGER.error("Error waiting for end of scheduler");
+            log.error("Error waiting for end of scheduler");
             Thread.currentThread().interrupt();
         }
 
         addAnnotation(false);
 
         // Send last set of data before ending
-        LOGGER.info("Sending last metrics");
+        log.info("Sending last metrics");
         sendMetrics();
 
         influxdbMetricsManager.destroy();

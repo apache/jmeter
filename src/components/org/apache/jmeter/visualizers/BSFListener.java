@@ -25,8 +25,8 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
@@ -34,7 +34,7 @@ import org.apache.log.Logger;
 public class BSFListener extends BSFTestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BSFListener.class);
 
     private static final long serialVersionUID = 234L;
 
@@ -52,7 +52,7 @@ public class BSFListener extends BSFTestElement
             mgr.declareBean("sampleResult", result, SampleResult.class);
             processFileOrScript(mgr);
         } catch (BSFException e) {
-            log.warn("Problem in BSF script "+e);
+            log.warn("Problem in BSF script. {}", e.toString());
         } finally {
             if (mgr != null) {
                 mgr.terminate();

@@ -34,8 +34,6 @@ import java.math.BigDecimal;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.ChartDataException;
@@ -51,12 +49,14 @@ import org.jCharts.properties.PointChartProperties;
 import org.jCharts.properties.PropertyException;
 import org.jCharts.properties.util.ChartFont;
 import org.jCharts.types.ChartType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RespTimeGraphChart extends JPanel {
 
-    private static final long serialVersionUID = 280L;
+    private static final long serialVersionUID = 281L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RespTimeGraphChart.class);
 
     protected double[][] data;
     
@@ -342,7 +342,7 @@ public class RespTimeGraphChart extends JPanel {
                 yaxis.setNumItems((int)(max / incrTopValue) + 1);
                 yaxis.setShowGridLines(1);
             } catch (PropertyException e) {
-                log.warn("",e);
+                log.warn("Exception while setting Y axis properties.", e);
             }
 
             AxisProperties axisProperties= new AxisProperties(xaxis, yaxis);
@@ -366,7 +366,7 @@ public class RespTimeGraphChart extends JPanel {
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (ChartDataException | PropertyException e) {
-            log.warn("", e);
+            log.warn("Exception while rendering axis chart.", e);
         }
     }
 
