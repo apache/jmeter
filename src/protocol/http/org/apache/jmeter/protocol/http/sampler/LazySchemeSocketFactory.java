@@ -30,15 +30,15 @@ import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.params.HttpParams;
 import org.apache.jmeter.protocol.http.util.HC4TrustAllSSLSocketFactory;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Lazy SchemeSocketFactory that lazily initializes HTTPS Socket Factory
  * @since 3.0
  */
 public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory{
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(LazySchemeSocketFactory.class);
 
     private static class AdapteeHolder { // IODH idiom
         private static final SchemeLayeredSocketFactory ADAPTEE = checkAndInit();  

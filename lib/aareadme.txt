@@ -21,12 +21,6 @@ accessors-smart-1.1 (net.minidev)
 ----------------------
 - JSON Path extractor
 
-avalon-framework-4.1.4 (org.apache.avalon.framework)
-----------------------
-- LogKit (LoggingManager)
-- Configuration (DataSourceElement)
-- OldSaveService
-
 bsf-2.4.0.jar (org.apache.bsf)
 -------------
 http://jakarta.apache.org/site/downloads/downloads_bsf.cgi
@@ -74,11 +68,6 @@ commons-lang3-3.5
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
 
-commons-logging-1.2
----------------------
-http://commons.apache.org/downloads/download_logging.cgi
-- httpclient
-
 commons-math3-3.6.1
 -----------------
 http://commons.apache.org/proper/commons-math/download_math.cgi
@@ -98,10 +87,6 @@ dnsjava-2.1.8
 -----------------
 http://www.dnsjava.org/download/
 - DNSCacheManager
-
-excalibur-logger-1.1 (org.apache.avalon.excalibur.logger)
---------------------
-- LoggingManager
 
 groovy-all-2.4.8
 ----------------------
@@ -200,11 +185,6 @@ HttpComponents
 http://hc.apache.org/
 - httpclient 4 implementation for HTTP sampler
 - httpasyncclient implementation for InfluxDB Backend Listener Client
-
-logkit-2.0
-----------
-- logging
-- Anakia
 
 mongo-java-driver 2.11.3
 ------------------------

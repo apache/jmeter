@@ -34,8 +34,8 @@ import javax.naming.NamingException;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.sampler.JMSProperties;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for JMS protocol.
@@ -50,7 +50,7 @@ public final class Utils {
     // http://docs.oracle.com/javaee/6/tutorial/doc/bncfu.html
     public static final String DEFAULT_NO_EXPIRY = "0"; // $NON-NLS-1$
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
     public static void close(MessageConsumer closeable, Logger log){
         if (closeable != null){
@@ -82,6 +82,10 @@ public final class Utils {
         }
     }
 
+    /**
+     * @param closeable {@link MessageProducer}
+     * @param log {@link Logger}
+     */
     public static void close(MessageProducer closeable, Logger log) {
         if (closeable != null){
             try {

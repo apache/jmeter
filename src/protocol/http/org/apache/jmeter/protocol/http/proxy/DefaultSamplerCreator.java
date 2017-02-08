@@ -41,8 +41,8 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -53,7 +53,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * Default implementation that handles classical HTTP textual + Multipart requests
  */
 public class DefaultSamplerCreator extends AbstractSamplerCreator {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DefaultSamplerCreator.class);
  
     /**
      * 

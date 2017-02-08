@@ -25,16 +25,16 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 
 /**
  * The ObjectTableModel is a TableModel whose rows are objects;
  * columns are defined as Functors on the object.
  */
 public class ObjectTableModel extends DefaultTableModel {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ObjectTableModel.class);
 
     private static final long serialVersionUID = 240L;
 

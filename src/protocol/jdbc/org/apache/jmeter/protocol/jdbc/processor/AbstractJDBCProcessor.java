@@ -24,38 +24,34 @@ import java.sql.SQLException;
 
 import org.apache.jmeter.protocol.jdbc.AbstractJDBCTestElement;
 import org.apache.jmeter.protocol.jdbc.config.DataSourceElement;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * As pre- and post-processors essentially do the same this class provides the implementation.
  */
 public abstract class AbstractJDBCProcessor extends AbstractJDBCTestElement {
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AbstractJDBCProcessor.class);
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     /**
      * Calls the JDBC code to be executed.
      */
     protected void process() {
-        Connection conn = null;
         if(JOrphanUtils.isBlank(getDataSource())) {
             throw new IllegalArgumentException("Variable Name must not be null in "+getName());
         }
-        try {
-            conn = DataSourceElement.getConnection(getDataSource());
+        try (Connection conn = DataSourceElement.getConnection(getDataSource())){
             execute(conn);
         } catch (SQLException ex) {
-            log.warn("SQL Problem in  "+ getName() + ": " + ex.toString());
+            log.warn("SQL Problem in {}: {}", getName(), ex.toString());
         } catch (IOException ex) {
-            log.warn("IO Problem in  "+ getName() + ": " + ex.toString());
+            log.warn("IO Problem in {}: {}"+ getName(), ex.toString());
         } catch (UnsupportedOperationException ex) {
-            log.warn("Execution Problem in "+ getName() + ": " + ex.toString());
-        } finally {
-            close(conn);
+            log.warn("Execution Problem in {}: {}", getName(), ex.toString());
         }
     }
 

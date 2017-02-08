@@ -137,8 +137,8 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HTTP Sampler using Apache HttpClient 4.x.
@@ -148,7 +148,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
 
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
@@ -362,8 +362,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // Some servers fail if Content-Length is equal to 0
                 // so to avoid this we use HttpGet when there is no body (Content-Length will not be set)
                 // otherwise we use HttpGetWithEntity
-                if ( (!hasArguments() && getSendFileAsPostBody()) 
-                        || getSendParameterValuesAsPostBody() ) {
+                if ( !areFollowingRedirect 
+                        && ((!hasArguments() && getSendFileAsPostBody()) 
+                        || getSendParameterValuesAsPostBody()) ) {
                     httpRequest = new HttpGetWithEntity(uri);
                 } else {
                     httpRequest = new HttpGet(uri);

@@ -24,22 +24,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 
+import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.samplers.Entry;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.ThreadListener;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.Test.None;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.Protectable;
 import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestResult;
-
-import org.apache.jmeter.samplers.AbstractSampler;
-import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Test.None;
 
 /**
  *
@@ -50,7 +50,7 @@ import org.junit.Test.None;
  */
 public class JUnitSampler extends AbstractSampler implements ThreadListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JUnitSampler.class);
 
     private static final long serialVersionUID = 240L; // Remember to change this when the class changes ...
 
@@ -491,7 +491,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                 theclazz =
                     Thread.currentThread().getContextClassLoader().loadClass(className.trim());
             } catch (ClassNotFoundException e) {
-                log.warn("ClassNotFoundException:: " + e.getMessage());
+                log.warn("ClassNotFoundException:: {}", e.getMessage());
             }
             if (theclazz != null) {
                 // first we see if the class declares a string
@@ -512,7 +512,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         strCon = null;
                     }
                 } catch (NoSuchMethodException e) {
-                    log.info("Trying to find constructor with one String parameter returned error: " + e.getMessage());
+                    log.info("Trying to find constructor with one String parameter returned error: {}", e.getMessage());
                 }
                 try {
                     con = theclazz.getDeclaredConstructor(new Class[0]);
@@ -520,7 +520,7 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                         params = new Object[]{};
                     }
                 } catch (NoSuchMethodException e) {
-                    log.info("Trying to find empty constructor returned error: " + e.getMessage());
+                    log.info("Trying to find empty constructor returned error: {}", e.getMessage());
                 }
                 try {
                     // if the string constructor is not null, we use it.
@@ -531,11 +531,11 @@ public class JUnitSampler extends AbstractSampler implements ThreadListener {
                     } else if (con != null){
                         testclass = con.newInstance(params);
                     } else {
-                        log.error("No empty constructor nor string constructor found for class:"+theclazz);
+                        log.error("No empty constructor nor string constructor found for class:{}", theclazz);
                     }
                 } catch (InvocationTargetException | IllegalAccessException
                         | InstantiationException e) {
-                    log.error("Error instantiating class:"+theclazz+":"+e.getMessage(), e);
+                    log.error("Error instantiating class:{}:{}", theclazz, e.getMessage(), e);
                 }
             }
         }

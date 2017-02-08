@@ -51,10 +51,10 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterException;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 
 /**
  * Thread to handle one client request. Gets the request from the client and
@@ -64,7 +64,7 @@ import org.apache.log.Logger;
  *
  */
 public class Proxy extends Thread {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Proxy.class);
 
     private static final byte[] CRLF_BYTES = { 0x0d, 0x0a };
     private static final String CRLF_STRING = "\r\n";

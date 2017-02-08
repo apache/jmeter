@@ -193,9 +193,6 @@ There may also be some information on the <a href="http://wiki.apache.org/jmeter
 You will need to add the jar <code>activemq-all-X.X.X.jar</code> to your classpath, e.g. by storing it in the <code>lib/</code> directory.
 </p>
 <p>
-The other required jars (such as commons-logging) are already included with JMeter.
-</p>
-<p>
 See <a href="http://activemq.apache.org/initial-configuration.html">ActiveMQ initial configuration page</a>
 for details.
 </p>

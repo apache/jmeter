@@ -28,15 +28,15 @@ import javax.jms.Session;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.protocol.jms.Utils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Receiver of pseudo-synchronous reply messages.
  *
  */
 public final class Receiver implements Runnable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Receiver.class);
 
     private volatile boolean active;
 
@@ -61,16 +61,14 @@ public final class Receiver implements Runnable {
      */
     private Receiver(ConnectionFactory factory, Destination receiveQueue, String principal, String credentials, boolean useResMsgIdAsCorrelId, String jmsSelector) throws JMSException {
         if (null != principal && null != credentials) {
-            log.info("creating receiver WITH authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
+            log.info("creating receiver WITH authorisation credentials. UseResMsgId={}", useResMsgIdAsCorrelId);
             conn = factory.createConnection(principal, credentials);
         }else{
-            log.info("creating receiver without authorisation credentials. UseResMsgId="+useResMsgIdAsCorrelId);
+            log.info("creating receiver without authorisation credentials. UseResMsgId={}", useResMsgIdAsCorrelId);
             conn = factory.createConnection(); 
         }
         session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        if(log.isDebugEnabled()) {
-            log.debug("Receiver - ctor. Creating consumer with JMS Selector:"+jmsSelector);
-        }
+        log.debug("Receiver - ctor. Creating consumer with JMS Selector:{}", jmsSelector);
         if(StringUtils.isEmpty(jmsSelector)) {
             consumer = session.createConsumer(receiveQueue);
         } else {

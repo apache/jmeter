@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread that copies a stream in the background; closes both input and output streams.
@@ -32,7 +32,7 @@ import org.apache.log.Logger;
  */
 class StreamCopier extends Thread {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StreamCopier.class);
 
     private final InputStream is;
     private final OutputStream os;

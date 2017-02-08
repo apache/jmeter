@@ -29,10 +29,9 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
-// import javax.naming.directory.SearchResult;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Ldap Client class is main class to create, modify, search and delete all the
@@ -40,7 +39,7 @@ import org.apache.log.Logger;
  *
  */
 public class LdapClient {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LdapClient.class);
 
     private DirContext dirContext = null;
 

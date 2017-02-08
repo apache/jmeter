@@ -33,13 +33,13 @@ import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataSourceElement extends AbstractTestElement
     implements ConfigElement, TestStateListener, TestBean {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DataSourceElement.class);
 
     private static final long serialVersionUID = 234L;
 
@@ -78,18 +78,18 @@ public class DataSourceElement extends AbstractTestElement
                 try {
                     dbcpDataSource.close();
                 } catch (SQLException ex) {
-                    log.error("Error closing pool:"+getName(), ex);
+                    log.error("Error closing pool: {}", getName(), ex);
                 }
             }
             dbcpDataSource = null;
         }
         if (perThreadPoolSet != null) {// in case
             for(BasicDataSource dsc : perThreadPoolSet){
-                log.debug("Closing pool: "+ getDataSourceName()+" @"+System.identityHashCode(dsc));
+                log.debug("Closing pool: {}@{}", getDataSourceName(), System.identityHashCode(dsc));
                 try {
                     dsc.close();
                 } catch (SQLException ex) {
-                    log.error("Error closing pool:"+getName(), ex);
+                    log.error("Error closing pool:{}", getName(), ex);
                 }
             }
             perThreadPoolSet=null;
@@ -110,7 +110,7 @@ public class DataSourceElement extends AbstractTestElement
         if(JOrphanUtils.isBlank(poolName)) {
             throw new IllegalArgumentException("Variable Name must not be empty for element:"+getName());
         } else if (variables.getObject(poolName) != null) {
-            log.error("JDBC data source already defined for: "+poolName);
+            log.error("JDBC data source already defined for: {}", poolName);
         } else {
             String maxPool = getPoolMax();
             perThreadPoolSet = Collections.synchronizedSet(new HashSet<BasicDataSource>());
@@ -244,11 +244,7 @@ public class DataSourceElement extends AbstractTestElement
             dataSource.setPassword(getPassword());
         }
 
-        // log is required to ensure errors are available
-        //source.enableLogging(new LogKitLogger(log));
-        if(log.isDebugEnabled()) {
-            log.debug("PoolConfiguration:"+this.dataSource);
-        }
+        log.debug("PoolConfiguration:{}", this.dataSource);
         return dataSource;
     }
 
@@ -288,7 +284,7 @@ public class DataSourceElement extends AbstractTestElement
                 if (dsc == null){
                     dsc = initPool("1");
                     poolMap.put(getDataSourceName(),dsc);
-                    log.debug("Storing pool: "+getName()+" @"+System.identityHashCode(dsc));
+                    log.debug("Storing pool: {}@{}", getName(), System.identityHashCode(dsc));
                     perThreadPoolSet.add(dsc);
                 }
             }
@@ -299,11 +295,11 @@ public class DataSourceElement extends AbstractTestElement
                     try {
                         // make sure setting the new isolation mode is done in an auto committed transaction
                         conn.setTransactionIsolation(transactionIsolation);
-                        log.debug("Setting transaction isolation: " + transactionIsolation + " @"
-                                + System.identityHashCode(dsc));
+                        log.debug("Setting transaction isolation: {}@{}",
+                                    transactionIsolation, System.identityHashCode(dsc));
                     } catch (SQLException ex) {
-                        log.error("Could not set transaction isolation: " + transactionIsolation + " @"
-                                + System.identityHashCode(dsc));
+                        log.error("Could not set transaction isolation: {}@{}", 
+                                transactionIsolation, System.identityHashCode(dsc));
                     }   
                 }
             }

@@ -31,8 +31,8 @@ import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -41,9 +41,9 @@ import org.apache.log.Logger;
  */
 public abstract class BaseJMSSampler extends AbstractSampler {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
     
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass(); 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseJMSSampler.class);
 
     //++ These are JMX file attribute names and must not be changed
     private static final String JNDI_INITIAL_CONTEXT_FAC = "jms.initial_context_factory"; // $NON-NLS-1$

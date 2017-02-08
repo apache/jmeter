@@ -29,8 +29,8 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides a RandomString function which returns a random String of length (first argument) 
@@ -38,7 +38,7 @@ import org.apache.log.Logger;
  * @since 2.6
  */
 public class RandomString extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RandomString.class);
 
     private static final List<String> desc = new LinkedList<>();
 

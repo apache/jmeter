@@ -28,8 +28,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessController;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -244,11 +246,9 @@ public final class NewDriver {
             System.err.println("Configuration error during init, see exceptions:"+exceptionsToString(EXCEPTIONS_IN_INIT));
         } else {
             Thread.currentThread().setContextClassLoader(loader);
-            if (System.getProperty("log4j.configuration") == null) {// $NON-NLS-1$ $NON-NLS-2$
-                File conf = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j.conf");// $NON-NLS-1$ $NON-NLS-2$
-                System.setProperty("log4j.configuration", "file:" + conf);
-            }
-    
+
+            setLoggingProperties(args);
+
             try {
                 Class<?> initialClass = loader.loadClass("org.apache.jmeter.JMeter");// $NON-NLS-1$
                 Object instance = initialClass.newInstance();
@@ -275,5 +275,108 @@ public final class NewDriver {
                 .append("\r\n");
         }
         return builder.toString();
+    }
+
+    /*
+     * Set logging related system properties.
+     */
+    private static void setLoggingProperties(String[] args) {
+        String jmLogFile = getCommandLineArgument(args, (int) 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
+
+        if (jmLogFile != null && !jmLogFile.isEmpty()) {
+            jmLogFile = replaceDateFormatInFileName(jmLogFile);
+            System.setProperty("jmeter.logfile", jmLogFile);// $NON-NLS-1$
+        } else if (System.getProperty("jmeter.logfile") == null) {// $NON-NLS-1$
+            System.setProperty("jmeter.logfile", "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
+        }
+
+        String jmLogConf = getCommandLineArgument(args, (int) 'i', "jmeterlogconf");// $NON-NLS-1$ $NON-NLS-2$
+        File logConfFile = null;
+
+        if (jmLogConf != null && !jmLogConf.isEmpty()) {
+            logConfFile = new File(jmLogConf);
+        } else if (System.getProperty("log4j.configurationFile") == null) {// $NON-NLS-1$
+            logConfFile = new File("log4j2.xml");// $NON-NLS-1$
+            if (!logConfFile.isFile()) {
+                logConfFile = new File(JMETER_INSTALLATION_DIRECTORY, "bin" + File.separator + "log4j2.xml");// $NON-NLS-1$ $NON-NLS-2$
+            }
+        }
+
+        if (logConfFile != null) {
+            System.setProperty("log4j.configurationFile", logConfFile.toURI().toString());// $NON-NLS-1$
+        }
+    }
+
+    /*
+     * Find command line argument option value by the id and name.
+     */
+    private static String getCommandLineArgument(String [] args, int id, String name) {
+        final String shortArgName = "-" + ((char) id);// $NON-NLS-1$
+        final String longArgName = "--" + name;// $NON-NLS-1$
+
+        String value = null;
+
+        for (int i = 0; i < args.length; i++) {
+            if (shortArgName.equals(args[i]) && i < args.length - 1) {
+                if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
+                    value = args[i + 1];
+                }
+                break;
+            } else if (!shortArgName.equals(args[i]) && args[i].startsWith(shortArgName)) {
+                value = args[i].substring(shortArgName.length());
+                break;
+            } else if (longArgName.equals(args[i])) {
+                if (!args[i + 1].startsWith("-")) {// $NON-NLS-1$
+                    value = args[i + 1];
+                }
+                break;
+            }
+        }
+
+        return value;
+    }
+
+    /*
+     * If the fileName contains at least one set of paired single-quotes, reformat using DateFormat
+     */
+    private static String replaceDateFormatInFileName(String fileName) {
+        try {
+            StringBuilder builder = new StringBuilder();
+
+            final Date date = new Date();
+            int fromIndex = 0;
+            int begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
+            int end;
+
+            String format;
+            SimpleDateFormat dateFormat;
+
+            while (begin != -1) {
+                builder.append(fileName.substring(fromIndex, begin));
+
+                fromIndex = begin + 1;
+                end = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
+                if (end == -1) {
+                    throw new IllegalArgumentException("Invalid pairs of single-quotes in the file name: " + fileName);// $NON-NLS-1$
+                }
+
+                format = fileName.substring(begin + 1, end);
+                dateFormat = new SimpleDateFormat(format);
+                builder.append(dateFormat.format(date));
+
+                fromIndex = end + 1;
+                begin = fileName.indexOf('\'', fromIndex);// $NON-NLS-1$
+            }
+
+            if (fromIndex < fileName.length() - 1) {
+                builder.append(fileName.substring(fromIndex));
+            }
+
+            return builder.toString();
+        } catch (Exception ex) {
+            System.err.println("Error replacing date format in file name:"+fileName+", error:"+ex.getMessage()); // NOSONAR
+        }
+
+        return fileName;
     }
 }

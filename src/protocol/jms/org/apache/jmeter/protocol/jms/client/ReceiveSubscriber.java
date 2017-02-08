@@ -34,8 +34,8 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.jmeter.protocol.jms.Utils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generic MessageConsumer class, which has two possible strategies.
@@ -48,7 +48,7 @@ import org.apache.log.Logger;
  */
 public class ReceiveSubscriber implements Closeable, MessageListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ReceiveSubscriber.class);
 
     private final Connection connection;
 
@@ -353,7 +353,7 @@ public class ReceiveSubscriber implements Closeable, MessageListener {
                 connectionStarted = false;
             }
         } catch (JMSException e) {
-            log.warn("Stopping connection throws exception, message:"+e.getMessage(), e);
+            log.warn("Stopping connection throws exception, message: {}", e.getMessage(), e);
         }
         Utils.close(subscriber, log);
         Utils.close(session, log);

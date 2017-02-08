@@ -36,21 +36,21 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import junit.framework.TestCase;
-
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.java.sampler.JUnitSampler;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import junit.framework.TestCase;
 
 /**
  * The <code>JUnitTestSamplerGui</code> class provides the user interface
@@ -62,7 +62,7 @@ implements ChangeListener, ActionListener, ItemListener
 {
     private static final long serialVersionUID = 240L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JUnitTestSamplerGui.class);
 
     private static final String TESTMETHOD_PREFIX = "test"; //$NON-NLS-1$
 

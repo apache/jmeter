@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.helger.css.ECSSVersion;
@@ -45,7 +45,7 @@ import com.helger.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 public class CssParserCacheLoader implements
         CacheLoader<Triple<String, URL, Charset>, URLCollection> {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger LOG = LoggerFactory.getLogger(CssParserCacheLoader.class);
     private static final boolean IGNORE_ALL_CSS_ERRORS = JMeterUtils
             .getPropDefault("css.parser.ignore_all_css_errors", true);
 

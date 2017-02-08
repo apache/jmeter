@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * File data container for CSV (and similar delimited) files Data is accessible
@@ -37,7 +37,7 @@ import org.apache.log.Logger;
  */
 public class FileRowColContainer {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(FileRowColContainer.class);
 
     private final List<List<String>> fileData; // Lines in the file, split into columns
 

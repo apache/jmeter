@@ -21,6 +21,7 @@ package org.apache.jmeter.protocol.java.sampler;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract implementation of the JavaSamplerClient interface. This
@@ -48,9 +49,9 @@ import org.apache.log.Logger;
  *
  * @see JavaSamplerClient#runTest(JavaSamplerContext)
  *
- * @version $Revision$
  */
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AbstractJavaSamplerClient.class);
 
     private static final Logger log = LoggingManager.getLoggerForClass();
 
@@ -78,8 +79,21 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
      * (jmeter.protocol.java).
      *
      * @return a Logger instance which can be used for logging
+     * @deprecated Will be removed in 3.3, use {@link AbstractJavaSamplerClient#getNewLogger()} 
      */
+    @Deprecated
     protected Logger getLogger() {
         return log;
+    }
+    
+    /**
+     * Get a Logger instance which can be used by subclasses to log information.
+     * This is the same Logger which is used by the base JavaSampler classes
+     * (jmeter.protocol.java).
+     *
+     * @return {@link org.slf4j.Logger}  instance which can be used for logging
+     */
+    protected org.slf4j.Logger getNewLogger() {
+        return logger;
     }
 }

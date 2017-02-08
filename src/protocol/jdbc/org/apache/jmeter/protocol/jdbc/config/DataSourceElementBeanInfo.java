@@ -30,11 +30,11 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataSourceElementBeanInfo extends BeanInfoSupport {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DataSourceElementBeanInfo.class);
     private static Map<String,Integer> TRANSACTION_ISOLATION_MAP = new HashMap<>(5);
     static {
         // Will use default isolation

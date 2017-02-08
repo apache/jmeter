@@ -27,8 +27,8 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 // @see org.apache.jmeter.functions.PackageTest for unit tests
 
@@ -46,12 +46,8 @@ import org.apache.log.Logger;
  * @since 2.0.3
  */
 public class XPath extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XPath.class);
 
-    // static {
-    // LoggingManager.setPriority("DEBUG","jmeter");
-    // LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-    // }
     private static final String KEY = "__XPath"; // Function name //$NON-NLS-1$
 
     private static final List<String> desc = new LinkedList<>();
