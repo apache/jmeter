@@ -22,13 +22,13 @@ import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.BSFTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBean {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BSFTimer.class);
 
-    private static final long serialVersionUID = 4;
+    private static final long serialVersionUID = 5;
 
     /** {@inheritDoc} */
     @Override
@@ -44,7 +44,7 @@ public class BSFTimer extends BSFTestElement implements Cloneable, Timer, TestBe
             }
             delay = Long.parseLong(o.toString());
         } catch (NumberFormatException | BSFException e) {
-            log.warn("Problem in BSF script "+e);
+            log.warn("Problem in BSF script. {}", e.toString());
         } finally {
             if(mgr != null) {
                 mgr.terminate();

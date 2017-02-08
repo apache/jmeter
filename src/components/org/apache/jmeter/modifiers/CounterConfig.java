@@ -29,8 +29,8 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides a counter per-thread(user) or per-thread group.
@@ -38,7 +38,7 @@ import org.apache.log.Logger;
 public class CounterConfig extends AbstractTestElement
     implements Serializable, LoopIterationListener, NoThreadClone {
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     private static final String START = "CounterConfig.start"; // $NON-NLS-1$
 
@@ -66,7 +66,7 @@ public class CounterConfig extends AbstractTestElement
     // Used for per-thread/user storage of increment in Thread Group Main loop
     private transient ThreadLocal<Long> perTheadLastIterationNumber;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CounterConfig.class);
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         perTheadNumber = new ThreadLocal<Long>() {
@@ -139,7 +139,7 @@ public class CounterConfig extends AbstractTestElement
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
             } catch (IllegalArgumentException ignored) {
-                log.warn("Error formating "+value + " at format:"+format+", using default");
+                log.warn("Error formating {} at format {}, using default", value, format);
             }
         }
         return Long.toString(value);
