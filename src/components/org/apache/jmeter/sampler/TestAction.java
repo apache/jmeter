@@ -32,8 +32,8 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Dummy Sampler used to pause or stop a thread or the test;
@@ -42,9 +42,9 @@ import org.apache.log.Logger;
  */
 public class TestAction extends AbstractSampler implements Interruptible {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TestAction.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Set<String> APPLIABLE_CONFIG_CLASSES = new HashSet<>(
             Arrays.asList("org.apache.jmeter.config.gui.SimpleConfigGui"));
@@ -109,7 +109,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
         try {
             millis=Long.parseLong(timeInMillis);
         } catch (NumberFormatException e){
-            log.warn("Could not create number from "+timeInMillis);
+            log.warn("Could not create number from {}", timeInMillis);
             millis=0;
         }
         try {

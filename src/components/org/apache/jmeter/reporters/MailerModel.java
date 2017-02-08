@@ -40,8 +40,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The model for a MailerVisualizer.
@@ -54,9 +54,9 @@ public class MailerModel extends AbstractTestElement implements Serializable {
         NONE
     }
 
-    private static final long serialVersionUID = 270L;
+    private static final long serialVersionUID = 271L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MailerModel.class);
 
     private static final String MAIL_SMTP_HOST = "mail.smtp.host"; //$NON-NLS-1$
 
@@ -164,7 +164,7 @@ public class MailerModel extends AbstractTestElement implements Serializable {
                 if (theToken.indexOf('@') > 0) { //NOSONAR $NON-NLS-1$ 
                     addressList.add(theToken);
                 } else {
-                    log.warn("Ignored unexpected e-mail address: "+theToken);
+                    log.warn("Ignored unexpected e-mail address: {}", theToken);
                 }
             }
         }

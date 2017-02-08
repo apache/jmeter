@@ -30,13 +30,13 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserParameters extends AbstractTestElement implements Serializable, PreProcessor, LoopIterationListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(UserParameters.class);
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     public static final String NAMES = "UserParameters.names";// $NON-NLS-1$
 
@@ -136,7 +136,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     @Override
     public void process() {
         if (log.isDebugEnabled()) {
-            log.debug(Thread.currentThread().getName() + " process " + isPerIteration());//$NON-NLS-1$
+            log.debug("{} process {}", Thread.currentThread().getName(), isPerIteration());//$NON-NLS-1$
         }
         if (!isPerIteration()) {
             setValues();
@@ -147,7 +147,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     private void setValues() {
         synchronized (lock) {
             if (log.isDebugEnabled()) {
-                log.debug(Thread.currentThread().getName() + " Running up named: " + getName());//$NON-NLS-1$
+                log.debug("{} Running up named: {}", Thread.currentThread().getName(), getName());//$NON-NLS-1$
             }
             PropertyIterator namesIter = getNames().iterator();
             PropertyIterator valueIter = getValues().iterator();
@@ -156,7 +156,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
                 String name = namesIter.next().getStringValue();
                 String value = valueIter.next().getStringValue();
                 if (log.isDebugEnabled()) {
-                    log.debug(Thread.currentThread().getName() + " saving variable: " + name + "=" + value);//$NON-NLS-1$
+                    log.debug("{} saving variable: {}={}", Thread.currentThread().getName(), name, value);//$NON-NLS-1$
                 }
                 jmvars.put(name, value);
             }
@@ -169,7 +169,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
     @Override
     public void iterationStart(LoopIterationEvent event) {
         if (log.isDebugEnabled()) {
-            log.debug(Thread.currentThread().getName() + " iteration start " + isPerIteration());//$NON-NLS-1$
+            log.debug("{} iteration start {}", Thread.currentThread().getName(), isPerIteration());//$NON-NLS-1$
         }
         if (isPerIteration()) {
             setValues();
