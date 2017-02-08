@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * BackendListenerContext is used to provide context information to a
@@ -45,7 +45,7 @@ public class BackendListenerContext {
      */
 
     /** Logging */
-    private static final Logger LOGGER = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BackendListenerContext.class);
 
     /**
      * Map containing the initialization parameters for the BackendListenerClient.
@@ -164,8 +164,8 @@ public class BackendListenerContext {
         try {
             return Integer.parseInt(params.get(name));
         } catch (NumberFormatException e) {
-            LOGGER.warn("Value for parameter '" + name + "' not an integer: '" + params.get(name) + "'.  Using default: '"
-                    + defaultValue + "'.", e);
+            log.warn("Value for parameter '{}' not an integer: '{}'.  Using default: '{}'.", name, params.get(name),
+                    defaultValue, e);
             return defaultValue;
         }
     }
@@ -216,8 +216,8 @@ public class BackendListenerContext {
         try {
             return Long.decode(params.get(name)).longValue();
         } catch (NumberFormatException e) {
-            LOGGER.warn("Value for parameter '" + name + "' not a long: '" + params.get(name) + "'.  Using default: '"
-                    + defaultValue + "'.", e);
+            log.warn("Value for parameter '{}' not a long: '{}'.  Using default: '{}'.", name, params.get(name),
+                    defaultValue, e);
             return defaultValue;
         }
     }

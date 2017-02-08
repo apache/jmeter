@@ -31,17 +31,17 @@ import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.gui.util.JMeterColor;
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements a simple graph for displaying performance results.
  *
  */
 public class Graph extends JComponent implements Scrollable, Clearable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Graph.class);
 
     private boolean wantData = true;
 
@@ -208,7 +208,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
 
     private void drawSample(long x, Sample oneSample, Graphics g) {
         int height = getHeight();
-        log.debug("Drawing a sample at " + x);
+        log.debug("Drawing a sample at {}", x);
         int adjustedWidth = (int)(x % WIDTH); // will always be within range of an int: as must be < width
         if (wantData) {
             int data = (int) (oneSample.getData() * height / graphMax);
@@ -220,7 +220,7 @@ public class Graph extends JComponent implements Scrollable, Clearable {
             }
             g.drawLine(adjustedWidth, height - data, adjustedWidth, height - data - 1);
             if (log.isDebugEnabled()) {
-                log.debug("Drawing coords = " + adjustedWidth + "," + (height - data));
+                log.debug("Drawing coords = {}, {}", adjustedWidth, (height - data));
             }
         }
 

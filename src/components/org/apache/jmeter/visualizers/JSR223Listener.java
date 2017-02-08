@@ -29,8 +29,8 @@ import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Needs to implement Visualizer so that TestBeanGUI can find the correct GUI class
@@ -39,9 +39,9 @@ import org.apache.log.Logger;
 public class JSR223Listener extends JSR223TestElement
     implements Cloneable, SampleListener, TestBean, Visualizer {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JSR223Listener.class);
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
     @Override
     public void sampleOccurred(SampleEvent event) {
@@ -52,7 +52,7 @@ public class JSR223Listener extends JSR223TestElement
             bindings.put("sampleResult", event.getResult());
             processFileOrScript(scriptEngine, bindings);
         } catch (ScriptException | IOException e) {
-            log.error("Problem in JSR223 script "+getName(), e);
+            log.error("Problem in JSR223 script, {}", getName(), e);
         }
     }
 

@@ -52,12 +52,12 @@ import javax.swing.text.Highlighter;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SearchTextExtension implements ActionListener, DocumentListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SearchTextExtension.class);
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
@@ -207,7 +207,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     }
 
     private class EnterAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 2L;
         @Override
         public void actionPerformed(ActionEvent ev) {
             executeAndShowTextFind();
@@ -302,10 +302,8 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
             if (results != null && results.getText().length() > 0
                     && pattern != null) {
 
-                if (log.isDebugEnabled()) {
-                    log.debug("lastPosition=" + lastPosition);
-                }
-                
+                log.debug("lastPosition={}", lastPosition);
+
                 Matcher matcher = null;
                 try {
                     Document contentDoc = results.getDocument();

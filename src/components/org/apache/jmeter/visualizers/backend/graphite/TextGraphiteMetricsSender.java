@@ -24,15 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PlainText Graphite sender
  * @since 2.13
  */
 class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
-    private static final Logger LOG = LoggingManager.getLoggerForClass();        
+    private static final Logger log = LoggerFactory.getLogger(TextGraphiteMetricsSender.class);
         
     private String prefix;
 
@@ -60,9 +60,8 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
         this.socketConnectionInfos = new SocketConnectionInfos(graphiteHost, graphitePort);
         this.socketOutputStreamPool = createSocketOutputStreamPool();
 
-        if(LOG.isInfoEnabled()) {
-            LOG.info("Created TextGraphiteMetricsSender with host:"+graphiteHost+", port:"+graphitePort+", prefix:"+prefix);
-        }
+        log.info("Created TextGraphiteMetricsSender with host: {}, port: {}, prefix: {}", graphiteHost, graphitePort,
+                prefix);
     }
     
     /* (non-Javadoc)
@@ -107,8 +106,8 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                 pw.flush();
                 // if there was an error, we might miss some data. for now, drop those on the floor and
                 // try to keep going.
-                if(LOG.isDebugEnabled()) {
-                    LOG.debug("Wrote "+ copyMetrics.size() +" metrics");
+                if (log.isDebugEnabled()) {
+                    log.debug("Wrote {} metrics", copyMetrics.size());
                 }
                 socketOutputStreamPool.returnObject(socketConnectionInfos, out);
             } catch (Exception e) {
@@ -116,11 +115,11 @@ class TextGraphiteMetricsSender extends AbstractGraphiteMetricsSender {
                     try {
                         socketOutputStreamPool.invalidateObject(socketConnectionInfos, out);
                     } catch (Exception e1) {
-                        LOG.warn("Exception invalidating socketOutputStream connected to graphite server '"+
-                                socketConnectionInfos.getHost()+"':"+socketConnectionInfos.getPort(), e1);
+                        log.warn("Exception invalidating socketOutputStream connected to graphite server '{}':{}",
+                                socketConnectionInfos.getHost(), socketConnectionInfos.getPort(), e1);
                     }
                 }
-                LOG.error("Error writing to Graphite:"+e.getMessage());
+                log.error("Error writing to Graphite: {}", e.getMessage());
             }
             // We drop metrics in all cases
             copyMetrics.clear();
