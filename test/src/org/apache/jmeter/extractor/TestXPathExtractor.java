@@ -250,6 +250,24 @@ public class TestXPathExtractor {
             assertEquals("zero", vars.get(VAL_NAME+"_1"));
             assertNull(vars.get(VAL_NAME+"_2"));
             
+            
+            // get data from child
+            extractor.setScopeVariable("result");
+            result = new SampleResult();
+            vars.put("result", data);
+            extractor.process();
+            assertEquals("zero", vars.get(VAL_NAME));
+            assertEquals("1", vars.get(VAL_NAME_NR));
+            assertEquals("zero", vars.get(VAL_NAME+"_1"));
+            assertNull(vars.get(VAL_NAME+"_2"));
+            
+            // get data from child
+            extractor.setScopeVariable("result");
+            result = new SampleResult();
+            vars.remove("result");
+            extractor.process();
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("0", vars.get(VAL_NAME_NR));            
         }
 
         @Test
