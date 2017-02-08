@@ -25,13 +25,13 @@ import javax.script.ScriptException;
 
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.util.JSR223TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, TestBean {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JSR223Timer.class);
 
-    private static final long serialVersionUID = 4;
+    private static final long serialVersionUID = 5;
 
     /** {@inheritDoc} */
     @Override
@@ -46,7 +46,7 @@ public class JSR223Timer extends JSR223TestElement implements Cloneable, Timer, 
             }
             delay = Long.parseLong(o.toString());
         } catch (NumberFormatException | IOException | ScriptException e) {
-            log.error("Problem in JSR223 script "+getName(), e);
+            log.error("Problem in JSR223 script, {}", getName(), e);
         }
         return delay;
     }
