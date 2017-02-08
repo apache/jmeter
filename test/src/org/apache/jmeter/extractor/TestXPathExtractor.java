@@ -256,15 +256,39 @@ public class TestXPathExtractor {
         public void testInvalidXpath() throws Exception {
             extractor.setXPathQuery("<");
             extractor.process();
+            assertEquals(1, result.getAssertionResults().length);
+            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
+                    getFailureMessage().contains("A location path was expected, but the following token was encountered"));
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
         }
 
         @Test
+        public void testNonXmlDocument() throws Exception {
+            result.setResponseData("Error:exception occured", null);
+            extractor.setXPathQuery("//test");
+            extractor.process();
+            assertEquals(1, result.getAssertionResults().length);
+            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
+                    getFailureMessage().contains("Content is not allowed in prolog"));
+            assertEquals("Default", vars.get(VAL_NAME));
+            assertEquals("0", vars.get(VAL_NAME_NR));
+        }
+        @Test
         public void testInvalidDocument() throws Exception {
             result.setResponseData("<z>", null);
-            extractor.setXPathQuery("<");
+            extractor.setXPathQuery("//test");
             extractor.process();
+            
+            assertEquals(1, result.getAssertionResults().length);
+            assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
+            System.out.println(result.getAssertionResults()[0].
+                    getFailureMessage());
+            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
+                    getFailureMessage().contains("XML document structures must start and end within the same entity"));
+
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
         }
