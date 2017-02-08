@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.commons.collections.buffer.BoundedFifoBuffer;
@@ -46,8 +45,9 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     private final JTextArea textArea;
 
-    // Limit length of log content
-    private static final int LOGGER_PANEL_MAX_LENGTH =
+    // Limit length of log content 
+    // 0 means unlimited
+    private static final int LOGGER_PANEL_MAX_LINES =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 1000); // $NON-NLS-1$
 
     // Make panel handle event even if closed
@@ -58,7 +58,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             JMeterUtils.getPropDefault("jmeter.loggerpanel.refresh_period", 500); // $NON-NLS-1$
 
     private final BoundedFifoBuffer events =
-            new BoundedFifoBuffer(valueOrMax(LOGGER_PANEL_MAX_LENGTH, 2000)); // $NON-NLS-1$
+            new BoundedFifoBuffer(valueOrMax(LOGGER_PANEL_MAX_LINES, 2000)); // $NON-NLS-1$
 
     private volatile boolean logChanged = false;
 
@@ -146,7 +146,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
                     String logText = builder.toString();
                     synchronized (textArea) {
                         int currentLength;
-                        if (LOGGER_PANEL_MAX_LENGTH > 0) {
+                        if (LOGGER_PANEL_MAX_LINES > 0) {
                             textArea.setText(logText);
                             currentLength = logText.length();
                         } else {
