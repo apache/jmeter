@@ -445,6 +445,11 @@ public class AssertionGui extends AbstractAssertionGui {
                     tableModel.removeRow(rowsSelected[i]);
                 }
                 tableModel.fireTableDataChanged();
+            } else {
+                if(tableModel.getRowCount()>0) {
+                    tableModel.removeRow(0);
+                    tableModel.fireTableDataChanged();
+                }
             }
 
             if (stringTable.getModel().getRowCount() == 0) {
