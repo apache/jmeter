@@ -20,13 +20,16 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
+import org.apache.commons.collections.buffer.BoundedFifoBuffer;
 import org.apache.jmeter.gui.logging.GuiLogEventListener;
 import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -45,17 +48,34 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     // Limit length of log content
     private static final int LOGGER_PANEL_MAX_LENGTH =
-            JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 80000); // $NON-NLS-1$
-    
+            JMeterUtils.getPropDefault("jmeter.loggerpanel.maxlength", 1000); // $NON-NLS-1$
+
     // Make panel handle event even if closed
     private static final boolean LOGGER_PANEL_RECEIVE_WHEN_CLOSED =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.enable_when_closed", true); // $NON-NLS-1$
+
+    private static final int LOGGER_PANEL_REFRESH_PERIOD =
+            JMeterUtils.getPropDefault("jmeter.loggerpanel.refresh_period", 500); // $NON-NLS-1$
+
+    private final BoundedFifoBuffer events =
+            new BoundedFifoBuffer(valueOrMax(LOGGER_PANEL_MAX_LENGTH, 2000)); // $NON-NLS-1$
+
+    private volatile boolean logChanged = false;
+
+    private Timer timer;
 
     /**
      * Pane for display JMeter log file
      */
     public LoggerPanel() {
         textArea = init();
+    }
+
+    private static int valueOrMax(int value, int max) {
+        if (value > 0) {
+            return value;
+        }
+        return max;
     }
 
     private JTextArea init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -84,6 +104,9 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
         areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.add(areaScrollPane, BorderLayout.CENTER);
+
+        initWorker();
+
         return jTextArea;
     }
 
@@ -96,27 +119,55 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             return;
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (textArea) {
-                    textArea.append(logEventObject.toString());
-                    int currentLength = textArea.getText().length();
-                    // If LOGGER_PANEL_MAX_LENGTH is 0, it means all log events are kept
-                    if(LOGGER_PANEL_MAX_LENGTH != 0 && currentLength> LOGGER_PANEL_MAX_LENGTH) {
-                        textArea.setText(textArea.getText().substring(Math.max(0, currentLength-LOGGER_PANEL_MAX_LENGTH), 
-                                currentLength));
+        String logMessage = logEventObject.toString();
+        synchronized (events) {
+            if (events.isFull()) {
+                events.remove();
+            }
+            events.add(logMessage);
+        }
+
+        logChanged = true;
+    }
+
+    private void initWorker() {
+        timer = new Timer(
+            LOGGER_PANEL_REFRESH_PERIOD,
+            e -> {
+                if (logChanged) {
+                    logChanged = false;
+                    StringBuilder builder = new StringBuilder();
+                    synchronized (events) {
+                        Iterator<String> lines = events.iterator();
+                        while (lines.hasNext()) {
+                            builder.append(lines.next());
+                        }
                     }
-                    textArea.setCaretPosition(textArea.getText().length());
+                    String logText = builder.toString();
+                    synchronized (textArea) {
+                        int currentLength;
+                        if (LOGGER_PANEL_MAX_LENGTH > 0) {
+                            textArea.setText(logText);
+                            currentLength = logText.length();
+                        } else {
+                            textArea.append(logText);
+                            currentLength = textArea.getText().length();
+                        }
+                        textArea.setCaretPosition(currentLength);
+                    }
                 }
             }
-        });
+        );
+        timer.start();
     }
 
     /**
      * Clear panel content
      */
     public void clear() {
-        this.textArea.setText(""); // $NON-NLS-1$
+        synchronized (events) {
+            events.clear();
+        }
+        logChanged = true;
     }
 }
