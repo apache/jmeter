@@ -322,7 +322,7 @@ public class JMeter implements JMeterPlugin {
     private boolean remoteStop;
 
     /** should delete result file before start ? */
-	private boolean deleteResultFile; 
+	private boolean deleteResultFile = false; 
 
     public JMeter() {
         super();
@@ -873,6 +873,7 @@ public class JMeter implements JMeterPlugin {
         JMeter driver = new JMeter();// TODO - why does it create a new instance?
         driver.remoteProps = this.remoteProps;
         driver.remoteStop = this.remoteStop;
+        driver.deleteResultFile = this.deleteResultFile;
         PluginManager.install(this, false);
 
         String remoteHostsString = null;
