@@ -60,6 +60,12 @@ public class TextAreaCellRenderer implements TableCellRenderer {
     }
 
     public int getPreferredHeight() {
-        return rend.getPreferredSize().height + 5;
+        // Allow override for unit testing only
+        // TODO Find a better way
+        if ("true".equals(System.getProperty("java.awt.headless"))) { // $NON-NLS-1$ $NON-NLS-2$
+            return 10;
+        } else {
+            return rend.getPreferredSize().height + 5;
+        }
     }
 }
