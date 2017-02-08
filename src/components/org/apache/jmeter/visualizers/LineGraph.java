@@ -29,8 +29,6 @@ import java.awt.Stroke;
 
 import javax.swing.JPanel;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.jCharts.axisChart.AxisChart;
 import org.jCharts.chartData.AxisChartDataSet;
 import org.jCharts.chartData.DataSeries;
@@ -41,6 +39,8 @@ import org.jCharts.properties.LegendProperties;
 import org.jCharts.properties.LineChartProperties;
 import org.jCharts.properties.PointChartProperties;
 import org.jCharts.types.ChartType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -49,9 +49,9 @@ import org.jCharts.types.ChartType;
  */
 public class LineGraph extends JPanel {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LineGraph.class);
 
     protected double[][] data = null;
     protected String title;
@@ -182,7 +182,7 @@ public class LineGraph extends JPanel {
             axisChart.setGraphics2D((Graphics2D) g);
             axisChart.render();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Error while rendering axis chart. {}", e.getMessage());
         }
     }
 

@@ -83,9 +83,9 @@ import org.apache.jorphan.gui.ObjectTableModel;
 import org.apache.jorphan.gui.ObjectTableSorter;
 import org.apache.jorphan.gui.RateRenderer;
 import org.apache.jorphan.gui.RendererUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Aggregrate Table-Based Reporting Visualizer for JMeter. Props to the people
@@ -95,7 +95,7 @@ import org.apache.log.Logger;
  *
  */
 public class StatGraphVisualizer extends AbstractVisualizer implements Clearable, ActionListener {
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final String PCT1_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct1", "90");
     private static final String PCT2_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct2", "95");
@@ -105,7 +105,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final Float PCT2_VALUE =  new Float(Float.parseFloat(PCT2_LABEL)/100);
     private static final Float PCT3_VALUE =  new Float(Float.parseFloat(PCT3_LABEL)/100);
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StatGraphVisualizer.class);
 
     private static final String[] COLUMNS = { 
             "sampler_label",                  //$NON-NLS-1$

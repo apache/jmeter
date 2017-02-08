@@ -37,8 +37,8 @@ import org.apache.jmeter.gui.action.RegexpSearcher;
 import org.apache.jmeter.gui.action.Searcher;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel used by {@link ViewResultsFullVisualizer} to search for data within the Tree
@@ -46,9 +46,9 @@ import org.apache.log.Logger;
  */
 public class SearchTreePanel extends JPanel implements ActionListener {
 
-    private static final long serialVersionUID = -4436834972710248247L;
+    private static final long serialVersionUID = 1L;
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SearchTreePanel.class);
 
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
@@ -175,7 +175,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
             node.updateState();
             return node.isNodeHasMatched() || node.isChildrenNodesHaveMatched();
         } catch (Exception e) {
-            LOG.error("Error extracting data from tree node");
+            log.error("Error extracting data from tree node");
             return false;
         }
     }
