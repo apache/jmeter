@@ -335,12 +335,16 @@ public class BackendListener extends AbstractTestElement
                 listenerClientData.queueWaitTime = new AtomicLong(0L);
                 listenerClientData.latch = new CountDownLatch(1);
                 listenerClientData.client = backendListenerClient;
-                log.info("{}: Starting worker with class: {} and queue capacity: {}", getName(), clientClass,
-                        getQueueSize());
+                if (log.isInfoEnabled()) {
+                    log.info("{}: Starting worker with class: {} and queue capacity: {}", getName(), clientClass,
+                            getQueueSize());
+                }
                 Worker worker = new Worker(backendListenerClient, (Arguments) getArguments().clone(), listenerClientData);
                 worker.setDaemon(true);
                 worker.start();
-                log.info("{}: Started  worker with class: {}", getName(), clientClass);
+                if (log.isInfoEnabled()) {
+                    log.info("{}: Started  worker with class: {}", getName(), clientClass);
+                }
                 try {
                     backendListenerClient.setupTest(context);
                 } catch (Exception e) {
@@ -376,7 +380,7 @@ public class BackendListener extends AbstractTestElement
         try {
             listenerClientData.queue.put(FINAL_SAMPLE_RESULT);
         } catch (Exception ex) {
-            log.warn("testEnded() with exception: {}", ex.getMessage(), ex);
+            log.warn("testEnded() with exception: {}", ex, ex);
         }
         if (listenerClientData.queueWaits.get() > 0) {
             log.warn(
