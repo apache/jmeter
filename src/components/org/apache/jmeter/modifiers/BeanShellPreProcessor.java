@@ -58,7 +58,9 @@ public class BeanShellPreProcessor extends BeanShellTestElement
             bshInterpreter.set("sampler", sam);//$NON-NLS-1$
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
-            log.warn("Problem in BeanShell script. {}", e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("Problem in BeanShell script. {}", e.toString());
+            }
         }
     }
     

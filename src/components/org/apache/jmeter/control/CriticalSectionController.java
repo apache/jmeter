@@ -126,7 +126,9 @@ public class CriticalSectionController extends GenericController implements
     @Override
     public Sampler next() {
         if (StringUtils.isEmpty(getLockName())) {
-            log.warn("Empty lock name in Critical Section Controller: {}", getName());
+            if (log.isWarnEnabled()) {
+                log.warn("Empty lock name in Critical Section Controller: {}", getName());
+            }
             return super.next();
         }
         if (isFirst()) {
@@ -170,7 +172,9 @@ public class CriticalSectionController extends GenericController implements
     public void threadFinished() {
         if (this.currentLock != null
                 && this.currentLock.isHeldByCurrentThread()) {
-            log.warn("Lock '{}' not released in: {}, releasing in threadFinished", getLockName(), getName());
+            if (log.isWarnEnabled()) {
+                log.warn("Lock '{}' not released in: {}, releasing in threadFinished", getLockName(), getName());
+            }
             this.currentLock.unlock();
         }
         this.currentLock = null;

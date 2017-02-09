@@ -118,8 +118,9 @@ public class XMLSchemaAssertion extends AbstractTestElement implements Serializa
             }
 
         } catch (SAXException e) {
-
-            log.warn(e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn(e.toString());
+            }
             result.setResultForFailure(e.getMessage());
 
         } catch (IOException e) {

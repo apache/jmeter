@@ -196,7 +196,7 @@ public class XPathPanel extends JPanel {
             testDoc.appendChild(el);
             XPathUtil.validateXPath(testDoc, xpathString);
         } catch (IllegalArgumentException | ParserConfigurationException | TransformerException e) {
-            log.warn(e.getLocalizedMessage(), e);
+            log.warn("Exception while validating XPath.", e);
             success = false;
             ret = e.getLocalizedMessage();
         }
