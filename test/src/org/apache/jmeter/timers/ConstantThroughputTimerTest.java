@@ -39,10 +39,14 @@ public class ConstantThroughputTimerTest {
         ConstantThroughputTimer timer = new ConstantThroughputTimer();
         assertEquals(0,timer.getCalcMode());// Assume this thread only
         timer.setThroughput(60.0);// 1 per second
+        long start = System.currentTimeMillis();
         long delay = timer.delay(); // Initialise
         assertEquals(0,delay);
         Thread.sleep(500);
-        assertEquals("Expected delay of approx 500", 500, timer.delay(), 50);
+        long elapsed = System.currentTimeMillis() - start;
+        long expected = 1000-elapsed; // 1 second less what has already elapsed
+        if (expected < 0) expected = 0;
+        assertEquals("Expected delay of approx 500", expected, timer.delay(), 50);
     }
 
     @Test
