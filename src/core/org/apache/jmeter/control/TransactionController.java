@@ -31,8 +31,8 @@ import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.SamplePackage;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transaction Controller to measure transaction times
@@ -48,7 +48,7 @@ public class TransactionController extends GenericController implements SampleLi
      */
     static final String NUMBER_OF_SAMPLES_IN_TRANSACTION_PREFIX = "Number of samples in transaction : ";
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
     
     private static final String TRUE = Boolean.toString(true); // i.e. "true"
 
@@ -56,7 +56,7 @@ public class TransactionController extends GenericController implements SampleLi
 
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
 
     private static final boolean DEFAULT_VALUE_FOR_INCLUDE_TIMERS = true; // default true for compatibility
 
@@ -142,7 +142,7 @@ public class TransactionController extends GenericController implements SampleLi
         // Check if transaction is done
         if(transactionSampler != null && transactionSampler.isTransactionDone()) {
             if (log.isDebugEnabled()) {
-                log.debug("End of transaction " + getName());
+                log.debug("End of transaction {}", getName());
             }
             // This transaction is done
             transactionSampler = null;
@@ -153,7 +153,7 @@ public class TransactionController extends GenericController implements SampleLi
         if (isFirst()) // must be the start of the subtree
         {
             if (log.isDebugEnabled()) {
-                log.debug("Start of transaction " + getName());
+                log.debug("Start of transaction {}", getName());
             }
             transactionSampler = new TransactionSampler(this, getName());
         }
