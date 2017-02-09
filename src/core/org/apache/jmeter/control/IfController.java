@@ -107,7 +107,7 @@ public class IfController extends GenericController implements Serializable, Thr
                 , "<cmd>", 1, null);
                 result = computeResultFromString(condition, Context.toString(cxResultObject));
             } catch (Exception e) {
-                logger.error(testElementName+": error while processing "+ "[" + condition + "]\n", e);
+                log.error("{}: error while processing "+ "[{}]", testElementName, condition, e);
             } finally {
                 Context.exit();
             }
@@ -124,7 +124,7 @@ public class IfController extends GenericController implements Serializable, Thr
                 Object o = NASHORN_ENGINE.get().eval(condition, newContext);
                 return computeResultFromString(condition, o.toString());
             } catch (Exception ex) {
-                logger.error(testElementName+": error while processing "+ "[" + condition + "]\n", ex);
+                log.error("{}: error while processing [{}]", testElementName, condition, ex);
             }
             return false;
         }
@@ -181,9 +181,7 @@ public class IfController extends GenericController implements Serializable, Thr
      * evaluate the condition clause log error if bad condition
      */
     private boolean evaluateCondition(String cond) {
-        if(logger.isDebugEnabled()) {
-            logger.debug("    getCondition() : [" + cond + "]");
-        }
+        log.debug("    getCondition() : [{}]", cond);
         return JAVASCRIPT_EVALUATOR.evaluate(getName(), cond);
     }
 
@@ -206,9 +204,7 @@ public class IfController extends GenericController implements Serializable, Thr
             default:
                 throw new Exception(" BAD CONDITION :: " + condition + " :: expected true or false");
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("    >> evaluate Condition -  [ " + condition + "] results is  [" + result + "]");
-        }
+        log.debug("    >> evaluate Condition -  [{}] results is  [{}]", condition, result);
         return result;
     }
     
