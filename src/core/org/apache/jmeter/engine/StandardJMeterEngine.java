@@ -44,9 +44,9 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
 import org.apache.jorphan.collections.SearchByClass;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopTestException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Runs JMeter tests, either directly for local GUI and non-GUI invocations, 
@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  */
 public class StandardJMeterEngine implements JMeterEngine, Runnable {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StandardJMeterEngine.class);
 
     // Should we exit at end of the test? (only applies to server, because host is non-null)
     private static final boolean EXIT_AFTER_TEST =
@@ -329,9 +329,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
                 if (!stopped) {  // we totally failed to stop the test
                     if (JMeter.isNonGUI()) {
                         // TODO should we call test listeners? That might hang too ...
-                        log.fatalError(JMeterUtils.getResString("stopping_test_failed")); //$NON-NLS-1$
+                        log.error(JMeterUtils.getResString("stopping_test_failed")); //$NON-NLS-1$
                         if (SYSTEM_EXIT_ON_STOP_FAIL) { // default is true
-                            log.fatalError("Exiting");
+                            log.error("Exiting");
                             System.out.println("Fatal error, could not stop test, exiting"); // NOSONAR Intentional
                             System.exit(1); // NOSONAR Intentional
                         } else {
