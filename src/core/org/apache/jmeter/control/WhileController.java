@@ -26,15 +26,15 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // @see TestWhileController for unit tests
 
 public class WhileController extends GenericController implements Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(WhileController.class);
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     private static final String CONDITION = "WhileController.condition"; // $NON-NLS-1$
 
@@ -54,9 +54,7 @@ public class WhileController extends GenericController implements Serializable {
      */
     private boolean endOfLoop(boolean loopEnd) {
         String cnd = getCondition().trim();
-        if(log.isDebugEnabled()) {
-            log.debug("Condition string:" + cnd+".");
-        }
+        log.debug("Condition string: '{}'", cnd);
         boolean res;
         // If blank, only check previous sample when at end of loop
         if ((loopEnd && cnd.length() == 0) || "LAST".equalsIgnoreCase(cnd)) {// $NON-NLS-1$
@@ -66,9 +64,7 @@ public class WhileController extends GenericController implements Serializable {
             // cnd may be null if next() called us
             res = "false".equalsIgnoreCase(cnd);// $NON-NLS-1$
         }
-        if(log.isDebugEnabled()) {
-            log.debug("Condition value: " + res);
-        }
+        log.debug("Condition value: '{}'", res);
         return res;
     }
 
@@ -115,9 +111,7 @@ public class WhileController extends GenericController implements Serializable {
      *            the condition to save
      */
     public void setCondition(String string) {
-        if(log.isDebugEnabled()) {
-            log.debug("setCondition(" + string + ")");
-        }
+        log.debug("setCondition({})", string);
         setProperty(new StringProperty(CONDITION, string));
     }
 

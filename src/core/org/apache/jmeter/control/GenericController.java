@@ -32,8 +32,8 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.threads.TestCompilerHelper;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -49,9 +49,9 @@ import org.apache.log.Logger;
  */
 public class GenericController extends AbstractTestElement implements Controller, Serializable, TestCompilerHelper {
 
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(GenericController.class);
 
     private transient LinkedList<LoopIterationListener> iterationListeners = new LinkedList<>();
 
@@ -156,9 +156,7 @@ public class GenericController extends AbstractTestElement implements Controller
     @Override
     public Sampler next() {
         fireIterEvents();
-        if (log.isDebugEnabled()) {
-            log.debug("Calling next on: " + this.getClass().getName());
-        }
+        log.debug("Calling next on: {}", GenericController.class);
         if (isDone()) {
             return null;
         }
