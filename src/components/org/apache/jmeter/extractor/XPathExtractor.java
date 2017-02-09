@@ -134,8 +134,10 @@ public class XPathExtractor extends AbstractScopedTestElement implements
                         getValuesForXPath(d,getXPathQuery(), matches, matchNumber);
                     }
                 } else {
-                    log.warn("No variable '{}' found to process by XPathExtractor '{}', skipping processing",
-                            getVariableName(), getName());
+                    if (log.isWarnEnabled()) {
+                        log.warn("No variable '{}' found to process by XPathExtractor '{}', skipping processing",
+                                getVariableName(), getName());
+                    }
                 }
             } else {
                 List<SampleResult> samples = getSampleList(previousResult);
@@ -175,10 +177,14 @@ public class XPathExtractor extends AbstractScopedTestElement implements
             log.error(errrorMessage,e);
             throw new JMeterError(errrorMessage,e);
         } catch (SAXException e) {// Can happen for bad input document
-            log.warn("SAXException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("SAXException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
+            }
             addAssertionFailure(previousResult, e, false); // Should this also fail the sample?
         } catch (TransformerException e) {// Can happen for incorrect XPath expression
-            log.warn("TransformerException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
+            if (log.isWarnEnabled()) {
+                log.warn("TransformerException while processing ({}). {}", getXPathQuery(), e.getLocalizedMessage());
+            }
             addAssertionFailure(previousResult, e, false);
         } catch (TidyException e) {
             // Will already have been logged by XPathUtil

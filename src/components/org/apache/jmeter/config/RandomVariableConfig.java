@@ -202,7 +202,7 @@ public class RandomVariableConfig extends ConfigTestElement
                 seed = Long.parseLong(randomSeed);
             } catch (NumberFormatException e) {
                 seed = System.currentTimeMillis();
-                log.warn("Cannot parse seed: {}. {}", randomSeed, e.getLocalizedMessage());
+                log.warn("Cannot parse random seed: '{}'", randomSeed);
             }
         }
         return seed;

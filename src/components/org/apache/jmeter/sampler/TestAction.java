@@ -109,7 +109,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
         try {
             millis=Long.parseLong(timeInMillis);
         } catch (NumberFormatException e){
-            log.warn("Could not create number from {}", timeInMillis);
+            log.warn("Could not parse number: '{}'", timeInMillis);
             millis=0;
         }
         try {
