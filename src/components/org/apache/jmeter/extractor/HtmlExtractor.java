@@ -117,7 +117,9 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 try {
                     prevCount = Integer.parseInt(prevString);
                 } catch (NumberFormatException nfe) {
-                    log.warn("{}: Could not parse number '{}'.", getName(), prevString);
+                    if (log.isWarnEnabled()) {
+                        log.warn("{}: Could not parse number: '{}'.", getName(), prevString);
+                    }
                 }
             }
             int matchCount=0;// Number of refName_n variable sets to keep
@@ -145,7 +147,9 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 vars.remove(refNameN);
             }
         } catch (RuntimeException e) {
-            log.warn("{}: Error while generating result. {}", getName(), e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("{}: Error while generating result. {}", getName(), e.toString());
+            }
         }
 
     }
@@ -185,8 +189,10 @@ public class HtmlExtractor extends AbstractScopedTestElement implements PostProc
                 getExtractorImpl().extract(expression, attribute, matchNumber, inputString, result, found, "-1");
             } else {
                 if(inputString==null) {
-                    log.warn("No variable '{}' found to process by CSS/JQuery Extractor '{}', skipping processing",
-                            getVariableName(), getName());
+                    if (log.isWarnEnabled()) {
+                        log.warn("No variable '{}' found to process by CSS/JQuery Extractor '{}', skipping processing",
+                                getVariableName(), getName());
+                    }
                 }
                 return Collections.emptyList();
             } 

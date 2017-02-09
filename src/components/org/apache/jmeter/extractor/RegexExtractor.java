@@ -130,7 +130,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
                 try {
                     prevCount = Integer.parseInt(prevString);
                 } catch (NumberFormatException nfe) {
-                    log.warn("Could not parse number: '{}', message: '{}'", prevString, nfe.toString());
+                    log.warn("Could not parse number: '{}'", prevString);
                 }
             }
             int matchCount=0;// Number of refName_n variable sets to keep
@@ -199,8 +199,10 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
         if (isScopeVariable()){
             String inputString=vars.get(getVariableName());
             if(inputString == null) {
-                log.warn("No variable '{}' found to process by RegexExtractor '{}', skipping processing",
-                        getVariableName(), getName());
+                if (log.isWarnEnabled()) {
+                    log.warn("No variable '{}' found to process by RegexExtractor '{}', skipping processing",
+                            getVariableName(), getName());
+                }
                 return Collections.emptyList();
             }
             matchStrings(matchNumber, matcher, pattern, matches, found,
@@ -251,7 +253,7 @@ public class RegexExtractor extends AbstractScopedTestElement implements PostPro
             try {
                 previous=Integer.parseInt(prevString);
             } catch (NumberFormatException nfe) {
-                log.warn("Could not parse number: '{}', message:'{}'", prevString, nfe.toString());
+                log.warn("Could not parse number: '{}'.", prevString);
             }
         }
         //Note: match.groups() includes group 0

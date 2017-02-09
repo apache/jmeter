@@ -63,7 +63,9 @@ public class BeanShellPostProcessor extends BeanShellTestElement
             bshInterpreter.set("data", prev.getResponseData());//$NON-NLS-1$
             processFileOrScript(bshInterpreter);
         } catch (JMeterException e) {
-            log.warn("Problem in BeanShell script: {}", e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("Problem in BeanShell script: {}", e.toString());
+            }
         }
     }
      
