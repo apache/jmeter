@@ -161,10 +161,11 @@ public class BackendListenerContext {
             return defaultValue;
         }
 
+        final String valueString = params.get(name);
         try {
-            return Integer.parseInt(params.get(name));
+            return Integer.parseInt(valueString);
         } catch (NumberFormatException e) {
-            log.warn("Value for parameter '{}' not an integer: '{}'.  Using default: '{}'.", name, params.get(name),
+            log.warn("Value for parameter '{}' not an integer: '{}'.  Using default: '{}'.", name, valueString,
                     defaultValue, e);
             return defaultValue;
         }
@@ -213,10 +214,11 @@ public class BackendListenerContext {
         if (params == null || !params.containsKey(name)) {
             return defaultValue;
         }
+        final String valueString = params.get(name);
         try {
-            return Long.decode(params.get(name)).longValue();
+            return Long.decode(valueString).longValue();
         } catch (NumberFormatException e) {
-            log.warn("Value for parameter '{}' not a long: '{}'.  Using default: '{}'.", name, params.get(name),
+            log.warn("Value for parameter '{}' not a long: '{}'.  Using default: '{}'.", name, valueString,
                     defaultValue, e);
             return defaultValue;
         }
