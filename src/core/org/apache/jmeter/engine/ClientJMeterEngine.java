@@ -31,14 +31,14 @@ import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to run remote tests from the client JMeter and collect remote samples
  */
 public class ClientJMeterEngine implements JMeterEngine {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ClientJMeterEngine.class);
 
     private static final Object LOCK = new Object();
 
@@ -154,6 +154,24 @@ public class ClientJMeterEngine implements JMeterEngine {
             log.error("Error in "+methodName+" method "+ex); // $NON-NLS-1$ $NON-NLS-2$
             tidyRMI(log);
             throw new JMeterEngineException("Error in "+methodName+" method "+ex, ex); // $NON-NLS-1$ $NON-NLS-2$
+        }
+    }
+
+    /**
+     * Tidy up RMI access to allow JMeter client to exit.
+     * Currently just interrups the "RMI Reaper" thread.
+     * @param logger where to log the information
+     * @deprecated since 3.2, use {@link #tidyRMI(Logger)}.
+     */
+    @Deprecated
+    public static void tidyRMI(org.apache.log.Logger logger) {
+        String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
+        for(Thread t : Thread.getAllStackTraces().keySet()){
+            String name = t.getName();
+            if (name.matches(reaperRE)) {
+                logger.info("Interrupting "+name);
+                t.interrupt();
+            }
         }
     }
 
