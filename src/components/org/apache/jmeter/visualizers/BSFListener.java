@@ -52,7 +52,9 @@ public class BSFListener extends BSFTestElement
             mgr.declareBean("sampleResult", result, SampleResult.class);
             processFileOrScript(mgr);
         } catch (BSFException e) {
-            log.warn("Problem in BSF script. {}", e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("Problem in BSF script. {}", e.toString());
+            }
         } finally {
             if (mgr != null) {
                 mgr.terminate();
