@@ -55,7 +55,7 @@ public class TextAreaCellRenderer implements TableCellRenderer {
     private JSyntaxTextArea createRenderer(String value) {
         JSyntaxTextArea textArea = JSyntaxTextArea.getInstance(2, 50);
         textArea.setLanguage("text"); //$NON-NLS-1$
-        textArea.setInitialText(value.toString());
+        textArea.setInitialText(value);
         return textArea;
     }
 
