@@ -24,8 +24,8 @@ import java.rmi.RemoteException;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -34,9 +34,9 @@ import org.apache.log.Logger;
  */
 public class RemoteListenerWrapper extends AbstractTestElement implements SampleListener, TestStateListener, Serializable,
         NoThreadClone {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RemoteListenerWrapper.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private final RemoteSampleListener listener;
 
@@ -74,14 +74,14 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
 
     @Override
     public void testStarted(String host) {
-        log.debug("Test Started on " + host);
+        log.debug("Test Started on {}", host);
         try {
             listener.testStarted(host);
         } catch (Error | RuntimeException ex) { // NOSONAR We want to have errors logged in log file
-            log.error("testStarted(host) on "+host, ex);
+            log.error("testStarted(host) on {}", host, ex);
             throw ex;
         } catch(Exception ex) {
-            log.error("testStarted(host) on "+host, ex);
+            log.error("testStarted(host) on {}", host, ex);
         }
     }
 

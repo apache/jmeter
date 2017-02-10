@@ -23,16 +23,15 @@ import java.io.Serializable;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.TestStateListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @version $Revision$
  */
 public class RemoteTestListenerWrapper extends AbstractTestElement implements TestStateListener, Serializable, NoThreadClone {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RemoteTestListenerWrapper.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private final RemoteSampleListener listener;
 
@@ -50,7 +49,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         try {
             listener.testStarted();
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Exception on testStarted.", ex); // $NON-NLS-1$
         }
 
     }
@@ -60,7 +59,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         try {
             listener.testEnded();
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Exception on testEnded.", ex); // $NON-NLS-1$
         }
     }
 
@@ -69,7 +68,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         try {
             listener.testStarted(host);
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Exception on testStarted on host {}", host, ex); // $NON-NLS-1$
         }
     }
 
@@ -78,7 +77,7 @@ public class RemoteTestListenerWrapper extends AbstractTestElement implements Te
         try {
             listener.testEnded(host);
         } catch (Exception ex) {
-            log.error("", ex); // $NON-NLS-1$
+            log.error("Exception on testEnded on host {}", host, ex); // $NON-NLS-1$
         }
     }
 

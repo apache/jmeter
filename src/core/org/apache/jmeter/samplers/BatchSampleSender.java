@@ -18,24 +18,24 @@
 
 package org.apache.jmeter.samplers;
 
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.rmi.RemoteException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.jmeter.util.JMeterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements batch reporting for remote testing.
  *
  */
 public class BatchSampleSender extends AbstractSampleSender implements Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BatchSampleSender.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
 
@@ -86,9 +86,8 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     protected BatchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         if (isClientConfigured()) {
-            log.info("Using batching (client settings) for this run."
-                    + " Thresholds: num=" + clientConfiguredNumSamplesThreshold
-                    + ", time=" + clientConfiguredTimeThresholdMs);
+            log.info("Using batching (client settings) for this run. Thresholds: num={}, time={}",
+                    clientConfiguredNumSamplesThreshold, clientConfiguredTimeThresholdMs);
         } else {
             log.info("Using batching (server settings) for this run.");
         }
@@ -119,7 +118,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
      */
     @Override
     public void testEnded(String host) {
-        log.info("Test Ended on " + host);
+        log.info("Test Ended on {}", host);
         try {
             if (sampleStore.size() != 0) {
                 listener.processBatch(sampleStore);
@@ -204,9 +203,7 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
             numSamplesThreshold =  NUM_SAMPLES_THRESHOLD;
             timeThresholdMs = TIME_THRESHOLD_MS;
         }
-        log.info("Using batching for this run."
-                + " Thresholds: num=" + numSamplesThreshold
-                + ", time=" + timeThresholdMs); 
+        log.info("Using batching for this run. Thresholds: num={}, time={}", numSamplesThreshold, timeThresholdMs);
         return this;
     }
 }
