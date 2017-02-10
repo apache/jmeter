@@ -285,7 +285,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         float perThreadDelayInMillis = (float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads();
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group number {} threads {} ramp-up {} perThread {} delayedStart={}", groupNumber,
+        log.info("Starting thread group... number={} threads={} ramp-up={} perThread={} delayedStart={}", groupNumber,
                 numThreads, rampUpPeriodInSeconds, perThreadDelayInMillis, delayedStartup);
         if (delayedStartup) {
             threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
@@ -376,7 +376,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay);
         JMeterContextService.addTotalThreads( 1 );
-        log.info("Started new thread in group {}", groupNumber );
+        log.info("Started new thread in group {}", groupNumber);
         return newJmThread;
     }
 
