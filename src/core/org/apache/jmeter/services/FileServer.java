@@ -41,9 +41,9 @@ import org.apache.commons.collections.ArrayStack;
 import org.apache.jmeter.gui.JMeterFileFilter;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -60,7 +60,7 @@ import org.apache.log.Logger;
  */
 public class FileServer {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(FileServer.class);
 
     /**
      * The default base used for resolving relative files, i.e.<br/>
@@ -89,7 +89,7 @@ public class FileServer {
     // Cannot be instantiated
     private FileServer() {
         base = new File(DEFAULT_BASE);
-        log.info("Default base='"+DEFAULT_BASE+"'");
+        log.info("Default base='{}'", DEFAULT_BASE);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FileServer {
     public synchronized void resetBase() {
         checkForOpenFiles();
         base = new File(DEFAULT_BASE);
-        log.info("Reset base to'"+base+"'");
+        log.info("Reset base to '{}'", base);
     }
 
     /**
@@ -124,7 +124,7 @@ public class FileServer {
                 newBase = newBase.getParentFile();
             }
             base = newBase;
-            log.info("Set new base='"+base+"'");
+            log.info("Set new base='{}'", base);
         }
     }
 
@@ -159,7 +159,7 @@ public class FileServer {
         }
         checkForOpenFiles();
         base = jmxBase;
-        log.info("Set new base='"+base+"'");
+        log.info("Set new base='{}'", base);
     }
 
     /**
@@ -268,9 +268,9 @@ public class FileServer {
         if (fileEntry == null) {
             fileEntry = new FileEntry(resolveFileFromPath(filename), null, charsetName);
             if (filename.equals(alias)){
-                log.info("Stored: "+filename);
+                log.info("Stored: {}", filename);
             } else {
-                log.info("Stored: "+filename+" Alias: "+alias);
+                log.info("Stored: {} Alias: {}", filename, alias);
             }
             files.put(alias, fileEntry);
             if (hasHeader) {
@@ -359,7 +359,7 @@ public class FileServer {
                 }
                 line = reader.readLine();
             }
-            if (log.isDebugEnabled()) { log.debug("Read:"+line); }
+            log.debug("Read:{}", line);
             return line;
         }
         throw new IOException("File never reserved: "+filename);
@@ -450,7 +450,7 @@ public class FileServer {
                 throw new IOException("File " + filename + " already in use");
             }
             BufferedWriter writer = (BufferedWriter) fileEntry.inputOutputObject;
-            if (log.isDebugEnabled()) { log.debug("Write:"+value); }
+            log.debug("Write:{}", value);
             writer.write(value);
         } else {
             throw new IOException("File never reserved: "+filename);
@@ -488,7 +488,7 @@ public class FileServer {
 
     private void closeFile(String name, FileEntry fileEntry) throws IOException {
         if (fileEntry != null && fileEntry.inputOutputObject != null) {
-            log.info("Close: "+name);
+            log.info("Close: {}", name);
             fileEntry.inputOutputObject.close();
             fileEntry.inputOutputObject = null;
         }
