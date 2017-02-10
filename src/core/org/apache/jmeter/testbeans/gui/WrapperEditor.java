@@ -27,8 +27,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is an implementation of a full-fledged property editor, providing both
@@ -54,7 +54,7 @@ import org.apache.log.Logger;
  *
  */
 class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(WrapperEditor.class);
 
     /** The type's property editor. */
     private final PropertyEditor typeEditor;
@@ -308,7 +308,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("->" + (value != null ? value.getClass().getName() : "NULL") + ":" + value);
+            if (value == null) {
+                log.debug("->NULL:null");
+            } else {
+                log.debug("->{}:{}", value.getClass().getName(), value);
+            }
         }
         return value;
     }
@@ -318,7 +322,11 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
         String text;
 
         if (log.isDebugEnabled()) {
-            log.debug("<-" + (value != null ? value.getClass().getName() : "NULL") + ":" + value);
+            if (value == null) {
+                log.debug("<-NULL:null");
+            } else {
+                log.debug("<-{}:{}", value.getClass().getName(), value);
+            }
         }
 
         if (value == null) {
@@ -383,16 +391,18 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             }
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("->\"" + text + "\"");
-        }
+        log.debug("->\"{}\"", text);
         return text;
     }
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
         if (log.isDebugEnabled()) {
-            log.debug(text == null ? "<-null" : "<-\"" + text + "\"");
+            if (text == null) {
+                log.debug("<-null");
+            } else {
+                log.debug("<-\"{}\"", text);
+            }
         }
 
         String value;
@@ -428,7 +438,7 @@ class WrapperEditor extends PropertyEditorSupport implements PropertyChangeListe
             firePropertyChange();
         } else {
             if (GuiPackage.getInstance() == null){
-                log.warn("Invalid value: "+text+" "+typeEditor);
+                log.warn("Invalid value: {} {}", text, typeEditor);
             } else {
                 JOptionPane.showMessageDialog(guiEditor.getCustomEditor().getParent(),
                    JMeterUtils.getResString("property_editor.value_is_invalid_message"),//$NON-NLS-1$
