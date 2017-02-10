@@ -34,9 +34,9 @@ import org.apache.commons.lang3.CharUtils;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * N.B. to add a new field, remember the following
@@ -70,9 +70,9 @@ import org.apache.log.Logger;
  * </ul>
  */
 public class SampleSaveConfiguration implements Cloneable, Serializable {
-    private static final long serialVersionUID = 7L;
+    private static final long serialVersionUID = 8L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SampleSaveConfiguration.class);
 
     // ---------------------------------------------------------------------
     // PROPERTY FILE CONSTANTS
@@ -380,7 +380,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             IS_XML = true;
         } else {
             if (!CSV.equals(howToSave)) {
-                log.warn(OUTPUT_FORMAT_PROP + " has unexepected value: '" + howToSave + "' - assuming 'csv' format");
+                log.warn("{} has unexepected value: '{}' - assuming 'csv' format", OUTPUT_FORMAT_PROP, howToSave);
             }
             IS_XML = false;
         }

@@ -18,22 +18,22 @@
 
 package org.apache.jmeter.samplers;
 
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterError;
-
-import java.rmi.RemoteException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+
+import org.apache.jorphan.util.JMeterError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default behaviour for remote testing.
  */
 
 public class StandardSampleSender extends AbstractSampleSender implements Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StandardSampleSender.class);
 
     private final RemoteSampleListener listener;
 
@@ -53,11 +53,11 @@ public class StandardSampleSender extends AbstractSampleSender implements Serial
 
     @Override
     public void testEnded(String host) {
-        log.info("Test Ended on " + host);
+        log.info("Test Ended on {}", host);
         try {
             listener.testEnded(host);
         } catch (RemoteException ex) {
-            log.warn("testEnded(host)"+ex);
+            log.warn("testEnded(host)", ex);
         }
     }
 

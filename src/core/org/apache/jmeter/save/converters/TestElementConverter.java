@@ -24,8 +24,8 @@ import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.NameUpdater;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 public class TestElementConverter extends AbstractCollectionConverter {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TestElementConverter.class);
 
 
     /**
@@ -112,7 +112,7 @@ public class TestElementConverter extends AbstractCollectionConverter {
             }
             return el;
         } catch (InstantiationException | IllegalAccessException e) {
-            log.error("TestElement not instantiable: " + type, e);
+            log.error("TestElement not instantiable: {}", type, e);
             return null;
         }
     }

@@ -20,12 +20,12 @@
 package org.apache.jmeter.gui.util;
 
 import org.apache.jmeter.gui.action.ActionNames;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class IconToolbarBean {
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(IconToolbarBean.class);
 
     private static final String ICON_FIELD_SEP = ",";  //$NON-NLS-1$
 
@@ -66,7 +66,7 @@ public final class IconToolbarBean {
         try {
             aName = (String) (ActionNames.class.getField(this.actionName).get(null));
         } catch (Exception e) {
-            log.warn("Toolbar icon Action names error: " + this.actionName + ", use unknown action."); //$NON-NLS-1$
+            log.warn("Toolbar icon Action names error: {}, use unknown action.", this.actionName); //$NON-NLS-1$
             return this.actionName; // return unknown action names for display error msg
         }
         return aName;

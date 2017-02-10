@@ -29,8 +29,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeListener;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Places a copied JMeterTreeNode under the selected node.
@@ -38,7 +38,7 @@ import org.apache.log.Logger;
  */
 public class Paste extends AbstractAction {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Paste.class);
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -88,7 +88,7 @@ public class Paste extends AbstractAction {
             }
         }
         catch (IllegalUserActionException iuae) {
-            log.error("", iuae); // $NON-NLS-1$
+            log.error("Illegal user action while adding a tree node.", iuae); // $NON-NLS-1$
             JMeterUtils.reportErrorToUser(iuae.getMessage());
         }
     }

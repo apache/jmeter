@@ -55,8 +55,8 @@ import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Save the current test plan; implements:
@@ -65,7 +65,7 @@ import org.apache.log.Logger;
  * Save (Selection) As
  */
 public class Save extends AbstractAction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Save.class);
 
     private static final List<File> EMPTY_FILE_LIST = Collections.emptyList();
     
@@ -209,13 +209,15 @@ public class Save extends AbstractAction {
         try {
             expiredBackupFiles = createBackupFile(fileToBackup);
         } catch (Exception ex) {
-            log.error("Failed to create a backup for " + fileToBackup.getName(), ex); //$NON-NLS-1$
+            log.error("Failed to create a backup for {}", fileToBackup, ex); //$NON-NLS-1$
         }
         
         try {
             convertSubTree(subTree);
         } catch (Exception err) {
-            log.warn("Error converting subtree "+err);
+            if (log.isWarnEnabled()) {
+                log.warn("Error converting subtree. {}", err.toString());
+            }
         }
 
         try (FileOutputStream ostream = new FileOutputStream(updateFile)){
@@ -235,14 +237,14 @@ public class Save extends AbstractAction {
                 try {
                     FileUtils.deleteQuietly(expiredBackupFile);
                 } catch (Exception ex) {
-                    log.warn("Failed to delete backup file " + expiredBackupFile.getName()); //$NON-NLS-1$
+                    log.warn("Failed to delete backup file, {}", expiredBackupFile); //$NON-NLS-1$
                 }
             }
         } catch(RuntimeException ex) {
             throw ex;
         }
         catch (Exception ex) {
-            log.error("Error saving tree:", ex);
+            log.error("Error saving tree.", ex);
             throw new IllegalUserActionException("Couldn't save test plan to file: " + updateFile, ex);
         } 
 
@@ -321,7 +323,9 @@ public class Save extends AbstractAction {
         File backupDir = new File(BACKUP_DIRECTORY);
         backupDir.mkdirs();
         if (!backupDir.isDirectory()) {
-            log.error("Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <" + backupDir.getAbsolutePath() + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+            log.error(
+                    "Could not backup file ! Backup directory does not exist, is not a directory or could not be created ! <{}>", //$NON-NLS-1$
+                    backupDir.getAbsolutePath()); //$NON-NLS-2$
         }
 
         /**
@@ -377,7 +381,7 @@ public class Save extends AbstractAction {
         try {
             FileUtils.copyFile(fileToBackup, backupFile);
         } catch (IOException e) {
-            log.error("Failed to backup file :" + fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
+            log.error("Failed to backup file : {}", fileToBackup.getAbsolutePath(), e); //$NON-NLS-1$
             return EMPTY_FILE_LIST;
         }
         // add the fresh new backup file (list is still sorted here)

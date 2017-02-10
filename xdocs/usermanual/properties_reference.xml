@@ -1457,6 +1457,7 @@ log_level.org.apache.http.client=DEBUG
 </property>
 <property name="view.results.tree.max_results">
     Maximum number of main samples, that should be stored and displayed.<br/>
+    A value of <code>0</code> will store all results. This might consume a lot of memory.<br/>
     Defaults to: <code>500</code>
 </property>
 <property name="view.results.tree.max_size">

@@ -98,9 +98,9 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The main JMeter frame, containing the menu bar, test tree, and an area for
@@ -109,7 +109,7 @@ import org.apache.log.Logger;
  */
 public class MainFrame extends JFrame implements TestStateListener, Remoteable, DropTargetListener, Clearable, ActionListener {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     // This is used to keep track of local (non-remote) tests
     // The name is chosen to be an unlikely host-name
@@ -126,7 +126,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     private static final boolean DISPLAY_LOGGER_PANEL =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.display", false); // $NON-NLS-1$
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MainFrame.class);
 
     /** The menu bar. */
     private JMeterMenuBar menuBar;
@@ -235,6 +235,19 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         init();
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        
+        addMouseWheelListener(e -> {
+            if (e.isControlDown()) {
+                final float scale = 1.1f;
+                int rotation = e.getWheelRotation();
+                if (rotation > 0) { // DOWN
+                    JMeterUtils.applyScaleOnFonts(1.0f/scale);
+                } else if (rotation < 0) { // UP
+                    JMeterUtils.applyScaleOnFonts(scale);
+                }
+                e.consume();
+            }
+        });
     }
 
     protected void computeTestDuration(ActionEvent evt) {
@@ -679,10 +692,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
             public void actionPerformed(ActionEvent actionEvent) {
                 String propname = "gui.quick_" + actionEvent.getActionCommand();
                 String comp = JMeterUtils.getProperty(propname);
-                log.debug("Event " + propname + ": " + comp);
+                log.debug("Event {}: {}", propname, comp);
 
                 if (comp == null) {
-                    log.warn("No component set through property: " + propname);
+                    log.warn("No component set through property: {}", propname);
                     return;
                 }
 
@@ -701,7 +714,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                         guiPackage.getMainFrame().getTree().setSelectionPath(new TreePath(node.getPath()));
                     }
                 } catch (Exception err) {
-                    log.warn("Failed to perform quick component add: " + comp, err); // $NON-NLS-1$
+                    log.warn("Failed to perform quick component add: {}", comp, err); // $NON-NLS-1$
                 }
             }
         };
@@ -781,7 +794,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 }
             }
         } catch (UnsupportedFlavorException | IOException e) {
-            log.warn("Dnd failed" , e);
+            log.warn("Dnd failed", e);
         }
 
     }
@@ -795,7 +808,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         }
         File file = files.get(0);
         if (!file.getName().endsWith(".jmx")) {
-            log.warn("Importing file:" + file.getName()+ "from DnD failed because file extension does not end with .jmx");
+            if (log.isWarnEnabled()) {
+                log.warn("Importing file, {}, from DnD failed because file extension does not end with .jmx", file.getName());
+            }
             return false;
         }
 
@@ -872,7 +887,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
                 awtAppClassName.setAccessible(true);
                 awtAppClassName.set(null, DEFAULT_APP_NAME);
             } catch (NoSuchFieldException | IllegalAccessException nsfe) {
-                log.warn("Error awt title: " + nsfe); // $NON-NLS-1$
+                if (log.isWarnEnabled()) {
+                    log.warn("Error awt title: {}", nsfe.toString()); // $NON-NLS-1$
+                }
             }
        }
     }

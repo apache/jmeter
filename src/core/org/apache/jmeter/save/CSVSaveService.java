@@ -46,22 +46,22 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.samplers.StatisticalSampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides a means for saving/reading test results as CSV files.
  */
 // For unit tests, @see TestCSVSaveService
 public final class CSVSaveService {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CSVSaveService.class);
 
     // ---------------------------------------------------------------------
     // XML RESULT FILE CONSTANTS AND FIELD NAME CONSTANTS
@@ -152,8 +152,7 @@ public final class CSVSaveService {
             SampleSaveConfiguration saveConfig = CSVSaveService
                     .getSampleSaveConfiguration(line, filename);
             if (saveConfig == null) {// not a valid header
-                log.info(filename
-                        + " does not appear to have a valid header. Using default configuration.");
+                log.info("{} does not appear to have a valid header. Using default configuration.", filename);
                 saveConfig = (SampleSaveConfiguration) resultCollector
                         .getSaveConfig().clone(); // may change the format later
                 dataReader.reset(); // restart from beginning
@@ -213,7 +212,7 @@ public final class CSVSaveService {
                     try {
                         timeStamp = Long.parseLong(text); // see if this works
                     } catch (NumberFormatException e) { // it did not, let's try some other formats
-                        log.warn(e.toString());
+                        log.warn("Cannot parse timestamp: '{}'", text);
                         boolean foundMatch = false;
                         for(String fmt : DATE_FORMAT_STRINGS) {
                             SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
@@ -223,12 +222,12 @@ public final class CSVSaveService {
                                 timeStamp = stamp.getTime();
                                 // method is only ever called from one thread at a time
                                 // so it's OK to use a static DateFormat
-                                log.warn("Setting date format to: " + fmt);
+                                log.warn("Setting date format to: {}", fmt);
                                 saveConfig.setFormatter(dateFormat);
                                 foundMatch = true;
                                 break;
-                            } catch (ParseException e1) {
-                                log.info(text+" did not match "+fmt);
+                            } catch (ParseException pe) {
+                                log.info("{} did not match {}", text, fmt);
                             }
                         }
                         if (!foundMatch) {
@@ -367,18 +366,17 @@ public final class CSVSaveService {
             }
 
             if (i + saveConfig.getVarCount() < parts.length) {
-                log.warn("Line: " + lineNumber + ". Found " + parts.length
-                        + " fields, expected " + i
-                        + ". Extra fields have been ignored.");
+                log.warn("Line: {}. Found {} fields, expected {}. Extra fields have been ignored.", lineNumber,
+                        parts.length, i);
             }
 
         } catch (NumberFormatException | ParseException e) {
-            log.warn("Error parsing field '" + field + "' at line "
-                    + lineNumber + " " + e);
+            if (log.isWarnEnabled()) {
+                log.warn("Error parsing field '{}' at line {}. {}", field, lineNumber, e.toString());
+            }
             throw new JMeterError(e);
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Insufficient columns to parse field '" + field
-                    + "' at line " + lineNumber);
+            log.warn("Insufficient columns to parse field '{}' at line {}", field, lineNumber);
             throw new JMeterError(e);
         }
         return new SampleEvent(result, "", hostname);
@@ -620,9 +618,10 @@ public final class CSVSaveService {
         }
 
         if (delim != null) {
-            log.warn("Default delimiter '" + _saveConfig.getDelimiter()
-                    + "' did not work; using alternate '" + delim
-                    + "' for reading " + filename);
+            if (log.isWarnEnabled()) {
+                log.warn("Default delimiter '{}' did not work; using alternate '{}' for reading {}",
+                        _saveConfig.getDelimiter(), delim, filename);
+            }
             saveConfig.setDelimiter(delim);
         }
 
@@ -644,12 +643,11 @@ public final class CSVSaveService {
             }
             int current = headerLabelMethods.indexOf(label);
             if (current == -1) {
-                log.warn("Unknown column name " + label);
+                log.warn("Unknown column name {}", label);
                 return null; // unknown column name
             }
             if (current <= previous) {
-                log.warn("Column header number " + (i + 1) + " name " + label
-                        + " is out of order.");
+                log.warn("Column header number {} name {} is out of order.", (i + 1), label);
                 return null; // out of order
             }
             previous = current;

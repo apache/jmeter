@@ -44,9 +44,9 @@ import javax.swing.JRootPane;
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.Functor;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generates Configure pop-up dialogue for Listeners from all methods in SampleSaveConfiguration
@@ -57,9 +57,9 @@ import org.apache.log.Logger;
  */
 public class SavePropertyDialog extends JDialog implements ActionListener {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SavePropertyDialog.class);
 
-    private static final long serialVersionUID = 232L;
+    private static final long serialVersionUID = 233L;
 
     private static final Map<String, Functor> functors = new HashMap<>();
 
@@ -85,14 +85,14 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
     {
         super(owner, title, modal);
         saveConfig = s;
-        log.debug("SampleSaveConfiguration = " + saveConfig);// $NON-NLS-1$
+        log.debug("SampleSaveConfiguration = {}", saveConfig);// $NON-NLS-1$
         initDialog();
     }
 
     private void initDialog() {
         this.getContentPane().setLayout(new BorderLayout());
         final int configCount = (SampleSaveConfiguration.SAVE_CONFIG_NAMES.size() / 3) + 1;
-        log.debug("grid panel is " + 3 + " by " + configCount);
+        log.debug("grid panel is {} by {}", 3, configCount);
         JPanel checkPanel = new JPanel(new GridLayout(configCount, 3));
         for (final String name : SampleSaveConfiguration.SAVE_CONFIG_NAMES) {
             try {
