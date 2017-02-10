@@ -23,18 +23,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 
 public class Document {
     
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Document.class);
     
     // Maximum size to convert a document to text (default 10Mb)
     private static final int MAX_DOCUMENT_SIZE =
@@ -61,7 +61,7 @@ public class Document {
             response = handler.toString();
         } catch (Exception e) {
             response = e.toString();
-            log.warn("Error document parsing:", e);
+            log.warn("Error document parsing.", e);
         } catch (NoClassDefFoundError e) {
             // put a warning if tika-app.jar missing (or some dependencies in only tika-core|parsers packages are using)
             if (!System.getProperty("java.class.path").contains("tika-app")) { // $NON-NLS-1$ $NON-NLS-2$ 
@@ -78,7 +78,7 @@ public class Document {
         }
 
         if (response.length() == 0 && document.length > 0) {
-            log.warn("Probably: " + errMissingTika);// $NON-NLS-1$
+            log.warn("Probably: {}", errMissingTika);// $NON-NLS-1$
             response = errMissingTika;
         }
         return response;

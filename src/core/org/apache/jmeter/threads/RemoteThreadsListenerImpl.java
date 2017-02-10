@@ -28,9 +28,9 @@ import java.util.List;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * RMI Implementation, client side code (ie executed on Controller)
@@ -38,13 +38,13 @@ import org.apache.log.Logger;
  */
 public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
         RemoteThreadsListener, ThreadListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RemoteThreadsListenerImpl.class);
     private final List<RemoteThreadsLifeCycleListener> listeners = new ArrayList<>();
 
     /**
      * 
      */
-    private static final long serialVersionUID = 4790505101521183660L;
+    private static final long serialVersionUID = 1L;
     /**
      * 
      */
@@ -62,23 +62,20 @@ public class RemoteThreadsListenerImpl extends UnicastRemoteObject implements
                     new Class[] {RemoteThreadsLifeCycleListener.class }); 
             for (String strClassName : listClasses) {
                 try {
-                    if(log.isDebugEnabled()) {
-                        log.debug("Loading class: "+ strClassName);
-                    }
+                    log.debug("Loading class: {}", strClassName);
                     Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
-                        if(log.isDebugEnabled()) {
-                            log.debug("Instantiating: "+ commandClass.getName());
-                        }
+                        log.debug("Instantiating: {}", commandClass);
                         RemoteThreadsLifeCycleListener listener = (RemoteThreadsLifeCycleListener) commandClass.newInstance();
                         listeners.add(listener);
                     }
                 } catch (Exception e) {
-                    log.error("Exception registering "+RemoteThreadsLifeCycleListener.class.getName() + " with implementation:"+strClassName, e);
+                    log.error("Exception registering {} with implementation: {}", RemoteThreadsLifeCycleListener.class,
+                            strClassName, e);
                 }
             }
         } catch (IOException e) {
-            log.error("Exception finding implementations of "+RemoteThreadsLifeCycleListener.class, e);
+            log.error("Exception finding implementations of {}", RemoteThreadsLifeCycleListener.class, e);
         }
     }
 
