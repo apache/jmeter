@@ -42,8 +42,8 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The SSLManager handles the KeyStore information for JMeter. Basically, it
@@ -57,7 +57,7 @@ import org.apache.log.Logger;
  *
  */
 public class JsseSSLManager extends SSLManager {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JsseSSLManager.class);
 
     private static final String HTTPS = "https"; // $NON-NLS-1$
 
@@ -75,13 +75,14 @@ public class JsseSSLManager extends SSLManager {
     public static final int CPS = JMeterUtils.getPropDefault("httpclient.socket.https.cps", 0); // $NON-NLS-1$
 
     static {
-        log.info("Using default SSL protocol: "+DEFAULT_SSL_PROTOCOL);
-        log.info("SSL session context: "+(SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
+        if (log.isInfoEnabled()) {
+            log.info("Using default SSL protocol: {}", DEFAULT_SSL_PROTOCOL);
+            log.info("SSL session context: {}", (SHARED_SESSION_CONTEXT ? "shared" : "per-thread"));
 
-        if (CPS > 0) {
-            log.info("Setting up HTTPS SlowProtocol, cps="+CPS);
+            if (CPS > 0) {
+                log.info("Setting up HTTPS SlowProtocol, cps={}", CPS);
+            }
         }
-
     }
 
     /**
@@ -102,7 +103,7 @@ public class JsseSSLManager extends SSLManager {
      *            Description of Parameter
      */
     public JsseSSLManager(Provider provider) {
-        log.debug("ssl Provider =  " + provider);
+        log.debug("ssl Provider = {}", provider);
         setProvider(provider);
         if (null == this.rand) { // Surely this is always null in the constructor?
             this.rand = new SecureRandom();
@@ -155,7 +156,9 @@ public class JsseSSLManager extends SSLManager {
 //          HttpsURLConnection secureConn = (HttpsURLConnection) conn;
 //          secureConn.setSSLSocketFactory(this.getContext().getSocketFactory());
         } else {
-            log.warn("Unexpected HttpURLConnection class: "+conn.getClass().getName());
+            if (log.isWarnEnabled()) {
+                log.warn("Unexpected HttpURLConnection class: {}", conn.getClass().getName());
+            }
         }
     }
 
@@ -184,7 +187,7 @@ public class JsseSSLManager extends SSLManager {
     public SSLContext getContext() throws GeneralSecurityException {
         if (SHARED_SESSION_CONTEXT) {
             if (log.isDebugEnabled()){
-                log.debug("Using shared SSL context for: "+Thread.currentThread().getName());
+                log.debug("Using shared SSL context for: {}", Thread.currentThread().getName());
             }
             return this.defaultContext;
         }
@@ -192,13 +195,13 @@ public class JsseSSLManager extends SSLManager {
         SSLContext sslContext = this.threadlocal.get();
         if (sslContext == null) {
             if (log.isDebugEnabled()){
-                log.debug("Creating threadLocal SSL context for: "+Thread.currentThread().getName());
+                log.debug("Creating threadLocal SSL context for: {}", Thread.currentThread().getName());
             }
             sslContext = createContext();
             this.threadlocal.set(sslContext);
         }
         if (log.isDebugEnabled()){
-            log.debug("Using threadLocal SSL context for: "+Thread.currentThread().getName());
+            log.debug("Using threadLocal SSL context for: {}", Thread.currentThread().getName());
         }
         return sslContext;
     }
@@ -236,8 +239,10 @@ public class JsseSSLManager extends SSLManager {
         managerFactory.init(null, defaultpw == null ? new char[]{} : defaultpw.toCharArray());
         KeyManager[] managers = managerFactory.getKeyManagers();
         KeyManager[] newManagers = new KeyManager[managers.length];
-        
-        log.debug(keys.getClass().toString());
+
+        if (log.isDebugEnabled()) {
+            log.debug("JmeterKeyStore type: {}", keys.getClass());
+        }
 
         // Now wrap the default managers with our key manager
         for (int i = 0; i < managers.length; i++) {
@@ -269,10 +274,10 @@ public class JsseSSLManager extends SSLManager {
             int len = (dCiphers.length > sCiphers.length) ? dCiphers.length : sCiphers.length;
             for (int i = 0; i < len; i++) {
                 if (i < dCiphers.length) {
-                    log.debug("Default Cipher: " + dCiphers[i]);
+                    log.debug("Default Cipher: {}", dCiphers[i]);
                 }
                 if (i < sCiphers.length) {
-                    log.debug("Supported Cipher: " + sCiphers[i]);
+                    log.debug("Supported Cipher: {}", sCiphers[i]);
                 }
             }
         }
@@ -357,7 +362,7 @@ public class JsseSSLManager extends SSLManager {
          */
         @Override
         public X509Certificate[] getCertificateChain(String alias) {
-            log.debug("WrappedX509Manager: getCertificateChain(" + alias + ")");
+            log.debug("WrappedX509Manager: getCertificateChain({})", alias);
             return this.store.getCertificateChain(alias);
         }
 
@@ -371,7 +376,7 @@ public class JsseSSLManager extends SSLManager {
         @Override
         public PrivateKey getPrivateKey(String alias) {
             PrivateKey privateKey = this.store.getPrivateKey(alias);
-            log.debug("WrappedX509Manager: getPrivateKey: " + privateKey);
+            log.debug("WrappedX509Manager: getPrivateKey: {}", privateKey);
             return privateKey;
         }
 
@@ -396,11 +401,11 @@ public class JsseSSLManager extends SSLManager {
         @Override
         public String chooseClientAlias(String[] keyType, Principal[] issuers, Socket socket) {
             if(log.isDebugEnabled()) {
-                log.debug("keyType: " + keyType[0]);
+                log.debug("keyType: {}", keyType[0]);
             }
             String alias = this.store.getAlias();
             if(log.isDebugEnabled()) {
-                log.debug("Client alias:'"+alias+"'");
+                log.debug("Client alias: '{}'", alias);
             }
             return alias;
         }

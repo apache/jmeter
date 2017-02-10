@@ -30,15 +30,15 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class NameUpdater {
     private static final Properties nameMap;
     // Read-only access after class has been initialised
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(NameUpdater.class);
 
     private static final String NAME_UPDATER_PROPERTIES = 
             "META-INF/resources/org.apache.jmeter.nameupdater.properties"; // $NON-NLS-1$
@@ -53,9 +53,9 @@ public final class NameUpdater {
             fis = new FileInputStream(f);
             nameMap.load(fis);
         } catch (FileNotFoundException e) {
-            log.error("Could not find upgrade file: ", e);
+            log.error("Could not find upgrade file.", e);
         } catch (IOException e) {
-            log.error("Error processing upgrade file: "+f.getPath(), e);
+            log.error("Error processing upgrade file: {}", f, e);
         } finally {
             JOrphanUtils.closeQuietly(fis);
         }
@@ -66,20 +66,20 @@ public final class NameUpdater {
         try {
            enu = JMeterUtils.class.getClassLoader().getResources(NAME_UPDATER_PROPERTIES);
         } catch (IOException e) {
-           log.error("Error in finding additional nameupdater.properties files: ", e);
+           log.error("Error in finding additional nameupdater.properties files.", e);
         }
 
         if(enu != null) {
             while(enu.hasMoreElements()) {
                 URL ressourceUrl = enu.nextElement();
-                log.info("Processing "+ressourceUrl.toString());
+                log.info("Processing {}", ressourceUrl);
                 Properties prop = new Properties();
                 InputStream is = null;
                 try {
                     is = ressourceUrl.openStream();
                     prop.load(is);
                 } catch (IOException e) {
-                    log.error("Error processing upgrade file: " + ressourceUrl.getPath(), e);
+                    log.error("Error processing upgrade file: {}", ressourceUrl.getPath(), e);
                 } finally {
                     JOrphanUtils.closeQuietly(is);
                 }
@@ -90,9 +90,9 @@ public final class NameUpdater {
                     String key = propertyNames.nextElement();
                     if (!nameMap.containsKey(key)) {
                        nameMap.put(key, prop.get(key));
-                       log.info("Added additional nameMap entry: " + key);
+                       log.info("Added additional nameMap entry: {}", key);
                     } else {
-                       log.warn("Additional nameMap entry: '" + key + "' rejected as already defined.");
+                       log.warn("Additional nameMap entry: '{}' rejected as already defined.", key);
                     }
                 }
             }
@@ -109,7 +109,7 @@ public final class NameUpdater {
     public static String getCurrentName(String className) {
         if (nameMap.containsKey(className)) {
             String newName = nameMap.getProperty(className);
-            log.info("Upgrading class " + className + " to " + newName);
+            log.info("Upgrading class {} to {}", className, newName);
             return newName;
         }
         return className;
@@ -127,7 +127,7 @@ public final class NameUpdater {
         String key = testClassName + "|" + guiClassName;
         if (nameMap.containsKey(key)) {
             String newName = nameMap.getProperty(key);
-            log.info("Upgrading " + key + " to " + newName);
+            log.info("Upgrading {} to {}", key, newName);
             return newName;
         }
         return getCurrentName(testClassName);
@@ -145,7 +145,7 @@ public final class NameUpdater {
         String key = className + "/" + propertyName;
         if (nameMap.containsKey(key)) {
             String newName = nameMap.getProperty(key);
-            log.info("Upgrading property " + propertyName + " to " + newName);
+            log.info("Upgrading property {} to {}", propertyName, newName);
             return newName;
         }
         return propertyName;
@@ -164,7 +164,7 @@ public final class NameUpdater {
         String key = className + "." + propertyName + "/" + value;
         if (nameMap.containsKey(key)) {
             String newValue = nameMap.getProperty(key);
-            log.info("Upgrading value " + value + " to " + newValue);
+            log.info("Upgrading value {} to {}", value, newValue);
             return newValue;
         }
         return value;

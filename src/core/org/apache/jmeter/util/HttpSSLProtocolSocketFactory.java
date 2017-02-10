@@ -32,8 +32,8 @@ import javax.net.ssl.SSLSocketFactory;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Derived from EasySSLProtocolFactory
@@ -45,7 +45,7 @@ public class HttpSSLProtocolSocketFactory
     extends SSLSocketFactory // for java sockets
     implements SecureProtocolSocketFactory { // for Commons Httpclient sockets
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HttpSSLProtocolSocketFactory.class);
 
     private static final String PROTOCOL_LIST =
             JMeterUtils.getPropDefault("https.socket.protocols", ""); // $NON-NLS-1$ $NON-NLS-2$
@@ -53,8 +53,8 @@ public class HttpSSLProtocolSocketFactory
     private static final String[] protocols = PROTOCOL_LIST.split(" "); // $NON-NLS-1$
 
     static {
-        if (!PROTOCOL_LIST.isEmpty()){
-            log.info("Using protocol list: "+PROTOCOL_LIST);
+        if (!PROTOCOL_LIST.isEmpty()) {
+            log.info("Using protocol list: {}", PROTOCOL_LIST);
         }
     }
 
@@ -82,8 +82,10 @@ public class HttpSSLProtocolSocketFactory
             try {
                 sock.setEnabledProtocols(protocols);
             } catch (IllegalArgumentException e) {
-                log.warn("Could not set protocol list: " + PROTOCOL_LIST + ".");
-                log.warn("Valid protocols are: " + join(sock.getSupportedProtocols()));
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not set protocol list: {}.", PROTOCOL_LIST);
+                    log.warn("Valid protocols are: {}", join(sock.getSupportedProtocols()));
+                }
             }
         }
     }

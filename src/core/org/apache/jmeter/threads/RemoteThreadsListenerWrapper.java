@@ -24,8 +24,8 @@ import java.rmi.RemoteException;
 import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.testelement.ThreadListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * server side wrapper, used to notify RMI client 
@@ -33,9 +33,9 @@ import org.apache.log.Logger;
  */
 public class RemoteThreadsListenerWrapper extends AbstractTestElement implements ThreadListener, Serializable,
         NoThreadClone {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RemoteThreadsListenerWrapper.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private RemoteThreadsListener listener;
 
@@ -51,7 +51,7 @@ public class RemoteThreadsListenerWrapper extends AbstractTestElement implements
         try {
             listener.threadStarted();
         } catch (RemoteException err) {
-            log.error("", err); // $NON-NLS-1$
+            log.error("Exception invoking listener on threadStarted.", err); // $NON-NLS-1$
         }
     }
 
@@ -60,7 +60,7 @@ public class RemoteThreadsListenerWrapper extends AbstractTestElement implements
         try {
             listener.threadFinished();
         } catch (RemoteException err) {
-            log.error("", err); // $NON-NLS-1$
+            log.error("Exception invoking listener on threadFinished.", err); // $NON-NLS-1$
         }
     }
 }
