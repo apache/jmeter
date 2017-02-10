@@ -57,7 +57,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.apache.commons.collections.buffer.BoundedFifoBuffer;
+import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
+import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.JMeter;
 import org.apache.jmeter.assertions.AssertionResult;
@@ -135,7 +137,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
 
     private JCheckBox autoScrollCB;
 
-    private BoundedFifoBuffer buffer = new BoundedFifoBuffer(JMeterUtils.getPropDefault("view.results.tree.max_results", 500));
+    private Buffer buffer;
 
     private boolean dataChanged;
 
@@ -144,19 +146,20 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      */
     public ViewResultsFullVisualizer() {
         super();
+        final int maxResults = JMeterUtils.getPropDefault("view.results.tree.max_results", 500);
+        if (maxResults > 0) {
+            buffer = new CircularFifoBuffer(maxResults);
+        } else {
+            buffer = new UnboundedFifoBuffer();
+        }
         init();
-        new Timer(REFRESH_PERIOD, e -> {
-            updateGui();
-        }).start();
+        new Timer(REFRESH_PERIOD, e -> updateGui()).start();
     }
 
     /** {@inheritDoc} */
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
-            if (buffer.isFull()) {
-                buffer.remove();
-            }
             buffer.add(sample);
             dataChanged = true;
         }
@@ -171,10 +174,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 return;
             }
             root.removeAllChildren();
-            @SuppressWarnings("unchecked")
-            Iterator<SampleResult> samplers = buffer.iterator();
-            while (samplers.hasNext()) {
-                SampleResult res = (SampleResult) samplers.next();
+            for (Object sampler: buffer) {
+                SampleResult res = (SampleResult) sampler;
                 // Add sample
                 DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
                 treeModel.insertNodeInto(currNode, root, root.getChildCount());
