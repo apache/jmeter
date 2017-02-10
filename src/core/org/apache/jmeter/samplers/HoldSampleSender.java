@@ -22,17 +22,18 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Lars-Erik Helander provided the idea (and original implementation) for the
  * caching functionality (sampleStore).
  */
 public class HoldSampleSender extends AbstractSampleSender implements Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HoldSampleSender.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private final ConcurrentLinkedQueue<SampleEvent> sampleStore = new ConcurrentLinkedQueue<>();
 
@@ -54,7 +55,7 @@ public class HoldSampleSender extends AbstractSampleSender implements Serializab
 
     @Override
     public void testEnded(String host) {
-        log.info("Test Ended on " + host);
+        log.info("Test Ended on {}", host);
         try {
             for (SampleEvent se : sampleStore) {
                 listener.sampleOccurred(se);
