@@ -33,14 +33,14 @@ import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the Help menu item.
  */
 public class Help extends AbstractAction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Help.class);
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -89,7 +89,7 @@ public class Help extends AbstractAction {
         try {
             helpDoc.setPage(url.toString()); // N.B. this only reloads if necessary (ignores the reference)
         } catch (IOException ioe) {
-            log.error("Error setting page for url"+url, ioe);
+            log.error("Error setting page for url, {}", url, ioe);
             helpDoc.setText("<html><head><title>Problem loading help page</title>"
                     + "<style><!--"
                     + ".note { background-color: #ffeeee; border: 1px solid brown; }"

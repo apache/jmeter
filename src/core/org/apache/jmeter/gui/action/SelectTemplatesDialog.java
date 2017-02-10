@@ -52,8 +52,8 @@ import org.apache.jmeter.swing.HtmlPane;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Dialog used for Templates selection
@@ -61,7 +61,7 @@ import org.apache.log.Logger;
  */
 public class SelectTemplatesDialog extends JDialog implements ChangeListener, ActionListener, HyperlinkListener {
 
-    private static final long serialVersionUID = -4436834972710248247L;
+    private static final long serialVersionUID = 1;
     
     // Minimal dimensions for dialog box
     private static final int MINIMAL_BOX_WIDTH = 500;
@@ -71,7 +71,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SelectTemplatesDialog.class);
 
     private final JLabeledChoice templateList = new JLabeledChoice(JMeterUtils.getResString("template_choose"), false); //$NON-NLS-1$
 
@@ -237,7 +237,7 @@ public class SelectTemplatesDialog extends JDialog implements ChangeListener, Ac
                 try {
                     java.awt.Desktop.getDesktop().browse(e.getURL().toURI());
                 } catch (Exception ex) {
-                    log.error("Error opening URL in browser:"+e.getURL());
+                    log.error("Error opening URL in browser: {}", e.getURL());
                 } 
             }
         }
