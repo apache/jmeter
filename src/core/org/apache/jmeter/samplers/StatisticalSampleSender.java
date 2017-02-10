@@ -18,10 +18,6 @@
 
 package org.apache.jmeter.samplers;
 
-import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -30,14 +26,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.jmeter.util.JMeterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implements batch reporting for remote testing.
  *
  */
 public class StatisticalSampleSender extends AbstractSampleSender implements Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(StatisticalSampleSender.class);
 
     private static final int DEFAULT_NUM_SAMPLE_THRESHOLD = 100;
 
@@ -105,10 +105,11 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
     StatisticalSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
         if (isClientConfigured()) {
-            log.info("Using StatisticalSampleSender (client settings) for this run."
-                    + " Thresholds: num=" + clientConfiguredNumSamplesThreshold
-                    + ", time=" + clientConfiguredTimeThresholdMs
-                    + ". Key uses ThreadName: " + clientConfiguredKeyOnThreadName);
+            log.info(
+                    "Using StatisticalSampleSender (client settings) for this run."
+                            + " Thresholds: num={}, time={}. Key uses ThreadName: {}",
+                    clientConfiguredNumSamplesThreshold, clientConfiguredTimeThresholdMs,
+                    clientConfiguredKeyOnThreadName);
         } else {
             log.info("Using StatisticalSampleSender (server settings) for this run.");
         }
@@ -122,7 +123,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
      */
     @Override
     public void testEnded(String host) {
-        log.info("Test Ended on " + host);
+        log.info("Test Ended on {}", host);
         try {
             if (sampleStore.size() != 0) {
                 sendBatch();
@@ -178,9 +179,7 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             }
             if (sendNow) {
                 try {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Firing sample");
-                    }
+                    log.debug("Firing sample");
                     sendBatch();
                     if (timeThresholdMs != -1) {
                         this.batchSendTime = now + timeThresholdMs;
@@ -216,11 +215,12 @@ public class StatisticalSampleSender extends AbstractSampleSender implements Ser
             timeThresholdMs = TIME_THRESHOLD_MS;
             keyOnThreadName = KEY_ON_THREADNAME;
         }
-        log.info("Using StatisticalSampleSender for this run."
-                + (isClientConfigured() ? " Client config: " : " Server config: ")
-                + " Thresholds: num=" + numSamplesThreshold
-                + ", time=" + timeThresholdMs
-                + ". Key uses ThreadName: " + keyOnThreadName);
+        if (log.isInfoEnabled()) {
+            log.info(
+                    "Using StatisticalSampleSender for this run. {} config: Thresholds: num={}, time={}. Key uses ThreadName: {}",
+                    (isClientConfigured() ? "Client" : "Server"), numSamplesThreshold, timeThresholdMs,
+                    keyOnThreadName);
+        }
         return this;
     }
 }

@@ -31,8 +31,8 @@ import java.util.Map;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.NameUpdater;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -43,7 +43,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  *
  */
 public class ConversionHelp {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ConversionHelp.class);
 
     private static final String CHAR_SET = StandardCharsets.UTF_8.name();
 
@@ -98,7 +98,7 @@ public class ConversionHelp {
             String p1 = URLEncoder.encode(p, CHAR_SET);
             return p1;
         } catch (UnsupportedEncodingException e) {
-            log.warn("System doesn't support " + CHAR_SET, e);
+            log.warn("System doesn't support {}", CHAR_SET, e);
             return p;
         }
     }
@@ -121,7 +121,7 @@ public class ConversionHelp {
         try {
             return URLDecoder.decode(p, CHAR_SET);
         } catch (UnsupportedEncodingException e) {
-            log.warn("System doesn't support " + CHAR_SET, e);
+            log.warn("System doesn't support {}", CHAR_SET, e);
             return p;
         }
     }
