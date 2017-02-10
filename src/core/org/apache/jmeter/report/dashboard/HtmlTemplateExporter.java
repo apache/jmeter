@@ -45,9 +45,9 @@ import org.apache.jmeter.report.processor.SampleContext;
 import org.apache.jmeter.report.processor.ValueResultData;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -63,7 +63,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     /** Format used for non null check of parameters. */
     private static final String MUST_NOT_BE_NULL = "%s must not be null";
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(HtmlTemplateExporter.class);
 
     public static final String DATA_CTX_REPORT_TITLE = "reportTitle";
     public static final String DATA_CTX_TESTFILE = "testFile";
@@ -216,8 +216,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                 // whereas the current graph support controller
                 // discrimination and excludes
                 // controllers
-                LOG.warn(ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY
-                        + " is set while the graph "+graphId+" excludes controllers.");
+                log.warn("{} is set while the graph {} excludes controllers.",
+                        ReportGeneratorConfiguration.EXPORTER_KEY_SHOW_CONTROLLERS_ONLY, graphId);
                 return false;
             } else {
                 if (filterPattern != null) {
@@ -264,8 +264,8 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
                         }
                         if (!matches) {
                             // None series matches the pattern
-                            LOG.warn("No serie matches the series_filter:"
-                                    + ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER + " in graph:"+graphId);
+                            log.warn("No serie matches the series_filter: {} in graph: {}",
+                                    ReportGeneratorConfiguration.EXPORTER_KEY_SERIES_FILTER, graphId);
                             return false;
                         }
                     }
@@ -334,7 +334,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         Validate.notNull(file, MUST_NOT_BE_NULL, "file");
         Validate.notNull(configuration, MUST_NOT_BE_NULL, "configuration");
 
-        LOG.debug("Start template processing");
+        log.debug("Start template processing");
 
         // Create data context and populate it
         DataContext dataContext = new DataContext();
@@ -349,7 +349,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         if (!templateDirectory.isDirectory()) {
             String message = String.format(INVALID_TEMPLATE_DIRECTORY_FMT,
                     templateDirectory.getAbsolutePath());
-            LOG.error(message);
+            log.error(message);
             throw new ExportException(message);
         }
 
@@ -363,7 +363,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         
         JOrphanUtils.canSafelyWriteToFolder(outputDir);
 
-        LOG.info("Will generate dashboard in folder:" + outputDir.getAbsolutePath());
+        if (log.isInfoEnabled()) {
+            log.info("Will generate dashboard in folder: {}", outputDir.getAbsolutePath());
+        }
 
         // Add the flag defining whether only sample series are filtered to the
         // context
@@ -379,8 +381,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             try {
                 filterPattern = Pattern.compile(seriesFilter);
             } catch (PatternSyntaxException ex) {
-                LOG.error(String.format("Invalid series filter: \"%s\", %s",
-                        seriesFilter, ex.getDescription()));
+                log.error("Invalid series filter: '{}', {}", seriesFilter, ex.getDescription());
             }
         }
         addToContext(DATA_CTX_SERIES_FILTER, seriesFilter, dataContext);
@@ -478,9 +479,9 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             templateCfg.setDirectoryForTemplateLoading(templateDirectory);
             templateCfg.setTemplateExceptionHandler(
                     TemplateExceptionHandler.RETHROW_HANDLER);
-            LOG.info(
-                    "Report will be generated in:" + outputDir.getAbsolutePath()
-                            + ", creating folder structure");
+            if (log.isInfoEnabled()) {
+                log.info("Report will be generated in: {}, creating folder structure", outputDir.getAbsolutePath());
+            }
             FileUtils.forceMkdir(outputDir);
             TemplateVisitor visitor = new TemplateVisitor(
                     templateDirectory.toPath(), outputDir.toPath(), templateCfg,
@@ -490,7 +491,7 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
             throw new ExportException("Unable to process template files.", ex);
         }
 
-        LOG.debug("End of template processing");
+        log.debug("End of template processing");
 
     }
 
