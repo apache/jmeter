@@ -235,6 +235,19 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         init();
         initTopLevelDndHandler();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        
+        addMouseWheelListener(e -> {
+            if (e.isControlDown()) {
+                final float scale = 1.1f;
+                int rotation = e.getWheelRotation();
+                if (rotation > 0) { // DOWN
+                    JMeterUtils.applyScaleOnFonts(1.0f/scale);
+                } else if (rotation < 0) { // UP
+                    JMeterUtils.applyScaleOnFonts(scale);
+                }
+                e.consume();
+            }
+        });
     }
 
     protected void computeTestDuration(ActionEvent evt) {
