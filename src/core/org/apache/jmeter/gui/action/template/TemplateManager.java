@@ -27,8 +27,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
@@ -50,7 +50,7 @@ public class TemplateManager {
     private static final String TEMPLATE_FILES = JMeterUtils.getPropDefault("template.files", // $NON-NLS-1$
             "/bin/templates/templates.xml");
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TemplateManager.class);
     
     private static final TemplateManager SINGLETON = new TemplateManager();
     
@@ -134,7 +134,9 @@ public class TemplateManager {
                 final File f = new File(JMeterUtils.getJMeterHome(), templateFile); 
                 try {
                     if(f.exists() && f.canRead()) {
-                        log.info("Reading templates from:"+f.getAbsolutePath());
+                        if (log.isInfoEnabled()) {
+                            log.info("Reading templates from: {}", f.getAbsolutePath());
+                        }
                         final File parent = f.getParentFile();
                         final LinkedHashMap<String, Template> templates = ((Templates) xstream.fromXML(f)).templates;
                         for(Template t : templates.values()) {
@@ -144,10 +146,16 @@ public class TemplateManager {
                         }
                         temps.putAll(templates);
                     } else {
-                        log.warn("Ignoring template file:'"+f.getAbsolutePath()+"' as it does not exist or is not readable");
+                        if (log.isWarnEnabled()) {
+                            log.warn("Ignoring template file:'{}' as it does not exist or is not readable",
+                                    f.getAbsolutePath());
+                        }
                     }
-                } catch(Exception ex) {                    
-                    log.warn("Ignoring template file:'"+f.getAbsolutePath()+"', an error occured parsing the file", ex);
+                } catch(Exception ex) {
+                    if (log.isWarnEnabled()) {
+                        log.warn("Ignoring template file:'{}', an error occured parsing the file", f.getAbsolutePath(),
+                                ex);
+                    }
                 } 
             }
         }

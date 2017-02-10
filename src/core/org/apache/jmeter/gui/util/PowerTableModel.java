@@ -27,13 +27,13 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.jorphan.collections.Data;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PowerTableModel extends DefaultTableModel {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(PowerTableModel.class);
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     private Data model = new Data();
 
@@ -77,7 +77,7 @@ public class PowerTableModel extends DefaultTableModel {
 
     @Override
     public void removeRow(int row) {
-        log.debug("remove row: " + row);
+        log.debug("remove row: {}", row);
         if (model.size() > row) {
             log.debug("Calling remove row on Data");
             model.removeRow(row);
