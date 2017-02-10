@@ -20,7 +20,6 @@ package org.apache.jmeter.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
-import java.util.Iterator;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,7 +27,9 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 
-import org.apache.commons.collections.buffer.BoundedFifoBuffer;
+import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
+import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.jmeter.gui.logging.GuiLogEventListener;
 import org.apache.jmeter.gui.logging.LogEventObject;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
@@ -57,25 +58,21 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
     private static final int LOGGER_PANEL_REFRESH_PERIOD =
             JMeterUtils.getPropDefault("jmeter.loggerpanel.refresh_period", 500); // $NON-NLS-1$
 
-    private final BoundedFifoBuffer events =
-            new BoundedFifoBuffer(valueOrMax(LOGGER_PANEL_MAX_LINES, 2000)); // $NON-NLS-1$
+    private final Buffer events;
 
     private volatile boolean logChanged = false;
-
-    private Timer timer;
 
     /**
      * Pane for display JMeter log file
      */
     public LoggerPanel() {
-        textArea = init();
-    }
-
-    private static int valueOrMax(int value, int max) {
-        if (value > 0) {
-            return value;
+        if (LOGGER_PANEL_MAX_LINES > 0) {
+            events =
+                    new CircularFifoBuffer(LOGGER_PANEL_MAX_LINES);
+        } else {
+            events = new UnboundedFifoBuffer();
         }
-        return max;
+        textArea = init();
     }
 
     private JTextArea init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
@@ -121,9 +118,6 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
         String logMessage = logEventObject.toString();
         synchronized (events) {
-            if (events.isFull()) {
-                events.remove();
-            }
             events.add(logMessage);
         }
 
@@ -131,34 +125,32 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
     }
 
     private void initWorker() {
-        timer = new Timer(
+        Timer timer = new Timer(
             LOGGER_PANEL_REFRESH_PERIOD,
-            e -> {
-                if (logChanged) {
-                    logChanged = false;
-                    StringBuilder builder = new StringBuilder();
-                    synchronized (events) {
-                        Iterator<String> lines = events.iterator();
-                        while (lines.hasNext()) {
-                            builder.append(lines.next());
-                        }
-                    }
-                    String logText = builder.toString();
-                    synchronized (textArea) {
-                        int currentLength;
-                        if (LOGGER_PANEL_MAX_LINES > 0) {
-                            textArea.setText(logText);
-                            currentLength = logText.length();
-                        } else {
-                            textArea.append(logText);
-                            currentLength = textArea.getText().length();
-                        }
-                        textArea.setCaretPosition(currentLength);
-                    }
-                }
-            }
-        );
+            e -> updateLogEntries());
         timer.start();
+    }
+
+    private void updateLogEntries() {
+        if (!logChanged) {
+            return;
+        }
+        logChanged = false;
+        StringBuilder builder = new StringBuilder();
+        synchronized (events) {
+            for (Object line: events) {
+                builder.append((String) line);
+            }
+        }
+        String logText = builder.toString();
+        synchronized (textArea) {
+            if (LOGGER_PANEL_MAX_LINES > 0) {
+                textArea.setText(logText);
+            } else {
+                textArea.append(logText);
+            }
+            textArea.setCaretPosition(textArea.getText().length());
+        }
     }
 
     /**
