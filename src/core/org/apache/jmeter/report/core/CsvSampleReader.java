@@ -31,9 +31,9 @@ import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Reader class for reading CSV files.
@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  */
 public class CsvSampleReader implements Closeable{
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CsvSampleReader.class);
     private static final int BUF_SIZE = 1024 * 1024;
 
     private static final String CHARSET = SaveService.getFileEncoding(StandardCharsets.UTF_8.displayName());
@@ -134,8 +134,12 @@ public class CsvSampleReader implements Closeable{
                     && CSVSaveService.getSampleSaveConfiguration(line,
                             file.getAbsolutePath()) == null) {
                 // Build metadata from default save config
-                LOG.warn("File '"+file.getAbsolutePath()+"' does not contain the field names header, "
-                        + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly");
+                if (log.isWarnEnabled()) {
+                    log.warn(
+                            "File '{}' does not contain the field names header, "
+                                    + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly",
+                            file.getAbsolutePath());
+                }
                 System.err.println("File '"+file.getAbsolutePath()+"' does not contain the field names header, "
                         + "ensure the jmeter.save.saveservice.* properties are the same as when the CSV file was created or the file may be read incorrectly");
                 result = new SampleMetadata(
