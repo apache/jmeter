@@ -30,15 +30,15 @@ import javax.swing.UIManager;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements the Look and Feel menu item.
  */
 public class LookAndFeelCommand extends AbstractAction {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LookAndFeelCommand.class);
 
     private static final String JMETER_LAF = "jmeter.laf"; // $NON-NLS-1$
 
@@ -55,18 +55,18 @@ public class LookAndFeelCommand extends AbstractAction {
         for (UIManager.LookAndFeelInfo lf : lfs) {
             commands.add(ActionNames.LAF_PREFIX + lf.getClassName());
         }
-        String jMeterLaf = getJMeterLaf();
         if (log.isInfoEnabled()) {
+            final String jMeterLaf = getJMeterLaf();
             List<String> names = new ArrayList<>();
             for(UIManager.LookAndFeelInfo laf : lfs) {
                 if (laf.getClassName().equals(jMeterLaf)) {
                     names.add(laf.getName());
                 }
             }
-            if (names.size() > 0) {
-                log.info("Using look and feel: "+jMeterLaf+ " " +names.toString());
+            if (!names.isEmpty()) {
+                log.info("Using look and feel: {} {}", jMeterLaf, names);
             } else {
-                log.info("Using look and feel: "+jMeterLaf);
+                log.info("Using look and feel: {}", jMeterLaf);
             }
         }
     }
