@@ -31,8 +31,8 @@ import java.util.ResourceBundle;
 import org.apache.jmeter.testbeans.gui.GenericTestBeanCustomizer;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Support class for test bean beanInfo objects. It will help using the
@@ -62,7 +62,7 @@ import org.apache.log.Logger;
  */
 public abstract class BeanInfoSupport extends SimpleBeanInfo {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BeanInfoSupport.class);
 
     // Some known attribute names, just for convenience:
     public static final String TAGS = GenericTestBeanCustomizer.TAGS;
@@ -134,7 +134,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
             if (resourceBundle.containsKey(dnKey)) { // $NON-NLS-1$
                 getBeanDescriptor().setDisplayName(resourceBundle.getString(dnKey)); // $NON-NLS-1$
             } else {
-                log.debug("Localized display name not available for bean " + beanClass);                    
+                log.debug("Localized display name not available for bean {}", beanClass);
             }
             // Localize the property names and descriptions:
             PropertyDescriptor[] properties = getPropertyDescriptors();
@@ -144,19 +144,19 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
                 if(resourceBundle.containsKey(propDnKey)) {
                     property.setDisplayName(resourceBundle.getString(propDnKey)); // $NON-NLS-1$
                 } else {
-                    log.debug("Localized display name not available for property " + name + " in " + beanClass);
+                    log.debug("Localized display name not available for property {} in {}", name, beanClass);
                 }
                 final String propSdKey = name + ".shortDescription";
                 if(resourceBundle.containsKey(propSdKey)) {
                     property.setShortDescription(resourceBundle.getString(propSdKey));
                 } else {
-                    log.debug("Localized short description not available for property " + name + " in " + beanClass);
+                    log.debug("Localized short description not available for property {} in {}", name, beanClass);
                 }
             }
         } catch (MissingResourceException e) {
-            log.warn("Localized strings not available for bean " + beanClass, e);
+            log.warn("Localized strings not available for bean {}", beanClass, e);
         } catch (Exception e) {
-            log.warn("Something bad happened when loading bean info for bean " + beanClass, e);
+            log.warn("Something bad happened when loading bean info for bean {}", beanClass, e);
         }
     }
 
@@ -173,7 +173,7 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
                 return propdesc;
             }
         }
-        log.error("Cannot find property: " + name + " in class " + beanClass);
+        log.error("Cannot find property: {} in class {}", name, beanClass);
         return null;
     }
 
@@ -244,9 +244,11 @@ public abstract class BeanInfoSupport extends SimpleBeanInfo {
      *            property names in the desired order
      */
     protected void createPropertyGroup(String group, String[] names) {
+        String name;
         for (int i = 0; i < names.length; i++) { // i is used below
-            log.debug("Getting property for: " + names[i]);
-            PropertyDescriptor p = property(names[i]);
+            name = names[i];
+            log.debug("Getting property for: {}", name);
+            PropertyDescriptor p = property(name);
             p.setValue(GenericTestBeanCustomizer.GROUP, group);
             p.setValue(GenericTestBeanCustomizer.ORDER, Integer.valueOf(i));
         }

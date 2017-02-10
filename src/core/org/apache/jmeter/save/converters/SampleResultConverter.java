@@ -31,9 +31,9 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.save.SaveService;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.Converter;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -46,7 +46,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
  * XStream Converter for the SampleResult class
  */
 public class SampleResultConverter extends AbstractCollectionConverter {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(SampleResultConverter.class);
 
     private static final String JAVA_LANG_STRING = "java.lang.String"; //$NON-NLS-1$
     private static final String ATT_CLASS = "class"; //$NON-NLS-1$
@@ -470,7 +470,7 @@ public class SampleResultConverter extends AbstractCollectionConverter {
             outstream.close();
             res.setResponseData(outstream.toByteArray());
         } catch (IOException e) {
-            log.warn(e.getLocalizedMessage());
+            log.warn("Failed to read result file.", e);
         } 
     }
 
