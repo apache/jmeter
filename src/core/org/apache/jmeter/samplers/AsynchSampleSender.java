@@ -27,18 +27,18 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sends samples in a separate Thread and in Batch mode
  */
 public class AsynchSampleSender extends AbstractSampleSender implements Serializable {
 
-    private static final long serialVersionUID = 251L;
+    private static final long serialVersionUID = 252L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AsynchSampleSender.class);
 
     // Create unique object as marker for end of queue
     private static transient final SampleEvent FINAL_EVENT = new SampleEvent();
@@ -70,7 +70,9 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     // Created by SampleSenderFactory
     protected AsynchSampleSender(RemoteSampleListener listener) {
         this.listener = listener;
-        log.info("Using Asynch Remote Sampler for this test run, queue size "+getCapacity());  // client log file
+        if (log.isInfoEnabled()) {
+            log.info("Using Asynch Remote Sampler for this test run, queue size: {}", getCapacity());  // client log file
+        }
     }
     
     /**
@@ -81,7 +83,7 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
      */
     protected Object readResolve() throws ObjectStreamException{
         int capacity = getCapacity();
-        log.info("Using batch queue size (asynch.batch.queue.size): " + capacity); // server log file
+        log.info("Using batch queue size (asynch.batch.queue.size): {}", capacity); // server log file
         queue = new ArrayBlockingQueue<>(capacity);
         Worker worker = new Worker(queue, listener);
         worker.setDaemon(true);
@@ -99,15 +101,15 @@ public class AsynchSampleSender extends AbstractSampleSender implements Serializ
     
     @Override
     public void testEnded(String host) {
-        log.debug("Test Ended on " + host);
+        log.debug("Test Ended on {}", host);
         try {
             listener.testEnded(host);
             queue.put(FINAL_EVENT);
         } catch (Exception ex) {
-            log.warn("testEnded(host)"+ex);
+            log.warn("testEnded(host)", ex);
         }
         if (queueWaits > 0) {
-            log.info("QueueWaits: "+queueWaits+"; QueueWaitTime: "+queueWaitTime+" (nanoseconds)");            
+            log.info("QueueWaits: {}; QueueWaitTime: {} (nanoseconds)", queueWaits, queueWaitTime);
         }
     }
 

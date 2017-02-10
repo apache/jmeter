@@ -18,11 +18,6 @@
 
 package org.apache.jmeter.samplers;
 
-import org.apache.log.Logger;
-import org.apache.commons.io.IOUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.jorphan.util.JMeterError;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,14 +33,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.jorphan.util.JMeterError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Version of HoldSampleSender that stores the samples on disk as a serialised stream.
  */
 
 public class DiskStoreSampleSender extends AbstractSampleSender implements Serializable {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DiskStoreSampleSender.class);
 
-    private static final long serialVersionUID = 252L;
+    private static final long serialVersionUID = 253L;
 
     private final RemoteSampleListener listener;
 
@@ -69,14 +69,14 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
 
     @Override
     public void testEnded(String host) {
-        log.info("Test Ended on " + host);
+        log.info("Test Ended on {}", host);
         singleExecutor.submit(new Runnable(){
             @Override
             public void run() {
                 try {
                     oos.close(); // ensure output is flushed
                 } catch (IOException e) {
-                    log.error("Failed to close data file ", e);
+                    log.error("Failed to close data file.", e);
                 }                
             }});
         singleExecutor.shutdown(); // finish processing samples
@@ -84,8 +84,8 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             if (!singleExecutor.awaitTermination(3, TimeUnit.SECONDS)) {
                 log.error("Executor did not terminate in a timely fashion");
             }
-        } catch (InterruptedException e1) {
-            log.error("Executor did not terminate in a timely fashion", e1);
+        } catch (InterruptedException e) {
+            log.error("Executor did not terminate in a timely fashion", e);
             Thread.currentThread().interrupt();
         }
         ObjectInputStream ois = null;
@@ -103,7 +103,7 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
                         log.error("returning sample", err);
                     }
                 } else {
-                    log.error("Unexpected object type found in data file "+obj.getClass().getName());
+                    log.error("Unexpected object type found in data file. {}", obj.getClass());
                 }
             }                    
         } catch (EOFException err) {
@@ -118,7 +118,9 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             }
             IOUtils.closeQuietly(ois);
             if(!temporaryFile.delete()) {
-                log.warn("Could not delete file:"+temporaryFile.getAbsolutePath());
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not delete file: {}", temporaryFile.getAbsolutePath());
+                }
             }
         }
     }
