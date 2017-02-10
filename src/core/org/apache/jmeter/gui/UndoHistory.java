@@ -31,8 +31,8 @@ import org.apache.jmeter.gui.tree.JMeterTreeModel;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class serves storing Test Tree state and navigating through it
@@ -44,7 +44,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = -974269825492906010L;
+    private static final long serialVersionUID = 1L;
     
     /**
      * Interface to be implemented by components interested in UndoHistory
@@ -78,7 +78,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
         }
     }
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(UndoHistory.class);
 
     /**
      * temporary storage for GUI tree expansion state
@@ -152,7 +152,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
         String name = root.getName();
 
-        log.debug("Adding history element " + name + ": " + comment);
+        log.debug("Adding history element {}: {}", name, comment);
 
         working = true;
         // get test plan tree
@@ -162,7 +162,9 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
         position++;
         while (history.size() > position) {
-            log.debug("Removing further record, position: " + position + ", size: " + history.size());
+            if (log.isDebugEnabled()) {
+                log.debug("Removing further record, position: {}, size: {}", position, history.size());
+            }
             history.remove(history.size() - 1);
         }
 
@@ -171,7 +173,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
 
         history.add(new UndoHistoryItem(copy, comment));
 
-        log.debug("Added history element, position: " + position + ", size: " + history.size());
+        log.debug("Added history element, position: {}, size: {}", position, history.size());
         working = false;
         notifyListeners();
     }
@@ -183,7 +185,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
      * @param acceptorModel TreeModel to accept the changes
      */
     public void moveInHistory(int offset, JMeterTreeModel acceptorModel) {
-        log.debug("Moving history from position " + position + " with step " + offset + ", size is " + history.size());
+        log.debug("Moving history from position {} with step {}, size is {}", position, offset, history.size());
         if (offset < 0 && !canUndo()) {
             log.warn("Can't undo, we're already on the last record");
             return;
@@ -212,7 +214,9 @@ public class UndoHistory implements TreeModelListener, Serializable {
         // load tree UI state
         restoreTreeState(guiInstance);
 
-        log.debug("Current position " + position + ", size is " + history.size());
+        if (log.isDebugEnabled()) {
+            log.debug("Current position {}, size is {}", position, history.size());
+        }
 
         // refresh the all ui
         guiInstance.updateCurrentGui();
@@ -262,7 +266,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     @Override
     public void treeNodesChanged(TreeModelEvent tme) {
         String name = ((JMeterTreeNode) tme.getTreePath().getLastPathComponent()).getName();
-        log.debug("Nodes changed " + name);
+        log.debug("Nodes changed {}", name);
         final JMeterTreeModel sender = (JMeterTreeModel) tme.getSource();
         add(sender, "Node changed " + name);
     }
@@ -275,7 +279,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     @Override
     public void treeNodesInserted(TreeModelEvent tme) {
         String name = ((JMeterTreeNode) tme.getTreePath().getLastPathComponent()).getName();
-        log.debug("Nodes inserted " + name);
+        log.debug("Nodes inserted {}", name);
         final JMeterTreeModel sender = (JMeterTreeModel) tme.getSource();
         add(sender, "Add " + name);
     }
@@ -288,7 +292,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     @Override
     public void treeNodesRemoved(TreeModelEvent tme) {
         String name = ((JMeterTreeNode) tme.getTreePath().getLastPathComponent()).getName();
-        log.debug("Nodes removed: " + name);
+        log.debug("Nodes removed: {}", name);
         add((JMeterTreeModel) tme.getSource(), "Remove " + name);
     }
 

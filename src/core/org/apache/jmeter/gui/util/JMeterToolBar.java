@@ -37,8 +37,8 @@ import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
 import org.apache.jmeter.util.LocaleChangeListener;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The JMeter main toolbar class
@@ -49,9 +49,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
     /**
      * 
      */
-    private static final long serialVersionUID = -4591210341986068907L;
+    private static final long serialVersionUID = 1L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JMeterToolBar.class);
 
     private static final String TOOLBAR_ENTRY_SEP = ",";  //$NON-NLS-1$
 
@@ -100,7 +100,9 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                     try {
                         toolBar.add(makeButtonItemRes(iconToolbarBean));
                     } catch (Exception e) {
-                        log.warn(e.getMessage());
+                        if (log.isWarnEnabled()) {
+                            log.warn("Exception while adding button item to toolbar. {}", e.getMessage());
+                        }
                     }
                 }
             }
@@ -166,14 +168,14 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
 
         List<IconToolbarBean> listIcons = new ArrayList<>();
         for (String key : oList) {
-            log.debug("Toolbar icon key: " + key); //$NON-NLS-1$
+            log.debug("Toolbar icon key: {}", key); //$NON-NLS-1$
             String trimmed = key.trim();
             if (trimmed.equals("|")) { //$NON-NLS-1$
                 listIcons.add(null);
             } else {
                 String property = p.getProperty(trimmed);
                 if (property == null) {
-                    log.warn("No definition for toolbar entry: " + key);
+                    log.warn("No definition for toolbar entry: {}", key);
                 } else {
                     try {
                         IconToolbarBean itb = new IconToolbarBean(property, iconSize);

@@ -29,11 +29,11 @@ import org.apache.jmeter.exceptions.IllegalUserActionException;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.HeapDumper;
-import org.apache.log.Logger;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -44,7 +44,7 @@ import org.apache.logging.log4j.core.config.Configurator;
  *
  */
 public class What extends AbstractAction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(What.class);
 
     private static final Set<String> commandSet;
 
@@ -66,13 +66,17 @@ public class What extends AbstractAction {
             String guiClassName = te.getPropertyAsString(TestElement.GUI_CLASS);
             System.out.println(te.getClass().getName());
             System.out.println(guiClassName);
-            log.info("TestElement:"+te.getClass().getName()+", guiClassName:"+guiClassName);
-        } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())){
-            Configurator.setAllLevels(te.getClass().getName(), Level.DEBUG);
-            log.info("Log level set to DEBUG for " + te.getClass().getName());
+            if (log.isInfoEnabled()) {
+                log.info("TestElement: {}, guiClassName: {}", te.getClass(), guiClassName);
+            }
+        } else if (ActionNames.DEBUG_ON.equals(e.getActionCommand())) {
+            final String loggerName = te.getClass().getName();
+            Configurator.setAllLevels(loggerName, Level.DEBUG);
+            log.info("Log level set to DEBUG for {}", loggerName);
         } else if (ActionNames.DEBUG_OFF.equals(e.getActionCommand())){
-            Configurator.setAllLevels(te.getClass().getName(), Level.INFO);
-            log.info("Log level set to INFO for " + te.getClass().getName());
+            final String loggerName = te.getClass().getName();
+            Configurator.setAllLevels(loggerName, Level.INFO);
+            log.info("Log level set to INFO for {}", loggerName);
         } else if (ActionNames.HEAP_DUMP.equals(e.getActionCommand())){
             try {
                 String s = HeapDumper.dumpHeap();

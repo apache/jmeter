@@ -26,8 +26,8 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.samplers.Clearable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles the following actions:
@@ -36,7 +36,7 @@ import org.apache.log.Logger;
  * - Reset (Clear GUI)
  */
 public class Clear extends AbstractAction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Clear.class);
 
     private static final Set<String> commands = new HashSet<>();
 
@@ -75,7 +75,7 @@ public class Clear extends AbstractAction {
                     try {
                         item.clearData();
                     } catch (Exception ex) {
-                        log.error("Can't clear: "+node+" "+guiComp, ex);
+                        log.error("Can't clear: {} {}", node, guiComp, ex);
                     }
                 }
             }
