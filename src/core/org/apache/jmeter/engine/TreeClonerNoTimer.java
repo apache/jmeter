@@ -19,14 +19,14 @@
 package org.apache.jmeter.engine;
 
 import org.apache.jmeter.timers.Timer;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Clones the test tree,  skipping test elements that implement {@link Timer} by default.
  */
 public class TreeClonerNoTimer extends TreeCloner{
-    private static final Logger logger = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TreeClonerNoTimer.class);
     
     public TreeClonerNoTimer() {
         super();
@@ -43,9 +43,7 @@ public class TreeClonerNoTimer extends TreeCloner{
     @Override
     protected Object addNodeToTree(Object node) {
         if(node instanceof Timer) {
-            if(logger.isDebugEnabled()) {
-                logger.debug("Ignoring timer node:"+ node);
-            }
+            log.debug("Ignoring timer node: {}", node);
             return node; // don't add the timer
         } else {
             return super.addNodeToTree(node);

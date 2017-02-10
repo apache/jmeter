@@ -35,8 +35,8 @@ import org.apache.jmeter.threads.RemoteThreadsListenerTestElement;
 import org.apache.jmeter.threads.RemoteThreadsListenerWrapper;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Converts the Remoteable Test and Sample Listeners in the test tree by wrapping
@@ -46,7 +46,7 @@ import org.apache.log.Logger;
  * 
  */
 public class ConvertListeners implements HashTreeTraverser {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ConvertListeners.class);
 
     /**
      * {@inheritDoc}
@@ -55,7 +55,9 @@ public class ConvertListeners implements HashTreeTraverser {
     public void addNode(Object node, HashTree subTree) {
         for (Object item : subTree.list()) {
             if (item instanceof AbstractThreadGroup) {
-                log.debug("num threads = " + ((AbstractThreadGroup) item).getNumThreads());
+                if (log.isDebugEnabled()) {
+                    log.debug("num threads = {}", ((AbstractThreadGroup) item).getNumThreads());
+                }
             }
             if (item instanceof Remoteable) {
                 if (item instanceof RemoteThreadsListenerTestElement){
@@ -64,14 +66,14 @@ public class ConvertListeners implements HashTreeTraverser {
                         RemoteThreadsListenerWrapper wrapper = new RemoteThreadsListenerWrapper(new RemoteThreadsListenerImpl());
                         subTree.replaceKey(item, wrapper);
                     } catch (RemoteException e) {
-                        log.error("Error replacing "+RemoteThreadsListenerTestElement.class.getName() 
-                                +" by wrapper:"+RemoteThreadsListenerWrapper.class.getName(), e); 
+                        log.error("Error replacing {} by wrapper: {}", RemoteThreadsListenerTestElement.class,
+                                RemoteThreadsListenerWrapper.class, e);
                     }
                     continue;
                 }
                 if (item instanceof ThreadListener){
                     // TODO Document the reason for this
-                    log.error("Cannot handle ThreadListener Remotable item "+item.getClass().getName());
+                    log.error("Cannot handle ThreadListener Remotable item: {}", item.getClass());
                     continue;
                 }
                 try {
@@ -86,10 +88,12 @@ public class ConvertListeners implements HashTreeTraverser {
                         RemoteSampleListenerWrapper wrap = new RemoteSampleListenerWrapper(rtl);
                         subTree.replaceKey(item, wrap);
                     } else {
-                        log.warn("Could not replace Remotable item "+item.getClass().getName());
+                        if (log.isWarnEnabled()) {
+                            log.warn("Could not replace Remotable item: {}", item.getClass());
+                        }
                     }
                 } catch (RemoteException e) {
-                    log.error("", e); // $NON-NLS-1$
+                    log.error("RemoteException occurred while replacing Remotable item.", e); // $NON-NLS-1$
                 }
             }
         }
