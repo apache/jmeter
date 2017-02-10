@@ -52,10 +52,10 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterError;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class handles all saving of samples.
@@ -88,9 +88,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             log.info("Shutdown hook ended");
         }     
     }
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ResultCollector.class);
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
     // This string is used to identify local test runs, so must not be a valid host name
     private static final String TEST_IS_LOCAL = "*local*"; // $NON-NLS-1$
@@ -304,7 +304,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 if (shutdownHook != null) {
                     Runtime.getRuntime().removeShutdownHook(shutdownHook);
                 } else {
-                    log.warn("Should not happen: shutdownHook==null, instanceCount=" + instanceCount);
+                    log.warn("Should not happen: shutdownHook==null, instanceCount={}", instanceCount);
                 }
                 finalizeFileOutput();
                 inTest = false;
@@ -330,7 +330,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                     this.isStats = getVisualizer().isStats();
                 }
             } catch (Exception e) {
-                log.error("", e);
+                log.error("Exception occurred while initializing file output.", e);
             }
         }
         inTest = true;
@@ -377,7 +377,7 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 dataReader.close();
                 dataReader = null;
                 if (line == null) {
-                    log.warn(filename+" is empty");
+                    log.warn("{} is empty", filename);
                 } else {
                     if (!line.startsWith("<?xml ")){// No, must be CSV //$NON-NLS-1$
                         CSVSaveService.processSamples(filename, visualizer, this);
@@ -389,13 +389,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
                         } catch (Exception e) {
-                            log.warn("Failed to load " + filename + " using XStream. Error was: " + e);
+                            if (log.isWarnEnabled()) {
+                                log.warn("Failed to load {} using XStream. Error was: {}", filename, e.toString());
+                            }
                         }
                     }
                 }
             } catch (IOException | JMeterError | RuntimeException | OutOfMemoryError e) {
                 // FIXME Why do we catch OOM ?
-                log.warn("Problem reading JTL file: " + file);
+                log.warn("Problem reading JTL file: {}", file);
             } finally {
                 JOrphanUtils.closeQuietly(dataReader);
                 JOrphanUtils.closeQuietly(bufferedInputStream);
@@ -463,15 +465,17 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             if (pdir != null) {
                 // returns false if directory already exists, so need to check again
                 if(pdir.mkdirs()){
-                    log.info("Folder "+pdir.getAbsolutePath()+" was created");
+                    if (log.isInfoEnabled()) {
+                        log.info("Folder at {} was created", pdir.getAbsolutePath());
+                    }
                 } // else if might have been created by another process so not a problem
                 if (!pdir.exists()){
-                    log.warn("Error creating directories for "+pdir.toString());
+                    log.warn("Error creating directories for {}", pdir);
                 }
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
                     trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
-            log.debug("Opened file: "+filename);
+            log.debug("Opened file: {}", filename);
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
             writer = fe.pw;
@@ -503,14 +507,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 pos = raf.getFilePointer();
             }
             if (line == null) {
-                log.warn("Unexpected EOF trying to find XML end marker in " + filename);
+                log.warn("Unexpected EOF trying to find XML end marker in {}", filename);
                 return false;
             }
             raf.setLength(pos + end);// Truncate the file
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
-            log.warn("Error trying to find XML terminator " + e.toString());
+            if (log.isWarnEnabled()) {
+                log.warn("Error trying to find XML terminator. {}", e.toString());
+            }
             return false;
         }
         return true;
@@ -614,24 +620,30 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
      * Flush PrintWriter, called by Shutdown Hook to ensure no data is lost
      */
     private static void flushFileOutput() {
-        for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
-            log.debug("Flushing: "+me.getKey());
-            FileEntry fe = me.getValue();
-            fe.pw.flush();
-            if (fe.pw.checkError()){
-                log.warn("Problem detected during use of "+me.getKey());
+        String key;
+        ResultCollector.FileEntry value;
+        for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
+            key = me.getKey();
+            value = me.getValue();
+            log.debug("Flushing: {}", key);
+            value.pw.flush();
+            if (value.pw.checkError()){
+                log.warn("Problem detected during use of {}", key);
             }
         }
     }
     
     private void finalizeFileOutput() {
-        for(Map.Entry<String,ResultCollector.FileEntry> me : files.entrySet()){
-            log.debug("Closing: "+me.getKey());
-            FileEntry fe = me.getValue();
-            writeFileEnd(fe.pw, fe.config);
-            fe.pw.close();
-            if (fe.pw.checkError()){
-                log.warn("Problem detected during use of "+me.getKey());
+        String key;
+        ResultCollector.FileEntry value;
+        for(Map.Entry<String, ResultCollector.FileEntry> me : files.entrySet()) {
+            key = me.getKey();
+            value = me.getValue();
+            log.debug("Closing: {}", key);
+            writeFileEnd(value.pw, value.config);
+            value.pw.close();
+            if (value.pw.checkError()){
+                log.warn("Problem detected during use of {}", key);
             }
         }
         files.clear();
