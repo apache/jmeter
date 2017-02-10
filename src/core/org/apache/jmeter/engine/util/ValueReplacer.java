@@ -32,14 +32,14 @@ import org.apache.jmeter.testelement.property.MultiProperty;
 import org.apache.jmeter.testelement.property.NumberProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.testelement.property.StringProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Perfom replacement of ${variable} references.
  */
 public class ValueReplacer {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ValueReplacer.class);
 
     private final CompoundVariable masterFunction = new CompoundVariable();
 
@@ -161,22 +161,18 @@ public class ValueReplacer {
         while (iter.hasNext()) {
             JMeterProperty val = iter.next();
             if (log.isDebugEnabled()) {
-                log.debug("About to replace in property of type: " + val.getClass() + ": " + val);
+                log.debug("About to replace in property of type: {}: {}", val.getClass(), val);
             }
             if (val instanceof StringProperty) {
                 // Must not convert TestElement.gui_class etc
                 if (!val.getName().equals(TestElement.GUI_CLASS) &&
                         !val.getName().equals(TestElement.TEST_CLASS)) {
                     val = transform.transformValue(val);
-                    if (log.isDebugEnabled()) {
-                        log.debug("Replacement result: " + val);
-                    }
+                    log.debug("Replacement result: {}", val);
                 }
             } else if (val instanceof NumberProperty) {
                 val = transform.transformValue(val);
-                if (log.isDebugEnabled()) {
-                    log.debug("Replacement result: " + val);
-                }
+                log.debug("Replacement result: {}", val);
             } else if (val instanceof MultiProperty) {
                 MultiProperty multiVal = (MultiProperty) val;
                 Collection<JMeterProperty> newValues = replaceValues(multiVal.iterator(), transform);
@@ -184,13 +180,9 @@ public class ValueReplacer {
                 for (JMeterProperty jmp : newValues) {
                     multiVal.addProperty(jmp);
                 }
-                if (log.isDebugEnabled()) {
-                    log.debug("Replacement result: " + multiVal);
-                }
+                log.debug("Replacement result: {}", multiVal);
             } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("Won't replace " + val);
-                }
+                log.debug("Won't replace {}", val);
             }
             props.add(val);
         }

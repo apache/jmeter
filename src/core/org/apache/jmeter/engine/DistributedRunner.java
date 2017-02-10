@@ -34,8 +34,8 @@ import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class serves all responsibility of starting and stopping distributed tests.
@@ -45,7 +45,7 @@ import org.apache.log.Logger;
  * @see org.apache.jmeter.gui.action.RemoteStart
  */
 public class DistributedRunner {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(DistributedRunner.class);
 
     public static final String RETRIES_NUMBER = "client.tries"; // $NON-NLS-1$
     public static final String RETRIES_DELAY = "client.retries_delay"; // $NON-NLS-1$
@@ -131,7 +131,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).runTest();
                 } else {
-                    log.warn("Host not found in list of active engines: " + address);
+                    log.warn("Host not found in list of active engines: {}", address);
                 }
             } catch (IllegalStateException | JMeterEngineException e) { // NOSONAR already reported to user
                 JMeterUtils.reportErrorToUser(e.getMessage(), JMeterUtils.getResString("remote_error_starting")); // $NON-NLS-1$  
@@ -156,7 +156,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).stopTest(true);
                 } else {
-                    log.warn("Host not found in list of active engines: " + address);
+                    log.warn("Host not found in list of active engines: {}", address);
                 }
             } catch (RuntimeException e) {
                 errln("Failed to stop test on " + address, e);
@@ -181,7 +181,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).stopTest(false);
                 } else {
-                    log.warn("Host not found in list of active engines: " + address);
+                    log.warn("Host not found in list of active engines: {}", address);
                 }
 
             } catch (RuntimeException e) {
@@ -198,7 +198,7 @@ public class DistributedRunner {
                 if (engines.containsKey(address)) {
                     engines.get(address).exit();
                 } else {
-                    log.warn("Host not found in list of active engines: " + address);
+                    log.warn("Host not found in list of active engines: {}", address);
                 }
             } catch (RuntimeException e) {
                 errln("Failed to exit on " + address, e);
@@ -217,7 +217,7 @@ public class DistributedRunner {
             }
             return engine;
         } catch (Exception ex) {
-            log.error("Failed to create engine at " + address, ex);
+            log.error("Failed to create engine at {}", address, ex);
             JMeterUtils.reportErrorToUser(ex.getMessage(),
                     JMeterUtils.getResString("remote_error_init") + ": " + address); // $NON-NLS-1$ $NON-NLS-2$
             return null;

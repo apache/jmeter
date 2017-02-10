@@ -31,16 +31,16 @@ import java.util.Properties;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the JMeter server main code.
  */
 public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteObject implements RemoteJMeterEngine {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(RemoteJMeterEngineImpl.class);
 
     static final String JMETER_ENGINE_RMI_NAME = "JMeterEngine"; // $NON-NLS-1$
 
@@ -82,7 +82,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
     }
 
     private void init() throws RemoteException {
-        log.info("Starting backing engine on " + this.rmiPort);
+        log.info("Starting backing engine on {}", this.rmiPort);
         InetAddress localHost=null;
         // Bug 47980 - allow override of local hostname
         String host = System.getProperties().getProperty("java.rmi.server.hostname"); // $NON-NLS-1$
@@ -91,13 +91,15 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                 log.info("System property 'java.rmi.server.hostname' is not defined, using localHost address");
                 localHost = InetAddress.getLocalHost();
             } else {
-                log.info("Resolving by name the value of System property 'java.rmi.server.hostname':"+host);
+                log.info("Resolving by name the value of System property 'java.rmi.server.hostname': {}", host);
                 localHost = InetAddress.getByName(host);
             }
         } catch (UnknownHostException e1) {
             throw new RemoteException("Cannot start. Unable to get local host IP address.", e1);
         }
-        log.info("Local IP address="+localHost.getHostAddress());
+        if (log.isInfoEnabled()) {
+            log.info("Local IP address={}", localHost.getHostAddress());
+        }
         // BUG 52469 : Allow loopback address for SSH Tunneling of RMI traffic
         if (host == null && localHost.isLoopbackAddress()){
             String hostName = localHost.getHostName();
@@ -108,7 +110,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             log.info("IP address is a site-local address; this may cause problems with remote access.\n"
                     + "\tCan be overridden by defining the system property 'java.rmi.server.hostname' - see jmeter-server script file");
         }
-        log.debug("This = " + this);
+        log.debug("This = {}", this);
         if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
@@ -123,9 +125,9 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         try {
             Registry reg = LocateRegistry.getRegistry(this.rmiPort);
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
-            log.info("Bound to registry on port " + this.rmiPort);
+            log.info("Bound to registry on port {}", this.rmiPort);
         } catch (Exception ex) {
-            log.error("rmiregistry needs to be running to start JMeter in server " + "mode\n\t" + ex.toString());
+            log.error("rmiregistry needs to be running to start JMeter in server mode. {}", ex.toString());
             // Throw an Exception to ensure caller knows ...
             throw new RemoteException("Cannot start. See server log file.", ex);
         }
@@ -140,9 +142,11 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
      */
     @Override
     public void rconfigure(HashTree testTree, String host, File jmxBase, String scriptName) throws RemoteException {
-        log.info("Creating JMeter engine on host "+host+" base '"+jmxBase+"'");
+        log.info("Creating JMeter engine on host {} base '{}'", host, jmxBase);
         try {
-            log.info("Remote client host: " + getClientHost());
+            if (log.isInfoEnabled()) {
+                log.info("Remote client host: {}", getClientHost());
+            }
         } catch (ServerNotActiveException e) {
             // ignored
         }
@@ -210,7 +214,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         try {
             reg.unbind(JMETER_ENGINE_RMI_NAME);
         } catch (NotBoundException e) {
-            log.warn(JMETER_ENGINE_RMI_NAME+" is not bound",e);
+            log.warn("{} is not bound", JMETER_ENGINE_RMI_NAME, e);
         }
         log.info("Unbound from registry");
         // Help with garbage control
@@ -223,7 +227,7 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
         checkOwner("setProperties");
         if(remotelySetProperties != null) {
             Properties jmeterProperties = JMeterUtils.getJMeterProperties();
-            log.info("Cleaning previously set properties "+remotelySetProperties);
+            log.info("Cleaning previously set properties: {}", remotelySetProperties);
             for (Object key  : remotelySetProperties.keySet()) {
                 jmeterProperties.remove(key);
             }
