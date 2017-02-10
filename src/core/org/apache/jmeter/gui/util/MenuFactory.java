@@ -56,13 +56,13 @@ import org.apache.jmeter.testelement.WorkBench;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
 import org.apache.jorphan.gui.GuiUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class MenuFactory {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(MenuFactory.class);
 
     /*
      *  Predefined strings for makeMenu().
@@ -487,7 +487,7 @@ public final class MenuFactory {
                 }
 
                 if (elementsToSkip.contains(name)) { // No point instantiating class
-                    log.info("Skipping " + name);
+                    log.info("Skipping {}", name);
                     continue;
                 }
 
@@ -504,27 +504,28 @@ public final class MenuFactory {
                         item = (JMeterGUIComponent) c.newInstance();
                     }
                 } catch (NoClassDefFoundError e) {
-                    log.warn("Configuration error, probably corrupt or missing third party library(jar) ? Could not create class:" + name + ". " + e, 
-                            e);
+                    log.warn(
+                            "Configuration error, probably corrupt or missing third party library(jar) ? Could not create class: {}. {}",
+                            name, e, e);
                     continue;
                 } catch(HeadlessException e) {
-                    log.warn("Could not instantiate class:" + name, e); // NOSONAR
+                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
                     continue;
                 } catch(RuntimeException e) {
                     throw (RuntimeException) e;
                 } catch (Exception e) {
-                    log.warn("Could not instantiate class:" + name, e); // NOSONAR
+                    log.warn("Could not instantiate class: {}", name, e); // NOSONAR
                     continue;
                 }
                 if (hideBean || elementsToSkip.contains(item.getStaticLabel())) {
-                    log.info("Skipping " + name);
+                    log.info("Skipping {}", name);
                     continue;
                 } else {
                     elementsToSkip.add(name); // Don't add it again
                 }
                 Collection<String> categories = item.getMenuCategories();
                 if (categories == null) {
-                    log.debug(name + " participates in no menus.");
+                    log.debug("{} participates in no menus.", name);
                     continue;
                 }
                 if (categories.contains(THREADS)) {
@@ -570,7 +571,7 @@ public final class MenuFactory {
 
             }
         } catch (IOException e) {
-            log.error("", e);
+            log.error("IO Exception while initializing menus.", e);
         }
     }
 

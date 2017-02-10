@@ -35,8 +35,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Printable;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class takes care of the most basic functions necessary to
@@ -55,10 +55,10 @@ import org.apache.log.Logger;
  *
  */
 public abstract class AbstractJMeterGuiComponent extends JPanel implements JMeterGUIComponent, Printable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     /** Logging */
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AbstractJMeterGuiComponent.class);
 
     /** Flag indicating whether or not this component is enabled. */
     private boolean enabled = true;
@@ -114,9 +114,9 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
      * developers will need to override.
      */
     @Override
-    public void setEnabled(boolean e) {
-        log.debug("Setting enabled: " + e);
-        enabled = e;
+    public void setEnabled(boolean enabled) {
+        log.debug("Setting enabled: {}", enabled);
+        this.enabled = enabled;
     }
 
     /**
@@ -234,7 +234,7 @@ public abstract class AbstractJMeterGuiComponent extends JPanel implements JMete
         mc.setProperty(new StringProperty(TestElement.TEST_CLASS, mc.getClass().getName()));
 
         // This stores the state of the TestElement
-        log.debug("setting element to enabled: " + enabled);
+        log.debug("setting element to enabled: {}", enabled);
         mc.setEnabled(enabled);
         mc.setComment(getComment());
     }

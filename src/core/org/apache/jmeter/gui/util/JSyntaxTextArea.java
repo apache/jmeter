@@ -23,11 +23,11 @@ import java.awt.HeadlessException;
 import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RUndoManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class to handle RSyntaxTextArea code
@@ -36,7 +36,7 @@ import org.fife.ui.rtextarea.RUndoManager;
  */
 public class JSyntaxTextArea extends RSyntaxTextArea {
 
-    private static final long serialVersionUID = 210L;
+    private static final long serialVersionUID = 211L;
 
     private final Properties languageProperties = JMeterUtils.loadProperties("org/apache/jmeter/gui/util/textarea.properties"); //$NON-NLS-1$
 
@@ -47,7 +47,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
     private static final int MAX_UNDOS           = JMeterUtils.getPropDefault("jsyntaxtextarea.maxundos", 50);
     private static final String USER_FONT_FAMILY = JMeterUtils.getPropDefault("jsyntaxtextarea.font.family", null);
     private static final int USER_FONT_SIZE      = JMeterUtils.getPropDefault("jsyntaxtextarea.font.size", -1);
-    private static final Logger log              = LoggingManager.getLoggerForClass();
+    private static final Logger log              = LoggerFactory.getLogger(JSyntaxTextArea.class);
 
     /**
      * Creates the default syntax highlighting text area. The following are set:
@@ -184,7 +184,7 @@ public class JSyntaxTextArea extends RSyntaxTextArea {
             int fontSize = USER_FONT_SIZE > 0 ? USER_FONT_SIZE : getFont().getSize();
             setFont(new Font(USER_FONT_FAMILY, Font.PLAIN, fontSize));
             if (log.isDebugEnabled()) {
-                log.debug("Font is set to: " + getFont());
+                log.debug("Font is set to: {}", getFont());
             }
         }
         if(disableUndo) {

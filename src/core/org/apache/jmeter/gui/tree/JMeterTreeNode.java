@@ -36,13 +36,13 @@ import org.apache.jmeter.gui.GUIFactory;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeNode {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JMeterTreeNode.class);
 
     private static final int TEST_PLAN_LEVEL = 1;
 
@@ -123,21 +123,21 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
                         Object clazz = Introspector.getBeanInfo(testClass).getBeanDescriptor()
                                 .getValue(TestElement.GUI_CLASS);
                         if (clazz == null) {
-                            log.warn("getIcon(): Can't obtain GUI class from " + testClass.getName());
+                            log.warn("getIcon(): Can't obtain GUI class from {}", testClass);
                             return null;
                         }
                         return GUIFactory.getIcon(Class.forName((String) clazz), enabled);
                     }
                     return new ImageIcon(img);
                 } catch (IntrospectionException e1) {
-                    log.error("Can't obtain icon for class "+testElement, e1);
+                    log.error("Can't obtain icon for class {}", testElement, e1);
                     throw new org.apache.jorphan.util.JMeterError(e1);
                 }
             }
             return GUIFactory.getIcon(Class.forName(testElement.getPropertyAsString(TestElement.GUI_CLASS)),
                         enabled);
         } catch (ClassNotFoundException e) {
-            log.warn("Can't get icon for class " + testElement, e);
+            log.warn("Can't get icon for class {}", testElement, e);
             return null;
         }
     }
