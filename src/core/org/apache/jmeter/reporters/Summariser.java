@@ -36,9 +36,9 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterContextService.ThreadCounts;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generate a summary of the test run so far to the log file and/or standard
@@ -68,9 +68,9 @@ public class Summariser extends AbstractTestElement
      * Totals accumulator object for the samples to be stored in.
      */
 
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(Summariser.class);
 
     /** interval between summaries (in seconds) default 30 seconds */
     private static final long INTERVAL = JMeterUtils.getPropDefault("summariser.interval", 30); //$NON-NLS-1$
@@ -80,7 +80,7 @@ public class Summariser extends AbstractTestElement
 
     /** Write messages to System.out ? */
     private static final boolean TOOUT = JMeterUtils.getPropDefault("summariser.out", true); //$NON-NLS-1$
-    
+
     /** Ignore TC generated SampleResult in summary */
     private static final boolean IGNORE_TC_GENERATED_SAMPLERESULT = JMeterUtils.getPropDefault("summariser.ignore_transaction_controller_sample_result", true); //$NON-NLS-1$
 
@@ -206,11 +206,11 @@ public class Summariser extends AbstractTestElement
             }
         }
         if (reportNow) {
-            writeToLog(format(myName, myDelta, "+"));
+            formatAndWriteToLog(myName, myDelta, "+");
 
             // Only if we have updated them
             if (myTotal != null && myDelta != null &&myTotal.getNumSamples() != myDelta.getNumSamples()) { // NOSONAR
-                writeToLog(format(myName, myTotal, "="));
+                formatAndWriteToLog(myName, myTotal, "=");
             }
         }
     }
@@ -227,55 +227,6 @@ public class Summariser extends AbstractTestElement
         dfDouble.setMaximumFractionDigits(frac);
         sb.append(dfDouble.format(d));
         return JOrphanUtils.rightAlign(sb, len);
-    }
-
-    /**
-     * Formats summariserRunningSample
-     * @param name Summariser name
-     * @param summariserRunningSample {@link SummariserRunningSample}
-     * @param type Type of summariser (difference or total)
-     * @return the summary information
-     */
-    private static String format(String name, SummariserRunningSample summariserRunningSample, String type) {
-        DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
-        StringBuilder tmp = new StringBuilder(20); // for intermediate use
-        StringBuilder sb = new StringBuilder(140); // output line buffer
-        sb.append(name);
-        sb.append(' ');
-        sb.append(type);
-        sb.append(' ');
-        sb.append(longToSb(tmp, summariserRunningSample.getNumSamples(), 6));
-        sb.append(" in ");
-        long elapsed = summariserRunningSample.getElapsed();
-        long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
-        sb.append(JOrphanUtils.formatDuration(elapsedSec));
-        sb.append(" = ");
-        if (elapsed > 0) {
-            sb.append(doubleToSb(dfDouble, tmp, summariserRunningSample.getRate(), 6, 1));
-        } else {
-            sb.append("******");// Rate is effectively infinite
-        }
-        sb.append("/s Avg: ");
-        sb.append(longToSb(tmp, summariserRunningSample.getAverage(), 5));
-        sb.append(" Min: ");
-        sb.append(longToSb(tmp, summariserRunningSample.getMin(), 5));
-        sb.append(" Max: ");
-        sb.append(longToSb(tmp, summariserRunningSample.getMax(), 5));
-        sb.append(" Err: ");
-        sb.append(longToSb(tmp, summariserRunningSample.getErrorCount(), 5));
-        sb.append(" (");
-        sb.append(summariserRunningSample.getErrorPercentageString());
-        sb.append(')');
-        if ("+".equals(type)) {
-            ThreadCounts tc = JMeterContextService.getThreadCounts();
-            sb.append(" Active: ");
-            sb.append(tc.activeThreads);
-            sb.append(" Started: ");
-            sb.append(tc.startedThreads);
-            sb.append(" Finished: ");
-            sb.append(tc.finishedThreads);
-        }
-        return sb.toString();
     }
 
     /** {@inheritDoc} */
@@ -362,20 +313,72 @@ public class Summariser extends AbstractTestElement
             // Only print final delta if there were some samples in the delta
             // and there has been at least one sample reported previously
             if (total.delta.getNumSamples() > 0 && total.total.getNumSamples() >  0) {
-                writeToLog(format(name, total.delta, "+"));
+                formatAndWriteToLog(name, total.delta, "+");
             }
             total.moveDelta(); // This will update the total endTime
-            writeToLog(format(name, total.total, "="));
+            formatAndWriteToLog(name, total.total, "=");
         }
     }
 
-    private void writeToLog(String str) {
-        if (TOLOG) {
-            log.info(str);
+    private void formatAndWriteToLog(String name, SummariserRunningSample summariserRunningSample, String type) {
+        if (TOOUT || (TOLOG && log.isInfoEnabled())) {
+            String formattedMessage = format(name, summariserRunningSample, type);
+            if (TOLOG) {
+                log.info(formattedMessage);
+            }
+            if (TOOUT) {
+                System.out.println(formattedMessage);
+            }
         }
-        if (TOOUT) {
-            System.out.println(str);
+    }
+
+    /**
+     * Formats summariserRunningSample
+     * @param name Summariser name
+     * @param summariserRunningSample {@link SummariserRunningSample}
+     * @param type Type of summariser (difference or total)
+     * @return the summary information
+     */
+    private static String format(String name, SummariserRunningSample summariserRunningSample, String type) {
+        DecimalFormat dfDouble = new DecimalFormat("#0.0"); // $NON-NLS-1$
+        StringBuilder tmp = new StringBuilder(20); // for intermediate use
+        StringBuilder sb = new StringBuilder(140); // output line buffer
+        sb.append(name);
+        sb.append(' ');
+        sb.append(type);
+        sb.append(' ');
+        sb.append(longToSb(tmp, summariserRunningSample.getNumSamples(), 6));
+        sb.append(" in ");
+        long elapsed = summariserRunningSample.getElapsed();
+        long elapsedSec = (elapsed + 500) / 1000; // rounded seconds
+        sb.append(JOrphanUtils.formatDuration(elapsedSec));
+        sb.append(" = ");
+        if (elapsed > 0) {
+            sb.append(doubleToSb(dfDouble, tmp, summariserRunningSample.getRate(), 6, 1));
+        } else {
+            sb.append("******");// Rate is effectively infinite
         }
+        sb.append("/s Avg: ");
+        sb.append(longToSb(tmp, summariserRunningSample.getAverage(), 5));
+        sb.append(" Min: ");
+        sb.append(longToSb(tmp, summariserRunningSample.getMin(), 5));
+        sb.append(" Max: ");
+        sb.append(longToSb(tmp, summariserRunningSample.getMax(), 5));
+        sb.append(" Err: ");
+        sb.append(longToSb(tmp, summariserRunningSample.getErrorCount(), 5));
+        sb.append(" (");
+        sb.append(summariserRunningSample.getErrorPercentageString());
+        sb.append(')');
+        if ("+".equals(type)) {
+            ThreadCounts tc = JMeterContextService.getThreadCounts();
+            sb.append(" Active: ");
+            sb.append(tc.activeThreads);
+            sb.append(" Started: ");
+            sb.append(tc.startedThreads);
+            sb.append(" Finished: ");
+            sb.append(tc.finishedThreads);
+        }
+        return sb.toString();
     }
 
 }

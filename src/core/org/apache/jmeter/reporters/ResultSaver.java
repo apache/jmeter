@@ -33,9 +33,9 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.AbstractTestElement;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Save Result responseData to a set of files
@@ -45,9 +45,9 @@ import org.apache.log.Logger;
  *
  */
 public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ResultSaver.class);
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     private static final Object LOCK = new Object();
 
@@ -172,8 +172,8 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         }
 
         String fileName = makeFileName(s.getContentType(), getSkipAutoNumber(), getSkipSuffix());
-        if(log.isDebugEnabled()) {
-            log.debug("Saving " + s.getSampleLabel() + " in " + fileName);
+        if (log.isDebugEnabled()) {
+            log.debug("Saving {} in {}", s.getSampleLabel(), fileName);
         }
         s.setResultFileName(fileName);// Associate sample with file name
         String variable = getVariableName();
@@ -188,10 +188,10 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
         File out = new File(fileName);
         try (FileOutputStream fos = new FileOutputStream(out)){
             JOrphanUtils.write(s.getResponseData(), fos); // chunk the output if necessary
-        } catch (FileNotFoundException e1) {
-            log.error("Error creating sample file for " + s.getSampleLabel(), e1);
-        } catch (IOException e1) {
-            log.error("Error saving sample " + s.getSampleLabel(), e1);
+        } catch (FileNotFoundException e) {
+            log.error("Error creating sample file for {}", s.getSampleLabel(), e);
+        } catch (IOException e) {
+            log.error("Error saving sample {}", s.getSampleLabel(), e);
         }
     }
 
