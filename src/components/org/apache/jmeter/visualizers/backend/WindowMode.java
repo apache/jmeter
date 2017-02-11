@@ -32,6 +32,7 @@ public enum WindowMode {
 
     /**
      * Gets defined JMeter mode.
+     * @return the defined window mode
      */
     public static WindowMode get() {
         String name = JMeterUtils.getPropDefault("backend_metrics_window_mode", FIXED.name());
