@@ -95,21 +95,22 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
-     * Comparator used prior to sorted columns.
+     * @return Comparator used prior to sorted columns.
      */
     public Comparator<Row> getPrimaryComparator() {
         return primaryComparator;
     }
 
     /**
-     * Comparator used on sorted columns.
+     * @param column to be compared
+     * @return Comparator used on column.
      */
     public Comparator<?> getValueComparator(int column) {
         return valueComparators[column];
     }
 
     /**
-     * Comparator if all sorted columns matches. Defaults to model index comparison.
+     * @return Comparator if all sorted columns matches. Defaults to model index comparison.
      */
     public Comparator<Row> getFallbackComparator() {
         return fallbackComparator;
@@ -117,6 +118,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
 
     /**
      * Comparator used prior to sorted columns.
+     * @param primaryComparator {@link Comparator} to be used first
      * @return <code>this</code>
      */
     public ObjectTableSorter setPrimaryComparator(Comparator<Row> primaryComparator) {
@@ -134,7 +136,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
-     * Assign comparator to given column, if <code>null</code> a {@link #getDefaultComparator(int) default one} is used instead.
+     * Assign comparator to given column, if <code>null</code> a getDefaultComparator(int) default one is used instead.
      * @param column Model column index.
      * @param comparator Column value comparator.
      * @return <code>this</code>
@@ -168,7 +170,14 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
     }
 
     /**
-     * Sets a fallback comparator (defaults to model index comparison) if none {@link #getPrimaryComparator() primary}, neither {@link #getValueComparator(int) column value comparators} can make differences between two rows.
+     * Sets a fallback comparator (defaults to model index comparison) if none
+     * {@link #getPrimaryComparator() primary}, neither
+     * {@link #getValueComparator(int) column value comparators} can make
+     * differences between two rows.
+     *
+     * @param comparator
+     *            to be used, when all other {@link Comparator}s can't see a
+     *            difference
      * @return <code>this</code>
      */
     public ObjectTableSorter setFallbackComparator(Comparator<Row> comparator) {
