@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.conn.DnsResolver;
@@ -33,6 +34,9 @@ import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
+import org.apache.jmeter.testelement.property.NullProperty;
+import org.apache.jmeter.testelement.property.PropertyIterator;
+import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -57,7 +61,8 @@ import org.xbill.DNS.Type;
  */
 
 public class DNSCacheManager extends ConfigTestElement implements TestIterationListener, Serializable, DnsResolver {
-    private static final long serialVersionUID = 2121L;
+
+    private static final long serialVersionUID = 2122L;
 
     private static final Logger log = LoggerFactory.getLogger(DNSCacheManager.class);
 
@@ -67,6 +72,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     private static final String CLEAR_CACHE_EACH_ITER = "DNSCacheManager.clearEachIteration"; // $NON-NLS-1$
 
     private static final String SERVERS = "DNSCacheManager.servers"; // $NON-NLS-1$
+
+    private  static final String HOSTS = "DNSCacheManager.hosts"; // $NON-NLS-1$
 
     private static final String IS_CUSTOM_RESOLVER = "DNSCacheManager.isCustomResolver"; // $NON-NLS-1$
     //-- JMX tag values
@@ -142,7 +149,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     @Override
     public InetAddress[] resolve(String host) throws UnknownHostException {
         InetAddress[] result = cache.get(host);
-        // cache may contain
+        // cache may contain null.
         // A return value of null does not necessarily 
         // indicate that the map contains no mapping 
         // for the key; it's also possible that the map 
@@ -154,6 +161,14 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
                         + Arrays.toString(result));
             }
             return result;
+        } else if (isStaticHost(host)) {
+            InetAddress[] staticAddresses = fromStaticHost(host);
+            if (log.isDebugEnabled()) {
+                log.debug("Cache miss thr#{}: (static) {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                        Arrays.toString(staticAddresses));
+            }
+            cache.put(host, staticAddresses);
+            return staticAddresses;
         } else {
             InetAddress[] addresses = requestLookup(host);
             if (log.isDebugEnabled()) {
@@ -163,6 +178,56 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             cache.put(host, addresses);
             return addresses;
         }
+    }
+
+    private boolean isStaticHost(String host) {
+        JMeterProperty p = getProperty(HOSTS);
+        if (p instanceof NullProperty) {
+            removeProperty(HOSTS);
+            return false;
+        }
+        CollectionProperty property = (CollectionProperty) p;
+        PropertyIterator iterator = property.iterator();
+        while (iterator.hasNext()) {
+            TestElementProperty possibleEntry = (TestElementProperty) iterator.next();
+            if (log.isDebugEnabled()) {
+                log.debug("Look for {} at {}: {}", host, possibleEntry.getObjectValue(), possibleEntry.getObjectValue().getClass());
+            }
+            StaticHost entry = (StaticHost) possibleEntry.getObjectValue();
+            if (entry.getName().equalsIgnoreCase(host)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Found static host: {} => {}", host, entry.getAddress());
+                }
+                return true;
+            }
+        }
+        log.debug("No static host found for {}", host);
+        return false;
+    }
+
+    private InetAddress[] fromStaticHost(String host) {
+        JMeterProperty p = getProperty(HOSTS);
+        if (p instanceof NullProperty) {
+            removeProperty(HOSTS);
+            return new InetAddress[0];
+        }
+        CollectionProperty property = (CollectionProperty) p;
+        PropertyIterator iterator = property.iterator();
+        while (iterator.hasNext()) {
+            StaticHost entry = (StaticHost) ((TestElementProperty)iterator.next()).getObjectValue();
+            if (entry.getName().equals(host)) {
+                List<InetAddress> addresses = new ArrayList<>();
+                for (String address : Arrays.asList(entry.getAddress().split("\\s*,\\s*"))) {
+                    try {
+                        addresses.addAll(Arrays.asList(requestLookup(address)));
+                    } catch (UnknownHostException e) {
+                        log.warn("Couldn't resolve static address {} for host {}", address, host, e);
+                    }
+                }
+                return addresses.toArray(new InetAddress[addresses.size()]);
+            }
+        }
+        return new InetAddress[0];
     }
 
     /**
@@ -237,6 +302,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     public void clear() {
         super.clear();
         clearServers(); // ensure data is set up OK initially
+        clearHosts();
         this.cache.clear();
         this.initFailed = false;
         this.resolver = null;
@@ -256,6 +322,24 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     public CollectionProperty getServers() {
         return (CollectionProperty) getProperty(SERVERS);
+    }
+
+    private void clearHosts() {
+        log.debug("Clear all hosts from store");
+        removeProperty(HOSTS);
+        cache.clear();
+    }
+
+    public void addHost(String dnsHost, String addresses) {
+        getHosts().addItem(new StaticHost(dnsHost, addresses));
+        cache.clear();
+    }
+
+    public CollectionProperty getHosts() {
+        if (getProperty(HOSTS) instanceof NullProperty) {
+            setProperty(new CollectionProperty(HOSTS, new ArrayList<StaticHost>()));
+        }
+        return (CollectionProperty) getProperty(HOSTS);
     }
 
     /**
