@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
  * Some bugs only appear under production traffic, so it is useful to generate
  * traffic using production logs. This way, JMeter can record when problems
  * occur and provide a way to match the server logs.
- * <p>
+ * </p>
  *
  */
 public class AccessLogSampler extends HTTPSampler implements TestBean,ThreadListener {
