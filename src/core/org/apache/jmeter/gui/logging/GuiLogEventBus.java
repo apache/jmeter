@@ -56,7 +56,7 @@ public class GuiLogEventBus {
 
     /**
      * Post a log event object.
-     * @param logEvent log event object
+     * @param logEventObject log event object
      */
     public void postEvent(LogEventObject logEventObject) {
         for (GuiLogEventListener listener : listeners) {
