@@ -36,13 +36,13 @@ import java.util.Vector;
 import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import junit.framework.TestSuite;
 
 public class TestHTMLParser extends JMeterTestCaseJUnit3 {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
     private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";
     private static final String UA_FF       = "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0";
@@ -372,7 +372,7 @@ public class TestHTMLParser extends JMeterTestCaseJUnit3 {
                 throws Exception {
             String parserName = p.getClass().getName().substring("org.apache.jmeter.protocol.http.parser.".length());
             String fname = file.substring(file.indexOf('/')+1);
-            log.debug("file   " + file);
+            log.debug("file   {}", file);
             File f = findTestFile(file);
             byte[] buffer = new byte[(int) f.length()];
             InputStream is = null;

@@ -37,10 +37,6 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Test;
 
 public class TestSwitchController extends JMeterTestCase {
-//      static {
-//           LoggingManager.setPriority("DEBUG","jmeter");
-//           LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-//      }
 
         // Get next sample and its name
         private String nextName(GenericController c) {
