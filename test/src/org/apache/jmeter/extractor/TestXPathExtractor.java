@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -302,10 +303,8 @@ public class TestXPathExtractor {
             
             assertEquals(1, result.getAssertionResults().length);
             assertEquals(extractor.getName(), result.getAssertionResults()[0].getName());
-            System.out.println(result.getAssertionResults()[0].
-                    getFailureMessage());
-            org.junit.Assert.assertTrue(result.getAssertionResults()[0].
-                    getFailureMessage().contains("XML document structures must start and end within the same entity"));
+            org.junit.Assert.assertThat(result.getAssertionResults()[0].
+                    getFailureMessage(), CoreMatchers.containsString("XML document structures must start and end within the same entity"));
 
             assertEquals("Default", vars.get(VAL_NAME));
             assertEquals("0", vars.get(VAL_NAME_NR));
