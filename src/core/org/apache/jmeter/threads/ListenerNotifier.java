@@ -31,9 +31,6 @@ package org.apache.jmeter.threads;
 
 import java.util.List;
 
-//import org.apache.commons.collections.Buffer;
-//import org.apache.commons.collections.BufferUtils;
-//import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testbeans.TestBeanHelper;
