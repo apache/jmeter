@@ -101,11 +101,11 @@ Nor does it render the HTML pages as a browser does
 
 <h2>Tutorials</h2>
 <ul>
-<li><a href="usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a> (<a href="usermanual/jmeter_distributed_testing_step_by_step.html">PDF</a>)</li>
-<li><a href="usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a> (<a href="usermanual/jmeter_proxy_step_by_step.pdf">PDF</a>)</li>
-<li><a href="usermanual/junitsampler_tutorial.html">JUnit Sampler</a> (<a href="usermanual/junitsampler_tutorial.pdf">PDF</a>)</li>
-<li><a href="usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a> (<a href="usermanual/jmeter_accesslog_sampler_step_by_step.pdf">PDF</a>)</li>
-<li><a href="usermanual/jmeter_tutorial.html">Extending JMeter</a> (<a href="extending/jmeter_tutorial.pdf">PDF</a>)</li>
+<li><a href="usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li>
+<li><a href="usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li>
+<li><a href="usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li>
+<li><a href="usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li>
+<li><a href="usermanual/jmeter_tutorial.html">Extending JMeter</a></li>
 </ul>
 <h2>Further Information About JMeter</h2>
 <ul>
