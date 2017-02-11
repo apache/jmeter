@@ -37,8 +37,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Use this Keystore for JMeter specific KeyStores.
@@ -46,7 +46,7 @@ import org.apache.log.Logger;
  */
 public final class JmeterKeyStore {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JmeterKeyStore.class);
 
     private final KeyStore store;
 
@@ -152,8 +152,10 @@ public final class JmeterKeyStore {
                 throw new IOException("No key(s) found");
             }
             if (index <= endIndex-startIndex) {
-                LOG.warn("Did not find all requested aliases. Start="+startIndex
-                        +", end="+endIndex+", found="+certsByAlias.size());
+                if (log.isWarnEnabled()) {
+                    log.warn("Did not find all requested aliases. Start={}, end={}, found={}",
+                            startIndex, endIndex, certsByAlias.size());
+                }
             }
         }
     
@@ -196,7 +198,7 @@ public final class JmeterKeyStore {
             // We return even if result is null
             String aliasName = JMeterContextService.getContext().getVariables().get(clientCertAliasVarName);
             if(StringUtils.isEmpty(aliasName)) {
-                LOG.error("No var called '"+clientCertAliasVarName+"' found");
+                log.error("No var called '{}' found", clientCertAliasVarName);
                 throw new IllegalArgumentException("No var called '"+clientCertAliasVarName+"' found");
             }
             return aliasName;

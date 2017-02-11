@@ -38,8 +38,8 @@ import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.testbeans.TestBeanHelper;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Processes sample events. <br/>
@@ -48,7 +48,7 @@ import org.apache.log.Logger;
  * Thread safe class 
  */
 public class ListenerNotifier {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ListenerNotifier.class);
 
 
     /**
@@ -67,7 +67,7 @@ public class ListenerNotifier {
                 TestBeanHelper.prepare((TestElement) sampleListener);
                 sampleListener.sampleOccurred(res);
             } catch (RuntimeException e) {
-                log.error("Detected problem in Listener: ", e);
+                log.error("Detected problem in Listener.", e);
                 log.info("Continuing to process further listeners");
             }
         }

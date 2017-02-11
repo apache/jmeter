@@ -33,16 +33,16 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BSFTestElement extends ScriptingTestElement
     implements Serializable
 {
-    private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 235L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(BSFTestElement.class);
 
     static {
         log.info("Registering JMeter version of JavaScript engine as work-round for BSF-22");
@@ -66,7 +66,7 @@ public abstract class BSFTestElement extends ScriptingTestElement
         final String fileName = getFilename();
         final String scriptParameters = getParameters();
         // Use actual class name for log
-        final Logger logger = LoggingManager.getLoggerForShortName(getClass().getName());
+        final Logger logger = LoggerFactory.getLogger(getClass());
         mgr.declareBean("log", logger, Logger.class); // $NON-NLS-1$
         mgr.declareBean("Label",label, String.class); // $NON-NLS-1$
         mgr.declareBean("FileName",fileName, String.class); // $NON-NLS-1$
@@ -101,8 +101,10 @@ public abstract class BSFTestElement extends ScriptingTestElement
                 String script=FileUtils.readFileToString(new File(scriptFile));
                 bsfEngine.exec(scriptFile,0,0,script);
             } catch (IOException e) {
-                log.warn(e.getLocalizedMessage());
-                throw new BSFException(BSFException.REASON_IO_ERROR,"Problem reading script file",e);
+                if (log.isWarnEnabled()) {
+                    log.warn("Exception executing script. {}", e.getLocalizedMessage());
+                }
+                throw new BSFException(BSFException.REASON_IO_ERROR, "Problem reading script file", e);
             }
         }
     }
@@ -117,7 +119,9 @@ public abstract class BSFTestElement extends ScriptingTestElement
                 String script=FileUtils.readFileToString(new File(scriptFile));
                 return bsfEngine.eval(scriptFile,0,0,script);
             } catch (IOException e) {
-                log.warn(e.getLocalizedMessage());
+                if (log.isWarnEnabled()) {
+                    log.warn("Exception evaluating script. {}", e.getLocalizedMessage());
+                }
                 throw new BSFException(BSFException.REASON_IO_ERROR,"Problem reading script file",e);
             }
         }
