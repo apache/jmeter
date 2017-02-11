@@ -42,10 +42,18 @@ public class ConstantThroughputTimerTest {
         long start = System.currentTimeMillis();
         long delay = timer.delay(); // Initialise
         assertEquals(0,delay);
+        // The test tries to check if the calculated delay is correct.
+        // If the build machine is busy, then the sleep(500) may take longer in
+        // which case the calculated delay should be shorter.
+        // Since the test aims at 1 per second, the delay should be 1000 - elapsed.
+        // The test currently assumes elapsed is 500.
+       
         Thread.sleep(500);
         long elapsed = System.currentTimeMillis() - start;
         long expected = 1000-elapsed; // 1 second less what has already elapsed
-        if (expected < 0) expected = 0;
+        if (expected < 0) {
+            expected = 0;
+        }
         assertEquals("Expected delay of approx 500", expected, timer.delay(), 50);
     }
 
