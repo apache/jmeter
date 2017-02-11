@@ -2424,7 +2424,7 @@ run JMeter unless all the JMeter jars are added.
     </condition>
     <tstamp>
       <!-- Use variable port to help avoid clashes on CI servers -->
-      <format property="rmi_port" pattern="1mmss"/>
+      <format property="rmi_port" pattern="2SSS"/>
     </tstamp>
     <parallel>
       <daemons>
