@@ -100,7 +100,7 @@ public final class CSVSaveService {
     private static final String VARIABLE_NAME_QUOTE_CHAR = "\""; // $NON-NLS-1$
 
     // Initial config from properties
-    static private final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration
+    private static final SampleSaveConfiguration _saveConfig = SampleSaveConfiguration
             .staticConfig();
 
     // Date formats to try if the time format does not parse as milliseconds
