@@ -189,7 +189,7 @@ public final class LoggingManager {
      * @deprecated
      */
     @Deprecated
-    public static void setPriority(String p) {
+    public static void setPriority(String priority) {
         // NOP
     }
 
