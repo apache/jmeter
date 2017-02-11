@@ -391,23 +391,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         stoppingMessage.getContentPane().add(stopLabel);
         stoppingMessage.pack();
         ComponentUtil.centerComponentInComponent(this, stoppingMessage);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
                 if (stoppingMessage != null) { // TODO - how can this be null?
                     stoppingMessage.setVisible(true);
                 }
-            }
         });
     }
 
     public void updateCounts() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
                 activeThreads.setText(Integer.toString(JMeterContextService.getNumberOfThreads()));
                 totalThreads.setText(Integer.toString(JMeterContextService.getTotalThreads()));
-            }
         });
     }
 
@@ -835,12 +829,9 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         public void processLogEvent(LogEventObject logEventObject) {
             if (logEventObject.isMoreSpecificThanError()) {
                 final int newValue = errorOrFatal.incrementAndGet();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
+                SwingUtilities.invokeLater(() -> {
                         errorsOrFatalsLabel.setForeground(Color.RED);
-                        errorsOrFatalsLabel.setText(Integer.toString(newValue));
-                    }
+                        errorsOrFatalsLabel.setText(Long.toString(newValue));
                 });
             }
         }
@@ -848,13 +839,10 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         @Override
         public void clearData() {
             errorOrFatal.set(0);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
+            SwingUtilities.invokeLater(() -> {
                     errorsOrFatalsLabel.setForeground(Color.BLACK);
                     errorsOrFatalsLabel.setText(Integer.toString(errorOrFatal.get()));
-                }
-            });
+                });
         }
 
     }
