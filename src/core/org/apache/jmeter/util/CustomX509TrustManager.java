@@ -22,8 +22,9 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Custom TrustManager ignores all certificate errors
@@ -37,7 +38,7 @@ public class CustomX509TrustManager implements X509TrustManager
 {
     private final X509TrustManager defaultTrustManager;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CustomX509TrustManager.class);
 
     public CustomX509TrustManager(final X509TrustManager defaultTrustManager) {
         super();
@@ -51,23 +52,25 @@ public class CustomX509TrustManager implements X509TrustManager
      * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String)
      */
     @Override
-    public void checkClientTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
-        if (certificates != null && log.isDebugEnabled()) {
-            for (int c = 0; c < certificates.length; c++) {
-                X509Certificate cert = certificates[c];
-                log.debug(" Client certificate " + (c + 1) + ":");
-                log.debug("  Subject DN: " + cert.getSubjectDN());
-                log.debug("  Signature Algorithm: " + cert.getSigAlgName());
-                log.debug("  Valid from: " + cert.getNotBefore() );
-                log.debug("  Valid until: " + cert.getNotAfter());
-                log.debug("  Issuer: " + cert.getIssuerDN());
+    public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+        if (log.isDebugEnabled() && certificates != null) {
+            for (int i = 0; i < certificates.length; i++) {
+                X509Certificate cert = certificates[i];
+                log.debug(
+                        " Client certificate {}:\n"
+                        + "  Subject DN: {}\n"
+                        + "  Signature Algorithm: {}\n"
+                        + "  Valid from: {}\n"
+                        + "  Valid until: {}\n"
+                        + "  Issuer: {}",
+                        (i + 1),
+                        cert.getSubjectDN(),
+                        cert.getSigAlgName(),
+                        cert.getNotBefore(),
+                        cert.getNotAfter(),
+                        cert.getIssuerDN());
             }
         }
-//        try {
-//            defaultTrustManager.checkClientTrusted(certificates,authType);
-//        } catch (CertificateException e){
-//            log.warn("Ignoring failed Client trust check: "+e.getMessage());
-//        }
     }
 
     /**
@@ -75,22 +78,24 @@ public class CustomX509TrustManager implements X509TrustManager
      */
     @Override
     public void checkServerTrusted(X509Certificate[] certificates,String authType) throws CertificateException {
-        if (certificates != null && log.isDebugEnabled()) {
-            for (int c = 0; c < certificates.length; c++) {
-                X509Certificate cert = certificates[c];
-                log.debug(" Server certificate " + (c + 1) + ":");
-                log.debug("  Subject DN: " + cert.getSubjectDN());
-                log.debug("  Signature Algorithm: " + cert.getSigAlgName());
-                log.debug("  Valid from: " + cert.getNotBefore() );
-                log.debug("  Valid until: " + cert.getNotAfter());
-                log.debug("  Issuer: " + cert.getIssuerDN());
+        if (log.isDebugEnabled() && certificates != null) {
+            for (int i = 0; i < certificates.length; i++) {
+                X509Certificate cert = certificates[i];
+                log.debug(
+                        " Server certificate {}:\n"
+                        + "  Subject DN: {}\n"
+                        + "  Signature Algorithm: {}\n"
+                        + "  Valid from: {}\n"
+                        + "  Valid until: {}\n"
+                        + "  Issuer: {}",
+                        (i + 1),
+                        cert.getSubjectDN(),
+                        cert.getSigAlgName(),
+                        cert.getNotBefore(),
+                        cert.getNotAfter(),
+                        cert.getIssuerDN());
             }
         }
-//        try{
-//            defaultTrustManager.checkServerTrusted(certificates,authType);
-//        } catch (CertificateException e){
-//            log.warn("Ignoring failed Server trust check: "+e.getMessage());
-//        }
     }
 
     /**

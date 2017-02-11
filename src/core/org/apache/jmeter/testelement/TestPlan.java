@@ -32,14 +32,14 @@ import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestPlan extends AbstractTestElement implements Serializable, TestStateListener {
-    private static final long serialVersionUID = 233L;
+    private static final long serialVersionUID = 234L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(TestPlan.class);
 
     //+ JMX field names - do not change values
     private static final String FUNCTIONAL_MODE = "TestPlan.functional_mode"; //$NON-NLS-1$
@@ -256,7 +256,7 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
             try {
                 FileServer.getFileServer().setBasedir(FileServer.getFileServer().getBaseDir() + getBasedir());
             } catch (IllegalStateException e) {
-                log.error("Failed to set file server base dir with " + getBasedir(), e);
+                log.error("Failed to set file server base dir with {}", getBasedir(), e);
             }
         }
         // we set the classpath
@@ -264,10 +264,10 @@ public class TestPlan extends AbstractTestElement implements Serializable, TestS
         for (String path : paths) {
             try {
                 NewDriver.addURL(path);
-                log.info("added " + path + " to classpath");
+                log.info("added {} to classpath", path);
             } catch (MalformedURLException e) {
                 // TODO Should we continue the test or fail ?
-                log.error("Error adding " + path + " to classpath", e);
+                log.error("Error adding {} to classpath", path, e);
             }
         }
     }
