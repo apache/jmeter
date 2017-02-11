@@ -414,15 +414,15 @@ public class Data implements Serializable {
      * data. Each row's data can be gotten with the column header name, which
      * will always be a string.
      *
-     * @param h
+     * @param headers
      *            array of strings representing the column headers.
      *            these must be distinct - duplicates will cause incorrect behaviour
      */
-    public void setHeaders(String[] h) {
-        header = new ArrayList<>(h.length);
-        for (int x = 0; x < h.length; x++) {
-            header.add(h[x]);
-            data.put(h[x], new ArrayList<>());
+    public void setHeaders(String[] headers) {
+        header = new ArrayList<>(headers.length);
+        for (String h : headers) {
+            header.add(h);
+            data.put(h, new ArrayList<>());
         }
     }
 

@@ -277,16 +277,16 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         koPercentiles = new HashMap<>(percentilesStringArray.length);
         allPercentiles = new HashMap<>(percentilesStringArray.length);
         DecimalFormat format = new DecimalFormat("0.##");
-        for (String aPercentilesStringArray : percentilesStringArray) {
-            if (!StringUtils.isEmpty(aPercentilesStringArray.trim())) {
+        for (String percentile : percentilesStringArray) {
+            if (!StringUtils.isEmpty(percentile.trim())) {
                 try {
-                    Float percentileValue = Float.valueOf(aPercentilesStringArray.trim());
+                    Float percentileValue = Float.valueOf(percentile.trim());
                     final String key = AbstractInfluxdbMetricsSender.tagToStringValue(format.format(percentileValue));
                     okPercentiles.put(key, percentileValue);
                     koPercentiles.put(key, percentileValue);
                     allPercentiles.put(key, percentileValue);
                 } catch (Exception e) {
-                    log.error("Error parsing percentile: '{}'", percentilesStringArray[i], e);
+                    log.error("Error parsing percentile: '{}'", percentile, e);
                 }
             }
         }
