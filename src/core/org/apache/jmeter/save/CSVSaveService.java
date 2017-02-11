@@ -654,7 +654,7 @@ public final class CSVSaveService {
 
     /**
      * Method saves aggregate statistics (with header names) as CSV from a table
-     * model. Same as {@link #saveCSVStats(List, FileWriter, String[])} except
+     * model. Same as {@link #saveCSVStats(List, Writer, String[])} except
      * that there is no need to create a List containing the data.
      * 
      * @param model
@@ -671,7 +671,7 @@ public final class CSVSaveService {
 
     /**
      * Method saves aggregate statistics as CSV from a table model. Same as
-     * {@link #saveCSVStats(List, FileWriter, String[])} except that there is no
+     * {@link #saveCSVStats(List, Writer, String[])} except that there is no
      * need to create a List containing the data.
      * 
      * @param model
