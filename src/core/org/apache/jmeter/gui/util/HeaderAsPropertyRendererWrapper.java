@@ -40,6 +40,7 @@ public class HeaderAsPropertyRendererWrapper implements TableCellRenderer, Seria
     private TableCellRenderer delegate;
 
     /**
+     * @param renderer {@link TableCellRenderer} to delegate to
      * @param columnsMsgParameters Optional parameters of i18n keys
      */
     public HeaderAsPropertyRendererWrapper(TableCellRenderer renderer, Object[][] columnsMsgParameters) {
