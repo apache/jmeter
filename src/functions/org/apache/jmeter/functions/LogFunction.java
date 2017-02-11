@@ -26,9 +26,9 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-import org.apache.log.Priority;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 /**
  * <p>
@@ -47,7 +47,7 @@ import org.apache.log.Priority;
  * @since 2.2
  */
 public class LogFunction extends AbstractFunction {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(LogFunction.class);
 
     private static final List<String> desc = new LinkedList<>();
 
@@ -132,32 +132,52 @@ public class LogFunction extends AbstractFunction {
         }
     }
 
-    // Routine to perform the output (also used by __logn() function)
-    static synchronized void logDetails(Logger l, String s, String prio, Throwable t, String c) {
-        if (prio.equalsIgnoreCase("OUT")) //$NON-NLS-1
-        {
-            printDetails(System.out, s, t, c);
-        } else if (prio.equalsIgnoreCase("ERR")) //$NON-NLS-1
-        {
-            printDetails(System.err, s, t, c);
+    /**
+     * Routine to perform the output (also used by __logn() function)
+     * @param logger {@link Logger}
+     * @param stringToLog String to log
+     * @param priorityString OUT or ERR or Logger priority
+     * @param throwable {@link Throwable}
+     * @param comment If present, it is displayed in the string. Useful for identifying what is being logged.
+     */
+    static synchronized void logDetails(Logger logger, String stringToLog, String priorityString, Throwable throwable,
+            String comment) {
+        String prio = priorityString.trim().toUpperCase();
+
+        if ("OUT".equals(prio)) {//$NON-NLS-1
+            printDetails(System.out, stringToLog, throwable, comment);
+        } else if ("ERR".equals(prio)) {//$NON-NLS-1
+            printDetails(System.err, stringToLog, throwable, comment);
         } else {
-            // N.B. if the string is not recognised, DEBUG is assumed
-            Priority p = Priority.getPriorityForName(prio.trim());
-            if (log.isPriorityEnabled(p)) {// Thread method is potentially expensive
-                String tn = Thread.currentThread().getName();
-                StringBuilder sb = new StringBuilder(40);
-                sb.append(tn);
-                if (c.length()>0){
-                    sb.append(' ');
-                    sb.append(c);
-                } else {
-                    sb.append(DEFAULT_SEPARATOR);
-                }
-                sb.append(s);
-                log.log(p, sb.toString(), t);
+            // N.B. if the string is not recognized, DEBUG is assumed
+            Level prioLevel;
+            try {
+                prioLevel = Level.valueOf(prio);
+            } catch (IllegalArgumentException ignored) {
+                prioLevel = Level.DEBUG;
+            }
+
+            final String threadName = Thread.currentThread().getName();
+            final String separator = (comment.isEmpty()) ? DEFAULT_SEPARATOR : comment;
+
+            switch (prioLevel) {
+            case ERROR:
+                logger.error("{} {} {}", threadName, separator, stringToLog, throwable);
+                break;
+            case WARN:
+                logger.warn("{} {} {}", threadName, separator, stringToLog, throwable);
+                break;
+            case INFO:
+                logger.info("{} {} {}", threadName, separator, stringToLog, throwable);
+                break;
+            case DEBUG:
+                logger.debug("{} {} {}", threadName, separator, stringToLog, throwable);
+                break;
+            case TRACE:
+                logger.trace("{} {} {}", threadName, separator, stringToLog, throwable);
+                break;
             }
         }
-
     }
 
     /** {@inheritDoc} */
