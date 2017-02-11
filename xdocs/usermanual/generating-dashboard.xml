@@ -286,7 +286,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                                 Default: <code>true</code></property>
                             <property name="series_filter" required="No">Sets the filter
                                 of series. An empty value deactivates the filtering.
-                                If not empty, regex should end with <code>(-success|-failure)?</code><br/>
+                                If not empty, regex should end with <code>((-success$|-failure$)|$)</code><br/>
                                 Format: regular expression.
                                 Default: ""
                             </property>
