@@ -2278,7 +2278,10 @@ run JMeter unless all the JMeter jars are added.
       bottom="Copyright &amp;#xA9; 1998-${THISYEAR} Apache Software Foundation. All Rights Reserved."
       packagenames="org.apache.jmeter.*,org.apache.jorphan.*"
       excludepackagenames="org.apache.jorphan.timer">
-      <classpath refid="classpath"/>
+      <classpath>
+        <path refid="classpath"/>
+        <path refid="logging.classpath"/>
+      </classpath>
       <link href="http://docs.oracle.com/javase/8/docs/api/"/>
     </javadoc>
     <!-- No need for Javadoc patch (CVE-2013-1571) now we are using Java 8 minimum -->
