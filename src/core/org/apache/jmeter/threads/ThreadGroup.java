@@ -32,9 +32,9 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.ListedHashTree;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JMeterStopTestException;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ThreadGroup holds the settings for a JMeter thread group.
@@ -42,9 +42,9 @@ import org.apache.log.Logger;
  * This class is intended to be ThreadSafe.
  */
 public class ThreadGroup extends AbstractThreadGroup {
-    private static final long serialVersionUID = 281L;
+    private static final long serialVersionUID = 282L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ThreadGroup.class);
     
     private static final String DATE_FIELD_FORMAT = "yyyy/MM/dd HH:mm:ss"; //$NON-NLS-1$
 
@@ -285,11 +285,8 @@ public class ThreadGroup extends AbstractThreadGroup {
         float perThreadDelayInMillis = (float) (rampUpPeriodInSeconds * 1000) / (float) getNumThreads();
 
         delayedStartup = isDelayedStartup(); // Fetch once; needs to stay constant
-        log.info("Starting thread group number " + groupNumber
-                + " threads " + numThreads
-                + " ramp-up " + rampUpPeriodInSeconds
-                + " perThread " + perThreadDelayInMillis
-                + " delayedStart=" + delayedStartup);
+        log.info("Starting thread group... number={} threads={} ramp-up={} perThread={} delayedStart={}", groupNumber,
+                numThreads, rampUpPeriodInSeconds, perThreadDelayInMillis, delayedStartup);
         if (delayedStartup) {
             threadStarter = new Thread(new ThreadStarter(notifier, threadGroupTree, engine), getName()+"-ThreadStarter");
             threadStarter.setDaemon(true);
@@ -302,7 +299,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                 startNewThread(notifier, threadGroupTree, engine, threadNum, context, now, (int)(threadNum * perThreadDelayInMillis));
             }
         }
-        log.info("Started thread group number "+groupNumber);
+        log.info("Started thread group number {}", groupNumber);
     }
 
     /**
@@ -379,7 +376,7 @@ public class ThreadGroup extends AbstractThreadGroup {
         }
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay);
         JMeterContextService.addTotalThreads( 1 );
-        log.info("Started new thread in group " + groupNumber );
+        log.info("Started new thread in group {}", groupNumber);
         return newJmThread;
     }
 
@@ -425,7 +422,9 @@ public class ThreadGroup extends AbstractThreadGroup {
      */
     @Override
     public void threadFinished(JMeterThread thread) {
-        log.debug("Ending thread " + thread.getThreadName());
+        if (log.isDebugEnabled()) {
+            log.debug("Ending thread {}", thread.getThreadName());
+        }
         allThreads.remove(thread);
     }
 
@@ -513,7 +512,9 @@ public class ThreadGroup extends AbstractThreadGroup {
             }
             if (thread.isAlive()) {
                 stopped = false;
-                log.warn("Thread won't exit: " + thread.getName());
+                if (log.isWarnEnabled()) {
+                    log.warn("Thread won't exit: {}", thread.getName());
+                }
             }
         }
         return stopped;
@@ -665,7 +666,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     newThread.start();
                 }
             } catch (Exception ex) {
-                log.error("An error occured scheduling delay start of threads for Thread Group:"+getName(), ex);
+                log.error("An error occured scheduling delay start of threads for Thread Group: {}", getName(), ex);
             }
         }
     }

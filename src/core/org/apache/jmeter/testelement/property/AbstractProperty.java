@@ -22,14 +22,14 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractProperty implements JMeterProperty {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     //TODO consider using private logs for each derived class
-    protected static final Logger log = LoggingManager.getLoggerForClass();
+    protected static final Logger log = LoggerFactory.getLogger(AbstractProperty.class);
 
     private String name;
 
@@ -235,7 +235,7 @@ public abstract class AbstractProperty implements JMeterProperty {
         String val = getStringValue();
         String val2 = arg0.getStringValue();
         if (val == null) {
-            log.warn("Warning: Unexpected null value for property: " + name);
+            log.warn("Warning: Unexpected null value for property: {}", name);
 
             if (val2 == null) {
                 // Two null values -- return equal
@@ -310,7 +310,7 @@ public abstract class AbstractProperty implements JMeterProperty {
             }
             return newColl;
         } catch (Exception e) {// should not happen
-            log.error("Cannot create copy of "+coll.getClass().getName(),e);
+            log.error("Cannot create copy of {}", coll.getClass(), e);
             return null;
         }
     }
@@ -340,7 +340,7 @@ public abstract class AbstractProperty implements JMeterProperty {
                     item = (String) key;
                 } else {
                     if (key != null) {
-                        log.error("Expected key type String, found: "+key.getClass().getName());
+                        log.error("Expected key type String, found: {}", key.getClass());
                         item = key.toString();
                     }
                 }
@@ -348,7 +348,7 @@ public abstract class AbstractProperty implements JMeterProperty {
             }
             return newColl;
         } catch (Exception e) {// should not happen
-            log.error("Cannot create copy of "+coll.getClass().getName(),e);
+            log.error("Cannot create copy of {}", coll.getClass(), e);
             return null;
         }
     }

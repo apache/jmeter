@@ -43,15 +43,15 @@ import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  */
 public abstract class AbstractTestElement implements TestElement, Serializable, Searchable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestElement.class);
 
     private final Map<String, JMeterProperty> propMap =
         Collections.synchronizedMap(new LinkedHashMap<String, JMeterProperty>());
@@ -339,8 +339,8 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
             PropertyIterator iter = propertyIterator();
             while (iter.hasNext()) {
                 JMeterProperty prop = iter.next();
-                log.debug("Property " + prop.getName() + " is temp? " + isTemporary(prop) + " and is a "
-                        + prop.getObjectValue());
+                log.debug("Property {} is temp? {} and is a {}", prop.getName(), isTemporary(prop),
+                        prop.getObjectValue());
             }
         }
     }
@@ -564,9 +564,6 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
              * Only samplers have the thread context set up by JMeterThread at
              * present, so suppress the warning for now
              */
-            // log.warn("ThreadContext was not set up - should only happen in
-            // JUnit testing..."
-            // ,new Throwable("Debug"));
             threadContext = JMeterContextService.getContext();
         }
         return threadContext;
