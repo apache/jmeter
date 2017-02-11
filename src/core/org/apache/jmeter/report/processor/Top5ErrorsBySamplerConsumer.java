@@ -38,7 +38,7 @@ public class Top5ErrorsBySamplerConsumer extends
      * Instantiates a new Top5 Errors by sampler consumer.
      */
     public Top5ErrorsBySamplerConsumer() {
-        super(true);
+        super(false);
     }
 
     /**
