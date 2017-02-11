@@ -26,21 +26,22 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PackageTest {
-        
+
+    private static Logger log = LoggerFactory.getLogger(PackageTest.class);
+
         @Test
         public void testAdd1() throws Exception {
-            Logger log = LoggingManager.getLoggerForClass();
             Collection<String> treePath = Arrays.asList(new String[] { "1", "2", "3", "4" });
             HashTree tree = new HashTree();
-            log.debug("treePath = " + treePath);
+            log.debug("treePath = {}", treePath);
             tree.add(treePath, "value");
-            log.debug("Now treePath = " + treePath);
-            log.debug(tree.toString());
+            log.debug("Now treePath = {}, tree = {}", treePath, tree);
             assertEquals(1, tree.list(treePath).size());
             assertEquals("value", tree.getArray(treePath)[0]);
         }

@@ -44,9 +44,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.gui.ObsoleteGui;
 import org.apache.jmeter.gui.JMeterGUIComponent;
@@ -57,18 +54,21 @@ import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testbeans.gui.TestBeanGUI;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class JMeterTest extends JMeterTestCaseJUnit3 {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(JMeterTest.class);
 
     private static Map<String, Boolean> guiTitles;
 
@@ -339,7 +339,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
                 assertFalse("'" + label + "' should be in resource file for " + name, JMeterUtils.getResString(
                         label).startsWith(JMeterUtils.RES_KEY_PFX));
             } catch (UnsupportedOperationException uoe) {
-                log.warn("Class has not yet implemented getLabelResource " + name);
+                log.warn("Class has not yet implemented getLabelResource {}", name);
             }
         }
         checkElementAlias(guiItem);
@@ -366,7 +366,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         if (!(guiItem instanceof UnsharedComponent)) {
             assertEquals("SHARED: Failed on " + name, "", el2.getPropertyAsString("NOT"));
         }
-        log.debug("Saving element: " + el.getClass());
+        log.debug("Saving element: {}", el.getClass());
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         SaveService.saveElement(el, bos);
         ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());

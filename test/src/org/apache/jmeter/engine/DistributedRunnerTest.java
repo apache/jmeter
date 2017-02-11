@@ -35,9 +35,9 @@ import java.util.Properties;
 
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DistributedRunnerTest {
 
@@ -137,7 +137,7 @@ public class DistributedRunnerTest {
     }
 
     private static class EmulatorEngine implements JMeterEngine {
-        private static final Logger log = LoggingManager.getLoggerForClass();
+        private static final Logger log = LoggerFactory.getLogger(EmulatorEngine.class);
         private String host;
 
         public EmulatorEngine() {
@@ -146,37 +146,37 @@ public class DistributedRunnerTest {
 
         @Override
         public void configure(HashTree testPlan) {
-            log.debug("Configuring " + host);
+            log.debug("Configuring {}", host);
         }
 
         @Override
         public void runTest() throws JMeterEngineException {
-            log.debug("Running " + host);
+            log.debug("Running {}", host);
         }
 
         @Override
         public void stopTest(boolean now) {
-            log.debug("Stopping " + host);
+            log.debug("Stopping {}", host);
         }
 
         @Override
         public void reset() {
-            log.debug("Resetting " + host);
+            log.debug("Resetting {}", host);
         }
 
         @Override
         public void setProperties(Properties p) {
-            log.debug("Set properties " + host);
+            log.debug("Set properties {}", host);
         }
 
         @Override
         public void exit() {
-            log.debug("Exiting " + host);
+            log.debug("Exiting {}", host);
         }
 
         @Override
         public boolean isActive() {
-            log.debug("Check if active " + host);
+            log.debug("Check if active {}", host);
             return false;
         }
 

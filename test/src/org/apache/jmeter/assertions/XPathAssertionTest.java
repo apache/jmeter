@@ -32,13 +32,13 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XPathAssertionTest extends JMeterTestCase {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(XPathAssertionTest.class);
 
     private XPathAssertion assertion;
 
@@ -92,8 +92,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionOK() throws Exception {
         assertion.setXPathString("/");
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure", res.isFailure());
     }
@@ -102,8 +102,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionFail() throws Exception {
         assertion.setXPathString("//x");
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
@@ -112,8 +112,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionPath1() throws Exception {
         assertion.setXPathString("//*[code=1]");
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
@@ -122,8 +122,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionPath2() throws Exception {
         assertion.setXPathString("//*[code=2]"); // Not present
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
@@ -132,8 +132,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionBool1() throws Exception {
         assertion.setXPathString("count(//error)=2");
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
@@ -142,8 +142,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionBool2() throws Exception {
         assertion.setXPathString("count(//*[code=1])=1");
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertFalse("Should not be a failure",res.isFailure());
     }
@@ -152,18 +152,18 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionBool3() throws Exception {
         assertion.setXPathString("count(//error)=1"); // wrong
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
-        assertTrue("Should be a failure",res.isFailure());
+        assertTrue("Should be a failure", res.isFailure());
     }
 
     @Test
     public void testAssertionBool4() throws Exception {
         assertion.setXPathString("count(//*[code=2])=1"); //Wrong
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
@@ -172,8 +172,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionNumber() throws Exception {
         assertion.setXPathString("count(//error)");// not yet handled
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
     }
@@ -183,8 +183,8 @@ public class XPathAssertionTest extends JMeterTestCase {
         // result.setResponseData - not set
         result = new SampleResult();
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertEquals(AssertionResult.RESPONSE_WAS_NULL, res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
@@ -194,8 +194,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionEmptyResult() throws Exception {
         result.setResponseData("", null);
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertEquals(AssertionResult.RESPONSE_WAS_NULL, res.getFailureMessage());
         assertFalse("Should not be an error", res.isError());
         assertTrue("Should be a failure",res.isFailure());
@@ -205,8 +205,8 @@ public class XPathAssertionTest extends JMeterTestCase {
     public void testAssertionBlankResult() throws Exception {
         result.setResponseData(" ", null);
         AssertionResult res = assertion.getResult(result);
-        testLog.debug("isError() " + res.isError() + " isFailure() " + res.isFailure());
-        testLog.debug("failure message: " + res.getFailureMessage());
+        testLog.debug("isError() {} isFailure() {}", res.isError(), res.isFailure());
+        testLog.debug("failure message: {}", res.getFailureMessage());
         assertTrue(res.getFailureMessage().indexOf("Premature end of file") > 0);
         assertTrue("Should be an error",res.isError());
         assertFalse("Should not be a failure", res.isFailure());
@@ -225,7 +225,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertion.setValidating(false);
         assertion.setTolerant(false);
         AssertionResult res = assertion.getResult(result);
-        log.debug("failureMessage: " + res.getFailureMessage());
+        log.debug("failureMessage: {}", res.getFailureMessage());
         assertTrue(res.isError());
         assertFalse(res.isFailure());
     }
@@ -235,8 +235,8 @@ public class XPathAssertionTest extends JMeterTestCase {
         setAlternateResponseData();
         assertion.setXPathString("//row/value[@field = 'alias']");
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-        log.debug(" res " + res.isError());
-        log.debug(" failure " + res.getFailureMessage());
+        log.debug(" res {}", res.isError());
+        log.debug(" failure {}", res.getFailureMessage());
         assertFalse(res.isError());
         assertFalse(res.isFailure());
     }
@@ -248,8 +248,8 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertion.setNegated(true);
 
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-        log.debug(" res " + res.isError());
-        log.debug(" failure " + res.getFailureMessage());
+        log.debug(" res {}", res.isError());
+        log.debug(" failure {}", res.getFailureMessage());
         assertFalse(res.isError());
         assertFalse(res.isFailure());
     }
@@ -261,7 +261,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertion.setNegated(false);
         assertion.setValidating(true);
         AssertionResult res = assertion.getResult(jmctx.getPreviousResult());
-        log.debug(res.getFailureMessage() + " error: " + res.isError() + " failure: " + res.isFailure());
+        log.debug("{} error: {} failure: {}", res.getFailureMessage(), res.isError(), res.isFailure());
         assertTrue(res.isError());
         assertFalse(res.isFailure());
     }
@@ -316,7 +316,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertion.setXPathString("/");
         assertion.setValidating(true);
         AssertionResult res = assertion.getResult(result);
-        log.debug("failureMessage: " + res.getFailureMessage());
+        log.debug("failureMessage: {}", res.getFailureMessage());
         assertTrue(res.isError());
         assertFalse(res.isFailure());
     }
@@ -334,7 +334,7 @@ public class XPathAssertionTest extends JMeterTestCase {
         assertion.setValidating(true);
         assertion.setTolerant(true);
         AssertionResult res = assertion.getResult(result);
-        log.debug("failureMessage: " + res.getFailureMessage());
+        log.debug("failureMessage: {}", res.getFailureMessage());
         assertFalse(res.isFailure());
         assertFalse(res.isError());
     }

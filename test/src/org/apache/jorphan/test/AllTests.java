@@ -20,9 +20,7 @@ package org.apache.jorphan.test;
 
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,18 +28,15 @@ import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.crypto.Cipher;
 
 import org.apache.jmeter.junit.categories.ExcludeCategoryFilter;
 import org.apache.jmeter.junit.categories.NeedGuiTests;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFilter;
 import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 import org.junit.internal.RealSystem;
 import org.junit.internal.TextListener;
 import org.junit.runner.Computer;
@@ -49,6 +44,8 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
 
@@ -107,7 +104,7 @@ import junit.framework.TestCase;
  * @see UnitTestManager
  */
 public final class AllTests {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(AllTests.class);
 
     /**
      * Private constructor to prevent instantiation.
@@ -117,7 +114,7 @@ public final class AllTests {
 
     private static void logprop(String prop, boolean show) {
         String value = System.getProperty(prop);
-        log.info(prop + "=" + value);
+        log.info("{}={}", prop, value);
         if (show) {
             System.out.println(prop + "=" + value);
         }
@@ -148,30 +145,26 @@ public final class AllTests {
         String home = new File(System.getProperty("user.dir")).getParent();
         System.out.println("Setting JMeterHome: "+home);
         JMeterUtils.setJMeterHome(home);
-        initializeLogging(args);
         initializeManager(args);
 
-        String version = "JMeterVersion="+JMeterUtils.getJMeterVersion();
-        log.info(version);
-        System.out.println(version);
+        log.info("JMeterVersion={}", JMeterUtils.getJMeterVersion());
+        System.out.println("JMeterVersion=" + JMeterUtils.getJMeterVersion());
         logprop("java.version", true);
         logprop("java.vm.name");
         logprop("java.vendor");
         logprop("java.home", true);
         logprop("file.encoding", true);
         // Display actual encoding used (will differ if file.encoding is not recognised)
-        String msg = "default encoding="+Charset.defaultCharset();
-        System.out.println(msg);
-        log.info(msg);
+        System.out.println("default encoding="+Charset.defaultCharset());
+        log.info("default encoding={}", Charset.defaultCharset());
         logprop("user.home");
         logprop("user.dir", true);
         logprop("user.language");
         logprop("user.region");
         logprop("user.country");
         logprop("user.variant");
-        final String showLocale = "Locale="+Locale.getDefault().toString();
-        log.info(showLocale);
-        System.out.println(showLocale);
+        log.info("Locale={}", Locale.getDefault());
+        System.out.println("Locale=" + Locale.getDefault());
         logprop("os.name", true);
         logprop("os.version", true);
         logprop("os.arch");
@@ -239,29 +232,6 @@ public final class AllTests {
     }
 
     /**
-     * An overridable method that initializes the logging for the unit test run,
-     * using the properties file passed in as the second argument.
-     * 
-     * @param args arguments to get the logging setup information from
-     */
-    protected static void initializeLogging(String[] args) {
-        if (args.length >= 2) {
-            Properties props = new Properties();
-            InputStream inputStream = null;
-            try {
-                System.out.println("Setting up props using file: " + args[1]);
-                inputStream = new FileInputStream(args[1]);
-                props.load(inputStream);
-                LoggingManager.initializeLogging(props);
-            } catch (IOException e) {
-                System.out.println(e.getLocalizedMessage());
-            } finally {
-                JOrphanUtils.closeQuietly(inputStream);
-            }
-        }
-    }
-
-    /**
      * An overridable method that instantiates a UnitTestManager (if one
      * was specified in the command-line arguments), and hands it the name of
      * the properties file to use to configure the system.
@@ -320,7 +290,7 @@ public final class AllTests {
                 }
             } catch (UnsupportedClassVersionError | ClassNotFoundException
                     | NoClassDefFoundError e) {
-                log.debug(e.getLocalizedMessage());
+                log.debug("Exception while filtering class {}. {}", className, e.toString());
             }
 
             return isJunitTest;

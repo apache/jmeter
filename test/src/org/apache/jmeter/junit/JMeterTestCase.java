@@ -26,12 +26,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
+
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.AbstractFunction;
 import org.apache.jmeter.functions.InvalidVariableException;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Common setup for JUnit4 test cases
@@ -120,7 +121,7 @@ public abstract class JMeterTestCase {
         return file;
     }
 
-    protected static final Logger testLog = LoggingManager.getLoggerForClass();
+    protected static final Logger testLog = LoggerFactory.getLogger(JMeterTestCase.class);
 
     protected void checkInvalidParameterCounts(AbstractFunction func, int minimum)
             throws Exception {
