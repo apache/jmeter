@@ -153,6 +153,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      * Builds a default comparator based on model column class. {@link Collator#getInstance()} for {@link String},
      * {@link Comparator#naturalOrder() natural order} for {@link Comparable}, no sort support for others.
      * @param column Model column index.
+     * @return default {@link Comparator}
      */
     protected Comparator<?> getDefaultComparator(int column) {
         Class<?> columnClass = model.getColumnClass(column);
