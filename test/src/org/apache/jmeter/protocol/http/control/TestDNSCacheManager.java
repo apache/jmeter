@@ -18,12 +18,15 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbill.DNS.ExtendedResolver;
@@ -32,6 +35,39 @@ public class TestDNSCacheManager extends JMeterTestCase {
     private static final String INVALID_DNS_SERVER = "8.8.8.8.9"; //$NON-NLS-1$
     
     private static final String VALID_DNS_SERVER = "8.8.8.8"; //$NON-NLS-1$
+
+    @Test
+    public void testWithOneStaticHost() throws Exception {
+        DNSCacheManager manager = new DNSCacheManager();
+        manager.setCustomResolver(true);
+        manager.addHost("jmeter.example.org", "127.0.0.1");
+        assertThat(manager.resolve("jmeter.example.org"),
+                CoreMatchers.is(CoreMatchers.equalTo(new InetAddress[] { InetAddress.getByName("127.0.0.1") })));
+    }
+
+    @Test
+    public void testWithMultipleStaticHost() throws Exception {
+        DNSCacheManager manager = new DNSCacheManager();
+        manager.setCustomResolver(true);
+        manager.addHost("jmeter.example.org", "127.0.0.1, 1.2.3.4");
+        assertThat(manager.resolve("jmeter.example.org"),
+                CoreMatchers.is(CoreMatchers.equalTo(new InetAddress[] { InetAddress.getByName("127.0.0.1"), InetAddress.getByName("1.2.3.4") })));
+    }
+
+    @Test
+    public void testAddAndClearStaticHost() throws Exception {
+        DNSCacheManager manager = new DNSCacheManager();
+        manager.setCustomResolver(true);
+        manager.addHost("apache.jmeter.org", "127.0.0.1");
+        manager.resolve("apache.jmeter.org");
+        manager.clear();
+        assertThat(Arrays.asList(manager.resolve("jmeter.apache.org")),
+                CoreMatchers.hasItem(InetAddress.getByName("jmeter.apache.org")));
+        assertThat(Arrays.asList(manager.resolve("jmeter.apache.org")),
+                CoreMatchers.not(CoreMatchers.hasItem(InetAddress.getByName("127.0.0.1"))));
+    }
+
+    
     @Test
     public void testWithCustomResolverAnd1WrongServer() throws UnknownHostException {
         DNSCacheManager original = new DNSCacheManager();
