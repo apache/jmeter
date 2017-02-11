@@ -126,15 +126,13 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
                 serverNames[index] = jMeterProperty.getStringValue();
                 index++;
             }
-            ExtendedResolver resolver = new ExtendedResolver(serverNames);
-            if(log.isDebugEnabled()) {
-                log.debug("Using DNS Resolvers: "
-                        + Arrays.asList(((ExtendedResolver) resolver)
-                                .getResolvers()));
+            ExtendedResolver result = new ExtendedResolver(serverNames);
+            if (log.isDebugEnabled()) {
+                log.debug("Using DNS Resolvers: {}", Arrays.asList((result).getResolvers()));
             }
             // resolvers will be chosen via round-robin
-            resolver.setLoadBalance(true);
-            return resolver;
+            result.setLoadBalance(true);
+            return result;
         } catch (UnknownHostException uhe) {
             this.initFailed = true;
             log.warn("Failed to create Extended resolver: " + uhe.getMessage());
