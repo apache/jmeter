@@ -71,7 +71,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     /**
      * @param params {@link HttpParams}
      * @return the socket
-     * @throws IOException
+     * @throws IOException when the socket creation fails
      * @see org.apache.http.conn.scheme.SchemeSocketFactory#createSocket(org.apache.http.params.HttpParams)
      */
     @Override
@@ -85,9 +85,9 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
      * @param localAddress {@link InetSocketAddress}
      * @param params {@link HttpParams}
      * @return the socket
-     * @throws IOException
-     * @throws UnknownHostException
-     * @throws ConnectTimeoutException
+     * @throws IOException when the socket creation fails
+     * @throws UnknownHostException when the remote or local addresses can't be resolved
+     * @throws ConnectTimeoutException when the connection times out
      * @see org.apache.http.conn.scheme.SchemeSocketFactory#connectSocket(java.net.Socket, java.net.InetSocketAddress, java.net.InetSocketAddress, org.apache.http.params.HttpParams)
      */
     @Override
@@ -100,7 +100,7 @@ public final class LazySchemeSocketFactory implements SchemeLayeredSocketFactory
     /**
      * @param sock {@link Socket}
      * @return true if the socket is secure
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when the socket is not valid
      * @see org.apache.http.conn.scheme.SchemeSocketFactory#isSecure(java.net.Socket)
      */
     @Override
