@@ -33,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1171,7 +1172,7 @@ public class JMeterUtils implements UnitTestManager {
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
             // If I iterate over the entrySet under ubuntu with jre 1.8.0_121
             // the font objects are missing, so iterate over the keys, only
-            for (Object key : defaults.keySet()) {
+            for (Object key : new ArrayList<Object>(defaults.keySet())) {
                 Object value = defaults.get(key);
                 log.debug("Try key {} with value {}", key, value);
                 if (value instanceof Font) {
