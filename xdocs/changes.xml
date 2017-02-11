@@ -261,6 +261,11 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <ul>
 </ul>
 
+<h3>Report / Dashboard</h3>
+<ul>
+    <li><bug>60726</bug>Report / Dashboard : Top 5 errors by samplers must not take into account the series filtering</li>
+</ul>
+    
 <h3>General</h3>
 <ul>
     <li><bug>60428</bug>JMeter Graphite Backend Listener throws exception when test ends
