@@ -28,24 +28,24 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
 import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ComponentReferenceFunctionTest.class);
     
     private static Map<String, Boolean> funcTitles;
     
@@ -134,7 +134,7 @@ public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
                 // No, not a work in progress ...
                 String s = "function.xml needs '" + title + "' entry for " + funcItem.getClass().getName();
                 if (!ct) {
-                    LOG.warn(s); // Record in log as well
+                    log.warn(s); // Record in log as well
                 }
                 assertTrue(s, ct);
             }

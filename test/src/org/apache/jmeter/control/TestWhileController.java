@@ -36,11 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestWhileController extends JMeterTestCase {
-//      static {
-//           LoggingManager.setPriority("DEBUG","jmeter");
-//           LoggingManager.setTarget(new java.io.PrintWriter(System.out));
-//      }
-
 
         private JMeterContext jmctx;
         private JMeterVariables jmvars;

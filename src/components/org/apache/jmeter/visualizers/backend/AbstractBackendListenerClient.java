@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jorphan.logging.LoggingManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractBackendListenerClient implements BackendListenerClient {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractBackendListenerClient.class);
+
+    private static final org.apache.log.Logger oldLogger = LoggingManager.getLoggerForClass();
+
     private UserMetric userMetrics = new UserMetric();
     
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
@@ -89,8 +93,20 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
      * As this class is designed to be subclassed this is useful.
      *
      * @return a Logger instance which can be used for logging
+     * @deprecated Will be removed in 3.3, use {@link AbstractBackendListenerClient#getNewLogger()} 
      */
-    protected Logger getLogger() {
+    @Deprecated
+    protected org.apache.log.Logger getLogger() {
+        return oldLogger;
+    }
+
+    /**
+     * Get a Logger instance which can be used by subclasses to log information.
+     * As this class is designed to be subclassed this is useful.
+     *
+     * @return {@link Logger}  instance which can be used for logging
+     */
+    protected Logger getNewLogger() {
         return log;
     }
 

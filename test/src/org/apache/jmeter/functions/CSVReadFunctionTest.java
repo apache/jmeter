@@ -26,13 +26,13 @@ import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CSVReadFunctionTest extends JMeterTestCase {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(CSVReadFunctionTest.class);
     
     // Create the CSVRead function and set its parameters.
     private static CSVRead setCSVReadParams(String p1, String p2) throws Exception {

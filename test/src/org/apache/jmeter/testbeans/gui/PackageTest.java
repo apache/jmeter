@@ -30,9 +30,9 @@ import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.reflect.ClassFinder;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -47,7 +47,7 @@ import junit.framework.TestSuite;
  * 
  */
 public final class PackageTest extends JMeterTestCaseJUnit3 {
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
     private static final Locale defaultLocale = new Locale("en","");
 
@@ -86,7 +86,7 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
             beanInfo = Introspector.getBeanInfo(testBeanClass);
             bundle = (ResourceBundle) beanInfo.getBeanDescriptor().getValue(GenericTestBeanCustomizer.RESOURCE_BUNDLE);
         } catch (IntrospectionException e) {
-            log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
+            log.error("Can't get beanInfo for {}", testBeanClass, e);
             throw new Error(e.toString(), e); // Programming error. Don't continue.
         }
         if (bundle == null) {
@@ -174,17 +174,17 @@ public final class PackageTest extends JMeterTestCaseJUnit3 {
                 defaultBundle = (ResourceBundle) Introspector.getBeanInfo(testBeanClass).getBeanDescriptor().getValue(
                         GenericTestBeanCustomizer.RESOURCE_BUNDLE);
             } catch (IntrospectionException e) {
-                log.error("Can't get beanInfo for " + testBeanClass.getName(), e);
+                log.error("Can't get beanInfo for {}", testBeanClass, e);
                 throw new Error(e.toString(), e); // Programming error. Don't continue.
             }
 
             if (defaultBundle == null) {
                 if (className.startsWith("org.apache.jmeter.examples.")) {
-                    log.info("No default bundle found for " + className);
+                    log.info("No default bundle found for {}", className);
                     continue;
                 }
                 errorDetected=true;
-                log.error("No default bundle found for " + className + " using " + defaultLocale.toString());
+                log.error("No default bundle found for {} using {}", className, defaultLocale);
                 continue;
             }
 

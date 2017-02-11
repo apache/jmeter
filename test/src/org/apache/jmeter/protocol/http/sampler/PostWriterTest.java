@@ -34,20 +34,21 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.apache.log.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PostWriterTest {
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(PostWriterTest.class);
 
     private static final String UTF_8 = "UTF-8";
     private static final String HTTP_ENCODING = "ISO-8859-1";
@@ -219,13 +220,13 @@ public class PostWriterTest {
         
         String otherEncoding;
         final String fileEncoding = System.getProperty( "file.encoding");// $NON-NLS-1$
-        log.info("file.encoding: "+fileEncoding);
+        log.info("file.encoding: {}", fileEncoding);
         if (UTF_8.equalsIgnoreCase(fileEncoding) || "UTF8".equalsIgnoreCase(fileEncoding)){// $NON-NLS-1$
             otherEncoding="ISO-8859-1"; // $NON-NLS-1$
         } else {
             otherEncoding=UTF_8;
         }
-        log.info("Using other encoding: "+otherEncoding);
+        log.info("Using other encoding: {}", otherEncoding);
         establishConnection();
         sampler.setContentEncoding(otherEncoding);
         // File content is sent as binary, so the content encoding should not change the file data
