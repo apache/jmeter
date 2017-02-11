@@ -94,9 +94,9 @@ function createTable(table, info, formatter, defaultSorts, seriesIndex, headerCr
     tableRef.appendChild(tBody);
 
     var regexp;
-    if(seriesFilter)
+    if(seriesFilter) {
         regexp = new RegExp(seriesFilter, 'i');
-
+	}
     // Populate body with data.items array
     for(var index=0; index < info.items.length; index++){
         var item = info.items[index];
