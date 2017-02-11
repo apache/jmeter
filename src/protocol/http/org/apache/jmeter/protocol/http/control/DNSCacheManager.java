@@ -135,7 +135,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             return result;
         } catch (UnknownHostException uhe) {
             this.initFailed = true;
-            log.warn("Failed to create Extended resolver: " + uhe.getMessage());
+            log.warn("Failed to create Extended resolver: {}", uhe.getMessage(), uhe);
             return null;
         }
     }
