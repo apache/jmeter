@@ -906,9 +906,9 @@ public class JMeterThread implements Runnable, Interruptible {
                 try {
                     TimeUnit.MILLISECONDS.sleep(pause); // delay between checks
                 } catch (InterruptedException e) {
-                    if (running) { 
+                    if (running) { // NOSONAR running may have been changed from another thread 
                         log.warn("{} delay for {} was interrupted. Waited {} milli-seconds out of {}", type, threadName,
-                                (now - start), delay);
+                                now - start, delay);
                     }
                     Thread.currentThread().interrupt();
                     break;
