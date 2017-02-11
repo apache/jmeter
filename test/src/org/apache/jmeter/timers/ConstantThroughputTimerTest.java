@@ -26,13 +26,13 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.ScriptingTestElement;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConstantThroughputTimerTest {
 
-    private static final Logger LOG = LoggingManager.getLoggerForClass();
+    private static final Logger log = LoggerFactory.getLogger(ConstantThroughputTimerTest.class);
 
     @Test
     public void testTimer1() throws Exception {
@@ -84,7 +84,7 @@ public class ConstantThroughputTimerTest {
     public void testTimerBSH() throws Exception {
         if (!BeanShellInterpreter.isInterpreterPresent()){
             final String msg = "BeanShell jar not present, test ignored";
-            LOG.warn(msg);
+            log.warn(msg);
             return;
         }
         BeanShellTimer timer = new BeanShellTimer();
