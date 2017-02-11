@@ -31,13 +31,13 @@ function summaryTableHeader(header) {
     cell.colSpan = 1;
     cell.innerHTML = "Requests";
     newRow.appendChild(cell);
-   
+
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
     cell.colSpan = 3;
     cell.innerHTML = "Executions";
     newRow.appendChild(cell);
-   
+
     cell = document.createElement('th');
     cell.setAttribute("data-sorter", false);
     cell.colSpan = 7;
@@ -61,12 +61,12 @@ function createTable(table, info, formatter, defaultSorts, seriesIndex, headerCr
 
     // Create header and populate it with data.titles array
     var header = tableRef.createTHead();
-    
+
     // Call callback is available
     if(headerCreator) {
         headerCreator(header);
     }
-    
+
     var newRow = header.insertRow(-1);
     for (var index = 0; index < info.titles.length; index++) {
         var cell = document.createElement('th');
@@ -96,7 +96,7 @@ function createTable(table, info, formatter, defaultSorts, seriesIndex, headerCr
     var regexp;
     if(seriesFilter) {
         regexp = new RegExp(seriesFilter, 'i');
-	}
+    }
     // Populate body with data.items array
     for(var index=0; index < info.items.length; index++){
         var item = info.items[index];
@@ -132,7 +132,7 @@ $(document).ready(function() {
         {
             "label" : "KO",
             "data" : data.KoPercent,
-			"color" : "#FF6347"
+            "color" : "#FF6347"
         },
         {
             "label" : "OK",
@@ -207,7 +207,7 @@ $(document).ready(function() {
         }
         return item;
     }, [[0, 0]], 0, summaryTableHeader);
-    
+
     // Create error table
     createTable($("#errorsTable"), ${errorsSummary!"{}"}, function(index, item){
         switch(index){
@@ -218,10 +218,10 @@ $(document).ready(function() {
         }
         return item;
     }, [[1, 1]]);
-    
+
         // Create top5 errors by sampler
     createTable($("#top5ErrorsBySamplerTable"), ${top5ErrorsBySampler!"{}"}, function(index, item){
         return item;
     }, [[0, 0]], 0);
-    
+
 });
