@@ -23,7 +23,9 @@ import java.io.CharArrayWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -136,12 +138,12 @@ public final class CSVSaveService {
      */
     public static void processSamples(String filename, Visualizer visualizer,
             ResultCollector resultCollector) throws IOException {
-        BufferedReader dataReader = null;
         final boolean errorsOnly = resultCollector.isErrorLogging();
         final boolean successOnly = resultCollector.isSuccessOnlyLogging();
-        try {
-            dataReader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(filename), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())));
+        try (InputStream inStream = new FileInputStream(filename);
+                Reader inReader = new InputStreamReader(inStream,
+                        SaveService.getFileEncoding(StandardCharsets.UTF_8.name()));
+                BufferedReader dataReader = new BufferedReader(inReader)) {
             dataReader.mark(400);// Enough to read the header column names
             // Get the first line, and see if it is the header
             String line = dataReader.readLine();
@@ -175,8 +177,6 @@ public final class CSVSaveService {
                     }
                 }
             }
-        } finally {
-            JOrphanUtils.closeQuietly(dataReader);
         }
     }
 
