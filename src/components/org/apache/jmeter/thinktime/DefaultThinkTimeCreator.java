@@ -53,13 +53,6 @@ public class DefaultThinkTimeCreator implements ThinkTimeCreator {
         super();
     }
 
-    /**
-     * 
-     * @param guiPackage {@link GuiPackage}
-     * @param parentNode {@link JMeterTreeNode}
-     * @return array of {@link JMeterTreeNode}
-     * @throws IllegalUserActionException
-     */
     @Override
     public JMeterTreeNode[] createThinkTime(GuiPackage guiPackage, JMeterTreeNode parentNode) 
             throws IllegalUserActionException {
