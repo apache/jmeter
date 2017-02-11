@@ -67,19 +67,17 @@ public class TestSampleResult {
             SampleResult res = new SampleResult(false);
             // Check sample increments OK
             res.sampleStart();
-            Thread.sleep(100);
+            long totalSampleTime = sleep(100); // accumulate the time spent 'sampling'
             res.samplePause();
 
-            Thread.sleep(200);
+            Thread.sleep(200); // This should be ignored 
 
             // Re-increment
             res.sampleResume();
-            Thread.sleep(100);
+            totalSampleTime += sleep(100);
             res.sampleEnd();
             long sampleTime = res.getTime();
-            if ((sampleTime < 180) || (sampleTime > 290)) {
-                fail("Accumulated time (" + sampleTime + ") was not between 180 and 290 ms");
-            }
+            assertEquals("Accumulated sample time", totalSampleTime, sampleTime, 50);
         }
 
         @Test
@@ -87,19 +85,17 @@ public class TestSampleResult {
             SampleResult res = new SampleResult(true);
             // Check sample increments OK
             res.sampleStart();
-            Thread.sleep(100);
+            long totalSampleTime = sleep(100); // accumulate the time spent 'sampling'
             res.samplePause();
 
-            Thread.sleep(200);
+            Thread.sleep(200); // this should be ignored
 
             // Re-increment
             res.sampleResume();
-            Thread.sleep(100);
+            totalSampleTime += sleep(100);
             res.sampleEnd();
             long sampleTime = res.getTime();
-            if ((sampleTime < 180) || (sampleTime > 290)) {
-                fail("Accumulated time (" + sampleTime + ") was not between 180 and 290 ms");
-            }
+            assertEquals("Accumulated sample time", totalSampleTime, sampleTime, 50);
         }
 
         private LogRecordingDelegatingLogger recordLogger;
@@ -340,6 +336,14 @@ public class TestSampleResult {
             assertEquals("aBCd",res.getDataEncodingWithDefault());
             assertEquals("aBCd",res.getDataEncodingNoDefault());
             assertEquals("text",res.getDataType());         
+        }
+
+        // sleep and return how long we actually slept
+        // may be rather longer if the system is busy
+        private long sleep(long ms) throws InterruptedException {
+            long start = System.currentTimeMillis();
+            Thread.sleep(ms);
+            return System.currentTimeMillis() - start;
         }
 }
 
