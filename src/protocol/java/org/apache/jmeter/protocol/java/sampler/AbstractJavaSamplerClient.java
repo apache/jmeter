@@ -20,7 +20,7 @@ package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -51,9 +51,9 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AbstractJavaSamplerClient.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractJavaSamplerClient.class);
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+    private static final org.apache.log.Logger oldLogger = LoggingManager.getLoggerForClass();
 
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
     @Override
@@ -82,18 +82,18 @@ public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
      * @deprecated Will be removed in 3.3, use {@link AbstractJavaSamplerClient#getNewLogger()} 
      */
     @Deprecated
-    protected Logger getLogger() {
-        return log;
+    protected org.apache.log.Logger getLogger() {
+        return oldLogger;
     }
-    
+
     /**
      * Get a Logger instance which can be used by subclasses to log information.
      * This is the same Logger which is used by the base JavaSampler classes
      * (jmeter.protocol.java).
      *
-     * @return {@link org.slf4j.Logger}  instance which can be used for logging
+     * @return {@link Logger}  instance which can be used for logging
      */
-    protected org.slf4j.Logger getNewLogger() {
-        return logger;
+    protected Logger getNewLogger() {
+        return log;
     }
 }
