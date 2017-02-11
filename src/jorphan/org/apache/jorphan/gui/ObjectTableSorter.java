@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 /**
  * Implementation of a {@link RowSorter} for {@link ObjectTableModel}
  * @since 3.2
@@ -143,10 +145,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      */
     public ObjectTableSorter setValueComparator(int column, Comparator<?> comparator) {
         invalidate();
-        if (comparator == null) {
-            comparator = getDefaultComparator(column);
-        }
-        valueComparators[column] = comparator;
+        valueComparators[column] = ObjectUtils.defaultIfNull(comparator, getDefaultComparator(column));
         return this;
     }
 
@@ -182,10 +181,7 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
      */
     public ObjectTableSorter setFallbackComparator(Comparator<Row> comparator) {
         invalidate();
-        if (comparator == null) {
-            comparator = Comparator.comparingInt(Row::getIndex);
-        }
-        fallbackComparator = comparator;
+        fallbackComparator = ObjectUtils.defaultIfNull(comparator, Comparator.comparingInt(Row::getIndex));
         return this;
     }
 
@@ -247,9 +243,10 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
         invalidate();
         if (sortkey != null) {
             int column = sortkey.getColumn();
-            Comparator<?> comparator = valueComparators[column];
-            if (comparator == null) {
-                throw new IllegalArgumentException(format("Can't sort column %s, it is mapped to type %s and this one have no natural order. So an explicit one must be specified", column, model.getColumnClass(column)));
+            if (valueComparators[column] == null) {
+                throw new IllegalArgumentException(
+                        format("Can't sort column %s, it is mapped to type %s and this one have no natural order. So an explicit one must be specified",
+                                column, model.getColumnClass(column)));
             }
         }
         this.sortkey    = sortkey;
@@ -332,12 +329,12 @@ public class ObjectTableSorter extends RowSorter<ObjectTableModel> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Comparator<Row> getComparatorFromSortKey(SortKey sortkey) {
-        Comparator comparator = getValueComparator(sortkey.getColumn());
+        Comparator comp = getValueComparator(sortkey.getColumn());
         if (sortkey.getSortOrder() == SortOrder.DESCENDING) {
-            comparator = comparator.reversed();
+            comp = comp.reversed();
         }
         Function<Row,Object> getValueAt = (Row row) -> row.getValueAt(sortkey.getColumn());
-        return Comparator.comparing(getValueAt, comparator);
+        return Comparator.comparing(getValueAt, comp);
     }
 
     /**
