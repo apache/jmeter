@@ -402,109 +402,26 @@ public final class CSVSaveService {
         StringBuilder text = new StringBuilder();
         String delim = saveConfig.getDelimiter();
 
-        if (saveConfig.saveTimestamp()) {
-            text.append(TIME_STAMP);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveTime()) {
-            text.append(CSV_ELAPSED);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveLabel()) {
-            text.append(LABEL);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveCode()) {
-            text.append(RESPONSE_CODE);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveMessage()) {
-            text.append(RESPONSE_MESSAGE);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveThreadName()) {
-            text.append(THREAD_NAME);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveDataType()) {
-            text.append(DATA_TYPE);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveSuccess()) {
-            text.append(SUCCESSFUL);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveAssertionResultsFailureMessage()) {
-            text.append(FAILURE_MESSAGE);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveBytes()) {
-            text.append(CSV_BYTES);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveSentBytes()) {
-            text.append(CSV_SENT_BYTES);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveThreadCounts()) {
-            text.append(CSV_THREAD_COUNT1);
-            text.append(delim);
-            text.append(CSV_THREAD_COUNT2);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveUrl()) {
-            text.append(CSV_URL);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveFileName()) {
-            text.append(CSV_FILENAME);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveLatency()) {
-            text.append(CSV_LATENCY);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveEncoding()) {
-            text.append(CSV_ENCODING);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveSampleCount()) {
-            text.append(CSV_SAMPLE_COUNT);
-            text.append(delim);
-            text.append(CSV_ERROR_COUNT);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveHostname()) {
-            text.append(CSV_HOSTNAME);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveIdleTime()) {
-            text.append(CSV_IDLETIME);
-            text.append(delim);
-        }
-
-        if (saveConfig.saveConnectTime()) {
-            text.append(CSV_CONNECT_TIME);
-            text.append(delim);
-        }
+        appendFields(saveConfig.saveTimestamp(), text, delim, TIME_STAMP);
+        appendFields(saveConfig.saveTime(), text, delim, CSV_ELAPSED);
+        appendFields(saveConfig.saveLabel(), text, delim, LABEL);
+        appendFields(saveConfig.saveCode(), text, delim, RESPONSE_CODE);
+        appendFields(saveConfig.saveMessage(), text, delim, RESPONSE_MESSAGE);
+        appendFields(saveConfig.saveThreadName(), text, delim, THREAD_NAME);
+        appendFields(saveConfig.saveDataType(), text, delim, DATA_TYPE);
+        appendFields(saveConfig.saveSuccess(), text, delim, SUCCESSFUL);
+        appendFields(saveConfig.saveAssertionResultsFailureMessage(), text, delim, FAILURE_MESSAGE);
+        appendFields(saveConfig.saveBytes(), text, delim, CSV_BYTES);
+        appendFields(saveConfig.saveSentBytes(), text, delim, CSV_SENT_BYTES);
+        appendFields(saveConfig.saveThreadCounts(), text, delim, CSV_THREAD_COUNT1, CSV_THREAD_COUNT2);
+        appendFields(saveConfig.saveUrl(), text, delim, CSV_URL);
+        appendFields(saveConfig.saveFileName(), text, delim, CSV_FILENAME);
+        appendFields(saveConfig.saveLatency(), text, delim, CSV_LATENCY);
+        appendFields(saveConfig.saveEncoding(), text, delim, CSV_ENCODING);
+        appendFields(saveConfig.saveSampleCount(), text, delim, CSV_SAMPLE_COUNT, CSV_ERROR_COUNT);
+        appendFields(saveConfig.saveHostname(), text, delim, CSV_HOSTNAME);
+        appendFields(saveConfig.saveIdleTime(), text, delim, CSV_IDLETIME);
+        appendFields(saveConfig.saveConnectTime(), text, delim, CSV_CONNECT_TIME);
 
         for (int i = 0; i < SampleEvent.getVarCount(); i++) {
             text.append(VARIABLE_NAME_QUOTE_CHAR);
@@ -513,7 +430,7 @@ public final class CSVSaveService {
             text.append(delim);
         }
 
-        String resultString = null;
+        String resultString;
         int size = text.length();
         int delSize = delim.length();
 
@@ -524,6 +441,15 @@ public final class CSVSaveService {
             resultString = text.toString();
         }
         return resultString;
+    }
+
+    private static void appendFields(final boolean condition, StringBuilder textBuffer, String delim, String... fieldNames) {
+        if (condition) {
+            for (String name: fieldNames) {
+                textBuffer.append(name);
+                textBuffer.append(delim);
+            }
+        }
     }
 
     // Map header names to set() methods
