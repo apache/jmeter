@@ -37,12 +37,12 @@ This short tutorial explains how to use multiple systems to perform stress testi
 </p>
 
 <ul>
-  <li>the firewalls on the systems are turned off.</li>
+  <li>the firewalls on the systems are turned off or correct ports are opened.</li>
   <li>all the clients are on the same subnet.</li>
   <li>the server is in the same subnet, if <code>192.x.x.x</code> or <code>10.x.x.x</code> IP addresses are used.
       If the server doesn't use <code>192.xx</code> or <code>10.xx</code> IP address, there shouldn't be any problems.</li>
   <li>Make sure JMeter can access the server.</li>
-  <li>Make sure you use the same version of JMeter on all the systems. Mixing versions may not work correctly.</li>
+  <li>Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly.</li>
 </ul>
 
 <p>
@@ -50,7 +50,9 @@ Once you've made sure the systems are ready, it's time to setup remote testing. 
 have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
 </p>
 
-<figure width="610" height="462" image="distributed-jmeter.svg">One master controlls multiple slaves</figure>
+<note>In this tutorial we use GUI Mode just for demonstration. In real life you should use NON GUI mode to start your load test</note>
+
+<figure width="610" height="462" image="distributed-jmeter.svg">One master controls multiple slaves</figure>
 
 <subsection name="&sect-num;.1 Terminology" anchor="terminology">
 
@@ -74,19 +76,6 @@ Before we dive into the step-by-step instructions, it's a good idea to define th
 <ol>
   <li>On the slave systems, go to <code>jmeter/bin</code> directory and execute
      <code>jmeter-server.bat</code> (<code>jmeter-server</code> on unix).
-     <note> On windows, you should see a dos window appear with
-     <code>jre\[version]\bin\rmiregistry.exe</code>.
-     If this doesn't happen, it means either the environment settings are not right, or
-     there are multiple JRE installed on the system. Note: <code>[version]</code> would
-     be the JRE version installed on the system.
-     <ol>
-       <li>Open <code>jmeter-server.bat</code> in a text editor</li>
-       <li>go to line <code>44</code> and find <code>:setCP</code></li>
-       <li>edit <code>START rmiregistry</code> to the full path. Example:
-           <source>START C:\&lt;JAVA_HOME&gt;\jre\bin\rmiregistry</source>
-       </li>
-    </ol>
-    </note>
   </li>
   <li>On master system acting as the console, open windows explorer and go to
       <code>jmeter/bin</code> directory</li>
@@ -112,7 +101,8 @@ the slave systems are working, open <code>jmeter.log</code> in your editor. You 
 </p>
 
 <source>
-Jmeter.engine.RemoteJMeterEngineImpl:  Starting backing engine
+Writing log file to: /XXXX/XXXXX/bin/jmeter-server.log
+Created remote object: UnicastServerRef [liveRef: [endpoint:[192.X.X.X:XXXXX](local),objID:[-6a665beb:15a2c8b9419:-7fff, 3180474504933847586]]]
 </source>
 
 <p>
@@ -154,14 +144,9 @@ There are some basic limitations for distributed testing. Here's the list of the
 
 <ol>
   <li>RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy.</li>
-  <li>Since JMeter sends all the test results to the controlling console, it is easy to saturate
-      the network IO. It is a good idea to use the simple data writer to save the results and view the file
-      later with one of the graph listeners.</li>
-  <li>Unless the server is a large multi processor system, in most cases 1-2 clients is sufficient to overwhelm the server.</li>
-  <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 300-600 threads depending on the type of test.
-      (The exception is the webservices). XML processing is CPU intensive and will rapidly consume all the CPU cycles.
-      As a general rule, the performance of XML centric applications will perform 4-10 times slower than applications
-      using binary protocols.</li>
+  <li>Since version 2.9, JMeter sends all the test results stripping Response data to the controlling console, this allows
+      us to reduce impact on network IO. Ensure you monitor your network traffic so that this trafic does not incur contention</li>
+  <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 1000-2000 threads depending on the type of test.</li>
 </ol>
 
 </subsection>
@@ -184,10 +169,11 @@ There are some basic limitations for distributed testing. Here's the list of the
 In some cases, the firewall may still be blocking RMI traffic.
 </p>
 
-<h3>Symantec Anti Virus and Firewall</h3>
+<h3>Anti Virus and Firewall</h3>
 
+<note>Antivirus should be stopped during a Load Test as it can drastically impact timings leading to wrong results.</note>
 <p>
-In some cases, Symantec firewall needs to be stopped from windows services.
+Firewall needs to be stopped from windows services or at least some ports need to be opened.
 </p>
 
 <ol>
@@ -210,14 +196,14 @@ In some cases, Symantec firewall needs to be stopped from windows services.
 <h3>Linux</h3>
 
 <p>
-On SUSE Linux, iptables is turned on by default. For instructions, please refer to the
+On Linux, iptables might be turned on by default. For instructions, please refer to the
   <a href="remote-test.html">Remote Testing in the user manual</a>
 </p>
 
 <p>
 On RedHat (or derivatives), iptables is turned on by default. Execute
 <source>service iptables stop</source>
-to stop the Linux firewall.
+to stop the Linux firewall or ensure you open the correct ports.
 </p>
 
 </subsection>
