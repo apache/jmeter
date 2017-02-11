@@ -3640,11 +3640,15 @@ By default, a Graphite implementation is provided.
 <component name="DNS Cache Manager" index="&sect-num;.4.3"  width="712" height="387" screenshot="dns-cache-manager.png">
     <note>DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
     </note>
-    <note>DNS Cache Manager working only with the HTTP request using HTTPClient4 implementation.</note>
+    <note>DNS Cache Manager works only with HTTP requests using HTTPClient4 implementation.</note>
     <description><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc.), 
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
-    only one server from the cluster receives load. DNS Cache Manager resolves name for each thread separately each iteration and
-    saves results of resolving to its internal DNS Cache, which independent from both JVM and OS DNS caches.
+    only one server from the cluster receives load. DNS Cache Manager resolves names for each thread separately each iteration and
+    saves results of resolving to its internal DNS Cache, which is independent from both JVM and OS DNS caches.
+    </p>
+    <p>
+    A mapping for static hosts can be used to simulate something like <code>/etc/hosts</code> file.
+    These entries will be preferred over the custom resolver.
     </p>
     </description>
     <properties>
@@ -3653,10 +3657,13 @@ By default, a Graphite implementation is provided.
     <property name="Use system DNS resolver" required="N/A">System DNS resolver will be used. For correct work edit
        <code>$JAVA_HOME/jre/lib/security/java.security</code> and add <code>networkaddress.cache.ttl=0</code> 
     </property>
-    <property name="Use custom DNS resolver" required="N/A">Custom DNS resolver(from dnsjava library) will be used.</property>
+    <property name="Use custom DNS resolver" required="N/A">Custom DNS resolver (from dnsjava library) will be used.</property>
     <property name="Hostname or IP address" required="No">List of DNS servers to use. If empty, network configuration DNS will used.</property>
     <property name="Add Button" required="N/A">Add an entry to the DNS servers table.</property>
     <property name="Delete Button" required="N/A">Delete the currently selected table entry.</property>
+    <property name="Host and Hostname or IP address" required="No">Mapping of hostnames to a static host entry which will be resolved using the custom DNS resolver.</property>
+    <property name="Add static host Button" required="N/A">Add an entry to the static hosts table.</property>
+    <property name="Delete static host Button" required="N/A">Delete the currently selected static host in the table.</property>
     </properties>
 </component>
 
