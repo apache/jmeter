@@ -173,7 +173,7 @@ public final class NewDriver {
      * Add a URL to the loader classpath only; does not update the system classpath.
      *
      * @param path to be added.
-     * @throws MalformedURLException 
+     * @throws MalformedURLException when <code>path</code> points to an ivalid url
      */
     public static void addURL(String path) throws MalformedURLException {
         File furl = new File(path);
