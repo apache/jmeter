@@ -26,7 +26,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.LockSupport;
 
 import org.apache.jmeter.config.Arguments;
@@ -57,8 +57,8 @@ public class BackendListener extends AbstractTestElement
     private static final class ListenerClientData {
         private BackendListenerClient client;
         private BlockingQueue<SampleResult> queue;
-        private AtomicLong queueWaits; // how many times we had to wait to queue a SampleResult        
-        private AtomicLong queueWaitTime; // how long we had to wait (nanoSeconds)
+        private LongAdder queueWaits; // how many times we had to wait to queue a SampleResult        
+        private LongAdder queueWaitTime; // how long we had to wait (nanoSeconds)
         // @GuardedBy("LOCK")
         private int instanceCount; // number of active tests
         private CountDownLatch latch;
@@ -181,11 +181,11 @@ public class BackendListener extends AbstractTestElement
         }
         try {
             if (!listenerClientData.queue.offer(sr)){ // we failed to add the element first time
-                listenerClientData.queueWaits.incrementAndGet();
+                listenerClientData.queueWaits.add(1L);
                 long t1 = System.nanoTime();
                 listenerClientData.queue.put(sr);
                 long t2 = System.nanoTime();
-                listenerClientData.queueWaitTime.addAndGet(t2-t1);
+                listenerClientData.queueWaitTime.add(t2-t1);
             }
         } catch (Exception err) {
             log.error("sampleOccurred, failed to queue the sample", err);
@@ -331,8 +331,8 @@ public class BackendListener extends AbstractTestElement
 
                 listenerClientData = new ListenerClientData();
                 listenerClientData.queue = new ArrayBlockingQueue<>(queueSize);
-                listenerClientData.queueWaits = new AtomicLong(0L);
-                listenerClientData.queueWaitTime = new AtomicLong(0L);
+                listenerClientData.queueWaits = new LongAdder();
+                listenerClientData.queueWaitTime = new LongAdder();
                 listenerClientData.latch = new CountDownLatch(1);
                 listenerClientData.client = backendListenerClient;
                 if (log.isInfoEnabled()) {
@@ -382,7 +382,7 @@ public class BackendListener extends AbstractTestElement
         } catch (Exception ex) {
             log.warn("testEnded() with exception: {}", ex, ex);
         }
-        if (listenerClientData.queueWaits.get() > 0) {
+        if (listenerClientData.queueWaits.longValue() > 0) {
             log.warn(
                     "QueueWaits: {}; QueueWaitTime: {} (nanoseconds), you may need to increase queue capacity, see property 'backend_queue_capacity'",
                     listenerClientData.queueWaits, listenerClientData.queueWaitTime);
