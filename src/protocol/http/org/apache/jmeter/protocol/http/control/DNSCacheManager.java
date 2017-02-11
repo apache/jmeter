@@ -155,8 +155,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         // https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html
         if (result != null || cache.containsKey(host)) {
             if (log.isDebugEnabled()) {
-                log.debug("Cache hit thr#" + JMeterContextService.getContext().getThreadNum() + ": " + host + "=>"
-                        + Arrays.toString(result));
+                log.debug("Cache hit thr#{}: {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                        Arrays.toString(result));
             }
             return result;
         } else if (isStaticHost(host)) {
@@ -170,8 +170,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         } else {
             InetAddress[] addresses = requestLookup(host);
             if (log.isDebugEnabled()) {
-                log.debug("Cache miss thr#" + JMeterContextService.getContext().getThreadNum() + ": " + host + "=>"
-                        + Arrays.toString(addresses));
+                log.debug("Cache miss thr#{}: {} => {}", JMeterContextService.getContext().getThreadNum(), host,
+                        Arrays.toString(addresses));
             }
             cache.put(host, addresses);
             return addresses;
@@ -266,8 +266,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         }
         addresses = systemDefaultDnsResolver.resolve(host);
         if (log.isDebugEnabled()) {
-            log.debug("Cache miss: " + host + " Thread #" + JMeterContextService.getContext().getThreadNum()
-                    + ", resolved with system resolver into " + Arrays.toString(addresses));
+            log.debug("Cache miss: {} Thread #{}, resolved with system resolver into {}", host,
+                    JMeterContextService.getContext().getThreadNum(), Arrays.toString(addresses));
         }
         return addresses;
     }
