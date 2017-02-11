@@ -42,9 +42,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Processes sample events. <br/>
+ * Processes sample events. <br>
  * The current implementation processes events in the calling thread
- * using {@link #notifyListeners(SampleEvent, List)} <br/>
+ * using {@link #notifyListeners(SampleEvent, List)} <br>
  * Thread safe class 
  */
 public class ListenerNotifier {
