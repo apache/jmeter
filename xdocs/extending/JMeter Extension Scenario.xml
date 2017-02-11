@@ -167,22 +167,17 @@ extension.
 
 <H2><A name="tips">Tips</A></H2>
 <OL>
-  <LI>You might consider using log4j as your logging utility since that's what
-  JMeter uses. It's helpful for figuring out what's going on. Not all JMeter
-  classes have been fully outfitted with logging statements. If things get
-  nasty, you might have to add your own to JMeter and recompile it to see what
-  is happening.
-  <P>If you do decide to use log4j and you set the priority (or level, as it
+  <LI>You might consider using slf4j as your logging utility since that's what
+  JMeter uses. It's helpful for figuring out what's going on. 
+  <P>If you do decide to use slf4j and you set the priority (or level, as it
   will soon be called) to debug, you will probably see way more than you need to
-  know. You can filter the JMeter stuff by making the following modifications to
-  <TT>log4j.conf</TT> in the JMeter's <TT>bin</TT> directory. The <B>bold</B>
-  text is added/modified <PRE>    # Set the appenders for the categories
-    log4j.rootCategory=<B>info</B>,Root_Appender
-    <B>log4j.category.com.myfirm.jmeter=debug,</B>
-    log4j.category.org.apache.jmeter.control=debug
-    log4j.category.org.apache.jmeter.gui.tree.NonGuiTree=INFO,File_Appender
-    </PRE>Note that the root (default) debugging has been set to <B>info</B>.
-  This eliminates most log4j output from JMeter. The new line specifies the name
+  know. You can filter the JMeter stuff by adding  to
+  <TT>log4j2.xml</TT> in the JMeter's <TT>bin</TT> directory.   
+  <source>
+    <Logger name="com.myfirm.jmeter" level="debug" />
+  </source>
+  Note that the root (default) debugging has been set to <B>info</B>.
+  This eliminates most slf4j output from JMeter. The new line specifies the name
   of the package containing JMeter extensions. (<TT>com.yourfirm.jmeter</TT>) in
   this example. Note that it is not necessary to specify a particular class
   name. Also, note that <B>no</B> appenders are specified - just the trailing
