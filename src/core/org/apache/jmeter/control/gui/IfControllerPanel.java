@@ -174,6 +174,7 @@ public class IfControllerPanel extends AbstractControllerGui {
 
         // TEXT FIELD
         theCondition = new JTextField(""); // $NON-NLS-1$
+        theCondition.setToolTipText(JMeterUtils.getResString("if_controller_performance")); // $NON-NLS-1$
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(theCondition, BorderLayout.CENTER);
        
@@ -184,6 +185,7 @@ public class IfControllerPanel extends AbstractControllerGui {
 
         // Use expression instead of Javascript
         useExpression = new JCheckBox(JMeterUtils.getResString("if_controller_expression")); // $NON-NLS-1$
+        useExpression.setToolTipText(JMeterUtils.getResString("if_controller_performance")); // $NON-NLS-1$
         optionPanel.add(useExpression);
 
         // Evaluate All checkbox
