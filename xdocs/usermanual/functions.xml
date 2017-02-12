@@ -127,7 +127,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__groovy">groovy</a></td><td>run a Groovy script</td><td>3.1</td></tr>
         <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
-        <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Mozilla Rhino)</td><td>1.9</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Nashorn)</td><td>1.9</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
         <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
         <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
@@ -561,7 +561,12 @@ The javaScript function executes a piece of JavaScript (not Java!) code and retu
 The JMeter Javascript function calls a standalone JavaScript interpreter.
 Javascript is used as a scripting language, so you can do calculations etc.</p>
 <p>
-For details of the language, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
+<note>javaScript is not the best scripting language for performances in JMeter. If your plan requires a high number of threads
+it is advised to use <code>__jexl3</code> or <code>__groovy</code> functions.
+</note>
+
+For Nashorn Engine, please see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/">Java Platform, Standard Edition Nashorn User's Guide</a>.<br/>
+For Rhino engine, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
 </p>
 <p>
 The following variables are made available to the script:
@@ -577,9 +582,9 @@ The following variables are made available to the script:
 </ul>
 <p>
 Rhinoscript allows access to static methods via its Packages object.
-See the <a href="http://www.mozilla.org/rhino/ScriptingJava.html">Scripting Java</a> documentation.
+See the <a href="https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide">Scripting Java</a> documentation.
 For example one can access the JMeterContextService static methods thus:
-<code>Packages.org.apache.jmeter.threads.JMeterContextService.getTotalThreads()</code>
+<code>Java.type("org.apache.jmeter.threads.JMeterContextService").getTotalThreads()</code>
 </p>
 <note>
 JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
