@@ -2300,6 +2300,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
     For example, <code>${FOUND}</code> or <code>${__jexl3(${VAR} &gt; 100)}</code>.
     Unlike the Javascript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
+    <note>Checking this and using <code>__jexl3</code> or <code>__groovy</code> function in Condition is advised for performances</note>
     </property>
     <property name="Evaluate for all children" required="Yes">
     Should condition be evaluated for all children?
