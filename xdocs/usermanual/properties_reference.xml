@@ -401,35 +401,34 @@ JMETER-SERVER</source>
     Commons HttpClient Logging information can be found at <a href="http://hc.apache.org/httpclient-3.x/logging.html" target="_blank" >Logging</a>
     <note>Note that full category names are used, i.e. must include the <code>org.apache</code>.</note>
     Info level produces no output.<br/>
-    Set debug level:
-    <source>log_level.org.apache.commons.httpclient=debug</source>
+    In log4j2.xml, set debug level:
+    <source>&lt;Logger name="org.apache.commons.httpclient" level="debug" /&gt;</source>
     Might be useful:
-    <source>log_level.org.apache.commons.httpclient.Authenticator=trace</source> 
+    <source>&lt;Logger name="org.apache.commons.httpclient.Authenticator" level="trace" /&gt;</source> 
     Show headers only
-    <source>log_level.httpclient.wire.header=debug</source>
+    <source>&lt;Logger name="org.apache.commons.httpclient.wire.header" level="debug" /&gt;</source>
     Full wire debug produces a lot of output; consider using separate file:
-    <source>
-log_level.httpclient.wire=debug
-log_file.httpclient=httpclient.log
-</source>
+    <source>&lt;Logger name="org.apache.commons.httpclient.wire" level="debug" /&gt;</source>
 </description>
 </section>
 <section name="&sect-num;.13 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
     Enable header wire and context logging - Best for Debugging
+	In log4j2.xml, set:
 <source>
-log_level.org.apache.http=DEBUG
-log_level.org.apache.http.wire=ERROR
+&lt;Logger name="org.apache.http" level="debug" /&gt;
+&lt;Logger name="org.apache.http.wire" level="error" /&gt;
 </source>
     Enable full wire and context logging
-    <source>log_level.org.apache.http=DEBUG</source>
+	In log4j2.xml, set:
+    <source>&lt;Logger name="org.apache.http" level="debug" /&gt;</source>
     Enable context logging for connection management
-    <source>log_level.org.apache.http.impl.conn=DEBUG</source>
+    <source>&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;</source>
     Enable context logging for connection management / request execution
 <source>
-log_level.org.apache.http.impl.conn=DEBUG
-log_level.org.apache.http.impl.client=DEBUG
-log_level.org.apache.http.client=DEBUG
+&lt;Logger name="org.apache.http.impl.conn" level="debug" /&gt;
+&lt;Logger name="org.apache.http.impl.client" level="debug" /&gt;
+&lt;Logger name="org.apache.http.client" level="debug" /&gt;
 </source>
 </description>
 </section>
@@ -439,6 +438,10 @@ log_level.org.apache.http.client=DEBUG
     Define a properties file for overriding Apache HttpClient parameters.<br/>
     Uncomment this line if you put anything in <code>hc.parameters</code> file.<br/>
     Defaults to: <code>hc.parameters</code>
+</property>
+<property name="httpclient4.auth.preemptive">
+    Preemptively send Authorization Header when BASIC auth is used
+    Defaults to: <code>true</code>
 </property>
 <property name="httpclient4.retrycount">
     Number of retries to attempt.<br/>
@@ -1038,11 +1041,32 @@ log_level.org.apache.http.client=DEBUG
 </section>
 <section name="&sect-num;.30 BackendListener - configuration" anchor="backend">
 <properties>
+<property name="backend_graphite.send_interval">
+    Send interval in seconds.<br/>
+    Defaults to: <code>1</code> second
+</property>
+<property name="backend_influxdb.send_interval">
+    Send interval in seconds.<br/>
+    Defaults to: <code>5</code> seconds
+</property>
+<property name="backend_influxdb.connection_timeout">
+    InfluxDB connection timeout.<br/>
+    Defaults to: <code>1000</code> millis
+</property>
+<property name="backend_influxdb.socket_timeout">
+    InfluxDB socket read timeout.<br/>
+    Defaults to: <code>3000</code> millis
+</property>
+<property name="backend_influxdb.connection_request_timeout">
+    InfluxDB timeout to get a connection.<br/>
+    Defaults to: <code>100</code> millis
+</property>
 <property name="backend_metrics_window">
     Backend metrics sliding window size for <code>Percentiles</code>, <code>Min</code>
     and <code>Max</code>.<br/>
     Defaults to: <code>100</code>
 </property>
+
 <property name="backend_metrics_window_mode">
     Backend metrics window mode.
     Possible values:
@@ -1287,7 +1311,7 @@ log_level.org.apache.http.client=DEBUG
 <property name="javascript.use_rhino">
     Ability to switch to Rhino as default Javascript Engine used by <code>IfController</code>
     and <code>__javaScript</code> function.<br/>
-    <note>JMeter will prefer to use Nashorn since 3.2 version.
+    <note>JMeter uses Nashorn since 3.2 version.
     If you want to use Rhino, set this value to <code>true</code></note>
     Defaults to: <code>false</code>
 </property>
@@ -1365,6 +1389,10 @@ log_level.org.apache.http.client=DEBUG
     Set this to <code>false</code> to disable the use of JSyntaxTextArea
     for the Console Logger panel.<br/>
     Defaults to: <code>true</code>
+</property>
+<property name="view.results.tree.update_period">
+    Period after which the results tree should be refreshed<br/>
+    Defaults to: <code>500</code> millis
 </property>
 <property name="view.results.tree.max_results">
     Maximum number of main samples, that should be stored and displayed.<br/>
