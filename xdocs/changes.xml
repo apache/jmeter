@@ -102,6 +102,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>JMeter now uses by default Oracle Nashorn engine instead of Mozilla Rhino for better performances. This should not have an impact unless
     you use some advanced features. You can revert back to Rhino by settings property <code>javascript.use_rhino=true</code>. 
     You can read this <a href="https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide">migration guide</a> for more details on Nashorn. See <bugzilla>60672</bugzilla></li>
+    <li><bug>60729</bug>The Random Variable Config Element now allows minimum==maximum. Previous versions logged an error when minimum==maximum and did not set the configured variable.</li>
 </ul>
 
 <h3>Deprecated and removed elements or functions</h3>
@@ -252,6 +253,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60438</bug><pr>235</pr>Clear old variables before extracting new ones in JSON Extractor.
     Based on a patch by Qi Chen (qi.chensh at ele.me)</li>
     <li><bug>60607</bug>DNS Cache Manager configuration is ignored</li>
+    <li><bug>60729</bug>The Random Variable Config Element should allow minimum==maximum</li>
 </ul>
 
 <h3>Functions</h3>
