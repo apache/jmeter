@@ -297,9 +297,4 @@ public class Arguments extends ConfigTestElement implements Serializable, Iterab
 
         return argument;
     }
-    public static void main(String [] a){
-        Arguments args = new Arguments();
-        args.addArgument("a","b","c","d");
-        System.out.println(args);
-    }
 }
