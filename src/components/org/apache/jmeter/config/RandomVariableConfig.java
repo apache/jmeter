@@ -91,8 +91,8 @@ public class RandomVariableConfig extends ConfigTestElement
         final String maxAsString = getMaximumValue();
         long maximum = NumberUtils.toLong(maxAsString);
         long rangeL=maximum-minimum+1; // This can overflow
-        if (minimum >= maximum){
-            log.error("maximum({}) must be > minimum({})", maxAsString, minAsString);
+        if (minimum > maximum){
+            log.error("maximum({}) must be >= minimum({})", maxAsString, minAsString);
             range=0;// This is used as an error indicator
             return;
         }
