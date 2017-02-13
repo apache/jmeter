@@ -506,9 +506,4 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
         log.debug("End of template processing");
 
     }
-
-    public static void main(String[] args) {
-        Pattern filterPattern = Pattern.compile("((^EnleverArticle)|(^ModifierQuantite)|(^VoirPanier)|(^AjoutPanier)|(^ChoixMagasin)|(^ChangerMagasin)|(^VoirPanier)|(^ClickProduit)|(^ClicTriPrix)|(^ClickPagination)|(^AjoutProduitPourComparison)|(^ClickComparer)|(^ChoixCategorie)|(^ChoixSousCategorie)|(^ClickFiltrer)|(^RechercheFullText)|(^Autocomplete)|(^Rechercher)|(^HP_Mag)|(^ChoixMag)|(^HP))(-success|-failure)?");
-        System.out.println(filterPattern.matcher("ChoixSousCategorie").matches());
-    }
 }
