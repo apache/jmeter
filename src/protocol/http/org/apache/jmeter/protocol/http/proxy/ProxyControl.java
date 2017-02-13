@@ -28,6 +28,8 @@ import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,12 +97,12 @@ import org.apache.jmeter.timers.Timer;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.exec.KeyToolUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.slf4j.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -522,7 +524,7 @@ public class ProxyControl extends GenericController {
                 GuiPackage.getInstance().register(server);
             }
         } catch (IOException e) {
-            log.error("Could not create Proxy daemon", e);
+            log.error("Could not create HTTP(S) Test Script Recorder Proxy daemon", e);
             throw e;
         }
     }
@@ -1470,20 +1472,28 @@ public class ProxyControl extends GenericController {
             } catch (IOException e) { // store is faulty, we need to recreate it
                 keyStore = null; // if cert is not valid, flag up to recreate it
                 if (e.getCause() instanceof UnrecoverableKeyException) {
-                    log.warn("Could not read key store " + e.getMessage() + "; cause: " + e.getCause().getMessage(), e);
+                    log.warn("Could not read key store " + e.getMessage() + "; cause: " + e.getCause().getMessage()
+                            + ", a new one will be created, ensure you install it in browser", e);
                 } else {
-                    log.warn("Could not open/read key store " + e.getMessage(), e); // message includes the file name
+                    log.warn("Could not open/read key store " + e.getMessage()
+                        + ", a new one will be created, ensure you install it in browser", e); // message includes the file name
                 }
+            } catch (CertificateExpiredException e) {
+                keyStore = null; // if cert is not valid, flag up to recreate it
+                log.warn("Existing ROOT Certificate has expired, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
+            } catch (CertificateNotYetValidException e) {
+                keyStore = null; // if cert is not valid, flag up to recreate it
+                log.warn("Existing ROOT Certificate is not yet valid, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
             } catch (GeneralSecurityException e) {
                 keyStore = null; // if cert is not valid, flag up to recreate it
-                log.warn("Problem reading key store: " + e.getMessage(), e);
+                log.warn("Problem reading key store, a new one will be created, ensure you install it in browser, message: " + e.getMessage(), e);
             }
         }
         if (keyStore == null) { // no existing file or not valid
             storePassword = RandomStringUtils.randomAlphanumeric(20); // Alphanum to avoid issues with command-line quoting
             keyPassword = storePassword; // we use same password for both
             setPassword(storePassword);
-            log.info("Creating Proxy CA in " + CERT_PATH_ABS);
+            log.info("Creating HTTP(S) Test Script Recorder Root CA in " + CERT_PATH_ABS+", ensure you install certificate in your Browser for recording");
             KeyToolUtils.generateProxyCA(CERT_PATH, storePassword, CERT_VALIDITY);
             log.info("Created keystore in " + CERT_PATH_ABS);
             keyStore = getKeyStore(storePassword.toCharArray()); // This should now work
