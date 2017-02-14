@@ -106,7 +106,7 @@ Java If once 1,,,Thread Group 1-2,text,false,,0,1,1,null,,1,1
 Java If once 2,200,OK,Thread Group 1-2,text,true,,0,1,1,null,,1,0
 Java If all 1,,,Thread Group 1-2,text,false,,0,1,1,null,,1,1
 Java OK,200,OK,Thread Group 1-2,text,true,,0,1,1,null,,1,0
-"HTTP ""Request,",200,OK,Thread Group 2-1,text,true,,132799,1,1,file:testfiles/BatchTestLocal.jmx,,1,0
+"HTTP ""Request,",200,OK,Thread Group 2-1,text,true,,134648,1,1,file:testfiles/BatchTestLocal.jmx,,1,0
 1 1,200,OK,Thread Group 2-1,text,true,,0,1,1,null,,1,0
 2 2,200,OK,Thread Group 2-1,text,true,,0,1,1,null,,1,0
 3 3,200,OK,Thread Group 2-1,text,true,,0,1,1,null,,1,0
