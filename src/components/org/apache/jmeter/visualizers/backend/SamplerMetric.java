@@ -34,21 +34,22 @@ import org.apache.jmeter.util.JMeterUtils;
  */
 public class SamplerMetric {
     private static final int SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_window", 100);
+    private static final int LARGE_SLIDING_WINDOW_SIZE = JMeterUtils.getPropDefault("backend_metrics_large_window", 5000);
 
     private static final WindowMode WINDOW_MODE = WindowMode.get();
 
     /**
      * Response times for OK samples
      */
-    private DescriptiveStatistics okResponsesStats = new DescriptiveStatistics();
+    private DescriptiveStatistics okResponsesStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      * Response times for KO samples
      */
-    private DescriptiveStatistics koResponsesStats = new DescriptiveStatistics();
+    private DescriptiveStatistics koResponsesStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      * Response times for All samples
      */
-    private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics();
+    private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
      *  OK, KO, ALL stats if WindowMode is FIXED
      */
@@ -56,7 +57,7 @@ public class SamplerMetric {
     /**
      * Timeboxed percentiles don't makes sense
      */
-    private DescriptiveStatistics pctResponseStats = new DescriptiveStatistics();
+    private DescriptiveStatistics pctResponseStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
     private int hits;
