@@ -55,6 +55,7 @@ import org.apache.jorphan.reflect.ClassFinder;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
     private static final long serialVersionUID = 241L;
@@ -329,7 +330,20 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
             guiInstance.setMenuItemLoggerPanel(menuLoggerPanel);
         }
         optionsMenu.add(menuLoggerPanel);
-        
+
+        JMenu menuLoggerLevel = makeMenuRes("menu_logger_level"); //$NON-NLS-1$
+        JMenuItem menuItem;
+        String levelString;
+        for (Level level : Level.values()) {
+            levelString = level.toString();
+            menuItem = new JMenuItem(levelString);
+            menuItem.addActionListener(ActionRouter.getInstance());
+            menuItem.setActionCommand(ActionNames.LOG_LEVEL_PREFIX + levelString);
+            menuItem.setToolTipText(levelString); // show the classname to the user
+            menuLoggerLevel.add(menuItem);
+        }
+        optionsMenu.add(menuLoggerLevel);
+
         if (SSLManager.isSSLSupported()) {
             sslManager = makeMenuItemRes("sslmanager", 'S', ActionNames.SSL_MANAGER, KeyStrokes.SSL_MANAGER); //$NON-NLS-1$
             optionsMenu.add(sslManager);
