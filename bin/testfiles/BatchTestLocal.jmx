@@ -261,6 +261,7 @@ This is to ensure the test output is predictable, whilst still allowing testing 
                     <stringProp name="-1227702913">WorkBench</stringProp>
                     <stringProp name="764597751">Test Plan</stringProp>
                     <stringProp name="-1948168983">Thread Group</stringProp>
+                    <stringProp name="-87920136">Critical Section Controller</stringProp>
                     <stringProp name="307399011">Simple Controller for Module Controller</stringProp>
                   </collectionProp>
                 </ModuleController>
