@@ -1066,6 +1066,12 @@ JMETER-SERVER</source>
     and <code>Max</code>.<br/>
     Defaults to: <code>100</code>
 </property>
+<property name="backend_metrics_large_window">
+    Backend metrics sliding window size  for <code>Percentiles</code>, <code>Min</code> 
+    and <code>Max</code>. when <code>backend_metrics_window_mode=timed</code><br/>
+    Setting this value too high can lead to OOM Backend metrics sliding window size 
+    Defaults to: <code>5000</code>
+</property>
 
 <property name="backend_metrics_window_mode">
     Backend metrics window mode.
