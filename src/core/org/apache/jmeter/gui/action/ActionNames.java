@@ -60,6 +60,7 @@ public final class ActionNames {
     public static final String HEAP_DUMP        = "heap_dump"; // $NON-NLS-1$
     public static final String LAF_PREFIX       = "laf:"; // Look and Feel prefix
     public static final String LOGGER_PANEL_ENABLE_DISABLE     = "logger_panel_enable_disable"; // $NON-NLS-1$
+    public static final String LOG_LEVEL_PREFIX = "loglevel:"; // Logger level prefix
     public static final String MERGE            = "merge"; // $NON-NLS-1$
     public static final String OPEN             = "open"; // $NON-NLS-1$
     public static final String OPEN_RECENT      = "open_recent"; // $NON-NLS-1$
