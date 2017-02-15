@@ -188,6 +188,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
     
     private javax.swing.Timer computeTestDurationTimer = new javax.swing.Timer(1000, 
             this::computeTestDuration);
+    
+    public AtomicInteger errorOrFatal = new AtomicInteger(0);
+
+    private javax.swing.Timer refreshErrorsTimer = new javax.swing.Timer(1000, 
+            this::refreshErrors);
 
     /**
      * Create a new JMeter frame.
@@ -250,6 +255,17 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         });
     }
 
+    /**
+     * Refresh errors label
+     * @param evt {@link ActionEvent}
+     */
+    private void refreshErrors(ActionEvent evt) {
+        if(errorOrFatal.get()>0) {
+            errorsOrFatalsLabel.setForeground(Color.RED);
+            errorsOrFatalsLabel.setText(Long.toString(errorOrFatal.get()));
+        }
+    }
+    
     protected void computeTestDuration(ActionEvent evt) {
         long startTime = JMeterContextService.getTestStartTime();
         if (startTime > 0) {
@@ -535,6 +551,7 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
         setTitle(DEFAULT_TITLE);
         setIconImage(JMeterUtils.getImage("icon-apache.png").getImage());// $NON-NLS-1$
         setWindowTitle(); // define AWT WM_CLASS string
+        refreshErrorsTimer.start();
     }
 
 
@@ -823,16 +840,11 @@ public class MainFrame extends JFrame implements TestStateListener, Remoteable, 
      * ErrorsAndFatalsCounterLogTarget.
      */
     public final class ErrorsAndFatalsCounterLogTarget implements GuiLogEventListener, Clearable {
-        public AtomicInteger errorOrFatal = new AtomicInteger(0);
 
         @Override
         public void processLogEvent(LogEventObject logEventObject) {
             if (logEventObject.isMoreSpecificThanError()) {
-                final int newValue = errorOrFatal.incrementAndGet();
-                SwingUtilities.invokeLater(() -> {
-                        errorsOrFatalsLabel.setForeground(Color.RED);
-                        errorsOrFatalsLabel.setText(Long.toString(newValue));
-                });
+                errorOrFatal.incrementAndGet();
             }
         }
 
