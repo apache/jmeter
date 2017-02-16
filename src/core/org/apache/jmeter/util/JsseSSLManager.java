@@ -39,8 +39,6 @@ import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,14 +122,6 @@ public class JsseSSLManager extends SSLManager {
                 }
             });
 
-            /*
-             * Also set up HttpClient defaults
-             */
-            Protocol protocol = new Protocol(
-                    JsseSSLManager.HTTPS,
-                    (ProtocolSocketFactory) new HttpSSLProtocolSocketFactory(this, CPS),
-                    443);
-            Protocol.registerProtocol(JsseSSLManager.HTTPS, protocol);
             log.debug("SSL stuff all set");
         } catch (GeneralSecurityException ex) {
             log.error("Could not set up SSLContext", ex);

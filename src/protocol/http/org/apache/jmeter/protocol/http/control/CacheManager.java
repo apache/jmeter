@@ -28,8 +28,6 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -42,8 +40,8 @@ import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles HTTP Caching
@@ -146,39 +144,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     /**
      * Save the Last-Modified, Etag, and Expires headers if the result is
-     * cacheable. Version for Commons HttpClient implementation.
-     *
-     * @param method
-     *            {@link HttpMethod} to get header information from
-     * @param res
-     *            result to decide if result is cacheable
-     * @throws URIException
-     *             if extraction of the uri from <code>method</code> fails
-     * @deprecated HC3.1 will be dropped in upcoming version
-     */
-    @Deprecated
-    public void saveDetails(HttpMethod method, HTTPSampleResult res) throws URIException{
-        if (isCacheable(res) && !hasVaryHeader(method)){
-            String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
-            String expires = getHeader(method ,HTTPConstants.EXPIRES);
-            String etag = getHeader(method ,HTTPConstants.ETAG);
-            String url = method.getURI().toString();
-            String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
-            String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, url, date);
-        }
-    }
-
-    /**
-     * @deprecated HC3.1 will be dropped in upcoming version
-     */
-    @Deprecated
-    private boolean hasVaryHeader(HttpMethod method) {
-        return getHeader(method, HTTPConstants.VARY) != null;
-    }
-
-    /**
-     * Save the Last-Modified, Etag, and Expires headers if the result is
      * cacheable. Version for Apache HttpClient implementation.
      *
      * @param method
@@ -276,19 +241,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
     }
 
-    /**
-     * Helper method to deal with missing headers - Commons HttpClient
-     * @param method Http method
-     * @param name Header name
-     * @return Header value
-     * @deprecated HC3.1 will be dropped in upcoming version
-     */
-    @Deprecated
-    private String getHeader(HttpMethod method, String name){
-        org.apache.commons.httpclient.Header hdr = method.getResponseHeader(name);
-        return hdr != null ? hdr.getValue() : null;
-    }
-
     // Apache HttpClient
     private String getHeader(HttpResponse method, String name) {
         org.apache.http.Header hdr = method.getLastHeader(name);
@@ -315,35 +267,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             }
         }
         return false;
-    }
-
-    /**
-     * Check the cache, and if there is a match, set the headers:
-     * <ul>
-     * <li>If-Modified-Since</li>
-     * <li>If-None-Match</li>
-     * </ul>
-     * Commons HttpClient version
-     * @param url URL to look up in cache
-     * @param method where to set the headers
-     * @deprecated HC3.1 will be dropped in upcoming version
-     */
-    @Deprecated
-    public void setHeaders(URL url, HttpMethod method) {
-        CacheEntry entry = getCache().get(url.toString());
-        if (log.isDebugEnabled()){
-            log.debug(method.getName()+"(OACH) "+url.toString()+" "+entry);
-        }
-        if (entry != null){
-            final String lastModified = entry.getLastModified();
-            if (lastModified != null){
-                method.setRequestHeader(HTTPConstants.IF_MODIFIED_SINCE, lastModified);
-            }
-            final String etag = entry.getEtag();
-            if (etag != null){
-                method.setRequestHeader(HTTPConstants.IF_NONE_MATCH, etag);
-            }
-        }
     }
 
     /**

@@ -63,7 +63,6 @@ under the License.
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
       <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
-      <commons-httpclient.version>3.1</commons-httpclient.version>
       <commons-io.version>2.5</commons-io.version>
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-jexl3.version>3.0</commons-jexl3.version>
@@ -172,11 +171,6 @@ under the License.
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-dbcp2</artifactId>
         <version>${commons-dbcp2.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
-        <version>${commons-httpclient.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

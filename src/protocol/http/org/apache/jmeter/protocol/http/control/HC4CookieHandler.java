@@ -48,8 +48,8 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.apache.jmeter.testelement.property.JMeterProperty;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HC4CookieHandler implements CookieHandler {
     private static final Logger log = LoggerFactory.getLogger(HC4CookieHandler.class);
@@ -96,7 +96,7 @@ public class HC4CookieHandler implements CookieHandler {
     
     public HC4CookieHandler(String policy) {
         super();
-        if (policy.equals(org.apache.commons.httpclient.cookie.CookiePolicy.DEFAULT)) { // tweak diff HC3 vs HC4
+        if (policy.equalsIgnoreCase("default")) { // tweak diff HC3 vs HC4
             policy = CookieSpecs.DEFAULT;
         }
         HttpClientContext context = HttpClientContext.create();

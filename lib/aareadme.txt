@@ -33,20 +33,13 @@ bsh-2.0b5.jar (org.bsh)
 commons-codec-1.10
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
-- used by commons-httpclient-3.1
-- also HtmlParserTester for Base64
+- Used by ProxyControl and JSR223Test Element for Base64 and md5 
 
 commons-collections-3.2.2
 -------------------------
 http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
 - Anakia
-
-commons-httpclient-3.1
-----------------------
-http://hc.apache.org/downloads.cgi
-- httpclient version of HTTP sampler
-- Cookie manager implementation
 
 commons-io-2.5
 --------------

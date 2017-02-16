@@ -69,7 +69,7 @@ public class HTTPSamplerBaseConverter extends TestElementConverter {
             httpSampler.setImplementation(HTTPSamplerFactory.IMPL_JAVA);
         }
         if (nodeName.equals(HTTPSamplerFactory.HTTP_SAMPLER_APACHE)){
-            httpSampler.setImplementation(HTTPSamplerFactory.IMPL_HTTP_CLIENT3_1);
+            httpSampler.setImplementation(HTTPSamplerFactory.IMPL_HTTP_CLIENT4);
         }
         httpSampler.mergeFileProperties();
         return httpSampler;
