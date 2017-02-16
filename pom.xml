@@ -380,20 +380,6 @@
 							</execution>
 
 							<execution>
-								<id>ApacheJMeter_monitors</id>
-								<phase>install</phase>
-								<goals>
-									<goal>install-file</goal>
-								</goals>
-								<configuration>
-									<file>${maven.dir}/ApacheJMeter_monitors.jar</file>
-									<pomFile>${maven.dir}/ApacheJMeter_monitors.pom</pomFile>
-									<generatePom>false</generatePom>
-									<packaging>jar</packaging>
-								</configuration>
-							</execution>
-
-							<execution>
 								<id>ApacheJMeter_native</id>
 								<phase>install</phase>
 								<goals>
