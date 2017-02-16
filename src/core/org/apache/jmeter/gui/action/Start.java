@@ -205,17 +205,19 @@ public class Start extends AbstractAction {
             TreeCloner cloner = cloneTree(testTree, ignoreTimer);      
             clonedTree = cloner.getClonedTree();
         }
-        engine = new StandardJMeterEngine();
-        engine.configure(clonedTree);
-        try {
-            engine.runTest();
-        } catch (JMeterEngineException e) {
-            JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), 
-                    JMeterUtils.getResString("error_occurred"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("test plan after cloning and running test is running version: {}",
-                    ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+        if ( popupCheckExistingFileListener(testTree) ) {
+	        engine = new StandardJMeterEngine();
+	        engine.configure(clonedTree);
+	        try {
+	            engine.runTest();
+	        } catch (JMeterEngineException e) {
+	            JOptionPane.showMessageDialog(gui.getMainFrame(), e.getMessage(), 
+	                    JMeterUtils.getResString("error_occurred"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+	        }
+	        if (log.isDebugEnabled()) {
+	            log.debug("test plan after cloning and running test is running version: {}",
+	                    ((TestPlan) testTree.getArray()[0]).isRunningVersion());
+	        }
         }
     }
 
