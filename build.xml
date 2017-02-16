@@ -119,7 +119,7 @@
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="skip.batchtest" value="false" />
   <property name="skip.bug52310" value="false" />
-  <property name="skip.test_https" value="false" />
+  <property name="skip.test_https" value="true" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
