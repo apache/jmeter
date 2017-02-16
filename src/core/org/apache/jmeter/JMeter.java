@@ -273,7 +273,7 @@ public class JMeter implements JMeterPlugin {
     private static final CLOptionDescriptor D_REPORT_OUTPUT_FOLDER_OPT =
             new CLOptionDescriptor("reportoutputfolder",
                     CLOptionDescriptor.ARGUMENT_REQUIRED, REPORT_OUTPUT_FOLDER_OPT,
-            		"output folder for report dashboard");
+                    "output folder for report dashboard");
      private static final CLOptionDescriptor D_FORCE_DELETE_RESULT_FILE =
             new CLOptionDescriptor("forceDeleteResultFile",
                     CLOptionDescriptor.ARGUMENT_DISALLOWED, FORCE_DELETE_RESULT_FILE,
@@ -854,8 +854,8 @@ public class JMeter implements JMeterPlugin {
                 remoteStop = true;
                 break;
             case FORCE_DELETE_RESULT_FILE:
-            	deleteResultFile = true;
-            	break;
+                deleteResultFile = true;
+                break;
             default:
                 // ignored
                 break;
@@ -941,16 +941,16 @@ public class JMeter implements JMeterPlugin {
             convertSubTree(tree);
             
             if (deleteResultFile) {
-            	SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
-            	tree.traverse(resultListeners);
-            	Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-            	while (irc.hasNext()) {
-	            	ResultCollector rc = irc.next();
-	            	File resultFile = new File(rc.getFilename());
-	            	if (resultFile.exists()) {
-	            		resultFile.delete();
-	            	}
-            	}
+                SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
+                tree.traverse(resultListeners);
+                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
+                while (irc.hasNext()) {
+                    ResultCollector rc = irc.next();
+                    File resultFile = new File(rc.getFilename());
+                    if (resultFile.exists()) {
+                        resultFile.delete();
+                    }
+                }
             }
 
             Summariser summer = null;
