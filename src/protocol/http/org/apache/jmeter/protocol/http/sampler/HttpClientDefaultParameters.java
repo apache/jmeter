@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.jmeter.NewDriver;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,31 +48,6 @@ public class HttpClientDefaultParameters {
     private static abstract class GenericHttpParams {
         public abstract void setParameter(String name, Object value);
         public abstract void setVersion(String name, String value) throws Exception;
-    }
-
-    /**
-     * Loads a property file and converts parameters as necessary.
-     * 
-     * @param file the file to load
-     * @param params Commons HttpClient parameter instance
-     * @deprecated HC3.1 will be dropped in upcoming version
-     */
-    @Deprecated
-    public static void load(String file, 
-            final org.apache.commons.httpclient.params.HttpParams params){
-        load(file, 
-                new GenericHttpParams (){
-                    @Override
-                    public void setParameter(String name, Object value) {
-                        params.setParameter(name, value);
-                    }
-                    @Override
-                    public void setVersion(String name, String value) throws Exception {
-                        params.setParameter(name,
-                        org.apache.commons.httpclient.HttpVersion.parse("HTTP/"+value));
-                    }            
-                }
-            );
     }
 
     /**
@@ -118,10 +92,8 @@ public class HttpClientDefaultParameters {
             }
         }
         log.info("Reading httpclient parameters from "+f.getAbsolutePath());
-        InputStream is = null;
         Properties props = new Properties();
-        try {
-            is = new FileInputStream(f);
+        try ( InputStream is = new FileInputStream(f) ){
             props.load(is);
             for (Map.Entry<Object, Object> me : props.entrySet()){
                 String key = (String) me.getKey();
@@ -153,9 +125,6 @@ public class HttpClientDefaultParameters {
             }
         } catch (IOException e) {
             log.error("Problem loading properties "+e.toString());
-        } finally {
-            JOrphanUtils.closeQuietly(is);
         }
     }
-
 }

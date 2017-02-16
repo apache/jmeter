@@ -105,7 +105,7 @@ public class TestDNSCacheManager extends JMeterTestCase {
             Assert.assertTrue(original.cache.size()==1);
             // OK
         } catch (UnknownHostException e) {
-            fail("System DNS server should have been used");
+            fail("Should have succeeded resolving jmeter.apache.org, error:"+e.getMessage());
         }
     }
     

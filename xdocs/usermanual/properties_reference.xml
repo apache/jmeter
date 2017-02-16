@@ -468,19 +468,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.15 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
-<properties>
-<property name="httpclient.parameters.file">
-    Define a properties file for overriding Commons HttpClient parameters.
-    See <a href="http://hc.apache.org/httpclient-3.x/preference-api.html">this</a>.
-    Uncomment this line if you put anything in <code>httpclient.parameters</code> file.
-</property>
-<property name="httpclient3.retrycount">
-    Number of retries to attempt.<br/>
-    Defaults to: <code>0</code>
-</property>
-</properties>
-</section>
+
 <section name="&sect-num;.16 HTTP Cache Manager configuration" anchor="cache_maanger">
 <properties>
 <property name="cacheable_methods">
