@@ -122,7 +122,7 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * @deprecated not intended for use outside this class (should have been created private)
      */
     @Deprecated
-    public static final String DEFAULT_IMPLEMENTATION = HC3CookieHandler.class.getName();
+    public static final String DEFAULT_IMPLEMENTATION = "org.apache.jmeter.protocol.http.control.HC3CookieHandler";
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available

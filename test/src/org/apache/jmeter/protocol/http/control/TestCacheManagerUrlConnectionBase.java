@@ -19,22 +19,14 @@
 package org.apache.jmeter.protocol.http.control;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 
 public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManagerBase {
-    protected class URLConnectionStub extends URLConnection {
+    protected class URLConnectionStub extends HttpURLConnection {
 
         protected URLConnectionStub(URL url) {
             super(url);
@@ -74,88 +66,27 @@ public abstract class TestCacheManagerUrlConnectionBase extends TestCacheManager
         public URL getURL() {
             return url;
         }
-    }
 
-    protected class HttpMethodStub extends PostMethod {
-        protected org.apache.commons.httpclient.Header lastModifiedHeader;
-        protected org.apache.commons.httpclient.Header etagHeader;
-        protected String expires;
-        protected String cacheControl;
-        protected org.apache.commons.httpclient.Header dateHeader;
-
-        HttpMethodStub() {
-            this.lastModifiedHeader = new org.apache.commons.httpclient.Header(HTTPConstants.LAST_MODIFIED, currentTimeInGMT);
-            this.dateHeader = new org.apache.commons.httpclient.Header(HTTPConstants.DATE, currentTimeInGMT);
-            this.etagHeader = new org.apache.commons.httpclient.Header(HTTPConstants.ETAG, EXPECTED_ETAG);
+        @Override
+        public void disconnect() {
         }
 
         @Override
-        public org.apache.commons.httpclient.Header getResponseHeader(String headerName) {
-            if (HTTPConstants.LAST_MODIFIED.equals(headerName)) {
-                return this.lastModifiedHeader;
-            } else if (HTTPConstants.ETAG.equals(headerName)) {
-                return this.etagHeader;
-            } else if (HTTPConstants.EXPIRES.equals(headerName)) {
-                return expires == null ? null : new org.apache.commons.httpclient.Header(HTTPConstants.EXPIRES, expires);
-            } else if (HTTPConstants.CACHE_CONTROL.equals(headerName)) {
-                return cacheControl == null ? null : new org.apache.commons.httpclient.Header(HTTPConstants.CACHE_CONTROL, cacheControl);
-            } else if (HTTPConstants.DATE.equals(headerName)) {
-                return this.dateHeader;
-            } else if (HTTPConstants.VARY.equals(headerName)) {
-                return vary == null ? null : new org.apache.commons.httpclient.Header(HTTPConstants.VARY, vary);
-            }
-            return null;
-        }
-
-        @Override
-        public URI getURI() throws URIException {
-            return uri;
+        public boolean usingProxy() {
+            return false;
         }
     }
-
-    private static class HttpURLConnectionStub extends HttpURLConnection {
-        private Map<String, List<String>> properties;
-
-        public HttpURLConnectionStub(HttpMethod method, URL url) {
-            super(method, url);
-            this.properties = new HashMap<>();
-        }
-
-        @Override
-        public void addRequestProperty(String key, String value) {
-            List<String> list = new ArrayList<>();
-            list.add(value);
-            this.properties.put(key, list);
-        }
-
-        @Override
-        public Map<String, List<String>> getRequestProperties() {
-            return this.properties;
-        }
-
-    }
-
-    private URI uri;
     protected URLConnection urlConnection;
-    protected HttpMethod httpMethod;
-    protected HttpURLConnection httpUrlConnection;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.uri = new URI(LOCAL_HOST, false);
         this.urlConnection = new URLConnectionStub(this.url.openConnection());
-        this.httpMethod = new HttpMethodStub();
-        this.httpUrlConnection = new HttpURLConnectionStub(this.httpMethod, this.url);
-        this.httpMethod.setURI(this.uri);
     }
 
     @Override
     public void tearDown() throws Exception {
-        this.httpUrlConnection = null;
-        this.httpMethod = null;
         this.urlConnection = null;
-        this.uri = null;
         super.tearDown();
     }
 }

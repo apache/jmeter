@@ -18,13 +18,14 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnectionBase {
 
@@ -50,7 +51,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
 
     @Override
     protected void checkRequestHeader(String requestHeader, String expectedValue) {
-        Map<String, List<String>> properties = this.httpUrlConnection.getRequestProperties();
+        Map<String, List<String>> properties = ((HttpURLConnection)this.urlConnection).getRequestProperties();
         checkProperty(properties, requestHeader, expectedValue);
     }
 
@@ -61,7 +62,7 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
 
     @Override
     protected void setRequestHeaders() {
-        this.cacheManager.setHeaders(this.httpUrlConnection, this.url);
+        this.cacheManager.setHeaders((HttpURLConnection)this.urlConnection, this.url);
     }
 
     private static void checkProperty(Map<String, List<String>> properties, String property, String expectedPropertyValue) {
