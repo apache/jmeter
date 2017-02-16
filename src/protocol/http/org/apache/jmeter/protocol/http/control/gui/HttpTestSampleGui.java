@@ -43,7 +43,6 @@ import org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
 
 //For unit tests, @see TestHttpTestSampleGui
@@ -86,7 +85,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
 
     private JPasswordField proxyPass;
     
-    private JLabeledChoice httpImplementation;
+    private JComboBox<String> httpImplementation = new JComboBox<>(HTTPSamplerFactory.getImplementations());
 
     private JTextField connectTimeOut;
 
@@ -123,7 +122,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             proxyPort.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPORT));
             proxyUser.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYUSER));
             proxyPass.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.PROXYPASS));
-            httpImplementation.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.IMPLEMENTATION));
+            httpImplementation.setSelectedItem(samplerBase.getPropertyAsString(HTTPSamplerBase.IMPLEMENTATION));
             connectTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.CONNECT_TIMEOUT));
             responseTimeOut.setText(samplerBase.getPropertyAsString(HTTPSamplerBase.RESPONSE_TIMEOUT));
         }
@@ -162,7 +161,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             samplerBase.setProperty(HTTPSamplerBase.PROXYPORT, proxyPort.getText(),"");
             samplerBase.setProperty(HTTPSamplerBase.PROXYUSER, proxyUser.getText(),"");
             samplerBase.setProperty(HTTPSamplerBase.PROXYPASS, String.valueOf(proxyPass.getPassword()),"");
-            samplerBase.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getText(),"");
+            samplerBase.setProperty(HTTPSamplerBase.IMPLEMENTATION, httpImplementation.getSelectedItem().toString(),"");
             samplerBase.setProperty(HTTPSamplerBase.CONNECT_TIMEOUT, connectTimeOut.getText());
             samplerBase.setProperty(HTTPSamplerBase.RESPONSE_TIMEOUT, responseTimeOut.getText());
         }
@@ -184,12 +183,17 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
         // URL CONFIG
         urlConfigGui = new UrlConfigGui(true, true, true);
         
+        // HTTP request options
+        JPanel httpOptions = new HorizontalPanel();
+        httpOptions.add(getImplementationPanel());
+        httpOptions.add(getTimeOutPanel());
         // AdvancedPanel (embedded resources, source address and optional tasks)
         JPanel advancedPanel = new VerticalPanel();
+        if (!isAJP) {
+            advancedPanel.add(httpOptions);
+        }
         advancedPanel.add(createEmbeddedRsrcPanel());
         if (!isAJP) {
-            advancedPanel.add(getTimeOutPanel());
-            advancedPanel.add(getImplementationPanel());
             advancedPanel.add(createSourceAddrPanel());
             advancedPanel.add(getProxyServerPanel());
         }
@@ -283,9 +287,10 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
      */
     protected final JPanel getImplementationPanel(){
         JPanel implPanel = new HorizontalPanel();
-        httpImplementation = new JLabeledChoice(JMeterUtils.getResString("http_implementation"), // $NON-NLS-1$
-                HTTPSamplerFactory.getImplementations());
-        httpImplementation.addValue("");
+        implPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("web_server_client"))); // $NON-NLS-1$
+        implPanel.add(new JLabel(JMeterUtils.getResString("http_implementation"))); // $NON-NLS-1$
+        httpImplementation.addItem("");// $NON-NLS-1$
         implPanel.add(httpImplementation);
         return implPanel;
     }
@@ -345,7 +350,7 @@ public class HttpTestSampleGui extends AbstractSamplerGui {
             proxyPort.setText(""); // $NON-NLS-1$
             proxyUser.setText(""); // $NON-NLS-1$
             proxyPass.setText(""); // $NON-NLS-1$
-            httpImplementation.setText(""); // $NON-NLS-1$
+            httpImplementation.setSelectedItem(""); // $NON-NLS-1$
             connectTimeOut.setText(""); // $NON-NLS-1$
             responseTimeOut.setText(""); // $NON-NLS-1$
         }
