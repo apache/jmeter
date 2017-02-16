@@ -76,15 +76,15 @@ public class RemoteStart extends AbstractAction {
             popupShouldSave(e);
             HashTree testTree = getTestTree();
             if ( popupCheckExistingFileListener(testTree) ) {
-            	distributedRunner.init(Arrays.asList(name), testTree);
-            	distributedRunner.start(Arrays.asList(name));
+                distributedRunner.init(Arrays.asList(name), testTree);
+                distributedRunner.start(Arrays.asList(name));
             }
         } else if (action.equals(ActionNames.REMOTE_START_ALL)) {
             popupShouldSave(e);
             HashTree testTree = getTestTree();
             if ( popupCheckExistingFileListener(testTree) ) {
-            	distributedRunner.init(getRemoteHosts(), testTree);
-            	distributedRunner.start();
+                distributedRunner.init(getRemoteHosts(), testTree);
+                distributedRunner.start();
             }
         } else if (action.equals(ActionNames.REMOTE_STOP_ALL)) {
             distributedRunner.stop(getRemoteHosts());
