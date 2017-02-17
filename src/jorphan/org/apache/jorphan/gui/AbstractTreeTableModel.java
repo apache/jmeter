@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.event.EventListenerList;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreeNode;
 
@@ -111,9 +111,6 @@ public abstract class AbstractTreeTableModel extends DefaultTableModel implement
      */
     @Override
     public int getRowCount() {
-        if (objects == null) {
-            return 0;
-        }
         return objects.size();
     }
 
