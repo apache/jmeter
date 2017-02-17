@@ -463,7 +463,7 @@
             <stringProp name="HTTPSampler.implementation">HttpClient3.1</stringProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <SoapSampler guiclass="SoapSamplerGui" testclass="SoapSampler" testname="SOAP/XML-RPC Request" enabled="true">
+          <ConfigTestElement guiclass="ObsoleteGui" testclass="ConfigTestElement" testname="SOAP/XML-RPC Request" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -473,7 +473,7 @@
             <stringProp name="SoapSampler.SOAP_ACTION">Action</stringProp>
             <stringProp name="SoapSampler.SEND_SOAP_ACTION">true</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-          </SoapSampler>
+          </ConfigTestElement>
           <hashTree/>
           <AccessLogSampler guiclass="TestBeanGUI" testclass="AccessLogSampler" testname="Access Log Sampler" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
