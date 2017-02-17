@@ -72,11 +72,8 @@ public class FileRowColContainer {
     }
 
     private void load() throws IOException, FileNotFoundException {
-
-        BufferedReader myBread = null;
-        try {
-            FileReader fis = new FileReader(fileName);
-            myBread = new BufferedReader(fis);
+        try ( FileReader fis = new FileReader(fileName);
+                BufferedReader myBread = new BufferedReader(fis);) {
             String line = myBread.readLine();
             /*
              * N.B. Stop reading the file if we get a blank line: This allows
@@ -90,10 +87,6 @@ public class FileRowColContainer {
             fileData.clear();
             log.warn(e.toString());
             throw e;
-        } finally {
-            if (myBread != null) {
-                myBread.close();
-            }
         }
     }
 
