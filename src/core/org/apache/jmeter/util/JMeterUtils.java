@@ -540,7 +540,11 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getParsedLabel(String key) {
         String value = JMeterUtils.getResString(key);
-        return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+        if(value != null) {
+            return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+        } else {
+            return null;
+        }
     }
     
     /**
