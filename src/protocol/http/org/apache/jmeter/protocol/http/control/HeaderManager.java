@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.Replaceable;
@@ -137,9 +136,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             throw new IOException("The file you specified cannot be read.");
         }
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(file)); // TODO Charset ?
+        try ( FileReader fr = new FileReader(file);
+                BufferedReader reader = new BufferedReader(fr) ) {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
@@ -155,8 +153,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
                     throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
                 }
             }
-        } finally {
-            IOUtils.closeQuietly(reader);
         }
     }
 
