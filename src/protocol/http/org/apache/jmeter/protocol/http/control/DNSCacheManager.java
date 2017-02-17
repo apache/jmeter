@@ -314,20 +314,35 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         setProperty(new CollectionProperty(SERVERS, new ArrayList<String>()));
     }
 
+    /**
+     * Add DNS Server
+     * @param dnsServer
+     */
     public void addServer(String dnsServer) {
         getServers().addItem(dnsServer);
     }
 
+    /**
+     * @return DNS Servers
+     */
     public CollectionProperty getServers() {
         return (CollectionProperty) getProperty(SERVERS);
     }
 
+    /**
+     * Clear static hosts
+     */
     private void clearHosts() {
         log.debug("Clear all hosts from store");
         removeProperty(HOSTS);
         cache.clear();
     }
 
+    /**
+     * Add static host
+     * @param dnsHost DNS host
+     * @param addresses Comma separated list of addresses
+     */
     public void addHost(String dnsHost, String addresses) {
         getHosts().addItem(new StaticHost(dnsHost, addresses));
         cache.clear();

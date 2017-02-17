@@ -21,6 +21,10 @@ import java.io.Serializable;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
 
+/**
+ * Bean containing mapping from name to array of Addresses
+ * @since 3.2
+ */
 public class StaticHost extends AbstractTestElement implements Serializable {
 
     private static final long serialVersionUID = 1L;
