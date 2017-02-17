@@ -22,7 +22,6 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,9 +29,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.jmeter.util.XPathUtil;
-import org.slf4j.LoggerFactory;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -68,13 +66,11 @@ public class XPathFileContainer {
 
     private NodeList load(String xpath) throws IOException, FileNotFoundException, ParserConfigurationException, SAXException,
             TransformerException {
-        InputStream fis = null;
         NodeList nl = null;
-        try {
+        try ( FileInputStream fis = new FileInputStream(fileName);
+                BufferedInputStream bis = new BufferedInputStream(fis) ){
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-            fis = new BufferedInputStream(new FileInputStream(fileName));
-            nl = XPathUtil.selectNodeList(builder.parse(fis), xpath);
+            nl = XPathUtil.selectNodeList(builder.parse(bis), xpath);
             if(log.isDebugEnabled()) {
                 log.debug("found " + nl.getLength());
             }
@@ -82,9 +78,7 @@ public class XPathFileContainer {
                 | ParserConfigurationException | IOException e) {
             log.warn(e.toString());
             throw e;
-        } finally {
-            JOrphanUtils.closeQuietly(fis);
-        }
+        } 
         return nl;
     }
 
