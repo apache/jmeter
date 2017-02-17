@@ -109,7 +109,7 @@ public class DNSCachePanel extends AbstractConfigGui implements ActionListener {
     private static final Class<?>[] columnClasses = {
         String.class };
 
-    private static final String[] HOSTS_COLUMN_RESOURCE_NAMES = { "host", JMeterUtils.getResString("dns_hostname_or_ip") };
+    private static final String[] HOSTS_COLUMN_RESOURCE_NAMES = { JMeterUtils.getResString("dns_host"), JMeterUtils.getResString("dns_hostname_or_ip") };
     private static final Class<?>[] HOSTS_COLUMN_CLASSES = { String.class, String.class };
 
     private JCheckBox clearEachIteration;
