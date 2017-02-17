@@ -37,7 +37,6 @@ import java.util.List;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestSaveService extends JMeterTestCase {
@@ -94,7 +93,7 @@ public class TestSaveService extends JMeterTestCase {
         assertEquals("Property File Version mismatch, ensure you update SaveService#FILEVERSION field with sha1 of saveservice.properties without newline", SaveService.FILEVERSION, SaveService.getFileVersion());
     }
 
-    @Ignore @Test
+    @Test
     public void testLoadAndSave() throws Exception {
         boolean failed = false; // Did a test fail?
 
@@ -128,7 +127,7 @@ public class TestSaveService extends JMeterTestCase {
         } finally {
             out.close(); // Make sure all the data is flushed out
         }
-
+        
         final FileStats compareStats = savedStats == FileStats.NO_STATS ? origStats : savedStats;
 
         final FileStats outputStats;
