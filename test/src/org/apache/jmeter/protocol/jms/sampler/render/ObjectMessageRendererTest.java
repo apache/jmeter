@@ -56,7 +56,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         assertValueFromFile(object -> {
             assertObject(object, "Doe");
             Person p = (Person) object;
-            assertSame("cache", p, cacheContent.getValue());
+            assertSame("cache", p, getFirstCachedValue());
         }, "object_doe.xml", false);
     }
 
@@ -65,7 +65,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         String filename = getResourceFile("object_cp1252.xml");
         Serializable object = getRenderer().getValueFromFile(filename, "Cp1252", true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", format("%s%n", getUnicodeContent()), cacheContent.getValue());
+        assertEquals("cache", format("%s%n", getUnicodeContent()), getFirstCachedValue());
 
     }
 
@@ -74,7 +74,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         String filename = getResourceFile("object_utf8.xml");
         Serializable object = getRenderer().getValueFromFile(filename, PublisherSampler.DEFAULT_ENCODING, true, cache);
         assertObject(object, "eéè€");
-        assertEquals("cache", format("%s%n", getUnicodeContent()), cacheContent.getValue());
+        assertEquals("cache", format("%s%n", getUnicodeContent()), getFirstCachedValue());
 
     }
 
@@ -85,7 +85,7 @@ public class ObjectMessageRendererTest extends MessageRendererTest<Serializable>
         assertObject(object, "eéè€");
         Person p = (Person) object;
         assertEquals("object.name", "eéè€", p.getName());
-        assertEquals("cache", format("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>%n%s%n", getUnicodeContent()), cacheContent.getValue());
+        assertEquals("cache", format("<?xml version=\"1.0\" encoding=\"Windows-1252\"?>%n%s%n", getUnicodeContent()), getFirstCachedValue());
 
     }
 
