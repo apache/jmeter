@@ -112,10 +112,10 @@ public class BinaryMessageRendererTest extends MessageRendererTest<byte[]> {
     }
 
     protected void assertCacheContentInBytes(String expected) {
-        assertBytesEquals(expected, (byte[]) cacheContent.getValue());
+        assertBytesEquals(expected, (byte[]) getFirstCachedValue());
     }
     protected void assertCacheContentInString(String expected) {
-        assertEquals(expected, cacheContent.getValue());
+        assertEquals(expected, getFirstCachedValue());
     }
     protected void assertBytesEquals(String expected, byte[] actual) {
         assertArrayEquals(expected.getBytes(StandardCharsets.UTF_8), actual);

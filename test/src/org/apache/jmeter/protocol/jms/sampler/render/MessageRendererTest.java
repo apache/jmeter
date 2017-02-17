@@ -17,39 +17,27 @@
 
 package org.apache.jmeter.protocol.jms.sampler.render;
 
-import static java.lang.String.format;
-
-import java.util.AbstractMap;
-import java.util.Map.Entry;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-import org.apache.jmeter.protocol.jms.sampler.cache.Cache;
+import org.apache.jmeter.test.ResourceLocator;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextServiceHelper;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Rule;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  *
  */
 public abstract class MessageRendererTest<T> {
 
-    @SuppressWarnings("rawtypes")
-    protected Entry cacheContent;
-    protected Cache cache = new Cache() {
-        @Override
-        public void put(Object key, Object value) {
-            cacheContent = new AbstractMap.SimpleImmutableEntry<>(key, value);
-        }
+    protected Cache<Object,Object> cache = Caffeine.newBuilder().build();
 
-        @Override
-        public <K, V> V get(K key, Function<K, V> get) {
-            V value = get.apply(key);
-            cacheContent = new AbstractMap.SimpleImmutableEntry<>(key, value);
-            return value;
-        }
-    };
+    protected Object getFirstCachedValue() {
+        return cache.asMap().values().stream().findFirst().get();
+    }
 
     @Rule
     public JMeterContextServiceHelper jmeterCtxService = new JMeterContextServiceHelper() {
@@ -62,7 +50,7 @@ public abstract class MessageRendererTest<T> {
     protected abstract MessageRenderer<T> getRenderer();
 
     protected String getResourceFile(String resource) {
-        return format("test/resources/%s/%s", getClass().getPackage().getName().replace('.', '/'), resource);
+        return ResourceLocator.getResource(this, resource);
     }
 
     protected void assertValueFromFile(Consumer<T> assertion, String resource, boolean hasVariable) {

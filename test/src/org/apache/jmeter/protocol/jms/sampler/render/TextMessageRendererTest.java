@@ -68,11 +68,11 @@ public class TextMessageRendererTest extends MessageRendererTest<String> {
     public void checkCache() {
         jmeterCtxService.get().getVariables().put("oneVar", "foo");
         assertValueFromFile(format("foo%n"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}%n"), cacheContent.getValue());
+        assertEquals(format("${oneVar}%n"), getFirstCachedValue());
 
         jmeterCtxService.get().getVariables().put("oneVar", "bar");
         assertValueFromFile(format("bar%n"), "oneVar.txt", true);
-        assertEquals(format("${oneVar}%n"), cacheContent.getValue());
+        assertEquals(format("${oneVar}%n"), getFirstCachedValue());
     }
 
     @Test
