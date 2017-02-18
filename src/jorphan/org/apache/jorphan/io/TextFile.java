@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
@@ -110,11 +111,13 @@ public class TextFile extends File {
      */
     public void setText(String body) {
         Writer writer = null;
+        OutputStream outputStream = null;
         try {
             if (encoding == null) {
                 writer = new FileWriter(this);
             } else {
-                writer = new OutputStreamWriter(new FileOutputStream(this), encoding);
+                outputStream = new FileOutputStream(this);
+                writer = new OutputStreamWriter(outputStream, encoding);
             }
             writer.write(body);
             writer.flush();
@@ -122,6 +125,7 @@ public class TextFile extends File {
             log.error("", ioe);
         } finally {
             JOrphanUtils.closeQuietly(writer);
+            JOrphanUtils.closeQuietly(outputStream);
         }
     }
 
@@ -135,11 +139,13 @@ public class TextFile extends File {
         StringBuilder sb = new StringBuilder();
         Reader reader = null;
         BufferedReader br = null;
+        FileInputStream fileInputStream = null;
         try {
             if (encoding == null) {
                 reader = new FileReader(this);
             } else {
-                reader = new InputStreamReader(new FileInputStream(this), encoding);
+                fileInputStream = new FileInputStream(this);
+                reader = new InputStreamReader(fileInputStream, encoding);
             }
             br = new BufferedReader(reader);
             String line = "NOTNULL"; //$NON-NLS-1$
@@ -152,7 +158,9 @@ public class TextFile extends File {
         } catch (IOException ioe) {
             log.error("", ioe); //$NON-NLS-1$
         } finally {
-            JOrphanUtils.closeQuietly(br); // closes reader as well
+            JOrphanUtils.closeQuietly(br);
+            JOrphanUtils.closeQuietly(reader); 
+            JOrphanUtils.closeQuietly(fileInputStream); 
         }
 
         return sb.toString();
