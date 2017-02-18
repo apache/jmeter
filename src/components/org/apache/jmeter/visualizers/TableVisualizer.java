@@ -198,7 +198,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
             noSamplesField.setText("0"); // $NON-NLS-1$
             dataField.setText("0"); // $NON-NLS-1$
             averageField.setText("0"); // $NON-NLS-1$
-            deviationField.setText("0"); // $NON-NLS-1$            
+            deviationField.setText("0"); // $NON-NLS-1$
         }
         repaint();
     }
@@ -223,7 +223,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
-        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5, 
+        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5,
                 Comparator.nullsFirst(
                         (ImageIcon o1, ImageIcon o2) -> {
                             if (o1 == o2) {
