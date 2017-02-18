@@ -335,18 +335,14 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (!file.isAbsolute()) {
             file = new File(System.getProperty("user.dir"),authFile);
         }
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(new FileWriter(file));
+        try (FileWriter fw = new FileWriter(file);
+                PrintWriter writer = new PrintWriter(fw)){
             writer.println("# JMeter generated Authorization file");
             for (int i = 0; i < getAuthObjects().size(); i++) {
                 Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
                 writer.println(auth.toString());
             }
             writer.flush();
-            writer.close();
-        } finally {
-            JOrphanUtils.closeQuietly(writer);
         }
     }
 
