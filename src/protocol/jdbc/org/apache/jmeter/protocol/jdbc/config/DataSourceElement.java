@@ -299,7 +299,7 @@ public class DataSourceElement extends AbstractTestElement
                             isolation, System.identityHashCode(dsc));
                 } catch (SQLException ex) {
                     log.error("Could not set transaction isolation: {}@{}", 
-                            isolation, System.identityHashCode(dsc));
+                            isolation, System.identityHashCode(dsc), ex);
                 }   
             }
 
