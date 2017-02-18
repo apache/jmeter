@@ -2483,7 +2483,7 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="batchtest" description="Run the batch test and compare output files" unless="${skip.batchtest}">
 
-    <!-- will be overwritten by antcall paramaters -->
+    <!-- will be overwritten by antcall parameters -->
     <property name="taskname" value="jmeter"/>
     <property name="remote" value="-X"/>
     <property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
@@ -3164,7 +3164,7 @@ run JMeter unless all the JMeter jars are added.
      </taskdef>
      <jacoco:agent property="jacocoagent"
                    destfile="reports/jacoco.exec"
-                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder"
+                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder:org.apache.http.impl.conn.JMeterPoolingClientConnectionManager"
                    sessionid=""
      />
   </target>
