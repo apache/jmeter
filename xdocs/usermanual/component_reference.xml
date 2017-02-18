@@ -4041,17 +4041,66 @@ If JMeter reports <code>No suitable driver</code>, then this could mean either:
 <li>The driver class was not found. In this case, there will be a log message such as <code>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</code></li>
 <li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the wrong classname was used.</li>
 </ul>
+<p>
 If the database server is not running or is not accessible, then JMeter will report a <code>java.net.ConnectException</code>.
-<table>
-<tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
-<tr><td>MySQL</td><td><code>com.mysql.jdbc.Driver</code></td><td><code>jdbc:mysql://host[:port]/dbname</code></td></tr>
-<tr><td>PostgreSQL</td><td><code>org.postgresql.Driver</code></td><td><code>jdbc:postgresql:{dbname}</code></td></tr>
-<tr><td>Oracle</td><td><code>oracle.jdbc.OracleDriver</code></td><td><code>jdbc:oracle:thin:@//host:port/service</code>
-OR<br/><code>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</code></td></tr>
-<tr><td>Ingres (2006)</td><td><code>ingres.jdbc.IngresDriver</code></td><td><code>jdbc:ingres://host:port/db[;attr=value]</code></td></tr>
-<tr><td>SQL Server (MS JDBC driver)</td><td><code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></td><td><code>jdbc:sqlserver://host:port;DatabaseName=dbname</code></td></tr>
-<tr><td>Apache Derby</td><td><code>org.apache.derby.jdbc.ClientDriver</code></td><td><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></td></tr>
-</table>
+</p>
+<p>Some examples for databases and their parameters are given below.</p>
+<dl>
+  <dt>MySQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>com.mysql.jdbc.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:mysql://host[:port]/dbname</code></dd>
+    </dl>
+  </dd>
+  <dt>PostgreSQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.postgresql.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:postgresql:{dbname}</code></dd>
+    </dl>
+  </dd>
+  <dt>Oracle</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>oracle.jdbc.OracleDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:oracle:thin:@//host:port/service</code> OR <code>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</code></dd>
+    </dl>
+  </dd>
+  <dt>Ingress (2006)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>ingres.jdbc.IngresDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:ingres://host:port/db[;attr=value]</code></dd>
+    </dl>
+  </dd>
+  <dt>Microsoft SQL Server (MS JDBC driver)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:sqlserver://host:port;DatabaseName=dbname</code></dd>
+    </dl>
+  </dd>
+  <dt>Apache Derby</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.apache.derby.jdbc.ClientDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></dd>
+    </dl>
+  </dd>
+</dl>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
 
