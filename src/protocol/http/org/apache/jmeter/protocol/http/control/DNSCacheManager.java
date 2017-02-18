@@ -236,8 +236,9 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
         InetAddress[] addresses = null;
         if (isCustomResolver()) {
-            if (getResolver() != null) {
-                if(getResolver().getResolvers().length > 0) {
+            ExtendedResolver extendedResolver = getResolver();
+            if (extendedResolver != null) {
+                if(extendedResolver.getResolvers().length > 0) {
                     try {
                         Lookup lookup = new Lookup(host, Type.A);
                         lookup.setCache(lookupCache);
