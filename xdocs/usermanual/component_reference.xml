@@ -3610,8 +3610,28 @@ By default, a Graphite implementation is provided.
     </p>
     <p>
     A mapping for static hosts can be used to simulate something like <code>/etc/hosts</code> file.
-    These entries will be preferred over the custom resolver.
+    These entries will be preferred over the custom resolver. <code>Use custom DNS resolver</code> has to be enabled,
+    if you want to use this mapping.
     </p>
+    <example title="Usage of static host table" anchor="static_host_table">
+    <p>Say, you have a test server, that you want to reach with a name, that is not (yet) set up in your dns servers.
+    For our example, this would be <code>www.example.com</code> for the server name, which you want to reach at the
+    ip of the server <code>a123.another.example.org</code>.
+    </p>
+    <p>You could change your workstation and add an entry to your <code>/etc/hosts</code> file - or the equivalent for
+    your OS, or add an entry to the Static Host Table of the DNS Cache Manager.
+    </p>
+    <p>You would type <code>www.example.com</code> into the first column (<code>Host</code>) and
+    <code>a123.another.example.org</code> into the second column (<code>Hostname or IP address</code>).
+    As the name of the second column implies, you could even use the ip address of your test server there.
+    </p>
+    <p>The ip address for the test server will be looked up by using the custom dns resolver. When none is given, the
+    system dns resolver will be used.
+    </p>
+    <p>Now you can use <code>www.example.com</code> in your HTTPClient4 samplers and the requests will be made against
+    <code>a123.another.example.org</code> with all headers set to <code>www.example.com</code>.
+    </p>
+    </example>
     </description>
     <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
