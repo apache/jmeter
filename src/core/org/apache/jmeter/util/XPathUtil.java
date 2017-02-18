@@ -419,7 +419,8 @@ public class XPathUtil {
                     NodeList nodeList = xObject.nodelist();
                     final int len = (nodeList != null) ? nodeList.getLength() : 0;
                     log.debug("nodeList length {}", len);
-                    if (len == 0 || nodeList == null) {
+                    // length == 0 means nodelist is null 
+                    if (len == 0) {
                         log.debug("nodeList is null or empty. No match by xpath expression: {}", xPathExpression);
                         result.setFailure(!isNegated);
                         result.setFailureMessage("No Nodes Matched " + xPathExpression);
