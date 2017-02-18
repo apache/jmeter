@@ -71,7 +71,7 @@ public class SocketOutputStreamPoolFactory
     @Override
     public SocketOutputStream create(SocketConnectionInfos connectionInfos)
             throws Exception {
-        Socket socket = new Socket();
+        Socket socket = new Socket(); // NOSONAR closed by destroyObject
         socket.setKeepAlive(true);
         socket.setSoTimeout(socketTimeoutInMillis);
         socket.connect(new InetSocketAddress(connectionInfos.getHost(), connectionInfos.getPort()), socketConnectTimeoutInMillis);
