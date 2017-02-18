@@ -490,9 +490,9 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
     private PreparedStatement getPreparedStatement(Connection conn, boolean callable) throws SQLException {
         PreparedStatement pstmt;
         if (callable) {
-            pstmt = conn.prepareCall(getQuery());
+            pstmt = conn.prepareCall(getQuery()); // NOSONAR closed by caller
         } else {
-            pstmt = conn.prepareStatement(getQuery());
+            pstmt = conn.prepareStatement(getQuery()); // NOSONAR closed by caller
         }
         pstmt.setQueryTimeout(getIntegerQueryTimeout());
         return pstmt;
@@ -597,7 +597,7 @@ public abstract class AbstractJDBCTestElement extends AbstractTestElement implem
                 s.close();
             }
         } catch (SQLException e) {
-            log.warn("Error closing Statement {}", (s != null ? s.toString() : "null"), e);
+            log.warn("Error closing Statement {}", s.toString(), e);
         }
     }
 
