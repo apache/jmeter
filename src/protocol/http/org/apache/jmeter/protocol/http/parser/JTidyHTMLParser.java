@@ -133,12 +133,12 @@ class JTidyHTMLParser extends HTMLParser {
             if (name.equalsIgnoreCase(TAG_INPUT)) {
                 String src = getValue(attrs, ATT_SRC);
                 String typ = getValue(attrs, ATT_TYPE);
-                if ((src != null) && (typ.equalsIgnoreCase(ATT_IS_IMAGE))) {
+                if ((src != null) && ATT_IS_IMAGE.equalsIgnoreCase(typ)) {
                     urls.addURL(src, baseUrl);
                 }
                 break;
             }
-            if (name.equalsIgnoreCase(TAG_LINK) && getValue(attrs, ATT_REL).equalsIgnoreCase(STYLESHEET)) {
+            if (TAG_LINK.equalsIgnoreCase(name) && STYLESHEET.equalsIgnoreCase(getValue(attrs, ATT_REL))) {
                 urls.addURL(getValue(attrs, ATT_HREF), baseUrl);
                 break;
             }
