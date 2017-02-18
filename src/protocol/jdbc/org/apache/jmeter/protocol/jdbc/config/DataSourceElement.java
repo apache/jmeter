@@ -290,16 +290,16 @@ public class DataSourceElement extends AbstractTestElement
             }
 
             conn=dsc.getConnection();
-            int transactionIsolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
-            if (transactionIsolation >= 0 && conn.getTransactionIsolation() != transactionIsolation) {
+            int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
+            if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
                 try {
                     // make sure setting the new isolation mode is done in an auto committed transaction
-                    conn.setTransactionIsolation(transactionIsolation);
+                    conn.setTransactionIsolation(isolation);
                     log.debug("Setting transaction isolation: {}@{}",
-                            transactionIsolation, System.identityHashCode(dsc));
+                            isolation, System.identityHashCode(dsc));
                 } catch (SQLException ex) {
                     log.error("Could not set transaction isolation: {}@{}", 
-                            transactionIsolation, System.identityHashCode(dsc));
+                            isolation, System.identityHashCode(dsc));
                 }   
             }
 
