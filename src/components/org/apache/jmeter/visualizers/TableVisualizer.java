@@ -171,18 +171,18 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     @Override
     public void add(final SampleResult res) {
+        if (childSamples.isSelected()) {
+            SampleResult[] subResults = res.getSubResults();
+            if (subResults.length > 0) {
+                for (SampleResult sr : subResults) {
+                    add(sr);
+                }
+                return;
+            }
+        }
         JMeterUtils.runSafe(false, new Runnable() {
             @Override
             public void run() {
-                if (childSamples.isSelected()) {
-                    SampleResult[] subResults = res.getSubResults();
-                    if (subResults.length > 0) {
-                        for (SampleResult sr : subResults) {
-                            add(sr);
-                        }
-                        return;
-                    }
-                }
                 synchronized (calc) {
                     calc.addSample(res);
                     int count = calc.getCount();
