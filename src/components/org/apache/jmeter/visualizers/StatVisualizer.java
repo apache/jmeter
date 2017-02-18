@@ -86,6 +86,8 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
     private final JCheckBox useGroupName = new JCheckBox(
             JMeterUtils.getResString("aggregate_graph_use_group_name")); //$NON-NLS-1$
 
+    private final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
+
     private transient ObjectTableModel model;
 
     /**
@@ -183,7 +185,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         opts.add(saveHeaders, BorderLayout.EAST);
         this.add(opts,BorderLayout.SOUTH);
 
-        new Timer(500, e -> {
+        new Timer(REFRESH_PERIOD, e -> {
             synchronized (lock) {
                 while (!newRows.isEmpty()) {
                     model.insertRow(newRows.pop(), model.getRowCount() - 1);

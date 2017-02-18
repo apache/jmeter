@@ -67,6 +67,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
 
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
+
     // Note: the resource string won't respond to locale-changes,
     // however this does not matter as it is only used when pasting to the clipboard
     private static final ImageIcon imageSuccess = JMeterUtils.getImage(
@@ -320,7 +322,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Add the main panel and the graph
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
-        new Timer(500, e -> collectNewSamples()).start();
+        new Timer(REFRESH_PERIOD, e -> collectNewSamples()).start();
     }
 
     private void collectNewSamples() {

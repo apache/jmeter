@@ -129,7 +129,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final String VIEWERS_ORDER =
         JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
-    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("view.results.tree.refresh_period", 500);
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private ResultRenderer resultsRender = null;
 

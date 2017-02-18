@@ -56,7 +56,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             JMeterUtils.getPropDefault("jmeter.loggerpanel.enable_when_closed", true); // $NON-NLS-1$
 
     private static final int LOGGER_PANEL_REFRESH_PERIOD =
-            JMeterUtils.getPropDefault("jmeter.loggerpanel.refresh_period", 500); // $NON-NLS-1$
+            JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
 
     private final Buffer events;
 
