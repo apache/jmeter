@@ -75,6 +75,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private final String minute = JMeterUtils.getResString("minute"); // $NON-NLS-1$
 
+    private final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500); // $NON-NLS-1$
+
     private final Graph graph;
 
     private JCheckBox data;
@@ -234,7 +236,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         this.add(makeTitlePanel(), BorderLayout.NORTH);
         this.add(graphPanel, BorderLayout.CENTER);
 
-        new Timer(500, e -> collectSamplesFromQueue()).start();
+        new Timer(REFRESH_PERIOD, e -> collectSamplesFromQueue()).start();
     }
 
     // Methods used in creating the GUI
