@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
@@ -96,6 +97,9 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
     private Object[] values;
 
     // @GuardedBy("this")
+    private FileReader myFileReader = null; // File reader
+
+    // @GuardedBy("this")
     private BufferedReader myBread = null; // Buffered reader
 
     // @GuardedBy("this")
@@ -130,6 +134,12 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
         log.info(tn + " closing file " + fileName);//$NON-NLS-1$
         try {
             myBread.close();
+        } catch (IOException e) {
+            log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
+        }
+        
+        try {
+            myFileReader.close();
         } catch (IOException e) {
             log.error("closeFile() error: " + e.toString(), e);//$NON-NLS-1$
         }
@@ -198,10 +208,14 @@ public class StringFromFile extends AbstractFunction implements TestStateListene
 
         log.info(tn + " opening file " + fileName);//$NON-NLS-1$
         try {
-            myBread = new BufferedReader(new FileReader(fileName));
+            myFileReader = new FileReader(fileName);
+            myBread = new BufferedReader(myFileReader);
         } catch (Exception e) {
             log.error("openFile() error: " + e.toString());//$NON-NLS-1$
+            IOUtils.closeQuietly(myFileReader);
+            IOUtils.closeQuietly(myBread);
             myBread = null;
+            myFileReader = null;
         }
     }
 
