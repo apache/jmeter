@@ -210,10 +210,11 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
             final Object state) {
         Args.notNull(route, "HTTP route");
         if (this.log.isDebugEnabled()) {
-            this.log.debug("Connection request: " + format(route, state) + formatStats(route));
+            this.log.debug("Connection request: "+format(route, state)
+                +", stats:"+formatStats(route)+", pool:"+ pool);
         }
         final Future<HttpPoolEntry> future = this.pool.lease(route, state);
-
+        
         return new ClientConnectionRequest() {
             @Override
             public void abortRequest() {
