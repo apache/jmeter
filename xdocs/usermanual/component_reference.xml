@@ -409,9 +409,8 @@ The <code>PUT</code> and <code>PATCH</code> method body must be provided as one 
 <li>define the body as parameter value(s) with no name</li>
 <li>use the <code>Body Data</code> tab</li>
 </ul>
-
-The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <p>
+The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <code>GET</code>, <code>DELETE</code>, <code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 </p>
@@ -425,12 +424,14 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
  If the <code>HTTPResponse.parser</code> property is not set, JMeter reverts to the previous behaviour,
  i.e. only <code>text/html</code> responses will be scanned</p>
 <b>Emulating slow connections:</b><br></br>
-<code>HttpClient31</code>, <code>HttpClient4</code> and <code>Java</code> Sampler support emulation of slow connections; see the following entries in <code>jmeter.properties</code>:
+<p>
+<code>HttpClient4</code> and <code>Java</code> Sampler support emulation of slow connections; see the following entries in <code>jmeter.properties</code>:
 <source>
 # Define characters per second &gt; 0 to emulate slow connections
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
 </source>
+</p>
 <p><b>Response size calculation</b><br></br>
 Optional properties to allow change the method to get response size:<br></br></p>
 <ul><li>Gets the real network size in bytes for the body response
