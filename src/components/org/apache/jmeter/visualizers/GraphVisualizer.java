@@ -233,7 +233,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         // Add the main panel and the graph
         this.add(makeTitlePanel(), BorderLayout.NORTH);
         this.add(graphPanel, BorderLayout.CENTER);
-        
+
         new Timer(500, e -> collectSamplesFromQueue()).start();
     }
 
