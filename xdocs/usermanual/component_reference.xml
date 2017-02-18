@@ -449,7 +449,7 @@ so the value may be greater than the number of bytes in the response content.
 <note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-For HttpClient4 and Commons HttpClient 3.1 samplers, the retry count has been set to <code>0</code>, meaning not retry is attempted. 
+For HttpClient4 the retry count has been set to <code>0</code>, meaning not retry is attempted. 
 Note that the Java implementation appears to retry 1 time.
 The retry count can be overridden by setting the relevant JMeter property, for example:
 </p>
@@ -3663,18 +3663,11 @@ transmits the login information when it encounters this type of page.</p>
 The Authorization headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
-The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
-The HttpComponents (HC 4.5.X) implementation does not do pre-emptive auth 
-(it is supported by the library but JMeter does not enable it)
+The HttpComponents (HC 4.5.X) implementation defaults to pre-emptive since 3.2 and the header will be shown.
+To disable this, set the values as below, in which case authentication will only be performed in response to a challenge.
 </p>
 <p>
-The HttpClient3.1 implementation defaults to pre-emptive authentication
-if the setting has not been defined. To disable this, set the values as below, in which case
-authentication will only be performed in response to a challenge.
-</p>
-<p>
-In the file <code>jmeter.properties</code> set <code>httpclient.parameters.file=httpclient.parameters</code>
-and in <code>httpclient.parameters</code> set <code>http.authentication.preemptive$Boolean=false</code>
+In the file <code>jmeter.properties</code> set <code>httpclient4.auth.preemptive=false</code>
 </p>
 <note>
 Note: the above settings only apply to the HttpClient sampler.
@@ -3705,7 +3698,6 @@ information for the user named, "<code>jmeter</code>".</property>
   <property name="Mechanism" required="No">Type of authentication to perform. JMeter can perform different types of authentications based on used Http Samplers:
 <dl>
 <dt>Java</dt><dd><code>BASIC</code></dd>
-<dt>HttpClient 3.1</dt><dd><code>BASIC</code> and <code>DIGEST</code></dd>
 <dt>HttpClient 4</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
 </dl>
 </property>
