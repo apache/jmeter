@@ -68,7 +68,7 @@ under the License.
       <commons-jexl3.version>3.0</commons-jexl3.version>
       <commons-lang3.version>3.5</commons-lang3.version>
       <commons-math3.version>3.6.1</commons-math3.version>
-      <commons-net.version>3.5</commons-net.version>
+      <commons-net.version>3.6</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
       <dnsjava.version>2.1.8</dnsjava.version>
       <freemarker.version>2.3.23</freemarker.version>
