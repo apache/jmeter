@@ -24,6 +24,8 @@ import java.awt.FlowLayout;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -33,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -110,6 +113,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
 
+    private Deque<SampleResult> newRows = new ConcurrentLinkedDeque<>();
+
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
         new TableCellRenderer[]{
@@ -180,43 +185,21 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
                 return;
             }
         }
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                synchronized (calc) {
-                    calc.addSample(res);
-                    int count = calc.getCount();
-                    TableSample newS = new TableSample(
-                            count,
-                            res.getSampleCount(),
-                            res.getStartTime(),
-                            res.getThreadName(),
-                            res.getSampleLabel(),
-                            res.getTime(),
-                            res.isSuccessful(),
-                            res.getBytesAsLong(),
-                            res.getSentBytes(),
-                            res.getLatency(),
-                            res.getConnectTime()
-                            );
-                    model.addRow(newS);
-                }
-                updateTextFields(res);
-                if (autoscroll.isSelected()) {
-                    table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
-                }
-            }
-        });
+        newRows.add(res);
+
     }
 
     @Override
     public synchronized void clearData() {
-        model.clearData();
-        calc.clear();
-        noSamplesField.setText("0"); // $NON-NLS-1$
-        dataField.setText("0"); // $NON-NLS-1$
-        averageField.setText("0"); // $NON-NLS-1$
-        deviationField.setText("0"); // $NON-NLS-1$
+        synchronized (calc) {
+            model.clearData();
+            calc.clear();
+            newRows.clear();
+            noSamplesField.setText("0"); // $NON-NLS-1$
+            dataField.setText("0"); // $NON-NLS-1$
+            averageField.setText("0"); // $NON-NLS-1$
+            deviationField.setText("0"); // $NON-NLS-1$            
+        }
         repaint();
     }
 
@@ -337,6 +320,39 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Add the main panel and the graph
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
+        new Timer(500, e -> collectNewSamples()).start();
+    }
+
+    private void collectNewSamples() {
+        synchronized (calc) {
+            SampleResult res = null;
+            while (!newRows.isEmpty()) {
+                res = newRows.pop();
+                calc.addSample(res);
+                int count = calc.getCount();
+                TableSample newS = new TableSample(
+                        count,
+                        res.getSampleCount(),
+                        res.getStartTime(),
+                        res.getThreadName(),
+                        res.getSampleLabel(),
+                        res.getTime(),
+                        res.isSuccessful(),
+                        res.getBytesAsLong(),
+                        res.getSentBytes(),
+                        res.getLatency(),
+                        res.getConnectTime()
+                        );
+                model.addRow(newS);
+            }
+            if (res == null) {
+                return;
+            }
+            updateTextFields(res);
+            if (autoscroll.isSelected()) {
+                table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+            }
+        }
     }
 
     public static class SampleSuccessFunctor extends Functor {
