@@ -72,8 +72,7 @@ public class ResponseTimeDistributionGraphConsumer extends
             @Override
             public Double select(Sample sample) {
                 long elapsed = sample.getElapsedTime();
-                return Double.valueOf(elapsed - elapsed % granularity);
-
+                return Double.valueOf((double) elapsed - elapsed % granularity);
             }
         };
     }
