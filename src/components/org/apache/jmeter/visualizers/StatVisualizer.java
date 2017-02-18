@@ -182,7 +182,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         opts.add(saveTable, BorderLayout.CENTER);
         opts.add(saveHeaders, BorderLayout.EAST);
         this.add(opts,BorderLayout.SOUTH);
-        
+
         new Timer(500, e -> {
             synchronized (lock) {
                 while (!newRows.isEmpty()) {
