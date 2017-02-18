@@ -3164,7 +3164,7 @@ run JMeter unless all the JMeter jars are added.
      </taskdef>
      <jacoco:agent property="jacocoagent"
                    destfile="reports/jacoco.exec"
-                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder:org.apache.http.impl.conn.JMeterPoolingClientConnectionManager"
+                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder:org.apache.http.impl.conn.*"
                    sessionid=""
      />
   </target>
