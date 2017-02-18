@@ -27,6 +27,8 @@ import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.NumberFormat;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -94,6 +97,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private JTextField medianField;
 
+    private Deque<SampleResult> newSamples = new ConcurrentLinkedDeque<>();
+
     /**
      * Constructor for the GraphVisualizer object.
      */
@@ -117,8 +122,30 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         return result;
     }
 
-    public synchronized void updateGui(Sample s) {
+    /**
+     * @deprecated use {@link GraphVisualizer#add(SampleResult)} instead
+     */
+    public void updateGui(Sample s) {
+        JMeterUtils.runSafe(false, () -> _updateGui(s));
+    }
+
+    // called inside AWT Thread
+    private void collectSamplesFromQueue() {
         // We have received one more sample
+        Sample s = null;
+        synchronized (graph) {
+            while (!newSamples.isEmpty()) {
+                s = model.addSample(newSamples.pop());
+            }
+        }
+        _updateGui(s);
+    }
+
+    // called inside AWT Thread
+    private void _updateGui(Sample s) {
+        if (s == null) {
+            return;
+        }
         graph.updateGui(s);
         noSamplesField.setText(Long.toString(s.getCount()));
         dataField.setText(Long.toString(s.getData()));
@@ -131,12 +158,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                updateGui(model.addSample(res));
-            }
-        });
+        newSamples.add(res);
     }
 
     @Override
@@ -162,8 +184,11 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     @Override
     public void clearData() {
-        graph.clearData();
-        model.clear();
+        synchronized (graph) {
+            graph.clearData();
+            model.clear();
+            newSamples.clear();
+        }
         dataField.setText(ZERO);
         averageField.setText(ZERO);
         deviationField.setText(ZERO);
@@ -208,6 +233,8 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
         // Add the main panel and the graph
         this.add(makeTitlePanel(), BorderLayout.NORTH);
         this.add(graphPanel, BorderLayout.CENTER);
+        
+        new Timer(500, e -> collectSamplesFromQueue()).start();
     }
 
     // Methods used in creating the GUI
