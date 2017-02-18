@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
@@ -88,10 +89,9 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             log.error("Executor did not terminate in a timely fashion", e);
             Thread.currentThread().interrupt();
         }
-        ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(new FileInputStream(temporaryFile));
-            Object obj = null;
+        try (InputStream fis = new FileInputStream(temporaryFile);
+                ObjectInputStream ois = new ObjectInputStream(fis)){
+            Object obj;
             while((obj = ois.readObject()) != null) {
                 if (obj instanceof SampleEvent) {
                     try {
@@ -116,7 +116,6 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             } catch (RemoteException e) {
                 log.error("returning sample", e);
             }
-            IOUtils.closeQuietly(ois);
             if(!temporaryFile.delete()) {
                 if (log.isWarnEnabled()) {
                     log.warn("Could not delete file: {}", temporaryFile.getAbsolutePath());
