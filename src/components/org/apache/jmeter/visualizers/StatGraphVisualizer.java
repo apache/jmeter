@@ -33,9 +33,11 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -58,6 +60,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -254,6 +257,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private Pattern pattern = null;
 
+    private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
+
     public StatGraphVisualizer() {
         super();
         model = createObjectTableModel();
@@ -422,20 +427,17 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
-            JMeterUtils.runSafe(false, () -> {
-                    SamplingStatCalculator row = null;
-                    synchronized (lock) {
-                        row = tableRows.get(sampleLabel);
-                        if (row == null) {
-                            row = new SamplingStatCalculator(sampleLabel);
-                            tableRows.put(row.getLabel(), row);
-                            model.insertRow(row, model.getRowCount() - 1);
-                        }
-                    }
-                    row.addSample(res);
-                    tableRows.get(TOTAL_ROW_LABEL).addSample(res);
-                    model.fireTableDataChanged();
+            SamplingStatCalculator row = tableRows.computeIfAbsent(sampleLabel, label -> {
+                SamplingStatCalculator newRow = new SamplingStatCalculator(label);
+                newRows.addLast(newRow);
+                return newRow;
             });
+            synchronized (row) {
+                row.addSample(res);
+            }
+            synchronized (lock) {
+                tableRows.get(TOTAL_ROW_LABEL).addSample(res);
+            }
         }
     }
 
@@ -514,6 +516,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane, BorderLayout.CENTER);
+        new Timer(500, e -> {
+                synchronized (lock) {
+                    while (!newRows.isEmpty()) {
+                        model.insertRow(newRows.pop(), model.getRowCount() - 1);
+                    }
+                }
+                model.fireTableDataChanged();
+        }).start();
     }
 
     public void makeGraph() {
