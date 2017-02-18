@@ -162,7 +162,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
             try {
                 closeSocket(socketKey); // Bug 44910 - close previous socket (if any)
                 SocketAddress sockaddr = new InetSocketAddress(getServer(), getPort());
-                con = new Socket();
+                con = new Socket(); // NOSONAR socket is either cache in ThreadLocal for reuse and closed at end of thread or closed here
                 if (getPropertyAsString(SO_LINGER,"").length() > 0){
                     con.setSoLinger(true, getSoLinger());
                 }
