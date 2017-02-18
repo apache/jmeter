@@ -280,9 +280,6 @@ class SMIMEAssertion {
             log.error(e.getMessage(), e);
             res.setError(true);
             res.setFailureMessage(e.getMessage());
-        } catch (FileNotFoundException e) {
-            res.setFailure(true);
-            res.setFailureMessage("certificate file not found: " + e.getMessage());
         }
 
         return res;
