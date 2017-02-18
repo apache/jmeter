@@ -328,7 +328,8 @@ public class JMeterThread implements Runnable, Interruptible {
 
         Sampler realSampler = findRealSampler(sam);
         if(realSampler == null) {
-            throw new IllegalStateException("Got null subSampler calling findRealSampler for:"+sam.getName()+", sam:"+sam);
+            throw new IllegalStateException("Got null subSampler calling findRealSampler for:"+
+                    (sam != null ? sam.getName(): "null")+", sam:"+sam);
         }
         // Find parent controllers of current sampler
         FindTestElementsUpToRootTraverser pathToRootTraverser = new FindTestElementsUpToRootTraverser(realSampler);
