@@ -286,7 +286,7 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                                 Default: <code>true</code></property>
                             <property name="series_filter" required="No">Sets the filter
                                 of series. An empty value deactivates the filtering.
-                                If not empty, regex should end with <code>((-success$|-failure$)|$)</code><br/>
+                                If not empty, regex should end with <code>(-success|-failure)?$</code><br/>
                                 Format: regular expression.
                                 Default: ""
                             </property>
@@ -518,10 +518,10 @@ jmeter.reportgenerator.apdex_tolerated_threshold=3000
 
 # Indicates which graph series are filtered (regular expression)
 # In the below example we filter on Search and Order samples
-# Note that the end of the pattern should always include (-success|-failure)? 
+# Note that the end of the pattern should always include (-success|-failure)?$
 # Transactions per second suffixes Transactions with "-success" or "-failure" depending 
 # on the result
-#jmeter.reportgenerator.exporter.html.series_filter=((^Search)|(^Order))(-success|-failure)?
+#jmeter.reportgenerator.exporter.html.series_filter=^(Search|Order)(-success|-failure)?$
 
 # Indicates whether series filter apply only on sample series
 jmeter.reportgenerator.exporter.html.filters_only_sample_series=true
