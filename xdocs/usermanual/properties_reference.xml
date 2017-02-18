@@ -160,8 +160,8 @@ The <code>system.properties</code> file gives more flexibility.</note>
 <property name="jmeter.loggerpanel.maxlength">
      Max lines kept in LoggerPanel, <code>0</code> means no limit.<br/>
      Defaults to: <code>1000</code></property>
-<property name="jmeter.loggerpanel.refresh_period">
-    Interval in <code>ms</code> to refresh the log entries in the panel.<br/>
+<property name="jmeter.gui.refresh_period">
+    Interval period in <code>ms</code> to process the events of the listeners.<br/>
     Defaults to: <code>500</code></property>
 </properties>
 </section>
@@ -1406,9 +1406,6 @@ JMETER-SERVER</source>
     Defaults to:
     <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
 </property>
-<property name="view.results.tree.refresh_period">
-    Interval in <code>ms</code> after which the results should be updated.<br/>
-    Defaults to: <code>500</code></property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>
