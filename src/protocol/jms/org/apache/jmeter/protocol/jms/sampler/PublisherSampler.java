@@ -73,7 +73,10 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     public static final Set<String> NO_ENCODING = Collections
             .unmodifiableSet(new LinkedHashSet<>(Arrays.asList(RAW_DATA, DEFAULT_ENCODING)));
 
-    /** Init available encoding using constants, then JVM standard ones **/
+    /** 
+     * Init available encoding using constants, then JVM standard ones
+     * @return Array of String containing supported encodings 
+     */
     public static String[] getSupportedEncodings() {
         // Only get JVM standard charsets
         return Stream.concat(NO_ENCODING.stream(),

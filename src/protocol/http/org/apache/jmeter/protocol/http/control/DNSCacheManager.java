@@ -230,7 +230,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Sends DNS request via system or custom DNS resolver
-     * @param host
+     * @param host Host
      * @return array of {@link InetAddress} or null if lookup did not return result
      */
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
@@ -317,7 +317,7 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Add DNS Server
-     * @param dnsServer
+     * @param dnsServer DNS Server
      */
     public void addServer(String dnsServer) {
         getServers().addItem(dnsServer);
