@@ -13,7 +13,7 @@ commons-jexl-2.1.1.jar
 commons-jexl3-3.0.jar
 commons-lang3-3.5.jar
 commons-math3-3.5.jar
-commons-net-3.5.jar
+commons-net-3.6.jar
 commons-pool2-2.4.2.jar
 excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
