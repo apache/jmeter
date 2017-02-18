@@ -104,7 +104,7 @@ public class BeanShellClient {
                     System.out.print(c);
                 }
             } catch (IOException e) {
-                // TODO Why empty block ?
+                e.printStackTrace();
             } finally {
                 System.out.println("... disconnected from server.");
             }
