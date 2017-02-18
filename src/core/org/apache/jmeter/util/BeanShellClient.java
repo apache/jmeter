@@ -104,7 +104,7 @@ public class BeanShellClient {
                     System.out.print(c);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // NOSONAR No way to log here
             } finally {
                 System.out.println("... disconnected from server.");
             }
