@@ -351,7 +351,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.10 Commons and Apache HttpClient common properties" anchor="httpclient_common_properties">
+<section name="&sect-num;.10 Apache HttpClient common properties" anchor="httpclient_common_properties">
 <properties>
 <property name="httpclient.timeout">
     Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
