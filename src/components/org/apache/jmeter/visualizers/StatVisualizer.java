@@ -26,8 +26,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,6 +38,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -92,6 +95,8 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
+    private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
+
     public StatVisualizer() {
         super();
         model = StatGraphVisualizer.createObjectTableModel();
@@ -116,32 +121,21 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                SamplingStatCalculator row;
-                final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-                synchronized (lock) {
-                    row = tableRows.get(sampleLabel);
-                    if (row == null) {
-                        row = new SamplingStatCalculator(sampleLabel);
-                        tableRows.put(row.getLabel(), row);
-                        model.insertRow(row, model.getRowCount() - 1);
-                    }
-                }
-                /*
-                 * Synch is needed because multiple threads can update the counts.
-                 */
-                synchronized(row) {
-                    row.addSample(res);
-                }
-                SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
-                synchronized(tot) {
-                    tot.addSample(res);
-                }
-                model.fireTableDataChanged();
-            }
+        SamplingStatCalculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
+           SamplingStatCalculator newRow = new SamplingStatCalculator(label);
+           newRows.add(newRow);
+           return newRow;
         });
+        synchronized(row) {
+            /*
+             * Synch is needed because multiple threads can update the counts.
+             */
+            row.addSample(res);
+        }
+        SamplingStatCalculator tot = tableRows.get(TOTAL_ROW_LABEL);
+        synchronized(lock) {
+            tot.addSample(res);
+        }
     }
 
     /**
@@ -152,6 +146,7 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         synchronized (lock) {
             model.clearData();
             tableRows.clear();
+            newRows.clear();
             tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
             model.addRow(tableRows.get(TOTAL_ROW_LABEL));
         }
@@ -187,6 +182,15 @@ public class StatVisualizer extends AbstractVisualizer implements Clearable, Act
         opts.add(saveTable, BorderLayout.CENTER);
         opts.add(saveHeaders, BorderLayout.EAST);
         this.add(opts,BorderLayout.SOUTH);
+        
+        new Timer(500, e -> {
+            synchronized (lock) {
+                while (!newRows.isEmpty()) {
+                    model.insertRow(newRows.pop(), model.getRowCount() - 1);
+                }
+            }
+            model.fireTableDataChanged();
+        }).start();
     }
 
     @Override
