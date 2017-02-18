@@ -356,8 +356,6 @@ JMETER-SERVER</source>
 <property name="httpclient.timeout">
     Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
     AJP Sampler and HttpClient3 implementation.<br/>
-    <note>Note for HttpClient3 implementation it is better to use GUI to set timeout or
-    use <code>http.socket.timeout</code> in <code>httpclient.parameters</code>.</note>
     Value is in milliseconds, <code>0</code> means no timeout.<br/>
     Defaults to: <code>0</code>
 </property>
@@ -689,8 +687,7 @@ JMETER-SERVER</source>
     <dl>
         <dt><code>HTTPSampler</code> or <code>Java</code></dt>
         <dd>Use the <code>Java</code> Sampler</dd>
-        <dt><code>HTTPSampler2</code> or <code>HttpClient3.1</code></dt>
-        <dd>Use Apache HTTPClient version 3.1</dd>
+        <dt><code>HTTPSampler2</code></dt>
         <dt><code>HttpClient4</code></dt>
         <dd>Use Apache HTTPClient version 4</dd>
     </dl>
