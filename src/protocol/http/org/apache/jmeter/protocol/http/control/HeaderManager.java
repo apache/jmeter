@@ -226,15 +226,12 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * 
      * @param element
      *            The object to be merged with
-     * @param preferLocalValues
-     *            When both objects have a value for the same attribute, this
-     *            flag determines which value is preferred.
      * @return merged HeaderManager
      * @throws IllegalArgumentException
      *             if <code>element</code> is not an instance of
      *             {@link HeaderManager}
      */
-    public HeaderManager merge(TestElement element, boolean preferLocalValues) {
+    public HeaderManager merge(TestElement element) {
         if (!(element instanceof HeaderManager)) {
             throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
         }
@@ -253,16 +250,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
                 if (mergedHeader.getName().equalsIgnoreCase(otherHeader.getName())) {
                     // we have a match
                     found = true;
-                    if (!preferLocalValues) {
-                        // prefer values from the other object
-                        if ( (otherHeader.getValue() == null) || (otherHeader.getValue().length() == 0) ) {
-                            // the other object has an empty value, so remove this value from the merged object
-                            merged.remove(j);
-                        } else {
-                            // use the other object's value
-                            mergedHeader.setValue(otherHeader.getValue());
-                        }
-                    }
                     // break out of the inner loop
                     break;
                 }
