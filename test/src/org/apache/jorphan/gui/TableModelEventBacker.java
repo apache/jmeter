@@ -44,6 +44,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds an assertion first args is table model event, second one is event index.
+         * @param assertion assertion to add
          * @return <code>this</code>
          */
         public EventAssertion add(ObjIntConsumer<TableModelEvent> assertion) {
@@ -64,6 +65,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds {@link TableModelEvent#getSource()} assertion.
+         * @param expected Object to compare against the source of the event
          * @return <code>this</code>
          */
         public EventAssertion source(Object expected) {
@@ -72,6 +74,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds {@link TableModelEvent#getType()} assertion.
+         * @param expected int value of the type to compare against
          * @return <code>this</code>
          */
         public EventAssertion type(int expected) {
@@ -80,6 +83,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds {@link TableModelEvent#getColumn()} assertion.
+         * @param expected int value of the column to compare against
          * @return <code>this</code>
          */
         public EventAssertion column(int expected) {
@@ -88,6 +92,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds {@link TableModelEvent#getFirstRow()} assertion.
+         * @param expected int value of the first row that should have changed
          * @return <code>this</code>
          */
         public EventAssertion firstRow(int expected) {
@@ -96,6 +101,7 @@ public class TableModelEventBacker implements TableModelListener {
 
         /**
          * Adds {@link TableModelEvent#getLastRow()} assertion.
+         * @param expected int value of the last row that should have changed
          * @return <code>this</code>
          */
         public EventAssertion lastRow(int expected) {
@@ -128,6 +134,7 @@ public class TableModelEventBacker implements TableModelListener {
 
     /**
      * Creates a new event assertion.
+     * @return a newly created {@link EventAssertion}
      * @see #assertEvents(EventAssertion...)
      */
     public EventAssertion assertEvent() {
@@ -136,6 +143,7 @@ public class TableModelEventBacker implements TableModelListener {
 
     /**
      * Checks each event assertion against each backed event in order. Event storage is cleared after it.
+     * @param assertions a collection if {@link EventAssertion}s to check
      */
     public void assertEvents(EventAssertion... assertions) {
         try {
