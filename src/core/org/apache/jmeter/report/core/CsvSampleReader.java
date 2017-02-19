@@ -112,12 +112,12 @@ public class CsvSampleReader implements Closeable{
             isr = new InputStreamReader(fis, CHARSET);
             this.reader = new BufferedReader(isr, BUF_SIZE);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            throw new SampleException("Could not create file reader !", ex);
-        } finally {
             JOrphanUtils.closeQuietly(isr);
             JOrphanUtils.closeQuietly(fis);
             JOrphanUtils.closeQuietly(this.reader);
+            throw new SampleException("Could not create file reader !", ex);
         }
+
         if (metadata == null) {
             this.metadata = readMetadata(separator, useSaveSampleCfg);
         } else {
