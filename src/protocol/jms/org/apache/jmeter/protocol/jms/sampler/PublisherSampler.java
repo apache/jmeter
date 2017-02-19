@@ -302,8 +302,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         default:
             cacheBuilder.expireAfterWrite(0, TimeUnit.MILLISECONDS).maximumSize(0);
         }
-        Cache<Object, Object> newCache = cacheBuilder.build();
-        return newCache;
+        return cacheBuilder.build();
     }
 
     /** Gets file path to use **/
