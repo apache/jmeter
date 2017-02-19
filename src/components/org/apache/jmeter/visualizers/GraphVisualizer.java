@@ -125,6 +125,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
     }
 
     /**
+     * @param s Sample
      * @deprecated use {@link GraphVisualizer#add(SampleResult)} instead
      */
     public void updateGui(Sample s) {
