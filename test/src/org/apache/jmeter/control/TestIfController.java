@@ -30,6 +30,7 @@ import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestIfController extends JMeterTestCase {
@@ -144,6 +145,7 @@ public class TestIfController extends JMeterTestCase {
         }
 
         @Test
+        @Ignore
         public void testProcessing() throws Exception {
 
             GenericController controller = new GenericController();
