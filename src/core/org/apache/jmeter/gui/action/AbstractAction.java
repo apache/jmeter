@@ -69,6 +69,7 @@ public abstract class AbstractAction implements Command {
     
     /**
      * @param tree where check if listener has existing file
+     * @return true if continue test, false otherwise
      */
     protected boolean popupCheckExistingFileListener(HashTree tree) {
 
