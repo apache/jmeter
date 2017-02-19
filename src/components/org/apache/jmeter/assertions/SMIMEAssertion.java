@@ -21,7 +21,6 @@ package org.apache.jmeter.assertions;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -40,7 +39,6 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
