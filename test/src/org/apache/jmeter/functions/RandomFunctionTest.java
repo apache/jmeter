@@ -19,17 +19,30 @@
 package org.apache.jmeter.functions;
 
 import static org.apache.jmeter.functions.FunctionTestHelper.makeParams;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.threads.JMeterVariables;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 public class RandomFunctionTest extends JMeterTestCase {
 
+    @Before
+    public void setup() {
+        JMeterContextService.getContext().setVariables(new JMeterVariables());
+    }
+    @After
+    public void tearDown() {
+        JMeterContextService.getContext().clear();
+    }
+    
     @Test
     public void randomTest1() throws Exception {
         Random r = new Random();
@@ -44,5 +57,7 @@ public class RandomFunctionTest extends JMeterTestCase {
         s = r.execute(null,null);
         l = Long.parseLong(s);
         assertEquals(1, l);
+        String varValue = JMeterContextService.getContext().getVariables().get("VAR");
+        assertEquals("1", varValue);
     }
 }
