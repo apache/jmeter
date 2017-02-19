@@ -19,6 +19,7 @@
 package org.apache.jorphan.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -79,7 +80,7 @@ public class TestConverter {
      */
     @Test
     public void testGetCalendarObjectCalendarWithInvalidStringAndNullDefault() {
-        assertEquals(null, Converter.getCalendar("invalid date", null));
+        assertNull(Converter.getCalendar("invalid date", null));
     }
 
     /**
@@ -128,7 +129,7 @@ public class TestConverter {
      */
     @Test
     public void testGetDateObjectDateWithInvalidStringAndNullDefault() {
-        assertEquals(null, Converter.getDate("invalid date", null));
+        assertNull(Converter.getDate("invalid date", null));
     }
 
 }
