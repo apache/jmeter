@@ -219,6 +219,35 @@ public class TestIfController extends JMeterTestCase {
         }
         assertEquals(counter, 6);
     }
+    
+    @Test
+    public void testProcessingTrueWithExpression() throws Exception {
+        LoopController controller = new LoopController();
+        controller.setLoops(2);
+        controller.addTestElement(new TestSampler("Sample1"));
+        IfController ifCont = new IfController("true");
+        ifCont.setUseExpression(true);
+        ifCont.setEvaluateAll(false);
+        ifCont.addTestElement(new TestSampler("Sample2"));
+        TestSampler sample3 = new TestSampler("Sample3");
+        ifCont.addTestElement(sample3);
+        controller.addTestElement(ifCont);
+
+        String[] order = new String[] { "Sample1", "Sample2", "Sample3", "Sample1", "Sample2", "Sample3" };
+        int counter = 0;
+        controller.initialize();
+        controller.setRunningVersion(true);
+        ifCont.setRunningVersion(true);
+
+        Sampler sampler = null;
+        while ((sampler = controller.next()) != null) {
+            sampler.sample(null);
+            assertEquals(order[counter], sampler.getName());
+            counter++;
+        }
+        assertEquals(counter, 6);
+    }
+
 
     /**
      * Test false return on sample3 (sample4 doesn't execute)
