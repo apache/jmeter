@@ -20,6 +20,8 @@ package org.apache.jmeter.assertions.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -36,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 
 import org.apache.jmeter.assertions.ResponseAssertion;
@@ -76,6 +79,9 @@ public class AssertionGui extends AbstractAssertionGui {
 
     /** Radio button indicating that the headers should be tested. */
     private JRadioButton responseHeadersButton;
+    
+    /** Radio button indicating that the request headers should be tested. */
+    private JRadioButton requestHeadersButton;
 
     /**
      * Checkbox to indicate whether the response should be forced successful
@@ -169,6 +175,8 @@ public class AssertionGui extends AbstractAssertionGui {
                 ra.setTestFieldResponseCode();
             } else if (responseMessageButton.isSelected()) {
                 ra.setTestFieldResponseMessage();
+            } else if (requestHeadersButton.isSelected()) {
+                ra.setTestFieldRequestHeaders();
             } else if (responseHeadersButton.isSelected()) {
                 ra.setTestFieldResponseHeaders();
             } else { // Assume URL
@@ -214,6 +222,7 @@ public class AssertionGui extends AbstractAssertionGui {
         urlButton.setSelected(false);
         responseCodeButton.setSelected(false);
         responseMessageButton.setSelected(false);
+        requestHeadersButton.setSelected(false);
         responseHeadersButton.setSelected(false);
         assumeSuccess.setSelected(false);
 
@@ -259,6 +268,8 @@ public class AssertionGui extends AbstractAssertionGui {
             responseCodeButton.setSelected(true);
         } else if (model.isTestFieldResponseMessage()) {
             responseMessageButton.setSelected(true);
+        } else if (model.isTestFieldRequestHeaders()) {
+            requestHeadersButton.setSelected(true);
         } else if (model.isTestFieldResponseHeaders()) {
             responseHeadersButton.setSelected(true);
         } else // Assume it is the URL
@@ -305,15 +316,13 @@ public class AssertionGui extends AbstractAssertionGui {
      * @return a new panel for selecting the response field
      */
     private JPanel createFieldPanel() {
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field"))); //$NON-NLS-1$
-
         responseStringButton = new JRadioButton(JMeterUtils.getResString("assertion_text_resp")); //$NON-NLS-1$
         responseAsDocumentButton = new JRadioButton(JMeterUtils.getResString("assertion_text_document")); //$NON-NLS-1$
         urlButton = new JRadioButton(JMeterUtils.getResString("assertion_url_samp")); //$NON-NLS-1$
         responseCodeButton = new JRadioButton(JMeterUtils.getResString("assertion_code_resp")); //$NON-NLS-1$
         responseMessageButton = new JRadioButton(JMeterUtils.getResString("assertion_message_resp")); //$NON-NLS-1$
         responseHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_headers")); //$NON-NLS-1$
+        requestHeadersButton = new JRadioButton(JMeterUtils.getResString("assertion_req_headers")); //$NON-NLS-1$
 
         ButtonGroup group = new ButtonGroup();
         group.add(responseStringButton);
@@ -321,22 +330,57 @@ public class AssertionGui extends AbstractAssertionGui {
         group.add(urlButton);
         group.add(responseCodeButton);
         group.add(responseMessageButton);
+        group.add(requestHeadersButton);
         group.add(responseHeadersButton);
-
-        panel.add(responseStringButton);
-        panel.add(responseAsDocumentButton);
-        panel.add(urlButton);
-        panel.add(responseCodeButton);
-        panel.add(responseMessageButton);
-        panel.add(responseHeadersButton);
-
+        
         responseStringButton.setSelected(true);
 
         assumeSuccess = new JCheckBox(JMeterUtils.getResString("assertion_assume_success")); //$NON-NLS-1$
-        panel.add(assumeSuccess);
 
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        initConstraints(gbc);
+
+        JPanel panel = new JPanel(gridBagLayout);
+        panel.setBorder(BorderFactory.createTitledBorder(JMeterUtils.getResString("assertion_resp_field"))); //$NON-NLS-1$
+
+        addField(panel, responseStringButton, gbc);
+        addField(panel, responseCodeButton, gbc);
+        addField(panel, responseMessageButton, gbc);
+        addField(panel, responseHeadersButton, gbc);
+
+        resetContraints(gbc);
+        addField(panel, requestHeadersButton, gbc);
+        addField(panel, urlButton, gbc);
+        addField(panel, responseAsDocumentButton, gbc);
+        addField(panel, assumeSuccess, gbc);
         return panel;
     }
+    
+    private void addField(JPanel panel, JToggleButton button, GridBagConstraints gbc) {
+        panel.add(button, gbc.clone());
+        gbc.gridx++;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+    }
+    
+    // Next line
+    private void resetContraints(GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.fill=GridBagConstraints.NONE;
+    }
+
+    private void initConstraints(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+    }
+
 
     /**
      * Create a panel allowing the user to choose what type of test should be
