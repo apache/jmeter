@@ -30,11 +30,10 @@ import org.apache.jmeter.NewDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
+/**
  * Utility class to set up default HttpClient parameters from a file.
  * 
- * Supports both Commons HttpClient and Apache HttpClient.
- * 
+ * Supports Apache HttpClient.
  */
 public class HttpClientDefaultParameters {
 
