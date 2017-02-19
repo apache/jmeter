@@ -106,8 +106,6 @@ public class CsvSampleReaderTest {
     public void testHasNext() {
         try (CsvSampleReader reader = new CsvSampleReader(tempCsv, metadata)) {
             for (long i = 0; i < NR_ROWS; i++) {
-                Sample expected = new SampleBuilder(metadata).add(i)
-                        .add("a" + i).build();
                 Assert.assertTrue(reader.hasNext());
                 reader.readSample();
             }
