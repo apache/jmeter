@@ -131,7 +131,7 @@ public class XPathUtil {
      * @param tolerant - Is tolerant - i.e. use the Tidy parser
      * @param quiet - set Tidy quiet
      * @param showWarnings - set Tidy warnings
-     * @param report_errors - throw TidyException if Tidy detects an error
+     * @param reportErrors - throw TidyException if Tidy detects an error
      * @param isXml - is document already XML (Tidy only)
      * @param downloadDTDs - if true, try to download external DTDs
      * @return document
@@ -141,10 +141,10 @@ public class XPathUtil {
      * @throws TidyException if a ParseError is detected and <code>report_errors</code> is <code>true</code>
      */
     public static Document makeDocument(InputStream stream, boolean validate, boolean whitespace, boolean namespace,
-            boolean tolerant, boolean quiet, boolean showWarnings, boolean report_errors, boolean isXml, boolean downloadDTDs)
+            boolean tolerant, boolean quiet, boolean showWarnings, boolean reportErrors, boolean isXml, boolean downloadDTDs)
             throws ParserConfigurationException, SAXException, IOException, TidyException {
         return makeDocument(stream, validate, whitespace, namespace,
-                tolerant, quiet, showWarnings, report_errors, isXml, downloadDTDs, null);
+                tolerant, quiet, showWarnings, reportErrors, isXml, downloadDTDs, null);
     }
 
     /**
