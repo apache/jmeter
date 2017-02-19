@@ -57,6 +57,7 @@ public class ResponseAssertionTest {
         sample.setURL(new URL("http://localhost/Sampler/Data/"));
         sample.setResponseCode("401");
         sample.setResponseHeaders("X-Header: abcd");
+        sample.setRequestHeaders("X-reqHeader: cdef");
     }
 
     @Test
@@ -78,7 +79,7 @@ public class ResponseAssertionTest {
     }
     
     @Test
-    public void testResponseAssertionHeaders() throws Exception{
+    public void testResponseAssertionResponseHeaders() throws Exception{
         assertion.unsetNotType();
         assertion.setToEqualsType();
         assertion.setTestFieldResponseHeaders();
@@ -89,6 +90,22 @@ public class ResponseAssertionTest {
 
         assertion.clearTestStrings();
         assertion.addTestString("X-Header: abcd");
+        result = assertion.getResult(sample);
+        assertPassed();
+    }
+    
+    @Test
+    public void testResponseAssertionRequestHeaders() throws Exception{
+        assertion.unsetNotType();
+        assertion.setToEqualsType();
+        assertion.setTestFieldRequestHeaders();
+        assertion.addTestString("X-reqHeader: cdef");
+        assertion.addTestString("X-reqHeader: cdefx");
+        result = assertion.getResult(sample);
+        assertFailed();
+
+        assertion.clearTestStrings();
+        assertion.addTestString("X-reqHeader: cdef");
         result = assertion.getResult(sample);
         assertPassed();
     }

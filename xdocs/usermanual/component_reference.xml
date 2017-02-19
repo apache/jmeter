@@ -4437,7 +4437,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
 <component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="921" height="423" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
-    fields of the response.
+    fields of the request or response.
     The pattern strings are:
     </p>
     <ul>
@@ -4485,16 +4485,17 @@ These can be used anywhere within the expression and remain in effect until over
         <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
-        <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
+        <property name="Field to Test" required="Yes">Instructs JMeter which field of the Request or Response to test.
         <ul>
         <li><code>Text Response</code> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
-        <li><code>Document (text)</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
-        <li><code>URL sampled</code></li>
         <li><code>Response Code</code> - e.g. <code>200</code></li>
         <li><code>Response Message</code> - e.g. <code>OK</code></li>
         <li><code>Response Headers</code>, including Set-Cookie headers (if any)</li>
+        <li><code>Request Headers</code></li>
+        <li><code>URL sampled</code></li>
+        <li><code>Document (text)</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
         </ul>
-                </property>
+        </property>
         <property name="Ignore status" required="Yes">Instructs JMeter to set the status to success initially. 
                 <p>
                 The overall success of the sample is determined by combining the result of the
@@ -4517,7 +4518,8 @@ These can be used anywhere within the expression and remain in effect until over
         <li><code>Substring</code> - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
         <code>Equals</code> and <code>Substring</code> patterns are plain strings, not regular expressions.
-        <code>NOT</code> may also be selected to invert the result of the check.</property>
+        <code>NOT</code> may also be selected to invert the result of the check.
+        <code>OR</code> Apply each assertion in OR combination (if 1 pattern to test maches, Assertion will be ok) instead of AND (All patterns must match so that Assertion is OK).</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
         be tested.  
         Each pattern is tested separately. 
