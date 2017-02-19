@@ -105,16 +105,16 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             file = new File(System.getProperty("user.dir")// $NON-NLS-1$
                     + File.separator + headFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file)); // TODO Charset ?
-        writer.println("# JMeter generated Header file");// $NON-NLS-1$
-        final CollectionProperty hdrs = getHeaders();
-        for (int i = 0; i < hdrs.size(); i++) {
-            final JMeterProperty hdr = hdrs.get(i);
-            Header head = (Header) hdr.getObjectValue();
-            writer.println(head.toString());
+        try ( FileWriter fw = new FileWriter(file);
+                PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ? 
+            writer.println("# JMeter generated Header file");// $NON-NLS-1$
+            final CollectionProperty hdrs = getHeaders();
+            for (int i = 0; i < hdrs.size(); i++) {
+                final JMeterProperty hdr = hdrs.get(i);
+                Header head = (Header) hdr.getObjectValue();
+                writer.println(head.toString());
+            }
         }
-        writer.flush();
-        writer.close();
     }
 
     /**
