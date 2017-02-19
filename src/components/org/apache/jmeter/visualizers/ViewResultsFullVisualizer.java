@@ -156,6 +156,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {
