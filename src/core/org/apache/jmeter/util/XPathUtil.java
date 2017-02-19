@@ -380,9 +380,7 @@ public class XPathUtil {
      * @return {@link PrefixResolver}
      */
     private static PrefixResolver getPrefixResolver(Document document) {
-        PropertiesBasedPrefixResolver propertiesBasedPrefixResolver =
-                new PropertiesBasedPrefixResolver(document.getDocumentElement());
-        return propertiesBasedPrefixResolver;
+        return new PropertiesBasedPrefixResolver(document.getDocumentElement());
     }
 
     /**
