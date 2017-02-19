@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.mail.sampler;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +31,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 import javax.mail.URLName;
-
-import org.apache.commons.io.IOUtils;
 
 public class MailFileFolder extends Folder {
 
