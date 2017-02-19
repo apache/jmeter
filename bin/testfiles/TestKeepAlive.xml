@@ -7,10 +7,20 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HTTP_Request_REUSE" rc="200" rm="OK" dt="text">
   <assertionResult>
     <name>RA_Max99</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -21,6 +31,11 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HTTP_Request_REUSE_AFTER_VALIDATE" rc="200" rm="OK" dt="text">
   <assertionResult>
@@ -28,10 +43,8 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-</httpSample>
-<httpSample s="true" lb="HTTP_Request_NO_REUSE" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Max100</name>
+    <name>RA_keepAlive</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -42,6 +55,9 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
 </httpSample>
-
-</testResults>
