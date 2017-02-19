@@ -30,7 +30,7 @@ public abstract class Logger
 
     /**
      * Separator character use to separate different categories
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public static final char CATEGORY_SEPARATOR = '.';
@@ -153,7 +153,7 @@ public abstract class Logger
      * This is derived from Log4js notion of Additivity.
      *
      * @param additivity true to make logger additive, false otherwise
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void setAdditivity( final boolean additivity )
@@ -162,7 +162,7 @@ public abstract class Logger
     }
 
     /**
-     * Determine if messages of priority �will be logged.
+     * Determine if messages of priority will be logged.
      * @param priority the priority
      * @return true if messages will be logged
      */
@@ -191,7 +191,7 @@ public abstract class Logger
      * Set the priority for this logger.
      *
      * @param priority the priority
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void setPriority( final Priority priority )
@@ -202,7 +202,7 @@ public abstract class Logger
     /**
      * Unset the priority of Logger.
      * (Thus it will use it's parent's priority or DEBUG if no parent.
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void unsetPriority()
@@ -216,7 +216,7 @@ public abstract class Logger
      * If recursive is true unset priorities of all child loggers.
      *
      * @param recursive true to unset priority of all child loggers
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void unsetPriority( final boolean recursive )
@@ -228,7 +228,7 @@ public abstract class Logger
      * Set the log targets for this logger.
      *
      * @param logTargets the Log Targets
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void setLogTargets( final LogTarget[] logTargets )
@@ -240,7 +240,7 @@ public abstract class Logger
      * Unset the logtargets for this logger.
      * This logger (and thus all child loggers who don't specify logtargets) will
      * inherit from the parents LogTargets.
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void unsetLogTargets()
@@ -253,7 +253,7 @@ public abstract class Logger
      * The loggers unset (and all child loggers who don't specify logtargets) will
      * inherit from the parents LogTargets.
      * @param recursive the recursion policy
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public void unsetLogTargets( final boolean recursive )
@@ -265,7 +265,7 @@ public abstract class Logger
      * Get all the child Loggers of current logger.
      *
      * @return the child loggers
-     * @deprecated
+     * @deprecated Will be dropped in 3.3
      */
     @Deprecated
     public Logger[] getChildren()
