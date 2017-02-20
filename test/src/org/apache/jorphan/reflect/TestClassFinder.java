@@ -18,7 +18,11 @@
 
 package org.apache.jorphan.reflect;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,28 +30,38 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.logging.log4j.LoggingException;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestClassFinder {
 
-    private static final String[] LIB_DIRS = new String[] { getJMeterHome() };
+    private String[] libDirs;
 
-    private static String getJMeterHome() {
+    private String getJMeterHome() throws Exception {
+        String path;
         if (JMeterUtils.getJMeterHome() == null) {
-            return "./lib";
+            path = "lib";
+        } else {
+            path = JMeterUtils.getJMeterHome() + "/lib";
         }
-        return JMeterUtils.getJMeterHome() + "/lib";
+        return Paths.get(path).toRealPath().toString();
     }
+
+    @Before
+    public void setUp() throws Exception {
+        libDirs = new String[] { getJMeterHome() };
+    }
+
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArray() throws IOException {
-        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(LIB_DIRS,
+        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(libDirs,
                 new Class<?>[] { Exception.class });
         Assert.assertThat(findClassesThatExtend, CoreMatchers.hasItem(LoggingException.class.getName()));
     }
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayTrue() throws Exception {
-        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(LIB_DIRS,
+        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(libDirs,
                 new Class<?>[] { Object.class }, true);
         Assert.assertFalse(
                 findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
@@ -55,7 +69,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayFalse() throws Exception {
-        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(LIB_DIRS,
+        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(libDirs,
                 new Class<?>[] { Exception.class }, false);
         Assert.assertTrue(
                 findClassesThatExtend.stream().filter(s -> s.contains("$")).collect(Collectors.toList()).isEmpty());
@@ -64,7 +78,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringString() throws Exception {
-        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(LIB_DIRS,
+        List<String> findClassesThatExtend = ClassFinder.findClassesThatExtend(libDirs,
                 new Class<?>[] { Exception.class }, false, "org.apache.log", "core");
         Assert.assertTrue(
                 findClassesThatExtend.stream().filter(s -> s.contains("core")).collect(Collectors.toList()).isEmpty());
@@ -72,13 +86,46 @@ public class TestClassFinder {
     }
 
     @Test
+    public void testFindClassesThatExtendStringArrayClassOfQArrayBooleanStringStringTrue() throws Exception {
+        List<String> annotatedClasses = ClassFinder.findClassesThatExtend(libDirs,
+                new Class<?>[] { java.beans.Transient.class }, false, null, null, true);
+        Assert.assertFalse(annotatedClasses.isEmpty());
+    }
+
+    @Test
+    public void testFindAnnotatedClasses() throws Exception {
+        @SuppressWarnings("unchecked")
+        List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(libDirs,
+                new Class[] { java.beans.Transient.class});
+        Assert.assertFalse(annotatedClasses.isEmpty());
+    }
+
+    @Test
+    public void testFindAllClassesInJar() throws Exception {
+        Path jarPath = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> a.isRegularFile()).findFirst()
+                .orElseThrow(() -> new FileNotFoundException("no jars found")).toRealPath();
+        List<String> annotatedClasses = ClassFinder.findClasses(new String[] { jarPath.toString() },
+                c -> true);
+        Assert.assertFalse(annotatedClasses.isEmpty());
+    }
+
+    @Test
+    public void testFindAnnotatedInnerClasses() throws Exception {
+        @SuppressWarnings("unchecked")
+        List<String> annotatedClasses = ClassFinder.findAnnotatedClasses(libDirs,
+                new Class[] { java.lang.Deprecated.class}, true);
+        Assert.assertTrue(annotatedClasses.stream().filter(s->s.contains("$")).findAny().isPresent());
+        Assert.assertFalse(annotatedClasses.isEmpty());
+    }
+
+    @Test
     public void testFindClasses() throws IOException {
-        Assert.assertFalse(ClassFinder.findClasses(LIB_DIRS, className -> true).isEmpty());
+        Assert.assertFalse(ClassFinder.findClasses(libDirs, className -> true).isEmpty());
     }
 
     @Test
     public void testFindClassesNone() throws IOException {
-        Assert.assertTrue(ClassFinder.findClasses(LIB_DIRS, className -> false).isEmpty());
+        Assert.assertTrue(ClassFinder.findClasses(libDirs, className -> false).isEmpty());
     }
 
 }
