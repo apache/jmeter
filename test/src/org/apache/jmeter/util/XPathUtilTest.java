@@ -27,11 +27,13 @@ import org.junit.Test;
 
 public class XPathUtilTest {
 
+    final String lineSeparator = System.getProperty("line.separator");
+
     @Test
     public void testFormatXmlSimple() {
         assertThat(XPathUtil.formatXml("<one foo='bar'>Test</one>"),
                 CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                        + "<one foo=\"bar\">Test</one>\n"));
+                        + "<one foo=\"bar\">Test</one>" + lineSeparator));
     }
 
     @Test
@@ -39,10 +41,12 @@ public class XPathUtilTest {
         assertThat(
                 XPathUtil.formatXml(
                         "<one foo='bar'><two/><three><four p=\"1\"/></three>...</one>"),
-                CoreMatchers.is("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                        + "<one foo=\"bar\">\n" + "  <two/>\n" + "  <three>\n"
-                        + "    <four p=\"1\"/>\n" + "  </three>" + "..."
-                        + "</one>\n"));
+                CoreMatchers.is(String.join(lineSeparator, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><one foo=\"bar\">",
+                        "  <two/>",
+                        "  <three>",
+                        "    <four p=\"1\"/>",
+                        "  </three>...</one>",
+                        "")));
     }
 
     @Test()
