@@ -176,4 +176,29 @@ public class TestHtmlExtractorJSoup {
         assertNull(vars.get("regVal"));
         assertNull(vars.get("regVal_1"));
     }
+    
+    @Test
+    public void testPreviousVarsAreCleanedUp() throws Exception {
+        testMultipleVariableExtractionWithAttribute();
+        testMultipleVariableExtractionNoMatch();
+        assertNull(vars.get("regVal_2"));
+    }
+    
+    @Test
+    public void testUnknownExtractor() throws Exception {
+        extractor.setExtractor("UNKNOWN");
+        extractor.setExpression("c");
+        extractor.setMatchNumber(-1);
+        extractor.process();        
+        assertNull(vars.get("regVal_matchNr"));
+    }
+    
+    @Test
+    public void testNoPrevious() throws Exception {
+        jmctx.setPreviousResult(null);
+        extractor.setExpression("b");
+        extractor.setMatchNumber(-1);
+        extractor.process();        
+        assertNull(vars.get("regVal_matchNr"));
+    }
 }
