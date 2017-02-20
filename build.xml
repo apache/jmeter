@@ -2453,7 +2453,8 @@ run JMeter unless all the JMeter jars are added.
         </java>
       </daemons>
       <sequential>
-        <sleep seconds="1"/>
+        <!-- Increase as necessary to ensure server has time to start -->
+        <sleep seconds="2"/>
         <antcall target="batchtest">
           <param name="remote" value="-Rlocalhost:${rmi_port}"/>
           <param name="taskname" value="client"/>
