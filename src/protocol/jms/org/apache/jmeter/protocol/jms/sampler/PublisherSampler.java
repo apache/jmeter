@@ -530,7 +530,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
 
     /**
-     * Gets file encoding to use. If {@value #RAW_DATA}, content isn't parsed.
+     * Gets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
      * 
      * @return File encoding.
      * @see #RAW_DATA
@@ -542,7 +542,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     }
 
     /**
-     * Sets file encoding to use. If {@value #RAW_DATA}, content isn't parsed.
+     * Sets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
      * 
      * @param fileEncoding
      *            File encoding.
