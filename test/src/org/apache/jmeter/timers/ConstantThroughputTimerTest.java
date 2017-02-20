@@ -26,6 +26,7 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.TestJMeterContextService;
 import org.apache.jmeter.util.BeanShellInterpreter;
 import org.apache.jmeter.util.ScriptingTestElement;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +122,24 @@ public class ConstantThroughputTimerTest {
         
         timer.setScript("5*3*4");
         assertEquals(60,timer.delay());
+    }
+    
+    @Test
+    public void testUniformRandomTimer() throws Exception {
+        UniformRandomTimer timer = new UniformRandomTimer();
+        timer.setDelay("1000");
+        timer.setRange(100d);
+        timer.iterationStart(null);
+        long delay = timer.delay();
+        Assert.assertTrue("delay:"+delay +" is not in expected range", delay >= 1000 && delay <=1100);
+    }
+    
+    @Test
+    public void testConstantTimer() throws Exception {
+        ConstantTimer timer = new ConstantTimer();
+        timer.setDelay("1000");
+        timer.iterationStart(null);
+        assertEquals(1000, timer.delay());
     }
 
 }
