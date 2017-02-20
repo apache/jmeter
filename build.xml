@@ -694,8 +694,11 @@
         <pathelement location="${build.functions}"/>
         <pathelement location="${build.java}"/>
         <pathelement location="${build.jdbc}"/>
+        <pathelement location="${build.jms}"/>
         <pathelement location="${build.ldap}"/>
         <pathelement location="${build.mail}"/>
+        <pathelement location="${build.mongodb}"/>
+        <pathelement location="${build.native}"/>
         <pathelement location="${build.tcp}"/>
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
