@@ -277,8 +277,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
 
     private Pattern pattern = null;
 
-    private transient Matcher matcher = null;
-
     private final List<Color> listColors = Colors.getColors();
 
     private final List<RespTimeGraphDataBean> internalList = new ArrayList<>(); // internal list of all results
@@ -294,6 +292,8 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
         synchronized (lockInterval) {
             internalList.add(new RespTimeGraphDataBean(sampleResult.getStartTime(), sampleResult.getTime(), sampleLabel));
         }
+
+        Matcher matcher = null;
 
         // Sampler selection
         if (samplerSelection.isSelected() && pattern != null) {
@@ -548,7 +548,6 @@ public class RespTimeGraphVisualizer extends AbstractVisualizer implements Actio
                 pattern = createPattern(samplerMatchLabel.getText());
             } else if (forceReloadData) {
                 pattern = null;
-                matcher = null;
             }
             if (getFile() != null && getFile().length() > 0) {
                 // Reload data from file
