@@ -35,20 +35,20 @@ public final class LoggingManager {
     /**
      * Predefined format patterns, selected by the property log_format_type (see
      * jmeter.properties) The new-line is added later
-     * @deprecated
+     * @deprecated  since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static final String DEFAULT_PATTERN = "%{time:yyyy/MM/dd HH:mm:ss} %5.5{priority} - "  //$NON_NLS-1$
             + "%{category}: %{message} %{throwable}"; //$NON_NLS-1$
 
     /**
-     * @deprecated
+     * @deprecated  since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static final String LOG_FILE = "log_file";  //$NON_NLS-1$
 
     /**
-     * @deprecated
+     * @deprecated  since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static final String LOG_PRIORITY = "log_level";  //$NON_NLS-1$
@@ -67,7 +67,7 @@ public final class LoggingManager {
      *
      * @param properties
      *            {@link Properties} to be used for initialization
-     * @deprecated
+     * @deprecated  since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void initializeLogging(Properties properties) {
@@ -83,7 +83,7 @@ public final class LoggingManager {
      *            {@link Properties} that contain the
      *            {@link LoggingManager#LOG_PRIORITY LOG_PRIORITY} and
      *            {@link LoggingManager#LOG_FILE LOG_FILE} prefixed entries
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setLoggingLevels(Properties appProperties) {
@@ -101,7 +101,7 @@ public final class LoggingManager {
      * 
      * @param name from which to remove the prefix
      * @return the name with the prefix removed
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static String removePrefix(String name){
@@ -139,7 +139,7 @@ public final class LoggingManager {
      * @param category - the full name of the logger category, this will have the prefix removed.
      *
      * @return Logger
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static Logger getLoggerForShortName(String category) {
@@ -151,7 +151,7 @@ public final class LoggingManager {
      * 
      * @param priority - string containing the priority name, e.g. "INFO", "WARN", "DEBUG", "FATAL_ERROR"
      * @param category - string containing the category
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setPriority(String priority, String category) {
@@ -163,7 +163,7 @@ public final class LoggingManager {
      * 
      * @param priority - priority, e.g. DEBUG, INFO
      * @param fullName - e.g. org.apache.jmeter.etc, will have the prefix removed.
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setPriorityFullName(String priority, String fullName) {
@@ -175,7 +175,7 @@ public final class LoggingManager {
      * 
      * @param priority - e.g. Priority.DEBUG
      * @param category - string containing the category
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setPriority(Priority priority, String category) {
@@ -186,7 +186,7 @@ public final class LoggingManager {
      * Set the logging priority.
      * 
      * @param priority - e.g. Priority.DEBUG
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setPriority(String priority) {
@@ -197,7 +197,7 @@ public final class LoggingManager {
      * Set the default logging priority.
      * 
      * @param priority e.g. Priority.DEBUG
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setPriority(Priority priority) {
@@ -209,7 +209,7 @@ public final class LoggingManager {
      * 
      * @param target the LogTarget
      * @param category the category name
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void setTarget(LogTarget target, String category) {
@@ -220,7 +220,7 @@ public final class LoggingManager {
      * Add logTargets to root logger
      * FIXME What's the clean way to add a LogTarget afterwards ?
      * @param logTargets LogTarget array
-     * @deprecated
+     * @deprecated since 3.2, use SLF4J for logging
      */
     @Deprecated
     public static void addLogTargetToRootLogger(LogTarget[] logTargets) {

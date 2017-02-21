@@ -20,8 +20,29 @@ package org.apache.jmeter.protocol.jms.sampler.render;
 import com.github.benmanes.caffeine.cache.Cache;
 
 public interface MessageRenderer<T> {
-    /** Convert text to expected type **/
+
+    /**
+     * Convert text to expected type
+     * 
+     * @param text
+     *            Text representing the type
+     * @return the constructed object
+     **/
     T getValueFromText(String text);
-    /** Read text from file, eventually replace variables, then convert it. Cached content depends if variabilisation is active or not. **/
+
+    /**
+     * Read text from file, eventually replace variables, then convert it.
+     * Cached content depends if variabilisation is active or not.
+     * 
+     * @param filename
+     *            name of the file to get the value from
+     * @param encoding
+     *            encoding of the file
+     * @param hasVariable
+     *            flag, whether variables inside the value should be replaced
+     * @param cache
+     *            Cache in which the raw values will be stored/read from
+     * @return the constructed object
+     **/
     T getValueFromFile(String filename, String encoding, boolean hasVariable, Cache<Object,Object> cache);
 }
