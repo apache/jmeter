@@ -102,7 +102,7 @@ public class TestClassFinder {
 
     @Test
     public void testFindAllClassesInJar() throws Exception {
-        Path jarPath = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> a.isRegularFile()).findFirst()
+        Path jarPath = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> String.valueOf(p).endsWith(".jar")).findFirst()
                 .orElseThrow(() -> new FileNotFoundException("no jars found")).toRealPath();
         List<String> annotatedClasses = ClassFinder.findClasses(new String[] { jarPath.toString() },
                 c -> true);
