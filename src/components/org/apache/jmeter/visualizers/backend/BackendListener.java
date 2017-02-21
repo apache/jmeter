@@ -234,8 +234,8 @@ public class BackendListener extends AbstractTestElement
                             }
                             sampleResult = listenerClientData.queue.poll(); // returns null if nothing on queue currently
                             if (isDebugEnabled) {
-                                log.debug("Thread: {} took from queue: {}, isFinal:", Thread.currentThread().getName(),
-                                        sampleResult, (sampleResult == FINAL_SAMPLE_RESULT));
+                                log.debug("Thread: {} took from queue: {}, isFinal: {}", Thread.currentThread().getName(),
+                                        sampleResult, sampleResult == FINAL_SAMPLE_RESULT);
                             }
                         }
                         if (isDebugEnabled) {
