@@ -94,7 +94,15 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
      * Increment request number
      */
     protected static void incrementRequestNumber() {
-        REQUEST_NUMBER.incrementAndGet();
+        incrementRequestNumberAndGet();
+    }
+    
+    /**
+     * Increment request number
+     * @return int number for created sampler
+     */
+    protected static int incrementRequestNumberAndGet() {
+        return REQUEST_NUMBER.incrementAndGet();
     }
 
     /**

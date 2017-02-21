@@ -275,8 +275,7 @@ public class DefaultSamplerCreator extends AbstractSamplerCreator {
     protected void computeSamplerName(HTTPSamplerBase sampler,
             HttpRequestHdr request) {
         if (!HTTPConstants.CONNECT.equals(request.getMethod()) && isNumberRequests()) {
-            incrementRequestNumber();
-            sampler.setName(getRequestNumber() + " " + sampler.getPath());
+            sampler.setName(incrementRequestNumberAndGet() + " " + sampler.getPath());
         } else {
             sampler.setName(sampler.getPath());
         }
