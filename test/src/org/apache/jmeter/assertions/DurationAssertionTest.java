@@ -50,6 +50,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         sampleResult.setStampAndTime(0, 1000);
         assertion.setAllowedDuration(1100L);
         result = assertion.getResult(sampleResult);
+        Assert.assertFalse(result.isError());
         Assert.assertFalse(result.isFailure());
         Assert.assertNull(result.getFailureMessage());
     }
@@ -59,6 +60,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         sampleResult.setStampAndTime(0, 1000);
         assertion.setAllowedDuration(1000L);
         result = assertion.getResult(sampleResult);
+        Assert.assertFalse(result.isError());
         Assert.assertFalse(result.isFailure());
         Assert.assertNull(result.getFailureMessage());
     }
@@ -68,6 +70,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         sampleResult.setStampAndTime(0, 1200);
         assertion.setAllowedDuration(1100);
         result = assertion.getResult(sampleResult);
+        Assert.assertFalse(result.isError());
         Assert.assertTrue(result.isFailure());
         Assert.assertNotNull(result.getFailureMessage());
     }
@@ -78,6 +81,7 @@ public class DurationAssertionTest extends JMeterTestCase {
         assertion.setAllowedDuration(1100);
         result = assertion.getResult(sampleResult);
         Assert.assertFalse(result.isFailure());
+        Assert.assertFalse(result.isError());
         Assert.assertNull(result.getFailureMessage());
     }
 }
