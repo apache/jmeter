@@ -141,5 +141,24 @@ public class ConstantThroughputTimerTest {
         timer.iterationStart(null);
         assertEquals(1000, timer.delay());
     }
-
+    
+    @Test
+    public void testPoissonRandomTimerRangeHigherThan30() throws Exception {
+        PoissonRandomTimer timer = new PoissonRandomTimer();
+        timer.setDelay("300");
+        timer.setRange(100d);
+        timer.iterationStart(null);
+        long delay = timer.delay();
+        Assert.assertTrue("delay:"+delay +" is not in expected range", delay >= 356 && delay <=457);
+    }
+    
+    @Test
+    public void testPoissonRandomTimerRangeLowerThan30() throws Exception {
+        PoissonRandomTimer timer = new PoissonRandomTimer();
+        timer.setDelay("300");
+        timer.setRange(30d);
+        timer.iterationStart(null);
+        long delay = timer.delay();
+        Assert.assertTrue("delay:"+delay +" is not in expected range", delay >= 305 && delay <=362);
+    }
 }
