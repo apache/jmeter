@@ -363,7 +363,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     /** {@inheritDoc} */
     @Override
     public void itemStateChanged(ItemEvent e) {
-        // System.err.println(e.paramString());
         enableRestart();
     }
 
@@ -401,13 +400,9 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             includeModel.fireTableDataChanged();
             enableRestart();
         } else if (command.equals(DELETE_EXCLUDE)) {
-            excludeModel.removeRow(excludeTable.getSelectedRow());
-            excludeModel.fireTableDataChanged();
-            enableRestart();
+            deleteRowFromTable(excludeModel, excludeTable);
         } else if (command.equals(DELETE_INCLUDE)) {
-            includeModel.removeRow(includeTable.getSelectedRow());
-            includeModel.fireTableDataChanged();
-            enableRestart();
+            deleteRowFromTable(includeModel, includeTable);
         } else if (command.equals(CHANGE_TARGET)) {
             log.debug("Change target " + targetNodes.getSelectedItem());
             log.debug("In model " + model);
@@ -427,6 +422,34 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             excludeModel.fireTableDataChanged();
             enableRestart();
         }
+    }
+
+    /**
+     * Delete row from table, select one if possible and enable restart button 
+     * @param tableModel {@link PowerTableModel} 
+     * @param table {@link JTable}
+     * 
+     */
+    private void deleteRowFromTable(PowerTableModel tableModel, JTable table) {
+        int selectedRow = table.getSelectedRow();
+        if(selectedRow >= 0) {
+            tableModel.removeRow(table.getSelectedRow());                
+        } else {
+            if(table.getRowCount()>0) {
+                tableModel.removeRow(0);
+            }
+        }
+        
+        tableModel.fireTableDataChanged();
+        if(table.getRowCount()>0) {
+            if(selectedRow == -1) {
+                table.setRowSelectionInterval(0, 0);
+            } else {
+                int rowToSelect = selectedRow>0 ? selectedRow-1:0;
+                table.setRowSelectionInterval(rowToSelect, rowToSelect);
+            }
+        }
+        enableRestart();
     }
 
     /**
