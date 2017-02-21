@@ -129,7 +129,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * @deprecated use {@link GraphVisualizer#add(SampleResult)} instead
      */
     public void updateGui(Sample s) {
-        JMeterUtils.runSafe(false, () -> _updateGui(s));
+        JMeterUtils.runSafe(false, () -> updateGuiInAWTThread(s));
     }
 
     // called inside AWT Thread
@@ -141,11 +141,11 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
                 s = model.addSample(newSamples.pop());
             }
         }
-        _updateGui(s);
+        updateGuiInAWTThread(s);
     }
 
     // called inside AWT Thread
-    private void _updateGui(Sample s) {
+    private void updateGuiInAWTThread(Sample s) {
         if (s == null) {
             return;
         }
