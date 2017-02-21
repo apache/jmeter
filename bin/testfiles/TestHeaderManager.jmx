@@ -255,7 +255,6 @@
             <success>true</success>
             <label>true</label>
             <code>true</code>
-            <message>true</message>
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -286,7 +285,6 @@
             <success>true</success>
             <label>true</label>
             <code>true</code>
-            <message>true</message>
             <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
