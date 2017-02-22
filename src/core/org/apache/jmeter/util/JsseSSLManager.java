@@ -57,8 +57,6 @@ import org.slf4j.LoggerFactory;
 public class JsseSSLManager extends SSLManager {
     private static final Logger log = LoggerFactory.getLogger(JsseSSLManager.class);
 
-    private static final String HTTPS = "https"; // $NON-NLS-1$
-
     // Temporary fix to allow default protocol to be changed
     private static final String DEFAULT_SSL_PROTOCOL =
         JMeterUtils.getPropDefault("https.default.protocol","TLS"); // $NON-NLS-1$ // $NON-NLS-2$

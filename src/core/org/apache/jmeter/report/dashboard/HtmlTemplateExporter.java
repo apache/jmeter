@@ -81,7 +81,6 @@ public class HtmlTemplateExporter extends AbstractDataExporter {
     public static final String TIMESTAMP_FORMAT_MS = "ms";
     private static final String INVALID_TEMPLATE_DIRECTORY_FMT = "\"%s\" is not a valid template directory";
     private static final String INVALID_PROPERTY_CONFIG_FMT = "Wrong property \"%s\" in \"%s\" export configuration";
-    private static final String EMPTY_GRAPH_FMT = "The graph \"%s\" will be empty : %s";
 
     // Template directory
     private static final String TEMPLATE_DIR = "template_dir";
