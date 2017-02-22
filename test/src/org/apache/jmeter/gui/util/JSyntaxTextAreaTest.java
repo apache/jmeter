@@ -37,6 +37,7 @@ public class JSyntaxTextAreaTest extends JMeterTestCase {
     @Test
     public void testSetLanguage() {
         try {
+            @SuppressWarnings("deprecation") // test code
             JSyntaxTextArea textArea = new JSyntaxTextArea(30, 50, false);
             textArea.setLanguage(null);
             assertEquals(SyntaxConstants.SYNTAX_STYLE_NONE, textArea.getSyntaxEditingStyle());
