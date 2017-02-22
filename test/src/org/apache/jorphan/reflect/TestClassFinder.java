@@ -106,7 +106,7 @@ public class TestClassFinder {
                 .orElseThrow(() -> new FileNotFoundException("no jars found")).toRealPath();
         List<String> annotatedClasses = ClassFinder.findClasses(new String[] { jarPath.toString() },
                 c -> true);
-        Assert.assertFalse(annotatedClasses.isEmpty());
+        Assert.assertFalse("No classes found in: " + jarPath, annotatedClasses.isEmpty());
     }
 
     @Test
