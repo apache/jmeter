@@ -19,7 +19,6 @@
 package org.apache.jmeter.protocol.java.sampler;
 
 import org.apache.jmeter.config.Arguments;
-import org.apache.jorphan.logging.LoggingManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +52,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractJavaSamplerClient implements JavaSamplerClient {
     private static final Logger log = LoggerFactory.getLogger(AbstractJavaSamplerClient.class);
 
-    private static final org.apache.log.Logger oldLogger = LoggingManager.getLoggerForClass();
+    @SuppressWarnings("deprecation") // will be removed in 3.3
+    private static final org.apache.log.Logger oldLogger = org.apache.jorphan.logging.LoggingManager.getLoggerForClass();
 
     /* Implements JavaSamplerClient.setupTest(JavaSamplerContext) */
     @Override
