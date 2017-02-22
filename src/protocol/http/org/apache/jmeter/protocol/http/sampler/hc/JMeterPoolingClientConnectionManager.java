@@ -116,6 +116,7 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
     }
     
     /**
+     * @return configured period of inactivity in ms after which connections will be re-validated
      * @see #setValidateAfterInactivity(int)
      *
      * @since 4.5.2
@@ -130,6 +131,7 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
      *   long, java.util.concurrent.TimeUnit) leased} to the consumer. Non-positive value passed
      * to this method disables connection validation. This check helps detect connections
      * that have become stale (half-closed) while kept inactive in the pool.
+     * @param ms period of inactivity in ms
      *
      * @see #leaseConnection(java.util.concurrent.Future, long, java.util.concurrent.TimeUnit)
      *
