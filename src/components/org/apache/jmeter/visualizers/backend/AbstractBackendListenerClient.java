@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jorphan.logging.LoggingManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +55,8 @@ public abstract class AbstractBackendListenerClient implements BackendListenerCl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractBackendListenerClient.class);
 
-    private static final org.apache.log.Logger oldLogger = LoggingManager.getLoggerForClass();
+    @SuppressWarnings("deprecation") // will be removed in 3.3
+    private static final org.apache.log.Logger oldLogger = org.apache.jorphan.logging.LoggingManager.getLoggerForClass();
 
     private UserMetric userMetrics = new UserMetric();
     
