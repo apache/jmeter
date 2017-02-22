@@ -512,7 +512,7 @@ public final class MenuFactory {
                     log.warn("Could not instantiate class: {}", name, e); // NOSONAR
                     continue;
                 } catch(RuntimeException e) {
-                    throw (RuntimeException) e;
+                    throw e;
                 } catch (Exception e) {
                     log.warn("Could not instantiate class: {}", name, e); // NOSONAR
                     continue;
