@@ -2394,7 +2394,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,_allbatchtests"
+  <target name="test" depends="_test,_allbatchtests"
     description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
 
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -2722,7 +2722,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
-   <target name="_test" depends="package">
+   <target name="_test" depends="compile-tests,package">
    <!--
    The property java.awt.headless is not automatically passed on,
    because the tests are run in a separate JVM from the build.
