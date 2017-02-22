@@ -253,7 +253,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * 1 HttpClient instance per combination of (HttpClient,HttpClientKey)
      */
     private static final ThreadLocal<Map<HttpClientKey, HttpClient>> HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY = 
-        InheritableThreadLocal.withInitial(() -> new HashMap<HttpClientKey, HttpClient>(5));
+        InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
