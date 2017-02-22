@@ -49,6 +49,7 @@ public class NonGuiProxySample {
         testPlanTree.add(testPlan);
         testPlanTree.add(threadGroup, testPlan);
 
+        @SuppressWarnings("deprecation") // deliberate use of deprecated ctor
         JMeterTreeModel treeModel = new JMeterTreeModel(new Object());
 
         JMeterTreeNode root = (JMeterTreeNode) treeModel.getRoot();
