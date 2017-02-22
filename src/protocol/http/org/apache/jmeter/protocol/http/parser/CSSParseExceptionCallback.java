@@ -49,6 +49,7 @@ public class CSSParseExceptionCallback implements ICSSParseExceptionCallback {
     @Deprecated
     public CSSParseExceptionCallback() {
         this.baseUrl = null;
+        LOG.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
 
     @Override
