@@ -151,7 +151,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         guiTitles = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
-        try (InputStream stream = new FileInputStream(compref)) {
+        try (InputStream stream = new FileInputStream(findTestFile(compref))) {
             org.w3c.dom.Element body = getBodyFromXMLDocument(stream);
             NodeList sections = body.getElementsByTagName("section");
             for (int i = 0; i < sections.getLength(); i++) {
@@ -197,7 +197,7 @@ public class JMeterTest extends JMeterTestCaseJUnit3 {
         guiTags = new HashMap<>(90);
 
         String compref = "../xdocs/usermanual/component_reference.xml";
-        try (InputStream stream = new FileInputStream(compref)) {
+        try (InputStream stream = new FileInputStream(findTestFile(compref))) {
             org.w3c.dom.Element body = getBodyFromXMLDocument(stream);
             NodeList sections = body.getElementsByTagName("section");
             
