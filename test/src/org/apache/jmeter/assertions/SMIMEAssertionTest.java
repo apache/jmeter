@@ -21,6 +21,7 @@ package org.apache.jmeter.assertions;
 import static org.junit.Assert.assertFalse;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -168,12 +169,11 @@ public class SMIMEAssertionTest {
     }
 
     @Test
-    public void testSignerCert() {
+    public void testSignerCert() throws Exception {
         SMIMEAssertionTestElement testElement = new SMIMEAssertionTestElement();
         testElement.setSignerCheckConstraints(true);
         testElement.setSignerCheckByFile(true);
-        testElement.setSignerCertFile(getClass().getResource("email.pem")
-                .getPath());
+        testElement.setSignerCertFile(new File(getClass().getResource("email.pem").toURI()).getAbsolutePath());
         AssertionResult result = SMIMEAssertion.getResult(testElement, parent,
                 "Test");
         assertFalse("Result should not be an error", result.isError());
