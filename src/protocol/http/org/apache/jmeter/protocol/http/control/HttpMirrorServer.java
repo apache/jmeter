@@ -263,6 +263,8 @@ public class HttpMirrorServer extends Thread implements Stoppable {
                     }
                 }
                 break;
+            default:
+                break;
             }
         }
 
