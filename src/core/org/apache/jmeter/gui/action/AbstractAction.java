@@ -101,6 +101,8 @@ public abstract class AbstractAction implements Command {
                 case JOptionPane.YES_OPTION:
                     // append is the default behaviour, so nothing to do
                     break;
+                default:
+                    break;
                 }
             }
         }
