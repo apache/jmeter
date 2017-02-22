@@ -20,8 +20,6 @@ package org.apache.jmeter.protocol.http.sampler.hc;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAccumulator;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.http.conn.ClientConnectionOperator;
