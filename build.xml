@@ -2452,7 +2452,6 @@ run JMeter unless all the JMeter jars are added.
           <arg value="-j"/>
           <arg value="${batchtestserver.out}/${batchtestserver.log}"/>
           <arg value="-Dserver_port=${rmi_port}"/>
-          <arg value="-Djava.rmi.server.hostname=127.0.0.1"/> <!-- TEMP DEBUG -->
           <arg value="-s"/>
           <arg value="-Jserver.exitaftertest=true"/>
           <arg value="${rmi_hostname_option}"/>
@@ -2462,7 +2461,7 @@ run JMeter unless all the JMeter jars are added.
         <!-- Increase as necessary to ensure server has time to start -->
         <sleep seconds="2"/>
         <antcall target="batchtest">
-          <param name="remote" value="-R127.0.0.1:${rmi_port}"/>  <!-- TEMP DEBUG -->
+          <param name="remote" value="-Rlocalhost:${rmi_port}"/>
           <param name="taskname" value="client"/>
           <!-- Default the test name so we can override with a parameter -->
         </antcall>
