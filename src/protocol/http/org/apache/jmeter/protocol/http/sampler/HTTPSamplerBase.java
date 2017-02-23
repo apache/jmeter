@@ -2066,6 +2066,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 totalReplaced += nbReplaced;
             }
         }
+
+        if(!StringUtils.isEmpty(getDomain())) {
+            Object[] result = JOrphanUtils.replaceAllWithRegex(getDomain(), regex, replaceBy, caseSensitive);            
+            // check if there is anything to replace
+            int nbReplaced = ((Integer)result[1]).intValue();
+            if (nbReplaced>0) {
+                totalReplaced += nbReplaced;
+                String replacedText = (String) result[0];
+                setDomain(replacedText);
+                totalReplaced += nbReplaced;
+            }
+        }
         return totalReplaced;
     }
 }
