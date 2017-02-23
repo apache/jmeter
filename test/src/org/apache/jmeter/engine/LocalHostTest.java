@@ -27,10 +27,6 @@ import org.junit.Test;
  */
 public class LocalHostTest {
 
-    private static void perr(Object s) {
-        System.err.println(s);
-    }
-
     @Test
     public void testLocalHost() throws Exception {
         final String key = "java.rmi.server.hostname";
@@ -42,6 +38,11 @@ public class LocalHostTest {
         } else {
             localHost = InetAddress.getByName(host);
         }
+        showAddress(localHost);
+        showAddress(InetAddress.getByName("localhost"));
+    }
+
+    private static void showAddress(InetAddress localHost) {
         perr(localHost);
         perr("isSiteLocalAddress:"+localHost.isSiteLocalAddress());
         perr("isAnyLocalAddress:"+localHost.isAnyLocalAddress());
@@ -50,5 +51,8 @@ public class LocalHostTest {
         perr("isMulticastAddress:"+localHost.isMulticastAddress());
     }
 
+    private static void perr(Object s) {
+        System.err.println(s);
+    }
 
 }
