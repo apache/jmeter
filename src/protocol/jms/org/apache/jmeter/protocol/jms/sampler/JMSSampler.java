@@ -18,24 +18,6 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.jms.DeliveryMode;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
@@ -47,6 +29,15 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.jms.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Map;
+import java.lang.IllegalStateException;
 
 /**
  * This class implements the JMS Point-to-Point sampler
@@ -369,7 +360,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             } else {
 
                 if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue);
+                    executor = new ExtendedTemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
                 } else {
                     producer = session.createSender(sendQueue);
                     executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
