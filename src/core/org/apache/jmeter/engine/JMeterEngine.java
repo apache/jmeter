@@ -28,13 +28,13 @@ import org.apache.jorphan.collections.HashTree;
 public interface JMeterEngine {
     /**
      * Configure engine
-     * @param testPlan
+     * @param testPlan the test plan
      */
     void configure(HashTree testPlan);
 
     /**
      * Runs the test
-     * @throws JMeterEngineException
+     * @throws JMeterEngineException if an error occurs
      */
     void runTest() throws JMeterEngineException;
 
@@ -57,7 +57,7 @@ public interface JMeterEngine {
 
     /**
      * set Properties on engine
-     * @param p
+     * @param p the properties to set
      */
     void setProperties(Properties p);
 
