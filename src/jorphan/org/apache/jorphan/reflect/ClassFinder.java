@@ -356,7 +356,7 @@ public final class ClassFinder {
         if (path.equals(".")) { // $NON-NLS-1$
             return System.getProperty("user.dir"); // $NON-NLS-1$
         }
-        if (path.length() > 3 && path.matches("[a-z]:\\.*")) { // lower-case drive letter?
+        if (path.length() > 3 && path.matches("[a-z]:\\\\.*")) { // lower-case drive letter?
             path = path.substring(0, 1).toUpperCase(Locale.ROOT) + path.substring(1);
         }
         path = path.trim().replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
