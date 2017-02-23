@@ -104,11 +104,11 @@ public class TestClassFinder {
     public void testFindAllClassesInJar() throws Exception {
         Path jarPath = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> String.valueOf(p).endsWith(".jar")).findFirst()
                 .orElseThrow(() -> new FileNotFoundException("no jars found")).toRealPath();
-        final String loggerName = ClassFinder.class.getName(); // debug
-        org.apache.logging.log4j.core.config.Configurator.setAllLevels(loggerName, org.apache.logging.log4j.Level.DEBUG); // debug
+//        final String loggerName = ClassFinder.class.getName(); // debug
+//        org.apache.logging.log4j.core.config.Configurator.setAllLevels(loggerName, org.apache.logging.log4j.Level.DEBUG); // debug
         List<String> annotatedClasses = ClassFinder.findClasses(new String[] { jarPath.toString() },
                 c -> true);
-        org.apache.logging.log4j.core.config.Configurator.setAllLevels(loggerName, org.apache.logging.log4j.Level.INFO); // debug
+//        org.apache.logging.log4j.core.config.Configurator.setAllLevels(loggerName, org.apache.logging.log4j.Level.INFO); // debug
         Assert.assertFalse("No classes found in: " + jarPath, annotatedClasses.isEmpty());
     }
 
