@@ -40,6 +40,10 @@ public class LocalHostTest {
         }
         showAddress(localHost);
         showAddress(InetAddress.getByName("localhost"));
+        for (InetAddress a : InetAddress.getAllByName(InetAddress.getLocalHost().getHostName())) {
+            perr("====================");
+            showAddress(a);            
+        }
     }
 
     private static void showAddress(InetAddress localHost) {
