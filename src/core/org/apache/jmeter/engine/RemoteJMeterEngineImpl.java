@@ -125,10 +125,10 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             }
         }
         try {
-            if (reg == null) {
+//            if (reg == null) {
                 System.err.println("Locating registry");
                 reg = LocateRegistry.getRegistry(this.rmiPort);
-            }
+//            }
             System.err.println("About to rebind registry: " + reg);
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
             System.err.println("Bound registry as: " + reg);
