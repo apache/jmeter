@@ -252,8 +252,8 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
             this.log.error("Unexpected exception leasing connection from pool", cause);
             // Should never happen
             throw new InterruptedException();
-        } catch (final TimeoutException ex) {
-            throw new ConnectionPoolTimeoutException("Timeout waiting for connection from pool, message:"+ex.getMessage()); // NOSONAR 
+        } catch (final TimeoutException ex) { // NOSONAR Exception message is used
+            throw new ConnectionPoolTimeoutException("Timeout waiting for connection from pool, message:"+ex.getMessage());  
         }
     }
     @Override
