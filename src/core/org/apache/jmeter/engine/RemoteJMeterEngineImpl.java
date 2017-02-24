@@ -111,12 +111,10 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
                     + "\tCan be overridden by defining the system property 'java.rmi.server.hostname' - see jmeter-server script file");
         }
         log.debug("This = {}", this);
-        Registry reg = null;
         if (CREATE_SERVER){
             log.info("Creating RMI registry (server.rmi.create=true)");
             try {
-                reg = LocateRegistry.createRegistry(this.rmiPort);
-                System.err.println("Created registry: " + reg);
+                LocateRegistry.createRegistry(this.rmiPort);
             } catch (RemoteException e){
                 String msg="Problem creating registry: "+e;
                 log.warn(msg);
@@ -125,13 +123,8 @@ public final class RemoteJMeterEngineImpl extends java.rmi.server.UnicastRemoteO
             }
         }
         try {
-//            if (reg == null) {
-                System.err.println("Locating registry");
-                reg = LocateRegistry.getRegistry(this.rmiPort);
-//            }
-            System.err.println("About to rebind registry: " + reg);
+            Registry reg = LocateRegistry.getRegistry(this.rmiPort);
             reg.rebind(JMETER_ENGINE_RMI_NAME, this);
-            System.err.println("Bound registry as: " + reg);
             log.info("Bound to registry on port {}", this.rmiPort);
         } catch (Exception ex) {
             log.error("rmiregistry needs to be running to start JMeter in server mode. {}", ex.toString());
