@@ -142,7 +142,7 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
     }
 
     @Override
-    protected void finalize() throws Throwable {
+    protected void finalize() throws Throwable { // NOSONAR We know what we do here
         try {
             shutdown();
         } finally {
