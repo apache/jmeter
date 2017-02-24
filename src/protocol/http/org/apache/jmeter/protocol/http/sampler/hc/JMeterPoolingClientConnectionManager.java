@@ -253,7 +253,7 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
             // Should never happen
             throw new InterruptedException();
         } catch (final TimeoutException ex) {
-            throw new ConnectionPoolTimeoutException("Timeout waiting for connection from pool");
+            throw new ConnectionPoolTimeoutException("Timeout waiting for connection from pool, message:"+ex.getMessage()); // NOSONAR 
         }
     }
     @Override

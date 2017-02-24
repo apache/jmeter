@@ -476,7 +476,8 @@ public class ManagedClientConnectionImpl implements ManagedClientConnection {
             final OperatedClientConnection conn = this.poolEntry.getConnection();
             try {
                 conn.shutdown();
-            } catch (final IOException ignore) {
+            } catch (final IOException ignore) { // NOSONAR It ok to ignore
+                // NOOP
             }
             this.manager.releaseConnection(this, this.duration, TimeUnit.MILLISECONDS);
             this.poolEntry = null;
