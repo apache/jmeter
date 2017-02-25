@@ -185,11 +185,11 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             return false;
         }
         CollectionProperty property = (CollectionProperty) p;
-        PropertyIterator iterator = property.iterator();
-        while (iterator.hasNext()) {
-            TestElementProperty possibleEntry = (TestElementProperty) iterator.next();
+        for (JMeterProperty aProperty : property) {
+            TestElementProperty possibleEntry = (TestElementProperty) aProperty;
             if (log.isDebugEnabled()) {
-                log.debug("Look for {} at {}: {}", host, possibleEntry.getObjectValue(), possibleEntry.getObjectValue().getClass());
+                log.debug("Look for {} at {}: {}",
+                        host, possibleEntry.getObjectValue(), possibleEntry.getObjectValue().getClass());
             }
             StaticHost entry = (StaticHost) possibleEntry.getObjectValue();
             if (entry.getName().equalsIgnoreCase(host)) {
@@ -210,9 +210,8 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             return new InetAddress[0];
         }
         CollectionProperty property = (CollectionProperty) p;
-        PropertyIterator iterator = property.iterator();
-        while (iterator.hasNext()) {
-            StaticHost entry = (StaticHost) ((TestElementProperty)iterator.next()).getObjectValue();
+        for (JMeterProperty aProperty : property) {
+            StaticHost entry = (StaticHost) aProperty.getObjectValue();
             if (entry.getName().equals(host)) {
                 List<InetAddress> addresses = new ArrayList<>();
                 for (String address : Arrays.asList(entry.getAddress().split("\\s*,\\s*"))) {

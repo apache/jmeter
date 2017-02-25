@@ -943,9 +943,7 @@ public class JMeter implements JMeterPlugin {
             if (deleteResultFile) {
                 SearchByClass<ResultCollector> resultListeners = new SearchByClass<>(ResultCollector.class);
                 tree.traverse(resultListeners);
-                Iterator<ResultCollector> irc = resultListeners.getSearchResults().iterator();
-                while (irc.hasNext()) {
-                    ResultCollector rc = irc.next();
+                for (ResultCollector rc : resultListeners.getSearchResults()) {
                     File resultFile = new File(rc.getFilename());
                     if (resultFile.exists()) {
                         resultFile.delete();
