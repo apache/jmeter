@@ -35,15 +35,15 @@ import junit.framework.TestCase;
 /*
  * Extend JUnit TestCase to provide common setup
  */
-public abstract class JMeterTestCaseJUnit3 extends TestCase {
+public abstract class JMeterTestCaseJUnit extends TestCase {
     // Used by findTestFile
     private static final String filePrefix;
 
-    public JMeterTestCaseJUnit3() {
+    public JMeterTestCaseJUnit() {
         super();
     }
 
-    public JMeterTestCaseJUnit3(String name) {
+    public JMeterTestCaseJUnit(String name) {
         super(name);
     }
 
