@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -41,7 +41,7 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Functions
  */
-public class PackageTest extends JMeterTestCaseJUnit3 {
+public class PackageTest extends JMeterTestCaseJUnit {
 
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
