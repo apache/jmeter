@@ -2841,6 +2841,7 @@ run JMeter unless all the JMeter jars are added.
     <jvmarg value="-Dfile.encoding=${test.encoding}"/>
     <!-- Allow headless to be passed in -->
     <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
+    <sysproperty key="log4j.configurationFile" value="${basedir}/bin/log4j2.xml" />
     <classpath>
       <fileset dir="${dest.jar}" includes="*.jar"/>
       <pathelement location="${build.test}"/>
