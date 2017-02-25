@@ -72,6 +72,7 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         XMLReader builder = XML_READER.get();
         if(builder != null) {
             try {
+                builder.setErrorHandler(new LogErrorHandler());
                 builder.parse(new InputSource(new StringReader(resultData)));
             } catch (SAXException | IOException e) {
                 result.setError(true);
