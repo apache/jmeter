@@ -72,7 +72,10 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      */
     @Override
     public String getName() {
-        return nameField.getText();
+        if (nameField != null) {
+            return nameField.getText();
+        }
+        return ""; // $NON-NLS-1$
     }
 
     /** {@inheritDoc} */
