@@ -67,7 +67,7 @@ import org.xml.sax.SAXException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class JMeterTest extends JMeterTestCaseJUnit3 {
+public class JMeterTest extends JMeterTestCaseJUnit {
     private static final Logger log = LoggerFactory.getLogger(JMeterTest.class);
 
     private static Map<String, Boolean> guiTitles;

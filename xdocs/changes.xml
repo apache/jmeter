@@ -225,6 +225,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>Updated to commons-net-3.6 (from 3.5)</li>
     <li>Converted the old pdf tutorials to xml.</li>
     <li><pr>255</pr>Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->

@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 import org.apache.jmeter.junit.JMeterTest;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.save.SaveService;
 import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.PropertyIterator;
@@ -31,7 +31,7 @@ import org.apache.jmeter.testelement.property.PropertyIterator;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestElementTest extends JMeterTestCaseJUnit3 {
+public class TestElementTest extends JMeterTestCaseJUnit {
 
     private TestElement testItem;
     
