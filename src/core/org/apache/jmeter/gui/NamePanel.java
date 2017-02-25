@@ -72,7 +72,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      */
     @Override
     public String getName() {
-        if (nameField != null) {
+        if (nameField != null) { // NOSONAR this field seems to be null in the constructor
             return nameField.getText();
         }
         return ""; // $NON-NLS-1$
