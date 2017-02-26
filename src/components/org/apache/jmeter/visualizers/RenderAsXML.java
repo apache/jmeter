@@ -154,7 +154,7 @@ public class RenderAsXML extends SamplerResultTab
          * This class is to view as tooltext. This is very useful, when the
          * contents has long string and does not fit in the view. it will also
          * automatically wrap line for each 100 characters since tool tip
-         * support html. author <a href="mailto:d.maung@mdl.com">Dave Maung</a>
+         * support html. 
          */
         private static class DomTreeRenderer extends DefaultTreeCellRenderer {
 
