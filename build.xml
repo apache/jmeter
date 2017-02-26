@@ -3438,7 +3438,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
            value="**/*.java" />
   	<property name="sonar.coverage.exclusions"
-  			value="**/BSF*.java,**/org/apache/log/**.java,**/org/apache/jorphan/logging/LoggingManager.java" />
+  			value="**/BSF*.java,**/org/apache/log/**.java,**/org/apache/jmeter/examples/**.java,**/org/apache/jorphan/logging/LoggingManager.java" />
     <property name="core.sonar.projectName" value="core" />
     <property name="core.sonar.sources" value="${src.core}" />
     <property name="core.sonar.projectBaseDir" value="./" />
