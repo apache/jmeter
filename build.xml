@@ -2756,7 +2756,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
       <!-- This test contains a Redirection loop that leads to an error -->
-      <param name="batchtest.ignoreErrorLogs" value="false" />
+      <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
   </target>
 
