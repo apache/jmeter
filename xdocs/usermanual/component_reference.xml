@@ -431,6 +431,7 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
 </source>
+However the <code>Java</code> sampler only supports slow HTTPS connections.
 </p>
 <p><b>Response size calculation</b><br></br>
 Optional properties to allow change the method to get response size:<br></br></p>
