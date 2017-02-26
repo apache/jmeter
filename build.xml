@@ -2492,6 +2492,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- will be overwritten by antcall parameters -->
     <property name="taskname" value="jmeter"/>
     <property name="remote" value="-X"/>
+    <property name="batchtest.ignoreErrorLogs" value="false" />
     <property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
     <property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
@@ -2624,9 +2625,16 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">${batchtest.name} output files compared OK</echo>
 
     <local         name="BatchTestLocal.len"/>
+    <!-- We define "BatchTestLocal.len" property only if log file is empty 
+    	or  batchtest.ignoreErrorLogs is false
+    -->
     <condition property="BatchTestLocal.len">
-      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+        <or>
+	      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+          <equals arg1="${batchtest.ignoreErrorLogs}" arg2="true" casesensitive="true"/>
+        </or>
     </condition>
+
     <fail unless="BatchTestLocal.len">
         Error detected in log file. See above.
     </fail>
@@ -2741,12 +2749,14 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="HttpClient4"/>
     </antcall>
-
+      
     <antcall target="batchtest">
       <param name="batchtest.name" value="TEST_HTTP_Java"/>
       <param name="batchtest.jmx" value="TEST_HTTP.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
+      <!-- This test contains a Redirection loop that leads to an error -->
+      <param name="batchtest.ignoreErrorLogs" value="false" />
     </antcall>
   </target>
 
