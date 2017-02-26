@@ -62,7 +62,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 ,0); // Maximum connection retries
 
     static {
-        log.info("Maximum connection retries = "+MAX_CONN_RETRIES); // $NON-NLS-1$
+        log.info("Maximum connection retries = {}", MAX_CONN_RETRIES); // $NON-NLS-1$
         // Temporary copies, so can set the final ones
     }
 
@@ -234,7 +234,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         // works OK even if ContentEncoding is null
         boolean gzipped = HTTPConstants.ENCODING_GZIP.equals(conn.getContentEncoding());
-        InputStream instream = null;
+        CountingInputStream instream = null;
         try {
             instream = new CountingInputStream(conn.getInputStream());
             if (gzipped) {
@@ -245,10 +245,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         } catch (IOException e) {
             if (! (e.getCause() instanceof FileNotFoundException))
             {
-                log.error("readResponse: "+e.toString());
+                log.error("readResponse: {}", e.toString());
                 Throwable cause = e.getCause();
                 if (cause != null){
-                    log.error("Cause: "+cause);
+                    log.error("Cause: {}", cause.toString());
                     if(cause instanceof Error) {
                         throw (Error)cause;
                     }
@@ -257,13 +257,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             // Normal InputStream is not available
             InputStream errorStream = conn.getErrorStream();
             if (errorStream == null) {
-                log.info("Error Response Code: "+conn.getResponseCode()+", Server sent no Errorpage");
+                if(log.isInfoEnabled()) {
+                    log.info("Error Response Code: {}, Server sent no Errorpage", conn.getResponseCode());
+                }
                 res.setResponseHeaders(getResponseHeaders(conn));
                 res.latencyEnd();
                 return NULL_BA;
             }
 
-            log.info("Error Response Code: "+conn.getResponseCode());
+            if(log.isInfoEnabled()) {
+                log.info("Error Response Code: {}", conn.getResponseCode());
+            }
 
             if (gzipped) {
                 in = new BufferedInputStream(new GZIPInputStream(errorStream));
@@ -271,10 +275,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 in = new BufferedInputStream(errorStream);
             }
         } catch (Exception e) {
-            log.error("readResponse: "+e.toString());
+            log.error("readResponse: {}", e.toString());
             Throwable cause = e.getCause();
             if (cause != null){
-                log.error("Cause: "+cause);
+                log.error("Cause: {}", cause.toString());
                 if(cause instanceof Error) {
                     throw (Error)cause;
                 }
@@ -284,7 +288,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // N.B. this closes 'in'
         byte[] responseData = readResponse(res, in, contentLength);
         if (instream != null) {
-            res.setBodySize(((CountingInputStream) instream).getByteCount());
+            res.setBodySize(instream.getByteCount());
             instream.close();
         }
         return responseData;
@@ -448,8 +452,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
         String urlStr = url.toString();
         if (log.isDebugEnabled()) {
-            log.debug("Start : sample " + urlStr);
-            log.debug("method " + method+ " followingRedirect " + areFollowingRedirect + " depth " + frameDepth);            
+            log.debug("Start : sample {}, method {}, followingRedirect {}, depth {}",
+                    urlStr, method, areFollowingRedirect, frameDepth);
         }
 
         HTTPSampleResult res = new HTTPSampleResult();
@@ -482,7 +486,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     break;
                 } catch (BindException e) {
                     if (retry >= MAX_CONN_RETRIES) {
-                        log.error("Can't connect after "+retry+" retries, "+e);
+                        log.error("Can't connect after {} retries, message: {}", retry, e.toString());
                         throw e;
                     }
                     log.debug("Bind exception, try again");
@@ -528,13 +532,13 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 if (respMsg != null) {// Bug 41902 - NPE
                     try {
                         errorLevel = Integer.parseInt(respMsg.substring(0, 3));
-                        log.warn("ResponseCode==-1; parsed "+respMsg+ " as "+errorLevel);
+                        log.warn("ResponseCode==-1; parsed {} as {}", respMsg, errorLevel);
                       } catch (NumberFormatException e) {
-                        log.warn("ResponseCode==-1; could not parse "+respMsg+" hdr: "+hdr);
+                        log.warn("ResponseCode==-1; could not parse {}  hdr: {}", respMsg, hdr);
                       }
                 } else {
                     respMsg=hdr; // for result
-                    log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= "+hdr);
+                    log.warn("ResponseCode==-1 & null ResponseMessage. Header(0)= {} ", hdr);
                 }
             }
             if (errorLevel == -1) {
@@ -565,8 +569,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             res.setHeadersSize(responseHeaders.replaceAll("\n", "\r\n") // $NON-NLS-1$ $NON-NLS-2$
                     .length() + 2); // add 2 for a '\r\n' at end of headers (before data) 
             if (log.isDebugEnabled()) {
-                log.debug("Response headersSize=" + res.getHeadersSize() + " bodySize=" + res.getBodySizeAsLong()
-                        + " Total=" + (res.getHeadersSize() + res.getBodySizeAsLong()));
+                log.debug("Response headersSize={}, bodySize={}, Total=",
+                        res.getHeadersSize(),  res.getBodySizeAsLong(),
+                        res.getHeadersSize() + res.getBodySizeAsLong());
             }
             
             // If we redirected automatically, the URL may have changed
