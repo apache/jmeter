@@ -34,6 +34,8 @@ import org.apache.jmeter.util.JMeterUtils;
 public class NamePanel extends JPanel implements JMeterGUIComponent {
     private static final long serialVersionUID = 240L;
 
+    private static final String LABEL_RESOURCE = "root"; // $NON-NLS-1$
+
     /** A text field containing the name. */
     private final JTextField nameField = new JTextField(15);
 
@@ -42,7 +44,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
      * Create a new NamePanel with the default name.
      */
     public NamePanel() {
-        setName(getStaticLabel());
+        _setName(JMeterUtils.getResString(LABEL_RESOURCE));
         init();
     }
 
@@ -81,6 +83,10 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     /** {@inheritDoc} */
     @Override
     public void setName(String name) {
+        _setName(name);
+    }
+
+    private void _setName(String name) {
         super.setName(name);
         nameField.setText(name);
     }
@@ -106,7 +112,7 @@ public class NamePanel extends JPanel implements JMeterGUIComponent {
     /** {@inheritDoc} */
     @Override
     public String getLabelResource() {
-        return "root"; // $NON-NLS-1$
+        return LABEL_RESOURCE;
     }
 
     /** {@inheritDoc} */
