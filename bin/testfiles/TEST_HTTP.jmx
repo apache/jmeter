@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170223">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170226">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -80,7 +80,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="1492901334">GET /test HTTP/1.1</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -141,7 +141,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="70454">GET</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="827169597">/test?name=value</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -192,7 +192,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="70454">GET</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="-1326526456">/test?name0=value0&amp;name1=value1</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -201,56 +201,63 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET_WITH_BODY" enabled="true">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">Get with body</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/test</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-        </HTTPSamplerProxy>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If_not_java_impl" enabled="true">
+          <stringProp name="IfController.condition">${__jexl3(&quot;${__P(jmeter.httpsampler,)}&quot; != &quot;Java&quot;,)}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+        </IfController>
         <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="224767426">Content-Length: 13</stringProp>
-              <stringProp name="1012959042">Content-Type: text/plain; charset=ISO-8859-1</stringProp>
-              <stringProp name="-644619860">Content-Type:</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="1492901334">GET /test HTTP/1.1</stringProp>
-              <stringProp name="894172713">Connection: keep-alive</stringProp>
-              <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
-              <stringProp name="1663251538">Get with body</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET_WITH_BODY" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">Get with body</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/test</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_ContentLength" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="224767426">Content-Length: 13</stringProp>
+                <stringProp name="1012959042">Content-Type: text/plain; charset=ISO-8859-1</stringProp>
+                <stringProp name="-644619860">Content-Type:</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="1492901334">GET /test HTTP/1.1</stringProp>
+                <stringProp name="894172713">Connection: keep-alive</stringProp>
+                <stringProp name="2117109222">Host: localhost:8081</stringProp>
+                <stringProp name="1052466409">User-Agent: </stringProp>
+                <stringProp name="1663251538">Get with body</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
         </hashTree>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -496,69 +503,76 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-GET_WITH_BODY_NoFollowRedirect" enabled="true">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">Method has body</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          <stringProp name="TestPlan.comments">BUG 60682</stringProp>
-        </HTTPSamplerProxy>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If_not_java_impl" enabled="true">
+          <stringProp name="IfController.condition">${__jexl3(&quot;${__P(jmeter.httpsampler,)}&quot; != &quot;Java&quot;,)}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+        </IfController>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="Accept-Encoding" elementType="Header">
-                <stringProp name="Header.name">Accept-Encoding</stringProp>
-                <stringProp name="Header.value">gzip</stringProp>
-              </elementProp>
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">X-SetHeaders</stringProp>
-                <stringProp name="Header.value">Location:http://localhost:8081/redirect</stringProp>
-              </elementProp>
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">X-ResponseStatus</stringProp>
-                <stringProp name="Header.value">302</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Gzip" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="-88801152">Content-Length:</stringProp>
-              <stringProp name="-644619860">Content-Type:</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">16</intProp>
-          </ResponseAssertion>
-          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-GET_WITH_BODY_NoFollowRedirect" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">Method has body</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">/</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            <stringProp name="TestPlan.comments">BUG 60682</stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Accept-Encoding" elementType="Header">
+                  <stringProp name="Header.name">Accept-Encoding</stringProp>
+                  <stringProp name="Header.value">gzip</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">X-SetHeaders</stringProp>
+                  <stringProp name="Header.value">Location:http://localhost:8081/redirect</stringProp>
+                </elementProp>
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">X-ResponseStatus</stringProp>
+                  <stringProp name="Header.value">302</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Gzip" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_NoContentLength" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-88801152">Content-Length:</stringProp>
+                <stringProp name="-644619860">Content-Type:</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.request_headers</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-FollowRedirect" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -743,7 +757,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
               <stringProp name="224767425">Content-Length: 12</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -751,7 +765,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_PARAMETERS" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_PARAMETERS_MULTIPART" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="name1" elementType="HTTPArgument">
@@ -790,7 +804,7 @@ mirrorServer.start();</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="REE_boundary" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">boundary</stringProp>
-            <stringProp name="RegexExtractor.regex">boundary=(.+?);</stringProp>
+            <stringProp name="RegexExtractor.regex">boundary=(.*)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">nv_boundary</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -802,15 +816,14 @@ mirrorServer.start();</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="54777371">Content-Disposition: form-data; name=&quot;name1&quot;</stringProp>
-              <stringProp name="-320868780">Content-Type: text/plain; charset=US-ASCII</stringProp>
+              <stringProp name="-378849006">Content-Type: text/plain; charset=</stringProp>
               <stringProp name="80784828">Content-Transfer-Encoding: 8bit</stringProp>
               <stringProp name="-823812896">value1</stringProp>
               <stringProp name="-1299776663">boundary=${boundary}</stringProp>
-              <stringProp name="1378275580">--${boundary}</stringProp>
-              <stringProp name="1672906652">--${boundary}--</stringProp>
+              <stringProp name="182753948">${boundary}</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -818,7 +831,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_PARAMETERS" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_BODY" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
@@ -861,7 +874,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="-1704395926">Content-Type: application/x-www-form-urlencoded</stringProp>
               <stringProp name="224767427">Content-Length: 14</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="897616683">Veni vidi vici</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -870,7 +883,7 @@ mirrorServer.start();</stringProp>
           </ResponseAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_PARAMETERS" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_FILE" enabled="true">
           <elementProp name="HTTPsampler.Files" elementType="HTTPFileArgs">
             <collectionProp name="HTTPFileArgs.files">
               <elementProp name="user.properties" elementType="HTTPFileArg">
@@ -910,7 +923,7 @@ mirrorServer.start();</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="REE_boundary" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">boundary</stringProp>
-            <stringProp name="RegexExtractor.regex">boundary=(.+?);</stringProp>
+            <stringProp name="RegexExtractor.regex">boundary=(.*)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">nv_boundary</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -922,14 +935,13 @@ mirrorServer.start();</stringProp>
               <stringProp name="894172713">Connection: keep-alive</stringProp>
               <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
               <stringProp name="2117109222">Host: localhost:8081</stringProp>
-              <stringProp name="526885222">User-Agent: Apache-HttpClient/4.5.3 (Java/1.8.0_121)</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="-1500123463">Content-Disposition: form-data; name=&quot;fileName&quot;; filename=&quot;user.properties&quot;</stringProp>
               <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
               <stringProp name="1533831720">Content-Transfer-Encoding: binary</stringProp>
               <stringProp name="-1299776663">boundary=${boundary}</stringProp>
-              <stringProp name="1378275580">--${boundary}</stringProp>
-              <stringProp name="1672906652">--${boundary}--</stringProp>
+              <stringProp name="182753948">${boundary}</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -993,7 +1005,7 @@ mirrorServer.stopServer();</stringProp>
             <assertionsResultsToSave>0</assertionsResultsToSave>
           </value>
         </objProp>
-        <stringProp name="filename">TEST_HTTP.csv</stringProp>
+        <stringProp name="filename">TEST_HTTP_${__P(jmeter.httpsampler,)}.csv</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
@@ -1024,7 +1036,7 @@ mirrorServer.stopServer();</stringProp>
             <assertionsResultsToSave>0</assertionsResultsToSave>
           </value>
         </objProp>
-        <stringProp name="filename">TEST_HTTP.xml</stringProp>
+        <stringProp name="filename">TEST_HTTP_${__P(jmeter.httpsampler,)}.xml</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
