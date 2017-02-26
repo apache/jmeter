@@ -41,10 +41,11 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.CountingOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.protocol.smtp.sampler.gui.SecuritySettingsPanel;
 import org.apache.jmeter.protocol.smtp.sampler.protocol.SendMailCommand;
-import org.apache.jmeter.protocol.smtp.sampler.tools.CounterOutputStream;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -53,6 +54,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.CollectionProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Sampler-Class for JMeter - builds, starts and interprets the results of the
@@ -186,9 +188,9 @@ public class SmtpSampler extends AbstractSampler {
     private long calculateMessageSize(Message message) throws IOException, MessagingException {
         if (getPropertyAsBoolean(MESSAGE_SIZE_STATS)) {
             // calculate message size
-            CounterOutputStream cs = new CounterOutputStream();
+            CountingOutputStream cs = new CountingOutputStream(new NullOutputStream());
             message.writeTo(cs);
-            return cs.getCount();
+            return cs.getByteCount();
         } else {
             return -1L;
         }
