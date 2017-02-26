@@ -288,6 +288,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     
 <h3>General</h3>
 <ul>
+    <li><bug>60775</bug>NamePanel ctor calls overrideable method</li>
     <li><bug>60428</bug>JMeter Graphite Backend Listener throws exception when test ends
     and <code>useRegexpForSamplersList</code> is set to <code>true</code>.
     Based on patch by Liu XP (liu_xp2003 at sina.com)</li>
