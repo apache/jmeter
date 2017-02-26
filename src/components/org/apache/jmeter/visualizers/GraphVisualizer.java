@@ -54,8 +54,6 @@ import org.apache.jmeter.visualizers.gui.AbstractVisualizer;
  * and the standard deviation of the sampling process and outputs them as
  * autoscaling plots.
  *
- * Created February 8, 2001
- *
  */
 public class GraphVisualizer extends AbstractVisualizer implements ImageVisualizer, ItemListener, Clearable {
 
