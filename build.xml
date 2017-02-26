@@ -2721,6 +2721,12 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="TEST_HTTP"/>
     </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TEST_HTTP"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="Java"/>
+    </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
