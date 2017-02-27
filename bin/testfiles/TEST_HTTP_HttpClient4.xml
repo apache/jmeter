@@ -181,6 +181,91 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
+<httpSample s="true" lb="HR-POST_MULTIPART_WITH_FILE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-POST_MULTIPART_WITH_FILE_AND_CONTENTTYPE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_MULTIPART_WITH_FILE_AND_CONTENTTYPE" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_WITH_BODY" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HR-PUT_WITH_PARAMETERS" rc="200" dt="text">
+  <assertionResult>
+    <name>RA_not_present</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_response_contains</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
 <sample s="true" lb="JSS_stopMirror" rc="200" dt="text"/>
 
 </testResults>
