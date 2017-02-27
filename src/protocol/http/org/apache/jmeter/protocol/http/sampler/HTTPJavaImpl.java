@@ -183,7 +183,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
-        // Ensure System property "" is set to true to allow headers 
+        // Ensure System property "sun.net.http.allowRestrictedHeaders=true" is set to true to allow headers 
         // such as "Host" and "Connection" to be passed through.
         // See http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6996110
         if (getUseKeepAlive()) {
@@ -437,6 +437,8 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             if (auth != null) {
                 String headerValue = auth.toBasicHeader();
                 conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
+                // Java hides request properties so we have to 
+                // keep trace of it
                 Map<String, String> map = new HashMap<>(1);
                 map.put(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
                 return map;
