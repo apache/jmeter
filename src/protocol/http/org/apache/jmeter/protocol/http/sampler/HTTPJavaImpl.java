@@ -26,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -386,7 +387,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param conn
      *            <code>HttpUrlConnection</code> which represents the URL
      *            request
-     * @param securityHeaders Map of security Header or null
+     * @param securityHeaders Map of security Header
      * @return the headers as a string
      */
     private String getConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
@@ -406,13 +407,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 }
             }
         }
-        if(securityHeaders != null) {
-            for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
-                hdrs.append(entry.getKey())
-                .append(": ") // $NON-NLS-1$
-                .append(entry.getValue())
-                .append("\n"); // $NON-NLS-1$
-            }
+        for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
+            hdrs.append(entry.getKey()).append(": ") // $NON-NLS-1$
+                .append(entry.getValue()).append("\n"); // $NON-NLS-1$
         }
         return hdrs.toString();
     }
@@ -444,7 +441,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                 return map;
             }
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     /**
