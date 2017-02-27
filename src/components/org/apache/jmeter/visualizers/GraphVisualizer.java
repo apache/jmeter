@@ -97,7 +97,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
 
     private JTextField medianField;
 
-    private Deque<SampleResult> newSamples = new ConcurrentLinkedDeque<>();
+    private final Deque<SampleResult> newSamples = new ConcurrentLinkedDeque<>();
 
     /**
      * Constructor for the GraphVisualizer object.

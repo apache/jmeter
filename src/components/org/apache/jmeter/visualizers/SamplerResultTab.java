@@ -132,11 +132,11 @@ public abstract class SamplerResultTab implements ResultRenderer {
             "view_results_table_fields_key", // $NON-NLS-1$
             "view_results_table_fields_value" }; // $NON-NLS-1$
 
-    private ObjectTableModel resultModel = null;
+    private final ObjectTableModel resultModel;
 
-    private ObjectTableModel resHeadersModel = null;
+    private final ObjectTableModel resHeadersModel;
 
-    private ObjectTableModel resFieldsModel = null;
+    private final ObjectTableModel resFieldsModel;
 
     private JTable tableResult = null;
 
