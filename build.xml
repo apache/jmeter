@@ -2441,11 +2441,9 @@ run JMeter unless all the JMeter jars are added.
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
-          <!-- quieten the logging; this has to be done first -->
-          <arg value="-ptestfiles/jmeter-batch.properties"/>
           <!-- pick up default properties -->
-          <arg value="-qjmeter.properties"/>
-          <!-- reset the logging and other parameters -->
+          <arg value="-pjmeter.properties"/>
+          <!-- reset other parameters -->
           <arg value="-qtestfiles/jmeter-batch.properties"/>
           <arg value="-i"/>
           <arg value="testfiles/log4j2-batch.xml"/>
@@ -2557,11 +2555,9 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="user.region" value="US"/>
       <sysproperty key="java.awt.headless" value="false"/>
       <!-- Bug 59723 -->
-      <!-- quieten the logging; this has to be done first -->
-      <arg value="-ptestfiles/jmeter-batch.properties"/>
       <!-- pick up default properties -->
-      <arg value="-qjmeter.properties"/>
-      <!-- reset the logging and other parameters -->
+      <arg value="-pjmeter.properties"/>
+      <!-- reset other parameters -->
       <arg value="-qtestfiles/jmeter-batch.properties"/>
       <arg value="-n"/>
       <arg value="-ttestfiles/${batchtest.jmx}"/>
