@@ -243,6 +243,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60690</bug>Default values for "httpclient4.validate_after_inactivity" and "httpclient4.time_to_live" which are equal to each other makes validation useless</li>
     <li><bug>60758</bug>HTTP(s) Test Script Recorder : Number request may generate duplicate numbers. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
+    <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
 </ul>
 
 <h3>Other Samplers</h3>
