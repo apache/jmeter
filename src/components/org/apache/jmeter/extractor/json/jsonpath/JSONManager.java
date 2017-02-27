@@ -51,7 +51,7 @@ public class JSONManager {
      * store the computed JsonPath for the set of JSON Path Expressions.
      * Usually there will be 1 to Maximum 10 elements
      */
-    private Map<String, JsonPath> expressionToJsonPath = new HashMap<>(2);
+    private final Map<String, JsonPath> expressionToJsonPath = new HashMap<>(2);
 
     private JsonPath getJsonPath(String jsonPathExpression) {
         JsonPath jsonPath = expressionToJsonPath.get(jsonPathExpression);

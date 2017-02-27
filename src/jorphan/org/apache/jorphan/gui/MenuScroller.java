@@ -640,7 +640,7 @@ public class MenuScroller {
 
         private static final long serialVersionUID = 1;
 
-        private MenuScrollTimer timer;
+        private final MenuScrollTimer timer;
 
         public MenuScrollItem(MenuIcon icon, int increment) {
             setIcon(icon);
