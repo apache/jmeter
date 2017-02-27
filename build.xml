@@ -2720,12 +2720,12 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="SlowCharsFeature"/>
+      <param name="batchtest.name" value="SlowCharsFeature_HttpClient4"/>
       <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="SlowCharsFeature"/>
+      <param name="batchtest.name" value="SlowCharsFeature_Java"/>
       <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
