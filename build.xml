@@ -2739,6 +2739,13 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
     </antcall>
 
+	<antcall target="batchtest">
+      <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+      <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+	  <param name="batchtest.variable" value="jmeter.httpsampler"/>
+	  <param name="batchtest.value" value="Java"/>
+    </antcall>
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestKeepAlive"/>
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>

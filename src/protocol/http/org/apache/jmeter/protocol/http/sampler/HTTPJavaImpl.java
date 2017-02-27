@@ -26,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -63,7 +64,6 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
 
     static {
         log.info("Maximum connection retries = {}", MAX_CONN_RETRIES); // $NON-NLS-1$
-        // Temporary copies, so can set the final ones
     }
 
     private static final byte[] NULL_BA = new byte[0];// can share these
@@ -183,6 +183,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         // with the last request to an HTTP server. Instead, most browsers
         // leave it to the server to close the connection after their
         // timeout period. Leave it to the JMeter user to decide.
+        // Ensure System property "" is set to true to allow headers 
+        // such as "Host" and "Connection" to be passed through.
+        // See http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6996110
         if (getUseKeepAlive()) {
             conn.setRequestProperty(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
         } else {
@@ -193,7 +196,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         setConnectionHeaders(conn, u, getHeaderManager(), getCacheManager());
         String cookies = setConnectionCookie(conn, u, getCookieManager());
 
-        setConnectionAuthorization(conn, u, getAuthManager());
+        Map<String, String> securityHeaders = setConnectionAuthorization(conn, u, getAuthManager());
 
         if (method.equals(HTTPConstants.POST)) {
             setPostHeaders(conn);
@@ -202,7 +205,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
         }
 
         if (res != null) {
-            res.setRequestHeaders(getConnectionHeaders(conn));
+            res.setRequestHeaders(getConnectionHeaders(conn, securityHeaders));
             res.setCookies(cookies);
         }
 
@@ -383,9 +386,10 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param conn
      *            <code>HttpUrlConnection</code> which represents the URL
      *            request
+     * @param securityHeaders Map of security Header or null
      * @return the headers as a string
      */
-    private String getConnectionHeaders(HttpURLConnection conn) {
+    private String getConnectionHeaders(HttpURLConnection conn, Map<String, String> securityHeaders) {
         // Get all the request properties, which are the headers set on the connection
         StringBuilder hdrs = new StringBuilder(100);
         Map<String, List<String>> requestHeaders = conn.getRequestProperties();
@@ -400,6 +404,14 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                     hdrs.append(value);
                     hdrs.append("\n"); // $NON-NLS-1$
                 }
+            }
+        }
+        if(securityHeaders != null) {
+            for(Map.Entry<String, String> entry : securityHeaders.entrySet()) {
+                hdrs.append(entry.getKey())
+                .append(": ") // $NON-NLS-1$
+                .append(entry.getValue())
+                .append("\n"); // $NON-NLS-1$
             }
         }
         return hdrs.toString();
@@ -417,14 +429,20 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      * @param authManager
      *            the <code>AuthManager</code> containing all the cookies for
      *            this <code>UrlConfig</code>
+     * @return String Authorization header value or null if not set
      */
-    private void setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
+    private Map<String, String> setConnectionAuthorization(HttpURLConnection conn, URL u, AuthManager authManager) {
         if (authManager != null) {
             Authorization auth = authManager.getAuthForURL(u);
             if (auth != null) {
-                conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, auth.toBasicHeader());
+                String headerValue = auth.toBasicHeader();
+                conn.setRequestProperty(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
+                Map<String, String> map = new HashMap<>(1);
+                map.put(HTTPConstants.HEADER_AUTHORIZATION, headerValue);
+                return map;
             }
         }
+        return null;
     }
 
     /**
