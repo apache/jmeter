@@ -29,7 +29,7 @@ import org.xml.sax.SAXParseException;
  * @since 3.2
  */
 public class LogErrorHandler implements ErrorHandler {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     @Override
     public void warning(SAXParseException exception) throws SAXException {
         logger.warn("Exception parsing document, message:{}", exception.getMessage());
