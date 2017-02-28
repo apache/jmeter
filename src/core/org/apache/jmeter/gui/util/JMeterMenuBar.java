@@ -293,6 +293,8 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
 
         JMenuItem heapDump = makeMenuItemRes("heap_dump", ActionNames.HEAP_DUMP);//$NON-NLS-1$
 
+        JMenuItem threadDump = makeMenuItemRes("thread_dump", ActionNames.THREAD_DUMP);//$NON-NLS-1$
+
         helpAbout = makeMenuItemRes("about", 'A', ActionNames.ABOUT); //$NON-NLS-1$
 
         helpMenu.add(contextHelp);
@@ -301,6 +303,7 @@ public class JMeterMenuBar extends JMenuBar implements LocaleChangeListener {
         helpMenu.add(setDebug);
         helpMenu.add(resetDebug);
         helpMenu.add(heapDump);
+        helpMenu.add(threadDump);
 
         addPluginsMenuItems(helpMenu, menuCreators, MENU_LOCATION.HELP);
 
