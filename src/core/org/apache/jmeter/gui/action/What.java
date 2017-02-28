@@ -83,14 +83,14 @@ public class What extends AbstractAction {
             try {
                 String s = HeapDumper.dumpHeap();
                 JOptionPane.showMessageDialog(null, "Created "+s, "HeapDump", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
+            } catch (Exception ex) { // NOSONAR We show cause in message
                 JOptionPane.showMessageDialog(null, ex.toString(), "HeapDump", JOptionPane.ERROR_MESSAGE);
             }
         } else if (ActionNames.THREAD_DUMP.equals(e.getActionCommand())){
             try {
                 String s = ThreadDumper.threadDump();
                 JOptionPane.showMessageDialog(null, "Created "+s, "ThreadDump", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
+            } catch (Exception ex) { // NOSONAR We show cause in message
                 JOptionPane.showMessageDialog(null, ex.toString(), "ThreadDump", JOptionPane.ERROR_MESSAGE);
             }
         }
