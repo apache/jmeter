@@ -37,6 +37,11 @@ import java.util.Date;
  */
 public class ThreadDumper {
 
+    // Only invoked by IODH class
+    private ThreadDumper() {
+        super();
+    }
+
     /**
      * @return Name of file containing thread dump
      * @throws Exception
