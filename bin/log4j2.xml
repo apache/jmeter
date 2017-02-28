@@ -31,14 +31,6 @@
       </PatternLayout>
     </GuiLogEvent>
 
-    <!--
-    <File name="httpclient-log" fileName="httpclient.log" append="false">
-      <PatternLayout>
-        <pattern>%d %p %c{1.}: %m%n</pattern>
-      </PatternLayout>
-    </File>
-    -->
-
   </Appenders>
 
   <Loggers>
@@ -68,30 +60,6 @@
     <Logger name="org.apache.jmeter.testelements.property" level="debug" />
     -->
     <Logger name="org.apache.jorphan" level="info" />
-
-    <!--
-      # Sample logging levels for Commons HttpClient
-    -->
-    <!--
-      # Commons HttpClient Logging information can be found at:
-      # http://hc.apache.org/httpclient-3.x/logging.html
-
-      # Note that full category names are used, i.e. must include the org.apache.
-      # Info level produces no output:
-    -->
-    <!-- <Logger name="org.apache.commons.httpclient" level="debug" /> -->
-    <!-- # Might be useful: -->
-    <!-- <Logger name="org.apache.commons.httpclient.Authenticator" level="trace" /> -->
-
-    <!-- # Show headers only -->
-    <!-- <Logger name="org.apache.commons.httpclient.wire.header" level="debug" /> -->
-
-    <!-- # Full wire debug produces a lot of output; consider using separate file: -->
-    <!--
-    <Logger name="org.apache.commons.httpclient.wire" level="debug">
-      <AppenderRef ref="httpclient-log" />
-    </Logger>
-    -->
 
     <!--
       # Apache HttpClient logging examples
