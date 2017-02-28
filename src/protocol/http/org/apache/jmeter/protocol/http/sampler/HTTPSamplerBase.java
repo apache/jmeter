@@ -452,7 +452,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     public void setPath(String path, String contentEncoding) {
         boolean fullUrl = path.startsWith(HTTP_PREFIX) || path.startsWith(HTTPS_PREFIX);
-        boolean getOrDelete = HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod());
+        String method = getMethod();
+        boolean getOrDelete = HTTPConstants.GET.equals(method) || HTTPConstants.DELETE.equals(method);
         if (!fullUrl && getOrDelete) {
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
@@ -825,7 +826,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setAuthManager(AuthManager value) {
         AuthManager mgr = getAuthManager();
         if (mgr != null) {
-            log.warn("Existing AuthManager " + mgr.getName() + " superseded by " + value.getName());
+            if(log.isDebugEnabled()) {
+                log.debug("Existing AuthManager {} superseded by {}", mgr.getName(), value.getName());
+            }
         }
         setProperty(new TestElementProperty(AUTH_MANAGER, value));
     }
@@ -861,7 +864,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setCookieManager(CookieManager value) {
         CookieManager mgr = getCookieManager();
         if (mgr != null) {
-            log.warn("Existing CookieManager " + mgr.getName() + " superseded by " + value.getName());
+            if(log.isDebugEnabled()) {
+                log.debug("Existing CookieManager {} superseded by {}", mgr.getName(), value.getName());
+            }
         }
         setCookieManagerProperty(value);
     }
@@ -878,7 +883,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setCacheManager(CacheManager value) {
         CacheManager mgr = getCacheManager();
         if (mgr != null) {
-            log.warn("Existing CacheManager " + mgr.getName() + " superseded by " + value.getName());
+            if(log.isDebugEnabled()) {
+                log.debug("Existing CacheManager {} superseded by {}", mgr.getName(), value.getName());
+            }
         }
         setCacheManagerProperty(value);
     }
@@ -894,7 +901,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public void setDNSResolver(DNSCacheManager cacheManager) {
         DNSCacheManager mgr = getDNSResolver();
         if (mgr != null) {
-            log.warn("Existing DNSCacheManager " + mgr.getName() + " superseded by " + cacheManager.getName());
+            if(log.isDebugEnabled()) {
+                log.debug("Existing DNSCacheManager {} superseded by {}", mgr.getName(), cacheManager.getName());
+            }
         }
         setProperty(new TestElementProperty(DNS_CACHE_MANAGER, cacheManager));
     }
@@ -964,6 +973,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         }
         String domain = getDomain();
         String protocol = getProtocol();
+        String method = getMethod();
         if (PROTOCOL_FILE.equalsIgnoreCase(protocol)) {
             domain = null; // allow use of relative file URLs
         } else {
@@ -975,9 +985,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         pathAndQuery.append(path);
 
         // Add the query string if it is a HTTP GET or DELETE request
-        if (HTTPConstants.GET.equals(getMethod()) 
-                || HTTPConstants.DELETE.equals(getMethod())
-                || HTTPConstants.OPTIONS.equals(getMethod())) {
+        if (HTTPConstants.GET.equals(method) 
+                || HTTPConstants.DELETE.equals(method)
+                || HTTPConstants.OPTIONS.equals(method)) {
             // Get the query string encoded in specified encoding
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
@@ -1145,7 +1155,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             StringBuilder stringBuffer = new StringBuilder();
             stringBuffer.append(this.getUrl().toString());
             // Append body if it is a post or put
-            if (HTTPConstants.POST.equals(getMethod()) || HTTPConstants.PUT.equals(getMethod())) {
+            String method = getMethod();
+            if (HTTPConstants.POST.equals(method) || HTTPConstants.PUT.equals(method)) {
                 stringBuffer.append("\nQuery Data: ");
                 stringBuffer.append(getQueryString());
             }
