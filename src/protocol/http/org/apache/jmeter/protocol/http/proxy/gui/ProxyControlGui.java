@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.BindException;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -40,6 +41,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -77,8 +79,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.exec.KeyToolUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComponent, ActionListener, ItemListener,
         KeyListener, UnsharedComponent {
@@ -542,15 +544,22 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             if (ProxyControl.isDynamicMode()) {
                 String[] details = model.getCertificateDetails();
                 StringBuilder sb = new StringBuilder();
+                sb.append("<html>");
                 sb.append(JMeterUtils.getResString("proxy_daemon_msg_rootca_cert"))  // $NON-NLS-1$
-                        .append(SPACE).append(KeyToolUtils.ROOT_CACERT_CRT_PFX)
-                        .append(SPACE).append(JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"));
-                sb.append(NEW_LINE).append(JMeterUtils.getResString("proxy_daemon_msg_install_as_in_doc")); // $NON-NLS-1$
-                sb.append(NEW_LINE).append(JMeterUtils.getResString("proxy_daemon_msg_check_details")) // $NON-NLS-1$
-                    .append(NEW_LINE).append(NEW_LINE);
+                        .append("&nbsp;<b>").append(KeyToolUtils.ROOT_CACERT_CRT_PFX)
+                        .append("</b>&nbsp;").append(JMeterUtils.getResString("proxy_daemon_msg_created_in_bin"));
+                sb.append("<br>").append(JMeterUtils.getResString("proxy_daemon_msg_install_as_in_doc")); // $NON-NLS-1$
+                sb.append("<br><b>").append(MessageFormat.format(
+                        JMeterUtils.getResString("proxy_daemon_msg_check_expiration"),
+                        new Object[] {ProxyControl.CERT_VALIDITY})) // $NON-NLS-1$
+                    .append("</b><br>");
+                sb.append("<br>").append(JMeterUtils.getResString("proxy_daemon_msg_check_details"))
+                    .append("<ul>"); // $NON-NLS-1$
                 for(String detail : details) {
-                    sb.append(detail).append(NEW_LINE);
+                    sb.append("<li>").append(detail).append("</li>");
                 }
+                sb.append("</ul>").append("</html>");
+                
                 JOptionPane.showMessageDialog(this,
                     sb.toString(),
                     JMeterUtils.getResString("proxy_daemon_msg_rootca_cert") + SPACE // $NON-NLS-1$
@@ -628,6 +637,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         add(makeTitlePanel(), BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createControls(), BorderLayout.NORTH);
 
         Box myBox = Box.createVerticalBox();
         myBox.add(createPortPanel());
@@ -638,38 +648,45 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         myBox.add(Box.createVerticalStrut(5));
         myBox.add(createContentTypePanel());
         myBox.add(Box.createVerticalStrut(5));
-        mainPanel.add(myBox, BorderLayout.NORTH);
+        mainPanel.add(myBox, BorderLayout.CENTER);
 
         Box includeExcludePanel = Box.createVerticalBox();
         includeExcludePanel.add(createIncludePanel());
         includeExcludePanel.add(createExcludePanel());
         includeExcludePanel.add(createNotifyListenersPanel());
-        mainPanel.add(includeExcludePanel, BorderLayout.CENTER);
-
-        mainPanel.add(createControls(), BorderLayout.SOUTH);
-
+        mainPanel.add(includeExcludePanel, BorderLayout.SOUTH);
         add(mainPanel, BorderLayout.CENTER);
     }
 
     private JPanel createControls() {
         start = new JButton(JMeterUtils.getResString("start")); // $NON-NLS-1$
+        ImageIcon startImage = JMeterUtils.getImage("toolbar/32x32/arrow-right-3.png");
+        start.setIcon(startImage);
         start.addActionListener(this);
         start.setActionCommand(START);
         start.setEnabled(true);
-
+        
         stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
+        ImageIcon stopImage = JMeterUtils.getImage("toolbar/32x32/process-stop-4.png");
+        stop.setIcon(stopImage);
         stop.addActionListener(this);
         stop.setActionCommand(STOP);
         stop.setEnabled(false);
 
+        ImageIcon restartImage = JMeterUtils.getImage("toolbar/32x32/edit-redo-7.png");
         restart = new JButton(JMeterUtils.getResString("restart")); // $NON-NLS-1$
+        restart.setIcon(restartImage);
         restart.addActionListener(this);
         restart.setActionCommand(RESTART);
         restart.setEnabled(false);
 
         JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_general_lifecycle"))); // $NON-NLS-1$
         panel.add(start);
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(stop);
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(restart);
         return panel;
     }
