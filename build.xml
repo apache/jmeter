@@ -383,7 +383,6 @@
     <include name="${lib.dir}/${commons-codec.jar}"/>
     <include name="${lib.dir}/${commons-collections.jar}"/>
     <include name="${lib.dir}/${commons-dbcp2.jar}"/>
-    <include name="${lib.dir}/${commons-httpclient.jar}"/>
     <include name="${lib.dir}/${commons-io.jar}"/>
     <include name="${lib.dir}/${commons-jexl2.jar}"/>
     <include name="${lib.dir}/${commons-jexl3.jar}"/>
@@ -464,7 +463,6 @@
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
     <pathelement location="${lib.dir}/${commons-dbcp2.jar}"/>
-    <pathelement location="${lib.dir}/${commons-httpclient.jar}"/>
     <pathelement location="${lib.dir}/${commons-io.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl2.jar}"/>
     <pathelement location="${lib.dir}/${commons-jexl3.jar}"/>
@@ -696,8 +694,11 @@
         <pathelement location="${build.functions}"/>
         <pathelement location="${build.java}"/>
         <pathelement location="${build.jdbc}"/>
+        <pathelement location="${build.jms}"/>
         <pathelement location="${build.ldap}"/>
         <pathelement location="${build.mail}"/>
+        <pathelement location="${build.mongodb}"/>
+        <pathelement location="${build.native}"/>
         <pathelement location="${build.tcp}"/>
         <!-- Also include compiled jars to allow running tests without rebuilding source -->
         <fileset dir="${dest.jar}" includes="*.jar"/>
@@ -2055,7 +2056,8 @@ run JMeter unless all the JMeter jars are added.
     <echoproperties prefix="ant"/>
     <echoproperties prefix="gump"/>
     <echoproperties prefix="os"/>
-    <echoproperties prefix="java"/>
+    <echoproperties prefix="java."/>
+    <echoproperties prefix="user."/>
 
   </target>
 
@@ -2393,7 +2395,7 @@ run JMeter unless all the JMeter jars are added.
     </copy>
   </target>
 
-  <target name="test" depends="compile-tests,_test,_allbatchtests"
+  <target name="test" depends="_test,_allbatchtests"
     description="Run tests (use -Djava.awt.headless=true on systems without graphic displays)"/>
 
   <target name="test-both" depends="test-headless,test-headed"/>
@@ -2413,6 +2415,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
+  	<!-- rmi_force_localhost is used by the Travis build -->
     <condition property="rmi_hostname_option" value="-Ddummy=true">
       <not><isset property="rmi_force_localhost"/></not>
     </condition>
@@ -2438,11 +2441,9 @@ run JMeter unless all the JMeter jars are added.
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
-          <!-- quieten the logging; this has to be done first -->
-          <arg value="-ptestfiles/jmeter-batch.properties"/>
           <!-- pick up default properties -->
-          <arg value="-qjmeter.properties"/>
-          <!-- reset the logging and other parameters -->
+          <arg value="-pjmeter.properties"/>
+          <!-- reset other parameters -->
           <arg value="-qtestfiles/jmeter-batch.properties"/>
           <arg value="-i"/>
           <arg value="testfiles/log4j2-batch.xml"/>
@@ -2455,7 +2456,8 @@ run JMeter unless all the JMeter jars are added.
         </java>
       </daemons>
       <sequential>
-        <sleep seconds="1"/>
+        <!-- Increase as necessary to ensure server has time to start -->
+        <sleep seconds="2"/>
         <antcall target="batchtest">
           <param name="remote" value="-Rlocalhost:${rmi_port}"/>
           <param name="taskname" value="client"/>
@@ -2485,12 +2487,14 @@ run JMeter unless all the JMeter jars are added.
 
   <target name="batchtest" description="Run the batch test and compare output files" unless="${skip.batchtest}">
 
-    <!-- will be overwritten by antcall paramaters -->
+    <!-- will be overwritten by antcall parameters -->
     <property name="taskname" value="jmeter"/>
     <property name="remote" value="-X"/>
+    <property name="batchtest.ignoreErrorLogs" value="false" />
     <property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
     <property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
+  	<property name="batchtest.jmx" value="${batchtest.name}.jmx"/>
     <!--
          Allow variable to be set on the command line
          Cannot omit value because that causes a warning message
@@ -2501,7 +2505,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
     <fixcrlf encoding="${encoding}" srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
 
-    <echo level="info" message="Starting ${batchtest.name} using ${remote}"/>
+    <echo level="info" message="Starting ${batchtest.name} with file ${batchtest.jmx} using ${remote} -D${batchtest.variable}=${batchtest.value}"/>
 
     <macrodef name="deleteworkfiles">
       <sequential>
@@ -2551,14 +2555,12 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="user.region" value="US"/>
       <sysproperty key="java.awt.headless" value="false"/>
       <!-- Bug 59723 -->
-      <!-- quieten the logging; this has to be done first -->
-      <arg value="-ptestfiles/jmeter-batch.properties"/>
       <!-- pick up default properties -->
-      <arg value="-qjmeter.properties"/>
-      <!-- reset the logging and other parameters -->
+      <arg value="-pjmeter.properties"/>
+      <!-- reset other parameters -->
       <arg value="-qtestfiles/jmeter-batch.properties"/>
       <arg value="-n"/>
-      <arg value="-ttestfiles/${batchtest.name}.jmx"/>
+      <arg value="-ttestfiles/${batchtest.jmx}"/>
       <arg value="-i"/>
       <arg value="testfiles/log4j2-batch.xml"/>
       <arg value="-j"/>
@@ -2619,9 +2621,16 @@ run JMeter unless all the JMeter jars are added.
     <echo level="info">${batchtest.name} output files compared OK</echo>
 
     <local         name="BatchTestLocal.len"/>
+    <!-- We define "BatchTestLocal.len" property only if log file is empty 
+    	or  batchtest.ignoreErrorLogs is false
+    -->
     <condition property="BatchTestLocal.len">
-      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+        <or>
+	      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+          <equals arg1="${batchtest.ignoreErrorLogs}" arg2="true" casesensitive="true"/>
+        </or>
     </condition>
+
     <fail unless="BatchTestLocal.len">
         Error detected in log file. See above.
     </fail>
@@ -2634,12 +2643,14 @@ run JMeter unless all the JMeter jars are added.
   <target name="batch_scripts">
     <antcall target="batchtest">
       <param name="batchtest.name" value="HTMLParserTestFile_2"/>
+      <param name="batchtest.jmx" value="HTMLParserTestFile_2.jmx"/>
     </antcall>
   <!-- Disable Test which seems wrong -->
   <!--
     <antcall target="batchtest">
       Using the same module controller name in command line mode causes NPE
       <param name="batchtest.name" value="Bug47165"/>
+      <param name="batchtest.jmx" value="Bug47165.jmx"/>
     </antcall>
   -->
 
@@ -2647,27 +2658,32 @@ run JMeter unless all the JMeter jars are added.
       <!-- variable in IPSource failed HTTP request if "Concurrent Pool Size" is enabled -->
       <!-- N.B. requires access to jmeter.apache.org -->
       <param name="batchtest.name" value="Bug52310"/>
+      <param name="batchtest.jmx" value="Bug52310.jmx"/>
       <param name="skip.batchtest" value="${skip.bug52310}" />
     </antcall>
     <antcall target="batchtest">
       <!-- Option Start Next Loop in Thread Group does not mark parent Transaction Sampler in error when an error occurs -->
       <param name="batchtest.name" value="Bug52968"/>
+      <param name="batchtest.jmx" value="Bug52968.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
       <!-- IncludeController : NullPointerException loading script in non-GUI mode if Includers use same element name -->
       <param name="batchtest.name" value="Bug50898"/>
+      <param name="batchtest.jmx" value="Bug50898.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
       <!-- Foreach works incorrectly with indexes on subsequent iterations -->
       <param name="batchtest.name" value="Bug56243"/>
+      <param name="batchtest.jmx" value="Bug56243.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
       <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
       <!-- This is unaffected by the bug; it just checks the script works OK in local mode -->
       <param name="batchtest.name" value="Bug54685"/>
+      <param name="batchtest.jmx" value="Bug54685.jmx"/>
       <param name="batchtest.variable" value="sample_variables"/>
       <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
     </antcall>
@@ -2675,35 +2691,89 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <!--   StackOverflowError with ModuleController in Non-GUI mode if its name is the same as the target node -->
       <param name="batchtest.name" value="Bug55375"/>
+      <param name="batchtest.jmx" value="Bug55375.jmx"/>
     </antcall>
 
     <antcall target="batchtestserver">
       <!-- ArrayIndexOutOfBoundsException if "sample_variable" is set in client but not server -->
       <!-- This is the actual test -->
       <param name="batchtest.name" value="Bug54685"/>
+      <param name="batchtest.jmx" value="Bug54685.jmx"/>
       <param name="batchtest.variable" value="sample_variables"/>
       <param name="batchtest.value" value="REFERENCE,JSESSIONID"/>
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug56811"/>
+      <param name="batchtest.jmx" value="Bug56811.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="TEST_HTTPS"/>
+      <param name="batchtest.jmx" value="TEST_HTTPS.jmx"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
+      <param name="batchtest.jmx" value="Bug60607.jmx"/>
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="SlowCharsFeature"/>
+      <param name="batchtest.name" value="SlowCharsFeature_HttpClient4"/>
+      <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="SlowCharsFeature_Java"/>
+      <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="Java"/>
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+      <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+    </antcall>
+
+	<antcall target="batchtest">
+      <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+      <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+	  <param name="batchtest.variable" value="jmeter.httpsampler"/>
+	  <param name="batchtest.value" value="Java"/>
+    </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TestKeepAlive"/>
+      <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
+    </antcall>
+  	
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TestHeaderManager"/>
+      <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
+    </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TestHeaderManager"/>
+      <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="Java"/>
+    </antcall>
+  	
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TEST_HTTP_HttpClient4"/>
+      <param name="batchtest.jmx" value="TEST_HTTP.jmx"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="HttpClient4"/>
+    </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TEST_HTTP_Java"/>
+      <param name="batchtest.jmx" value="TEST_HTTP.jmx"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="Java"/>
+      <!-- This test contains a Redirection loop that leads to an error -->
+      <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
   </target>
 
@@ -2712,7 +2782,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
-   <target name="_test" depends="package">
+   <target name="_test" depends="compile-tests,package">
    <!--
    The property java.awt.headless is not automatically passed on,
    because the tests are run in a separate JVM from the build.
@@ -2829,6 +2899,7 @@ run JMeter unless all the JMeter jars are added.
     <jvmarg value="-Dfile.encoding=${test.encoding}"/>
     <!-- Allow headless to be passed in -->
     <jvmarg value="-Djava.awt.headless=${java.awt.headless}"/>
+    <sysproperty key="log4j.configurationFile" value="${basedir}/bin/log4j2.xml" />
     <classpath>
       <fileset dir="${dest.jar}" includes="*.jar"/>
       <pathelement location="${build.test}"/>
@@ -3020,7 +3091,6 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="commons-codec"/>
     <process_jarfile jarname="commons-collections"/>
     <process_jarfile jarname="commons-dbcp2"/>
-    <process_jarfile jarname="commons-httpclient"/>
     <process_jarfile jarname="commons-io"/>
     <process_jarfile jarname="commons-jexl2"/>
     <process_jarfile jarname="commons-jexl3"/>
@@ -3119,6 +3189,8 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.dir}" includes="slf4j-nop-1.7.13.jar"/>
       <!-- tidy up unused commons-logging jar -->
       <fileset dir="${lib.dir}" includes="commons-logging-1.2.jar"/>
+      <!-- tidy up unused commons-httpclient jar -->
+      <fileset dir="${lib.dir}" includes="commons-httpclient-3.1.jar"/>
       <!-- tidy up unused htmlparser jars -->
       <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar"/>
       <!-- tidy up unused logkit jars -->
@@ -3161,7 +3233,7 @@ run JMeter unless all the JMeter jars are added.
      </taskdef>
      <jacoco:agent property="jacocoagent"
                    destfile="reports/jacoco.exec"
-                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder"
+                   includes="org.apache.jmeter.*:org.apache.jorphan.*:org.apache.commons.cli.avalon.*:org.sl4j.impl.StaticLoggerBinder:org.apache.http.impl.conn.*"
                    sessionid=""
      />
   </target>
@@ -3423,6 +3495,8 @@ run JMeter unless all the JMeter jars are added.
            value="squid:S1192" />
     <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
            value="**/*.java" />
+  	<property name="sonar.coverage.exclusions"
+  			value="**/BSF*.java,**/org/apache/log/**.java,**/org/apache/jmeter/examples/**.java,**/org/apache/jorphan/logging/LoggingManager.java" />
     <property name="core.sonar.projectName" value="core" />
     <property name="core.sonar.sources" value="${src.core}" />
     <property name="core.sonar.projectBaseDir" value="./" />
