@@ -44,6 +44,7 @@ public class Colors {
     
     private static final String COLORS_ORDER = "jmeter.order";
     
+    public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
     /**
      * Parse icon set file.
      * @return List of icons/action definition
