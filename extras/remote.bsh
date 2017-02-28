@@ -34,9 +34,6 @@ print(args);
 printsysprop("user.home");
 printsysprop("user.dir");
 
-printprop("log_level.jmeter");
-printprop("log_level.jorphan");
-
 // loglevel("DEBUG","jmeter");
 
 for(i=0;i<10;i++){
