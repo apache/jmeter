@@ -335,18 +335,14 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         if (!file.isAbsolute()) {
             file = new File(System.getProperty("user.dir"),authFile);
         }
-        PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(new FileWriter(file));
+        try (FileWriter fw = new FileWriter(file);
+                PrintWriter writer = new PrintWriter(fw)){
             writer.println("# JMeter generated Authorization file");
             for (int i = 0; i < getAuthObjects().size(); i++) {
                 Authorization auth = (Authorization) getAuthObjects().get(i).getObjectValue();
                 writer.println(auth.toString());
             }
             writer.flush();
-            writer.close();
-        } finally {
-            JOrphanUtils.closeQuietly(writer);
         }
     }
 
@@ -367,10 +363,9 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             throw new IOException("The file you specified cannot be read.");
         }
 
-        BufferedReader reader = null;
         boolean ok = true;
-        try {
-            reader = new BufferedReader(new FileReader(file));
+        try ( FileReader fr = new FileReader(file); 
+                BufferedReader reader = new BufferedReader(fr)){
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
@@ -405,8 +400,6 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
                     ok = false;
                 }
             }
-        } finally {
-            JOrphanUtils.closeQuietly(reader);
         }
         if (!ok){
             JMeterUtils.reportErrorToUser("One or more errors found when reading the Auth file - see the log file");

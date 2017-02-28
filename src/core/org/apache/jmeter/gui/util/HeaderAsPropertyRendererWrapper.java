@@ -19,7 +19,6 @@
 package org.apache.jmeter.gui.util;
 
 import java.awt.Component;
-import java.io.Serializable;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -32,9 +31,8 @@ import javax.swing.table.TableCellRenderer;
  * Wraps {@link TableCellRenderer} to renders items in a JTable by using resource names
  * and control some formatting (centering, fonts and border)
  */
-public class HeaderAsPropertyRendererWrapper implements TableCellRenderer, Serializable {
+public class HeaderAsPropertyRendererWrapper implements TableCellRenderer {
 
-    private static final long serialVersionUID = 240L;
     private Object[][] columnsMsgParameters;
 
     private TableCellRenderer delegate;

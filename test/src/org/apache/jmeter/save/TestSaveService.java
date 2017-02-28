@@ -127,7 +127,7 @@ public class TestSaveService extends JMeterTestCase {
         } finally {
             out.close(); // Make sure all the data is flushed out
         }
-
+        
         final FileStats compareStats = savedStats == FileStats.NO_STATS ? origStats : savedStats;
 
         final FileStats outputStats;

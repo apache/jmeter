@@ -173,6 +173,10 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
 
     }
 
+    public void setChoiceListEnabled(boolean enabled) {
+        choiceList.setEnabled(enabled);
+    }
+
     /**
      * Set the text displayed in the label.
      *
@@ -238,28 +242,28 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         return mLabel.getText();
     }
 
-   /**
-    * Registers the text to display in a tool tip.
-    * The text displays when the cursor lingers over the component.
-    * @param text the string to display; if the text is null,
-    *      the tool tip is turned off for this component
-    */
-   @Override
-public void setToolTipText(String text) {
-       choiceList.setToolTipText(text);
-   }
+    /**
+     * Registers the text to display in a tool tip.
+     * The text displays when the cursor lingers over the component.
+     * @param text the string to display; if the text is null,
+     *      the tool tip is turned off for this component
+     */
+    @Override
+    public void setToolTipText(String text) {
+        choiceList.setToolTipText(text);
+    }
 
-   /**
+    /**
      * Returns the tooltip string that has been set with setToolTipText
      * @return the text of the tool tip
      */
-   @Override
-public String getToolTipText() {
-       if (choiceList == null){ // Necessary to avoid NPE when testing serialisation
-           return null;
-       }
-       return choiceList.getToolTipText();
-   }
+    @Override
+    public String getToolTipText() {
+        if (choiceList == null){ // Necessary to avoid NPE when testing serialisation
+            return null;
+        }
+        return choiceList.getToolTipText();
+    }
 
     /**
      * Adds a change listener, that will be notified when the text in the text
@@ -270,7 +274,7 @@ public String getToolTipText() {
      * @param pChangeListener
      *            The listener to add
      */
-   @Override
+    @Override
     public void addChangeListener(ChangeListener pChangeListener) {
         mChangeListeners.add(pChangeListener);
     }

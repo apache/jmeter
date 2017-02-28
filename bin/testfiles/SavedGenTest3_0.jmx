@@ -750,7 +750,7 @@
             <collectionProp name="SMTPSampler.headerFields"/>
           </SmtpSampler>
           <hashTree/>
-          <SoapSampler guiclass="SoapSamplerGui" testclass="SoapSampler" testname="SOAP/XML-RPC Request" enabled="true">
+          <ConfigTestElement guiclass="ObsoleteGui" testclass="ConfigTestElement" testname="SOAP/XML-RPC Request" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -760,7 +760,7 @@
             <stringProp name="SoapSampler.SOAP_ACTION"></stringProp>
             <stringProp name="SoapSampler.SEND_SOAP_ACTION">true</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-          </SoapSampler>
+          </ConfigTestElement>
           <hashTree/>
           <TCPSampler guiclass="TCPSamplerGui" testclass="TCPSampler" testname="TCP Sampler" enabled="true">
             <stringProp name="TCPSampler.server"></stringProp>

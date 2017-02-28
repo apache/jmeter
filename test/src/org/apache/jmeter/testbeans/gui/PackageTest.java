@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.apache.jmeter.gui.util.JMeterMenuBar;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
@@ -46,7 +46,7 @@ import junit.framework.TestSuite;
  * TODO: - Check property files don't have duplicate keys (is this important)
  * 
  */
-public final class PackageTest extends JMeterTestCaseJUnit3 {
+public final class PackageTest extends JMeterTestCaseJUnit {
     private static final Logger log = LoggerFactory.getLogger(PackageTest.class);
 
     private static final Locale defaultLocale = new Locale("en","");

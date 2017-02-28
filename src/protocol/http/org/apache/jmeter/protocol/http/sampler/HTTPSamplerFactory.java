@@ -74,17 +74,14 @@ public final class HTTPSamplerFactory {
         if (alias.equals(HTTP_SAMPLER_JAVA) || alias.equals(IMPL_JAVA)) {
             return new HTTPSamplerProxy(IMPL_JAVA);
         }
-        if (alias.equals(HTTP_SAMPLER_APACHE) || alias.equals(IMPL_HTTP_CLIENT3_1)) {
-            return new HTTPSamplerProxy(IMPL_HTTP_CLIENT3_1);
-        }
-        if (alias.equals(IMPL_HTTP_CLIENT4)) {
+        if (alias.equals(IMPL_HTTP_CLIENT4) || alias.equals(HTTP_SAMPLER_APACHE) || alias.equals(IMPL_HTTP_CLIENT3_1)) {
             return new HTTPSamplerProxy(IMPL_HTTP_CLIENT4);
         }
         throw new IllegalArgumentException("Unknown sampler type: '" + alias+"'");
     }
 
     public static String[] getImplementations(){
-        return new String[]{IMPL_HTTP_CLIENT4,IMPL_HTTP_CLIENT3_1,IMPL_JAVA};
+        return new String[]{IMPL_HTTP_CLIENT4,IMPL_JAVA};
     }
 
     public static HTTPAbstractImpl getImplementation(String impl, HTTPSamplerBase base){
@@ -96,9 +93,7 @@ public final class HTTPSamplerFactory {
         }
         if (IMPL_JAVA.equals(impl) || HTTP_SAMPLER_JAVA.equals(impl)) {
             return new HTTPJavaImpl(base);
-        } else if (IMPL_HTTP_CLIENT3_1.equals(impl) || HTTP_SAMPLER_APACHE.equals(impl)) {
-            return new HTTPHC3Impl(base);                
-        } else if (IMPL_HTTP_CLIENT4.equals(impl)) {
+        } else if (IMPL_HTTP_CLIENT4.equals(impl) || IMPL_HTTP_CLIENT3_1.equals(impl)) {
             return new HTTPHC4Impl(base);
         } else {
             throw new IllegalArgumentException("Unknown implementation type: '"+impl+"'");

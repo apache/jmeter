@@ -540,7 +540,11 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static String getParsedLabel(String key) {
         String value = JMeterUtils.getResString(key);
-        return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+        if(value != null) {
+            return value.replaceFirst("(?m)\\s*?:\\s*$", ""); // $NON-NLS-1$ $NON-NLS-2$
+        } else {
+            return null;
+        }
     }
     
     /**
@@ -1172,7 +1176,7 @@ public class JMeterUtils implements UnitTestManager {
             UIDefaults defaults = UIManager.getLookAndFeelDefaults();
             // If I iterate over the entrySet under ubuntu with jre 1.8.0_121
             // the font objects are missing, so iterate over the keys, only
-            for (Object key : new ArrayList<Object>(defaults.keySet())) {
+            for (Object key : new ArrayList<>(defaults.keySet())) {
                 Object value = defaults.get(key);
                 log.debug("Try key {} with value {}", key, value);
                 if (value instanceof Font) {

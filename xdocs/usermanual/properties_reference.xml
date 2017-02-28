@@ -160,8 +160,8 @@ The <code>system.properties</code> file gives more flexibility.</note>
 <property name="jmeter.loggerpanel.maxlength">
      Max lines kept in LoggerPanel, <code>0</code> means no limit.<br/>
      Defaults to: <code>1000</code></property>
-<property name="jmeter.loggerpanel.refresh_period">
-    Interval in <code>ms</code> to refresh the log entries in the panel.<br/>
+<property name="jmeter.gui.refresh_period">
+    Interval period in <code>ms</code> to process the events of the listeners.<br/>
     Defaults to: <code>500</code></property>
 </properties>
 </section>
@@ -351,13 +351,11 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.10 Commons and Apache HttpClient common properties" anchor="httpclient_common_properties">
+<section name="&sect-num;.10 Apache HttpClient common properties" anchor="httpclient_common_properties">
 <properties>
 <property name="httpclient.timeout">
     Set the socket timeout (or use the parameter <code>http.socket.timeout</code>) for
-    AJP Sampler and HttpClient3 implementation.<br/>
-    <note>Note for HttpClient3 implementation it is better to use GUI to set timeout or
-    use <code>http.socket.timeout</code> in <code>httpclient.parameters</code>.</note>
+    AJP Sampler.<br/>
     Value is in milliseconds, <code>0</code> means no timeout.<br/>
     Defaults to: <code>0</code>
 </property>
@@ -396,22 +394,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.12 Sample logging levels for Commons HttpClient" anchor="log_levels_commons_httpclient">
-<description>
-    Commons HttpClient Logging information can be found at <a href="http://hc.apache.org/httpclient-3.x/logging.html" target="_blank" >Logging</a>
-    <note>Note that full category names are used, i.e. must include the <code>org.apache</code>.</note>
-    Info level produces no output.<br/>
-    In log4j2.xml, set debug level:
-    <source>&lt;Logger name="org.apache.commons.httpclient" level="debug" /&gt;</source>
-    Might be useful:
-    <source>&lt;Logger name="org.apache.commons.httpclient.Authenticator" level="trace" /&gt;</source> 
-    Show headers only
-    <source>&lt;Logger name="org.apache.commons.httpclient.wire.header" level="debug" /&gt;</source>
-    Full wire debug produces a lot of output; consider using separate file:
-    <source>&lt;Logger name="org.apache.commons.httpclient.wire" level="debug" /&gt;</source>
-</description>
-</section>
-<section name="&sect-num;.13 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
+<section name="&sect-num;.12 Apache HttpClient logging examples" anchor="httpclient_logging_examples">
 <description>
     Enable header wire and context logging - Best for Debugging
 	In log4j2.xml, set:
@@ -432,7 +415,7 @@ JMETER-SERVER</source>
 </source>
 </description>
 </section>
-<section name="&sect-num;.14 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
+<section name="&sect-num;.13 Apache HttpComponents HTTPClient configuration (HTTPClient4)" anchor="httpclient4">
 <properties>
 <property name="hc.parameters.file">
     Define a properties file for overriding Apache HttpClient parameters.<br/>
@@ -468,20 +451,8 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.15 Apache HttpComponents Commons HTTPClient configuration (HTTPClient 3.1)" anchor="httpclient31">
-<properties>
-<property name="httpclient.parameters.file">
-    Define a properties file for overriding Commons HttpClient parameters.
-    See <a href="http://hc.apache.org/httpclient-3.x/preference-api.html">this</a>.
-    Uncomment this line if you put anything in <code>httpclient.parameters</code> file.
-</property>
-<property name="httpclient3.retrycount">
-    Number of retries to attempt.<br/>
-    Defaults to: <code>0</code>
-</property>
-</properties>
-</section>
-<section name="&sect-num;.16 HTTP Cache Manager configuration" anchor="cache_maanger">
+
+<section name="&sect-num;.14 HTTP Cache Manager configuration" anchor="cache_maanger">
 <properties>
 <property name="cacheable_methods">
     Space or comma separated list of methods that can be cached.<br/>
@@ -516,7 +487,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.17 Results file configuration" anchor="results_file_config">
+<section name="&sect-num;.15 Results file configuration" anchor="results_file_config">
 <properties>
 <property name="jmeter.save.saveservice.output_format">
     This section helps determine how result data will be saved.<br/>
@@ -651,7 +622,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.18 Settings that affect SampleResults" anchor="sample_results">
+<section name="&sect-num;.16 Settings that affect SampleResults" anchor="sample_results">
 <properties>
 <property name="sampleresult.timestamp.start">
     Save the start time stamp instead of the end.<br/>
@@ -669,7 +640,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.19 Upgrade" anchor="upgrade">
+<section name="&sect-num;.17 Upgrade" anchor="upgrade">
 <properties>
 <property name="upgrade_properties">
     File that holds a record of name changes for backward compatibility issues.<br/>
@@ -677,7 +648,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.20 JMeter Test Script recorder configuration" anchor="test_script_recorder">
+<section name="&sect-num;.18 JMeter Test Script recorder configuration" anchor="test_script_recorder">
 <properties>
 <property name="proxy.pause">
     <note>N.B. The element was originally called the Proxy recorder, which is why the properties
@@ -701,8 +672,7 @@ JMETER-SERVER</source>
     <dl>
         <dt><code>HTTPSampler</code> or <code>Java</code></dt>
         <dd>Use the <code>Java</code> Sampler</dd>
-        <dt><code>HTTPSampler2</code> or <code>HttpClient3.1</code></dt>
-        <dd>Use Apache HTTPClient version 3.1</dd>
+        <dt><code>HTTPSampler2</code></dt>
         <dt><code>HttpClient4</code></dt>
         <dd>Use Apache HTTPClient version 4</dd>
     </dl>
@@ -753,7 +723,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.21 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
+<section name="&sect-num;.19 Test Script Recorder certificate configuration" anchor="test_script_recorder_cert">
 <properties>
 <property name="proxy.cert.directory">
     Defaults to: <em>JMeter <code>bin</code> directory</em>
@@ -788,7 +758,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.22 JMeter Proxy configuration" anchor="proxy_config">
+<section name="&sect-num;.20 JMeter Proxy configuration" anchor="proxy_config">
 <properties>
 <property name="http.proxyDomain">
     Use command-line flags for user-name and password.<br/>
@@ -796,7 +766,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.23 HTML Parser configuration" anchor="parser_config">
+<section name="&sect-num;.21 HTML Parser configuration" anchor="parser_config">
 <properties>
 <property name="HTTPResponse.parsers">
     Space-separated list of parser groups.<br/>
@@ -850,7 +820,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.24 Remote batching configuration" anchor="remote_batching_config">
+<section name="&sect-num;.22 Remote batching configuration" anchor="remote_batching_config">
     <p>
     Configure how SampleResults are sent from server to client when using distributed testing.
     </p>
@@ -941,7 +911,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.25 JDBC Request configuration" anchor="jdbc_request">
+<section name="&sect-num;.23 JDBC Request configuration" anchor="jdbc_request">
 <properties>
 <property name="jdbcsampler.nullmarker">
     String used to indicate a null value.<br/>
@@ -953,7 +923,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.26 OS Process Sampler configuration" anchor="os_sampler">
+<section name="&sect-num;.24 OS Process Sampler configuration" anchor="os_sampler">
 <properties>
 <property name="os_sampler.poll_for_timeout">
     Polling to see if process has finished its work, used when a timeout
@@ -962,7 +932,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.27 TCP Sampler configuration" anchor="tcp_sampler">
+<section name="&sect-num;.25 TCP Sampler configuration" anchor="tcp_sampler">
 <properties>
 <property name="tcp.handler">
     The default handler class.<br/>
@@ -993,7 +963,7 @@ JMETER-SERVER</source>
     Defaults to: <code>2</code></property>
 </properties>
 </section>
-<section name="&sect-num;.28 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)" anchor="summariser">
+<section name="&sect-num;.26 Summariser - Generate Summary Results - configuration (mainly applies to non-GUI mode)" anchor="summariser">
 <properties>
 <property name="summariser.name">
     Comment the following property to disable the default non-GUI summariser.<br/>
@@ -1019,7 +989,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.29 Aggregate Report and Aggregate Graph - configuration" anchor="aggregate_report_graph">
+<section name="&sect-num;.27 Aggregate Report and Aggregate Graph - configuration" anchor="aggregate_report_graph">
 <properties>
 <property name="aggregate_rpt_pct1">
     Percentiles to display in reports.<br/>
@@ -1039,7 +1009,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.30 BackendListener - configuration" anchor="backend">
+<section name="&sect-num;.28 BackendListener - configuration" anchor="backend">
 <properties>
 <property name="backend_graphite.send_interval">
     Send interval in seconds.<br/>
@@ -1084,7 +1054,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.31 BeanShell configuration" anchor="beanshell">
+<section name="&sect-num;.29 BeanShell configuration" anchor="beanshell">
 <properties>
 <property name="beanshell.server.port">
     BeanShell Server properties.<br/>
@@ -1129,7 +1099,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.32 MailerModel configuration" anchor="mailer">
+<section name="&sect-num;.30 MailerModel configuration" anchor="mailer">
 <properties>
 <property name="mailer.successlimit">
     The file <code>BeanShellListeners.bshrc</code> contains sample definitions
@@ -1143,7 +1113,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.33 CSVRead configuration" anchor="csv">
+<section name="&sect-num;.31 CSVRead configuration" anchor="csv">
 <properties>
 <property name="csvread.delimiter">
     CSVRead delimiter setting (default "<code>,</code>").<br/>
@@ -1153,7 +1123,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.34 __time() function configuration" anchor="time">
+<section name="&sect-num;.32 __time() function configuration" anchor="time">
 <properties>
 <property name="time.YMD">
     This and the following properties can be used to redefine the default time formats.<br/>
@@ -1173,7 +1143,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.35 CSV DataSet configuration" anchor="csv_dataset">
+<section name="&sect-num;.33 CSV DataSet configuration" anchor="csv_dataset">
 <properties>
 <property name="csvdataset.eofstring">
     String to return at <abbr title="end of file"><code>EOF</code></abbr> (if recycle not used).<br/>
@@ -1181,7 +1151,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.36 LDAP Sampler configuration" anchor="ldap">
+<section name="&sect-num;.34 LDAP Sampler configuration" anchor="ldap">
 <properties>
 <property name="ldapsampler.max_sorted_results">
     Maximum number of search results returned by a search that will be sorted
@@ -1209,7 +1179,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.37 Miscellaneous configuration" anchor="miscellaneous">
+<section name="&sect-num;.35 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
 <property name="monitor.buffer.size">
     To set the Monitor Health Visualiser buffer size, enter the desired value.<br/>
@@ -1418,9 +1388,6 @@ JMETER-SERVER</source>
     Defaults to:
     <source>.RenderAsText,.RenderAsRegexp,.RenderAsCssJQuery,.RenderAsXPath,.RenderAsHTML,.RenderAsHTMLWithEmbedded,.RenderAsDocument,.RenderAsJSON,.RenderAsXML</source>
 </property>
-<property name="view.results.tree.refresh_period">
-    Interval in <code>ms</code> after which the results should be updated.<br/>
-    Defaults to: <code>500</code></property>
 <property name="document.max_size">
     Maximum size (in bytes) of Document that can be parsed by Tika engine<br/>
     Set to zero to disable the size check.<br/>
@@ -1444,7 +1411,7 @@ JMETER-SERVER</source>
     Defaults to: <code>100</code></property>
 </properties>
 </section>
-<section name="&sect-num;.38 Classpath configuration" anchor="classpath">
+<section name="&sect-num;.36 Classpath configuration" anchor="classpath">
 <properties>
 <property name="search_paths">
     List of directories (separated by <code>;</code>) to search for additional
@@ -1488,7 +1455,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.39 Reporting configuration" anchor="reporting">
+<section name="&sect-num;.37 Reporting configuration" anchor="reporting">
 <properties>
 <property name="jmeter.reportgenerator.apdex_satisfied_threshold">
     Sets the satisfaction threshold for the APDEX calculation (in milliseconds).<br/>
@@ -1699,7 +1666,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.40 Additional property files to load" anchor="properties">
+<section name="&sect-num;.38 Additional property files to load" anchor="properties">
 <properties>
 <property name="user.properties">
     Should JMeter automatically load additional JMeter properties?<br/>
@@ -1718,7 +1685,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.41 Thread Group Validation feature" anchor="validation">
+<section name="&sect-num;.39 Thread Group Validation feature" anchor="validation">
 <description>Validation is the name of the feature used to rapidly validate a Thread Group runs fine</description>
 <properties>
 <property name="testplan_validation.tree_cloner_class">
@@ -1751,7 +1718,7 @@ JMETER-SERVER</source>
 </property>
 </properties>
 </section>
-<section name="&sect-num;.42 Timer related feature" anchor="timer">
+<section name="&sect-num;.40 Timer related feature" anchor="timer">
 <description>Timer are used to introduce think time in your plan.</description>
 <properties>
 <property name="timer.factor">
@@ -1784,7 +1751,7 @@ JMETER-SERVER</source>
 <a href="#">^</a>
 </section>
 
-<section name="&sect-num;.43 Naming Policy" anchor="naming_policy">
+<section name="&sect-num;.41 Naming Policy" anchor="naming_policy">
 <description>Timer are used to introduce think time in your plan.</description>
 <properties>
 <property name="naming_policy.prefix">

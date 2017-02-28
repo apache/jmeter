@@ -39,11 +39,12 @@ public class ShutdownClient {
         }
         String command = args[0];
         System.out.println("Sending "+command+" request to port "+port);
-        DatagramSocket socket = new DatagramSocket();
-        byte[] buf = command.getBytes("ASCII");
-        InetAddress address = InetAddress.getByName("localhost");
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
-        socket.send(packet);
-        socket.close();
+        try (DatagramSocket socket = new DatagramSocket()) {
+            byte[] buf = command.getBytes("ASCII");
+            InetAddress address = InetAddress.getByName("localhost");
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address,
+                    port);
+            socket.send(packet);
+        }
     }
 }

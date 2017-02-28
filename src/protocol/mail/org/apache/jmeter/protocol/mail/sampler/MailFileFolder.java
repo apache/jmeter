@@ -21,8 +21,8 @@ package org.apache.jmeter.protocol.mail.sampler;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.mail.Flags;
@@ -31,8 +31,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 import javax.mail.URLName;
-
-import org.apache.commons.io.IOUtils;
 
 public class MailFileFolder extends Folder {
 
@@ -108,16 +106,12 @@ public class MailFileFolder extends Folder {
         } else {
             f = new File(folderPath,String.format(FILENAME_FORMAT, Integer.valueOf(index)));
         }
-        try {
-            InputStream fis = new BufferedInputStream(new FileInputStream(f));
-            try {
-                Message m = new MailFileMessage(this, fis, index);
-                return m;
-            } finally {
-                IOUtils.closeQuietly(fis);
-            }
-        } catch (FileNotFoundException e) {
-            throw new MessagingException("Cannot open folder: "+e.getMessage(), e);
+        try (InputStream fis = new FileInputStream(f);
+                InputStream bis = new BufferedInputStream(fis)) {
+            return new MailFileMessage(this, bis, index);
+        } catch (IOException e) {
+            throw new MessagingException(
+                    "Cannot open folder: " + e.getMessage(), e);
         }
     }
 

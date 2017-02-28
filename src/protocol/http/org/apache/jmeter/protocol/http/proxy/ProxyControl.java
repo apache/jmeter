@@ -452,7 +452,7 @@ public class ProxyControl extends GenericController {
         if (SAMPLER_TYPE_HTTP_SAMPLER_JAVA.equals(type)){
             type = HTTPSamplerFactory.IMPL_JAVA;
         } else if (SAMPLER_TYPE_HTTP_SAMPLER_HC3_1.equals(type)){
-            type = HTTPSamplerFactory.IMPL_HTTP_CLIENT3_1;
+            type = HTTPSamplerFactory.IMPL_HTTP_CLIENT4;
         } else if (SAMPLER_TYPE_HTTP_SAMPLER_HC4.equals(type)){
             type = HTTPSamplerFactory.IMPL_HTTP_CLIENT4;
         }

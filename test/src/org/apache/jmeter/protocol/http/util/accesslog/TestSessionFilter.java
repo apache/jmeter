@@ -64,7 +64,7 @@ public class TestSessionFilter {
 
     @Test
     public void testIsFiltered() throws Exception {
-        Map<String, CookieManager> cm = new ConcurrentHashMap<String, CookieManager>();
+        Map<String, CookieManager> cm = new ConcurrentHashMap<>();
         Set<CookieManager> inUse = Collections
                 .synchronizedSet(new HashSet<CookieManager>());
         SessionFilter filter = new SessionFilter(cm, inUse);

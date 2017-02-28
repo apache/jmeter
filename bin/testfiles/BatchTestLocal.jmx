@@ -24,7 +24,7 @@
         </elementProp>
         <longProp name="ThreadGroup.end_time">1172922900000</longProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">80</stringProp>
         <stringProp name="TestPlan.comments">N.B. The ramp-up period is set so that the first thread will finish before the second.
 This is to ensure the test output is predictable, whilst still allowing testing of unshared counter etc</stringProp>
       </ThreadGroup>

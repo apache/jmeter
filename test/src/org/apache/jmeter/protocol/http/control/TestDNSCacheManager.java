@@ -101,11 +101,11 @@ public class TestDNSCacheManager extends JMeterTestCase {
         try {
             original.resolve("jmeter.apache.org");
             Assert.assertNotNull(original.resolver);
-            Assert.assertTrue(((ExtendedResolver)original.resolver).getResolvers().length==1);
-            Assert.assertTrue(original.cache.size()==1);
+            Assert.assertEquals(((ExtendedResolver)original.resolver).getResolvers().length, 1);
+            Assert.assertEquals(original.cache.size(), 1);
             // OK
         } catch (UnknownHostException e) {
-            fail("System DNS server should have been used");
+            fail("Should have succeeded resolving jmeter.apache.org, error:"+e.getMessage());
         }
     }
     
@@ -143,7 +143,7 @@ public class TestDNSCacheManager extends JMeterTestCase {
             // This will use Default System DNS resolver
             original.resolve("jmeter.apache.org");
             Assert.assertNotNull(original.resolver);
-            Assert.assertTrue(((ExtendedResolver)original.resolver).getResolvers().length==0);
+            Assert.assertEquals(((ExtendedResolver)original.resolver).getResolvers().length, 0);
         } catch (UnknownHostException e) {
             fail("Should have failed as no DNS server provided");
         }

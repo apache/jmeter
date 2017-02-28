@@ -110,6 +110,10 @@ public class HttpMirrorThread implements Runnable {
 
             baos.close();
             final String headerString = headers.toString();
+            if(headerString.length() == 0 || headerString.indexOf('\r') < 0) {
+                log.error("Invalid request received:'{}'", headerString);
+                return;
+            }
             final String firstLine = headerString.substring(0, headerString.indexOf('\r'));
             final String[] requestParts = firstLine.split("\\s+");
             final String requestMethod = requestParts[0];

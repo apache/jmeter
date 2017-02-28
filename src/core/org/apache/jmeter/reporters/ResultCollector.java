@@ -53,7 +53,6 @@ import org.apache.jmeter.testelement.property.ObjectProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.visualizers.Visualizer;
 import org.apache.jorphan.util.JMeterError;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -368,14 +367,11 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         String filename = getFilename();
         File file = new File(filename);
         if (file.exists()) {
-            BufferedReader dataReader = null;
-            BufferedInputStream bufferedInputStream = null;
-            try {
-                dataReader = new BufferedReader(new FileReader(file)); // TODO Charset ?
+            try ( FileReader fr = new FileReader(file); 
+                    BufferedReader dataReader = new BufferedReader(fr, 300)){
                 // Get the first line, and see if it is XML
                 String line = dataReader.readLine();
                 dataReader.close();
-                dataReader = null;
                 if (line == null) {
                     log.warn("{} is empty", filename);
                 } else {
@@ -383,8 +379,8 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         CSVSaveService.processSamples(filename, visualizer, this);
                         parsedOK = true;
                     } else { // We are processing XML
-                        try { // Assume XStream
-                            bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+                        try ( FileInputStream fis = new FileInputStream(file);
+                                BufferedInputStream bufferedInputStream = new BufferedInputStream(fis); ){ // Assume XStream
                             SaveService.loadTestResults(bufferedInputStream,
                                     new ResultCollectorHelper(this, visualizer));
                             parsedOK = true;
@@ -399,8 +395,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                 // FIXME Why do we catch OOM ?
                 log.warn("Problem reading JTL file: {}", file);
             } finally {
-                JOrphanUtils.closeQuietly(dataReader);
-                JOrphanUtils.closeQuietly(bufferedInputStream);
                 if (!parsedOK) {
                     GuiPackage.showErrorMessage(
                                 "Error loading results file - see log file",

@@ -63,13 +63,12 @@ under the License.
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
       <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
-      <commons-httpclient.version>3.1</commons-httpclient.version>
       <commons-io.version>2.5</commons-io.version>
       <commons-jexl2.version>2.1.1</commons-jexl2.version>
       <commons-jexl3.version>3.0</commons-jexl3.version>
       <commons-lang3.version>3.5</commons-lang3.version>
       <commons-math3.version>3.6.1</commons-math3.version>
-      <commons-net.version>3.5</commons-net.version>
+      <commons-net.version>3.6</commons-net.version>
       <commons-pool2.version>2.4.2</commons-pool2.version>
       <dnsjava.version>2.1.8</dnsjava.version>
       <freemarker.version>2.3.23</freemarker.version>
@@ -95,7 +94,7 @@ under the License.
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
       <ph-css.version>5.0.3</ph-css.version>
       <ph-commons.version>8.6.0</ph-commons.version>
-      <rsyntaxtextarea.version>2.6.0</rsyntaxtextarea.version>
+      <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.22</slf4j-api.version>
       <slf4j-ext.version>1.7.22</slf4j-ext.version>
       <log4j-api.version>2.7</log4j-api.version>
@@ -172,11 +171,6 @@ under the License.
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-dbcp2</artifactId>
         <version>${commons-dbcp2.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-httpclient</groupId>
-        <artifactId>commons-httpclient</artifactId>
-        <version>${commons-httpclient.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

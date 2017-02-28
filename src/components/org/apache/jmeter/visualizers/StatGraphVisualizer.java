@@ -33,9 +33,11 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -58,6 +60,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -100,7 +103,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private static final String PCT1_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct1", "90");
     private static final String PCT2_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct2", "95");
     private static final String PCT3_LABEL = JMeterUtils.getPropDefault("aggregate_rpt_pct3", "99");
-    
+
     private static final Float PCT1_VALUE = new Float(Float.parseFloat(PCT1_LABEL)/100);
     private static final Float PCT2_VALUE =  new Float(Float.parseFloat(PCT2_LABEL)/100);
     private static final Float PCT3_VALUE =  new Float(Float.parseFloat(PCT3_LABEL)/100);
@@ -138,6 +141,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8)); //$NON-NLS-1$
 
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
+
     private JTable myJTable;
 
     private JScrollPane myScrollPane;
@@ -148,7 +153,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
      * Lock used to protect tableRows update + model update
      */
     private final transient Object lock = new Object();
-    
+
     private final Map<String, SamplingStatCalculator> tableRows = new ConcurrentHashMap<>();
 
     private AxisGraph graphPanel = null;
@@ -253,6 +258,8 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
     private int nbColToGraph = 1;
 
     private Pattern pattern = null;
+
+    private Deque<SamplingStatCalculator> newRows = new ConcurrentLinkedDeque<>();
 
     public StatGraphVisualizer() {
         super();
@@ -422,20 +429,17 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
             matcher = pattern.matcher(sampleLabel);
         }
         if ((matcher == null) || (matcher.find())) {
-            JMeterUtils.runSafe(false, () -> {
-                    SamplingStatCalculator row = null;
-                    synchronized (lock) {
-                        row = tableRows.get(sampleLabel);
-                        if (row == null) {
-                            row = new SamplingStatCalculator(sampleLabel);
-                            tableRows.put(row.getLabel(), row);
-                            model.insertRow(row, model.getRowCount() - 1);
-                        }
-                    }
-                    row.addSample(res);
-                    tableRows.get(TOTAL_ROW_LABEL).addSample(res);
-                    model.fireTableDataChanged();
+            SamplingStatCalculator row = tableRows.computeIfAbsent(sampleLabel, label -> {
+                SamplingStatCalculator newRow = new SamplingStatCalculator(label);
+                newRows.addLast(newRow);
+                return newRow;
             });
+            synchronized (row) {
+                row.addSample(res);
+            }
+            synchronized (lock) {
+                tableRows.get(TOTAL_ROW_LABEL).addSample(res);
+            }
         }
     }
 
@@ -447,6 +451,7 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
         synchronized (lock) {
             model.clearData();
             tableRows.clear();
+            newRows.clear();
             tableRows.put(TOTAL_ROW_LABEL, new SamplingStatCalculator(TOTAL_ROW_LABEL));
             model.addRow(tableRows.get(TOTAL_ROW_LABEL));
         }
@@ -514,6 +519,14 @@ public class StatGraphVisualizer extends AbstractVisualizer implements Clearable
 
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(spane, BorderLayout.CENTER);
+        new Timer(REFRESH_PERIOD, e -> {
+                synchronized (lock) {
+                    while (!newRows.isEmpty()) {
+                        model.insertRow(newRows.pop(), model.getRowCount() - 1);
+                    }
+                }
+                model.fireTableDataChanged();
+        }).start();
     }
 
     public void makeGraph() {

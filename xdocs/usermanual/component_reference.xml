@@ -139,8 +139,6 @@ Latency is set to the time it takes to login.
           <dl>
             <dt><code>Java</code></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt><code>HTTPClient3.1</code></dt><dd>(DEPRECATED SINCE 3.0) uses Apache Commons HttpClient 3.1.
-            This is no longer being developed, and support for this will be dropped in a future JMeter release.</dd>
             <dt><code>HTTPClient4</code></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <code>jmeter.httpsampler</code> property defined in <code>jmeter.properties</code></dd>
           </dl>
@@ -223,7 +221,7 @@ https.default.protocol=SSLv3
         <property name="Port" required="No, unless proxy hostname is specified">Port the proxy server is listening to.</property>
         <property name="Username" required="No">(Optional) username for proxy server.</property>
         <property name="Password" required="No">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1 (DEPRECATED SINCE 3.0)</code>, <code>HttpClient4</code>.
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>.
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the HttpClient4 implementation is used.</property>
         <property name="Protocol" required="No"><code>HTTP</code>, <code>HTTPS</code> or <code>FILE</code>. Default: <code>HTTP</code></property>
@@ -411,9 +409,8 @@ The <code>PUT</code> and <code>PATCH</code> method body must be provided as one 
 <li>define the body as parameter value(s) with no name</li>
 <li>use the <code>Body Data</code> tab</li>
 </ul>
-
-The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <p>
+The <code>GET</code>, <code>DELETE</code> and <code>POST</code> methods have an additional way of passing parameters by using the <code>Parameters</code> tab.
 <code>GET</code>, <code>DELETE</code>, <code>PUT</code> and <code>PATCH</code> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 </p>
@@ -427,12 +424,15 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
  If the <code>HTTPResponse.parser</code> property is not set, JMeter reverts to the previous behaviour,
  i.e. only <code>text/html</code> responses will be scanned</p>
 <b>Emulating slow connections:</b><br></br>
-<code>HttpClient31</code>, <code>HttpClient4</code> and <code>Java</code> Sampler support emulation of slow connections; see the following entries in <code>jmeter.properties</code>:
+<p>
+<code>HttpClient4</code> and <code>Java</code> Sampler support emulation of slow connections; see the following entries in <code>jmeter.properties</code>:
 <source>
 # Define characters per second &gt; 0 to emulate slow connections
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
 </source>
+However the <code>Java</code> sampler only supports slow HTTPS connections.
+</p>
 <p><b>Response size calculation</b><br></br>
 Optional properties to allow change the method to get response size:<br></br></p>
 <ul><li>Gets the real network size in bytes for the body response
@@ -450,13 +450,12 @@ so the value may be greater than the number of bytes in the response content.
 <note>When those two properties are set  <code>false</code>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</note>
 <p>
 <b>Retry handling</b><br></br>
-For HttpClient4 and Commons HttpClient 3.1 samplers, the retry count has been set to <code>0</code>, meaning not retry is attempted. 
+For HttpClient4 the retry count has been set to <code>0</code>, meaning not retry is attempted. 
 Note that the Java implementation appears to retry 1 time.
 The retry count can be overridden by setting the relevant JMeter property, for example:
 </p>
 <source>
 httpclient4.retrycount=3
-httpclient3.retrycount=3
 </source>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
@@ -661,42 +660,6 @@ This will not have any impact on existing Test plans.
         <property name="ResultData" required="No">If provided, sets the SampleResult ResultData.</property>
     </properties>
 </component>
-
-<component name="SOAP/XML-RPC Request (DEPRECATED)" index="&sect-num;.1.5"  width="426" height="276" screenshot="soap_sampler.png">
-<note>
-See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
-</note>
-<description><p>This sampler lets you send a SOAP request to a webservice.  It can also be
-used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
-POST content.
-To change the "<code>Content-type</code>" from the default of "<code>text/xml</code>", use a <complink name="HTTP Header Manager" />.
-Note that the sampler will use all the headers from the <complink name="HTTP Header Manager"/>.
-If a SOAP action is specified, that will override any <code>SOAPaction</code> in the <complink name="HTTP Header Manager"/>.
-The primary difference between the soap sampler and
-webservice sampler, is the soap sampler uses raw post and does not require conformance to
-SOAP 1.1.</p>
-<note>The sampler no longer uses chunked encoding by default.<br/>
-For screen input, it now always uses the size of the data.<br/>
-File input uses the file length as determined by Java.<br/>
-On some OSes this may not work for all files, in which case add a child <complink name="HTTP Header Manager"/>
-with <code>Content-Length</code> set to the actual length of the file.<br/>
-Or set <code>Content-Length</code> to <code>-1</code> to force chunked encoding.
-</note>
-</description>
-
-<properties>
-        <property name="Name" required="No">Descriptive name for this sampler
-         that is shown in the tree.</property>
-        <property name="URL" required="Yes">The URL to direct the SOAP request to.</property>
-        <property name="Send SOAP action" required="No">Send a SOAP action header? (overrides the <complink name="HTTP Header Manager"/>)</property>
-        <property name="Use KeepAlive" required="No">If set, sends <code>Connection: keep-alive</code>, else sends <code>Connection: close</code></property>
-        <property name="Soap/XML-RPC Data" required="No">The Soap XML message, or XML-RPC instructions.
-        Not used if the filename is provided.
-        </property>
-        <property name="Filename" required="No">If specified, then the contents of the file are sent, and the Data field is ignored</property>
-        </properties>
-</component>
-
 <component name="LDAP Request" index="&sect-num;.1.7" width="621" height="462" screenshot="ldap_request.png">
   <description>This Sampler lets you send a different Ldap request(<code>Add</code>, <code>Modify</code>, <code>Delete</code> and <code>Search</code>) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
@@ -3649,8 +3612,28 @@ By default, a Graphite implementation is provided.
     </p>
     <p>
     A mapping for static hosts can be used to simulate something like <code>/etc/hosts</code> file.
-    These entries will be preferred over the custom resolver.
+    These entries will be preferred over the custom resolver. <code>Use custom DNS resolver</code> has to be enabled,
+    if you want to use this mapping.
     </p>
+    <example title="Usage of static host table" anchor="static_host_table">
+    <p>Say, you have a test server, that you want to reach with a name, that is not (yet) set up in your dns servers.
+    For our example, this would be <code>www.example.com</code> for the server name, which you want to reach at the
+    ip of the server <code>a123.another.example.org</code>.
+    </p>
+    <p>You could change your workstation and add an entry to your <code>/etc/hosts</code> file - or the equivalent for
+    your OS, or add an entry to the Static Host Table of the DNS Cache Manager.
+    </p>
+    <p>You would type <code>www.example.com</code> into the first column (<code>Host</code>) and
+    <code>a123.another.example.org</code> into the second column (<code>Hostname or IP address</code>).
+    As the name of the second column implies, you could even use the ip address of your test server there.
+    </p>
+    <p>The ip address for the test server will be looked up by using the custom dns resolver. When none is given, the
+    system dns resolver will be used.
+    </p>
+    <p>Now you can use <code>www.example.com</code> in your HTTPClient4 samplers and the requests will be made against
+    <code>a123.another.example.org</code> with all headers set to <code>www.example.com</code>.
+    </p>
+    </example>
     </description>
     <properties>
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
@@ -3681,18 +3664,11 @@ transmits the login information when it encounters this type of page.</p>
 The Authorization headers may not be shown in the Tree View Listener "<code>Request</code>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
-The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
-The HttpComponents (HC 4.5.X) implementation does not do pre-emptive auth 
-(it is supported by the library but JMeter does not enable it)
+The HttpComponents (HC 4.5.X) implementation defaults to pre-emptive since 3.2 and the header will be shown.
+To disable this, set the values as below, in which case authentication will only be performed in response to a challenge.
 </p>
 <p>
-The HttpClient3.1 implementation defaults to pre-emptive authentication
-if the setting has not been defined. To disable this, set the values as below, in which case
-authentication will only be performed in response to a challenge.
-</p>
-<p>
-In the file <code>jmeter.properties</code> set <code>httpclient.parameters.file=httpclient.parameters</code>
-and in <code>httpclient.parameters</code> set <code>http.authentication.preemptive$Boolean=false</code>
+In the file <code>jmeter.properties</code> set <code>httpclient4.auth.preemptive=false</code>
 </p>
 <note>
 Note: the above settings only apply to the HttpClient sampler.
@@ -3723,7 +3699,6 @@ information for the user named, "<code>jmeter</code>".</property>
   <property name="Mechanism" required="No">Type of authentication to perform. JMeter can perform different types of authentications based on used Http Samplers:
 <dl>
 <dt>Java</dt><dd><code>BASIC</code></dd>
-<dt>HttpClient 3.1</dt><dd><code>BASIC</code> and <code>DIGEST</code></dd>
 <dt>HttpClient 4</dt><dd><code>BASIC</code>, <code>DIGEST</code> and <code>Kerberos</code></dd>
 </dl>
 </property>
@@ -3876,12 +3851,8 @@ Note also that the cookie name must be unique - if a second cookie is defined wi
   See <a href="https://hc.apache.org/httpcomponents-client-ga/tutorial/html/statemgmt.html#d5e515">Cookie specifications</a> and 
   <a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/cookie/CookieSpec.html">CookieSpec implementations</a>
   [Note: "<code>ignoreCookies</code>" is equivalent to omitting the CookieManager.]
-  
-  If you still use HC3CookieHandler (which is DEPRECATED as of 3.0 version, so migration is highly advised), default Cookie Policy is "<code>compatibility</code>", and should work in most cases.
-  See <a href="http://hc.apache.org/httpclient-3.x/cookies.html">http://hc.apache.org/httpclient-3.x/cookies.html</a> and 
-  <a href="http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html">http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html</a>
-    </property>
- <property name="Implementation" required="Yes"><code>HC4CookieHandler</code> (HttpClient 4.5.X API) or <code>HC3CookieHandler (deprecated)</code> (HttpClient 3 API). 
+ </property>
+ <property name="Implementation" required="Yes"><code>HC4CookieHandler</code> (HttpClient 4.5.X API). 
   Default is <code>HC4CookieHandler</code> since 3.0.
   <br></br>
   <i>[Note: If you have a website to test with IPv6 address, choose <code>HC4CookieHandler</code> (IPv6 compliant)]</i></property>
@@ -3920,7 +3891,7 @@ All port values are treated equally; a sampler that does not specify a port will
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
-        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient3.1 (DEPRECATED SINCE 3.0)</code>, <code>HttpClient4</code>. 
+        <property name="Implementation" required="No"><code>Java</code>, <code>HttpClient4</code>. 
         If not specified the default depends on the value of the JMeter property
         <code>jmeter.httpsampler</code>, failing that, the <code>Java</code> implementation is used.</property>
         <property name="Protocol" required="No"><code>HTTP</code> or <code>HTTPS</code>.</property>
@@ -4064,17 +4035,66 @@ If JMeter reports <code>No suitable driver</code>, then this could mean either:
 <li>The driver class was not found. In this case, there will be a log message such as <code>DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</code></li>
 <li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the wrong classname was used.</li>
 </ul>
+<p>
 If the database server is not running or is not accessible, then JMeter will report a <code>java.net.ConnectException</code>.
-<table>
-<tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
-<tr><td>MySQL</td><td><code>com.mysql.jdbc.Driver</code></td><td><code>jdbc:mysql://host[:port]/dbname</code></td></tr>
-<tr><td>PostgreSQL</td><td><code>org.postgresql.Driver</code></td><td><code>jdbc:postgresql:{dbname}</code></td></tr>
-<tr><td>Oracle</td><td><code>oracle.jdbc.OracleDriver</code></td><td><code>jdbc:oracle:thin:@//host:port/service</code>
-OR<br/><code>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</code></td></tr>
-<tr><td>Ingres (2006)</td><td><code>ingres.jdbc.IngresDriver</code></td><td><code>jdbc:ingres://host:port/db[;attr=value]</code></td></tr>
-<tr><td>SQL Server (MS JDBC driver)</td><td><code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></td><td><code>jdbc:sqlserver://host:port;DatabaseName=dbname</code></td></tr>
-<tr><td>Apache Derby</td><td><code>org.apache.derby.jdbc.ClientDriver</code></td><td><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></td></tr>
-</table>
+</p>
+<p>Some examples for databases and their parameters are given below.</p>
+<dl>
+  <dt>MySQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>com.mysql.jdbc.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:mysql://host[:port]/dbname</code></dd>
+    </dl>
+  </dd>
+  <dt>PostgreSQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.postgresql.Driver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:postgresql:{dbname}</code></dd>
+    </dl>
+  </dd>
+  <dt>Oracle</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>oracle.jdbc.OracleDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:oracle:thin:@//host:port/service</code> OR <code>jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</code></dd>
+    </dl>
+  </dd>
+  <dt>Ingress (2006)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>ingres.jdbc.IngresDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:ingres://host:port/db[;attr=value]</code></dd>
+    </dl>
+  </dd>
+  <dt>Microsoft SQL Server (MS JDBC driver)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>com.microsoft.sqlserver.jdbc.SQLServerDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:sqlserver://host:port;DatabaseName=dbname</code></dd>
+    </dl>
+  </dd>
+  <dt>Apache Derby</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><code>org.apache.derby.jdbc.ClientDriver</code></dd>
+      <dt>Database URL</dt>
+      <dd><code>jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</code></dd>
+    </dl>
+  </dd>
+</dl>
 <note>The above may not be correct - please check the relevant JDBC driver documentation.</note>
 </component>
 
@@ -4107,7 +4127,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
 To make JMeter use more than one certificate you need to ensure that:
 <ul>
 <li><code>https.use.cached.ssl.context=false</code> is set in <code>jmeter.properties</code> or <code>user.properties</code></li>
-<li>You use either HTTPClient 4 (ADVISED) or HTTPClient 3.1 (DEPRECATED SINCE 3.0) implementations for HTTP Request</li>
+<li>You use HTTPClient 4 implementation for HTTP Request</li>
 </ul>
 </note>
 </component>
@@ -4418,7 +4438,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
 <component name="Response Assertion" index="&sect-num;.5.1" anchor="basic_assertion"  width="921" height="423" screenshot="assertion/assertion.png">
 
 <description><p>The response assertion control panel lets you add pattern strings to be compared against various
-    fields of the response.
+    fields of the request or response.
     The pattern strings are:
     </p>
     <ul>
@@ -4466,16 +4486,17 @@ These can be used anywhere within the expression and remain in effect until over
         <li><code>JMeter Variable</code> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </property>
-        <property name="Response Field to Test" required="Yes">Instructs JMeter which field of the Response to test.
+        <property name="Field to Test" required="Yes">Instructs JMeter which field of the Request or Response to test.
         <ul>
         <li><code>Text Response</code> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
-        <li><code>Document (text)</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
-        <li><code>URL sampled</code></li>
         <li><code>Response Code</code> - e.g. <code>200</code></li>
         <li><code>Response Message</code> - e.g. <code>OK</code></li>
         <li><code>Response Headers</code>, including Set-Cookie headers (if any)</li>
+        <li><code>Request Headers</code></li>
+        <li><code>URL sampled</code></li>
+        <li><code>Document (text)</code> - the extract text from various type of documents via Apache Tika (see <complink name="View Results Tree"/> Document view section).</li>
         </ul>
-                </property>
+        </property>
         <property name="Ignore status" required="Yes">Instructs JMeter to set the status to success initially. 
                 <p>
                 The overall success of the sample is determined by combining the result of the
@@ -4498,7 +4519,8 @@ These can be used anywhere within the expression and remain in effect until over
         <li><code>Substring</code> - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
         <code>Equals</code> and <code>Substring</code> patterns are plain strings, not regular expressions.
-        <code>NOT</code> may also be selected to invert the result of the check.</property>
+        <code>NOT</code> may also be selected to invert the result of the check.
+        <code>OR</code> Apply each assertion in OR combination (if 1 pattern to test maches, Assertion will be ok) instead of AND (All patterns must match so that Assertion is OK).</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
         be tested.  
         Each pattern is tested separately. 

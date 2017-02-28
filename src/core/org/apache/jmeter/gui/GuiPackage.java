@@ -274,6 +274,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             updateCurrentNode();
             TestElement curNode = treeListener.getCurrentNode().getTestElement();
             JMeterGUIComponent comp = getGui(curNode);
+            if (comp == null) {
+                log.debug("No Component found for {}.", treeListener.getCurrentNode().getName());
+                return null;
+            }
             comp.clearGui();
             log.debug("Updating gui to new node");
             comp.configure(curNode);
@@ -419,6 +423,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         currentNode = treeListener.getCurrentNode();
         TestElement element = currentNode.getTestElement();
         JMeterGUIComponent comp = getGui(element);
+        if (comp == null) {
+            log.debug("No component found for {}", currentNode.getName());
+            return;
+        }
         comp.configure(element);
         currentNodeUpdated = false;
     }
@@ -434,6 +442,10 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
             if (currentNode != null && !currentNodeUpdated) {
                 log.debug("Updating current node " + currentNode.getName());
                 JMeterGUIComponent comp = getGui(currentNode.getTestElement());
+                if (comp == null) {
+                    log.debug("No component found for {}", currentNode.getName());
+                    return;
+                }
                 TestElement el = currentNode.getTestElement();
                 int before = 0;
                 int after = 0;

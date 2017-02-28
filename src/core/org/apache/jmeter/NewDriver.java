@@ -281,7 +281,7 @@ public final class NewDriver {
      * Set logging related system properties.
      */
     private static void setLoggingProperties(String[] args) {
-        String jmLogFile = getCommandLineArgument(args, (int) 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
+        String jmLogFile = getCommandLineArgument(args, 'j', "jmeterlogfile");// $NON-NLS-1$ $NON-NLS-2$
 
         if (jmLogFile != null && !jmLogFile.isEmpty()) {
             jmLogFile = replaceDateFormatInFileName(jmLogFile);
@@ -290,7 +290,7 @@ public final class NewDriver {
             System.setProperty("jmeter.logfile", "jmeter.log");// $NON-NLS-1$ $NON-NLS-2$
         }
 
-        String jmLogConf = getCommandLineArgument(args, (int) 'i', "jmeterlogconf");// $NON-NLS-1$ $NON-NLS-2$
+        String jmLogConf = getCommandLineArgument(args, 'i', "jmeterlogconf");// $NON-NLS-1$ $NON-NLS-2$
         File logConfFile = null;
 
         if (jmLogConf != null && !jmLogConf.isEmpty()) {

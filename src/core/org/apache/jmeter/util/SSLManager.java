@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.util.keystore.JmeterKeyStore;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,15 +123,19 @@ public abstract class SSLManager {
                 this.keyStore = null;
                 throw new RuntimeException("Could not create keystore: "+e.getMessage(), e);
             }
-            InputStream fileInputStream = null;
+
             try {
                 File initStore = new File(fileName);
 
                 if (fileName.length() >0 && initStore.exists()) {
-                    fileInputStream = new BufferedInputStream(new FileInputStream(initStore));
-                    this.keyStore.load(fileInputStream, getPassword());
-                    if (log.isInfoEnabled()) {
-                        log.info("Total of {} aliases loaded OK from keystore", keyStore.getAliasCount());
+                    try (InputStream fis = new FileInputStream(initStore);
+                            InputStream fileInputStream = new BufferedInputStream(fis)) {
+                        this.keyStore.load(fileInputStream, getPassword());
+                        if (log.isInfoEnabled()) {
+                            log.info(
+                                    "Total of {} aliases loaded OK from keystore",
+                                    keyStore.getAliasCount());
+                        }
                     }
                 } else {
                     log.warn("Keystore file not found, loading empty keystore");
@@ -141,8 +144,6 @@ public abstract class SSLManager {
                 }
             } catch (Exception e) {
                 log.error("Problem loading keystore: {}", e.getMessage(), e);
-            } finally {
-                JOrphanUtils.closeQuietly(fileInputStream);
             }
 
             if (log.isDebugEnabled()) {
@@ -217,22 +218,21 @@ public abstract class SSLManager {
                 throw new RuntimeException("Problem creating truststore: "+e.getMessage(), e);
             }
 
-            InputStream fileInputStream = null;
             try {
                 File initStore = new File(fileName);
 
                 if (initStore.exists()) {
-                    fileInputStream = new BufferedInputStream(new FileInputStream(initStore));
-                    this.trustStore.load(fileInputStream, null);
-                    log.info("Truststore loaded OK from file");
+                    try (InputStream fis = new FileInputStream(initStore);
+                            InputStream fileInputStream = new BufferedInputStream(fis)) {
+                        this.trustStore.load(fileInputStream, null);
+                        log.info("Truststore loaded OK from file");
+                    }
                 } else {
                     log.info("Truststore file not found, loading empty truststore");
                     this.trustStore.load(null, null);
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Can't load TrustStore: " + e.getMessage(), e);
-            } finally {
-                JOrphanUtils.closeQuietly(fileInputStream);
             }
         }
 

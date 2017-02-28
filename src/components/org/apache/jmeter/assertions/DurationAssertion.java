@@ -31,7 +31,7 @@ import org.apache.jmeter.util.JMeterUtils;
  * 
  */
 public class DurationAssertion extends AbstractScopedAssertion implements Serializable, Assertion {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 241L;
 
     /** Key for storing assertion-information in the jmx-file. */
     public static final String DURATION_KEY = "DurationAssertion.duration"; // $NON-NLS-1$
@@ -49,8 +49,8 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
         long duration=getAllowedDuration();
         if (duration > 0) {
             long responseTime=response.getTime();
-        // has the Sample lasted too long?
-            if ( responseTime > duration) {
+            // has the Sample lasted too long?
+            if ( responseTime > duration ) {
                 result.setFailure(true);
                 Object[] arguments = { Long.valueOf(responseTime), Long.valueOf(duration) };
                 String message = MessageFormat.format(
@@ -69,5 +69,13 @@ public class DurationAssertion extends AbstractScopedAssertion implements Serial
     private long getAllowedDuration() {
         return getPropertyAsLong(DURATION_KEY);
     }
+    
 
+    /**
+     * Set duration
+     * @param duration Duration in millis
+     */
+    public void setAllowedDuration(long duration) {
+        setProperty(DURATION_KEY, duration);
+    }
 }

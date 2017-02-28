@@ -24,6 +24,8 @@ import java.awt.FlowLayout;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -33,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
@@ -63,6 +66,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     private static final long serialVersionUID = 241L;
 
     private static final String ICON_SIZE = JMeterUtils.getPropDefault(JMeter.TREE_ICON_SIZE, JMeter.DEFAULT_TREE_ICON_SIZE);
+
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     // Note: the resource string won't respond to locale-changes,
     // however this does not matter as it is only used when pasting to the clipboard
@@ -109,6 +114,8 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
     private final transient Calculator calc = new Calculator();
 
     private Format format = new SimpleDateFormat("HH:mm:ss.SSS"); //$NON-NLS-1$
+
+    private Deque<SampleResult> newRows = new ConcurrentLinkedDeque<>();
 
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
@@ -171,52 +178,30 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
     @Override
     public void add(final SampleResult res) {
-        JMeterUtils.runSafe(false, new Runnable() {
-            @Override
-            public void run() {
-                if (childSamples.isSelected()) {
-                    SampleResult[] subResults = res.getSubResults();
-                    if (subResults.length > 0) {
-                        for (SampleResult sr : subResults) {
-                            add(sr);
-                        }
-                        return;
-                    }
+        if (childSamples.isSelected()) {
+            SampleResult[] subResults = res.getSubResults();
+            if (subResults.length > 0) {
+                for (SampleResult sr : subResults) {
+                    add(sr);
                 }
-                synchronized (calc) {
-                    calc.addSample(res);
-                    int count = calc.getCount();
-                    TableSample newS = new TableSample(
-                            count,
-                            res.getSampleCount(),
-                            res.getStartTime(),
-                            res.getThreadName(),
-                            res.getSampleLabel(),
-                            res.getTime(),
-                            res.isSuccessful(),
-                            res.getBytesAsLong(),
-                            res.getSentBytes(),
-                            res.getLatency(),
-                            res.getConnectTime()
-                            );
-                    model.addRow(newS);
-                }
-                updateTextFields(res);
-                if (autoscroll.isSelected()) {
-                    table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
-                }
+                return;
             }
-        });
+        }
+        newRows.add(res);
+
     }
 
     @Override
     public synchronized void clearData() {
-        model.clearData();
-        calc.clear();
-        noSamplesField.setText("0"); // $NON-NLS-1$
-        dataField.setText("0"); // $NON-NLS-1$
-        averageField.setText("0"); // $NON-NLS-1$
-        deviationField.setText("0"); // $NON-NLS-1$
+        synchronized (calc) {
+            model.clearData();
+            calc.clear();
+            newRows.clear();
+            noSamplesField.setText("0"); // $NON-NLS-1$
+            dataField.setText("0"); // $NON-NLS-1$
+            averageField.setText("0"); // $NON-NLS-1$
+            deviationField.setText("0"); // $NON-NLS-1$
+        }
         repaint();
     }
 
@@ -240,7 +225,7 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
 
         // Set up the table itself
         table = new JTable(model);
-        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5, 
+        table.setRowSorter(new ObjectTableSorter(model).setValueComparator(5,
                 Comparator.nullsFirst(
                         (ImageIcon o1, ImageIcon o2) -> {
                             if (o1 == o2) {
@@ -337,6 +322,39 @@ public class TableVisualizer extends AbstractVisualizer implements Clearable {
         // Add the main panel and the graph
         this.add(mainPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
+        new Timer(REFRESH_PERIOD, e -> collectNewSamples()).start();
+    }
+
+    private void collectNewSamples() {
+        synchronized (calc) {
+            SampleResult res = null;
+            while (!newRows.isEmpty()) {
+                res = newRows.pop();
+                calc.addSample(res);
+                int count = calc.getCount();
+                TableSample newS = new TableSample(
+                        count,
+                        res.getSampleCount(),
+                        res.getStartTime(),
+                        res.getThreadName(),
+                        res.getSampleLabel(),
+                        res.getTime(),
+                        res.isSuccessful(),
+                        res.getBytesAsLong(),
+                        res.getSentBytes(),
+                        res.getLatency(),
+                        res.getConnectTime()
+                        );
+                model.addRow(newS);
+            }
+            if (res == null) {
+                return;
+            }
+            updateTextFields(res);
+            if (autoscroll.isSelected()) {
+                table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+            }
+        }
     }
 
     public static class SampleSuccessFunctor extends Functor {

@@ -230,14 +230,15 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
 
     /**
      * Sends DNS request via system or custom DNS resolver
-     * @param host
+     * @param host Host
      * @return array of {@link InetAddress} or null if lookup did not return result
      */
     private InetAddress[] requestLookup(String host) throws UnknownHostException {
         InetAddress[] addresses = null;
         if (isCustomResolver()) {
-            if (getResolver() != null) {
-                if(getResolver().getResolvers().length > 0) {
+            ExtendedResolver extendedResolver = getResolver();
+            if (extendedResolver != null) {
+                if(extendedResolver.getResolvers().length > 0) {
                     try {
                         Lookup lookup = new Lookup(host, Type.A);
                         lookup.setCache(lookupCache);
@@ -314,20 +315,35 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
         setProperty(new CollectionProperty(SERVERS, new ArrayList<String>()));
     }
 
+    /**
+     * Add DNS Server
+     * @param dnsServer DNS Server
+     */
     public void addServer(String dnsServer) {
         getServers().addItem(dnsServer);
     }
 
+    /**
+     * @return DNS Servers
+     */
     public CollectionProperty getServers() {
         return (CollectionProperty) getProperty(SERVERS);
     }
 
+    /**
+     * Clear static hosts
+     */
     private void clearHosts() {
         log.debug("Clear all hosts from store");
         removeProperty(HOSTS);
         cache.clear();
     }
 
+    /**
+     * Add static host
+     * @param dnsHost DNS host
+     * @param addresses Comma separated list of addresses
+     */
     public void addHost(String dnsHost, String addresses) {
         getHosts().addItem(new StaticHost(dnsHost, addresses));
         cache.clear();

@@ -32,6 +32,8 @@ import java.io.Serializable;
 public final class LogEvent
     implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     //A Constant used when retrieving time relative to start of applicaiton start
     private static final long START_TIME = System.currentTimeMillis();
 

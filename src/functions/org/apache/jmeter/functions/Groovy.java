@@ -38,8 +38,8 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JSR223TestElement;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * __groovy function 
@@ -134,14 +134,6 @@ public class Groovy extends AbstractFunction {
         }
         return resultStr;
 
-    }
-
-    /*
-     * Helper method for use by scripts
-     *
-     */
-    public void log_info(String s) {
-        log.info(s);
     }
 
     /** {@inheritDoc} */

@@ -82,12 +82,12 @@ import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
-import org.slf4j.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Common constants and methods for HTTP samplers
@@ -838,7 +838,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         HeaderManager mgr = getHeaderManager();
         HeaderManager lValue = value;
         if (mgr != null) {
-            lValue = mgr.merge(value, true);
+            lValue = mgr.merge(value);
             if (log.isDebugEnabled()) {
                 log.debug("Existing HeaderManager '" + mgr.getName() + "' merged with '" + lValue.getName() + "'");
                 for (int i = 0; i < lValue.getHeaders().size(); i++) {
@@ -975,7 +975,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         pathAndQuery.append(path);
 
         // Add the query string if it is a HTTP GET or DELETE request
-        if (HTTPConstants.GET.equals(getMethod()) || HTTPConstants.DELETE.equals(getMethod())) {
+        if (HTTPConstants.GET.equals(getMethod()) 
+                || HTTPConstants.DELETE.equals(getMethod())
+                || HTTPConstants.OPTIONS.equals(getMethod())) {
             // Get the query string encoded in specified encoding
             // If no encoding is specified by user, we will get it
             // encoded in UTF-8, which is what the HTTP spec says
@@ -1451,6 +1453,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
      */
     @Override
     public void testEnded() {
+        if (isConcurrentDwn()) {
+            ResourcesDownloader.getInstance().shrink();
+        }
     }
 
     /**
@@ -2060,6 +2065,18 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 totalReplaced += nbReplaced;
                 String replacedText = (String) result[0];
                 setPath(replacedText);
+                totalReplaced += nbReplaced;
+            }
+        }
+
+        if(!StringUtils.isEmpty(getDomain())) {
+            Object[] result = JOrphanUtils.replaceAllWithRegex(getDomain(), regex, replaceBy, caseSensitive);            
+            // check if there is anything to replace
+            int nbReplaced = ((Integer)result[1]).intValue();
+            if (nbReplaced>0) {
+                totalReplaced += nbReplaced;
+                String replacedText = (String) result[0];
+                setDomain(replacedText);
                 totalReplaced += nbReplaced;
             }
         }

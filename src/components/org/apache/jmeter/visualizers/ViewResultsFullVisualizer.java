@@ -33,7 +33,6 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -129,7 +128,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final String VIEWERS_ORDER =
         JMeterUtils.getPropDefault("view.results.tree.renderers_order", ""); // $NON-NLS-1$ //$NON-NLS-2$
 
-    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("view.results.tree.refresh_period", 500);
+    private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private ResultRenderer resultsRender = null;
 
@@ -157,6 +156,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     @Override
     public void add(final SampleResult sample) {
         synchronized (buffer) {

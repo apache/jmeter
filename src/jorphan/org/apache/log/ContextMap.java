@@ -40,9 +40,12 @@ import java.util.Hashtable;
  * @deprecated Will be dropped in 3.3 
  */
 @Deprecated
+@SuppressWarnings({"unchecked","rawtypes"}) // will be dropped in 3.3
 public final class ContextMap
     implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     ///Thread local for holding instance of map associated with current thread
     private static final ThreadLocal c_localContext = new InheritableThreadLocal();
 

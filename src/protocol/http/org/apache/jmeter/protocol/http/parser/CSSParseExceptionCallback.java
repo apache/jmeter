@@ -43,6 +43,15 @@ public class CSSParseExceptionCallback implements ICSSParseExceptionCallback {
         this.baseUrl = Validate.notNull(baseUrl);
     }
 
+    /**
+     * @deprecated - only for use from unit test code
+     */
+    @Deprecated
+    public CSSParseExceptionCallback() {
+        this.baseUrl = null;
+        LOG.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
+    }
+
     @Override
     public void onException(ParseException ex) {
         final String message = "Failed to parse CSS: " + baseUrl + ", "

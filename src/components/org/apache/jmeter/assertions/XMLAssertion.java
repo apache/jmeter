@@ -55,10 +55,10 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
     };
 
     /**
-     * Returns the result of the Assertion. Here it checks whether the Sample
-     * took to long to be considered successful. If so an AssertionResult
-     * containing a FailureMessage will be returned. Otherwise the returned
-     * AssertionResult will reflect the success of the Sample.
+     * Returns the result of the Assertion. 
+     * Here it checks whether the Sample data is XML. 
+     * If so an AssertionResult containing a FailureMessage will be returned. 
+     * Otherwise the returned AssertionResult will reflect the success of the Sample.
      */
     @Override
     public AssertionResult getResult(SampleResult response) {
@@ -72,9 +72,11 @@ public class XMLAssertion extends AbstractTestElement implements Serializable, A
         XMLReader builder = XML_READER.get();
         if(builder != null) {
             try {
+                builder.setErrorHandler(new LogErrorHandler());
                 builder.parse(new InputSource(new StringReader(resultData)));
             } catch (SAXException | IOException e) {
                 result.setError(true);
+                result.setFailure(true);
                 result.setFailureMessage(e.getMessage());
             }
         } else {

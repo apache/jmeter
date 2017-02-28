@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.gui.Replaceable;
@@ -106,16 +105,16 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             file = new File(System.getProperty("user.dir")// $NON-NLS-1$
                     + File.separator + headFile);
         }
-        PrintWriter writer = new PrintWriter(new FileWriter(file)); // TODO Charset ?
-        writer.println("# JMeter generated Header file");// $NON-NLS-1$
-        final CollectionProperty hdrs = getHeaders();
-        for (int i = 0; i < hdrs.size(); i++) {
-            final JMeterProperty hdr = hdrs.get(i);
-            Header head = (Header) hdr.getObjectValue();
-            writer.println(head.toString());
+        try ( FileWriter fw = new FileWriter(file);
+                PrintWriter writer = new PrintWriter(fw);) { // TODO Charset ? 
+            writer.println("# JMeter generated Header file");// $NON-NLS-1$
+            final CollectionProperty hdrs = getHeaders();
+            for (int i = 0; i < hdrs.size(); i++) {
+                final JMeterProperty hdr = hdrs.get(i);
+                Header head = (Header) hdr.getObjectValue();
+                writer.println(head.toString());
+            }
         }
-        writer.flush();
-        writer.close();
     }
 
     /**
@@ -137,9 +136,8 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
             throw new IOException("The file you specified cannot be read.");
         }
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(file)); // TODO Charset ?
+        try ( FileReader fr = new FileReader(file);
+                BufferedReader reader = new BufferedReader(fr) ) {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
@@ -155,8 +153,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
                     throw new IOException("Error parsing header line\n\t'" + line + "'\n\t" + e);
                 }
             }
-        } finally {
-            IOUtils.closeQuietly(reader);
         }
     }
 
@@ -230,15 +226,12 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      * 
      * @param element
      *            The object to be merged with
-     * @param preferLocalValues
-     *            When both objects have a value for the same attribute, this
-     *            flag determines which value is preferred.
      * @return merged HeaderManager
      * @throws IllegalArgumentException
      *             if <code>element</code> is not an instance of
      *             {@link HeaderManager}
      */
-    public HeaderManager merge(TestElement element, boolean preferLocalValues) {
+    public HeaderManager merge(TestElement element) {
         if (!(element instanceof HeaderManager)) {
             throw new IllegalArgumentException("Cannot merge type:" + this.getClass().getName() + " with type:" + element.getClass().getName());
         }
@@ -257,16 +250,6 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
                 if (mergedHeader.getName().equalsIgnoreCase(otherHeader.getName())) {
                     // we have a match
                     found = true;
-                    if (!preferLocalValues) {
-                        // prefer values from the other object
-                        if ( (otherHeader.getValue() == null) || (otherHeader.getValue().length() == 0) ) {
-                            // the other object has an empty value, so remove this value from the merged object
-                            merged.remove(j);
-                        } else {
-                            // use the other object's value
-                            mergedHeader.setValue(otherHeader.getValue());
-                        }
-                    }
                     // break out of the inner loop
                     break;
                 }

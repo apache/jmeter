@@ -40,8 +40,6 @@ import org.junit.Test;
 public class TestValueReplacer extends JMeterTestCase {
         private TestPlan variables;
 
-
-        /** {@inheritDoc} */
         @Before
         public void setUp() {
             variables = new TestPlan();
@@ -152,7 +150,6 @@ public class TestValueReplacer extends JMeterTestCase {
             assertEquals("jakarta.apache.org \\ \\ \\\\ , ", element.getPropertyAsString("domain"));
         }
 
-        /** {@inheritDoc} */
         @After
         public void tearDown() throws Exception {
             JMeterContextService.getContext().setSamplingStarted(false);

@@ -183,8 +183,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
             log.warn("Cannot set URL: "+e1.getLocalizedMessage());
         }
         InputStream input = null;
-        OutputStream output = null;
-
+        FileInputStream fileIS = null;
         res.sampleStart();
         FTPClient ftp = new FTPClient();
         try {
@@ -214,13 +213,15 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         } else {
                             File infile = new File(local);
                             res.setBytes(infile.length());
-                            input = new BufferedInputStream(new FileInputStream(infile));
+                            fileIS = new FileInputStream(infile);
+                            input = new BufferedInputStream(fileIS);
                         }
                         ftpOK = ftp.storeFile(remote, input);
                     } else {
                         final boolean saveResponse = isSaveResponse();
                         ByteArrayOutputStream baos=null; // No need to close this
                         OutputStream target=null; 
+                        OutputStream output = null;
                         try {
                             if (saveResponse){
                                 baos  = new ByteArrayOutputStream();
@@ -255,6 +256,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                             }
                         } finally {
                             IOUtils.closeQuietly(target);
+                            IOUtils.closeQuietly(output);
                         }
                     }
 
@@ -292,7 +294,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                 }
             }
             IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(output);
+            IOUtils.closeQuietly(fileIS);
         }
 
         res.sampleEnd();

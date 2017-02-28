@@ -34,14 +34,14 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestSuite;
 
-public class TestHTMLParser extends JMeterTestCaseJUnit3 {
+public class TestHTMLParser extends JMeterTestCaseJUnit {
     private static final Logger log = LoggerFactory.getLogger(TestHTMLParser.class);
 
     private static final String DEFAULT_UA  = "Apache-HttpClient/4.2.6";

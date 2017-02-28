@@ -38,10 +38,10 @@ import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.ManagedClientConnection;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.conn.JMeterPoolingClientConnectionManager;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
+import org.apache.jmeter.protocol.http.sampler.hc.JMeterPoolingClientConnectionManager;
 import org.apache.jmeter.samplers.SampleResult;
 
 /**

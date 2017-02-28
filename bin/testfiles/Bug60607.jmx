@@ -182,7 +182,6 @@
             <responseDataOnError>false</responseDataOnError>
             <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
           </value>
         </objProp>
         <stringProp name="filename">Bug60607.xml</stringProp>

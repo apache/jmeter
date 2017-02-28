@@ -31,7 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTest;
-import org.apache.jmeter.junit.JMeterTestCaseJUnit3;
+import org.apache.jmeter.junit.JMeterTestCaseJUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -43,7 +43,7 @@ import org.xml.sax.SAXException;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit3 {
+public class ComponentReferenceFunctionTest extends JMeterTestCaseJUnit {
 
     private static final Logger log = LoggerFactory.getLogger(ComponentReferenceFunctionTest.class);
     

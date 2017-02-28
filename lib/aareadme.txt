@@ -33,20 +33,13 @@ bsh-2.0b5.jar (org.bsh)
 commons-codec-1.10
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
-- used by commons-httpclient-3.1
-- also HtmlParserTester for Base64
+- Used by ProxyControl and JSR223Test Element for Base64 and md5 
 
 commons-collections-3.2.2
 -------------------------
 http://commons.apache.org/downloads/download_collections.cgi
 - ListenerNotifier
 - Anakia
-
-commons-httpclient-3.1
-----------------------
-http://hc.apache.org/downloads.cgi
-- httpclient version of HTTP sampler
-- Cookie manager implementation
 
 commons-io-2.5
 --------------
@@ -73,7 +66,7 @@ commons-math3-3.6.1
 http://commons.apache.org/proper/commons-math/download_math.cgi
 - BackendListener
 
-commons-net-3.5
+commons-net-3.6
 -----------------
 http://commons.apache.org/downloads/download_net.cgi
 - FTPSampler
@@ -196,7 +189,7 @@ oro-2.0.8
 http://jakarta.apache.org/site/downloads/downloads_oro.cgi
 - regular expressions: various
 
-rsyntaxtextarea-2.6.0
+rsyntaxtextarea-2.6.1
 ---------------------
 http://fifesoft.com/rsyntaxtextarea/
 - syntax coloration

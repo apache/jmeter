@@ -28,8 +28,10 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.Format;
+import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -112,6 +114,8 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     private final Map<String, Calculator> tableRows = new ConcurrentHashMap<>();
 
+    private final Deque<Calculator> newRows = new ConcurrentLinkedDeque<>();
+
     // Column renderers
     private static final TableCellRenderer[] RENDERERS =
         new TableCellRenderer[]{
@@ -172,6 +176,9 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             }
             dataChanged = false;
             synchronized (lock) {
+                while (!newRows.isEmpty()) {
+                    model.insertRow(newRows.pop(), model.getRowCount() - 1);
+                }
                 model.fireTableDataChanged();
             }
         }).start();
@@ -194,16 +201,11 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
 
     @Override
     public void add(final SampleResult res) {
-        final String sampleLabel = res.getSampleLabel(useGroupName.isSelected());
-        Calculator row;
-        synchronized (lock) {
-            row = tableRows.get(sampleLabel);
-            if (row == null) {
-                row = new Calculator(sampleLabel);
-                tableRows.put(row.getLabel(), row);
-                model.insertRow(row, model.getRowCount() - 1);
-            }
-        }
+        Calculator row = tableRows.computeIfAbsent(res.getSampleLabel(useGroupName.isSelected()), label -> {
+            Calculator newRow = new Calculator(label);
+            newRows.add(newRow);
+            return newRow;
+        });
         /*
          * Synch is needed because multiple threads can update the counts.
          */
@@ -211,7 +213,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
             row.addSample(res);
         }
         Calculator tot = tableRows.get(TOTAL_ROW_LABEL);
-        synchronized (tot) {
+        synchronized (lock) {
             tot.addSample(res);
         }
         dataChanged = true;
@@ -225,6 +227,7 @@ public class SummaryReport extends AbstractVisualizer implements Clearable, Acti
         //Synch is needed because a clear can occur while add occurs
         synchronized (lock) {
             model.clearData();
+            newRows.clear();
             tableRows.clear();
             tableRows.put(TOTAL_ROW_LABEL, new Calculator(TOTAL_ROW_LABEL));
             model.addRow(tableRows.get(TOTAL_ROW_LABEL));

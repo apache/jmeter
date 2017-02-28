@@ -17,19 +17,20 @@
 
 package org.apache.jmeter.protocol.jms.sampler;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.lang.reflect.Modifier;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
@@ -43,28 +44,60 @@ import org.apache.jmeter.protocol.jms.client.ClientPool;
 import org.apache.jmeter.protocol.jms.client.InitialContextFactory;
 import org.apache.jmeter.protocol.jms.client.Publisher;
 import org.apache.jmeter.protocol.jms.control.gui.JMSPublisherGui;
+import org.apache.jmeter.protocol.jms.sampler.render.MessageRenderer;
+import org.apache.jmeter.protocol.jms.sampler.render.Renderers;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.io.TextFile;
-import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.thoughtworks.xstream.XStream;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * This class implements the JMS Publisher sampler.
  */
 public class PublisherSampler extends BaseJMSSampler implements TestStateListener {
 
+    /** Encoding value to sent data as is (no variabilisation) **/
+    public static final String RAW_DATA = "<RAW>";
+    /**
+     * Encoding value to sent parsed data but read with default system encoding
+     **/
+    public static final String DEFAULT_ENCODING = "<DEFAULT>";
+
+    /** Constant for system default encodings **/
+    public static final Set<String> NO_ENCODING = Collections
+            .unmodifiableSet(new LinkedHashSet<>(Arrays.asList(RAW_DATA, DEFAULT_ENCODING)));
+
+    /** 
+     * Init available encoding using constants, then JVM standard ones
+     * @return Array of String containing supported encodings 
+     */
+    public static String[] getSupportedEncodings() {
+        // Only get JVM standard charsets
+        return Stream.concat(NO_ENCODING.stream(),
+                Arrays.stream(StandardCharsets.class.getDeclaredFields())
+                        .filter(f -> Modifier.isStatic(f.getModifiers()) && Modifier.isPublic(f.getModifiers())
+                                && f.getType() == Charset.class)
+                        .map(f -> {
+                            try {
+                                return (Charset) f.get(null);
+                            } catch (IllegalArgumentException | IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }).map(Charset::displayName).sorted())
+                .toArray(size -> new String[size]);
+    }
+
     private static final long serialVersionUID = 233L;
 
     private static final Logger log = LoggerFactory.getLogger(PublisherSampler.class);
 
-    //++ These are JMX file names and must not be changed
+    // ++ These are JMX file names and must not be changed
     private static final String INPUT_FILE = "jms.input_file"; //$NON-NLS-1$
 
     private static final String RANDOM_PATH = "jms.random_path"; //$NON-NLS-1$
@@ -74,36 +107,34 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final String CONFIG_CHOICE = "jms.config_choice"; //$NON-NLS-1$
 
     private static final String MESSAGE_CHOICE = "jms.config_msg_type"; //$NON-NLS-1$
-    
+
     private static final String NON_PERSISTENT_DELIVERY = "jms.non_persistent"; //$NON-NLS-1$
-    
+
     private static final String JMS_PROPERTIES = "jms.jmsProperties"; // $NON-NLS-1$
 
     private static final String JMS_PRIORITY = "jms.priority"; // $NON-NLS-1$
 
     private static final String JMS_EXPIRATION = "jms.expiration"; // $NON-NLS-1$
 
-    //--
+    private static final String JMS_FILE_ENCODING = "jms.file_encoding"; // $NON-NLS-1$
 
-    // Does not need to be synch. because it is only accessed from the sampler thread
-    // The ClientPool does access it in a different thread, but ClientPool is fully synch.
+    /** File extensions for text files **/
+    private static final String[] EXT_FILE_TEXT = { ".txt", ".obj" };
+    /** File extensions for binary files **/
+    private static final String[] EXT_FILE_BIN = { ".dat" };
+
+    // --
+
+    // Does not need to be synch. because it is only accessed from the sampler
+    // thread
+    // The ClientPool does access it in a different thread, but ClientPool is
+    // fully synch.
     private transient Publisher publisher = null;
 
     private static final FileServer FSERVER = FileServer.getFileServer();
 
-    // Cache for file. Only used by sample() in a single thread
-    private String file_contents = null;
-    // Cache for object-message, only used when parsing from a file because in text-area
-    // property replacement might have been used
-    private Serializable object_msg_file_contents = null;
-    // Cache for bytes-message, only used when parsing from a file 
-    private byte[] bytes_msg_file_contents = null;
-
-    // Cached file name
-    private String cachedFileName;
-
-    public PublisherSampler() {
-    }
+    /** File cache handler **/
+    private Cache<Object, Object> fileCache = null;
 
     /**
      * the implementation calls testStarted() without any parameters.
@@ -137,15 +168,17 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
 
     /**
      * initialize the Publisher client.
-     * @throws JMSException 
-     * @throws NamingException 
+     * 
+     * @throws JMSException
+     * @throws NamingException
      *
      */
     private void initClient() throws JMSException, NamingException {
+
         configureIsReconnectErrorCode();
-        publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), 
-                getProviderUrl(), getConnectionFactory(), getDestination(), isUseAuth(), getUsername(),
-                getPassword(), isDestinationStatic());
+        publisher = new Publisher(getUseJNDIPropertiesAsBoolean(), getJNDIInitialContextFactory(), getProviderUrl(),
+                getConnectionFactory(), getDestination(), isUseAuth(), getUsername(), getPassword(),
+                isDestinationStatic());
         ClientPool.addClient(publisher);
         log.debug("PublisherSampler.initClient called");
     }
@@ -158,6 +191,12 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
      */
     @Override
     public SampleResult sample() {
+        String configChoice = getConfigChoice();
+        if (fileCache == null) {
+            Cache<Object, Object> newCache = buildCache(configChoice);
+            fileCache = newCache;
+        }
+
         SampleResult result = new SampleResult();
         result.setSampleLabel(getName());
         result.setSuccessful(false); // Assume it will fail
@@ -175,34 +214,34 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         int loop = getIterationCount();
         result.sampleStart();
         String type = getMessageChoice();
-        
+
         try {
             Map<String, Object> msgProperties = getJMSProperties().getJmsPropertysAsMap();
-            int deliveryMode = getUseNonPersistentDelivery() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT; 
+            int deliveryMode = getUseNonPersistentDelivery() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT;
             int priority = Integer.parseInt(getPriority());
             long expiration = Long.parseLong(getExpiration());
-            
+
             for (int idx = 0; idx < loop; idx++) {
-                if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)){
-                    String tmsg = getMessageContent();
-                    Message msg = publisher.publish(tmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
+                Message msg;
+                if (JMSPublisherGui.TEXT_MSG_RSC.equals(type)) {
+                    String tmsg = getRenderedContent(String.class, EXT_FILE_TEXT);
+                    msg = publisher.publish(tmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                     buffer.append(tmsg);
-                    Utils.messageProperties(propBuffer, msg);
-                } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)){
-                    Map<String, Object> m = getMapContent();
-                    Message msg = publisher.publish(m, getDestination(), msgProperties, deliveryMode, priority, expiration);
-                    Utils.messageProperties(propBuffer, msg);
-                } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)){
-                    Serializable omsg = getObjectContent();
-                    Message msg = publisher.publish(omsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
-                    Utils.messageProperties(propBuffer, msg);
-                } else if (JMSPublisherGui.BYTES_MSG_RSC.equals(type)){
-                    byte[] bmsg = getBytesContent();
-                    Message msg = publisher.publish(bmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
-                    Utils.messageProperties(propBuffer, msg);
+                } else if (JMSPublisherGui.MAP_MSG_RSC.equals(type)) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> map = getRenderedContent(Map.class, EXT_FILE_TEXT);
+                    Map<String, Object> m = map;
+                    msg = publisher.publish(m, getDestination(), msgProperties, deliveryMode, priority, expiration);
+                } else if (JMSPublisherGui.OBJECT_MSG_RSC.equals(type)) {
+                    Serializable omsg = getRenderedContent(Serializable.class, EXT_FILE_TEXT);
+                    msg = publisher.publish(omsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
+                } else if (JMSPublisherGui.BYTES_MSG_RSC.equals(type)) {
+                    byte[] bmsg = getRenderedContent(byte[].class, EXT_FILE_BIN);
+                    msg = publisher.publish(bmsg, getDestination(), msgProperties, deliveryMode, priority, expiration);
                 } else {
-                    throw new JMSException(type+ " is not recognised");                    
+                    throw new JMSException(type + " is not recognised");
                 }
+                Utils.messageProperties(propBuffer, msg);
             }
             result.setResponseCodeOK();
             result.setResponseMessage(loop + " messages published");
@@ -215,28 +254,31 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         } catch (Exception e) {
             handleError(result, e, false);
         } finally {
-            result.sampleEnd();            
+            result.sampleEnd();
         }
         return result;
     }
 
     /**
-     * Fills in result and decide wether to reconnect or not depending on checkForReconnect 
-     * and underlying {@link JMSException#getErrorCode()}
-     * @param result {@link SampleResult}
-     * @param e {@link Exception}
-     * @param checkForReconnect if true and exception is a {@link JMSException}
+     * Fills in result and decide wether to reconnect or not depending on
+     * checkForReconnect and underlying {@link JMSException#getErrorCode()}
+     * 
+     * @param result
+     *            {@link SampleResult}
+     * @param e
+     *            {@link Exception}
+     * @param checkForReconnect
+     *            if true and exception is a {@link JMSException}
      */
     private void handleError(SampleResult result, Exception e, boolean checkForReconnect) {
         result.setSuccessful(false);
         result.setResponseMessage(e.toString());
 
         if (e instanceof JMSException) {
-            JMSException jms = (JMSException)e;
+            JMSException jms = (JMSException) e;
 
             String errorCode = Optional.ofNullable(jms.getErrorCode()).orElse("");
-            if (checkForReconnect && publisher != null 
-                    && getIsReconnectErrorCode().test(errorCode)) {
+            if (checkForReconnect && publisher != null && getIsReconnectErrorCode().test(errorCode)) {
                 ClientPool.removeClient(publisher);
                 IOUtils.closeQuietly(publisher);
                 publisher = null;
@@ -246,202 +288,62 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         }
 
         StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer)); // NOSONAR We're getting it to put it in ResponseData 
+        e.printStackTrace(new PrintWriter(writer)); // NOSONAR We're getting it
+                                                    // to put it in ResponseData
         result.setResponseData(writer.toString(), "UTF-8");
     }
 
-    private Map<String, Object> getMapContent() throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        Map<String,Object> m = new HashMap<>();
-        String text = getMessageContent();
-        String[] lines = text.split("\n");
-        for (String line : lines){
-            String[] parts = line.split(",",3);
-            if (parts.length != 3) {
-                throw new IllegalArgumentException("line must have 3 parts: "+line);
-            }
-            String name = parts[0];
-            String type = parts[1];
-            if (!type.contains(".")){// Allow shorthand names
-                type = "java.lang."+type;
-            }
-            String value = parts[2];
-            Object obj;
-            if (type.equals("java.lang.String")){
-                obj = value;
-            } else {
-                Class <?> clazz = Class.forName(type);
-                Method method = clazz.getMethod("valueOf", String.class);
-                obj = method.invoke(clazz, value);                
-            }
-            m.put(name, obj);
+    protected static Cache<Object, Object> buildCache(String configChoice) {
+        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
+        switch (configChoice) {
+        case JMSPublisherGui.USE_FILE_RSC:
+            cacheBuilder.maximumSize(1);
+            break;
+        default:
+            cacheBuilder.expireAfterWrite(0, TimeUnit.MILLISECONDS).maximumSize(0);
         }
-        return m;
+        return cacheBuilder.build();
     }
 
-    /**
-     * Method will check the setting and get the contents for the message.
-     *
-     * @return the contents for the message
-     */
-    private String getMessageContent() {
-        if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
-            // in the case the test uses a file, we set it locally and
-            // prevent loading the file repeatedly
-            // if the file name changes we reload it
-            if (file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
-                cachedFileName = getInputFile();
-                file_contents = getFileContent(getInputFile());
-            }
-            return file_contents;
-        } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
-            // Maybe we should consider creating a global cache for the
-            // random files to make JMeter more efficient.
-            String fname = FSERVER.getRandomFile(getRandomPath(), new String[] { ".txt", ".obj" })
-                    .getAbsolutePath();
-            return getFileContent(fname);
-        } else {
-            return getTextMessage();
-        }
-    }
-
-    /**
-     * The implementation uses TextFile to load the contents of the file and
-     * returns a string.
-     *
-     * @param path path to the file to read in
-     * @return the contents of the file
-     */
-    public String getFileContent(String path) {
-        TextFile tf = new TextFile(path);
-        return tf.getText();
-    }
-
-    /**
-     * This method will load the contents for the JMS Object Message.
-     * The contents are either loaded from file (might be cached), random file
-     * or from the GUI text-area.
-     * 
-     * @return Serialized object as loaded from the specified input file
-     */
-    private Serializable getObjectContent() {
-        if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
-            // in the case the test uses a file, we set it locally and
-            // prevent loading the file repeatedly
-            // if the file name changes we reload it
-            if (object_msg_file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
-                cachedFileName = getInputFile();
-                object_msg_file_contents = getFileObjectContent(getInputFile());
-            }
-
-            return object_msg_file_contents;
-        } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
-            // Maybe we should consider creating a global cache for the
-            // random files to make JMeter more efficient.
-            final String fname = FSERVER.getRandomFile(getRandomPath(), new String[] {".txt", ".obj"})
-                .getAbsolutePath();
-
-            return getFileObjectContent(fname);
-        } else {
-            final String xmlMessage = getTextMessage();
-            return transformXmlToObjectMessage(xmlMessage);
-        }
-    }
-    
-    /**
-     * This method will load the contents for the JMS BytesMessage.
-     * The contents are either loaded from file (might be cached), random file
-     * 
-     * @return byte[] as loaded from the specified input file
-     * @since 2.9
-     */
-    private  byte[] getBytesContent() {
-        if (getConfigChoice().equals(JMSPublisherGui.USE_FILE_RSC)) {
-            // in the case the test uses a file, we set it locally and
-            // prevent loading the file repeatedly
-            // if the file name changes we reload it
-            if (bytes_msg_file_contents == null || !Objects.equals(cachedFileName, getInputFile())) {
-                cachedFileName = getInputFile();
-                bytes_msg_file_contents = getFileBytesContent(getInputFile());
-            }
-
-            return bytes_msg_file_contents;
-        } else if (getConfigChoice().equals(JMSPublisherGui.USE_RANDOM_RSC)) {
-            final String fname = FSERVER.getRandomFile(getRandomPath(), new String[] {".dat"})
-                .getAbsolutePath();
-
-            return getFileBytesContent(fname);
-        } else {
+    /** Gets file path to use **/
+    private String getFilePath(String... ext) {
+        switch (getConfigChoice()) {
+        case JMSPublisherGui.USE_FILE_RSC:
+            return getInputFile();
+        case JMSPublisherGui.USE_RANDOM_RSC:
+            String fname = FSERVER.getRandomFile(getRandomPath(), ext).getAbsolutePath();
+            return fname;
+        default:
             throw new IllegalArgumentException("Type of input not handled:" + getConfigChoice());
         }
     }
-    
+
     /**
-     * Try to load an object from a provided file, so that it can be used as body
-     * for a JMS message.
-     * An {@link IllegalStateException} will be thrown if loading the object fails.
-     * 
-     * @param path Path to the file that will be serialized
-     * @return byte[]  instance
-     * @since 2.9
-     */
-    private static byte[] getFileBytesContent(final String path) {
-        InputStream inputStream = null;
-        try {
-            File file = new File(path);
-            inputStream = new BufferedInputStream(new FileInputStream(file));
-            return IOUtils.toByteArray(inputStream, (int)file.length());
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage(), e);
-            throw new IllegalStateException("Unable to load file:'"+path+"'", e);
-        } finally {
-            JOrphanUtils.closeQuietly(inputStream);
+     * Look-up renderer and get appropriate value
+     *
+     * @param type
+     *            Message type to render
+     * @param fileExts
+     *            File extensions for directory mode.
+     **/
+    private <T> T getRenderedContent(Class<T> type, String[] fileExts) {
+        MessageRenderer<T> renderer = Renderers.getInstance(type);
+        if (getConfigChoice().equals(JMSPublisherGui.USE_TEXT_RSC)) {
+            return renderer.getValueFromText(getTextMessage());
+        } else {
+            return renderer.getValueFromFile(getFilePath(fileExts), getFileEncoding(), !isRaw(), fileCache);
         }
     }
-    
+
     /**
-     * Try to load an object from a provided file, so that it can be used as body
-     * for a JMS message.
-     * An {@link IllegalStateException} will be thrown if loading the object fails.
+     * Specified if value must be parsed or not.
      * 
-     * @param path Path to the file that will be serialized
-     * @return Serialized object instance
+     * @return <code>true</code> if value must be sent as-is.
      */
-    private static Serializable getFileObjectContent(final String path) {
-      Serializable readObject = null;
-      InputStream inputStream = null;
-      try {
-          inputStream = new BufferedInputStream(new FileInputStream(path));
-          XStream xstream = new XStream();
-        readObject = (Serializable) xstream.fromXML(inputStream, readObject);
-      } catch (Exception e) {
-          log.error(e.getLocalizedMessage(), e);
-          throw new IllegalStateException("Unable to load object instance from file:'"+path+"'", e);
-      } finally {
-          JOrphanUtils.closeQuietly(inputStream);
-      }
-      return readObject;
+    private boolean isRaw() {
+        return RAW_DATA.equals(getFileEncoding());
     }
-    
-    /**
-     * Try to load an object via XStream from XML text, so that it can be used as body
-     * for a JMS message.
-     * An {@link IllegalStateException} will be thrown if transforming the XML to an object fails.
-     *
-     * @param xmlMessage String containing XML text as input for the transformation
-     * @return Serialized object instance
-     */
-    private static Serializable transformXmlToObjectMessage(final String xmlMessage) {
-      Serializable readObject = null;
-      try {
-          XStream xstream = new XStream();
-          readObject = (Serializable) xstream.fromXML(xmlMessage, readObject);
-      } catch (Exception e) {
-          log.error(e.getLocalizedMessage(), e);
-          throw new IllegalStateException("Unable to load object instance from text", e);
-      }
-      return readObject;
-    }
-    
+
     // ------------- get/set properties ----------------------//
     /**
      * set the source of the message
@@ -461,29 +363,29 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     private static final String USE_RANDOM_LOCALNAME = JMeterUtils.getResString(JMSPublisherGui.USE_RANDOM_RSC);
 
     /**
-     * return the source of the message
-     * Converts from old JMX files which used the local language string
+     * return the source of the message Converts from old JMX files which used
+     * the local language string
      *
      * @return source of the messages
      */
     public String getConfigChoice() {
         // Allow for the old JMX file which used the local language string
         String config = getPropertyAsString(CONFIG_CHOICE);
-        if (config.equals(USE_FILE_LOCALNAME) 
-         || config.equals(JMSPublisherGui.USE_FILE_RSC)){
+        if (config.equals(USE_FILE_LOCALNAME) || config.equals(JMSPublisherGui.USE_FILE_RSC)) {
             return JMSPublisherGui.USE_FILE_RSC;
         }
-        if (config.equals(USE_RANDOM_LOCALNAME)
-         || config.equals(JMSPublisherGui.USE_RANDOM_RSC)){
+        if (config.equals(USE_RANDOM_LOCALNAME) || config.equals(JMSPublisherGui.USE_RANDOM_RSC)) {
             return JMSPublisherGui.USE_RANDOM_RSC;
         }
-        return config; // will be the 3rd option, which is not checked specifically
+        return config; // will be the 3rd option, which is not checked
+                       // specifically
     }
 
     /**
      * set the type of the message
      *
-     * @param choice type of the message (Text, Object, Map)
+     * @param choice
+     *            type of the message (Text, Object, Map)
      */
     public void setMessageChoice(String choice) {
         setProperty(MESSAGE_CHOICE, choice);
@@ -500,7 +402,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the input file for the publisher
      *
-     * @param file input file for the publisher
+     * @param file
+     *            input file for the publisher
      */
     public void setInputFile(String file) {
         setProperty(INPUT_FILE, file);
@@ -517,7 +420,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the random path for the messages
      *
-     * @param path random path for the messages
+     * @param path
+     *            random path for the messages
      */
     public void setRandomPath(String path) {
         setProperty(RANDOM_PATH, path);
@@ -534,7 +438,8 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
     /**
      * set the text for the message
      *
-     * @param message text for the message
+     * @param message
+     *            text for the message
      */
     public void setTextMessage(String message) {
         setProperty(TEXT_MSG, message);
@@ -565,7 +470,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
             return priority;
         }
     }
-    
+
     public void setPriority(String s) {
         // Bug 59173
         if (Utils.DEFAULT_PRIORITY_4.equals(s)) {
@@ -573,7 +478,7 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         }
         setProperty(JMS_PRIORITY, s); // always need to save the field
     }
-    
+
     public void setExpiration(String s) {
         // Bug 59173
         if (Utils.DEFAULT_NO_EXPIRY.equals(s)) {
@@ -581,14 +486,15 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         }
         setProperty(JMS_EXPIRATION, s); // always need to save the field
     }
-    
+
     /**
-     * @param value boolean use NON_PERSISTENT
+     * @param value
+     *            boolean use NON_PERSISTENT
      */
     public void setUseNonPersistentDelivery(boolean value) {
         setProperty(NON_PERSISTENT_DELIVERY, value, false);
     }
-    
+
     /**
      * @return true if NON_PERSISTENT delivery must be used
      */
@@ -596,29 +502,55 @@ public class PublisherSampler extends BaseJMSSampler implements TestStateListene
         return getPropertyAsBoolean(NON_PERSISTENT_DELIVERY, false);
     }
 
-    /** 
+    /**
      * @return {@link JMSProperties} JMS Properties
      */
     public JMSProperties getJMSProperties() {
         Object o = getProperty(JMS_PROPERTIES).getObjectValue();
         JMSProperties jmsProperties = null;
         // Backward compatibility with versions <= 2.10
-        if(o instanceof Arguments) {
-            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments)o);
+        if (o instanceof Arguments) {
+            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
         } else {
             jmsProperties = (JMSProperties) o;
         }
-        if(jmsProperties == null) {
+        if (jmsProperties == null) {
             jmsProperties = new JMSProperties();
             setJMSProperties(jmsProperties);
         }
         return jmsProperties;
     }
-    
+
     /**
-     * @param jmsProperties JMS Properties
+     * @param jmsProperties
+     *            JMS Properties
      */
     public void setJMSProperties(JMSProperties jmsProperties) {
         setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
+    }
+
+    /**
+     * Gets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
+     * 
+     * @return File encoding.
+     * @see #RAW_DATA
+     * @see #DEFAULT_ENCODING
+     * @see #getSupportedEncodings()
+     */
+    public String getFileEncoding() {
+        return getPropertyAsString(JMS_FILE_ENCODING, RAW_DATA);
+    }
+
+    /**
+     * Sets file encoding to use. If {@link #RAW_DATA}, content isn't parsed.
+     * 
+     * @param fileEncoding
+     *            File encoding.
+     * @see #RAW_DATA
+     * @see #DEFAULT_ENCODING
+     * @see #getSupportedEncodings()
+     */
+    public void setFileEncoding(String fileEncoding) {
+        setProperty(JMS_FILE_ENCODING, fileEncoding, RAW_DATA);
     }
 }

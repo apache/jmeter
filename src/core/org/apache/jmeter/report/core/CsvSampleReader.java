@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
@@ -103,12 +105,19 @@ public class CsvSampleReader implements Closeable{
                     + " does not exist or is not readable");
         }
         this.file = inputFile;
+        InputStream fis = null;
+        Reader isr = null;
         try {
-            this.reader = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(file), CHARSET), BUF_SIZE);
+            fis = new FileInputStream(file);
+            isr = new InputStreamReader(fis, CHARSET);
+            this.reader = new BufferedReader(isr, BUF_SIZE);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            JOrphanUtils.closeQuietly(isr);
+            JOrphanUtils.closeQuietly(fis);
+            JOrphanUtils.closeQuietly(this.reader);
             throw new SampleException("Could not create file reader !", ex);
         }
+
         if (metadata == null) {
             this.metadata = readMetadata(separator, useSaveSampleCfg);
         } else {

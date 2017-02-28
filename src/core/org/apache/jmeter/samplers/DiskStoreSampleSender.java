@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
@@ -33,7 +34,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jorphan.util.JMeterError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,15 +70,13 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
     @Override
     public void testEnded(String host) {
         log.info("Test Ended on {}", host);
-        singleExecutor.submit(new Runnable(){
-            @Override
-            public void run() {
-                try {
-                    oos.close(); // ensure output is flushed
-                } catch (IOException e) {
-                    log.error("Failed to close data file.", e);
-                }                
-            }});
+        singleExecutor.submit(() -> {
+            try {
+                oos.close(); // ensure output is flushed
+            } catch (IOException e) {
+                log.error("Failed to close data file.", e);
+            }
+        });
         singleExecutor.shutdown(); // finish processing samples
         try {
             if (!singleExecutor.awaitTermination(3, TimeUnit.SECONDS)) {
@@ -88,10 +86,9 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             log.error("Executor did not terminate in a timely fashion", e);
             Thread.currentThread().interrupt();
         }
-        ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(new FileInputStream(temporaryFile));
-            Object obj = null;
+        try (InputStream fis = new FileInputStream(temporaryFile);
+                ObjectInputStream ois = new ObjectInputStream(fis)){
+            Object obj;
             while((obj = ois.readObject()) != null) {
                 if (obj instanceof SampleEvent) {
                     try {
@@ -116,7 +113,6 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
             } catch (RemoteException e) {
                 log.error("returning sample", e);
             }
-            IOUtils.closeQuietly(ois);
             if(!temporaryFile.delete()) {
                 if (log.isWarnEnabled()) {
                     log.warn("Could not delete file: {}", temporaryFile.getAbsolutePath());
@@ -129,18 +125,13 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
     public void sampleOccurred(final SampleEvent e) {
         // sampleOccurred is called from multiple threads; not safe to write from multiple threads.
         // also decouples the file IO from sample generation
-        singleExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        oos.writeObject(e);
-                    } catch (IOException err) {
-                        log.error("sampleOccurred", err);
-                    }                
-                }
-            
+        singleExecutor.submit(() -> {
+            try {
+                oos.writeObject(e);
+            } catch (IOException err) {
+                log.error("sampleOccurred", err);
             }
-        );
+        });
     }
 
     /**
@@ -157,17 +148,15 @@ public class DiskStoreSampleSender extends AbstractSampleSender implements Seria
         try {
             temporaryFile = File.createTempFile("SerialisedSampleSender", ".ser");
             temporaryFile.deleteOnExit();
-            singleExecutor.submit(new Runnable(){
-                @Override
-                public void run() {
-                    OutputStream anOutputStream;
-                    try {
-                        anOutputStream = new FileOutputStream(temporaryFile);
-                        oos = new ObjectOutputStream(anOutputStream);
-                    } catch (IOException e) {
-                        log.error("Failed to create output Stream", e);
-                    }
-                }});
+            singleExecutor.submit(() -> {
+                OutputStream anOutputStream;
+                try {
+                    anOutputStream = new FileOutputStream(temporaryFile);
+                    oos = new ObjectOutputStream(anOutputStream);
+                } catch (IOException e) {
+                    log.error("Failed to create output Stream", e);
+                }
+            });
         } catch (IOException e) {
             log.error("Failed to create output file", e);
         }

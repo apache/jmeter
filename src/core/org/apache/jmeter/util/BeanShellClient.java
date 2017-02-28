@@ -51,33 +51,31 @@ public class BeanShellClient {
 
         System.out.println("Connecting to BSH server on "+host+":"+portString);
 
-        Socket sock = new Socket(host,port);
-        InputStream is = sock.getInputStream();
-        SockRead sockRead = new SockRead(is);
-        sockRead.start();
+        try (Socket sock = new Socket(host,port);
+                InputStream is = sock.getInputStream();
+                OutputStream os = sock.getOutputStream()) {
+            SockRead sockRead = new SockRead(is);
+            sockRead.start();
 
-        OutputStream os = sock.getOutputStream();
-        sendLine("bsh.prompt=\"\";",os);// Prompt is unnecessary
+            sendLine("bsh.prompt=\"\";", os);// Prompt is unnecessary
 
-        sendLine("String [] args={",os);
-        for (int i=MINARGS; i<args.length;i++){
-            sendLine("\""+args[i]+"\",\n",os);
+            sendLine("String [] args={", os);
+            for (int i = MINARGS; i < args.length; i++) {
+                sendLine("\"" + args[i] + "\",\n", os);
+            }
+            sendLine("};", os);
+
+            int b;
+            try (InputStreamReader fis = new FileReader(file)) {
+                while ((b = fis.read()) != -1) {
+                    os.write(b);
+                }
+            }
+            sendLine("bsh.prompt=\"bsh % \";", os);// Reset for other users
+            os.flush();
+            sock.shutdownOutput(); // Tell server that we are done
+            sockRead.join(); // wait for script to finish
         }
-        sendLine("};",os);
-
-        int b;
-        InputStreamReader fis = new FileReader(file);
-        while ((b=fis.read()) != -1){
-            os.write(b);
-        }
-        fis.close();
-        sendLine("bsh.prompt=\"bsh % \";",os);// Reset for other users
-        os.flush();
-        sock.shutdownOutput(); // Tell server that we are done
-        sockRead.join(); // wait for script to finish
-        is.close();
-        os.close();
-        sock.close();
     }
 
     private static void sendLine( String line, OutputStream outPipe )
@@ -106,7 +104,7 @@ public class BeanShellClient {
                     System.out.print(c);
                 }
             } catch (IOException e) {
-                // TODO Why empty block ?
+                e.printStackTrace(); // NOSONAR No way to log here
             } finally {
                 System.out.println("... disconnected from server.");
             }

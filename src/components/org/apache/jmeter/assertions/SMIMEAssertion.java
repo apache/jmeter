@@ -21,7 +21,6 @@ package org.apache.jmeter.assertions;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -40,7 +39,6 @@ import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
@@ -245,20 +243,23 @@ class SMIMEAssertion {
                     if (testElement.isSignerCheckByFile()) {
                         CertificateFactory cf = CertificateFactory
                                 .getInstance("X.509");
-                        X509CertificateHolder certFromFile;
-                        InputStream inStream = null;
-                        try {
-                            inStream = new BufferedInputStream(new FileInputStream(testElement.getSignerCertFile()));
-                            certFromFile = new JcaX509CertificateHolder((X509Certificate) cf.generateCertificate(inStream));
-                        } finally {
-                            IOUtils.closeQuietly(inStream);
+                        try (InputStream fis = new FileInputStream(testElement.getSignerCertFile());
+                                InputStream bis = new BufferedInputStream(fis)){
+                            X509CertificateHolder certFromFile = new JcaX509CertificateHolder((X509Certificate) cf.generateCertificate(bis));
+                            if (!certFromFile.equals(cert)) {
+                                res.setFailure(true);
+                                res.setFailureMessage("Signer certificate does not match certificate "
+                                                + testElement.getSignerCertFile());
+                            }
+                        } catch (IOException e) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("Could not read cert file {}", testElement.getSignerCertFile(), e);
+                            }
+                            res.setFailure(true);
+                            res.setFailureMessage("Could not read certificate file " + testElement.getSignerCertFile());
                         }
 
-                        if (!certFromFile.equals(cert)) {
-                            res.setFailure(true);
-                            res.setFailureMessage("Signer certificate does not match certificate "
-                                            + testElement.getSignerCertFile());
-                        }
+                        
                     }
 
                 } else {
@@ -277,9 +278,6 @@ class SMIMEAssertion {
             log.error(e.getMessage(), e);
             res.setError(true);
             res.setFailureMessage(e.getMessage());
-        } catch (FileNotFoundException e) {
-            res.setFailure(true);
-            res.setFailureMessage("certificate file not found: " + e.getMessage());
         }
 
         return res;

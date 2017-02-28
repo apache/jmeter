@@ -114,7 +114,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         /**
-         * @throws Exception
+         * @throws Exception when anything goes wrong in the test
          */
         @Test
         public void testAddCookieFromHeaderWithWildcard() throws Exception {
@@ -147,7 +147,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         /**
-         * @throws Exception
+         * @throws Exception when anything goes wrong in the test
          */
         @Test
         public void testAddCookieFromHeaderWithNoWildcard() throws Exception {
@@ -175,7 +175,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         /**
-         * @throws Exception
+         * @throws Exception  when anything goes wrong in the test
          */
         @Test
         public void testAddCookieFromHeaderWithWildcard2() throws Exception {
@@ -199,7 +199,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
         }
 
         /**
-         * @throws Exception
+         * @throws Exception  when anything goes wrong in the test
          */
         @Test
         public void testBug56358() throws Exception {
@@ -513,6 +513,7 @@ public class TestHC4CookieManager extends JMeterTestCase {
             assertEquals("test1=moo1; test2=moo2; test2=moo3", s);
         }
         
+        @SuppressWarnings("deprecation") // test of deprecated item
         @Test
         public void testCookiePolicy2109() throws Exception {
             man.setCookiePolicy(org.apache.http.client.params.CookiePolicy.RFC_2109);

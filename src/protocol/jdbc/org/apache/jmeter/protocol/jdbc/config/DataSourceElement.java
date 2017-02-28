@@ -274,8 +274,8 @@ public class DataSourceElement extends AbstractTestElement
          * @throws SQLException if database access error occurrs
          */
         public Connection getConnection() throws SQLException {
-            Connection conn = null;
-            BasicDataSource dsc = null;
+            Connection conn;
+            BasicDataSource dsc;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
             } else {
@@ -288,21 +288,21 @@ public class DataSourceElement extends AbstractTestElement
                     perThreadPoolSet.add(dsc);
                 }
             }
-            if (dsc != null) {
-                conn=dsc.getConnection();
-                int transactionIsolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
-                if (transactionIsolation >= 0 && conn.getTransactionIsolation() != transactionIsolation) {
-                    try {
-                        // make sure setting the new isolation mode is done in an auto committed transaction
-                        conn.setTransactionIsolation(transactionIsolation);
-                        log.debug("Setting transaction isolation: {}@{}",
-                                    transactionIsolation, System.identityHashCode(dsc));
-                    } catch (SQLException ex) {
-                        log.error("Could not set transaction isolation: {}@{}", 
-                                transactionIsolation, System.identityHashCode(dsc));
-                    }   
-                }
+
+            conn=dsc.getConnection();
+            int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
+            if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
+                try {
+                    // make sure setting the new isolation mode is done in an auto committed transaction
+                    conn.setTransactionIsolation(isolation);
+                    log.debug("Setting transaction isolation: {}@{}",
+                            isolation, System.identityHashCode(dsc));
+                } catch (SQLException ex) {
+                    log.error("Could not set transaction isolation: {}@{}", 
+                            isolation, System.identityHashCode(dsc), ex);
+                }   
             }
+
             return conn;
         }
     }
