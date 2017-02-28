@@ -214,8 +214,6 @@ BeanShell 2.0b5 - by Pat Niemeyer (pat@pat.net)
 bsh % remote.bsh starting
 user.home = C:\Documents and Settings\User
 user.dir = D:\eclipseworkspaces\main\JMeter_trunk\bin
-log_level.jmeter = INFO
-log_level.jorphan = INFO
 Setting property 'EXAMPLE' to '0'.
 Setting property 'EXAMPLE' to '1'.
 Setting property 'EXAMPLE' to '2'.
