@@ -459,8 +459,7 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
 <source>jmeter -LDEBUG</source>
 <note>
     The command line properties are processed early in startup, but after the logging system has been set up.
-    Attempts to use the <code>-J</code> flag to update <code>log_level</code> or <code>log_file</code> properties will have no effect.
-    </note>
+</note>
 </subsection>
 <subsection name="&sect-num;.4.7 Logging and error messages" anchor="logging">
     <note>
