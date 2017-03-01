@@ -447,12 +447,14 @@ To do so, use the following options:</p>
 <dt><code>-J[prop_name]=[value]</code></dt><dd>defines a local JMeter property.</dd>
 <dt><code>-G[prop_name]=[value]</code></dt><dd>defines a JMeter property to be sent to all remote servers.</dd>
 <dt><code>-G[propertyfile]</code></dt><dd>defines a file containing JMeter properties to be sent to all remote servers.</dd>
+<dt><code>-L[category]=[priority]</code></dt><dd>overrides a logging setting, setting a particular category to the given priority level.</dd>
 </dl>
+<p>The <code>-L</code> flag can also be used without the category name to set the root logging level.</p>
 <p><b>Examples</b>:
 </p>
 <source>
 jmeter -Duser.dir=/home/mstover/jmeter_stuff \
-    -Jremote_hosts=127.0.0.1
+    -Jremote_hosts=127.0.0.1 -Ljmeter.engine=DEBUG
 </source>
 <source>jmeter -LDEBUG</source>
 <note>
