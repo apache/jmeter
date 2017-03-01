@@ -182,6 +182,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <h3>I18N</h3>
 <ul>
     <li>Improve translation "save_as" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60785</bug>Improvement of Japanese translation. Patch by Kimono (kimono.outfit.am at gmail.com).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -326,6 +327,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <li>Andrew Burton (andrewburtonatwh at gmail.com)</li>
 <li>Woonsan Ko (woonsan at apache.org)</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
+<li>Kimono (kimono.outfit.am at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
