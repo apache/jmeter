@@ -280,10 +280,10 @@ gui.quick_9=ViewResultsFullVisualizer
     RMI port to be used by the server (must start <code>rmiregistry</code> with same port).
     To change the port to (say) <code>1234</code>:<br/>
     On the server(s):
-    <ul>
-        <ol><code>set server_port=1234</code></ol>
-        <ol>start <code>rmiregistry</code> with port <code>1234</code></ol>
-    </ul>
+    <ol>
+        <li><code>set server_port=1234</code></li>
+        <li>start <code>rmiregistry</code> with port <code>1234</code></li>
+    </ol>
     On Windows this can be done by:
     <source>SET SERVER_PORT=1234
 JMETER-SERVER</source>
