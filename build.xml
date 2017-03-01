@@ -2775,6 +2775,11 @@ run JMeter unless all the JMeter jars are added.
       <!-- This test contains a Redirection loop that leads to an error -->
       <param name="batchtest.ignoreErrorLogs" value="true" />
     </antcall>
+
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="TestSchedulerWithTimer"/>
+      <param name="batchtest.jmx" value="TestSchedulerWithTimer.jmx"/>
+    </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->
