@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
@@ -107,10 +108,15 @@ public class TestAction extends AbstractSampler implements Interruptible {
     private void pause(String timeInMillis) {
         long millis;
         try {
-            millis=Long.parseLong(timeInMillis);
+            if(!StringUtils.isEmpty(timeInMillis)) {
+                millis=Long.parseLong(timeInMillis);
+            } else {
+                log.warn("Duration value is empty, defaulting to 0");
+                millis=0L;
+            }
         } catch (NumberFormatException e){
             log.warn("Could not parse number: '{}'", timeInMillis);
-            millis=0;
+            millis=0L;
         }
         try {
             pauseThread = Thread.currentThread();
