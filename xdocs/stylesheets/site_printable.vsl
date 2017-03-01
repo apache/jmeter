@@ -357,7 +357,7 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #if($node.getClass().getName().indexOf("Element") > -1)
 #unknown($node)
 #else
-$node.getText()
+$escape.getText($node.getText())
 #end
 #end
 #end
