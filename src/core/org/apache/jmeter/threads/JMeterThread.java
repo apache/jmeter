@@ -47,6 +47,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestIterationListener;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.timers.Timer;
+import org.apache.jmeter.timers.TimerService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
@@ -79,6 +80,7 @@ public class JMeterThread implements Runnable, Interruptible {
 
     private static final float TIMER_FACTOR = JMeterUtils.getPropDefault("timer.factor", 1.0f);
 
+    private static final TimerService TIMER_SERVICE = TimerService.getInstance();
     /**
      * 1 as float
      */
@@ -842,10 +844,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 if(scheduler) {
                     // We reduce pause to ensure end of test is not delayed by a sleep ending after test scheduled end
                     // See Bug 60049
-                    long now = System.currentTimeMillis();
-                    if(now + totalDelay > endTime) {
-                        totalDelay = endTime - now;
-                    }
+                    totalDelay = TIMER_SERVICE.adjustDelay(totalDelay, endTime);
                 }
                 TimeUnit.MILLISECONDS.sleep(totalDelay);
             } catch (InterruptedException e) {
