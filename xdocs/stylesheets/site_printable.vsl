@@ -509,7 +509,7 @@ $escape.getText($node.getText())
 </ul></td><td valign="top"><ul>
 #end
 <li><a href="#$sect.getAttributeValue("anchor")">$sect.getAttributeValue("name")</a></li>
-#if ("$!level2" != "no")
+#if ("$!level2" != "no" and !$sect.getChildren().isEmpty())
 <ul>
 #foreach ($comp in $sect.getChildren("component"))
 <li>
