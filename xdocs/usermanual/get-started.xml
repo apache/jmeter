@@ -467,10 +467,6 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
     Also, every code including JMeter and plugins MUST use <a href="https://www.slf4j.org/" target="_blank">SLF4J</a> library
     to leave logs since 3.2.
     </note>
-    <note>
-        Also, since 3.2, every code including JMeter and plugins MUST use <a href="https://www.slf4j.org/" target="_blank">SLF4J</a> library
-        to leave logs. For detail, please see <a href="https://www.slf4j.org/manual.html" target="_blank">SLF4J user manual</a>.
-    </note>
     <p>
         Here is an example <code>log4j2.xml</code> file which defines two log appenders and loggers for each category.
     </p>
