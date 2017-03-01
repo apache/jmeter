@@ -248,7 +248,7 @@ public class JMeter implements JMeterPlugin {
     private static final CLOptionDescriptor D_LOGLEVEL =
             new CLOptionDescriptor("loglevel", CLOptionDescriptor.DUPLICATES_ALLOWED
                     | CLOptionDescriptor.ARGUMENTS_REQUIRED_2, LOGLEVEL,
-                    "[category=]level e.g. jorphan=INFO or jmeter.util=DEBUG");
+                    "[category=]level e.g. jorphan=INFO, jmeter.util=DEBUG or com.example.foo=WARN");
     private static final CLOptionDescriptor D_REMOTE_OPT =
             new CLOptionDescriptor("runremote", CLOptionDescriptor.ARGUMENT_DISALLOWED, REMOTE_OPT,
                     "Start remote servers (as defined in remote_hosts)");
