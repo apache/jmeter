@@ -86,6 +86,7 @@ These properties are only taken into account after restarting JMeter as they are
 JMeter no longer converts <code>javax.<em>xxx</em></code> property entries in this file into System properties.<br/>
 These must now be defined in the <code>system.properties</code> file or on the command-line.<br/>
 The <code>system.properties</code> file gives more flexibility.</note>
+<properties>
 <property name="https.sessioncontext.shared">
     By default, SSL session contexts are now created per-thread, rather than being shared.<br/>
     The old behaviour can be enabled by setting this property to <code>true</code>. Defaults to: <code>false</code>
@@ -97,7 +98,6 @@ The <code>system.properties</code> file gives more flexibility.</note>
     Default HTTPS protocol level: <source>https.default.protocol=TLS</source>
     This may need to be changed to: <source>https.default.protocol=SSLv3</source>
 </property>
-<properties>
 <property name="https.socket.protocols">
     List of protocols to enable. You may have to select only a subset if you find issues with target server.<br/>
     This is needed when server does not support Socket version negotiation, this can lead to errors like:
