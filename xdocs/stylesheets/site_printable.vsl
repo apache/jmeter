@@ -260,6 +260,10 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif">$title.getText()</font></td></tr></table>
 #end
 
+#macro (description $node)
+<div class="description">#runloop($node)</div>
+#end
+
 #macro (unknown $node)
 #if($node.getName() == "note")
 #note($node)
@@ -309,6 +313,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #keysym ($node)
 #elseif ($node.getName().equals("guimenuitem"))
 #guimenuitem ($node)
+#elseif ($node.getName().equals("description"))
+#description ($node)
 #else
 #outputTag($node)
 #runloop($node)
