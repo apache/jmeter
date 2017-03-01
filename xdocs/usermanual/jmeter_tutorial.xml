@@ -102,7 +102,7 @@ The folders inside of <code>apache-jmeter</code>
 
 <p>
 As the tutorial progresses, an explanation of the subdirectories will be provided. For now, lets
-focus on <code>src</code> directory. From the screen capture, we see the following directories.
+focus on <code>src</code> directory.
 </p>
 
 <p>
@@ -114,9 +114,7 @@ The folders inside of <code>src</code>
   <dt><code>core</code></dt><dd>the core code of JMeter including all core interfaces and abstract classes.</dd>
   <dt><code>examples</code></dt><dd>example sampler demonstrating how to use the new bean framework</dd>
   <dt><code>functions</code></dt><dd>standard functions used by all components</dd>
-  <dt><code>htmlparser</code></dt><dd>a snapshot of HtmlParser, donated by HtmlParser project on sourceforge</dd>
   <dt><code>jorphan</code></dt><dd>utility classes providing common utility functions</dd>
-  <dt><code>monitor</code></dt><dd>tomcat 5 monitor components</dd>
   <dt><code>protocol</code></dt><dd>contains the different protocols JMeter supports</dd>
 </dl>
 
