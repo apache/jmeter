@@ -1060,7 +1060,12 @@ JMETER-SERVER</source>
     BeanShell Server properties.<br/>
     Define the port number as non-zero to start the http server on that port.<br/>
     The telnet server will be started on the next port.<br/>
-    Defaults to: <code>0</code>
+    Defaults to: <code>0</code> (i.e. don't start the server)
+    <note>
+    There is no security. Anyone who can connect to the port can issue any BeanShell commands.
+    These can provide unrestricted access to the JMeter application and the host.
+    <b>Do not enable the server unless the ports are protected against access, e.g. by a firewall.</b>
+    </note>
 </property>
 <property name="beanshell.server.file">
     Define the server initialisation file.<br/>
