@@ -1103,12 +1103,14 @@ JMETER-SERVER</source>
     Defaults to empty value.
 </property>
 </properties>
+    <p>
+    The file <code>BeanShellListeners.bshrc</code> contains sample definitions
+    of Test and Thread Listeners.<br/>
+    </p>
 </section>
 <section name="&sect-num;.30 MailerModel configuration" anchor="mailer">
 <properties>
 <property name="mailer.successlimit">
-    The file <code>BeanShellListeners.bshrc</code> contains sample definitions
-    of Test and Thread Listeners.<br/>
     Number of successful samples before a message is sent.<br/>
     Defaults to: <code>2</code>
 </property>
