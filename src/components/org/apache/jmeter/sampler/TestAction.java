@@ -33,6 +33,7 @@ import org.apache.jmeter.testelement.property.IntegerProperty;
 import org.apache.jmeter.testelement.property.StringProperty;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jmeter.timers.TimerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,8 @@ import org.slf4j.LoggerFactory;
 public class TestAction extends AbstractSampler implements Interruptible {
 
     private static final Logger log = LoggerFactory.getLogger(TestAction.class);
+
+    private static final TimerService TIMER_SERVICE = TimerService.getInstance(); 
 
     private static final long serialVersionUID = 241L;
 
@@ -121,7 +124,7 @@ public class TestAction extends AbstractSampler implements Interruptible {
         try {
             pauseThread = Thread.currentThread();
             if(millis>0) {
-                TimeUnit.MILLISECONDS.sleep(millis);
+                TimeUnit.MILLISECONDS.sleep(TIMER_SERVICE.adjustDelay(millis));
             } else if(millis<0) {
                 throw new IllegalArgumentException("Configured sleep is negative:"+millis);
             } // else == 0 we do nothing

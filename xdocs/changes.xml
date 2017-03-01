@@ -276,6 +276,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60730</bug>The JSON PostProcessor should set the <code>_ALL</code> variable even if the JSON path matches only once.</li>
     <li><bug>60747</bug>Response Assertion : Add Request Headers to <code>Field to Test</code></li>
     <li><bug>60763</bug>XMLAssertion should not leak errors to console</li>
+    <li><bug>60797</bug>TestAction in pause mode can last beyond configured duration of test</li>
 </ul>
 
 <h3>Functions</h3>
