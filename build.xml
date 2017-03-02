@@ -2783,7 +2783,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Run all batch tests; used by test target -->
-  <target name="_allbatchtests" depends="batchtest,batchtestserver,batch_scripts">
+  <target name="_allbatchtests" depends="batchtest,batch_scripts">
   </target>
 
    <!-- Generic test target, not intended to be called directly -->
