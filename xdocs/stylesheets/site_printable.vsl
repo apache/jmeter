@@ -161,6 +161,7 @@ $value.content
 #macro (properties $properties)
 <p>
 <b>Parameters</b>
+</p>
 <table border="1" cellspacing="0" cellpadding="2">
 <tr><th>Attribute</th><th>Description</th><th>Required</th></tr>
 #foreach ($items in $properties.getChildren("property"))
@@ -177,11 +178,10 @@ No
 </tr>
 #end
 </table>
-</p>
 #end
 
 #macro (seeAlso $seeAlso)
-<p><b>See Also:</b>
+<p><b>See Also:</b></p>
 <ul>
 #foreach ($items in $seeAlso.getChildren())
 #if($items.getName() == "link")
@@ -191,7 +191,6 @@ No
 #end
 #end
 </ul>
-</p>
 #end
 
 #macro (figure $figure)
@@ -203,8 +202,8 @@ No
 #if  ("$!width" != "")
 #set ($dim = "width='$width' height='$height'")
 #end
-<p><table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"/><br>
-<font size="-1">#runloop($figure)</font></td></tr></table></p>
+<table border="0" cellspacing="0" cellpadding="0"><tr><td><img $dim src="$sshotdir/$figure.getAttributeValue("image")"/><br>
+<font size="-1">#runloop($figure)</font></td></tr></table>
 #end
 
 #macro (example $example)
@@ -261,6 +260,10 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 <tr><td><font color="white" face="Helvetica, Arial, sans-serif">$title.getText()</font></td></tr></table>
 #end
 
+#macro (description $node)
+<div class="description">#runloop($node)</div>
+#end
+
 #macro (unknown $node)
 #if($node.getName() == "note")
 #note($node)
@@ -310,6 +313,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #keysym ($node)
 #elseif ($node.getName().equals("guimenuitem"))
 #guimenuitem ($node)
+#elseif ($node.getName().equals("description"))
+#description ($node)
 #else
 #outputTag($node)
 #runloop($node)
@@ -357,7 +362,7 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #if($node.getClass().getName().indexOf("Element") > -1)
 #unknown($node)
 #else
-$node.getText()
+$escape.getText($node.getText())
 #end
 #end
 #end
@@ -504,7 +509,7 @@ $node.getText()
 </ul></td><td valign="top"><ul>
 #end
 <li><a href="#$sect.getAttributeValue("anchor")">$sect.getAttributeValue("name")</a></li>
-#if ("$!level2" != "no")
+#if ("$!level2" != "no" and !$sect.getChildren().isEmpty())
 <ul>
 #foreach ($comp in $sect.getChildren("component"))
 <li>

@@ -82,27 +82,31 @@ public abstract class AbstractAction implements Command {
             if (f.exists()) {
                 String[] option = new String[] { JMeterUtils.getResString("concat_result"),
                         JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file") };
-                String question = MessageFormat.format(JMeterUtils.getResString("ask_existing_file") // $NON-NLS-1$
-                        , rc.getFilename());
-                int response = JOptionPane.YES_OPTION;
-
+                String question = MessageFormat.format(
+                        JMeterUtils.getResString("ask_existing_file"), // $NON-NLS-1$
+                        rc.getFilename());
                 // Interactive question
-                response = JOptionPane.showOptionDialog(null, question, JMeterUtils.getResString("warning"),
-                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, option, option[0]);
+                int response = JOptionPane.showOptionDialog(GuiPackage.getInstance().getMainFrame(), 
+                        question, JMeterUtils.getResString("warning"),
+                        JOptionPane.YES_NO_CANCEL_OPTION, 
+                        JOptionPane.WARNING_MESSAGE, 
+                        null, 
+                        option, 
+                        option[0]);
 
                 switch (response) {
-                case JOptionPane.NO_OPTION:
-                    // Exit without start the test
-                    return false;
-                case JOptionPane.CANCEL_OPTION:
-                    // replace_file so delete the existing one
-                    f.delete();
-                    break;
-                case JOptionPane.YES_OPTION:
-                    // append is the default behaviour, so nothing to do
-                    break;
-                default:
-                    break;
+                    case JOptionPane.NO_OPTION:
+                        // Exit without start the test
+                        return false;
+                    case JOptionPane.CANCEL_OPTION:
+                        // replace_file so delete the existing one
+                        f.delete();
+                        break;
+                    case JOptionPane.YES_OPTION:
+                        // append is the default behaviour, so nothing to do
+                        break;
+                    default:
+                        return false;
                 }
             }
         }

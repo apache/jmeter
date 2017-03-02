@@ -19,24 +19,32 @@
 package org.apache.jmeter.visualizers;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.gui.Searchable;
+import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.gui.action.RawTextSearcher;
 import org.apache.jmeter.gui.action.RegexpSearcher;
 import org.apache.jmeter.gui.action.Searcher;
 import org.apache.jmeter.util.JMeterUtils;
-import org.apache.jorphan.gui.JLabeledTextField;
+import org.apache.jmeter.visualizers.utils.Colors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,13 +58,15 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
     private static final Logger log = LoggerFactory.getLogger(SearchTreePanel.class);
 
+    private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
+
     private static final Font FONT_DEFAULT = UIManager.getDefaults().getFont("TextField.font");
 
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private JButton searchButton;
 
-    private JLabeledTextField searchTF;
+    private JTextField searchTF;
 
     private JCheckBox isRegexpCB;
 
@@ -80,10 +90,32 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 //        log.warn("Constructor only intended for use in testing"); // $NON-NLS-1$
     }
 
+    private class EnterAction extends AbstractAction {
+        private static final long serialVersionUID = 2L;
+        @Override
+        public void actionPerformed(ActionEvent ev) {
+            boolean found = doSearch();
+            if(found) {
+                searchTF.setBackground(Color.WHITE);
+                searchTF.setForeground(Color.BLACK);
+            }
+            else {
+                searchTF.setBackground(Colors.LIGHT_RED);
+                searchTF.setForeground(Color.WHITE);
+            }
+        }
+    }
+    
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(10,10));
+        
+        searchTF = new JTextField(20); //$NON-NLS-1$
+        InputMap im = searchTF
+                .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        im.put(KeyStrokes.ENTER, SEARCH_TEXT_COMMAND);
+        ActionMap am = searchTF.getActionMap();
+        am.put(SEARCH_TEXT_COMMAND, new EnterAction());
 
-        searchTF = new JLabeledTextField(JMeterUtils.getResString("search_text_field"), 20); //$NON-NLS-1$
         isRegexpCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_regexp"), false); //$NON-NLS-1$
         isCaseSensitiveCB = new JCheckBox(JMeterUtils.getResString("search_text_chkbox_case"), false); //$NON-NLS-1$
         
@@ -97,6 +129,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
+        searchPanel.add(new JLabel(JMeterUtils.getResString("search_text_field")));
         searchPanel.add(searchTF);
         searchPanel.add(isCaseSensitiveCB);
         searchPanel.add(isRegexpCB);        
@@ -112,7 +145,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == searchButton) {
-            doSearch(e);
+            doSearch();
         } else if (e.getSource() == resetButton) {
             doResetSearch((SearchableTreeNode)defaultMutableTreeNode);
         }
@@ -131,17 +164,17 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
 
     /**
-     * @param e {@link ActionEvent}
+     * return true if a match occured
      */
-    private void doSearch(ActionEvent e) {
+    private boolean doSearch() {
         String wordToSearch = searchTF.getText();
         if (StringUtils.isEmpty(wordToSearch)) {
-            return;
+            return false;
         }
         Searcher searcher = isRegexpCB.isSelected() ?
             new RegexpSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText()) : 
             new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());        
-        searchInNode(searcher, (SearchableTreeNode)defaultMutableTreeNode);
+        return searchInNode(searcher, (SearchableTreeNode)defaultMutableTreeNode);
     }
 
     /**

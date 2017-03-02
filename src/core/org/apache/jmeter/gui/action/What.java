@@ -30,6 +30,7 @@ import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.util.HeapDumper;
+import org.apache.jorphan.util.ThreadDumper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class What extends AbstractAction {
         commands.add(ActionNames.DEBUG_ON);
         commands.add(ActionNames.DEBUG_OFF);
         commands.add(ActionNames.HEAP_DUMP);
+        commands.add(ActionNames.THREAD_DUMP);
         commandSet = Collections.unmodifiableSet(commands);
     }
 
@@ -81,8 +83,15 @@ public class What extends AbstractAction {
             try {
                 String s = HeapDumper.dumpHeap();
                 JOptionPane.showMessageDialog(null, "Created "+s, "HeapDump", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
+            } catch (Exception ex) { // NOSONAR We show cause in message
                 JOptionPane.showMessageDialog(null, ex.toString(), "HeapDump", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (ActionNames.THREAD_DUMP.equals(e.getActionCommand())){
+            try {
+                String s = ThreadDumper.threadDump();
+                JOptionPane.showMessageDialog(null, "Created "+s, "ThreadDump", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) { // NOSONAR We show cause in message
+                JOptionPane.showMessageDialog(null, ex.toString(), "ThreadDump", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

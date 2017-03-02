@@ -52,6 +52,7 @@ import javax.swing.text.Highlighter;
 
 import org.apache.jmeter.gui.action.KeyStrokes;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jmeter.visualizers.utils.Colors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,8 +65,6 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
     private static final Font FONT_SMALL = new Font("SansSerif", Font.PLAIN, (int) Math.round(FONT_DEFAULT.getSize() * 0.8));
 
     private static final String SEARCH_TEXT_COMMAND = "search_text"; // $NON-NLS-1$
-
-    public static final Color LIGHT_RED = new Color(0xFF, 0x80, 0x80);
 
     private JLabel label;
 
@@ -121,7 +120,7 @@ public class SearchTextExtension implements ActionListener, DocumentListener {
                 }
                 else {
                     findButton.setText(JMeterUtils.getResString("search_text_button_find"));// $NON-NLS-1$
-                    textToFindField.setBackground(LIGHT_RED);
+                    textToFindField.setBackground(Colors.LIGHT_RED);
                     textToFindField.setForeground(Color.WHITE);
                 }
             } catch (PatternSyntaxException pse) {

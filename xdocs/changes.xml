@@ -58,11 +58,14 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
-<ch_section>IMPORTANT CHANGE</ch_section>
+<ch_section>IMPORTANT CHANGES</ch_section>
 <p>
-JMeter now requires Java 8. Ensure you use most up to date version.
+JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
-
+<p>
+JMeter logging has been migrated to SLF4J and Log4j2.
+This affects configuration and 3rd party plugins.
+</p>
 <ch_title>Core improvements</ch_title>
 <ul>
 <li>Fill in improvements</li>
@@ -84,6 +87,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>JMeter requires now at least a JAVA 8 version to run.</li>
     <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
     <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">log4j2 configuration</a> in file <code>log4j2.xml</code>
+    See <code>Logging changes</code> section below for further details.
     </li>
     <li>The following jars have been removed after migration from Logkit to SLF4J (see <bugzilla>60589</bugzilla>):
         <ul>
@@ -98,7 +102,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>The <code>commons-httpclient-3.1.jar</code> has been removed after drop of HC3.1 support(see <bugzilla>60727</bugzilla>)</li>
     <li>JMeter now sets through <code>-Djava.security.egd=file:/dev/urandom</code> the algorithm for secure random</li>
     <li>Process Sampler now returns error code 500 when an error occurs. It previously returned an empty value.</li>
-    <li>In <code>org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</code> 2 protected static fields (localhost and nonProxyHostSuffixSize) have been renamed to (LOCALHOST and NON_PROXY_HOST_SUFFIX_SIZE) 
+    <li>In <code>org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</code> two protected static fields (<code>localhost</code> and <code>nonProxyHostSuffixSize</code>) have been renamed to (<code>LOCALHOST</code> and <code>NON_PROXY_HOST_SUFFIX_SIZE</code>) 
         to follow static fields naming convention</li>
     <li>JMeter now uses by default Oracle Nashorn engine instead of Mozilla Rhino for better performances. This should not have an impact unless
     you use some advanced features. You can revert back to Rhino by settings property <code>javascript.use_rhino=true</code>. 
@@ -125,6 +129,31 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><code>org.apache.jmeter.protocol.http.util.Base64Encode</code> has been deprecated, you can use <code>java.util.Base64</code> as a replacement</li>
 </ul>
 
+<h3>Logging changes</h3>
+<p>
+    JMeter logging has been migrated to SLF4J and Log4j2.
+    This affects logging configuration and 3rd party plugins (if they use JMeter logging).
+    The following sections describe what changes need to be made.
+</p>
+
+<h4>Setting the logging level and log file</h4>
+<p>
+    The default logging level can be changed on the command-line using the <code>-L</code> parameter.
+    Likewise the <code>-l</code> parameter can be used to change the name of the log file.
+    However the <code>log_level</code> properties no longer work.
+</p>
+<p>
+    The default logging levels and file name are defined in the <code>log4j2.xml</code> configuration file
+    in the launch directory (usually <code>JMETER_HOME/bin</code>)
+</p>
+<p>
+    <note>TBA how to change the level programmatically.</note>
+</p>
+
+<h4>Changes to 3rd party plugin logging</h4>
+<p>
+    <note>TBA</note>
+</p>
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
@@ -136,11 +165,12 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60548</bug>HTTP Request : Allow Upper Panel to be collapsed</li>
     <li><bug>57242</bug>HTTP Authorization is not pre-emptively set with HttpClient4</li>
     <li><bug>60727</bug>Drop commons-httpclient-3.1 and related elements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60790</bug>HTTP(S) Test Script Recorder : Improve information on certificate expiration and have better UX for Start/Stop</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-	<li><bug>60740</bug>Support variable for all JMS messages (bytes, object, ...) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+	<li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><pr>259</pr>Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
@@ -160,6 +190,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60678</bug>View Results Tree : Text renderer, search should not popup "Text Not Found"</li>
     <li><bug>60691</bug>View Results Tree : In Renderers (XPath, JSON Path Tester, RegExp Tester and CSS/JQuery Tester) lower panel is sometimes not visible as upper panel is too big and cannot be resized</li>
     <li><bug>60687</bug>Make GUI more responsive when it gets a lot of events.</li>
+    <li><bug>60791</bug>View Results Tree: Trigger search on Enter key in Search Feature and display red background if no match</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -179,7 +210,8 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 
 <h3>I18N</h3>
 <ul>
-    <li>Improve translation "save_as" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li>Improve translation "<code>save_as</code>" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60785</bug>Improvement of Japanese translation. Patch by Kimono (kimono.outfit.am at gmail.com).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -197,22 +229,23 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60593</bug>Switch to G1 GC algorithm</li>
     <li><bug>60595</bug>Add a SplashScreen at the start of JMeter GUI. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>55258</bug>Drop "Close" icon from toolbar and add "New" to menu. Partly based on contribution from Sanduni Kanishka (https://github.com/SanduniKanishka)</li>
-    <li><bug>59995</bug>Allow user to change font size with 2 new menu items and use <code>jmeter.hidpi.scale.factor</code> for scaling fonts. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>59995</bug>Allow user to change font size with two new menu items and use <code>jmeter.hidpi.scale.factor</code> for scaling fonts. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60654</bug>Validation Feature : Be able to ignore BackendListener. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60646</bug>Workbench : Save it by default</li>
     <li><bug>60684</bug>Thread Group: Validate ended prematurely by Scheduler with 0 or very short duration. Contributed by Andrew Burton (andrewburtonatwh at gmail.com).</li>
-    <li><bug>60589</bug>Migrate LogKit to SLF4J - Drop avalon, logkit and excalibur with backward compatibility for 3rd party modules. Contributed by Woonsan Ko (woonsan at apache.org)</li>
+    <li><bug>60589</bug>Migrate LogKit to SLF4J - Drop avalon, logkit and excalibur with backward compatibility for 3<sup>rd</sup> party modules. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60565</bug>Migrate LogKit to SLF4J - Optimize logging statements. e.g, message format args, throwable args, unnecessary if-enabled-logging in simple ones, etc. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60564</bug>Migrate LogKit to SLF4J - Replace logkit loggers with slf4j ones and keep the current logkit binding solution for backward compatibility with plugins. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60664</bug>Add a UI menu to set log level. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><pr>276</pr>Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
+    <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
-    <li>Updated to groovy 2.4.8 (from 2.4.7)</li>
+    <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
     <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
@@ -272,6 +305,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60730</bug>The JSON PostProcessor should set the <code>_ALL</code> variable even if the JSON path matches only once.</li>
     <li><bug>60747</bug>Response Assertion : Add Request Headers to <code>Field to Test</code></li>
     <li><bug>60763</bug>XMLAssertion should not leak errors to console</li>
+    <li><bug>60797</bug>TestAction in pause mode can last beyond configured duration of test</li>
 </ul>
 
 <h3>Functions</h3>
@@ -297,8 +331,8 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><bug>60449</bug>JMeter Tree : Annoying behaviour when node name is empty</li>
     <li><bug>60494</bug>Add sonar analysis task to build</li>
     <li><bug>60501</bug>Search Feature : Performance issue when regexp is checked</li>
-    <li><bug>60444</bug>Intermittent failure of TestHTTPMirrorThread#testSleep(). Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
-    <li><bug>60621</bug>The "report-template" folder is missing from ApacheJMeter_config-3.1.jar in maven central</li>
+    <li><bug>60444</bug>Intermittent failure of <code>TestHTTPMirrorThread#testSleep()</code>. Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
+    <li><bug>60621</bug>The "<code>report-template</code>" folder is missing from <code>ApacheJMeter_config-3.1.jar</code> in maven central</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
 </ul>
 
@@ -323,6 +357,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
 <li>Andrew Burton (andrewburtonatwh at gmail.com)</li>
 <li>Woonsan Ko (woonsan at apache.org)</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
+<li>Kimono (kimono.outfit.am at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

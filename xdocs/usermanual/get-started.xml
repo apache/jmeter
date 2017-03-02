@@ -439,7 +439,7 @@ Normally this is not necessary.
 </subsection>
 
 <subsection name="&sect-num;.4.6 Overriding Properties Via The Command Line" anchor="override">
-<p>Java system properties, JMeter properties, and logging properties can be overridden directly on the command line
+<p>Java system properties and JMeter properties can be overridden directly on the command lin
 (instead of modifying <code>jmeter.properties</code>).
 To do so, use the following options:</p>
 <dl>
@@ -459,17 +459,105 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
 <source>jmeter -LDEBUG</source>
 <note>
     The command line properties are processed early in startup, but after the logging system has been set up.
-    Attempts to use the <code>-J</code> flag to update <code>log_level</code> or <code>log_file</code> properties will have no effect.
-    </note>
+</note>
 </subsection>
 <subsection name="&sect-num;.4.7 Logging and error messages" anchor="logging">
+    <note>
+    Since 3.2, JMeter logging is not configured through properties file(s) such as <code>jmeter.properties</code> any more,
+    but it is configured through a <a href="http://logging.apache.org/log4j/2.x/" target="_blank">Apache Log4j 2</a> configuration file
+    (<code>log4j2.xml</code> in the directory from which JMeter was launched, by default) instead.
+    Also, every code including JMeter and plugins MUST use <a href="https://www.slf4j.org/" target="_blank">SLF4J</a> library
+    to leave logs since 3.2.
+    </note>
+    <p>
+        Here is an example <code>log4j2.xml</code> file which defines two log appenders and loggers for each category.
+    </p>
+<source><![CDATA[<Configuration status="WARN" packages="org.apache.jmeter.gui.logging">
+
+  <Appenders>
+
+    <!-- The main log file appender to jmeter.log in the directory from which JMeter was launched, by default. -->
+    <File name="jmeter-log" fileName="${sys:jmeter.logfile:-jmeter.log}" append="false">
+      <PatternLayout>
+        <pattern>%d %p %c{1.}: %m%n</pattern>
+      </PatternLayout>
+    </File>
+
+    <!-- Log appender for GUI Log Viewer. See below. -->
+    <GuiLogEvent name="gui-log-event">
+      <PatternLayout>
+        <pattern>%d %p %c{1.}: %m%n</pattern>
+      </PatternLayout>
+    </GuiLogEvent>
+
+  </Appenders>
+
+  <Loggers>
+
+    <!-- Root logger -->
+    <Root level="info">
+      <AppenderRef ref="jmeter-log" />
+      <AppenderRef ref="gui-log-event" />
+    </Root>
+
+    <!-- SNIP -->
+
+    <!--
+      # Apache HttpClient logging examples
+    -->
+    <!-- # Enable header wire + context logging - Best for Debugging -->
+    <!--
+    <Logger name="org.apache.http" level="debug" />
+    <Logger name="org.apache.http.wire" level="error" />
+    -->
+
+    <!-- SNIP -->
+
+  </Loggers>
+
+</Configuration>]]></source>
+    <p>
+        So, if you want to change the log level for <code>org.apache.http</code> category to debug level for instance,
+        you can simply add (or uncomment) the following logger element in <code>log4j2.xml</code> file before launching JMeter.
+    </p>
+<source><![CDATA[  <Loggers>
+    <!-- SNIP -->
+    <Logger name="org.apache.http" level="debug" />
+    <!-- SNIP -->
+  </Loggers>]]></source>
+    <p>
+        For more detail on how to configure <code>log4j2.xml</code> file,
+        please see <a href="http://logging.apache.org/log4j/2.x/manual/configuration.html" target="_blank">Apache Log4j 2 Configuration</a> page.
+    </p>
+    <p>
+        Log level for specific categories or root logger can be overridden directly on the command line (instead of modifying <code>log4j2.xml</code>) as well.
+        To do so, use the following options:
+    </p>
+    <dl>
+        <dt>
+            <code>-L[category]=[priority]</code>
+        </dt>
+        <dd>
+            Overrides a logging setting, setting a particular category to the given priority level.
+            Since 3.2, it is recommended to use a full category name (e.g, <code>org.apache.jmeter</code> or <code>com.example.foo</code>),
+            but if the category name starts with either <code>jmeter</code> or <code>jorphan</code>, <code>org.apache.</code>
+            will be prepended internally to the category name input to construct a full category name (i.e, <code>org.apache.jmeter</code> or <code>org.apache.jorphan</code>) for backward compatibility.
+        </dd>
+    </dl>
+    <p>
+        <b>Examples</b>:
+    </p>
+    <source>jmeter -Ljmeter.engine=DEBUG</source>
+    <source>jmeter -Lorg.apache.jmeter.engine=DEBUG</source>
+    <source>jmeter -Lcom.example.foo=DEBUG</source>
+    <source>jmeter -LDEBUG</source>
     <note>
     JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
     running tests. Nor does it report any error for a mis-spelt variable or function; instead the
     reference is just used as is. See <a href="functions.html">Functions and Variables for more information</a>.
     </note>
     <p>If JMeter detects an error during a test, a message will be written to the log file.
-        The log file name is defined in the <code>jmeter.properties</code> file (or using the <code>-j</code> option, see below).
+        The log file name is defined in the <code>log4j2.xml</code> file (or using the <span class="code">-j</span> option, see below).
         It defaults to <code>jmeter.log</code>, and will be found in the directory from which JMeter was launched.
         </p>
         <p>
@@ -494,14 +582,14 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
         </p>
         <p>As well as recording errors, the <code>jmeter.log</code> file records some information about the test run. For example:</p>
 <source>
-10/17/2003 12:19:20 PM INFO  - jmeter.JMeter: Version 1.9.20031002 
-10/17/2003 12:19:45 PM INFO  - jmeter.gui.action.Load: Loading file: c:\mytestfiles\BSH.jmx 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Starting 1 threads for group BSH. Ramp up = 1. 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Continue on error 
-10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 started 
-10/17/2003 12:19:52 PM INFO  - jmeter.threads.JMeterThread: Thread BSH1-1 is done 
-10/17/2003 12:19:52 PM INFO  - jmeter.engine.StandardJMeterEngine: Test has ended
+2017-03-01 12:19:20,314 INFO o.a.j.JMeter: Version 3.2.20170301
+2017-03-01 12:19:45,314 INFO o.a.j.g.a.Load: Loading file: c:\mytestfiles\BSH.jmx 
+2017-03-01 12:19:52,328 INFO o.a.j.e.StandardJMeterEngine: Running the test! 
+2017-03-01 12:19:52,384 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group BSH. Ramp up = 1. 
+2017-03-01 12:19:52,485 INFO o.a.j.e.StandardJMeterEngine: Continue on error 
+2017-03-01 12:19:52,589 INFO o.a.j.t.JMeterThread: Thread BSH1-1 started 
+2017-03-01 12:19:52,590 INFO o.a.j.t.JMeterThread: Thread BSH1-1 is done 
+2017-03-01 12:19:52,691 INFO o.a.j.e.StandardJMeterEngine: Test has ended
 </source>
 <p>The log file can be helpful in determining the cause of an error,
     as JMeter does not interrupt a test to display an error dialogue.</p>
@@ -510,6 +598,8 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
 <p>Invoking JMeter as "<code>jmeter -?</code>" will print a list of all the command-line options. 
 These are shown below.</p>
 <source>
+    --?
+        print command line options and exit
     -h, --help
         print usage information and exit
     -v, --version
@@ -522,6 +612,8 @@ These are shown below.</p>
         the jmeter test(.jmx) file to run
     -l, --logfile &lt;argument&gt;
         the file to log samples to
+    -i, --jmeterlogconf &lt;argument&gt;
+        jmeter logging configuration file (log4j2.xml)
     -j, --jmeterlogfile &lt;argument&gt;
         jmeter run log file (jmeter.log)
     -n, --nongui
@@ -548,8 +640,10 @@ These are shown below.</p>
         Define additional system properties
     -S, --systemPropertyFile &lt;argument&gt;
         additional system property file(s)
+    -f, --forceDeleteResultFile
+        force delete existing results files before start the test
     -L, --loglevel &lt;argument&gt;=&lt;value&gt;
-        [category=]level e.g. jorphan=INFO or jmeter.util=DEBUG
+        [category=]level e.g. jorphan=INFO, jmeter.util=DEBUG or com.example.foo=WARN
     -r, --runremote
         Start remote servers (as defined in remote_hosts)
     -R, --remotestart &lt;argument&gt;
@@ -559,10 +653,10 @@ These are shown below.</p>
     -X, --remoteexit
         Exit the remote servers at end of test (non-GUI)
     -g, --reportonly &lt;argument&gt;
-        generate report dashboard only
+        generate report dashboard only, from a test results file
     -e, --reportatendofloadtests
         generate report dashboard after load test
-    -o, --reportoutputfolder
+    -o, --reportoutputfolder &lt;argument&gt;
         output folder for report dashboard
 </source>
 <p>
