@@ -199,7 +199,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.22
+slf4j-api-1.7.24
 ----------------
 http://www.slf4j.org/
 - jodd-core
