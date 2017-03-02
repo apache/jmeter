@@ -58,11 +58,14 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
-<ch_section>IMPORTANT CHANGE</ch_section>
+<ch_section>IMPORTANT CHANGES</ch_section>
 <p>
-JMeter now requires Java 8. Ensure you use most up to date version.
+JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
-
+<p>
+JMeter logging has been migrated to SLF4J and Log4j2.
+This affects configuration and 3rd party plugins.
+</p>
 <ch_title>Core improvements</ch_title>
 <ul>
 <li>Fill in improvements</li>
@@ -84,6 +87,7 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li>JMeter requires now at least a JAVA 8 version to run.</li>
     <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
     <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">log4j2 configuration</a> in file <code>log4j2.xml</code>
+    See <code>Logging changes</code> section below for further details.
     </li>
     <li>The following jars have been removed after migration from Logkit to SLF4J (see <bugzilla>60589</bugzilla>):
         <ul>
@@ -125,6 +129,31 @@ JMeter now requires Java 8. Ensure you use most up to date version.
     <li><code>org.apache.jmeter.protocol.http.util.Base64Encode</code> has been deprecated, you can use <code>java.util.Base64</code> as a replacement</li>
 </ul>
 
+<h3>Logging changes</h3>
+<p>
+    JMeter logging has been migrated to SLF4J and Log4j2.
+    This affects logging configuration and 3rd party plugins (if they use JMeter logging).
+    The following sections describe what changes need to be made.
+</p>
+
+<h4>Setting the logging level and log file</h4>
+<p>
+    The default logging level can be changed on the command-line using the <code>-L</code> parameter.
+    Likewise the <code>-l</code> parameter can be used to change the name of the log file.
+    However the <code>log_level</code> properties no longer work.
+</p>
+<p>
+    The default logging levels and file name are defined in the <code>log4j2.xml</code> configuration file
+    in the launch directory (usually <code>JMETER_HOME/bin</code>)
+</p>
+<p>
+    <note>TBA how to change the level programmatically.</note>
+</p>
+
+<h4>Changes to 3rd party plugin logging</h4>
+<p>
+    <note>TBA</note>
+</p>
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
