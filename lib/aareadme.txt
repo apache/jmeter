@@ -30,6 +30,12 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
+caffeine 2.4.0
+-----------------
+https://github.com/ben-manes/caffeine/
+- Used by CssParser
+- Used by JMS Publisher Sampler
+
 commons-codec-1.10
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
