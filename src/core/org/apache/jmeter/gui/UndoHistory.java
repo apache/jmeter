@@ -347,10 +347,9 @@ public class UndoHistory implements TreeModelListener, Serializable {
     }
     
     /**
-     * 
      * @return true if history is enabled
      */
-    boolean isEnabled() {
+    public static boolean isEnabled() {
         return HISTORY_SIZE > 0;
     }
     
