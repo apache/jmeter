@@ -43,7 +43,6 @@ public class Clear extends AbstractAction {
     static {
         commands.add(ActionNames.CLEAR);
         commands.add(ActionNames.CLEAR_ALL);
-        commands.add(ActionNames.RESET_GUI);
     }
 
     public Clear() {
@@ -63,9 +62,6 @@ public class Clear extends AbstractAction {
             if (guiComp instanceof Clearable){
                 ((Clearable) guiComp).clearData();
             }
-        } else if (actionCommand.equals(ActionNames.RESET_GUI)) {
-            JMeterGUIComponent guiComp = guiPackage.getCurrentGui();
-            guiComp.clearGui();
         } else {
             guiPackage.getMainFrame().clearData();
             for (JMeterTreeNode node : guiPackage.getTreeModel().getNodesOfType(Clearable.class)) {
