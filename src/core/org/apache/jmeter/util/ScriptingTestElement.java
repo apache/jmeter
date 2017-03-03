@@ -19,6 +19,9 @@
 package org.apache.jmeter.util;
 
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jorphan.util.JMeterStopTestException;
+import org.apache.jorphan.util.JMeterStopTestNowException;
+import org.apache.jorphan.util.JMeterStopThreadException;
 
 /**
  * Common parent class for the {@link BSFTestElement} and {@link JSR223TestElement} scripting test elements.
@@ -83,5 +86,13 @@ public abstract class ScriptingTestElement extends AbstractTestElement {
         filename = s;
     }
 
-
+    /**
+     * @param rootCause Throwable
+     * @return true if Throwable is an Exception that impacts test state
+     */
+    protected boolean isStopCondition(Throwable rootCause) {
+        return rootCause instanceof JMeterStopTestNowException 
+                || rootCause instanceof JMeterStopTestException
+                || rootCause instanceof JMeterStopThreadException;
+    }
 }
