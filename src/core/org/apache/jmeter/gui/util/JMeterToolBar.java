@@ -32,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
+import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.util.JMeterUtils;
@@ -98,7 +99,14 @@ public class JMeterToolBar extends JToolBar implements LocaleChangeListener {
                     toolBar.addSeparator();
                 } else {
                     try {
-                        toolBar.add(makeButtonItemRes(iconToolbarBean));
+                        if(ActionNames.UNDO.equalsIgnoreCase(iconToolbarBean.getActionName())
+                                        || ActionNames.REDO.equalsIgnoreCase(iconToolbarBean.getActionName())) {
+                            if(UndoHistory.isEnabled()) {
+                                toolBar.add(makeButtonItemRes(iconToolbarBean));                                
+                            }
+                        } else {
+                            toolBar.add(makeButtonItemRes(iconToolbarBean));
+                        }
                     } catch (Exception e) {
                         if (log.isWarnEnabled()) {
                             log.warn("Exception while adding button item to toolbar. {}", e.getMessage());
