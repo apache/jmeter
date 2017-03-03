@@ -47,7 +47,7 @@ public class TimerService {
     
     /**
      * Adjust delay so that initialDelay does not exceed end of test
-     * @param delay initial delay in millis
+     * @param initialDelay initial delay in millis
      * @return initialDelay or adjusted delay
      */
     public long adjustDelay(final long initialDelay) {
