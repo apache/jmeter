@@ -241,6 +241,7 @@ This affects configuration and 3rd party plugins.
     <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
+    <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
