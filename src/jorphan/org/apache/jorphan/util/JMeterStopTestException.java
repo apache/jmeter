@@ -21,8 +21,7 @@ package org.apache.jorphan.util;
 /**
  * This Exception is for use by functions etc to signal a Stop Test condition
  * where there is no access to the normal stop method
- *
- * @version $Revision$
+ * Stop test now means shutdown test waiting for current running samplers to end
  */
 public class JMeterStopTestException extends RuntimeException {
     private static final long serialVersionUID = 240L;
