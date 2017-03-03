@@ -198,7 +198,7 @@ public class JMeter implements JMeterPlugin {
                     "additional JMeter property file(s)");
     private static final CLOptionDescriptor D_TESTFILE_OPT =
             new CLOptionDescriptor("testfile", CLOptionDescriptor.ARGUMENT_REQUIRED, TESTFILE_OPT,
-                    "the jmeter test(.jmx) file to run");
+                    "the jmeter test(.jmx) file to run. \"-t LAST\" will load last used file");
     private static final CLOptionDescriptor D_LOGFILE_OPT =
             new CLOptionDescriptor("logfile", CLOptionDescriptor.ARGUMENT_REQUIRED, LOGFILE_OPT,
                     "the file to log samples to");
