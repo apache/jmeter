@@ -20,6 +20,7 @@ package org.apache.jmeter.functions;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -29,6 +30,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,7 +74,8 @@ public class TestFileToString extends JMeterTestCase {
     
     @Test
     public void testRead() throws Exception {
-        params.add(new CompoundVariable("bin/jmeter.properties"));
+        File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
+        params.add(new CompoundVariable(file.getAbsolutePath()));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
         Assert.assertTrue(returnValue.indexOf("language=")>0);
@@ -80,7 +83,8 @@ public class TestFileToString extends JMeterTestCase {
     
     @Test
     public void testReadWithEncoding() throws Exception {
-        params.add(new CompoundVariable("bin/jmeter.properties"));
+        File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
+        params.add(new CompoundVariable(file.getAbsolutePath()));
         params.add(new CompoundVariable("UTF-8"));
         function.setParameters(params);
         String returnValue = function.execute(result, null);
@@ -89,7 +93,8 @@ public class TestFileToString extends JMeterTestCase {
     
     @Test
     public void testReadWithEncodingAndVar() throws Exception {
-        params.add(new CompoundVariable("bin/jmeter.properties"));
+        File file = new File(JMeterUtils.getJMeterBinDir(), "jmeter.properties");
+        params.add(new CompoundVariable(file.getAbsolutePath()));
         params.add(new CompoundVariable("UTF-8"));
         params.add(new CompoundVariable("MY_FILE_AS_TEXT"));
         function.setParameters(params);
