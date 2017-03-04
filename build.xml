@@ -2415,7 +2415,7 @@ run JMeter unless all the JMeter jars are added.
   <target name="batchtestserver" description="Run the batch test using client-server mode">
     <property name="batchtestserver.out" location="${basedir}/bin"/>
     <property name="batchtestserver.log" value="BatchTestServer.log"/>
-  	<!-- rmi_force_localhost is used by the Travis build -->
+    <!-- rmi_force_localhost is used by the Travis build -->
     <condition property="rmi_hostname_option" value="-Ddummy=true">
       <not><isset property="rmi_force_localhost"/></not>
     </condition>
@@ -2494,7 +2494,7 @@ run JMeter unless all the JMeter jars are added.
     <property name="batchtest.inp" location="${basedir}/bin/testfiles"/>
     <property name="batchtest.out" location="${basedir}/bin"/>
     <property name="batchtest.name" value="BatchTestLocal"/>
-  	<property name="batchtest.jmx" value="${batchtest.name}.jmx"/>
+    <property name="batchtest.jmx" value="${batchtest.name}.jmx"/>
     <!--
          Allow variable to be set on the command line
          Cannot omit value because that causes a warning message
@@ -2622,11 +2622,11 @@ run JMeter unless all the JMeter jars are added.
 
     <local         name="BatchTestLocal.len"/>
     <!-- We define "BatchTestLocal.len" property only if log file is empty 
-    	or  batchtest.ignoreErrorLogs is false
+      or  batchtest.ignoreErrorLogs is false
     -->
     <condition property="BatchTestLocal.len">
         <or>
-	      <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
+          <length file="${batchtest.out}/${batchtest.name}.log" when="equal" length="0" />
           <equals arg1="${batchtest.ignoreErrorLogs}" arg2="true" casesensitive="true"/>
         </or>
     </condition>
@@ -2736,30 +2736,30 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
     </antcall>
 
-	<antcall target="batchtest">
+    <antcall target="batchtest">
       <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
       <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
-	  <param name="batchtest.variable" value="jmeter.httpsampler"/>
-	  <param name="batchtest.value" value="Java"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="Java"/>
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestKeepAlive"/>
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
     </antcall>
-  	
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestHeaderManager"/>
       <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
     </antcall>
-      
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestHeaderManager"/>
       <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
     </antcall>
-  	
+
     <antcall target="batchtest">
       <param name="batchtest.name" value="TEST_HTTP_HttpClient4"/>
       <param name="batchtest.jmx" value="TEST_HTTP.jmx"/>
@@ -3500,8 +3500,8 @@ run JMeter unless all the JMeter jars are added.
            value="squid:S1192" />
     <property name="sonar.issue.ignore.multicriteria.c5.resourceKey"
            value="**/*.java" />
-  	<property name="sonar.coverage.exclusions"
-  			value="**/BSF*.java,**/org/apache/log/**.java,**/org/apache/jmeter/examples/**.java,**/org/apache/jorphan/logging/**.java" />
+    <property name="sonar.coverage.exclusions"
+           value="**/BSF*.java,**/org/apache/log/**.java,**/org/apache/jmeter/examples/**.java,**/org/apache/jorphan/logging/**.java" />
     <property name="core.sonar.projectName" value="core" />
     <property name="core.sonar.sources" value="${src.core}" />
     <property name="core.sonar.projectBaseDir" value="./" />
