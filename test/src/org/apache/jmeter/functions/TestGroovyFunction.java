@@ -29,6 +29,7 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,5 +98,14 @@ public class TestGroovyFunction extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("/query.cgi?s1=1&s2=2&s3=3", ret);
         assertEquals(ret,vars.getObject("URL"));
+    }
+    
+    @Test
+    public void testFileLoading() throws Exception {
+        JMeterUtils.setProperty("groovy.utilities", "bin/utility.groovy");
+        params.add(new CompoundVariable("factorial(10)"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("3628800", ret);
     }
 }
