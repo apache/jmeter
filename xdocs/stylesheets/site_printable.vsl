@@ -133,7 +133,7 @@ $value.content
 #end
 
 #macro ( code $value)
-<tt class="code">#runloop($value)</tt>
+<tt class="code">#runloop($value)</tt>##
 #end
 
 #macro ( source $value)
