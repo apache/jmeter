@@ -338,7 +338,6 @@ This affects configuration and 3rd party plugins.
     <li><bug>60621</bug>The "<code>report-template</code>" folder is missing from <code>ApacheJMeter_config-3.1.jar</code> in maven central</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
     <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
-    <li><bug>60818</bug>Synchronize file access while writing CSV data.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
