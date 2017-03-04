@@ -350,6 +350,52 @@ public class TestRegexFunction extends JMeterTestCase {
             String match = variable.execute(result, null);
             assertEquals("_pinposition2", match);
         }
+        
+        @Test
+        public void testExtractionIndexTooHigh() throws Exception {
+            params = new LinkedList<>();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("_$1$"));
+            params.add(new CompoundVariable("10"));
+            params.add(new CompoundVariable(""));
+            params.add(new CompoundVariable("No Value Found"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("No Value Found", match);
+        }
+        
+        @Test
+        public void testRandomExtraction() throws Exception {
+            params = new LinkedList<>();
+            params.add(new CompoundVariable("<company-xmlext-query-ret>(.+?)</company-xmlext-query-ret>"));
+            params.add(new CompoundVariable("$1$"));
+            params.add(new CompoundVariable("RAND"));
+            params.add(new CompoundVariable(""));
+            params.add(new CompoundVariable("No Value Found"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("<row>" + "<value field=\"RetCode\">" + "LIS_OK</value><value"
+                    + " field=\"RetCodeExtension\"></value>" + "<value field=\"alias\"></value><value"
+                    + " field=\"positioncount\"></value>" + "<value field=\"invalidpincount\">0</value><value"
+                    + " field=\"pinposition1\">1</value><value" + " field=\"pinpositionvalue1\"></value><value"
+                    + " field=\"pinposition2\">5</value><value" + " field=\"pinpositionvalue2\"></value><value"
+                    + " field=\"pinposition3\">6</value><value" + " field=\"pinpositionvalue3\"></value>"
+                    + "</row>", match);
+        }
+        
+        
+        @Test(expected=NumberFormatException.class)
+        public void testExtractionIndexNotNumeric() throws Exception {
+            params = new LinkedList<>();
+            params.add(new CompoundVariable("<value field=\"(pinposition\\d+)\">(\\d+)</value>"));
+            params.add(new CompoundVariable("_$1$"));
+            params.add(new CompoundVariable("0.333a"));
+            params.add(new CompoundVariable(""));
+            params.add(new CompoundVariable("No Value Found"));
+            variable.setParameters(params);
+            String match = variable.execute(result, null);
+            assertEquals("No Value Found", match);
+        }
 
         @Test
         public void testVariableExtraction4() throws Exception {
