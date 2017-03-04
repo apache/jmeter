@@ -99,10 +99,14 @@ public class FileToString extends AbstractFunction {
         String myValue = ERR_IND;
 
         try {
-            myValue = FileUtils.readFileToString(new File(fileName), encoding);
+            File file = new File(fileName);
+            if(file.exists() && file.canRead()) {
+                myValue = FileUtils.readFileToString(new File(fileName), encoding);
+            } else {
+                log.warn("Could not read open: "+fileName+" ");
+            }
         } catch (IOException e) {
             log.warn("Could not read file: "+fileName+" "+e.getMessage(), e);
-            throw new JMeterStopThreadException("End of sequence", e);
         }
 
         if (myName.length() > 0) {
