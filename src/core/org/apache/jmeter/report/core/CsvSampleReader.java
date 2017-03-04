@@ -59,6 +59,8 @@ public class CsvSampleReader implements Closeable{
 
     private File file;
 
+    private InputStream fis;
+    private Reader isr;
     private BufferedReader reader;
 
     private char separator;
@@ -105,11 +107,9 @@ public class CsvSampleReader implements Closeable{
                     + " does not exist or is not readable");
         }
         this.file = inputFile;
-        InputStream fis = null;
-        Reader isr = null;
         try {
-            fis = new FileInputStream(file);
-            isr = new InputStreamReader(fis, CHARSET);
+            this.fis = new FileInputStream(file); 
+            this.isr = new InputStreamReader(fis, CHARSET);
             this.reader = new BufferedReader(isr, BUF_SIZE);
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             JOrphanUtils.closeQuietly(isr);
@@ -225,6 +225,8 @@ public class CsvSampleReader implements Closeable{
      */
     @Override
     public void close() {
+        JOrphanUtils.closeQuietly(isr);
+        JOrphanUtils.closeQuietly(fis);
         JOrphanUtils.closeQuietly(reader);
     }
 }
