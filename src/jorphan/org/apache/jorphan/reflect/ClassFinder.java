@@ -356,16 +356,17 @@ public final class ClassFinder {
         if (path.equals(".")) { // $NON-NLS-1$
             return System.getProperty("user.dir"); // $NON-NLS-1$
         }
+        String resultPath = path;
         if (path.length() > 3 && path.matches("[a-z]:\\\\.*")) { // lower-case drive letter?
-            path = path.substring(0, 1).toUpperCase(Locale.ROOT) + path.substring(1);
+            resultPath = path.substring(0, 1).toUpperCase(Locale.ROOT) + path.substring(1);
         }
-        path = path.trim().replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
-        path = JOrphanUtils.substitute(path, "//", "/"); // $NON-NLS-1$// $NON-NLS-2$
+        resultPath = resultPath.trim().replace('\\', '/'); // $NON-NLS-1$ // $NON-NLS-2$
+        resultPath = JOrphanUtils.substitute(resultPath, "//", "/"); // $NON-NLS-1$// $NON-NLS-2$
 
-        while (path.endsWith("/")) { // $NON-NLS-1$
-            path = path.substring(0, path.length() - 1);
+        while (resultPath.endsWith("/")) { // $NON-NLS-1$
+            resultPath = resultPath.substring(0, resultPath.length() - 1);
         }
-        return path;
+        return resultPath;
     }
 
     /**
