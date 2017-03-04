@@ -323,7 +323,7 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #end
 
 #macro (complink $complink)
-<a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>
+<a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>##
 #end
 
 #macro (outputTag $tag)
