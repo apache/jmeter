@@ -84,6 +84,16 @@ public class TestEscapeOroRegexpChars extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
     }
+    
+    @Test
+    public void testEscapeWithVars() throws Exception {
+        params.add(new CompoundVariable("toto(.+?)titi"));
+        params.add(new CompoundVariable("exportedVar"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("toto\\(\\.\\+\\?\\)titi", ret);
+        assertEquals("toto\\(\\.\\+\\?\\)titi", vars.get("exportedVar"));
+    }
 
     @Test
     public void testEscape2() throws Exception {
