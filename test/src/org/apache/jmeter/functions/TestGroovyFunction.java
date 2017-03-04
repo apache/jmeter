@@ -30,6 +30,7 @@ import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,6 +45,10 @@ public class TestGroovyFunction extends JMeterTestCase {
 
     private JMeterContext jmctx;
 
+    @After
+    public void tearDown() {
+        JMeterUtils.getJMeterProperties().remove("groovy.utilities");
+    }
     @Before
     public void setUp() {
         function = new Groovy();
@@ -103,6 +108,15 @@ public class TestGroovyFunction extends JMeterTestCase {
     @Test
     public void testFileLoading() throws Exception {
         JMeterUtils.setProperty("groovy.utilities", "bin/utility.groovy");
+        params.add(new CompoundVariable("factorial(10)"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("3628800", ret);
+    }
+    
+    @Test(expected=InvalidVariableException.class)
+    public void testInvalidFileLoading() throws Exception {
+        JMeterUtils.setProperty("groovy.utilities", "bin/missing.groovy");
         params.add(new CompoundVariable("factorial(10)"));
         function.setParameters(params);
         String ret = function.execute(result, null);
