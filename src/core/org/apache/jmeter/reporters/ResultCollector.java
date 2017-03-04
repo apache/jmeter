@@ -544,7 +544,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
                         SaveService.saveSampleResult(event, out);
                     } else { // !saveAsXml
                         String savee = CSVSaveService.resultToDelimitedString(event);
-                        out.println(savee);
+                        synchronized (LOCK) {
+                            out.println(savee);
+                        }
                     }
                 } catch (Exception err) {
                     log.error("Error trying to record a sample", err); // should throw exception back to caller
