@@ -42,7 +42,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.jmeter.reporters.ResultCollectorHelper;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.NameUpdater;
 import org.apache.jorphan.collections.HashTree;
@@ -358,17 +357,6 @@ public class SaveService {
         } catch(Exception e) {
             return "Exception occured creating debug from event, message:"+e.getMessage();
         }
-    }
-
-    /**
-     * @param elem test element
-     * @param writer output stream which must be created using {@link #getFileEncoding(String)}
-     * @throws IOException when writing data to output fails
-     */
-    // Used by ResultCollector#recordStats()
-    public synchronized static void saveTestElement(TestElement elem, Writer writer) throws IOException {
-        JMXSAVER.toXML(elem, writer); // TODO should this be JTLSAVER? Only seems to be called by MonitorHealthVisualzer
-        writer.write('\n');
     }
 
     // Routines for TestSaveService
