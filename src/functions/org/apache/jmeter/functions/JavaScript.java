@@ -57,7 +57,7 @@ public class JavaScript extends AbstractFunction {
         public static final ScriptEngineManager INSTANCE = new ScriptEngineManager();
     }
  
-    private static final boolean USE_RHINO_ENGINE = 
+    private final boolean useRhinoEngine = 
             JMeterUtils.getPropDefault(USE_RHINO_ENGINE_PROPERTY, false) || 
             (getInstance().getEngineByName(JavaScript.NASHORN_ENGINE_NAME) == null);
 
@@ -96,7 +96,7 @@ public class JavaScript extends AbstractFunction {
         String varName = values.length < 2 ? null : ((CompoundVariable) values[1]).execute().trim();
         String resultStr = "";
 
-        if(USE_RHINO_ENGINE) {
+        if(useRhinoEngine) {
             resultStr = executeWithRhino(previousResult, currentSampler, jmctx,
                 vars, script, varName);
         } else {
