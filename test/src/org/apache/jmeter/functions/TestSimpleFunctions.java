@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
@@ -70,6 +71,24 @@ public class TestSimpleFunctions extends JMeterTestCase {
         AbstractFunction function = new EscapeHtml();
         checkInvalidParameterCounts(function, 1, 1);
     }
+
+    @Test
+    public void testUnEscapeHtmlParameterCount() throws Exception {
+        AbstractFunction function = new UnEscapeHtml();
+        checkInvalidParameterCounts(function, 1, 1);
+    }
+    
+    @Test
+    public void testUnEscapeParameterCount() throws Exception {
+        AbstractFunction function = new UnEscape();
+        checkInvalidParameterCounts(function, 1, 1);
+    }
+    
+    @Test
+    public void testTestPlanParameterCount() throws Exception {
+        AbstractFunction function = new TestPlanName();
+        checkInvalidParameterCounts(function, 0, 0);
+    }
     
     @Test
     public void testThreadNumber() throws Exception {
@@ -95,5 +114,27 @@ public class TestSimpleFunctions extends JMeterTestCase {
         function.setParameters(params);
         String ret = function.execute(result, null);
         assertEquals("&quot;bread&quot; &amp; &quot;butter&quot;", ret);
+    }
+    
+    @Test
+    public void testUnEscapeHtml() throws Exception {
+        AbstractFunction function = new UnEscapeHtml();
+        params.add(new CompoundVariable("&quot;bread&quot; &amp; &quot;butter&quot;"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("\"bread\" & \"butter\"", ret);
+    }
+    
+    @Test
+    public void testTestPlanName() throws Exception {
+        AbstractFunction function = new TestPlanName();
+        try {
+            FileServer.getFileServer().setScriptName("Test");
+            function.setParameters(params);
+            String ret = function.execute(result, null);
+            assertEquals("Test", ret);
+        } finally {
+            FileServer.getFileServer().setScriptName(null);
+        }
     }
 }
