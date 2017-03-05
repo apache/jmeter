@@ -1373,10 +1373,6 @@ JMETER-SERVER</source>
     for the Console Logger panel.<br/>
     Defaults to: <code>true</code>
 </property>
-<property name="view.results.tree.update_period">
-    Period after which the results tree should be refreshed<br/>
-    Defaults to: <code>500</code> millis
-</property>
 <property name="view.results.tree.max_results">
     Maximum number of main samples, that should be stored and displayed.<br/>
     A value of <code>0</code> will store all results. This might consume a lot of memory.<br/>
