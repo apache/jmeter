@@ -1188,10 +1188,6 @@ JMETER-SERVER</source>
 </section>
 <section name="&sect-num;.35 Miscellaneous configuration" anchor="miscellaneous">
 <properties>
-<property name="monitor.buffer.size">
-    To set the Monitor Health Visualiser buffer size, enter the desired value.<br/>
-    Defaults to: <code>800</code>
-</property>
 <property name="mirror.server.port">
     If defined and greater then zero, then start the mirror server on the port.<br/>
     Defaults to: <code>0</code>
