@@ -27,7 +27,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.X509KeyManager;
 
 /**
- * X509KeyManager wrapper class which returns a spacific server alias.
+ * X509KeyManager wrapper class which returns a specific server alias.
  */
 class ServerAliasKeyManager implements X509KeyManager {
 
