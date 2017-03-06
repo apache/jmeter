@@ -64,7 +64,8 @@ configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecor
     </dl>
     <figure image="http-config/http-request-defaults.png"></figure>
   </li>
-  <li>Return to <code>HTTP(S) Test Script Recorder</code>, and click the <code>Start</code> button at the bottom.</li>
+  <li>Return to <code>HTTP(S) Test Script Recorder</code>, and click the <code>Start</code> button at the top.</li>
+  <figure image="Proxy_Run.png"></figure>
 </ol>
 
 <p>
@@ -161,12 +162,36 @@ Right click on the <code>Thread Group</code>
   <figure image="Validate-Test-Plan.png"></figure>
 </p>
 <p>
-Check with <code>View Results Tree</code> element if all is ok
+Check with <code>View Results Tree</code> element if all is ok.
 </p>
-
 </subsection>
 
-<subsection name="&sect-num;.6 Start the test" anchor="test-start">
+<subsection name="&sect-num;.6 Variabilize and Correlate the script" anchor="correlate-start">
+<p>
+In some scripts, we will need to:
+<ul>
+  <li>Variabilize some input (login, password, search words...)</li>
+  <li>Correlate some data (session variable...) between two requests</li>
+</ul>  
+</p>
+<p>
+To variabilize, we can use:
+<ul>
+	<li><code>CSV Data Set Config</code> to get input data from csv file</li>
+	<li>JMeter functions like <code>__counter</code>, <code>__time</code>...</li>
+	<li>etc.</li>
+</ul>
+</p>
+<p>
+To correlate, we can get data from a request with <code>Post Processors</code> like <code>JSON Extractor</code>, <code>Regular Expression Extractor</code>... and inject it in another request.
+</p>
+<p>
+To find data to correlate, the easiest way to do it is to use the Search function in <code>View Results Tree</code>.
+<figure image="Search-Correlation.png"></figure>
+</p>
+</subsection>
+
+<subsection name="&sect-num;.7 Start the test" anchor="test-start">
 
 <p>
 At this point, we are ready to run our test plan and see what happens. When you're
@@ -179,7 +204,9 @@ ready to run the test, there are two ways:
 
 
 <p>
-Solution 1, with the gui, either use the menu and select
+Solution 1, with the gui, but just during debug phase, use Non GUI for your load test.
+</p>
+<p>
   <menuchoice>
     <guimenuitem>Run</guimenuitem>
     <guimenuitem>Start</guimenuitem>
