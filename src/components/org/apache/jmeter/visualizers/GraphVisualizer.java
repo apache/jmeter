@@ -126,6 +126,7 @@ public class GraphVisualizer extends AbstractVisualizer implements ImageVisualiz
      * @param s Sample
      * @deprecated use {@link GraphVisualizer#add(SampleResult)} instead
      */
+    @Deprecated
     public void updateGui(Sample s) {
         JMeterUtils.runSafe(false, () -> updateGuiInAWTThread(s));
     }
