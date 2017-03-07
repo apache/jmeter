@@ -49,6 +49,7 @@ public class TestGroovyFunction extends JMeterTestCase {
     public void tearDown() {
         JMeterUtils.getJMeterProperties().remove("groovy.utilities");
     }
+    
     @Before
     public void setUp() {
         function = new Groovy();
