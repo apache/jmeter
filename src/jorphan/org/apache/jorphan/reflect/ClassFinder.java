@@ -19,7 +19,6 @@
 package org.apache.jorphan.reflect;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -149,12 +148,7 @@ public final class ClassFinder {
             if (!path.endsWith(DOT_JAR)) {
                 File dir = new File(path);
                 if (dir.exists() && dir.isDirectory()) {
-                    String[] jars = dir.list(new FilenameFilter() {
-                        @Override
-                        public boolean accept(File f, String name) {
-                            return name.endsWith(DOT_JAR);
-                        }
-                    });
+                    String[] jars = dir.list((f, name) -> name.endsWith(DOT_JAR));
                     if(jars != null) {
                         Collections.addAll(fullList, jars);
                     }

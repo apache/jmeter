@@ -23,7 +23,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -115,12 +114,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
-        Arrays.sort(functionNames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareToIgnoreCase(o2);
-            }
-        });
+        Arrays.sort(functionNames, (o1, o2) -> o1.compareToIgnoreCase(o2));
         functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
         functionList.addChangeListener(this);
     }
