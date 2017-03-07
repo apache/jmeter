@@ -54,11 +54,9 @@ public class SplashScreen extends JWindow {
      * Show screen
      */
     public void showScreen() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                setVisible(true);
-                setAlwaysOnTop(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            setVisible(true);
+            setAlwaysOnTop(true);
         });
     }
 
@@ -66,11 +64,9 @@ public class SplashScreen extends JWindow {
      * Close splash
      */
     public void close() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                setVisible(false);
-                dispose();
-            }
+        SwingUtilities.invokeLater(() -> {
+            setVisible(false);
+            dispose();
         });
     }
 
@@ -78,10 +74,6 @@ public class SplashScreen extends JWindow {
      * @param progress Loading progress
      */
     public void setProgress(final int progress) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                progressBar.setValue(progress);
-            }
-        });
+        SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
     }
 }

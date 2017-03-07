@@ -166,12 +166,7 @@ public class JDateField extends JTextField {
             pos = newDate.length();
         }
         final int newPosition = pos;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setCaretPosition(newPosition);// Restore position
-            }
-        });
+        SwingUtilities.invokeLater(() -> setCaretPosition(newPosition));
     }
 
     class KeyFocus extends KeyAdapter {
