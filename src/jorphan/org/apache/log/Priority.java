@@ -125,6 +125,7 @@ public final class Priority
      *
      * @return the string describing priority
      */
+    @Override
     public String toString()
     {
         return "Priority[" + getName() + "/" + getValue() + "]";
