@@ -271,18 +271,17 @@ public class ObjectTableModel extends DefaultTableModel {
         boolean status = true;
         for(int i=0;i<getColumnCount();i++){
             Functor setMethod = writeFunctors.get(i);
-            if (setMethod != null) {
-                if (!setMethod.checkMethod(value,getColumnClass(i))){
+            if (setMethod != null
+                 && !setMethod.checkMethod(value,getColumnClass(i))) {
                     status=false;
                     log.warn(caller.getName()+" is attempting to use nonexistent "+setMethod.toString());
-                }
             }
+            
             Functor getMethod = readFunctors.get(i);
-            if (getMethod != null) {
-                if (!getMethod.checkMethod(value)){
+            if (getMethod != null 
+                 && !getMethod.checkMethod(value)) {
                     status=false;
                     log.warn(caller.getName()+" is attempting to use nonexistent "+getMethod.toString());
-                }
             }
 
         }
