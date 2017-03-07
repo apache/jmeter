@@ -113,12 +113,7 @@ public class SavePropertyDialog extends JDialog implements ActionListener {
         getContentPane().add(checkPanel, BorderLayout.NORTH);
         JButton exit = new JButton(JMeterUtils.getResString("done")); // $NON-NLS-1$
         this.getContentPane().add(exit, BorderLayout.SOUTH);
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        exit.addActionListener(e -> dispose());
     }
     
     @Override
