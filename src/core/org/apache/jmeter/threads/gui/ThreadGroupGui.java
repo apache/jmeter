@@ -280,9 +280,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         // LOOP COUNT
         threadPropsPanel.add(createControllerPanel());
 
-        // mainPanel.add(threadPropsPanel, BorderLayout.NORTH);
-        // add(mainPanel, BorderLayout.CENTER);
-
         if (showDelayedStart) {
             delayedStart = new JCheckBox(JMeterUtils.getResString("delayed_start")); // $NON-NLS-1$
             threadPropsPanel.add(delayedStart);
