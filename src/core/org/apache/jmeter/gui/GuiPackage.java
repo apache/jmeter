@@ -740,12 +740,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (guiPack == null) {
             return ;
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JOptionPane.showMessageDialog(null,message,title,type);
-            }
-        });
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
 
     }
 
