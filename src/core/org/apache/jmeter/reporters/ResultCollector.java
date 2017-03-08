@@ -441,7 +441,9 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         if (filename == null || filename.length() == 0) {
             return null;
         }
+        log.debug("Getting file: {} in thread {}", filename, Thread.currentThread().getName());
         filename = FileServer.resolveBaseRelativeName(filename);
+        filename = new File(filename).getCanonicalPath(); // try to ensure uniqueness (Bug 60822)
         FileEntry fe = files.get(filename);
         PrintWriter writer = null;
         boolean trimmed = true;
@@ -468,12 +470,13 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
                     trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
-            log.debug("Opened file: {}", filename);
+            log.debug("Opened file: {} in thread {}", filename, Thread.currentThread().getName());
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
             writer = fe.pw;
         }
         if (!trimmed) {
+            log.debug("Writing header to file: {}", filename);
             writeFileStart(writer, saveConfig);
         }
         return writer;
