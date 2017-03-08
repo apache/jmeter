@@ -323,7 +323,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             instanceCount++;
             try {
-                initializeFileOutput();
+                String filename = getFilename();
+                if (filename != null) {
+                    if (out == null) {
+                        try {
+                            out = getFileWriter(filename, getSaveConfig());
+                        } catch (FileNotFoundException e) {
+                            out = null;
+                        }
+                    }
+                }
                 if (getVisualizer() != null) {
                     this.isStats = getVisualizer().isStats();
                 }
@@ -573,20 +582,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private boolean isResultMarked(SampleResult res) {
         String filename = getFilename();
         return res.markFile(filename);
-    }
-
-    private void initializeFileOutput() throws IOException {
-
-        String filename = getFilename();
-        if (filename != null) {
-            if (out == null) {
-                try {
-                    out = getFileWriter(filename, getSaveConfig());
-                } catch (FileNotFoundException e) {
-                    out = null;
-                }
-            }
-        }
     }
 
     /**
