@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.threads;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -84,7 +86,7 @@ public class ThreadGroup extends AbstractThreadGroup {
     // List of active threads
     private final Map<JMeterThread, Thread> allThreads = new ConcurrentHashMap<>();
     
-    private final transient Object addThreadLock = new Object();
+    private transient Object addThreadLock = new Object();
 
     /**
      * Is test (still) running?
@@ -323,6 +325,15 @@ public class ThreadGroup extends AbstractThreadGroup {
         newThread.start();
         return jmThread;
     }
+    
+    /*
+     * Fix NPE for addThreadLock transient object in remote mode (BZ60829)
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        addThreadLock = new Object();
+    }
+    
     /**
      * Register Thread when it starts
      * @param jMeterThread {@link JMeterThread}
