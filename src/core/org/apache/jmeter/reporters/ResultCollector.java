@@ -323,14 +323,12 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             instanceCount++;
             try {
-                String filename = getFilename();
-                if (filename != null) {
-                    if (out == null) {
-                        try {
-                            out = getFileWriter(filename, getSaveConfig());
-                        } catch (FileNotFoundException e) {
-                            out = null;
-                        }
+                if (out == null) {
+                    try {
+                        // Note: getFileWriter ignores a null filename
+                        out = getFileWriter(getFilename(), getSaveConfig());
+                    } catch (FileNotFoundException e) {
+                        out = null;
                     }
                 }
                 if (getVisualizer() != null) {
