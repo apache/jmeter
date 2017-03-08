@@ -167,7 +167,7 @@ public class ClientJMeterEngine implements JMeterEngine {
         for(Thread t : Thread.getAllStackTraces().keySet()){
             String name = t.getName();
             if (name.matches(reaperRE)) {
-                logger.info("Interrupting "+name);
+                logger.info("Interrupting {}", name);
                 t.interrupt();
             }
         }
@@ -177,7 +177,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     // Called by JMeter ListenToTest if remoteStop is true
     @Override
     public void exit() {
-        log.info("about to exit remote server on "+host);
+        log.info("about to exit remote server on {}", host);
         try {
             remote.rexit();
         } catch (RemoteException e) {
@@ -186,6 +186,7 @@ public class ClientJMeterEngine implements JMeterEngine {
     }
 
     private Properties savep;
+    
     /** {@inheritDoc} */
     @Override
     public void setProperties(Properties p) {
