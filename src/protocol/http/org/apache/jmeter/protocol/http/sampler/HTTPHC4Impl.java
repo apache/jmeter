@@ -101,6 +101,7 @@ import org.apache.http.impl.client.DefaultClientConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.EntityEnclosingRequestWrapper;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
@@ -823,7 +824,19 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
-                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false); // set retry count
+                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false) { // set retry count
+                        @Override
+                        protected boolean handleAsIdempotent(HttpRequest request) {
+                            if(request instanceof EntityEnclosingRequestWrapper) {
+                                EntityEnclosingRequestWrapper enclosingRequest =
+                                        (EntityEnclosingRequestWrapper) request;
+                                if(HTTPConstants.GET.equals(enclosingRequest.getMethod())) {
+                                    return true;
+                                }
+                            }
+                            return super.handleAsIdempotent(request);
+                        }
+                    };
                 }
             };
             
