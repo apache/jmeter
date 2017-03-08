@@ -443,15 +443,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
-    private static PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
+    private static PrintWriter getFileWriter(final String pFilename, SampleSaveConfiguration saveConfig)
             throws IOException {
-        if (filename == null || filename.length() == 0) {
+        if (pFilename == null || pFilename.length() == 0) {
             return null;
         }
         if(log.isDebugEnabled()) {
-            log.debug("Getting file: {} in thread {}", filename, Thread.currentThread().getName());
+            log.debug("Getting file: {} in thread {}", pFilename, Thread.currentThread().getName());
         }
-        filename = FileServer.resolveBaseRelativeName(filename);
+        String filename = FileServer.resolveBaseRelativeName(pFilename);
         filename = new File(filename).getCanonicalPath(); // try to ensure uniqueness (Bug 60822)
         FileEntry fe = files.get(filename);
         PrintWriter writer = null;
