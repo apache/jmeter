@@ -548,6 +548,9 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
     }
 
+    /**
+     * Clean shutdown ie, wait for end of current running samplers
+     */
     public void askThreadsToStop() {
         if (engine != null) { // Will be null if StopTest thread has started
             engine.stopTest(false);

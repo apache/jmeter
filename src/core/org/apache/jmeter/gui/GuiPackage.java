@@ -142,7 +142,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     private GuiPackage(JMeterTreeModel treeModel, JMeterTreeListener treeListener) {
         this.treeModel = treeModel;
-        if(undoHistory.isEnabled()) {
+        if(UndoHistory.isEnabled()) {
             this.treeModel.addTreeModelListener(undoHistory);
         }
         this.treeListener = treeListener;
@@ -163,7 +163,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      * - Locale Changes
      */
     public void registerAsListener() {
-        if(undoHistory.isEnabled()) {
+        if(UndoHistory.isEnabled()) {
             this.undoHistory.registerHistoryListener(this);
         }
         JMeterUtils.addLocaleChangeListener(this);
@@ -449,7 +449,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
                 TestElement el = currentNode.getTestElement();
                 int before = 0;
                 int after = 0;
-                final boolean historyEnabled = undoHistory.isEnabled();
+                final boolean historyEnabled = UndoHistory.isEnabled();
                 if(historyEnabled) {
                     before = getTestElementCheckSum(el);
                 }
@@ -740,12 +740,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (guiPack == null) {
             return ;
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JOptionPane.showMessageDialog(null,message,title,type);
-            }
-        });
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
 
     }
 

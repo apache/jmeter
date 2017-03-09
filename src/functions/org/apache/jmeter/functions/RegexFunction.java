@@ -30,8 +30,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.apache.oro.text.MalformedCachePatternException;
 import org.apache.oro.text.regex.MatchResult;
 import org.apache.oro.text.regex.Pattern;
@@ -39,6 +37,8 @@ import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.PatternMatcherInput;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Implements regular expression parsing of sample results and variables
  * @since 1.X
@@ -157,7 +157,9 @@ public class RegexFunction extends AbstractFunction {
             PatternMatcherInput input = new PatternMatcherInput(textToMatch);
             while (matcher.contains(input, searchPattern)) {
                 MatchResult match = matcher.getMatch();
-                collectAllMatches.add(match);
+                if(match != null) {
+                    collectAllMatches.add(match);
+                } 
             }
         } finally {
             if (name.length() > 0){
@@ -165,7 +167,7 @@ public class RegexFunction extends AbstractFunction {
             }
         }
 
-        if (collectAllMatches.size() == 0) {
+        if (collectAllMatches.isEmpty()) {
             return defaultValue;
         }
 
@@ -188,6 +190,9 @@ public class RegexFunction extends AbstractFunction {
         } else {
             try {
                 int index = Integer.parseInt(valueIndex) - 1;
+                if(index >= collectAllMatches.size()) {
+                    return defaultValue;
+                }
                 MatchResult result = collectAllMatches.get(index);
                 return generateResult(result, name, tmplt, vars);
             } catch (NumberFormatException e) {
@@ -195,18 +200,14 @@ public class RegexFunction extends AbstractFunction {
                 MatchResult result = collectAllMatches
                         .get((int) (collectAllMatches.size() * ratio + .5) - 1);
                 return generateResult(result, name, tmplt, vars);
-            } catch (IndexOutOfBoundsException e) {
-                return defaultValue;
             }
         }
 
     }
 
     private void saveGroups(MatchResult result, String namep, JMeterVariables vars) {
-        if (result != null) {
-            for (int x = 0; x < result.groups(); x++) {
-                vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
-            }
+        for (int x = 0; x < result.groups(); x++) {
+            vars.put(namep + "_g" + x, result.group(x)); //$NON-NLS-1$
         }
     }
 

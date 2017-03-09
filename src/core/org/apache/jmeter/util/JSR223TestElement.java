@@ -47,6 +47,9 @@ import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Base class for JSR223 Test elements
+ */
 public abstract class JSR223TestElement extends ScriptingTestElement
     implements Serializable, TestStateListener
 {
@@ -156,70 +159,78 @@ public abstract class JSR223TestElement extends ScriptingTestElement
      * @throws IOException when reading the script fails
      * @throws ScriptException when compiling or evaluation of the script fails
      */
-    protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings) throws IOException, ScriptException {
+    protected Object processFileOrScript(ScriptEngine scriptEngine, Bindings bindings)
+            throws IOException, ScriptException {
         if (bindings == null) {
             bindings = scriptEngine.createBindings();
         }
         populateBindings(bindings);
-        File scriptFile = new File(getFilename()); 
-        // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws "java.lang.Error: unimplemented"
-        boolean supportsCompilable = scriptEngine instanceof Compilable 
-                && !("bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName())); // NOSONAR $NON-NLS-1$
-        if (!StringUtils.isEmpty(getFilename())) {
-            if (scriptFile.exists() && scriptFile.canRead()) {
-                if (supportsCompilable) {
-                    String cacheKey = 
-                            getScriptLanguage()+"#"+ // $NON-NLS-1$
-                            scriptFile.getAbsolutePath()+"#"+  // $NON-NLS-1$
-                                    scriptFile.lastModified();
-                    CompiledScript compiledScript = 
-                            compiledScriptsCache.get(cacheKey);
-                    if (compiledScript==null) {
-                        synchronized (compiledScriptsCache) {
-                            compiledScript = 
-                                    compiledScriptsCache.get(cacheKey);
-                            if (compiledScript==null) {
-                                // TODO Charset ?
-                                try ( BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile), 
-                                        (int)scriptFile.length())) {
-                                    compiledScript = 
-                                            ((Compilable) scriptEngine).compile(fileReader);
-                                    compiledScriptsCache.put(cacheKey, compiledScript);
+        File scriptFile = new File(getFilename());
+        // Hack: bsh-2.0b5.jar BshScriptEngine implements Compilable but throws
+        // "java.lang.Error: unimplemented"
+        boolean supportsCompilable = scriptEngine instanceof Compilable
+                && !("bsh.engine.BshScriptEngine".equals(scriptEngine.getClass().getName())); // NOSONAR // $NON-NLS-1$
+        try {
+            if (!StringUtils.isEmpty(getFilename())) {
+                if (scriptFile.exists() && scriptFile.canRead()) {
+                    if (supportsCompilable) {
+                        String cacheKey = getScriptLanguage() + "#" + // $NON-NLS-1$
+                                scriptFile.getAbsolutePath() + "#" + // $NON-NLS-1$
+                                scriptFile.lastModified();
+                        CompiledScript compiledScript = compiledScriptsCache.get(cacheKey);
+                        if (compiledScript == null) {
+                            synchronized (compiledScriptsCache) {
+                                compiledScript = compiledScriptsCache.get(cacheKey);
+                                if (compiledScript == null) {
+                                    // TODO Charset ?
+                                    try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
+                                            (int) scriptFile.length())) {
+                                        compiledScript = ((Compilable) scriptEngine).compile(fileReader);
+                                        compiledScriptsCache.put(cacheKey, compiledScript);
+                                    }
                                 }
                             }
                         }
-                    }
-                    return compiledScript.eval(bindings);
-                } else {
-                    // TODO Charset ?
-                    try ( BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile), 
-                            (int)scriptFile.length())) {
-                        return scriptEngine.eval(fileReader, bindings);
-                    }
-                }
-            }  else {
-                throw new ScriptException("Script file '"+scriptFile.getAbsolutePath()+"' does not exist or is unreadable for element:"+getName());
-            }
-        } else if (!StringUtils.isEmpty(getScript())) {
-            if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
-                computeScriptMD5();
-                CompiledScript compiledScript = compiledScriptsCache.get(this.scriptMd5);
-                if (compiledScript == null) {
-                    synchronized (compiledScriptsCache) {
-                        compiledScript = compiledScriptsCache.get(this.scriptMd5);
-                        if (compiledScript == null) {
-                            compiledScript = ((Compilable) scriptEngine).compile(getScript());
-                            compiledScriptsCache.put(this.scriptMd5, compiledScript);
+                        return compiledScript.eval(bindings);
+                    } else {
+                        // TODO Charset ?
+                        try (BufferedReader fileReader = new BufferedReader(new FileReader(scriptFile),
+                                (int) scriptFile.length())) {
+                            return scriptEngine.eval(fileReader, bindings);
                         }
                     }
+                } else {
+                    throw new ScriptException("Script file '" + scriptFile.getAbsolutePath()
+                            + "' does not exist or is unreadable for element:" + getName());
                 }
-                
-                return compiledScript.eval(bindings);
+            } else if (!StringUtils.isEmpty(getScript())) {
+                if (supportsCompilable && !StringUtils.isEmpty(cacheKey)) {
+                    computeScriptMD5();
+                    CompiledScript compiledScript = compiledScriptsCache.get(this.scriptMd5);
+                    if (compiledScript == null) {
+                        synchronized (compiledScriptsCache) {
+                            compiledScript = compiledScriptsCache.get(this.scriptMd5);
+                            if (compiledScript == null) {
+                                compiledScript = ((Compilable) scriptEngine).compile(getScript());
+                                compiledScriptsCache.put(this.scriptMd5, compiledScript);
+                            }
+                        }
+                    }
+
+                    return compiledScript.eval(bindings);
+                } else {
+                    return scriptEngine.eval(getScript(), bindings);
+                }
             } else {
-                return scriptEngine.eval(getScript(), bindings);
+                throw new ScriptException("Both script file and script text are empty for element:" + getName());
             }
-        } else {
-            throw new ScriptException("Both script file and script text are empty for element:"+getName());            
+        } catch (ScriptException ex) {
+            Throwable rootCause = ex.getCause();
+            if(isStopCondition(rootCause)) {
+                throw (RuntimeException) ex.getCause();
+            } else {
+                throw ex;
+            }
         }
     }
 

@@ -57,32 +57,34 @@ public class SamplerCreatorFactory {
             for (String strClassName : listClasses) {
                 try {
                     if(log.isDebugEnabled()) {
-                        log.debug("Loading class: "+ strClassName);
+                        log.debug("Loading class: {}", strClassName);
                     }
                     Class<?> commandClass = Class.forName(strClassName);
                     if (!Modifier.isAbstract(commandClass.getModifiers())) {
                         if(log.isDebugEnabled()) {
-                            log.debug("Instantiating: "+ commandClass.getName());
+                            log.debug("Instantiating: {}", commandClass.getName());
                         }
-                            SamplerCreator creator = (SamplerCreator) commandClass.newInstance();
-                            String[] contentTypes = creator.getManagedContentTypes();
-                            for (String contentType : contentTypes) {
-                                if(log.isDebugEnabled()) {
-                                    log.debug("Registering samplerCreator "+commandClass.getName()+" for content type:"+contentType);
-                                }
-                                SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
-                                if(oldSamplerCreator!=null) {
-                                    log.warn("A sampler creator was already registered for:"+contentType+", class:"+oldSamplerCreator.getClass()
-                                            + ", it will be replaced");
-                                }
-                            }                        
+                        SamplerCreator creator = (SamplerCreator) commandClass.newInstance();
+                        String[] contentTypes = creator.getManagedContentTypes();
+                        for (String contentType : contentTypes) {
+                            if(log.isDebugEnabled()) {
+                                log.debug("Registering samplerCreator {} for content type:{}", 
+                                        commandClass.getName(), contentType);
+                            }
+                            SamplerCreator oldSamplerCreator = samplerCreatorMap.put(contentType, creator);
+                            if(oldSamplerCreator!=null) {
+                                log.warn("A sampler creator was already registered for:{}, class:{}, it will be replaced", 
+                                        contentType, oldSamplerCreator.getClass());
+                            }
+                        }                        
                     }
                 } catch (Exception e) {
-                    log.error("Exception registering "+SamplerCreator.class.getName() + " with implementation:"+strClassName, e);
+                    log.error("Exception registering {} with implementation:{}",
+                            SamplerCreator.class.getName(),strClassName, e);
                 }
             }
         } catch (IOException e) {
-            log.error("Exception finding implementations of "+SamplerCreator.class, e);
+            log.error("Exception finding implementations of {}", SamplerCreator.class, e);
         }
     }
 

@@ -43,6 +43,7 @@ import javax.swing.MenuElement;
 import org.apache.jmeter.control.Controller;
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.JMeterGUIComponent;
+import org.apache.jmeter.gui.UndoHistory;
 import org.apache.jmeter.gui.action.ActionNames;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.KeyStrokes;
@@ -189,7 +190,6 @@ public final class MenuFactory {
         menu.add(makeMenuItemRes("copy", ActionNames.COPY, KeyStrokes.COPY));  //$NON-NLS-1$
         menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
         menu.add(makeMenuItemRes("duplicate", ActionNames.DUPLICATE, KeyStrokes.DUPLICATE));  //$NON-NLS-1$
-        menu.add(makeMenuItemRes("reset_gui", ActionNames.RESET_GUI )); //$NON-NLS-1$
         if (removable) {
             menu.add(makeMenuItemRes("remove", ActionNames.REMOVE, KeyStrokes.REMOVE)); //$NON-NLS-1$
         }
@@ -198,7 +198,6 @@ public final class MenuFactory {
     public static void addPasteResetMenu(JPopupMenu menu) {
         addSeparator(menu);
         menu.add(makeMenuItemRes("paste", ActionNames.PASTE, KeyStrokes.PASTE)); //$NON-NLS-1$
-        menu.add(makeMenuItemRes("reset_gui", ActionNames.RESET_GUI )); //$NON-NLS-1$
     }
 
     public static void addFileMenu(JPopupMenu pop) {
@@ -212,7 +211,9 @@ public final class MenuFactory {
     public static void addFileMenu(JPopupMenu menu, boolean addSaveTestFragmentMenu) {
         // the undo/redo as a standard goes first in Edit menus
         // maybe there's better place for them in JMeter?
-        addUndoItems(menu);
+        if(UndoHistory.isEnabled()) {
+            addUndoItems(menu);
+        }
 
         addSeparator(menu);
         menu.add(makeMenuItemRes("open", ActionNames.OPEN));// $NON-NLS-1$

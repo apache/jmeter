@@ -44,7 +44,7 @@ public class ThreadDumper {
 
     /**
      * @return Name of file containing thread dump
-     * @throws Exception
+     * @throws Exception if file cannot be written
      */
     public static String threadDump() throws Exception {
         return threadDump(new File(".")); //$NON-NLS-1$
@@ -53,7 +53,7 @@ public class ThreadDumper {
     /**
      * @param basedir {@link File} Base directory
      * @return Name of file containing thread dump
-     * @throws Exception
+     * @throws Exception  if file cannot we written
      */
     public static String threadDump(File basedir) throws Exception {
         SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd_hhmmss_SSS");
@@ -67,11 +67,11 @@ public class ThreadDumper {
         }
         return path;
     }
-    
+
     /**
      * Write Thread Dump 
      * @param writer {@link Writer}
-     * @throws IOException 
+     * @throws IOException if file cannot be written
      */
     public static void writeThreadDump(Writer writer) throws IOException {
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();

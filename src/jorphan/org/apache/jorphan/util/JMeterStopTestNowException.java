@@ -20,9 +20,9 @@ package org.apache.jorphan.util;
 
 /**
  * This Exception is for use by functions etc to signal a Stop Test Now condition
- * where there is no access to the normal stop method
+ * where there is no access to the normal stop method.
+ * Stop test now means interrupting current running samplers which will mark them as failed
  *
- * @version $Revision$
  */
 public class JMeterStopTestNowException extends RuntimeException {
     private static final long serialVersionUID = 240L;

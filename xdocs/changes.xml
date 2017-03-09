@@ -170,7 +170,7 @@ This affects configuration and 3rd party plugins.
 
 <h3>Other samplers</h3>
 <ul>
-	<li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
+    <li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><pr>259</pr>Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
@@ -191,6 +191,7 @@ This affects configuration and 3rd party plugins.
     <li><bug>60691</bug>View Results Tree : In Renderers (XPath, JSON Path Tester, RegExp Tester and CSS/JQuery Tester) lower panel is sometimes not visible as upper panel is too big and cannot be resized</li>
     <li><bug>60687</bug>Make GUI more responsive when it gets a lot of events.</li>
     <li><bug>60791</bug>View Results Tree: Trigger search on Enter key in Search Feature and display red background if no match</li>
+    <li><bug>60822</bug>ResultCollector does not ensure unique file name entries in files HashMap</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -221,7 +222,7 @@ This affects configuration and 3rd party plugins.
 
 <h3>General</h3>
 <ul>
-	<li><bug>58164</bug>Check if file already exists on ResultCollector listener before starting the loadtest</li>	
+    <li><bug>58164</bug>Check if file already exists on ResultCollector listener before starting the loadtest</li>
     <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
     <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60514</bug>Ability to apply a naming convention on Children of a Transaction Controller. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
@@ -239,6 +240,9 @@ This affects configuration and 3rd party plugins.
     <li><bug>60664</bug>Add a UI menu to set log level. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><pr>276</pr>Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
     <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
+    <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
+    <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
+    <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -252,7 +256,7 @@ This affects configuration and 3rd party plugins.
     <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
-    <li>Updated to slf4j-api 1.7.22 (from 1.7.21)</li>
+    <li>Updated to slf4j-api 1.7.24 (from 1.7.21)</li>
     <li>Updated to asm 5.2 (from 5.1)</li>
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
@@ -271,12 +275,13 @@ This affects configuration and 3rd party plugins.
     <li><bug>60575</bug>HTTP GET Requests could have a content-type header without a body.</li>
     <li><bug>60682</bug>HTTP Request : Get method may fail on redirect due to Content-Length header being set</li>
     <li><bug>60643</bug>HTTP(S) Test Script Recorder doesn't correctly handle restart or start after stop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60652</bug>PUT might leak file descriptors.</li>
+    <li><bug>60652</bug>HTTP PUT Requests might leak file descriptors.</li>
     <li><bug>60689</bug><code>httpclient4.validate_after_inactivity</code> has no impact leading to usage of potentially stale/closed connections</li>
     <li><bug>60690</bug>Default values for "httpclient4.validate_after_inactivity" and "httpclient4.time_to_live" which are equal to each other makes validation useless</li>
     <li><bug>60758</bug>HTTP(s) Test Script Recorder : Number request may generate duplicate numbers. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
+    <li><bug>60837</bug>Since version 3.1, HttpGet with a body may not be retried even if retrycount is higher than 0</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -310,6 +315,7 @@ This affects configuration and 3rd party plugins.
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>60819</bug>Function __fileToString does not honor the documentation contract when file is not found</li>
 </ul>
 
 <h3>I18N</h3>
@@ -334,6 +340,7 @@ This affects configuration and 3rd party plugins.
     <li><bug>60444</bug>Intermittent failure of <code>TestHTTPMirrorThread#testSleep()</code>. Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
     <li><bug>60621</bug>The "<code>report-template</code>" folder is missing from <code>ApacheJMeter_config-3.1.jar</code> in maven central</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
+    <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -371,7 +378,11 @@ Apologies if we have omitted anyone else.
  <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
 
 <ch_section>Known problems and workarounds</ch_section>
-
+<ul>
+<li>View Results Tree may freeze rendering large response particularly if this response has no spaces, see <bugzilla>60816</bugzilla>.
+This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling JEditorPane.setText() or JTextArea.setText() with long text without space</a>.
+</li>
+</ul>
 <ul>
 <li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
 but otherwise its behaviour is not consistent (or clearly specified).</li>

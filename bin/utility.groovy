@@ -19,5 +19,5 @@
 // "bin/jmeter.properties", if you want to access it through
 // the __groovy function
 //
-// Uncomment this function and use it with ${__groovy(factorial(10))}
-// def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }
+//Uncomment this function and use it with ${__groovy(factorial(10))}
+def factorial(n) { n == 1 ? 1 : n * factorial(n - 1) }

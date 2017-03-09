@@ -30,6 +30,12 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
+caffeine 2.4.0
+-----------------
+https://github.com/ben-manes/caffeine/
+- Used by CssParser
+- Used by JMS Publisher Sampler
+
 commons-codec-1.10
 -----------------
 http://commons.apache.org/downloads/download_codec.cgi
@@ -141,6 +147,11 @@ jsoup-1.10.2
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
+log4j2
+--------
+https://logging.apache.org/log4j/2.x/
+- Logging framework
+
 ph-css-5.0.3
 --------
 https://github.com/phax/ph-css
@@ -199,7 +210,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.22
+slf4j-api-1.7.24
 ----------------
 http://www.slf4j.org/
 - jodd-core

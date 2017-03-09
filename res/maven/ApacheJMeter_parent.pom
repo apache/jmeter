@@ -59,7 +59,7 @@ under the License.
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
       <bcpkix.version>1.49</bcpkix.version>
-      <caffeine.version>2.3.5</caffeine.version>
+      <caffeine.version>2.4.0</caffeine.version>
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
       <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
@@ -81,7 +81,7 @@ under the License.
       <httpmime.version>4.5.3</httpmime.version>
       <jakarta-oro.version>2.0.8</jakarta-oro.version>
       <jcharts.version>0.7.5</jcharts.version>
-      <jcl-over-slf4j.version>1.7.22</jcl-over-slf4j.version>
+      <jcl-over-slf4j.version>1.7.24</jcl-over-slf4j.version>
       <jodd-core.version>3.8.1</jodd-core.version>
       <jodd-lagarto.version>3.8.1</jodd-lagarto.version>
       <jodd-log.version>3.8.1</jodd-log.version>
@@ -95,12 +95,12 @@ under the License.
       <ph-css.version>5.0.3</ph-css.version>
       <ph-commons.version>8.6.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
-      <slf4j-api.version>1.7.22</slf4j-api.version>
-      <slf4j-ext.version>1.7.22</slf4j-ext.version>
-      <log4j-api.version>2.7</log4j-api.version>
-      <log4j-core.version>2.7</log4j-core.version>
-      <log4j-slf4j-impl.version>2.7</log4j-slf4j-impl.version>
-      <log4j-1.2-api.version>2.7</log4j-1.2-api.version>
+      <slf4j-api.version>1.7.24</slf4j-api.version>
+      <slf4j-ext.version>1.7.24</slf4j-ext.version>
+      <log4j-api.version>2.8.1</log4j-api.version>
+      <log4j-core.version>2.8.1</log4j-core.version>
+      <log4j-slf4j-impl.version>2.8.1</log4j-slf4j-impl.version>
+      <log4j-1.2-api.version>2.8.1</log4j-1.2-api.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.14</tika-core.version>
       <tika-parsers.version>1.14</tika-parsers.version>

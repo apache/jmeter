@@ -35,7 +35,7 @@ Highly Extensible core:
 
 ## The Latest Version
 
-Details of the latest version can be found on the Java Apache 
+Details of the latest version can be found on the JMeter Apache 
 Project web site (http://jmeter.apache.org/).
 
 ## Requirements
@@ -45,7 +45,8 @@ The following requirements exist for running Apache JMeter:
 *  Java Interpreter:
 
     A fully compliant Java 8 (or later) Runtime Environment is required 
-    for Apache JMeter to execute.
+    for Apache JMeter to execute. A JDK with keytool utility is better suited 
+    for Recording HTTPS websites. 
 
 *  Optional jars:
 

@@ -133,7 +133,7 @@ $value.content
 #end
 
 #macro ( code $value)
-<tt class="code">#runloop($value)</tt>
+<tt class="code">#runloop($value)</tt>##
 #end
 
 #macro ( source $value)
@@ -323,19 +323,19 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #end
 
 #macro (complink $complink)
-<a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>
+<a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>##
 #end
 
 #macro (outputTag $tag)
-<$tag.getName()#getAtts($tag)>
+<$tag.getName()#getAtts($tag)>##
 #end
 
 #macro (getAtts $tag)
-#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end
+#foreach ($att in $tag.getAttributes()) $att.getName()="$att.getValue()"#end##
 #end
 
 #macro (outputEndTag $tag)
-</$tag.getName()>
+</$tag.getName()>##
 #end
 
 #macro (menuchoice $items)
@@ -360,9 +360,9 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #macro (runloop $itemToLoop)
 #foreach ($node in $itemToLoop.getContent())
 #if($node.getClass().getName().indexOf("Element") > -1)
-#unknown($node)
+#unknown($node)##
 #else
-$escape.getText($node.getText())
+$escape.getText($node.getText())##
 #end
 #end
 #end
