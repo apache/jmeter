@@ -21,10 +21,10 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://stash.eden.klm.com/scm/TCPOW/apache-jmeter.git</connection>
-		<developerConnection>scm:git:https://stash.eden.klm.com/scm/TCPOW/apache-jmeter.git</developerConnection>
+		<connection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</connection>
+		<developerConnection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</developerConnection>
 		<tag>master</tag>
-		<url>https://stash.eden.klm.com/projects/TCPOW/repos/apache-jmeter/browse</url>
+		<url>https://bitbucket.devnet.klm.com/projects/TCPOW/repos/apache-jmeter/browse</url>
 	</scm>
 
 	<profiles>
