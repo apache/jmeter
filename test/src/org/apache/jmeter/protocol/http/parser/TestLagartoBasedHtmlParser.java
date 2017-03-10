@@ -71,9 +71,10 @@ public class TestLagartoBasedHtmlParser {
                 new Object[] {"<anytag style=\"foo: url('bar')'\"/>", "http://example.org/bar"},
                 // new Object[] {"<anytag style=\"foo: url(bar)'\"/>", "http://example.org/bar"},
                 // new Object[] {"<anytag style=\"foo: url(bar)'; other: url(something);\"/>", "http://example.org/bar,http://example.org/something"},
-                // new Object[] {"<link href='  abc\n.css  ' rel='stylesheet'/>", "http://example.org/abc.css"},
-                // new Object[] {"<embed src=''/>", ""},
-                // new Object[] {"<embed src='  '/>", ""},
+                new Object[] {"<link href='  abc\n.css  ' rel='stylesheet'/>", "http://example.org/abc.css"},
+                new Object[] {"<link href='  with spaces\n.css  ' rel='stylesheet'/>", "http://example.org/with spaces.css"},
+                new Object[] {"<embed src=''/>", ""},
+                new Object[] {"<embed src='  '/>", ""},
         };
     }
 
