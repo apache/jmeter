@@ -282,6 +282,7 @@ This affects configuration and 3rd party plugins.
     <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
     <li><bug>60837</bug>GET with body, PUT are not be retried even if retrycount is higher than 0</li>
+    <li><bug>60842</bug>Trim extracted URLs when loading embedded resources using the Lagarto based HTML Parser.</li>
 </ul>
 
 <h3>Other Samplers</h3>
