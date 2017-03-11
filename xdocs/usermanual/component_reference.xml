@@ -3572,10 +3572,9 @@ By default, a Graphite implementation is provided.
   If the OS does not distinguish between upper and lower case, <code>csvData.TXT</code> would also be opened separately. 
   </property>
   <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
-  <property name="Variable Names" required="Yes">List of variable names (comma-delimited).
+  <property name="Variable Names" required="No">List of variable names. The names must be separated by the delimiter character. They can be quoted using double-quotes.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
-  The names must be separated by the delimiter character. They can be quoted using double-quotes.
   </property>
   <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
   Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
