@@ -172,7 +172,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 <ul>
     <li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><pr>259</pr>Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>259</pr> - Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -238,7 +238,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
     <li><bug>60565</bug>Migrate LogKit to SLF4J - Optimize logging statements. e.g, message format args, throwable args, unnecessary if-enabled-logging in simple ones, etc. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60564</bug>Migrate LogKit to SLF4J - Replace LogKit loggers with SLF4J ones and keep the current LogKit binding solution for backward compatibility with plugins. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60664</bug>Add a UI menu to set log level. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><pr>276</pr>Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
+    <li><pr>276</pr> - Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
     <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
@@ -261,7 +261,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
     <li>Converted the old pdf tutorials to xml.</li>
-    <li><pr>255</pr>Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>255</pr> - Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
 </ul>
 
