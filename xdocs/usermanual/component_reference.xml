@@ -2895,6 +2895,10 @@ will be displayed in the lower panel.<br/>
 </td></tr>
 </table>
 <p><code>Scroll automatically?</code> option permit to have last node display in tree selection</p>
+<note>Starting with version 3.2 the number of entries in the View is restricted to the value of the
+property <code>view.results.tree.max_results</code> which defaults to <code>500</code> entries. The old
+behaviour can be restored by setting the property to <code>0</code>. Beware, that this might consume
+a lot of memory.</note>
 <p>
 With <code>Search</code> option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
 in the display above. For example the Control panel screenshot below shows one result of searching for "<code>Java</code>".
