@@ -58,6 +58,10 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
+<!-- <ch_category>Sample category</ch_category> -->
+<!-- <ch_title>Sample title</ch_title> -->
+<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
+
 <ch_section>IMPORTANT CHANGES</ch_section>
 <p>
 JMeter now requires Java 8. Ensure you use the most up to date version.
@@ -68,16 +72,35 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 </p>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>Fill in improvements</li>
+<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.</li>
+<li>DNS Cache Manager now has a table to allow static host resolution</li>
+<li>JMS Publisher and Subscriber now allow reconnection on error with pause.</li>
+<li>Variables are now supported for all types of messages.</li>
+<li>XPath Extractor now allows extraction randomly, by index or for all matches</li>
+<li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
+<li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
+</ul>
+
+<ch_title>UX improvements</ch_title>
+<ul>
+<li>When running a Test, GUI is now more responsive and less impacting on memory usage thanks to a limitation on the number of Sample Results 
+listeners hold and a rework of the way GUI is updated</li>
+<li>HTTP Request GUI has been simplified and provides more place for parameters and body</li>
+<li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements</li>
+<li>View Results Tree now provides a more up to date Browser renderer which requires JavaFX.</li>
+<li>You can now add through a contextual menu think times, this will add think times between samplers and Transaction Controllers
+ of selected node.</li>
+<li>You can now apply a naming policy to children of a Transaction Controller. A default policy exists but you can implement your own 
+    through <code><a href="./api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html" >org.apache.jmeter.gui.action.TreeNodeNamingPolicy</a></code>
+    and configuring property <code>naming_policy.impl</code></li>
+<li>Sorting per column has been added to View Results in Table, Summary Report, Aggregate Report and Aggregate Graph elements</li>
+<li>Response Assertion has a better cell renderer</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
 <ul>
 <li>PDF Documentations have been migrated to HTML user manual</li>
 </ul>
-<!-- <ch_category>Sample category</ch_category> -->
-<!-- <ch_title>Sample title</ch_title> -->
-<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
 <!-- =================== Incompatible changes =================== -->
 
