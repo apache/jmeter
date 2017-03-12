@@ -1392,7 +1392,6 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 </component>
 
 <component name="JMS Publisher" index="&sect-num;.1.13" width="854" height="796" screenshot="jmspublisher.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         JMS Publisher will publish messages to a given destination (topic/queue). For those not
@@ -1500,7 +1499,6 @@ The following table shows some values which may be useful when configuring JMS:
 </component>
 
 <component name="JMS Subscriber" index="&sect-num;.1.14"  width="739" height="607" screenshot="jmssubscriber.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         JMS Publisher will subscribe to messages in a given destination (topic or queue). For those not
@@ -1561,7 +1559,6 @@ The following table shows some values which may be useful when configuring JMS:
 </component>
 
 <component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="882" height="804" screenshot="jms/JMS_Point-to-Point.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         This sampler sends and optionally receives JMS Messages through point-to-point connections (queues).
@@ -5545,7 +5542,6 @@ this one will be used by "<code>Calculate Price cut off</code>".
 
 <component name="Sample Timeout" index="&sect-num;.7.11" anchor="interrupt" width="316" height="138" screenshot="sample_timeout.png">
 <description>
-<note>BETA CODE - the test element may be moved or replaced in a future release</note>
 <p>This Pre-Processor schedules a timer task to interrupt a sample if it takes too long to complete.
 The timeout is ignored if it is zero or negative.
 For this to work, the sampler must implement Interruptible. 
