@@ -63,7 +63,7 @@ Summary
 JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
 <p>
-JMeter logging has been migrated to SLF4J and Log4j 2.
+JMeter logging has been migrated to SLF4J and Log4j2.
 This affects configuration and 3<sup>rd</sup> party plugins.
 </p>
 <ch_title>Core improvements</ch_title>
@@ -85,7 +85,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 
 <ul>
     <li>JMeter requires now at least a Java 8 version to run.</li>
-    <li>JMeter logging has been migrated to SLF4J and Log4j 2, this involves changes in the way configuration is done. JMeter now relies on standard
+    <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
     <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">Log4j 2 configuration</a> in file <code>log4j2.xml</code>
     See <code>Logging changes</code> section below for further details.
     </li>
@@ -131,7 +131,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 
 <h3>Logging changes</h3>
 <p>
-    JMeter logging has been migrated to SLF4J and Log4j 2.
+    JMeter logging has been migrated to SLF4J and Log4j2.
     This affects logging configuration and 3<sup>rd</sup> party plugins (if they use JMeter logging).
     The following sections describe what changes need to be made.
 </p>
@@ -147,12 +147,33 @@ This affects configuration and 3<sup>rd</sup> party plugins.
     in the launch directory (usually <code>JMETER_HOME/bin</code>)
 </p>
 <p>
-    <note>TBA how to change the level programmatically.</note>
+    <note>If you need to change the level programmatically from Groovy code or Beanshell, you need to do the following:
+    <source>
+    import org.apache.logging.log4j.core.config.Configurator;
+    ...
+    final String loggerName = te.getClass().getName(); // te being a JMeter class
+    Configurator.setAllLevels(loggerName, Level.DEBUG); 
+    </source>
+    </note>
 </p>
 
 <h4>Changes to 3<sup>rd</sup> party plugin logging</h4>
 <p>
-    <note>TBA</note>
+    <note>3rd party plugins should migrate their logging code from logkit to slf4j. This is fairly easy and can be done by replacing:
+    <source>
+        import org.apache.jorphan.logging.LoggingManager;
+        import org.apache.log.Logger;
+        ...
+        private static final Logger log = LoggingManager.getLoggerForClass();
+    </source>
+    By:
+    <source>
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+        ...
+        private static final Logger log = LoggerFactory.getLogger(YourClassName.class);
+    </source>
+    </note>
 </p>
 <!-- =================== Improvements =================== -->
 
@@ -281,7 +302,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
     <li><bug>60758</bug>HTTP(s) Test Script Recorder : Number request may generate duplicate numbers. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
-    <li><bug>60837</bug>GET with body, PUT are not be retried even if retrycount is higher than 0</li>
+    <li><bug>60837</bug>GET with body, PUT are not retried even if <code>httpclient4.retrycount</code> is higher than 0</li>
     <li><bug>60842</bug>Trim extracted URLs when loading embedded resources using the Lagarto based HTML Parser.</li>
 </ul>
 
