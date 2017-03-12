@@ -273,7 +273,7 @@ This affects configuration and 3<sup>rd</sup> party plugins.
     <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
-    <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
+    <li>Updated to jodd 3.8.1 (from 3.7.1.jar)</li>
     <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
