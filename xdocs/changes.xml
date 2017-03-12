@@ -72,11 +72,23 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 </p>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.</li>
-<li>DNS Cache Manager now has a table to allow static host resolution</li>
-<li>JMS Publisher and Subscriber now allow reconnection on error with pause.</li>
+<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.
+<figure width="813" height="407" image="changes/3.2/backend_influxdb.png"></figure>
+</li>
+<li>DNS Cache Manager now has a table to allow static host resolution.
+<figure width="803" height="561" image="changes/3.2/dns_cache_manager_static_hosts.png"></figure>
+</li>
+<li>JMS Publisher and Subscriber now allow reconnection on error with pause.
+<figure width="852" height="738" image="changes/3.2/jms_publisher_reconnect.png"></figure>
+<figure width="716" height="538" image="changes/3.2/jms_subscriber_reconnect_pause.png"></figure>
+</li>
 <li>Variables are now supported for all types of messages.</li>
-<li>XPath Extractor now allows extraction randomly, by index or for all matches</li>
+<li>XPath Extractor now allows extraction randomly, by index or for all matches.
+<figure width="823" height="348" image="changes/3.2/xpath_extractor.png"></figure>
+</li>
+<li>Response Assertion now allows to work on Request Header, provides a "OR" combination and has a better cell renderer
+<figure width="1053" height="329" image="changes/3.2/response_assertion.png"></figure>
+</li>
 <li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
 <li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
 </ul>
@@ -85,16 +97,25 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 <ul>
 <li>When running a Test, GUI is now more responsive and less impacting on memory usage thanks to a limitation on the number of Sample Results 
 listeners hold and a rework of the way GUI is updated</li>
-<li>HTTP Request GUI has been simplified and provides more place for parameters and body</li>
-<li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements</li>
+<li>HTTP Request GUI has been simplified and provides more place for parameters and body.
+<figure width="848" height="475" image="changes/3.2/http_request.png"></figure>
+</li>
+<li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements.
+<figure width="459" height="196" image="changes/3.2/search_replace.png"></figure>
+</li>
 <li>View Results Tree now provides a more up to date Browser renderer which requires JavaFX.</li>
 <li>You can now add through a contextual menu think times, this will add think times between samplers and Transaction Controllers
- of selected node.</li>
+ of selected node.
+ <figure width="326" height="430" image="changes/3.2/menu_add_think_times.png"></figure>
+ </li>
 <li>You can now apply a naming policy to children of a Transaction Controller. A default policy exists but you can implement your own 
     through <code><a href="./api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html" >org.apache.jmeter.gui.action.TreeNodeNamingPolicy</a></code>
-    and configuring property <code>naming_policy.impl</code></li>
-<li>Sorting per column has been added to View Results in Table, Summary Report, Aggregate Report and Aggregate Graph elements</li>
-<li>Response Assertion has a better cell renderer</li>
+    and configuring property <code>naming_policy.impl</code>
+<figure width="327" height="518" image="changes/3.2/menu_apply_naming_policy.png"></figure>    
+</li>
+<li>Sorting per column has been added to View Results in Table, Summary Report, Aggregate Report and Aggregate Graph elements.
+<figure width="1065" height="369" image="changes/3.2/sorting.png"></figure>
+</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
