@@ -496,7 +496,9 @@ public class SaveService {
             return Charset.forName(fileEncoding);
         }
         else {
+            
             // We use the default character set encoding of the JRE
+            log.info("fileEncoding not defined - using JRE default");
             return Charset.defaultCharset();
         }
     }
