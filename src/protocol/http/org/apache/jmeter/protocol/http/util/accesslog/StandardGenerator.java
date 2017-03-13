@@ -97,7 +97,7 @@ public class StandardGenerator implements Generator, Serializable {
     }
 
     /**
-     * Create the FileWriter to save the JMX file.
+     * Create the OutputStream to save the JMX file.
      */
     protected void initStream() {
         try {
