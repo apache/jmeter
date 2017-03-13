@@ -23,10 +23,10 @@ import java.io.File;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.threads.JMeterContext;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
-import org.apache.jmeter.util.JMeterUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class TestResultSaver extends JMeterTestCase {
         String fileName = sampleResult.getResultFileName();
         Assert.assertNotNull(fileName);
         Assert.assertEquals("00001.unknown", fileName);
-        File file = new File(JMeterUtils.getJMeterHome(), fileName);
+        File file = new File(FileServer.getDefaultBase(), fileName);
         Assert.assertTrue(file.exists());
         Assert.assertTrue(file.delete());
     }
@@ -75,7 +75,7 @@ public class TestResultSaver extends JMeterTestCase {
         String fileName = sampleResult.getResultFileName();
         Assert.assertNotNull(fileName);
         Assert.assertEquals("00001.unknown", fileName);
-        File file = new File(JMeterUtils.getJMeterHome(), fileName);
+        File file = new File(FileServer.getDefaultBase(), fileName);
         Assert.assertTrue(file.exists());
         Assert.assertTrue(file.delete());
         Assert.assertEquals("00001.unknown", vars.get("myVar"));
@@ -106,7 +106,7 @@ public class TestResultSaver extends JMeterTestCase {
         String fileName = sampleResult.getResultFileName();
         Assert.assertNotNull(fileName);
         Assert.assertEquals("00001.unknown", fileName);
-        File file = new File(JMeterUtils.getJMeterHome(), fileName);
+        File file = new File(FileServer.getDefaultBase(), fileName);
         Assert.assertTrue(file.exists());
         Assert.assertTrue(file.delete());
         Assert.assertEquals("00001.unknown", vars.get("myVar"));
