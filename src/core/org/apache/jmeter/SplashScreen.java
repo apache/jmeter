@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -43,6 +44,7 @@ public class SplashScreen extends JWindow {
      */
     public SplashScreen() {
         imageLabel.setIcon(JMeterUtils.getImage("jmeter.png"));
+        imageLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         setLayout(borderLayout);
         add(imageLabel, BorderLayout.CENTER);
         add(progressBar, BorderLayout.SOUTH);
