@@ -67,7 +67,7 @@ Summary
 JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
 <p>
-JMeter logging has been migrated to SLF4J and Log4j2.
+JMeter logging has been migrated to SLF4J and Log4j 2.
 This affects configuration and 3<sup>rd</sup> party plugins.
 </p>
 <ch_title>Core improvements</ch_title>
@@ -130,7 +130,7 @@ listeners hold and a rework of the way GUI is updated</li>
 
 <ul>
     <li>JMeter requires now at least a Java 8 version to run.</li>
-    <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
+    <li>JMeter logging has been migrated to SLF4J and Log4j 2, this involves changes in the way configuration is done. JMeter now relies on standard
     <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">Log4j 2 configuration</a> in file <code>log4j2.xml</code>
     See <code>Logging changes</code> section below for further details.
     </li>
@@ -176,7 +176,7 @@ listeners hold and a rework of the way GUI is updated</li>
 
 <h3>Logging changes</h3>
 <p>
-    JMeter logging has been migrated to SLF4J and Log4j2.
+    JMeter logging has been migrated to SLF4J and Log4j 2.
     This affects logging configuration and 3<sup>rd</sup> party plugins (if they use JMeter logging).
     The following sections describe what changes need to be made.
 </p>
