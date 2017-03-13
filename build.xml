@@ -514,6 +514,8 @@
     <pathelement location="${lib.dir}/${xstream.jar}"/>
     <!-- Generated jars -->
     <fileset dir="${lib.dir}" includes="jorphan.jar"/>
+    <!-- bshclient is needed to prevent occasional test failures in TestClassFinder -->
+    <fileset dir="${lib.dir}" includes="bshclient.jar"/>
     <!-- API-only jars-->
     <fileset dir="${lib.api}" includes="*.jar"/>
     <!-- Optional jars -->
