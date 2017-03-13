@@ -92,6 +92,9 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 </li>
 <li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
 <li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
+<li>An important work on code quality and code coverage with tests has been done since Sonar has been setup on the project.
+You can see Sonar report <a href="https://builds.apache.org/analysis/overview?id=12927" >here</a>.
+</li>
 </ul>
 
 <ch_title>UX improvements</ch_title>
