@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -59,8 +58,6 @@ public class StandardGenerator implements Generator, Serializable {
     private static final Logger log = LoggerFactory.getLogger(StandardGenerator.class);
 
     protected HTTPSamplerBase SAMPLE = null;
-
-    protected transient FileWriter WRITER = null;
 
     protected transient OutputStream OUTPUT = null;
 
@@ -116,7 +113,6 @@ public class StandardGenerator implements Generator, Serializable {
     @Override
     public void close() {
         JOrphanUtils.closeQuietly(OUTPUT);
-        JOrphanUtils.closeQuietly(WRITER);
     }
 
     /**
