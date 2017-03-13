@@ -18,7 +18,6 @@
 package org.apache.jmeter.report.processor;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
