@@ -207,7 +207,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max99" enabled="true">
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max98" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="-1636660816">Keep-Alive: timeout=30, max=98</stringProp>
               </collectionProp>
@@ -247,7 +247,7 @@ vars.put(&quot;thirdPause&quot;,thirdPause.toString());</stringProp>
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max99" enabled="true">
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_Max97" enabled="true">
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="-1636660817">Keep-Alive: timeout=30, max=97</stringProp>
               </collectionProp>

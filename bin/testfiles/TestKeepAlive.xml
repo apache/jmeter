@@ -27,7 +27,7 @@
 </httpSample>
 <httpSample s="true" lb="HTTP_Request_REUSE_2" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Max99</name>
+    <name>RA_Max98</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
@@ -39,7 +39,7 @@
 </httpSample>
 <httpSample s="true" lb="HTTP_Request_REUSE_AFTER_VALIDATE" rc="200" rm="OK" dt="text">
   <assertionResult>
-    <name>RA_Max99</name>
+    <name>RA_Max97</name>
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
