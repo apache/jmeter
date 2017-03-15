@@ -28,6 +28,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
+import org.apache.jmeter.visualizers.backend.Backend;
 import org.apache.jorphan.collections.HashTree;
 import org.apache.jorphan.collections.HashTreeTraverser;
 import org.slf4j.Logger;
@@ -61,7 +62,34 @@ public class PreCompiler implements HashTreeTraverser {
     /** {@inheritDoc} */
     @Override
     public void addNode(Object node, HashTree subTree) {
-        if(isRemote && node instanceof ResultCollector)
+        
+        if (node instanceof TestPlan) {
+            ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
+            Map<String, String> args = ((TestPlan) node).getUserDefinedVariables();
+            replacer.setUserDefinedVariables(args);
+            JMeterVariables vars = new JMeterVariables();
+            vars.putAll(args);
+            // Don't store variable of test plan in the context for client side
+            if (isRemote) {
+                JMeterContextService.setClientVariable(vars);
+            } else { 
+                JMeterContextService.getContext().setVariables(vars);
+            }
+        }
+        
+        if (node instanceof Arguments) {
+            ((Arguments)node).setRunningVersion(true);
+            Map<String, String> args = ((Arguments) node).getArgumentsAsMap();
+            replacer.addVariables(args);
+            // Don't store User Defined Variables in the context for client side
+            if (isRemote) {
+                JMeterContextService.getClientVariable().putAll(args);
+            } else { 
+                JMeterContextService.getContext().getVariables().putAll(args);
+            }
+        }
+        
+        if(isRemote && (node instanceof ResultCollector || node instanceof Backend) )
         {
             try {
                 replacer.replaceValues((TestElement) node);
@@ -69,9 +97,11 @@ public class PreCompiler implements HashTreeTraverser {
                 log.error("invalid variables", e);
             }
         }
+                
         if (isRemote) {
             return;
         }
+        
         if(node instanceof TestElement)
         {
             try {
@@ -80,21 +110,9 @@ public class PreCompiler implements HashTreeTraverser {
                 log.error("invalid variables", e);
             }
         }
-        if (node instanceof TestPlan) {
-            ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
-            Map<String, String> args = ((TestPlan) node).getUserDefinedVariables();
-            replacer.setUserDefinedVariables(args);
-            JMeterVariables vars = new JMeterVariables();
-            vars.putAll(args);
-            JMeterContextService.getContext().setVariables(vars);
-        }
+   
 
-        if (node instanceof Arguments) {
-            ((Arguments)node).setRunningVersion(true);
-            Map<String, String> args = ((Arguments) node).getArgumentsAsMap();
-            replacer.addVariables(args);
-            JMeterContextService.getContext().getVariables().putAll(args);
-        }
+ 
     }
 
     /** {@inheritDoc} */

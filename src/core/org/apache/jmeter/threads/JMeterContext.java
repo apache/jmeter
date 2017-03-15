@@ -79,7 +79,8 @@ public class JMeterContext {
      * @return a pointer to the JMeter variables.
      */
     public JMeterVariables getVariables() {
-        return variables;
+        // If context variable is null ( Client side ) return client variables
+        return (variables == null) ? JMeterContextService.getClientVariable() : variables;
     }
 
     public void setVariables(JMeterVariables vars) {
