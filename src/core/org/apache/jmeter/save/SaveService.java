@@ -464,25 +464,13 @@ public class SaveService {
     private static InputStreamReader getInputStreamReader(InputStream inStream) {
         // Check if we have a encoding to use from properties
         Charset charset = getFileEncodingCharset();
-        if(charset != null) {
-            return new InputStreamReader(inStream, charset);
-        }
-        else {
-            // We use the default character set encoding of the JRE
-            return new InputStreamReader(inStream);
-        }
+        return new InputStreamReader(inStream, charset);
     }
 
     private static OutputStreamWriter getOutputStreamWriter(OutputStream outStream) {
         // Check if we have a encoding to use from properties
         Charset charset = getFileEncodingCharset();
-        if(charset != null) {
-            return new OutputStreamWriter(outStream, charset);
-        }
-        else {
-            // We use the default character set encoding of the JRE
-            return new OutputStreamWriter(outStream);
-        }
+        return new OutputStreamWriter(outStream, charset);
     }
 
     /**
@@ -501,27 +489,28 @@ public class SaveService {
         }
     }
 
+    // @NotNull
     private static Charset getFileEncodingCharset() {
         // Check if we have a encoding to use from properties
         if(fileEncoding != null && fileEncoding.length() > 0) {
             return Charset.forName(fileEncoding);
         }
         else {
+            
             // We use the default character set encoding of the JRE
-            return null;
+            log.info("fileEncoding not defined - using JRE default");
+            return Charset.defaultCharset();
         }
     }
 
     private static void writeXmlHeader(OutputStreamWriter writer) throws IOException {
         // Write XML header if we have the charset to use for encoding
         Charset charset = getFileEncodingCharset();
-        if(charset != null) {
-            // We do not use getEncoding method of Writer, since that returns
-            // the historical name
-            String header = XML_HEADER.replaceAll("<ph>", charset.name());
-            writer.write(header);
-            writer.write('\n');
-        }
+        // We do not use getEncoding method of Writer, since that returns
+        // the historical name
+        String header = XML_HEADER.replaceAll("<ph>", charset.name());
+        writer.write(header);
+        writer.write('\n');
     }
 
 //  Normal output

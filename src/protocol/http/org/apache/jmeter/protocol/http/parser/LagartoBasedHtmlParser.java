@@ -79,10 +79,12 @@ public class LagartoBasedHtmlParser extends HTMLParser {
 
         private void extractAttribute(Tag tag, String attributeName) {
             CharSequence url = tag.getAttributeValue(attributeName);
-            if (!StringUtils.isEmpty(url)) {
-                urls.addURL(url.toString(), baseUrl.url);
+            String normalizedUrl = normalizeUrlValue(url);
+            if(normalizedUrl != null) {
+                urls.addURL(normalizedUrl, baseUrl.url);
             }
         }
+        
         /*
          * (non-Javadoc)
          * 

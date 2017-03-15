@@ -100,8 +100,7 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultClientConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.client.EntityEnclosingRequestWrapper;
+import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
@@ -153,6 +152,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
+    
+    /** true if it's OK to retry requests that have been sent */
+    private static final boolean REQUEST_SENT_RETRY_ENABLED = 
+            JMeterUtils.getPropDefault("httpclient4.request_sent_retry_enabled", false);
 
     /** Idle timeout to be applied to connections if no Keep-Alive header is sent by the server (default 0 = disable) */
     private static final int IDLE_TIMEOUT = JMeterUtils.getPropDefault("httpclient4.idletimeout", 0);
@@ -824,19 +827,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             httpClient = new DefaultHttpClient(connManager, clientParams) {
                 @Override
                 protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
-                    return new DefaultHttpRequestRetryHandler(RETRY_COUNT, false) { // set retry count
-                        @Override
-                        protected boolean handleAsIdempotent(HttpRequest request) {
-                            if(request instanceof EntityEnclosingRequestWrapper) {
-                                EntityEnclosingRequestWrapper enclosingRequest =
-                                        (EntityEnclosingRequestWrapper) request;
-                                if(HTTPConstants.GET.equals(enclosingRequest.getMethod())) {
-                                    return true;
-                                }
-                            }
-                            return super.handleAsIdempotent(request);
-                        }
-                    };
+                    return new StandardHttpRequestRetryHandler(RETRY_COUNT, 
+                            REQUEST_SENT_RETRY_ENABLED);
                 }
             };
             

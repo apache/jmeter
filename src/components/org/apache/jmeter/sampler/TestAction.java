@@ -88,18 +88,18 @@ public class TestAction extends AbstractSampler implements Interruptible {
         } else if (action == STOP || action == STOP_NOW || action == RESTART_NEXT_LOOP) {
             if (target == THREAD) {
                 if(action == STOP || action == STOP_NOW) {
-                    log.info("Stopping current thread");
+                    log.info("Stopping current thread from element {}", getName());
                     context.getThread().stop();
                 } else {
-                    log.info("Restarting next loop");
+                    log.info("Restarting next loop from element {}", getName());
                     context.setRestartNextLoop(true);
                 }
             } else if (target == TEST) {
                 if (action == STOP_NOW) {
-                    log.info("Stopping all threads now");
+                    log.info("Stopping all threads now from element {}", getName());
                     context.getEngine().stopTest();
                 } else {
-                    log.info("Stopping all threads");
+                    log.info("Stopping all threads from element {}", getName());
                     context.getEngine().askThreadsToStop();
                 }
             }
