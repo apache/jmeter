@@ -62,7 +62,23 @@ public class PreCompiler implements HashTreeTraverser {
     /** {@inheritDoc} */
     @Override
     public void addNode(Object node, HashTree subTree) {
-        
+        if(isRemote && (node instanceof ResultCollector || node instanceof Backend))
+        {
+            try {
+                replacer.replaceValues((TestElement) node);
+            } catch (InvalidVariableException e) {
+                log.error("invalid variables", e);
+            }
+        }
+
+        if(!isRemote && node instanceof TestElement)
+        {
+            try {
+                replacer.replaceValues((TestElement) node);
+            } catch (InvalidVariableException e) {
+                log.error("invalid variables", e);
+            }
+        }
         if (node instanceof TestPlan) {
             ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
             Map<String, String> args = ((TestPlan) node).getUserDefinedVariables();
@@ -76,7 +92,7 @@ public class PreCompiler implements HashTreeTraverser {
                 JMeterContextService.getContext().setVariables(vars);
             }
         }
-        
+
         if (node instanceof Arguments) {
             ((Arguments)node).setRunningVersion(true);
             Map<String, String> args = ((Arguments) node).getArgumentsAsMap();
@@ -88,31 +104,6 @@ public class PreCompiler implements HashTreeTraverser {
                 JMeterContextService.getContext().getVariables().putAll(args);
             }
         }
-        
-        if(isRemote && (node instanceof ResultCollector || node instanceof Backend) )
-        {
-            try {
-                replacer.replaceValues((TestElement) node);
-            } catch (InvalidVariableException e) {
-                log.error("invalid variables", e);
-            }
-        }
-                
-        if (isRemote) {
-            return;
-        }
-        
-        if(node instanceof TestElement)
-        {
-            try {
-                replacer.replaceValues((TestElement) node);
-            } catch (InvalidVariableException e) {
-                log.error("invalid variables", e);
-            }
-        }
-   
-
- 
     }
 
     /** {@inheritDoc} */
