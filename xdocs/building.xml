@@ -58,6 +58,12 @@ ant download_jars
 <p>
 This will retrieve any missing jars.
 </p>
+<note>
+If you are behind a proxy, you will have to set an environment entry for ant to use the proxy:
+<source>
+export ANT_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttp.user=login -Dhttp.pass=xxxxx"
+</source>
+</note>
 
 <p>
 Once you have downloaded the source from SVN or the release archives and run the ant <code>download_jars</code> target to
