@@ -73,7 +73,7 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
                     + ")";   // $NON-NLS-1$
         }
         
-        LANGUAGE_NAMES = getLanguageNames();
+        LANGUAGE_NAMES = getLanguageNames(); // NOSONAR Kept for backward compatibility
     }
 
     private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {            
