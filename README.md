@@ -113,6 +113,12 @@ but won't be used at run-time.
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
 
+If you are behind a proxy, you will have to set an environment entry for ant to use the proxy:
+
+```sh
+export ANT_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttp.user=login -Dhttp.pass=xxxxx"
+```
+
 ### Test builds
 
 JMeter is built using Ant.
