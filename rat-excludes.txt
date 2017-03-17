@@ -12,6 +12,7 @@ bin/report-output/**
 bin/report-template/**
 bin/testfiles/**
 build/**
+build-local.properties
 docs/**
 extras/*.txt
 **/images/**
