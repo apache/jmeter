@@ -55,8 +55,8 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.GuiUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.layout.VerticalLayout;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the GUI for Cookie Manager
@@ -151,22 +151,21 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                 // before deleting the row.
                 GuiUtils.cancelEditing(cookieTable);
 
-                int rowSelected = cookieTable.getSelectedRow();
-
-                if (rowSelected != -1) {
+                if (cookieTable.getRowCount()>0) {
+                    int rowSelected = cookieTable.getSelectedRow();
+                    if(rowSelected < 0) {
+                        rowSelected = 0;
+                    }
                     tableModel.removeRow(rowSelected);
                     tableModel.fireTableDataChanged();
 
                     // Disable the DELETE and SAVE buttons if no rows remaining
                     // after delete.
-                    if (tableModel.getRowCount() == 0) {
-                        deleteButton.setEnabled(false);
-                        saveButton.setEnabled(false);
-                    }
+                    configureButtonsState();
 
-                    // Table still contains one or more rows, so highlight
-                    // (select) the appropriate one.
-                    else {
+                    if (tableModel.getRowCount() > 0) {
+                        // Table still contains one or more rows, so highlight
+                        // (select) the appropriate one.
                         int rowToSelect = rowSelected;
 
                         if (rowSelected >= tableModel.getRowCount()) {
@@ -185,14 +184,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
             tableModel.addNewRow();
             tableModel.fireTableDataChanged();
 
-            // Enable the DELETE and SAVE buttons if they are currently
-            // disabled.
-            if (!deleteButton.isEnabled()) {
-                deleteButton.setEnabled(true);
-            }
-            if (!saveButton.isEnabled()) {
-                saveButton.setEnabled(true);
-            }
+            configureButtonsState();
 
             // Highlight (select) the appropriate row.
             int rowToSelect = tableModel.getRowCount() - 1;
@@ -209,10 +201,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
                     }
                     tableModel.fireTableDataChanged();
 
-                    if (tableModel.getRowCount() > 0) {
-                        deleteButton.setEnabled(true);
-                        saveButton.setEnabled(true);
-                    }
+                    configureButtonsState();
                 }
             } catch (IOException ex) {
                 log.error("", ex);
@@ -300,8 +289,16 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         selectHandlerPanel.setSelectedItem(DEFAULT_IMPLEMENTATION
                 .substring(DEFAULT_IMPLEMENTATION.lastIndexOf('.') + 1));
         policy.setText(DEFAULT_POLICY);
-        deleteButton.setEnabled(false);
-        saveButton.setEnabled(false);
+        configureButtonsState();
+    }
+    
+    /**
+     * update buttons state
+     */
+    private void configureButtonsState() {
+        boolean hasRows = tableModel.getRowCount() > 0;
+        deleteButton.setEnabled(hasRows);
+        saveButton.setEnabled(hasRows);
     }
 
     private Cookie createCookie(Object[] rowData) {
@@ -320,6 +317,7 @@ public class CookiePanel extends AbstractConfigGui implements ActionListener {
         for (JMeterProperty jMeterProperty : manager.getCookies()) {
             addCookieToTable((Cookie) jMeterProperty.getObjectValue());
         }
+        configureButtonsState();
     }
 
     @Override
