@@ -572,7 +572,7 @@ For Rhino engine, please see <a href="http://www.mozilla.org/rhino/overview.html
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
@@ -884,7 +884,7 @@ sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the BeanShell function (*)</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the BeanShell function (*)</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -929,7 +929,7 @@ sample init file in the <code>bin</code> directory: <code>utility.groovy</code>.
 The following variables are set before the script is executed:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the groovy function (*)</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the groovy function (*)</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -1105,7 +1105,7 @@ The following shorthand aliases are provided:
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -1156,7 +1156,7 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>

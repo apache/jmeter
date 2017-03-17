@@ -27,11 +27,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.jmeter.engine.util.NoThreadClone;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleListener;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.AbstractTestElement;
+import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -44,24 +46,14 @@ import org.slf4j.LoggerFactory;
  * This is mainly intended for validation tests
  *
  */
-public class ResultSaver extends AbstractTestElement implements Serializable, SampleListener {
+public class ResultSaver extends AbstractTestElement implements NoThreadClone, Serializable, SampleListener, TestStateListener {
     private static final Logger log = LoggerFactory.getLogger(ResultSaver.class);
 
-    private static final long serialVersionUID = 241L;
+    private static final long serialVersionUID = 242L;
 
     private static final Object LOCK = new Object();
 
     private static final String TIMESTAMP_FORMAT = "yyyyMMdd-HHmm_"; // $NON-NLS-1$
-
-    // File name sequence number
-    //@GuardedBy("LOCK")
-    private static long sequenceNumber = 0;
-
-    //@GuardedBy("LOCK")
-    private static String timeStamp;
-
-    //@GuardedBy("LOCK")
-    private static int numberPadLength;
 
     //+ JMX property names; do not change
 
@@ -82,6 +74,16 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     public static final String NUMBER_PAD_LENGTH = "FileSaver.numberPadLen"; // $NON-NLS-1$
 
     //- JMX property names
+
+    // File name sequence number
+    //@GuardedBy("LOCK")
+    private long sequenceNumber = 0;
+
+    //@GuardedBy("LOCK")
+    private String timeStamp;
+
+    //@GuardedBy("LOCK")
+    private int numberPadLength;
 
     /**
      * Constructor is initially called once for each occurrence in the test plan
@@ -105,19 +107,19 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
     /**
      * @return next number accross all instances
      */
-    private static long nextNumber() {
+    private long nextNumber() {
         synchronized(LOCK) {
             return ++sequenceNumber;
         }
-    }
-    
-    /**
-     * This is called once for each occurrence in the test plan, before the
-     * start of the test. The super.clear() method clears the name (and all
-     * other properties), so it is called last.
-     */
+    }    
+
     @Override
-    public void clear() {
+    public void testStarted() {
+        testStarted(""); //$NON-NLS-1$
+    }
+
+    @Override
+    public void testStarted(String host) {
         synchronized(LOCK){
             sequenceNumber = 0;
             if (getAddTimeStamp()) {
@@ -128,7 +130,16 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
             }
             numberPadLength=getNumberPadLen();
         }
-        super.clear();
+    }
+
+    @Override
+    public void testEnded() {
+        testEnded(""); //$NON-NLS-1$
+    }
+
+    @Override
+    public void testEnded(String host) {
+        
     }
 
     /**
@@ -203,7 +214,7 @@ public class ResultSaver extends AbstractTestElement implements Serializable, Sa
      *         from the contentType e.g. Content-Type:
      *         text/html;charset=ISO-8859-1
      */
-    private String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
+    String makeFileName(String contentType, boolean skipAutoNumber, boolean skipSuffix) {
         StringBuilder sb = new StringBuilder(FileServer.resolveBaseRelativeName(getFilename()));
         sb.append(timeStamp); // may be the empty string
         if (!skipAutoNumber){

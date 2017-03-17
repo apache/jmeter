@@ -38,7 +38,14 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
 
     private static final String[] LANGUAGE_TAGS;
 
-    private static final String[][] LANGUAGE_NAMES;
+    /**
+     * Will be removed in next version following 3.2
+     * @deprecated use {@link JSR223BeanInfoSupport#getLanguageNames()}
+     */
+    @Deprecated
+    public static final String[][] LANGUAGE_NAMES; // NOSONAR Kept for backward compatibility
+
+    private static final String[][] CONSTANT_LANGUAGE_NAMES;
 
     static {
         Map<String, ScriptEngineFactory> nameMap = new HashMap<>();
@@ -52,30 +59,39 @@ public abstract class JSR223BeanInfoSupport extends ScriptingBeanInfoSupport {
         }
         LANGUAGE_TAGS = nameMap.keySet().toArray(new String[nameMap.size()]);
         Arrays.sort(LANGUAGE_TAGS);
-        LANGUAGE_NAMES = new String[nameMap.size()][2];
+        CONSTANT_LANGUAGE_NAMES = new String[nameMap.size()][2];
         int i = 0;
         for(Entry<String, ScriptEngineFactory> me : nameMap.entrySet()) {
             final String key = me.getKey();
-            LANGUAGE_NAMES[i][0] = key;
+            CONSTANT_LANGUAGE_NAMES[i][0] = key;
             final ScriptEngineFactory fact = me.getValue();
-            LANGUAGE_NAMES[i++][1] = key + 
+            CONSTANT_LANGUAGE_NAMES[i++][1] = key + 
                     "     (" // $NON-NLS-1$
                     + fact.getLanguageName() + " " + fact.getLanguageVersion()  // $NON-NLS-1$
                     + " / "  // $NON-NLS-1$
                     + fact.getEngineName() + " " + fact.getEngineVersion() // $NON-NLS-1$
                     + ")";   // $NON-NLS-1$
         }
+        
+        LANGUAGE_NAMES = getLanguageNames(); // NOSONAR Kept for backward compatibility
     }
 
     private static final ResourceBundle NAME_BUNDLE = new ListResourceBundle() {            
         @Override
         protected Object[][] getContents() {
-            return LANGUAGE_NAMES;
+            return CONSTANT_LANGUAGE_NAMES;
         }
     };
 
     protected JSR223BeanInfoSupport(Class<? extends TestBean> beanClass) {
         super(beanClass, LANGUAGE_TAGS, NAME_BUNDLE);
+    }
+    
+    /**
+     * @return String array of 2 columns array containing Script engine short name / Script Language details 
+     */
+    public static final String[][] getLanguageNames() {
+        return CONSTANT_LANGUAGE_NAMES.clone();
     }
 
 }

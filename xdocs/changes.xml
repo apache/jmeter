@@ -58,38 +58,86 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
+<!-- <ch_category>Sample category</ch_category> -->
+<!-- <ch_title>Sample title</ch_title> -->
+<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
+
 <ch_section>IMPORTANT CHANGES</ch_section>
 <p>
 JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
 <p>
-JMeter logging has been migrated to SLF4J and Log4j2.
-This affects configuration and 3rd party plugins.
+JMeter logging has been migrated to SLF4J and Log4j 2.
+This affects configuration and 3<sup>rd</sup> party plugins.
 </p>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>Fill in improvements</li>
+<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.
+<figure width="813" height="407" image="changes/3.2/backend_influxdb.png"></figure>
+</li>
+<li>DNS Cache Manager now has a table to allow static host resolution.
+<figure width="803" height="561" image="changes/3.2/dns_cache_manager_static_hosts.png"></figure>
+</li>
+<li>JMS Publisher and Subscriber now allow reconnection on error with pause.
+<figure width="852" height="738" image="changes/3.2/jms_publisher_reconnect.png"></figure>
+<figure width="716" height="538" image="changes/3.2/jms_subscriber_reconnect_pause.png"></figure>
+</li>
+<li>Variables in JMS Publisher are now supported for all types of messages. Add the encoding type of the file to parse his content</li>
+<figure width="750" height="743" image="changes/3.2/jms_subscriber_content_encoding.png"></figure>
+<li>XPath Extractor now allows extraction randomly, by index or for all matches.
+<figure width="823" height="348" image="changes/3.2/xpath_extractor.png"></figure>
+</li>
+<li>Response Assertion now allows to work on Request Header, provides a "OR" combination and has a better cell renderer
+<figure width="1053" height="329" image="changes/3.2/response_assertion.png"></figure>
+</li>
+<li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
+<li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
+<li>An important work on code quality and code coverage with tests has been done since Sonar has been setup on the project.
+You can see Sonar report <a href="https://builds.apache.org/analysis/overview?id=12927" >here</a>.
+</li>
+</ul>
+
+<ch_title>UX improvements</ch_title>
+<ul>
+<li>When running a Test, GUI is now more responsive and less impacting on memory usage thanks to a limitation on the number of Sample Results 
+listeners hold and a rework of the way GUI is updated</li>
+<li>HTTP Request GUI has been simplified and provides more place for parameters and body.
+<figure width="848" height="475" image="changes/3.2/http_request.png"></figure>
+</li>
+<li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements.
+<figure width="459" height="196" image="changes/3.2/search_replace.png"></figure>
+</li>
+<li>View Results Tree now provides a more up to date Browser renderer which requires JavaFX.</li>
+<li>You can now add through a contextual menu think times, this will add think times between samplers and Transaction Controllers
+ of selected node.
+ <figure width="326" height="430" image="changes/3.2/menu_add_think_times.png"></figure>
+ </li>
+<li>You can now apply a naming policy to children of a Transaction Controller. A default policy exists but you can implement your own 
+    through <code><a href="./api/org/apache/jmeter/gui/action/TreeNodeNamingPolicy.html" >org.apache.jmeter.gui.action.TreeNodeNamingPolicy</a></code>
+    and configuring property <code>naming_policy.impl</code>
+<figure width="327" height="518" image="changes/3.2/menu_apply_naming_policy.png"></figure>    
+</li>
+<li>Sorting per column has been added to View Results in Table, Summary Report, Aggregate Report and Aggregate Graph elements.
+<figure width="1065" height="369" image="changes/3.2/sorting.png"></figure>
+</li>
 </ul>
 
 <ch_title>Documentation improvements</ch_title>
 <ul>
-<li>PDF Documentations have been migrated to HTML user manual</li>
+<li>PDF Documentations have been migrated and updated to HTML user manual</li>
 </ul>
-<!-- <ch_category>Sample category</ch_category> -->
-<!-- <ch_title>Sample title</ch_title> -->
-<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
 
 <ul>
-    <li>JMeter requires now at least a JAVA 8 version to run.</li>
-    <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
-    <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">log4j2 configuration</a> in file <code>log4j2.xml</code>
+    <li>JMeter requires now at least a Java 8 version to run.</li>
+    <li>JMeter logging has been migrated to SLF4J and Log4j 2, this involves changes in the way configuration is done. JMeter now relies on standard
+    <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">Log4j 2 configuration</a> in file <code>log4j2.xml</code>
     See <code>Logging changes</code> section below for further details.
     </li>
-    <li>The following jars have been removed after migration from Logkit to SLF4J (see <bugzilla>60589</bugzilla>):
+    <li>The following jars have been removed after migration from LogKit to SLF4J (see <bugzilla>60589</bugzilla>):
         <ul>
             <li>ApacheJMeter_slf4j_logkit.jar</li>
             <li>avalon-framework-4.1.4.jar</li>
@@ -131,8 +179,8 @@ This affects configuration and 3rd party plugins.
 
 <h3>Logging changes</h3>
 <p>
-    JMeter logging has been migrated to SLF4J and Log4j2.
-    This affects logging configuration and 3rd party plugins (if they use JMeter logging).
+    JMeter logging has been migrated to SLF4J and Log4j 2.
+    This affects logging configuration and 3<sup>rd</sup> party plugins (if they use JMeter logging).
     The following sections describe what changes need to be made.
 </p>
 
@@ -147,12 +195,33 @@ This affects configuration and 3rd party plugins.
     in the launch directory (usually <code>JMETER_HOME/bin</code>)
 </p>
 <p>
-    <note>TBA how to change the level programmatically.</note>
+    <note>If you need to change the level programmatically from Groovy code or Beanshell, you need to do the following:
+    <source>
+    import org.apache.logging.log4j.core.config.Configurator;
+    ...
+    final String loggerName = te.getClass().getName(); // te being a JMeter class
+    Configurator.setAllLevels(loggerName, Level.DEBUG); 
+    </source>
+    </note>
 </p>
 
-<h4>Changes to 3rd party plugin logging</h4>
+<h4>Changes to 3<sup>rd</sup> party plugin logging</h4>
 <p>
-    <note>TBA</note>
+    <note>3rd party plugins should migrate their logging code from logkit to slf4j. This is fairly easy and can be done by replacing:
+    <source>
+        import org.apache.jorphan.logging.LoggingManager;
+        import org.apache.log.Logger;
+        ...
+        private static final Logger log = LoggingManager.getLoggerForClass();
+    </source>
+    By:
+    <source>
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+        ...
+        private static final Logger log = LoggerFactory.getLogger(YourClassName.class);
+    </source>
+    </note>
 </p>
 <!-- =================== Improvements =================== -->
 
@@ -172,7 +241,7 @@ This affects configuration and 3rd party plugins.
 <ul>
     <li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><pr>259</pr>Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>259</pr> - Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -234,11 +303,11 @@ This affects configuration and 3rd party plugins.
     <li><bug>60654</bug>Validation Feature : Be able to ignore BackendListener. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
     <li><bug>60646</bug>Workbench : Save it by default</li>
     <li><bug>60684</bug>Thread Group: Validate ended prematurely by Scheduler with 0 or very short duration. Contributed by Andrew Burton (andrewburtonatwh at gmail.com).</li>
-    <li><bug>60589</bug>Migrate LogKit to SLF4J - Drop avalon, logkit and excalibur with backward compatibility for 3<sup>rd</sup> party modules. Contributed by Woonsan Ko (woonsan at apache.org)</li>
+    <li><bug>60589</bug>Migrate LogKit to SLF4J - Drop Avalon, LogKit and Excalibur with backward compatibility for 3<sup>rd</sup> party modules. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60565</bug>Migrate LogKit to SLF4J - Optimize logging statements. e.g, message format args, throwable args, unnecessary if-enabled-logging in simple ones, etc. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><bug>60564</bug>Migrate LogKit to SLF4J - Replace logkit loggers with slf4j ones and keep the current logkit binding solution for backward compatibility with plugins. Contributed by Woonsan Ko (woonsan at apache.org)</li>
+    <li><bug>60564</bug>Migrate LogKit to SLF4J - Replace LogKit loggers with SLF4J ones and keep the current LogKit binding solution for backward compatibility with plugins. Contributed by Woonsan Ko (woonsan at apache.org)</li>
     <li><bug>60664</bug>Add a UI menu to set log level. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><pr>276</pr>Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
+    <li><pr>276</pr> - Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
     <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
@@ -252,7 +321,7 @@ This affects configuration and 3rd party plugins.
     <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
-    <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
+    <li>Updated to jodd 3.8.1 (from 3.7.1.jar)</li>
     <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
@@ -261,7 +330,7 @@ This affects configuration and 3rd party plugins.
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
     <li>Converted the old pdf tutorials to xml.</li>
-    <li><pr>255</pr>Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
+    <li><pr>255</pr> - Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
 </ul>
 
@@ -281,7 +350,8 @@ This affects configuration and 3rd party plugins.
     <li><bug>60758</bug>HTTP(s) Test Script Recorder : Number request may generate duplicate numbers. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
-    <li><bug>60837</bug>GET with body, PUT are not be retried even if retrycount is higher than 0</li>
+    <li><bug>60837</bug>GET with body, PUT are not retried even if <code>httpclient4.retrycount</code> is higher than 0</li>
+    <li><bug>60842</bug>Trim extracted URLs when loading embedded resources using the Lagarto based HTML Parser.</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -299,11 +369,12 @@ This affects configuration and 3rd party plugins.
     <li><bug>60648</bug>GraphiteBackendListener can lose some metrics at end of test if test is very short</li>
     <li><bug>60650</bug>AbstractBackendListenerClient does not reset UserMetric between runs</li>
     <li><bug>60759</bug>View Results Tree : Search feature does not search in URL. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60859</bug>Save Responses to a file : 2 elements with different configuration will overlap</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>60438</bug><pr>235</pr>Clear old variables before extracting new ones in JSON Extractor.
+    <li><bug>60438</bug><pr>235</pr> - Clear old variables before extracting new ones in JSON Extractor.
     Based on a patch by Qi Chen (qi.chensh at ele.me)</li>
     <li><bug>60607</bug>DNS Cache Manager configuration is ignored</li>
     <li><bug>60729</bug>The Random Variable Config Element should allow minimum==maximum</li>
@@ -341,6 +412,7 @@ This affects configuration and 3rd party plugins.
     <li><bug>60621</bug>The "<code>report-template</code>" folder is missing from <code>ApacheJMeter_config-3.1.jar</code> in maven central</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
     <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
+    <li><bug>60857</bug>SaveService omits XML header if _file_encoding is not defined in saveservice.properties</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
