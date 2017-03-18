@@ -583,7 +583,8 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
             }
             return temporaryTimestampFormat;
         } catch(IllegalArgumentException ex) {
-            log.error("Invalid pattern value {} for property {}", temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP);
+            log.error("Invalid pattern value {} for property {}", temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP, 
+                    ex);
             return null;
         }
     }
