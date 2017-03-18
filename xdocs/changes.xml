@@ -318,7 +318,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <ul>
     <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
-    <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
+    <li>Updated to groovy 2.4.10 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
     <li>Updated to jodd 3.8.1 (from 3.7.1.jar)</li>
