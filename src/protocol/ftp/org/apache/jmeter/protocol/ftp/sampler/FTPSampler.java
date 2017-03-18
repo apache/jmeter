@@ -213,7 +213,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                         } else {
                             File infile = new File(local);
                             res.setBytes(infile.length());
-                            fileIS = new FileInputStream(infile);
+                            fileIS = new FileInputStream(infile); // NOSONAR False positive, fileIS is closed in finally and not overwritten
                             input = new BufferedInputStream(fileIS);
                         }
                         ftpOK = ftp.storeFile(remote, input);
@@ -228,7 +228,7 @@ public class FTPSampler extends AbstractSampler implements Interruptible {
                                 target=baos;
                             }
                             if (local.length()>0){
-                                output=new FileOutputStream(local);
+                                output=new FileOutputStream(local); // NOSONAR False positive, the output is closed in finally and not overwritten
                                 if (target==null) {
                                     target=output;
                                 } else {
