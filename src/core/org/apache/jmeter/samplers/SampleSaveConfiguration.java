@@ -578,12 +578,12 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         try {
             new SimpleDateFormat(temporaryTimestampFormat);
             if(log.isDebugEnabled()) {
-                log.debug("Successfully validated pattern value {} for property {}", 
+                log.debug("Successfully validated pattern value {} for property {}",
                         temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP);
             }
             return temporaryTimestampFormat;
         } catch(IllegalArgumentException ex) {
-            log.error("Invalid pattern value {} for property {}", temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP, 
+            log.error("Invalid pattern value {} for property {}", temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP,
                     ex);
             return null;
         }
