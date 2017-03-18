@@ -551,7 +551,7 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
                         errorLevel = Integer.parseInt(respMsg.substring(0, 3));
                         log.warn("ResponseCode==-1; parsed {} as {}", respMsg, errorLevel);
                       } catch (NumberFormatException e) {
-                        log.warn("ResponseCode==-1; could not parse {}  hdr: {}", respMsg, hdr);
+                        log.warn("ResponseCode==-1; could not parse {} hdr: {}", respMsg, hdr);
                       }
                 } else {
                     respMsg=hdr; // for result
