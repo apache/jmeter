@@ -427,8 +427,17 @@ JMETER-SERVER</source>
     Defaults to: <code>true</code>
 </property>
 <property name="httpclient4.retrycount">
-    Number of retries to attempt.<br/>
+    Number of retries to attempt.
+    Retry will be done on Idempotent Http Methods by default. 
+    If you want to retry for all methods, see property <code>httpclient4.request_sent_retry_enabled</code>
+    <br/>
     Defaults to: <code>0</code>
+</property>
+<property name="httpclient4.request_sent_retry_enabled">
+    Set this property to <code>true</code> if it's OK to retry requests that have been sent.
+    This mean that both Idempotent and non Idempotent requests will be retried.
+    This should usually be false, but it can be useful when testing against some Load Balancers like Amazon ELB.<br/>
+    Defaults to: <code>false</code>
 </property>
 <property name="httpclient4.idletimeout">
     Idle connection timeout (in milliseconds) to apply if the server does not send <code>Keep-Alive</code> timeout headers.<br/>

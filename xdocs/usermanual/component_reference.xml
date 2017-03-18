@@ -457,6 +457,11 @@ The retry count can be overridden by setting the relevant JMeter property, for e
 <source>
 httpclient4.retrycount=3
 </source>
+With HC4 Implementation, retry will be done on Idempotent Http Methods by default.
+If you want to retry for all methods, then set property
+<source>
+httpclient4.request_sent_retry_enabled=true
+</source>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
 You may encounter the following error: <code>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</code>
