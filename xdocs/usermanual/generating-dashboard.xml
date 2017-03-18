@@ -130,9 +130,11 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         <property name="date_format" required="No">
                             Default date format from <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">
                             SimpleDateFormat Java API</a> with Locale.ENGLISH.<br/>
-                            Date format is <code>yyyyMMddHHmmss</code><br/>
-                            Useful when you would generate a report after the load test, and the results file contains timestamp in
-                            another time zone. In this case the date format must include the time zone (zzz).<br/>
+                            Default Date format is <code>yyyyMMddHHmmss</code><br/>
+                            Useful when you would like to generate a report after the load test, and the results file contains timestamp in
+                            another time zone. In this case the date format must include the time zone (zzz).
+                            <note>If <code>jmeter.save.saveservice.timestamp_format</code> does not contain year then use 1970 as year</note>
+                            <br/>
                             Example: <code>dd/MM/yyyy HH:mm:ss zzz</code>
                         </property>
                         <property name="start_date" required="No">
