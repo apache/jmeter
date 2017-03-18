@@ -413,6 +413,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
     <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
     <li><bug>60857</bug>SaveService omits XML header if _file_encoding is not defined in saveservice.properties</li>
+    <li><bug>60830</bug>Timestamps in CSV file could be corrupted due to sharing a SimpleDateFormatter across threads</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
