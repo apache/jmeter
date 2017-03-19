@@ -1440,9 +1440,9 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   <property name="Message type" required="Yes">Text, Map, Object message or Bytes Message</property>
   <property name="Content encoding" required="Yes">Specify the encoding for reading the message source file:
   <dl> 
-    <dt><code>RAW</code>: No variable support from the file and load it with default system charset.</dt>
-    <dt><code>DEFAULT</code>: Load file from default system encoding, except for XML which relies on XML prolog. If the file contain variables, they are processing.</dt>
-    <dt><code>Standard charsets</code>: The specified encoding (valid or not) is use for reading the file and processing variables</dt>
+    <dt><code>RAW</code>:</dt><dd>No variable support from the file and load it with default system charset.</dd>
+    <dt><code>DEFAULT</code>:</dt><dd>Load file from default system encoding, except for XML which relies on XML prolog. If the file contain variables, they are processing.</dd>
+    <dt><code>Standard charsets</code>:</dt><dd>The specified encoding (valid or not) is use for reading the file and processing variables</dd>
   </dl>
   </property>
   <property name="Use non-persistent delivery mode?" required="No">
