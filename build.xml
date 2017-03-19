@@ -119,7 +119,13 @@
   <property name="findbugs.outName" value="reports/jmeter-fb" />
   <property name="skip.batchtest" value="false" />
   <property name="skip.bug52310" value="false" />
+  <property name="skip.bug60607" value="false" />
+  <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="false" />
+  <property name="skip.batchtest_SlowCharsFeature" value="false" />
+  <property name="skip.batchtest_TestKeepAlive" value="false" />
   <property name="skip.test_https" value="true" />
+  <property name="skip.test_http" value="false" />
+  <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
 
   <target name="findbugs" description="Run the stand-alone Findbugs detector">
     <echoproperties prefix="findbugs"/>
@@ -2719,11 +2725,13 @@ run JMeter unless all the JMeter jars are added.
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
       <param name="batchtest.jmx" value="Bug60607.jmx"/>
+      <param name="skip.batchtest" value="${skip.bug60607}" />
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="SlowCharsFeature_HttpClient4"/>
       <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
+      <param name="skip.batchtest" value="${skip.batchtest_SlowCharsFeature}" />
     </antcall>
 
     <antcall target="batchtest">
@@ -2731,11 +2739,13 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="SlowCharsFeature.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
+      <param name="skip.batchtest" value="${skip.batchtest_SlowCharsFeature}" />
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
       <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+      <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
     </antcall>
 
     <antcall target="batchtest">
@@ -2743,11 +2753,13 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
+      <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
     </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestKeepAlive"/>
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
+      <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
     </antcall>
 
     <antcall target="batchtest">
@@ -2767,6 +2779,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TEST_HTTP.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="HttpClient4"/>
+      <param name="skip.batchtest" value="${skip.test_http}" />
     </antcall>
       
     <antcall target="batchtest">
@@ -2776,6 +2789,7 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.value" value="Java"/>
       <!-- This test contains a Redirection loop that leads to an error -->
       <param name="batchtest.ignoreErrorLogs" value="true" />
+      <param name="skip.batchtest" value="${skip.test_http}" />
     </antcall>
 
     <antcall target="batchtest">
@@ -2847,6 +2861,8 @@ run JMeter unless all the JMeter jars are added.
       <sysproperty key="testsaveservice.saveout" value="${testsaveservice.saveout}" />
       <sysproperty key="gump.run" value="${gump.run}" />
       <sysproperty key="log4j.configurationFile" value="${basedir}/bin/log4j2.xml" />
+      <sysproperty key="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server"
+        value="${skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server}" />
       <arg value="${build.test}"/>
       <arg value="${basedir}/bin/jmeter.properties"/>
       <arg value="org.apache.jmeter.util.JMeterUtils"/>
