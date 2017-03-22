@@ -71,6 +71,9 @@ public class ReportGeneratorConfiguration {
     private static final String REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
+    
+    private static final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
+            + KEY_DELIMITER + "apdex_per_transaction";
 
     // Exclude Transaction Controller from Top5 Errors by Sampler consumer
     private static final String REPORT_GENERATOR_KEY_EXCLUDE_TC_FROM_TOP5_ERRORS_BY_SAMPLER = REPORT_GENERATOR_KEY_PREFIX
@@ -275,6 +278,7 @@ public class ReportGeneratorConfiguration {
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
+    private String apdexPerTransaction;
     private Pattern filteredSamplesPattern;
     private boolean ignoreTCFromTop5ErrorsBySampler;
     private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
@@ -356,7 +360,15 @@ public class ReportGeneratorConfiguration {
         this.apdexToleratedThreshold = apdexToleratedThreshold;
     }
 
-    /**
+    public String getApdexPerTransaction() {
+		return apdexPerTransaction;
+	}
+
+	public void setApdexPerTransaction(String apdexPerTransaction) {
+		this.apdexPerTransaction = apdexPerTransaction;
+	}
+
+	/**
      * Gets the export configurations.
      *
      * @return the export configurations
@@ -612,6 +624,11 @@ public class ReportGeneratorConfiguration {
                 REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT,
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
+        
+        final String apdexPerTransaction = getOptionalProperty(props, 
+        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
+        		String.class);
+        configuration.setApdexPerTransaction(apdexPerTransaction);
 
         final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
                 props, 

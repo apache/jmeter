@@ -433,9 +433,22 @@ public class ReportGenerator {
         apdexSummaryConsumer.setThresholdSelector(sampleName -> {
                 ApdexThresholdsInfo info = new ApdexThresholdsInfo();
                 info.setSatisfiedThreshold(configuration
-                        .getApdexSatisfiedThreshold());
+                		.getApdexSatisfiedThreshold());
                 info.setToleratedThreshold(configuration
-                        .getApdexToleratedThreshold());
+                		.getApdexToleratedThreshold());
+                // see if the sample name is in the special cases targeted
+                // by property jmeter.reportgenerator.apdex_per_transaction
+                if (configuration.getApdexPerTransaction() != null) {
+                	Pattern regex = Pattern.compile(sampleName + ":(?<satisfied>\\d+)\\|(?<tolerated>\\d+)",
+                			Pattern.MULTILINE);
+                	Matcher matcher = regex.matcher(configuration.getApdexPerTransaction());
+                	if (matcher.find()) {
+                		Long satisfied = Long.valueOf(matcher.group("satisfied"));
+                		Long tolerated = Long.valueOf(matcher.group("tolerated"));
+                		info.setSatisfiedThreshold(satisfied);
+                		info.setToleratedThreshold(tolerated);
+                	}
+                }
                 return info;
         });
         return apdexSummaryConsumer;
