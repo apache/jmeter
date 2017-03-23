@@ -313,6 +313,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
     <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
+    <li><bug>60886</bug>Build improvements to better enable builds in environments that are behind a proxy.</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
