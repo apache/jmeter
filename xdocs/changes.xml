@@ -313,7 +313,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
     <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
-    <li><bug>60886</bug>Build improvements to better enable builds in environments that are behind a proxy.</li>
+    <li><bug>60886</bug>Build improvements to better enable builds in environments that are behind a proxy. Partly contributed by Michael Osipov (1983-01-06 at gmx.net)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -440,6 +440,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <li>Woonsan Ko (woonsan at apache.org)</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
 <li>Kimono (kimono.outfit.am at gmail.com)</li>
+<li>Michael Osipov (1983-01-06 at gmx.net)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
