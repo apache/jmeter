@@ -72,6 +72,7 @@ public class ReportGeneratorConfiguration {
             + KEY_DELIMITER + "apdex_tolerated_threshold";
     private static final Long REPORT_GENERATOR_KEY_APDEX_TOLERATED_THRESHOLD_DEFAULT = Long.valueOf(1500L);
     
+    // Apdex per transaction Thresholds
     private static final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
             + KEY_DELIMITER + "apdex_per_transaction";
 
@@ -278,7 +279,7 @@ public class ReportGeneratorConfiguration {
     private File tempDirectory;
     private long apdexSatisfiedThreshold;
     private long apdexToleratedThreshold;
-    private String apdexPerTransaction;
+    private Map<String, Long[]> apdexPerTransaction;
     private Pattern filteredSamplesPattern;
     private boolean ignoreTCFromTop5ErrorsBySampler;
     private Map<String, ExporterConfiguration> exportConfigurations = new HashMap<>();
@@ -359,16 +360,27 @@ public class ReportGeneratorConfiguration {
     public final void setApdexToleratedThreshold(long apdexToleratedThreshold) {
         this.apdexToleratedThreshold = apdexToleratedThreshold;
     }
+    
+    /**
+     * Gets the apdex per transaction map
+     *
+     * @return the apdex per transaction map
+     */
+    public Map<String, Long[]> getApdexPerTransaction() {
+        return apdexPerTransaction;
+    }
 
-    public String getApdexPerTransaction() {
-		return apdexPerTransaction;
-	}
+    /**
+     * Sets the apdex per transaction map.
+     *
+     * @param apdexPerTransaction
+     *            a map containing thresholds for one or more samples
+     */
+    public void setApdexPerTransaction(Map<String, Long[]> apdexPerTransaction) {
+        this.apdexPerTransaction = apdexPerTransaction;
+    }
 
-	public void setApdexPerTransaction(String apdexPerTransaction) {
-		this.apdexPerTransaction = apdexPerTransaction;
-	}
-
-	/**
+    /**
      * Gets the export configurations.
      *
      * @return the export configurations
@@ -625,10 +637,11 @@ public class ReportGeneratorConfiguration {
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
         
+        // Load apdex per transactions, overriden by user
         final String apdexPerTransaction = getOptionalProperty(props, 
-        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
-        		String.class);
-        configuration.setApdexPerTransaction(apdexPerTransaction);
+                REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
+                String.class);
+        configuration.setApdexPerTransaction(getApdexPerTransactionParts(apdexPerTransaction));
 
         final boolean ignoreTCFromTop5ErrorsBySampler = getRequiredProperty(
                 props, 
@@ -705,6 +718,43 @@ public class ReportGeneratorConfiguration {
         log.debug("End of report generator properties loading");
 
         return configuration;
+    }
+    
+    /**
+     * Parses a string coming from properties to fill a map containing
+     * sample names as keys and an array of long [satisfied, tolerated] as values.
+     * The sample name can be a regex supplied by the user.
+     * @param apdexPerTransaction, the string coming from properties
+     * @return a map containing for each sample name or sample name regex an array of Long
+     * corresponding to satisfied and tolerated apdex thresholds.
+     */
+    public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
+        Map <String, Long[]> specificApdexes = new HashMap<>();
+        if (apdexPerTransaction == null) {
+            return null;
+        } else if (apdexPerTransaction.indexOf(",") == -1 ||
+                apdexPerTransaction.indexOf(";") == -1) {
+            log.error(
+                    "error parsing property apdex_per_transaction : {}. Missing comma or semicolon.", apdexPerTransaction);
+            return null;
+        } else {
+            // data looks like : sample(\d+):1000|2000,samples12:3000|4000;scenar01-12:5000|6000
+            String[] parts = apdexPerTransaction.split("[,;]");
+            for (String p : parts) {
+                int colonSeparator = p.lastIndexOf(":");
+                int pipeSeparator = p.lastIndexOf("|");
+                if (colonSeparator == -1 || pipeSeparator == -1) {
+                    log.error(
+                        "error parsing property apdex_per_transaction around chunk {}. Missing pipe or colon ?", p);
+                    continue;
+                }
+                String key = p.substring(0, colonSeparator);
+                Long satisfied = Long.valueOf(p.substring(colonSeparator + 1, pipeSeparator));
+                Long tolerated = Long.valueOf(p.substring(pipeSeparator + 1));
+                specificApdexes.put(key, new Long[] {satisfied, tolerated});
+            }
+            return specificApdexes;
+        }
     }
 
     /**

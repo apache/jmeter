@@ -57,6 +57,7 @@ import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.oro.text.regex.PatternMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -432,22 +433,26 @@ public class ReportGenerator {
         apdexSummaryConsumer.setHasOverallResult(true);
         apdexSummaryConsumer.setThresholdSelector(sampleName -> {
                 ApdexThresholdsInfo info = new ApdexThresholdsInfo();
+                // set default values anyway for safety
                 info.setSatisfiedThreshold(configuration
-                		.getApdexSatisfiedThreshold());
+                        .getApdexSatisfiedThreshold());
                 info.setToleratedThreshold(configuration
-                		.getApdexToleratedThreshold());
+                        .getApdexToleratedThreshold());
                 // see if the sample name is in the special cases targeted
                 // by property jmeter.reportgenerator.apdex_per_transaction
+                // key in entry below can be a hardcoded name or a regex
                 if (configuration.getApdexPerTransaction() != null) {
-                	Pattern regex = Pattern.compile(sampleName + ":(?<satisfied>\\d+)\\|(?<tolerated>\\d+)",
-                			Pattern.MULTILINE);
-                	Matcher matcher = regex.matcher(configuration.getApdexPerTransaction());
-                	if (matcher.find()) {
-                		Long satisfied = Long.valueOf(matcher.group("satisfied"));
-                		Long tolerated = Long.valueOf(matcher.group("tolerated"));
-                		info.setSatisfiedThreshold(satisfied);
-                		info.setToleratedThreshold(tolerated);
-                	}
+                    for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
+                        org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
+                        PatternMatcher matcher = JMeterUtils.getMatcher();
+                        if (matcher.matches(sampleName, regex)) {
+                            Long satisfied = entry.getValue()[0];
+                            Long tolerated = entry.getValue()[1];
+                            info.setSatisfiedThreshold(satisfied);
+                            info.setToleratedThreshold(tolerated);
+                            break;
+                        }
+                    }
                 }
                 return info;
         });
