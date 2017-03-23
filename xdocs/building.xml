@@ -59,9 +59,12 @@ ant download_jars
 This will retrieve any missing jars.
 </p>
 <note>
-If you are behind a proxy, you will have to set an environment entry for ant to use the proxy:
+If you are behind a proxy, you can set a few build properties for ant to use the proxy:
 <source>
-export ANT_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttp.user=login -Dhttp.pass=xxxxx"
+proxy.host=proxy.example.invalid
+proxy.port=8080
+proxy.user=your_user_name
+proxy.pass=your_password
 </source>
 </note>
 

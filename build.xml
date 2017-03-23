@@ -3029,7 +3029,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Get a zip file and unpack it -->
-  <target name="_get_zipfile" if="_get_zipfile" unless="file.exists">
+  <target name="_get_zipfile" if="_get_zipfile" unless="file.exists" depends="setproxy">
     <get src="${loc}/${zip}"
          dest="${build.dir}/${zip}"
          usetimestamp="true" ignoreerrors="false"/>
@@ -3050,7 +3050,7 @@ run JMeter unless all the JMeter jars are added.
   </target>
 
   <!-- Download a jar file and check its hash; if correct, move to correct directory -->
-  <target name="_get_jarfile" if="_get_jarfile" unless="file.exists">
+  <target name="_get_jarfile" if="_get_jarfile" unless="file.exists" depends="setproxy">
     <echo message="Fetching: ${path}/${jar}" level="info"/>
     <get src="${loc}/${jar}"
          dest="${build.dir}/${jar}"
@@ -3574,5 +3574,11 @@ run JMeter unless all the JMeter jars are added.
   <target name="sonar" depends="compile, install, coverage, _sonar" />
 
   <target name="nightlysonar" depends="_coverage.prepare, nightly, _coverage.report, _sonar" />
+
+  <target name="setproxy" if="${proxy.use}">
+    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+              proxyuser="${proxy.user}" proxypassword="${proxy.password}" />
+    <echo message="Using ${proxy.host}:${proxy.port} to download file"/>
+  </target>
 
 </project>
