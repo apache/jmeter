@@ -399,6 +399,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>60726</bug>Report / Dashboard : Top 5 errors by samplers must not take into account the series filtering</li>
+    <li><bug>60919</bug>Report / Dashboard : Latency Vs Request and Response Time Vs Request are wrong if granularity is different from 1000 (1 second)</li>
 </ul>
     
 <h3>General</h3>
