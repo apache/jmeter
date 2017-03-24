@@ -116,6 +116,7 @@ downloaded by other JMeter users._
 If you are behind a proxy, you can set a few build properties in `build-local.properties` for ant to use the proxy:
 
 ```
+proxy.use=true
 proxy.host=proxy.example.invalid
 proxy.port=8080
 proxy.user=your_user_name
