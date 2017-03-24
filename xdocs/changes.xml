@@ -236,6 +236,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60727</bug>Drop commons-httpclient-3.1 and related elements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60790</bug>HTTP(S) Test Script Recorder : Improve information on certificate expiration and have better UX for Start/Stop</li>
     <li><bug>60888</bug>HttpRequest : Add option to allow retrial of all requests including NON Idempotent HTTP methods</li>
+    <li><bug>60896</bug>HTTP(S) Test Script Recorder : Improve UX by reducing number of properties on screen</li>
 </ul>
 
 <h3>Other samplers</h3>
