@@ -155,7 +155,7 @@ public class CSVDataSet extends ConfigTestElement
         if ("\\t".equals(delim)) { // $NON-NLS-1$
             delim = "\t";// Make it easier to enter a Tab // $NON-NLS-1$
         } else if (delim.isEmpty()){
-            log.warn("Empty delimiter converted to ','");
+            log.debug("Empty delimiter, will use ','");
             delim=",";
         }
         if (vars == null) {
