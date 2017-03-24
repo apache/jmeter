@@ -61,6 +61,7 @@ This will retrieve any missing jars.
 <note>
 If you are behind a proxy, you can set a few build properties in <code>build-local.properties</code> for ant to use the proxy:
 <source>
+proxy.use=true
 proxy.host=proxy.example.invalid
 proxy.port=8080
 proxy.user=your_user_name
