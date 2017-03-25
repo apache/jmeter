@@ -26,7 +26,6 @@ package org.apache.jmeter.engine.util;
  * be cloned for each thread in a test run. Otherwise, the default behavior is
  * to clone every test element for each thread.
  * 
- * @version $Revision$
  */
 public interface NoThreadClone {
 }
