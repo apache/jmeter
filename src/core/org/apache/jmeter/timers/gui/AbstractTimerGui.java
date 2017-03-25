@@ -29,7 +29,6 @@ import org.apache.jmeter.gui.util.MenuFactory;
 /**
  * This is the base class for JMeter GUI components which manage timers.
  *
- * @version $Revision$
  */
 public abstract class AbstractTimerGui extends AbstractJMeterGuiComponent {
     private static final long serialVersionUID = 240L;
