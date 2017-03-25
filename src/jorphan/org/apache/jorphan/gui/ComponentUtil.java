@@ -25,7 +25,6 @@ import java.awt.Dimension;
  * This class is a Util for awt Component and could be used to place them in
  * center of an other.
  *
- * @version $Revision$
  */
 public final class ComponentUtil {
     /**
