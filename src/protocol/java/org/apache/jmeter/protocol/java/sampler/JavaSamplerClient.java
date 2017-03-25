@@ -59,7 +59,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * See {@link org.apache.jmeter.protocol.java.test.SleepTest} for an example of
  * how to implement this interface.
  *
- * @version $Revision$
  */
 public interface JavaSamplerClient {
     /**
