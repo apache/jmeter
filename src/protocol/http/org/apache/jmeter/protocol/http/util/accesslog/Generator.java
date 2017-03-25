@@ -37,7 +37,6 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * is better to design test plans that use data from the database.
  * <p>
  *
- * @version $Revision$
  */
 
 public interface Generator {
