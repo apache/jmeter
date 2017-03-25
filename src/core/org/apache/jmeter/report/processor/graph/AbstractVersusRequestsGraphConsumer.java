@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractVersusRequestsGraphConsumer extends
         AbstractGraphConsumer {
-    private static final Long ONE = Long.valueOf(1L);
     public static final String RESULT_CTX_GRANULARITY = "granularity";
     public static final String TIME_INTERVAL_LABEL = "Interval";
 
@@ -305,10 +304,12 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
             // Count sample depending on time interval
             Long time = getTimeInterval(sample);
             Long count = counts.get(time);
+            // No need to test if it's a controller as they are excluded by default
+            int numberOfRequests = sample.getSampleCount();
             if (count != null) {
-                counts.put(time, Long.valueOf(count.longValue() + 1));
+                counts.put(time, Long.valueOf(count.longValue() + numberOfRequests));
             } else {
-                counts.put(time, ONE);
+                counts.put(time, Long.valueOf(numberOfRequests));
             }
             fileInfos.get(channel).getWriter().write(sample);
         }

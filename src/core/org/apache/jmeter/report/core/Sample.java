@@ -259,6 +259,19 @@ public class Sample {
     }
 
     /**
+     * Gets the sample count stored in the sample.
+     *
+     * @return the sample count or 1
+     */
+    public int getSampleCount() {
+        if(metadata.indexOf(CSVSaveService.CSV_SAMPLE_COUNT) >= 0) {
+            return getData(int.class, CSVSaveService.CSV_SAMPLE_COUNT).intValue();
+        } else {
+            return 1;
+        }
+    }
+
+    /**
      * Gets the success status stored in the sample.
      *
      * @return the success status stored in the sample

@@ -637,6 +637,8 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
         setSentBytes(getSentBytes() + subResult.getSentBytes());
         setHeadersSize(getHeadersSize() + subResult.getHeadersSize());
         setBodySize(getBodySizeAsLong() + subResult.getBodySizeAsLong());
+        setSampleCount(getSampleCount() + subResult.getSampleCount());
+        setErrorCount(getErrorCount()+ subResult.getErrorCount());
         addRawSubResult(subResult);
     }
     

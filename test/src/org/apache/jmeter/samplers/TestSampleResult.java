@@ -262,7 +262,7 @@ public class TestSampleResult {
             assertTrue(parent.isSuccessful());
             assertEquals(600, parent.getBytesAsLong());
             assertEquals("Parent Sample", parent.getSampleLabel());
-            assertEquals(1, parent.getSampleCount());
+            assertEquals(3, parent.getSampleCount());
             assertEquals(2, parent.getSubResults().length);
             long parentElapsedTotal = parent.getTime();
             
@@ -297,10 +297,10 @@ public class TestSampleResult {
             Calculator calculator = new Calculator();
             calculator.addSample(parent);
             assertEquals(600, calculator.getTotalBytes());
-            assertEquals(1, calculator.getCount());
-            assertEquals(1d / (parentElapsedTotal / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
+            assertEquals(3, calculator.getCount());
+            assertEquals(3d / (parentElapsedTotal / 1000d), calculator.getRate(),0.0001d); // Allow for some margin of error
             // Check that the throughput uses the time elapsed for the sub results
-            assertFalse(1d / (parentElapsed / 1000d) <= calculator.getRate());
+            assertFalse(3d / (parentElapsed / 1000d) <= calculator.getRate());
         }
 
         // TODO some more invalid sequence tests needed
