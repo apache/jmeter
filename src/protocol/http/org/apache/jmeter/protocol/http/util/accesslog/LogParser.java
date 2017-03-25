@@ -33,7 +33,6 @@ import org.apache.jmeter.testelement.TestElement;
  * coded and written over the weekend.
  * <p>
  *
- * @version $Revision$
  */
 
 public interface LogParser {
