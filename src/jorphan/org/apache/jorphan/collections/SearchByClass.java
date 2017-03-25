@@ -49,7 +49,6 @@ import java.util.Map;
  * @see HashTree
  * @see HashTreeTraverser
  *
- * @version $Revision$
  * @param <T>
  *            Class that should be searched for
  */
