@@ -26,7 +26,6 @@ import java.util.List;
  * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  *
- * @version $Revision$
  */
 public interface RemoteSampleListener extends java.rmi.Remote {
     void testStarted() throws RemoteException;
