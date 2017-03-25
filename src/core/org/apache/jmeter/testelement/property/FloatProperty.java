@@ -21,7 +21,6 @@ package org.apache.jmeter.testelement.property;
 import org.apache.jmeter.testelement.TestElement;
 
 /**
- * @version $Revision$
  */
 public class FloatProperty extends NumberProperty {
     private static final long serialVersionUID = 240L;
