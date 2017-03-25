@@ -22,7 +22,6 @@ import java.util.EventObject;
 import java.util.Locale;
 
 /**
- * @version $Revision$
  */
 public class LocaleChangeEvent extends EventObject {
 

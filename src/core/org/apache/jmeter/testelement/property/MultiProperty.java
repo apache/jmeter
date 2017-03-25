@@ -24,7 +24,6 @@ import org.apache.jmeter.testelement.TestElement;
  * For JMeterProperties that hold multiple properties within, provides a simple
  * interface for retrieving a property iterator for the sub values.
  *
- * @version $Revision$
  */
 public abstract class MultiProperty extends AbstractProperty implements Iterable<JMeterProperty> {
     private static final long serialVersionUID = 240L;
