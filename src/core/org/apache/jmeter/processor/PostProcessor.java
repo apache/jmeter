@@ -21,7 +21,6 @@ package org.apache.jmeter.processor;
 /**
  * The PostProcessor is activated after a sample result has been generated.
  *
- * @version $Revision$
  */
 public interface PostProcessor {
     /**

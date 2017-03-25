@@ -25,7 +25,6 @@ import java.net.PasswordAuthentication;
  * Provides JMeter the ability to use proxy servers that require username and
  * password.
  *
- * @version $Revision$
  */
 public class ProxyAuthenticator extends Authenticator {
     /** The username to authenticate with. */

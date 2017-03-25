@@ -26,7 +26,6 @@ import org.apache.jmeter.samplers.SampleResult;
  * Assertion Result. For example, if a web response doesn't contain an expected
  * expression, it would be considered a failure.
  *
- * @version $Revision$
  */
 public interface Assertion {
     /**
