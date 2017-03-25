@@ -21,7 +21,6 @@ package org.apache.jmeter.processor;
 /**
  * PreProcessors are executed just prior to a sample being run.
  *
- * @version $Revision$
  */
 public interface PreProcessor {
     void process();

@@ -24,7 +24,6 @@ import org.apache.jmeter.threads.TestCompiler;
  * Otherwise, the default behavior is to merge the element with every sampler in scope.
  * 
  * @see TestCompiler#configureSampler(org.apache.jmeter.samplers.Sampler)
- * @version $Revision$
  * @since 2.7
  */
 public interface NoConfigMerge {
