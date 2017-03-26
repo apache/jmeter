@@ -17,7 +17,7 @@ asm-5.2 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
-accessors-smart-1.1 (net.minidev)
+accessors-smart-1.2 (net.minidev)
 ----------------------
 - JSON Path extractor
 
