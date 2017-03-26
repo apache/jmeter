@@ -328,7 +328,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
-    <li>Updated to slf4j-api 1.7.24 (from 1.7.21)</li>
+    <li>Updated to slf4j-api 1.7.25 (from 1.7.21)</li>
     <li>Updated to asm 5.2 (from 5.1)</li>
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
