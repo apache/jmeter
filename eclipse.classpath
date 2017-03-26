@@ -71,7 +71,7 @@
 	<classpathentry kind="lib" path="lib/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.24.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-core-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-log-3.8.1.jar"/>
@@ -89,8 +89,8 @@
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.24.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.24.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.1.jar"/>
