@@ -475,11 +475,10 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Does not appear to be used (yet)
     private int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
 
-
     // Don't save this, as it is derived from the time format
     private boolean printMilliseconds = PRINT_MILLISECONDS;
 
-    private String dateFormat = DATE_FORMAT;
+    private transient String dateFormat = DATE_FORMAT;
 
     /** A formatter for the time stamp. 
      * Make transient as we don't want to save the FastDateFormat class
@@ -613,7 +612,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         try {
             SampleSaveConfiguration clone = (SampleSaveConfiguration)super.clone();
             if(this.dateFormat != null) {
-                clone.threadSafeLenientFormatter = (FastDateFormat)this.threadSafeLenientFormatter.clone();
+                clone.threadSafeLenientFormatter = (FastDateFormat)this.threadSafeLenientFormatter().clone();
             }
             return clone;
         }
@@ -970,6 +969,12 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
      * @return {@link FastDateFormat} Thread safe lenient formatter
      */
     public FastDateFormat threadSafeLenientFormatter() {
+        // When restored by XStream threadSafeLenientFormatter may not have 
+        // been initialized
+        if(threadSafeLenientFormatter == null) {
+            threadSafeLenientFormatter = 
+                    dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;
+        }
         return threadSafeLenientFormatter;
     }
 
