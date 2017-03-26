@@ -198,7 +198,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <note>If you need to change the level programmatically from Groovy code or Beanshell, you need to do the following:
     <source>
     import org.apache.logging.log4j.core.config.Configurator;
-    ...
+    &vellip;
     final String loggerName = te.getClass().getName(); // te being a JMeter class
     Configurator.setAllLevels(loggerName, Level.DEBUG); 
     </source>
@@ -211,14 +211,14 @@ listeners hold and a rework of the way GUI is updated</li>
     <source>
         import org.apache.jorphan.logging.LoggingManager;
         import org.apache.log.Logger;
-        ...
+        &vellip;
         private static final Logger log = LoggingManager.getLoggerForClass();
     </source>
     By:
     <source>
         import org.slf4j.Logger;
         import org.slf4j.LoggerFactory;
-        ...
+        &vellip;
         private static final Logger log = LoggerFactory.getLogger(YourClassName.class);
     </source>
     </note>
