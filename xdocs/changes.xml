@@ -332,6 +332,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li>Updated to asm 5.2 (from 5.1)</li>
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
+    <li>Updated to json-smart-2.3 (from 2.2.1)</li>
     <li>Converted the old pdf tutorials to xml.</li>
     <li><pr>255</pr> - Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
