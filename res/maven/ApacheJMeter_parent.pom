@@ -52,7 +52,7 @@ under the License.
 
     <properties>
       <!-- these must agree with the definitions in build.properties -->
-      <accessors-smart.version>1.1</accessors-smart.version>
+      <accessors-smart.version>1.2</accessors-smart.version>
       <apache-bsf.version>2.4.0</apache-bsf.version>
       <asm.version>5.2</asm.version>
       <beanshell.version>2.0b5</beanshell.version>
