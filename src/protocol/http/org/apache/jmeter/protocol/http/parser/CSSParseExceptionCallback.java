@@ -22,8 +22,8 @@ import java.net.URL;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.jmeter.util.JMeterUtils;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.css.handler.ICSSParseExceptionCallback;
 import com.helger.css.parser.ParseException;
@@ -59,7 +59,11 @@ public class CSSParseExceptionCallback implements ICSSParseExceptionCallback {
         if (IGNORE_UNRECOVERABLE_PARSING_ERROR) {
             LOG.warn(message);
         } else {
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(
+                    "Unrecoverable error met during parsing, "
+                    + "you can ignore such errors by setting property:"
+                    + "'httpsampler.ignore_failed_embedded_resource' to true, message:"
+                    + message);
         }
 
     }
