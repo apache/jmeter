@@ -136,7 +136,7 @@ https://github.com/jayway/JsonPath
 - JSON Path Extractor
 - JSON Path Renderer
 
-json-smart-2.2.1 (net.minidev)
+json-smart-2.3 (net.minidev)
 --------
 https://github.com/netplex/json-smart-v2
 - JSON Path Extractor

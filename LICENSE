@@ -247,7 +247,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * caffeine-2.4.0.jar
 * freemarker-2.3.23.jar (AL2.0, see licenses/bin for additional info)
 * json-path-2.2.0.jar
-* json-smart-2.2.1.jar
+* json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
 * ph-commons-8.6.0.jar
 * ph-css-5.0.3.jar
