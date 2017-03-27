@@ -56,7 +56,7 @@ public class TestCssParser extends JMeterTestCase {
     }
     
     @Test(expected=LinkExtractorParseException.class)
-    public void testGetEmbeddedResourceURLs() throws Exception {
+    public void testExtractUrlsFromBrokenData() throws Exception {
         extractUrls(CSS_IN_ERROR);
     }
 
