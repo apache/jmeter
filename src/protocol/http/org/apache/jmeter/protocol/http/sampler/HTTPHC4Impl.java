@@ -350,7 +350,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         HTTPSampleResult res = createSampleResult(url, method);
 
-        CloseableHttpClient httpClient = setupClient(url, res);
+        CloseableHttpClient httpClient = setupClient(url);
 
         HttpRequestBase httpRequest = null;
         try {
@@ -611,7 +611,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     /**
      * Execute request either as is or under PrivilegedAction 
      * if a Subject is available for url
-     * @param httpClient the {@link HttpClient} to be used to execute the httpRequest
+     * @param httpClient the {@link CloseableHttpClient} to be used to execute the httpRequest
      * @param httpRequest the {@link HttpRequest} to be executed
      * @param localContext th {@link HttpContext} to be used for execution
      * @param url the target url (will be used to look up a possible subject for the execution)
@@ -627,8 +627,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             Subject subject = authManager.getSubjectForUrl(url);
             if (subject != null) {
                 try {
-                    return (CloseableHttpResponse) Subject.doAs(subject,
-                            (PrivilegedExceptionAction<HttpResponse>) () ->
+                    return Subject.doAs(subject,
+                            (PrivilegedExceptionAction<CloseableHttpResponse>) () ->
                                     httpClient.execute(httpRequest, localContext));
                 } catch (PrivilegedActionException e) {
                     log.error("Can't execute httpRequest with subject: {}", subject, e);
@@ -754,7 +754,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(URL url, SampleResult res) {
+    private CloseableHttpClient setupClient(URL url) {
 
         Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
