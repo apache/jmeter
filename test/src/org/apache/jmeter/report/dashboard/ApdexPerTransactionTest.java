@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
@@ -39,7 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import jodd.props.Props;
 
-public class ApdexPerTransactionTest {
+public class ApdexPerTransactionTest extends JMeterTestCase {
 	
 	private static final Logger log = LoggerFactory.getLogger(ApdexPerTransactionTest.class);
 	
@@ -56,8 +57,8 @@ public class ApdexPerTransactionTest {
 		final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
 	            + KEY_DELIMITER + "apdex_per_transaction";
 		
-		File rgp = new File("test/resources/", "reportgenerator_test.properties");
-		merged.putAll(loadProps(rgp));
+		merged.putAll(loadProps(
+		        new File(this.getClass().getResource("reportgenerator_test.properties").getFile())));
 		props.load(merged);
 		final String apdexPerTransaction = getOptionalProperty(props, 
         		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
