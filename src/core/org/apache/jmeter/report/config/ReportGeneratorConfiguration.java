@@ -738,8 +738,8 @@ public class ReportGeneratorConfiguration {
             // data looks like : sample(\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000
             String[] parts = apdexPerTransaction.split("[;]");
             for (String chunk : parts) {
-                int colonSeparator = chunk.lastIndexOf(":");
-                int pipeSeparator = chunk.lastIndexOf("|");
+                int colonSeparator = chunk.lastIndexOf(':');
+                int pipeSeparator = chunk.lastIndexOf('|');
                 if (colonSeparator == -1 || pipeSeparator == -1 ||
                         pipeSeparator <= colonSeparator) {
                     log.error(
