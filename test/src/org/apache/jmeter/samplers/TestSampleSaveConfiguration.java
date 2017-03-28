@@ -25,7 +25,6 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,16 +135,26 @@ public class TestSampleSaveConfiguration extends JMeterTestCase {
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
-        a.setFormatter(null);
-        b.setFormatter(null);
+        assertTrue(a.strictDateFormatter() == null);
+        assertTrue(b.strictDateFormatter() == null);
+        assertTrue(a.threadSafeLenientFormatter() == null);
+        assertTrue(b.threadSafeLenientFormatter() == null);
+        a.setDateFormat(null);
+        b.setDateFormat(null);
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
-        a.setFormatter(new SimpleDateFormat());
-        b.setFormatter(new SimpleDateFormat());
+        assertTrue(a.strictDateFormatter() == null);
+        assertTrue(b.strictDateFormatter() == null);
+        assertTrue(a.threadSafeLenientFormatter() == null);
+        assertTrue(b.threadSafeLenientFormatter() == null);
+        a.setDateFormat("dd/MM/yyyy");
+        b.setDateFormat("dd/MM/yyyy");
         assertEquals("Hash codes should be equal",a.hashCode(), b.hashCode());
         assertTrue("Objects should be equal",a.equals(b));
         assertTrue("Objects should be equal",b.equals(a));
+        assertTrue("Objects should be equal",a.strictDateFormatter().equals(b.strictDateFormatter()));
+        assertTrue("Objects should be equal",a.threadSafeLenientFormatter().equals(b.threadSafeLenientFormatter()));
     }
 
     @Test

@@ -220,7 +220,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * commons-math3-3.6.1.jar
 * commons-net-3.6.jar
 * commons-pool2-2.4.2.jar
-* groovy-all-2.4.9.jar
+* groovy-all-2.4.10.jar
 * httpasyncclient-4.1.3.jar
 * httpclient-4.5.3.jar
 * httpcore-4.4.6.jar
@@ -243,11 +243,11 @@ The following software is provided under the Apache License V 2.0 (as above):
 
 - Software produced outside the ASF which is available under AL 2.0:
 
-* accessors-smart-1.1.jar
+* accessors-smart-1.2.jar
 * caffeine-2.4.0.jar
 * freemarker-2.3.23.jar (AL2.0, see licenses/bin for additional info)
 * json-path-2.2.0.jar
-* json-smart-2.2.1.jar
+* json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
 * ph-commons-8.6.0.jar
 * ph-css-5.0.3.jar
@@ -261,7 +261,7 @@ For details, please see the files under: licenses/bin
 * hamcrest-core-1.3.jar (BSD)
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
 * jcharts-0.7.5.jar (?)
-* jcl-over-slf4j-1.7.24.jar (MIT)
+* jcl-over-slf4j-1.7.25.jar (MIT)
 * jsoup-1.10.2.jar (MIT)
 * jodd-core-3.8.1.jar (Simplified BSD)
 * jodd-lagarto-3.8.1.jar (Simplified BSD)
@@ -271,8 +271,8 @@ For details, please see the files under: licenses/bin
 * junit-4.12.jar (BSD)
 * rhino-1.7.7.1.jar (MPL 2.0)
 * rsyntaxtextarea-2.6.1.jar (BSD)
-* slf4j-api-1.7.24.jar (MIT)
-* slf4j-ext-1.7.24.jar (MIT)
+* slf4j-api-1.7.25.jar (MIT)
+* slf4j-ext-1.7.25.jar (MIT)
 * xmlpull-1.1.3.1.jar (Public Domain)
 * xpp3-1.1.4c.jar (Indiana University Extreme! Lab Software License 1.1.1)
 * xstream-1.4.9.jar (BSD)

@@ -22,7 +22,6 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * Description:<br>
  * <br>
  *
- * @version $Revision$
  */
 
 public class NVPair {

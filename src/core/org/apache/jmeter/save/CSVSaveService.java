@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -211,7 +212,8 @@ public final class CSVSaveService {
                     try {
                         timeStamp = Long.parseLong(text); // see if this works
                     } catch (NumberFormatException e) { // it did not, let's try some other formats
-                        log.warn("Cannot parse timestamp: '{}'", text);
+                        log.warn("Cannot parse timestamp: '{}', will try following formats {}", text,
+                                Arrays.asList(DATE_FORMAT_STRINGS));
                         boolean foundMatch = false;
                         for(String fmt : DATE_FORMAT_STRINGS) {
                             SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
@@ -219,22 +221,20 @@ public final class CSVSaveService {
                             try {
                                 Date stamp = dateFormat.parse(text);
                                 timeStamp = stamp.getTime();
-                                // method is only ever called from one thread at a time
-                                // so it's OK to use a static DateFormat
                                 log.warn("Setting date format to: {}", fmt);
-                                saveConfig.setFormatter(dateFormat);
+                                saveConfig.setDateFormat(fmt);
                                 foundMatch = true;
                                 break;
                             } catch (ParseException pe) {
-                                log.info("{} did not match {}", text, fmt);
+                                log.info("{} did not match {}, trying next date format", text, fmt);
                             }
                         }
                         if (!foundMatch) {
                             throw new ParseException("No date-time format found matching "+text,-1);
                         }
                     }
-                } else if (saveConfig.formatter() != null) {
-                    Date stamp = saveConfig.formatter().parse(text);
+                } else if (saveConfig.strictDateFormatter() != null) {
+                    Date stamp = saveConfig.strictDateFormatter().parse(text);
                     timeStamp = stamp.getTime();
                 } else { // can this happen?
                     final String msg = "Unknown timestamp format";
@@ -802,8 +802,8 @@ public final class CSVSaveService {
         if (saveConfig.saveTimestamp()) {
             if (saveConfig.printMilliseconds()) {
                 text.append(sample.getTimeStamp());
-            } else if (saveConfig.formatter() != null) {
-                String stamp = saveConfig.formatter().format(
+            } else if (saveConfig.threadSafeLenientFormatter() != null) {
+                String stamp = saveConfig.threadSafeLenientFormatter().format(
                         new Date(sample.getTimeStamp()));
                 text.append(stamp);
             }

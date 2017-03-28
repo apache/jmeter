@@ -17,7 +17,7 @@ asm-5.2 (org.ow2.asm)
 ----------------------
 - JSON Path extractor
 
-accessors-smart-1.1 (net.minidev)
+accessors-smart-1.2 (net.minidev)
 ----------------------
 - JSON Path extractor
 
@@ -87,7 +87,7 @@ dnsjava-2.1.8
 http://www.dnsjava.org/download/
 - DNSCacheManager
 
-groovy-all-2.4.9
+groovy-all-2.4.10
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
@@ -136,7 +136,7 @@ https://github.com/jayway/JsonPath
 - JSON Path Extractor
 - JSON Path Renderer
 
-json-smart-2.2.1 (net.minidev)
+json-smart-2.3 (net.minidev)
 --------
 https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
@@ -210,7 +210,7 @@ serialiser-2.7.1
 http://www.apache.org/dyn/closer.cgi/xml/xalan-j
 - xalan
 
-slf4j-api-1.7.24
+slf4j-api-1.7.25
 ----------------
 http://www.slf4j.org/
 - jodd-core

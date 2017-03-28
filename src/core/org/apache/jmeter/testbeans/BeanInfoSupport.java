@@ -58,7 +58,6 @@ import org.slf4j.LoggerFactory;
  * attribute, so that it can be used for further localization. TestBeanGUI, for
  * example, uses it to obtain the group's display names from properties <b><i>groupName</i>.displayName</b>.
  *
- * @version $Revision$
  */
 public abstract class BeanInfoSupport extends SimpleBeanInfo {
 

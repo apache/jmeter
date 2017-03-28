@@ -22,7 +22,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
- * @version $Revision$
  */
 public class JLabeledPasswordField extends JLabeledTextField {
 

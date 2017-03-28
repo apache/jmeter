@@ -55,6 +55,7 @@ general cases where access logs might be inappropriate.
 <ul>
   <li>Security sensitive applications where the data is encrypted</li>
   <li>The application does not allow fine grain control of which request parameters are written to the access logs</li>
+  <li>The application needs correlation between requests</li>
   <li>The webserver cannot be configured to append the post data to the access log</li>
   <li>The webserver is hosting multiple applications, but doesn't provide a way to log the requests of one application to a separate file</li>
 </ul>

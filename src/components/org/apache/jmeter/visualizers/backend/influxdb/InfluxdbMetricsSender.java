@@ -51,7 +51,7 @@ interface InfluxdbMetricsSender {
     public void addMetric(String measurement, String tag, String field);
 
     /**
-     * Write metrics to Influxdb with HTTP API with InfluxDB’s Line Protocol
+     * Write metrics to Influxdb with HTTP API with InfluxDB's Line Protocol
      */
     public void writeAndSendMetrics();
 

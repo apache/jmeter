@@ -25,7 +25,6 @@ import java.util.Map;
 import org.apache.jmeter.threads.JMeterVariables;
 
 /**
- * @version $Revision$
  */
 public class VariablesCollection implements Serializable {
 

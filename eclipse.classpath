@@ -45,7 +45,7 @@
 	<classpathentry kind="src" output="build/protocol/native" path="src/protocol/native"/>
 	<classpathentry kind="src" output="build/protocol/tcp" path="src/protocol/tcp"/>
 	<classpathentry kind="src" output="build/test" path="test/src"/>
-	<classpathentry kind="lib" path="lib/accessors-smart-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/accessors-smart-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
@@ -62,7 +62,7 @@
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
-	<classpathentry kind="lib" path="lib/groovy-all-2.4.9.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-2.4.10.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpasyncclient-4.1.3.jar"/>
@@ -71,13 +71,13 @@
 	<classpathentry kind="lib" path="lib/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
-	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.24.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-core-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-log-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/jodd-props-3.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/json-smart-2.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/json-smart-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.10.2.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
@@ -89,8 +89,8 @@
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.24.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.24.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.1.jar"/>

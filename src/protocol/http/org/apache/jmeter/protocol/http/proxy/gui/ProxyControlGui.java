@@ -22,6 +22,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
@@ -51,6 +53,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -639,22 +642,30 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createControls(), BorderLayout.NORTH);
 
-        Box myBox = Box.createVerticalBox();
-        myBox.add(createPortPanel());
-        myBox.add(Box.createVerticalStrut(5));
-        myBox.add(createTestPlanContentPanel());
-        myBox.add(Box.createVerticalStrut(5));
-        myBox.add(createHTTPSamplerPanel());
-        myBox.add(Box.createVerticalStrut(5));
-        myBox.add(createContentTypePanel());
-        myBox.add(Box.createVerticalStrut(5));
-        mainPanel.add(myBox, BorderLayout.CENTER);
+        JTabbedPane tabbedPane = new JTabbedPane();
 
-        Box includeExcludePanel = Box.createVerticalBox();
-        includeExcludePanel.add(createIncludePanel());
-        includeExcludePanel.add(createExcludePanel());
-        includeExcludePanel.add(createNotifyListenersPanel());
-        mainPanel.add(includeExcludePanel, BorderLayout.SOUTH);
+        JPanel testPlanPanel = new VerticalPanel();
+        testPlanPanel.add(createTestPlanContentPanel());
+        testPlanPanel.add(Box.createVerticalStrut(5));
+        testPlanPanel.add(createHTTPSamplerPanel());
+        tabbedPane.add(JMeterUtils
+                .getResString("proxy_test_plan_creation"), testPlanPanel);
+        
+        JPanel filteringPanel = new VerticalPanel();
+        tabbedPane.add(JMeterUtils
+                .getResString("proxy_test_plan_filtering"), filteringPanel);
+        
+        filteringPanel.add(createContentTypePanel());        
+        filteringPanel.add(createIncludePanel());
+        filteringPanel.add(createExcludePanel());
+        filteringPanel.add(createNotifyListenersPanel());
+        
+        JPanel vPanel = new VerticalPanel();
+        vPanel.add(createPortPanel());
+        vPanel.add(Box.createVerticalStrut(5));
+        vPanel.add(tabbedPane);
+        mainPanel.add(vPanel, BorderLayout.CENTER);
+        
         add(mainPanel, BorderLayout.CENTER);
     }
 
@@ -681,6 +692,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         restart.setEnabled(false);
 
         JPanel panel = new JPanel();
+        panel.setMinimumSize(new Dimension(100, 70));
+        panel.setPreferredSize(new Dimension(100, 70));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_general_lifecycle"))); // $NON-NLS-1$
         panel.add(start);
@@ -692,23 +705,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createPortPanel() {
-        portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 5);
+        portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 20);
         portField.setName(PORTFIELD);
         portField.addKeyListener(this);
 
         JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
         label.setLabelFor(portField);
 
-        JPanel gPane = new JPanel(new BorderLayout());
-        gPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                JMeterUtils.getResString("proxy_general_settings"))); // $NON-NLS-1$
-
         HorizontalPanel panel = new HorizontalPanel();
         panel.add(label);
         panel.add(portField);
-        panel.add(Box.createHorizontalStrut(10));
-
-        gPane.add(panel, BorderLayout.WEST);
 
         sslDomains = new JLabeledTextField(JMeterUtils.getResString("proxy_domains")); // $NON-NLS-1$
         sslDomains.setEnabled(ProxyControl.isDynamicMode());
@@ -717,7 +723,28 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         } else {
             sslDomains.setToolTipText(JMeterUtils.getResString("proxy_domains_dynamic_mode_tooltip_java6"));
         }
-        gPane.add(sslDomains, BorderLayout.CENTER);
+
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+        JPanel gPane = new JPanel(gridBagLayout);
+        gPane.setMinimumSize(new Dimension(400,50));
+        gPane.setPreferredSize(new Dimension(400,50));
+        gPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                JMeterUtils.getResString("proxy_general_settings"))); // $NON-NLS-1$
+        gPane.add(panel, gbc.clone());
+        gbc.gridx++;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 6;
+        gPane.add(sslDomains, gbc);
         return gPane;
     }
 
@@ -765,8 +792,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         samplerTypeName.setPreferredSize(new Dimension(150, 20));
         samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
-        JLabel label2 = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
-        label2.setLabelFor(samplerTypeName);
 
         samplerRedirectAutomatically = new JCheckBox(JMeterUtils.getResString("follow_redirects_auto")); // $NON-NLS-1$
         samplerRedirectAutomatically.setSelected(false);
@@ -796,18 +821,50 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         JLabel labelPrefix = new JLabel(JMeterUtils.getResString("proxy_prefix_http_sampler_name")); // $NON-NLS-1$
         labelPrefix.setLabelFor(prefixHTTPSampleName);
 
-        HorizontalPanel panel = new HorizontalPanel();
+        JLabel labelSamplerType = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
+        labelSamplerType.setLabelFor(samplerTypeName);
+              
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        JPanel panel = new JPanel(gridBagLayout);
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_sampler_settings"))); // $NON-NLS-1$
-        panel.add(label2);
-        panel.add(samplerTypeName);
-        panel.add(labelPrefix);
-        panel.add(prefixHTTPSampleName);
-        panel.add(samplerRedirectAutomatically);
-        panel.add(samplerFollowRedirects);
-        panel.add(useKeepAlive);
-        panel.add(samplerDownloadImages);
-
+        panel.add(labelPrefix, gbc.clone());
+        gbc.gridx++;
+        gbc.weightx = 3;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(prefixHTTPSampleName, gbc.clone());
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.fill=GridBagConstraints.VERTICAL;
+        panel.add(samplerDownloadImages, gbc.clone());
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.fill=GridBagConstraints.VERTICAL;
+        panel.add(samplerRedirectAutomatically, gbc.clone());
+        gbc.gridx++;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(samplerFollowRedirects, gbc.clone());
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.fill=GridBagConstraints.VERTICAL;
+        panel.add(useKeepAlive, gbc.clone());
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.fill=GridBagConstraints.VERTICAL;        
+        panel.add(labelSamplerType, gbc.clone());
+        gbc.gridx++;
+        gbc.fill=GridBagConstraints.HORIZONTAL;
+        panel.add(samplerTypeName, gbc.clone());
         return panel;
     }
 
@@ -901,7 +958,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         includeTable = new JTable(includeModel);
         JMeterUtils.applyHiDPI(includeTable);
         includeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        includeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
+        includeTable.setPreferredScrollableViewportSize(new Dimension(80, 80));
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils
@@ -918,7 +975,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         excludeTable = new JTable(excludeModel);
         JMeterUtils.applyHiDPI(excludeTable);
         excludeTable.getTableHeader().setDefaultRenderer(new HeaderAsPropertyRenderer());
-        excludeTable.setPreferredScrollableViewportSize(new Dimension(100, 30));
+        excludeTable.setPreferredScrollableViewportSize(new Dimension(80, 80));
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), JMeterUtils

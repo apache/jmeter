@@ -34,7 +34,6 @@ import org.apache.jmeter.testelement.TestElement;
  * access logs can also reduce the amount of memory needed to run large test
  * plans. <br>
  *
- * @version $Revision$
  */
 
 public interface Filter {

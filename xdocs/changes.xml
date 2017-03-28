@@ -124,7 +124,7 @@ listeners hold and a rework of the way GUI is updated</li>
 
 <ch_title>Documentation improvements</ch_title>
 <ul>
-<li>PDF Documentations have been migrated to HTML user manual</li>
+<li>PDF Documentations have been migrated and updated to HTML user manual</li>
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
@@ -198,7 +198,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <note>If you need to change the level programmatically from Groovy code or Beanshell, you need to do the following:
     <source>
     import org.apache.logging.log4j.core.config.Configurator;
-    ...
+    &vellip;
     final String loggerName = te.getClass().getName(); // te being a JMeter class
     Configurator.setAllLevels(loggerName, Level.DEBUG); 
     </source>
@@ -211,14 +211,14 @@ listeners hold and a rework of the way GUI is updated</li>
     <source>
         import org.apache.jorphan.logging.LoggingManager;
         import org.apache.log.Logger;
-        ...
+        &vellip;
         private static final Logger log = LoggingManager.getLoggerForClass();
     </source>
     By:
     <source>
         import org.slf4j.Logger;
         import org.slf4j.LoggerFactory;
-        ...
+        &vellip;
         private static final Logger log = LoggerFactory.getLogger(YourClassName.class);
     </source>
     </note>
@@ -235,6 +235,8 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>57242</bug>HTTP Authorization is not pre-emptively set with HttpClient4</li>
     <li><bug>60727</bug>Drop commons-httpclient-3.1 and related elements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>60790</bug>HTTP(S) Test Script Recorder : Improve information on certificate expiration and have better UX for Start/Stop</li>
+    <li><bug>60888</bug>HttpRequest : Add option to allow retrial of all requests including NON Idempotent HTTP methods</li>
+    <li><bug>60896</bug>HTTP(S) Test Script Recorder : Improve UX by reducing number of properties on screen</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -312,23 +314,26 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
     <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
     <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
+    <li><bug>60886</bug>Build improvements to better enable builds in environments that are behind a proxy. Partly contributed by Michael Osipov (michaelo at apache.org)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li><bug>60415</bug>Drop support for Java 7.</li>
     <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
-    <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
+    <li>Updated to groovy 2.4.10 (from 2.4.7)</li>
     <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
     <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
     <li>Updated to jodd 3.8.1 (from 3.7.1.jar)</li>
     <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
     <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
     <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
-    <li>Updated to slf4j-api 1.7.24 (from 1.7.21)</li>
+    <li>Updated to slf4j-api 1.7.25 (from 1.7.21)</li>
     <li>Updated to asm 5.2 (from 5.1)</li>
     <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
     <li>Updated to commons-net-3.6 (from 3.5)</li>
+    <li>Updated to json-smart-2.3 (from 2.2.1)</li>
+    <li>Updated to accessors-smart-1.2 (from 1.1)</li>
     <li>Converted the old pdf tutorials to xml.</li>
     <li><pr>255</pr> - Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
     <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
@@ -396,6 +401,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>60726</bug>Report / Dashboard : Top 5 errors by samplers must not take into account the series filtering</li>
+    <li><bug>60919</bug>Report / Dashboard : Latency Vs Request and Response Time Vs Request are wrong if granularity is different from 1000 (1 second)</li>
 </ul>
     
 <h3>General</h3>
@@ -413,6 +419,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
     <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
     <li><bug>60857</bug>SaveService omits XML header if _file_encoding is not defined in saveservice.properties</li>
+    <li><bug>60830</bug>Timestamps in CSV file could be corrupted due to sharing a SimpleDateFormatter across threads</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -437,6 +444,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <li>Woonsan Ko (woonsan at apache.org)</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
 <li>Kimono (kimono.outfit.am at gmail.com)</li>
+<li>Michael Osipov (michaelo at apache.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

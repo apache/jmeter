@@ -113,6 +113,28 @@ but won't be used at run-time.
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
 
+If you are behind a proxy, you can set a few build properties in `build-local.properties` for ant to use the proxy:
+
+```
+proxy.use=true
+proxy.host=proxy.example.invalid
+proxy.port=8080
+proxy.user=your_user_name
+proxy.pass=your_password
+```
+
+You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
+properties into `build-local.properties`:
+```
+skip.bug52310=true
+skip.bug60607=true
+skip.batchtest_Http4ImplPreemptiveBasicAuth=true
+skip.batchtest_SlowCharsFeature=true
+skip.batchtest_TestKeepAlive=true
+skip.test_http=true
+skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+```
+
 ### Test builds
 
 JMeter is built using Ant.
