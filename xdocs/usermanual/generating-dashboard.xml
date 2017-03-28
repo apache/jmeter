@@ -166,7 +166,8 @@ jmeter.save.saveservice.timestamp_format = yyyy/MM/dd HH:mm:ss
                         <property name="jmeter.reportgenerator.apdex_per_transaction" required="No">
                              Sets satisfaction and tolerance threshold to specific samples.<br/>
                              Use sample names or regular expression.<br/> 
-                             Format is <code>sample_name:satisfaction|tolerance[;]</code>(in ms).<br/>
+                             Format is <code>sample_name:satisfaction|tolerance[;]</code><br/>
+                             Values are in milliseconds.
                              <note>
                              Notice the colon between sample name and values, the pipe between thresholds and the 
                              semicolon at the end to separate different samples. Don't forget to escape after
