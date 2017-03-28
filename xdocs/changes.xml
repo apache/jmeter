@@ -289,6 +289,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>60637</bug>Improve Statistics table design <figure image="dashboard/report_statistics.png" ></figure></li>
+    <li><bug>60112</bug>Report / Dashboard : Add ability to customize APDEX thresholds per Transaction name. Contributed by Stephane Leplus (s.leplus at ubik-ingenierie.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -446,6 +447,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
 <li>Kimono (kimono.outfit.am at gmail.com)</li>
 <li>Michael Osipov (michaelo at apache.org)</li>
+<li>Stephane Leplus (s.leplus at ubik-ingenierie.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
