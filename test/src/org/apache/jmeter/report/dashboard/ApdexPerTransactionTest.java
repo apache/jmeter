@@ -88,6 +88,25 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         assertTrue(keys.contains("sample(\\d+)"));
         assertArrayEquals(new Long[] {1000L,  2000L}, apdex.get("sample(\\d+)"));
     }
+   
+   @Test
+   public void testGetApdexPerTransactionNoValue() {
+       Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts("");
+       assertNotNull("map should not be null", apdex);
+       assertEquals(0, apdex.size());
+       
+       apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(" ");
+       assertNotNull("map should not be null", apdex);
+       assertEquals(0, apdex.size());
+   }
+   
+   @Test
+   public void testGetApdexPerTransactionWrongFormat() {
+       Map<String, Long[]> apdex = 
+               ReportGeneratorConfiguration.getApdexPerTransactionParts("sample1|123:434");
+       assertNotNull("map should not be null", apdex);
+       assertEquals(0, apdex.size());
+   }
 	
 	@Test
 	public void testSampleNameMatching() {
