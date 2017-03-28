@@ -357,6 +357,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
     <li><bug>60837</bug>GET with body, PUT are not retried even if <code>httpclient4.retrycount</code> is higher than 0</li>
     <li><bug>60842</bug>Trim extracted URLs when loading embedded resources using the Lagarto based HTML Parser.</li>
+    <li><bug>60928</bug>Http Request : Connection Leak when keepalive is used with Embedded Resources</li>
 </ul>
 
 <h3>Other Samplers</h3>
