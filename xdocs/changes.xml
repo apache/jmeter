@@ -104,6 +104,10 @@ listeners hold and a rework of the way GUI is updated</li>
 <li>HTTP Request GUI has been simplified and provides more place for parameters and body.
 <figure width="848" height="475" image="changes/3.2/http_request.png"></figure>
 </li>
+<li>HTTP(S) Test Script Recorder has been simplified and clarified.
+<figure width="1023" height="494" image="changes/3.2/http_recorder_1.png"></figure>
+<figure width="1021" height="711" image="changes/3.2/http_recorder_2.png"></figure>
+</li>
 <li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements.
 <figure width="459" height="196" image="changes/3.2/search_replace.png"></figure>
 </li>
@@ -119,6 +123,26 @@ listeners hold and a rework of the way GUI is updated</li>
 </li>
 <li>Sorting per column has been added to View Results in Table, Summary Report, Aggregate Report and Aggregate Graph elements.
 <figure width="1065" height="369" image="changes/3.2/sorting.png"></figure>
+</li>
+</ul>
+
+<ch_title>Report/Dashboard improvements</ch_title>
+<ul>
+<li>
+Statistics have been reorganized to clarify report:
+<figure width="1548" height="366" image="dashboard/report_statistics.png"></figure>
+</li>
+<li>
+It is now possible to customize APDEX thresholds per transaction based on regular expression or sample name.
+The below example will apply different thresholds for samples sample(\\d+), sampleA and scenarioB 
+than default ones (500 and 1500 for satisfied and tolerated thresholds) declared:
+<source>
+jmeter.reportgenerator.apdex_satisfied_threshold=500
+jmeter.reportgenerator.apdex_tolerated_threshold=1500
+jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
+    sampleA:3000|4000;\
+    scenarioB:5000|6000
+</source>
 </li>
 </ul>
 
@@ -289,6 +313,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>60637</bug>Improve Statistics table design <figure image="dashboard/report_statistics.png" ></figure></li>
+    <li><bug>60112</bug>Report / Dashboard : Add ability to customize APDEX thresholds per Transaction name. Contributed by Stephane Leplus (s.leplus at ubik-ingenierie.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -357,6 +382,7 @@ listeners hold and a rework of the way GUI is updated</li>
     <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
     <li><bug>60837</bug>GET with body, PUT are not retried even if <code>httpclient4.retrycount</code> is higher than 0</li>
     <li><bug>60842</bug>Trim extracted URLs when loading embedded resources using the Lagarto based HTML Parser.</li>
+    <li><bug>60928</bug>Http Request : Connection Leak when keepalive is used with Embedded Resources</li>
 </ul>
 
 <h3>Other Samplers</h3>
@@ -445,6 +471,7 @@ listeners hold and a rework of the way GUI is updated</li>
 <li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
 <li>Kimono (kimono.outfit.am at gmail.com)</li>
 <li>Michael Osipov (michaelo at apache.org)</li>
+<li>Stephane Leplus (s.leplus at ubik-ingenierie.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
