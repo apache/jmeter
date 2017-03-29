@@ -323,7 +323,6 @@ public class ThreadGroup extends AbstractThreadGroup {
         Thread newThread = new Thread(jmThread, jmThread.getThreadName());
         registerStartedThread(jmThread, newThread);
         newThread.start();
-        waitThreadStopped(newThread);
         return jmThread;
     }
     
@@ -540,10 +539,13 @@ public class ThreadGroup extends AbstractThreadGroup {
         if (delayedStartup) {
             waitThreadStopped(threadStarter);
         }
-        System.out.println(""+allThreads.size());
-        for (Thread t : allThreads.values()) {
-            waitThreadStopped(t);
-        }
+        
+        while (!allThreads.isEmpty()) {
+            for (Thread t : allThreads.values()) {
+                waitThreadStopped(t);
+            }
+        }   
+      
     }
 
     /**
