@@ -1,0 +1,224 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          JUnit Sampler Tutorial</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="jmeter_proxy_step_by_step.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="jmeter_accesslog_sampler_step_by_step.html">Next &gt;</a></li></ul><div class="section"><h1 id="junit">28. JUnit Sampler Tutorial<a class="sectionlink" href="#junit" title="Link to here">&para;</a></h1>
+
+<p>
+This tutorial attempts to explain the basic design, functionality and usage of the new JUnit Sampler for JMeter.
+The sampler was introduced in version 2.1.2 release of JMeter. Earlier releases do not have the sampler.
+</p>
+
+<div class="subsection"><h2 id="design">28.1 Design<a class="sectionlink" href="#design" title="Link to here">&para;</a></h2>
+
+<p>
+The current implementation supports standard JUnit convention and extensions, like <span class="code">oneTimeSetUp</span>
+and <span class="code">oneTimeTearDown</span>. Other features can be added on request. The sampler works like the JavaSampler
+with some differences.
+</p>
+
+<ul>
+  <li>Rather than use JMeter's test interface, it scans the jar files for classes extending JUnit's
+      <span class="code">TestCase</span> class. This means any class or subclass.</li>
+  <li>JUnit test jar files are copied to <span class="code">jmeter/lib/junit</span> instead of
+      <span class="code">jmeter/lib</span></li>
+  <li>JUnit sampler does not use name/value pairs for configuration. The sampler assumes
+      <span class="code">setUp</span> and <span class="code">tearDown</span> will configure the test correctly.
+      <div class="clear"></div><div class="note">Note: <span class="code">setUp</span> and <span class="code">tearDown</span> methods must be declared <span class="code">public</span>,
+       so that JMeter can use it.</div><div class="clear"></div>
+  </li>
+  <li>The sampler measures the elapsed time only for the test method and does not include
+      <span class="code">setUp</span> and <span class="code">tearDown</span>.
+  </li>
+  <li>Each time the test method is called, JMeter will pass the result to the listeners.</li>
+  <li>Support for <span class="code">oneTimeSetUp</span> and <span class="code">oneTimeTearDown</span> is done as a method.
+      Since JMeter is multi-threaded, we cannot call <span class="code">oneTimeSetUp</span>/<span class="code">oneTimeTearDown</span>
+      the same way maven does it.</li>
+  <li>The sampler reports unexpected exceptions as errors.</li>
+</ul>
+
+</div>
+
+<div class="subsection"><h2 id="functionality">28.2 Functionality<a class="sectionlink" href="#functionality" title="Link to here">&para;</a></h2>
+
+<p>
+Here is a description of the functionality.
+</p>
+
+<dl>
+  <dt>Name</dt><dd>name for the sample. This is the same as all JMeter samplers.</dd>
+  <dt>Package Filter</dt><dd>provides a way to filter the classes by package name.</dd>
+  <dt>Classname</dt><dd>the name of the class to test. The sampler will scan the jar files in
+      <span class="code">jmeter/lib/ext</span> and <span class="code">jmeter/lib/junit</span> for classes extending
+      JUnit's <span class="code">TestCase</span>.</dd>
+  <dt>Constructor String</dt><dd>a string to pass to the string constructor of the test class.</dd>
+  <dt>Test Method</dt><dd>the name of the method to test in the sampler.</dd>
+  <dt>Success message</dt><dd>a descriptive message indicating what success means.</dd>
+  <dt>Success code</dt><dd>an unique code indicating the test was successful.</dd>
+  <dt>Failure message</dt><dd>a descriptive message indicating what failure means.</dd>
+  <dt>Failure code</dt><dd>an unique code indicating the test failed</dd>
+  <dt>Error message</dt><dd>a description for errors</dd>
+  <dt>Error code</dt><dd>some code for errors. Does not need to be unique</dd>
+  <dt>Do not call <span class="code">setUp</span> and <span class="code">tearDown</span></dt><dd>set the sampler not
+      to call <span class="code">setUp</span> and <span class="code">tearDown</span>. By default, <span class="code">setUp</span> and
+      <span class="code">tearDown</span> should be called. Not calling those methods could affect the test and
+      make it inaccurate. This option should be used with caution.
+      <div class="clear"></div><div class="note">If the selected method is <span class="code">oneTimeSetUp</span> or <span class="code">oneTimeTearDown</span>,
+      this option should be checked.</div><div class="clear"></div></dd>
+  <dt>Append assertion error</dt><dd>By default, the sampler will not append the assert failures
+      to the failure message. To see the message in the result tree, check the option.</dd>
+  <dt>Append runtime exception</dt><dd>By default, the sampler will not append the exceptions
+      to the failure message. To see the stacktrace, check the option</dd>
+</dl>
+
+<figure><a href="../images/screenshots/junit_sampler.png"><img src="../images/screenshots/junit_sampler.png" width="397" height="536" alt="JUnit Request"></a><figcaption>JUnit Request</figcaption></figure>
+
+<p>
+The current implementation of the sampler will try to create an instance using the string constructor
+first. If the test class does not declare a string constructor, the sampler will look for an empty
+constructor. Example below:
+</p>
+
+<div class="example"><div class="title">Constructor Examples<a class="sectionlink" href="#constructor-examples" title="Link to here">&para;</a></div>
+Empty Constructor:
+<pre class="source">
+public class myTestCase {
+  public myTestCase() {}
+}
+</pre>
+
+String Constructor:
+<pre class="source">
+public class myTestCase {
+  public myTestCase(String text) {
+    super(text);
+  }
+}
+</pre>
+</div>
+
+<p>
+By default, JMeter will provide some default values for the success/failure code and message.
+Users should define a set of unique success and failure codes and use them uniformly across all tests.
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="usage">28.3 Usage<a class="sectionlink" href="#usage" title="Link to here">&para;</a></h2>
+
+<p>
+Here is a short step-by-step.
+</p>
+
+<ol>
+  <li>Write your JUnit test and jar the classes</li>
+  <li>Copy and paste the jar files into <span class="code">jmeter/lib/junit</span> directory</li>
+  <li>Start JMeter</li>
+  <li>Select <span class="code">Test Plan</span></li>
+  <li>Right click
+     <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Thread Group</span></span></li>
+  <li>Select <span class="code">Thread Group</span></li>
+  <li>Right click
+      <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">JUnit Request</span></span></li>
+  <li>Enter <span class="code">my unit test</span> in the name</li>
+  <li>Enter the package of your JUnit test</li>
+  <li>Select the class you want to test</li>
+  <li>Select a method to test</li>
+  <li>Enter <span class="code">test successful</span> in success message</li>
+  <li>Enter <span class="code">1000</span> in success code</li>
+  <li>Enter <span class="code">test failed</span> in failure message</li>
+  <li>Enter <span class="code">0001</span> in failure code</li>
+  <li>Select the Thread Group</li>
+  <li>Right click
+      <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">View Results Tree</span></span></li>
+</ol>
+
+<p>
+One benefit of the JUnit sampler is it allows the user to select any method from a variety
+of unit tests to create a test plan. This should reduce the amount of code an user needs to
+write to create a variety of test scenarios. From a basic set of test methods, different
+sequences and tests can be created using JMeter's GUI.
+</p>
+
+<p>
+For example:
+</p>
+
+<p>
+Test Plan1
+<pre class="source">
+TestCase1.testImportCustomer
+TestCase2.testUpdateRandomCustomer
+TestCase1.testSelect100
+TestCase2.testUpdateOrder
+TestCase1.testSelect1000
+</pre>
+</p>
+
+<p>
+TestPlan2
+<pre class="source">
+TestCase1.testImportCustomer
+TestCase1.testSelect100
+TestCase1.testSelect1000
+TestCase2.testAdd100Customers
+</pre>
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="guidelines">28.4 General Guidelines<a class="sectionlink" href="#guidelines" title="Link to here">&para;</a></h2>
+
+<p>
+Here are some general guidelines for writing JUnit tests so they work well with JMeter. Since JMeter
+runs multi-threaded, it is important to keep certain things in mind.
+</p>
+
+<ul>
+  <li>Write the <span class="code">setUp</span> and <span class="code">tearDown</span> methods so they are thread safe. This
+      generally means avoid using static members.</li>
+  <li>Make the test methods discrete units of work and not long sequences of actions. By keeping
+      the test method to a discrete operation, it makes it easier to combine test methods to create
+      new test plans.</li>
+  <li>Avoid making test methods depend on each other. Since JMeter allows arbitrary sequencing of
+      test methods, the runtime behavior is different than the default JUnit behavior.</li>
+  <li>If a test method is configurable, be careful about where the properties are stored. Reading
+      the properties from the Jar file is recommended.</li>
+  <li>Each sampler creates an instance of the test class, so write your test so the setup happens
+      in <span class="code">oneTimeSetUp</span> and <span class="code">oneTimeTearDown</span>.</li>
+  <li>If you select a class and no methods show up, it means the sampler had a problem creating an
+      instance of the test class. The best way to debug this is to add some <span class="code">System.out</span>
+      to your class constructor and see what is happening.</li>
+</ul>
+
+</div>
+
+</div><ul class="pagelinks"><li><a href="jmeter_proxy_step_by_step.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="jmeter_accesslog_sampler_step_by_step.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>
