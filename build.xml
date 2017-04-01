@@ -2513,7 +2513,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
     <fixcrlf encoding="${encoding}" srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
 
-    <echo level="info" message="Starting ${batchtest.name} with file ${batchtest.jmx} using ${remote} -D${batchtest.variable}=${batchtest.value}"/>
+    <echo level="info" message="Starting ${batchtest.name} with file ${batchtest.jmx} using ${remote} -J${batchtest.variable}=${batchtest.value}"/>
 
     <macrodef name="deleteworkfiles">
       <sequential>
