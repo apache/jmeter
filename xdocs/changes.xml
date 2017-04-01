@@ -85,15 +85,16 @@ and give you the following graphs with annotations:
 <figure width="852" height="738" image="changes/3.2/jms_publisher_reconnect.png"></figure>
 <figure width="716" height="538" image="changes/3.2/jms_subscriber_reconnect_pause.png"></figure>
 </li>
-<li>Variables in JMS Publisher are now supported for all types of messages. Add the encoding type of the file to parse his content</li>
+<li>Variables in JMS Publisher are now supported for all types of messages. Add the encoding type of the file to parse its content</li>
 <figure width="750" height="743" image="changes/3.2/jms_subscriber_content_encoding.png"></figure>
 <li>XPath Extractor now allows extraction randomly, by index or for all matches.
-<figure width="823" height="348" image="changes/3.2/xpath_extractor.png"></figure>
+<figure width="823" height="348" image="changes/3.2/xpath_extractor_matchno.png"></figure>
 </li>
 <li>Response Assertion now allows to work on Request Header, provides a "OR" combination and has a better cell renderer
 <figure width="1053" height="329" image="changes/3.2/response_assertion.png"></figure>
 </li>
-<li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
+<li>JMeter now uses Oracle Nashorn Javascript engine instead of Rhino. This provides a faster execution of Javascript.</li>
+<li>HTTP HC4 Implementation now provides preemptive Basic Auth enabled by default</li>
 <li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
 <li>An important work on code quality and code coverage with tests has been done since Sonar has been setup on the project.
 You can see Sonar report <a href="https://builds.apache.org/analysis/overview?id=12927" >here</a>.
