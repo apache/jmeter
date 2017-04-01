@@ -35,7 +35,7 @@ package org.apache.jmeter.protocol.http.util.accesslog;
  * large number of requests per day, but the request parameters vary
  * dramatically. E-commerce sites typically have limited inventory, therefore it
  * is better to design test plans that use data from the database.
- * <p>
+ * </p>
  *
  */
 
