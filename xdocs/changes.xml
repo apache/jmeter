@@ -68,12 +68,15 @@ JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
 <p>
 JMeter logging has been migrated to SLF4J and Log4j 2.
-This affects configuration and 3<sup>rd</sup> party plugins.
+This affects configuration and 3<sup>rd</sup> party plugins, see below <b>"Logging changes"</b>.
 </p>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.
+<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB.
 <figure width="813" height="407" image="changes/3.2/backend_influxdb.png"></figure>
+This implementation sends data using Asynchronous HTTP calls to InfluxDB through its <a href="https://docs.influxdata.com/influxdb/v1.2/guides/writing_data/">HTTP API</a>
+and give you the following graphs with annotations:
+<figure width="934" height="399" image="backend_listener_influxdb_graph.png"></figure>
 </li>
 <li>DNS Cache Manager now has a table to allow static host resolution.
 <figure width="803" height="561" image="changes/3.2/dns_cache_manager_static_hosts.png"></figure>
