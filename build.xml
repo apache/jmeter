@@ -1657,9 +1657,6 @@ run JMeter unless all the JMeter jars are added.
   <scriptdef name="svnmuccScript" language="beanshell">
     <classpath>
       <pathelement location="${lib.dir}/${beanshell.jar}"/>
-      <!-- Needed to work with Java 1.5 -->
-      <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-      <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
     </classpath>
     <!-- type of script to create: upload, publish or delete -->
     <attribute name="type"/>
