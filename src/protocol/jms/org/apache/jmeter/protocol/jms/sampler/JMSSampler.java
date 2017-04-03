@@ -165,6 +165,8 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
                 } else {
                     if (replyMsg instanceof TextMessage) {
                         res.setResponseData(((TextMessage) replyMsg).getText(), null);
+					} else if (replyMsg instanceof BytesMessage) {
+						res.setResponseData(convertToString((BytesMessage) replyMsg), null);
                     } else {
                         res.setResponseData(replyMsg.toString(), null);
                     }
@@ -182,6 +184,12 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         }
         res.sampleEnd();
         return res;
+    }
+	
+	private String convertToString(BytesMessage bytesMessage) throws JMSException {
+        byte[] bytes = new byte[(int) bytesMessage.getBodyLength()];
+        bytesMessage.readBytes(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private TextMessage createMessage() throws JMSException {
