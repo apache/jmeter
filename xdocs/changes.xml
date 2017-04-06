@@ -306,6 +306,7 @@ jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>60883</bug><pr>288</pr> - Add <code>${__escapeXml()}</code> function. Contributed by Michael Osipov (michaelo at apache.org)</li>
 </ul>
 
 <h3>I18N</h3>
