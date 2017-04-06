@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.apache.jmeter.functions;
@@ -59,13 +59,13 @@ public class TestSimpleFunctions extends JMeterTestCase {
         AbstractFunction function = new Uuid();
         checkInvalidParameterCounts(function, 0, 0);
     }
-    
+
     @Test
     public void testThreadNumberParameterCount() throws Exception {
         AbstractFunction function = new ThreadNumber();
         checkInvalidParameterCounts(function, 0, 0);
     }
-    
+
     @Test
     public void testEscapeHtmlParameterCount() throws Exception {
         AbstractFunction function = new EscapeHtml();
@@ -77,19 +77,25 @@ public class TestSimpleFunctions extends JMeterTestCase {
         AbstractFunction function = new UnEscapeHtml();
         checkInvalidParameterCounts(function, 1, 1);
     }
-    
+
+    @Test
+    public void testEscapeXmlParameterCount() throws Exception {
+        AbstractFunction function = new EscapeXml();
+        checkInvalidParameterCounts(function, 1, 1);
+    }
+
     @Test
     public void testUnEscapeParameterCount() throws Exception {
         AbstractFunction function = new UnEscape();
         checkInvalidParameterCounts(function, 1, 1);
     }
-    
+
     @Test
     public void testTestPlanParameterCount() throws Exception {
         AbstractFunction function = new TestPlanName();
         checkInvalidParameterCounts(function, 0, 0);
     }
-    
+
     @Test
     public void testThreadNumber() throws Exception {
         AbstractFunction function = new ThreadNumber();
@@ -97,8 +103,8 @@ public class TestSimpleFunctions extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("1", ret);
     }
-    
-    
+
+
     @Test
     public void testUuid() throws Exception {
         AbstractFunction function = new Uuid();
@@ -106,7 +112,7 @@ public class TestSimpleFunctions extends JMeterTestCase {
         String ret = function.execute(result, null);
         UUID.fromString(ret);
     }
-    
+
     @Test
     public void testEscapeHtml() throws Exception {
         AbstractFunction function = new EscapeHtml();
@@ -115,7 +121,7 @@ public class TestSimpleFunctions extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("&quot;bread&quot; &amp; &quot;butter&quot;", ret);
     }
-    
+
     @Test
     public void testUnEscapeHtml() throws Exception {
         AbstractFunction function = new UnEscapeHtml();
@@ -124,7 +130,16 @@ public class TestSimpleFunctions extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("\"bread\" & \"butter\"", ret);
     }
-    
+
+    @Test
+    public void testEscapeXml() throws Exception {
+        AbstractFunction function = new EscapeXml();
+        params.add(new CompoundVariable("\"bread\" & <'butter'>"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("&quot;bread&quot; &amp; &lt;&apos;butter&apos;&gt;", ret);
+    }
+
     @Test
     public void testTestPlanName() throws Exception {
         AbstractFunction function = new TestPlanName();
