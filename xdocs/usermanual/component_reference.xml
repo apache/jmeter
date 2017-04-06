@@ -3481,7 +3481,7 @@ By default, a Graphite implementation is provided.
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
         <property name="samplersRegex" required="Yes">Regular expression which will be matched against the names of samples and sent to the back end.</property>
         <property name="testTitle" required="Yes">Test name. Defaults to <code>Test name</code>. This value is stored in the 'events' measurement as a field named 'text'. JMeter generate automaticaly at the start and the end of the test an annotation with this value ending with ' started' and ' ended'</property>
-		<property name="eventTags" required="No">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</property>
+        <property name="eventTags" required="No">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to the backend.
         A percentile may contain a fractional part, for example <code>12.5</code>.
         (The separator is always ".")
