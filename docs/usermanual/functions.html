@@ -104,6 +104,7 @@ Alternatively, just use <span class="code">/</span> instead for the path separat
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
@@ -1303,6 +1304,26 @@ becomes:
         <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">
 A reference name - <span class="code">refName</span> - for reusing the value created by this function. Stored values are of the form <span class="code">${refName}</span>.
         </div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__escapeXml">__escapeXml<a class="sectionlink" href="#__escapeXml" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function which escapes the characters in a String using XML 1.0 entities.
+</p>
+<p>
+For example,<span class="code">"bread" &amp; 'butter'</span>
+becomes:
+<span class="code">&amp;quot;bread&amp;quot; &amp;amp; &amp;apos;butter&amp;apos;</span>.
+</p>
+    <p>
+    Uses <span class="code">StringEscapeUtils#escapeXml10(String)</span> from Commons Lang.
+    </p>
+    </div><div class="properties"><h3 id="__escapeXml_parms1">
+        Parameters
+        <a class="sectionlink" href="#__escapeXml_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to escape</div><div class="description req-true">
+        The string to be escaped.
+        </div><div class="required req-true">Yes</div></div>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 </div>
