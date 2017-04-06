@@ -232,7 +232,7 @@ public class HeaderManager extends ConfigTestElement implements Serializable, Re
      *             if <code>element</code> is not an instance of
      *             {@link HeaderManager}
      *             
-     * @deprecated use {@link HeaderManager#merge(TestElement)} as this method will be removed in a future version
+     * @deprecated since 3.2, use {@link HeaderManager#merge(TestElement)} as this method will be removed in a future version
      */
     @Deprecated
     public HeaderManager merge(TestElement element, boolean preferLocalValues) {
