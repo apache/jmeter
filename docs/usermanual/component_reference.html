@@ -3164,21 +3164,22 @@ By default, a Graphite implementation is provided.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</div><div class="required req-true">Yes</div></div>
     </div><p>See also <a href="realtime-results.html">Real-time results</a> for more details.</p><figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure><p>Since JMeter 3.2, a new implementation (in Alpha state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <span class="code">InfluxdbBackendListenerClient</span> 
-      The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p><div class="properties"><h3 id="Backend_Listener_parms3">
+      The following parameters apply to the <a href="../../docs/api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p><div class="properties"><h3 id="Backend_Listener_parms3">
         Parameters
         <a class="sectionlink" href="#Backend_Listener_parms3" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
         <div class="property"><div class="name req-true">influxdbMetricsSender</div><div class="description req-true"><span class="code">org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</span></div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">influxdbUrl</div><div class="description req-true">Influx URL (example : http://influxHost:8086/write?db=jmeter)</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">application</div><div class="description req-true">Name of tested application</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">application</div><div class="description req-true">Name of tested application. This value is stored in the 'events' measurement as a tag named 'application' </div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">measurement</div><div class="description req-true">Measurement as per <a href="https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/">Influx Line Protocol Reference</a>. Defaults to "<span class="code">jmeter</span>."</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">summaryOnly</div><div class="description req-true">Only send a summary with no detail. Defaults to <span class="code">true</span>.</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">samplersRegex</div><div class="description req-true">Regular expression which will be matched against the names of samples and sent to the back end.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">testTitle</div><div class="description req-true">Test name. Defaults to <span class="code">Test name</span>.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">testTitle</div><div class="description req-true">Test name. Defaults to <span class="code">Test name</span>. This value is stored in the 'events' measurement as a field named 'text'. JMeter generate automaticaly at the start and the end of the test an annotation with this value ending with ' started' and ' ended'</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">eventTags</div><div class="description req-false">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-true">percentiles</div><div class="description req-true">The percentiles you want to send to the backend.
         A percentile may contain a fractional part, for example <span class="code">12.5</span>.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</div><div class="required req-true">Yes</div></div>
-    </div><p>See also <a href="realtime-results.html">Real-time results</a> for more details.</p><div class="go-top"><a href="#">^</a></div></div>
+    </div><p>See also <a href="realtime-results.html">Real-time results</a> and <a href="http://docs.grafana.org/reference/annotations/#influxdb-annotations">Influxdb annotations in Grafana</a> for more details.</p><div class="go-top"><a href="#">^</a></div></div>
 
 <a href="#">^</a>
 

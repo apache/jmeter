@@ -1,6 +1,0 @@
-According to the following, dnsjava is available under a BSD license
-
-http://www.dnsjava.org/
-https://sourceforge.net/projects/dnsjava/?source=navbar
-
-However the version is not stated, and there are no working links to the specific license

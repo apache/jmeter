@@ -1359,6 +1359,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
+    <include name="${dest.jar.jmeter}/*.groovy"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
