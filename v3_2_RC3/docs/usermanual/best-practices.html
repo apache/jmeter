@@ -1,0 +1,381 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Best Practices</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="realtime-results.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="boss.html">Next &gt;</a></li></ul><div class="section"><h1 id="best_practices">17. Best Practices<a class="sectionlink" href="#best_practices" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="use_latest_version">17.1 Always use latest version of JMeter<a class="sectionlink" href="#use_latest_version" title="Link to here">&para;</a></h1>
+<p>The performance of JMeter is being constantly improved, so users are highly encouraged to use the most up to date version. <br>
+Ensure you always read <a href="../changes.html">changes list</a> to be aware of new improvements and components.
+You should absolutely avoid using versions that are older than 3 versions before the last one.
+</p>
+</div><div class="section"><h1 id="sizing_threads">17.2 Use the correct Number of Threads<a class="sectionlink" href="#sizing_threads" title="Link to here">&para;</a></h1>
+<p>Your hardware capabilities as well as the Test Plan design will both impact the number of threads you can effectively
+run with JMeter.  The number will also depend on how fast your server is (a faster server
+ makes JMeter work harder since it returns a response quicker).  As with any Load Testing tool, if you don't correctly size
+ the number of threads, you will face the "Coordinated Omission" problem which can give you wrong or inaccurate results.
+ If you need large-scale load testing, consider running multiple non-GUI JMeter instances on multiple machines 
+ using distributed mode (or not). When using distributed mode the result file is combined on the Controller node, if
+ using multiple autonomous instances, the sample result files can be combined for subsequent analysis.
+For testing how JMeter performs on a given platform, the JavaTest sampler can be used.
+It does not require any network access so can give some idea as to the maximum throughput achievable.
+</p>
+<p>
+JMeter has an option to delay thread creation until the thread starts sampling, i.e. after any thread group delay and the ramp-up time for the thread itself.
+This allows for a very large total number of threads, provided that not too many are active concurrently.
+</p>
+</div><div class="section"><h1 id="put_cookie_manager">17.3 Where to Put the Cookie Manager<a class="sectionlink" href="#put_cookie_manager" title="Link to here">&para;</a></h1>
+<p>See <a href="build-web-test-plan.html#adding_cookie_support">Building a Web Test</a>
+for information.</p>
+</div><div class="section"><h1 id="put_auth_manager">17.4 Where to Put the Authorization Manager<a class="sectionlink" href="#put_auth_manager" title="Link to here">&para;</a></h1>
+<p>See <a href="build-adv-web-test-plan.html#header_manager">Building an Advanced
+Web Test</a> for information.</p>
+</div><div class="section"><h1 id="proxy_server">17.5 Using the HTTP(S) Test Script Recorder<a class="sectionlink" href="#proxy_server" title="Link to here">&para;</a></h1>
+<p>Refer to <a href="../usermanual/component_reference.html#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder</a> for details on setting up the
+recorder. The most important thing to do is filter out all requests you aren't
+interested in.  For instance, there's no point in recording image requests (JMeter can
+be instructed to download all images on a page - see <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>).
+These will just clutter your test plan.  Most likely, there is an extension all your files
+share, such as <span class="code">.jsp</span>, <span class="code">.asp</span>, <span class="code">.php</span>, <span class="code">.html</span> or the like.
+These you should "<span class="code">include</span>" by entering "<span class="code">.*\.jsp</span>" as an "Include Pattern". </p>
+<p>Alternatively, you can exclude images by entering "<span class="code">.*\.gif</span>" as an "Exclude Pattern".
+Depending on your application, this may or may not be a better way to go.  You may
+also have to exclude stylesheets, javascript files, and other included files.  Test
+out your settings to verify you are recording what you want, and then erase and start
+fresh.</p>
+
+<p>The HTTP(S) Test Script Recorder expects to find a ThreadGroup element with a Recording Controller
+under it where it will record HTTP Requests to.  This conveniently packages all your samples under one
+controller, which can be given a name that describes the test case.</p>
+<p>Now, go through the steps of a Test Case.  If you have no pre-defined test cases, use
+JMeter to record your actions to define your test cases.  Once you have finished a
+definite series of steps, save the entire test case in an appropriately named file.  Then, wipe
+clean and start a new test case.  By doing this, you can quickly record a large number of
+test case "rough drafts".</p>
+<p>One of the most useful features of the HTTP(S) Test Script Recorder is that you can abstract out
+certain common elements from the recorded samples.  By defining some
+<a href="functions.html">user-defined variables</a> at the Test Plan level or in
+<a href="../usermanual/component_reference.html#User_Defined_Variables">User Defined Variables</a> elements, you can have JMeter automatically
+replace values in you recorded samples.  For instance, if you are testing an app on
+server "<span class="code">xxx.example.com</span>", then you can define a variable called "<span class="code">server</span>" with the value of
+"<span class="code">xxx.example.com</span>", and anyplace that value is found in your recorded samples will be replaced
+with "<span class="code">${server}</span>".
+
+<div class="clear"></div><div class="note">Please note that matching is case-sensitive.</div><div class="clear"></div>
+
+</p>
+<p>
+If JMeter does not record any samples, check that the browser really is using the proxy.
+If the browser works OK even if JMeter is not running, then the browser cannot be using the proxy.
+Some browsers ignore proxy settings for <span class="code">localhost</span> or <span class="code">127.0.0.1</span>; try using the local hostname or IP instead.
+</p>
+<p>
+The error "<span class="code">unknown_ca</span>" probably means that you are trying to record HTTPS, and the browser has not accepted the
+JMeter Proxy server certificate.
+</p>
+
+
+</div><div class="section"><h1 id="user_variables">17.6 User variables<a class="sectionlink" href="#user_variables" title="Link to here">&para;</a></h1>
+<p>
+Some test plans need to use different values for different users/threads. 
+For example, you might want to test a sequence that requires a unique login for each user.
+This is easy to achieve with the facilities provided by JMeter.
+</p>
+<p>For example:</p>
+<ul>
+<li>Create a text file containing the user names and passwords, separated by commas.
+Put this in the same directory as your test plan.
+</li>
+<li>
+Add a CSV DataSet configuration element to the test plan.
+Name the variables <span class="code">USER</span> and <span class="code">PASS</span>.
+</li>
+<li>
+Replace the login name with <span class="code">${USER}</span> and the password with <span class="code">${PASS}</span> on the appropriate
+samplers
+</li>
+</ul>
+<p>The CSV Data Set element will read a new line for each thread.
+</p>
+</div><div class="section"><h1 id="lean_mean">17.7 Reducing resource requirements<a class="sectionlink" href="#lean_mean" title="Link to here">&para;</a></h1>
+<p>
+Some suggestions on reducing resource usage.
+</p>
+<ul>
+<li>Use non-GUI mode: <span class="code">jmeter -n -t test.jmx -l test.jtl</span></li>
+<li>Use as few Listeners as possible; if using the <span class="code">-l</span> flag as above they can all be deleted or disabled.</li>
+<li>Don't use "View Results Tree" or "View Results in Table" listeners during the load test, use them only during scripting phase to debug your scripts.</li>
+<li>Rather than using lots of similar samplers,
+use the same sampler in a loop, and use variables (CSV Data Set) to vary the sample.
+[The Include Controller does not help here, as it adds all the test elements in the file to the test plan.]
+</li>
+<li>Don't use functional mode</li>
+<li>Use CSV output rather than XML</li>
+<li>Only save the data that you need</li>
+<li>Use as few Assertions as possible</li>
+<li>Use the most performing scripting language (see JSR223 section)</li>
+</ul>
+<p>
+If your test needs large amounts of data - particularly if it needs to be randomised - create the test data in a file
+that can be read with CSV Dataset. This avoids wasting resources at run-time.
+</p>
+</div><div class="section"><h1 id="beanshell_server">17.8 BeanShell server<a class="sectionlink" href="#beanshell_server" title="Link to here">&para;</a></h1>
+<p>
+The BeanShell interpreter has a very useful feature - it can act as a server,
+which is accessible by telnet or http.
+</p>
+<div class="clear"></div><div class="note">
+There is no security. Anyone who can connect to the port can issue any BeanShell commands.
+These can provide unrestricted access to the JMeter application and the host.
+<b>Do not enable the server unless the ports are protected against access, e.g. by a firewall.</b>
+</div><div class="clear"></div>
+<p>
+If you do wish to use the server, define the following in <span class="code">jmeter.properties</span>:
+</p>
+<pre class="source">
+beanshell.server.port=9000
+beanshell.server.file=../extras/startup.bsh
+</pre>
+<p>
+In the above example, the server will be started, and will listen on ports <span class="code">9000</span> and <span class="code">9001</span>.
+Port <span class="code">9000</span> will be used for http access. Port <span class="code">9001</span> will be used for telnet access.
+The <span class="code">startup.bsh</span> file will be processed by the server, and can be used to define various functions and set up variables.
+The startup file defines methods for setting and printing JMeter and system properties.
+This is what you should see in the JMeter console:
+</p>
+<pre class="source">
+Startup script running
+Startup script completed
+Httpd started on port: 9000
+Session started on port: 9001
+</pre>
+<p>
+There is a sample script (<span class="code">extras/remote.bsh</span>) you can use to test the server.
+[Have a look at it to see how it works.]
+<br>
+When starting it in the JMeter <span class="code">bin</span> directory
+(adjust paths as necessary if running from elsewhere)
+the output should look like:
+<pre class="source">
+$ java -jar ../lib/bshclient.jar localhost 9000 ../extras/remote.bsh
+Connecting to BSH server on localhost:9000
+Reading responses from server &hellip;
+BeanShell 2.0b5 - by Pat Niemeyer (pat@pat.net)
+bsh % remote.bsh starting
+user.home = C:\Documents and Settings\User
+user.dir = D:\eclipseworkspaces\main\JMeter_trunk\bin
+Setting property 'EXAMPLE' to '0'.
+Setting property 'EXAMPLE' to '1'.
+Setting property 'EXAMPLE' to '2'.
+Setting property 'EXAMPLE' to '3'.
+Setting property 'EXAMPLE' to '4'.
+Setting property 'EXAMPLE' to '5'.
+Setting property 'EXAMPLE' to '6'.
+Setting property 'EXAMPLE' to '7'.
+Setting property 'EXAMPLE' to '8'.
+Setting property 'EXAMPLE' to '9'.
+EXAMPLE = 9
+remote.bsh ended
+bsh % &hellip; disconnected from server.
+</pre>
+</p>
+<p>
+As a practical example, assume you have a long-running JMeter test running in non-GUI mode,
+and you want to vary the throughput at various times during the test.
+The test-plan includes a Constant Throughput Timer which is defined in terms of a property,
+e.g. <span class="code">${__P(throughput)}</span>.
+The following BeanShell commands could be used to change the test:
+</p>
+<pre class="source">
+printprop("throughput");
+curr = Integer.decode(args[0]);  // Start value
+inc  = Integer.decode(args[1]);  // Increment
+end  = Integer.decode(args[2]);  // Final value
+secs = Integer.decode(args[3]);  // Wait between changes
+while(curr &lt;= end) {
+  setprop("throughput",curr.toString()); // Needs to be a string here
+  Thread.sleep(secs*1000);
+  curr += inc;
+}
+printprop("throughput");
+</pre>
+<p>The script can be stored in a file (<span class="code">throughput.bsh</span>, say), and sent to the server using <span class="code">bshclient.jar</span>.
+For example:
+</p>
+<pre class="source">
+java -jar ../lib/bshclient.jar localhost 9000 throughput.bsh 70 5 100 60
+</pre>
+</div><div class="section"><h1 id="bsh_scripting">17.9 BeanShell scripting<a class="sectionlink" href="#bsh_scripting" title="Link to here">&para;</a></h1>
+<div class="clear"></div><div class="note">Since JMeter 3.1, we advise switching from BeanShell to JSR223 Test Elements (see JSR223 section below for more details), and switching from <span class="code"><a href="functions.html#__BeanShell">__Beanshell</a></span> function 
+to <a href="functions.html#__groovy">__groovy</a> function.</div><div class="clear"></div>
+<div class="subsection"><h2 id="bsh_overview">17.9.1 Overview<a class="sectionlink" href="#bsh_overview" title="Link to here">&para;</a></h2>
+<p>
+Each BeanShell test element has its own copy of the interpreter (for each thread).
+If the test element is repeatedly called, e.g. within a loop, then the interpreter is retained
+between invocations unless the "<span class="code">Reset bsh.Interpreter before each call</span>" option is selected.
+</p>
+<p>
+Some long-running tests may cause the interpreter to use lots of memory; if this is the case try using the reset option.
+</p>
+<p>
+You can test BeanShell scripts outside JMeter by using the command-line interpreter:
+<pre class="source">
+$ java -cp bsh-xxx.jar[;other jars as needed] bsh.Interpreter file.bsh [parameters]
+</pre>
+or
+<pre class="source">
+$ java -cp bsh-xxx.jar bsh.Interpreter
+bsh% source("file.bsh");
+bsh% exit(); // or use EOF key (e.g. ^Z or ^D)
+</pre>
+</p>
+</div>
+<div class="subsection"><h2 id="bsh_variables">17.9.2 Sharing Variables<a class="sectionlink" href="#bsh_variables" title="Link to here">&para;</a></h2>
+<p>
+Variables can be defined in startup (initialisation) scripts.
+These will be retained across invocations of the test element, unless the reset option is used.
+</p>
+<p>
+Scripts can also access JMeter variables using the <span class="code">get()</span> and <span class="code">put()</span> methods of the "<span class="code">vars</span>" variable,
+for example:
+<pre class="source">vars.get("HOST");
+vars.put("MSG","Successful");</pre>
+The <span class="code">get()</span> and <span class="code">put()</span> methods only support variables with String values,
+but there are also <span class="code">getObject()</span> and <span class="code">putObject()</span> methods which can be used for arbitrary objects.
+JMeter variables are local to a thread, but can be used by all test elements (not just Beanshell).
+</p>
+<p>
+If you need to share variables between threads, then JMeter properties can be used:
+<pre class="source">
+import org.apache.jmeter.util.JMeterUtils;
+String value = JMeterUtils.getPropDefault("name","");
+JMeterUtils.setProperty("name", "value");
+</pre>
+The sample <span class="code">.bshrc</span> files contain sample definitions of <span class="code">getprop()</span> and <span class="code">setprop()</span> methods.
+</p>
+<p>
+Another possible method of sharing variables is to use the "<span class="code">bsh.shared</span>" shared namespace.
+For example:
+<pre class="source">
+if (bsh.shared.myObj == void){
+    // not yet defined, so create it:
+    myObj = new AnyObject();
+}
+bsh.shared.myObj.process();
+</pre>
+Rather than creating the object in the test element, it can be created in the startup file
+defined by the JMeter property "<span class="code">beanshell.init.file</span>". This is only processed once.
+</p>
+</div>
+</div><div class="section"><h1 id="developing_scripts">17.10 Developing script functions in Groovy or Jexl3 etc.<a class="sectionlink" href="#developing_scripts" title="Link to here">&para;</a></h1>
+<p>
+It's quite hard to write and test scripts as functions.
+However, JMeter has the JSR223 samplers which can be used instead with any language supporting it. 
+We advise using <a href="http://www.groovy-lang.org/">Apache Groovy</a> or any language that supports the <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface of JSR223.
+</p>
+<p>
+Create a simple Test Plan containing the JSR223 Sampler and Tree View Listener.
+Code the script in the sampler script pane, and test it by running the test.
+If there are any errors, these will show up in the Tree View and <span class="code">jmeter.log</span> file.
+Also the result of running the script will show up as the response.
+</p>
+<p>
+Once the script is working properly, it can be stored as a variable on the Test Plan.
+The script variable can then be used to create the function call.
+For example, suppose a Groovy script is stored in the variable <span class="code">RANDOM_NAME</span>.
+The function call can then be coded as <span class="code">${__groovy(${RANDOM_NAME})}</span>.
+There is no need to escape any commas in the script,
+because the function call is parsed before the variable's value is interpolated.
+</p>
+</div><div class="section"><h1 id="parameterising_tests">17.11 Parameterising tests<a class="sectionlink" href="#parameterising_tests" title="Link to here">&para;</a></h1>
+<p>
+Often it is useful to be able to re-run the same test with different settings.
+For example, changing the number of threads or loops, or changing a hostname.
+</p>
+<p>
+One way to do this is to define a set of variables on the Test Plan, and then use those variables in the test elements.
+For example, one could define the variable <span class="code">LOOPS=10</span>, and refer to that in the Thread Group as <span class="code">${LOOPS}</span>.
+To run the test with 20 loops, just change the value of the <span class="code">LOOPS</span> variable on the Test Plan.
+</p>
+<p>
+This quickly becomes tedious if you want to run lots of tests in non-GUI mode.
+One solution to this is to define the Test Plan variable in terms of a property,
+for example <span class="code">LOOPS=${__P(loops,10))}</span>.
+This uses the value of the property "<span class="code">loops</span>", defaulting to <span class="code">10</span> if the property is not found.
+The "<span class="code">loops</span>" property can then be defined on the JMeter command-line:
+<pre class="source">jmeter &hellip; -Jloops=12 &hellip;</pre>
+If there are a lot of properties that need to be changed together,
+then one way to achieve this is to use a set of property files.
+The appropriate property file can be passed in to JMeter using the <span class="code">-q</span> command-line option.
+</p>
+</div><div class="section"><h1 id="jsr223">17.12 JSR223 Elements<a class="sectionlink" href="#jsr223" title="Link to here">&para;</a></h1>
+<p>
+For intensive load testing, the recommended scripting language is one whose ScriptingEngine implements the <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface.
+Groovy scripting engine implements <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span>. However neither Beanshell nor Javascript do so as of release date of JMeter 3.1, so it is
+recommended to avoid them for intensive load testing.
+<div class="clear"></div><div class="note">Note: Beanshell implements the <span class="code"><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></span> interface but it has not been coded - the method just throws an Exception.
+JMeter has an explicit work-round for this bug.</div><div class="clear"></div>
+
+When using JSR 223 elements, it is advised to check <span class="code">Cache compiled script if available</span> property to ensure the script compilation is cached if underlying language supports it.
+In this case, ensure the script does not use any variable using <span class="code">${varName}</span> as caching would take only first value of <span class="code">${varName}</span>. Instead use :
+<pre class="source">
+vars.get("varName")
+</pre>
+</p>
+<p>
+You can also pass them as Parameters to the script and use them this way.
+</p>
+</div><div class="section"><h1 id="sharing_variables">17.13 Sharing variables between threads and thread groups<a class="sectionlink" href="#sharing_variables" title="Link to here">&para;</a></h1>
+<p>
+Variables are local to a thread; a variable set in one thread cannot be read in another.
+This is by design. For variables that can be determined before a test starts, see 
+<a href="#parameterising_tests">Parameterising Tests</a> (above). 
+If the value is not known until the test starts, there are various options:
+<ul>
+<li>Store the variable as a property - properties are global to the JMeter instance</li>
+<li>Write variables to a file and re-read them.</li>
+<li>Use the <span class="code">bsh.shared</span> namespace - see <a href="#bsh_variables">above</a></li>
+<li>Write your own Java classes</li>
+</ul>
+</p>
+</div><div class="section"><h1 id="properties">17.14 Managing properties<a class="sectionlink" href="#properties" title="Link to here">&para;</a></h1>
+<p>When you need to modify jmeter properties, ensure you don't modify <span class="code">jmeter.properties</span> file,
+<b>instead copy the property from <span class="code">jmeter.properties</span> and modify its value in <span class="code">user.properties</span> file</b>.<br>
+Doing so will ease you migration to the next version of JMeter. <br>
+Note that in the documentation <span class="code">jmeter.properties</span> is frequently mentioned but this should be understood as
+"Copy from <span class="code">jmeter.properties</span> to <span class="code">user.properties</span> the property you want to modify and do so in the latter file".</p>
+<div class="clear"></div><div class="note"><span class="code">user.properties</span> file supersedes the properties defined in <span class="code">jmeter.properties</span></div><div class="clear"></div>
+</div><div class="section"><h1 id="deprecation">17.15 Deprecated elements<a class="sectionlink" href="#deprecation" title="Link to here">&para;</a></h1>
+<p>It is advised not to use deprecated elements (marked as such in <a href="../changes.html">changes list</a> and in <a href="./component_reference.html">component reference</a>) 
+and to migrate to new advised elements if available or new way of doing the same thing. <br>
+Deprecated elements are removed from the menu in version N but can be enabled for migration by modifying <span class="code">not_in_menu</span> property in <span class="code">user.properties</span> file and removing the full class name 
+of the element from there.<br></p>
+<div class="clear"></div><div class="note">Please note that deprecated elements in version N will be removed definitely in version N+1, so ensure you stop using them as soon as possible.</div><div class="clear"></div>
+</div><ul class="pagelinks"><li><a href="realtime-results.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="boss.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

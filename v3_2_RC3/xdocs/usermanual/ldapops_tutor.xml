@@ -1,0 +1,114 @@
+<?xml version="1.0"?> 
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>   
+<properties>     
+    <title>JMeter - User's Manual: LDAP Operations</title>   
+  </properties> 
+<body> 
+
+<section name="A short LDAP Operations tutorial" anchor="ops">
+    <p>
+    The extended LDAP sampler was built to support testing for very complex testpurposes.
+    It was aimed at supporting the LDAP operations as close as possible.
+    In this short tutorial, I will explain which LDAP operations exist and what they do.
+    Per operation, I will shortly explain how these operations are implemented.<br/>
+    LDAP servers are some kind of hierarchical database, they store objects (entries) in a tree. The uppermost part of a tree is called the ROOT of the tree.<br/>
+    eg. When a tree starts with dc=com, the root equals dc=com.<br/>
+    The next level can exist under the root, eg dc=test. The full name of this object (the "distinguished name") is "dc=test,dc=com.<br/>
+    Again, a following level can be made, by adding the user "cn=admin" under dc=test,dc=com. This object has a DN (distinguished name) of "cn=admin,dc=test,dc=com".<br/>
+    The relative distinguished name (RDN) is the last part of the DN, eg. cn=admin.<br/>
+    The characteristics of an object are determined by the objectClasses, which can be seen as a collection of attributes.<br/>
+    The type of an object is determined by the "structural objectClass" eg person, organizationalUnit or country.<br/>
+    The attributes contain the data of an object, eg mailaddress, name, streetaddress etc. Each attribute can have 0, 1 or more values.
+    </p>
+<subsection name="1 Bind operation" anchor="bind">
+    <p>
+    Any contact with an LDAP server MUST start with a bind request. LDAP is a state dependent protocol. Without opening a session to
+    a LDAP server, no additional request can be made.
+    Due to some peculiarities in the JAVA libraries, 2 different bind operations are implemented.
+    </p>
+<subsection name="1.1 Thread Bind" anchor="thread_bind">
+    <p>
+    This bind is meant to open a session to a LDAP server. Any testplan should use this operation as the starting point from a session.
+    For each Thread (each virtual user) a separate connection with the LDAP server is build, and so a separate Thread bind is performed.
+    </p>
+</subsection>
+<subsection name="1.2 Single bind/unbind" anchor="single">
+    <p>
+        This bind is used for user authentication verification.
+        A proper developed LDAP client, who needs an authenticated user, perform a bind with a given distinguished name and password.
+        This Single bind/unbind operation is for this purpose. It builds it own separate connection to the LDAP server, performs a
+        bind operation, and ends the connection again (by sending an unbind).
+    </p>
+</subsection>
+</subsection>
+<subsection name="2 Unbind" anchor="unbind">
+    <p>
+        To close a connection to a LDAP server, an unbind operation is needed.
+        As the Single bind/unbind operation already (implicitly) performs an unbind, only a Thread unbind operation is needed.
+        This Thread unbind just closes the connection and cleans up any resources it has used.
+    </p>
+</subsection>
+<subsection name="3 Compare" anchor="compare">
+    <p>
+    The compare operation needs the full distinguished name from a LDAP object, as well as a attribute and a value for the attribute.
+    It will simply check: "Has this object really this attribute with this value?".
+    Typical use is checking the membership of a certain user with a given group.
+    </p>
+</subsection>
+<subsection name="4 Search" anchor="search">
+    <p>
+    The search test simply searches for all objects which comply with a given search filter, e.g.
+    all persons with a "employeeType=inactive" or "all persons with a userID equals user1"
+    </p>
+</subsection>
+<subsection name="5 Add" anchor="add">
+    <p>
+    This simply add an object to the LDAP directory.
+    Off course the combination of attributes and distinguishedName must be valid!
+    </p>
+</subsection>
+<subsection name="6 Modify" anchor="modify">
+    <p>
+        This operation modifies one or more attributes from a given object.
+        It needs the distinguished name from the object, as well as the attributes and the new values for this attribute.<br/>
+        Three versions are available, add, for adding an attribute value<br/>
+        replace, for overwriting the old attribute value with a new value<br/>
+        delete, to delete a value form an attribute, or to delete all the values of an attribute<br/>
+    </p>
+</subsection>
+<subsection name="7 Delete" anchor="delete">
+    <p>
+        This operation deletes an object from the LDAP server.
+        It needs the distinguished name from the object.
+    </p>
+</subsection>
+<subsection name="8 modDN" anchor="moddn">
+    <p>
+        This operation modifies the distinguished name from an object (it "moves" the object).<br/>
+        It comes in two flavours, just renaming an entry, then you specify a new RDN (relative distinguished name, this is the lowest part of the DN)<br/>
+        e.g. you can rename "cn=admin,dc=test,dc=com" to cn=administrator,dc=test,dc=com"<br/>
+        The second flavour is renaming (moving) a complete subtree by specifying a "new superior"<br/>
+        e.g. you can move a complete subtree "ou=retired,ou=people,dc=test,dc=com" to a new subtree "ou=retired people,dc=test,dc=com" by specifying
+        a new rdn "ou=retired people" and a new superior of "dc=test,dc=com"
+    </p>
+</subsection>
+</section>
+
+</body>
+</document>

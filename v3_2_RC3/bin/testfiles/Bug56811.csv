@@ -1,0 +1,31 @@
+label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,grpThreads,allThreads,URL,SampleCount,ErrorCount
+01 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSample 1-1,,false,,5,1,1,null,1,1
+01 Transaction Controller2,200,"Number of samples in transaction : 1, number of failing samples : 0",TG-UsingTCwithGenerateParentSample 1-1,,true,,0,1,1,null,1,0
+02 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSample 1-1,,false,,5,1,1,null,1,1
+02 Transaction Controller2,200,"Number of samples in transaction : 1, number of failing samples : 0",TG-UsingTCwithGenerateParentSample 1-1,,true,,0,1,1,null,1,0
+03 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSample 1-1,,false,,5,1,1,null,1,1
+03 Transaction Controller2,200,"Number of samples in transaction : 1, number of failing samples : 0",TG-UsingTCwithGenerateParentSample 1-1,,true,,0,1,1,null,1,0
+01 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1,,false,,5,1,1,null,1,1
+02 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1,,false,,5,1,1,null,1,1
+03 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1,,false,,5,1,1,null,1,1
+01 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1,,false,,5,1,1,null,1,1
+02 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1,,false,,5,1,1,null,1,1
+03 Transaction Controller,200,"Number of samples in transaction : 1, number of failing samples : 1",TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1,,false,,5,1,1,null,1,1
+Samp 1,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+Samp 2,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+BeanShell Sampler,200,OK,TG-UsingTCAndStartNextThreadLoop 4-1,text,false,,5,1,1,null,1,1
+Transaction Controller2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+Transaction Controller1,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+01 Transaction Controller,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+Samp 1,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+Samp 2,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+BeanShell Sampler,200,OK,TG-UsingTCAndStartNextThreadLoop 4-1,text,false,,5,1,1,null,1,1
+Transaction Controller2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+Transaction Controller1,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+02 Transaction Controller,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+Samp 1,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+Samp 2,200,Alright,TG-UsingTCAndStartNextThreadLoop 4-1,text,true,,0,1,1,null,1,0
+BeanShell Sampler,200,OK,TG-UsingTCAndStartNextThreadLoop 4-1,text,false,,5,1,1,null,1,1
+Transaction Controller2,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+Transaction Controller1,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1
+03 Transaction Controller,,"Number of samples in transaction : 3, number of failing samples : 1",TG-UsingTCAndStartNextThreadLoop 4-1,,false,,5,1,1,null,1,1

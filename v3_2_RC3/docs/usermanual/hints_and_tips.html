@@ -1,0 +1,224 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Hints and Tips</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="regular_expressions.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="glossary.html">Next &gt;</a></li></ul><div class="section"><h1 id="hints">23. Hints and Tips<a class="sectionlink" href="#hints" title="Link to here">&para;</a></h1>
+<p>
+This section is a collection of various hints and tips that have been suggested by various questions on the JMeter User list.
+If you don't find what you are looking for here, please check the <a href="http://wiki.apache.org/jmeter">JMeter Wiki</a>.
+Also, try search the JMeter User list; someone may well have already provided a solution.
+</p>
+<div class="subsection"><h2 id="variable_and_threads">23.1 Passing variables between threads<a class="sectionlink" href="#variable_and_threads" title="Link to here">&para;</a></h2>
+<p>
+JMeter variables have thread scope. This is deliberate, so that threads can act independently.
+However sometimes there is a need to pass variables between different threads, in the same or different Thread Groups.
+</p>
+<p>
+One way to do this is to use a property instead. 
+Properties are shared between all JMeter threads, so if one thread <a href="functions.html#__setProperty">sets a property</a>,
+another thread can <a href="functions.html#__P">read</a> the updated value.
+</p>
+<p>
+If there is a lot of information that needs to be passed between threads, then consider using a file.
+For example you could use the <a href="component_reference.html#Save_Responses_to_a_file">Save Responses to a file</a>
+listener or perhaps a BeanShell PostProcessor in one thread, and read the file using the HTTP Sampler "<span class="code">file:</span>" protocol,
+and extract the information using a PostProcessor or BeanShell element.
+</p>
+<p>
+If you can derive the data before starting the test, then it may well be better to store it in a file,
+read it using CSV Dataset.
+</p>
+</div>
+
+<div class="subsection"><h2 id="debug_logging">23.2 Enabling Debug logging<a class="sectionlink" href="#debug_logging" title="Link to here">&para;</a></h2>
+<p>
+Most test elements include debug logging. If running a test plan from the GUI, 
+select the test element and use the Help Menu to enable or disable logging.
+The Help Menu also has an option to display the GUI and test element class names.
+You can use these to determine the correct property setting to change the logging level.
+</p>
+
+<p>
+It is sometimes very useful to see Log messages to debug dynamic scripting languages like BeanShell or
+groovy used in JMeter.
+You can view log messages directly in JMeter GUI, to do so:</p>
+<ul>
+<li>use menu <span class="menuchoice"><span class="guimenuitem">Options</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Log Viewer</span></span>,
+a log console will appear at the bottom of the interface</li>
+<li>Or click on the Warning icon in the upper right corner of GUI</li>
+</ul>
+By default this log console is disabled, you can enable it by changing in <span class="code">jmeter.properties</span>:
+<pre class="source">jmeter.loggerpanel.display=true</pre>
+
+To avoid using too much memory, this components limits the number of characters used by this panel:
+
+<pre class="source">jmeter.loggerpanel.maxlength=80000</pre>
+</div>
+
+<div class="subsection"><h2 id="searching">23.3 Searching<a class="sectionlink" href="#searching" title="Link to here">&para;</a></h2>
+<p>
+It is sometimes hard to find in a Test Plan tree and elements using a variable or containing a certain URL or parameter.
+A new feature is now available since 2.6, you can access it in Menu Search.
+It provides search with following options:
+</p>
+<dl>
+<dt><span class="code">Case sensitive</span></dt><dd>Makes search case sensitive</dd>
+<dt><span class="code">Regular exp.</span></dt><dd>Is text to search a regexp, if so Regexp will be searched in Tree of components, example "<span class="code">\btest\b</span>"
+will match any component that contains test in searchable elements of the component</dd>
+</dl>
+
+<figure><a href="../images/screenshots/searching/raw-search.png"><img src="../images/screenshots/searching/raw-search.png" width="768" height="339" alt="Figure 1 - Search raw text in TreeView"></a><figcaption>Figure 1 - Search raw text in TreeView</figcaption></figure>
+<figure><a href="../images/screenshots/searching/raw-search-result.png"><img src="../images/screenshots/searching/raw-search-result.png" width="767" height="316" alt="Figure 2 - Result in TreeView"></a><figcaption>Figure 2 - Result in TreeView</figcaption></figure>
+<figure><a href="../images/screenshots/searching/regexp-search.png"><img src="../images/screenshots/searching/regexp-search.png" width="772" height="319" alt="Figure 3 - Search Regexp in TreeView (in this example we search whole word)"></a><figcaption>Figure 3 - Search Regexp in TreeView (in this example we search whole word)</figcaption></figure>
+<figure><a href="../images/screenshots/searching/regexp-search-result.png"><img src="../images/screenshots/searching/regexp-search-result.png" width="771" height="302" alt="Figure 4 - Result in TreeView"></a><figcaption>Figure 4 - Result in TreeView</figcaption></figure>
+
+</div>
+
+<div class="subsection"><h2 id="hidpi">23.4 JMeter with a HiDPI screen on Linux or Windows<a class="sectionlink" href="#hidpi" title="Link to here">&para;</a></h2>
+<div class="description">
+    <p>
+    The HiDPI mode isn't currently support by the Swing API in Java on Linux, MacOS or Windows. Therefore
+    JMeter can be very hard to read with a HiDPI screen (little icons and chars).
+    </p>
+    <p>You can improve the JMeter's display on HiDPI screen by changing some properties:</p>
+    <dl>
+      <dt><span class="code">jmeter.hidpi.mode</span></dt>
+      <dd>set to <span class="code">true</span> to activate a '<em>pseudo</em>'-hidpi mode allowing to increase size of some UI elements</dd>
+      <dt><span class="code">jmeter.hidpi.scale.factor</span></dt>
+      <dd>set to <span class="code">2.0</span> to scale the size of some UI elements</dd>
+      <dt><span class="code">jmeter.toolbar.icons.size</span></dt>
+      <dd>with these values: <span class="code">22x22</span> (default size), <span class="code">32x32</span> or <span class="code">48x48</span> (Suggested value for HiDPI)</dd>
+      <dt><span class="code">jmeter.tree.icons.size</span></dt>
+      <dd>with these values: <span class="code">19x19</span> (default size), <span class="code">24x24</span>, <span class="code">32x32</span> (Suggested value for HiDPI) or <span class="code">48x48</span></dd>
+    </dl>
+    <div class="clear"></div><div class="note">This is not a full HiDPI support and only affects
+      <ul>
+        <li>JMeter tree nodes</li>
+        <li>icons in the menus</li>
+        <li>Tables content</li>
+      </ul>
+    </div><div class="clear"></div>
+</div>
+</div>
+
+<div class="subsection"><h2 id="autosave">23.5 Autosave process configuration<a class="sectionlink" href="#autosave" title="Link to here">&para;</a></h2>
+<div class="description">
+    <p>Since JMeter 3.0, JMeter automatically saves up to ten backups of every saved jmx files. When enabled, just before the jmx file is saved,
+    it will be backed up to the <span class="code">${JMETER_HOME}/backups</span> subfolder. Backup files are named after the saved jmx file and assigned a
+    version number that is automatically incremented, ex: <span class="code">test-plan-000001.jmx</span>, <span class="code">test-plan-000002.jmx</span>, <span class="code">test-plan-000003.jmx</span>, etc.
+    To control auto-backup, add the following properties to <span class="code">user.properties</span>.</p>
+    <dl>
+      <dt><span class="code">backup_on_save</span></dt>
+      <dd>
+       To enable/disable auto-backup, set the following property to <span class="code">true</span>/<span class="code">false</span> (default is <span class="code">true</span>):
+       <pre class="source">jmeter.gui.action.save.backup_on_save=false</pre>
+      </dd>
+      <dt><span class="code">backup_directory</span></dt>
+      <dd>
+    The backup directory can also be set to a different location. Setting the <span class="code">jmeter.gui.action.save.backup_directory</span> property
+    to the path of the desired directory
+    will cause backup files to be stored inside instead of the <span class="code">${JMETER_HOME}/backups</span> folder. If the specified directory does not exist
+    it will be created. Leaving this property unset will cause the <span class="code">${JMETER_HOME}/backups</span> folder to be used.
+    <pre class="source">jmeter.gui.action.save.backup_directory=/path/to/backups/dir</pre>
+      </dd>
+      <dt><span class="code">keep_backup_max_hours</span></dt>
+      <dd>
+    You can also configure the maximum time (in hours) that backup files should be preserved since the most recent save time.
+    By default a zero expiration time is set which instructs JMeter to preserve backup files for ever.
+    Use the following property to control max preservation time:
+    <pre class="source">jmeter.gui.action.save.keep_backup_max_hours=0</pre>
+      </dd>
+      <dt><span class="code">keep_backup_max_count</span></dt>
+      <dd>
+    You can set the maximum number of backup files that should be preserved. By default <span class="code">10</span> backups will be kept.
+    Setting this to zero will cause the backups to never being deleted (unless <span class="code">keep_backup_max_hours</span> is set to a non null value)
+    Maximum backup files selection is processed <em>after</em> time expiration selection, so even if you set one year as the expiry time,
+    only the <span class="code">keep_backup_max_count</span> most recent backups files will be kept.
+    <pre class="source">jmeter.gui.action.save.keep_backup_max_count=10</pre>
+      </dd>
+    </dl>
+</div>
+</div>
+
+    <div class="subsection"><h2 id="component_hotkeys">23.5 Adding Elements with Hotkeys<a class="sectionlink" href="#component_hotkeys" title="Link to here">&para;</a></h2>
+        <p>
+            When you do intense scripting with JMeter, there is a way to add elements to test plan quickly
+            with keyboard shortcuts. Default bindings are:
+        </p>
+        <dl>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">0</span></span>
+            </dt>
+            <dd>Thread Group</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">1</span></span>
+            </dt>
+            <dd>HTTP Request</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">2</span></span>
+            </dt>
+            <dd>Regular Expression Extractor</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">3</span></span>
+            </dt>
+            <dd>Response Assertion</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">4</span></span>
+            </dt>
+            <dd>Constant Timer</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">5</span></span>
+            </dt>
+            <dd>Test Action</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">6</span></span>
+            </dt>
+            <dd>JSR223 PostProcessor</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">7</span></span>
+            </dt>
+            <dd>JSR223 PreProcessor</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">8</span></span>
+            </dt>
+            <dd>Debug Sampler</dd>
+            <dt>
+                <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">9</span></span>
+            </dt>
+            <dd>View Results Tree</dd>
+        </dl>
+        <div class="clear"></div><div class="note">The binding above are made for Windows QWERTY keyboards. For other platforms and keyboards ensure you adapt those values.</div><div class="clear"></div>
+        <p>
+            To change these binding, please find "<span class="code">gui.quick_*</span>" properties within <span class="code">jmeter.properties</span> file as example,
+            it is recommended to put overrides for them into <span class="code">user.properties</span> file.
+        </p>
+    </div>
+</div><ul class="pagelinks"><li><a href="regular_expressions.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="glossary.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

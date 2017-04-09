@@ -1,0 +1,157 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Building a Monitor Test Plan (DEPRECATED)</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="build-jms-topic-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="listeners.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">12. Building a Monitor Test Plan (DEPRECATED)<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
+<div class="clear"></div><div class="note">Note this feature is deprecated since JMeter 3.1</div><div class="clear"></div>
+<p>In this section, you will learn how to create a 
+<a href="build-test-plan.html">Test Plan</a> to monitor webservers. Monitors
+are useful for a stress testing and system management. Used with stress
+testing, the monitor provides additional information about server performance.
+It also makes it easier to see the relationship between server performance
+and response time on the client side. As a system administration tool, the
+monitor provides an easy way to monitor multiple servers from one console.
+The monitor was designed to work with the status servlet in Tomcat 5. In
+theory, any servlet container that supports JMX (Java Management Extension)
+can port the status servlet to provide the same information.</p>
+<p>For those who want to use the monitor with other servlet or EJB containers,
+Tomcat's status servlet should work with other containers for the memory
+statistics without any modifications. To get thread information, you will
+need to change the MBeanServer lookup to retrieve the correct MBeans.</p>
+
+</div><div class="section"><h1 id="adding_server">12.1 Adding A Server<a class="sectionlink" href="#adding_server" title="Link to here">&para;</a></h1>
+<p>The first step is to add a <a href="test_plan.html#thread_group">Thread Group</a>
+element.  The Thread Group tells JMeter the number of threads you want. Always use
+<span class="code">1</span>, since we are using JMeter as a monitor. This is very important for those not
+familiar with server monitors. As a general rule, using multiple threads for a
+single server is bad and can create significant stress.
+</p>
+
+<p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
+clicking your right mouse button to get the <span class="menuchoice"><span class="guimenuitem">Add</span></span> menu, and then select
+<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">ThreadGroup</span></span>.</p>
+
+<p>You should now see the Thread Group element under Test Plan.  If you do not
+see the element, "expand" the Test Plan tree by clicking on the Test Plan element.</p>
+
+<figure><a href="../images/screenshots/webtest/threadgroup.png"><img src="../images/screenshots/webtest/threadgroup.png" width="" height="" alt="
+Figure 12.1. Thread Group with Default Values"></a><figcaption>
+Figure 12.1. Thread Group with Default Values</figcaption></figure>
+
+<p>Change the loop count to forever (or some large number) so that enough samples are generated.</p>
+
+</div><div class="section"><h1 id="adding_auth">12.2 HTTP Auth Manager<a class="sectionlink" href="#adding_auth" title="Link to here">&para;</a></h1>
+<p>Add the <a href="../usermanual/component_reference.html#HTTP_Authorization_Manager">HTTP Authorization Manager</a> to the Thread Group element
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Config element</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">HTTP Authorization Manager</span></span>). Enter the username
+and password for your webserver. 
+<div class="clear"></div><div class="note">Important note: the monitor only works with
+Tomcat5 build 5.0.19 and newer. For instructions on how to setup Tomcat, please
+refer to tomcat 5 documentation.
+</div><div class="clear"></div>
+</p>
+<ol>
+<li> leave the base URL blank</li>
+<li> enter the username</li>
+<li> enter the password</li>
+</ol>
+</div><div class="section"><h1 id="adding_request">12.3 Adding HTTP Request<a class="sectionlink" href="#adding_request" title="Link to here">&para;</a></h1>
+
+<p>Add the <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a> to the Thread Group element
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">HTTP Request</span></span>). Then, select the HTTP Request element
+in the tree and edit the following properties):
+<ol>
+<li>Change the Name field to "<span class="code">Server Status</span>".</li>
+<li>Enter the IP address or Hostname</li>
+<li>Enter the port number</li>
+<li>Set the Path field to "<span class="code">/manager/status</span>" if you're using Tomcat.</li>
+<li>Add a request parameter named "<span class="code">XML</span>" in uppercase. Give it a value of
+"<span class="code">true</span>" in lowercase.</li>
+<li>Check "<span class="code">Use as Monitor</span>" at the bottom of the sampler</li>
+</ol>
+</p>
+
+</div><div class="section"><h1 id="adding_timer">12.4 Adding Constant Timer<a class="sectionlink" href="#adding_timer" title="Link to here">&para;</a></h1>
+
+<p>Add a timer to this thread group 
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Timer</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Constant Timer</span></span>).
+Enter <span class="code">5000</span> milliseconds in the "<span class="code">Thread Delay</span>" box. In general, using intervals shorter
+than 5 seconds will add stress to your server. Find out what is an acceptable interval
+before you deploy the monitor in your production environment.</p>
+
+</div><div class="section"><h1 id="adding_listener">12.5 Adding a Listener to Store the Results<a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></h1>
+<p>If you want to save the raw results from the server, add a simple data
+ <a href="component_reference.html#listeners">Listener</a>. If you want to save the
+ calculated statistics, enter a filename in the listener. If you want to save both
+ the raw data and statistics, make sure you use different filenames.</p>
+
+<p>Select the thread group element and add a <a href="../usermanual/component_reference.html#Simple_Data_Writer">Simple Data Writer</a> listener
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Simple Data Writer</span></span>).  Next, you need to specify a directory
+and filename of the output file.  You can either type it into the filename field, or
+select the Browse button and browse to a directory and then enter a filename.</p>
+
+</div><div class="section"><h1 id="add_monitor_listener">12.6 Adding Monitor Results<a class="sectionlink" href="#add_monitor_listener" title="Link to here">&para;</a></h1>
+
+<p>Add the <a href="component_reference.html#listeners">Listener</a> by selecting the
+test plan element 
+(<span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Monitor Results</span></span>).
+</p><p>
+By default, the Listener will select the results from the first connector in the sample response.
+The Connector prefix field can be used to select a different connector.
+If specified, the Listener will choose the first connector which matches the prefix.
+If no match is found, then the first connector is selected.
+</p>
+<p>There are two tabs in
+the monitor results listener. The first is the "<span class="code">Health</span>", which displays the status of
+the last sample the monitor received. The second tab is "<span class="code">Performance</span>", which shows a
+historical view of the server's performance. 
+</p>
+
+<figure><a href="../images/screenshots/monitor_health.png"><img src="../images/screenshots/monitor_health.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+<p>A quick note about how health is calculated. Typically, a server will crash if
+it runs out of memory, or reached the maximum number of threads. In the case of
+Tomcat 5, once the threads are maxed out, requests are placed in a queue until a
+thread is available. The relative importance of threads vary between containers, so
+the current implementation uses 50/50 to be conservative. A container that is more
+efficient with thread management might not see any performance degradation, but
+the used memory definitely will show an impact.</p>
+<figure><a href="../images/screenshots/monitor_screencap.png"><img src="../images/screenshots/monitor_screencap.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+<p>The performance graph shows four different lines. The free memory line shows how
+much free memory is left in the current allocated block. Tomcat 5 returns the maximum
+memory, but it is not graphed. In a well tuned environment, the server should never
+reach the maximum memory.</p>
+<p>Note the graph has captions on both sides of the graph. On the left is percent and
+the right is dead/healthy. If the memory line spikes up and down rapidly, it could
+indicate memory thrashing. In those situations, it is a good idea to profile the
+application with Borland OptimizeIt or JProbe. What you want to see is a regular
+pattern for load, memory and threads. Any erratic behavior usually indicates poor
+performance or a bug of some sort.</p>
+
+</div><ul class="pagelinks"><li><a href="build-jms-topic-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="listeners.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.1" jmeter="3.1-SNAPSHOT.20161018">
+  <hashTree>
+    <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223Sampler using Groovy" enabled="true">
+      <stringProp name="TestPlan.comments">JSR223 Sampler using Groovy</stringProp>
+      <stringProp name="cacheKey">cea2f0e3-d38e-4ea4-bf26-efa6bcb3d07f</stringProp>
+      <stringProp name="filename"></stringProp>
+      <stringProp name="parameters"></stringProp>
+      <stringProp name="script">def variable = vars[&quot;varName&quot;];
+log.info(&quot;Example&quot;);
+
+vars.put(&quot;newVar&quot;, &quot;a computed value&quot;);</stringProp>
+      <stringProp name="scriptLanguage">groovy</stringProp>
+    </JSR223Sampler>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

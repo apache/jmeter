@@ -1,0 +1,224 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="../index.html">Index</a></li><li><a href="get-started.html">Next &gt;</a></li></ul><div class="section"><h1 id="index">User's Manual<a class="sectionlink" href="#index" title="Link to here">&para;</a></h1>
+<p>Click on the section name to go straight to the section. 
+    Click on the "+" to go to the relevant section of the detailed section list,
+    where you can select individual subsections.</p>
+
+<div class="subsection"><h2 id="summary">Section Summary<a class="sectionlink" href="#summary" title="Link to here">&para;</a></h2>
+<ul>
+  <li><a href="../changes.html">Changes</a></li>
+  <li><a href="#get-started">+</a>...<a href="get-started.html">1. Getting Started</a></li>
+  <li><a href="#build-test-plan">+</a>...<a href="build-test-plan.html">2. Building a Test Plan</a></li>
+  <li><a href="#test_plan">+</a>...<a href="test_plan.html">3. Elements of a Test Plan</a></li>
+  <li><a href="#build-web-test-plan">+</a>...<a href="build-web-test-plan.html">4. Building a Web Test Plan</a></li>
+  <li><a href="#build-adv-web-test-plan">+</a>...<a href="build-adv-web-test-plan.html">5. Building an Advanced Web Test Plan</a></li>
+  <li><a href="#build-db-test-plan">+</a>...<a href="build-db-test-plan.html">6. Building a Database Test Plan</a></li>
+  <li><a href="#build-ftp-test-plan">+</a>...<a href="build-ftp-test-plan.html">7. Building an FTP Test Plan</a></li>
+  <li><a href="#build-ldap-test-plan">+</a>...<a href="build-ldap-test-plan.html">8a. Building an LDAP Test Plan</a></li>
+  <li><a href="#build-ldapext-test-plan">+</a>...<a href="build-ldapext-test-plan.html">8b. Building an Extended LDAP Test Plan</a></li>
+  <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
+  <li><a href="#build-jms-point-to-point-test-plan">+</a>...<a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
+  <li><a href="#build-jms-topic-test-plan">+</a>...<a href="build-jms-topic-test-plan.html">11. Building a JMS Topic Test Plan</a></li>
+  <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">12. Building a Monitor Test Plan</a></li>
+  <li><a href="#listeners">+</a>...<a href="listeners.html">13. Listeners</a></li>
+  <li><a href="#remote-test">+</a>...<a href="remote-test.html">14. Remote Testing</a></li>
+  <li><a href="#generating-dashboard">+</a>...<a href="generating-dashboard.html">15. Dashboard Report</a></li>
+  <li><a href="#realtime-results">+</a>...<a href="realtime-results.html">16. Real time Results</a></li>
+  <li><a href="#best-practices">+</a>...<a href="best-practices.html">17. Best Practices</a></li>
+  <li><a href="#boss">+</a>...<a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="#component_reference">+</a>...<a href="component_reference.html">19. Component Reference</a></li>
+  <li><a href="#properties_reference">+</a>...<a href="properties_reference.html">20. Properties Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">21. Functions</a></li>
+  <li><a href="#regex">+</a>...<a href="regular_expressions.html">22. Regular Expressions</a></li>
+  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">23. Hints and Tips</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">24. Glossary</a></li>
+  <li><a href="#history_future">+</a>...<a href="history_future.html">25. History / Future</a></li>  
+</ul>
+</div>
+<div class="subsection"><h2 id="details">Detailed Section List<a class="sectionlink" href="#details" title="Link to here">&para;</a></h2>
+<ul>
+  <li><a name="get-started"></a><a href="get-started.html">1. Getting Started</a>
+  <ul>
+     <li><a href="get-started.html#overview">1.0 Overview</a></li>
+     <ul>
+        <li><a href="get-started.html#test_plan_building">Test plan building</a></li>
+        <li><a href="get-started.html#load_test_running">Load Test running</a></li>
+        <li><a href="get-started.html#load_test_analysis">Load Test analysis</a></li>
+        <li><a href="get-started.html#lets_start">Let's start</a></li>
+     </ul>
+     <li><a href="get-started.html#requirements">1.1 Requirements</a></li>
+     <ul>
+        <li><a href="get-started.html#java_versions">1.1.1 Java Version</a></li>
+        <li><a href="get-started.html#os">1.1.2 Operating Systems</a></li>
+     </ul>
+     <li><a href="get-started.html#optional">1.2 Optional</a>
+     <ul>
+        <li><a href="get-started.html#opt_compiler">1.2.1 Java Compiler</a></li>
+        <li><a href="get-started.html#opt_sax">1.2.2 SAX XML Parser</a></li>
+        <li><a href="get-started.html#opt_email">1.2.3 Email Support</a></li>
+        <li><a href="get-started.html#opt_ssl">1.2.4 SSL Encryption</a></li>
+        <li><a href="get-started.html#opt_jdbc">1.2.5 JDBC Driver</a></li>
+        <li><a href="get-started.html#opt_jms">1.2.6 JMS client</a></li>
+        <li><a href="get-started.html#libraries_activemq">1.2.7 Libraries for ActiveMQ JMS</a></li>
+     </ul>
+     </li>
+     <li><a href="get-started.html#install">1.3 Installation</a></li>
+     <li><a href="get-started.html#running">1.4 Running JMeter</a>
+     <ul>
+        <li><a href="get-started.html#classpath">1.4.1 JMeter's Classpath</a></li>
+        <li><a href="get-started.html#template">1.4.2 Create Test Plan from Template</a></li>
+        <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behing a proxy</a></li>
+        <li><a href="get-started.html#non_gui">1.4.4 Non-GUI Mode</a></li>
+        <li><a href="get-started.html#server">1.4.5 Server Mode</a></li>
+        <li><a href="get-started.html#override">1.4.6 Overriding Properties Via The Command Line</a></li>
+        <li><a href="get-started.html#logging">1.4.7 Logging and Error Messages</a></li>
+        <li><a href="get-started.html#options">1.4.8 Full list of command-line options</a></li>
+        <li><a href="get-started.html#shutdown">1.4.9 non-GUI shutdown</a></li>
+     </ul>
+     </li>
+     <li><a href="get-started.html#configuring_jmeter">1.5 Configuring JMeter</a></li>
+  </ul>
+  </li>
+  <li><a name="build-test-plan"></a><a href="build-test-plan.html">2. Building a Test Plan</a>
+  <ul>
+     <li><a href="build-test-plan.html#add_remove">2.1 Adding and Removing Elements</a></li>
+     <li><a href="build-test-plan.html#load_save">2.2 Loading and Saving Elements</a></li>
+     <li><a href="build-test-plan.html#config_element">2.3 Configuring Tree Elements</a></li>
+     <li><a href="build-test-plan.html#save">2.4 Saving the Test Plan</a></li>
+     <li><a href="build-test-plan.html#run">2.5 Running a Test Plan</a></li>
+     <li><a href="build-test-plan.html#stop">2.6 Stopping a Test</a></li>
+     <li><a href="build-test-plan.html#error_reporting">2.7 Error reporting</a></li>
+  </ul>
+  </li>
+  <li><a name="test_plan"></a><a href="test_plan.html">3. Elements of a Test Plan</a>
+  <ul>
+     <li><a href="test_plan.html#thread_group">3.1 Thread Group</a></li>
+     <li><a href="test_plan.html#controllers">3.2 Controllers</a>
+     <ul>
+        <li><a href="test_plan.html#samplers">3.2.1 Samplers</a></li>
+        <li><a href="test_plan.html#logic_controller">3.2.2 Logic Controllers</a></li>
+        <li><a href="test_plan.html#test_fragments">3.2.3 Test Fragments</a></li>
+     </ul>
+     </li>
+     <li><a href="test_plan.html#listeners">3.3 Listeners</a></li>
+     <li><a href="test_plan.html#timers">3.4 Timers</a></li>
+     <li><a href="test_plan.html#assertions">3.5 Assertions</a></li>
+     <li><a href="test_plan.html#config_elements">3.6 Configuration Elements</a></li>
+     <li><a href="test_plan.html#preprocessors">3.7 Pre-Processor Elements</a></li>
+     <li><a href="test_plan.html#postprocessors">3.8 Post-Processor Elements</a></li>
+     <li><a href="test_plan.html#executionorder">3.9 Execution order</a></li>
+     <li><a href="test_plan.html#scoping_rules">3.10 Scoping Rules</a></li>
+     <li><a href="test_plan.html#properties">3.11 Properties and Variables</a></li>
+     <li><a href="test_plan.html#using_variables">3.12 Using Variables to parameterise tests</a></li>
+ </ul>
+ </li>
+ <li><a name="build-web-test-plan"></a><a href="build-web-test-plan.html">4. Building a Web Test Plan</a>
+     <ul>
+        <li><a href="build-web-test-plan.html#adding_users">4.1 Adding Users</a></li>
+        <li><a href="build-web-test-plan.html#adding_defaults">4.2 Adding Default HTTP Request Properties</a></li>
+        <li><a href="build-web-test-plan.html#adding_cookie_support">4.3 Adding Cookie Support</a></li>
+        <li><a href="build-web-test-plan.html#adding_requests">4.4 Adding HTTP Requests</a></li>
+        <li><a href="build-web-test-plan.html#adding_listener">4.5 Adding a Listener to View/Store the Test Results</a></li>
+        <li><a href="build-web-test-plan.html#logging_in">4.6 Logging in to a web-site</a></li>
+     </ul>
+ </li>
+ <li><a name="build-adv-web-test-plan"></a><a href="build-adv-web-test-plan.html">5. Building an Advanced Web Test Plan</a>
+     <ul>
+        <li><a href="build-adv-web-test-plan.html#session_url_rewriting">5.1 Handling User Sessions With URL Rewriting</a></li>
+        <li><a href="build-adv-web-test-plan.html#header_manager">5.2 Using a Header Manager</a></li>
+     </ul>
+ </li>
+ <li><a name="build-db-test-plan"></a><a href="build-db-test-plan.html">6. Building a Database Test Plan</a>
+     <ul>
+        <li><a href="build-db-test-plan.html#adding_users">6.1 Adding Users</a></li>
+        <li><a href="build-db-test-plan.html#adding_requests">6.2 Adding JDBC Requests</a></li>
+        <li><a href="build-db-test-plan.html#adding_listener">6.3 Adding a Listener to View/Store the Test Results</a></li>
+     </ul>
+ </li>
+ <li><a name="build-ftp-test-plan"></a><a href="build-ftp-test-plan.html">7. Building an FTP Test Plan</a>
+     <ul>
+        <li><a href="build-ftp-test-plan.html#adding_users">7.1 Adding Users</a></li>
+        <li><a href="build-ftp-test-plan.html#adding_defaults">7.2 Adding Default FTP Request Properties</a></li>
+        <li><a href="build-ftp-test-plan.html#adding_requests">7.3 Adding FTP Requests</a></li>
+        <li><a href="build-ftp-test-plan.html#adding_listener">7.4 Adding a Listener to View/Store the Test Results</a></li>
+     </ul>
+ </li>
+ <li><a name="build-ldap-test-plan"></a><a href="build-ldap-test-plan.html">8a. Building an LDAP Test Plan</a>
+  <ul>
+    <li><a href="build-ldap-test-plan.html#adding_users">8a.1 Adding Users</a></li>
+    <li><a href="build-ldap-test-plan.html#add_login">8a.2 Adding Login Config Element</a></li>
+    <li><a href="build-ldap-test-plan.html#add_defaults">8a.3 Adding LDAP Request Defaults</a></li>
+    <li><a href="build-ldap-test-plan.html#add_requests">8a.4 Adding LDAP Requests</a></li>
+    <li><a href="build-ldap-test-plan.html#ResponseAssertion">8a.5 Adding a Response Assertion</a></li>
+    <li><a href="build-ldap-test-plan.html#add_listener">8a.6 Adding a Listener to View/Store the Test Results</a></li>
+  </ul>
+ </li>
+ <li><a name="build-ldapext-test-plan"></a><a href="build-ldap-test-plan.html">8b. Building an Extended LDAP Test Plan</a>
+  <ul>
+    <li><a href="build-ldapext-test-plan.html#ext_adding_users">8b.1 Adding Users</a></li>
+    <li><a href="build-ldapext-test-plan.html#add_login">8b.2 Adding LDAP Extended Request Defaults</a></li>
+    <li><a href="build-ldapext-test-plan.html#add_extrequests">8b.3 Adding LDAP Requests</a></li>
+    <li><a href="build-ldapext-test-plan.html#add_ldapext_listener">8b.4 Adding a Listener to View/Store the Test Results</a></li>
+   </ul>
+ </li>
+ <li><a name="build-ws-test-plan"></a><a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
+ <li><a name="build-jms-point-to-point-test-plan"></a><a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
+ <li><a name="build-jms-topic-test-plan"></a><a href="build-jms-topic-test-plan.html">11. Building a JMS topic Test Plan</a></li>
+ <li><a name="build-monitor-test-plan"></a><a href="build-monitor-test-plan.html">12. Building a Monitor Test Plan</a></li>
+ <li><a name="listeners"></a><a href="listeners.html">13. Introduction to Listeners</a></li>
+ <li><a name="remote-test"></a><a href="remote-test.html">14. Remote Testing</a></li>
+ <li><a name="generating-dashboard"></a><a href="generating-dashboard.html">15. Dashboard Report</a>
+   <ul>
+     <li><a href="generating-dashboard.html#overview">15.1 Overview</a></li>
+     <li><a href="generating-dashboard.html#configuration">15.2 Configuring Dashboard Generation</a></li>
+     <li><a href="generating-dashboard.html#report">15.3 Generating reports</a></li>
+     <li><a href="generating-dashboard.html#default_graphs">15.4 Default graphs</a></li>
+     <li><a href="generating-dashboard.html#development">15.5 Want to improve Report Dashboard</a></li>
+   </ul>
+ </li>
+ <li><a name="realtime-results"></a><a href="realtime-results.html">16. Real time Results</a></li>
+ <li><a name="best-practices"></a><a href="best-practices.html">17. Best Practices</a></li>
+ <li><a name="boss"></a><a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
+ <li><a name="component_reference"></a><a href="component_reference.html">19. Component Reference</a></li>
+ <li><a name="properties"></a><a href="properties_reference.html">20. Properties reference</a></li>
+ <li><a name="functions"></a><a href="functions.html">21. Functions</a></li>
+ <li><a name="regex"></a><a href="regular_expressions.html">22. Regular Expressions</a></li>
+ <li><a name="hints"></a><a href="hints_and_tips.html">23. Hints and Tips</a></li>
+ <li><a name="glossary"></a><a href="glossary.html">24. Glossary</a></li>
+ <li><a name="history_future"></a><a href="history_future.html">25. History / Future</a></li>
+ 
+</ul>
+</div>
+
+</div><ul class="pagelinks"><li><a href="../index.html">Index</a></li><li><a href="get-started.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+    
+       http://www.apache.org/licenses/LICENSE-2.0
+    
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project name="ant-jmeter" default="all">
+    <description>
+
+        Sample build file for use with ant-jmeter.jar
+        See http://www.programmerplanet.org/pages/projects/jmeter-ant-task.php
+
+    To run a test and create the output report:
+        ant -Dtest=script
+
+    To run a test only:
+        ant -Dtest=script run
+
+    To run report on existing test output
+        ant -Dtest=script report
+
+    The "script" parameter is the name of the script without the .jmx suffix.
+
+    Additional options:
+        -Dshow-data=y - include response data in Failure Details
+        -Dtestpath=xyz - path to test file(s) (default user.dir).
+                         N.B. Ant interprets relative paths against the build file
+        -Djmeter.home=.. - path to JMeter home directory (defaults to parent of this build file)
+        -Dreport.title="My Report" - title for html report (default is 'Load Test Results')
+    </description>
+    
+    <property name="testpath" value="${user.dir}"/>
+    <property name="jmeter.home" value="${basedir}/.."/>
+    <property name="report.title" value="Load Test Results"/>
+    
+    <!-- Name of test (without .jmx) -->
+    <property name="test" value="Test"/>
+    
+    <!-- Should report include response data for failures? -->
+    <property name="show-data" value="n"/>
+
+    <property name="format" value="2.1"/>
+    
+    <condition property="style_version" value="_21">
+        <equals arg1="${format}" arg2="2.1"/>
+    </condition>
+
+    <condition property="funcMode">
+        <equals arg1="${show-data}" arg2="y"/>
+    </condition>
+    
+    <condition property="funcMode" value="false">
+      <not>
+        <equals arg1="${show-data}" arg2="y"/>
+      </not>
+    </condition>
+
+    <!-- Allow jar to be picked up locally -->
+    <path id="jmeter.classpath">
+        <fileset dir="${basedir}">
+          <include name="ant-jmeter*.jar"/>
+        </fileset>
+    </path>
+
+    <taskdef
+        name="jmeter"
+        classpathref="jmeter.classpath"
+        classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+    
+    <target name="all" depends="run,report"/>
+
+    <target name="run">
+        <echo>funcMode = ${funcMode}</echo>
+        <delete file="${testpath}/${test}.html"/>
+        <jmeter
+            jmeterhome="${jmeter.home}"
+            testplan ="${testpath}/${test}.jmx"
+            resultlog="${testpath}/${test}.jtl">
+        <!--
+            <jvmarg value="-Xincgc"/>
+            <jvmarg value="-Xmx128m"/>
+            <jvmarg value="-Dproperty=value"/>
+            <jmeterarg value="-qextra.properties"/>
+        -->
+            <!-- Force suitable defaults -->
+            <property name="jmeter.save.saveservice.output_format" value="xml"/>
+            <property name="jmeter.save.saveservice.assertion_results" value="all"/>
+            <property name="jmeter.save.saveservice.bytes" value="true"/>
+            <property name="file_format.testlog" value="${format}"/>
+            <property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
+        </jmeter>
+    </target>
+
+    <property name="lib.dir" value="${jmeter.home}/lib"/>
+
+    <!-- Use xalan copy from JMeter lib directory to ensure consistent processing with Java 1.4+ -->
+    <path id="xslt.classpath">
+        <fileset dir="${lib.dir}" includes="xalan*.jar"/>
+        <fileset dir="${lib.dir}" includes="serializer*.jar"/>
+    </path>
+
+    <target name="report" depends="xslt-report,copy-images">
+        <echo>Report generated at ${report.datestamp}</echo>
+    </target>
+
+    <target name="xslt-report" depends="_message_xalan">
+        <tstamp><format property="report.datestamp" pattern="yyyy/MM/dd HH:mm"/></tstamp>
+        <xslt
+            classpathref="xslt.classpath"
+            force="true"
+            in="${testpath}/${test}.jtl"
+            out="${testpath}/${test}.html"
+            style="${basedir}/jmeter-results-detail-report${style_version}.xsl">
+            <param name="showData" expression="${show-data}"/>
+            <param name="titleReport" expression="${report.title}"/>
+            <param name="dateReport" expression="${report.datestamp}"/>
+        </xslt>
+    </target>
+
+    <!-- Copy report images if needed -->
+    <target name="copy-images" depends="verify-images" unless="samepath">
+        <copy file="${basedir}/expand.png" tofile="${testpath}/expand.png"/>
+        <copy file="${basedir}/collapse.png" tofile="${testpath}/collapse.png"/>
+    </target>
+
+    <target name="verify-images">
+        <condition property="samepath">
+                <equals arg1="${testpath}" arg2="${basedir}" />
+        </condition>
+    </target>
+
+    <!-- Check that the xalan libraries are present -->
+    <condition property="xalan.present">
+          <and>
+              <!-- No need to check all jars; just check a few -->
+            <available classpathref="xslt.classpath" classname="org.apache.xalan.processor.TransformerFactoryImpl"/>
+            <available classpathref="xslt.classpath" classname="org.apache.xml.serializer.ExtendedContentHandler"/>
+          </and>
+    </condition>
+
+    <target name="_message_xalan" unless="xalan.present">
+          <echo>Cannot find all xalan and/or serialiser jars</echo>
+        <echo>The XSLT formatting may not work correctly.</echo>
+        <echo>Check you have xalan and serializer jars in ${lib.dir}</echo>
+    </target>
+
+
+</project>

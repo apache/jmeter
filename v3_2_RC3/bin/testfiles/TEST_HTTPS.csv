@@ -1,0 +1,3 @@
+label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+HTTPS-SNI,200,OK,Thread Group 1-1,text,true,1,1,1,0
+HTTPS-Request,200,OK,Thread Group 1-1,text,true,1,1,1,0

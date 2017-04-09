@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.9" jmeter="3.1-SNAPSHOT.20160819">
+  <hashTree>
+    <TestAction guiclass="TestActionGui" testclass="TestAction" testname="ThinkTime" enabled="true">
+      <intProp name="ActionProcessor.action">1</intProp>
+      <intProp name="ActionProcessor.target">0</intProp>
+      <stringProp name="ActionProcessor.duration">0</stringProp>
+    </TestAction>
+    <hashTree>
+      <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="URT" enabled="true">
+        <stringProp name="ConstantTimer.delay">1000</stringProp>
+        <stringProp name="RandomTimer.range">100.0</stringProp>
+      </UniformRandomTimer>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

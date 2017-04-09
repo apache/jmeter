@@ -1,0 +1,253 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Regular Expressions</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="functions.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="hints_and_tips.html">Next &gt;</a></li></ul><div class="section"><h1 id="regex">22. Regular Expressions<a class="sectionlink" href="#regex" title="Link to here">&para;</a></h1>
+<div class="subsection"><h2 id="overview">22.1 Overview<a class="sectionlink" href="#overview" title="Link to here">&para;</a></h2>
+<p>
+JMeter includes the pattern matching software <a href="http://attic.apache.org/projects/jakarta-oro.html">Apache Jakarta ORO</a>
+<br>
+There is some documentation for this on the Jakarta web-site, for example 
+<a href="http://archimedes.fas.harvard.edu/scrapbook/jakarta-oro-2.0.6/docs/api/org/apache/oro/text/regex/package-summary.html">
+a summary of the pattern matching characters</a>
+</p>
+<p>
+There is also documentation on an older incarnation of the product at 
+<a href="http://www.savarese.org/oro/docs/OROMatcher/index.html">OROMatcher User's guide</a>, which might prove useful. 
+</p>
+<p>
+The pattern matching is very similar to the pattern matching in Perl. 
+A full installation of Perl will include plenty of documentation on regular expressions - look for <span class="code">perlrequick</span>,
+<span class="code">perlretut</span>, <span class="code">perlre</span> and <span class="code">perlreref</span>.
+</p>
+<p>
+It is worth stressing the difference between "<em>contains</em>" and "<em>matches</em>", as used on the Response Assertion test element:
+</p>
+<dl>
+<dt>"<em>contains</em>"</dt><dd> means that the regular expression matched at least some part of the target, 
+so '<span class="code">alphabet</span>' "<em>contains</em>" '<span class="code">ph.b.</span>' because the regular expression matches the substring '<span class="code">phabe</span>'.
+</dd>
+<dt>
+"<em>matches</em>"</dt><dd> means that the regular expression matched the whole target. 
+So '<span class="code">alphabet</span>' is "<em>matched</em>" by '<span class="code">al.*t</span>'. 
+</dd>
+</dl>
+<p>In this case, it is equivalent to wrapping the regular expression in <span class="code">^</span> and <span class="code">$</span>, viz '<span class="code">^al.*t$</span>'. 
+</p>
+<p>However, this is not always the case. 
+For example, the regular expression '<span class="code">alp|.lp.*</span>' is "<em>contained</em>" in '<span class="code">alphabet</span>',
+but does not "<em>match</em>" '<span class="code">alphabet</span>'.
+</p>
+<p>Why? Because when the pattern matcher finds the sequence '<span class="code">alp</span>' in '<span class="code">alphabet</span>', it stops trying any other
+combinations - and '<span class="code">alp</span>' is not the same as '<span class="code">alphabet</span>', as it does not include '<span class="code">habet</span>'.
+</p>
+<div class="clear"></div><div class="note">
+Unlike Perl, there is no need to (i.e. do not) enclose the regular expression in <span class="code">//</span>.
+</div><div class="clear"></div>
+<p>
+So how does one use the modifiers <span class="code">ismx</span> etc. if there is no trailing <span class="code">/</span>? 
+The solution is to use <i>extended regular expressions</i>, i.e. <span class="code">/abc/i</span> becomes <span class="code">(?i)abc</span>.
+See also <a href="#placement">Placement of modifiers</a> below.
+</p>
+</div>
+<div class="subsection"><h2 id="examples">22.2 Examples<a class="sectionlink" href="#examples" title="Link to here">&para;</a></h2>
+<h3>Extract single string</h3>
+<p>
+Suppose you want to match the following portion of a web-page: 
+<br>
+<span class="code">name="file" value="readme.txt"&gt;</span>
+<br>
+and you want to extract <span class="code">readme.txt</span>.
+<br>
+A suitable regular expression would be:
+<br>
+<span class="code">name="file" value="(.+?)"&gt;</span>
+<p>
+The special characters above are:
+</p>
+<dl>
+<dt><span class="code">(</span> and <span class="code">)</span></dt><dd>these enclose the portion of the match string to be returned</dd>
+<dt><span class="code">.</span></dt><dd>match any character</dd>
+<dt><span class="code">+</span></dt><dd>one or more times</dd> 
+<dt><span class="code">?</span></dt><dd>don't be greedy, i.e. stop when first match succeeds</dd>
+</dl>
+<p>
+Note: without the <span class="code">?</span>, the <span class="code">.+</span> would continue past the first <span class="code">"&gt;</span>
+until it found the last possible <span class="code">"&gt;</span> - which is probably not what was intended.
+</p>
+<p>
+Note: although the above expression works, it's more efficient to use the following expression:
+<br>
+<span class="code">name="file" value="([^"]+)"&gt;</span>
+where<br>
+<span class="code">[^"]</span> - means match anything except <span class="code">"</span><br>
+In this case, the matching engine can stop looking as soon as it sees the first <span class="code">"</span>, 
+whereas in the previous case the engine has to check that it has found <span class="code">"&gt;</span> rather than say <span class="code">" &gt;</span>.
+</p>
+<h3>Extract multiple strings</h3>
+<p>
+Suppose you want to match the following portion of a web-page:<br>
+<span class="code">name="file.name" value="readme.txt"</span> 
+and you want to extract both <span class="code">file.name</span> and <span class="code">readme.txt</span>.
+<br>
+A suitable regular expression would be:
+<br>
+<span class="code">name="([^"]+)" value="([^"]+)"</span>
+<br>
+This would create 2 groups, which could be used in the JMeter Regular Expression Extractor template as <span class="code">$1$</span> and <span class="code">$2$</span>.
+</p>
+<p>
+The JMeter Regex Extractor saves the values of the groups in additional variables.
+</p>
+<p>
+For example, assume:
+</p>
+<ul>
+<li>Reference Name: <span class="code">MYREF</span></li>
+<li>Regex: <span class="code">name="(.+?)" value="(.+?)"</span></li>
+<li>Template: <span class="code">$1$$2$</span></li>
+</ul>
+<div class="clear"></div><div class="note">Do not enclose the regular expression in <span class="code">/ /</span></div><div class="clear"></div>
+<p>
+The following variables would be set:
+</p>
+<dl>
+<dt><span class="code">MYREF</span></dt><dd><span class="code">file.namereadme.txt</span></dd>
+<dt><span class="code">MYREF_g0</span></dt><dd><span class="code">name="file.name" value="readme.txt"</span></dd>
+<dt><span class="code">MYREF_g1</span></dt><dd><span class="code">file.name</span></dd>
+<dt><span class="code">MYREF_g2</span></dt><dd><span class="code">readme.txt</span></dd>
+</dl>
+These variables can be referred to later on in the JMeter test plan, as <span class="code">${MYREF}</span>, <span class="code">${MYREF_g1}</span> etc. 
+</p>
+</div>
+<div class="subsection"><h2 id="line_mode">22.3 Line mode<a class="sectionlink" href="#line_mode" title="Link to here">&para;</a></h2>
+<p>The pattern matching behaves in various slightly different ways, 
+depending on the setting of the multi-line and single-line modifiers.
+Note that the single-line and multi-line operators have nothing to do with each other;
+they can be specified independently.
+</p>
+<h3>Single-line mode</h3>
+<p>
+Single-line mode only affects how the '<span class="code">.</span>' meta-character is interpreted.
+</p>
+<p>
+Default behaviour is that '<span class="code">.</span>' matches any character except newline. 
+In single-line mode, '<span class="code">.</span>' also matches newline.
+</p>
+
+<h3>Multi-line mode</h3>
+<p>
+Multi-line mode only affects how the meta-characters '<span class="code">^</span>' and '<span class="code">$</span>' are interpreted.
+</p>
+<p>
+Default behaviour is that '<span class="code">^</span>' and '<span class="code">$</span>' only match at the very beginning and end of the string. 
+When Multi-line mode is used, the '<span class="code">^</span>' metacharacter matches at the beginning of every line,
+and the '<span class="code">$</span>' metacharacter matches at the end of every line.</p>
+
+</div>
+
+<div class="subsection"><h2 id="meta_chars">22.4 Meta characters<a class="sectionlink" href="#meta_chars" title="Link to here">&para;</a></h2>
+<p>
+Regular expressions use certain characters as meta characters - these characters have a special meaning to the RE engine.
+Such characters must be escaped by preceding them with <span class="code">\</span> (backslash) in order to treat them as ordinary characters.
+Here is a list of the meta characters and their meaning (please check the ORO documentation if in doubt).
+</p>
+<dl>
+<dt><span class="code">(</span> and <span class="code">)</span></dt><dd>grouping</dd>
+<dt><span class="code">[</span> and <span class="code">]</span></dt><dd>character classes</dd>
+<dt><span class="code">{</span> and <span class="code">}</span></dt><dd>repetition</dd>
+<dt><span class="code">*</span>, <span class="code">+</span> and <span class="code">?</span></dt><dd>repetition</dd>
+<dt><span class="code">.</span></dt><dd>wild-card character</dd>
+<dt><span class="code">\</span></dt><dd>escape character</dd>
+<dt><span class="code">|</span></dt><dd>alternatives</dd>
+<dt><span class="code">^</span> and <span class="code">$</span></dt><dd>start and end of string or line</dd>
+</dl>
+<div class="clear"></div><div class="note">
+Please note that ORO does not support the <span class="code">\Q</span> and <span class="code">\E</span> meta-characters.
+[In other RE engines, these can be used to quote a portion of an RE so that the meta-characters stand for themselves.]
+You can use function  to do the equivalent, see <a href="functions.html#__escapeOroRegexpChars">${__escapeOroRegexpChars(valueToEscape)}</a>.
+</div><div class="clear"></div>
+<p>
+The following Perl5 extended regular expressions are supported by ORO.
+
+<dl>
+<dt><span class="code">(?#text)</span></dt>
+<dd>An embedded comment causing text to be ignored.</dd>
+<dt><span class="code">(?:regexp)</span></dt>
+<dd>Groups things like "<span class="code">()</span>" but doesn't cause the group match to be saved.</dd>
+<dt><span class="code">(?=regexp)</span></dt>
+<dd>A zero-width positive lookahead assertion. For example, <span class="code">\w+(?=\s)</span> matches a word followed by whitespace, without including whitespace in the MatchResult.</dd>
+<dt><span class="code">(?!regexp)</span></dt>
+<dd>A zero-width negative lookahead assertion. For example <span class="code">foo(?!bar)</span> matches any occurrence of "<span class="code">foo</span>" that
+isn't followed by "<span class="code">bar</span>". Remember that this is a zero-width assertion, which means that <span class="code">a(?!b)d</span> will
+match <span class="code">ad</span> because <span class="code">a</span> is followed by a character that is not <span class="code">b</span> (the <span class="code">d</span>) and a <span class="code">d</span>
+follows the zero-width assertion.</dd>
+<dt><span class="code">(?imsx)</span></dt>
+<dd>One or more embedded pattern-match modifiers. <span class="code">i</span> enables case insensitivity, <span class="code">m</span> enables multiline treatment
+of the input, <span class="code">s</span> enables single line treatment of the input, and <span class="code">x</span> enables extended whitespace comments.</dd>
+</dl>
+<b>Note that <span class="code">(?&lt;=regexp)</span> - lookbehind - is not supported.</b>
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="placement">22.5 Placement of modifiers<a class="sectionlink" href="#placement" title="Link to here">&para;</a></h2>
+<p>
+Modifiers can be placed anywhere in the regex, and apply from that point onwards.
+[A bug in ORO means that they cannot be used at the very end of the regex.
+However they would have no effect there anyway.]
+</p>
+<p>
+The single-line <span class="code">(?s)</span> and multi-line <span class="code">(?m)</span> modifiers are normally placed at the start of the regex.
+</p>
+<p>
+The ignore-case modifier <span class="code">(?i)</span> may be usefully applied to just part of a regex,
+for example:</p>
+<pre class="source">
+Match ExAct case or (?i)ArBiTrARY(?-i) case
+</pre>
+would match <span class="code">Match ExAct case or arbitrary case</span> as well as <span class="code">Match ExAct case or ARBitrary case</span>, but not <span class="code">Match exact case or ArBiTrARY case</span>.
+</div>
+</div><div class="section"><h1 id="testing_expressions">22.6 Testing Regular Expressions<a class="sectionlink" href="#testing_expressions" title="Link to here">&para;</a></h1>
+<p>
+Since JMeter 2.4, the listener <a href="component_reference.html#View_Results_Tree">View Results Tree</a>
+include a RegExp Tester to test regular expressions directly on sampler response data. 
+</p>
+<p>
+There is a <a href="http://www.regexplanet.com/advanced/java/index.html">Website</a> to test Java Regular expressions.
+</p>
+<p>
+Another approach is to use a simple test plan to test the regular expressions.
+The Java Request sampler can be used to generate a sample, or the HTTP Sampler can be used to load a file.
+Add a Debug Sampler and a Tree View Listener and changes to the regular expression can be tested quickly,
+without needing to access any external servers. 
+</p>
+</div><ul class="pagelinks"><li><a href="functions.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="hints_and_tips.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

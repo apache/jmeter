@@ -1,0 +1,196 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: My boss wants me to &hellip;</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="best-practices.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul><div class="section"><h1 id="boss">18. Help! My boss wants me to load test our application!<a class="sectionlink" href="#boss" title="Link to here">&para;</a></h1>
+<p>This is a fairly open-ended proposition. There are a number of questions to
+be asked first, and additionally a number of resources that will be needed. You
+will need some hardware to run the benchmarks/load-tests from. A number of
+tools will prove useful. There are a number of products to consider.  And finally,
+why is Java a good choice to implement a load-testing/Benchmarking product.
+</p>
+<div class="subsection"><h2 id="questions">18.1 Questions to ask<a class="sectionlink" href="#questions" title="Link to here">&para;</a></h2>
+<p>What is our anticipated average number of users (normal load)?
+</p>
+<p>What is our anticipated peak number of users?
+</p>
+<p>When is a good time to load-test our application (i.e. off-hours or week-ends),
+bearing in mind that this may very well crash one or more of our servers?
+</p>
+<p>Does our application have state? If so, how does our application manage it
+(cookies, session-rewriting, or some other method)?
+</p>
+<p>What is the testing intended to achieve?</p>
+</div>
+<div class="subsection"><h2 id="resources">18.2 Resources<a class="sectionlink" href="#resources" title="Link to here">&para;</a></h2>
+<p>The following resources will prove very helpful. Bear in mind that if you
+cannot locate these resources, <b>you</b> will become these resources. As you
+already have your work cut out for you, it is worth knowing who the following
+people are, so that you can ask them for help if you need it.
+</p>
+    <div class="subsection"><h2 id="network">18.2.1 Network<a class="sectionlink" href="#network" title="Link to here">&para;</a></h2>
+    <p>Who knows our network topology? If you run into any firewall or
+    proxy issues, this will become very important. As well, a private
+    testing network (which will therefore have very low network latency)
+    would be a very nice thing. Knowing who can set one up for you
+    (if you feel that this is necessary) will be very useful. If the
+    application doesn't scale as expected, who can add additional
+    hardware?
+    </p>
+    </div>
+    <div class="subsection"><h2 id="application">18.2.2 Application<a class="sectionlink" href="#application" title="Link to here">&para;</a></h2>
+    <p>Who knows how our application functions? The normal sequence is
+    <ul>
+        <li>test (low-volume - can we benchmark our application?)</li>
+        <li>benchmark (the average number of users)</li>
+        <li>load-test (the maximum number of users)</li>
+        <li>test destructively (what is our hard limit?)</li>
+    </ul>
+    The <b>test</b> process may progress from black-box testing to
+    white-box testing (the difference is that the first requires
+    no knowledge of the application [it is treated as a "black box"]
+    while the second requires some knowledge of the application).
+    It is not uncommon to discover problems with the application
+    during this process, so be prepared to defend your work.</p>
+    </div>
+</div>
+<div class="subsection"><h2 id="platform">18.3 What platform should I use to run the benchmarks/load-tests?<a class="sectionlink" href="#platform" title="Link to here">&para;</a></h2>
+<p>This should be a widely-used piece of hardware, with a standard
+(i.e. vanilla) software installation. Remember, if you publish your results,
+the first thing your clients will do is hire a graduate student to verify them.
+You might as well make it as easy for this person as you possibly can.
+</p>
+<p>For Windows, Windows XP Professional should be a minimum (the others
+do not multi-thread past 50-60 connections, and you probably anticipate
+more users than that).
+</p>
+<p>Good free platforms include the linuxes, the BSDs, and Solaris Intel. If
+you have a little more money, there are commercial linuxes.
+This may be worth it if you need the support.
+</p>
+<p>
+For non-Windows platforms, investigate "<span class="code">ulimit -n unlimited</span>" with a view to
+including it in your user account startup scripts (<span class="code">.bashrc</span> or <span class="code">.cshrc</span> scripts
+for the testing account).
+</p>
+<p>
+Also note that some Linux/Unix editions are intended for server use.
+These generally have minimal or no GUI support.
+Such OSes should be OK for running JMeter in non-GUI mode, but JMeter GUI mode probably won't work
+unless you install a minimal GUI environment.
+</p>
+<p>As you progress to larger-scale benchmarks/load-tests, this platform
+will become the limiting factor. So it's worth using the best hardware and
+software that you have available. Remember to include the hardware/software
+configuration in your published benchmarks.
+</p>
+<p><b>When you need a lot of machines or want to test the network latency, Cloud can help you.</b>
+JMeter can easily be installed on Cloud instances as it runs on nearly any architecture available in the Cloud.
+JMeter is also supported within Commercial Cloud PAAS if you don't want to manage it yourself. 
+</p>
+<p>Don't forget JMeter batch (NON-GUI) mode. This mode should be used during load testing for many reasons:
+<ul>
+<li>If you have a powerful server that supports Java but perhaps does not have a fast graphics implementation, or where you need to login remotely.</li>
+<li>Batch (non-GUI) mode can reduce the network traffic compared with using a remote display or client-server mode.</li>
+<li>Java AWT Thread used for GUI mode can alter injection behaviour by blocking sometimes</li>
+</ul>
+The batch log file can then be loaded into JMeter on a workstation for analysis, or you can
+use CSV output and import the data into a spreadsheet.</p>
+<div class="clear"></div><div class="note">Remember GUI mode is for Script creation and debugging, not for load testing</div><div class="clear"></div>
+</div>
+<div class="subsection"><h2 id="tools">18.4 Tools<a class="sectionlink" href="#tools" title="Link to here">&para;</a></h2>
+<p>The following tools will all prove useful. It is definitely worthwhile to
+become familiar with them. This should include trying them out, and reading the
+appropriate documentation (man-pages, info-files, application --help messages,
+and any supplied documentation).
+</p>
+    <div class="subsection"><h2 id="ping">18.4.1 ping<a class="sectionlink" href="#ping" title="Link to here">&para;</a></h2>
+    <p>
+    This can be used to establish whether or not you can reach your
+    target site. Options can be specified so that '<span class="code">ping</span>' provides the
+    same type of route reporting as '<span class="code">traceroute</span>'.
+    </p>
+    </div>
+    <div class="subsection"><h2 id="dig">18.4.2 nslookup/dig<a class="sectionlink" href="#dig" title="Link to here">&para;</a></h2>
+    <p>
+    While the <b>user</b> will normally use a human-readable internet
+    address, <b>you</b> may wish to avoid the overhead of DNS lookups when
+    performing benchmarking/load-testing. These can be used to determine
+    the unique address (dotted quad) of your target site.
+    </p>
+    </div>
+    <div class="subsection"><h2 id="traceroute">18.4.3 traceroute<a class="sectionlink" href="#traceroute" title="Link to here">&para;</a></h2>
+    <p>
+    If you cannot "<span class="code">ping</span>" your target site, this may be used to determine 
+    the problem (possibly a firewall or a proxy). It can also be used
+    to estimate the overall network latency (running locally should give
+    the lowest possible network latency - remember that your users will
+    be running over a possibly busy internet). Generally, the fewer hops
+    the better.
+    </p>
+    </div>
+</div>
+<div class="subsection"><h2 id="plugins">18.5 How can I enhance JMeter?<a class="sectionlink" href="#plugins" title="Link to here">&para;</a></h2>
+<p>There a lot of open-source and commercial providers who provide JMeter plugins or other resources for use with JMeter.
+Some of these are listed on the JMeter Wiki.
+They are listed under several categories:
+<ul>
+<li><a href="http://wiki.apache.org/jmeter/JMeterPlugins">JMeterPlugins</a> - plugins for extending JMeter</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterAddons">JMeterAddons</a> - addons for use with JMeter, e.g. plugins for browsers, Maven and Jenkins.</li>
+<li><a href="http://wiki.apache.org/jmeter/JMeterServices">JMeterServices</a> - 3<sup>rd</sup> party services, e.g. cloud-based JMeter</li>
+</ul>
+Note that appearance of these on the Wiki does not imply any endorsement by the Apache JMeter project.
+Any requests for support should be directed to the relevant supplier.
+</p>
+</div>
+<div class="subsection"><h2 id="java">18.6 Why Java?<a class="sectionlink" href="#java" title="Link to here">&para;</a></h2>
+<p>Why not Perl or C?
+</p>
+<p>Well, Perl might be a very good choice except that the Benchmark package
+seems to give fairly fuzzy results. Also, simulating multiple users with
+Perl is a tricky proposition (multiple connections can be simulated by forking
+many processes from a shell script, but these will not be threads, they will
+be processes). However, the Perl community is very large. If you find that
+someone has already written something that seems useful, this could be a very
+good solution.
+</p>
+<p>C, of course, is a very good choice (check out the Apache <span class="code">ab</span> tool).
+But be prepared to write all of the custom networking, threading, and state
+management code that you will need to benchmark your application.
+</p>
+<p>Java gives you (for free) the custom networking, threading, and state
+management code that you will need to benchmark your application. Java is
+aware of HTTP, FTP, and HTTPS - as well as RMI, IIOP, and JDBC (not to mention
+cookies, URL-encoding, and URL-rewriting). In addition Java gives you automatic
+garbage-collection, and byte-code level security.
+</p>
+</div>
+</div><ul class="pagelinks"><li><a href="best-practices.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE document[
+<!ENTITY sect-num '42'>
+<!ENTITY hellip   "&#x02026;" >
+]>
+
+<document prev="best-practices.html" next="component_reference.html" id="$Id$">
+
+<properties>
+  <author email="dev@jmeter.apache.org">JMeter developers</author>
+  <title>Include Controller Tutorial</title>
+</properties>
+
+<body>
+
+<section name="&sect-num;. Include Controller Tutorial" anchor="include">
+<p>
+This is a short tutorial explaining the basics of the Include Controller. The Include Controller
+provides an easy way to include modules in a test plan. It is different than the Module Controller
+in a couple of ways.
+</p>
+
+<ul>
+<li>the Include Controller loads a simple controller with all it's samples, where as the Module
+    Controller can use any controller</li>
+<li>the Include Controller doesn't use the workbench</li>
+<li>the Module Controller doesn't load from a file</li>
+<li>the Include Controller loads the module at runtime and doesn't display the contents of the
+    Simple Controller</li>
+</ul>
+
+<p>
+There are a couple of reasons why one might want to use the include controller.
+</p>
+
+<ul>
+  <li>Break a test plan into reusable modules</li>
+  <li>Reduce the cost of maintaining test plans</li>
+  <li>Reduce duplication of common process</li>
+</ul>
+
+<p>
+For example, say you need to test an application that requires login. If each test plan had the login requests,
+a change in the login process would require updating all test plans. By making the login a module, all other
+test plans can reuse it. When the login process changes, the change is made to the module and all other test
+plans get the change. One limitation of the current implementation is the contents of the module are only
+loaded at runtime, so users can't view or edit the contents of an included module.
+</p>
+
+<figure width="417" height="130" image="includecontroller.png">Include Controller</figure>
+
+<p>
+The Include Controller has two properties. The <code>name</code> and the <code>filename</code>. The <code>name</code>
+is the descriptive name for the controller in the test plan. The <code>filename</code> is the name of the <code>.jmx</code> file.
+</p>
+
+<subsection name="&sect-num;.1 Step-by-step" anchor="step-by-step">
+
+<ol>
+  <li>Start JMeter</li>
+  <li>Select the workbench</li>
+  <li><menuchoice>
+        <guimenuitem>Add</guimenuitem>
+        <guimenuitem>Logic Controller</guimenuitem>
+        <guimenuitem>Simple Controller</guimenuitem>
+      </menuchoice>
+  </li>
+  <li>Enter <code>module1</code> in the name</li>
+  <li>Now add one or more samples to the controller</li>
+  <li>Once the samples are added, right click on <code>module1</code></li>
+  <li>Select <code>save as</code> and save it as <code>module1.jmx</code></li>
+</ol>
+
+</subsection>
+
+<p>
+<code>module1.jmx</code> can now be used with any test plan. The Include Controller hasn't been tested
+with other controllers as the root element. If you need to use other controllers, use a Simple Controller
+as the root and add other controllers to it.
+</p>
+
+</section>
+
+</body>
+
+</document>

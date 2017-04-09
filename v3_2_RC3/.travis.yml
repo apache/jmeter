@@ -1,0 +1,18 @@
+sudo: false
+language: java
+
+before_script:
+  - test "x$RUN_CHECKSTYLE" != 'x' || ant -Djava.awt.headless=true download_jars install
+  - test "x$RUN_CHECKSTYLE" != 'xtrue' || ant -Djava.awt.headless=true download_checkstyle
+
+# skip default "install" command
+install: true
+
+matrix:
+  include:
+    - jdk: oraclejdk8
+      env: RUN_CHECKSTYLE=true
+      script: ant -Djava.awt.headless=true checkstyle
+    - jdk: oraclejdk8
+      script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true -Dskip.test_https=true test
+      sudo: true # otherwise TEST_HTTPS.jmx -> sni.velox.ch does not work

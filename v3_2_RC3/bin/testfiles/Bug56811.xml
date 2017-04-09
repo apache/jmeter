@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="false" lb="01 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+      <sample s="true" lb="Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="true" lb="01 Transaction Controller2" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="Transaction Controller3" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+    <sample s="true" lb="2Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 3" rc="666" rm="Error" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+  </sample>
+</sample>
+<sample s="false" lb="02 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+      <sample s="true" lb="Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="true" lb="02 Transaction Controller2" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="Transaction Controller3" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+    <sample s="true" lb="2Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 3" rc="666" rm="Error" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+  </sample>
+</sample>
+<sample s="false" lb="03 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+      <sample s="true" lb="Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="true" lb="03 Transaction Controller2" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+  <sample s="true" lb="Transaction Controller3" rc="200" rm="Number of samples in transaction : 4, number of failing samples : 0" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="" by="0" sc="1" ec="0" ng="1" na="1">
+    <sample s="true" lb="2Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 3" rc="666" rm="Error" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+    <sample s="true" lb="2Samp 4" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSample 1-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+  </sample>
+</sample>
+<sample s="false" lb="01 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="false" lb="02 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="false" lb="03 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndResultStatusActionHandlerWithStartNextThreadLoop 2-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="false" lb="01 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="false" lb="02 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="false" lb="03 Transaction Controller" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="1" na="1">
+  <sample s="false" lb="Transaction Controller1" rc="200" rm="Number of samples in transaction : 1, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+    <sample s="false" lb="Transaction Controller2" rc="200" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="" by="5" sc="1" ec="1" ng="0" na="0">
+      <sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+      <sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCwithGenerateParentSampleAndStartNextThreadLoop 3-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+    </sample>
+  </sample>
+</sample>
+<sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller1" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="01 Transaction Controller" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller1" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="02 Transaction Controller" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="true" lb="Samp 1" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="true" lb="Samp 2" rc="200" rm="Alright" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="0" sc="1" ec="0" ng="1" na="1"/>
+<sample s="false" lb="BeanShell Sampler" rc="200" rm="OK" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="text" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller2" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="Transaction Controller1" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+<sample s="false" lb="03 Transaction Controller" rc="" rm="Number of samples in transaction : 3, number of failing samples : 1" tn="TG-UsingTCAndStartNextThreadLoop 4-1" dt="" by="5" sc="1" ec="1" ng="1" na="1"/>
+
+</testResults>

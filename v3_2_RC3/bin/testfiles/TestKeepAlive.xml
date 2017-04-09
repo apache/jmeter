@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="JSPP_SetProperties" rc="200" rm="OK" dt="text"/>
+<httpSample s="true" lb="HTTP-Warmup" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max100</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP_Request_REUSE" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max99</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP_Request_REUSE_2" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max98</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP_Request_REUSE_AFTER_VALIDATE" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max97</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP_Request_NO_REUSE" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max100</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+<httpSample s="true" lb="HTTP_Request_NO_REUSE" rc="200" rm="OK" dt="text">
+  <assertionResult>
+    <name>RA_Max100</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+  <assertionResult>
+    <name>RA_keepAlive</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
+
+</testResults>

@@ -1,0 +1,3 @@
+label,responseCode,responseMessage,threadName,dataType,success
+HTTP Request,200,OK,Thread Group 1-1,text,true
+HTTP Request,Non HTTP response code: java.net.UnknownHostException,Non HTTP response message: Failed to resolve host name: jmeter.apache.org,Thread Group 2-1,text,true

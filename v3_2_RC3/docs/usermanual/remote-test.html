@@ -1,0 +1,331 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Remote (Distributed) Testing</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="listeners.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="generating-dashboard.html">Next &gt;</a></li></ul><div class="section"><h1>14. Remote Testing</h1>
+
+<p>In the event that your JMeter client machine is unable, performance-wise, to simulate 
+enough users to stress your server or is limited at network level, an option exists to control multiple, remote JMeter
+engines from a single JMeter client.  By running JMeter remotely, you can replicate 
+a test across many low-end computers and thus simulate a larger load on the server.  One
+instance of the JMeter client can control any number of remote JMeter instances, and collect
+all the data from them.  This offers the following features: 
+
+<ul>
+<li>Saving of test samples to the local machine </li>
+<li>Management of multiple JMeterEngines from a single machine </li>
+<li>No need to copy the test plan to each server - the client sends it to all the servers</li>
+</ul>
+</p>
+<div class="clear"></div><div class="note">
+Note: The same test plan is run by all the servers.
+JMeter does not distribute the load between servers, each runs the full test plan.
+So if you set 1000 Threads and have 6 JMeter server, you end up injecting 6000 Threads.
+</div><div class="clear"></div>
+<p>
+However, remote mode does use more resources than running the same number of non-GUI tests independently.
+If many server instances are used, the client JMeter can become overloaded, as can the client network connection.
+This has been improved by switching to Stripped modes (see below) but you should always check that your client is not overloaded.
+</p>
+<p>Note that while you can execute the JMeterEngine on your application 
+server, you need to be mindful of the fact that this will be adding processing 
+overhead on the application server and thus your testing results will be 
+somewhat tainted.  The recommended approach is to have one or more machines on
+the same Ethernet segment as your application server that you configure to run
+the JMeter Engine.  This will minimize the impact of the network on the test 
+results without impacting the performance of the application server 
+itself.
+</p>
+
+<p><b>Step 0: Configure the nodes</b></p>
+<p>
+Make sure that all the nodes (client and servers) :
+<ul>
+    <li>are running exactly the same version of JMeter.</li>
+    <li>are using the same version of Java on all systems. Using different versions of Java may work but is discouraged.</li>
+</ul>
+</p>
+<p>
+If the test uses any data files, <b>note that these are not sent across by the client so
+make sure that these are available in the appropriate directory on each server</b>.
+If necessary you can define different values for properties by editing the <span class="code">user.properties</span> or <span class="code">system.properties</span>
+files on each server. These properties will be picked up when the server is started and may be
+used in the test plan to affect its behaviour (e.g. connecting to a different remote server).
+Alternatively use different content in any datafiles used by the test 
+(e.g. if each server must use unique ids, divide these between the data files)
+</p>
+
+<p><b>Step 1: Start the servers </b></p>
+<p>To run JMeter in remote node, start the JMeter server component on all machines you wish to run on by running
+the <span class="code">JMETER_HOME/bin/jmeter-server</span> (unix) or <span class="code">JMETER_HOME/bin/jmeter-server.bat</span> (windows) script.</p>
+<p>Note that there can only be one JMeter server on each node unless different RMI ports are used.</p>
+<p>Since JMeter 2.3.1, the JMeter server application starts the RMI registry itself; 
+there is no need to start RMI registry separately.
+To revert to the previous behaviour, define the JMeter property <pre class="source">server.rmi.create=false</pre> on the server host systems.
+</p>
+<p>
+By default, RMI uses a dynamic port for the JMeter server engine. This can cause problems for firewalls,
+so with you can define the JMeter property <span class="code">server.rmi.localport</span> 
+to control this port number.
+If this is non-zero, it will be used as the local port number for the server engine.
+</p>
+<p><b>Step 2: Add the server IP to your client's Properties File</b></p>
+<p>Edit the properties file <i>on the controlling JMeter machine</i>.  In <span class="code">JMETER_HOME/bin/jmeter.properties</span>,
+find the property named, "<span class="code">remote_hosts</span>", and
+add the value of your running JMeter server's IP address.  Multiple such servers can be added, comma-delimited.</p>
+<p>Note that you can use the <span class="code">-R</span> <a href="get-started.html#override">command line option</a>
+instead to specify the remote host(s) to use. This has the same effect as using <span class="code">-r</span> and <span class="code">-Jremote_hosts={serverlist}</span>.
+    E.g. </p><pre class="source">jmeter -Rhost1,127.0.0.1,host2</pre>
+<p>If you define the JMeter property <span class="code">server.exitaftertest=true</span>, then the server will exit after it runs a single test.
+See also the <span class="code">-X</span> flag (described below)
+</p>
+<p><b>Step 3a: Start the JMeter Client from a GUI client to check configuration</b></p>
+<p>Now you are ready to start the controlling JMeter client. For MS-Windows, start the client with the script "<span class="code">bin/jmeter.bat</span>".  For UNIX, 
+use the script "<span class="code">bin/jmeter</span>".  You will notice that the Run menu contains two new sub-menus: "Remote Start" and "Remote Stop" 
+(see figure 1). These menus contain the client that you set in the properties file.  Use the remote start and stop instead of the 
+normal JMeter start and stop menu items.</p>
+<figure><a href="../images/screenshots/remote/run-menu00.png"><img src="../images/screenshots/remote/run-menu00.png" width="487" height="295" alt="Figure 1 - Run Menu"></a><figcaption>Figure 1 - Run Menu</figcaption></figure>
+
+<p><b>Step 3b: Start the JMeter from a non-GUI Client</b></p>
+<p>
+GUI mode should only be used for debugging, as a better alternative, you should start the test on remote server(s) from a non-GUI (command-line) client.
+The command to do this is:</p>
+<pre class="source">
+jmeter -n -t script.jmx -r
+</pre>
+<p>or</p>
+<pre class="source">
+jmeter -n -t script.jmx -R server1,server2,&hellip;
+</pre>
+<p>
+Other flags that may be useful:
+</p>
+<dl>
+<dt><span class="code">-Gproperty=value</span></dt><dd>define a property in all the servers (may appear more than once)</dd>
+<dt><span class="code">-X</span></dt><dd>Exit remote servers at the end of the test.</dd>
+</dl>
+<p>
+The first example will start the test on whatever servers are defined in the JMeter property <span class="code">remote_hosts</span>;<br>
+The second example will define <span class="code">remote_hosts</span> from the list of servers and then start the test on the remote servers.
+<br>
+The command-line client will exit when all the remote servers have stopped.
+</p>
+<div class="subsection"><h2 id="detail_instructions">14.1 Doing it Manually<a class="sectionlink" href="#detail_instructions" title="Link to here">&para;</a></h2>
+<p>In some cases, the jmeter-server script may not work for you (if you are using an OS platform not anticipated by the JMeter developers).
+Here is how to start the JMeter servers (step 1 above) with a more manual process:</p>
+<p><b>Step 1a: Start the RMI Registry</b></p>
+<p>
+Since JMeter 2.3.1, the RMI registry is started by the JMeter server, so this section does not apply in the normal case.
+To revert to the previous behaviour, define the JMeter property <span class="code">server.rmi.create=false</span> on the server host systems
+and follow the instructions below.
+</p>
+<p>JMeter uses Remote Method Invocation (RMI) as the remote communication mechanism.  Therefore, you need
+to run the RMI Registry application (which is named, "<span class="code">rmiregistry</span>") that comes with the JDK and is located in the "<span class="code">bin</span>"
+directory.  Before running <span class="code">rmiregistry</span>, make sure that the following jars are in your system classpath:
+<ul>
+    <li><span class="code">JMETER_HOME/lib/ext/ApacheJMeter_core.jar</span></li>
+    <li><span class="code">JMETER_HOME/lib/jorphan.jar</span></li>
+    <li><span class="code">JMETER_HOME/lib/logkit-2.0.jar</span></li>
+</ul>
+The 
+rmiregistry application needs access to certain JMeter classes.  Run <span class="code">rmiregistry</span> with no parameters.  By default the 
+application listens to port <span class="code">1099</span>.</p>
+
+<p><b>Step 1b: Start the JMeter Server</b></p>
+<p>Once the RMI Registry application is running, start the JMeter Server.
+Use the "<span class="code">-s</span>" option with the jmeter startup script ("<span class="code">jmeter -s</span>").</p>
+
+<p>Steps 2 and 3 remain the same.</p>
+</div>
+<div class="subsection"><h2 id="tips">14.2 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a></h2>
+<p>
+JMeter/RMI requires a connection from the client to the server. This will use the port you chose, default <span class="code">1099</span>.<br>
+JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client.<br>
+This will use a high-numbered port. <br>
+This port can be controlled by jmeter property called <span class="code">client.rmi.localport</span> in <span class="code">jmeter.properties</span>.<br>
+If there are any firewalls or other network filters between JMeter client and server,
+you will need to make sure that they are set up to allow the connections through.
+If necessary, use monitoring software to show what traffic is being generated.
+</p>
+<p>If you're running Suse Linux, these tips may help. The default installation may enable the firewall. In that case,
+remote testing will not work properly. The following tips were contributed by Sergey Ten.</p>
+<p>If you see connections refused, turn on debugging by passing the following options.</p>
+<pre class="source">
+rmiregistry -J-Dsun.rmi.log.debug=true \
+     -J-Dsun.rmi.server.exceptionTrace=true \
+     -J-Dsun.rmi.loader.logLevel=verbose \
+     -J-Dsun.rmi.dgc.logLevel=verbose \
+     -J-Dsun.rmi.transport.logLevel=verbose \
+     -J-Dsun.rmi.transport.tcp.logLevel=verbose \
+</pre>
+<p>Since JMeter 2.3.1, the RMI registry is started by the server; however the options can still be passed in from the JMeter command line.
+For example: "<span class="code">jmeter -s -Dsun.rmi.loader.logLevel=verbose</span>" (i.e. omit the <span class="code">-J</span> prefixes).
+Alternatively the properties can be defined in the <span class="code">system.properties</span> file.
+</p>
+<p>The solution to the problem is to remove the loopbacks <span class="code">127.0.0.1</span> and <span class="code">127.0.0.2</span> from <span class="code">/etc/hosts</span>.
+What happens is <span class="code">jmeter-server</span> can't connect to rmiregistry if <span class="code">127.0.0.2</span> loopback is not available.
+Use the following settings to fix the problem.</p>
+<p> Replace</p>
+<pre class="source">`dirname $0`/jmeter  -s "$@"</pre>
+<p> With</p>
+<pre class="source">
+HOST="-Djava.rmi.server.hostname=[computer_name][computer_domain] \
+      -Djava.security.policy=`dirname $0`/[policy_file]" \
+`dirname $0`/jmeter $HOST -s "$@"
+</pre>
+<p>Also create a policy file and add <span class="code">[computer_name][computer_domain]</span> line to <span class="code">/etc/hosts</span>.</p>
+
+<p>In order to better support SSH-tunneling of the RMI communication channels used
+in remote testing, since JMeter 2.6:</p>
+<ul>
+<li>a new property "<span class="code">client.rmi.localport</span>" can be set to control the RMI port used by the RemoteSampleListenerImpl</li>
+<li>To support tunneling RMI traffic over an SSH tunnel as the remote endpoint using a port on the local machine,
+ loopback interface is now allowed to be used if it has been specified directly using the Java System Property
+ "<span class="code">java.rmi.server.hostname</span>" parameter.</li>
+</ul>
+</div>
+<div class="subsection"><h2 id="portchange">14.3 Using a different port<a class="sectionlink" href="#portchange" title="Link to here">&para;</a></h2>
+<p>By default, JMeter uses the standard RMI port <span class="code">1099</span>. It is possible to change this. For this to work successfully,
+all the following need to agree:</p>
+<ul>
+<li>On the server, start <span class="code">rmiregistry</span> using the new port number</li>
+<li>On the server, start JMeter with the property <span class="code">server_port</span> defined</li>
+<li>On the client, update the <span class="code">remote_hosts</span> property to include the new remote <span class="code">host:port</span> settings</li>
+</ul>
+
+<p>Since Jmeter 2.1.1, the jmeter-server scripts provide support for changing the port.
+For example, assume you want to use port <span class="code">1664</span> (perhaps <span class="code">1099</span> is already used).</p>
+On Windows (in a DOS box)
+<pre class="source">
+C:\JMETER&gt; SET SERVER_PORT=1664
+C:\JMETER&gt; JMETER-SERVER [other options]
+</pre>
+On Unix:
+<pre class="source">
+$ SERVER_PORT=1664 jmeter-server [other options]
+</pre>
+[N.B. use upper case for the environment variable]
+<p>
+In both cases, the script starts rmiregistry on the specified port, 
+and then starts JMeter in server mode, having defined the "<span class="code">server_port</span>" property.
+</p>
+<p>
+The chosen port will be logged in the server <span class="code">jmeter.log</span> file (<span class="code">rmiregistry</span> does not create a log file).
+</p>
+</div>
+
+<div class="subsection"><h2 id="sendermode">14.4 Using a different sample sender<a class="sectionlink" href="#sendermode" title="Link to here">&para;</a></h2>
+<p>
+Listeners in the test plan send their results back to the client JMeter which writes the results to the specified files
+By default, samples are sent back synchronously as they are generated.
+This can affect the maximum throughput of the server test; the sample result has to be sent back before the thread can
+continue.
+There are some JMeter properties that can be set to alter this behaviour.
+</p>
+<dl>
+<dt><span class="code">mode</span></dt><dd>sample sending mode - default is <span class="code">StrippedBatch</span> since 2.9. This should be set on the client node.
+    <dl>
+    <dt><span class="code">Standard</span></dt><dd>send samples synchronously as soon as they are generated</dd>
+    <dt><span class="code">Hold</span></dt><dd>hold samples in an array until the end of a run. This may use a lot of memory on the server and is discouraged.</dd>
+    <dt><span class="code">DiskStore</span></dt><dd>store samples in a disk file (under <span class="code">java.io.temp</span>) until the end of a run. 
+    The serialised data file is deleted on JVM exit.</dd>
+    <dt><span class="code">StrippedDiskStore</span></dt><dd>remove responseData from successful samples, and use DiskStore sender to send them.</dd>
+    <dt><span class="code">Batch</span></dt><dd>send saved samples when either the count (<span class="code">num_sample_threshold</span>) or time (<span class="code">time_threshold</span>) exceeds a threshold,
+    at which point the samples are sent synchronously.
+    The thresholds can be configured on the server using the following properties:
+        <dl>
+        <dt><span class="code">num_sample_threshold</span></dt><dd>number of samples to accumulate, default <span class="code">100</span></dd>
+        <dt><span class="code">time_threshold</span></dt><dd>time threshold, default 60000 ms = 60 seconds</dd>
+        </dl>
+    
+     See also the Asynch mode, described below.</dd>
+    <dt><span class="code">Statistical</span></dt><dd>send a summary sample when either the count or time exceeds a threshold. 
+    The samples are summarised by thread group name and sample label.
+    The following fields are accumulated:
+      <ul>
+      <li><span class="code">elapsed time</span></li>
+      <li><span class="code">latency</span></li>
+      <li><span class="code">bytes</span></li>
+      <li><span class="code">sample count</span></li>
+      <li><span class="code">error count</span></li>
+      </ul>
+    Other fields that vary between samples are lost. 
+    </dd>
+    <dt><span class="code">Stripped</span></dt><dd>remove responseData from successful samples</dd>
+    <dt><span class="code">StrippedBatch</span></dt><dd>remove responseData from successful samples, and use Batch sender to send them.</dd>
+    <dt><span class="code">Asynch</span></dt><dd>samples are temporarily stored in a local queue. A separate worker thread sends the samples.
+        This allows the test thread to continue without waiting for the result to be sent back to the client.
+        However, if samples are being created faster than they can be sent, the queue will eventually fill up,
+        and the sampler thread will block until some samples can be drained from the queue.
+        This mode is useful for smoothing out peaks in sample generation.
+        The queue size can be adjusted by setting the JMeter property
+        <span class="code">asynch.batch.queue.size</span> (default <span class="code">100</span>) on the server node.
+    </dd>
+    <dt><span class="code">StrippedAsynch</span></dt><dd>remove responseData from successful samples, and use Async sender to send them.</dd>
+    <dt><span class="code">Custom implementation</span></dt><dd>set the mode parameter to your custom sample sender class name.
+    This must implement the interface <span class="code">SampleSender</span> and have a constructor which takes a single
+    parameter of type <span class="code">RemoteSampleListener</span>. 
+    </dd>
+    </dl>
+    </dd>
+</dl>
+<div class="clear"></div><div class="note"><span class="code">Stripped</span> mode family strips <span class="code">responseData</span> so this means that some Elements that rely
+on the previous <span class="code">responseData</span> being available will not work.<br>
+This is not really a problem as there is always a more efficient way to implement this feature.
+</div><div class="clear"></div>
+<p>The following properties apply to the <span class="code">Batch</span> and <span class="code">Statistical</span> modes:</p>
+    <dl>
+    <dt><span class="code">num_sample_threshold</span></dt><dd>number of samples in a batch (default <span class="code">100</span>)</dd>
+    <dt><span class="code">time_threshold</span></dt><dd>number of milliseconds to wait (default 60 seconds)</dd>
+    </dl>
+</div>
+
+
+<div class="subsection"><h2 id="retries">14.5 Dealing with nodes that failed starting<a class="sectionlink" href="#retries" title="Link to here">&para;</a></h2>
+  <p>
+    For large-scale tests there is a chance that some part of remote servers will be unavailable or down. 
+    For example, when you use automation script to allocate many cloud machines and use them as generators,
+    some of requested machines might fail booting because of cloud's issues.
+    Since JMeter 2.13 there are new properties to control this behaviour.
+  </p>
+  <p>
+    First what you might want is to retry initialization attempts in hope that failed nodes just slightly delayed their boot. 
+    To enable retries, you should set <span class="code">client.tries</span> property to total number of connection attempts. 
+    By default it does only one attempt. To control retry delay, set the <span class="code">client.retries_delay</span> property
+    to number of milliseconds to sleep between attempts.
+  </p>
+  <p>
+    Finally, you might still want to run the test with those generators that succeeded initialization and skipping failed nodes.
+    To enable that, set the <span class="code">client.continue_on_fail=true</span> property.
+  </p>
+</div>
+
+</div><ul class="pagelinks"><li><a href="listeners.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="generating-dashboard.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

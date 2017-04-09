@@ -1,0 +1,220 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Building a Web Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="test_plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-adv-web-test-plan.html">Next &gt;</a></li></ul><div class="section"><h1 id="building">4. Building a Web Test Plan<a class="sectionlink" href="#building" title="Link to here">&para;</a></h1>
+<p>In this section, you will learn how to create a basic
+<a href="build-test-plan.html">Test Plan</a> to test a Web site.  You will
+create five users that send requests to two pages on the JMeter Web site.
+Also, you will tell the users to run their tests twice. So, the total number of
+requests is (5 users) x (2 requests) x (repeat 2 times) = 20 HTTP requests. To
+construct the Test Plan, you will use the following elements:
+<a href="test_plan.html#thread_group">Thread Group</a>,
+<a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>,
+<a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a>, and
+<a href="../usermanual/component_reference.html#Graph_Results">Graph Results</a>.</p>
+
+<p>For a more advanced Test Plan, see
+<a href="build-adv-web-test-plan.html">Building an Advanced Web Test Plan</a>.</p>
+</div><div class="section"><h1 id="adding_users">4.1 Adding Users<a class="sectionlink" href="#adding_users" title="Link to here">&para;</a></h1>
+<p>The first step you want to do with every JMeter Test Plan is to add a
+<a href="test_plan.html#thread_group">Thread Group</a> element.  The Thread Group tells
+JMeter the number of users you want to simulate, how often the users should send
+requests, and how many requests they should send.</p>
+
+<p>Go ahead and add the ThreadGroup element by first selecting the Test Plan,
+clicking your right mouse button to get the Add menu, and then select
+Add &rarr; ThreadGroup.</p>
+
+<p>You should now see the Thread Group element under Test Plan.  If you do not
+see the element, then "expand" the Test Plan tree by clicking on the
+Test Plan element.</p>
+
+<p>Next, you need to modify the default properties.  Select the Thread Group element
+in the tree, if you have not already selected it. You should now see the Thread
+Group Control Panel in the right section of the JMeter window (see Figure 4.1
+below)</p>
+
+<figure><a href="../images/screenshots/webtest/threadgroup.png"><img src="../images/screenshots/webtest/threadgroup.png" width="640" height="416" alt="
+Figure 4.1. Thread Group with Default Values"></a><figcaption>
+Figure 4.1. Thread Group with Default Values</figcaption></figure>
+
+<p>Start by providing a more descriptive name for our Thread Group. In the name
+field, enter JMeter Users.</p>
+
+<p>Next, increase the number of users (called threads) to 5.</p>
+
+<p>In the next field, the Ramp-Up Period, leave the default value of 1
+seconds.  This property tells JMeter how long to delay between starting each
+user. For example, if you enter a Ramp-Up Period of 5 seconds, JMeter will
+finish starting all of your users by the end of the 5 seconds.  So, if we have
+5 users and a 5 second Ramp-Up Period, then the delay between starting users
+would be 1 second (5 users / 5 seconds = 1 user per second).  If you set the
+value to 0, then JMeter will immediately start all of your users.</p>
+
+<p>Finally enter a value of 2 in
+the Loop Count field.  This property tells JMeter how many times to repeat your
+test. If you enter a loop count value of 1, then JMeter will run your test only
+once. To have JMeter repeatedly run your Test Plan, select the Forever
+checkbox.</p>
+
+<div class="clear"></div><div class="note">In most applications, you have to manually accept
+changes you make in a Control Panel.  However, in JMeter, the Control Panel
+automatically accepts your changes as you make them.  If you change the
+name of an element, the tree will be updated with the new text after you
+leave the Control Panel (for example, when selecting another tree element).</div><div class="clear"></div>
+
+<p>See Figure 4.2 for the completed JMeter Users Thread Group.</p>
+
+<figure><a href="../images/screenshots/webtest/threadgroup2.png"><img src="../images/screenshots/webtest/threadgroup2.png" width="1206" height="414" alt="
+Figure 4.2. JMeter Users Thread Group"></a><figcaption>
+Figure 4.2. JMeter Users Thread Group</figcaption></figure>
+
+</div><div class="section"><h1 id="adding_defaults">4.2 Adding Default HTTP Request Properties<a class="sectionlink" href="#adding_defaults" title="Link to here">&para;</a></h1>
+<p>Now that we have defined our users, it is time to define the tasks that they
+will be performing.  In this section, you will specify the default settings
+for your HTTP requests.  And then, in section 4.3, you will add HTTP Request
+elements which use some of the default settings you specified here.</p>
+
+<p>Begin by selecting the JMeter Users (Thread Group) element. Click your right mouse button
+to get the Add menu, and then select Add &rarr; Config Element &rarr; HTTP Request
+Defaults. Then select this new element to view its Control Panel (see Figure 4.3).
+</p>
+
+<figure><a href="../images/screenshots/webtest/http-defaults1.png"><img src="../images/screenshots/webtest/http-defaults1.png" width="1211" height="669" alt="
+Figure 4.3. HTTP Request Defaults"></a><figcaption>
+Figure 4.3. HTTP Request Defaults</figcaption></figure>
+
+<p>
+Like most JMeter elements, the <a href="../usermanual/component_reference.html#HTTP_Request_Defaults">HTTP Request Defaults</a> Control
+Panel has a name field that you can modify.  In this example, leave this field with
+the default value.</p>
+
+<p>Skip to the next field, which is the Web Server's Server Name/IP. For the
+Test Plan that you are building, all HTTP requests will be sent to the same
+Web server, jmeter.apache.org.  Enter this domain name into the field.
+This is the only field that we will specify a default, so leave the remaining
+fields with their default values.</p>
+
+<div class="clear"></div><div class="note">The HTTP Request Defaults element does not tell JMeter
+to send an HTTP request.  It simply defines the default values that the
+HTTP Request elements use.</div><div class="clear"></div>
+
+<p>See Figure 4.4 for the completed HTTP Request Defaults element</p>
+
+<figure><a href="../images/screenshots/webtest/http-defaults2.png"><img src="../images/screenshots/webtest/http-defaults2.png" width="1210" height="666" alt="
+Figure 4.4. HTTP Defaults for our Test Plan"></a><figcaption>
+Figure 4.4. HTTP Defaults for our Test Plan</figcaption></figure>
+
+</div><div class="section"><h1 id="adding_cookie_support">4.3 Adding Cookie Support<a class="sectionlink" href="#adding_cookie_support" title="Link to here">&para;</a></h1>
+<p>Nearly all web testing should use cookie support, unless your application
+specifically doesn't use cookies.  To add cookie support, simply add an
+<a href="../usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a> to each <a href="test_plan.html#thread_group">Thread
+Group</a> in your test plan.  This will ensure that each thread gets its own
+cookies, but shared across all <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a> objects.</p>
+
+<p>To add the <a href="../usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a>, simply select the
+<a href="test_plan.html#thread_group">Thread Group</a>, and choose Add &rarr;
+Config Element &rarr; HTTP
+Cookie Manager, either from the Edit Menu, or from the right-click pop-up menu.</p>
+</div><div class="section"><h1 id="adding_requests">4.4 Adding HTTP Requests<a class="sectionlink" href="#adding_requests" title="Link to here">&para;</a></h1>
+
+<p>In our Test Plan, we need to make two HTTP requests. The first one is for the
+JMeter home page (http://jmeter.apache.org/), and the second one is for the
+Changes page (http://jmeter.apache.org/changes.html).</p>
+
+<div class="clear"></div><div class="note">JMeter sends requests in the order that they appear in the tree.</div><div class="clear"></div>
+
+<p>Start by adding the first <a href="../usermanual/component_reference.html#HTTP_Request">HTTP Request</a>
+to the JMeter Users element (Add &rarr; Sampler &rarr; HTTP Request).
+Then, select the HTTP Request element in the tree and edit the following properties
+(see Figure 4.5):
+<ol>
+<li>Change the Name field to "Home Page".</li>
+<li>Set the Path field to "/".  Remember that you do not have to set the Server
+Name field because you already specified this value in the HTTP Request Defaults
+element.</li>
+</ol>
+</p>
+
+<figure><a href="../images/screenshots/webtest/http-request1.png"><img src="../images/screenshots/webtest/http-request1.png" width="1209" height="675" alt="
+Figure 4.5. HTTP Request for JMeter Home Page"></a><figcaption>
+Figure 4.5. HTTP Request for JMeter Home Page</figcaption></figure>
+
+<p>Next, add the second HTTP Request and edit the following properties (see
+Figure 4.6:
+<ol>
+<li>Change the Name field to "Changes".</li>
+<li>Set the Path field to "/changes.html".</li>
+</ol>
+</p>
+
+<figure><a href="../images/screenshots/webtest/http-request2.png"><img src="../images/screenshots/webtest/http-request2.png" width="1212" height="668" alt="
+Figure 4.6. HTTP Request for JMeter Changes Page"></a><figcaption>
+Figure 4.6. HTTP Request for JMeter Changes Page</figcaption></figure>
+
+</div><div class="section"><h1 id="adding_listener">4.5 Adding a Listener to View Store the Test Results<a class="sectionlink" href="#adding_listener" title="Link to here">&para;</a></h1>
+<p>The final element you need to add to your Test Plan is a
+ <a href="component_reference.html#listeners">Listener</a>. This element is
+responsible for storing all of the results of your HTTP requests in a file and presenting
+a visual model of the data.</p>
+
+<p>Select the JMeter Users element and add a <a href="../usermanual/component_reference.html#Graph_Results">Graph Results</a> listener (Add &rarr; Listener
+&rarr; Graph Results).  Next, you need to specify a directory and filename of the
+output file.  You can either type it into the filename field, or select the
+Browse button and browse to a directory and then enter a filename.</p>
+
+<figure><a href="../images/screenshots/graph_results.png"><img src="../images/screenshots/graph_results.png" width="915" height="686" alt="
+Figure 4.7. Graph Results Listener"></a><figcaption>
+Figure 4.7. Graph Results Listener</figcaption></figure>
+
+</div><div class="section"><h1 id="logging_in">4.6 Logging in to a web-site<a class="sectionlink" href="#logging_in" title="Link to here">&para;</a></h1>
+<p>
+It's not the case here, but some web-sites require you to login before permitting you to perform certain actions.
+In a web-browser, the login will be shown as a form for the user name and password,
+and a button to submit the form.
+The button generates a POST request, passing the values of the form items as parameters.
+</p>
+<p>
+To do this in JMeter, add an HTTP Request, and set the method to POST.
+You'll need to know the names of the fields used by the form, and the target page.
+These can be found out by inspecting the code of the login page.
+[If this is difficult to do, you can use the <a href="component_reference.html#HTTP_Proxy_Server">JMeter Proxy Recorder</a> to record the login sequence.]
+Set the path to the target of the submit button. 
+Click the Add button twice and enter the username and password details.
+Sometimes the login form contains additional hidden fields.
+These will need to be added as well.
+</p>
+<figure><a href="../images/screenshots/webtest/http_login.png"><img src="../images/screenshots/webtest/http_login.png" width="948" height="665" alt="
+Figure 4.8. Sample HTTP login request"></a><figcaption>
+Figure 4.8. Sample HTTP login request</figcaption></figure>
+
+</div><ul class="pagelinks"><li><a href="test_plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="build-adv-web-test-plan.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

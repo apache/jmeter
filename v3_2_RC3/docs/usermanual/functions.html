@@ -1,0 +1,1390 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Functions and Variables</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="properties_reference.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="regular_expressions.html">Next &gt;</a></li></ul><div class="section"><h1 id="functions">21. Functions and Variables<a class="sectionlink" href="#functions" title="Link to here">&para;</a></h1>
+<p>
+JMeter functions are special values that can populate fields of any Sampler or other
+element in a test tree.  A function call looks like this:</p>
+
+<p><span class="code">${__functionName(var1,var2,var3)}</span></p>
+
+<p>
+Where "__functionName" matches the name of a function.
+<br>
+Parentheses surround the parameters sent to the function, for example <span class="code">${__time(YMD)}</span>
+The actual parameters vary from function to function.
+Functions that require no parameters can leave off the parentheses, for example <span class="code">${__threadNum}</span>.
+</p>
+
+<p>
+If a function parameter contains a comma, then be sure to escape this with "<span class="code">\</span>", otherwise JMeter will treat it as a parameter delimiter.
+For example:
+<pre class="source">
+${__time(EEE\, d MMM yyyy)}
+</pre>
+If the comma is not escaped - e.g. <span class="code">${__javaScript(Math.max(2,5))}</span> - you will get an error such as:
+<pre class="source">
+ERROR - jmeter.functions.JavaScript: Error processing Javascript: [Math.max(2]
+    org.mozilla.javascript.EvaluatorException: missing ) after argument list (&lt;cmd&gt;#1)
+ </pre>
+ This is because the string "<span class="code">Math.max(2,5)</span>" is treated as being two parameters to the __javascript function:<br>
+ <span class="code">Math.max(2</span> and <span class="code">5)</span><br>
+ Other error messages are possible. 
+</p>
+<p>Variables are referenced as follows:
+<pre>
+${VARIABLE}
+</pre>
+</p>
+<p>
+<b>
+If an undefined function or variable is referenced, JMeter does not report/log an error - the reference is returned unchanged.
+For example if <span class="code">UNDEF</span> is not defined as a variable, then the value of <span class="code">${UNDEF}</span> is <span class="code">${UNDEF}</span>.
+</b>
+Variables, functions (and properties) are all case-sensitive.
+<b>
+JMeter trims spaces from variable names before use, so for example
+<span class="code">${__Random(1,63,&nbsp;LOTTERY&nbsp;)}</span> will use the variable '<span class="code">LOTTERY</span>' rather than '<span class="code">&nbsp;LOTTERY&nbsp;</span>'.
+</b>
+</p>
+<div class="clear"></div><div class="note">
+Properties are not the same as variables.
+Variables are local to a thread; properties are common to all threads,
+and need to be referenced using the <span class="code">__P</span> or <span class="code">__property</span> function.
+</div><div class="clear"></div>
+<div class="clear"></div><div class="note">
+When using <span class="code">\</span> before a variable for a windows path for example <span class="code">C:\test\${test}</span>, ensure you escape the <span class="code">\</span>
+otherwise JMeter will not interpret the variable, example:
+<span class="code">C:\\test\\${test}</span>.
+<br> 
+Alternatively, just use <span class="code">/</span> instead for the path separator - e.g. <span class="code">C:/test/${test}</span> - Windows JVMs will convert the separators as necessary.
+</div><div class="clear"></div>
+<p>List of functions, loosely grouped into types.</p>
+<table>
+        
+        <tr><th>Type of function</th><th>Name</th><th>Comment</th><th>Since</th></tr>
+        
+        <tr><td>Information</td><td> <a href="#__threadNum">threadNum</a></td><td>get thread number</td><td>1.X</td></tr>
+        <tr><td>Information</td><td> <a href="#__samplerName">samplerName</a></td><td>get the sampler name (label)</td><td>2.5</td></tr>
+        <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td><td>2.6</td></tr>
+        <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td><td>1.X</td></tr>
+        <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td><td>2.2</td></tr>
+        <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td><td>2.2</td></tr>
+        <tr><td>Information</td><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td><td>2.2</td></tr>
+        <tr><td>Input</td><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td><td>1.9</td></tr>
+        <tr><td>Input</td><td> <a href="#__FileToString">FileToString</a></td><td>read an entire file</td><td>2.4</td></tr>
+        <tr><td>Input</td><td> <a href="#__CSVRead">CSVRead</a></td><td>read from CSV delimited file</td><td>1.9</td></tr>
+        <tr><td>Input</td><td> <a href="#__XPath">XPath</a></td><td>Use an XPath expression to read from a file</td><td>2.0.3</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__counter">counter</a></td><td>generate an incrementing number</td><td>1.X</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomFromMultipleVars">RandomFromMultipleVars</a></td><td>extracts an element from the values of a set of variables separated by <span class="code">|</span></td><td>3.1</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td><td>2.6</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__groovy">groovy</a></td><td>run a Groovy script</td><td>3.1</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__BeanShell">BeanShell</a></td><td>run a BeanShell script</td><td>1.X</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__javaScript">javaScript</a></td><td>process JavaScript (Nashorn)</td><td>1.9</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl2">jexl2</a></td><td>evaluate a Commons Jexl2 expression</td><td>jexl2(2.1.1)</td></tr>
+        <tr><td>Scripting</td><td> <a href="#__jexl3">jexl3</a></td><td>evaluate a Commons Jexl3 expression</td><td>jexl3 (3.0)</td></tr>
+        <tr><td>Properties</td><td> <a href="#__property">property</a> </td><td>read a property</td><td>2.0</td></tr>
+        <tr><td>Properties</td><td> <a href="#__P">P</a></td><td>read a property (shorthand method)</td><td>2.0</td></tr>
+        <tr><td>Properties</td><td> <a href="#__setProperty">setProperty</a></td><td>set a JMeter property</td><td>2.1</td></tr>
+        <tr><td>Variables</td><td> <a href="#__split">split</a></td><td>Split a string into variables</td><td>2.0.2</td></tr>
+        <tr><td>Variables</td><td> <a href="#__V">V</a></td><td>evaluate a variable name</td><td>2.3RC3</td></tr>
+        <tr><td>Variables</td><td> <a href="#__eval">eval</a></td><td>evaluate a variable expression</td><td>2.3.1</td></tr>
+        <tr><td>Variables</td><td> <a href="#__evalVar">evalVar</a></td><td>evaluate an expression stored in a variable</td><td>2.3.1</td></tr>
+        <tr><td>String</td><td> <a href="#__regexFunction">regexFunction</a></td><td>parse previous response using a regular expression</td><td>1.X</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeOroRegexpChars">escapeOroRegexpChars</a></td><td>quote meta chars used by ORO regular expression</td><td>2.9</td></tr>
+        <tr><td>String</td><td> <a href="#__char">char</a></td><td>generate Unicode char values from a list of numbers</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
+        <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
+        <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
+        <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
+</table>
+<p></p>
+<div class="subsection"><h2 id="what_can_do">21.1 What can functions do<a class="sectionlink" href="#what_can_do" title="Link to here">&para;</a></h2>
+<p>There are two kinds of functions: user-defined static values (or variables), and built-in functions.<br>
+User-defined static values allow the user to define variables to be replaced with their static value when
+a test tree is compiled and submitted to be run.  This replacement happens once at the beginning of the test
+run.  This could be used to replace the DOMAIN field of all HTTP requests, for example - making it a simple 
+matter to change a test to target a different server with the same test.
+</p>
+<p>
+Note that variables cannot currently be nested; i.e. <span class="code">${Var${N}}</span> does not work.
+The <span class="code">__V</span> (variable) function can be used to do this: <span class="code">${__V(Var${N})}</span>.
+You can also use <span class="code">${__BeanShell(vars.get("Var${N}")}</span>.
+</p>
+<p>This type of replacement is possible without functions, but was less convenient and less intuitive.
+It required users to create default config elements that would fill in blank values of Samplers.
+Variables allow one to replace only part of any given value, not just filling in blank values.</p>
+<p>
+With built-in functions users can compute new values at run-time based on previous response data, which
+thread the function is in, the time, and many other sources.  These values are generated fresh for every
+request throughout the course of the test. </p>
+<div class="clear"></div><div class="note">Functions are shared between threads. 
+Each occurrence of a function call in a test plan is handled by a separate function instance.</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="where">21.2 Where can functions and variables be used?<a class="sectionlink" href="#where" title="Link to here">&para;</a></h2>
+<p>
+Functions and variables can be written into any field of any test component (apart from the TestPlan - see below).
+Some fields do not allow random strings 
+because they are expecting numbers, and thus will not accept a function.  However, most fields will allow
+functions.
+</p>
+<p>
+Functions which are used on the Test Plan have some restrictions.
+JMeter thread variables will have not been fully set up when the functions are processed, 
+so variable names passed as parameters will not be set up, and variable references will not work, 
+so <span class="code">split()</span> and <span class="code">regex()</span> and the variable evaluation functions won't work. 
+The <span class="code">threadNum()</span> function won't work (and does not make sense at test plan level).
+The following functions should work OK on the test plan:
+<ul>
+<li>intSum</li>
+<li>longSum</li>
+<li>machineName</li>
+<li>BeanShell</li>
+<li>groovy</li>
+<li>javaScript</li>
+<li>jexl2/jexl3</li>
+<li>random</li>
+<li>time</li>
+<li>property functions</li>
+<li>log functions</li>
+</ul>
+</p>
+<p>
+Configuration elements are processed by a separate thread.
+Therefore functions such as <span class="code">__threadNum</span> do not work properly in elements such as User Defined Variables.
+Also note that variables defined in a UDV element are not available until the element has been processed.
+</p>
+<div class="clear"></div><div class="note">When using variable/function references in SQL code (etc.),
+remember to include any necessary quotes for text strings,
+i.e. use
+<pre class="source">
+SELECT item from table where name='${VAR}'
+</pre>
+<b>not</b>
+<pre class="source">
+SELECT item from table where name=${VAR}
+</pre>
+(unless <span class="code">VAR</span> itself contains the quotes)
+</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="how">21.3 How to reference variables and functions<a class="sectionlink" href="#how" title="Link to here">&para;</a></h2>
+<p>Referencing a variable in a test element is done by bracketing the variable name with '<span class="code">${</span>' and '<span class="code">}</span>'.</p>
+<p>Functions are referenced in the same manner, but by convention, the names of
+functions begin with "<span class="code">__</span>" to avoid conflict with user value names<sup>*</sup>.  Some functions take arguments to
+configure them, and these go in parentheses, comma-delimited.  If the function takes no arguments, the parentheses can
+be omitted.</p>
+
+<p><b>Argument values that themselves contain commas should be escaped as necessary.
+If you need to include a comma in your parameter value, escape it like so: '<span class="code">\,</span>'.</b>
+This applies for example to the scripting functions - Javascript, Beanshell, Jexl, groovy - where it is necessary to escape any commas
+that may be needed in script method calls - e.g.
+</p>
+<pre>
+${__BeanShell(vars.put("name"\,"value"))}
+</pre>
+<p>
+Alternatively, you can define your script as a variable, e.g. on the Test Plan:
+<pre>SCRIPT          vars.put("name","value")</pre>
+The script can then be referenced as follows:
+<pre>${__BeanShell(${SCRIPT})}</pre>
+There is no need to escape commas in the <span class="code">SCRIPT</span> variable because the function call is parsed before the variable is replaced with its value.
+This works well in conjunction with the JSR223 or BeanShell Samplers, as these can be used to test Javascript, Jexl and BeanShell scripts.
+</p>
+<p>
+Functions can reference variables and other functions, for example 
+<span class="code">${__XPath(${__P(xpath.file),${XPATH})}</span> 
+will use the property "<span class="code">xpath.file</span>" as the file name
+and the contents of the variable <span class="code">XPATH</span> as the expression to search for.
+</p>
+<p>
+JMeter provides a tool to help you construct
+function calls for various built-in functions, which you can then copy-paste. 
+It will not automatically escape values for you, since functions can be parameters to other functions, and you should only escape values you intend as literal.
+</p>
+<div class="clear"></div><div class="note">
+If a string contains a backslash('<span class="code">\</span>') and also contains a function or variable reference, the backslash will be removed if
+it appears before '<span class="code">$</span>' or '<span class="code">,</span>' or '<span class="code">\</span>'.
+This behaviour is necessary to allow for nested functions that include commas or the string <span class="code">${</span>.
+Backslashes before '<span class="code">$</span>' or '<span class="code">,</span>' or '<span class="code">\</span>' are not removed if the string does not contain a function or variable reference. 
+</div><div class="clear"></div>
+<p>
+<b>The value of a variable or function can be reported</b> using the <a href="#__logn"><span class="code">__logn()</span></a> function.
+The <span class="code">__logn()</span> function reference can be used anywhere in the test plan after the variable has been defined.
+Alternatively, the Java Request sampler can be used to create a sample containing variable references;
+the output will be shown in the appropriate Listener.
+Note there is a <a href="../usermanual/component_reference.html#Debug_Sampler">Debug Sampler</a> 
+that can be used to display the values of variables etc. in the Tree View Listener.
+</p>
+<div class="clear"></div><div class="note"><sup>*</sup>If you define a user-defined static variable with the same name as a built-in function, your static
+variable will override the built-in function.</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="function_helper">21.4 The Function Helper Dialog<a class="sectionlink" href="#function_helper" title="Link to here">&para;</a></h2>
+<p>The Function Helper dialog is available from JMeter's Tools menu.</p>
+<figure><a href="../images/screenshots/function_helper_dialog.png"><img src="../images/screenshots/function_helper_dialog.png" width="831" height="305" alt="Function Helper Dialog"></a><figcaption>Function Helper Dialog</figcaption></figure>
+<p>Using the Function Helper, you can select a function from the pull down, and assign
+values for its arguments.  The left column in the table provides a brief description of the
+argument, and the right column is where you write in the value for that argument.  Different
+functions take different arguments.</p>
+<p>Once you have done this, click the "generate" button, and the appropriate string is generated
+for you to copy-paste into your test plan wherever you like.</p>
+</div>
+
+<div class="subsection"><h2 id="functions">21.5 Functions<a class="sectionlink" href="#functions" title="Link to here">&para;</a></h2>
+
+<div class="component"><h2 id="__regexFunction">__regexFunction<a class="sectionlink" href="#__regexFunction" title="Link to here">&para;</a></h2><div class="description"><p>The Regex Function is used to parse the previous response (or the value of a variable) using any regular
+expression (provided by user).  The function returns the template string with variable values filled
+in.</p>
+<p>The <span class="code">__regexFunction</span> can also store values for future use.  In the sixth parameter, you can specify
+a reference name.  After this function executes, the same values can be retrieved at later times
+using the syntax for user-defined values.  For instance, if you enter "<span class="code">refName</span>" as the sixth
+parameter you will be able to use:
+<ul>
+<li><span class="code">${refName}</span> to refer to the computed result of the second parameter ("Template for the
+replacement string") parsed by this function</li>
+<li><span class="code">${refName_g0}</span> to refer to the entire match  parsed by this function.</li>
+<li><span class="code">${refName_g1}</span> to refer to the first group parsed by this function.</li>
+<li><span class="code">${refName_g#}</span> to refer to the n<sup>th</sup> group parsed by this function.</li>
+<li><span class="code">${refName_matchNr}</span> to refer to the number of groups found by this function.</li>
+</ul>
+<div class="clear"></div><div class="note">If using distributed testing, ensure you switch mode (see <span class="code">jmeter.properties</span>) so that it's not a stripping one, see <a href="https://bz.apache.org/bugzilla/show_bug.cgi?id=56376">
+      Bug
+      56376</a></div><div class="clear"></div>
+</p>
+</div><div class="properties"><h3 id="__regexFunction_parms1">
+        Parameters
+        <a class="sectionlink" href="#__regexFunction_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">First argument</div><div class="description req-true">The first argument is the regular expression
+        to be applied to the response data.  It will grab all matches.  Any parts of this expression
+        that you wish to use in your template string, be sure to surround in parentheses.  Example:
+        <span class="code">&lt;a href="(.*)"&gt;</span>.  This will grab the value of the link and store it as the first group (there is
+        only 1 group).  Another example: <span class="code">&lt;input type="hidden" name="(.*)" value="(.*)"&gt;</span>.  This will
+        grab the name as the first group, and the value as the second group.  These values can be used
+        in your template string</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Second argument</div><div class="description req-true">This is the template string that will replace
+        the function at run-time.  To refer to a group captured in the regular expression, use the syntax:
+        <span class="code">$[group_number]$</span>.  I.e.: <span class="code">$1$</span>, or <span class="code">$2$</span>.  Your template can be any string.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Third argument</div><div class="description req-false">The third argument tells JMeter which match
+        to use.  Your regular expression might find numerous matches.  You have four choices:
+                <ul><li>An integer - Tells JMeter to use that match.  '<span class="code">1</span>' for the first found match, '<span class="code">2</span>' for the
+                second, and so on</li>
+                <li><span class="code">RAND</span> - Tells JMeter to choose a match at random.</li>
+                <li><span class="code">ALL</span> - Tells JMeter to use all matches, and create a template string for each one and then
+                append them all together.  This option is little used.</li>
+                <li>A float number between 0 and 1 - tells JMeter to find the X<sup>th</sup> match using the formula:
+                (number_of_matches_found * float_number) rounded to nearest integer.</li>
+                </ul></div><div class="required req-false">No, default=1</div></div>
+        <div class="property"><div class="name req-false">Fourth argument</div><div class="description req-false">If '<span class="code">ALL</span>' was selected for the above argument
+        value, then this argument will be inserted between each appended copy of the template value.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Fifth argument</div><div class="description req-false">Default value returned if no match is found</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Sixth argument</div><div class="description req-false">A reference name for reusing the values parsed by this function.<br>
+        Stored values are <span class="code">${refName}</span> (the replacement template string) and <span class="code">${refName_g#}</span> where "<span class="code">#</span>" is the
+        group number from the regular expression ("<span class="code">0</span>" can be used to refer to the entire match).</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Seventh argument</div><div class="description req-false">Input variable name. 
+        If specified, then the value of the variable is used as the input instead of using the previous sample result.
+        </div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__counter">__counter<a class="sectionlink" href="#__counter" title="Link to here">&para;</a></h2><div class="description"><p>The counter generates a new number each time it is called, starting with 1
+and incrementing by +1 each time.  The counter can be configured to keep each simulated user's values
+separate, or to use the same counter for all users.  If each user's values is incremented separately,
+that is like counting the number of iterations through the test plan.  A global counter is like
+counting how many times that request was run.
+</p>
+<p>The counter uses an integer variable to hold the count, which therefore has a maximum of 2,147,483,647.</p>
+<p>The counter function instances are completely independent.  
+The global counter - "<span class="code">FALSE</span>" - is separately maintained by each counter instance.
+</p>
+<p>
+<b>
+Multiple <span class="code">__counter</span> function calls in the same iteration won't increment the value further.
+</b>
+<br>
+If you want to have a count that increments for each sample, use the function in a Pre-Processor such as <a href="../usermanual/component_reference.html#User_Parameters">User Parameters</a>.
+</p>
+</div><div class="properties"><h3 id="__counter_parms1">
+        Parameters
+        <a class="sectionlink" href="#__counter_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">First argument</div><div class="description req-true"><span class="code">TRUE</span> if you wish each simulated user's counter
+        to be kept independent and separate from the other users.  <span class="code">FALSE</span> for a global counter.</div><div class="required req-true">Yes</div></div>
+
+<div class="property"><div class="name req-false">Second argument</div><div class="description req-false">A reference name for reusing the value created by this function.<br>
+                Stored values are of the form <span class="code">${refName}</span>.  This allows you to keep one counter and refer to its value in
+                multiple places.</div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__threadNum">__threadNum<a class="sectionlink" href="#__threadNum" title="Link to here">&para;</a></h2><div class="description"><p>The thread number function simply returns the number of the thread currently
+being executed.  These numbers are independent of ThreadGroup, meaning thread #1 in one threadgroup
+is indistinguishable from thread #1 in another threadgroup, from the point of view of this function.</p>
+
+<p>There are no arguments for this function.</p>
+<p>Usage Example:
+<pre class="source">${__threadNum}</pre> returns a number between 1 and the max number of running threads configured in the containing Thread Group
+</p>
+</div><div class="clear"></div><div class="note">
+This function does not work in any Configuration elements (e.g. User Defined Variables) as these are run from a separate thread.
+Nor does it make sense to use it on the Test Plan.
+</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__intSum">__intSum<a class="sectionlink" href="#__intSum" title="Link to here">&para;</a></h2><div class="description">
+<p>
+The intSum function can be used to compute the sum of two or more integer values.
+</p>
+<div class="clear"></div><div class="note">
+The reference name is optional, but it must not be a valid integer.
+</div><div class="clear"></div>
+</div><div class="properties"><h3 id="__intSum_parms1">
+        Parameters
+        <a class="sectionlink" href="#__intSum_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">First argument</div><div class="description req-true">The first int value.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Second argument</div><div class="description req-true">The second int value.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">nth argument</div><div class="description req-false">The n<sup>th</sup> int value.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">last argument</div><div class="description req-false">A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another int value to be added.
+        </div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__intSum(2,5,MYVAR)}</pre> will return 7 (2+5) and store the result in MYVAR variable. So <span class="code">${MYVAR}</span> will be equal to 7. <br>
+<pre class="source">${__intSum(2,5,7)}</pre> will return 14 (2+5+7) and store the result in MYVAR variable. <br>
+<pre class="source">${__intSum(1,2,5,${MYVAR})}</pre> will return 16 if MYVAR value is equal to 8, 1+2+5+${MYVAR})<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__longSum">__longSum<a class="sectionlink" href="#__longSum" title="Link to here">&para;</a></h2><div class="description"><p>The longSum function can be used to compute the sum of two or more long values, use this instead of __intSum whenever you know your values will not 
+be in the interval -2147483648 to 2147483647.
+</p></div><div class="properties"><h3 id="__longSum_parms1">
+        Parameters
+        <a class="sectionlink" href="#__longSum_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">First argument</div><div class="description req-true">The first long value.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Second argument</div><div class="description req-true">The second long value.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">nth argument</div><div class="description req-false">The n<sup>th</sup> long value.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">last argument</div><div class="description req-false">A reference name for reusing the value computed by this function. 
+                If specified, the reference name must contain at least one non-numeric character otherwise it will
+                be treated as another long value to be added.
+        </div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__longSum(2,5,MYVAR)}</pre> will return 7 (2+5) and store the result in MYVAR variable. So <span class="code">${MYVAR}</span> will be equal to 7. <br>
+<pre class="source">${__longSum(2,5,7)}</pre> will return 14 (2+5+7) and store the result in MYVAR variable. <br>
+<pre class="source">${__longSum(1,2,5,${MYVAR})}</pre> will return 16 if MYVAR value is equal to 8, 1+2+5+${MYVAR})<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+
+<a name="_StringFromFile"></a>
+<div class="component"><h2 id="__StringFromFile">__StringFromFile<a class="sectionlink" href="#__StringFromFile" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The StringFromFile function can be used to read strings from a text file. 
+    This is useful for running tests that require lots of variable data.
+    For example when testing a banking application, 100s or 1000s of different account numbers might be required.
+    </p>
+    <p>
+    See also the 
+    <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config test element</a> 
+    which may be easier to use. However, that does not currently support multiple input files.
+    </p>
+
+    <p>
+    Each time it is called it reads the next line from the file.
+    All threads share the same instance, so different threads will get different lines.
+    When the end of the file is reached, it will start reading again from the beginning,
+    unless the maximum loop count has been reached.
+    If there are multiple references to the function in a test script, each will open the file independently,
+    even if the file names are the same.
+    [If the value is to be used again elsewhere, use different variable names for each function call.]
+    </p>
+    <div class="clear"></div><div class="note">
+    Function instances are shared between threads, and the file is (re-)opened by whatever thread
+    happens to need the next line of input, so using the <span class="code">threadNumber</span> as part of the file name
+    will result in unpredictable behaviour.
+    </div><div class="clear"></div>
+    <p>If an error occurs opening or reading the file, then the function returns the string "<span class="code">**ERR**</span>"</p>
+</div><div class="properties"><h3 id="__StringFromFile_parms1">
+        Parameters
+        <a class="sectionlink" href="#__StringFromFile_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">File Name</div><div class="description req-true">Path to the file name.
+            (The path can be relative to the JMeter launch directory)
+            If using optional sequence numbers, the path name should be suitable for passing to DecimalFormat.
+            See below for examples.
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">
+A reference name - <span class="code">refName</span> - for reusing the value created by this function. Stored values are of the form <span class="code">${refName}</span>.
+Defaults to "<span class="code">StringFromFile_</span>".
+        </div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Start sequence number</div><div class="description req-false">Initial Sequence number (if omitted, the End sequence number is treated as a loop count)</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">End   sequence number</div><div class="description req-false">Final sequence number (if omitted, sequence numbers can increase without limit)</div><div class="required req-false">No</div></div>
+</div><p>The file name parameter is resolved when the file is opened or re-opened.</p><p>The reference name parameter (if supplied) is resolved every time the function is executed.</p><p><b>Using sequence numbers:</b></p><p>When using the optional sequence numbers, the path name is used as the format string for <span class="code">java.text.DecimalFormat</span>.
+    The current sequence number is passed in as the only parameter.
+    If the optional start number is not specified, the path name is used as is.
+    Useful formatting sequences are:
+    </p><dl>
+<dt><span class="code">#</span></dt><dd>insert the number, with no leading zeros or spaces</dd>
+<dt><span class="code">000</span></dt><dd>insert the number packed out to three digits with leading zeros if necessary</dd>
+</dl><div class="example"><div class="title">Usage of format strings<a class="sectionlink" href="#string-from-file-format-examples" title="Link to here">&para;</a></div>
+Here are a few format strings and the corresponding sequences they will generate.
+<dl>
+  <dt><span class="code">pin#'.'dat</span></dt><dd>Will generate the digits without leading zeros and treat the dot literally like<br>
+    <span class="code">pin1.dat</span>, &hellip;, <span class="code">pin9.dat</span>, <span class="code">pin10.dat</span>, &hellip;, <span class="code">pin9999.dat</span></dd>
+  <dt><span class="code">pin000'.'dat</span></dt><dd>Will generate leading zeros while keeping the dot. When the numbers start having more digits
+    then those three digits that this format suggests, the sequence will use more digits as can be seen in<br>
+    <span class="code">pin001.dat</span>, &hellip; <span class="code">pin099.dat</span>, &hellip;, <span class="code">pin999.dat</span>, &hellip;, <span class="code">pin9999.dat</span></dd>
+  <dt><span class="code">pin'.'dat#</span></dt><dd>Will append digits without leading zeros while keeping the dot and generate<br>
+    <span class="code">pin.dat1</span>, &hellip;, <span class="code">pin.dat9</span>, &hellip;, <span class="code">pin.dat999</span></dd>
+</dl>
+</div><p>
+    If more digits are required than there are formatting characters, the number will be
+    expanded as necessary.<br>
+    <b>To prevent a formatting character from being interpreted,
+    enclose it in single quotes. Note that "<span class="code">.</span>" is a formatting character,
+    and must be enclosed in single quotes</b>
+    (though <span class="code">#.</span> and <span class="code">000.</span> work as expected in locales where the decimal point is also "<span class="code">.</span>")
+    <br>
+    In other locales (e.g. <span class="code">fr</span>), the decimal point is "<span class="code">,</span>" - which means that "<span class="code">#.</span>"
+    becomes "<span class="code">nnn,</span>".<br>
+    See the documentation for <span class="code">DecimalFormat</span> for full details.<br>
+    If the path name does not contain any special formatting characters,
+    the current sequence number will be appended to the name, otherwise
+    the number will be inserted according to the formatting instructions.<br>
+    If the start sequence number is omitted, and the end sequence number is specified,
+    the sequence number is interpreted as a loop count, and the file will be used at most "<span class="code">end</span>" times.
+    In this case the filename is not formatted.
+    <br>
+    <span class="code">${_StringFromFile(PIN#'.'DAT,,1,2)}</span> - reads <span class="code">PIN1.DAT</span>, <span class="code">PIN2.DAT</span><br>
+    <span class="code">${_StringFromFile(PIN.DAT,,,2)}</span> - reads <span class="code">PIN.DAT</span> twice<br>
+    Note that the "<span class="code">.</span>" in <span class="code">PIN.DAT</span> above should <u>not</u> be quoted.
+    In this case the start number is omitted, so the file name is used exactly as is.
+    </p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__machineName">__machineName<a class="sectionlink" href="#__machineName" title="Link to here">&para;</a></h2><div class="description"><p>The machineName function returns the local host name. This uses the Java method <span class="code">InetAddress.getLocalHost()</span> and passes it to <span class="code">getHostName()</span></p></div><div class="properties"><h3 id="__machineName_parms1">
+        Parameters
+        <a class="sectionlink" href="#__machineName_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__machineName()}</pre> will return the host name of the machine<br>
+<pre class="source">${__machineName}</pre> will return the host name of the machine<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__machineIP">__machineIP<a class="sectionlink" href="#__machineIP" title="Link to here">&para;</a></h2><div class="description"><p>The machineIP function returns the local IP address. This uses the Java method <span class="code">InetAddress.getLocalHost()</span> and passes it to <span class="code">getHostAddress()</span></p></div><div class="properties"><h3 id="__machineIP_parms1">
+        Parameters
+        <a class="sectionlink" href="#__machineIP_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__machineIP()}</pre> will return the IP address of the machine<br>
+<pre class="source">${__machineIP}</pre> will return the IP address of the machine<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__javaScript">__javaScript<a class="sectionlink" href="#__javaScript" title="Link to here">&para;</a></h2><div class="description">
+<p>
+The javaScript function executes a piece of JavaScript (not Java!) code and returns its value
+</p>
+<p>
+The JMeter Javascript function calls a standalone JavaScript interpreter.
+Javascript is used as a scripting language, so you can do calculations etc.</p>
+<p>
+<div class="clear"></div><div class="note">javaScript is not the best scripting language for performances in JMeter. If your plan requires a high number of threads
+it is advised to use <span class="code">__jexl3</span> or <span class="code">__groovy</span> functions.
+</div><div class="clear"></div>
+
+For Nashorn Engine, please see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/nashorn/">Java Platform, Standard Edition Nashorn User's Guide</a>.<br>
+For Rhino engine, please see <a href="http://www.mozilla.org/rhino/overview.html">Mozilla Rhino Overview</a>
+</p>
+<p>
+The following variables are made available to the script:
+</p>
+<ul>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
+<li><span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><span class="code">threadName</span> - String containing the current thread name</li>
+<li><span class="code">sampler</span> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><span class="code">sampleResult</span> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) object</li>
+</ul>
+<p>
+Rhinoscript allows access to static methods via its Packages object.
+See the <a href="https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide">Scripting Java</a> documentation.
+For example one can access the JMeterContextService static methods thus:
+<span class="code">Java.type("org.apache.jmeter.threads.JMeterContextService").getTotalThreads()</span>
+</p>
+<div class="clear"></div><div class="note">
+JMeter is not a browser, and does not interpret the JavaScript in downloaded pages.
+</div><div class="clear"></div>
+</div><div class="properties"><h3 id="__javaScript_parms1">
+        Parameters
+        <a class="sectionlink" href="#__javaScript_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Expression</div><div class="description req-true">The JavaScript expression to be executed. For example:
+            <ul>
+                <li><span class="code">new Date()</span> - return the current date and time</li>
+                <li><span class="code">Math.floor(Math.random()*(${maxRandom}+1))</span>
+                    - a random number between <span class="code">0</span> and the variable <span class="code">maxRandom</span></li>
+                <li><span class="code">${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1))</span>
+                    - a random number between the variables <span class="code">minRandom</span> and <span class="code">maxRandom</span></li>
+                <li><span class="code">"${VAR}"=="abcd"</span></li>
+            </ul>
+            </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><div class="clear"></div><div class="note">Remember to include any necessary quotes for text strings and JMeter variables. Also, if
+the expression has commas, please make sure to escape them. For example in:
+<pre class="source">
+${__javaScript('${sp}'.slice(7\,99999))}
+</pre>
+the comma after <span class="code">7</span> is escaped.</div><div class="clear"></div><p>Examples:
+<pre class="source">${__javaScript(new Date())}</pre> will return <span class="code">Sat Jan 09 2016 16:22:15 GMT+0100 (CET)</span><br>
+<pre class="source">${__javaScript(new Date(),MYDATE)}</pre> will return <span class="code">Sat Jan 09 2016 16:22:15 GMT+0100 (CET)</span> and store it under variable <span class="code">MYDATE</span><br> 
+<pre class="source">${__javaScript(Math.floor(Math.random()*(${maxRandom}+1)),MYRESULT)}</pre> will use maxRandom variable, return a random value between 0 and maxRandom and store it in MYRESULT  
+<pre class="source">${__javaScript(${minRandom}+Math.floor(Math.random()*(${maxRandom}-${minRandom}+1)),MYRESULT)}</pre> will use <span class="code">maxRandom</span> and <span class="code">minRandom</span> variables, return a random value between <span class="code">maxRandom</span> and <span class="code">minRandom</span> and store it under variable <span class="code">MYRESULT</span>
+<pre class="source">${__javaScript("${VAR}"=="abcd",MYRESULT)}</pre> will compare the value of <span class="code">VAR</span> variable with <span class="code">abcd</span>, return <span class="code">true</span> or <span class="code">false</span> and store the result in MYRESULT
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__Random">__Random<a class="sectionlink" href="#__Random" title="Link to here">&para;</a></h2><div class="description"><p>The random function returns a random number that lies between the given min and max values.</p></div><div class="properties"><h3 id="__Random_parms1">
+        Parameters
+        <a class="sectionlink" href="#__Random_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Minimum value</div><div class="description req-true">A number</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Maximum value</div><div class="description req-true">A bigger number</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__Random(0,10)}</pre> will return a random number between 0 and 10<br>
+<pre class="source">${__Random(0,10, MYVAR)}</pre> will return a random number between 0 and 10 and store it in <span class="code">MYVAR</span>. <span class="code">${MYVAR}</span> will contain the random number<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__RandomString">__RandomString<a class="sectionlink" href="#__RandomString" title="Link to here">&para;</a></h2><div class="description"><p>The RandomString function returns a random String of length using characters in chars to use.</p></div><div class="properties"><h3 id="__RandomString_parms1">
+        Parameters
+        <a class="sectionlink" href="#__RandomString_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Length</div><div class="description req-true">A number length of generated String</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Characters to use</div><div class="description req-false">Chars used to generate String</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__RandomString(5)}</pre> will return a random string of 5 characters which can be readable or not<br>
+<pre class="source">${__RandomString(10,abcdefg)}</pre> will return a random string of 10 characters picked from <span class="code">abcdefg</span> set, like <span class="code">cdbgdbeebd</span> or <span class="code">adbfeggfad</span>, &hellip;<br>
+<pre class="source">${__RandomString(6,a12zeczclk, MYVAR)}</pre> will return a random string of 6 characters picked from <span class="code">a12zeczclk</span> set and store the result in <span class="code">MYVAR</span>, <span class="code">MYVAR</span> will contain
+string like <span class="code">2z22ak</span> or <span class="code">z11kce</span>, &hellip;<br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__RandomFromMultipleVars">__RandomFromMultipleVars<a class="sectionlink" href="#__RandomFromMultipleVars" title="Link to here">&para;</a></h2><div class="description"><p>The RandomFromMultipleVars function returns a random value based on the variable values provided by <span class="code">Source Variables</span>.</p>
+The variables can be simple or multi-valued as they can be generated by the following extractors:
+<ul>
+    <li><a href="component_reference.html#Regular_Expression_Extractor">Regular Expression Extractor</a></li>
+    <li><a href="component_reference.html#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li>
+    <li><a href="component_reference.html#JSON_Extractor">JSON Extractor</a></li>
+    <li><a href="component_reference.html#XPath_Assertion">XPath Assertion</a></li>
+</ul>
+
+Multi-value vars are the ones that are extracted when you set <span class="code">-1</span> for <span class="code">Match Numbers</span>. 
+This leads to creation of match number variable called <span class="code">varName_matchNr</span> and for each value to the creation of variable <span class="code">varName_n</span> where n = 1, 2, 3 etc.
+
+</div><div class="properties"><h3 id="__RandomFromMultipleVars_parms1">
+        Parameters
+        <a class="sectionlink" href="#__RandomFromMultipleVars_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Source Variables</div><div class="description req-true">Variable names separated by <span class="code">|</span> that contain the values that will be used as input for random computation</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+</div><p>Examples:
+<pre class="source">${__RandomFromMultipleVars(val)}</pre> will return a random string based on content of variable val taking into account wether they are multi-value or not<br>
+<pre class="source">${__RandomFromMultipleVars(val1|val2)}</pre> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not<br>
+<pre class="source">${__RandomFromMultipleVars(val1|val2, MYVAR)}</pre> will return a random string based on content of variables val1 and val2 taking into account wether they are multi-value or not and store the result in <span class="code">MYVAR</span><br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+
+<div class="component"><h2 id="__UUID">__UUID<a class="sectionlink" href="#__UUID" title="Link to here">&para;</a></h2><div class="description">
+<p>The UUID function returns a pseudo random type 4 Universally Unique IDentifier (UUID).</p>
+</div><div class="properties"><h3 id="__UUID_parms1">
+        Parameters
+        <a class="sectionlink" href="#__UUID_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+</div><p>Examples:
+<pre class="source">${UUID()}</pre> will return UUIDs with this format : <span class="code">c69e0dd1-ac6b-4f2b-8d59-5d4e8743eecd</span> <br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__CSVRead">__CSVRead<a class="sectionlink" href="#__CSVRead" title="Link to here">&para;</a></h2><div class="description"><p>The CSVRead function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
+    <p>NOTE: JMeter supports multiple file names.
+    </p>
+    <p><b>In most cases, the newer 
+    <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
+     is easier to use.</b></p>
+    <p>
+    When a filename is first encountered, the file is opened and read into an internal
+    array. If a blank line is detected, this is treated as end of file - this allows
+    trailing comments to be used.
+    </p>
+    <p>All subsequent references to the same file name use the same internal array.
+    N.B. the filename case is significant to the function, even if the OS doesn't care,
+    so <span class="code">CSVRead(abc.txt,0)</span> and <span class="code">CSVRead(aBc.txt,0)</span> would refer to different internal arrays.
+    </p>
+    <p>
+    The <span class="code">*ALIAS</span> feature allows the same file to be opened more than once,
+    and also allows for shorter file names.
+    </p>
+    <p>
+    Each thread has its own internal pointer to its current row in the file array.
+    When a thread first refers to the file it will be allocated the next free row in
+    the array, so each thread will access a different row from all other threads.
+    [Unless there are more threads than there are rows in the array.]
+    </p>
+    <div class="clear"></div><div class="note">The function splits the line at every comma by default.
+    If you want to enter columns containing commas, then you will need
+    to change the delimiter to a character that does not appear in any
+    column data, by setting the property: <span class="code">csvread.delimiter</span>
+    </div><div class="clear"></div>
+</div><div class="properties"><h3 id="__CSVRead_parms1">
+        Parameters
+        <a class="sectionlink" href="#__CSVRead_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">File Name</div><div class="description req-true">The file (or <span class="code">*ALIAS</span>) to read from</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Column number</div><div class="description req-true">
+            The column number in the file.
+            <span class="code">0</span> = first column, <span class="code">1</span> = second etc.
+            "<span class="code">next</span>" - go to next line of file.
+            <span class="code">*ALIAS</span> - open a file and assign it to the alias
+            </div><div class="required req-true">Yes</div></div>
+</div><p>For example, you could set up some variables as follows:
+<ul>
+<li>COL1a <span class="code">${__CSVRead(random.txt,0)}</span></li>
+<li>COL2a <span class="code">${__CSVRead(random.txt,1)}${__CSVRead(random.txt,next)}</span></li>
+<li>COL1b <span class="code">${__CSVRead(random.txt,0)}</span></li>
+<li>COL2b <span class="code">${__CSVRead(random.txt,1)}${__CSVRead(random.txt,next)}</span></li>
+</ul>
+This would read two columns from one line, and two columns from the next available line.
+If all the variables are defined on the same User Parameters Pre-Processor, then the lines
+will be consecutive. Otherwise, a different thread may grab the next line.
+</p><div class="clear"></div><div class="note">
+The function is not suitable for use with large files, as the entire file is stored in memory.
+For larger files, use <a href="component_reference.html#CSV_Data_Set_Config">CSV Data Set Config element</a>
+or <a href="#__StringFromFile">StringFromFile</a>.
+</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__property">__property<a class="sectionlink" href="#__property" title="Link to here">&para;</a></h2><div class="description"><p>The property function returns the value of a JMeter property. 
+    If the property value cannot be found, and no default has been supplied, it returns the property name.
+    When supplying a default value, there is no need to provide a function name - the parameter can be set to null, and it will be ignored.
+    </p>For example:<p>
+        <ul>
+<li><span class="code">${__property(user.dir)}</span> - return value of <span class="code">user.dir</span></li>
+<li><span class="code">${__property(user.dir,UDIR)}</span> - return value of <span class="code">user.dir</span> and save in <span class="code">UDIR</span></li>
+<li><span class="code">${__property(abcd,ABCD,atod)}</span> - return value of property <span class="code">abcd</span> (or "<span class="code">atod</span>" if not defined) and save in <span class="code">ABCD</span></li>
+<li><span class="code">${__property(abcd,,atod)}</span> - return value of property <span class="code">abcd</span> (or "<span class="code">atod</span>" if not defined) but don't save it</li>
+</ul>
+</p>
+    </div><div class="properties"><h3 id="__property_parms1">
+        Parameters
+        <a class="sectionlink" href="#__property_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Property Name</div><div class="description req-true">The property name to be retrieved.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">A reference name for reusing the value
+                computed by this function.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Default Value</div><div class="description req-false">The default value for the property.</div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__P">__P<a class="sectionlink" href="#__P" title="Link to here">&para;</a></h2><div class="description"><p>This is a simplified property function which is
+    intended for use with properties defined on the command line.
+    Unlike the <span class="code">__property</span> function, there is no option to save the value in a variable,
+    and if no default value is supplied, it is assumed to be 1. 
+    The value of 1 was chosen because it is valid for common test variables such
+    as loops, thread count, ramp up etc.
+    </p>For example:<p>
+<span class="code">
+Define the property value:
+<pre class="source">
+jmeter -Jgroup1.threads=7 -Jhostname1=www.realhost.edu
+</pre>
+
+Fetch the values:
+<br>
+<span class="code">${__P(group1.threads)}</span> - return the value of <span class="code">group1.threads</span>
+<br>
+<span class="code">${__P(group1.loops)}</span> - return the value of <span class="code">group1.loops</span>
+<br>
+<span class="code">${__P(hostname,www.dummy.org)}</span> - return value of property <span class="code">hostname</span> or <span class="code">www.dummy.org</span> if not defined
+<br>
+</span>
+In the examples above, the first function call would return <span class="code">7</span>, 
+the second would return <span class="code">1</span> and the last would return <span class="code">www.dummy.org</span>
+(unless those properties were defined elsewhere!)
+</p>
+    </div><div class="properties"><h3 id="__P_parms1">
+        Parameters
+        <a class="sectionlink" href="#__P_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Property Name</div><div class="description req-true">The property name to be retrieved.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Default Value</div><div class="description req-false">The default value for the property.
+            If omitted, the default is set to "<span class="code">1</span>".</div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__log">__log<a class="sectionlink" href="#__log" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The log function logs a message, and returns its input string
+    </p>
+</div><div class="properties"><h3 id="__log_parms1">
+        Parameters
+        <a class="sectionlink" href="#__log_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to be logged</div><div class="description req-true">A string</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Log Level</div><div class="description req-false"><span class="code">OUT</span>, <span class="code">ERR</span>, <span class="code">DEBUG</span>, <span class="code">INFO</span> (default), <span class="code">WARN</span> or <span class="code">ERROR</span></div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Throwable text</div><div class="description req-false">If non-empty, creates a Throwable to pass to the logger</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Comment</div><div class="description req-false">If present, it is displayed in the string. 
+        Useful for identifying what is being logged.</div><div class="required req-false">No</div></div>
+</div><p>The <span class="code">OUT</span> and <span class="code">ERR</span> log level names are used to direct the output to <span class="code">System.out</span> and <span class="code">System.err</span> respectively.
+    In this case, the output is always printed - it does not depend on the current log setting.
+</p><dl>
+  <dt><span class="code">${__log(Message)}</span></dt><dd>written to the log file as   "<span class="code"> &hellip; thread Name : Message</span>"</dd>
+  <dt><span class="code">${__log(Message,OUT)}</span></dt><dd>written to console window</dd>
+  <dt><span class="code">${__log(${VAR},,,VAR=)}</span></dt><dd>written to log file as "<span class="code"> &hellip; thread Name VAR=value</span>"</dd>
+</dl><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__logn">__logn<a class="sectionlink" href="#__logn" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The logn function logs a message, and returns the empty string
+    </p>
+</div><div class="properties"><h3 id="__logn_parms1">
+        Parameters
+        <a class="sectionlink" href="#__logn_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to be logged</div><div class="description req-true">A string</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Log Level</div><div class="description req-false"><span class="code">OUT</span>, <span class="code">ERR</span>, <span class="code">DEBUG</span>, <span class="code">INFO</span> (default), <span class="code">WARN</span> or <span class="code">ERROR</span></div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Throwable text</div><div class="description req-false">If non-empty, creates a Throwable to pass to the logger</div><div class="required req-false">No</div></div>
+</div><p>The <span class="code">OUT</span> and <span class="code">ERR</span> log level names are used to direct the output to <span class="code">System.out</span> and <span class="code">System.err</span> respectively.
+    In this case, the output is always printed - it does not depend on the current log setting.
+</p><dl>
+  <dt><span class="code">${__logn(VAR1=${VAR1},OUT)}</span></dt><dd>write the value of the variable to the console window</dd>
+</dl><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__BeanShell">__BeanShell<a class="sectionlink" href="#__BeanShell" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The BeanShell function evaluates the script passed to it, and returns the result.
+</p>
+<p>
+<b>For full details on using BeanShell, please see the BeanShell web-site at <a href="http://www.beanshell.org/">http://www.beanshell.org/</a>
+</b>
+</p>
+<div class="clear"></div><div class="note">
+Note that a different Interpreter is used for each independent occurrence of the function
+in a test script, but the same Interpreter is used for subsequent invocations.
+This means that variables persist across calls to the function.
+</div><div class="clear"></div>
+<p>
+A single instance of a function may be called from multiple threads.
+However the function <span class="code">execute()</span> method is synchronised.
+</p>
+<p>
+If the property "<span class="code">beanshell.function.init</span>" is defined, it is passed to the Interpreter
+as the name of a sourced file. This can be used to define common methods and variables. There is a
+sample init file in the bin directory: <span class="code">BeanShellFunction.bshrc</span>.
+</p>
+<p>
+The following variables are set before the script is executed:
+<ul>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the BeanShell function (*)</li>
+<li><span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) object</li>
+<li><span class="code">threadName</span> - the threadName (String)</li>
+<li><span class="code">Sampler</span> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><span class="code">SampleResult</span> - the current <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
+</ul>
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+</p>
+</div><div class="properties"><h3 id="__BeanShell_parms1">
+        Parameters
+        <a class="sectionlink" href="#__BeanShell_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">BeanShell script</div><div class="description req-true">A beanshell script (not a file name)</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Name of variable</div><div class="description req-false">A reference name for reusing the value
+               computed by this function.</div><div class="required req-false">No</div></div>
+        
+</div><p>
+Example:
+<dl>
+<dt><span class="code">${__BeanShell(123*456)}</span></dt><dd>returns <span class="code">56088</span></dd>
+<dt><span class="code">${__BeanShell(source("function.bsh"))}</span></dt><dd>processes the script in <span class="code">function.bsh</span></dd>
+</dl>
+</p><div class="clear"></div><div class="note">
+Remember to include any necessary quotes for text strings and JMeter variables that represent text strings.
+</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__groovy">__groovy<a class="sectionlink" href="#__groovy" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The <span class="code">__groovy</span> function evaluates <a href="http://groovy-lang.org/">Apache Groovy</a> scripts passed to it, and returns the result.
+</p>
+<p>
+If the property "<span class="code">groovy.utilities</span>" is defined, it will be loaded by the ScriptEngine. 
+This can be used to define common methods and variables. There is a
+sample init file in the <span class="code">bin</span> directory: <span class="code">utility.groovy</span>.
+</p>
+<p>
+The following variables are set before the script is executed:
+</p>
+<ul>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the groovy function (*)</li>
+<li><span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) object</li>
+<li><span class="code">threadName</span> - the threadName (String)</li>
+<li><span class="code">sampler</span> - the current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>, if any</li>
+<li><span class="code">prev</span> - the previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>, if any</li>
+<li><span class="code">OUT</span> - System.out</li>
+</ul>
+<p>
+(*) means that this is set before the init file, if any, is processed. 
+Other variables vary from invocation to invocation.
+</p>
+</div><div class="properties"><h3 id="__groovy_parms1">
+        Parameters
+        <a class="sectionlink" href="#__groovy_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Expression to evaluate</div><div class="description req-true">A groovy script (not a file name)
+        <div class="clear"></div><div class="note">Argument values that themselves contain commas should be escaped as necessary. 
+        If you need to include a comma in your parameter value, escape it like this: '<span class="code">\,</span>'</div><div class="clear"></div>
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Name of variable</div><div class="description req-false">A reference name for reusing the value
+               computed by this function.</div><div class="required req-false">No</div></div>
+        
+</div><p>
+Example:
+<dl>
+<dt><span class="code">${__groovy(123*456)}</span></dt><dd>returns <span class="code">56088</span></dd>
+<dt><span class="code">${__groovy("${var}".substring(0\,2))}</span></dt><dd>If var's value is <span class="code">JMeter</span>, it will return <span class="code">JM</span> as it runs <span class="code">String.substring(0,2)</span>. Note
+that <span class="code">,</span> has been escaped to <span class="code">\,</span> </dd>
+</dl>
+</p><div class="clear"></div><div class="note">
+Remember to include any necessary quotes for text strings and JMeter variables that represent text strings.
+</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+
+<div class="component"><h2 id="__split">__split<a class="sectionlink" href="#__split" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The split function splits the string passed to it according to the delimiter,
+    and returns the original string. If any delimiters are adjacent, "<span class="code">?</span>" is returned as the value.
+    The split strings are returned in the variables <span class="code">${VAR_1}</span>, <span class="code">${VAR_2}</span> etc. 
+    The count of variables is returned in <span class="code">${VAR_n}</span>. 
+    A trailing delimiter is treated as a missing variable, and "<span class="code">?</span>" is returned.
+    Also, to allow it to work better with the ForEach controller, 
+    <span class="code">__split</span> now deletes the first unused variable in case it was set by a previous split.
+    </p>
+    <p></p>
+    Example:
+    <br>
+    Define <span class="code">VAR</span>="<span class="code">a||c|</span>" in the test plan.
+    <br>
+    <span class="code">${__split(${VAR},VAR,|)}</span>
+    <br>
+    This will return the contents of <span class="code">VAR</span>, i.e. "<span class="code">a||c|</span>" and set the following variables:
+    <br>
+        <span class="code">VAR_n</span>=<span class="code">4</span>
+    <br>
+        <span class="code">VAR_1</span>=<span class="code">a</span>
+    <br>
+        <span class="code">VAR_2</span>=<span class="code">?</span>
+    <br>
+        <span class="code">VAR_3</span>=<span class="code">c</span>
+    <br>
+        <span class="code">VAR_4</span>=<span class="code">?</span>
+    <br>
+        <span class="code">VAR_5</span>=<span class="code">null</span>
+</div><div class="properties"><h3 id="__split_parms1">
+        Parameters
+        <a class="sectionlink" href="#__split_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to split</div><div class="description req-true">A delimited string, e.g. "<span class="code">a|b|c</span>"</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Name of variable</div><div class="description req-true">A reference name for reusing the value
+               computed by this function.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Delimiter</div><div class="description req-false">The delimiter character, e.g. <span class="code">|</span>. 
+If omitted, <span class="code">,</span> is used. Note that <span class="code">,</span> would need to be specified as <span class="code">\,</span>.
+</div><div class="required req-false">No</div></div>
+        
+</div><div class="go-top"><a href="#">^</a></div></div>
+<div class="component"><h2 id="__XPath">__XPath<a class="sectionlink" href="#__XPath" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The XPath function reads an XML file and matches the XPath.
+    Each time the function is called, the next match will be returned.
+    At end of file, it will wrap around to the start.
+    If no nodes matched, then the function will return the empty string,
+    and a warning message will be written to the JMeter log file.
+    <div class="clear"></div><div class="note">Note that the entire NodeList is held in memory.</div><div class="clear"></div>
+    </p>
+    <p></p>
+    Example:
+    <pre class="source">${__XPath(/path/to/build.xml, //target/@name)}</pre>
+    This will match all targets in <span class="code">build.xml</span> and return the contents of the next name attribute
+</div><div class="properties"><h3 id="__XPath_parms1">
+        Parameters
+        <a class="sectionlink" href="#__XPath_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">XML file to parse</div><div class="description req-true"> a XML file to parse</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">XPath</div><div class="description req-true"> a XPath expression to match nodes in the XML file</div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__setProperty">__setProperty<a class="sectionlink" href="#__setProperty" title="Link to here">&para;</a></h2><div class="description">
+    <p>The setProperty function sets the value of a JMeter property. 
+        The default return value from the function is the empty string,
+        so the function call can be used anywhere functions are valid.</p>
+        <p>The original value can be returned by setting the optional 3<sup>rd</sup> parameter to "<span class="code">true</span>".</p>
+    <p>Properties are global to JMeter,
+        so can be used to communicate between threads and thread groups</p>
+    </div><div class="properties"><h3 id="__setProperty_parms1">
+        Parameters
+        <a class="sectionlink" href="#__setProperty_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Property Name</div><div class="description req-true">The property name to be set.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">Property Value</div><div class="description req-true">The value for the property.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">True/False</div><div class="description req-false">Should the original value be returned?</div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+
+<div class="component"><h2 id="__time">__time<a class="sectionlink" href="#__time" title="Link to here">&para;</a></h2><div class="description">
+    <p>The time function returns the current time in various formats.</p>
+    </div><div class="properties"><h3 id="__time_parms1">
+        Parameters
+        <a class="sectionlink" href="#__time_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-false">Format</div><div class="description req-false">
+        The format to be passed to SimpleDateFormat.
+        The function supports various shorthand aliases, see below.
+        If omitted, the function returns the current time in milliseconds since the epoch.
+        </div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Name of variable</div><div class="description req-false">The name of the variable to set.</div><div class="required req-false">No</div></div>
+</div><p>If the format string is omitted, then the function returns the current time in milliseconds since the epoch.
+If the format matches "<span class="code">/ddd</span>" (where <span class="code">ddd</span> are decimal digits),
+then the function returns the current time in milliseconds divided by the value of <span class="code">ddd</span>.
+For example, "<span class="code">/1000</span>" returns the current time in seconds since the epoch.
+Otherwise, the current time is passed to SimpleDateFormat.
+The following shorthand aliases are provided:
+</p><ul>
+<li><span class="code">YMD</span> = <span class="code">yyyyMMdd</span></li>
+<li><span class="code">HMS</span> = <span class="code">HHmmss</span></li>
+<li><span class="code">YMDHMS</span> = <span class="code">yyyyMMdd-HHmmss</span></li>
+<li><span class="code">USER1</span> = whatever is in the Jmeter property <span class="code">time.USER1</span></li>
+<li><span class="code">USER2</span> = whatever is in the Jmeter property <span class="code">time.USER2</span></li>
+</ul><p>The defaults can be changed by setting the appropriate JMeter property, e.g.
+<span class="code">time.YMD=yyMMdd</span>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__jexl2">__jexl2<a class="sectionlink" href="#__jexl2" title="Link to here">&para;</a></h2><div class="description">
+    <p>The jexl function returns the result of evaluating a 
+    <a href="http://commons.apache.org/jexl">Commons JEXL expression</a>. 
+    See links below for more information on JEXL expressions.
+    </p>
+    <p>The <span class="code">__jexl2</span> function uses Commons JEXL 2</p>
+    <ul>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
+    </ul>
+    </div><div class="properties"><h3 id="__jexl2_parms1">
+        Parameters
+        <a class="sectionlink" href="#__jexl2_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Expression</div><div class="description req-true">
+        The expression to be evaluated. For example, <span class="code">6*(5+2)</span>
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Name of variable</div><div class="description req-false">The name of the variable to set.</div><div class="required req-false">No</div></div>
+</div><p>
+The following variables are made available to the script:
+</p><ul>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
+<li><span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) object</li>
+<li><span class="code">threadName</span> - String containing the current thread name</li>
+<li><span class="code">sampler</span> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><span class="code">sampleResult</span> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span></li>
+</ul><p>
+    Jexl can also create classes and call methods on them, for example:
+    </p><p>
+    <pre class="source">
+Systemclass=log.class.forName("java.lang.System");
+now=Systemclass.currentTimeMillis();
+</pre>
+    Note that the Jexl documentation on the web-site wrongly suggests that "<span class="code">div</span>" does integer division.
+    In fact "<span class="code">div</span>" and "<span class="code">/</span>" both perform normal division. One can get the same effect
+    as follows:
+    <pre class="source">
+i= 5 / 2;
+i.intValue(); // or use i.longValue()
+</pre>
+    </p><div class="clear"></div><div class="note">JMeter allows the expression to contain multiple statements.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__jexl3">__jexl3<a class="sectionlink" href="#__jexl3" title="Link to here">&para;</a></h2><div class="description">
+    <p>The jexl function returns the result of evaluating a 
+    <a href="http://commons.apache.org/proper/commons-jexl/">Commons JEXL expression</a>. 
+    See links below for more information on JEXL expressions.
+    </p>
+    <p>The <span class="code">__jexl3</span> function uses Commons JEXL 3</p>
+    <ul>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/syntax.html">JEXL syntax description</a></li>
+    <li><a href="http://commons.apache.org/proper/commons-jexl/reference/examples.html#Example_Expressions">JEXL examples</a></li>
+    </ul>
+    </div><div class="properties"><h3 id="__jexl3_parms1">
+        Parameters
+        <a class="sectionlink" href="#__jexl3_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Expression</div><div class="description req-true">
+        The expression to be evaluated. For example, <span class="code">6*(5+2)</span>
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Name of variable</div><div class="description req-false">The name of the variable to set.</div><div class="required req-false">No</div></div>
+</div><p>
+The following variables are made available to the script:
+</p><ul>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
+<li><span class="code">ctx</span> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
+<li><span class="code">vars</span> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
+<li><span class="code">props</span> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><span class="code">java.util.Properties</span></a>) object</li>
+<li><span class="code">threadName</span> - String containing the current thread name</li>
+<li><span class="code">sampler</span> - current <a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a> object (if any)</li>
+<li><span class="code">sampleResult</span> - previous <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> object (if any)</li>
+<li><span class="code">OUT</span> - System.out - e.g. <span class="code">OUT.println("message")</span></li>
+</ul><p>
+    Jexl can also create classes and call methods on them, for example:
+    </p><p>
+    <pre class="source">
+Systemclass=log.class.forName("java.lang.System");
+now=Systemclass.currentTimeMillis();
+</pre>
+    Note that the Jexl documentation on the web-site wrongly suggests that "<span class="code">div</span>" does integer division.
+    In fact "<span class="code">div</span>" and "<span class="code">/</span>" both perform normal division. One can get the same effect
+    as follows:
+    <pre class="source">
+i= 5 / 2;
+i.intValue(); // or use i.longValue()
+</pre>
+    </p><div class="clear"></div><div class="note">JMeter allows the expression to contain multiple statements.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__V">__V<a class="sectionlink" href="#__V" title="Link to here">&para;</a></h2><div class="description">
+    <p>The V (variable) function returns the result of evaluating a variable name expression.
+    This can be used to evaluate nested variable references (which are not currently supported).
+    </p>
+    <p>For example, if one has variables <span class="code">A1</span>,<span class="code">A2</span> and <span class="code">N</span>=<span class="code">1</span>:</p>
+    <ul>
+    <li><span class="code">${A1}</span> - works OK</li>
+    <li><span class="code">${A${N}}</span> - does not work (nested variable reference)</li>
+    <li><span class="code">${__V(A${N})}</span> - works OK. <span class="code">A${N}</span> becomes <span class="code">A1</span>, and the <span class="code">__V</span> function returns the value of <span class="code">A1</span></li>
+    </ul>
+    </div><div class="properties"><h3 id="__V_parms1">
+        Parameters
+        <a class="sectionlink" href="#__V_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Variable name</div><div class="description req-true">
+        The variable to be evaluated. 
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__evalVar">__evalVar<a class="sectionlink" href="#__evalVar" title="Link to here">&para;</a></h2><div class="description">
+    <p>The evalVar function returns the result of evaluating an expression stored in a variable.
+    </p>
+    <p>
+    This allows one to read a string from a file, and process any variable references in it.
+    For example, if the variable "<span class="code">query</span>" contains "<span class="code">select ${column} from ${table}</span>" 
+    and "<span class="code">column</span>" and "<span class="code">table</span>" contain "<span class="code">name</span>" and "<span class="code">customers</span>", then <span class="code">${__evalVar(query)}</span>
+    will evaluate as "<span class="code">select name from customers</span>". 
+    </p>
+    </div><div class="properties"><h3 id="__evalVar_parms1">
+        Parameters
+        <a class="sectionlink" href="#__evalVar_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Variable name</div><div class="description req-true">
+        The variable to be evaluated. 
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+<div class="component"><h2 id="__eval">__eval<a class="sectionlink" href="#__eval" title="Link to here">&para;</a></h2><div class="description">
+    <p>The eval function returns the result of evaluating a string expression.
+    </p>
+    <p>
+    This allows one to interpolate variable and function references in a string
+    which is stored in a variable.    For example, given the following variables:
+    </p>
+    <ul>
+    <li><span class="code">name</span>=<span class="code">Smith</span></li>
+    <li><span class="code">column</span>=<span class="code">age</span></li>
+    <li><span class="code">table</span>=<span class="code">birthdays</span></li>
+    <li><span class="code">SQL</span>=<span class="code">select ${column} from ${table} where name='${name}'</span></li>
+    </ul>
+    then <span class="code">${__eval(${SQL})}</span> will evaluate as "<span class="code">select age from birthdays where name='Smith'</span>". 
+  
+    <p>
+    This can be used in conjunction with CSV Dataset, for example 
+    where the both SQL statements and the values are defined in the data file.
+    </p>
+    </div><div class="properties"><h3 id="__eval_parms1">
+        Parameters
+        <a class="sectionlink" href="#__eval_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Variable name</div><div class="description req-true">
+        The variable to be evaluated. 
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__char">__char<a class="sectionlink" href="#__char" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The char function returns the result of evaluating a list of numbers as Unicode characters.
+    See also <span class="code">__unescape()</span>, below.
+    </p>
+    <p>
+    This allows one to add arbitrary character values into fields.
+    </p>
+    </div><div class="properties"><h3 id="__char_parms1">
+        Parameters
+        <a class="sectionlink" href="#__char_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">Unicode character number (decimal or 0xhex)</div><div class="description req-true">
+        The decimal number (or hex number, if prefixed by <span class="code">0x</span>, or octal, if prefixed by <span class="code">0</span>) to be converted to a Unicode character.
+        </div><div class="required req-true">Yes</div></div>
+</div><p>Examples:
+<br>
+<span class="code">${__char(13,10)}</span> = <span class="code">${__char(0xD,0xA)}</span> = <span class="code">${__char(015,012)}</span> = <span class="code">CRLF</span>
+<br>
+<span class="code">${__char(165)}</span> = <span class="code">&yen;</span> (yen)
+ </p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__unescape">__unescape<a class="sectionlink" href="#__unescape" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The unescape function returns the result of evaluating a Java-escaped string. See also <span class="code">__char()</span> above.
+    </p>
+    <p>
+    This allows one to add characters to fields which are otherwise tricky (or impossible) to define via the GUI.
+    </p>
+    </div><div class="properties"><h3 id="__unescape_parms1">
+        Parameters
+        <a class="sectionlink" href="#__unescape_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to unescape</div><div class="description req-true">
+        The string to be unescaped.
+        </div><div class="required req-true">Yes</div></div>
+</div><p>Examples:
+<br>
+<span class="code">${__unescape(\r\n)}</span> = <span class="code">CRLF</span>
+<br>
+<span class="code">${__unescape(1\t2)}</span> = <span class="code">1</span>[tab]<span class="code">2</span>
+ </p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__unescapeHtml">__unescapeHtml<a class="sectionlink" href="#__unescapeHtml" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function to unescape a string containing HTML entity escapes
+to a string containing the actual Unicode characters corresponding to the escapes. 
+Supports HTML 4.0 entities.
+</p>
+<p>
+For example, the string <span class="code">"&amp;lt;Fran&amp;ccedil;ais&amp;gt;"</span>
+will become <span class="code">"&lt;Fran&ccedil;ais&gt;"</span>.
+</p>
+<p>
+If an entity is unrecognized, it is left alone, and inserted verbatim into the result string.
+e.g. <span class="code">"&amp;gt;&amp;zzzz;x"</span> will become <span class="code">"&gt;&amp;zzzz;x"</span>.
+</p>
+    <p>
+    Uses <span class="code">StringEscapeUtils#unescapeHtml(String)</span> from Commons Lang.
+    </p>
+    </div><div class="properties"><h3 id="__unescapeHtml_parms1">
+        Parameters
+        <a class="sectionlink" href="#__unescapeHtml_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to unescape</div><div class="description req-true">
+        The string to be unescaped.
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__escapeHtml">__escapeHtml<a class="sectionlink" href="#__escapeHtml" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function which escapes the characters in a String using HTML entities.
+Supports HTML 4.0 entities.
+</p>
+<p>
+For example,<span class="code">"bread" &amp; "butter"</span>
+becomes:
+<span class="code">&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</span>.
+</p>
+    <p>
+    Uses <span class="code">StringEscapeUtils#escapeHtml(String)</span> from Commons Lang.
+    </p>
+    </div><div class="properties"><h3 id="__escapeHtml_parms1">
+        Parameters
+        <a class="sectionlink" href="#__escapeHtml_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to escape</div><div class="description req-true">
+        The string to be escaped.
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__urldecode">__urldecode<a class="sectionlink" href="#__urldecode" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function to decode a <span class="code">application/x-www-form-urlencoded</span> string.
+Note: use UTF-8 as the encoding scheme.
+</p>
+<p>
+For example, the string <span class="code">Word+%22school%22+is+%22%C3%A9cole%22+in+french</span> would get converted to
+ <span class="code">Word "school" is "&eacute;cole" in french</span>.
+</p>
+    <p>
+    Uses Java class <a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLDecoder.html">URLDecoder</a>.
+    </p>
+    </div><div class="properties"><h3 id="__urldecode_parms1">
+        Parameters
+        <a class="sectionlink" href="#__urldecode_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to decode</div><div class="description req-true">
+        The string with URL encoded chars to decode.
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__urlencode">__urlencode<a class="sectionlink" href="#__urlencode" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function to encode a string to a <span class="code">application/x-www-form-urlencoded</span> string.
+</p>
+<p>
+For example, the string <span class="code">Word "school" is "&eacute;cole" in french</span> would get converted to
+ <span class="code">Word+%22school%22+is+%22%C3%A9cole%22+in+french</span>.
+</p>
+    <p>
+    Uses Java class <a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLEncoder.html">URLEncoder</a>.
+    </p>
+    </div><div class="properties"><h3 id="__urlencode_parms1">
+        Parameters
+        <a class="sectionlink" href="#__urlencode_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to encode</div><div class="description req-true">
+        String to encode in URL encoded chars.
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__FileToString">__FileToString<a class="sectionlink" href="#__FileToString" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The FileToString function can be used to read an entire file.
+    Each time it is called it reads the entire file.
+    </p> 
+    <p>If an error occurs opening or reading the file, then the function returns the string "<span class="code">**ERR**</span>"</p>
+</div><div class="properties"><h3 id="__FileToString_parms1">
+        Parameters
+        <a class="sectionlink" href="#__FileToString_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">File Name</div><div class="description req-true">Path to the file name.
+            (The path can be relative to the JMeter launch directory)
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">File encoding if not the platform default</div><div class="description req-false">
+        The encoding to be used to read the file. If not specified, the platform default is used.
+        </div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">
+A reference name - <span class="code">refName</span> - for reusing the value created by this function. Stored values are of the form <span class="code">${refName}</span>.
+        </div><div class="required req-false">No</div></div>
+</div><p>The file name, encoding and reference name parameters are resolved every time the function is executed.</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__samplerName">__samplerName<a class="sectionlink" href="#__samplerName" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The samplerName function returns the name (i.e. label) of the current sampler.
+    </p>
+    <p>
+    The function does not work in Test elements that don't have an associated sampler.
+    For example the Test Plan. 
+    Configuration elements also don't have an associated sampler.
+    However some Configuration elements are referenced directly by samplers, such as the HTTP Header Manager
+    and Http Cookie Manager, and in this case the functions are resolved in the context of the Http Sampler.
+    Pre-Processors, Post-Processors and Assertions always have an associated Sampler.
+    </p>
+</div><div class="properties"><h3 id="__samplerName_parms1">
+        Parameters
+        <a class="sectionlink" href="#__samplerName_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">
+A reference name - <span class="code">refName</span> - for reusing the value created by this function. Stored values are of the form <span class="code">${refName}</span>.
+        </div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__TestPlanName">__TestPlanName<a class="sectionlink" href="#__TestPlanName" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+    The TestPlanName function returns the name of the current test plan (can be used in Including Plans to know the name of the calling test plan).
+    </p>
+</div><p>Example:
+<pre class="source">${__TestPlanName}</pre> will return the file name of your test plan, for example if plan is in a file named Demo.jmx, it will return "<span class="code">Demo.jmx</span><br>
+</p><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__escapeOroRegexpChars">__escapeOroRegexpChars<a class="sectionlink" href="#__escapeOroRegexpChars" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function which escapes the ORO Regexp meta characters, it is the equivalent of <span class="code">\Q</span> <span class="code">\E</span> in Java Regexp Engine.
+</p>
+<p>
+For example,<span class="code">[^"].+?</span>
+becomes:
+<span class="code">\[\^\"\]\.\+\?</span>.
+</p>
+    <p>
+    Uses Perl5Compiler#quotemeta(String) from ORO.
+    </p>
+    </div><div class="properties"><h3 id="__escapeOroRegexpChars_parms1">
+        Parameters
+        <a class="sectionlink" href="#__escapeOroRegexpChars_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to escape</div><div class="description req-true">
+        The string to be escaped.
+        </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">Variable Name</div><div class="description req-false">
+A reference name - <span class="code">refName</span> - for reusing the value created by this function. Stored values are of the form <span class="code">${refName}</span>.
+        </div><div class="required req-false">No</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+<div class="component"><h2 id="__escapeXml">__escapeXml<a class="sectionlink" href="#__escapeXml" title="Link to here">&para;</a></h2><div class="description">
+    <p>
+Function which escapes the characters in a String using XML 1.0 entities.
+</p>
+<p>
+For example,<span class="code">"bread" &amp; 'butter'</span>
+becomes:
+<span class="code">&amp;quot;bread&amp;quot; &amp;amp; &amp;apos;butter&amp;apos;</span>.
+</p>
+    <p>
+    Uses <span class="code">StringEscapeUtils#escapeXml10(String)</span> from Commons Lang.
+    </p>
+    </div><div class="properties"><h3 id="__escapeXml_parms1">
+        Parameters
+        <a class="sectionlink" href="#__escapeXml_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">String to escape</div><div class="description req-true">
+        The string to be escaped.
+        </div><div class="required req-true">Yes</div></div>
+</div><div class="go-top"><a href="#">^</a></div></div>
+
+</div>
+
+<div class="subsection"><h2 id="predefinedvars">21.6 Pre-defined Variables<a class="sectionlink" href="#predefinedvars" title="Link to here">&para;</a></h2>
+<p>
+Most variables are set by calling functions or by test elements such as User Defined Variables; 
+in which case the user has full control over the variable name that is used.
+However some variables are defined internally by JMeter. These are listed below.
+</p>
+<ul>
+<li><span class="code">COOKIE_cookiename</span> - contains the cookie value (see <a href="../usermanual/component_reference.html#HTTP_Cookie_Manager">HTTP Cookie Manager</a>)</li>
+<li><span class="code">JMeterThread.last_sample_ok</span> - whether or not the last sample was OK - <span class="code">true</span>/<span class="code">false</span>.
+Note: this is updated after PostProcessors and Assertions have been run.
+</li>
+<li><span class="code">START</span> variables (see next section)</li>
+</ul>
+</div>
+<div class="subsection"><h2 id="predefinedprops">21.6 Pre-defined Properties<a class="sectionlink" href="#predefinedprops" title="Link to here">&para;</a></h2>
+<p>
+The set of JMeter properties is initialised from the system properties defined when JMeter starts;
+additional JMeter properties are defined in <span class="code">jmeter.properties</span>, <span class="code">user.properties</span> or on the command line.
+</p>
+<p>
+Some built-in properties are defined by JMeter. These are listed below.
+For convenience, the <span class="code">START</span> properties are also copied to variables with the same names.
+</p>
+<ul>
+<li><span class="code">START.MS</span> - JMeter start time in milliseconds</li>
+<li><span class="code">START.YMD</span> - JMeter start time as <span class="code">yyyyMMdd</span></li>
+<li><span class="code">START.HMS</span> - JMeter start time as <span class="code">HHmmss</span></li>
+<li><span class="code">TESTSTART.MS</span> - test start time in milliseconds</li>
+</ul>
+<p>
+Please note that the <span class="code">START</span> variables / properties represent JMeter startup time, not the test start time.
+They are mainly intended for use in file names etc.
+</p>
+</div>
+</div><ul class="pagelinks"><li><a href="properties_reference.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="regular_expressions.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

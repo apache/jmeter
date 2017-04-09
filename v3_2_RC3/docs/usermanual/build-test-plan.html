@@ -1,0 +1,151 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Building a Test Plan</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="get-started.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="test_plan.html">Next &gt;</a></li></ul><div class="section"><h1>2. Building a Test Plan</h1>
+<p>A test plan describes a series of steps JMeter will execute when run.  A complete
+test plan will consist of one or more Thread Groups, logic controllers, sample generating
+controllers, listeners, timers, assertions, and configuration elements.
+</p>
+
+<div class="subsection"><h2 id="add_remove">2.1 Adding and Removing Elements<a class="sectionlink" href="#add_remove" title="Link to here">&para;</a></h2>
+<p>Adding <a href="test_plan.html">elements to a test plan</a> can be done by right-clicking on an element in the
+tree, and choosing a new element from the "<span class="code">add</span>" list.  Alternatively, elements can
+be loaded from file and added by choosing the "<span class="code">merge</span>" or "<span class="code">open</span>" option.</p>
+
+<p>To remove an element, make sure the element is selected, right-click on the element,
+and choose the "<span class="code">remove</span>" option.</p>
+</div>
+
+<div class="subsection"><h2 id="load_save">2.2 Loading and Saving Elements<a class="sectionlink" href="#load_save" title="Link to here">&para;</a></h2>
+<p>To load an element from file, right click on the existing tree elements to which
+you want to add the loaded element, and select the "<span class="code">merge</span>" option.  Choose the file where
+your elements are saved.  JMeter will merge the elements into the tree.</p>
+
+<p>To save tree elements, right click on an element and choose the "<span class="code">Save Selection As &hellip;</span>" option.
+JMeter will save the element selected, plus all child elements beneath it.  In this way,
+you can save test tree fragments and individual elements for later use.</p>
+
+<div class="clear"></div><div class="note">By default, the workbench is not automatically saved with the test plan, but it can be saved by checking "<span class="code">Save Workbench</span>" option on Workbench element.</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="config_element">2.3 Configuring Tree Elements<a class="sectionlink" href="#config_element" title="Link to here">&para;</a></h2>
+<p>Any element in the test tree will present controls in JMeter's right-hand frame.  These
+controls allow you to configure the behavior of that particular test element.  What can be
+configured for an element depends on what type of element it is.</p>
+
+<div class="clear"></div><div class="note">The Test Tree itself can be manipulated by dragging and dropping components around the test tree.</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="saving">2.4 Saving the Test Plan<a class="sectionlink" href="#saving" title="Link to here">&para;</a></h2>
+<p>Although it is not required, we recommend that you save the Test Plan to a
+file before running it.  To save the Test Plan, select "<span class="code">Save</span>" or "<span class="code">Save Test Plan As &hellip;</span>" from the
+File menu (with the latest release, it is no longer necessary to select the
+Test Plan element first).</p>
+
+<div class="clear"></div><div class="note">JMeter allows you to save the entire Test Plan tree or
+only a portion of it.  To save only the elements located in a particular "branch"
+of the Test Plan tree, select the Test Plan element in the tree from which to start
+the "branch", and then click your right mouse button to access the "<span class="code">Save Selection As &hellip;</span>" menu item.
+Alternatively, select the appropriate Test Plan element  and then select "<span class="code">Save Selection As &hellip;</span>" from
+the Edit menu.
+</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="run">2.5 Running a Test Plan<a class="sectionlink" href="#run" title="Link to here">&para;</a></h2>
+<p>To run your test plan, choose "<span class="code">Start</span>" (<span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">r</span></span>)
+from the "<span class="code">Run</span>" menu item.
+When JMeter is running, it shows a small green box at the right hand end of the section just under the menu bar.
+You can also check the "<span class="code">Run</span>" menu.
+If "<span class="code">Start</span>" is disabled, and "<span class="code">Stop</span>" is enabled,
+then JMeter is running your test plan (or, at least, it thinks it is).</p>
+<p>
+The numbers to the left of the green box are the number of active threads / total number of threads.
+These only apply to a locally run test; they do not include any threads started on remote systems when using client-server mode.
+</p>
+<div class="clear"></div><div class="note">Using GUI mode as described here should only be used when debugging your Test Plan. To run the real load test, use NON-GUI mode.</div><div class="clear"></div>
+</div>
+
+<div class="subsection"><h2 id="stop">2.6 Stopping a Test<a class="sectionlink" href="#stop" title="Link to here">&para;</a></h2>
+<p>
+There are two types of stop command available from the menu:
+<ul>
+<li><span class="code">Stop</span> (<span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">.</span></span>) - stops the threads immediately if possible.
+Many samplers are Interruptible which means that active samples can be terminated early.
+The stop command will check that all threads have stopped within the default timeout, which is 5000 ms = 5 seconds.
+[This can be changed using the JMeter property <span class="code">jmeterengine.threadstop.wait</span>]
+If the threads have not stopped, then a message is displayed.
+The Stop command can be retried, but if it fails, then it is necessary to exit JMeter to clean up.
+</li>
+<li><span class="code">Shutdown</span> (<span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">,</span></span>) - requests the
+threads to stop at the end of any current work.
+Will not interrupt any active samples.
+The modal shutdown dialog box will remain active until all threads have stopped.</li>
+</ul>
+If Shutdown is taking too long. Close the Shutdown dialog box and select <span class="code">Run</span>/<span class="code">Stop</span>, or just press <span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">.</span></span>.
+</p>
+<p>
+When running JMeter in non-GUI mode, there is no Menu, and JMeter does not react to keystrokes such as <span class="keycombo"><span class="keysym">Control</span>&nbsp;+&nbsp;<span class="keysym">.</span></span>.
+So JMeter non-GUI mode will listen for commands on a specific port (default <span class="code">4445</span>, see the JMeter property <span class="code">jmeterengine.nongui.port</span>).
+JMeter supports automatic choice of an alternate port if the default port is being used 
+(for example by another JMeter instance). In this case, JMeter will try the next higher port, continuing until
+it reaches the JMeter property <span class="code">jmeterengine.nongui.maxport</span>) which defaults to <span class="code">4455</span>.
+If <span class="code">maxport</span> is less than or equal to <span class="code">port</span>, port scanning will not take place.
+<br>
+The chosen port is displayed in the console window.
+<br>
+The commands currently supported are:
+<ul>
+<li><span class="code">Shutdown</span> - graceful shutdown</li>
+<li><span class="code">StopTestNow</span> - immediate shutdown</li>
+</ul>
+These commands can be sent by using the <span class="code">shutdown[.cmd|.sh]</span> or <span class="code">stoptest[.cmd|.sh]</span> script
+respectively. The scripts are to be found in the JMeter <span class="code">bin</span> directory.
+The commands will only be accepted if the script is run from the same host.
+</p>
+</div>
+
+<div class="subsection"><h2 id="error_reporting">2.7 Error reporting<a class="sectionlink" href="#error_reporting" title="Link to here">&para;</a></h2>
+<p>
+JMeter reports warnings and errors to the <span class="code">jmeter.log</span> file, as well as some information on the test run itself.
+JMeter shows the number of warnings/errors found in <span class="code">jmeter.log</span> file next to the warning icon (triangle) at the right hand end of its window. 
+Click on the warning icon to show the <span class="code">jmeter.log</span> file at the bottom of JMeter's window.
+Just occasionally there may be some errors that JMeter is unable to trap and log; these will appear on the command console.
+If a test is not behaving as you expect, please check the log file in case any errors have been reported (e.g. perhaps a syntax error in a function call).
+</p>
+<p>
+Sampling errors (e.g. HTTP 404 - file not found) are not normally reported in the log file. 
+Instead these are stored as attributes of the sample result.
+The status of a sample result can be seen in the various different Listeners.
+</p>
+</div>
+
+</div><ul class="pagelinks"><li><a href="get-started.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="test_plan.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

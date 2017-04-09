@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+
+<!--
+  Checkstyle checks configured for Maven.
+-->
+
+<module name="Checker">
+
+  <property name="localeLanguage" value="en"/>
+
+  <!-- Verify that EVERY source file has the appropriate license -->
+<!-- 
+  <module name="Header">
+    <property name="headerFile" value="${checkstyle.header.file}"/>
+  </module>
+-->
+ 
+  <!-- No tabs allowed! -->
+  <module name="FileTabCharacter">
+    <property name="fileExtensions" value="java, xml, xsd, dtd, htm, html, txt"/>
+  </module>
+  
+  <module name="NewlineAtEndOfFile"/>
+
+  <module name="TreeWalker">
+   
+    <!-- Operator must be at end of wrapped line -->
+<!--     
+    <module name="OperatorWrap">
+      <property name="option" value="eol"/>
+    </module>
+-->
+    
+    <!-- Interfaces must be types (not just constants) -->
+    <module name="InterfaceIsType"/>
+
+    <!-- Must have class / interface header comments -->
+<!--
+    <module name="JavadocType"/>
+-->        
+     <!-- Require method javadocs, allow undeclared RTE -->
+<!-- 
+    <module name="JavadocMethod">
+      <property name="allowUndeclaredRTE" value="true"/>
+      <property name="allowMissingThrowsTags" value="true"/>
+    </module>
+-->        
+
+    <!-- Require field javadoc -->
+<!--     
+    <module name="JavadocVariable"/>
+-->        
+            
+    <!-- No public fields -->
+<!-- 
+    <module name="VisibilityModifier">
+       <property name="protectedAllowed" value="true"/>
+    </module>
+-->        
+    
+    <!-- Require hash code override when equals is -->
+    <module name="EqualsHashCode"/>
+    
+    <!-- Disallow unnecessary instantiation of Boolean, String -->
+    <module name="IllegalInstantiation">
+      <property name="classes" value="java.lang.Boolean, java.lang.String"/>
+    </module>
+
+    <module name="NeedBraces"/>
+
+    <!-- Required for SuppressionCommentFilter below -->
+    <module name="FileContentsHolder"/>
+
+  </module>
+  
+  <!-- Require package javadoc -->
+<!--  
+  <module name="JavadocPackage"/>
+-->
+
+  <!-- Setup special comments to suppress specific checks from source files
+  CHECKSTYLE\:OFF and CHECKSTYLE\:ON -->
+  <module name="SuppressionCommentFilter"/>
+
+  <module name="SuppressionFilter">
+    <!-- config_loc is used by Eclipse plugin -->
+    <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
+  </module>
+
+  <!-- 
+      Allow comment to suppress checkstyle for a single line
+      e.g. // CHECKSTYLE IGNORE MagicNumber
+   -->
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="CHECKSTYLE IGNORE (\w+)"/>
+    <property name="checkFormat" value="$1"/>
+  </module>
+
+</module>

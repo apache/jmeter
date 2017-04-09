@@ -1,0 +1,487 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          User's Manual: Listeners</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="build-monitor-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="section"><h1 id="intro">13. Introduction to listeners<a class="sectionlink" href="#intro" title="Link to here">&para;</a></h1>
+<p>A listener is a component that shows the results of the
+samples. The results can be shown in a tree, tables, graphs or simply written to a log
+file. To view the contents of a response from any given sampler, add either of the Listeners "<span class="code">View
+Results Tree</span>" or "<span class="code">View Results in table</span>" to a test plan. To view the response time graphically, add
+graph results.
+The <a href="../usermanual/component_reference.html#listeners">listeners</a> 
+section of the components page has full descriptions of all the listeners.</p>
+
+<div class="clear"></div><div class="note">
+Different listeners display the response information in different ways.
+However, they all write the same raw data to the output file - if one is specified.
+</div><div class="clear"></div>
+<p>
+The "<span class="code">Configure</span>" button can be used to specify which fields to write to the file, and whether to
+write it as CSV or XML.
+CSV files are much smaller than XML files, so use CSV if you are generating lots of samples.
+</p>
+<p>
+The file name can be specified using either a relative or an absolute path name.
+Relative paths are resolved relative to the current working directory (which defaults to the <span class="code">bin/</span> directory).
+JMeter also supports paths relative to the directory containing the current test plan (JMX file).
+If the path name begins with "<span class="code">~/</span>" (or whatever is in the <span class="code">jmeter.save.saveservice.base_prefix</span> JMeter property),
+then the path is assumed to be relative to the JMX file location.
+</p>
+<p>
+If you only wish to record certain samples, add the Listener as a child of the sampler.
+Or you can use a Simple Controller to group a set of samplers, and add the Listener to that.
+The same filename can be used by multiple samplers - but make sure they all use the same configuration!
+</p>
+</div><div class="section"><h1 id="defaults">13.1 Default Configuration<a class="sectionlink" href="#defaults" title="Link to here">&para;</a></h1>
+<p>
+The default items to be saved can be defined in the <span class="code">jmeter.properties</span> (or <span class="code">user.properties</span>) file.
+The properties are used as the initial settings for the Listener Config pop-up, and are also
+used for the log file specified by the <span class="code">-l</span> command-line flag (commonly used for non-GUI test runs).
+</p>
+<p>To change the default format, find the following line in <span class="code">jmeter.properties</span>:</p>
+<pre class="source">jmeter.save.saveservice.output_format=</pre>
+<p>
+The information to be saved is configurable.  For maximum information, choose "<span class="code">xml</span>" as the format and specify "<span class="code">Functional Test Mode</span>" on the Test Plan element.  If this box is not checked, the default saved
+data includes a time stamp (the number of milliseconds since midnight,
+January 1, 1970 UTC), the data type, the thread name, the label, the
+response time, message, and code, and a success indicator.  If checked, all information, including the full response data will be logged.</p>
+<p>
+The following example indicates how to set
+properties to get a vertical bar ("<span class="code">|</span>") delimited format that will
+output results like:.</p>
+<pre class="source">
+timeStamp|time|label|responseCode|threadName|dataType|success|failureMessage
+02/06/03 08:21:42|1187|Home|200|Thread Group-1|text|true|
+02/06/03 08:21:42|47|Login|200|Thread Group-1|text|false|Test Failed: 
+    expected to contain: password etc.
+</pre>
+<p>
+The corresponding <span class="code">jmeter.properties</span> that need to be set are shown below.  One oddity
+in this example is that the <span class="code">output_format</span> is set to <span class="code">csv</span>, which
+typically
+indicates comma-separated values.  However, the <span class="code">default_delimiter</span> was
+set to be a vertical bar instead of a comma, so the csv tag is a
+misnomer in this case. (Think of CSV as meaning character separated values)</p>
+<pre class="source">
+jmeter.save.saveservice.output_format=csv
+jmeter.save.saveservice.assertion_results_failure_message=true
+jmeter.save.saveservice.default_delimiter=|
+</pre>
+<p>
+The full set of properties that affect result file output is shown below.
+</p>
+<pre class="source">
+#---------------------------------------------------------------------------
+# Results file configuration
+#---------------------------------------------------------------------------
+
+# This section helps determine how result data will be saved.
+# The commented out values are the defaults.
+
+# legitimate values: xml, csv, db.  Only xml and csv are currently supported.
+#jmeter.save.saveservice.output_format=csv
+
+
+# true when field should be saved; false otherwise
+
+# assertion_results_failure_message only affects CSV output
+#jmeter.save.saveservice.assertion_results_failure_message=true
+#
+# legitimate values: none, first, all
+#jmeter.save.saveservice.assertion_results=none
+#
+#jmeter.save.saveservice.data_type=true
+#jmeter.save.saveservice.label=true
+#jmeter.save.saveservice.response_code=true
+# response_data is not currently supported for CSV output
+#jmeter.save.saveservice.response_data=false
+# Save ResponseData for failed samples
+#jmeter.save.saveservice.response_data.on_error=false
+#jmeter.save.saveservice.response_message=true
+#jmeter.save.saveservice.successful=true
+#jmeter.save.saveservice.thread_name=true
+#jmeter.save.saveservice.time=true
+#jmeter.save.saveservice.subresults=true
+#jmeter.save.saveservice.assertions=true
+#jmeter.save.saveservice.latency=true
+#jmeter.save.saveservice.connect_time=true
+#jmeter.save.saveservice.samplerData=false
+#jmeter.save.saveservice.responseHeaders=false
+#jmeter.save.saveservice.requestHeaders=false
+#jmeter.save.saveservice.encoding=false
+#jmeter.save.saveservice.bytes=true
+#jmeter.save.saveservice.sent_bytes=true
+#jmeter.save.saveservice.url=false
+#jmeter.save.saveservice.filename=false
+#jmeter.save.saveservice.hostname=false
+#jmeter.save.saveservice.thread_counts=true
+#jmeter.save.saveservice.sample_count=false
+#jmeter.save.saveservice.idle_time=true
+
+# Timestamp format - this only affects CSV output files
+# legitimate values: none, ms, or a format suitable for SimpleDateFormat
+#jmeter.save.saveservice.timestamp_format=ms
+#jmeter.save.saveservice.timestamp_format=yyyy/MM/dd HH:mm:ss.SSS
+
+# For use with Comma-separated value (CSV) files or other formats
+# where the fields' values are separated by specified delimiters.
+# Default:
+#jmeter.save.saveservice.default_delimiter=,
+# For TAB, since JMeter 2.3 one can use:
+#jmeter.save.saveservice.default_delimiter=\t
+
+# Only applies to CSV format files:
+# Print field names as first line in CSV
+#jmeter.save.saveservice.print_field_names=true
+
+# Optional list of JMeter variable names whose values are to be saved in the result data files.
+# Use commas to separate the names. For example:
+#sample_variables=SESSION_ID,REFERENCE
+# N.B. The current implementation saves the values in XML as attributes,
+# so the names must be valid XML names.
+# JMeter sends the variable to all servers
+# to ensure that the correct data is available at the client.
+
+# Optional xml processing instruction for line 2 of the file:
+#jmeter.save.saveservice.xml_pi=&lt;?xml-stylesheet type="text/xsl" href="sample.xsl"?&gt;
+
+# Prefix used to identify filenames that are relative to the current base
+#jmeter.save.saveservice.base_prefix=~/
+
+# AutoFlush on each line written in XML or CSV output
+# Setting this to true will result in less test results data loss in case of Crash
+# but with impact on performances, particularly for intensive tests (low or no pauses)
+# Since JMeter 2.10, this is false by default
+#jmeter.save.saveservice.autoflush=false
+
+# Put the start time stamp in logs instead of the end
+sampleresult.timestamp.start=true
+
+# Whether to use System.nanoTime() - otherwise only use System.currentTimeMillis()
+#sampleresult.useNanoTime=true
+
+# Use a background thread to calculate the nanoTime offset
+# Set this to &lt;= 0 to disable the background thread
+#sampleresult.nanoThreadSleep=5000
+</pre>
+<p>
+The date format to be used for the <span class="code">timestamp_format</span> is described in <a HREF="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">
+<b>SimpleDateFormat</b></a>.
+The timestamp format is used for both writing and reading files.
+If the format is set to "<span class="code">ms</span>", and the column does not parse as a long integer,
+JMeter (2.9+) will try the following formats:
+<ul>
+<li><span class="code">yyyy/MM/dd HH:mm:ss.SSS</span></li>
+<li><span class="code">yyyy/MM/dd HH:mm:ss</span></li>
+<li><span class="code">yyyy-MM-dd HH:mm:ss.SSS</span></li>
+<li><span class="code">yyyy-MM-dd HH:mm:ss</span></li>
+<li><span class="code">MM/dd/yy HH:mm:ss</span> (this is for compatibility with previous versions; it is not recommended as a format)</li>
+</ul> 
+Matching is now also strict (non-lenient).
+JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
+(times were usually correct).</p>
+<div class="subsection"><h2 id="sample_variables">13.1.1 Sample Variables<a class="sectionlink" href="#sample_variables" title="Link to here">&para;</a></h2>
+<p>
+JMeter supports the <span class="code">sample_variables</span> 
+property to define a list of additional JMeter variables which are to be saved with
+each sample in the JTL files. The values are written to CSV files as additional columns,
+and as additional attributes in XML files. See above for an example.
+</p>
+</div>
+
+<div class="subsection"><h2 id="sample_configuration">13.1.2 Sample Result Save Configuration<a class="sectionlink" href="#sample_configuration" title="Link to here">&para;</a></h2>
+<p>
+Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
+The defaults are defined as described in  the <a href="#defaults">Listener Default Configuration</a> section above.
+Items with (CSV) after the name only apply to the CSV format; items with (XML) only apply to XML format.
+CSV format cannot currently be used to save any items that include line-breaks.
+</p>
+<figure><a href="../images/screenshots/sample_result_config.png"><img src="../images/screenshots/sample_result_config.png" width="" height="" alt=""></a><figcaption><br><b>Configuration dialogue</b></figcaption></figure>
+</div>
+<p>
+Note that cookies, method and the query string are saved as part of the "<span class="code">Sampler Data</span>" option.
+</p>
+</div><div class="section"><h1 id="batch">13.2 non-GUI (batch) test runs<a class="sectionlink" href="#batch" title="Link to here">&para;</a></h1>
+<p>
+When running in non-GUI mode, the <span class="code">-l</span> flag can be used to create a top-level listener for the test run.
+This is in addition to any Listeners defined in the test plan.
+The configuration of this listener is controlled by entries in the file <span class="code">jmeter.properties</span>
+as described in the previous section.
+</p>
+<p>
+This feature can be used to specify different data and log files for each test run, for example:
+</p>
+<pre class="source">
+jmeter -n -t testplan.jmx -l testplan_01.jtl -j testplan_01.log
+jmeter -n -t testplan.jmx -l testplan_02.jtl -j testplan_02.log
+</pre>
+<p>
+Note that JMeter logging messages are written to the file <span class="code">jmeter.log</span> by default.
+This file is recreated each time, so if you want to keep the log files for each run,
+you will need to rename it using the <span class="code">-j</span> option as above. 
+</p>
+<p>JMeter supports variables in the log file name.
+If the filename contains  paired single-quotes, then the name is processed
+as a <span class="code">SimpleDateFormat</span> format applied to the current date, for example:
+<span class="code">log_file='jmeter_'yyyyMMddHHmmss'.tmp'</span>.
+This can be used to generate a unique name for each test run.
+</p>
+</div><div class="section"><h1 id="resources">13.3 Resource usage<a class="sectionlink" href="#resources" title="Link to here">&para;</a></h1>
+<div class="clear"></div><div class="note"> Listeners can use a lot of memory if there are a lot of samples.</div><div class="clear"></div>
+<p>
+Most of the listeners currently keep a copy of every sample they display, apart from:
+</p>
+<ul>
+<li>Simple Data Writer</li>
+<li>BeanShell/JSR223 Listener</li>
+<li>Mailer Visualizer</li>
+<li>Monitor Results</li>
+<li>Summary Report</li>
+</ul>
+<p>
+The following Listeners no longer need to keep copies of every single sample.
+Instead, samples with the same elapsed time are aggregated.
+Less memory is now needed, especially if most samples only take a second or two at most.
+</p>
+<ul>
+<li>Aggregate Report</li>
+<li>Aggregate Graph</li>
+</ul>
+<p>To minimize the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
+</div><div class="section"><h1 id="csvlogformat">13.4 CSV Log format<a class="sectionlink" href="#csvlogformat" title="Link to here">&para;</a></h1>
+<p>
+The CSV log format depends on which data items are selected in the configuration.
+Only the specified data items are recorded in the file.
+The order of appearance of columns is fixed, and is as follows:
+</p>
+<ul>
+<li><span class="code">timeStamp</span> - in milliseconds since 1/1/1970</li>
+<li><span class="code">elapsed</span> - in milliseconds</li>
+<li><span class="code">label</span> - sampler label</li>
+<li><span class="code">responseCode</span> - e.g. <span class="code">200</span>, <span class="code">404</span></li>
+<li><span class="code">responseMessage</span> - e.g. <span class="code">OK</span></li>
+<li><span class="code">threadName</span></li>
+<li><span class="code">dataType</span> - e.g. <span class="code">text</span></li>
+<li><span class="code">success</span> - <span class="code">true</span> or <span class="code">false</span></li>
+<li><span class="code">failureMessage</span> - if any</li>
+<li><span class="code">bytes</span> - number of bytes in the sample</li>
+<li><span class="code">sentBytes</span> - number of bytes sent for the sample</li>
+<li><span class="code">grpThreads</span> - number of active threads in this thread group</li>
+<li><span class="code">allThreads</span> - total number of active threads in all groups</li>
+<li><span class="code">URL</span></li>
+<li><span class="code">Filename</span> - if <span class="code">Save Response to File</span> was used</li>
+<li><span class="code">latency</span> - time to first response</li>
+<li><span class="code">connect</span> - time to establish connection</li>
+<li><span class="code">encoding</span></li>
+<li><span class="code">SampleCount</span> - number of samples (1, unless multiple samples are aggregated)</li>
+<li><span class="code">ErrorCount</span> - number of errors (0 or 1, unless multiple samples are aggregated)</li>
+<li><span class="code">Hostname</span> - where the sample was generated</li>
+<li><span class="code">IdleTime</span> - number of milliseconds of 'Idle' time (normally 0)</li>
+<li><span class="code">Variables</span>, if specified</li>
+</ul>
+
+</div><div class="section"><h1 id="xmlformat2.1">13.5 XML Log format 2.1<a class="sectionlink" href="#xmlformat2.1" title="Link to here">&para;</a></h1>
+<p>
+The format of the updated XML (2.1) is as follows (line breaks will be different):
+</p>
+<pre class="source">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;testResults version="1.2"&gt;
+
+-- HTTP Sample, with nested samples 
+
+&lt;httpSample t="1392" lt="351" ts="1144371014619" s="true" 
+     lb="HTTP Request" rc="200" rm="OK" 
+     tn="Listen 1-1" dt="text" de="iso-8859-1" by="12407"&gt;
+  &lt;httpSample t="170" lt="170" ts="1144371015471" s="true" 
+        lb="http://www.apache.org/style/style.css" rc="200" rm="OK" 
+        tn="Listen 1-1" dt="text" de="ISO-8859-1" by="1002"&gt;
+    &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:14 GMT
+&#8942;
+Content-Type: text/css
+&lt;/responseHeader&gt;
+    &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+    &lt;responseData class="java.lang.String"&gt;body, td, th {
+    font-size: 95%;
+    font-family: Arial, Geneva, Helvetica, sans-serif;
+    color: black;
+    background-color: white;
+}
+&#8942;
+&lt;/responseData&gt;
+    &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+    &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+    &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+    &lt;url&gt;http://www.apache.org/style/style.css&lt;/url&gt;
+  &lt;/httpSample&gt;
+  &lt;httpSample t="200" lt="180" ts="1144371015641" s="true" 
+     lb="http://www.apache.org/images/asf_logo_wide.gif" 
+     rc="200" rm="OK" tn="Listen 1-1" dt="bin" de="ISO-8859-1" by="5866"&gt;
+    &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:14 GMT
+&#8942;
+Content-Type: image/gif
+&lt;/responseHeader&gt;
+    &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+    &lt;responseData class="java.lang.String"&gt;http://www.apache.org/asf.gif&lt;/responseData&gt;
+      &lt;responseFile class="java.lang.String"&gt;Mixed1.html&lt;/responseFile&gt;
+    &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+    &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+    &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+    &lt;url&gt;http://www.apache.org/asf.gif&lt;/url&gt;
+  &lt;/httpSample&gt;
+  &lt;responseHeader class="java.lang.String"&gt;HTTP/1.1 200 OK
+Date: Fri, 07 Apr 2006 00:50:13 GMT
+&#8942;
+Content-Type: text/html; charset=ISO-8859-1
+&lt;/responseHeader&gt;
+  &lt;requestHeader class="java.lang.String"&gt;MyHeader: MyValue&lt;/requestHeader&gt;
+  &lt;responseData class="java.lang.String"&gt;&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&#8942;
+&lt;html&gt;
+ &lt;head&gt;
+&#8942;
+ &lt;/head&gt;
+ &lt;body&gt;        
+&#8942;
+ &lt;/body&gt;
+&lt;/html&gt;
+&lt;/responseData&gt;
+  &lt;cookies class="java.lang.String"&gt;&lt;/cookies&gt;
+  &lt;method class="java.lang.String"&gt;GET&lt;/method&gt;
+  &lt;queryString class="java.lang.String"&gt;&lt;/queryString&gt;
+  &lt;url&gt;http://www.apache.org/&lt;/url&gt;
+&lt;/httpSample&gt;
+
+-- non HTTP Sample
+
+&lt;sample t="0" lt="0" ts="1144372616082" s="true" lb="Example Sampler"
+    rc="200" rm="OK" tn="Listen 1-1" dt="text" de="ISO-8859-1" by="10"&gt;
+  &lt;responseHeader class="java.lang.String"&gt;&lt;/responseHeader&gt;
+  &lt;requestHeader class="java.lang.String"&gt;&lt;/requestHeader&gt;
+  &lt;responseData class="java.lang.String"&gt;Listen 1-1&lt;/responseData&gt;
+  &lt;responseFile class="java.lang.String"&gt;Mixed2.unknown&lt;/responseFile&gt;
+  &lt;samplerData class="java.lang.String"&gt;ssssss&lt;/samplerData&gt;
+&lt;/sample&gt;
+
+&lt;/testResults&gt;
+</pre>
+<p>
+Note that the sample node name may be either "<span class="code">sample</span>" or "<span class="code">httpSample</span>".
+</p>
+</div><div class="section"><h1 id="xmlformat2.2">13.6 XML Log format 2.2<a class="sectionlink" href="#xmlformat2.2" title="Link to here">&para;</a></h1>
+<p>
+The format of the JTL files is identical for 2.2 and 2.1. Format 2.2 only affects JMX files.
+</p>
+</div><div class="section"><h1 id="attributes">13.7 Sample Attributes<a class="sectionlink" href="#attributes" title="Link to here">&para;</a></h1>
+<p>
+The sample attributes have the following meaning:
+</p>
+<table>
+<tr><th>Attribute</th><th>Content</th></tr>
+<tr><td><span class="code">by</span></td><td>Bytes</td></tr>
+<tr><td><span class="code">sby</span></td><td>Sent Bytes</td></tr>
+<tr><td><span class="code">de</span></td><td>Data encoding</td></tr>
+<tr><td><span class="code">dt</span></td><td>Data type</td></tr>
+<tr><td><span class="code">ec</span></td><td>Error count (0 or 1, unless multiple samples are aggregated)</td></tr>
+<tr><td><span class="code">hn</span></td><td>Hostname where the sample was generated</td></tr>
+<tr><td><span class="code">it</span></td><td>Idle Time = time not spent sampling (milliseconds) (generally 0)</td></tr>
+<tr><td><span class="code">lb</span></td><td>Label</td></tr>
+<tr><td><span class="code">lt</span></td><td>Latency = time to initial response (milliseconds) - not all samplers support this</td></tr>
+<tr><td><span class="code">ct</span></td><td>Connect Time = time to establish the connection (milliseconds) - not all samplers support this</td></tr>
+<tr><td><span class="code">na</span></td><td>Number of active threads for all thread groups</td></tr>
+<tr><td><span class="code">ng</span></td><td>Number of active threads in this group</td></tr>
+<tr><td><span class="code">rc</span></td><td>Response Code (e.g. <span class="code">200</span>)</td></tr>
+<tr><td><span class="code">rm</span></td><td>Response Message (e.g. <span class="code">OK</span>)</td></tr>
+<tr><td> <span class="code">s</span></td><td>Success flag (<span class="code">true</span>/<span class="code">false</span>)</td></tr>
+<tr><td><span class="code">sc</span></td><td>Sample count (1, unless multiple samples are aggregated)</td></tr>
+<tr><td> <span class="code">t</span></td><td>Elapsed time (milliseconds)</td></tr>
+<tr><td><span class="code">tn</span></td><td>Thread Name</td></tr>
+<tr><td><span class="code">ts</span></td><td>timeStamp (milliseconds since midnight Jan 1, 1970 UTC)</td></tr>
+<tr><td><span class="code">varname</span></td><td>Value of the named variable</td></tr>
+</table>
+
+<div class="clear"></div><div class="note">
+JMeter allows additional variables to be saved with the test plan.
+Currently, the variables are saved as additional attributes.
+The testplan variable name is used as the attribute name.
+See <a href="#sample_variables">Sample variables</a> (above) for more information.
+</div><div class="clear"></div>
+</div><div class="section"><h1 id="saving">13.8 Saving response data<a class="sectionlink" href="#saving" title="Link to here">&para;</a></h1>
+<p>
+As shown above, the response data can be saved in the XML log file if required.
+However, this can make the file rather large, and the text has to be encoded so
+that it is still valid XML. Also, images cannot be included.
+Only sample responses with the type <span class="code">TEXT</span> can be saved.
+<br>
+Another solution is to use the Post-Processor <a href="../usermanual/component_reference.html#Save_Responses_to_a_file">Save_Responses_to_a_file</a>.
+This generates a new file for each sample, and saves the file name with the sample.
+The file name can then be included in the sample log output.
+The data will be retrieved from the file if necessary when the sample log file is reloaded.
+</p>
+</div><div class="section"><h1 id="loading">13.9 Loading (reading) response data<a class="sectionlink" href="#loading" title="Link to here">&para;</a></h1>
+<p>To view an existing results file, you can use the File "<span class="code">Browse&hellip;</span>" button to select a file.
+If necessary, just create a dummy testplan with the appropriate Listener in it.
+</p>
+<p>Results can be read from XML or CSV format files.
+When reading from CSV results files, the header (if present) is used to determine which fields were saved.
+<b>In order to interpret a header-less CSV file correctly, the appropriate JMeter properties must be set.</b>
+</p>
+<div class="clear"></div><div class="note">
+JMeter does not clear any current data before loading the new file thus allowing files to be merged.
+If you want to clear the current data, use the menu item:
+  <span class="menuchoice"><span class="guimenuitem">Run</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Clear</span>
+    (<span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">Shift</span>&nbsp;+&nbsp;<span class="keysym">E</span></span>)
+  </span>
+or
+  <span class="menuchoice"><span class="guimenuitem">Run</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Clear All</span>
+    (<span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">E</span></span>)
+  </span>
+before loading the file.
+</div><div class="clear"></div>
+</div><div class="section"><h1 id="screencap">13.10 Saving Listener GUI data<a class="sectionlink" href="#screencap" title="Link to here">&para;</a></h1>
+<p>JMeter is capable of saving any listener as a PNG file. To do so, select the
+listener in the left panel. Click
+  <span class="menuchoice"><span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Save Node As Image</span></span>.
+A file dialog will
+appear. Enter the desired name and save the listener.
+</p>
+<p>
+The Listeners which generate output as tables can also be saved using Copy/Paste.
+Select the desired cells in the table, and use the OS Copy short-cut (normally <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">C</span></span>).
+The data will be saved to the clipboard, from where it can be pasted into another application,
+e.g. a spreadsheet or text editor.
+</p>
+<figure><a href="../images/screenshots/save_image.png"><img src="../images/screenshots/save_image.png" width="" height="" alt="Figure 1 - "></a><figcaption>Figure 1 - <span class="menuchoice"><span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Save Node As Image</span></span></figcaption></figure>
+
+</div><ul class="pagelinks"><li><a href="build-monitor-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

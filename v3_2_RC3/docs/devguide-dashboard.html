@@ -1,0 +1,310 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Developer's guide: Dashboard generator</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="./css/new-style.css"><link rel="apple-touch-icon-precomposed" href="./images/apple-touch-icon.png"><link rel="icon" href="./images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="./images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="./images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="./images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="./index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="./download_jmeter.cgi">Download Releases</a></li><li><a href="./changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="./usermanual/get-started.html">Get Started</a></li><li><a href="./usermanual/index.html">User Manual</a></li><li><a href="./usermanual/best-practices.html">Best Practices</a></li><li><a href="./usermanual/component_reference.html">Component Reference</a></li><li><a href="./usermanual/functions.html">Functions Reference</a></li><li><a href="./usermanual/properties_reference.html">Properties Reference</a></li><li><a href="./changes_history.html">Change History</a></li><li><a href="./api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="./usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="./usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="./usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="./usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="./usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="./issues.html">Issue Tracking</a></li><li><a href="./mail.html">Mailing Lists</a></li><li><a href="./svnindex.html">Source Repositories</a></li><li><a href="./building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><div class="section"><h1>Dashboard generator</h1>
+            <p>
+                This document describes the architecture and operation of the
+                dashboard generation engine.
+            </p>
+            <div class="subsection"><h2 id="overview">1 Overview<a class="sectionlink" href="#overview" title="Link to here">&para;</a></h2>
+                <div class="subsection"><h2 id="overview_architecture">1.1 Architecture<a class="sectionlink" href="#overview_architecture" title="Link to here">&para;</a></h2>
+                    <p>
+                        The dashboard generation engine is a modular feature based on
+                        samples operation processes.
+                        <br>
+                        The processes can be represented by the following diagram:
+                    </p>
+                    <figure><a href="./images/screenshots/dashboard.png"><img src="./images/screenshots/dashboard.png" width="" height="" alt="Figure 1 - Dashboard generation overview"></a><figcaption>Figure 1 - Dashboard generation overview</figcaption></figure>
+                    <p>
+                        In this view, you can see:
+                        <ul>
+                            <li>
+                                A source from where samples are produced (e.g. CSV file).
+                            </li>
+                            <li>
+                                A chain of items, named consumers, that operate
+                                on the samples
+                                that go through the chain
+                                (e.g. Filtering, sorting, calculation, &hellip;).
+                            </li>
+                            <li>
+                                An execution context, named sample context, where the results
+                                of consumers calculations are stored.
+                            </li>
+                            <li>
+                                A set of items, named exporters, that use the content of the
+                                sample context to generate a final result to the user (e.g.
+                                HTML
+                                page generation).
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="subsection"><h2 id="overview_operation">1.2 Operation<a class="sectionlink" href="#overview_operation" title="Link to here">&para;</a></h2>
+                    <p>
+                        Before producing samples, the source is associated with a sample
+                        context that will be used to store the consumers results.
+                    </p>
+                    <p>
+                        Then a chain of consumers is built using JMeter properties
+                        (prefixed by
+                        <span class="code">jmeter.reportgenerator</span>
+                        ) in order to enable the user to customize it.
+                    </p>
+                    <p>
+                        When the source emits a sample, it sends it to the first consumer
+                        of the chain.
+                        <br>
+                        The consumer can have different behaviors:
+                        <ul>
+                            <li>It can process the sample and send it to the next
+                                consumers.</li>
+                            <li>It cannot process the sample, so it stores it and
+                                continues to
+                                receive other samples. When it can process the
+                                stored samples, it
+                                does so and sends the whole to the next
+                                consumers (e.g. sorting).</li>
+                            <li>It can choose to discard the sample (e.g.
+                                filtering).</li>
+                        </ul>
+                        When the source stops producing samples, consumers can publish a
+                        result in the sample context.
+                        <br>
+                        The latter is send to the set of exporters in order to create
+                        results used by final user.
+                    </p>
+                </div>
+            </div>
+
+            <div class="subsection"><h2 id="consumers_chain">2 Consumers chain details<a class="sectionlink" href="#consumers_chain" title="Link to here">&para;</a></h2>
+                <p>
+
+                </p>
+                <figure><a href="./images/screenshots/chain.png"><img src="./images/screenshots/chain.png" width="" height="" alt="Figure 2 - Consumers chain"></a><figcaption>Figure 2 - Consumers chain</figcaption></figure>
+                <p>
+                    The chain begins with a normalizer consumer in charge of
+                    standardizing the timestamp of each sample because JMeter allows
+                    different timestamp formats (See
+                    <span class="code">jmeter.save.saveservice.timestamp_format</span>
+                    ).
+                </p>
+                <p>
+                    Then two consumers have to define the start time and end time of
+                    the load tests.
+                </p>
+                <p>
+                    At the same level a filter consumer keeps or
+                    discards samples
+                    depending on the
+                    <span class="code">jmeter.reportgenerator.sample_filter</span>
+                    property.
+                </p>
+                <p> Another filter is plugged after to discard controller
+                    samples.
+                </p>
+                <p>
+                    Depending on the property
+                    <span class="code">jmeter.reportgenerator.graph.&lt;graph_id&gt;.exclude_controllers</span>
+                    , the graph consumer matching the
+                    <span class="code">graph_id</span>
+                    identifier will be
+                    set at position
+                    <span class="code">A</span>
+                    or
+                    <span class="code">B</span>
+                    .
+                </p>
+            </div>
+
+            <div class="subsection"><h2 id="process_template">3 Template processing<a class="sectionlink" href="#process_template" title="Link to here">&para;</a></h2>
+                <div class="subsection"><h2 id="template_overview">3.1 Overview<a class="sectionlink" href="#template_overview" title="Link to here">&para;</a></h2>
+                    <p>
+                        The default exporter of the generator use the template engine
+                        <a href="http://freemarker.org/">freemarker</a>
+                        to produce html pages.
+                        <br>
+                        Template files are located in the template
+                        directory defined by
+                        the JMeter property
+                        "<span class="code">jmeter.reportgenerator.template_dir</span>"
+                        and have
+                        the extension "<span class="code">.fmkr</span>".
+                    </p>
+                    <p>
+                        The graph references in the template
+                        files use the syntax :
+                        <span class="code">${&lt;graph_id&gt;.&lt;value&gt;}</span> where :
+                        <dl>
+                            <dt><span class="code">graph_id</span></dt>
+                            <dd>is the identifier of the graph matching the JMeter
+                                properties definition</dd>
+                            <dt><span class="code">value</span></dt>
+                            <dd>is the name of the value where data are stored.</dd>
+                        </dl>
+                    </p>
+                    <p>
+                        Each graph produces the following values :
+                        <dl>
+                            <dt><span class="code">maxX</span>:</dt>
+                            <dd>The maximum abscissa of the graph (double).</dd>
+                            <dt><span class="code">maxY</span>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><span class="code">minX</span>:</dt>
+                            <dd>The minimum abscissa of the graph (double).</dd>
+                            <dt><span class="code">minY</span>:</dt>
+                            <dd>The maximum ordinate of the graph (double).</dd>
+                            <dt><span class="code">title</span>:</dt>
+                            <dd>The title of the graph (string).</dd>
+                            <dt><span class="code">values</span>:</dt>
+                            <dd>A JSON object representing the data of the graph series
+                                  (string).</dd>
+                        </dl>
+                    </p>
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+                <div class="subsection"><h2 id="template_customization">3.2 Customization<a class="sectionlink" href="#template_customization" title="Link to here">&para;</a></h2>
+                    <p>You can customize the dashboard generation by modifying the
+                        files in the
+                        template directory.
+                    </p>
+                    <p>
+                        If you want to add a graph to the dashboard,
+                        you have to
+                        <a href="#configure_graph">declare it among the JMeter properties</a>
+                        and use its references in the template files.
+                    </p>
+                    <p>If you want to remove
+                        a graph from the dashboard, you must remove
+                        all its references in
+                        the template
+                        files and clear JMeter
+                        properties.</p>
+                </div>
+            </div>
+
+            <div class="subsection"><h2 id="outlooks">4 Limitations and Outlooks<a class="sectionlink" href="#outlooks" title="Link to here">&para;</a></h2>
+                <ul>
+                    <li>
+                        <p>Till now, there is only one sample source implementation which
+                            is strongly coupled with the CSV file format, we should allow
+                            other kinds of source by using a sample source interface.</p>
+                    </li>
+                    <li>
+                        <p>
+                            To add customized graph, users must extend the
+                            <span class="code">AbstractGraphConsumer</span>
+                            or use one of the implementations provided
+                            in the package
+                            <span class="code">org.apache.jmeter.report.processor.graph.impl</span>
+                            .
+                            This could be enhanced by making concrete the base class and
+                            give
+                            public access to additional properties (like selectors). But
+                            first
+                            we have to resolve the issue of shared properties (e.g. over
+                            time
+                            graphs must dispatch the same granularity property to the
+                            keys
+                            selector and time rate aggregator).
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            The chain building is dispatched between the
+                            <span class="code">org.apache.jmeter.report.dashboard.ReporGenerator.generate</span>
+                            method
+                            and the implementation of the consumers. So the code in
+                            charge of
+                            the building is split and furthermore some consumers can
+                            be
+                            redundant and harm the performance of report generation, not
+                            load testing.
+                        </p>
+                        <p>
+                            E.g. Each
+                            <span class="code">LatencyVSRequestGraphConsumer</span>
+                            and
+                            <span class="code">ResponseTimeVSRequestGraphConsumer</span>
+                            instances use an embedded
+                            consumer that could be shared depending
+                            on
+                            <span class="code">granularity</span>
+                            and
+                            <span class="code">exclude_controllers</span>
+                            properties.
+                        </p>
+                        <p>
+                            So we should enable the consumers to define the chain they
+                            require and provide a single chain builder that processes these
+                            chain requirements to instantiate needed consumers on demand.
+                            I.e.
+                            for the same chain requirement declaration, the same consumer
+                            instances are used. Otherwise if the declaration differs, a new
+                            branch of consumers is created.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            The graphs (DOM elements) in the generated HTML page should be
+                            dynamically build in order to match the graphs defined in JMeter
+                            properties.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            Some improvements can be done on the generated html pages:
+                            <ul>
+                                <li>Using a single page, and hide graphs depending on the
+                                    navigation menu selection.</li>
+                                <li>Adding a loading animation when graphs are build or
+                                    refreshed.</li>
+                                <li>Let the user determine if a graph is zoomable using a JMeter
+                                    property.</li>
+                                <li>
+                                    Using the
+                                    <span class="code">jquery.plot.setData()</span>
+                                    method to handle series
+                                    activation/deactivation rather than
+                                    rebuild the graph.
+                                </li>
+                            </ul>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

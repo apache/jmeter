@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.1">
+  <hashTree>
+    <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="Load_JMeter_Page" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Argument List" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain">jakarta.apache.org</stringProp>
+      <stringProp name="HTTPSampler.port"></stringProp>
+      <stringProp name="HTTPSampler.protocol"></stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+      <stringProp name="HTTPSampler.path">/jmeter/index.html</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+      <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+      <stringProp name="HTTPSampler.mimetype"></stringProp>
+      <stringProp name="HTTPSampler.monitor">false</stringProp>
+      <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+    </HTTPSampler>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

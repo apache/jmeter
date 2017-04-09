@@ -1,0 +1,233 @@
+JMeter {
+	config.dir=@webapp_path@/WEB-INF
+	loginText=@LOGIN_TEXT@
+	urlBase=@URL_BASE@
+	altUrlBase=@ALT_URL_BASE@
+	altLoginText=@ALT_LOGIN_TEXT@
+	
+	services {
+	
+		org.apache.service.logging.LoggingManager {
+			class=org.apache.service.logging.DefaultLoggingManager
+			log4j.configuration=@webapp_path@/WEB-INF/log4j.properties
+		}
+		
+		org.apache.service.classfinder.ClassFinderService {
+			class=org.apache.service.classfinder.DefaultClassFinderService
+			paths {
+				@webapp_path@/WEB-INF/classes
+				@webapp_path@/WEB-INF/lib/giblex.jar
+			}
+		}
+		
+		org.apache.service.webaction.WebRequestHandler { 
+			class=org.apache.service.webaction.WebRequestHandlerContainer
+			default_call_page=index.jsp
+  			betaweek=@beta@
+  			requiresLogin {
+  				add_todo
+  				update_time_lock_pref
+  				update_manager_notification_pref
+  				add_site
+  				add_commit
+  				update_site
+  				update_full_timesheet
+  				Send Timesheet
+  				get_time_report
+  			}
+  			loginProof=user
+  			initActions {
+  				set_context
+  			}
+  			autoActions {
+  				set_request
+  				clean_session
+  			}
+  			profileInterval=500
+  		}
+  		
+  		org.apache.service.webaction.error.Redirector {
+  			class=org.apache.service.webaction.error.DefaultRedirector
+  			exceptions {
+	  			InvalidLoginException {
+	  				page=/@appname@/index.jsp
+	  				msg=Incorrect username/password.
+	  			}
+		        NotLoggedInException {
+		        	page=/@appname@/NoPermission.jsp
+		        	msg=You must be logged in to use that resource.
+		        }
+	        	NoPermissionError {
+	        		page=/@appname@/NoPermission.jsp
+	        		msg=You have no permission to use that resource.
+	        	}
+	        	InvalidCredentialsException {
+	        		page=/@appname@/index.jsp
+	        		msg=Incorrect username/password.
+	        	}
+	        	NoSuchObjectException {
+	        		msg=[[!
+The system could not find the resource you requested.  Please check your request and try again.
+If the problem persists, report it to the system administrators.
+					!]]
+	        	}
+	        	InvalidInputException
+	        	InvalidActionError {
+	        		msg=The system requested an unknown task.
+	        	}
+	        	DEFAULT {
+	        		msg=An unexpected error occurred.  Please check your request and try again.  If the problem persists, report it to the system administrators.
+	        	}
+	        	InvalidContextException {
+	        		msg=You've confused the poor server with your use of the back button.  Try again from the top.
+	        	}
+	        	NullRequesterException {
+	        		page=/@appname@/EditRequest.jsp
+	        		msg=You must select or enter the name of the request's requester.
+	        	}
+	        	TimesheetNotLockedException {
+	        		msg=Your timesheet needs to be finalized and approved by your manager before it can be sent.
+	        	}
+	        }
+		}
+  	
+		org.apache.service.authentication.AuthenticationService {
+			class=org.apache.service.authentication.ldap.LdapAuthenticator
+			ldap-hosts {
+	  			@LDAP1@
+	  			@LDAP2@
+	  			@LDAP3@
+	  		}
+  			users {
+  				mike=mstover { password=**** }
+  				peter=plin { password=**** }
+  			}
+  		}
+  	
+  		org.apache.service.template.TemplateService {
+  			class=org.apache.service.template.velocity.VelocityService
+  			runtime.log=@webapp_path@/WEB-INF/velocity.log
+  			file.resource.loader.path=@webapp_path@/WEB-INF/templates
+  			file.resource.loader.cache=true
+  			file.resource.loader.modificationCheckInterval=60
+  			velocimacro.library=menu.vm,jsp.vm,sql.vm,news.vm,timesheet.vm
+  			components {
+  				pmService=org.apache.service.JMeterBusinessLogicService
+  				userService=org.apache.service.UserGroupService
+  			}
+  		}
+  		
+  		groovyService {
+  			class=org.apache.service.template.groovy.GroovyService
+  			path=@webapp_path@/WEB-INF/groovyTemplates
+  			components {
+  				pmService=org.apache.service.JMeterBusinessLogicService
+  				userService=org.apache.service.UserGroupService
+  				repo=org.apache.service.sql.ObjectMappingService
+  			}
+  		}
+  		
+  		org.apache.avalon.excalibur.datasource.DataSourceComponent {
+  			class=org.apache.avalon.excalibur.datasource.J2eeDataSource
+  			dbname=@db_name@
+  		}
+  		
+  		org.apache.service.sql.ObjectMappingService {
+  			class=org.apache.service.sql.DefaultMappingService
+  			mappingDirectory=@webapp_path@/WEB-INF/mappings
+  			packages { org.apache.service.dbObjects }
+  			profileInterval=500
+  		}
+  		
+  		org.apache.service.JMeterBusinessLogicService {
+  			class=org.apache.service.searching.DefaultJMeterService
+  		}
+  		
+  		org.apache.service.PreferenceService {
+  			class=org.apache.service.impl.DefaultPreferenceService
+  			preferenceSql {
+  				Buddy List=Contact { sql=getBuddyList.sql }
+  				Group List=Contact { sql=getPreferredGroups.sql }
+  				Note Type=Group { sql=getPreferredNoteTypes.sql	}
+  				Project Type=Group { sql=getPreferredProjectTypes.sql }
+  				Milestones On Timesheet=Group
+  				All Sites=Contact
+  				Manager Notification=Contact
+  				Timesheet Lock Style=Group
+  				Commit Scripts=Group
+  				Projects By Contact=Contact
+  				Projects By Group=Contact
+  				Projects=Contact
+  				Programs By Contact=Contact
+  				Programs By Group=Contact
+  				Programs=Contact
+  				Applications By Contact=Contact
+  				Applications By Group=Contact
+  				Applications=Contact
+  				Tasks By Contact=Contact
+  				Tasks By Group=Contact
+  				Tasks=Contact
+  				Sites By Contact=Contact
+  				Sites By Group=Contact
+  				Sites=Contact
+  				Todos By Contact=Contact
+  				Todos By Group=Contact
+  				Todos=Contact
+  			}
+  		}
+  		
+  		org.apache.service.PermissionService {
+  			class=org.apache.service.impl.DefaultPermissionService
+  		}
+  		
+  		org.apache.service.notification.NotificationService {
+  			class=org.apache.service.notification.DefaultNotificationService
+  			mail.transport.protocol=smtp
+  			mail.host=smtp.apache.org
+  			mail.user=jmeter
+  			mail.from=jmeter-auto@apache.org
+  			mail.replyTo=jmeter@apache.org
+  			bcc.default=james@apache.org
+  			email.active=@email_active@
+  			mail.smtp.connectiontimeout=60000
+  			mail.smtp.timeout=120000
+  		}
+  		
+  		org.apache.service.UserGroupService {
+  			class=org.apache.service.impl.DefaultUserGroupService
+  			superUsers {
+  				mstover
+  				plin
+  				sebb
+  			}
+  		}
+  		
+  		org.apache.service.domain_event.DomainEventService {
+  			class=org.apache.service.domain_event.BasicEventService
+  			eventDefinitions=@webapp_path@/WEB-INF/eventDefs
+  			vmFile=
+  			components {
+  				pmService=org.apache.service.JMeterBusinessLogicService
+  				userGroupService=org.apache.service.UserGroupService
+  				emailService=org.apache.service.notification.NotificationService
+  				repository=org.apache.service.sql.ObjectMappingService
+  			}
+  			eventRetrieval=
+  		}
+  		
+  		org.apache.service.DocumentService {
+  			class=org.apache.service.impl.DefaultDocumentService
+  			url=@webdav_server@
+  			proxy=proxy.apache.org {
+  				port=8080
+  				username=*******
+  				password=********
+  			}
+  		}
+  		
+  		cvsCommitService {
+  			class=org.apache.service.impl.JMeterCommitProcessor
+  			CommitProcessor.delay=5
+  		}
+  	}
+ }

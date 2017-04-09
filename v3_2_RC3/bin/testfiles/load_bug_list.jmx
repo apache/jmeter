@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.1">
+  <hashTree>
+    <HTTPSampler guiclass="HttpTestSampleGui" testclass="HTTPSampler" testname="load_bug_list" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="bug_status" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">.*</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_status</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bug_status" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">.*</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_status</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bug_status" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">.*</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_status</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="email1" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">email1</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="emailtype1" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">substring</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">emailtype1</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="emailassigned_to1" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">emailassigned_to1</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="email2" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">email2</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="emailtype2" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">substring</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">emailtype2</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="emailreporter2" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">emailreporter2</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bugidtype" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">include</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bugidtype</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bug_id" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_id</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="changedin" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">changedin</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="votes" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">votes</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="chfieldfrom" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">chfieldfrom</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="chfieldto" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">Now</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">chfieldto</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="chfieldvalue" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">chfieldvalue</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="product" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">JMeter</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">product</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="short_desc" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">short_desc</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="short_desc_type" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">substring</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">short_desc_type</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="long_desc" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">long_desc</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="long_desc_type" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">substring</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">long_desc_type</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bug_file_loc" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_file_loc</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="bug_file_loc_type" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">substring</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">bug_file_loc_type</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="keywords" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">keywords</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="keywords_type" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">anywords</stringProp>
+            <stringProp name="Argument.name">keywords_type</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="field0-0-0" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">noop</stringProp>
+            <stringProp name="Argument.name">field0-0-0</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="type0-0-0" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">noop</stringProp>
+            <stringProp name="Argument.name">type0-0-0</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="value0-0-0" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.name">value0-0-0</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="cmdtype" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">doit</stringProp>
+            <stringProp name="Argument.name">cmdtype</stringProp>
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+          </elementProp>
+          <elementProp name="order" elementType="HTTPArgument">
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.value">Reuse same sort as last time</stringProp>
+            <stringProp name="Argument.name">order</stringProp>
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain">bz.apache.org</stringProp>
+      <stringProp name="HTTPSampler.port">80</stringProp>
+      <stringProp name="HTTPSampler.protocol">http</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+      <stringProp name="HTTPSampler.path">/bugzilla/buglist.cgi</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <stringProp name="HTTPSampler.FILE_NAME"></stringProp>
+      <stringProp name="HTTPSampler.FILE_FIELD"></stringProp>
+      <stringProp name="HTTPSampler.mimetype"></stringProp>
+      <stringProp name="HTTPSampler.monitor">false</stringProp>
+      <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+    </HTTPSampler>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

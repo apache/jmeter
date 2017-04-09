@@ -1,0 +1,122 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Access log sampler Step-by-step</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="junitsampler_tutorial.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="jmeter_tutorial.html">Next &gt;</a></li></ul><div class="section"><h1 id="access-log-sampler">29. Access log sampler Step-by-step<a class="sectionlink" href="#access-log-sampler" title="Link to here">&para;</a></h1>
+
+<p>
+This is a short tutorial on JMeter's access log sampler. The purpose of the Access Log Sampler
+is to provide an easy way to simulate production traffic. There are several benefits to using access logs.
+</p>
+
+<ul>
+  <li>Rather than guess what users are doing, the test plan is using real traffic data</li>
+  <li>As the traffic pattern changes, the access log provides a record of individual changes and general shifts in usage</li>
+  <li>Access logs contain a lot of useful data, which may provide some insight</li>
+  <li>Access logs can be minded to determine different types of users</li>
+  <li>Access logs can capture detailed session information</li>
+</ul>
+
+<p>
+The down side of using access logs for test plans is you have to configure the webserver to output the request
+information. This may not be appropriate where security is an issue. For example, if the webserver dumps the post
+data from each request to the access logs, users login and password would be stored in plain text. Here are some
+general cases where access logs might be inappropriate.
+</p>
+
+<ul>
+  <li>Security sensitive applications where the data is encrypted</li>
+  <li>The application does not allow fine grain control of which request parameters are written to the access logs</li>
+  <li>The application needs correlation between requests</li>
+  <li>The webserver cannot be configured to append the post data to the access log</li>
+  <li>The webserver is hosting multiple applications, but doesn't provide a way to log the requests of one application to a separate file</li>
+</ul>
+
+<p>
+To take advantage of access logs, the first thing is the webserver needs to be configured to use extended
+log format. Links for configuring the popular containers are provided below.
+</p>
+
+<ul>
+  <li><a href="http://e-docs.bea.com/wls/docs70/adminguide/web_server.html#113868">BEA Weblogic</a></li>
+  <li><a href="http://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Access_Log_Valve">Tomcat</a></li>
+  <li><a href="http://e-docs.bea.com/wls/docs61/adminguide/web_server.html#113868">Websphere</a></li>
+  <li><a href="http://www.caucho.com/resin-3.0/config/log.xtp#access-log">Resin</a></li>
+</ul>
+
+<p>
+In some cases, it may be desirable to write custom logging, so that sensitive information is not written
+to the access logs. This article does not cover the techniques for writing custom logging.
+</p>
+
+<div class="subsection"><h2 id="step-by-step">29.1 Step-by-Step<a class="sectionlink" href="#step-by-step" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>Start JMeter</li>
+  <li>Select <span class="code">Test Plan</span></li>
+  <li>Right click
+      <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Threads (Users)</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Thread Group</span></span>
+      <figure><a href="../images/screenshots/add-threadgroup.png"><img src="../images/screenshots/add-threadgroup.png" width="676" height="233" alt="Add Thread Group"></a><figcaption>Add Thread Group</figcaption></figure>
+   </li>
+  <li>Select <span class="code">Thread Group</span></li>
+  <li>Right click
+      <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Sampler</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Access Log Sampler</span></span>
+      <figure><a href="../images/screenshots/add-access-log-sampler.png"><img src="../images/screenshots/add-access-log-sampler.png" width="704" height="283" alt="Add Access Log Sampler"></a><figcaption>Add Access Log Sampler</figcaption></figure>
+  </li>
+  <li>Right click on <span class="code">Thread Group</span>
+      <span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Listener</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Aggregate Report</span></span>
+      <figure><a href="../images/screenshots/add-aggregate-report.png"><img src="../images/screenshots/add-aggregate-report.png" width="752" height="326" alt="Add Aggregate Report"></a><figcaption>Add Aggregate Report</figcaption></figure>
+  </li>
+  <li>Select the <span class="code">Access Log Sampler</span>
+      <figure><a href="../images/screenshots/accesslogsampler.png"><img src="../images/screenshots/accesslogsampler.png" width="702" height="305" alt="Access Log Sampler"></a><figcaption>Access Log Sampler</figcaption></figure>
+  </li>
+  <li>Enter the IP address or hostname in <span class="code">Server</span></li>
+  <li>Enter the port in <span class="code">Port</span></li>
+  <li>If you want to download the images, set <span class="code">Parse images</span> to <span class="code">true</span>.</li>
+  <li>Select a file for <span class="code">Log File Location</span>
+      <figure><a href="../images/screenshots/example-access-log-sampler.png"><img src="../images/screenshots/example-access-log-sampler.png" width="703" height="315" alt="Filled in Access Log Sampler"></a><figcaption>Filled in Access Log Sampler</figcaption></figure>
+  </li>
+  <li>Select Aggregate Report</li>
+  <li>Enter <span class="code">results.jtl</span> for filename
+      <figure><a href="../images/screenshots/example-aggregate-report.png"><img src="../images/screenshots/example-aggregate-report.png" width="344" height="150" alt="Aggregate Report with filename"></a><figcaption>Aggregate Report with filename</figcaption></figure>
+  </li>
+</ol>
+
+<p>
+At this point, the test plan is ready. Start the test with
+  <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">R</span></span>
+or from the menu
+   <span class="menuchoice"><span class="guimenuitem">Start</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Run</span></span>.
+</p>
+
+</div>
+
+</div><ul class="pagelinks"><li><a href="junitsampler_tutorial.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="jmeter_tutorial.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

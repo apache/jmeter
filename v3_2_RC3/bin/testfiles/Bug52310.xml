@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="ComputeIPAddr" rc="200" rm="OK" dt="text"/>
+<httpSample s="true" lb="HTTP-Request-HC31" rc="200" rm="OK" dt="text">
+  <httpSample s="true" lb="http://jmeter.apache.org/" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/css/new-style.css" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/asf-logo.svg" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/logo.svg" rc="200" rm="OK" dt="bin"/>
+</httpSample>
+<httpSample s="true" lb="HTTP-Request-HC4" rc="200" rm="OK" dt="text">
+  <httpSample s="true" lb="http://jmeter.apache.org/" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/css/new-style.css" rc="200" rm="OK" dt="text"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/asf-logo.svg" rc="200" rm="OK" dt="bin"/>
+  <httpSample s="true" lb="http://jmeter.apache.org/images/logo.svg" rc="200" rm="OK" dt="bin"/>
+</httpSample>
+
+</testResults>

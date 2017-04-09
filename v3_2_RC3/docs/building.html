@@ -1,0 +1,170 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Building and Contributing to JMeter</title><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="./css/new-style.css"><link rel="apple-touch-icon-precomposed" href="./images/apple-touch-icon.png"><link rel="icon" href="./images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="./images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="./images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="./images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="./index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="./download_jmeter.cgi">Download Releases</a></li><li><a href="./changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="./usermanual/get-started.html">Get Started</a></li><li><a href="./usermanual/index.html">User Manual</a></li><li><a href="./usermanual/best-practices.html">Best Practices</a></li><li><a href="./usermanual/component_reference.html">Component Reference</a></li><li><a href="./usermanual/functions.html">Functions Reference</a></li><li><a href="./usermanual/properties_reference.html">Properties Reference</a></li><li><a href="./changes_history.html">Change History</a></li><li><a href="./api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="./usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="./usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="./usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="./usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="./usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="./issues.html">Issue Tracking</a></li><li><a href="./mail.html">Mailing Lists</a></li><li><a href="./svnindex.html">Source Repositories</a></li><li><a href="./building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><div class="section"><h1>Building JMeter</h1>
+<h3>Acquiring the source</h3>
+<p>The full source is distributed alongside the binary, and you can also find source repositories <a href="./svnindex.html">here</a> .</p>
+<p>
+The source archive, SVN and GIT do not contain any of the required library files.
+
+<h3>Compiling and packaging JMeter using Eclipse</h3>
+<h4>Option 1 : Setting up Eclipse project with Ant task</h4>
+Once you have downloaded the sources using git or svn, you can setup the Eclipse project by running:
+
+<pre class="source">ant setup-eclipse-project</pre>
+
+You can then import the project using 
+<span class="menuchoice"><span class="guimenuitem">File</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Import</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Existing projects into Workspace</span></span> and select the folder containing JMeter sources.
+
+<h4>Option 2 : Setting up Eclipse project manually</h4> 
+The first step is to download dependencies by running the Ant command:</p>
+<pre class="source">
+ant download_jars
+</pre>
+<p>Or you can download the binary distribution archive for a release and unpack it into the same directory structure as the source.
+This will ensure that the <span class="code">lib/</span> directory contains the jar files needed for running JMeter.
+There are a few additional jars that are needed to build JMeter, download these using:
+</p>
+<pre class="source">
+ant download_jars
+</pre>
+<p>
+This will retrieve any missing jars.
+</p>
+<div class="clear"></div><div class="note">
+If you are behind a proxy, you can set a few build properties in <span class="code">build-local.properties</span> for ant to use the proxy:
+<pre class="source">
+proxy.use=true
+proxy.host=proxy.example.invalid
+proxy.port=8080
+proxy.user=your_user_name
+proxy.pass=your_password
+</pre>
+You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
+properties into <span class="code">build-local.properties</span>:
+<pre class="source">
+skip.bug52310=true
+skip.bug60607=true
+skip.batchtest_Http4ImplPreemptiveBasicAuth=true
+skip.batchtest_SlowCharsFeature=true
+skip.batchtest_TestKeepAlive=true
+skip.test_http=true
+skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+</pre>
+</div><div class="clear"></div>
+
+<p>
+Once you have downloaded the source from SVN or the release archives and run the ant <span class="code">download_jars</span> target to
+install the dependent jars, you can configure Eclipse. The easiest way to do this is to replace the Eclipse <span class="code">.classpath</span>
+file with the <span class="code">eclipse.classpath</span> file provided with JMeter. This will set up the source-paths and most of the libraries.
+</p>
+<p>
+Ensure you read <span class="code">eclipse.md</span> for project configuration.
+</p>
+
+
+<h3>Compiling and packaging JMeter using Ant</h3>
+<p>
+JMeter can be built entirely using Ant.
+The basic command is:</p>
+<pre class="source">
+ant [install]
+</pre>
+<p>
+See <span class="code">build.xml</span> (or call <span class="code">ant -p</span>) for the other targets that can be used.
+</p>
+</div><div class="section"><h1>Contributing to JMeter</h1>
+<h2>We love contribution</h2>
+<p>
+We are very grateful to you if you take some time to contribute to the project.
+If you have some time to spend on the project you can pick existing enhancement or bug from <a target="_blank" href="issues.html">Issues page</a>.<br>
+You can also contribute to translation, see <a href="localising/index.html">JMeter Localisation (Translator's Guide)</a>.
+</p>
+
+<h2>Submitting a patch</h2>
+<p>
+If you want to contribute to JMeter for a bug fix or enhancement, here is the procedure to follow:
+</p>
+
+<h3>Check your patch</h3>
+<p>
+Before submitting your patch ensure you do the following:<br>
+
+Check that patch compiles and follows Tab space policy by running:
+</p>
+<pre class="source">ant package-and-check</pre>
+<p>
+Check that patch does not break JUnit tests by running:
+</p>
+<pre class="source">ant test</pre>
+
+<h3>Create a PR using GIT</h3>
+<ul>
+    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
+    <li>Fork <a href="https://www.github.com/apache/jmeter">Apache JMeter mirror</a></li>
+    <li>Clone your forked repository locally : <pre class="source">git clone https://github.com/yourid/jmeter/</pre></li>
+    <li>Create a branch using for example bugzilla id: <pre class="source">git branch BUGID</pre></li>
+    <li>Checkout the new branch : <pre class="source">git checkout BUGID</pre></li>
+    <li>commit your fix there : <pre class="source">git commit -m 'Fix to BUGID' list of files</pre></li>
+    <li>Add JMeter repository as upstream : <pre class="source">git remote add upstream http://www.github.com/apache/jmeter</pre></li>
+    <li>push it : <pre class="source">git push origin BUGID</pre></li>
+    <li>Create a PR and link it in the bugzilla issue</li>
+</ul>
+
+<h3>Create a PR using Patch</h3>
+<ul>
+    <li>Open a bugzilla issue, see <a target="_blank" href="issues.html">Issues page</a></li>
+    <li>Checkout Apache JMeter source</li>
+    <li>Code your fix</li>
+    <li>Create your patch by Right clicking on Eclipse project and select 
+        <span class="menuchoice"><span class="guimenuitem">Team</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Create Patch &hellip;</span></span></li>
+    <li>Attach your patch to the bugzilla issue</li>
+</ul>
+</div><div class="section"><h1>Automated builds</h1>
+<h2>Automated (nightly) builds</h2>
+<p>
+As part of the development process, the JMeter project has access to various Continuous Integration (CI) server builds.
+The build output can be useful for testing recent changes to the code-base. 
+</p>
+<p>
+Please note that the builds have not undergone any QA and should only be used for development testing.
+For further information, see the <a href="nightly.html">Nightly builds for developers</a> page.
+</p>
+</div><div class="section"><h1>Building Add-Ons</h1>
+<h2>Building Add-Ons</h2>
+<p>
+There is no need to build JMeter if you just want to build an add-on.
+Just download the binary archive and add the jars to the classpath or use Maven artifacts to build your add-ons.
+You may want to also download the source so it can be used by the IDE.
+</p>
+<p>See the <span class="code">extras/addons*</span> files in the source tree for some suggestions</p>
+</div><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

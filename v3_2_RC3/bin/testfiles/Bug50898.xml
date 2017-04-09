@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample lt="0" s="true" lb="Java Request" rc="" rm="" tn="Thread Group 1-1" dt="text" by="0"/>
+<sample lt="0" s="true" lb="Java Request" rc="" rm="" tn="Thread Group 1-1" dt="text" by="0"/>
+
+</testResults>

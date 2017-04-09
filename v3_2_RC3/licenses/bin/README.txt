@@ -1,0 +1,33 @@
+This directory contains additional LICENSE files for software contained in binary distributions
+
+The following files are ASF products, and are licensed under the Apache License 2.0
+
+avalon-framework-4.1.4.jar
+bsf-2.4.0.jar
+bshclient.jar (part of JMeter)
+commons-codec-1.10.jar
+commons-collections-3.2.2.jar
+commons-dbcp2-2.1.1.jar
+commons-io-2.5.jar
+commons-jexl-2.1.1.jar
+commons-jexl3-3.0.jar
+commons-lang3-3.5.jar
+commons-math3-3.5.jar
+commons-net-3.6.jar
+commons-pool2-2.4.2.jar
+excalibur-logger-1.1.jar
+geronimo-jms_1.1_spec-1.1.1.jar
+groovy-all-2.4.10.jar
+httpclient-4.5.3.jar
+httpcore-4.4.6.jar
+httpmime-4.5.3.jar
+jorphan.jar (part of JMeter)
+logkit-2.0.jar
+oro-2.0.8.jar
+serializer-2.7.2.jar
+tika-core-1.14.jar
+tika-parsers-1.14.jar
+xalan-2.7.2.jar
+xercesImpl-2.11.0.jar
+xml-apis-1.4.01.jar
+xmlgraphics-commons-2.1.jar

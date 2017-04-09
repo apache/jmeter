@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<sample s="true" lb="sample_variables=REFERENCE,JSESSIONID REFERENCE=reference JSESSIONID=jsessionId" rc="" rm="" tn="Thread Group 1-1" dt="text" by="0" REFERENCE="reference" JSESSIONID="jsessionId"/>
+
+</testResults>

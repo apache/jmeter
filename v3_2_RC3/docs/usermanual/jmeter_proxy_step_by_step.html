@@ -1,0 +1,227 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Apache JMeter HTTP(S) Test Script Recorder</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="jmeter_distributed_testing_step_by_step.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="junitsampler_tutorial.html">Next &gt;</a></li></ul><div class="section"><h1 id="script-recorder">27. Apache JMeter HTTP(S) Test Script Recorder<a class="sectionlink" href="#script-recorder" title="Link to here">&para;</a></h1>
+
+<p>
+This tutorial attempts to explain the exact steps for recording HTTP/HTTPS. For those new to JMeter, one easy way to create a test plan is to use the Recorder.
+</p>
+
+<div class="subsection"><h2 id="configuration">27.1 JMeter configuration<a class="sectionlink" href="#configuration" title="Link to here">&para;</a></h2>
+
+<p>
+Since JMeter 2.10, recording has been improved to better handle embedded resources and creation of certificates on the fly.
+To enable these features, JMeter uses <span class="code">keytool</span> utility (available in JRE/JDK) so you need to ensure your
+configuration is correct, read <a href="https://wiki.apache.org/jmeter/TestRecording210">this wiki page before starting.</a>
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="basic-instructions">27.2 Basic Instructions<a class="sectionlink" href="#basic-instructions" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>Go to <span class="code">JMETER_HOME/bin</span> and start JMeter with <span class="code">jmeterw.cmd</span> on Windows
+      and <span class="code">jmeter</span> on Linux/Unix</li>
+  <li>Select <span class="code">Templates...</span> on the menu bar</li>
+  <figure><a href="../images/screenshots/Select-Templates-Icon.png"><img src="../images/screenshots/Select-Templates-Icon.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+  <li>Select <span class="code">Recording template</span> on the list</li>
+  <figure><a href="../images/screenshots/Select-Recording-Template.png"><img src="../images/screenshots/Select-Recording-Template.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+  <li>A complete <span class="code">Test Plan</span> is generated</li>
+  <figure><a href="../images/screenshots/Test_Generated.png"><img src="../images/screenshots/Test_Generated.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+  <li>In the <span class="code">HTTP Request Defaults</span> element:
+    <dl>
+      <dt><span class="code">Server name</span></dt><dd>enter <span class="code">example.com</span></dd>
+      <dt><span class="code">Path</span></dt><dd>leave blank</dd>
+    </dl>
+    <figure><a href="../images/screenshots/http-config/http-request-defaults.png"><img src="../images/screenshots/http-config/http-request-defaults.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+  </li>
+  <li>Return to <span class="code">HTTP(S) Test Script Recorder</span>, and click the <span class="code">Start</span> button at the top.</li>
+  <figure><a href="../images/screenshots/Proxy_Run.png"><img src="../images/screenshots/Proxy_Run.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+</ol>
+
+<p>
+This will start the JMeter proxy server which is used to intercept the browser requests.
+A file called <span class="code">ApacheJMeterTemporaryRootCA.crt</span> will be generated in <span class="code">jmeter/bin</span>
+folder. Install this certificate in your browser, if you don't know how to do it,
+read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Installing the JMeter CA certificate for HTTPS recording</a>
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="configue-browser">27.3 Configure your browser to use the JMeter Proxy<a class="sectionlink" href="#configue-browser" title="Link to here">&para;</a></h2>
+
+<p>
+At this point, JMeter's proxy is running. For this exercise, we will use Iceweasel/Firefox
+to view some pages on the JMeter website.
+</p>
+
+<ol>
+  <li>Start Iceweasel/Firefox, but do not close JMeter.</li>
+  <li>From the tool bar, click 
+      <span class="menuchoice"><span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Preferences</span></span> (or 
+      <span class="menuchoice"><span class="guimenuitem">Tools</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Preferences</span></span> or type <span class="code">about:preferences#advanced</span>
+      as URL). This should bring up the options.
+    <figure><a href="../images/screenshots/firefox-network-settings.png"><img src="../images/screenshots/firefox-network-settings.png" width="914" height="566" alt=""></a><figcaption></figcaption></figure>
+  </li>
+  <li>Select the <span class="code">Advanced</span> tab, and <span class="code">Network</span> tab</li>
+  <li>Click <span class="code">Settings</span> button near the top.</li>
+  <li>On the new pop-up, check <span class="code">Manual proxy configuration</span>. The address and
+      port fields should be enabled now.
+    <dl>
+      <dt><span class="code">Address</span></dt><dd>enter <span class="code">localhost</span> or the IP address of your system</dd>
+      <dt><span class="code">Port</span></dt><dd>enter <span class="code">8888</span>.</dd>
+    </dl>
+    <figure><a href="../images/screenshots/firefox-configure-proxy.png"><img src="../images/screenshots/firefox-configure-proxy.png" width="532" height="240" alt=""></a><figcaption></figcaption></figure>
+  </li>
+  <li>Check <span class="code">Use this proxy server for all protocols</span></li>
+  <li>Click <span class="code">OK</span> button. This should return you to the browser</li>
+</ol>
+
+</div>
+
+<div class="subsection"><h2 id="navigation-recording">27.4 Record your navigation<a class="sectionlink" href="#navigation-recording" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>With your browser, in the <span class="code">Address</span> bar at the top, enter <span class="code">http://example.com/index.html</span> (replace <span class="code">example.com</span> with your websites address).
+  and hit the <span class="code">enter</span> key.</li>
+  <li>Click on a few links on your sites pages.</li>
+  <li>Close your browser and bring up the JMeter window.</li>
+</ol>
+
+<p>
+Expand the <span class="code">Thread Group</span> and there should be several samplers. At this point, the test plan can
+be saved as is.
+<div class="clear"></div><div class="note">If you forget to add default HTTP Request settings, you will have to manually
+delete the server name, and port.</div><div class="clear"></div>
+</p>
+
+<figure><a href="../images/screenshots/example-recording.png"><img src="../images/screenshots/example-recording.png" width="258" height="194" alt=""></a><figcaption></figcaption></figure>
+<p>
+In this sample, there aren't any default request parameters. If a particular request parameter
+is required by all pages, the request defaults is where one would add the entries.
+</p>
+
+<ol>
+  <li>Select <span class="code">Thread Group</span> and change a few defaults:
+    <dl>
+      <dt><span class="code">Number of Threads</span></dt><dd>enter <span class="code">5</span></dd>
+      <dt><span class="code">Ramp-Up Period</span></dt><dd>do not change</dd>
+      <dt><span class="code">Loop Count</span></dt><dd>enter <span class="code">100</span></dd>
+    </dl>
+    <figure><a href="../images/screenshots/example-thread-group.png"><img src="../images/screenshots/example-thread-group.png" width="357" height="288" alt=""></a><figcaption></figcaption></figure>
+  </li>
+</ol>
+
+</div>
+
+<div class="subsection"><h2 id="validate-script">27.5 Validate the script<a class="sectionlink" href="#validate-script" title="Link to here">&para;</a></h2>
+
+<p>
+Now we need to validate the script before to run our test plan. Save the test plan.
+</p>
+<p>
+Right click on the <span class="code">Thread Group</span>
+  <span class="menuchoice"><span class="guimenuitem">Validate</span></span>
+  <figure><a href="../images/screenshots/Validate-Test-Plan.png"><img src="../images/screenshots/Validate-Test-Plan.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+</p>
+<p>
+Check with <span class="code">View Results Tree</span> element if all is ok.
+</p>
+</div>
+
+<div class="subsection"><h2 id="correlate-start">27.6 Variabilize and Correlate the script<a class="sectionlink" href="#correlate-start" title="Link to here">&para;</a></h2>
+<p>
+In some scripts, we will need to:
+<ul>
+  <li>Variabilize some input (login, password, search words...)</li>
+  <li>Correlate some data (session variable...) between two requests</li>
+</ul>  
+</p>
+<p>
+To variabilize, we can use:
+<ul>
+	<li><span class="code">CSV Data Set Config</span> to get input data from csv file</li>
+	<li>JMeter functions like <span class="code">__counter</span>, <span class="code">__time</span>...</li>
+	<li>etc.</li>
+</ul>
+</p>
+<p>
+To correlate, we can get data from a request with <span class="code">Post Processors</span> like <span class="code">JSON Extractor</span>, <span class="code">Regular Expression Extractor</span>... and inject it in another request.
+</p>
+<p>
+To find data to correlate, the easiest way to do it is to use the Search function in <span class="code">View Results Tree</span>.
+<figure><a href="../images/screenshots/Search-Correlation.png"><img src="../images/screenshots/Search-Correlation.png" width="" height="" alt=""></a><figcaption></figcaption></figure>
+</p>
+</div>
+
+<div class="subsection"><h2 id="test-start">27.7 Start the test<a class="sectionlink" href="#test-start" title="Link to here">&para;</a></h2>
+
+<p>
+At this point, we are ready to run our test plan and see what happens. When you're
+ready to run the test, there are two ways:
+<ol>
+  <li>With the gui, but it's not recommended to big load test.</li>
+  <li>With the command line.</li>
+</ol>
+</p>
+
+
+<p>
+Solution 1, with the gui, but just during debug phase, use Non GUI for your load test.
+</p>
+<p>
+  <span class="menuchoice"><span class="guimenuitem">Run</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Start</span></span>
+or use the keyboard and press <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">R</span></span>
+</p>
+
+<p>
+  Before you start the test,  add a <span class="code">Summary Report</span> element and select it. As the test runs, the statistics will change
+  until the test is done. At the end of the test, the summary report should look like this.
+  <figure><a href="../images/screenshots/example-summary-report.png"><img src="../images/screenshots/example-summary-report.png" width="984" height="220" alt=""></a><figcaption></figcaption></figure>
+</p>
+
+
+<p>
+  While the test is running, in the upper right-hand corner, there should be a green circle. When the test is done, the circle should be grey.
+  <figure><a href="../images/screenshots/example-running.png"><img src="../images/screenshots/example-running.png" width="132" height="39" alt=""></a><figcaption></figcaption></figure>
+</p>
+
+<p>
+Solution 2, in command line, use <span class="code">jmeter -n -t [jmx file] -l [results file] -e -o [Path to output folder]</span>
+</p>
+<p>
+At the end of the test, an HTML report will be generated and available in [Path to output folder] used in command line.
+</p>
+
+</div>
+
+</div><ul class="pagelinks"><li><a href="jmeter_distributed_testing_step_by_step.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="junitsampler_tutorial.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>
