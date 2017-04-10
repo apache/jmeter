@@ -2,7 +2,7 @@
 <jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170410">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
-      <stringProp name="TestPlan.comments">Each Thread Group should initially end after 20s but since scheduler is set to 5s, we check it ends within 5.5s. Tests for Bugs 60797 and 60049</stringProp>
+      <stringProp name="TestPlan.comments">Each Thread Group should initially end after 20s but since scheduler is set to 5s, we check it ends within 5.7s. Tests for Bugs 60797 and 60049</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -170,7 +170,7 @@
           <stringProp name="cacheKey">7b043ed3-cbc5-4b9c-8427-8c70e6791c07</stringProp>
           <stringProp name="script">long start = Long.parseLong(props.get(&quot;TEST_START&quot;));
 long duration = System.currentTimeMillis() - start;
-long maxDurationPlusMargin = vars[&quot;MaxDuration&quot;].toInteger()*1000+500;
+long maxDurationPlusMargin = vars[&quot;MaxDuration&quot;].toInteger()*1000+700;
 if(duration&gt; maxDurationPlusMargin) {
 	SampleResult.setSuccessful(false);
 	SampleResult.setResponseData(&quot;Duration &quot;+duration+&quot; exceeded expected duration of &quot;+maxDurationPlusMargin);
