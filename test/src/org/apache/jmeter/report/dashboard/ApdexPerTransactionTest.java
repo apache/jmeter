@@ -49,8 +49,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 		
 		props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
 		final String apdexPerTransaction = getOptionalProperty(props, 
-        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
-        		String.class);
+        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION);
 		assertEquals(apdexString, apdexPerTransaction);
 	}
 	
@@ -59,8 +58,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         final Props props = new Props();
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
         final String title = getOptionalProperty(props, 
-                "jmeter.reportgenerator.graph.responseTimePercentiles.title", 
-                String.class);
+                "jmeter.reportgenerator.graph.responseTimePercentiles.title");
         assertNotNull("title should not be null", title);
     }
     
@@ -131,17 +129,11 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 		
 	}
 	
-	private static String getOptionalProperty(Props props,
-            String key, Class<String> clazz) {
-        String property = getProperty(props, key, null, clazz);
-        if (property != null) {
-        }
-        return property;
+	private static String getOptionalProperty(Props props, String key) {
+        return getProperty(props, key, null);
     }
 	
-	private static String getProperty(Props props, String key,
-            String defaultValue, Class<String> clazz)
-             {
+	private static String getProperty(Props props, String key, String defaultValue) {
         String value = props.getValue(key);
         if (value == null) {
             return defaultValue;
