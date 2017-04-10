@@ -83,11 +83,13 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
                 String.class);
         if (title == null) {
             Iterator<PropsEntry> it = props.iterator();
+            int i = 0;
             while(it.hasNext()) {
                 PropsEntry pe = it.next();
-                System.out.println(pe);
+                i++;
+                System.err.println(pe);
             }
-            fail("title should not be null; see above for entries in property collection");            
+            fail("title should not be null; see above for entries in property collection: " + i);            
         }
     }
     
