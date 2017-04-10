@@ -68,12 +68,15 @@ JMeter now requires Java 8. Ensure you use the most up to date version.
 </p>
 <p>
 JMeter logging has been migrated to SLF4J and Log4j 2.
-This affects configuration and 3<sup>rd</sup> party plugins.
+This affects configuration and 3<sup>rd</sup> party plugins, see below <b>"Logging changes"</b>.
 </p>
 <ch_title>Core improvements</ch_title>
 <ul>
-<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB through its HTTP API using Asynchronous HTTP requests.
+<li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB.
 <figure width="813" height="407" image="changes/3.2/backend_influxdb.png"></figure>
+This implementation sends data using Asynchronous HTTP calls to InfluxDB through its <a href="https://docs.influxdata.com/influxdb/v1.2/guides/writing_data/">HTTP API</a>
+and give you the following graphs with annotations:
+<figure width="934" height="399" image="backend_listener_influxdb_graph.png"></figure>
 </li>
 <li>DNS Cache Manager now has a table to allow static host resolution.
 <figure width="803" height="561" image="changes/3.2/dns_cache_manager_static_hosts.png"></figure>
@@ -82,15 +85,16 @@ This affects configuration and 3<sup>rd</sup> party plugins.
 <figure width="852" height="738" image="changes/3.2/jms_publisher_reconnect.png"></figure>
 <figure width="716" height="538" image="changes/3.2/jms_subscriber_reconnect_pause.png"></figure>
 </li>
-<li>Variables in JMS Publisher are now supported for all types of messages. Add the encoding type of the file to parse his content</li>
+<li>Variables in JMS Publisher are now supported for all types of messages. Add the encoding type of the file to parse its content</li>
 <figure width="750" height="743" image="changes/3.2/jms_subscriber_content_encoding.png"></figure>
 <li>XPath Extractor now allows extraction randomly, by index or for all matches.
-<figure width="823" height="348" image="changes/3.2/xpath_extractor.png"></figure>
+<figure width="823" height="348" image="changes/3.2/xpath_extractor_matchno.png"></figure>
 </li>
 <li>Response Assertion now allows to work on Request Header, provides a "OR" combination and has a better cell renderer
 <figure width="1053" height="329" image="changes/3.2/response_assertion.png"></figure>
 </li>
-<li>HTTP HC4 Implementation now allows preemptive Basic Auth</li>
+<li>JMeter now uses Oracle Nashorn Javascript engine instead of Rhino. This provides a faster execution of Javascript.</li>
+<li>HTTP HC4 Implementation now provides preemptive Basic Auth enabled by default</li>
 <li>Embedded resources download in CSS has been improved to avoid useless repetitive parsing to find the resources</li>
 <li>An important work on code quality and code coverage with tests has been done since Sonar has been setup on the project.
 You can see Sonar report <a href="https://builds.apache.org/analysis/overview?id=12927" >here</a>.
@@ -302,6 +306,7 @@ jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>60883</bug><pr>288</pr> - Add <code>${__escapeXml()}</code> function. Contributed by Michael Osipov (michaelo at apache.org)</li>
 </ul>
 
 <h3>I18N</h3>
@@ -514,7 +519,7 @@ You may encounter the following error:
 <source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
  algorithm using MD2 (like md2WithRSAEncryption) or with a SSL certificate with a size lower than 1024 bits.
-This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
+This error is related to increased security in Java 8+.
 <br></br>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.

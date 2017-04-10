@@ -1,0 +1,211 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Apache JMeter Distributed Testing Step-by-step</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="../index.html">Index</a></li><li><a href="jmeter_proxy_step_by_step.html">Next &gt;</a></li></ul><div class="section"><h1 id="distributed-testing">26. Apache JMeter Distributed Testing Step-by-step<a class="sectionlink" href="#distributed-testing" title="Link to here">&para;</a></h1>
+
+<p>
+This short tutorial explains how to use multiple systems to perform stress testing. Before we start, there are a couple of things to check.
+</p>
+
+<ul>
+  <li>the firewalls on the systems are turned off or correct ports are opened.</li>
+  <li>all the clients are on the same subnet.</li>
+  <li>the server is in the same subnet, if <span class="code">192.x.x.x</span> or <span class="code">10.x.x.x</span> IP addresses are used.
+      If the server doesn't use <span class="code">192.xx</span> or <span class="code">10.xx</span> IP address, there shouldn't be any problems.</li>
+  <li>Make sure JMeter can access the server.</li>
+  <li>Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly.</li>
+</ul>
+
+<p>
+Once you've made sure the systems are ready, it's time to setup remote testing. The tutorial assumes you already
+have JMeter installed on all the systems. The way JMeter works is one master controller initiates the test on multiple slave systems.
+</p>
+
+<div class="clear"></div><div class="note">In this tutorial we use GUI Mode just for demonstration. In real life you should use NON GUI mode to start your load test</div><div class="clear"></div>
+
+<figure><a href="../images/screenshots/distributed-jmeter.svg"><img src="../images/screenshots/distributed-jmeter.svg" width="610" height="462" alt="One master controls multiple slaves"></a><figcaption>One master controls multiple slaves</figcaption></figure>
+
+<div class="subsection"><h2 id="terminology">26.1 Terminology<a class="sectionlink" href="#terminology" title="Link to here">&para;</a></h2>
+
+<p>
+Before we dive into the step-by-step instructions, it's a good idea to define the terms and make sure the definition is clear.
+</p>
+
+<dl>
+  <dt>Master</dt><dd>the system running JMeter GUI, which controls the test</dd>
+  <dt>Slave</dt><dd>the system running <span class="code">jmeter-server</span>, which takes commands from
+      the GUI and send requests to the target system(s)</dd>
+  <dt>Target</dt><dd>the webserver we plan to stress test</dd>
+</dl>
+
+<figure><a href="../images/screenshots/distributed-names.svg"><img src="../images/screenshots/distributed-names.svg" width="602" height="360" alt="Categories of systems"></a><figcaption>Categories of systems</figcaption></figure>
+
+</div>
+
+<div class="subsection"><h2 id="step-by-step">26.2 Step-by-Step<a class="sectionlink" href="#step-by-step" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>On the slave systems, go to <span class="code">jmeter/bin</span> directory and execute
+     <span class="code">jmeter-server.bat</span> (<span class="code">jmeter-server</span> on unix).
+  </li>
+  <li>On master system acting as the console, open windows explorer and go to
+      <span class="code">jmeter/bin</span> directory</li>
+  <li>Open <span class="code">jmeter.properties</span> in a text editor</li>
+  <li>Edit the line <span class="code">remote_hosts=127.0.0.1</span></li>
+  <li>Add the IP address. For example, if I have JMeter server running on <span class="code">192.168.0.10</span>,
+    &hellip;, <span class="code">192.168.0.15</span>, the entry would like like this:
+    <pre class="source">remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14</pre>
+  </li>
+  <li>Start JMeter.</li>
+  <li>Open the test plan you want to use</li>
+</ol>
+
+<figure><a href="../images/screenshots/example-simple-plan.png"><img src="../images/screenshots/example-simple-plan.png" width="483" height="266" alt="Simple test plan"></a><figcaption>Simple test plan</figcaption></figure>
+
+</div>
+
+<div class="subsection"><h2 id="starting">26.2 Starting the Test<a class="sectionlink" href="#starting" title="Link to here">&para;</a></h2>
+
+<p>
+At this point, you are ready to start load testing. If you want to double check
+the slave systems are working, open <span class="code">jmeter.log</span> in your editor. You should see the following in the log.
+</p>
+
+<pre class="source">
+Writing log file to: /XXXX/XXXXX/bin/jmeter-server.log
+Created remote object: UnicastServerRef [liveRef: [endpoint:[192.X.X.X:XXXXX](local),objID:[-6a665beb:15a2c8b9419:-7fff, 3180474504933847586]]]
+</pre>
+
+<p>
+If you do not see this message, it means <span class="code">jmeter-server</span> did not start correctly. For tips on
+debugging the issue, <a href="#tips">go to the tips section</a>. There are two ways to
+initiate the test: a single system and all systems.
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="start-single-client">26.3 Start a single clients<a class="sectionlink" href="#start-single-client" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start</li>
+  <li>Select the IP address</li>
+</ol>
+
+<figure><a href="../images/screenshots/example-remote-start.png"><img src="../images/screenshots/example-remote-start.png" width="490" height="196" alt="Start a single slave"></a><figcaption>Start a single slave</figcaption></figure>
+
+</div>
+
+<div class="subsection"><h2 id="start-all-clients">26.4 Start all clients<a class="sectionlink" href="#start-all-clients" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>Click Run at the top</li>
+  <li>Select Remote Start all or use <span class="keycombo"><span class="keysym">Ctrl</span>&nbsp;+&nbsp;<span class="keysym">Shift</span>&nbsp;+&nbsp;<span class="keysym">R</span></span></li>
+</ol>
+
+<figure><a href="../images/screenshots/example-remote-start-all.png"><img src="../images/screenshots/example-remote-start-all.png" width="410" height="155" alt="Start all slaves"></a><figcaption>Start all slaves</figcaption></figure>
+
+</div>
+
+<div class="subsection"><h2 id="limitations">26.5 Limitations<a class="sectionlink" href="#limitations" title="Link to here">&para;</a></h2>
+
+<p>
+There are some basic limitations for distributed testing. Here's the list of the known items in no specific order.
+</p>
+
+<ol>
+  <li>RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy.</li>
+  <li>Since version 2.9, JMeter sends all the test results stripping Response data to the controlling console, this allows
+      us to reduce impact on network IO. Ensure you monitor your network traffic so that this trafic does not incur contention</li>
+  <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 1000-2000 threads depending on the type of test.</li>
+</ol>
+
+</div>
+
+<div class="subsection"><h2 id="additional-resources">26.6 Additional resources<a class="sectionlink" href="#additional-resources" title="Link to here">&para;</a></h2>
+
+<p>
+  <a href="http://wiki.apache.org/jmeter/JMeterFAQ#How_to_do_remote_testing_the_.27proper_way.27.3F">Wiki page on remote testing</a>
+</p>
+
+<p>
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p>
+
+</div>
+
+<div class="subsection"><h2 id="tips">26.7 Tips<a class="sectionlink" href="#tips" title="Link to here">&para;</a></h2>
+
+<p>
+In some cases, the firewall may still be blocking RMI traffic.
+</p>
+
+<h3>Anti Virus and Firewall</h3>
+
+<div class="clear"></div><div class="note">Antivirus should be stopped during a Load Test as it can drastically impact timings leading to wrong results.</div><div class="clear"></div>
+<p>
+Firewall needs to be stopped from windows services or at least some ports need to be opened.
+</p>
+
+<ol>
+  <li>Open control panel</li>
+  <li>Open administrative tools</li>
+  <li>Double click services</li>
+  <li>Go to down to Symantec anti virus, right click and select stop</li>
+</ol>
+
+<h3>Windows firewall</h3>
+
+<ol>
+  <li>Open network connections</li>
+  <li>Select the network connection</li>
+  <li>Right click and select properties</li>
+  <li>Select advanced tab</li>
+  <li>Uncheck internet connection firewall</li>
+</ol>
+
+<h3>Linux</h3>
+
+<p>
+On Linux, iptables might be turned on by default. For instructions, please refer to the
+  <a href="remote-test.html">Remote Testing in the user manual</a>
+</p>
+
+<p>
+On RedHat (or derivatives), iptables is turned on by default. Execute
+<pre class="source">service iptables stop</pre>
+to stop the Linux firewall or ensure you open the correct ports.
+</p>
+
+</div>
+
+</div><ul class="pagelinks"><li><a href="../index.html">Index</a></li><li><a href="jmeter_proxy_step_by_step.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

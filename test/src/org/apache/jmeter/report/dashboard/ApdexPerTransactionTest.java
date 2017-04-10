@@ -22,10 +22,12 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -35,14 +37,11 @@ import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jodd.props.Props;
+import jodd.props.PropsEntry;
 
 public class ApdexPerTransactionTest extends JMeterTestCase {
-	
-	private static final Logger log = LoggerFactory.getLogger(ApdexPerTransactionTest.class);
 	
 	// prop in the file mixes comma, semicolon and spans several lines.
 	// it also includes hardcoded sample names mixed with regexes 
@@ -67,6 +66,29 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 		
 	}
 	
+    @Test
+    public void testgetApdexPerTransactionPropertySimple() {
+        final Properties merged = new Properties();
+        final Props props = new Props();
+        
+        merged.putAll(loadProps(
+                new File(this.getClass().getResource("reportgenerator_test.properties").getFile())));
+        props.load(merged);
+        final String title = getOptionalProperty(props, 
+                "jmeter.reportgenerator.graph.responseTimePercentiles.title", 
+                String.class);
+        if (title == null) {
+            Iterator<PropsEntry> it = props.iterator();
+            int i = 0;
+            while(it.hasNext()) {
+                PropsEntry pe = it.next();
+                i++;
+                System.err.println(pe);
+            }
+            fail("title should not be null; see above for entries in property collection: " + i);            
+        }
+    }
+    
 	@Test
 	public void testGetApdexPerTransactionParts() {
 		Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(apdexString);
@@ -139,13 +161,13 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         try (FileInputStream inStream = new FileInputStream(file)) {
             props.load(inStream);
         } catch (IOException e) {
-            log.error("Problem loading properties. " + e); // NOSONAR
+            fail("Problem loading properties. " + e); // NOSONAR
         }
         return props;
     }
 	
 	private static String getOptionalProperty(Props props,
-            String key, Class clazz) {
+            String key, Class<String> clazz) {
         String property = getProperty(props, key, null, clazz);
         if (property != null) {
         }
@@ -153,7 +175,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
     }
 	
 	private static String getProperty(Props props, String key,
-            String defaultValue, Class clazz)
+            String defaultValue, Class<String> clazz)
              {
         String value = props.getValue(key);
         if (value == null) {

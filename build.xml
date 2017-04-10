@@ -1359,6 +1359,7 @@ run JMeter unless all the JMeter jars are added.
     <include name="${src.test}/**"/>
     <include name="build.xml"/>
     <include name="build.properties"/>
+    <include name="${dest.jar.jmeter}/*.groovy"/>
     <include name="${dest.jar.jmeter}/testfiles/**"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jmx"/>
     <exclude name="${dest.jar.jmeter}/testfiles/*.jtl"/>
@@ -1657,9 +1658,6 @@ run JMeter unless all the JMeter jars are added.
   <scriptdef name="svnmuccScript" language="beanshell">
     <classpath>
       <pathelement location="${lib.dir}/${beanshell.jar}"/>
-      <!-- Needed to work with Java 1.5 -->
-      <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
-      <pathelement location="${lib.dir}/${jcl-over-slf4j.jar}"/>
     </classpath>
     <!-- type of script to create: upload, publish or delete -->
     <attribute name="type"/>
@@ -2513,7 +2511,7 @@ run JMeter unless all the JMeter jars are added.
     <!-- Fix the EOL in case the file was derived from the "wrong" archive type -->
     <fixcrlf encoding="${encoding}" srcdir="${batchtest.inp}" includes="${batchtest.name}.csv"/>
 
-    <echo level="info" message="Starting ${batchtest.name} with file ${batchtest.jmx} using ${remote} -D${batchtest.variable}=${batchtest.value}"/>
+    <echo level="info" message="Starting ${batchtest.name} with file ${batchtest.jmx} using ${remote} -J${batchtest.variable}=${batchtest.value}"/>
 
     <macrodef name="deleteworkfiles">
       <sequential>

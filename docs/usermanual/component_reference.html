@@ -5,7 +5,7 @@
             APACHE LOGO
           --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
-            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><iframe src="http://www.apache.org/ads/bannerbar.html" style="border-width:0;" frameborder="0" scrolling="no"></iframe><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials (PDF format)</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.pdf">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.pdf">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.pdf">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.pdf">Access Log Sampler</a></li><li><a href="../extending/jmeter_tutorial.pdf">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="properties_reference.html">Next &gt;</a></li></ul><ul class="section-index"><li><a href="#introduction">19 Introduction</a><ul></ul></li><li><a href="#samplers">19.1 Samplers</a><ul><li><a href="#FTP_Request">FTP Request</a></li><li><a href="#HTTP_Request">HTTP Request</a></li><li><a href="#JDBC_Request">JDBC Request</a></li><li><a href="#Java_Request">Java Request</a></li><li><a href="#SOAP/XML-RPC_Request">SOAP/XML-RPC Request</a></li><li><a href="#LDAP_Request">LDAP Request</a></li><li><a href="#LDAP_Extended_Request">LDAP Extended Request</a></li><li><a href="#Access_Log_Sampler">Access Log Sampler</a></li><li><a href="#BeanShell_Sampler">BeanShell Sampler</a></li><li><a href="#BSF_Sampler_(DEPRECATED)">BSF Sampler (DEPRECATED)</a></li><li><a href="#JSR223_Sampler">JSR223 Sampler</a></li><li><a href="#TCP_Sampler">TCP Sampler</a></li><li><a href="#JMS_Publisher">JMS Publisher</a></li><li><a href="#JMS_Subscriber">JMS Subscriber</a></li><li><a href="#JMS_Point-to-Point">JMS Point-to-Point</a></li><li><a href="#JUnit_Request">JUnit Request</a></li><li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li><li><a href="#Test_Action">Test Action</a></li><li><a href="#SMTP_Sampler">SMTP Sampler</a></li><li><a href="#OS_Process_Sampler">OS Process Sampler</a></li><li><a href="#MongoDB_Script_(DEPRECATED)">MongoDB Script (DEPRECATED)</a></li></ul></li><li><a href="#logic_controllers">19.2 Logic Controllers</a><ul><li><a href="#Simple_Controller">Simple Controller</a></li><li><a href="#Loop_Controller">Loop Controller</a></li><li><a href="#Once_Only_Controller">Once Only Controller</a></li><li><a href="#Interleave_Controller">Interleave Controller</a></li><li><a href="#Random_Controller">Random Controller</a></li><li><a href="#Random_Order_Controller">Random Order Controller</a></li><li><a href="#Throughput_Controller">Throughput Controller</a></li><li><a href="#Runtime_Controller">Runtime Controller</a></li><li><a href="#If_Controller">If Controller</a></li><li><a href="#While_Controller">While Controller</a></li><li><a href="#Switch_Controller">Switch Controller</a></li><li><a href="#ForEach_Controller">ForEach Controller</a></li><li><a href="#Module_Controller">Module Controller</a></li><li><a href="#Include_Controller">Include Controller</a></li><li><a href="#Transaction_Controller">Transaction Controller</a></li><li><a href="#Recording_Controller">Recording Controller</a></li><li><a href="#Critical_Section_Controller">Critical Section Controller</a></li></ul></li><li><a href="#listeners">19.3 Listeners</a><ul><li><a href="#Sample_Result_Save_Configuration">Sample Result Save Configuration</a></li><li><a href="#Graph_Results">Graph Results</a></li><li><a href="#Assertion_Results">Assertion Results</a></li><li><a href="#View_Results_Tree">View Results Tree</a></li><li><a href="#Aggregate_Report">Aggregate Report</a></li><li><a href="#View_Results_in_Table">View Results in Table</a></li><li><a href="#Simple_Data_Writer">Simple Data Writer</a></li><li><a href="#Monitor_Results_(DEPRECATED)">Monitor Results (DEPRECATED)</a></li><li><a href="#Aggregate_Graph">Aggregate Graph</a></li><li><a href="#Response_Time_Graph">Response Time Graph</a></li><li><a href="#Mailer_Visualizer">Mailer Visualizer</a></li><li><a href="#BeanShell_Listener">BeanShell Listener</a></li><li><a href="#Summary_Report">Summary Report</a></li><li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li><li><a href="#BSF_Listener_(DEPRECATED)">BSF Listener (DEPRECATED)</a></li><li><a href="#JSR223_Listener">JSR223 Listener</a></li><li><a href="#Generate_Summary_Results">Generate Summary Results</a></li><li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li><li><a href="#Backend_Listener">Backend Listener</a></li></ul></li><li><a href="#config_elements">19.4 Configuration Elements</a><ul><li><a href="#CSV_Data_Set_Config">CSV Data Set Config</a></li><li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li><li><a href="#DNS_Cache_Manager">DNS Cache Manager</a></li><li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li><li><a href="#HTTP_Cache_Manager">HTTP Cache Manager</a></li><li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li><li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li><li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li><li><a href="#Java_Request_Defaults">Java Request Defaults</a></li><li><a href="#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li><li><a href="#Keystore_Configuration">Keystore Configuration</a></li><li><a href="#Login_Config_Element">Login Config Element</a></li><li><a href="#LDAP_Request_Defaults">LDAP Request Defaults</a></li><li><a href="#LDAP_Extended_Request_Defaults">LDAP Extended Request Defaults</a></li><li><a href="#TCP_Sampler_Config">TCP Sampler Config</a></li><li><a href="#User_Defined_Variables">User Defined Variables</a></li><li><a href="#Random_Variable">Random Variable</a></li><li><a href="#Counter">Counter</a></li><li><a href="#Simple_Config_Element">Simple Config Element</a></li><li><a href="#MongoDB_Source_Config_(DEPRECATED)">MongoDB Source Config (DEPRECATED)</a></li></ul></li><li><a href="#assertions">19.5 Assertions</a><ul><li><a href="#Response_Assertion">Response Assertion</a></li><li><a href="#Duration_Assertion">Duration Assertion</a></li><li><a href="#Size_Assertion">Size Assertion</a></li><li><a href="#XML_Assertion">XML Assertion</a></li><li><a href="#BeanShell_Assertion">BeanShell Assertion</a></li><li><a href="#MD5Hex_Assertion">MD5Hex Assertion</a></li><li><a href="#HTML_Assertion">HTML Assertion</a></li><li><a href="#XPath_Assertion">XPath Assertion</a></li><li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li><li><a href="#BSF_Assertion_(DEPRECATED)">BSF Assertion (DEPRECATED)</a></li><li><a href="#JSR223_Assertion">JSR223 Assertion</a></li><li><a href="#Compare_Assertion">Compare Assertion</a></li><li><a href="#SMIME_Assertion">SMIME Assertion</a></li></ul></li><li><a href="#timers">19.6 Timers</a><ul><li><a href="#Constant_Timer">Constant Timer</a></li><li><a href="#Gaussian_Random_Timer">Gaussian Random Timer</a></li><li><a href="#Uniform_Random_Timer">Uniform Random Timer</a></li><li><a href="#Constant_Throughput_Timer">Constant Throughput Timer</a></li><li><a href="#Synchronizing_Timer">Synchronizing Timer</a></li><li><a href="#BeanShell_Timer">BeanShell Timer</a></li><li><a href="#BSF_Timer_(DEPRECATED)">BSF Timer (DEPRECATED)</a></li><li><a href="#JSR223_Timer">JSR223 Timer</a></li><li><a href="#Poisson_Random_Timer">Poisson Random Timer</a></li></ul></li><li><a href="#preprocessors">19.7 Pre Processors</a><ul><li><a href="#HTML_Link_Parser">HTML Link Parser</a></li><li><a href="#HTTP_URL_Re-writing_Modifier">HTTP URL Re-writing Modifier</a></li><li><a href="#User_Parameters">User Parameters</a></li><li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li><li><a href="#BSF_PreProcessor_(DEPRECATED)">BSF PreProcessor (DEPRECATED)</a></li><li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li><li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li><li><a href="#RegEx_User_Parameters">RegEx User Parameters</a></li><li><a href="#Sample_Timeout">Sample Timeout</a></li></ul></li><li><a href="#postprocessors">19.8 Post-Processors</a><ul><li><a href="#Regular_Expression_Extractor">Regular Expression Extractor</a></li><li><a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li><li><a href="#XPath_Extractor">XPath Extractor</a></li><li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li><li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li><li><a href="#BSF_PostProcessor_(DEPRECATED)">BSF PostProcessor (DEPRECATED)</a></li><li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li><li><a href="#JDBC_PostProcessor">JDBC PostProcessor</a></li><li><a href="#JSON_Extractor">JSON Extractor</a></li></ul></li><li><a href="#Miscellaneous_Features">19.9 Miscellaneous Features</a><ul><li><a href="#Test_Plan">Test Plan</a></li><li><a href="#Thread_Group">Thread Group</a></li><li><a href="#WorkBench">WorkBench</a></li><li><a href="#SSL_Manager">SSL Manager</a></li><li><a href="#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="boss.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="properties_reference.html">Next &gt;</a></li></ul><ul class="section-index"><li><a href="#introduction">19 Introduction</a><ul></ul></li><li><a href="#samplers">19.1 Samplers</a><ul><li><a href="#FTP_Request">FTP Request</a></li><li><a href="#HTTP_Request">HTTP Request</a></li><li><a href="#JDBC_Request">JDBC Request</a></li><li><a href="#Java_Request">Java Request</a></li><li><a href="#LDAP_Request">LDAP Request</a></li><li><a href="#LDAP_Extended_Request">LDAP Extended Request</a></li><li><a href="#Access_Log_Sampler">Access Log Sampler</a></li><li><a href="#BeanShell_Sampler">BeanShell Sampler</a></li><li><a href="#BSF_Sampler_(DEPRECATED)">BSF Sampler (DEPRECATED)</a></li><li><a href="#JSR223_Sampler">JSR223 Sampler</a></li><li><a href="#TCP_Sampler">TCP Sampler</a></li><li><a href="#JMS_Publisher">JMS Publisher</a></li><li><a href="#JMS_Subscriber">JMS Subscriber</a></li><li><a href="#JMS_Point-to-Point">JMS Point-to-Point</a></li><li><a href="#JUnit_Request">JUnit Request</a></li><li><a href="#Mail_Reader_Sampler">Mail Reader Sampler</a></li><li><a href="#Test_Action">Test Action</a></li><li><a href="#SMTP_Sampler">SMTP Sampler</a></li><li><a href="#OS_Process_Sampler">OS Process Sampler</a></li><li><a href="#MongoDB_Script_(DEPRECATED)">MongoDB Script (DEPRECATED)</a></li></ul></li><li><a href="#logic_controllers">19.2 Logic Controllers</a><ul><li><a href="#Simple_Controller">Simple Controller</a></li><li><a href="#Loop_Controller">Loop Controller</a></li><li><a href="#Once_Only_Controller">Once Only Controller</a></li><li><a href="#Interleave_Controller">Interleave Controller</a></li><li><a href="#Random_Controller">Random Controller</a></li><li><a href="#Random_Order_Controller">Random Order Controller</a></li><li><a href="#Throughput_Controller">Throughput Controller</a></li><li><a href="#Runtime_Controller">Runtime Controller</a></li><li><a href="#If_Controller">If Controller</a></li><li><a href="#While_Controller">While Controller</a></li><li><a href="#Switch_Controller">Switch Controller</a></li><li><a href="#ForEach_Controller">ForEach Controller</a></li><li><a href="#Module_Controller">Module Controller</a></li><li><a href="#Include_Controller">Include Controller</a></li><li><a href="#Transaction_Controller">Transaction Controller</a></li><li><a href="#Recording_Controller">Recording Controller</a></li><li><a href="#Critical_Section_Controller">Critical Section Controller</a></li></ul></li><li><a href="#listeners">19.3 Listeners</a><ul><li><a href="#Sample_Result_Save_Configuration">Sample Result Save Configuration</a></li><li><a href="#Graph_Results">Graph Results</a></li><li><a href="#Assertion_Results">Assertion Results</a></li><li><a href="#View_Results_Tree">View Results Tree</a></li><li><a href="#Aggregate_Report">Aggregate Report</a></li><li><a href="#View_Results_in_Table">View Results in Table</a></li><li><a href="#Simple_Data_Writer">Simple Data Writer</a></li><li><a href="#Aggregate_Graph">Aggregate Graph</a></li><li><a href="#Response_Time_Graph">Response Time Graph</a></li><li><a href="#Mailer_Visualizer">Mailer Visualizer</a></li><li><a href="#BeanShell_Listener">BeanShell Listener</a></li><li><a href="#Summary_Report">Summary Report</a></li><li><a href="#Save_Responses_to_a_file">Save Responses to a file</a></li><li><a href="#BSF_Listener_(DEPRECATED)">BSF Listener (DEPRECATED)</a></li><li><a href="#JSR223_Listener">JSR223 Listener</a></li><li><a href="#Generate_Summary_Results">Generate Summary Results</a></li><li><a href="#Comparison_Assertion_Visualizer">Comparison Assertion Visualizer</a></li><li><a href="#Backend_Listener">Backend Listener</a></li></ul></li><li><a href="#config_elements">19.4 Configuration Elements</a><ul><li><a href="#CSV_Data_Set_Config">CSV Data Set Config</a></li><li><a href="#FTP_Request_Defaults">FTP Request Defaults</a></li><li><a href="#DNS_Cache_Manager">DNS Cache Manager</a></li><li><a href="#HTTP_Authorization_Manager">HTTP Authorization Manager</a></li><li><a href="#HTTP_Cache_Manager">HTTP Cache Manager</a></li><li><a href="#HTTP_Cookie_Manager">HTTP Cookie Manager</a></li><li><a href="#HTTP_Request_Defaults">HTTP Request Defaults</a></li><li><a href="#HTTP_Header_Manager">HTTP Header Manager</a></li><li><a href="#Java_Request_Defaults">Java Request Defaults</a></li><li><a href="#JDBC_Connection_Configuration">JDBC Connection Configuration</a></li><li><a href="#Keystore_Configuration">Keystore Configuration</a></li><li><a href="#Login_Config_Element">Login Config Element</a></li><li><a href="#LDAP_Request_Defaults">LDAP Request Defaults</a></li><li><a href="#LDAP_Extended_Request_Defaults">LDAP Extended Request Defaults</a></li><li><a href="#TCP_Sampler_Config">TCP Sampler Config</a></li><li><a href="#User_Defined_Variables">User Defined Variables</a></li><li><a href="#Random_Variable">Random Variable</a></li><li><a href="#Counter">Counter</a></li><li><a href="#Simple_Config_Element">Simple Config Element</a></li><li><a href="#MongoDB_Source_Config_(DEPRECATED)">MongoDB Source Config (DEPRECATED)</a></li></ul></li><li><a href="#assertions">19.5 Assertions</a><ul><li><a href="#Response_Assertion">Response Assertion</a></li><li><a href="#Duration_Assertion">Duration Assertion</a></li><li><a href="#Size_Assertion">Size Assertion</a></li><li><a href="#XML_Assertion">XML Assertion</a></li><li><a href="#BeanShell_Assertion">BeanShell Assertion</a></li><li><a href="#MD5Hex_Assertion">MD5Hex Assertion</a></li><li><a href="#HTML_Assertion">HTML Assertion</a></li><li><a href="#XPath_Assertion">XPath Assertion</a></li><li><a href="#XML_Schema_Assertion">XML Schema Assertion</a></li><li><a href="#BSF_Assertion_(DEPRECATED)">BSF Assertion (DEPRECATED)</a></li><li><a href="#JSR223_Assertion">JSR223 Assertion</a></li><li><a href="#Compare_Assertion">Compare Assertion</a></li><li><a href="#SMIME_Assertion">SMIME Assertion</a></li></ul></li><li><a href="#timers">19.6 Timers</a><ul><li><a href="#Constant_Timer">Constant Timer</a></li><li><a href="#Gaussian_Random_Timer">Gaussian Random Timer</a></li><li><a href="#Uniform_Random_Timer">Uniform Random Timer</a></li><li><a href="#Constant_Throughput_Timer">Constant Throughput Timer</a></li><li><a href="#Synchronizing_Timer">Synchronizing Timer</a></li><li><a href="#BeanShell_Timer">BeanShell Timer</a></li><li><a href="#BSF_Timer_(DEPRECATED)">BSF Timer (DEPRECATED)</a></li><li><a href="#JSR223_Timer">JSR223 Timer</a></li><li><a href="#Poisson_Random_Timer">Poisson Random Timer</a></li></ul></li><li><a href="#preprocessors">19.7 Pre Processors</a><ul><li><a href="#HTML_Link_Parser">HTML Link Parser</a></li><li><a href="#HTTP_URL_Re-writing_Modifier">HTTP URL Re-writing Modifier</a></li><li><a href="#User_Parameters">User Parameters</a></li><li><a href="#BeanShell_PreProcessor">BeanShell PreProcessor</a></li><li><a href="#BSF_PreProcessor_(DEPRECATED)">BSF PreProcessor (DEPRECATED)</a></li><li><a href="#JSR223_PreProcessor">JSR223 PreProcessor</a></li><li><a href="#JDBC_PreProcessor">JDBC PreProcessor</a></li><li><a href="#RegEx_User_Parameters">RegEx User Parameters</a></li><li><a href="#Sample_Timeout">Sample Timeout</a></li></ul></li><li><a href="#postprocessors">19.8 Post-Processors</a><ul><li><a href="#Regular_Expression_Extractor">Regular Expression Extractor</a></li><li><a href="#CSS/JQuery_Extractor">CSS/JQuery Extractor</a></li><li><a href="#XPath_Extractor">XPath Extractor</a></li><li><a href="#Result_Status_Action_Handler">Result Status Action Handler</a></li><li><a href="#BeanShell_PostProcessor">BeanShell PostProcessor</a></li><li><a href="#BSF_PostProcessor_(DEPRECATED)">BSF PostProcessor (DEPRECATED)</a></li><li><a href="#JSR223_PostProcessor">JSR223 PostProcessor</a></li><li><a href="#JDBC_PostProcessor">JDBC PostProcessor</a></li><li><a href="#JSON_Extractor">JSON Extractor</a></li></ul></li><li><a href="#Miscellaneous_Features">19.9 Miscellaneous Features</a><ul><li><a href="#Test_Plan">Test Plan</a></li><li><a href="#Thread_Group">Thread Group</a></li><li><a href="#WorkBench">WorkBench</a></li><li><a href="#SSL_Manager">SSL Manager</a></li><li><a href="#HTTP(S)_Test_Script_Recorder">HTTP(S) Test Script Recorder
                     (was:
                     HTTP Proxy Server
                     )
@@ -96,8 +96,6 @@ Latency is set to the time it takes to login.
           <dl>
             <dt><span class="code">Java</span></dt><dd>uses the HTTP implementation provided by the JVM.
             This has some limitations in comparison with the HttpClient implementations - see below.</dd>
-            <dt><span class="code">HTTPClient3.1</span></dt><dd>(DEPRECATED SINCE 3.0) uses Apache Commons HttpClient 3.1.
-            This is no longer being developed, and support for this will be dropped in a future JMeter release.</dd>
             <dt><span class="code">HTTPClient4</span></dt><dd>uses Apache HttpComponents HttpClient 4.x.</dd>
             <dt>Blank Value</dt><dd>does not set implementation on HTTP Samplers, so relies on HTTP Request Defaults if present or on <span class="code">jmeter.httpsampler</span> property defined in <span class="code">jmeter.properties</span></dd>
           </dl>
@@ -179,7 +177,7 @@ https.default.protocol=SSLv3
         <div class="property"><div class="name req-false">Port</div><div class="description req-false">Port the proxy server is listening to.</div><div class="required req-false">No, unless proxy hostname is specified</div></div>
         <div class="property"><div class="name req-false">Username</div><div class="description req-false">(Optional) username for proxy server.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Password</div><div class="description req-false">(Optional) password for proxy server. (N.B. this is stored unencrypted in the test plan)</div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Implementation</div><div class="description req-false"><span class="code">Java</span>, <span class="code">HttpClient3.1 (DEPRECATED SINCE 3.0)</span>, <span class="code">HttpClient4</span>.
+        <div class="property"><div class="name req-false">Implementation</div><div class="description req-false"><span class="code">Java</span>, <span class="code">HttpClient4</span>.
         If not specified (and not defined by HTTP Request Defaults), the default depends on the value of the JMeter property
         <span class="code">jmeter.httpsampler</span>, failing that, the HttpClient4 implementation is used.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Protocol</div><div class="description req-false"><span class="code">HTTP</span>, <span class="code">HTTPS</span> or <span class="code">FILE</span>. Default: <span class="code">HTTP</span></div><div class="required req-false">No</div></div>
@@ -279,7 +277,6 @@ so unsafe characters may need to be encoded to avoid errors such as <span class=
 and send HTTP/HTTPS requests for all images, Java applets, JavaScript files, CSSs, etc. referenced in the file.
         See below for more details.
         </div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Use as monitor</div><div class="description req-false">For use with the <a href="../usermanual/component_reference.html#Monitor_Results">Monitor Results</a> listener. DEPRECATED</div><div class="required req-false">No</div></div>
        <div class="property"><div class="name req-false">Save response as MD5 hash?</div><div class="description req-false">
        If this is selected, then the response is not stored in the sample result.
        Instead, the 32 character MD5 hash of the data is calculated and stored instead.
@@ -354,7 +351,8 @@ The <span class="code">PUT</span> and <span class="code">PATCH</span> method bod
 <li>define the body as a file with empty Parameter name field; in which case the MIME Type is used as the Content-Type</li>
 <li>define the body as parameter value(s) with no name</li>
 <li>use the <span class="code">Body Data</span> tab</li>
-</ul><span class="code">GET</span><span class="code">DELETE</span><span class="code">POST</span><span class="code">Parameters</span><p>
+</ul><p>
+The <span class="code">GET</span>, <span class="code">DELETE</span> and <span class="code">POST</span> methods have an additional way of passing parameters by using the <span class="code">Parameters</span> tab.
 <span class="code">GET</span>, <span class="code">DELETE</span>, <span class="code">PUT</span> and <span class="code">PATCH</span> require a Content-Type.
 If not using a file, attach a Header Manager to the sampler and define the Content-Type there.
 </p><p>JMeter scan responses from embedded resources. It uses the property <span class="code">HTTPResponse.parsers</span>, which is a list of parser ids,
@@ -363,11 +361,15 @@ If not using a file, attach a Header Manager to the sampler and define the Conte
  <li><span class="code">id.className</span> - the parser to be used to extract the embedded resources</li>
  </ul><p>See <span class="code">jmeter.properties</span> file for the details of the settings.
  If the <span class="code">HTTPResponse.parser</span> property is not set, JMeter reverts to the previous behaviour,
- i.e. only <span class="code">text/html</span> responses will be scanned</p><b>Emulating slow connections:</b><br><span class="code">HttpClient31</span><span class="code">HttpClient4</span><span class="code">Java</span><span class="code">jmeter.properties</span><pre class="source">
+ i.e. only <span class="code">text/html</span> responses will be scanned</p><b>Emulating slow connections:</b><br><p>
+<span class="code">HttpClient4</span> and <span class="code">Java</span> Sampler support emulation of slow connections; see the following entries in <span class="code">jmeter.properties</span>:
+<pre class="source">
 # Define characters per second &gt; 0 to emulate slow connections
 #httpclient.socket.http.cps=0
 #httpclient.socket.https.cps=0
-</pre><p><b>Response size calculation</b><br>
+</pre>
+However the <span class="code">Java</span> sampler only supports slow HTTPS connections.
+</p><p><b>Response size calculation</b><br>
 Optional properties to allow change the method to get response size:<br></p><ul><li>Gets the real network size in bytes for the body response
 <pre class="source">sampleresult.getbytes.body_real_size=true</pre></li>
 <li>Add HTTP headers to full response size
@@ -378,19 +380,20 @@ The <span class="code">HttpClient4</span> implementation does include the overhe
 so the value may be greater than the number of bytes in the response content.
 </div><div class="clear"></div><div class="clear"></div><div class="note">When those two properties are set  <span class="code">false</span>, JMeter returns only data response size (uncompressed if request uses gzip/deflate mode).</div><div class="clear"></div><p>
 <b>Retry handling</b><br>
-For HttpClient4 and Commons HttpClient 3.1 samplers, the retry count has been set to <span class="code">0</span>, meaning not retry is attempted. 
+For HttpClient4 the retry count has been set to <span class="code">0</span>, meaning not retry is attempted. 
 Note that the Java implementation appears to retry 1 time.
 The retry count can be overridden by setting the relevant JMeter property, for example:
 </p><pre class="source">
 httpclient4.retrycount=3
-httpclient3.retrycount=3
+</pre><pre class="source">
+httpclient4.request_sent_retry_enabled=true
 </pre><p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br>
 You may encounter the following error: <span class="code">java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</span>
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
  algorithm using MD2 (like <span class="code">md2WithRSAEncryption</span>) or with a SSL certificate with a size lower than 1024 bits.
 </p><p>
-This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
+This error is related to increased security in Java 8.
 </p><p>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <span class="code">jdk.certpath.disabledAlgorithms</span> property. Remove the MD2 value or the constraint on size, depending on your case.
@@ -478,7 +481,7 @@ the additional variables for rows four, five and six will be removed.
         <div class="property"><div class="name req-true">Parameter types</div><div class="description req-true">
         Comma-separated list of SQL parameter types (e.g. <span class="code">INTEGER</span>, <span class="code">DATE</span>, <span class="code">VARCHAR</span>, <span class="code">DOUBLE</span>) or integer values of Constants. Those integer values can be used, when you use custom database types proposed by driver (For example <span class="code">OracleTypes.CURSOR</span> could be represented by its integer value <span class="code">-10</span>).<br>
         These are defined as fields in the class <span class="code">java.sql.Types</span>, see for example:<br>
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br>
+        <a href="http://docs.oracle.com/javase/8/docs/api/java/sql/Types.html">Javadoc for java.sql.Types</a>.<br>
         <div class="clear"></div><div class="note">Note: JMeter will use whatever types are defined by the runtime JVM,
         so if you are running on a different JVM, be sure to check the appropriate documentation</div><div class="clear"></div>
         <b>If the callable statement has <span class="code">INOUT</span> or <span class="code">OUT</span> parameters, then these must be indicated by prefixing the
@@ -553,39 +556,6 @@ This will not have any impact on existing Test plans.
         <div class="property"><div class="name req-false">SamplerData</div><div class="description req-false">If provided, sets the SampleResult SamplerData.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">ResultData</div><div class="description req-false">If provided, sets the SampleResult ResultData.</div><div class="required req-false">No</div></div>
     </div><div class="go-top"><a href="#">^</a></div></div>
-
-<div class="component"><h2 id="SOAP/XML-RPC_Request">SOAP/XML-RPC Request<a class="sectionlink" href="#SOAP/XML-RPC_Request" title="Link to here">&para;</a></h2><div class="description"><p>This sampler lets you send a SOAP request to a webservice.  It can also be
-used to send XML-RPC over HTTP.  It creates an HTTP POST request, with the specified XML as the
-POST content.
-To change the "<span class="code">Content-type</span>" from the default of "<span class="code">text/xml</span>", use a <a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a>.
-Note that the sampler will use all the headers from the <a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a>.
-If a SOAP action is specified, that will override any <span class="code">SOAPaction</span> in the <a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a>.
-The primary difference between the soap sampler and
-webservice sampler, is the soap sampler uses raw post and does not require conformance to
-SOAP 1.1.</p>
-<div class="clear"></div><div class="note">The sampler no longer uses chunked encoding by default.<br>
-For screen input, it now always uses the size of the data.<br>
-File input uses the file length as determined by Java.<br>
-On some OSes this may not work for all files, in which case add a child <a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a>
-with <span class="code">Content-Length</span> set to the actual length of the file.<br>
-Or set <span class="code">Content-Length</span> to <span class="code">-1</span> to force chunked encoding.
-</div><div class="clear"></div>
-</div><div class="screenshot"><figure><a href="../images/screenshots/soap_sampler.png"><img src="../images/screenshots/soap_sampler.png" width="426" height="276" alt="Screenshot for Control-Panel of SOAP/XML-RPC Request"></a><figcaption>Screenshot of Control-Panel of SOAP/XML-RPC Request</figcaption></figure></div><div class="clear"></div><div class="note">
-See <a href="build-ws-test-plan.html">Building a WebService Test Plan</a> for up to date way of test SOAP and REST Webservices
-</div><div class="clear"></div><div class="properties"><h3 id="SOAP/XML-RPC_Request_parms1">
-        Parameters
-        <a class="sectionlink" href="#SOAP/XML-RPC_Request_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
-        <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this sampler
-         that is shown in the tree.</div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-true">URL</div><div class="description req-true">The URL to direct the SOAP request to.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-false">Send SOAP action</div><div class="description req-false">Send a SOAP action header? (overrides the <a href="../usermanual/component_reference.html#HTTP_Header_Manager">HTTP Header Manager</a>)</div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Use KeepAlive</div><div class="description req-false">If set, sends <span class="code">Connection: keep-alive</span>, else sends <span class="code">Connection: close</span></div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Soap/XML-RPC Data</div><div class="description req-false">The Soap XML message, or XML-RPC instructions.
-        Not used if the filename is provided.
-        </div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Filename</div><div class="description req-false">If specified, then the contents of the file are sent, and the Data field is ignored</div><div class="required req-false">No</div></div>
-        </div><div class="go-top"><a href="#">^</a></div></div>
-
 <div class="component"><h2 id="LDAP_Request">LDAP Request<a class="sectionlink" href="#LDAP_Request" title="Link to here">&para;</a></h2><div class="description">This Sampler lets you send a different Ldap request(<span class="code">Add</span>, <span class="code">Modify</span>, <span class="code">Delete</span> and <span class="code">Search</span>) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <a href="../usermanual/component_reference.html#LDAP_Request_Defaults">LDAP Request Defaults</a>
@@ -951,7 +921,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
 </div><div class="clear"></div><p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p><p>The contents of the Parameters field is put into the variable "<span class="code">Parameters</span>".
             The string is also split into separate tokens using a single space as the separator, and the resulting list
             is stored in the String array <span class="code">bsh.args</span>.</p><p>The full list of BeanShell variables that is set up is as follows:</p><ul>
-        <li><span class="code">log</span> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+        <li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
         <li><span class="code">Label</span> - the Sampler label</li>
         <li><span class="code">FileName</span> - the file name, if any</li>
         <li><span class="code">Parameters</span> - text from the Parameters field</li>
@@ -1043,7 +1013,7 @@ e.g.<span class="code">props.get("START.HMS"); props.put("PROP1","1234");</span>
 Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p><ul>
-<li><span class="code">log</span> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
 <li><span class="code">Label</span> - the Sampler label</li>
 <li><span class="code">FileName</span> - the file name, if any</li>
 <li><span class="code">Parameters</span> - text from the Parameters field</li>
@@ -1134,7 +1104,7 @@ If a script file is supplied, that will be used, otherwise the script will be us
 Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p><ul>
-<li><span class="code">log</span> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+<li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
 <li><span class="code">Label</span> - the Sampler label</li>
 <li><span class="code">FileName</span> - the file name, if any</li>
 <li><span class="code">Parameters</span> - text from the Parameters field</li>
@@ -1279,7 +1249,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
         </p>
         <br>
 <div class="clear"></div><div class="note">JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</div><div class="clear"></div>
-    </div><div class="screenshot"><figure><a href="../images/screenshots/jmspublisher.png"><img src="../images/screenshots/jmspublisher.png" width="854" height="796" alt="Screenshot for Control-Panel of JMS Publisher"></a><figcaption>Screenshot of Control-Panel of JMS Publisher</figcaption></figure></div><div class="clear"></div><div class="note">BETA CODE - the code is still subject to change</div><div class="clear"></div><div class="properties"><h3 id="JMS_Publisher_parms1">
+    </div><div class="screenshot"><figure><a href="../images/screenshots/jmspublisher.png"><img src="../images/screenshots/jmspublisher.png" width="854" height="796" alt="Screenshot for Control-Panel of JMS Publisher"></a><figcaption>Screenshot of Control-Panel of JMS Publisher</figcaption></figure></div><div class="properties"><h3 id="JMS_Publisher_parms1">
         Parameters
         <a class="sectionlink" href="#JMS_Publisher_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
   <div class="property"><div class="name req-true">Name</div><div class="description req-true">Descriptive name for this element that is shown in the tree.</div><div class="required req-true"></div></div>
@@ -1303,6 +1273,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
       The priority level of the message. There are ten priority levels from <span class="code">0</span> (lowest) to <span class="code">9</span> (highest). 
       If you do not specify a priority level, the default level is <span class="code">4</span>. 
   </div><div class="required req-false">No</div></div>
+  <div class="property"><div class="name req-false">Reconnect on error codes (regex)</div><div class="description req-false">Regular expression for JMSException error codes which force reconnection. If empty no reconnection will be done</div><div class="required req-false">No</div></div>
   <div class="property"><div class="name req-true">Number of samples to aggregate</div><div class="description req-true">Number of samples to aggregate</div><div class="required req-true">Yes</div></div>
   <div class="property"><div class="name req-true">Message source</div><div class="description req-true">Where to obtain the message:
   <dl>
@@ -1312,6 +1283,13 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   </dl>
   </div><div class="required req-true">Yes</div></div>
   <div class="property"><div class="name req-true">Message type</div><div class="description req-true">Text, Map, Object message or Bytes Message</div><div class="required req-true">Yes</div></div>
+  <div class="property"><div class="name req-true">Content encoding</div><div class="description req-true">Specify the encoding for reading the message source file:
+  <dl> 
+    <dt><span class="code">RAW</span>:</dt><dd>No variable support from the file and load it with default system charset.</dd>
+    <dt><span class="code">DEFAULT</span>:</dt><dd>Load file with default system encoding, except for XML which relies on XML prolog. If the file contain variables, they will be processed.</dd>
+    <dt><span class="code">Standard charsets</span>:</dt><dd>The specified encoding (valid or not) is used for reading the file and processing variables</dd>
+  </dl>
+  </div><div class="required req-true">Yes</div></div>
   <div class="property"><div class="name req-false">Use non-persistent delivery mode?</div><div class="description req-false">
       Whether to set <span class="code">DeliveryMode.NON_PERSISTENT</span> (defaults to <span class="code">false</span>)
   </div><div class="required req-false">No</div></div>
@@ -1366,7 +1344,7 @@ The following table shows some values which may be useful when configuring JMS:
         </p>
         <br>
 <div class="clear"></div><div class="note">JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</div><div class="clear"></div>
-    </div><div class="screenshot"><figure><a href="../images/screenshots/jmssubscriber.png"><img src="../images/screenshots/jmssubscriber.png" width="739" height="607" alt="Screenshot for Control-Panel of JMS Subscriber"></a><figcaption>Screenshot of Control-Panel of JMS Subscriber</figcaption></figure></div><div class="clear"></div><div class="note">BETA CODE - the code is still subject to change</div><div class="clear"></div><div class="properties"><h3 id="JMS_Subscriber_parms1">
+    </div><div class="screenshot"><figure><a href="../images/screenshots/jmssubscriber.png"><img src="../images/screenshots/jmssubscriber.png" width="739" height="607" alt="Screenshot for Control-Panel of JMS Subscriber"></a><figcaption>Screenshot of Control-Panel of JMS Subscriber</figcaption></figure></div><div class="properties"><h3 id="JMS_Subscriber_parms1">
         Parameters
         <a class="sectionlink" href="#JMS_Subscriber_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
   <div class="property"><div class="name req-true">Name</div><div class="description req-true">Descriptive name for this element that is shown in the tree.</div><div class="required req-true"></div></div>
@@ -1413,6 +1391,8 @@ The following table shows some values which may be useful when configuring JMS:
   Separator used to separate messages when there is more than one (related to setting Number of samples to aggregate).
   Note that <span class="code">\n</span>, <span class="code">\r</span>, <span class="code">\t</span> are accepted.
   </div><div class="required req-false">No</div></div>
+  <div class="property"><div class="name req-false">Reconnect on error codes (regex)</div><div class="description req-false">Regular expression for JMSException error codes which force reconnection. If empty no reconnection will be done</div><div class="required req-false">No</div></div>
+  <div class="property"><div class="name req-false">Pause between errors (ms)</div><div class="description req-false">Pause in milliseconds that Subscriber will make when an error occurs</div><div class="required req-false">No</div></div>
 </div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="JMS_Point-to-Point">JMS Point-to-Point<a class="sectionlink" href="#JMS_Point-to-Point" title="Link to here">&para;</a></h2><div class="description">
@@ -1431,7 +1411,7 @@ The following table shows some values which may be useful when configuring JMS:
         </p>
         <br>
 <div class="clear"></div><div class="note">JMeter does not include any JMS implementation jar; this must be downloaded from the JMS provider and put in the lib directory</div><div class="clear"></div>
-    </div><div class="screenshot"><figure><a href="../images/screenshots/jms/JMS_Point-to-Point.png"><img src="../images/screenshots/jms/JMS_Point-to-Point.png" width="882" height="804" alt="Screenshot for Control-Panel of JMS Point-to-Point"></a><figcaption>Screenshot of Control-Panel of JMS Point-to-Point</figcaption></figure></div><div class="clear"></div><div class="note">BETA CODE - the code is still subject to change</div><div class="clear"></div><div class="properties"><h3 id="JMS_Point-to-Point_parms1">
+    </div><div class="screenshot"><figure><a href="../images/screenshots/jms/JMS_Point-to-Point.png"><img src="../images/screenshots/jms/JMS_Point-to-Point.png" width="882" height="804" alt="Screenshot for Control-Panel of JMS Point-to-Point"></a><figcaption>Screenshot of Control-Panel of JMS Point-to-Point</figcaption></figure></div><div class="properties"><h3 id="JMS_Point-to-Point_parms1">
         Parameters
         <a class="sectionlink" href="#JMS_Point-to-Point_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
   <div class="property"><div class="name req-true">Name</div><div class="description req-true">Descriptive name for this element that is shown in the tree.</div><div class="required req-true"></div></div>
@@ -1785,7 +1765,7 @@ If omitted, output is captured and returned as the response data.</div><div clas
 <div class="property"><div class="name req-false">Standard error (stderr)</div><div class="description req-false">Name of output file for standard error (<span class="code">STDERR</span>). 
 If omitted, output is captured and returned as the response data.</div><div class="required req-false">No</div></div>
 <div class="property"><div class="name req-false">Check Return Code</div><div class="description req-false">If checked, sampler will compare return code with <span class="code">Expected Return Code</span>.</div><div class="required req-false">No</div></div>
-<div class="property"><div class="name req-false">Expected Return Code</div><div class="description req-false">Expected return code for System Call, required if "<span class="code">Check Return Code</span>" is checked.</div><div class="required req-false">No</div></div>
+<div class="property"><div class="name req-false">Expected Return Code</div><div class="description req-false">Expected return code for System Call, required if "<span class="code">Check Return Code</span>" is checked. Note 500 is used as an error indicator in JMeter so you should not use it.</div><div class="required req-false">No</div></div>
 <div class="property"><div class="name req-false">Timeout</div><div class="description req-false">Timeout for command in milliseconds, defaults to <span class="code">0</span>, which means <em>no</em> timeout.
 If the timeout expires before the command finishes, JMeter will attempt to kill the OS process.
 </div><div class="required req-false">No</div></div>
@@ -2071,6 +2051,7 @@ Please refer to the <a href="../usermanual/component_reference.html#Constant_Thr
     <div class="property"><div class="name req-true">Interpret Condition as Variable Expression?</div><div class="description req-true">If this is selected, then the condition must be an expression that evaluates to "<span class="code">true</span>" (case is ignored).
     For example, <span class="code">${FOUND}</span> or <span class="code">${__jexl3(${VAR} &gt; 100)}</span>.
     Unlike the Javascript case, the condition is only checked to see if it matches "<span class="code">true</span>" (case is ignored).
+    <div class="clear"></div><div class="note">Checking this and using <span class="code">__jexl3</span> or <span class="code">__groovy</span> function in Condition is advised for performances</div><div class="clear"></div>
     </div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">Evaluate for all children</div><div class="description req-true">
     Should condition be evaluated for all children?
@@ -2443,7 +2424,6 @@ Most of the listeners currently keep a copy of every sample in their scope, apar
 <li>Simple Data Writer</li>
 <li>BeanShell/JSR223 Listener</li>
 <li>Mailer Visualizer</li>
-<li>Monitor Results</li>
 <li>Summary Report</li>
 </ul>
 <p>
@@ -2656,6 +2636,10 @@ will be displayed in the lower panel.<br>
 </td></tr>
 </table>
 <p><span class="code">Scroll automatically?</span> option permit to have last node display in tree selection</p>
+<div class="clear"></div><div class="note">Starting with version 3.2 the number of entries in the View is restricted to the value of the
+property <span class="code">view.results.tree.max_results</span> which defaults to <span class="code">500</span> entries. The old
+behaviour can be restored by setting the property to <span class="code">0</span>. Beware, that this might consume
+a lot of memory.</div><div class="clear"></div>
 <p>
 With <span class="code">Search</span> option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
 in the display above. For example the Control panel screenshot below shows one result of searching for "<span class="code">Java</span>".
@@ -2772,35 +2756,6 @@ When running in non-GUI mode, the <span class="code">-l</span> flag can be used 
 The fields to save are defined by JMeter properties.
 See the <span class="code">jmeter.properties</span> file for details.
 </div><div class="screenshot"><figure><a href="../images/screenshots/simpledatawriter.png"><img src="../images/screenshots/simpledatawriter.png" width="741" height="141" alt="Screenshot for Control-Panel of Simple Data Writer"></a><figcaption>Screenshot of Control-Panel of Simple Data Writer</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
-
-<div class="component"><h2 id="Monitor_Results_(DEPRECATED)">Monitor Results (DEPRECATED)<a class="sectionlink" href="#Monitor_Results_(DEPRECATED)" title="Link to here">&para;</a></h2><div class="description">
-<p>Monitor Results is a new Visualizer for displaying server
-status. It is designed for Tomcat 5, but any servlet container
-can port the status servlet and use this monitor. There are two primary
-tabs for the monitor. The first is the "<span class="code">Health</span>" tab, which will show the
-status of one or more servers. The second tab labled "<span class="code">Performance</span>" shows
-the performance for one server for the last 1000 samples. The equations
-used for the load calculation is included in the Visualizer.</p>
-<p>Currently, the primary limitation of the monitor is system memory. A
-quick benchmark of memory usage indicates a buffer of 1000 data points for
-100 servers would take roughly 10Mb of RAM. On a 1.4Ghz centrino
-laptop with 1Gb of ram, the monitor should be able to handle several
-hundred servers.</p>
-<p>As a general rule, monitoring production systems should take care to
-set an appropriate interval. Intervals shorter than 5 seconds are too
-aggressive and have a potential of impacting the server. With a buffer of
-1000 data points at 5 second intervals, the monitor would check the server
-status 12 times a minute or 720 times a hour. This means the buffer shows
-the performance history of each machine for the last hour.</p>
-<div class="clear"></div><div class="note">
-The monitor requires Tomcat 5 or above. 
-Use a browser to check that you can access the Tomcat status servlet OK.
-</div><div class="clear"></div>
-<p>
-For a detailed description of how to use the monitor, please refer to
-<a href="build-monitor-test-plan.html">Building a Monitor Test Plan</a>
-</p>
-</div><div class="screenshot"><figure><a href="../images/screenshots/monitor_screencap.png"><img src="../images/screenshots/monitor_screencap.png" width="762" height="757" alt="Screenshot for Control-Panel of Monitor Results (DEPRECATED)"></a><figcaption>Screenshot of Control-Panel of Monitor Results (DEPRECATED)</figcaption></figure></div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="Aggregate_Graph">Aggregate Graph<a class="sectionlink" href="#Aggregate_Graph" title="Link to here">&para;</a></h2><div class="description">The aggregate graph is similar to the aggregate report. The primary
 difference is the aggregate graph provides an easy way to generate bar graphs and save
@@ -2919,7 +2874,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
     The file name is stored in the script variable <span class="code">FileName</span></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The BeanShell script to run. The return value is ignored.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
 vars.put(key,val);
@@ -3036,7 +2991,7 @@ The script (or file) is processed using the <span class="code">BSFEngine.exec()<
 Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p><dl>
-<dt><span class="code">log</span></dt><dd>(<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</dd>
+<dt><span class="code">log</span></dt><dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
 <dt><span class="code">Label</span></dt><dd>the String Label</dd>
 <dt><span class="code">FileName</span></dt><dd>the script file name (if any)</dd>
 <dt><span class="code">Parameters</span></dt><dd>the parameters (as a String)</dd>
@@ -3077,7 +3032,7 @@ The JSR223 Listener allows JSR223 script code to be applied to sample results.
 Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p><dl>
-<dt><span class="code">log</span></dt><dd>(<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</dd>
+<dt><span class="code">log</span></dt><dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
 <dt><span class="code">Label</span></dt><dd>the String Label</dd>
 <dt><span class="code">FileName</span></dt><dd>the script file name (if any)</dd>
 <dt><span class="code">Parameters</span></dt><dd>the parameters (as a String)</dd>
@@ -3191,7 +3146,7 @@ By default, a Graphite implementation is provided.
  <div class="property"><div class="name req-true">Backend Listener implementation</div><div class="description req-true">Class of the <span class="code">BackendListenerClient</span> implementation.</div><div class="required req-true">Yes</div></div>
  <div class="property"><div class="name req-true">Async Queue size</div><div class="description req-true">Size of the queue that holds the SampleResults while they are processed asynchronously.</div><div class="required req-true">Yes</div></div>
  <div class="property"><div class="name req-true">Parameters</div><div class="description req-true">Parameters of the <span class="code">BackendListenerClient</span> implementation.</div><div class="required req-true">Yes</div></div>
- </div><p>The following parameters apply to the <span class="code">GraphiteBackendListenerClient</span> implementation:</p><div class="properties"><h3 id="Backend_Listener_parms2">
+ </div><p>The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/graphite/GraphiteBackendListenerClient.html">GraphiteBackendListenerClient</a> implementation:</p><div class="properties"><h3 id="Backend_Listener_parms2">
         Parameters
         <a class="sectionlink" href="#Backend_Listener_parms2" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
         <div class="property"><div class="name req-true">graphiteMetricsSender</div><div class="description req-true"><span class="code">org.apache.jmeter.visualizers.backend.graphite.TextGraphiteMetricsSender</span> or <span class="code">org.apache.jmeter.visualizers.backend.graphite.PickleGraphiteMetricsSender</span></div><div class="required req-true">Yes</div></div>
@@ -3208,7 +3163,23 @@ By default, a Graphite implementation is provided.
         A percentile may contain a fractional part, for example <span class="code">12.5</span>.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</div><div class="required req-true">Yes</div></div>
-    </div><p>See also <a href="realtime-results.html">Real-time results</a> for more details.</p><figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure><div class="go-top"><a href="#">^</a></div></div>
+    </div><p>See also <a href="realtime-results.html">Real-time results</a> for more details.</p><figure><a href="../images/screenshots/grafana_dashboard.png"><img src="../images/screenshots/grafana_dashboard.png" width="1265" height="581" alt="Grafana dashboard"></a><figcaption>Grafana dashboard</figcaption></figure><p>Since JMeter 3.2, a new implementation (in Alpha state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <span class="code">InfluxdbBackendListenerClient</span> 
+      The following parameters apply to the <a href="../../docs/api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p><div class="properties"><h3 id="Backend_Listener_parms3">
+        Parameters
+        <a class="sectionlink" href="#Backend_Listener_parms3" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
+        <div class="property"><div class="name req-true">influxdbMetricsSender</div><div class="description req-true"><span class="code">org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</span></div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">influxdbUrl</div><div class="description req-true">Influx URL (example : http://influxHost:8086/write?db=jmeter)</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">application</div><div class="description req-true">Name of tested application. This value is stored in the 'events' measurement as a tag named 'application' </div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">measurement</div><div class="description req-true">Measurement as per <a href="https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/">Influx Line Protocol Reference</a>. Defaults to "<span class="code">jmeter</span>."</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">summaryOnly</div><div class="description req-true">Only send a summary with no detail. Defaults to <span class="code">true</span>.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">samplersRegex</div><div class="description req-true">Regular expression which will be matched against the names of samples and sent to the back end.</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-true">testTitle</div><div class="description req-true">Test name. Defaults to <span class="code">Test name</span>. This value is stored in the 'events' measurement as a field named 'text'. JMeter generate automaticaly at the start and the end of the test an annotation with this value ending with ' started' and ' ended'</div><div class="required req-true">Yes</div></div>
+        <div class="property"><div class="name req-false">eventTags</div><div class="description req-false">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</div><div class="required req-false">No</div></div>
+        <div class="property"><div class="name req-true">percentiles</div><div class="description req-true">The percentiles you want to send to the backend.
+        A percentile may contain a fractional part, for example <span class="code">12.5</span>.
+        (The separator is always ".")
+        List must be semicolon separated. Generally 3 or 4 values should be sufficient.</div><div class="required req-true">Yes</div></div>
+    </div><p>See also <a href="realtime-results.html">Real-time results</a> and <a href="http://docs.grafana.org/reference/annotations/#influxdb-annotations">Influxdb annotations in Grafana</a> for more details.</p><div class="go-top"><a href="#">^</a></div></div>
 
 <a href="#">^</a>
 
@@ -3299,11 +3270,14 @@ By default, a Graphite implementation is provided.
   If the OS does not distinguish between upper and lower case, <span class="code">csvData.TXT</span> would also be opened separately. 
   </div><div class="required req-true">Yes</div></div>
   <div class="property"><div class="name req-false">File Encoding</div><div class="description req-false">The encoding to be used to read the file, if not the platform default.</div><div class="required req-false">No</div></div>
-  <div class="property"><div class="name req-true">Variable Names</div><div class="description req-true">List of variable names (comma-delimited).
+  <div class="property"><div class="name req-false">Variable Names</div><div class="description req-false">List of variable names. The names must be separated by the delimiter character. They can be quoted using double-quotes.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
-  The names must be separated by the delimiter character. They can be quoted using double-quotes.
-  </div><div class="required req-true">Yes</div></div>
+  </div><div class="required req-false">No</div></div>
+  <div class="property"><div class="name req-false">Ignore first line (only used if Variable Names is not empty)</div><div class="description req-false">
+  Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
+  if Variable Names is empty the first line must contain the headers.
+  </div><div class="required req-false">No</div></div>
   <div class="property"><div class="name req-true">Delimiter</div><div class="description req-true">Delimiter to be used to split the records in the file.
   If there are fewer values on the line than there are variables the remaining variables are not updated -
   so they will retain their previous value (if any).</div><div class="required req-true">Yes</div></div>
@@ -3330,11 +3304,35 @@ By default, a Graphite implementation is provided.
 
 <div class="component"><h2 id="DNS_Cache_Manager">DNS Cache Manager<a class="sectionlink" href="#DNS_Cache_Manager" title="Link to here">&para;</a></h2><div class="description"><p>The DNS Cache Manager element allows to test applications, which have several servers behind load balancers (CDN, etc.), 
     when user receives content from different IP's. By default JMeter uses JVM DNS cache. That's why
-    only one server from the cluster receives load. DNS Cache Manager resolves name for each thread separately each iteration and
-    saves results of resolving to its internal DNS Cache, which independent from both JVM and OS DNS caches.
+    only one server from the cluster receives load. DNS Cache Manager resolves names for each thread separately each iteration and
+    saves results of resolving to its internal DNS Cache, which is independent from both JVM and OS DNS caches.
     </p>
+    <p>
+    A mapping for static hosts can be used to simulate something like <span class="code">/etc/hosts</span> file.
+    These entries will be preferred over the custom resolver. <span class="code">Use custom DNS resolver</span> has to be enabled,
+    if you want to use this mapping.
+    </p>
+    <div class="example"><div class="title">Usage of static host table<a class="sectionlink" href="#static_host_table" title="Link to here">&para;</a></div>
+    <p>Say, you have a test server, that you want to reach with a name, that is not (yet) set up in your dns servers.
+    For our example, this would be <span class="code">www.example.com</span> for the server name, which you want to reach at the
+    ip of the server <span class="code">a123.another.example.org</span>.
+    </p>
+    <p>You could change your workstation and add an entry to your <span class="code">/etc/hosts</span> file - or the equivalent for
+    your OS, or add an entry to the Static Host Table of the DNS Cache Manager.
+    </p>
+    <p>You would type <span class="code">www.example.com</span> into the first column (<span class="code">Host</span>) and
+    <span class="code">a123.another.example.org</span> into the second column (<span class="code">Hostname or IP address</span>).
+    As the name of the second column implies, you could even use the ip address of your test server there.
+    </p>
+    <p>The ip address for the test server will be looked up by using the custom dns resolver. When none is given, the
+    system dns resolver will be used.
+    </p>
+    <p>Now you can use <span class="code">www.example.com</span> in your HTTPClient4 samplers and the requests will be made against
+    <span class="code">a123.another.example.org</span> with all headers set to <span class="code">www.example.com</span>.
+    </p>
+    </div>
     </div><div class="screenshot"><figure><a href="../images/screenshots/dns-cache-manager.png"><img src="../images/screenshots/dns-cache-manager.png" width="712" height="387" alt="Screenshot for Control-Panel of DNS Cache Manager"></a><figcaption>Screenshot of Control-Panel of DNS Cache Manager</figcaption></figure></div><div class="clear"></div><div class="note">DNS Cache Manager is designed for using in the root of Thread Group or Test Plan. Do not place it as child element of particular HTTP Sampler
-    </div><div class="clear"></div><div class="clear"></div><div class="note">DNS Cache Manager working only with the HTTP request using HTTPClient4 implementation.</div><div class="clear"></div><div class="properties"><h3 id="DNS_Cache_Manager_parms1">
+    </div><div class="clear"></div><div class="clear"></div><div class="note">DNS Cache Manager works only with HTTP requests using HTTPClient4 implementation.</div><div class="clear"></div><div class="properties"><h3 id="DNS_Cache_Manager_parms1">
         Parameters
         <a class="sectionlink" href="#DNS_Cache_Manager_parms1" title="Link to here">&para;</a></h3><div class="property title"><div class="name title">Attribute</div><div class="description title">Description</div><div class="required title">Required</div></div>
     <div class="property"><div class="name req-false">Name</div><div class="description req-false">Descriptive name for this element that is shown in the tree. </div><div class="required req-false">No</div></div>
@@ -3342,10 +3340,13 @@ By default, a Graphite implementation is provided.
     <div class="property"><div class="name req-false">Use system DNS resolver</div><div class="description req-false">System DNS resolver will be used. For correct work edit
        <span class="code">$JAVA_HOME/jre/lib/security/java.security</span> and add <span class="code">networkaddress.cache.ttl=0</span> 
     </div><div class="required req-false">N/A</div></div>
-    <div class="property"><div class="name req-false">Use custom DNS resolver</div><div class="description req-false">Custom DNS resolver(from dnsjava library) will be used.</div><div class="required req-false">N/A</div></div>
+    <div class="property"><div class="name req-false">Use custom DNS resolver</div><div class="description req-false">Custom DNS resolver (from dnsjava library) will be used.</div><div class="required req-false">N/A</div></div>
     <div class="property"><div class="name req-false">Hostname or IP address</div><div class="description req-false">List of DNS servers to use. If empty, network configuration DNS will used.</div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-false">Add Button</div><div class="description req-false">Add an entry to the DNS servers table.</div><div class="required req-false">N/A</div></div>
     <div class="property"><div class="name req-false">Delete Button</div><div class="description req-false">Delete the currently selected table entry.</div><div class="required req-false">N/A</div></div>
+    <div class="property"><div class="name req-false">Host and Hostname or IP address</div><div class="description req-false">Mapping of hostnames to a static host entry which will be resolved using the custom DNS resolver.</div><div class="required req-false">No</div></div>
+    <div class="property"><div class="name req-false">Add static host Button</div><div class="description req-false">Add an entry to the static hosts table.</div><div class="required req-false">N/A</div></div>
+    <div class="property"><div class="name req-false">Delete static host Button</div><div class="description req-false">Delete the currently selected static host in the table.</div><div class="required req-false">N/A</div></div>
     </div><div class="go-top"><a href="#">^</a></div></div>
 
 <div class="component"><h2 id="HTTP_Authorization_Manager">HTTP Authorization Manager<a class="sectionlink" href="#HTTP_Authorization_Manager" title="Link to here">&para;</a></h2><div class="description">
@@ -3357,18 +3358,11 @@ transmits the login information when it encounters this type of page.</p>
 The Authorization headers may not be shown in the Tree View Listener "<span class="code">Request</span>" tab.
 The Java implementation does pre-emptive authentication, but it does not
 return the Authorization header when JMeter fetches the headers.
-The Commons HttpClient (3.1) implementation defaults to pre-emptive and the header will be shown.
-The HttpComponents (HC 4.5.X) implementation does not do pre-emptive auth 
-(it is supported by the library but JMeter does not enable it)
+The HttpComponents (HC 4.5.X) implementation defaults to pre-emptive since 3.2 and the header will be shown.
+To disable this, set the values as below, in which case authentication will only be performed in response to a challenge.
 </p>
 <p>
-The HttpClient3.1 implementation defaults to pre-emptive authentication
-if the setting has not been defined. To disable this, set the values as below, in which case
-authentication will only be performed in response to a challenge.
-</p>
-<p>
-In the file <span class="code">jmeter.properties</span> set <span class="code">httpclient.parameters.file=httpclient.parameters</span>
-and in <span class="code">httpclient.parameters</span> set <span class="code">http.authentication.preemptive$Boolean=false</span>
+In the file <span class="code">jmeter.properties</span> set <span class="code">httpclient4.auth.preemptive=false</span>
 </p>
 <div class="clear"></div><div class="note">
 Note: the above settings only apply to the HttpClient sampler.
@@ -3400,7 +3394,6 @@ information for the user named, "<span class="code">jmeter</span>".</div><div cl
   <div class="property"><div class="name req-false">Mechanism</div><div class="description req-false">Type of authentication to perform. JMeter can perform different types of authentications based on used Http Samplers:
 <dl>
 <dt>Java</dt><dd><span class="code">BASIC</span></dd>
-<dt>HttpClient 3.1</dt><dd><span class="code">BASIC</span> and <span class="code">DIGEST</span></dd>
 <dt>HttpClient 4</dt><dd><span class="code">BASIC</span>, <span class="code">DIGEST</span> and <span class="code">Kerberos</span></dd>
 </dl>
 </div><div class="required req-false">No</div></div>
@@ -3531,12 +3524,8 @@ so use multiple Cookie Managers with care.</div><div class="clear"></div><div cl
   See <a href="https://hc.apache.org/httpcomponents-client-ga/tutorial/html/statemgmt.html#d5e515">Cookie specifications</a> and 
   <a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/cookie/CookieSpec.html">CookieSpec implementations</a>
   [Note: "<span class="code">ignoreCookies</span>" is equivalent to omitting the CookieManager.]
-  
-  If you still use HC3CookieHandler (which is DEPRECATED as of 3.0 version, so migration is highly advised), default Cookie Policy is "<span class="code">compatibility</span>", and should work in most cases.
-  See <a href="http://hc.apache.org/httpclient-3.x/cookies.html">http://hc.apache.org/httpclient-3.x/cookies.html</a> and 
-  <a href="http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html">http://hc.apache.org/httpclient-3.x/apidocs/org/apache/commons/httpclient/cookie/CookiePolicy.html</a>
-    </div><div class="required req-true">Yes</div></div>
- <div class="property"><div class="name req-true">Implementation</div><div class="description req-true"><span class="code">HC4CookieHandler</span> (HttpClient 4.5.X API) or <span class="code">HC3CookieHandler (deprecated)</span> (HttpClient 3 API). 
+ </div><div class="required req-true">Yes</div></div>
+ <div class="property"><div class="name req-true">Implementation</div><div class="description req-true"><span class="code">HC4CookieHandler</span> (HttpClient 4.5.X API). 
   Default is <span class="code">HC4CookieHandler</span> since 3.0.
   <br>
   <i>[Note: If you have a website to test with IPv6 address, choose <span class="code">HC4CookieHandler</span> (IPv6 compliant)]</i></div><div class="required req-true">Yes</div></div>
@@ -3570,7 +3559,7 @@ All port values are treated equally; a sampler that does not specify a port will
         <div class="property"><div class="name req-false">Port</div><div class="description req-false">Port the web server is listening to.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Connect Timeout</div><div class="description req-false">Connection Timeout. Number of milliseconds to wait for a connection to open.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Response Timeout</div><div class="description req-false">Response Timeout. Number of milliseconds to wait for a response.</div><div class="required req-false">No</div></div>
-        <div class="property"><div class="name req-false">Implementation</div><div class="description req-false"><span class="code">Java</span>, <span class="code">HttpClient3.1 (DEPRECATED SINCE 3.0)</span>, <span class="code">HttpClient4</span>. 
+        <div class="property"><div class="name req-false">Implementation</div><div class="description req-false"><span class="code">Java</span>, <span class="code">HttpClient4</span>. 
         If not specified the default depends on the value of the JMeter property
         <span class="code">jmeter.httpsampler</span>, failing that, the <span class="code">Java</span> implementation is used.</div><div class="required req-false">No</div></div>
         <div class="property"><div class="name req-false">Protocol</div><div class="description req-false"><span class="code">HTTP</span> or <span class="code">HTTPS</span>.</div><div class="required req-false">No</div></div>
@@ -3697,16 +3686,64 @@ If JMeter reports <span class="code">No suitable driver</span>, then this could 
 </p><ul>
 <li>The driver class was not found. In this case, there will be a log message such as <span class="code">DataSourceElement: Could not load driver: {classname} java.lang.ClassNotFoundException: {classname}</span></li>
 <li>The driver class was found, but the class does not support the connection string. This could be because of a syntax error in the connection string, or because the wrong classname was used.</li>
-</ul><span class="code">java.net.ConnectException</span><table>
-<tr><th>Database</th><th>Driver class</th><th>Database URL</th></tr>
-<tr><td>MySQL</td><td><span class="code">com.mysql.jdbc.Driver</span></td><td><span class="code">jdbc:mysql://host[:port]/dbname</span></td></tr>
-<tr><td>PostgreSQL</td><td><span class="code">org.postgresql.Driver</span></td><td><span class="code">jdbc:postgresql:{dbname}</span></td></tr>
-<tr><td>Oracle</td><td><span class="code">oracle.jdbc.OracleDriver</span></td><td><span class="code">jdbc:oracle:thin:@//host:port/service</span>
-OR<br><span class="code">jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</span></td></tr>
-<tr><td>Ingres (2006)</td><td><span class="code">ingres.jdbc.IngresDriver</span></td><td><span class="code">jdbc:ingres://host:port/db[;attr=value]</span></td></tr>
-<tr><td>SQL Server (MS JDBC driver)</td><td><span class="code">com.microsoft.sqlserver.jdbc.SQLServerDriver</span></td><td><span class="code">jdbc:sqlserver://host:port;DatabaseName=dbname</span></td></tr>
-<tr><td>Apache Derby</td><td><span class="code">org.apache.derby.jdbc.ClientDriver</span></td><td><span class="code">jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</span></td></tr>
-</table><div class="clear"></div><div class="note">The above may not be correct - please check the relevant JDBC driver documentation.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
+</ul><p>
+If the database server is not running or is not accessible, then JMeter will report a <span class="code">java.net.ConnectException</span>.
+</p><p>Some examples for databases and their parameters are given below.</p><dl>
+  <dt>MySQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">com.mysql.jdbc.Driver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:mysql://host[:port]/dbname</span></dd>
+    </dl>
+  </dd>
+  <dt>PostgreSQL</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">org.postgresql.Driver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:postgresql:{dbname}</span></dd>
+    </dl>
+  </dd>
+  <dt>Oracle</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">oracle.jdbc.OracleDriver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:oracle:thin:@//host:port/service</span> OR <span class="code">jdbc:oracle:thin:@(description=(address=(host={mc-name})(protocol=tcp)(port={port-no}))(connect_data=(sid={sid})))</span></dd>
+    </dl>
+  </dd>
+  <dt>Ingress (2006)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">ingres.jdbc.IngresDriver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:ingres://host:port/db[;attr=value]</span></dd>
+    </dl>
+  </dd>
+  <dt>Microsoft SQL Server (MS JDBC driver)</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">com.microsoft.sqlserver.jdbc.SQLServerDriver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:sqlserver://host:port;DatabaseName=dbname</span></dd>
+    </dl>
+  </dd>
+  <dt>Apache Derby</dt>
+  <dd>
+    <dl>
+      <dt>Driver class</dt>
+      <dd><span class="code">org.apache.derby.jdbc.ClientDriver</span></dd>
+      <dt>Database URL</dt>
+      <dd><span class="code">jdbc:derby://server[:port]/databaseName[;URLAttributes=value[;&hellip;]]</span></dd>
+    </dl>
+  </dd>
+</dl><div class="clear"></div><div class="note">The above may not be correct - please check the relevant JDBC driver documentation.</div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
 
 
 <div class="component"><h2 id="Keystore_Configuration">Keystore Configuration<a class="sectionlink" href="#Keystore_Configuration" title="Link to here">&para;</a></h2><div class="description"><p>The Keystore Config Element lets you configure how Keystore will be loaded and which keys it will use.
@@ -3735,7 +3772,7 @@ This component is typically used in HTTPS scenarios where you don't want to take
 To make JMeter use more than one certificate you need to ensure that:
 <ul>
 <li><span class="code">https.use.cached.ssl.context=false</span> is set in <span class="code">jmeter.properties</span> or <span class="code">user.properties</span></li>
-<li>You use either HTTPClient 4 (ADVISED) or HTTPClient 3.1 (DEPRECATED SINCE 3.0) implementations for HTTP Request</li>
+<li>You use HTTPClient 4 implementation for HTTP Request</li>
 </ul>
 </div><div class="clear"></div><div class="go-top"><a href="#">^</a></div></div>
 
@@ -4020,7 +4057,7 @@ DB db = MongoDBHolder.getDBFromSource("value of property MongoDB Source",
      </div><div class="clear"></div>
 </div>
 <div class="component"><h2 id="Response_Assertion">Response Assertion<a class="sectionlink" href="#Response_Assertion" title="Link to here">&para;</a></h2><div class="description"><p>The response assertion control panel lets you add pattern strings to be compared against various
-    fields of the response.
+    fields of the request or response.
     The pattern strings are:
     </p>
     <ul>
@@ -4069,16 +4106,17 @@ These can be used anywhere within the expression and remain in effect until over
         <li><span class="code">JMeter Variable</span> - assertion is to be applied to the contents of the named variable</li>
         </ul>
         </div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">Response Field to Test</div><div class="description req-true">Instructs JMeter which field of the Response to test.
+        <div class="property"><div class="name req-true">Field to Test</div><div class="description req-true">Instructs JMeter which field of the Request or Response to test.
         <ul>
         <li><span class="code">Text Response</span> - the response text from the server, i.e. the body, excluding any HTTP headers.</li>
-        <li><span class="code">Document (text)</span> - the extract text from various type of documents via Apache Tika (see <a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a> Document view section).</li>
-        <li><span class="code">URL sampled</span></li>
         <li><span class="code">Response Code</span> - e.g. <span class="code">200</span></li>
         <li><span class="code">Response Message</span> - e.g. <span class="code">OK</span></li>
         <li><span class="code">Response Headers</span>, including Set-Cookie headers (if any)</li>
+        <li><span class="code">Request Headers</span></li>
+        <li><span class="code">URL sampled</span></li>
+        <li><span class="code">Document (text)</span> - the extract text from various type of documents via Apache Tika (see <a href="../usermanual/component_reference.html#View_Results_Tree">View Results Tree</a> Document view section).</li>
         </ul>
-                </div><div class="required req-true">Yes</div></div>
+        </div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">Ignore status</div><div class="description req-true">Instructs JMeter to set the status to success initially. 
                 <p>
                 The overall success of the sample is determined by combining the result of the
@@ -4101,7 +4139,8 @@ These can be used anywhere within the expression and remain in effect until over
         <li><span class="code">Substring</span> - true if the text contains the pattern string (case-sensitive)</li>
         </ul>
         <span class="code">Equals</span> and <span class="code">Substring</span> patterns are plain strings, not regular expressions.
-        <span class="code">NOT</span> may also be selected to invert the result of the check.</div><div class="required req-true">Yes</div></div>
+        <span class="code">NOT</span> may also be selected to invert the result of the check.
+        <span class="code">OR</span> Apply each assertion in OR combination (if 1 pattern to test maches, Assertion will be ok) instead of AND (All patterns must match so that Assertion is OK).</div><div class="required req-true">Yes</div></div>
         <div class="property"><div class="name req-true">Patterns to Test</div><div class="description req-true">A list of patterns to
         be tested.  
         Each pattern is tested separately. 
@@ -4210,7 +4249,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
 Before invoking the script, some variables are set up in the BeanShell interpreter.
 These are strings unless otherwise noted:
 </p><ul>
-  <li><span class="code">log</span> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> Object. (e.g.) <span class="code">log.warn("Message"[,Throwable])</span></li>
+  <li><span class="code">log</span> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> Object. (e.g.) <span class="code">log.warn("Message"[,Throwable])</span></li>
   <li><span class="code">SampleResult</span> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
   <li><span class="code">Response</span> - the response Object; read-write</li>
   <li><span class="code">Failure</span> - boolean; read-write; used to set the Assertion status</li>
@@ -4326,7 +4365,7 @@ The BSF Assertion allows BSF script code to be used to check the status of the p
 </div><p>
 The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
 </p><p>The following variables are set up for use by the script:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">Filename</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -4374,7 +4413,7 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
     </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>The following variables are set up for use by the script:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">Filename</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -4611,7 +4650,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
         The BeanShell script. The return value is used as the number of milliseconds to wait.
     </div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">
 vars.get(key);
@@ -4649,7 +4688,7 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
         The script. The return value is used as the number of milliseconds to wait.
     </div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>Before invoking the script, some variables are set up in the script interpreter:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">
 vars.get(key);
@@ -4691,7 +4730,7 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
         The script. The return value is used as the number of milliseconds to wait.
     </div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>Before invoking the script, some variables are set up in the script interpreter:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
 vars.put(key,val);
@@ -4859,7 +4898,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
     The file name is stored in the script variable <span class="code">FileName</span></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The BeanShell script. The return value is ignored.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
 vars.put(key,val);
@@ -4889,7 +4928,7 @@ The BSF PreProcessor allows BSF script code to be applied before taking a sample
 </div><p>
 The script (or file) is processed using the <span class="code">BSFEngine.exec()</span> method, which does not return a value.
 </p><p>The following BSF variables are set up for use by the script:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">FileName</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -4925,7 +4964,7 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
     </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The script to run.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>The following JSR223 variables are set up for use by the script:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">FileName</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -4995,7 +5034,6 @@ this one will be used by "<span class="code">Calculate Price cut off</span>".
 <div class="links"><div class="title">See also:</div><ul class="links"><li><a href="../demos/RegEx-User-Parameters.jmx">Test Plan showing how to use RegEx User Parameters</a></li></ul></div>
 
 <div class="component"><h2 id="Sample_Timeout">Sample Timeout<a class="sectionlink" href="#Sample_Timeout" title="Link to here">&para;</a></h2><div class="description">
-<div class="clear"></div><div class="note">BETA CODE - the test element may be moved or replaced in a future release</div><div class="clear"></div>
 <p>This Pre-Processor schedules a timer task to interrupt a sample if it takes too long to complete.
 The timeout is ignored if it is zero or negative.
 For this to work, the sampler must implement Interruptible. 
@@ -5096,7 +5134,7 @@ generate the template string, and store the result into the given variable name.
         <div class="property"><div class="name req-true">Template</div><div class="description req-true">The template used to create a string from the matches found.  This is an arbitrary string
         with special elements to refer to groups within the regular expression.  The syntax to refer to a group is: '<span class="code">$1$</span>' to refer to
         group <span class="code">1</span>, '<span class="code">$2$</span>' to refer to group <span class="code">2</span>, etc. <span class="code">$0$</span> refers to whatever the entire expression matches.</div><div class="required req-true">Yes</div></div>
-        <div class="property"><div class="name req-true">Match No.</div><div class="description req-true">Indicates which match to use.  The regular expression may match multiple times.  
+        <div class="property"><div class="name req-true">Match No. (0 for Random)</div><div class="description req-true">Indicates which match to use.  The regular expression may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number N means to select the n<sup>th</sup> match.</li>
@@ -5201,7 +5239,7 @@ extracting the node as text or attribute value and store the result into the giv
             If empty this is the equivalent of <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">Element#text()</a> function for JSoup if not value is set for attribute.
             <figure><a href="../images/screenshots/css_extractor_noattr.png"><img src="../images/screenshots/css_extractor_noattr.png" width="825" height="275" alt="CSS Extractor with no attribute set"></a><figcaption>CSS Extractor with no attribute set</figcaption></figure>
         </div><div class="required req-false">false</div></div>
-        <div class="property"><div class="name req-true">Match No.</div><div class="description req-true">Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
+        <div class="property"><div class="name req-true">Match No. (0 for Random)</div><div class="description req-true">Indicates which match to use.  The CSS/JQuery selector may match multiple times.  
             <ul>
                 <li>Use a value of zero to indicate JMeter should choose a match at random.</li>
                 <li>A positive number <span class="code">N</span> means to select the n<sup>th</sup> match.</li>
@@ -5290,6 +5328,13 @@ extracting the node as text or attribute value and store the result into the giv
     </div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">Reference Name</div><div class="description req-true">The name of the JMeter variable in which to store the result.</div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">XPath Query</div><div class="description req-true">Element query in XPath language. Can return more than one match.</div><div class="required req-true">Yes</div></div>
+    <div class="property"><div class="name req-false">Match No. (0 for Random)</div><div class="description req-false">If the XPath Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <ul>
+        <li><span class="code">0</span> : means random</li>
+        <li><span class="code">-1</span> means extract all results (default value), they will be named as <span class="code"><em>&lt;variable name&gt;</em>_N</span> (where <span class="code">N</span> goes from 1 to Number of results)</li>
+        <li><span class="code">X</span> : means extract the X<sup>th</sup> result. If this X<sup>th</sup> is greater than number of matches, then nothing is returned. Default value will be used</li>
+    </ul>
+    </div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Default Value</div><div class="description req-true">Default value returned when no match found. 
     It is also returned if the node has no value and the fragment option is not selected.</div><div class="required req-true"></div></div>
    </div><p>To allow for use in a <a href="../usermanual/component_reference.html#ForEach_Controller">ForEach Controller</a>, the following variables are set on return:</p><ul>
@@ -5385,7 +5430,7 @@ See the file <span class="code">BeanShellListeners.bshrc</span> for example defi
     The file name is stored in the script variable <span class="code">FileName</span></div><div class="required req-false">No</div></div>
     <div class="property"><div class="name req-true">Script</div><div class="description req-true">The BeanShell script. The return value is ignored.</div><div class="required req-true">Yes (unless script file is provided)</div></div>
 </div><p>The following BeanShell variables are set up for use by the script:</p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">ctx</span> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><span class="code">vars</span> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <pre class="source">vars.get(key);
 vars.put(key,val);
@@ -5418,7 +5463,7 @@ The script (or file) is processed using the <span class="code">BSFEngine.exec()<
 Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">FileName</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -5458,7 +5503,7 @@ The JSR223 PostProcessor allows JSR223 script code to be applied after taking a 
 Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p><ul>
-<li><span class="code">log</span> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><span class="code">log</span> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><span class="code">Label</span> - the String Label</li>
 <li><span class="code">FileName</span> - the script file name (if any)</li>
 <li><span class="code">Parameters</span> - the parameters (as a String)</li>
@@ -5497,7 +5542,7 @@ It will allow you to extract in a very easy way text content, see <a href="http:
     <div class="property"><div class="name req-true">Variable Names</div><div class="description req-true">Semi-colon separated names of variables that will contain the results of JSON-PATH expressions (must match number of JSON-PATH expressions)</div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-true">JSON Path Expressions</div><div class="description req-true">Semi-colon separated JSON-PATH expressions (must match number of variables)</div><div class="required req-true">Yes</div></div>
     <div class="property"><div class="name req-false">Default Values</div><div class="description req-false">Semi-colon separated default values if JSON-PATH expressions do not return any result(must match number of variables)</div><div class="required req-false">No</div></div>
-    <div class="property"><div class="name req-false">Match Numbers</div><div class="description req-false">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
+    <div class="property"><div class="name req-false">Match No. (0 for Random)</div><div class="description req-false">If the JSON Path query leads to many results, you can choose which one(s) to extract as Variables:
     <ul>
         <li><span class="code">0</span> : means random (Default Value)</li>
         <li><span class="code">-1</span> means extract all results, they will be named as <span class="code"><em>&lt;variable name&gt;</em>_N</span> (where <span class="code">N</span> goes from 1 to Number of results)</li>
@@ -5733,7 +5778,7 @@ the browser. Effectively JMeter has to pretend to be the target server.
 <p>
 JMeter will generate its own certificate(s).
 These are generated with a validity period defined by the property <span class="code">proxy.cert.validity</span>, default 7 days, and random passwords.
-If JMeter detects that it is running under Java 7 or later, it will generate certificates for each target server as necessary (dynamic mode)
+If JMeter detects that it is running under Java 8 or later, it will generate certificates for each target server as necessary (dynamic mode)
 unless the following property is defined: <span class="code">proxy.cert.dynamic_keys=false</span>.
 When using dynamic mode, the certificate will be for the correct host name, and will be signed by a JMeter-generated CA certificate.
 By default, this CA certificate won't be trusted by the browser, however it can be installed as a trusted certificate.
@@ -5805,7 +5850,7 @@ This setting will also be needed when running the generated test plan.
 <a name="install_cert"></a>
 <h4>Installing the JMeter CA certificate for HTTPS recording</h4>
 <p>
-As mentioned above, when run under Java 7, JMeter can generate certificates for each server.
+As mentioned above, when run under Java 8, JMeter can generate certificates for each server.
 For this to work smoothly, the root CA signing certificate used by JMeter needs to be trusted by the browser.
 The first time that the recorder is started, it will generate the certificates if necessary. 
 The root CA certificate is exported into a file with the name <span class="code">ApacheJMeterTemporaryRootCA</span> in the current launch directory.
@@ -6178,7 +6223,7 @@ If Test Plan is stopped, tearDown will not run even if option is checked.
       <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
             Copyright &copy;
             1999 &ndash;
-            2016
+            2017
             , Apache Software Foundation
           </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
             feather, and the Apache JMeter logo are
