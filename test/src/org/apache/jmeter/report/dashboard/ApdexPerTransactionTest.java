@@ -37,15 +37,11 @@ import org.apache.jmeter.report.config.ReportGeneratorConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import jodd.props.Props;
 import jodd.props.PropsEntry;
 
 public class ApdexPerTransactionTest extends JMeterTestCase {
-	
-	private static final Logger log = LoggerFactory.getLogger(ApdexPerTransactionTest.class);
 	
 	// prop in the file mixes comma, semicolon and spans several lines.
 	// it also includes hardcoded sample names mixed with regexes 
@@ -165,7 +161,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         try (FileInputStream inStream = new FileInputStream(file)) {
             props.load(inStream);
         } catch (IOException e) {
-            log.error("Problem loading properties. " + e); // NOSONAR
+            fail("Problem loading properties. " + e); // NOSONAR
         }
         return props;
     }
