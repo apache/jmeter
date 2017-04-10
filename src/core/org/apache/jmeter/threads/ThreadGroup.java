@@ -385,6 +385,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             numThreads = getNumThreads();
             setNumThreads(numThreads + 1);
         }
+        setDelay(0);
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay);
         JMeterContextService.addTotalThreads( 1 );
         log.info("Started new thread in group {}", groupNumber);
@@ -540,7 +541,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             waitThreadStopped(threadStarter);
         }
         
-        while (!allThreads.isEmpty()) {
+        while ( !allThreads.isEmpty() ) {
             for (Thread t : allThreads.values()) {
                 waitThreadStopped(t);
             }
