@@ -385,6 +385,8 @@ public class ThreadGroup extends AbstractThreadGroup {
             numThreads = getNumThreads();
             setNumThreads(numThreads + 1);
         }
+		// Don't cumul intialDelay + rampup delay
+		setDelay(0);
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay);
         JMeterContextService.addTotalThreads( 1 );
         log.info("Started new thread in group {}", groupNumber);
