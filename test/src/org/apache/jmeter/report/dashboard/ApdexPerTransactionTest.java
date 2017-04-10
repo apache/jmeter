@@ -22,10 +22,12 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -39,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jodd.props.Props;
+import jodd.props.PropsEntry;
 
 public class ApdexPerTransactionTest extends JMeterTestCase {
 	
@@ -78,7 +81,14 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         final String title = getOptionalProperty(props, 
                 "jmeter.reportgenerator.graph.responseTimePercentiles.title", 
                 String.class);
-        assertNotNull("title should not be null", title);
+        if (title == null) {
+            Iterator<PropsEntry> it = props.iterator();
+            while(it.hasNext()) {
+                PropsEntry pe = it.next();
+                System.out.println(pe);
+            }
+            fail("title should not be null; see above for entries in property collection");            
+        }
     }
     
 	@Test
