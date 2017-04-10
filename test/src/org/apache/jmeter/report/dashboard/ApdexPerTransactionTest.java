@@ -145,7 +145,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
     }
 	
 	private static String getOptionalProperty(Props props,
-            String key, Class clazz) {
+            String key, Class<String> clazz) {
         String property = getProperty(props, key, null, clazz);
         if (property != null) {
         }
@@ -153,7 +153,7 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
     }
 	
 	private static String getProperty(Props props, String key,
-            String defaultValue, Class clazz)
+            String defaultValue, Class<String> clazz)
              {
         String value = props.getValue(key);
         if (value == null) {
