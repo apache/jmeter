@@ -67,6 +67,20 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 		
 	}
 	
+    @Test
+    public void testgetApdexPerTransactionPropertySimple() {
+        final Properties merged = new Properties();
+        final Props props = new Props();
+        
+        merged.putAll(loadProps(
+                new File(this.getClass().getResource("reportgenerator_test.properties").getFile())));
+        props.load(merged);
+        final String title = getOptionalProperty(props, 
+                "jmeter.reportgenerator.graph.responseTimePercentiles.title", 
+                String.class);
+        assertNotNull("title should not be null", title);
+    }
+    
 	@Test
 	public void testGetApdexPerTransactionParts() {
 		Map<String, Long[]> apdex = ReportGeneratorConfiguration.getApdexPerTransactionParts(apdexString);
