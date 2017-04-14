@@ -131,9 +131,9 @@ public class BatchSampleSender extends AbstractSampleSender implements Serializa
     }
 
     /**
-     * Stores sample events untill either a time or sample threshold is
+     * Stores sample events until either a time or sample threshold is
      * breached. Both thresholds are reset if one fires. If only one threshold
-     * is set it becomes the only value checked against. When a threhold is
+     * is set it becomes the only value checked against. When a threshold is
      * breached the list of sample events is sent to a listener where the event
      * are fired locally.
      *

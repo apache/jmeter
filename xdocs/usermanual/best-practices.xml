@@ -115,7 +115,7 @@ The error "<code>unknown_ca</code>" probably means that you are trying to record
 JMeter Proxy server certificate.
 </p>
 <!--TODO: Describe how to use this to record against one server[name]
-and run against another. Actually, this particular example may be beter for the HTTP Request Defaults&hellip;
+and run against another. Actually, this particular example may be better for the HTTP Request Defaults&hellip;
 a good similar example for the variables is http vs. https.-->
 <!--SUMMARY of all TODO's above: we need some actual usage to identify best practices
 with this new features.-->
