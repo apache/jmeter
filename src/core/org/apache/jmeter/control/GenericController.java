@@ -226,7 +226,7 @@ public class GenericController extends AbstractTestElement implements Controller
 
     /**
      * Increment the current pointer and return the element. Called by
-     * {@link #next()} if the element is a sampler. (May be overriden by
+     * {@link #next()} if the element is a sampler. (May be overridden by
      * sub-classes).
      *
      * @param element

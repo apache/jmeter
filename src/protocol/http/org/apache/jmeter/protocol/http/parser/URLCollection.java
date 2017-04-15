@@ -89,7 +89,7 @@ public class URLCollection implements Iterable<URL> {
         } catch (MalformedURLException mfue) {
             // No WARN message to avoid performance impact
             if(log.isDebugEnabled()) {
-                log.debug("Error occured building relative url for:"+url+", message:"+mfue.getMessage());
+                log.debug("Error occurred building relative url for:"+url+", message:"+mfue.getMessage());
             }
             // No point in adding the URL as String as it will result in null 
             // returned during iteration, see URLString

@@ -117,7 +117,7 @@ public class Calculator {
         addSentBytes(res.getSentBytes());
         addValue(res.getTime(),res.getSampleCount());
         errors+=res.getErrorCount(); // account for multiple samples
-        if (startTime == 0){ // not yet intialised
+        if (startTime == 0){ // not yet intialized
             startTime=res.getStartTime();
         } else {
             startTime = Math.min(startTime, res.getStartTime());

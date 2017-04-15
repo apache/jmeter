@@ -177,7 +177,7 @@ public final class CLArgsParser {
     }
 
     /**
-     * Retrieve an error message that occured during parsing if one existed.
+     * Retrieve an error message that occurred during parsing if one existed.
      *
      * @return the error string
      */

@@ -150,7 +150,7 @@
     </condition>
 
     <target name="_message_xalan" unless="xalan.present">
-          <echo>Cannot find all xalan and/or serialiser jars</echo>
+          <echo>Cannot find all xalan and/or serializer jars</echo>
         <echo>The XSLT formatting may not work correctly.</echo>
         <echo>Check you have xalan and serializer jars in ${lib.dir}</echo>
     </target>

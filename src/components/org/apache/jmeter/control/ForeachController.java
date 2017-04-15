@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ForeachController that iterates over a list of variables named XXXX_NN stored in {@link JMeterVariables}
- * where NN is a number starting from 1 to number of occurences.
+ * where NN is a number starting from 1 to number of occurrences.
  * This list of variable is usually set by PostProcessor (Regexp PostProcessor or {@link org.apache.jmeter.extractor.HtmlExtractor})
  * Iteration can take the full list or only a subset (configured through indexes)
  *

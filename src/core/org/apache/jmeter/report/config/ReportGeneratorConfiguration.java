@@ -638,7 +638,7 @@ public class ReportGeneratorConfiguration {
                 long.class).longValue();
         configuration.setApdexToleratedThreshold(apdexToleratedThreshold);
         
-        // Load apdex per transactions, overriden by user
+        // Load apdex per transactions, overridden by user
         final String apdexPerTransaction = getOptionalProperty(props, 
                 REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
                 String.class);
