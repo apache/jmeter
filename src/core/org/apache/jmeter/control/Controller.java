@@ -59,7 +59,7 @@ public interface Controller extends TestElement {
     void initialize();
 
     /**
-     * Unregister IterationListener
+     * UnRegister IterationListener
      * @param iterationListener {@link LoopIterationListener}
      */
     void removeIterationListener(LoopIterationListener iterationListener);

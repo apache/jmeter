@@ -127,7 +127,7 @@ public final class ClassFinder {
      * option to include inner classes in the search set to false.
      *
      * @param paths
-     *            pathnames or jarfiles to search for classes
+     *            pathNames or jarFiles to search for classes
      * @param superClasses
      *            required parent class(es)
      * @return List of Strings containing discovered class names.
@@ -160,7 +160,7 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param strPathsOrJars - pathNames or jarFiles to search for classes
      * @param superClasses - required parent class(es)
      * @param innerClasses - should we include inner classes?
      *
@@ -175,11 +175,11 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param strPathsOrJars - pathNames or jarFiles to search for classes
      * @param superClasses - required parent class(es)
      * @param innerClasses - should we include inner classes?
-     * @param contains - classname should contain this string
-     * @param notContains - classname should not contain this string
+     * @param contains - className should contain this string
+     * @param notContains - className should not contain this string
      *
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails
@@ -193,7 +193,7 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param strPathsOrJars - pathNames or jarFiles to search for classes
      * @param annotations - required annotations
      * @param innerClasses - should we include inner classes?
      *
@@ -210,7 +210,7 @@ public final class ClassFinder {
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
      * Inner classes are not searched.
      *
-     * @param strPathsOrJars - pathnames or jarfiles to search for classes
+     * @param strPathsOrJars - pathNames or jarFiles to search for classes
      * @param annotations - required annotations
      *
      * @return List containing discovered classes
@@ -224,12 +224,12 @@ public final class ClassFinder {
 
     /**
      * Find classes in the provided path(s)/jar(s) that extend the class(es).
-     * @param searchPathsOrJars - pathnames or jarfiles to search for classes
+     * @param searchPathsOrJars - pathNames or jarFiles to search for classes
      * @param classNames - required parent class(es) or annotations
      * @param innerClasses - should we include inner classes?
-     * @param contains - classname should contain this string
-     * @param notContains - classname should not contain this string
-     * @param annotations - true if classnames are annotations
+     * @param contains - className should contain this string
+     * @param notContains - className should not contain this string
+     * @param annotations - true if classNames are annotations
      *
      * @return List containing discovered classes
      * @throws IOException when scanning classes fails

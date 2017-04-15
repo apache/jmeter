@@ -36,7 +36,7 @@ public final class ComponentUtil {
      * @param component
      *            the component you want to center and set size on
      * @param percentOfScreen
-     *            the percent of the current screensize you want the component
+     *            the percent of the current screenSize you want the component
      *            to be
      */
     public static void centerComponentInWindow(Component component, int percentOfScreen) {

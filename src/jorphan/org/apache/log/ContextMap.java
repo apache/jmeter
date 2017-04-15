@@ -74,17 +74,17 @@ public final class ContextMap
      * Get the Current ContextMap.
      * This method returns a ContextMap associated with current thread.
      * If the thread doesn't have a ContextMap associated with it and
-     * autocreate is true then a new ContextMap is created.
+     * autoCreate is true then a new ContextMap is created.
      *
-     * @param autocreate true if a ContextMap is to be created if it doesn't exist
+     * @param autoCreate true if a ContextMap is to be created if it doesn't exist
      * @return the current ContextMap
      */
-    public static final ContextMap getCurrentContext( final boolean autocreate )
+    public static final ContextMap getCurrentContext( final boolean autoCreate )
     {
         //Check security permission here???
         ContextMap context = (ContextMap)c_localContext.get();
 
-        if( null == context && autocreate )
+        if( null == context && autoCreate )
         {
             context = new ContextMap();
             c_localContext.set( context );

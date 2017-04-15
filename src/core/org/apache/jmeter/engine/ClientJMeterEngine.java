@@ -159,7 +159,7 @@ public class ClientJMeterEngine implements JMeterEngine {
 
     /**
      * Tidy up RMI access to allow JMeter client to exit.
-     * Currently just interrups the "RMI Reaper" thread.
+     * Currently just interrupts the "RMI Reaper" thread.
      * @param logger where to log the information
      */
     public static void tidyRMI(Logger logger) {

@@ -271,7 +271,7 @@ public class DataSourceElement extends AbstractTestElement
 
         /**
          * @return Connection
-         * @throws SQLException if database access error occurrs
+         * @throws SQLException if database access error occurred
          */
         public Connection getConnection() throws SQLException {
             Connection conn;
@@ -347,7 +347,7 @@ public class DataSourceElement extends AbstractTestElement
     }
 
     /**
-     * @return Returns the poolname.
+     * @return Returns the poolName.
      */
     public String getDataSource() {
         return dataSource;
@@ -355,7 +355,7 @@ public class DataSourceElement extends AbstractTestElement
 
     /**
      * @param dataSource
-     *            The poolname to set.
+     *            The poolName to set.
      */
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
