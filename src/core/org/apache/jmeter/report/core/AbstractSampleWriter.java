@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * <p>
  * When a writer is set on the sample writer any previous writer is flushed and
- * closed before beeing replaced by the new one.
+ * closed before being replaced by the new one.
  * </p>
  * 
  * @since 3.0
@@ -77,7 +77,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
 
     /**
      * Instructs this sample writer to write samples on the specified output
-     * with UTG-8 encoding. The encoding can be overriden by the user through
+     * with UTG-8 encoding. The encoding can be overridden by the user through
      * {@link SaveService#getFileEncoding(String)}
      * 
      * @param out
@@ -97,8 +97,8 @@ public abstract class AbstractSampleWriter extends SampleWriter {
      * Set the destination file in which this sample writer will write samples
      * 
      * @param output
-     *            The ouput file that will receive samples written by this
-     *            sample writter
+     *            The output file that will receive samples written by this
+     *            sample writer
      */
     public void setOutputFile(File output) {
         FileOutputStream fos = null;
@@ -111,7 +111,7 @@ public abstract class AbstractSampleWriter extends SampleWriter {
     }
 
     /**
-     * This method is guaranted to not throw any exception. If writer is already
+     * This method is guaranteed to not throw any exception. If writer is already
      * closed then does nothing.<br>
      * Any buffered data is flushed by this method.
      */

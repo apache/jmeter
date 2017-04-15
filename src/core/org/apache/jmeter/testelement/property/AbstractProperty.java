@@ -369,7 +369,7 @@ public abstract class AbstractProperty implements JMeterProperty {
      * <li>TestElement =&gt; TestElementProperty with the same name</li>
      * <li>Map|Collection =&gt; Map|CollectionProperty with the name = item.hashCode</li>
      * </ul>
-     * @param item object to be turned into a propery
+     * @param item object to be turned into a property
      * @return the JMeterProperty
      */
     protected static JMeterProperty makeProperty(Object item) {
