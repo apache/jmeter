@@ -18,7 +18,7 @@
 package org.apache.jmeter.protocol.tcp.sampler;
 
 /**
- * Exception that contains partial response (Text read until exception occured)
+ * Exception that contains partial response (Text read until exception occurred)
  */
 public class ReadException extends Exception {
 
@@ -37,7 +37,7 @@ public class ReadException extends Exception {
      * Constructor
      * @param message Message
      * @param cause Source cause
-     * @param partialResponse  Text read until error occured
+     * @param partialResponse  Text read until error occurred
      */
     public ReadException(String message, Throwable cause, String partialResponse) {
         super(message, cause);
@@ -45,7 +45,7 @@ public class ReadException extends Exception {
     }
 
     /**
-     * @return the partialResponse Text read until error occured
+     * @return the partialResponse Text read until error occurred
      */
     public String getPartialResponse() {
         return partialResponse;

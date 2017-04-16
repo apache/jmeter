@@ -229,7 +229,7 @@ public class SubscriberSampler extends BaseJMSSampler implements Interruptible, 
     }
 
     /**
-     * Try to reconnect if configured to or temporize if not or an exception occured
+     * Try to reconnect if configured to or temporize if not or an exception occurred
      * @param reconnect
      */
     private void handleErrorAndAddTemporize(boolean reconnect) {

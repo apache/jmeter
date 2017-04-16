@@ -153,7 +153,7 @@ public class TemplateManager {
                     }
                 } catch(Exception ex) {
                     if (log.isWarnEnabled()) {
-                        log.warn("Ignoring template file:'{}', an error occured parsing the file", f.getAbsolutePath(),
+                        log.warn("Ignoring template file:'{}', an error occurred parsing the file", f.getAbsolutePath(),
                                 ex);
                     }
                 } 
