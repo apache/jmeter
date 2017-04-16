@@ -139,7 +139,7 @@ public class CounterConfig extends AbstractTestElement
                 DecimalFormat myFormatter = new DecimalFormat(format);
                 return myFormatter.format(value);
             } catch (IllegalArgumentException ignored) {
-                log.warn("Error formating {} at format {}, using default", value, format);
+                log.warn("Error formatting {} at format {}, using default", value, format);
             }
         }
         return Long.toString(value);

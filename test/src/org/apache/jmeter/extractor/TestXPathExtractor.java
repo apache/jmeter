@@ -285,7 +285,7 @@ public class TestXPathExtractor {
 
         @Test
         public void testNonXmlDocument() throws Exception {
-            result.setResponseData("Error:exception occured", null);
+            result.setResponseData("Error:exception occurred", null);
             extractor.setXPathQuery("//test");
             extractor.process();
             assertEquals(1, result.getAssertionResults().length);

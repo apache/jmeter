@@ -37,7 +37,7 @@ import org.apache.jmeter.save.CSVSaveService;
  */
 public class CsvSampleWriter extends AbstractSampleWriter {
 
-    /** The number of columnns for each row */
+    /** The number of columns for each row */
     private int columnCount;
 
     /** The separator to be used in between data on each row */
@@ -129,7 +129,7 @@ public class CsvSampleWriter extends AbstractSampleWriter {
     }
 
     /**
-     * Write the csv header. If samples have alredy been written then a row with
+     * Write the csv header. If samples have already been written then a row with
      * header information will be written in the middle of the file.
      */
     public void writeHeader() {
