@@ -246,7 +246,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                     nodes.addAll(matchingNodes);
                 }
             } catch (Exception ex) {
-                logger.error("Error occured searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
+                logger.error("Error occurred searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
             }
         }
         GuiPackage guiInstance = GuiPackage.getInstance();
@@ -266,7 +266,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
     }
     
     /**
-     * Replace all occurences in nodes that contain {@link Replaceable} Test Elements
+     * Replace all occurrences in nodes that contain {@link Replaceable} Test Elements
      * @param e {@link ActionEvent}
      */
     private void doReplaceAll(ActionEvent e) {
@@ -313,10 +313,10 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                     }
                 }
             } catch (Exception ex) {
-                logger.error("Error occured replacing data in node:"+jMeterTreeNode.getName(), ex);
+                logger.error("Error occurred replacing data in node:"+jMeterTreeNode.getName(), ex);
             }
         }
-        statusLabel.setText(MessageFormat.format("Replaced {0} occurences", new Object[]{totalReplaced}));
+        statusLabel.setText(MessageFormat.format("Replaced {0} occurrences", new Object[]{totalReplaced}));
         GuiPackage guiInstance = GuiPackage.getInstance();
         JTree jTree = guiInstance.getMainFrame().getTree();
 

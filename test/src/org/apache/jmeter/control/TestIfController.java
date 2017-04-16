@@ -71,7 +71,7 @@ public class TestIfController extends JMeterTestCase {
             }
             assertEquals(0, counter);
         } catch (StackOverflowError e) {
-            fail("Stackoverflow occured in testStackOverflow");
+            fail("Stackoverflow occurred in testStackOverflow");
         }
     }
 
@@ -140,7 +140,7 @@ public class TestIfController extends JMeterTestCase {
             assertEquals("0", vars.get("VAR1"));
 
         } catch (StackOverflowError e) {
-            fail("Stackoverflow occured in testStackOverflow");
+            fail("Stackoverflow occurred in testStackOverflow");
         }
     }
 

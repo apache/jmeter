@@ -3404,7 +3404,7 @@ this version no PreparedStatement will be closed during the test.</p>
     <li>JSR223 Test Elements that have an invalid filename (not existing or unreadable) will make test fail instead of 
     making the element silently work</li>
     <li>In JSR223 Test Elements: responseCodeOk, responseMessageOK and successful are set before
-     script is executed, if responseData is set it will not be overriden anymore by a toString() on script return value</li>
+     script is executed, if responseData is set it will not be overridden anymore by a toString() on script return value</li>
 </ul>
 </p>
 

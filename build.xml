@@ -83,7 +83,7 @@
 
   -->
 
-  <!-- Minimal version of Apache Ant requiere by this Ant script -->
+  <!-- Minimal version of Apache Ant required by this Ant script -->
   <property name="ant.version.required" value="1.8.2" />
 
   <!-- Are we running under Gump? -->
@@ -901,7 +901,7 @@
      description="Compile everything and create the jars"/>
 
   <target name="package-and-check" depends="clean, download_jars, package, checkstyle, rat"
-     description="Compile, create jars and apply checkstyle before commiting code"/>
+     description="Compile, create jars and apply checkstyle before committing code"/>
 
   <target name="prepare-resources"
      description="Prepare some resources files, update date">
@@ -2257,7 +2257,7 @@ run JMeter unless all the JMeter jars are added.
       <format property="THISYEAR" pattern="yyyy"/>
     </tstamp>
 
-    <!-- JMeter Javadoc version (own variable is used so can be overriden independently) -->
+    <!-- JMeter Javadoc version (own variable is used so can be overridden independently) -->
     <property name="docversion" value="${jmeter.version}"/>
 
     <mkdir dir="${dest.docs.api}"/>

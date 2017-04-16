@@ -112,7 +112,7 @@ public class RenderAsHTML extends SamplerResultTab implements ResultRenderer {
         } catch (NumberFormatException e) {
             // Java Bug : http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=9001188.
             // See https://bz.apache.org/bugzilla/show_bug.cgi?id=54586
-            log.warn("An error occured rendering html code", e);
+            log.warn("An error occurred rendering html code", e);
             results.setText("Failed to render HTML: " + e.getMessage() +", use Text renderer");            
         }
     }

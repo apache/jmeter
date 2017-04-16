@@ -429,7 +429,7 @@ public class TCPSampler extends AbstractSampler implements ThreadListener, Inter
     /**
      * Fills SampleResult object
      * @param sampleResult {@link SampleResult}
-     * @param readResponse Response read until error occured
+     * @param readResponse Response read until error occurred
      * @param exception Source exception
      * @param protocolHandler {@link TCPClient}
      * @return boolean if sample is considered as successful
