@@ -3470,7 +3470,7 @@ By default, a Graphite implementation is provided.
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
     
     
-    <p>Since JMeter 3.2, a new implementation (in Alpha state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
+    <p>Since JMeter 3.2, a new implementation (in Beta state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
       The following parameters apply to the <a href="../../docs/api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p>
 
     <properties>
