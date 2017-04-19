@@ -191,4 +191,21 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
     public String toString() {
         return JMeterUtils.getResString("view_results_render_browser"); // $NON-NLS-1$
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.visualizers.SamplerResultTab#clearData()
+     */
+    @Override
+    public void clearData() {
+        super.clearData();
+        if (browserPanel == null) {
+            browserPanel = initComponents("");
+        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                engine.loadContent("");
+            }
+        });
+    }
 }
