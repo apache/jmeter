@@ -164,6 +164,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
+    <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
