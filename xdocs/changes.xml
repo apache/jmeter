@@ -70,6 +70,14 @@ JMeter now requires Java 8. Ensure you use the most up to date version.
 JMeter logging has been migrated to SLF4J and Log4j 2.
 This affects configuration and 3<sup>rd</sup> party plugins, see below <b>"Logging changes"</b>.
 </p>
+<p>
+Starting with JMeter version 3.2 the number of results in View Results Tree is
+limited by default to 500 entries. If you want more entries, you have to set
+the property <code>view.results.tree.max_results</code> to a higher value, or to <code>0</code>, if
+you don't want to impose any limit.
+You can set the property in bin/user.properties.
+More info might be found <a href="usermanual/component_reference.html#View_Results_Tree">here</a>.
+</p>
 <ch_title>Core improvements</ch_title>
 <ul>
 <li>JMeter now provides a new BackendListener implementation that interfaces InfluxDB.
@@ -114,6 +122,11 @@ listeners hold and a rework of the way GUI is updated</li>
 </li>
 <li>A <code>replace</code> feature has been added to Search feature to allow replacement in some elements.
 <figure width="459" height="196" image="changes/3.2/search_replace.png"></figure>
+<note>
+ReplaceAll does not do replacement on all elements, it does it on:<br/>
+- HeaderManager: Replacement in values <br/>
+- Http Request: Replacement in Arguments, Path and Host<br/>
+</note>
 </li>
 <li>View Results Tree now provides a more up to date Browser renderer which requires JavaFX.</li>
 <li>You can now add through a contextual menu think times, this will add think times between samplers and Transaction Controllers
