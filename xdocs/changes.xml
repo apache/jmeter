@@ -451,6 +451,7 @@ jmeter.reportgenerator.apdex_per_transaction=sample(\\d+):1000|2000;\
     <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
     <li><bug>60857</bug>SaveService omits XML header if _file_encoding is not defined in saveservice.properties</li>
     <li><bug>60830</bug>Timestamps in CSV file could be corrupted due to sharing a SimpleDateFormatter across threads</li>
+    <li><bug>60842</bug>HTTP Request : Embedded resources doesn't strip newline when an html tag spans more than a single line.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
