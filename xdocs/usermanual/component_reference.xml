@@ -441,7 +441,7 @@ Optional properties to allow change the method to get response size:<br></br></p
 <source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
-The <code>Java</code> and <code>HttpClient3</code> implementations do not include transport overhead such as
+The <code>Java</code> implementation does not include transport overhead such as
 chunk headers in the response body size.<br></br>
 The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
