@@ -22,12 +22,12 @@
 <document prev="build-jms-topic-test-plan.html" next="listeners.html" id="$Id$">
 
 <properties>
-  <title>User's Manual: Building a Monitor Test Plan (DEPRECATED)</title>
+  <title>User's Manual: Building a Monitor Test Plan (REMOVED since JMeter 3.2)</title>
 </properties>
 
 <body>
 
-<section name="&sect-num;. Building a Monitor Test Plan (DEPRECATED)" anchor="building">
+<section name="&sect-num;. Building a Monitor Test Plan (REMOVED since JMeter 3.2)" anchor="building">
 <note>Note this feature is deprecated since JMeter 3.1</note>
 <p>In this section, you will learn how to create a 
 <a href="build-test-plan.html">Test Plan</a> to monitor webservers. Monitors
