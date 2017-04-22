@@ -5,7 +5,7 @@
             APACHE LOGO
           --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
               PROJECT LOGO
-            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="build-monitor-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="section"><h1 id="intro">13. Introduction to listeners<a class="sectionlink" href="#intro" title="Link to here">&para;</a></h1>
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="build-jms-topic-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="section"><h1 id="intro">12. Introduction to listeners<a class="sectionlink" href="#intro" title="Link to here">&para;</a></h1>
 <p>A listener is a component that shows the results of the
 samples. The results can be shown in a tree, tables, graphs or simply written to a log
 file. To view the contents of a response from any given sampler, add either of the Listeners "<span class="code">View
@@ -35,7 +35,7 @@ If you only wish to record certain samples, add the Listener as a child of the s
 Or you can use a Simple Controller to group a set of samplers, and add the Listener to that.
 The same filename can be used by multiple samplers - but make sure they all use the same configuration!
 </p>
-</div><div class="section"><h1 id="defaults">13.1 Default Configuration<a class="sectionlink" href="#defaults" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="defaults">12.1 Default Configuration<a class="sectionlink" href="#defaults" title="Link to here">&para;</a></h1>
 <p>
 The default items to be saved can be defined in the <span class="code">jmeter.properties</span> (or <span class="code">user.properties</span>) file.
 The properties are used as the initial settings for the Listener Config pop-up, and are also
@@ -183,7 +183,7 @@ JMeter (2.9+) will try the following formats:
 Matching is now also strict (non-lenient).
 JMeter 2.8 and earlier used lenient mode which could result in timestamps with incorrect dates 
 (times were usually correct).</p>
-<div class="subsection"><h2 id="sample_variables">13.1.1 Sample Variables<a class="sectionlink" href="#sample_variables" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="sample_variables">12.1.1 Sample Variables<a class="sectionlink" href="#sample_variables" title="Link to here">&para;</a></h2>
 <p>
 JMeter supports the <span class="code">sample_variables</span> 
 property to define a list of additional JMeter variables which are to be saved with
@@ -192,7 +192,7 @@ and as additional attributes in XML files. See above for an example.
 </p>
 </div>
 
-<div class="subsection"><h2 id="sample_configuration">13.1.2 Sample Result Save Configuration<a class="sectionlink" href="#sample_configuration" title="Link to here">&para;</a></h2>
+<div class="subsection"><h2 id="sample_configuration">12.1.2 Sample Result Save Configuration<a class="sectionlink" href="#sample_configuration" title="Link to here">&para;</a></h2>
 <p>
 Listeners can be configured to save different items to the result log files (JTL) by using the Config popup as shown below.
 The defaults are defined as described in  the <a href="#defaults">Listener Default Configuration</a> section above.
@@ -204,7 +204,7 @@ CSV format cannot currently be used to save any items that include line-breaks.
 <p>
 Note that cookies, method and the query string are saved as part of the "<span class="code">Sampler Data</span>" option.
 </p>
-</div><div class="section"><h1 id="batch">13.2 non-GUI (batch) test runs<a class="sectionlink" href="#batch" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="batch">12.2 non-GUI (batch) test runs<a class="sectionlink" href="#batch" title="Link to here">&para;</a></h1>
 <p>
 When running in non-GUI mode, the <span class="code">-l</span> flag can be used to create a top-level listener for the test run.
 This is in addition to any Listeners defined in the test plan.
@@ -229,7 +229,7 @@ as a <span class="code">SimpleDateFormat</span> format applied to the current da
 <span class="code">log_file='jmeter_'yyyyMMddHHmmss'.tmp'</span>.
 This can be used to generate a unique name for each test run.
 </p>
-</div><div class="section"><h1 id="resources">13.3 Resource usage<a class="sectionlink" href="#resources" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="resources">12.3 Resource usage<a class="sectionlink" href="#resources" title="Link to here">&para;</a></h1>
 <div class="clear"></div><div class="note"> Listeners can use a lot of memory if there are a lot of samples.</div><div class="clear"></div>
 <p>
 Most of the listeners currently keep a copy of every sample they display, apart from:
@@ -251,7 +251,7 @@ Less memory is now needed, especially if most samples only take a second or two 
 <li>Aggregate Graph</li>
 </ul>
 <p>To minimize the amount of memory needed, use the Simple Data Writer, and use the CSV format.</p>
-</div><div class="section"><h1 id="csvlogformat">13.4 CSV Log format<a class="sectionlink" href="#csvlogformat" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="csvlogformat">12.4 CSV Log format<a class="sectionlink" href="#csvlogformat" title="Link to here">&para;</a></h1>
 <p>
 The CSV log format depends on which data items are selected in the configuration.
 Only the specified data items are recorded in the file.
@@ -283,7 +283,7 @@ The order of appearance of columns is fixed, and is as follows:
 <li><span class="code">Variables</span>, if specified</li>
 </ul>
 
-</div><div class="section"><h1 id="xmlformat2.1">13.5 XML Log format 2.1<a class="sectionlink" href="#xmlformat2.1" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="xmlformat2.1">12.5 XML Log format 2.1<a class="sectionlink" href="#xmlformat2.1" title="Link to here">&para;</a></h1>
 <p>
 The format of the updated XML (2.1) is as follows (line breaks will be different):
 </p>
@@ -374,11 +374,11 @@ Content-Type: text/html; charset=ISO-8859-1
 <p>
 Note that the sample node name may be either "<span class="code">sample</span>" or "<span class="code">httpSample</span>".
 </p>
-</div><div class="section"><h1 id="xmlformat2.2">13.6 XML Log format 2.2<a class="sectionlink" href="#xmlformat2.2" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="xmlformat2.2">12.6 XML Log format 2.2<a class="sectionlink" href="#xmlformat2.2" title="Link to here">&para;</a></h1>
 <p>
 The format of the JTL files is identical for 2.2 and 2.1. Format 2.2 only affects JMX files.
 </p>
-</div><div class="section"><h1 id="attributes">13.7 Sample Attributes<a class="sectionlink" href="#attributes" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="attributes">12.7 Sample Attributes<a class="sectionlink" href="#attributes" title="Link to here">&para;</a></h1>
 <p>
 The sample attributes have the following meaning:
 </p>
@@ -412,7 +412,7 @@ Currently, the variables are saved as additional attributes.
 The testplan variable name is used as the attribute name.
 See <a href="#sample_variables">Sample variables</a> (above) for more information.
 </div><div class="clear"></div>
-</div><div class="section"><h1 id="saving">13.8 Saving response data<a class="sectionlink" href="#saving" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="saving">12.8 Saving response data<a class="sectionlink" href="#saving" title="Link to here">&para;</a></h1>
 <p>
 As shown above, the response data can be saved in the XML log file if required.
 However, this can make the file rather large, and the text has to be encoded so
@@ -424,7 +424,7 @@ This generates a new file for each sample, and saves the file name with the samp
 The file name can then be included in the sample log output.
 The data will be retrieved from the file if necessary when the sample log file is reloaded.
 </p>
-</div><div class="section"><h1 id="loading">13.9 Loading (reading) response data<a class="sectionlink" href="#loading" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="loading">12.9 Loading (reading) response data<a class="sectionlink" href="#loading" title="Link to here">&para;</a></h1>
 <p>To view an existing results file, you can use the File "<span class="code">Browse&hellip;</span>" button to select a file.
 If necessary, just create a dummy testplan with the appropriate Listener in it.
 </p>
@@ -444,7 +444,7 @@ or
   </span>
 before loading the file.
 </div><div class="clear"></div>
-</div><div class="section"><h1 id="screencap">13.10 Saving Listener GUI data<a class="sectionlink" href="#screencap" title="Link to here">&para;</a></h1>
+</div><div class="section"><h1 id="screencap">12.10 Saving Listener GUI data<a class="sectionlink" href="#screencap" title="Link to here">&para;</a></h1>
 <p>JMeter is capable of saving any listener as a PNG file. To do so, select the
 listener in the left panel. Click
   <span class="menuchoice"><span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Save Node As Image</span></span>.
@@ -459,7 +459,7 @@ e.g. a spreadsheet or text editor.
 </p>
 <figure><a href="../images/screenshots/save_image.png"><img src="../images/screenshots/save_image.png" width="" height="" alt="Figure 1 - "></a><figcaption>Figure 1 - <span class="menuchoice"><span class="guimenuitem">Edit</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Save Node As Image</span></span></figcaption></figure>
 
-</div><ul class="pagelinks"><li><a href="build-monitor-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="share-links">
+</div><ul class="pagelinks"><li><a href="build-jms-topic-test-plan.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="remote-test.html">Next &gt;</a></li></ul><div class="share-links">
       Share this page:
       <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
             Copyright &copy;
