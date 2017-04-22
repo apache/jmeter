@@ -18,12 +18,12 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '13'>
+<!ENTITY sect-num '12'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY vellip   "&#x022EE;" >
 ]>
 
-<document prev="build-monitor-test-plan.html" next="remote-test.html" id="$Id$">
+<document prev="build-jms-topic-test-plan.html" next="remote-test.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Listeners</title>
