@@ -165,6 +165,7 @@ Summary
 <ul>
     <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
     <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
+    <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -174,6 +175,7 @@ Summary
 </p>
 <ul>
 <li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
+<li>Anthony Kearns (anthony.kearns atrightside.co)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
