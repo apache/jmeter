@@ -57,7 +57,7 @@ public class SharedTCLogParser extends TCLogParser implements TestCloneable {
         } catch (Exception exception) {
             log.error("Problem creating samples", exception);
         }
-        return -1;// indicate that an error occured
+        return -1;// indicate that an error occurred
     }
 
     /**

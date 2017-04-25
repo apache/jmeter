@@ -22,14 +22,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -39,7 +32,6 @@ import org.apache.oro.text.regex.PatternMatcher;
 import org.junit.Test;
 
 import jodd.props.Props;
-import jodd.props.PropsEntry;
 
 public class ApdexPerTransactionTest extends JMeterTestCase {
 	
@@ -48,45 +40,26 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 	private static final String apdexString = "sample(\\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000";
 	
 	@Test
-	public void testgetApdexPerTransactionProperty() {
-		final Properties merged = new Properties();
+	public void testgetApdexPerTransactionProperty() throws Exception {
 		final Props props = new Props();
 		final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
 		final char KEY_DELIMITER = '.';
 		final String REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION = REPORT_GENERATOR_KEY_PREFIX
 	            + KEY_DELIMITER + "apdex_per_transaction";
 		
-		merged.putAll(loadProps(
-		        new File(this.getClass().getResource("reportgenerator_test.properties").getFile())));
-		props.load(merged);
+		props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
 		final String apdexPerTransaction = getOptionalProperty(props, 
-        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION, 
-        		String.class);
+        		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION);
 		assertEquals(apdexString, apdexPerTransaction);
-		
 	}
 	
     @Test
-    public void testgetApdexPerTransactionPropertySimple() {
-        final Properties merged = new Properties();
+    public void testgetApdexPerTransactionPropertySimple() throws Exception {
         final Props props = new Props();
-        
-        merged.putAll(loadProps(
-                new File(this.getClass().getResource("reportgenerator_test.properties").getFile())));
-        props.load(merged);
+        props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
         final String title = getOptionalProperty(props, 
-                "jmeter.reportgenerator.graph.responseTimePercentiles.title", 
-                String.class);
-        if (title == null) {
-            Iterator<PropsEntry> it = props.iterator();
-            int i = 0;
-            while(it.hasNext()) {
-                PropsEntry pe = it.next();
-                i++;
-                System.err.println(pe);
-            }
-            fail("title should not be null; see above for entries in property collection: " + i);            
-        }
+                "jmeter.reportgenerator.graph.responseTimePercentiles.title");
+        assertNotNull("title should not be null", title);
     }
     
 	@Test
@@ -156,27 +129,11 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
 		
 	}
 	
-	private static Properties loadProps(File file) {
-        final Properties props = new Properties();
-        try (FileInputStream inStream = new FileInputStream(file)) {
-            props.load(inStream);
-        } catch (IOException e) {
-            fail("Problem loading properties. " + e); // NOSONAR
-        }
-        return props;
+	private static String getOptionalProperty(Props props, String key) {
+        return getProperty(props, key, null);
     }
 	
-	private static String getOptionalProperty(Props props,
-            String key, Class<String> clazz) {
-        String property = getProperty(props, key, null, clazz);
-        if (property != null) {
-        }
-        return property;
-    }
-	
-	private static String getProperty(Props props, String key,
-            String defaultValue, Class<String> clazz)
-             {
+	private static String getProperty(Props props, String key, String defaultValue) {
         String value = props.getValue(key);
         if (value == null) {
             return defaultValue;

@@ -84,9 +84,9 @@ public class KeyToolUtils {
 
         String keytoolPath; // work field
         if (keytoolDir != null) {
-            keytoolPath = new File(new File(keytoolDir),KEYTOOL).getPath();
-        if (!checkKeytool(keytoolPath)) {
-                log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "="+keytoolDir);
+            keytoolPath = new File(new File(keytoolDir), KEYTOOL).getPath();
+            if (!checkKeytool(keytoolPath)) {
+                log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "=" + keytoolDir);
                 keytoolPath = null; // don't try anything else if the property is provided
             }
         } else {
@@ -94,7 +94,7 @@ public class KeyToolUtils {
             if (!checkKeytool(keytoolPath)) { // Not found on PATH, check Java Home
                 File javaHome = SystemUtils.getJavaHome();
                 if (javaHome != null) {
-                    keytoolPath = new File(new File(javaHome,"bin"),KEYTOOL).getPath(); // $NON-NLS-1$
+                    keytoolPath = new File(new File(javaHome, "bin"), KEYTOOL).getPath(); // $NON-NLS-1$
                     if (!checkKeytool(keytoolPath)) {
                         keytoolPath = null;
                     }
@@ -444,7 +444,8 @@ public class KeyToolUtils {
              */
             return status == 0 || status == 1; // TODO this is rather fragile
         } catch (IOException ioe) {
-            log.error("Exception checking for keytool existence, will return false", ioe);
+            log.info("Exception checking for keytool existence, will return false, try another way.");
+            log.debug("Exception is: ", ioe);
             return false;
         } catch (InterruptedException e) { // NOSONAR
             log.error("Command was interrupted\n" + nativeCommand.getOutResult(), e);

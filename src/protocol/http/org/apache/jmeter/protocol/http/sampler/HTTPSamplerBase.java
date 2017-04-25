@@ -2073,7 +2073,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // check if there is anything to replace
             int nbReplaced = ((Integer)result[1]).intValue();
             if (nbReplaced>0) {
-                totalReplaced += nbReplaced;
                 String replacedText = (String) result[0];
                 setPath(replacedText);
                 totalReplaced += nbReplaced;
@@ -2085,7 +2084,6 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             // check if there is anything to replace
             int nbReplaced = ((Integer)result[1]).intValue();
             if (nbReplaced>0) {
-                totalReplaced += nbReplaced;
                 String replacedText = (String) result[0];
                 setDomain(replacedText);
                 totalReplaced += nbReplaced;

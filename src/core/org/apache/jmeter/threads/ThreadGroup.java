@@ -455,7 +455,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
-                log.warn("Exception occured interrupting ThreadStarter", e);
+                log.warn("Exception occurred interrupting ThreadStarter", e);
             }
         }
         
@@ -478,7 +478,7 @@ public class ThreadGroup extends AbstractThreadGroup {
             try {
                 threadStarter.interrupt();
             } catch (Exception e) {
-                log.warn("Exception occured interrupting ThreadStarter", e);
+                log.warn("Exception occurred interrupting ThreadStarter", e);
             }            
         }
         for (JMeterThread item : allThreads.keySet()) {
@@ -682,7 +682,7 @@ public class ThreadGroup extends AbstractThreadGroup {
                     newThread.start();
                 }
             } catch (Exception ex) {
-                log.error("An error occured scheduling delay start of threads for Thread Group: {}", getName(), ex);
+                log.error("An error occurred scheduling delay start of threads for Thread Group: {}", getName(), ex);
             }
         }
     }

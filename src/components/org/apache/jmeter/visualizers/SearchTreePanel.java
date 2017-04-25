@@ -164,7 +164,7 @@ public class SearchTreePanel extends JPanel implements ActionListener {
 
 
     /**
-     * return true if a match occured
+     * return true if a match occurred
      */
     private boolean doSearch() {
         String wordToSearch = searchTF.getText();

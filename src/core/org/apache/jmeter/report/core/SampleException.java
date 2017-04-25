@@ -18,7 +18,7 @@
 package org.apache.jmeter.report.core;
 
 /**
- * Thrown when some sample processing occured
+ * Thrown when some sample processing occurred
  * 
  * @since 3.0
  */

@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * the logs. It also doesn't care how Generator is implemented, as long as it
  * implements the interface. This means a person could simply implement a dummy
  * parser to generate random parameters and the generator consumes the results.
- * This wasn't the original intent of the sampler. I originaly wanted to write
+ * This wasn't the original intent of the sampler. I originally wanted to write
  * this sampler, so that I can take production logs to simulate production
  * traffic in a test environment. Doing so is desirable to study odd or unusual
  * behavior. It's also good to compare a new system against an existing system
