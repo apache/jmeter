@@ -1518,12 +1518,14 @@ becomes:
         </property>
         <property name="value to shift" required="No">
         Indicate the specified amount of seconds/minutes/hours/days/mounths to add according to this usage :
+        <ul>
         <li><code>5s</code> for Second value</li>
         <li><code>5m</code> for Minute value</li>
         <li><code>5H</code> for Hour value</li>
         <li><code>5d</code> for Day value</li>
         <li><code>5M</code> for Month value</li>
-        To shift in the pass, you just have to indicate <code>-5d</code> by example to remove 5 days.
+        </ul>
+        To shift in the pass, you just have to indicate <code>-5d</code>  to remove 5 days.
         If omitted, nothing is add
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
