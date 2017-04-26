@@ -32,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.event.ChangeEvent;
@@ -61,6 +62,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private ArgumentsPanel parameterPanel;
 
     private JLabeledTextField cutPasteFunction;
+    
+    private JLabel resultat;
 
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
@@ -100,14 +103,19 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         comboPanel.add(helpButton);
         this.getContentPane().add(comboPanel, BorderLayout.NORTH);
         this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
-        JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel resultsPanel = new JPanel(new BorderLayout());
+        JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
-        resultsPanel.add(cutPasteFunction);
+        generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
-        resultsPanel.add(generateButton);
+        generatePanel.add(generateButton);
+        resultat = new JLabel("");
+        displayPanel.add(resultat);
+        resultsPanel.add(generatePanel, BorderLayout.NORTH );
+        resultsPanel.add(displayPanel, BorderLayout.WEST );
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
-
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
     }
@@ -160,7 +168,9 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             functionCall.append(")");
         }
         functionCall.append("}");
-        cutPasteFunction.setText(functionCall.toString());
+        cutPasteFunction.setText(functionCall.toString() );
+        CompoundVariable function = new CompoundVariable(functionCall.toString());
+        resultat.setText(JMeterUtils.getResString("result_function") + function.execute().trim()); 
     }
 
     private class HelpListener implements ActionListener {
