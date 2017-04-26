@@ -43,15 +43,16 @@ import org.slf4j.LoggerFactory;
 /**
  * timeShifting Function permit to shift a date
  *
- * Parameters:
- * - format date @see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html (optional - defaults to epoch time in millisecond)
- * - date to shift formated as first param (optional - defaults now)
- * - amount of (seconds / minutes / hours / days / months ) to add (optional - default nothing is add )
- * - variable name ( optional )
+ * Parameters: - format date @see
+ * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+ * (optional - defaults to epoch time in millisecond) - date to shift formated
+ * as first param (optional - defaults now) - amount of (seconds / minutes /
+ * hours / days / months ) to add (optional - default nothing is add ) -
+ * variable name ( optional )
  *
- * Returns:
- * - Returns a formated date with the specified number of (seconds / minutes / hours / days / months ) added.
- * - value is also saved in the variable for later re-use.
+ * Returns: - Returns a formated date with the specified number of (seconds /
+ * minutes / hours / days / months ) added. - value is also saved in the
+ * variable for later re-use.
  *
  * @since 3.3
  */
@@ -61,7 +62,7 @@ public class TimeShiftingFunction extends AbstractFunction {
     private static final String KEY = "__timeShifting"; // $NON-NLS-1$
 
     private static final List<String> desc = new LinkedList<>();
-    
+
     static {
         desc.add(JMeterUtils.getResString("time_format_shift")); //$NON-NLS-1$
         desc.add(JMeterUtils.getResString("date_to_shift")); //$NON-NLS-1$
@@ -83,17 +84,14 @@ public class TimeShiftingFunction extends AbstractFunction {
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String dateString;
-        LocalDateTime localDateTimeToShift = LocalDateTime.now( ZoneId.systemDefault() );
-        DateTimeFormatter formatter = null; 
+        LocalDateTime localDateTimeToShift = LocalDateTime.now(ZoneId.systemDefault());
+        DateTimeFormatter formatter = null;
         if (!StringUtils.isEmpty(format)) {
             try {
                 formatter = new DateTimeFormatterBuilder().appendPattern(format)
-                        .parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
-                        .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
-                        .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                        .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                        .parseDefaulting(ChronoField.NANO_OF_SECOND, 0).parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
+                        .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0).parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0).parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
                         .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
                         .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
                         .toFormatter(JMeterUtils.getLocale());
@@ -107,7 +105,8 @@ public class TimeShiftingFunction extends AbstractFunction {
                 if (formatter != null) {
                     localDateTimeToShift = LocalDateTime.parse(dateToShift, formatter);
                 } else {
-                    localDateTimeToShift = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)), ZoneId.systemDefault());
+                    localDateTimeToShift = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)),
+                            ZoneId.systemDefault());
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
                 log.error("Failed to parse the date '{}' to shift", dateToShift, ex); // $NON-NLS-1$
@@ -120,6 +119,7 @@ public class TimeShiftingFunction extends AbstractFunction {
             Character lastChar = shift.charAt(strLength - 1);
             try {
                 long amount = Long.parseLong(shift.substring(0, strLength - 1));
+                log.debug("Add '{}' period of time on '{}'", shift, localDateTimeToShift);
                 switch (lastChar) {
                 case 's':
                     localDateTimeToShift = localDateTimeToShift.plusSeconds(amount);
@@ -164,7 +164,7 @@ public class TimeShiftingFunction extends AbstractFunction {
 
         checkParameterCount(parameters, 0, 4);
         Object[] values = parameters.toArray();
-        
+
         format = ((CompoundVariable) values[0]).execute();
         dateToShift = ((CompoundVariable) values[1]).execute();
         shift = ((CompoundVariable) values[2]).execute();
