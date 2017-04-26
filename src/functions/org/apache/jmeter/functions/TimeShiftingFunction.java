@@ -98,7 +98,7 @@ public class TimeShiftingFunction extends AbstractFunction {
                         .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue())
                         .toFormatter(JMeterUtils.getLocale());
             } catch (IllegalArgumentException ex) {
-                log.error("Pattern is invalid", ex); // $NON-NLS-1$
+                log.error("Pattern '{}' is invalid", format, ex); // $NON-NLS-1$
             }
         }
 
@@ -110,7 +110,7 @@ public class TimeShiftingFunction extends AbstractFunction {
                     localDateTimeToShift = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dateToShift)), ZoneId.systemDefault());
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse date to shift", ex); // $NON-NLS-1$
+                log.error("Failed to parse the date '{}' to shift", dateToShift, ex); // $NON-NLS-1$
             }
         }
 
@@ -138,7 +138,7 @@ public class TimeShiftingFunction extends AbstractFunction {
                     break;
                 }
             } catch (NumberFormatException nfe) {
-                log.warn("Failed to parse amount of time to add", nfe); // $NON-NLS-1$
+                log.warn("Failed to parse the amount '{}' of time to add", shift, nfe); // $NON-NLS-1$
             }
         }
 
