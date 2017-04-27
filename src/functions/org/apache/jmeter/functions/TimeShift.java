@@ -27,8 +27,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -43,15 +43,18 @@ import org.slf4j.LoggerFactory;
 /**
  * timeShifting Function permit to shift a date
  *
- * Parameters: - format date @see
+ * Parameters: 
+ * - format date @see
  * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - defaults to epoch time in millisecond) - date to shift formated
- * as first param (optional - defaults now) - amount of (seconds / minutes /
- * hours / days / months ) to add (optional - default nothing is add ) -
- * variable name ( optional )
+ * (optional - defaults to epoch time in millisecond) 
+ * - date to shift formated
+ * as first param (optional - defaults now) 
+ * - amount of (seconds, minutes,
+ * hours, days or months ) to add (optional - default nothing is add ) 
+ * - variable name ( optional )
  *
- * Returns: - Returns a formated date with the specified number of (seconds /
- * minutes / hours / days / months ) added. - value is also saved in the
+ * Returns: a formatted date with the specified number of (seconds,
+ * minutes, hours, days or months ) added. - value is also saved in the
  * variable for later re-use.
  *
  * @since 3.3
@@ -61,20 +64,17 @@ public class TimeShift extends AbstractFunction {
 
     private static final String KEY = "__timeShift"; // $NON-NLS-1$
 
-    private static final List<String> desc = new LinkedList<>();
-
-    static {
-        desc.add(JMeterUtils.getResString("time_format_shift")); //$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("date_to_shift")); //$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("value_to_shift")); //$NON-NLS-1$
-        desc.add(JMeterUtils.getResString("function_name_paropt")); //$NON-NLS-1$
-    }
+    private static final List<String> desc = Arrays.asList(
+            JMeterUtils.getResString("time_format_shift"),
+            JMeterUtils.getResString("date_to_shift"),
+            JMeterUtils.getResString("value_to_shift"),
+            JMeterUtils.getResString("function_name_paropt"));
 
     // Ensure that these are set, even if no paramters are provided
     private String format = ""; //$NON-NLS-1$
     private String dateToShift = ""; //$NON-NLS-1$
-    private String shift = ""; //$NON-NLS-1$
-    private String variable = ""; //$NON-NLS-1$
+    private String amountToShift = ""; //$NON-NLS-1$
+    private String variableName = ""; //$NON-NLS-1$
 
     public TimeShift() {
         super();
@@ -97,6 +97,7 @@ public class TimeShift extends AbstractFunction {
                         .toFormatter(JMeterUtils.getLocale());
             } catch (IllegalArgumentException ex) {
                 log.error("Pattern '{}' is invalid", format, ex); // $NON-NLS-1$
+                return "";
             }
         }
 
@@ -114,12 +115,12 @@ public class TimeShift extends AbstractFunction {
         }
 
         // Check amount value to shift
-        if (!StringUtils.isEmpty(shift)) {
-            int strLength = shift.length();
-            Character lastChar = shift.charAt(strLength - 1);
+        if (!StringUtils.isEmpty(amountToShift)) {
+            int strLength = amountToShift.length();
+            Character lastChar = amountToShift.charAt(strLength - 1);
             try {
-                long amount = Long.parseLong(shift.substring(0, strLength - 1));
-                log.debug("Add '{}' period of time on '{}'", shift, localDateTimeToShift);
+                long amount = Long.parseLong(amountToShift.substring(0, strLength - 1));
+                log.debug("Add '{}' period of time on '{}'", amountToShift, localDateTimeToShift);
                 switch (lastChar) {
                 case 's':
                     localDateTimeToShift = localDateTimeToShift.plusSeconds(amount);
@@ -138,7 +139,7 @@ public class TimeShift extends AbstractFunction {
                     break;
                 }
             } catch (NumberFormatException nfe) {
-                log.warn("Failed to parse the amount '{}' of time to add", shift, nfe); // $NON-NLS-1$
+                log.warn("Failed to parse the amount '{}' of time to add", amountToShift, nfe); // $NON-NLS-1$
             }
         }
 
@@ -149,10 +150,10 @@ public class TimeShift extends AbstractFunction {
             dateString = String.valueOf(localDateTimeToShift.toInstant(offset).toEpochMilli());
         }
 
-        if (variable.length() > 0) {
+        if (variableName.length() > 0) {
             JMeterVariables vars = getVariables();
             if (vars != null) {// vars will be null on TestPlan
-                vars.put(variable, dateString);
+                vars.put(variableName, dateString);
             }
         }
         return dateString;
@@ -167,8 +168,8 @@ public class TimeShift extends AbstractFunction {
 
         format = ((CompoundVariable) values[0]).execute();
         dateToShift = ((CompoundVariable) values[1]).execute();
-        shift = ((CompoundVariable) values[2]).execute();
-        variable = ((CompoundVariable) values[3]).execute().trim();
+        amountToShift = ((CompoundVariable) values[2]).execute();
+        variableName = ((CompoundVariable) values[3]).execute().trim();
 
     }
 
