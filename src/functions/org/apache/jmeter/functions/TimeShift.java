@@ -30,6 +30,8 @@ import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -75,7 +77,8 @@ public class TimeShift extends AbstractFunction {
     private String dateToShift = ""; //$NON-NLS-1$
     private String amountToShift = ""; //$NON-NLS-1$
     private String variableName = ""; //$NON-NLS-1$
-
+    private Pattern pattern = Pattern.compile("(?:((?:[+-])?\\d+)([MdHms]))");
+    
     public TimeShift() {
         super();
     }
@@ -116,30 +119,28 @@ public class TimeShift extends AbstractFunction {
 
         // Check amount value to shift
         if (!StringUtils.isEmpty(amountToShift)) {
-            int strLength = amountToShift.length();
-            Character lastChar = amountToShift.charAt(strLength - 1);
-            try {
-                long amount = Long.parseLong(amountToShift.substring(0, strLength - 1));
-                log.debug("Add '{}' period of time on '{}'", amountToShift, localDateTimeToShift);
-                switch (lastChar) {
-                case 's':
-                    localDateTimeToShift = localDateTimeToShift.plusSeconds(amount);
-                    break;
-                case 'm':
-                    localDateTimeToShift = localDateTimeToShift.plusMinutes(amount);
-                    break;
-                case 'H':
-                    localDateTimeToShift = localDateTimeToShift.plusHours(amount);
-                    break;
-                case 'd':
-                    localDateTimeToShift = localDateTimeToShift.plusDays(amount);
-                    break;
-                case 'M':
-                    localDateTimeToShift = localDateTimeToShift.plusMonths(amount);
-                    break;
+            Matcher m = pattern.matcher(amountToShift);
+            while (m.find()) {
+                long amount = Long.parseLong(m.group(1));
+                String period = m.group(2);
+                log.debug("Add '{}{}' period of time on '{}'", amount, period, localDateTimeToShift);
+                switch (period) {
+                    case "s":
+                        localDateTimeToShift = localDateTimeToShift.plusSeconds(amount);
+                        break;
+                    case "m":
+                        localDateTimeToShift = localDateTimeToShift.plusMinutes(amount);
+                        break;
+                    case "H":
+                        localDateTimeToShift = localDateTimeToShift.plusHours(amount);
+                        break;
+                    case "d":
+                        localDateTimeToShift = localDateTimeToShift.plusDays(amount);
+                        break;
+                    case "M":
+                        localDateTimeToShift = localDateTimeToShift.plusMonths(amount);
+                        break;
                 }
-            } catch (NumberFormatException nfe) {
-                log.warn("Failed to parse the amount '{}' of time to add", amountToShift, nfe); // $NON-NLS-1$
             }
         }
 
