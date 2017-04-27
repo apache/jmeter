@@ -64,7 +64,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testDatePlusOneDay() throws Exception {
-        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "1d", "");
+        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "P1D", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-02-01")));
@@ -72,7 +72,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testDatePlusOneDayInVariable() throws Exception {
-        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "1d", "VAR");
+        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "2017-01-01", "P1d", "VAR");
         function.setParameters(params);
         function.execute(result, null);
         assertThat(vars.get("VAR"), is(equalTo("2017-02-01")));
@@ -80,7 +80,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testDatePlusComplexPeriod() throws Exception {
-        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM HH:m", "2017-01-01 12:00", "+1M+1d-1H-5m", "VAR");
+        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM HH:m", "2017-01-01 12:00", "P+32dT-1H-5m", "VAR");
         function.setParameters(params);
         String value = function.execute(result, null);
         assertThat(value, is(equalTo("2017-02-02 10:55")));
@@ -99,7 +99,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testNowPlusOneDay() throws Exception {
-        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd", "", "1d", "");
+        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd", "", "P1d", "");
         function.setParameters(params);
         value = function.execute(result, null);
         LocalDate tomorrow = LocalDate.now().plusDays(1);
@@ -109,10 +109,10 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     
     @Test
     public void testNowWithComplexPeriod() throws Exception {
-        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "", "+1M+1d-1H-5m5s", "");
+        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "", "P10DT-1H-5M5S", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDateTime futureDate = LocalDateTime.now().plusMonths(1).plusDays(1).plusHours(-1).plusMinutes(-5).plusSeconds(5);
+        LocalDateTime futureDate = LocalDateTime.now().plusDays(10).plusHours(-1).plusMinutes(-5).plusSeconds(5);
         LocalDateTime futureDateFromFunction = LocalDateTime.parse(value);
         assertThat(futureDateFromFunction, within(1, ChronoUnit.SECONDS, futureDate));
     }
@@ -120,7 +120,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
     @Test
     public void testWrongAmountToAdd() throws Exception {
         // Nothing is add with wrong value, so check if return is now
-        Collection<CompoundVariable> params = makeParams("", "", "1Psd", "");
+        Collection<CompoundVariable> params = makeParams("", "", "qefv1Psd", "");
         function.setParameters(params);
         value = function.execute(result, null);
         long resultat = Long.parseLong(value);
@@ -131,7 +131,7 @@ public class TestTimeShiftFunction extends JMeterTestCase {
 
     @Test
     public void testWrongFormatDate() throws Exception {
-        Collection<CompoundVariable> params = makeParams("hjfdjyra:fd", "", "1d", "");
+        Collection<CompoundVariable> params = makeParams("hjfdjyra:fd", "", "P1D", "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));

@@ -18,6 +18,7 @@
 
 package org.apache.jmeter.functions;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -30,8 +31,6 @@ import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.engine.util.CompoundVariable;
@@ -77,7 +76,6 @@ public class TimeShift extends AbstractFunction {
     private String dateToShift = ""; //$NON-NLS-1$
     private String amountToShift = ""; //$NON-NLS-1$
     private String variableName = ""; //$NON-NLS-1$
-    private Pattern pattern = Pattern.compile("(?:((?:[+-])?\\d+)([MdHms]))");
     
     public TimeShift() {
         super();
@@ -119,28 +117,11 @@ public class TimeShift extends AbstractFunction {
 
         // Check amount value to shift
         if (!StringUtils.isEmpty(amountToShift)) {
-            Matcher m = pattern.matcher(amountToShift);
-            while (m.find()) {
-                long amount = Long.parseLong(m.group(1));
-                String period = m.group(2);
-                log.debug("Add '{}{}' period of time on '{}'", amount, period, localDateTimeToShift);
-                switch (period) {
-                    case "s":
-                        localDateTimeToShift = localDateTimeToShift.plusSeconds(amount);
-                        break;
-                    case "m":
-                        localDateTimeToShift = localDateTimeToShift.plusMinutes(amount);
-                        break;
-                    case "H":
-                        localDateTimeToShift = localDateTimeToShift.plusHours(amount);
-                        break;
-                    case "d":
-                        localDateTimeToShift = localDateTimeToShift.plusDays(amount);
-                        break;
-                    case "M":
-                        localDateTimeToShift = localDateTimeToShift.plusMonths(amount);
-                        break;
-                }
+            try {
+                Duration duration = Duration.parse(amountToShift);
+                localDateTimeToShift = localDateTimeToShift.plus(duration);
+            }catch (DateTimeParseException ex) {
+                log.error("Failed to parse the amount duration '{}' to shift ", amountToShift, ex); // $NON-NLS-1$
             }
         }
 
