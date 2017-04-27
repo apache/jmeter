@@ -56,10 +56,10 @@ import org.slf4j.LoggerFactory;
  *
  * @since 3.3
  */
-public class TimeShiftingFunction extends AbstractFunction {
-    private static final Logger log = LoggerFactory.getLogger(TimeShiftingFunction.class);
+public class TimeShift extends AbstractFunction {
+    private static final Logger log = LoggerFactory.getLogger(TimeShift.class);
 
-    private static final String KEY = "__timeShifting"; // $NON-NLS-1$
+    private static final String KEY = "__timeShift"; // $NON-NLS-1$
 
     private static final List<String> desc = new LinkedList<>();
 
@@ -76,7 +76,7 @@ public class TimeShiftingFunction extends AbstractFunction {
     private String shift = ""; //$NON-NLS-1$
     private String variable = ""; //$NON-NLS-1$
 
-    public TimeShiftingFunction() {
+    public TimeShift() {
         super();
     }
 

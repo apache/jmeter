@@ -34,7 +34,7 @@ import org.apache.jmeter.threads.JMeterVariables;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestTimeShiftingFunction extends JMeterTestCase {
+public class TestTimeShiftFunction extends JMeterTestCase {
         private Function function;
 
         private SampleResult result;
@@ -55,7 +55,7 @@ public class TestTimeShiftingFunction extends JMeterTestCase {
             jmctx.setPreviousResult(result);
             params = new LinkedList<>();
             result = new SampleResult();
-            function = new TimeShiftingFunction();
+            function = new TimeShift();
         }
 
         @Test
