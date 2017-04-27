@@ -93,7 +93,7 @@ public class TimeShift extends AbstractFunction {
             try {
                 formatter = (DateTimeFormatter) dateTimeFormatterCache.get(format, key -> createFormatter((String)key));
             } catch (IllegalArgumentException ex) {
-                log.error("Pattern '{}' is invalid", format, ex); // $NON-NLS-1$
+                log.error("Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)", format, ex); // $NON-NLS-1$
                 return "";
             }
         }
@@ -117,7 +117,7 @@ public class TimeShift extends AbstractFunction {
                 Duration duration = Duration.parse(amountToShift);
                 localDateTimeToShift = localDateTimeToShift.plus(duration);
             } catch (DateTimeParseException ex) {
-                log.error("Failed to parse the amount duration '{}' to shift ", amountToShift, ex); // $NON-NLS-1$
+                log.error("Failed to parse the amount duration '{}' to shift (see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ", amountToShift, ex); // $NON-NLS-1$
             }
         }
 
