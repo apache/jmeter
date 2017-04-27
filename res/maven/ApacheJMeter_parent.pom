@@ -429,10 +429,10 @@ under the License.
         <version>${hamcrest-core.version}</version>
       </dependency>
       <dependency>
-	    <groupId>org.exparity</groupId>
-	    <artifactId>hamcrest-date</artifactId>
-	    <version>${hamcrest-date.version}</version>
-	  </dependency>
+        <groupId>org.exparity</groupId>
+        <artifactId>hamcrest-date</artifactId>
+        <version>${hamcrest-date.version}</version>
+        </dependency>
     </dependencies>
 
     <repositories>
