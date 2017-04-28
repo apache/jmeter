@@ -77,7 +77,7 @@ public class TimeShift extends AbstractFunction {
     private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
     /** Date time format cache handler **/
-    private Cache<Object, Object> dateTimeFormatterCache = null;
+    private Cache<String, DateTimeFormatter> dateTimeFormatterCache = null;
 
     public TimeShift() {
         super();
@@ -147,7 +147,7 @@ public class TimeShift extends AbstractFunction {
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(JMeterUtils.getLocale());
     }
 
-    protected static Cache<Object, Object> buildCache() {
+    protected static Cache<String, DateTimeFormatter> buildCache() {
         Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
         cacheBuilder.maximumSize(100);
         return cacheBuilder.build();
