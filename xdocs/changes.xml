@@ -147,6 +147,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>58743</bug><pr>293</bug>TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -176,6 +177,7 @@ Summary
 <ul>
 <li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
 <li>Anthony Kearns (anthony.kearns atrightside.co)</li>
+<li>Emilian Bold (emi @ apache.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
