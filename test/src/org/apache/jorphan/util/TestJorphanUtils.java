@@ -24,9 +24,12 @@ package org.apache.jorphan.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import java.nio.charset.StandardCharsets;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -76,224 +79,159 @@ public class TestJorphanUtils {
     
     // Tests for split(String,String,boolean)
     @Test
-    public void testSplit1() {
-        String in = "a,bc,,"; // Test ignore trailing split characters
-        String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        out = JOrphanUtils.split(in, ",",false);
-        assertEquals("Should detect the trailing split chars; ", 4, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        assertEquals("", out[2]);
-        assertEquals("", out[3]);
+    public void testSplitStringStringTrueWithTrailingSplitChars() {
+        // Test ignore trailing split characters
+        // Ignore adjacent delimiters
+        assertThat("Ignore trailing split chars", JOrphanUtils.split("a,bc,,", ",", true),
+                CoreMatchers.equalTo(new String[] { "a", "bc" }));
     }
 
     @Test
-    public void testSplit2() {
-        String in = ",,a,bc"; // Test leading split characters
-        String out[] = JOrphanUtils.split(in, ",",true);
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        out = JOrphanUtils.split(in, ",",false);
-        assertEquals("Should detect the leading split chars; ", 4, out.length);
-        assertEquals("", out[0]);
-        assertEquals("", out[1]);
-        assertEquals("a", out[2]);
-        assertEquals("bc", out[3]);
+    public void testSplitStringStringFalseWithTrailingSplitChars() {
+         // Test ignore trailing split characters
+        assertThat("Include the trailing split chars", JOrphanUtils.split("a,bc,,", ",", false),
+                CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
+    }
+
+    @Test
+    public void testSplitStringStringTrueWithLeadingSplitChars() {
+        // Test leading split characters
+        assertThat("Ignore leading split chars", JOrphanUtils.split(",,a,bc", ",", true),
+                CoreMatchers.equalTo(new String[] { "a", "bc" }));
+    }
+
+    @Test
+    public void testSplitStringStringFalseWithLeadingSplitChars() {
+        // Test leading split characters
+        assertThat("Include leading split chars", JOrphanUtils.split(",,a,bc", ",", false),
+                CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
     }
     
     @Test
     public void testSplit3() {
         String in = "a,bc,,"; // Test ignore trailing split characters
         String out[] = JOrphanUtils.split(in, ",",true);// Ignore adjacent delimiters
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
+        assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc" }));
         out = JOrphanUtils.split(in, ",",false);
-        assertEquals("Should detect the trailing split chars; ", 4, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        assertEquals("", out[2]);
-        assertEquals("", out[3]);
+        assertThat(out, CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
     }
 
     @Test
-    public void testSplit4() {
-        String in = " , ,a ,bc"; // Test leading split characters
-        String out[] = JOrphanUtils.split(in, " ,",true);
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        out = JOrphanUtils.split(in, " ,",false);
-        assertEquals("Should detect the leading split chars; ", 4, out.length);
-        assertEquals("", out[0]);
-        assertEquals("", out[1]);
-        assertEquals("a", out[2]);
-        assertEquals("bc", out[3]);
+    public void testSplitStringStringTrueWithLeadingComplexSplitCharacters() {
+        // Test leading split characters
+        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", true), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+    }
+
+    @Test
+    public void testSplitStringStringFalseWithLeadingComplexSplitCharacters() {
+        // Test leading split characters
+        assertThat(JOrphanUtils.split(" , ,a ,bc", " ,", false),
+                CoreMatchers.equalTo(new String[] { "", "", "a", "bc" }));
     }
     
     @Test
-    public void testTruncate() throws Exception
+    public void testSplitStringStringTrueTruncate() throws Exception
     {
-        String in = "a;,b;,;,;,d;,e;,;,f";
-        String[] out = JOrphanUtils.split(in,";,",true);
-        assertEquals(5, out.length);
-        assertEquals("a",out[0]);
-        assertEquals("b",out[1]);
-        assertEquals("d",out[2]);
-        assertEquals("e",out[3]);
-        assertEquals("f",out[4]);
-        out = JOrphanUtils.split(in,";,",false);
-        assertEquals(8, out.length);
-        assertEquals("a",out[0]);
-        assertEquals("b",out[1]);
-        assertEquals("", out[2]);
-        assertEquals("", out[3]);
-        assertEquals("d",out[4]);
-        assertEquals("e",out[5]);
-        assertEquals("", out[6]);
-        assertEquals("f",out[7]);
-        
+        assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", true),
+                CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
     }
 
     @Test
-    public void testSplit5() throws Exception
+    public void testSplitStringStringFalseTruncate() throws Exception
     {
-        String in = "a;;b;;;;;;d;;e;;;;f";
-        String[] out = JOrphanUtils.split(in,";;",true);
-        assertEquals(5, out.length);
-        assertEquals("a",out[0]);
-        assertEquals("b",out[1]);
-        assertEquals("d",out[2]);
-        assertEquals("e",out[3]);
-        assertEquals("f",out[4]);
-        out = JOrphanUtils.split(in,";;",false);
-        assertEquals(8, out.length);
-        assertEquals("a",out[0]);
-        assertEquals("b",out[1]);
-        assertEquals("", out[2]);
-        assertEquals("", out[3]);
-        assertEquals("d",out[4]);
-        assertEquals("e",out[5]);
-        assertEquals("", out[6]);
-        assertEquals("f",out[7]);
+        assertThat(JOrphanUtils.split("a;,b;,;,;,d;,e;,;,f", ";,", false),
+                CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
+    }
+
+    @Test
+    public void testSplitStringStringTrueDoubledSplitChar() throws Exception
+    {
+        assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", true),
+                CoreMatchers.equalTo(new String[] { "a", "b", "d", "e", "f" }));
+    }
+
+    @Test
+    public void testSplitStringStringFalseDoubledSplitChar() throws Exception
+    {
+        assertThat(JOrphanUtils.split("a;;b;;;;;;d;;e;;;;f", ";;", false),
+                CoreMatchers.equalTo(new String[] { "a", "b", "", "", "d", "e", "", "f" }));
         
     }
 
     // Empty string
     @Test
     public void testEmpty(){
-        String out[] = JOrphanUtils.split("", ",",false);   
-        assertEquals(0,out.length);
+        String out[] = JOrphanUtils.split("", ",", false);
+        assertEquals(0, out.length);
     }
 
     // Tests for split(String,String,String)
     @Test
-    public void testSplitSSS1() {
-        String in = "a,bc,,"; // Test non-empty parameters
-        String out[] = JOrphanUtils.split(in, ",","?");
-        assertEquals(4, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        assertEquals("?", out[2]);
-        assertEquals("?", out[3]);
+    public void testSplitSSSSingleDelimiterWithDefaultValue() {
+        // Test non-empty parameters
+        assertThat(JOrphanUtils.split("a,bc,,", ",", "?"), CoreMatchers.equalTo(new String[] { "a", "bc", "?", "?" }));
     }
 
     @Test
-    public void testSplitSSS2() {
-        String in = "a,bc,,"; // Empty default
-        String out[] = JOrphanUtils.split(in, ",","");
-        assertEquals(4, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        assertEquals("", out[2]);
-        assertEquals("", out[3]);
+    public void testSplitSSSSingleDelimiterWithEmptyValue() {
+        // Empty default
+        assertThat(JOrphanUtils.split("a,bc,,", ",", ""), CoreMatchers.equalTo(new String[] { "a", "bc", "", "" }));
     }
 
     @Test
-    public void testSplitSSS3() {
+    public void testSplitSSSEmptyDelimiter() {
         String in = "a,bc,,"; // Empty delimiter
-        String out[] = JOrphanUtils.split(in, "","?");
-        assertEquals(1, out.length);
-        assertEquals(in, out[0]);
+        assertThat(JOrphanUtils.split(in, "", "?"), CoreMatchers.equalTo(new String[] { in }));
     }
 
     @Test
-    public void testSplitSSS4() {
-        String in = "a,b;c,,"; // Multiple delimiters
-        String out[];
-        out = JOrphanUtils.split(in, ",;","?");
-        assertEquals(5, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("b", out[1]);
-        assertEquals("c", out[2]);
-        assertEquals("?", out[3]);
-        assertEquals("?", out[4]);
-        out = JOrphanUtils.split(in, ",;","");
-        assertEquals(5, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("b", out[1]);
-        assertEquals("c", out[2]);
-        assertEquals("", out[3]);
-        assertEquals("", out[4]);
+    public void testSplitSSSMultipleDelimCharsWithDefaultValue() {
+        // Multiple delimiters
+        assertThat(JOrphanUtils.split("a,b;c,,", ",;", "?"),
+                CoreMatchers.equalTo(new String [] { "a", "b", "c", "?", "?" }));
     }
 
     @Test
-    public void testSplitSSS5() {
-        String in = "a,bc,,"; // Delimiter same as splitter
-        String out[] = JOrphanUtils.split(in, ",",",");
-        assertEquals(4, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-        assertEquals(",", out[2]);
-        assertEquals(",", out[3]);
+    public void testSplitSSSMultipleDelimCharsWithEmptyValue() {
+        // Multiple delimiters
+        assertThat(JOrphanUtils.split("a,b;c,,", ",;", ""), CoreMatchers.equalTo(new String[] { "a", "b", "c", "", "" }));
     }
 
     @Test
-    public void testSplitSSSNulls() {
-        String in = "a,bc,,";
-        String out[];
-        try {
-            out = JOrphanUtils.split(null, ",","?");
-            assertEquals(0, out.length);
-            fail("Expecting NullPointerException");
-        } catch (NullPointerException ignored){
-            //Ignored
-        }
-        try{
-            out = JOrphanUtils.split(in, null,"?");
-            assertEquals(0, out.length);
-            fail("Expecting NullPointerException");
-        } catch (NullPointerException ignored){
-            //Ignored
-        }
+    public void testSplitSSSSameDelimiterAsDefaultValue() {
+        assertThat(JOrphanUtils.split("a,bc,,", ",", ","), CoreMatchers.equalTo(new String[] { "a", "bc", ",", "," }));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testSplitNullStringString() {
+        JOrphanUtils.split(null, ",","?");
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testSplitStringNullString() {
+        JOrphanUtils.split("a,bc,,", null, "?");
     }
 
     @Test
-    public void testSplitSSSNull() {
-        String out[];
-        out = JOrphanUtils.split("a,bc,,", ",",null);
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
-
-        out = JOrphanUtils.split("a,;bc,;,", ",;",null);
-        assertEquals(2, out.length);
-        assertEquals("a", out[0]);
-        assertEquals("bc", out[1]);
+    public void testSplitStringStringNullWithSingleDelimiter() {
+        assertThat(JOrphanUtils.split("a,bc,,", ",", null), CoreMatchers.equalTo(new String[] { "a", "bc" }));
     }
 
     @Test
-    public void testSplitSSSNone() {
+    public void testSplitStringStringNullWithMultipleDelimiter() {
+        assertThat(JOrphanUtils.split("a,;bc,;,", ",;", null), CoreMatchers.equalTo(new String[] { "a", "bc" }));
+    }
+
+    @Test
+    public void testSplitSSSWithEmptyInput() {
         String[] out = JOrphanUtils.split("", "," ,"x");
         assertEquals(0, out.length);
+    }
 
-        out = JOrphanUtils.split("a,;bc,;,", "","x");
-        assertEquals(1, out.length);
-        assertEquals("a,;bc,;,", out[0]);
+    @Test
+    public void testSplitSSSWithEmptyDelimiter() {
+        final String in = "a,;bc,;,";
+        assertThat(JOrphanUtils.split(in, "", "x"), CoreMatchers.equalTo(new String[] { in }));
     }
 
     @Test
@@ -306,7 +244,7 @@ public class TestJorphanUtils {
         assertEquals("A+B++C+", JOrphanUtils.replaceAllChars("A B  C ",' ', "+"));
         assertEquals("A%20B%20%20C%20", JOrphanUtils.replaceAllChars("A B  C ",' ', "%20"));
     }
-    
+
     @Test
     public void testTrim(){
         assertEquals("",JOrphanUtils.trim("", " ;"));
@@ -328,7 +266,8 @@ public class TestJorphanUtils {
     public void testbaToByte() throws Exception{
         assertEqualsArray(new byte[]{},JOrphanUtils.baToHexBytes(new byte[]{}));
         assertEqualsArray(new byte[]{'0','0'},JOrphanUtils.baToHexBytes(new byte[]{0}));
-        assertEqualsArray("0f107f8081ff".getBytes("UTF-8"),JOrphanUtils.baToHexBytes(new byte[]{15,16,127,-128,-127,-1}));
+        assertEqualsArray("0f107f8081ff".getBytes(StandardCharsets.UTF_8),
+                JOrphanUtils.baToHexBytes(new byte[] { 15, 16, 127, -128, -127, -1 }));
     }
 
     private void assertEqualsArray(byte[] expected, byte[] actual){
@@ -357,7 +296,7 @@ public class TestJorphanUtils {
         in = new StringBuilder("A");
         assertEquals("       A", JOrphanUtils.rightAlign(in, 8).toString());
     }
-    
+
     @Test
     public void testReplaceAllWithRegex() {
         Assert.assertArrayEquals(new Object[] {"toto", 0}, 
