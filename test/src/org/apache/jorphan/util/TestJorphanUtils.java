@@ -298,6 +298,13 @@ public class TestJorphanUtils {
     }
 
     @Test
+    public void testReplaceAllWithRegexWithSearchValueContainedInReplaceValue() {
+        // Bug 61054
+        Assert.assertArrayEquals(new Object[] { "abcd", 1 },
+                JOrphanUtils.replaceAllWithRegex("abc", "abc", "abcd", true));
+    }
+
+    @Test
     public void testReplaceAllWithRegex() {
         Assert.assertArrayEquals(new Object[] {"toto", 0}, 
                 JOrphanUtils.replaceAllWithRegex("toto","ti", "ta", true));

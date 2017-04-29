@@ -162,12 +162,13 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
 </ul>
-    
+
 <h3>General</h3>
 <ul>
     <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
     <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
     <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
+    <li><bug>61054</bug>Endless loop in JOrphanUtils#replaceAllWithRegex when regex is contained in replacement</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
