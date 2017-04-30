@@ -385,6 +385,7 @@
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${asm.jar}"/>
     <include name="${lib.dir}/${beanshell.jar}"/>
+    <include name="${lib.dir}/${brotli-dec.jar}"/>
     <include name="${lib.dir}/${caffeine.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
     <include name="${lib.dir}/${commons-collections.jar}"/>
@@ -465,6 +466,7 @@
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
     <pathelement location="${lib.dir}/${asm.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
+    <pathelement location="${lib.dir}/${brotli-dec.jar}"/>
     <pathelement location="${lib.dir}/${caffeine.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
@@ -3108,6 +3110,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
     <process_jarfile jarname="beanshell"/>
+    <process_jarfile jarname="brotli-dec"/>
     <process_jarfile jarname="caffeine"/>
     <process_jarfile jarname="commons-codec"/>
     <process_jarfile jarname="commons-collections"/>

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 import javax.security.auth.Subject;
 
@@ -64,6 +65,8 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.DeflateInputStream;
+import org.apache.http.client.entity.InputStreamFactory;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -79,6 +82,9 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
+import org.apache.http.config.Lookup;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.params.ConnRoutePNames;
@@ -139,6 +145,7 @@ import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.JsseSSLManager;
 import org.apache.jmeter.util.SSLManager;
 import org.apache.jorphan.util.JOrphanUtils;
+import org.brotli.dec.BrotliInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,6 +158,28 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static final int MAX_BODY_RETAIN_SIZE = JMeterUtils.getPropDefault("httpclient4.max_body_retain_size", 32 * 1024);
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
+    
+    private final static InputStreamFactory GZIP = new InputStreamFactory() {
+        @Override
+        public InputStream create(final InputStream instream) throws IOException {
+            return new GZIPInputStream(instream);
+        }
+    };
+
+    private final static InputStreamFactory DEFLATE = new InputStreamFactory() {
+        @Override
+        public InputStream create(final InputStream instream) throws IOException {
+            return new DeflateInputStream(instream);
+        }
+
+    };
+    
+    private final static InputStreamFactory BROTLI = new InputStreamFactory() {
+        @Override
+        public InputStream create(final InputStream instream) throws IOException {
+            return new BrotliInputStream(instream);
+        }
+    };
 
     /** retry count to be used (default 0); 0 = disable retries */
     private static final int RETRY_COUNT = JMeterUtils.getPropDefault("httpclient4.retrycount", 0);
@@ -216,7 +245,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * that HC core {@link ResponseContentEncoding} removes after uncompressing
      * See Bug 59401
      */
-    private static final HttpResponseInterceptor RESPONSE_CONTENT_ENCODING = new ResponseContentEncoding() {
+    private static final HttpResponseInterceptor RESPONSE_CONTENT_ENCODING = new ResponseContentEncoding(createLookupRegistry()) {
         @Override
         public void process(HttpResponse response, HttpContext context)
                 throws HttpException, IOException {
@@ -310,6 +339,20 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         super(testElement);
     }
     
+    /**
+     * Customize to plug Brotli
+     * @return {@link Lookup}
+     */
+    private static Lookup<InputStreamFactory> createLookupRegistry() {
+        Registry<InputStreamFactory> registry =
+                RegistryBuilder.<InputStreamFactory>create()
+                .register("gzip", GZIP)
+                .register("br", BROTLI)
+                .register("x-gzip", GZIP)
+                .register("deflate", DEFLATE).build();
+        return registry;
+    }
+
     /**
      * Implementation that allows GET method to have a body
      */
