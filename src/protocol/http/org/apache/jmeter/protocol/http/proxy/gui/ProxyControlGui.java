@@ -708,6 +708,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 20);
         portField.setName(PORTFIELD);
         portField.addKeyListener(this);
+        Dimension portPreferredSize = portField.getPreferredSize();
+        portField.setMinimumSize(new Dimension((int) Math.round(portPreferredSize.width*0.75), portPreferredSize.height));
 
         JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
         label.setLabelFor(portField);
