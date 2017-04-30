@@ -48,7 +48,7 @@ goto exit
 echo Found ApacheJMeter_core.jar
 
 REM No longer need to create the rmiregistry as it is done by the server
-REM set CLASSPATH=%JMETER_HOME%\lib\ext\ApacheJMeter_core.jar;%JMETER_HOME%\lib\jorphan.jar;%JMETER_HOME%\lib\logkit-1.2.jar
+REM set CLASSPATH=%JMETER_HOME%\lib\ext\ApacheJMeter_core.jar;%JMETER_HOME%\lib\jorphan.jar
 
 REM START rmiregistry %SERVER_PORT%
 REM
