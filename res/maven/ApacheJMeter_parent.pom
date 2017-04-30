@@ -59,6 +59,7 @@ under the License.
       <bcmail.version>1.49</bcmail.version>
       <bcprov.version>1.49</bcprov.version>
       <bcpkix.version>1.49</bcpkix.version>
+      <dec.version>0.1.1</dec.version>
       <caffeine.version>2.4.0</caffeine.version>
       <commons-codec.version>1.10</commons-codec.version>
       <commons-collections.version>3.2.2</commons-collections.version>
@@ -151,6 +152,11 @@ under the License.
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcpkix-jdk15on</artifactId>
         <version>${bcpkix.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.brotli</groupId>
+        <artifactId>dec</artifactId>
+        <version>${dec.version}</version>
       </dependency>
       <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
