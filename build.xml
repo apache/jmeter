@@ -123,6 +123,7 @@
   <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="false" />
   <property name="skip.batchtest_SlowCharsFeature" value="false" />
   <property name="skip.batchtest_TestKeepAlive" value="false" />
+  <property name="skip.batchtest_ResponseDecompression" value="false" />
   <property name="skip.test_https" value="true" />
   <property name="skip.test_http" value="false" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
@@ -2760,6 +2761,12 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.name" value="TestKeepAlive"/>
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
       <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
+    </antcall>
+      
+    <antcall target="batchtest">
+       <param name="batchtest.name" value="ResponseDecompression"/>
+       <param name="batchtest.jmx" value="ResponseDecompression.jmx"/>
+       <param name="skip.batchtest" value="${skip.batchtest_ResponseDecompression}" />
     </antcall>
 
     <antcall target="batchtest">
