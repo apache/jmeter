@@ -159,14 +159,14 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     private static final Logger log = LoggerFactory.getLogger(HTTPHC4Impl.class);
     
-    private final static InputStreamFactory GZIP = new InputStreamFactory() {
+    private static final InputStreamFactory GZIP = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
             return new GZIPInputStream(instream);
         }
     };
 
-    private final static InputStreamFactory DEFLATE = new InputStreamFactory() {
+    private static final InputStreamFactory DEFLATE = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
             return new DeflateInputStream(instream);
@@ -174,7 +174,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
     };
     
-    private final static InputStreamFactory BROTLI = new InputStreamFactory() {
+    private static final InputStreamFactory BROTLI = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
             return new BrotliInputStream(instream);
@@ -344,13 +344,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      * @return {@link Lookup}
      */
     private static Lookup<InputStreamFactory> createLookupRegistry() {
-        Registry<InputStreamFactory> registry =
+        return
                 RegistryBuilder.<InputStreamFactory>create()
                 .register("gzip", GZIP)
                 .register("br", BROTLI)
                 .register("x-gzip", GZIP)
                 .register("deflate", DEFLATE).build();
-        return registry;
     }
 
     /**
