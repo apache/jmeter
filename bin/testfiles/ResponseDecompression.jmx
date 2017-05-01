@@ -212,7 +212,8 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-94228242">microsoft</stringProp>
+                <stringProp name="1909739726">Microsoft</stringProp>
+                <stringProp name="3023936">bing</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -376,42 +377,6 @@
           </value>
         </objProp>
         <stringProp name="filename">ResponseDecompression.xml</stringProp>
-      </ResultCollector>
-      <hashTree/>
-      <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
-        <objProp>
-          <name>saveConfig</name>
-          <value class="SampleSaveConfiguration">
-            <time>true</time>
-            <latency>true</latency>
-            <timestamp>false</timestamp>
-            <success>true</success>
-            <label>true</label>
-            <code>true</code>
-            <message>true</message>
-            <threadName>true</threadName>
-            <dataType>true</dataType>
-            <encoding>true</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
-            <responseData>true</responseData>
-            <samplerData>true</samplerData>
-            <xml>true</xml>
-            <fieldNames>false</fieldNames>
-            <responseHeaders>true</responseHeaders>
-            <requestHeaders>true</requestHeaders>
-            <responseDataOnError>false</responseDataOnError>
-            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-            <assertionsResultsToSave>0</assertionsResultsToSave>
-            <sentBytes>true</sentBytes>
-            <fileName>true</fileName>
-            <threadCounts>true</threadCounts>
-            <sampleCount>true</sampleCount>
-            <idleTime>true</idleTime>
-          </value>
-        </objProp>
-        <stringProp name="filename">ResponseDecompressionFullDebug.xml</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>
