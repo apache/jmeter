@@ -36,9 +36,9 @@ import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class finds classes that extend one of a set of parent classes
@@ -239,10 +239,10 @@ public final class ClassFinder {
                 String contains, String notContains, boolean annotations)
                 throws IOException  {
         if (log.isDebugEnabled()) {
-            log.debug("searchPathsOrJars : " + Arrays.toString(searchPathsOrJars));
-            log.debug("superclass : " + Arrays.toString(classNames));
-            log.debug("innerClasses : " + innerClasses + " annotations: " + annotations);
-            log.debug("contains: " + contains + " notContains: " + notContains);
+            log.debug("searchPathsOrJars : {}", Arrays.toString(searchPathsOrJars));
+            log.debug("superclass : {}", Arrays.toString(classNames));
+            log.debug("innerClasses : {} annotations: {}", innerClasses, annotations);
+            log.debug("contains: {}, notContains: {}", contains, notContains);
         }
 
         
@@ -261,20 +261,18 @@ public final class ClassFinder {
     
     public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException  {
         if (log.isDebugEnabled()) {
-            log.debug("searchPathsOrJars : " + Arrays.toString(searchPathsOrJars));
+            log.debug("searchPathsOrJars : {}", Arrays.toString(searchPathsOrJars));
         }
     
         // Find all jars in the search path
-        String[] strPathsOrJars = addJarsInPath(searchPathsOrJars);
-        for (int k = 0; k < strPathsOrJars.length; k++) {
-            strPathsOrJars[k] = fixPathEntry(strPathsOrJars[k]);
-        }
+        List<String> strPathsOrJars = Arrays.asList(addJarsInPath(searchPathsOrJars));
+        strPathsOrJars.forEach(p -> fixPathEntry(p));
     
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
         if (log.isDebugEnabled()) {
             for (String path : listPaths) {
-                log.debug("listPaths : " + path);
+                log.debug("listPaths : {}", path);
             }
         }
     
@@ -285,50 +283,50 @@ public final class ClassFinder {
         }
         
         if (log.isDebugEnabled()) {
-            log.debug("listClasses.size()="+listClasses.size());
+            log.debug("listClasses.size()={}", listClasses.size());
             for (String clazz : listClasses) {
-                log.debug("listClasses : " + clazz);
+                log.debug("listClasses : {}", clazz);
             }
         }
 
         return new ArrayList<>(listClasses);
     }
 
-    /*
+    /**
      * Returns the classpath entries that match the search list of jars and paths
+     * @param List can contain null element but cannot be null
+     * @return List of paths (jars or folders) that ends with one of the rows of strPathsOrJars
      */
-    private static List<String> getClasspathMatches(String[] strPathsOrJars) {
+    private static List<String> getClasspathMatches(List<String> strPathsOrJars) {
         final String javaClassPath = System.getProperty("java.class.path"); // $NON-NLS-1$
-        StringTokenizer stPaths =
-            new StringTokenizer(javaClassPath, File.pathSeparator);
         if (log.isDebugEnabled()) {
-            log.debug("Classpath = " + javaClassPath);
-            for (int i = 0; i < strPathsOrJars.length; i++) {
-                log.debug("strPathsOrJars[" + i + "] : " + strPathsOrJars[i]);
+            log.debug("Classpath = {}", javaClassPath);
+            for (int i = 0; i < strPathsOrJars.size(); i++) {
+                log.debug("strPathsOrJars[{}] : {}", i, strPathsOrJars.get(i));
             }
         }
 
         // find all jar files or paths that end with strPathOrJar
         List<String> listPaths = new ArrayList<>();
-        String strPath = null;
-        while (stPaths.hasMoreTokens()) {
-            strPath = fixPathEntry(stPaths.nextToken());
-            if (strPathsOrJars == null) {
-                log.debug("Adding: " + strPath);
-                listPaths.add(strPath);
-            } else {
-                boolean found = false;
-                for (int i = 0; i < strPathsOrJars.length; i++) {
-                    if (strPath.endsWith(strPathsOrJars[i])) {
-                        found = true;
-                        log.debug("Adding " + strPath + " found at " + i);
-                        listPaths.add(strPath);
-                        break;// no need to look further
-                    }
+        String classpathElement = null;
+        StringTokenizer classpathElements =
+                new StringTokenizer(javaClassPath, File.pathSeparator);
+        while (classpathElements.hasMoreTokens()) {
+            classpathElement = fixPathEntry(classpathElements.nextToken());
+            if(classpathElement == null) {
+                continue;
+            }
+            boolean found = false;
+            for (String currentStrPathOrJar : strPathsOrJars) {
+                if (currentStrPathOrJar != null && currentStrPathOrJar.endsWith(currentStrPathOrJar)) {
+                    found = true;
+                    log.debug("Adding {}", classpathElement);
+                    listPaths.add(classpathElement);
+                    break;// no need to look further
                 }
-                if (!found) {
-                    log.debug("Did not find: " + strPath);
-                }
+            }
+            if (!found) {
+                log.debug("Did not find: {}", classpathElement);
             }
         }
         return listPaths;
@@ -430,9 +428,7 @@ public final class ClassFinder {
         if (file.isDirectory()) {
             findClassesInPathsDir(strPath, file, listClasses, filter);
         } else if (file.exists()) {
-            ZipFile zipFile = null;
-            try {
-                zipFile = new ZipFile(file);
+            try (ZipFile zipFile = new ZipFile(file);){
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements()) {
                     String strEntry = entries.nextElement().toString();
@@ -444,12 +440,7 @@ public final class ClassFinder {
                     }
                 }
             } catch (IOException e) {
-                log.warn("Can not open the jar " + strPath + " " + e.getLocalizedMessage(),e);
-            }
-            finally {
-                if(zipFile != null) {
-                    try {zipFile.close();} catch (Exception e) {}
-                }
+                log.warn("Can not open the jar {}, message: {}", strPath, e.getLocalizedMessage(),e);
             }
         }
     }
@@ -458,7 +449,7 @@ public final class ClassFinder {
     private static void findClassesInPathsDir(String strPathElement, File dir, Set<String> listClasses, ClassFilter filter) throws IOException {
         String[] list = dir.list();
         if(list == null) {
-            log.warn(dir.getAbsolutePath()+" is not a folder");
+            log.warn("{} is not a folder", dir.getAbsolutePath());
             return;
         }
         
@@ -479,5 +470,4 @@ public final class ClassFinder {
             }
         }
     }
-    
 }
