@@ -11,8 +11,6 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
-  <httpSample s="true" lb="https://www.google.com/" rc="302" rm="Found" dt="text"/>
-  <httpSample s="true" lb="https://www.google.fr/?gfe_rd=cr&amp;ei=2zwHWZSTE9aAaOuGkOgB" rc="200" rm="OK" dt="text"/>
 </httpSample>
 <httpSample s="true" lb="HR2-GZIP" rc="200" rm="OK" dt="text">
   <assertionResult>
