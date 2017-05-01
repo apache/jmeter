@@ -318,8 +318,7 @@ public final class ClassFinder {
                 continue;
             }
             boolean found = false;
-            for (int i = 0; i < strPathsOrJars.size(); i++) {
-                String currentStrPathOrJar = strPathsOrJars.get(i); 
+            for (String currentStrPathOrJar : strPathsOrJars) {
                 if (currentStrPathOrJar != null && classpathElement.endsWith(currentStrPathOrJar)) {
                     found = true;
                     log.debug("Adding {}", classpathElement);
