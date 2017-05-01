@@ -311,14 +311,16 @@ public final class ClassFinder {
         String classpathElement = null;
         StringTokenizer classpathElements =
                 new StringTokenizer(javaClassPath, File.pathSeparator);
+
         while (classpathElements.hasMoreTokens()) {
             classpathElement = fixPathEntry(classpathElements.nextToken());
             if(classpathElement == null) {
                 continue;
             }
             boolean found = false;
-            for (String currentStrPathOrJar : strPathsOrJars) {
-                if (currentStrPathOrJar != null && currentStrPathOrJar.endsWith(currentStrPathOrJar)) {
+            for (int i = 0; i < strPathsOrJars.size(); i++) {
+                String currentStrPathOrJar = strPathsOrJars.get(i); 
+                if (currentStrPathOrJar != null && classpathElement.endsWith(currentStrPathOrJar)) {
                     found = true;
                     log.debug("Adding {}", classpathElement);
                     listPaths.add(classpathElement);
@@ -470,4 +472,5 @@ public final class ClassFinder {
             }
         }
     }
+    
 }
