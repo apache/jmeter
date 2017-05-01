@@ -266,7 +266,7 @@ public final class ClassFinder {
     
         // Find all jars in the search path
         List<String> strPathsOrJars = Arrays.asList(addJarsInPath(searchPathsOrJars));
-        strPathsOrJars.forEach(p -> fixPathEntry(p));
+        strPathsOrJars.forEach(ClassFinder::fixPathEntry);
     
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
