@@ -116,7 +116,41 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     }
 
     public T getMedian() {
-        return getPercentPoint(0.5);
+        if (count <= 0) {
+            return ZERO;
+        }
+        long target0 = count / 2L;
+        long target1 = target0;
+        if (count % 2L == 0) {
+            target0 -= 1;
+        }
+        T result0 = null;
+        T result1 = null;
+
+        try {
+            for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
+                target0 -= val.getValue().longValue();
+                target1 -= val.getValue().longValue();
+                if ((target0 < 0) && (result0 == null)) {
+                    result0 = val.getKey();
+                }
+                if (target1 < 0) {
+                    result1 = val.getKey();
+                    break;
+                }
+            }
+        } catch (ConcurrentModificationException ignored) {
+            // ignored
+        }
+        if (result0 != null) {
+            if (result0.equals(result1)) {
+                return result0;
+            }
+            if (result1 != null) {
+                return divide(add(result0, result1), 2L);
+            }
+        }
+        return ZERO;
     }
 
     public long getTotalBytes() {
@@ -221,6 +255,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
     protected abstract T divide(T val, int n);
 
     protected abstract T divide(T val, long n);
+
+    protected abstract T add(T val1, T val2);
 
     /**
      * Update the calculator with the values for a set of samples.

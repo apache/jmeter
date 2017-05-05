@@ -50,4 +50,9 @@ public class StatCalculatorInteger extends StatCalculator<Integer> {
     protected Integer divide(Integer val, long n) {
         return Integer.valueOf((int) (val.intValue() / n));
     }
+
+    @Override
+    protected Integer add(Integer val1, Integer val2) {
+        return Integer.valueOf(val1.intValue() + val2.intValue());
+    }
 }
