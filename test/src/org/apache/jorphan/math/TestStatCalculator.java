@@ -71,6 +71,18 @@ public class TestStatCalculator {
         assertEquals(15, calc.getMedian().intValue());
     }
     @Test
+    public void testMedianBug61071() {
+        calc.addValue(10L);
+        calc.addValue(20L);
+        calc.addValue(30L);
+        calc.addValue(40L);
+        calc.addValue(50L);
+        calc.addValue(60L);
+        calc.addValue(80L);
+        calc.addValue(90L);
+        assertEquals(45, calc.getMedian().intValue());
+    }
+    @Test
     public void testLong(){
         calc.addValue(0L);
         calc.addValue(2L);
