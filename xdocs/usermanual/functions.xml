@@ -112,6 +112,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td><td>2.6</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td><td>1.X</td></tr>
         <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td><td>2.2</td></tr>
+        <tr><td>Information</td><td> <a href="#__timeShift">timeShift</a></td><td>return a date in various formats with the specified amount of seconds/minutes/hours/days/months added</td><td>3.3</td></tr>
         <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td><td>2.2</td></tr>
         <tr><td>Information</td><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td><td>2.2</td></tr>
         <tr><td>Input</td><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td><td>1.9</td></tr>
@@ -1083,6 +1084,8 @@ The following shorthand aliases are provided:
 </p>
 </component>
 
+
+
 <component index="&sect-num;.5.18" name="__jexl2">
 <description>
     <p>The jexl function returns the result of evaluating a 
@@ -1496,6 +1499,36 @@ becomes:
         <property name="String to escape" required="Yes">
         The string to be escaped.
         </property>
+</properties>
+</component>
+
+
+<component index="&sect-num;.5.22" name="__timeShift">
+<description>
+    <p>The timeShift function returns a date in the given format with the specified amount of seconds, minutes, hours, days or months added</p>
+    </description>
+<properties>
+        <property name="Format" required="No">
+        The format to be passed to DateTimeFormatter.
+        If omitted, the function uses milliseconds since epoch format.
+        </property>
+        <property name="Date to shift" required="No">
+        Indicate the date in the format set by the parameter 'Format' to shift
+        If omitted, the date is set to now
+        </property>
+        <property name="value to shift" required="No">
+        Indicate the specified amount of seconds, minutes, hours, days or months to add according to this usage :
+        <ul>
+        <li><code>5s</code> for Second value</li>
+        <li><code>5m</code> for Minute value</li>
+        <li><code>5H</code> for Hour value</li>
+        <li><code>5d</code> for Day value</li>
+        <li><code>5M</code> for Month value</li>
+        </ul>
+        To shift in the pass, you just have to indicate <code>-5d</code> to move five days backward.
+        If omitted, nothing is add
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 </component>
 
