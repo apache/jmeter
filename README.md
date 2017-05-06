@@ -1,6 +1,7 @@
 ![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
 # Apache JMeter
-=================================
+
+
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
 
