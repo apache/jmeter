@@ -135,6 +135,7 @@ skip.bug60607=true
 skip.batchtest_Http4ImplPreemptiveBasicAuth=true
 skip.batchtest_SlowCharsFeature=true
 skip.batchtest_TestKeepAlive=true
+skip.batchtest_ResponseDecompression=true
 skip.test_http=true
 skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
 ```
