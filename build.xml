@@ -3135,6 +3135,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="freemarker"/>
     <process_jarfile jarname="groovy-all"/>
     <process_jarfile jarname="hamcrest-core"/>
+    <process_jarfile jarname="hamcrest-date"/>
     <process_jarfile jarname="httpclient"/>
     <process_jarfile jarname="httpasyncclient"/>
     <process_jarfile jarname="httpcore"/>
