@@ -107,6 +107,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61040</bug>Add a time shifting function</li>
 </ul>
 
 <h3>I18N</h3>

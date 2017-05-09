@@ -25,16 +25,12 @@ import org.apache.jmeter.engine.util.CompoundVariable;
 
 public class FunctionTestHelper {
 
-    public static Collection<CompoundVariable> makeParams(String p1, String p2, String p3) {
+    public static Collection<CompoundVariable> makeParams(String... params) {
         Collection<CompoundVariable> parms = new LinkedList<>();
-        if (p1 != null) {
-            parms.add(new CompoundVariable(p1));
-        }
-        if (p2 != null) {
-            parms.add(new CompoundVariable(p2));
-        }
-        if (p3 != null) {
-            parms.add(new CompoundVariable(p3));
+        for (String p : params) {
+            if (p != null) {
+                parms.add(new CompoundVariable(p));
+            }
         }
         return parms;
     }
