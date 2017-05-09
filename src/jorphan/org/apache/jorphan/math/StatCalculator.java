@@ -161,8 +161,8 @@ public abstract class StatCalculator<T extends Number & Comparable<? super T>> {
             return getMax();
         }
 
-        // use Math.round () instead of simple (long) to provide correct value rounding
-        long target = Math.round (count * percent);
+        // use the Nearest Rank method
+        long target = (long) Math.ceil(count * percent);
         try {
             for (Entry<T, MutableLong> val : valuesMap.entrySet()) {
                 target -= val.getValue().longValue();
