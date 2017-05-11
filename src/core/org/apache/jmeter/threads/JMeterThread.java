@@ -433,15 +433,24 @@ public class JMeterThread implements Runnable, Interruptible {
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test: {}", e.toString());
             }
+            if (current != null && current instanceof TransactionSampler) {
+                doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
+            }
             shutdownTest();
         } catch (JMeterStopTestNowException e) { // NOSONAR
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test with interruption of current samplers: {}", e.toString());
             }
+            if (current != null && current instanceof TransactionSampler) {
+                doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
+            }
             stopTestNow();
         } catch (JMeterStopThreadException e) { // NOSONAR
             if (log.isInfoEnabled()) {
                 log.info("Stopping Thread: {}", e.toString());
+            }
+            if (current != null && current instanceof TransactionSampler) {
+                doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
             }
             stopThread();
         } catch (Exception e) {
@@ -527,12 +536,21 @@ public class JMeterThread implements Runnable, Interruptible {
 
             // Check if thread or test should be stopped
             if (result.isStopThread() || (!result.isSuccessful() && onErrorStopThread)) {
+                if (transactionSampler != null) {
+                    doEndTransactionSampler(transactionSampler, current, transactionPack, threadContext);
+                }
                 stopThread();
             }
             if (result.isStopTest() || (!result.isSuccessful() && onErrorStopTest)) {
+                if (transactionSampler != null) {
+                    doEndTransactionSampler(transactionSampler, current, transactionPack, threadContext);
+                }
                 shutdownTest();
             }
             if (result.isStopTestNow() || (!result.isSuccessful() && onErrorStopTestNow)) {
+                if (transactionSampler != null) {
+                    doEndTransactionSampler(transactionSampler, current, transactionPack, threadContext);
+                }
                 stopTestNow();
             }
             if(result.isStartNextThreadLoop()) {
