@@ -137,7 +137,7 @@ public class TimeShift extends AbstractFunction {
         return dateString;
     }
 
-    private DateTimeFormatter createFormatter(String format) throws IllegalArgumentException {
+    private DateTimeFormatter createFormatter(String format) {
 
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format).parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
