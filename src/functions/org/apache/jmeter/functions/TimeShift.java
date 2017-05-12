@@ -91,7 +91,7 @@ public class TimeShift extends AbstractFunction {
         DateTimeFormatter formatter = null;
         if (!StringUtils.isEmpty(format)) {
             try {
-                formatter = (DateTimeFormatter) dateTimeFormatterCache.get(format, key -> createFormatter((String)key));
+                formatter = dateTimeFormatterCache.get(format, key -> createFormatter((String)key));
             } catch (IllegalArgumentException ex) {
                 log.error("Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)", format, ex); // $NON-NLS-1$
                 return "";
