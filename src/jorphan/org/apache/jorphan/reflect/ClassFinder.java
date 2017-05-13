@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -265,9 +266,9 @@ public final class ClassFinder {
         }
     
         // Find all jars in the search path
-        List<String> strPathsOrJars = Arrays.asList(addJarsInPath(searchPathsOrJars));
-        strPathsOrJars.forEach(ClassFinder::fixPathEntry);
-    
+        List<String> strPathsOrJars = Arrays.asList(addJarsInPath(searchPathsOrJars)).stream()
+                .map(ClassFinder::fixPathEntry).collect(Collectors.toList());
+
         // Now eliminate any classpath entries that do not "match" the search
         List<String> listPaths = getClasspathMatches(strPathsOrJars);
         if (log.isDebugEnabled()) {
