@@ -259,7 +259,19 @@ public final class ClassFinder {
         
         return findClasses(searchPathsOrJars, filter);
     }
-    
+
+    /**
+     * Find all classes in the given jars that passes the class filter.
+     * 
+     * @param searchPathsOrJars
+     *            list of strings representing the jar locations
+     * @param filter
+     *            {@link ClassFilter} that the classes in the jars should
+     *            conform to
+     * @return list of all classes in the jars, that conform to {@code filter}
+     * @throws IOException
+     *             when reading the jar files fails
+     */
     public static List<String> findClasses(String[] searchPathsOrJars, ClassFilter filter) throws IOException  {
         if (log.isDebugEnabled()) {
             log.debug("searchPathsOrJars : {}", Arrays.toString(searchPathsOrJars));
