@@ -247,7 +247,7 @@ public final class ClassFinder {
         }
 
         
-        ClassFilter filter = null;
+        ClassFilter filter;
         if(annotations) {
             @SuppressWarnings("unchecked") // Should only be called with classes that extend annotations
             final Class<? extends Annotation>[] annoclassNames = (Class<? extends Annotation>[]) classNames;
