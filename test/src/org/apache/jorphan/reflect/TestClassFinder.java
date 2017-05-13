@@ -102,11 +102,15 @@ public class TestClassFinder {
 
     @Test
     public void testFindAllClassesInJar() throws Exception {
-        Path jarPath = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> String.valueOf(p).endsWith(".jar")).findFirst()
-                .orElseThrow(() -> new FileNotFoundException("no jars found")).toRealPath();
-        List<String> annotatedClasses = ClassFinder.findClasses(new String[] { jarPath.toString() },
-                c -> true);
-        Assert.assertFalse("No classes found in: " + jarPath, annotatedClasses.isEmpty());
+        List<Path> jarsPaths = Files.find(Paths.get(libDirs[0]), 1, (p, a) -> String.valueOf(p).endsWith(".jar"))
+                .collect(Collectors.toList());
+        for (Path jarPath : jarsPaths) {
+            if (!ClassFinder.findClasses(new String[] { jarPath.toRealPath().toString() }, c -> true).isEmpty()) {
+                // ok, we found an annotated class
+                return;
+            }
+        }
+        Assert.fail("No classes found in: " + jarsPaths);
     }
 
     @Test
