@@ -294,7 +294,7 @@ public final class ClassFinder {
 
     /**
      * Returns the classpath entries that match the search list of jars and paths
-     * @param List can contain null element but cannot be null
+     * @param List can contain {@code null} element but must not be {@code null}
      * @return List of paths (jars or folders) that ends with one of the rows of strPathsOrJars
      */
     private static List<String> getClasspathMatches(List<String> strPathsOrJars) {
@@ -335,12 +335,14 @@ public final class ClassFinder {
 
     /**
      * Fix a path:
-     * - replace "." by current directory
-     * - upcase the first character if it appears to be a drive letter
-     * - trim any trailing spaces
-     * - replace \ by /
-     * - replace // by /
-     * - remove all trailing /
+     * <ul>
+     * <li>replace "{@code .}" by current directory</li>
+     * <li>upcase the first character if it appears to be a drive letter</li>
+     * <li>trim any trailing spaces</li>
+     * <li>replace {@code \} by {@code /}</li>
+     * <li>replace {@code //} by {@code /}</li>
+     * <li>remove all trailing {@code /}</li>
+     * </ul>
      */
     private static String fixPathEntry(String path){
         if (path == null ) {
