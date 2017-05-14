@@ -62,13 +62,13 @@ For earlier postings, please see the Jakarta JMeter User list, below.
 <li>Subscribe at <a href="mailto:user-subscribe@jmeter.apache.org">user-subscribe@jmeter.apache.org</a></li>
 <li>Send your message to: <a href="mailto:user@jmeter.apache.org">user@jmeter.apache.org</a> (after the subscription process)</li>
 <li>Unsubscribe at <a href="mailto:user-unsubscribe@jmeter.apache.org">user-unsubscribe@jmeter.apache.org</a></li>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-user/">jmeter-user Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-user/">jmeter-user Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Jakarta JMeter User" anchor="JakartaJMeterUser">
 This is the old JMeter user list from when JMeter was a sub-project of Apache Jakarta.
 <ul>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">jakarta-jmeter-user Archive</a></li></ul>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-user/">jakarta-jmeter-user Archive</a></li></ul>
 </subsection>
 <subsection name="Apache JMeter Developer" anchor="JMeterDev">
 <p>
@@ -86,7 +86,7 @@ For earlier postings, please see below.
 <li>Subscribe at <a href="mailto:dev-subscribe@jmeter.apache.org">dev-subscribe@jmeter.apache.org</a></li>
 <li>Send your message to: <a href="mailto:dev@jmeter.apache.org">dev@jmeter.apache.org</a> (after the subscription process)</li>
 <li>Unsubscribe at <a href="mailto:dev-unsubscribe@jmeter.apache.org">dev-unsubscribe@jmeter.apache.org</a></li>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-dev/">jmeter-dev Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-dev/">jmeter-dev Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Apache JMeter Commits" anchor="JMeterCommits">
@@ -97,7 +97,7 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 <ul>
 <li>Subscribe at <a href="mailto:commits-subscribe@jmeter.apache.org">commits-subscribe@jmeter.apache.org</a></li>
 <li>Unsubscribe at <a href="mailto:commits-unsubscribe@jmeter.apache.org">commits-unsubscribe@jmeter.apache.org</a></li>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-commits/">jmeter-commits Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-commits/">jmeter-commits Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Apache JMeter Issues" anchor="JMeterIssues">
@@ -110,26 +110,26 @@ Prior to Nov 2011, they were sent to the Jakarta Notifications list, see below.
 <ul>
 <li>Subscribe at <a href="mailto:issues-subscribe@jmeter.apache.org">issues-subscribe@jmeter.apache.org</a></li>
 <li>Unsubscribe at <a href="mailto:issues-unsubscribe@jmeter.apache.org">issues-unsubscribe@jmeter.apache.org</a></li>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-issues/">jmeter-issues Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jmeter-issues/">jmeter-issues Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Jakarta Developer" anchor="JakartaDev">
 <p>Combined Jakarta developer list, April 2010 to November 2011</p>
 <ul>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-dev/">jakarta-dev Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-dev/">jakarta-dev Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Jakarta JMeter Developer" anchor="JakartaJMeterDev">
 Historical list, up to April 2010.
 <ul>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-dev/">jakarta-jmeter-dev Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-jmeter-dev/">jakarta-jmeter-dev Archive</a></li>
 </ul>
 </subsection>
 <subsection name="Jakarta Notifications" anchor="JakartaNotif">
 Combined Jakarta notifications to November 2011.
 Includes Bugzilla, SVN and Wiki commit mails for JMeter.
 <ul>
-<li>All old mails at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-notifications/">jakarta-notifications Archive</a></li>
+<li>Archives at <a href="http://mail-archives.apache.org/mod_mbox/jakarta-notifications/">jakarta-notifications Archive</a></li>
 </ul>
 </subsection>
 </section>
@@ -140,10 +140,8 @@ There are several 3<sup>rd</sup> party sites that archive and provide searching 
 </p>
 <p>
 <ul>
-<li><a href="http://mail-archives.apache.org/mod_mbox/">mail-archives.apache.org</a></li>
 <li><a href="http://jmeter.markmail.org/">Mark Mail</a> </li>
 <li><a href="http://www.mail-archive.com/">mail-archive.com</a> </li>
-<li><a href="http://marc.theaimsgroup.com/">marc.theaimsgroup.com</a></li>
 </ul>
 </p>
 </section>
