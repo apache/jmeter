@@ -21,6 +21,7 @@ package org.apache.jmeter.visualizers.backend;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -61,6 +62,8 @@ public class SamplerMetric {
     private int successes;
     private int failures;
     private int hits;
+    private HashMap<ErrorMetric, Integer> errors = new HashMap<ErrorMetric, Integer>();
+
     
     /**
      * 
@@ -91,11 +94,14 @@ public class SamplerMetric {
      * @param result {@link SampleResult} to be used
      */
     public synchronized void add(SampleResult result) {
+        
         if(result.isSuccessful()) {
             successes+=result.getSampleCount()-result.getErrorCount();
         } else {
             failures+=result.getErrorCount();
-        }
+            ErrorMetric error = new ErrorMetric(result);
+            errors.put(error, errors.getOrDefault(error, 0) + result.getErrorCount() );
+        }       
         long time = result.getTime();
         allResponsesStats.addValue(time);
         pctResponseStats.addValue(time);
@@ -140,6 +146,7 @@ public class SamplerMetric {
         default: 
             // This cannot happen
         }
+        errors.clear();
         successes = 0;
         failures = 0;
         hits = 0;
@@ -301,5 +308,13 @@ public class SamplerMetric {
      */
     public int getHits() {
         return hits;
+    }
+    
+    /**
+     * Returns details of errors occurs
+     * @return errors
+     */
+    public HashMap<ErrorMetric, Integer> getErrors() {
+        return errors;
     }
 }
