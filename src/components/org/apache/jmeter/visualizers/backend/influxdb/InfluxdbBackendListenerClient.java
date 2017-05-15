@@ -44,8 +44,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link AbstractBackendListenerClient} to write in an InfluxDB using 
- * custom schema
+ * Implementation of {@link AbstractBackendListenerClient} to write in an
+ * InfluxDB using custom schema
+ * 
  * @since 3.2
  */
 public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient implements Runnable {
@@ -54,7 +55,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private ConcurrentHashMap<String, SamplerMetric> metricsPerSampler = new ConcurrentHashMap<>();
     // Name of the measurement
     private static final String EVENTS_FOR_ANNOTATION = "events";
-    
+
     private static final String TAGS = ",tags=";
     private static final String TEXT = "text=\"";
 
@@ -62,12 +63,14 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
     private static final String DEFAULT_MEASUREMENT = "jmeter";
 
     private static final String TAG_TRANSACTION = ",transaction=";
-
     private static final String TAG_STATUT = ",statut=";
     private static final String TAG_APPLICATION = ",application=";
+    private static final String TAG_RESPONSE_CODE = ",responseCode=";
+    private static final String TAG_RESPONSE_MESSAGE = ",responseMessage=";
 
     private static final String METRIC_COUNT = "count=";
     private static final String METRIC_COUNT_ERREUR = "countError=";
+
     private static final String METRIC_MIN = "min=";
     private static final String METRIC_MAX = "max=";
     private static final String METRIC_AVG = "avg=";
@@ -161,23 +164,42 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
      */
     private void addMetrics(String transaction, SamplerMetric metric) {
         // FOR ALL STATUS
-        addMetric(transaction, metric, metric.getTotal(), false, TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
+        addMetric(transaction, metric, metric.getTotal(), TAG_ALL, metric.getAllMean(), metric.getAllMinTime(),
                 metric.getAllMaxTime(), allPercentiles.values());
         // FOR OK STATUS
-        addMetric(transaction, metric, metric.getSuccesses(), false, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
+        addMetric(transaction, metric, metric.getSuccesses(), TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
                 metric.getOkMaxTime(), Collections.<Float> emptySet());
         // FOR KO STATUS
-        addMetric(transaction, metric, metric.getFailures(), true, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
+        if (!summaryOnly) {
+            metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
+                    error.getResponseMessage(), count));
+        }
+        addMetric(transaction, metric, metric.getFailures(), TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), Collections.<Float> emptySet());
     }
 
-    private void addMetric(String transaction, SamplerMetric metric, int count, boolean includeResponseCode,
-            String statut, double mean, double minTime, double maxTime, Collection<Float> pcts) {
+    private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
+        if (count > 0) {
+            StringBuilder tag = new StringBuilder(70);
+            tag.append(TAG_APPLICATION).append(application);
+            tag.append(TAG_TRANSACTION).append(transaction);
+            tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
+            tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
+
+            StringBuilder field = new StringBuilder(30);
+            field.append(METRIC_COUNT).append(count);
+            influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        }
+    }
+
+    private void addMetric(String transaction, SamplerMetric metric, int count, String statut, double mean,
+            double minTime, double maxTime, Collection<Float> pcts) {
         if (count > 0) {
             StringBuilder tag = new StringBuilder(70);
             tag.append(TAG_APPLICATION).append(application);
             tag.append(TAG_STATUT).append(statut);
             tag.append(TAG_TRANSACTION).append(transaction);
+
             StringBuilder field = new StringBuilder(80);
             field.append(METRIC_COUNT).append(count);
             if (!Double.isNaN(mean)) {
@@ -221,7 +243,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
             field.append(",").append(METRIC_HIT).append(metric.getHits());
             for (Float pct : pcts) {
-                field.append(",").append(METRIC_PCT).append(pct).append("=").append(Double.toString(metric.getAllPercentile(pct)));
+                field.append(",").append(METRIC_PCT).append(pct).append("=")
+                        .append(Double.toString(metric.getAllPercentile(pct)));
             }
             field.append(",").append(METRIC_HIT).append(metric.getHits());
             influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
@@ -300,7 +323,8 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         addAnnotation(true);
 
         scheduler = Executors.newScheduledThreadPool(MAX_POOL_SIZE);
-        // Start immediately the scheduler and put the pooling ( 5 seconds by default )
+        // Start immediately the scheduler and put the pooling ( 5 seconds by
+        // default )
         this.timerHandle = scheduler.scheduleAtFixedRate(this, 0, SEND_INTERVAL, TimeUnit.SECONDS);
 
     }
@@ -345,22 +369,21 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     /**
      * Add Annotation at start or end of the run ( usefull with Grafana )
-     * Grafana will let you send HTML in the "Text" such as a link to the release notes
-     * Tags are separated by spaces in grafana
-     * Tags is put as InfluxdbTag for better query performance on it
-     * Never double or single quotes in influxdb except for string field
-     * see : https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
+     * Grafana will let you send HTML in the "Text" such as a link to the
+     * release notes Tags are separated by spaces in grafana Tags is put as
+     * InfluxdbTag for better query performance on it Never double or single
+     * quotes in influxdb except for string field see :
+     * https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/#quoting-special-characters-and-additional-naming-guidelines
      * * @param startOrEnd boolean true for start, false for end
      */
     private void addAnnotation(boolean startOrEnd) {
-        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION, 
-                TAG_APPLICATION + application + ",title=ApacheJMeter"+
-                (StringUtils.isNotEmpty(testTags) ? TAGS+ testTags : ""), 
-                TEXT +  
-                        AbstractInfluxdbMetricsSender.fieldToStringValue(testTitle +
-                                (startOrEnd ? " started" : " ended")) + "\"" );
+        influxdbMetricsManager.addMetric(EVENTS_FOR_ANNOTATION,
+                TAG_APPLICATION + application + ",title=ApacheJMeter"
+                        + (StringUtils.isNotEmpty(testTags) ? TAGS + testTags : ""),
+                TEXT + AbstractInfluxdbMetricsSender
+                        .fieldToStringValue(testTitle + (startOrEnd ? " started" : " ended")) + "\"");
     }
-    
+
     @Override
     public Arguments getDefaultParameters() {
         Arguments arguments = new Arguments();
