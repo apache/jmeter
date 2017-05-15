@@ -86,6 +86,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><bug>61056</bug>HTTP : Support brotli decoding</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -106,6 +107,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61040</bug>Add a time shifting function</li>
 </ul>
 
 <h3>I18N</h3>
@@ -122,6 +124,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -147,6 +150,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>58743</bug><pr>293</pr>TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
 </ul>
 
 <h3>Functions</h3>
@@ -160,12 +164,16 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
 </ul>
-    
+
 <h3>General</h3>
 <ul>
     <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
     <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
     <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
+    <li><bug>61054</bug>Endless loop in JOrphanUtils#replaceAllWithRegex when regex is contained in replacement</li>
+    <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some LAF</li>
+    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&F on Linux/XWayland</li>
+    <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -176,6 +184,7 @@ Summary
 <ul>
 <li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
 <li>Anthony Kearns (anthony.kearns atrightside.co)</li>
+<li>Emilian Bold (emi @ apache.org)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

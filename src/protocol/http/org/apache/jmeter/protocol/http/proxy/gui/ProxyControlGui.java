@@ -68,6 +68,7 @@ import org.apache.jmeter.gui.UnsharedComponent;
 import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.HorizontalPanel;
+import org.apache.jmeter.gui.util.JMeterToolBar;
 import org.apache.jmeter.gui.util.MenuFactory;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.gui.util.VerticalPanel;
@@ -670,21 +671,24 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     }
 
     private JPanel createControls() {
+
+        String iconSize = JMeterUtils.getPropDefault(JMeterToolBar.TOOLBAR_ICON_SIZE, JMeterToolBar.DEFAULT_TOOLBAR_ICON_SIZE); 
+
         start = new JButton(JMeterUtils.getResString("start")); // $NON-NLS-1$
-        ImageIcon startImage = JMeterUtils.getImage("toolbar/32x32/arrow-right-3.png");
+        ImageIcon startImage = JMeterUtils.getImage("toolbar/" + iconSize + "/arrow-right-3.png");
         start.setIcon(startImage);
         start.addActionListener(this);
         start.setActionCommand(START);
         start.setEnabled(true);
         
         stop = new JButton(JMeterUtils.getResString("stop")); // $NON-NLS-1$
-        ImageIcon stopImage = JMeterUtils.getImage("toolbar/32x32/process-stop-4.png");
+        ImageIcon stopImage = JMeterUtils.getImage("toolbar/" + iconSize + "/process-stop-4.png");
         stop.setIcon(stopImage);
         stop.addActionListener(this);
         stop.setActionCommand(STOP);
         stop.setEnabled(false);
 
-        ImageIcon restartImage = JMeterUtils.getImage("toolbar/32x32/edit-redo-7.png");
+        ImageIcon restartImage = JMeterUtils.getImage("toolbar/" + iconSize + "/edit-redo-7.png");
         restart = new JButton(JMeterUtils.getResString("restart")); // $NON-NLS-1$
         restart.setIcon(restartImage);
         restart.addActionListener(this);
@@ -692,8 +696,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         restart.setEnabled(false);
 
         JPanel panel = new JPanel();
-        panel.setMinimumSize(new Dimension(100, 70));
-        panel.setPreferredSize(new Dimension(100, 70));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_general_lifecycle"))); // $NON-NLS-1$
         panel.add(start);
@@ -708,6 +710,8 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         portField = new JTextField(ProxyControl.DEFAULT_PORT_S, 20);
         portField.setName(PORTFIELD);
         portField.addKeyListener(this);
+        Dimension portPreferredSize = portField.getPreferredSize();
+        portField.setMinimumSize(new Dimension((int) Math.round(portPreferredSize.width*0.75), portPreferredSize.height));
 
         JLabel label = new JLabel(JMeterUtils.getResString("port")); // $NON-NLS-1$
         label.setLabelFor(portField);
@@ -736,8 +740,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         gbc.weighty = 1;
 
         JPanel gPane = new JPanel(gridBagLayout);
-        gPane.setMinimumSize(new Dimension(400,50));
-        gPane.setPreferredSize(new Dimension(400,50));
         gPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("proxy_general_settings"))); // $NON-NLS-1$
         gPane.add(panel, gbc.clone());
@@ -789,7 +791,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         }
         m.addElement(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName = new JComboBox<>(m);
-        samplerTypeName.setPreferredSize(new Dimension(150, 20));
         samplerTypeName.setSelectedItem(USE_DEFAULT_HTTP_IMPL);
         samplerTypeName.addItemListener(this);
 

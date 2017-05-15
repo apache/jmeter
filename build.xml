@@ -123,6 +123,7 @@
   <property name="skip.batchtest_Http4ImplPreemptiveBasicAuth" value="true" />
   <property name="skip.batchtest_SlowCharsFeature" value="true" />
   <property name="skip.batchtest_TestKeepAlive" value="true" />
+  <property name="skip.batchtest_ResponseDecompression" value="true" />
   <property name="skip.test_https" value="true" />
   <property name="skip.test_http" value="true" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="true" />
@@ -385,6 +386,7 @@
     <include name="${lib.dir}/${apache-bsf.jar}"/>
     <include name="${lib.dir}/${asm.jar}"/>
     <include name="${lib.dir}/${beanshell.jar}"/>
+    <include name="${lib.dir}/${dec.jar}"/>
     <include name="${lib.dir}/${caffeine.jar}"/>
     <include name="${lib.dir}/${commons-codec.jar}"/>
     <include name="${lib.dir}/${commons-collections.jar}"/>
@@ -400,6 +402,7 @@
     <include name="${lib.dir}/${freemarker.jar}"/>
     <include name="${lib.dir}/${groovy-all.jar}"/>
     <include name="${lib.dir}/${hamcrest-core.jar}"/>
+    <include name="${lib.dir}/${hamcrest-date.jar}"/>
     <include name="${lib.dir}/${httpclient.jar}"/>
     <include name="${lib.dir}/${httpasyncclient.jar}"/>
     <include name="${lib.dir}/${httpcore.jar}"/>
@@ -465,6 +468,7 @@
     <pathelement location="${lib.dir}/${apache-bsf.jar}"/>
     <pathelement location="${lib.dir}/${asm.jar}"/>
     <pathelement location="${lib.dir}/${beanshell.jar}"/>
+    <pathelement location="${lib.dir}/${dec.jar}"/>
     <pathelement location="${lib.dir}/${caffeine.jar}"/>
     <pathelement location="${lib.dir}/${commons-codec.jar}"/>
     <pathelement location="${lib.dir}/${commons-collections.jar}"/>
@@ -480,6 +484,7 @@
     <pathelement location="${lib.dir}/${freemarker.jar}"/>
     <pathelement location="${lib.dir}/${groovy-all.jar}"/>
     <pathelement location="${lib.dir}/${hamcrest-core.jar}"/>
+    <pathelement location="${lib.dir}/${hamcrest-date.jar}"/>
     <pathelement location="${lib.dir}/${httpclient.jar}"/>
     <pathelement location="${lib.dir}/${httpasyncclient.jar}"/>
     <pathelement location="${lib.dir}/${httpcore.jar}"/>
@@ -2759,6 +2764,12 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
       <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
     </antcall>
+      
+    <antcall target="batchtest">
+       <param name="batchtest.name" value="ResponseDecompression"/>
+       <param name="batchtest.jmx" value="ResponseDecompression.jmx"/>
+       <param name="skip.batchtest" value="${skip.batchtest_ResponseDecompression}" />
+    </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="TestHeaderManager"/>
@@ -3108,6 +3119,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="bcprov" dest.dir="${lib.api}"/>
     <process_jarfile jarname="bcpkix" dest.dir="${lib.api}"/>
     <process_jarfile jarname="beanshell"/>
+    <process_jarfile jarname="dec"/>
     <process_jarfile jarname="caffeine"/>
     <process_jarfile jarname="commons-codec"/>
     <process_jarfile jarname="commons-collections"/>
@@ -3123,6 +3135,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="freemarker"/>
     <process_jarfile jarname="groovy-all"/>
     <process_jarfile jarname="hamcrest-core"/>
+    <process_jarfile jarname="hamcrest-date"/>
     <process_jarfile jarname="httpclient"/>
     <process_jarfile jarname="httpasyncclient"/>
     <process_jarfile jarname="httpcore"/>

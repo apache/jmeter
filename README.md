@@ -1,6 +1,10 @@
 ![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
 # Apache JMeter
 
+
+[![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
+
 ## What is it?
 
 Apache JMeter is a 100% pure Java application designed to test
@@ -131,6 +135,7 @@ skip.bug60607=true
 skip.batchtest_Http4ImplPreemptiveBasicAuth=true
 skip.batchtest_SlowCharsFeature=true
 skip.batchtest_TestKeepAlive=true
+skip.batchtest_ResponseDecompression=true
 skip.test_http=true
 skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
 ```
