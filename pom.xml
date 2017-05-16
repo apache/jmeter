@@ -12,7 +12,7 @@
 	<groupId>com.airfrance.qualif.jmeter</groupId>
 	<artifactId>apache-jmeter</artifactId>
 	<packaging>pom</packaging>
-	<version>3.2-SNAPSHOT</version>
+	<version>3.3-SNAPSHOT</version>
 
 	<properties>
 		<scmCommentPrefix>AFKLM-</scmCommentPrefix>
