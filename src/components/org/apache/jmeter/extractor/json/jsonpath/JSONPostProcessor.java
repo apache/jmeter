@@ -98,6 +98,12 @@ public class JSONPostProcessor extends AbstractScopedTestElement implements Seri
         for (int i = 0; i < jsonPathExpressions.length; i++) {
             int matchNumber = matchNumbers[i];
             String currentRefName = refNames[i].trim();
+            vars.put(currentRefName + REF_MATCH_NR, "0");
+            int k = 1;
+            while(vars.get(currentRefName + "_" + k) != null){
+                vars.remove(currentRefName + "_" + k);
+                k++;
+            }
             String currentJsonPath = jsonPathExpressions[i].trim();
             clearOldRefVars(vars, currentRefName);
             try {
