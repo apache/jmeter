@@ -985,6 +985,7 @@ public class ProxyControl extends GenericController {
                 TestElement template = templateNode.getTestElement();
                 if (template instanceof Timer) {
                     TestElement timer = (TestElement) template.clone();
+                    timer.setComment("Recorded think time: "+Long.toString(deltaT)+"ms");//TODO ARRRROOOO
                     try {
                         timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
                         replacer.undoReverseReplace(timer);
