@@ -52,6 +52,7 @@
      </menu>
      <menu name="Community">
         <item name="Issue Tracking"      href="/issues.html"/>
+        <item name="Security"            href="http://www.apache.org/security/"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
