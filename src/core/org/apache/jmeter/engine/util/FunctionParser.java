@@ -132,7 +132,7 @@ class FunctionParser {
                     function = CompoundVariable.getNamedFunction(funcName);
                     if (function instanceof Function) {
                         ((Function) function).setParameters(parseParams(reader));
-                        if (reader.read(current) == 0 || current[0] != '}') {
+                        if (reader.read(current) == 0 ) {
                             reader.reset();// set to start of string
                             char []cb = new char[100];
                             int nbRead = reader.read(cb);
