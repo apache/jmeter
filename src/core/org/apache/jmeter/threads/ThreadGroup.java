@@ -539,9 +539,16 @@ public class ThreadGroup extends AbstractThreadGroup {
         if (delayedStartup) {
             waitThreadStopped(threadStarter);
         }
-        for (Thread t : allThreads.values()) {
-            waitThreadStopped(t);
-        }
+        /* @Bugzilla 60933
+         * Like threads can be added on the fly during a test into allThreads
+         * we have to check if allThreads is rly empty before stop 
+         */
+        while ( !allThreads.isEmpty() ) {
+            for (Thread t : allThreads.values()) {
+                waitThreadStopped(t);
+            }
+        }   
+      
     }
 
     /**
