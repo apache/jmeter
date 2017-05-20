@@ -172,7 +172,7 @@ Summary
     <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
     <li><bug>61054</bug>Endless loop in JOrphanUtils#replaceAllWithRegex when regex is contained in replacement</li>
     <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some LAF</li>
-    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&F on Linux/XWayland</li>
+    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
     <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
 </ul>
 
