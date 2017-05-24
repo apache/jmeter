@@ -193,15 +193,15 @@ public class Data implements Serializable {
     }
 
     /**
-     * Private method that implements the quicksort algorithm to sort the rows
+     * Private method that implements the quickSort algorithm to sort the rows
      * of the Data object.
      *
      * @param column
      *            name of column to use as sorting criteria.
      * @param start
-     *            starting index (for quicksort algorithm).
+     *            starting index (for quickSort algorithm).
      * @param end
-     *            ending index (for quicksort algorithm).
+     *            ending index (for quickSort algorithm).
      */
     private void sortData(String column, int start, int end) {
         int x = start;

@@ -30,7 +30,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
- * The user interface for a controller which specifies that its subcomponents
+ * The user interface for a controller which specifies that its subComponents
  * should be executed while a condition holds. This component can be used
  * standalone or embedded into some other component.
  * 
@@ -51,7 +51,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
     /**
      * Boolean indicating whether or not this component should display its name.
      * If true, this is a standalone component. If false, this component is
-     * intended to be used as a subpanel for another component.
+     * intended to be used as a subPanel for another component.
      */
     private boolean displayName = true;
 
@@ -69,7 +69,7 @@ public class CriticalSectionControllerGui extends AbstractControllerGui {
      * @param displayName
      *            indicates whether or not this component should display its
      *            name. If true, this is a standalone component. If false, this
-     *            component is intended to be used as a subpanel for another
+     *            component is intended to be used as a subPanel for another
      *            component.
      */
     public CriticalSectionControllerGui(boolean displayName) {
