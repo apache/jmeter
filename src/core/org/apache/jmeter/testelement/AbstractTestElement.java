@@ -503,15 +503,17 @@ public abstract class AbstractTestElement implements TestElement, Serializable, 
      */
     @Override
     public void recoverRunningVersion() {
-        Iterator<Map.Entry<String, JMeterProperty>>  iter = propMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, JMeterProperty> entry = iter.next();
-            JMeterProperty prop = entry.getValue();
-            if (isTemporary(prop)) {
-                iter.remove();
-                clearTemporary(prop);
-            } else {
-                prop.recoverRunningVersion(this);
+        synchronized (propMap) {
+            Iterator<Map.Entry<String, JMeterProperty>> iter = propMap.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, JMeterProperty> entry = iter.next();
+                JMeterProperty prop = entry.getValue();
+                if (isTemporary(prop)) {
+                    iter.remove();
+                    clearTemporary(prop);
+                } else {
+                    prop.recoverRunningVersion(this);
+                }
             }
         }
         emptyTemporary();
