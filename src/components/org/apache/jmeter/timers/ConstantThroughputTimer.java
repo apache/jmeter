@@ -154,7 +154,9 @@ public class ConstantThroughputTimer extends AbstractTestElement implements Time
             return 0;
         }
         previousTime = currentTarget; // assume the sample will run as soon as the delay has expired
-        return currentTarget - currentTime;
+        long delay =  currentTarget - currentTime;
+        TimerService.checkDelay(delay);
+        return delay;
     }
 
     /**

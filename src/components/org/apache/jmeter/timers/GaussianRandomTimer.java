@@ -33,7 +33,9 @@ public class GaussianRandomTimer extends RandomTimer implements Serializable {
 
     @Override
     public long delay() {
-        return (long) Math.abs((getRandom().nextGaussian() * getRange()) + super.delay());
+        long delay = (long) Math.abs((getRandom().nextGaussian() * getRange()) + super.delay());
+        TimerService.checkDelay(delay);
+        return delay;
     }
 
     @Override
