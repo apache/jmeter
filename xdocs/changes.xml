@@ -108,6 +108,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61040</bug>Add a time shifting function</li>
+    <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
 </ul>
 
 <h3>I18N</h3>
