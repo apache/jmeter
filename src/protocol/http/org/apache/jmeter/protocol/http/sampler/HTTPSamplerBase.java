@@ -443,7 +443,9 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     /**
      * Sets the PATH property; if the request is a GET or DELETE (and the path
      * does not start with http[s]://) it also calls {@link #parseArguments(String, String)}
-     * to extract and store any query arguments.
+     * to extract and store any query arguments, clearing any previously stored query
+     * arguments in the process. This method should always be called before any calls to
+     * {@link #addArgument(String, String)} and related functions.
      *
      * @param path
      *            The new Path value
@@ -458,6 +460,8 @@ public abstract class HTTPSamplerBase extends AbstractSampler
             int index = path.indexOf(QRY_PFX);
             if (index > -1) {
                 setProperty(PATH, path.substring(0, index));
+                // Zero out the arguments, so we don't include query strings from previous calls
+                getArguments().clear();
                 // Parse the arguments in querystring, assuming specified encoding for values
                 parseArguments(path.substring(index + 1), contentEncoding);
             } else {

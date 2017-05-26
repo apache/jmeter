@@ -160,10 +160,10 @@ public class TestHTTPSamplers {
             HTTPSamplerBase config = new HTTPNullSampler();
             config.setProtocol("http");
             config.setMethod(HTTPConstants.GET);
-            config.addArgument("param1", "value1");
             config.setPath("/index.html?p1=p2");
+            config.addArgument("param1", "value1");
             config.setDomain("192.168.0.1");
-            assertEquals("http://192.168.0.1/index.html?param1=value1&p1=p2", config.getUrl().toString());
+            assertEquals("http://192.168.0.1/index.html?p1=p2&param1=value1", config.getUrl().toString());
         }
 
         @Test
@@ -259,7 +259,26 @@ public class TestHTTPSamplers {
             config.setDomain("192.168.0.1");
             assertEquals("http://192.168.0.1/index.html", config.getUrl().toString());
         }
-        
+
+        @Test
+        public void testClearGetArgumentsOnSetPath() throws Exception {
+            HTTPSamplerBase config = new HTTPNullSampler();
+            config.setProtocol("http");
+            config.setMethod(HTTPConstants.GET);
+            config.setPath("/first.html?p1=v1");
+            config.addArgument("param2", "value2");
+            config.setDomain("192.168.0.1");
+            assertEquals("http://192.168.0.1/first.html?p1=v1&param2=value2", config.getUrl().toString());
+            config.setPath("/second.html?p3=v3");
+            config.addArgument("param4", "value4");
+            assertEquals("http://192.168.0.1/second.html?p3=v3&param4=value4", config.getUrl().toString());
+            // WARNING!! This WILL NOT be added to the querystring arguments
+            config.addArgument("param5", "value5");
+            config.setPath("/third.html?p6=v6");
+            assertEquals("http://192.168.0.1/third.html?p6=v6", config.getUrl().toString());
+        }
+
+
         @Test
         public void testFileList(){
             HTTPSamplerBase config = new HTTPNullSampler();
