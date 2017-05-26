@@ -164,7 +164,7 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate</li>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <h3>General</h3>
@@ -188,6 +188,7 @@ Summary
 <li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
 <li>Anthony Kearns (anthony.kearns atrightside.co)</li>
 <li>Emilian Bold (emi @ apache.org)</li>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
