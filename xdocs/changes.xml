@@ -164,6 +164,7 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate</li>
 </ul>
 
 <h3>General</h3>

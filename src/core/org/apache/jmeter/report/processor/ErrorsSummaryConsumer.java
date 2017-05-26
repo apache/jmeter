@@ -78,11 +78,21 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
      */
     @Override
     protected String getKeyFromSample(Sample sample) {
+        return getErrorKey(sample);
+    }
+
+    /**
+     * @param sample {@link Sample}
+     * @return String Error key for sample 
+     */
+    static String getErrorKey(Sample sample) {
         String responseCode = sample.getResponseCode();
         String responseMessage = sample.getResponseMessage();
         String key = responseCode + (!StringUtils.isEmpty(responseMessage) ? 
                  "/" + StringEscapeUtils.escapeJson(responseMessage) : "");
-        if (isSuccessCode(responseCode)) {
+        if (isSuccessCode(responseCode) || 
+                (StringUtils.isEmpty(responseCode) && 
+                        !StringUtils.isEmpty(sample.getFailureMessage()))) {
             key = ASSERTION_FAILED;
             if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
@@ -93,7 +103,6 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         }
         return key;
     }
-
     /*
      * (non-Javadoc)
      * 
