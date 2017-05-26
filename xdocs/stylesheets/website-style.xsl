@@ -35,7 +35,7 @@
 
   <!-- Output method -->
   <xsl:output method="html" html-version="5.0" encoding="iso-8859-15"
-    indent="no" doctype-system="about:legacy-compat" />
+    indent="yes" doctype-system="about:legacy-compat" />
 
   <xsl:template match="document">
     <xsl:variable name="project" select="document('project.xml')/project" />
