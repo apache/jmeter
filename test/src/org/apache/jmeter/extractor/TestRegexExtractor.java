@@ -342,7 +342,7 @@ public class TestRegexExtractor {
             assertFalse("useBody should be false", extractor.useBody());
             assertFalse("useURL should be false", extractor.useUrl());
             assertTrue("useMessage should be true", extractor.useMessage());
-            assertFalse("useCode should be falsee", extractor.useCode());
+            assertFalse("useCode should be false", extractor.useCode());
             extractor.setMatchNumber(3);
             extractor.process();
             assertEquals("brown",vars.get("regVal"));

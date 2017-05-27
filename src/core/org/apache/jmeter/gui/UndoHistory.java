@@ -245,7 +245,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
     }
 
     /**
-     * @return true if remaing items
+     * @return true if remaining items
      */
     public boolean canRedo() {
         return position < history.size() - 1;

@@ -93,7 +93,7 @@ public class JDateField extends JTextField {
         setText(myString);
     }
 
-    // Dummy constructor to allo JUnit tests to work
+    // Dummy constructor to allow JUnit tests to work
     public JDateField() {
         this(new Date());
     }

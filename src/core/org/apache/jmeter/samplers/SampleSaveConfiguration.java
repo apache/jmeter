@@ -483,7 +483,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     /** A formatter for the time stamp. 
      * Make transient as we don't want to save the FastDateFormat class
      * Also, there's currently no way to change the value via the GUI, so changing it
-     * later means editting the JMX, or recreating the Listener.
+     * later means editing the JMX, or recreating the Listener.
      */
     private transient FastDateFormat timestampFormatter =
         dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;

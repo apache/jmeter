@@ -205,7 +205,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
              * Textfield uses \n (LF) to delimit lines; we need to send CRLF.
              * Rather than change the way that arguments are processed by the
              * samplers for raw data, it is easier to fix the data.
-             * On retrival, CRLF is converted back to LF for storage in the text field.
+             * On retrieval, CRLF is converted back to LF for storage in the text field.
              * See
              */
             HTTPArgument arg = new HTTPArgument("", text.replaceAll("\n","\r\n"), false);

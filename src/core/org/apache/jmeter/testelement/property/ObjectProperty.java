@@ -83,7 +83,7 @@ public class ObjectProperty extends AbstractProperty {
     }
 
     /**
-     * Constructs an instance with <code>name</code> as its name and the giveN
+     * Constructs an instance with <code>name</code> as its name and the given
      * value.
      *
      * @param name

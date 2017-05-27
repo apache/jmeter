@@ -68,7 +68,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     }
 
     /**
-     * Constructs a non-edittable combo-box with the label displaying the passed text.
+     * Constructs a non-editable combo-box with the label displaying the passed text.
      *
      * @param pLabel - the text to display in the label.
      * @param items - the items to display in the Combo box

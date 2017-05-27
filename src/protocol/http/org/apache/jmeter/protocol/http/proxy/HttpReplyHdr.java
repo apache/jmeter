@@ -144,12 +144,12 @@ public final class HttpReplyHdr {
     }
 
     /**
-     * Indicates only a partial responce was sent.
+     * Indicates only a partial response was sent.
      *
      * @return The header in a string;
      */
     public static String formPartial() {
-        return formError("203 Partial", "Only partail document available");
+        return formError("203 Partial", "Only partial document available");
     }
 
     /**

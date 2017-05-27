@@ -184,7 +184,7 @@ public class XPathPanel extends JPanel {
      *            XPath String to validate
      * @param showDialog
      *            weather to show a dialog
-     * @return returns true if valid, valse otherwise.
+     * @return returns true if valid, false otherwise.
      */
     public static boolean validXPath(String xpathString, boolean showDialog) {
         String ret = null;

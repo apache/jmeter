@@ -661,7 +661,7 @@ This allows you to update Think Times from one place and let you gain productivi
     <li>Since version 3.1, <code>jmeter.save.saveservice.connect_time</code> property value is <code>true</code>, meaning CSV file for results will contain an additional column containing connection time, see <bugzilla>60106</bugzilla></li>
     <li>Since version 3.1, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since version 3.1, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
-    <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
+    <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the beginning or end of your variable names. See <bugzilla>60221</bugzilla></li>
     <li>Since version 3.1, HTTP Request is able when using HttpClient4 (default) implementation to handle responses bigger than <code>2147483647</code> Bytes, that is 2GB. To allow this two properties have been introduced:
     <ul>
         <li><code>httpsampler.max_bytes_to_store_per_request</code> (defaults to 10MB) will control what is held in memory. By default JMeter will only keep in memory the first 10MB of a response. If you have responses larger than this value and use assertions that are after the first 10MB, then you must increase this value</li>
@@ -6861,7 +6861,7 @@ More work is needed to be able to control this from the GUI </li>
 <li>Proxy restart works better (stop waits for daemon to finish) </li>
 <li>Scheduler ignores start if it has already passed </li>
 <li>Scheduler now has delay function </li>
-<li>added Summariser test element (mainly for non-GUI) testing. This prints summary statistics to System.out and/or the log file every so oftem (3 minutes by default). Multiple summarisers can be used; samples are accumulated by summariser name. </li>
+<li>added Summariser test element (mainly for non-GUI) testing. This prints summary statistics to System.out and/or the log file every so often (3 minutes by default). Multiple summarisers can be used; samples are accumulated by summariser name. </li>
 <li>Extra Proxy Server options: 
 Create all samplers with keep-alive disabled 
 Add Separator markers between sets of samples 
@@ -6875,7 +6875,7 @@ Add Response Assertion to first sampler in each set </li>
       <li>__property() and __P() functions</li>
       <li>__log() and __logn() - for writing to the log file</li>
       <li>_StringFromFile can now process a sequence of files, e.g. dir/file01.txt, dir/file02.txt etc </li>
-      <li>_StringFromFile() funtion can now use a variable or function for the file name </li>
+      <li>_StringFromFile() function can now use a variable or function for the file name </li>
     </ul>
     <li>New / amended Assertions</li>
     <ul>

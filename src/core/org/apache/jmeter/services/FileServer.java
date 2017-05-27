@@ -293,7 +293,7 @@ public class FileServer {
 
     /**
      * Resolves file name into {@link File} instance.
-     * When filename is not absolute and not found from current workind dir,
+     * When filename is not absolute and not found from current working dir,
      * it tries to find it under current base directory
      * @param filename original file name
      * @return {@link File} instance

@@ -261,7 +261,7 @@ public class HttpMirrorThread implements Runnable {
                 // It is chunked transfer encoding, which we do not really support yet.
                 // So we just read without blocking, because we do not know when to
                 // stop reading, so we cannot block
-                // TODO propery implement support for chunked transfer, i.e. to
+                // TODO properly implement support for chunked transfer, i.e. to
                 // know when we have read the whole request, and therefore allow
                 // the reading to block
                 log.debug("Chunked");
@@ -270,7 +270,7 @@ public class HttpMirrorThread implements Runnable {
                 }
             }
             else {
-                // The reqest has no body, or it has a transfer encoding we do not support.
+                // The request has no body, or it has a transfer encoding we do not support.
                 // In either case, we read any data available
                 log.debug("Other");
                 while(in.available() > 0 && ((length = in.read(buffer)) != -1)) {

@@ -53,7 +53,7 @@ public abstract class HTTPAbstractImpl implements Interruptible, HTTPConstantsIn
     }
 
     /**
-     * If true create a SampleResult with emply content and 204 response code 
+     * If true create a SampleResult with empty content and 204 response code 
      */
     private static final CachedResourceMode CACHED_RESOURCE_MODE = 
             CachedResourceMode.valueOf(
