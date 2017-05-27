@@ -289,7 +289,7 @@ public class KeyToolUtils {
         KeyToolUtils.keytool("-certreq", keystore, password, alias, null, certReqOut);
 
         // create the certificate
-        //rem ku:c=dig,keyE means KeyUsage:criticial=digitalSignature,keyEncipherment
+        //rem ku:c=dig,keyE means KeyUsage:critical=digitalSignature,keyEncipherment
         InputStream certReqIn = new ByteArrayInputStream(certReqOut.toByteArray());
         ByteArrayOutputStream certOut = new ByteArrayOutputStream();
         KeyToolUtils.keytool("-gencert", keystore, password, INTERMEDIATE_CA_ALIAS, certReqIn, certOut, "-ext", "ku:c=dig,keyE");
@@ -366,7 +366,7 @@ public class KeyToolUtils {
      * @param command
      *            the command, not null
      * @param keystore
-     *            the keystore, not nill
+     *            the keystore, not null
      * @param password
      *            the password used for keystore and key, not null
      * @param alias

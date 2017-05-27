@@ -192,7 +192,7 @@ public class TextBoxDialoger implements ActionListener {
             if (e.getClickCount() == 2) { // double click
                 TableModel tm = table.getModel();
                 Object value = tm.getValueAt(table.getSelectedRow(), table.getSelectedColumn());
-                new TextBoxDialoger(value.toString(), false); // view only NOSONAR this instanciation opens a popup
+                new TextBoxDialoger(value.toString(), false); // view only NOSONAR this instantiation opens a popup
             }
         }
     }

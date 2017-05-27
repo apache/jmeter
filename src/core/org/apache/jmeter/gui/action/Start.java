@@ -231,7 +231,7 @@ public class Start extends AbstractAction {
             clazz = Class.forName(CLONER_FOR_VALIDATION_CLASS_NAME, true, Thread.currentThread().getContextClassLoader());
             return (TreeCloner) clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-            log.error("Error instanciating class:'{}' defined in property:'{}'", CLONER_FOR_VALIDATION_CLASS_NAME,
+            log.error("Error instantiating class:'{}' defined in property:'{}'", CLONER_FOR_VALIDATION_CLASS_NAME,
                     VALIDATION_CLONER_CLASS_PROPERTY_NAME, ex);
             return new TreeClonerForValidation();
         }

@@ -60,7 +60,7 @@ public class StatisticsSummaryConsumer extends
      * 
      * @param sample {@link Sample}
      * @param data {@link StatisticsSummaryData}
-     * @param isOverall boolean indicatin if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
+     * @param isOverall boolean indicating if aggregation concerns the Overall results in which case we ignore Transaction Controller's SampleResult
      */
     private void aggregateSample(Sample sample, StatisticsSummaryData data, boolean isOverall) {
         if(isOverall && sample.isController()) {

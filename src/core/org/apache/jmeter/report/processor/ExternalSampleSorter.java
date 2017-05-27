@@ -213,7 +213,7 @@ public class ExternalSampleSorter extends AbstractSampleConsumer {
      * @param inputFile
      *            The input file to be sorted (must not be {@code null})
      * @param outputFile
-     *            THe ouput sorted file (must not be {@code null})
+     *            The output sorted file (must not be {@code null})
      * @param writeHeader
      *            Whether output CSV header should be written (based on provided
      *            sample metadata)

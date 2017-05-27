@@ -41,13 +41,13 @@ import org.apache.jmeter.report.core.SampleMetadata;
  * The following sequence must be observed when consuming samples :
  * </p>
  * <ul>
- * <li>Call <code>setConsumedMetadata()</code> for each channel that wil consume
+ * <li>Call <code>setConsumedMetadata()</code> for each channel that will consume
  * samples</li>
  * <li>Call <code>startConsuming()</code> before any call to
  * <code>consume()</code></li>
  * <li>Call <code>consume()</code> for each sample to be consumed by the
  * consumer, specify the channel on which to consume</li>
- * <li>Call <code>stopConsuming()</code> after evry sample has been consumed</li>
+ * <li>Call <code>stopConsuming()</code> after every sample has been consumed</li>
  * </ul>
  *
  * @since 3.0

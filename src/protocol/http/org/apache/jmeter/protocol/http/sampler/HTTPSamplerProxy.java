@@ -74,7 +74,7 @@ public final class HTTPSamplerProxy extends HTTPSamplerBase implements Interrupt
         return impl.sample(u, method, areFollowingRedirect, depth);
     }
 
-    // N.B. It's not po ssible to forward threadStarted() to the implementation class.
+    // N.B. It's not possible to forward threadStarted() to the implementation class.
     // This is because Config items are not processed until later, and HTTPDefaults may define the implementation
 
     @Override
