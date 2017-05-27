@@ -82,7 +82,7 @@ public class TestCsvSampleWriter {
                 csvWriter.write(null);
                 fail("NPE expected");
             } catch (NullPointerException e) {
-                // OK. Excpected to land here
+                // OK. Expected to land here
             }
         }
     }

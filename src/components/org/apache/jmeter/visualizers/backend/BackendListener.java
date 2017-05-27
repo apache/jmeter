@@ -193,7 +193,7 @@ public class BackendListener extends AbstractTestElement
     }
 
     /**
-     * Thread that dequeus data from queue to send it to {@link BackendListenerClient}
+     * Thread that dequeues data from queue to send it to {@link BackendListenerClient}
      */
     private static final class Worker extends Thread {
 

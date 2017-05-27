@@ -778,7 +778,7 @@ public class SampleResult implements Serializable, Cloneable, Searchable {
     /**
      * Get the time it took this sample to occur.
      *
-     * @return elapsed time in milliseonds
+     * @return elapsed time in milliseconds
      *
      */
     public long getTime() {

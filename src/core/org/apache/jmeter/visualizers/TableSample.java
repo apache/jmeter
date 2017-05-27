@@ -147,7 +147,7 @@ public class TableSample implements Serializable, Comparable<TableSample> {
     }
 
     /**
-     * @return the conneect time
+     * @return the connect time
      */
     public long getConnectTime() {
         return connect;

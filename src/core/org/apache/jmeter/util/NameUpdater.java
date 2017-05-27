@@ -60,7 +60,7 @@ public final class NameUpdater {
             JOrphanUtils.closeQuietly(fis);
         }
 
-        //load additionnal name conversion rules from plugins
+        //load additional name conversion rules from plugins
         Enumeration<URL> enu = null;
 
         try {

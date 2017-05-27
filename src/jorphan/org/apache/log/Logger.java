@@ -148,7 +148,7 @@ public abstract class Logger
     /**
      * Make this logger additive. I.e. Send all log events to parent
      * loggers LogTargets regardless of whether or not the
-     * LogTargets have been overidden.
+     * LogTargets have been overridden.
      *
      * This is derived from Log4js notion of Additivity.
      *

@@ -281,7 +281,7 @@ public class JMeterThread implements Runnable, Interruptible {
                 }
             }
         }
-        // Might be found by contoller.next()
+        // Might be found by controller.next()
         catch (JMeterStopTestException e) { // NOSONAR
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test: {}", e.toString());

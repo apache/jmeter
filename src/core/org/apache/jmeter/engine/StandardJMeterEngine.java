@@ -300,7 +300,7 @@ public class StandardJMeterEngine implements JMeterEngine, Runnable {
         }
         
         /**
-         * @return boolean true if all threads of all Threead Groups stopped
+         * @return boolean true if all threads of all Thread Groups stopped
          */
         private boolean verifyThreadsStopped() {
             boolean stoppedAll = true;

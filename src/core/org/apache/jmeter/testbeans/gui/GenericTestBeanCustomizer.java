@@ -525,11 +525,11 @@ public class GenericTestBeanCustomizer extends JPanel implements SharedCustomize
                 // incorrect value with anything valid, e.g. the default value
                 // for the property.
                 // But for the time being, I just prefer to be aware of any
-                // problems occuring here, most likely programming errors,
+                // problems occurring here, most likely programming errors,
                 // so I'll bail out.
                 // (MS Note) Can't bail out - newly create elements have blank
                 // values and must get the defaults.
-                // Also, when loading previous versions of jmeter test scripts,
+                // Also, when loading previous versions of JMeter test scripts,
                 // some values
                 // may not be right, and should get default values - MS
                 // TODO: review this and possibly change to:

@@ -957,7 +957,7 @@ JMETER-SERVER</source>
     Defaults to platforms default charset as returned by <code>Charset.defaultCharset().name()</code>
 </property>
 <property name="tcp.status.prefix">
-    String at the begining of the status response code.<br/>
+    String at the beginning of the status response code.<br/>
     Defaults to: <code>Status</code></property>
 <property name="tcp.status.suffix">
     String at the end of the status response code.<br/>

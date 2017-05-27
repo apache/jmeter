@@ -57,7 +57,7 @@ public interface Function {
     /**
      * Return the name of your function. Convention is to prepend "__" to the
      * name (ie "__regexFunction")
-     * @return The name of the funtion
+     * @return The name of the function
      */
     String getReferenceKey();
 

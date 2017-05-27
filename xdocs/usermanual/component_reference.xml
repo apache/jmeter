@@ -5760,7 +5760,7 @@ extracting the node as text or attribute value and store the result into the giv
         </property>
         <property name="Attribute" required="false">
             Name of attribute (as per HTML syntax) to extract from nodes that matched the selector. If empty, then the combined text of this element and all its children will be returned.<br/>
-            This is the equivalent <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Node.html#attr%28java.lang.String%29">Element#attr(name)</a> function for JSoup if an atttribute is set.<br/>
+            This is the equivalent <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Node.html#attr%28java.lang.String%29">Element#attr(name)</a> function for JSoup if an attribute is set.<br/>
             <figure width="826" height="275" image="css_extractor_attr.png">CSS Extractor with attribute value set</figure><br/>
             If empty this is the equivalent of <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">Element#text()</a> function for JSoup if not value is set for attribute.
             <figure width="825" height="275" image="css_extractor_noattr.png">CSS Extractor with no attribute set</figure>

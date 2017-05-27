@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Sample consumed byt this consumer are written to a file<br>
+ * Sample consumed by this consumer are written to a file<br>
  * <br>
  * 
  * @since 3.0

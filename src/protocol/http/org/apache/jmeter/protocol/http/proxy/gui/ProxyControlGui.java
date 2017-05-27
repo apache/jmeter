@@ -535,7 +535,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 return;
             }
         }
-        // Proxy can take some while to start up; show a wating cursor
+        // Proxy can take some while to start up; show a waiting cursor
         Cursor cursor = getCursor();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         // TODO somehow show progress
@@ -1076,7 +1076,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                  * java.lang.ThreadGroup However, that does not work correctly;
                  * whereas treating it as a Controller does. if (te instanceof
                  * ThreadGroup) { name.append(parent_name);
-                 * name.append(cur.getName()); name.append(seperator);
+                 * name.append(cur.getName()); name.append(separator);
                  * buildNodesModel(cur, name.toString(), level); } else
                  */
                 if (te instanceof Controller) {
