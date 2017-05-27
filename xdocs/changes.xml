@@ -139,6 +139,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>60889</bug>JMeter JDBC sample calls SELECT USER() when testing with MySQL JDBC due to Connection#toString call for response headers.</li>
 </ul>
 
 <h3>Controllers</h3>
