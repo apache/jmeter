@@ -179,6 +179,7 @@ Summary
     <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
     <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
+    <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
