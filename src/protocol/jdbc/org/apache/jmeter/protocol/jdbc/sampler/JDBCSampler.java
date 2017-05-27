@@ -80,7 +80,7 @@ public class JDBCSampler extends AbstractJDBCTestElement implements Sampler, Tes
             } finally {
                 res.connectEnd();
             }
-            res.setResponseHeaders(conn.toString());
+            res.setResponseHeaders(DataSourceElement.getConnectionInfo(getDataSource()));
             res.setResponseData(execute(conn, res));
         } catch (SQLException ex) {
             final String errCode = Integer.toString(ex.getErrorCode());
