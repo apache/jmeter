@@ -99,10 +99,10 @@ under the License.
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.25</slf4j-api.version>
       <slf4j-ext.version>1.7.25</slf4j-ext.version>
-      <log4j-api.version>2.8.1</log4j-api.version>
-      <log4j-core.version>2.8.1</log4j-core.version>
-      <log4j-slf4j-impl.version>2.8.1</log4j-slf4j-impl.version>
-      <log4j-1.2-api.version>2.8.1</log4j-1.2-api.version>
+      <log4j-api.version>2.8.2</log4j-api.version>
+      <log4j-core.version>2.8.2</log4j-core.version>
+      <log4j-slf4j-impl.version>2.8.2</log4j-slf4j-impl.version>
+      <log4j-1.2-api.version>2.8.2</log4j-1.2-api.version>
       <jtidy.version>r938</jtidy.version>
       <tika-core.version>1.14</tika-core.version>
       <tika-parsers.version>1.14</tika-parsers.version>
