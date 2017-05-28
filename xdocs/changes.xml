@@ -133,6 +133,7 @@ Summary
     <li>Updated to ph-commons 8.6.5 (from 8.6.0)</li>
     <li>Updated to log4j2 2.8.2 (from 2.8.1)</li>
     <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
+    <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
