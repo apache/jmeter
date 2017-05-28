@@ -30,7 +30,7 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-dec-0.1.1 (org.brotli.dec)
+dec-0.1.2 (org.brotli.dec)
 -----------------
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
