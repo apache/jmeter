@@ -152,7 +152,7 @@ jsoup-1.10.2
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2
+log4j2-2.8.2
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
