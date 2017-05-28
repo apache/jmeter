@@ -296,7 +296,7 @@ JMETER-SERVER</source>
     Defaults to: <code>1099</code>
 </property>
 <property name="client.rmi.localport">
-    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controler)<br/>
+    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controller)<br/>
     Default value is <code>0</code>, which means port is randomly assigned.
     <note>You may need to open a port in the firewall on the Controller machine.</note>
     Defaults to: <code>0</code>
@@ -1484,7 +1484,7 @@ JMETER-SERVER</source>
 </property>
 <property name="jmeter.reportgenerator.statistic_window">
     Sets the size of the sliding window used by percentile evaluation.<br/>
-    <note>Caution: higher value provides a better accurency but needs more memory.</note>
+    <note>Caution: higher value provides a better accuracy but needs more memory.</note>
     Defaults to: <code>20000</code>
 </property>
 <property name="jmeter.reportgenerator.report_title">

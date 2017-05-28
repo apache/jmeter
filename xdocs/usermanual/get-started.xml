@@ -559,7 +559,7 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
       As JMeter uses SLF4J as logging API and Apache Log4j 2 as a logging framework since 3.2, not every log level
       used before 3.2 can match exactly with one of the new available log levels provided by SLF4J/Log4j2.
       Therefore, please keep the following differences and new suggested practices in mind
-      if you need to migrate any existing logging configruations and logging code.
+      if you need to migrate any existing logging configurations and logging code.
     </p>
     <table>
       <thead>
