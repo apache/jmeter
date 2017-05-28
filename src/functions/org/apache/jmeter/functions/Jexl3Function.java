@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.jexl3.JexlArithmetic;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -110,31 +109,6 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
     }
     
     /**
-     * FIXME Remove when upgrading to commons-jexl3-3.1
-     *
-     */
-    private static class JMeterArithmetic extends JexlArithmetic {
-        public JMeterArithmetic(boolean astrict) {
-            super(astrict);
-        }
-
-        /**
-         * A workaround to create an operator overload.
-         *  the 'size' method is discovered through introspection as
-         * an overload of the 'size' operator; this creates an entry in a cache for
-         * that arithmetic class avoiding to re-discover the operator overloads
-         * (Uberspect) on each execution. So, no, this method is not called; it is just
-         * meant as a workaround of the bug.
-         * @see <a href="https://issues.apache.org/jira/browse/JEXL-186">JEXL-186</a>
-         * @param jma an improbable parameter class
-         * @return 1
-         */
-        @SuppressWarnings("unused")
-        public int size(JMeterArithmetic jma) {
-            return 1;
-        }
-    }
-    /**
      * Get JexlEngine from ThreadLocal
      * @return JexlEngine
      */
@@ -149,8 +123,6 @@ public class Jexl3Function extends AbstractFunction implements ThreadListener {
                     // by a factory of 10
                     // Use JexlInfo if necessary
                     .debug(false)
-                    // see https://issues.apache.org/jira/browse/JEXL-186
-                    .arithmetic(new JMeterArithmetic(true))
                     .create();
             threadLocalJexl.set(engine);
         }
