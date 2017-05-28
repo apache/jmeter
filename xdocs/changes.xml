@@ -130,6 +130,7 @@ Summary
     <li>Updated to caffeine 2.5.1 (from 2.4.0)</li>
     <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
     <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
+    <li>Updated to ph-commons 8.6.5 (from 8.6.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
