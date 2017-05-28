@@ -113,7 +113,7 @@ under the License.
       <serializer.version>2.7.2</serializer.version>
       <xerces.version>2.11.0</xerces.version>
       <xml-apis.version>1.4.01</xml-apis.version>
-      <xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
+      <xmlgraphics-commons.version>2.2</xmlgraphics-commons.version>
       <javamail.version>1.5.0-b01</javamail.version>
       <jms.version>1.1.1</jms.version>
     </properties>
