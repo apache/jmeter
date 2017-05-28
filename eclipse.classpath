@@ -74,10 +74,10 @@
 	<classpathentry kind="lib" path="lib/httpmime-4.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-core-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-log-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-props-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-core-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-log-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-props-3.8.6.jar"/>
 	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-smart-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.10.2.jar"/>
