@@ -162,7 +162,7 @@ ph-css-5.0.4
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-8.6.0
+ph-commons-8.6.5
 --------
 https://github.com/phax/ph-commons
 - CssParser
