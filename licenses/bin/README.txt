@@ -30,4 +30,4 @@ tika-parsers-1.14.jar
 xalan-2.7.2.jar
 xercesImpl-2.11.0.jar
 xml-apis-1.4.01.jar
-xmlgraphics-commons-2.1.jar
+xmlgraphics-commons-2.2.jar
