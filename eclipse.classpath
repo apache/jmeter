@@ -55,7 +55,7 @@
 	<classpathentry kind="lib" path="lib/commons-dbcp2-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-jexl3-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.6.jar"/>

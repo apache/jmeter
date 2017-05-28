@@ -128,6 +128,7 @@ Summary
 <ul>
     <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
     <li>Updated to caffeine 2.5.1 (from 2.4.0)</li>
+    <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
