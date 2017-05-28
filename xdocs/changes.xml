@@ -127,6 +127,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
+    <li>Updated to caffeine 2.5.1 (from 2.4.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
