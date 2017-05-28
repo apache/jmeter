@@ -10,7 +10,7 @@ commons-collections-3.2.2.jar
 commons-dbcp2-2.1.1.jar
 commons-io-2.5.jar
 commons-jexl-2.1.1.jar
-commons-jexl3-3.0.jar
+commons-jexl3-3.1.jar
 commons-lang3-3.5.jar
 commons-math3-3.5.jar
 commons-net-3.6.jar
