@@ -93,10 +93,10 @@
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
