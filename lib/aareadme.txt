@@ -157,7 +157,7 @@ log4j2
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-5.0.3
+ph-css-5.0.4
 --------
 https://github.com/phax/ph-css
 - CssParser

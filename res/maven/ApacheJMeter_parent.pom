@@ -94,7 +94,7 @@ under the License.
       <rhino.version>1.7.7.1</rhino.version>
       <junit.version>4.12</junit.version>
       <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
-      <ph-css.version>5.0.3</ph-css.version>
+      <ph-css.version>5.0.4</ph-css.version>
       <ph-commons.version>8.6.0</ph-commons.version>
       <rsyntaxtextarea.version>2.6.1</rsyntaxtextarea.version>
       <slf4j-api.version>1.7.25</slf4j-api.version>

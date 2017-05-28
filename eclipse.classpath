@@ -85,7 +85,7 @@
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
-	<classpathentry kind="lib" path="lib/ph-css-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/ph-css-5.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-8.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
