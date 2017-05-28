@@ -20,14 +20,14 @@ package org.apache.jmeter.extractor;
 
 import java.util.List;
 
+import org.apache.jmeter.threads.JMeterContextService;
+import org.apache.jorphan.util.JOrphanUtils;
+
 import jodd.lagarto.dom.LagartoDOMBuilder;
 import jodd.lagarto.dom.Node;
 import jodd.lagarto.dom.NodeSelector;
 import jodd.log.LoggerFactory;
-import jodd.log.impl.Slf4jLoggerFactory;
-
-import org.apache.jmeter.threads.JMeterContextService;
-import org.apache.jorphan.util.JOrphanUtils;
+import jodd.log.impl.Slf4jLogger;
 
 /**
  * Jodd-Lagerto based CSS/JQuery extractor
@@ -44,7 +44,7 @@ public class JoddExtractor implements Extractor {
     private static final String CACHE_KEY_PREFIX = JoddExtractor.class.getName()+"_PARSED_BODY";
     
     static {
-        LoggerFactory.setLoggerFactory(new Slf4jLoggerFactory());
+        LoggerFactory.setLoggerProvider(Slf4jLogger.PROVIDER);
     }
 
     /**

@@ -37,7 +37,7 @@ import jodd.lagarto.TagType;
 import jodd.lagarto.TagUtil;
 import jodd.lagarto.dom.HtmlCCommentExpressionMatcher;
 import jodd.log.LoggerFactory;
-import jodd.log.impl.Slf4jLoggerFactory;
+import jodd.log.impl.Slf4jLogger;
 
 /**
  * Parser based on Lagarto
@@ -46,7 +46,7 @@ import jodd.log.impl.Slf4jLoggerFactory;
 public class LagartoBasedHtmlParser extends HTMLParser {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(LagartoBasedHtmlParser.class);
     static {
-        LoggerFactory.setLoggerFactory(new Slf4jLoggerFactory());
+        LoggerFactory.setLoggerProvider(Slf4jLogger.PROVIDER);
     }
 
     /*
