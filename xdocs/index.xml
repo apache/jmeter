@@ -110,7 +110,7 @@ Nor does it render the HTML pages as a browser does
 <h2>Further Information About JMeter</h2>
 <ul>
 <li><a href="changes.html">Changes List</a></li>
-<li><a href="issues.html">Read about existings Issues (Bugs or Enhancements) or reporting new ones (please do it !)</a></li>
+<li><a href="issues.html">Read about existing Issues (Bugs or Enhancements) or reporting new ones (please do it !)</a></li>
 <li><a href="http://www.apache.org/licenses/">License</a></li>
 <li><a href="mail.html">Mailing Lists</a></li>
 <li><a href="svnindex.html">Source Repositories</a></li>

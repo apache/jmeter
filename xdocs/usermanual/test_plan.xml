@@ -338,7 +338,7 @@ Since we placed "Web Defaults 1" inside a Loop Controller, only "Web Page 2" can
 requests will use "Web Defaults 2", since we placed it in the Thread Group (the "parent" of all other branches).</p>
 
 <figure image="http-config/http-config-example.png">Figure 1 -
-    Test Plan Showing Accessability of Configuration Elements</figure>
+    Test Plan Showing Accessibility of Configuration Elements</figure>
 
 <note>
 The <complink name="User Defined Variables"/> Configuration element is different. 
