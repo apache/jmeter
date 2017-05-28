@@ -88,7 +88,7 @@
      <ul>
         <li><a href="get-started.html#classpath">1.4.1 JMeter's Classpath</a></li>
         <li><a href="get-started.html#template">1.4.2 Create Test Plan from Template</a></li>
-        <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behing a proxy</a></li>
+        <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behind a proxy</a></li>
         <li><a href="get-started.html#non_gui">1.4.4 Non-GUI Mode</a></li>
         <li><a href="get-started.html#server">1.4.5 Server Mode</a></li>
         <li><a href="get-started.html#override">1.4.6 Overriding Properties Via The Command Line</a></li>

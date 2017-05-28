@@ -77,7 +77,7 @@ read <a href="component_reference.html#HTTP%28S%29_Test_Script_Recorder">Install
 
 </subsection>
 
-<subsection name="&sect-num;.3 Configure your browser to use the JMeter Proxy" anchor="configue-browser">
+<subsection name="&sect-num;.3 Configure your browser to use the JMeter Proxy" anchor="configure-browser">
 
 <p>
 At this point, JMeter's proxy is running. For this exercise, we will use Iceweasel/Firefox
