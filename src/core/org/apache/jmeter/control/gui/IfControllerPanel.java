@@ -19,13 +19,15 @@
 package org.apache.jmeter.control.gui;
 
 import java.awt.BorderLayout;
+
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.apache.jmeter.control.IfController;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -44,7 +46,7 @@ public class IfControllerPanel extends AbstractControllerGui {
      * A field allowing the user to specify the number of times the controller
      * should loop.
      */
-    private JTextField theCondition;
+    private JSyntaxTextArea theCondition;
 
     private JCheckBox useExpression;
 
@@ -172,11 +174,11 @@ public class IfControllerPanel extends AbstractControllerGui {
         JLabel conditionLabel = new JLabel(JMeterUtils.getResString("if_controller_label")); // $NON-NLS-1$
         conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
-        // TEXT FIELD
-        theCondition = new JTextField(""); // $NON-NLS-1$
+        // Condition
+        theCondition = JSyntaxTextArea.getInstance(5, 50); // $NON-NLS-1$
         theCondition.setToolTipText(JMeterUtils.getResString("if_controller_performance")); // $NON-NLS-1$
         conditionLabel.setLabelFor(theCondition);
-        conditionPanel.add(theCondition, BorderLayout.CENTER);
+        conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
        
         conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
                 + theCondition.getPreferredSize().width), BorderLayout.NORTH);
