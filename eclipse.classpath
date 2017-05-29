@@ -105,7 +105,7 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlpull-1.1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.4.9.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
