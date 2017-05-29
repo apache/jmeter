@@ -273,7 +273,7 @@ or
 http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
 - xstream
 
-xstream-1.4.9
+xstream-1.4.10
 -------------
 http://x-stream.github.io/download.html
 - SaveService
