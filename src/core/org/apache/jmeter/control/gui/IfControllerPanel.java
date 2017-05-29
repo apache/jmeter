@@ -180,8 +180,7 @@ public class IfControllerPanel extends AbstractControllerGui {
         conditionLabel.setLabelFor(theCondition);
         conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
        
-        conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
-                + theCondition.getPreferredSize().width), BorderLayout.NORTH);
+        conditionPanel.add(Box.createHorizontalGlue(), BorderLayout.NORTH);
 
         JPanel optionPanel = new JPanel();
 
