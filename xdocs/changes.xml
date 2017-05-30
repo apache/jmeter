@@ -77,6 +77,8 @@ Summary
 <ch_section>Incompatible changes</ch_section>
 
 <li>In InfluxDbBackendListenerClient, statut property has been renamed to status</li>
+<li>In CookieManager, DEFAULT_IMPLEMENTATION and DEFAULT_IMPLEMENTATION constants are now private.
+<note>If you're using ignorecookies with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back </note></li>
 <h3>Removed elements or functions</h3>
 
 <h3>Logging changes</h3>
@@ -88,6 +90,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>61056</bug>HTTP : Support brotli decoding</li>
+    <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
 </ul>
 
 <h3>Other samplers</h3>
