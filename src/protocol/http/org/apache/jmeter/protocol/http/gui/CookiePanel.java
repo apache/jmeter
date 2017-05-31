@@ -39,7 +39,6 @@ import org.apache.jmeter.gui.util.FileDialoger;
 import org.apache.jmeter.gui.util.HeaderAsPropertyRenderer;
 import org.apache.jmeter.gui.util.PowerTableModel;
 import org.apache.jmeter.protocol.http.control.Cookie;
-import org.apache.jmeter.protocol.http.control.CookieHandler;
 import org.apache.jmeter.protocol.http.control.CookieManager;
 import org.apache.jmeter.protocol.http.control.HC4CookieHandler;
 import org.apache.jmeter.testelement.TestElement;
