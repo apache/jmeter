@@ -139,6 +139,7 @@ Summary
     <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
     <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
     <li>Updated to xstream 1.4.10 (from 1.4.9)</li>
+    <li>Updated to Apache Tika 1.15 (from 1.14)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
