@@ -97,8 +97,8 @@
 	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.15.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
