@@ -393,7 +393,7 @@ public class AuthPanel extends AbstractConfigGui implements ActionListener {
         @Override
         public void setValueAt(Object value, int row, int column) {
             Authorization auth = manager.getAuthObjectAt(row);
-            log.debug("Setting auth value: " + value);
+            log.debug("Setting auth value: {}", value);
             switch (column){
                 case AuthManager.COL_URL:
                     auth.setURL((String) value);

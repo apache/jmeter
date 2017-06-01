@@ -49,10 +49,10 @@ public class SampleSenderFactory {
     private static final String MODE_STRIPPED_DISKSTORE = "StrippedDiskStore"; // $NON-NLS-1$
 
     /**
-     * Checks for the Jmeter property mode and returns the required class.
+     * Checks for the JMeter property mode and returns the required class.
      *
      * @param listener
-     * @return the appropriate class. Standard Jmeter functionality,
+     * @return the appropriate class. Standard JMeter functionality,
      *         hold_samples until end of test or batch samples.
      */
     static SampleSender getInstance(RemoteSampleListener listener) {
@@ -65,7 +65,7 @@ public class SampleSenderFactory {
         if (holdSamples || type.equalsIgnoreCase(MODE_HOLD)) {
             if(holdSamples) {
                 log.warn(
-                        "Property hold_samples is deprecated and will be removed in upcomping version, use mode={} instead",
+                        "Property hold_samples is deprecated and will be removed in upcoming version, use mode={} instead",
                         MODE_HOLD);
             }
             HoldSampleSender h = new HoldSampleSender(listener);

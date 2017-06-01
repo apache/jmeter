@@ -23,9 +23,10 @@ import java.awt.BorderLayout;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import org.apache.jmeter.control.WhileController;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -38,7 +39,7 @@ public class WhileControllerGui extends AbstractControllerGui {
     /**
      * A field allowing the user to specify the condition (not yet used).
      */
-    private JTextField theCondition;
+    private JSyntaxTextArea theCondition;
 
     /** The name of the condition field component. */
     private static final String CONDITION = "While_Condition"; // $NON-NLS-1$
@@ -133,15 +134,14 @@ public class WhileControllerGui extends AbstractControllerGui {
         JLabel conditionLabel = new JLabel(JMeterUtils.getResString(CONDITION_LABEL));
         conditionPanel.add(conditionLabel, BorderLayout.WEST);
 
-        // TEXT FIELD
+        // Condition
         // This means exit if last sample failed
-        theCondition = new JTextField("");  // $NON-NLS-1$
+        theCondition = JSyntaxTextArea.getInstance(5, 50);  // $NON-NLS-1$
         theCondition.setName(CONDITION);
         conditionLabel.setLabelFor(theCondition);
-        conditionPanel.add(theCondition, BorderLayout.CENTER);
+        conditionPanel.add(JTextScrollPane.getInstance(theCondition), BorderLayout.CENTER);
         
-        conditionPanel.add(Box.createHorizontalStrut(conditionLabel.getPreferredSize().width
-                + theCondition.getPreferredSize().width), BorderLayout.NORTH);
+        conditionPanel.add(Box.createHorizontalGlue(), BorderLayout.NORTH);
 
         return conditionPanel;
     }

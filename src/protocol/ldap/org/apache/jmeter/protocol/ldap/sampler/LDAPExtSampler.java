@@ -1018,7 +1018,7 @@ public class LDAPExtSampler extends AbstractSampler implements TestStateListener
     private String getWriteValue(final Object value)
     {
         if (value instanceof String) {
-            // assume it's senstive data
+            // assume it's sensitive data
             return StringEscapeUtils.escapeXml10((String)value);
         }
         if (value instanceof byte[]) {

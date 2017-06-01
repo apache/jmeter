@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -204,7 +205,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
              * Textfield uses \n (LF) to delimit lines; we need to send CRLF.
              * Rather than change the way that arguments are processed by the
              * samplers for raw data, it is easier to fix the data.
-             * On retrival, CRLF is converted back to LF for storage in the text field.
+             * On retrieval, CRLF is converted back to LF for storage in the text field.
              * See
              */
             HTTPArgument arg = new HTTPArgument("", text.replaceAll("\n","\r\n"), false);
@@ -394,6 +395,7 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
 
         JPanel pathPanel =  new HorizontalPanel();
+        pathPanel.setPreferredSize(new Dimension(80,30));
         if (notConfigOnly){
             pathPanel.add(method);
         }

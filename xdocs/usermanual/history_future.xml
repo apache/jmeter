@@ -17,7 +17,7 @@
 -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '25'>
+<!ENTITY sect-num '24'>
 <!ENTITY hellip   "&#x02026;" >
 ]>
 <document id="$Id$" prev="glossary.html" >
@@ -44,13 +44,13 @@ and to add functional-testing capabilities.
 pluggable architecture. <br/>
 The primary goal of further developments will be:
 <ul>
-<li>Addition of Websocket protocol</li>
-<li>Addition of FTPS and SFTP protocols</li>
-<li>Enhancements to Webservices protocols (SOAP Attachments)</li>
+<li>Support of HTTP/2 protocol</li>
+<li>Possible rework of core architecture to introduce a pool of threads or switch to async model allowing us to take advantage of async io</li>
+<li>Enhancements to Webservices protocols (REST / SOAP)</li>
 <li>Enhancements to JMS protocol implementation</li>
 <li>&hellip;</li>
 </ul>
-
+<note>You can help us by contributing to JMeter through any piece of work, read <a href="../building.html" >this document</a></note>
 </p>
 </subsection>
 </section>

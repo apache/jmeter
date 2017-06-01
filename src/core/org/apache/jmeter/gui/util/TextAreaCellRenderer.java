@@ -44,8 +44,7 @@ public class TextAreaCellRenderer implements TableCellRenderer {
         if (table.getRowHeight(row) < getPreferredHeight()) {
             table.setRowHeight(row, getPreferredHeight());
         }
-        JTextScrollPane scrollPane = JTextScrollPane.getInstance(rend);
-        return scrollPane;
+        return JTextScrollPane.getInstance(rend);
     }
 
     /**

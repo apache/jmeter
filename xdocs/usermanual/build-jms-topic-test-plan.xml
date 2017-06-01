@@ -19,7 +19,7 @@
 [
 <!ENTITY sect-num '11'>
 ]>
-<document prev="build-jms-point-to-point-test-plan.html" next="build-monitor-test-plan.html" id="$Id$">
+<document prev="build-jms-point-to-point-test-plan.html" next="listeners.html" id="$Id$">
 
 <properties>
   <title>User's Manual: Building a JMS (Java Messaging Service) Test Plan</title>

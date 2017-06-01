@@ -29,7 +29,7 @@
     Per operation, I will shortly explain how these operations are implemented.<br/>
     LDAP servers are some kind of hierarchical database, they store objects (entries) in a tree. The uppermost part of a tree is called the ROOT of the tree.<br/>
     eg. When a tree starts with dc=com, the root equals dc=com.<br/>
-    The next level can exist under the root, eg dc=test. The full name of this object (the "distinghuised name") is "dc=test,dc=com.<br/>
+    The next level can exist under the root, eg dc=test. The full name of this object (the "distinguished name") is "dc=test,dc=com.<br/>
     Again, a following level can be made, by adding the user "cn=admin" under dc=test,dc=com. This object has a DN (distinguished name) of "cn=admin,dc=test,dc=com".<br/>
     The relative distinguished name (RDN) is the last part of the DN, eg. cn=admin.<br/>
     The characteristics of an object are determined by the objectClasses, which can be seen as a collection of attributes.<br/>

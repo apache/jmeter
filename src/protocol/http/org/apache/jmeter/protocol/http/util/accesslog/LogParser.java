@@ -31,9 +31,8 @@ import org.apache.jmeter.testelement.TestElement;
  * then, the design and implementation has been rewritten from scratch several
  * times to make it more generic and extensible. The first version was hard
  * coded and written over the weekend.
- * <p>
+ * </p>
  *
- * @version $Revision$
  */
 
 public interface LogParser {

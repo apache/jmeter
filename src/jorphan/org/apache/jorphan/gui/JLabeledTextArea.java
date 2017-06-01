@@ -126,7 +126,7 @@ public class JLabeledTextArea extends JPanel implements JLabeledField, FocusList
      * Callback method when the focus to the Text Field component is lost.
      *
      * @param pFocusEvent
-     *            The focus event that occured.
+     *            The focus event that occurred.
      */
     @Override
     public void focusLost(FocusEvent pFocusEvent) {

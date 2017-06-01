@@ -34,7 +34,7 @@ public final class LogEvent
 {
     private static final long serialVersionUID = 1L;
 
-    //A Constant used when retrieving time relative to start of applicaiton start
+    //A Constant used when retrieving time relative to start of application start
     private static final long START_TIME = System.currentTimeMillis();
 
     ///The category that this LogEvent concerns. (Must not be null)
@@ -116,7 +116,7 @@ public final class LogEvent
     }
 
     /**
-     * Get throwabe instance associated with event.
+     * Get throwable instance associated with event.
      *
      * @return the Throwable
      */

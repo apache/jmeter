@@ -23,7 +23,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -33,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.event.ChangeEvent;
@@ -46,6 +46,9 @@ import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
@@ -62,6 +65,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     private ArgumentsPanel parameterPanel;
 
     private JLabeledTextField cutPasteFunction;
+    
+    private JSyntaxTextArea resultTextArea;
 
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
@@ -101,26 +106,30 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         comboPanel.add(helpButton);
         this.getContentPane().add(comboPanel, BorderLayout.NORTH);
         this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
-        JPanel resultsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel resultsPanel = new VerticalPanel();
+        JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
-        resultsPanel.add(cutPasteFunction);
+        generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
-        resultsPanel.add(generateButton);
+        generatePanel.add(generateButton);
+        resultTextArea = JSyntaxTextArea.getInstance(5,50);
+        resultTextArea.setToolTipText(JMeterUtils.getResString("function_helper_dialog_result_warn"));
+        displayPanel.add(new JLabel(JMeterUtils.getResString("result_function")));
+        displayPanel.add(JTextScrollPane.getInstance(resultTextArea));
+        
+        resultsPanel.add(generatePanel);
+        resultsPanel.add(displayPanel);
+        
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
-
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
     }
 
     private void initializeFunctionList() {
         String[] functionNames = CompoundVariable.getFunctionNames();
-        Arrays.sort(functionNames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareToIgnoreCase(o2);
-            }
-        });
+        Arrays.sort(functionNames, (o1, o2) -> o1.compareToIgnoreCase(o2));
         functionList = new JLabeledChoice(JMeterUtils.getResString("choose_function"), functionNames); //$NON-NLS-1$
         functionList.addChangeListener(this);
     }
@@ -141,6 +150,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             getContentPane().add(parameterPanel, BorderLayout.CENTER);
             this.pack();
             this.validate();
+            resultTextArea.setText("");
             this.repaint();
         } catch (InstantiationException | IllegalAccessException e) {
         }
@@ -167,6 +177,8 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         }
         functionCall.append("}");
         cutPasteFunction.setText(functionCall.toString());
+        CompoundVariable function = new CompoundVariable(functionCall.toString());
+        resultTextArea.setText(function.execute().trim()); 
     }
 
     private class HelpListener implements ActionListener {

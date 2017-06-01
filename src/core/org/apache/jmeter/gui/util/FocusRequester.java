@@ -30,11 +30,6 @@ import javax.swing.SwingUtilities;
 public class FocusRequester {
 
     public static void requestFocus(final Component comp) {
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run() {
-                comp.requestFocusInWindow();
-            }
-        });
+        SwingUtilities.invokeLater(comp::requestFocusInWindow);
     }
 }

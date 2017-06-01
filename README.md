@@ -1,6 +1,10 @@
 ![Apache JMeter logo](https://jmeter.apache.org/images/logo.svg)
 # Apache JMeter
 
+
+[![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
+
 ## What is it?
 
 Apache JMeter is a 100% pure Java application designed to test
@@ -35,7 +39,7 @@ Highly Extensible core:
 
 ## The Latest Version
 
-Details of the latest version can be found on the Java Apache 
+Details of the latest version can be found on the JMeter Apache 
 Project web site (http://jmeter.apache.org/).
 
 ## Requirements
@@ -45,7 +49,8 @@ The following requirements exist for running Apache JMeter:
 *  Java Interpreter:
 
     A fully compliant Java 8 (or later) Runtime Environment is required 
-    for Apache JMeter to execute.
+    for Apache JMeter to execute. A JDK with keytool utility is better suited 
+    for Recording HTTPS websites. 
 
 *  Optional jars:
 
@@ -111,6 +116,29 @@ but won't be used at run-time.
 
 _This is useful for testing what happens if the optional jars are not
 downloaded by other JMeter users._
+
+If you are behind a proxy, you can set a few build properties in `build-local.properties` for ant to use the proxy:
+
+```
+proxy.use=true
+proxy.host=proxy.example.invalid
+proxy.port=8080
+proxy.user=your_user_name
+proxy.pass=your_password
+```
+
+You might also want to skip some tests - that are failing without proper access to the internet - by adding some more
+properties into `build-local.properties`:
+```
+skip.bug52310=true
+skip.bug60607=true
+skip.batchtest_Http4ImplPreemptiveBasicAuth=true
+skip.batchtest_SlowCharsFeature=true
+skip.batchtest_TestKeepAlive=true
+skip.batchtest_ResponseDecompression=true
+skip.test_http=true
+skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server=true
+```
 
 ### Test builds
 

@@ -94,7 +94,7 @@ public class ExampleSampler extends AbstractSampler {
             res.setResponseCode("500");// $NON-NLS-1$
             res.setResponseMessage(ex.toString());
         }
-        res.sampleEnd(); // End timimg
+        res.sampleEnd(); // End timing
 
         res.setSuccessful(isOK);
 

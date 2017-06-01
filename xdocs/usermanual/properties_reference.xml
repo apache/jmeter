@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '20'>
+<!ENTITY sect-num '19'>
 <!ENTITY command  "&#x02318;" >
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
@@ -142,7 +142,7 @@ The <code>system.properties</code> file gives more flexibility.</note>
     <note>
         Mac apparently looks better with the System LAF set through
         <source>jmeter.laf.mac=System</source>
-        Failing that, the JMeter default laf can be defined through:
+        Failing that, the JMeter default LAF can be defined through:
         <source>jmeter.laf=System</source>
         If none of the above <code>jmeter.laf</code> properties are defined, JMeter uses the <code>CrossPlatform</code> LAF.
         This is because the <code>CrossPlatform</code> LAF generally looks better than the <code>System</code> LAF.
@@ -289,14 +289,14 @@ gui.quick_9=ViewResultsFullVisualizer
 JMETER-SERVER</source>
     On Unix:
     <source>SERVER_PORT=1234 jmeter-server</source>
-    On the windows client:
+    On the Windows client:
     <source>set remote_hosts=<em>server</em>:1234</source>
-    On the unix client:
+    On the Unix client:
     <source>export remote_hosts=<em>server</em>:1234</source>
     Defaults to: <code>1099</code>
 </property>
 <property name="client.rmi.localport">
-    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controler)<br/>
+    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controller)<br/>
     Default value is <code>0</code>, which means port is randomly assigned.
     <note>You may need to open a port in the firewall on the Controller machine.</note>
     Defaults to: <code>0</code>
@@ -324,7 +324,7 @@ JMETER-SERVER</source>
     Defaults to: <code>4000</code>
 </property>
 <property name="server.rmi.create">
-    From JMeter version 2.3.1, the jmeter server creates the RMI registry as part of the server process.<br/>
+    From JMeter version 2.3.1, the JMeter server creates the RMI registry as part of the server process.<br/>
     Set this property to <code>false</code>, to stop the server creating the RMI registry.<br/>
     Defaults to: <code>true</code>
 </property>
@@ -427,8 +427,17 @@ JMETER-SERVER</source>
     Defaults to: <code>true</code>
 </property>
 <property name="httpclient4.retrycount">
-    Number of retries to attempt.<br/>
+    Number of retries to attempt.
+    Retry will be done on Idempotent Http Methods by default. 
+    If you want to retry for all methods, see property <code>httpclient4.request_sent_retry_enabled</code>
+    <br/>
     Defaults to: <code>0</code>
+</property>
+<property name="httpclient4.request_sent_retry_enabled">
+    Set this property to <code>true</code> if it's OK to retry requests that have been sent.
+    This mean that both Idempotent and non Idempotent requests will be retried.
+    This should usually be false, but it can be useful when testing against some Load Balancers like Amazon ELB.<br/>
+    Defaults to: <code>false</code>
 </property>
 <property name="httpclient4.idletimeout">
     Idle connection timeout (in milliseconds) to apply if the server does not send <code>Keep-Alive</code> timeout headers.<br/>
@@ -452,7 +461,7 @@ JMETER-SERVER</source>
 </properties>
 </section>
 
-<section name="&sect-num;.14 HTTP Cache Manager configuration" anchor="cache_maanger">
+<section name="&sect-num;.14 HTTP Cache Manager configuration" anchor="cache_manager">
 <properties>
 <property name="cacheable_methods">
     Space or comma separated list of methods that can be cached.<br/>
@@ -606,7 +615,7 @@ JMETER-SERVER</source>
 <property name="jmeter.save.saveservice.xml_pi">
     <note>N.B. The current implementation saves the values in XML as attributes, so the names must be valid XML names.</note>
     Versions of JMeter after 2.3.2 send the variable to all servers to ensure that the correct data is available at the client.<br/>
-    Optional xml processing instruction for line two of the file.<br/>
+    Optional XML processing instruction for line two of the file.<br/>
     Defaults to empty value
 </property>
 <property name="jmeter.save.saveservice.base_prefix">
@@ -948,7 +957,7 @@ JMETER-SERVER</source>
     Defaults to platforms default charset as returned by <code>Charset.defaultCharset().name()</code>
 </property>
 <property name="tcp.status.prefix">
-    String at the begining of the status response code.<br/>
+    String at the beginning of the status response code.<br/>
     Defaults to: <code>Status</code></property>
 <property name="tcp.status.suffix">
     String at the end of the status response code.<br/>
@@ -1475,7 +1484,7 @@ JMETER-SERVER</source>
 </property>
 <property name="jmeter.reportgenerator.statistic_window">
     Sets the size of the sliding window used by percentile evaluation.<br/>
-    <note>Caution: higher value provides a better accurency but needs more memory.</note>
+    <note>Caution: higher value provides a better accuracy but needs more memory.</note>
     Defaults to: <code>20000</code>
 </property>
 <property name="jmeter.reportgenerator.report_title">

@@ -121,10 +121,11 @@ public final class Priority
     }
 
     /**
-     * Overidden string to display Priority in human readable form.
+     * Overridden string to display Priority in human readable form.
      *
      * @return the string describing priority
      */
+    @Override
     public String toString()
     {
         return "Priority[" + getName() + "/" + getValue() + "]";

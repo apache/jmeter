@@ -22,8 +22,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -113,10 +111,10 @@ public class TextFile extends File {
         Writer writer = null;
         OutputStream outputStream = null;
         try {
+            outputStream = new FileOutputStream(this);
             if (encoding == null) {
-                writer = new FileWriter(this);
+                writer = new OutputStreamWriter(outputStream);
             } else {
-                outputStream = new FileOutputStream(this);
                 writer = new OutputStreamWriter(outputStream, encoding);
             }
             writer.write(body);
@@ -141,10 +139,10 @@ public class TextFile extends File {
         BufferedReader br = null;
         FileInputStream fileInputStream = null;
         try {
+            fileInputStream = new FileInputStream(this);
             if (encoding == null) {
-                reader = new FileReader(this);
+                reader = new InputStreamReader(fileInputStream);                
             } else {
-                fileInputStream = new FileInputStream(this);
                 reader = new InputStreamReader(fileInputStream, encoding);
             }
             br = new BufferedReader(reader);

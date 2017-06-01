@@ -101,7 +101,7 @@ public class RemoteListenerWrapper extends AbstractTestElement implements Sample
     // is not used, but it may become an issue in the future. Then these
     // events must also be stored so that replay of all events may occur and
     // in the right order. Each stored event must then be tagged with something
-    // that lets you distinguish between occured, started and ended.
+    // that lets you distinguish between occurred, started and ended.
 
     @Override
     public void sampleStarted(SampleEvent e) {

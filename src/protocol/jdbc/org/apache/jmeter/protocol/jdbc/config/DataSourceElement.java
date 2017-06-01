@@ -141,6 +141,20 @@ public class DataSourceElement extends AbstractTestElement
         return el;
     }
 
+    /**
+     * @param poolName Pool name
+     * @return Connection information on poolName
+     */
+    public static String getConnectionInfo(String poolName) throws SQLException{
+        Object poolObject = 
+                JMeterContextService.getContext().getVariables().getObject(poolName);
+        if (poolObject instanceof DataSourceComponentImpl) {
+            DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
+            return pool.getConnectionInfo();
+        } else {
+            return "Object:"+poolName+" is not of expected type '"+DataSourceComponentImpl.class.getName()+"'";
+        }
+    }
     /*
      * Utility routine to get the connection from the pool.
      * Purpose:
@@ -268,10 +282,31 @@ public class DataSourceElement extends AbstractTestElement
         DataSourceComponentImpl(BasicDataSource p_dsc){
             sharedDSC=p_dsc;
         }
+        
+        /**
+         * @return String connection information
+         */
+        public String getConnectionInfo() {
+            BasicDataSource dsc;
+            boolean shared = false;
+            if (sharedDSC != null){ // i.e. shared pool
+                dsc = sharedDSC;
+                shared = true;
+            } else {
+                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
+                dsc = poolMap.get(getDataSourceName());
+            }
+            StringBuilder builder = new StringBuilder(100);
+            builder.append("shared:").append(shared)
+                .append(", driver:").append(dsc.getDriverClassName())
+                .append(", url:").append(dsc.getUrl())
+                .append(", user:").append(dsc.getUsername());
+            return builder.toString();
+        }
 
         /**
          * @return Connection
-         * @throws SQLException if database access error occurrs
+         * @throws SQLException if database access error occurred
          */
         public Connection getConnection() throws SQLException {
             Connection conn;

@@ -84,7 +84,7 @@ public interface JMeterGUIComponent extends ClearGui {
      * the component's label in the local language. The resource name is fixed,
      * and does not vary with the selected language.
      *
-     * Normally this method should be overriden in preference to overriding
+     * Normally this method should be overridden in preference to overriding
      * getStaticLabel(). However where the resource name is not available or required,
      * getStaticLabel() may be overridden instead.
      *

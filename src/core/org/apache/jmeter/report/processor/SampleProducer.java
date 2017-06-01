@@ -48,12 +48,12 @@ import org.apache.jmeter.report.core.SampleMetadata;
 public interface SampleProducer extends SampleProcessor {
 
     /**
-     * Set the metadata associated woth the specified channel
+     * Set the metadata associated with the specified channel
      * 
      * @param metadata
      *            The metadata to be associated to the specified channel
      * @param channel
-     *            The channel whoses metadata are beeing associated wih
+     *            The channel whoses metadata are being associated with
      */
     void setProducedMetadata(SampleMetadata metadata, int channel);
 

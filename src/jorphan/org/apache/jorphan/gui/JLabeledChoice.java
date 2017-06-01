@@ -22,7 +22,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
     }
 
     /**
-     * Constructs a non-edittable combo-box with the label displaying the passed text.
+     * Constructs a non-editable combo-box with the label displaying the passed text.
      *
      * @param pLabel - the text to display in the label.
      * @param items - the items to display in the Combo box
@@ -141,19 +140,9 @@ public class JLabeledChoice extends JPanel implements JLabeledField {
         // Register the handler for focus listening. This handler will
         // only notify the registered when the text changes from when
         // the focus is gained to when it is lost.
-        choiceList.addItemListener(new ItemListener() {
-            /**
-             * Callback method when the focus to the Text Field component is
-             * lost.
-             *
-             * @param e
-             *            The focus event that occured.
-             */
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    notifyChangeListeners();
-                }
+        choiceList.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                notifyChangeListeners();
             }
         });
 

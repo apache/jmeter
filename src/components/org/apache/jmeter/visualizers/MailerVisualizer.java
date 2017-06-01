@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 
 /*
  * TODO : - Create a subpanel for other visualizers - connect to the properties. -
- * Get the specific URL that is failing. - add a seperate interface to collect
+ * Get the specific URL that is failing. - add a separate interface to collect
  * the thrown failure messages. - - suggestions ;-)
  */
 

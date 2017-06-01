@@ -93,7 +93,7 @@ public class JDateField extends JTextField {
         setText(myString);
     }
 
-    // Dummy constructor to allo JUnit tests to work
+    // Dummy constructor to allow JUnit tests to work
     public JDateField() {
         this(new Date());
     }
@@ -166,12 +166,7 @@ public class JDateField extends JTextField {
             pos = newDate.length();
         }
         final int newPosition = pos;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setCaretPosition(newPosition);// Restore position
-            }
-        });
+        SwingUtilities.invokeLater(() -> setCaretPosition(newPosition));
     }
 
     class KeyFocus extends KeyAdapter {

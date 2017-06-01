@@ -96,12 +96,7 @@ public final class NewDriver {
                 new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "ext"),// $NON-NLS-1$ $NON-NLS-2$
                 new File(JMETER_INSTALLATION_DIRECTORY + File.separator + "lib" + File.separator + "junit")};// $NON-NLS-1$ $NON-NLS-2$
         for (File libDir : libDirs) {
-            File[] libJars = libDir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {// only accept jar files
-                    return name.endsWith(".jar");// $NON-NLS-1$
-                }
-            });
+            File[] libJars = libDir.listFiles((FilenameFilter) (dir, name) -> name.endsWith(".jar"));
             if (libJars == null) {
                 new Throwable("Could not access " + libDir).printStackTrace(); // NOSONAR No logging here
                 continue;
@@ -155,15 +150,12 @@ public final class NewDriver {
      */
     private static File[] listJars(File dir) {
         if (dir.isDirectory()) {
-            return dir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File f, String name) {
-                    if (name.endsWith(".jar")) {// $NON-NLS-1$
-                        File jar = new File(f, name);
-                        return jar.isFile() && jar.canRead();
-                    }
-                    return false;
+            return dir.listFiles((f, name) -> {
+                if (name.endsWith(".jar")) {// $NON-NLS-1$
+                    File jar = new File(f, name);
+                    return jar.isFile() && jar.canRead();
                 }
+                return false;
             });
         }
         return new File[0];
@@ -173,7 +165,7 @@ public final class NewDriver {
      * Add a URL to the loader classpath only; does not update the system classpath.
      *
      * @param path to be added.
-     * @throws MalformedURLException when <code>path</code> points to an ivalid url
+     * @throws MalformedURLException when <code>path</code> points to an invalid url
      */
     public static void addURL(String path) throws MalformedURLException {
         File furl = new File(path);

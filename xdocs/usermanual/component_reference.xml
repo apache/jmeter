@@ -18,7 +18,7 @@
  -->
 <!DOCTYPE document
 [
-<!ENTITY sect-num '19'>
+<!ENTITY sect-num '18'>
 <!ENTITY hellip   "&#x02026;" >
 <!ENTITY le       "&#x02264;" >
 <!ENTITY ge       "&#x02265;" >
@@ -441,7 +441,7 @@ Optional properties to allow change the method to get response size:<br></br></p
 <source>sampleresult.getbytes.headers_size=true</source></li></ul>
 
 <note>
-The <code>Java</code> and <code>HttpClient3</code> implementations do not include transport overhead such as
+The <code>Java</code> implementation does not include transport overhead such as
 chunk headers in the response body size.<br></br>
 The <code>HttpClient4</code> implementation does include the overhead in the response body size,
 so the value may be greater than the number of bytes in the response content.
@@ -456,6 +456,11 @@ The retry count can be overridden by setting the relevant JMeter property, for e
 </p>
 <source>
 httpclient4.retrycount=3
+</source>
+With HC4 Implementation, retry will be done on Idempotent Http Methods by default.
+If you want to retry for all methods, then set property
+<source>
+httpclient4.request_sent_retry_enabled=true
 </source>
 <p>
 <b>Note: Certificates does not conform to algorithm constraints</b><br></br>
@@ -1041,7 +1046,7 @@ BeanShell does not currently support Java 5 syntax such as generics and the enha
             is stored in the String array <code>bsh.args</code>.</p>
         <p>The full list of BeanShell variables that is set up is as follows:</p>
         <ul>
-        <li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+        <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
         <li><code>Label</code> - the Sampler label</li>
         <li><code>FileName</code> - the file name, if any</li>
         <li><code>Parameters</code> - text from the Parameters field</li>
@@ -1147,7 +1152,7 @@ Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
 <li><code>Label</code> - the Sampler label</li>
 <li><code>FileName</code> - the file name, if any</li>
 <li><code>Parameters</code> - text from the Parameters field</li>
@@ -1248,7 +1253,7 @@ Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a></li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a></li>
 <li><code>Label</code> - the Sampler label</li>
 <li><code>FileName</code> - the file name, if any</li>
 <li><code>Parameters</code> - text from the Parameters field</li>
@@ -1392,7 +1397,6 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
 </component>
 
 <component name="JMS Publisher" index="&sect-num;.1.13" width="854" height="796" screenshot="jmspublisher.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         JMS Publisher will publish messages to a given destination (topic/queue). For those not
@@ -1434,6 +1438,13 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   </dl>
   </property>
   <property name="Message type" required="Yes">Text, Map, Object message or Bytes Message</property>
+  <property name="Content encoding" required="Yes">Specify the encoding for reading the message source file:
+  <dl> 
+    <dt><code>RAW</code>:</dt><dd>No variable support from the file and load it with default system charset.</dd>
+    <dt><code>DEFAULT</code>:</dt><dd>Load file with default system encoding, except for XML which relies on XML prolog. If the file contain variables, they will be processed.</dd>
+    <dt><code>Standard charsets</code>:</dt><dd>The specified encoding (valid or not) is used for reading the file and processing variables</dd>
+  </dl>
+  </property>
   <property name="Use non-persistent delivery mode?" required="No">
       Whether to set <code>DeliveryMode.NON_PERSISTENT</code> (defaults to <code>false</code>)
   </property>
@@ -1493,7 +1504,6 @@ The following table shows some values which may be useful when configuring JMS:
 </component>
 
 <component name="JMS Subscriber" index="&sect-num;.1.14"  width="739" height="607" screenshot="jmssubscriber.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         JMS Publisher will subscribe to messages in a given destination (topic or queue). For those not
@@ -1554,7 +1564,6 @@ The following table shows some values which may be useful when configuring JMS:
 </component>
 
 <component name="JMS Point-to-Point" index="&sect-num;.1.15"  width="882" height="804" screenshot="jms/JMS_Point-to-Point.png">
-<note>BETA CODE - the code is still subject to change</note>
     <description>
         <p>
         This sampler sends and optionally receives JMS Messages through point-to-point connections (queues).
@@ -2888,6 +2897,10 @@ will be displayed in the lower panel.<br/>
 </td></tr>
 </table>
 <p><code>Scroll automatically?</code> option permit to have last node display in tree selection</p>
+<note>Starting with version 3.2 the number of entries in the View is restricted to the value of the
+property <code>view.results.tree.max_results</code> which defaults to <code>500</code> entries. The old
+behaviour can be restored by setting the property to <code>0</code>. Beware, that this might consume
+a lot of memory.</note>
 <p>
 With <code>Search</code> option, most of the views also allow the displayed data to be searched; the result of the search will be high-lighted
 in the display above. For example the Control panel screenshot below shows one result of searching for "<code>Java</code>".
@@ -3141,7 +3154,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
@@ -3268,7 +3281,7 @@ Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p>
 <dl>
-<dt><code>log</code></dt><dd>(<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</dd>
+<dt><code>log</code></dt><dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
 <dt><code>Label</code></dt><dd>the String Label</dd>
 <dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
 <dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
@@ -3314,7 +3327,7 @@ Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p>
 <dl>
-<dt><code>log</code></dt><dd>(<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</dd>
+<dt><code>log</code></dt><dd>(<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</dd>
 <dt><code>Label</code></dt><dd>the String Label</dd>
 <dt><code>FileName</code></dt><dd>the script file name (if any)</dd>
 <dt><code>Parameters</code></dt><dd>the parameters (as a String)</dd>
@@ -3457,23 +3470,24 @@ By default, a Graphite implementation is provided.
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure>
     
     
-    <p>Since JMeter 3.2, a new implementation (in Alpha state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
+    <p>Since JMeter 3.2, a new implementation (in Beta state) has been added that allows writing directly in InfluxDB with a custom schema, it is called <code>InfluxdbBackendListenerClient</code> 
       The following parameters apply to the <a href="../api/org/apache/jmeter/visualizers/backend/influxdb/InfluxdbBackendListenerClient.html">InfluxdbBackendListenerClient</a> implementation:</p>
 
     <properties>
         <property name="influxdbMetricsSender" required="Yes"><code>org.apache.jmeter.visualizers.backend.influxdb.HttpMetricsSender</code></property>
         <property name="influxdbUrl" required="Yes">Influx URL (example : http://influxHost:8086/write?db=jmeter)</property>
-        <property name="application" required="Yes">Name of tested application</property>
+        <property name="application" required="Yes">Name of tested application. This value is stored in the 'events' measurement as a tag named 'application' </property>
         <property name="measurement" required="Yes">Measurement as per <a href="https://docs.influxdata.com/influxdb/v1.1/write_protocols/line_protocol_reference/">Influx Line Protocol Reference</a>. Defaults to "<code>jmeter</code>."</property>
         <property name="summaryOnly" required="Yes">Only send a summary with no detail. Defaults to <code>true</code>.</property>
         <property name="samplersRegex" required="Yes">Regular expression which will be matched against the names of samples and sent to the back end.</property>
-        <property name="testTitle" required="Yes">Test name. Defaults to <code>Test name</code>.</property>
+        <property name="testTitle" required="Yes">Test name. Defaults to <code>Test name</code>. This value is stored in the 'events' measurement as a field named 'text'. JMeter generate automatically at the start and the end of the test an annotation with this value ending with ' started' and ' ended'</property>
+        <property name="eventTags" required="No">List of tags. This value is stored in the 'events' measurement as a tag named 'tags'.</property>
         <property name="percentiles" required="Yes">The percentiles you want to send to the backend.
         A percentile may contain a fractional part, for example <code>12.5</code>.
         (The separator is always ".")
         List must be semicolon separated. Generally 3 or 4 values should be sufficient.</property>
     </properties>
-    <p>See also <a href="realtime-results.html" >Real-time results</a> for more details.</p>     
+    <p>See also <a href="realtime-results.html" >Real-time results</a> and <a href="http://docs.grafana.org/reference/annotations/#influxdb-annotations">Influxdb annotations in Grafana</a> for more details.</p>     
 </component>
 
 <a href="#">^</a>
@@ -3565,10 +3579,9 @@ By default, a Graphite implementation is provided.
   If the OS does not distinguish between upper and lower case, <code>csvData.TXT</code> would also be opened separately. 
   </property>
   <property name="File Encoding" required="No">The encoding to be used to read the file, if not the platform default.</property>
-  <property name="Variable Names" required="Yes">List of variable names (comma-delimited).
+  <property name="Variable Names" required="No">List of variable names. The names must be separated by the delimiter character. They can be quoted using double-quotes.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
-  The names must be separated by the delimiter character. They can be quoted using double-quotes.
   </property>
   <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
   Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
@@ -4644,7 +4657,7 @@ Before invoking the script, some variables are set up in the BeanShell interpret
 These are strings unless otherwise noted:
 </p>
 <ul>
-  <li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
+  <li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> Object. (e.g.) <code>log.warn("Message"[,Throwable])</code></li>
   <li><code>SampleResult</code> - the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a> Object; read-write</li>
   <li><code>Response</code> - the response Object; read-write</li>
   <li><code>Failure</code> - boolean; read-write; used to set the Assertion status</li>
@@ -4776,7 +4789,7 @@ The script (or file) is processed using the <code>BSFEngine.exec()</code> method
 </p>
 <p>The following variables are set up for use by the script:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>Filename</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
@@ -4829,7 +4842,7 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
 </properties>
 <p>The following variables are set up for use by the script:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>Filename</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
@@ -4900,7 +4913,7 @@ please ensure that you select "<code>Store the message using MIME (raw)</code>" 
     <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
     <property name="Verify Signature" required="Yes">If selected, the assertion will verify if it is a valid signature according to the parameters defined in the <code>Signer Certificate</code> box.</property>
     <property name="Message not signed" required="Yes">Whether or not to expect a signature in the message</property>
-    <property name="Signer Cerificate" required="Yes">"<code>No Check</code>" means that it will not perform signature verification. "<code>Check values</code>" is used to verify the signature against the inputs provided. And "<code>Certificate file</code>" will perform the verification against a specific certificate file.</property>
+    <property name="Signer Certificate" required="Yes">"<code>No Check</code>" means that it will not perform signature verification. "<code>Check values</code>" is used to verify the signature against the inputs provided. And "<code>Certificate file</code>" will perform the verification against a specific certificate file.</property>
     <property name="Message Position" required="Yes">
     The Mail sampler can retrieve multiple messages in a single sample.
     Use this field to specify which message will be checked.
@@ -5094,7 +5107,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
 vars.get(key);
@@ -5137,7 +5150,7 @@ The BSF Timer can be used to generate a delay using a BSF scripting language.
 </properties>
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>
 vars.get(key);
@@ -5183,7 +5196,7 @@ The JSR223 Timer can be used to generate a delay using a JSR223 scripting langua
 </properties>
 <p>Before invoking the script, some variables are set up in the script interpreter:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
@@ -5374,7 +5387,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </properties>
 <p>Before invoking the script, some variables are set up in the BeanShell interpreter:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
@@ -5410,7 +5423,7 @@ The script (or file) is processed using the <code>BSFEngine.exec()</code> method
 </p>
 <p>The following BSF variables are set up for use by the script:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
@@ -5450,7 +5463,7 @@ The JSR223 PreProcessor allows JSR223 script code to be applied before taking a 
 </properties>
 <p>The following JSR223 variables are set up for use by the script:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
@@ -5535,7 +5548,6 @@ this one will be used by "<code>Calculate Price cut off</code>".
 
 <component name="Sample Timeout" index="&sect-num;.7.11" anchor="interrupt" width="316" height="138" screenshot="sample_timeout.png">
 <description>
-<note>BETA CODE - the test element may be moved or replaced in a future release</note>
 <p>This Pre-Processor schedules a timer task to interrupt a sample if it takes too long to complete.
 The timeout is ignored if it is zero or negative.
 For this to work, the sampler must implement Interruptible. 
@@ -5748,7 +5760,7 @@ extracting the node as text or attribute value and store the result into the giv
         </property>
         <property name="Attribute" required="false">
             Name of attribute (as per HTML syntax) to extract from nodes that matched the selector. If empty, then the combined text of this element and all its children will be returned.<br/>
-            This is the equivalent <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Node.html#attr%28java.lang.String%29">Element#attr(name)</a> function for JSoup if an atttribute is set.<br/>
+            This is the equivalent <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Node.html#attr%28java.lang.String%29">Element#attr(name)</a> function for JSoup if an attribute is set.<br/>
             <figure width="826" height="275" image="css_extractor_attr.png">CSS Extractor with attribute value set</figure><br/>
             If empty this is the equivalent of <a href="http://jsoup.org/apidocs/org/jsoup/nodes/Element.html#text%28%29">Element#text()</a> function for JSoup if not value is set for attribute.
             <figure width="825" height="275" image="css_extractor_noattr.png">CSS Extractor with no attribute set</figure>
@@ -5961,7 +5973,7 @@ See the file <code>BeanShellListeners.bshrc</code> for example definitions.
 </properties>
 <p>The following BeanShell variables are set up for use by the script:</p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>ctx</code> - (<a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a>) - gives access to the context</li>
 <li><code>vars</code> - (<a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a>) - gives read/write access to variables: <source>vars.get(key);
 vars.put(key,val);
@@ -6000,7 +6012,7 @@ Before invoking the script, some variables are set up.
 Note that these are BSF variables - i.e. they can be used directly in the script.
 </p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>
@@ -6044,7 +6056,7 @@ Before invoking the script, some variables are set up.
 Note that these are JSR223 variables - i.e. they can be used directly in the script.
 </p>
 <ul>
-<li><code>log</code> - (<a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a>) - can be used to write to the log file</li>
+<li><code>log</code> - (<a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a>) - can be used to write to the log file</li>
 <li><code>Label</code> - the String Label</li>
 <li><code>FileName</code> - the script file name (if any)</li>
 <li><code>Parameters</code> - the parameters (as a String)</li>

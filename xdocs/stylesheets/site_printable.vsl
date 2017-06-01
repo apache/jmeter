@@ -233,7 +233,7 @@ No
 #end
 
 #macro ( pr $id)
-<a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a> - ##
+<a href="https://github.com/apache/jmeter/pull/$id.getText()">Pull request #$id.getText()</a>##
 #end
 
 ## Shorthand - automatically adds " - " before remaining text

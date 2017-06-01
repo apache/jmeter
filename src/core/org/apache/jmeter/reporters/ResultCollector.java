@@ -323,7 +323,14 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             instanceCount++;
             try {
-                initializeFileOutput();
+                if (out == null) {
+                    try {
+                        // Note: getFileWriter ignores a null filename
+                        out = getFileWriter(getFilename(), getSaveConfig());
+                    } catch (FileNotFoundException e) {
+                        out = null;
+                    }
+                }
                 if (getVisualizer() != null) {
                     this.isStats = getVisualizer().isStats();
                 }
@@ -436,12 +443,16 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
         }
     }
 
-    private static PrintWriter getFileWriter(String filename, SampleSaveConfiguration saveConfig)
+    private static PrintWriter getFileWriter(final String pFilename, SampleSaveConfiguration saveConfig)
             throws IOException {
-        if (filename == null || filename.length() == 0) {
+        if (pFilename == null || pFilename.length() == 0) {
             return null;
         }
-        filename = FileServer.resolveBaseRelativeName(filename);
+        if(log.isDebugEnabled()) {
+            log.debug("Getting file: {} in thread {}", pFilename, Thread.currentThread().getName());
+        }
+        String filename = FileServer.resolveBaseRelativeName(pFilename);
+        filename = new File(filename).getCanonicalPath(); // try to ensure uniqueness (Bug 60822)
         FileEntry fe = files.get(filename);
         PrintWriter writer = null;
         boolean trimmed = true;
@@ -468,12 +479,15 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
             }
             writer = new PrintWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(filename,
                     trimmed)), SaveService.getFileEncoding(StandardCharsets.UTF_8.name())), SAVING_AUTOFLUSH);
-            log.debug("Opened file: {}", filename);
+            if(log.isDebugEnabled()) {
+                log.debug("Opened file: {} in thread {}", filename, Thread.currentThread().getName());
+            }
             files.put(filename, new FileEntry(writer, saveConfig));
         } else {
             writer = fe.pw;
         }
         if (!trimmed) {
+            log.debug("Writing header to file: {}", filename);
             writeFileStart(writer, saveConfig);
         }
         return writer;
@@ -570,20 +584,6 @@ public class ResultCollector extends AbstractListenerElement implements SampleLi
     private boolean isResultMarked(SampleResult res) {
         String filename = getFilename();
         return res.markFile(filename);
-    }
-
-    private void initializeFileOutput() throws IOException {
-
-        String filename = getFilename();
-        if (filename != null) {
-            if (out == null) {
-                try {
-                    out = getFileWriter(filename, getSaveConfig());
-                } catch (FileNotFoundException e) {
-                    out = null;
-                }
-            }
-        }
     }
 
     /**

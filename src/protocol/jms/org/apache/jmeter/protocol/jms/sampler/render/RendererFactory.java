@@ -38,7 +38,7 @@ enum RendererFactory {
     private ObjectMessageRenderer object = new ObjectMessageRenderer(text);
     private MapMessageRenderer    map    = new MapMessageRenderer(text);
 
-    /** Registred renderers **/
+    /** Registered renderers **/
     private Map<Class<?>, MessageRenderer<?>> renderers;
     {
         Map<Class<?>, MessageRenderer<?>> writable = new LinkedHashMap<>();

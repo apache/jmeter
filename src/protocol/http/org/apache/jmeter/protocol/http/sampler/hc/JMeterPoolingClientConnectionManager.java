@@ -312,9 +312,7 @@ public class JMeterPoolingClientConnectionManager implements ClientConnectionMan
     }
     @Override
     public void closeIdleConnections(final long idleTimeout, final TimeUnit tunit) {
-        if (this.log.isDebugEnabled()) {
-            this.log.debug("Closing connections idle longer than " + idleTimeout + " " + tunit);
-        }
+        this.log.debug("Closing connections idle longer than {} {}", idleTimeout, tunit);
         this.pool.closeIdle(idleTimeout, tunit);
     }
     @Override

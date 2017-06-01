@@ -201,7 +201,7 @@ public class TableEditor extends PropertyEditorSupport implements FocusListener,
         this.descriptor = descriptor;
         String value = (String)descriptor.getValue(CLASSNAME);
         if (value == null) {
-            throw new RuntimeException("The Table Editor requires the CLASSNAME atttribute be set - the name of the object to represent a row");
+            throw new RuntimeException("The Table Editor requires the CLASSNAME attribute be set - the name of the object to represent a row");
         }
         try {
             clazz = Class.forName(value);

@@ -23,7 +23,6 @@ package org.apache.jmeter.samplers;
  * Specifically, when sampling is started, when a specific sample is obtained,
  * and when sampling is stopped.
  *
- * @version $Revision$
  */
 public interface SampleListener {
     /**

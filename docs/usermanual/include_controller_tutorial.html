@@ -1,0 +1,95 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en"><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-15"><title>Apache JMeter
+          -
+          Include Controller Tutorial</title><meta name="author" value="JMeter developers"><meta name="email" value="dev@jmeter.apache.org"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="http://fonts.googleapis.com/css?family=Merriweather:400normal" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="../css/new-style.css"><link rel="apple-touch-icon-precomposed" href="../images/apple-touch-icon.png"><link rel="icon" href="../images/favicon.png"><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="../images/mstile-144x144.png"><meta name="theme-color" content="#ffffff"></head><body role="document"><a href="#content" class="hidden">Main content</a><div class="header"><!--
+            APACHE LOGO
+          --><div><a href="http://www.apache.org"><img title="Apache Software Foundation" class="asf-logo logo" src="../images/asf-logo.svg" alt="Logo ASF"></a></div><!--
+              PROJECT LOGO
+            --><div><a href="http://jmeter.apache.org/"><img class="logo" src="../images/logo.svg" alt="Apache JMeter"></a></div><div class="banner"><a href="http://www.apache.org/events/current-event.html"><img src="http://www.apache.org/events/current-event-234x60.png" alt="Current Apache event teaser"></a><div class="clear"></div></div></div><div class="nav"><ul class="menu"><li onClick="return true"><div class="menu-title">About</div><ul><li><a href="../index.html">Overview</a></li><li><a href="http://www.apache.org/licenses/">License</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Download</div><ul><li><a href="../download_jmeter.cgi">Download Releases</a></li><li><a href="../changes.html">Release Notes</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Documentation</div><ul><li><a href="../usermanual/get-started.html">Get Started</a></li><li><a href="../usermanual/index.html">User Manual</a></li><li><a href="../usermanual/best-practices.html">Best Practices</a></li><li><a href="../usermanual/component_reference.html">Component Reference</a></li><li><a href="../usermanual/functions.html">Functions Reference</a></li><li><a href="../usermanual/properties_reference.html">Properties Reference</a></li><li><a href="../changes_history.html">Change History</a></li><li><a href="../api/index.html">Javadocs</a></li><li><a href="http://wiki.apache.org/jmeter">JMeter Wiki</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterFAQ">FAQ (Wiki)</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Tutorials</div><ul><li><a href="../usermanual/jmeter_distributed_testing_step_by_step.html">Distributed Testing</a></li><li><a href="../usermanual/jmeter_proxy_step_by_step.html">Recording Tests</a></li><li><a href="../usermanual/junitsampler_tutorial.html">JUnit Sampler</a></li><li><a href="../usermanual/jmeter_accesslog_sampler_step_by_step.html">Access Log Sampler</a></li><li><a href="../usermanual/jmeter_tutorial.html">Extending JMeter</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Community</div><ul><li><a href="../issues.html">Issue Tracking</a></li><li><a href="../mail.html">Mailing Lists</a></li><li><a href="../svnindex.html">Source Repositories</a></li><li><a href="../building.html">Building and Contributing</a></li><li><a href="https://projects.apache.org/project.html?jmeter">Project info at Apache</a></li><li><a href="http://wiki.apache.org/jmeter/JMeterCommitters">Contributors</a></li></ul></li></ul><ul class="menu"><li onClick="return true"><div class="menu-title">Foundation</div><ul><li><a href="http://www.apache.org/">ASF</a></li><li><a href="http://www.apache.org/foundation/getinvolved.html">Get Involved in the ASF</a></li><li><a href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a></li><li><a href="http://www.apache.org/foundation/thanks.html">Thanks</a></li></ul></li></ul></div><div class="main" id="content"><div class="social-media"><ul class="social-media-links"><li class="twitter"><a href="https://twitter.com/ApacheJMeter" title="Follow us on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li><li class="github"><a href="https://github.com/apache/jmeter" title="Fork us on github"><i class="fa fa-github" aria-hidden="true"></i>github</a></li></ul></div><ul class="pagelinks"><li><a href="best-practices.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul><div class="section"><h1 id="include">42. Include Controller Tutorial<a class="sectionlink" href="#include" title="Link to here">&para;</a></h1>
+<p>
+This is a short tutorial explaining the basics of the Include Controller. The Include Controller
+provides an easy way to include modules in a test plan. It is different than the Module Controller
+in a couple of ways.
+</p>
+
+<ul>
+<li>the Include Controller loads a simple controller with all it's samples, where as the Module
+    Controller can use any controller</li>
+<li>the Include Controller doesn't use the workbench</li>
+<li>the Module Controller doesn't load from a file</li>
+<li>the Include Controller loads the module at runtime and doesn't display the contents of the
+    Simple Controller</li>
+</ul>
+
+<p>
+There are a couple of reasons why one might want to use the include controller.
+</p>
+
+<ul>
+  <li>Break a test plan into reusable modules</li>
+  <li>Reduce the cost of maintaining test plans</li>
+  <li>Reduce duplication of common process</li>
+</ul>
+
+<p>
+For example, say you need to test an application that requires login. If each test plan had the login requests,
+a change in the login process would require updating all test plans. By making the login a module, all other
+test plans can reuse it. When the login process changes, the change is made to the module and all other test
+plans get the change. One limitation of the current implementation is the contents of the module are only
+loaded at runtime, so users can't view or edit the contents of an included module.
+</p>
+
+<figure><a href="../images/screenshots/includecontroller.png"><img src="../images/screenshots/includecontroller.png" width="417" height="130" alt="Include Controller"></a><figcaption>Include Controller</figcaption></figure>
+
+<p>
+The Include Controller has two properties. The <span class="code">name</span> and the <span class="code">filename</span>. The <span class="code">name</span>
+is the descriptive name for the controller in the test plan. The <span class="code">filename</span> is the name of the <span class="code">.jmx</span> file.
+</p>
+
+<div class="subsection"><h2 id="step-by-step">42.1 Step-by-step<a class="sectionlink" href="#step-by-step" title="Link to here">&para;</a></h2>
+
+<ol>
+  <li>Start JMeter</li>
+  <li>Select the workbench</li>
+  <li><span class="menuchoice"><span class="guimenuitem">Add</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Logic Controller</span>&nbsp;&rarr;&nbsp;<span class="guimenuitem">Simple Controller</span></span>
+  </li>
+  <li>Enter <span class="code">module1</span> in the name</li>
+  <li>Now add one or more samples to the controller</li>
+  <li>Once the samples are added, right click on <span class="code">module1</span></li>
+  <li>Select <span class="code">save as</span> and save it as <span class="code">module1.jmx</span></li>
+</ol>
+
+</div>
+
+<p>
+<span class="code">module1.jmx</span> can now be used with any test plan. The Include Controller hasn't been tested
+with other controllers as the root element. If you need to use other controllers, use a Simple Controller
+as the root and add other controllers to it.
+</p>
+
+</div><ul class="pagelinks"><li><a href="best-practices.html">&lt; Prev</a></li><li><a href="../index.html">Index</a></li><li><a href="component_reference.html">Next &gt;</a></li></ul><div class="share-links">
+      Share this page:
+      <ul><li class="fb"><a data-social-url="https://facebook.com/sharer/sharer.php?u=" title="Share on facebook"><i class="fa fa-facebook" aria-hidden="true"></i>share</a></li><li class="twitter"><a data-social-url="https://twitter.com/intent/tweet?url=" title="Tweet on twitter"><i class="fa fa-twitter" aria-hidden="true"></i>tweet</a></li><li class="gplus"><a data-social-url="https://plus.google.com/share?url=" title="Share on Google+"><i class="fa fa-google-plus" aria-hidden="true"></i>share</a></li></ul></div></div><div class="footer"><div class="copyright">
+            Copyright &copy;
+            1999 &ndash;
+            2017
+            , Apache Software Foundation
+          </div><div class="trademarks">Apache, Apache JMeter, JMeter, the Apache
+            feather, and the Apache JMeter logo are
+            trademarks of the
+            Apache Software Foundation.
+          </div></div><script>(function(){
+            // fill in the current location into social links on this page.
+            "use strict";
+            var as = document.getElementsByTagName('a');
+            var loc = document.location.href;
+            if (!loc.toLowerCase().startsWith('http')) {
+                return;
+            }
+            for (var i=0; i<as.length; i++) {
+                var href = as[i].getAttribute('data-social-url');
+                if (href !== null) {
+                    as[i].href = href + encodeURIComponent(loc);
+                }
+            }
+        })();</script></body></html>

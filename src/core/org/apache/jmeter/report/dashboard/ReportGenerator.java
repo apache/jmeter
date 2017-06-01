@@ -57,6 +57,7 @@ import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.reporters.ResultCollector;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.apache.jmeter.util.JMeterUtils;
+import org.apache.oro.text.regex.PatternMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +83,7 @@ public class ReportGenerator {
 
     private static final String INVALID_CLASS_FMT = "Class name \"%s\" is not valid.";
     private static final String INVALID_EXPORT_FMT = "Data exporter \"%s\" is unable to export data.";
-    private static final String NOT_SUPPORTED_CONVERTION_FMT = "Not supported conversion to \"%s\"";
+    private static final String NOT_SUPPORTED_CONVERSION_FMT = "Not supported conversion to \"%s\"";
 
     public static final String NORMALIZER_CONSUMER_NAME = "normalizer";
     public static final String BEGIN_DATE_CONSUMER_NAME = "beginDate";
@@ -432,10 +433,29 @@ public class ReportGenerator {
         apdexSummaryConsumer.setHasOverallResult(true);
         apdexSummaryConsumer.setThresholdSelector(sampleName -> {
                 ApdexThresholdsInfo info = new ApdexThresholdsInfo();
+                // set default values anyway for safety
                 info.setSatisfiedThreshold(configuration
                         .getApdexSatisfiedThreshold());
                 info.setToleratedThreshold(configuration
                         .getApdexToleratedThreshold());
+                // see if the sample name is in the special cases targeted
+                // by property jmeter.reportgenerator.apdex_per_transaction
+                // key in entry below can be a hardcoded name or a regex
+                for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
+                    org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
+                    PatternMatcher matcher = JMeterUtils.getMatcher();
+                    if (matcher.matches(sampleName, regex)) {
+                        Long satisfied = entry.getValue()[0];
+                        Long tolerated = entry.getValue()[1];
+                        if(log.isDebugEnabled()) {
+                            log.debug("Found match for sampleName:{}, Regex:{}, satisfied value:{}, tolerated value:{}", 
+                                    entry.getKey(), satisfied, tolerated);
+                        }
+                        info.setSatisfiedThreshold(satisfied);
+                        info.setToleratedThreshold(tolerated);
+                        break;
+                    }
+                }
                 return info;
         });
         return apdexSummaryConsumer;
@@ -527,7 +547,7 @@ public class ReportGenerator {
                             if (converter == null) {
                                 throw new GenerationException(
                                         String.format(
-                                                NOT_SUPPORTED_CONVERTION_FMT,
+                                                NOT_SUPPORTED_CONVERSION_FMT,
                                                 parameterType
                                                         .getName()));
                             }

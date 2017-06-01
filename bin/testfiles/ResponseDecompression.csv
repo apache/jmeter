@@ -1,0 +1,6 @@
+HR1-GZIP,200,OK,Thread Group 1-1,text,true
+HR2-GZIP,200,OK,Thread Group 1-1,text,true
+HR1-DEFLATE,200,OK,Thread Group 1-1,text,true
+HR2-DEFLATE,200,OK,Thread Group 1-1,text,true
+HR-BROTLI,200,OK,Thread Group 1-1,text,true
+HR-NoCompression,200,OK,Thread Group 1-1,text,true

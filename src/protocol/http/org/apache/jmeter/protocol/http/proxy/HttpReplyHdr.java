@@ -21,7 +21,6 @@ package org.apache.jmeter.protocol.http.proxy;
 /**
  * Utility class to generate HTTP responses of various types.
  *
- * @version $Revision$
  */
 public final class HttpReplyHdr {
     /** String representing a carriage-return/line-feed pair. */
@@ -145,12 +144,12 @@ public final class HttpReplyHdr {
     }
 
     /**
-     * Indicates only a partial responce was sent.
+     * Indicates only a partial response was sent.
      *
      * @return The header in a string;
      */
     public static String formPartial() {
-        return formError("203 Partial", "Only partail document available");
+        return formError("203 Partial", "Only partial document available");
     }
 
     /**

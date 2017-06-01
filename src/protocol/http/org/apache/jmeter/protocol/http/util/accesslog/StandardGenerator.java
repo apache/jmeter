@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.util.accesslog;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -60,8 +59,6 @@ public class StandardGenerator implements Generator, Serializable {
 
     protected HTTPSamplerBase SAMPLE = null;
 
-    protected transient FileWriter WRITER = null;
-
     protected transient OutputStream OUTPUT = null;
 
     protected String FILENAME = null;
@@ -100,7 +97,7 @@ public class StandardGenerator implements Generator, Serializable {
     }
 
     /**
-     * Create the FileWriter to save the JMX file.
+     * Create the OutputStream to save the JMX file.
      */
     protected void initStream() {
         try {
@@ -116,7 +113,6 @@ public class StandardGenerator implements Generator, Serializable {
     @Override
     public void close() {
         JOrphanUtils.closeQuietly(OUTPUT);
-        JOrphanUtils.closeQuietly(WRITER);
     }
 
     /**

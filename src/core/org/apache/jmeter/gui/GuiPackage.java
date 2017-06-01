@@ -641,7 +641,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     @Override
     public void localeChanged(LocaleChangeEvent event) {
-        // FIrst make sure we save the content of the current GUI (since we
+        // First make sure we save the content of the current GUI (since we
         // will flush it away):
         updateCurrentNode();
 
@@ -740,12 +740,7 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
         if (guiPack == null) {
             return ;
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JOptionPane.showMessageDialog(null,message,title,type);
-            }
-        });
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,message,title,type));
 
     }
 

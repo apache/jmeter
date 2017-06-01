@@ -335,10 +335,11 @@ public abstract class AbstractVersusRequestsGraphConsumer extends
                     while (reader.hasNext()) {
                         Sample sample = reader.readSample();
                         // Ask parent to consume the altered sample
+                        Long requestsPerGranularity = counts.get(getTimeInterval(sample)).longValue()
+                                % parent.getGranularity();
+                        Long requestsPerSecond = requestsPerGranularity * 1000 / parent.getGranularity();
                         parent.consumeBase(
-                                createIndexedSample(sample, i,
-                                        counts.get(getTimeInterval(sample)).longValue()
-                                                % parent.getGranularity()), i);
+                                createIndexedSample(sample, i, requestsPerSecond), i);
                     }
                 } finally {
                     file.delete();

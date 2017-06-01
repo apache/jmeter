@@ -26,7 +26,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -362,14 +361,11 @@ public class Save extends AbstractAction {
             expiredFiles.addAll(FileFilterUtils.filterList(expiredFileFilter, backupFiles));
         }
         // sort backups from by their last modified time
-        Collections.sort(backupFiles, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                long diff = o1.lastModified() - o2.lastModified();
-                // convert the long to an int in order to comply with the method
-                // contract
-                return diff < 0 ? -1 : diff > 0 ? 1 : 0;
-            }
+        Collections.sort(backupFiles, (o1, o2) -> {
+            long diff = o1.lastModified() - o2.lastModified();
+            // convert the long to an int in order to comply with the method
+            // contract
+            return diff < 0 ? -1 : diff > 0 ? 1 : 0;
         });
         /**
          *  backup name is of the form 

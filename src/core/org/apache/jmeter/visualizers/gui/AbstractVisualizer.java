@@ -77,7 +77,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * </li>
  * </ul>
- * For most developers, making a new visualizer is primarly for the purpose of
+ * For most developers, making a new visualizer is primarily for the purpose of
  * either calculating new statistics on the sample results that other
  * visualizers don't calculate, or displaying the results visually in a new and
  * interesting way. Making a new visualizer for either of these purposes is easy -

@@ -39,9 +39,9 @@ Earlier changes are detailed in the <a href="changes_history.html">History of Pr
 </note>
 
 
-<!--  =================== 3.2 =================== -->
+<!--  =================== 3.3 =================== -->
 
-<h1>Version 3.2</h1>
+<h1>Version 3.3</h1>
 <p>
 Summary
 </p>
@@ -58,210 +58,88 @@ Summary
 
 <ch_section>New and Noteworthy</ch_section>
 
-<ch_section>IMPORTANT CHANGES</ch_section>
-<p>
-JMeter now requires Java 8. Ensure you use the most up to date version.
-</p>
-<p>
-JMeter logging has been migrated to SLF4J and Log4j2.
-This affects configuration and 3rd party plugins.
-</p>
-<ch_title>Core improvements</ch_title>
-<ul>
-<li>Fill in improvements</li>
-</ul>
-
-<ch_title>Documentation improvements</ch_title>
-<ul>
-<li>PDF Documentations have been migrated to HTML user manual</li>
-</ul>
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
+
+<ch_section>IMPORTANT CHANGES</ch_section>
+
+<ch_title>Core improvements</ch_title>
+
+<ch_title>UX improvements</ch_title>
+
+<ch_title>Report/Dashboard improvements</ch_title>
+
+<ch_title>Documentation improvements</ch_title>
 
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
 
-<ul>
-    <li>JMeter requires now at least a JAVA 8 version to run.</li>
-    <li>JMeter logging has been migrated to SLF4J and Log4j2, this involves changes in the way configuration is done. JMeter now relies on standard
-    <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">log4j2 configuration</a> in file <code>log4j2.xml</code>
-    See <code>Logging changes</code> section below for further details.
-    </li>
-    <li>The following jars have been removed after migration from Logkit to SLF4J (see <bugzilla>60589</bugzilla>):
-        <ul>
-            <li>ApacheJMeter_slf4j_logkit.jar</li>
-            <li>avalon-framework-4.1.4.jar</li>
-            <li>avalon-framework-4.1.4.jar</li>
-            <li>commons-logging-1.2.jar</li>
-            <li>excalibur-logger-1.1.jar</li>
-            <li>logkit-2.0.jar</li>
-        </ul>
-    </li>
-    <li>The <code>commons-httpclient-3.1.jar</code> has been removed after drop of HC3.1 support(see <bugzilla>60727</bugzilla>)</li>
-    <li>JMeter now sets through <code>-Djava.security.egd=file:/dev/urandom</code> the algorithm for secure random</li>
-    <li>Process Sampler now returns error code 500 when an error occurs. It previously returned an empty value.</li>
-    <li>In <code>org.apache.jmeter.protocol.http.sampler.HTTPHCAbstractImpl</code> two protected static fields (<code>localhost</code> and <code>nonProxyHostSuffixSize</code>) have been renamed to (<code>LOCALHOST</code> and <code>NON_PROXY_HOST_SUFFIX_SIZE</code>) 
-        to follow static fields naming convention</li>
-    <li>JMeter now uses by default Oracle Nashorn engine instead of Mozilla Rhino for better performances. This should not have an impact unless
-    you use some advanced features. You can revert back to Rhino by settings property <code>javascript.use_rhino=true</code>. 
-    You can read this <a href="https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide">migration guide</a> for more details on Nashorn. See <bugzilla>60672</bugzilla></li>
-    <li><bug>60729</bug>The Random Variable Config Element now allows minimum==maximum. Previous versions logged an error when minimum==maximum and did not set the configured variable.</li>
-    <li><bug>60730</bug>The JSON PostProcessor now sets the <code>_ALL</code> variable (assuming <code>Compute concatenation var</code> was checked)
-    even if the JSON path matches only once. Previous versions did not set the <code>_ALL</code> variable in this case.</li>
-</ul>
-
+<li>In InfluxDbBackendListenerClient, statut property has been renamed to status</li>
+<li>In CookieManager, DEFAULT_IMPLEMENTATION and DEFAULT_IMPLEMENTATION constants are now private.
+<note>If you're using ignorecookies with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back </note></li>
 <h3>Removed elements or functions</h3>
-<ul>
-    <li>SOAP/XML-RPC Request has been removed as part of <bugzilla>60727</bugzilla>. Use HTTP Request element as a replacement. 
-    See <a href="./build-ws-test-plan.html" >Building a WebService Test Plan</a></li>
-    <li><bug>60423</bug>Drop Monitor Results listener </li>
-    <li>Drop deprecated class <code>org.apache.jmeter.protocol.system.NativeCommand</code></li>
-    <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.config.gui.MultipartUrlConfigGui</code></li>
-    <li>Drop deprecated class <code>org.apache.jmeter.testelement.TestListener</code></li>
-    <li>Drop deprecated class <code>org.apache.jmeter.reporters.FileReporter</code></li>
-    <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.modifier.UserSequence</code></li>
-    <li>Drop deprecated class <code>org.apache.jmeter.protocol.http.parser.HTMLParseError</code></li>
-    <li>Drop unused methods <code>org.apache.jmeter.protocol.http.control.HeaderManager#getSOAPHeader</code>
-    and <code>org.apache.jmeter.protocol.http.control.HeaderManager#setSOAPHeader(Object)</code>
-    </li>
-    <li><code>org.apache.jmeter.protocol.http.util.Base64Encode</code> has been deprecated, you can use <code>java.util.Base64</code> as a replacement</li>
-</ul>
 
 <h3>Logging changes</h3>
-<p>
-    JMeter logging has been migrated to SLF4J and Log4j2.
-    This affects logging configuration and 3rd party plugins (if they use JMeter logging).
-    The following sections describe what changes need to be made.
-</p>
 
-<h4>Setting the logging level and log file</h4>
-<p>
-    The default logging level can be changed on the command-line using the <code>-L</code> parameter.
-    Likewise the <code>-l</code> parameter can be used to change the name of the log file.
-    However the <code>log_level</code> properties no longer work.
-</p>
-<p>
-    The default logging levels and file name are defined in the <code>log4j2.xml</code> configuration file
-    in the launch directory (usually <code>JMETER_HOME/bin</code>)
-</p>
-<p>
-    <note>TBA how to change the level programmatically.</note>
-</p>
-
-<h4>Changes to 3rd party plugin logging</h4>
-<p>
-    <note>TBA</note>
-</p>
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>59934</bug>Fix race-conditions in CssParser. Based on a patch by Jerome Loisel (loisel.jerome at gmail.com)</li>
-    <li><bug>60543</bug>HTTP Request / Http Request Defaults UX: Move to advanced panel Timeouts, Implementation, Proxy. Implemented by Philippe Mouawad (p.mouawad at ubik-ingenierie.com) and contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60548</bug>HTTP Request : Allow Upper Panel to be collapsed</li>
-    <li><bug>57242</bug>HTTP Authorization is not pre-emptively set with HttpClient4</li>
-    <li><bug>60727</bug>Drop commons-httpclient-3.1 and related elements. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60790</bug>HTTP(S) Test Script Recorder : Improve information on certificate expiration and have better UX for Start/Stop</li>
+    <li><bug>61056</bug>HTTP : Support brotli decoding</li>
+    <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
 </ul>
 
 <h3>Other samplers</h3>
 <ul>
-    <li><bug>60740</bug>Support variable for all JMS messages (bytes, object, &hellip;) and sources (file, folder), based on <pr>241</pr>. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60585</bug>JMS Publisher and JMS Subscriber : Allow reconnection on error and pause between errors. Based on <pr>240</pr> from by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><pr>259</pr>Refactored and reformatted SmtpSampler. Contributed by Graham Russell (graham at ham1.co.uk)</li>
 </ul>
 
 <h3>Controllers</h3>
 <ul>
-    <li><bug>60672</bug>JavaScript function / IfController : use Nashorn engine by default</li>
+    <li><bug>61131</bug>IfController and WhileController : Improve UX</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>60144</bug>View Results Tree : Add a more up to date Browser Renderer to replace old Render</li>
-    <li><bug>60542</bug>View Results Tree : Allow Upper Panel to be collapsed. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>52962</bug>Allow sorting by columns for View Results in Table, Summary Report, Aggregate Report and Aggregate Graph. Based on a <pr>245</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60590</bug>BackendListener : Add Influxdb BackendListenerClient implementation to JMeter. Partly based on <pr>246</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60591</bug>BackendListener : Add a time boxed sampling. Based on a <pr>237</pr> by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60678</bug>View Results Tree : Text renderer, search should not popup "Text Not Found"</li>
-    <li><bug>60691</bug>View Results Tree : In Renderers (XPath, JSON Path Tester, RegExp Tester and CSS/JQuery Tester) lower panel is sometimes not visible as upper panel is too big and cannot be resized</li>
-    <li><bug>60687</bug>Make GUI more responsive when it gets a lot of events.</li>
-    <li><bug>60791</bug>View Results Tree: Trigger search on Enter key in Search Feature and display red background if no match</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>60154</bug>User Parameters GUI: allow rows to be moved up &amp; down in the list. Contributed by Murdecai777 (https://github.com/Murdecai777).</li>
-    <li><bug>60507</bug>Added '<code>Or</code>' Function into ResponseAssertion. Based on a contribution from 忻隆 (298015902 at qq.com)</li>
-    <li><bug>58943</bug>Create a Better Think Time experience. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60602</bug>XPath Extractor : Add Match No. to allow extraction randomly, by index or all matches</li>
-    <li><bug>60710</bug>XPath Extractor : When content on which assertion applies is not XML, in View Results Tree the extractor is marked in Red and named SAXParseException. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60712</bug>Response Assertion : Improve Renderer of Patterns</li>
-    <li><bug>59174</bug>Add a table with static hosts to the DNS Cache Manager. This enables better virtual hosts testing with HttpClient4.</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61040</bug>Add a time shifting function</li>
+    <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
 </ul>
 
 <h3>I18N</h3>
 <ul>
-    <li>Improve translation "<code>save_as</code>" in French. Based on a <pr>252</pr> by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60785</bug>Improvement of Japanese translation. Patch by Kimono (kimono.outfit.am at gmail.com).</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>60637</bug>Improve Statistics table design <figure image="dashboard/report_statistics.png" ></figure></li>
 </ul>
 
 <h3>General</h3>
 <ul>
-    <li><bug>58164</bug>Check if file already exists on ResultCollector listener before starting the loadtest</li>
-    <li><bug>54525</bug>Search Feature : Enhance it with ability to replace</li>
-    <li><bug>60530</bug>Add API to create JMeter threads while test is running. Based on a contribution by Logan Mauzaize (logan.mauzaize at gmail.com) and Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60514</bug>Ability to apply a naming convention on Children of a Transaction Controller. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60711</bug>Improve Delete button behaviour for Assertions / Header Manager / User Parameters GUIs / Exclude, Include in HTTP(S) Test Script Recorder</li>
-    <li><bug>60593</bug>Switch to G1 GC algorithm</li>
-    <li><bug>60595</bug>Add a SplashScreen at the start of JMeter GUI. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>55258</bug>Drop "Close" icon from toolbar and add "New" to menu. Partly based on contribution from Sanduni Kanishka (https://github.com/SanduniKanishka)</li>
-    <li><bug>59995</bug>Allow user to change font size with two new menu items and use <code>jmeter.hidpi.scale.factor</code> for scaling fonts. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60654</bug>Validation Feature : Be able to ignore BackendListener. Contributed by Maxime Chassagneux (maxime.chassagneux at gmail.com).</li>
-    <li><bug>60646</bug>Workbench : Save it by default</li>
-    <li><bug>60684</bug>Thread Group: Validate ended prematurely by Scheduler with 0 or very short duration. Contributed by Andrew Burton (andrewburtonatwh at gmail.com).</li>
-    <li><bug>60589</bug>Migrate LogKit to SLF4J - Drop avalon, logkit and excalibur with backward compatibility for 3<sup>rd</sup> party modules. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><bug>60565</bug>Migrate LogKit to SLF4J - Optimize logging statements. e.g, message format args, throwable args, unnecessary if-enabled-logging in simple ones, etc. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><bug>60564</bug>Migrate LogKit to SLF4J - Replace logkit loggers with slf4j ones and keep the current logkit binding solution for backward compatibility with plugins. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><bug>60664</bug>Add a UI menu to set log level. Contributed by Woonsan Ko (woonsan at apache.org)</li>
-    <li><pr>276</pr>Added some translations for polish locale. Contributed by Bartosz Siewniak (barteksiewniak at gmail.com)</li>
-    <li><bug>60792</bug>Create a new Help menu item to create a thread dump</li>
-    <li><bug>60813</bug>JSR223 Test element : Take into account JMeterStopTestNowException, JMeterStopTestException and JMeterStopThreadException</li>
-    <li><bug>60814</bug>Menu : Add <code>Open Recent</code> menu item to make recent files loading more obvious</li>
-    <li><bug>60815</bug>Drop "Reset GUI" from menu</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li><bug>60415</bug>Drop support for Java 7.</li>
-    <li>Updated to dnsjava-2.1.8.jar (from 2.1.7)</li>
-    <li>Updated to groovy 2.4.9 (from 2.4.7)</li>
-    <li>Updated to httpcore 4.4.6 (from 4.4.5)</li>
-    <li>Updated to httpclient 4.5.3 (from 4.5.2)</li>
-    <li>Updated to jodd 3.8.1 (from 3.8.1.jar)</li>
-    <li>Updated to jsoup-1.10.2 (from 1.10.1)</li>
-    <li>Updated to ph-css 5.0.3 (from 4.1.6)</li>
-    <li>Updated to ph-commons 8.6.0 (from 6.2.4)</li>
-    <li>Updated to slf4j-api 1.7.24 (from 1.7.21)</li>
-    <li>Updated to asm 5.2 (from 5.1)</li>
-    <li>Updated to rsyntaxtextarea-2.6.1 (from 2.6.0)</li>
-    <li>Updated to commons-net-3.6 (from 3.5)</li>
-    <li>Converted the old pdf tutorials to xml.</li>
-    <li><pr>255</pr>Utilised Java 8 (and 7) features to tidy up code. Contributed by Graham Russell (graham at ham1.co.uk)</li>
-    <li><bug>59435</bug>JMeterTestCase no longer supports JUnit3</li>
+    <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
+    <li>Updated to caffeine 2.5.2 (from 2.4.0)</li>
+    <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
+    <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
+    <li>Updated to ph-commons 8.6.5 (from 8.6.0)</li>
+    <li>Updated to log4j2 2.8.2 (from 2.8.1)</li>
+    <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
+    <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
+    <li>Updated to xstream 1.4.10 (from 1.4.9)</li>
+    <li>Updated to Apache Tika 1.15 (from 1.14)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -270,22 +148,11 @@ This affects configuration and 3rd party plugins.
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
-    <li><bug>60531</bug>HTTP Cookie Manager : changing Implementation does not update Cookie Policy</li>
-    <li><bug>60575</bug>HTTP GET Requests could have a content-type header without a body.</li>
-    <li><bug>60682</bug>HTTP Request : Get method may fail on redirect due to Content-Length header being set</li>
-    <li><bug>60643</bug>HTTP(S) Test Script Recorder doesn't correctly handle restart or start after stop. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>60652</bug>HTTP PUT Requests might leak file descriptors.</li>
-    <li><bug>60689</bug><code>httpclient4.validate_after_inactivity</code> has no impact leading to usage of potentially stale/closed connections</li>
-    <li><bug>60690</bug>Default values for "httpclient4.validate_after_inactivity" and "httpclient4.time_to_live" which are equal to each other makes validation useless</li>
-    <li><bug>60758</bug>HTTP(s) Test Script Recorder : Number request may generate duplicate numbers. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
-    <li><bug>56939</bug>Parameters are not passed with OPTIONS HTTP Request</li>
-    <li><bug>60778</bug>Http Java Impl does not show Authorization header in SampleResult even if it is sent</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
-    <li><bug>603982</bug>Guard Exception handler of the <code>JDBCSampler</code> against null messages</li>
-    <li><bug>55652</bug>JavaSampler silently resets classname if class can not be found</li>
+    <li><bug>60889</bug>JMeter JDBC sample calls SELECT USER() when testing with MySQL JDBC due to Connection#toString call for response headers.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -294,26 +161,17 @@ This affects configuration and 3rd party plugins.
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>60648</bug>GraphiteBackendListener can lose some metrics at end of test if test is very short</li>
-    <li><bug>60650</bug>AbstractBackendListenerClient does not reset UserMetric between runs</li>
-    <li><bug>60759</bug>View Results Tree : Search feature does not search in URL. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61005</bug>View Results Tree - Browser Response Data is not clearing</li>
+    <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not KO and OK</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>60438</bug><pr>235</pr>Clear old variables before extracting new ones in JSON Extractor.
-    Based on a patch by Qi Chen (qi.chensh at ele.me)</li>
-    <li><bug>60607</bug>DNS Cache Manager configuration is ignored</li>
-    <li><bug>60729</bug>The Random Variable Config Element should allow minimum==maximum</li>
-    <li><bug>60730</bug>The JSON PostProcessor should set the <code>_ALL</code> variable even if the JSON path matches only once.</li>
-    <li><bug>60747</bug>Response Assertion : Add Request Headers to <code>Field to Test</code></li>
-    <li><bug>60763</bug>XMLAssertion should not leak errors to console</li>
-    <li><bug>60797</bug>TestAction in pause mode can last beyond configured duration of test</li>
+    <li><bug>58743</bug><pr>293</pr>TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
-    <li><bug>60819</bug>Function __fileToString does not honor the documentation contract when file is not found</li>
 </ul>
 
 <h3>I18N</h3>
@@ -322,23 +180,20 @@ This affects configuration and 3rd party plugins.
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>60726</bug>Report / Dashboard : Top 5 errors by samplers must not take into account the series filtering</li>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
-    
+
 <h3>General</h3>
 <ul>
-    <li><bug>60775</bug>NamePanel ctor calls overrideable method</li>
-    <li><bug>60428</bug>JMeter Graphite Backend Listener throws exception when test ends
-    and <code>useRegexpForSamplersList</code> is set to <code>true</code>.
-    Based on patch by Liu XP (liu_xp2003 at sina.com)</li>
-    <li><bug>60442</bug>Fix a typo in <code>build.xml</code> (gavin at 16degrees.com.au)</li>
-    <li><bug>60449</bug>JMeter Tree : Annoying behaviour when node name is empty</li>
-    <li><bug>60494</bug>Add sonar analysis task to build</li>
-    <li><bug>60501</bug>Search Feature : Performance issue when regexp is checked</li>
-    <li><bug>60444</bug>Intermittent failure of <code>TestHTTPMirrorThread#testSleep()</code>. Contributed by Thomas Schapitz (ts-nospam12 at online.de)</li>
-    <li><bug>60621</bug>The "<code>report-template</code>" folder is missing from <code>ApacheJMeter_config-3.1.jar</code> in maven central</li>
-    <li><bug>60744</bug>GUI elements are not cleaned up when reused during load of Test Plan which can lead them to be partially initialized with a previous state for a new Test Element</li>
-    <li><bug>60812</bug>JMeterThread does not honor contract of JMeterStopTestNowException</li>
+    <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
+    <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
+    <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
+    <li><bug>61054</bug>Endless loop in JOrphanUtils#replaceAllWithRegex when regex is contained in replacement</li>
+    <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some LAF</li>
+    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
+    <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+    <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
+    <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -347,28 +202,15 @@ This affects configuration and 3rd party plugins.
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-<li>Jerome Loisel (loisel.jerome at gmail.com)</li>
-<li>Liu XP (liu_xp2003 at sina.com)</li>
-<li>Qi Chen (qi.chensh at ele.me)</li>
-<li>(gavin at 16degrees.com.au)</li>
-<li>Thomas Schapitz (ts-nospam12 at online.de)</li>
-<li>Murdecai777 (https://github.com/Murdecai777)</li>
-<li>Logan Mauzaize (logan.mauzaize at gmail.com)</li>
-<li>Maxime Chassagneux (maxime.chassagneux at gmail.com)</li>
-<li>忻隆 (298015902 at qq.com)</li>
+<li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
+<li>Anthony Kearns (anthony.kearns atrightside.co)</li>
+<li>Emilian Bold (emi @ apache.org)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
-<li>Graham Russell (graham at ham1.co.uk)</li>
-<li>Sanduni Kanishka (https://github.com/SanduniKanishka)</li>
-<li>Andrew Burton (andrewburtonatwh at gmail.com)</li>
-<li>Woonsan Ko (woonsan at apache.org)</li>
-<li>Bartosz Siewniak (barteksiewniak at gmail.com)</li>
-<li>Kimono (kimono.outfit.am at gmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
 <ul>
-<li>Tuukka Mustonen (tuukka.mustonen at gmail.com) who gave us a lot of useful feedback which helped resolve <bugzilla>60689</bugzilla> and <bugzilla>60690</bugzilla></li>
-<li>Amar Darisa (amar.darisa at gmail.com) who helped us with his feedback on <bugzilla>60682</bugzilla></li>
+<li>Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.
@@ -405,7 +247,7 @@ You may encounter the following error:
 <source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
  algorithm using MD2 (like md2WithRSAEncryption) or with a SSL certificate with a size lower than 1024 bits.
-This error is related to increased security in Java 7 version u16 (MD2) and version u40 (Certificate size lower than 1024 bits), and Java 8 too.
+This error is related to increased security in Java 8+.
 <br></br>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
 the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.

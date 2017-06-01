@@ -39,7 +39,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     protected static final String HTTP = "http"; // $NON-NLS-1$
     protected static final String HTTPS = "https"; // $NON-NLS-1$
 
-    /** Filetype to be used for the temporary binary files*/
+    /** FileType to be used for the temporary binary files*/
     private static final String BINARY_FILE_SUFFIX =
         JMeterUtils.getPropDefault("proxy.binary.filesuffix",// $NON-NLS-1$
                                    ".binary"); // $NON-NLS-1$
@@ -50,7 +50,7 @@ public abstract class AbstractSamplerCreator implements SamplerCreator {
     /** Where to store the temporary binary files */
     private static final String BINARY_DIRECTORY =
         JMeterUtils.getPropDefault("proxy.binary.directory",// $NON-NLS-1$
-                System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.filetype=binary
+                System.getProperty("user.dir")); // $NON-NLS-1$ proxy.binary.fileType=binary
 
     /*
      * Optionally number the requests

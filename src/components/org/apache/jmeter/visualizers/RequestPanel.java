@@ -47,7 +47,7 @@ public class RequestPanel {
     private final JPanel panel;
 
     /**
-     * Find and instanciate all class that extend RequestView
+     * Find and instantiate all classes that extend RequestView
      * and Create Request Panel
      */
     public RequestPanel() {

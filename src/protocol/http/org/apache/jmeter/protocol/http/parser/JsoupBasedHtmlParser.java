@@ -64,8 +64,9 @@ public class JsoupBasedHtmlParser extends HTMLParser {
 
         private void extractAttribute(Element tag, String attributeName) {
             String url = tag.attr(attributeName);
-            if (!StringUtils.isEmpty(url)) {
-                urls.addURL(url, baseUrl.url);
+            String normalizedUrl = normalizeUrlValue(url);
+            if(normalizedUrl != null) {
+                urls.addURL(normalizedUrl, baseUrl.url);
             }
         }
 

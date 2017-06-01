@@ -1,0 +1,1 @@
+According to https://github.com/eXparity/hamcrest-date/blob/hamcrest-date-2.0.4/pom.xml#L18-L24 Hamcrest-date is under BSD License

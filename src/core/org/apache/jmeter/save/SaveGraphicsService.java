@@ -59,44 +59,6 @@ public class SaveGraphicsService {
         super();
     }
 
-/*
- * This is not currently used by JMeter code.
- * As it uses Sun-specific code (the only such in JMeter), it has been commented out for now.
- */
-//  /**
-//   * If someone wants to save a JPEG, use this method. There is a limitation
-//   * though. It uses gray scale instead of color due to artifacts with color
-//   * encoding. For some reason, it does not translate pure red and orange
-//   * correctly. To make the text readable, gray scale is used.
-//   *
-//   * @param filename
-//   * @param component
-//   */
-//  public void saveUsingJPEGEncoder(String filename, JComponent component) {
-//      Dimension size = component.getSize();
-//      // We use Gray scale, since color produces poor quality
-//      // this is an unfortunate result of the default codec
-//      // implementation.
-//      BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_USHORT_GRAY);
-//      Graphics2D grp = image.createGraphics();
-//      component.paint(grp);
-//
-//      File outfile = new File(filename + JPEG_EXTENSION);
-//      FileOutputStream fos = createFile(outfile);
-//      JPEGEncodeParam param = JPEGCodec.getDefaultJPEGEncodeParam(image);
-//      Float q = new Float(1.0);
-//      param.setQuality(q.floatValue(), true);
-//      JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos, param);
-//
-//      try {
-//          encoder.encode(image);
-//      } catch (Exception e) {
-//          log.warn(e.toString());
-//      } finally {
-//            JOrphanUtils.closeQuietly(fos);
-//      }
-//  }
-
     /**
      * Method will save the JComponent as an image. The formats are PNG, and
      * TIFF.

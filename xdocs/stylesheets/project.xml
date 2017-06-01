@@ -52,6 +52,7 @@
      </menu>
      <menu name="Community">
         <item name="Issue Tracking"      href="/issues.html"/>
+        <item name="Security"            href="http://www.apache.org/security/"/>
         <item name="Mailing Lists"       href="/mail.html"/>
         <item name="Source Repositories"    href="/svnindex.html"/>
         <item name="Building and Contributing"    href="/building.html"/>
@@ -59,7 +60,7 @@
         <item name="Contributors"        href="http://wiki.apache.org/jmeter/JMeterCommitters"/>
      </menu>
      <menu name="Foundation">
-        <item name="ASF"                 href="http://www.apache.org/"/>
+        <item name="The Apache Software Foundation (ASF)" href="http://www.apache.org/"/>
         <item name="Get Involved in the ASF" href="http://www.apache.org/foundation/getinvolved.html"/>
         <item name="Sponsorship"         href="http://www.apache.org/foundation/sponsorship.html"/>
         <item name="Thanks"              href="http://www.apache.org/foundation/thanks.html"/>

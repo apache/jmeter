@@ -27,12 +27,10 @@ import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509ExtendedKeyManager;
@@ -113,12 +111,7 @@ public class JsseSSLManager extends SSLManager {
             }
 
             HttpsURLConnection.setDefaultSSLSocketFactory(new HttpSSLProtocolSocketFactory(this, CPS));
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 
             log.debug("SSL stuff all set");
         } catch (GeneralSecurityException ex) {

@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.jmeter.save.CSVSaveService;
 import org.apache.jmeter.testelement.TestPlan;
 import org.apache.jmeter.util.JMeterUtils;
@@ -249,8 +250,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final boolean SAVE_ASSERTION_RESULTS_FAILURE_MESSAGE;
 
-    private static final String TIMESTAMP_FORMAT;
-
     private static final int ASSERTIONS_RESULT_TO_SAVE;
 
     // TODO turn into method?
@@ -276,7 +275,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final boolean SAMPLE_COUNT;
 
-    private static final DateFormat DATE_FORMATTER;
+    private static final String DATE_FORMAT;
 
     /**
      * The string used to separate fields when stored to disk, for example, the
@@ -346,19 +345,17 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
         TIME = TRUE.equalsIgnoreCase(props.getProperty(SAVE_TIME_PROP, TRUE));
 
-        TIMESTAMP_FORMAT = props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
+        String temporaryTimestampFormat = props.getProperty(TIME_STAMP_FORMAT_PROP, MILLISECONDS);
 
-        PRINT_MILLISECONDS = MILLISECONDS.equalsIgnoreCase(TIMESTAMP_FORMAT);
+        PRINT_MILLISECONDS = MILLISECONDS.equalsIgnoreCase(temporaryTimestampFormat);
 
-        // Prepare for a pretty date
-        // FIXME Can TIMESTAMP_FORMAT be null ? it does not appear to me .
-        if (!PRINT_MILLISECONDS && !NONE.equalsIgnoreCase(TIMESTAMP_FORMAT) && (TIMESTAMP_FORMAT != null)) {
-            DATE_FORMATTER = new SimpleDateFormat(TIMESTAMP_FORMAT);
+        if (!PRINT_MILLISECONDS && !NONE.equalsIgnoreCase(temporaryTimestampFormat)) {
+            DATE_FORMAT = validateFormat(temporaryTimestampFormat);
         } else {
-            DATE_FORMATTER = null;
+            DATE_FORMAT = null;
         }
 
-        TIMESTAMP = !NONE.equalsIgnoreCase(TIMESTAMP_FORMAT);// reversed compare allows for null
+        TIMESTAMP = !NONE.equalsIgnoreCase(temporaryTimestampFormat);// reversed compare allows for null
 
         SAVE_ASSERTION_RESULTS_FAILURE_MESSAGE = TRUE.equalsIgnoreCase(props.getProperty(
                 ASSERTION_RESULTS_FAILURE_MESSAGE_PROP, TRUE));
@@ -394,6 +391,48 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     private static final SampleSaveConfiguration STATIC_SAVE_CONFIGURATION = new SampleSaveConfiguration();
 
+    // for test code only
+    static final String CONFIG_GETTER_PREFIX = "save";  // $NON-NLS-1$
+    
+    // for test code only
+    static final String CONFIG_SETTER_PREFIX = "set";  // $NON-NLS-1$
+
+    /**
+     * List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
+     * New method names should be added at the end so that existing layouts are not affected.
+     */
+    // The current order is derived from http://jmeter.apache.org/usermanual/listeners.html#csvlogformat
+    // TODO this may not be the ideal order; fix further and update the screenshot(s)
+    public static final List<String> SAVE_CONFIG_NAMES = Collections.unmodifiableList(Arrays.asList(new String[]{
+        "AsXml",
+        "FieldNames", // CSV
+        "Timestamp",
+        "Time", // elapsed
+        "Label",
+        "Code", // Response Code
+        "Message", // Response Message
+        "ThreadName",
+        "DataType",
+        "Success",
+        "AssertionResultsFailureMessage",
+        "Bytes",
+        "SentBytes",
+        "ThreadCounts", // grpThreads and allThreads
+        "Url",
+        "FileName",
+        "Latency",
+        "ConnectTime",
+        "Encoding",
+        "SampleCount", // Sample and Error Count
+        "Hostname",
+        "IdleTime",
+        "RequestHeaders", // XML
+        "SamplerData", // XML
+        "ResponseHeaders", // XML
+        "ResponseData", // XML
+        "Subresults", // XML
+        "Assertions", // XML
+    }));
     // N.B. Remember to update the equals and hashCode methods when adding new variables.
 
     // Initialise values from properties
@@ -436,24 +475,25 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Does not appear to be used (yet)
     private int assertionsResultsToSave = ASSERTIONS_RESULT_TO_SAVE;
 
-
     // Don't save this, as it is derived from the time format
     private boolean printMilliseconds = PRINT_MILLISECONDS;
 
-    /** A formatter for the time stamp. */
-    private transient DateFormat formatter = DATE_FORMATTER;
-    /* Make transient as we don't want to save the SimpleDataFormat class
-     * Also, there's currently no way to change the value via the GUI, so changing it
-     * later means editting the JMX, or recreating the Listener.
-     */
+    private transient String dateFormat = DATE_FORMAT;
 
+    /** A formatter for the time stamp. 
+     * Make transient as we don't want to save the FastDateFormat class
+     * Also, there's currently no way to change the value via the GUI, so changing it
+     * later means editing the JMX, or recreating the Listener.
+     */
+    private transient FastDateFormat timestampFormatter =
+        dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;
+    
     // Don't save this, as not settable via GUI
     private String delimiter = DELIMITER;
 
     // Don't save this - only needed for processing CSV headers currently
     private transient int varCount = 0;
 
-    
     public SampleSaveConfiguration() {
     }
 
@@ -507,10 +547,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public static SampleSaveConfiguration staticConfig() {
         return STATIC_SAVE_CONFIGURATION;
     }
-
-    // for test code only
-    static final String CONFIG_GETTER_PREFIX = "save";  // $NON-NLS-1$
-
+    
     /**
      * Convert a config name to the method name of the getter.
      * The getter method returns a boolean.
@@ -520,9 +557,6 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     public static final String getterName(String configName) {
         return CONFIG_GETTER_PREFIX + configName;
     }
-
-    // for test code only
-    static final String CONFIG_SETTER_PREFIX = "set";  // $NON-NLS-1$
 
     /**
      * Convert a config name to the method name of the setter
@@ -535,53 +569,50 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     }
 
     /**
-     * List of saveXXX/setXXX(boolean) methods which is used to build the Sample Result Save Configuration dialog.
-     * New method names should be added at the end so that existing layouts are not affected.
+     * Validate pattern
+     * @param temporaryTimestampFormat DateFormat pattern
+     * @return format if ok or null
      */
-    // The current order is derived from http://jmeter.apache.org/usermanual/listeners.html#csvlogformat
-    // TODO this may not be the ideal order; fix further and update the screenshot(s)
-    public static final List<String> SAVE_CONFIG_NAMES = Collections.unmodifiableList(Arrays.asList(new String[]{
-        "AsXml",
-        "FieldNames", // CSV
-        "Timestamp",
-        "Time", // elapsed
-        "Label",
-        "Code", // Response Code
-        "Message", // Response Message
-        "ThreadName",
-        "DataType",
-        "Success",
-        "AssertionResultsFailureMessage",
-        "Bytes",
-        "SentBytes",
-        "ThreadCounts", // grpThreads and allThreads
-        "Url",
-        "FileName",
-        "Latency",
-        "ConnectTime",
-        "Encoding",
-        "SampleCount", // Sample and Error Count
-        "Hostname",
-        "IdleTime",
-        "RequestHeaders", // XML
-        "SamplerData", // XML
-        "ResponseHeaders", // XML
-        "ResponseData", // XML
-        "Subresults", // XML
-        "Assertions", // XML
-    }));
+    private static String validateFormat(String temporaryTimestampFormat) {
+        try {
+            new SimpleDateFormat(temporaryTimestampFormat);
+            if(log.isDebugEnabled()) {
+                log.debug("Successfully validated pattern value {} for property {}",
+                        temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP);
+            }
+            return temporaryTimestampFormat;
+        } catch(IllegalArgumentException ex) {
+            log.error("Invalid pattern value {} for property {}", temporaryTimestampFormat, TIME_STAMP_FORMAT_PROP,
+                    ex);
+            return null;
+        }
+    }
+
 
     private Object readResolve(){
-       formatter = DATE_FORMATTER;
-       return this;
+        setupDateFormat(DATE_FORMAT);
+        return this;
+    }
+
+    /**
+     * Initialize threadSafeLenientFormatter
+     * @param pDateFormat String date format
+     */
+    private void setupDateFormat(String pDateFormat) {
+        this.dateFormat = pDateFormat;
+        if(dateFormat != null) {
+            this.timestampFormatter = FastDateFormat.getInstance(dateFormat);
+        } else {
+            this.timestampFormatter = null;
+        }
     }
 
     @Override
     public Object clone() {
         try {
             SampleSaveConfiguration clone = (SampleSaveConfiguration)super.clone();
-            if(this.formatter != null) {
-                clone.formatter = (SimpleDateFormat)this.formatter.clone();
+            if(this.dateFormat != null) {
+                clone.timestampFormatter = (FastDateFormat)this.threadSafeLenientFormatter().clone();
             }
             return clone;
         }
@@ -638,7 +669,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         }
         boolean complexValues = false;
         if(primitiveValues && stringValues) {
-            complexValues = Objects.equals(formatter, s.formatter);
+            complexValues = Objects.equals(dateFormat, s.dateFormat);
         }
 
         return primitiveValues && stringValues && complexValues;
@@ -677,7 +708,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
         hash = 31 * hash + (hostname ? 1 : 0);
         hash = 31 * hash + (threadCounts ? 1 : 0);
         hash = 31 * hash + (delimiter != null  ? delimiter.hashCode() : 0);
-        hash = 31 * hash + (formatter != null  ? formatter.hashCode() : 0);
+        hash = 31 * hash + (dateFormat != null  ? dateFormat.hashCode() : 0);
         hash = 31 * hash + (sampleCount ? 1 : 0);
         hash = 31 * hash + (idleTime ? 1 : 0);
 
@@ -907,23 +938,44 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
 
     ///////////////// End of standard field accessors /////////////////////
 
+    
     /**
      * Intended for use by CsvSaveService (and test cases)
      * @param fmt
      *            format of the date to be saved. If <code>null</code>
      *            milliseconds since epoch will be printed
      */
-    public void setFormatter(DateFormat fmt){
+    public void setDateFormat(String fmt){
         printMilliseconds = fmt == null; // maintain relationship
-        formatter = fmt;
+        setupDateFormat(fmt);
     }
 
     public boolean printMilliseconds() {
         return printMilliseconds;
     }
 
-    public DateFormat formatter() {
-        return formatter;
+    /**
+     * @return {@link DateFormat} non lenient
+     */
+    public DateFormat strictDateFormatter() {
+        if(dateFormat != null) {
+            return new SimpleDateFormat(dateFormat);
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * @return {@link FastDateFormat} Thread safe lenient formatter
+     */
+    public FastDateFormat threadSafeLenientFormatter() {
+        // When restored by XStream threadSafeLenientFormatter may not have 
+        // been initialized
+        if(timestampFormatter == null) {
+            timestampFormatter = 
+                    dateFormat != null ? FastDateFormat.getInstance(dateFormat) : null;
+        }
+        return timestampFormatter;
     }
 
     public int assertionsResultsToSave() {
@@ -951,7 +1003,7 @@ public class SampleSaveConfiguration implements Cloneable, Serializable {
     // Used by SampleSaveConfigurationConverter.unmarshall()
     public void setDefaultTimeStampFormat() {
         printMilliseconds=PRINT_MILLISECONDS;
-        formatter=DATE_FORMATTER;
+        setupDateFormat(DATE_FORMAT);
     }
 
     public boolean saveHostname(){

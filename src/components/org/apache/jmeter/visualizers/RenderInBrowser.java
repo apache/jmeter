@@ -27,10 +27,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 
 import javax.swing.BorderFactory;
@@ -90,12 +88,7 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
         } 
         browserPanel.setVisible(true);
         resultsScrollPane.setViewportView(browserPanel);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                engine.loadContent(html);
-            }
-        });
+        Platform.runLater(() -> engine.loadContent(html));
     }
 
     private JPanel initComponents(String htmlContent) {
@@ -126,33 +119,11 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
                 WebView view = new WebView();
                 engine = view.getEngine();
 
-                engine.setOnStatusChanged(new EventHandler<WebEvent<String>>() {
-                    @Override
-                    public void handle(final WebEvent<String> event) {
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                lblStatus.setText(event.getData());
-                            }
-                        });
-                    }
-                });
+                engine.setOnStatusChanged(event -> SwingUtilities.invokeLater(() -> lblStatus.setText(event.getData())));
 
                 engine.getLoadWorker().workDoneProperty()
-                        .addListener(new ChangeListener<Number>() {
-                            @Override
-                            public void changed(
-                                    ObservableValue<? extends Number> observableValue,
-                                    Number oldValue, final Number newValue) {
-                                SwingUtilities.invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setValue(newValue
-                                                .intValue());
-                                    }
-                                });
-                            }
-                        });
+                        .addListener((ChangeListener<Number>) (observableValue, oldValue, newValue) -> SwingUtilities
+                                .invokeLater(() -> progressBar.setValue(newValue.intValue())));
 
                 engine.getLoadWorker().exceptionProperty()
                         .addListener(new ChangeListener<Throwable>() {
@@ -162,22 +133,17 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
                                     ObservableValue<? extends Throwable> o,
                                     Throwable old, final Throwable value) {
                                 if (engine.getLoadWorker().getState() == State.FAILED) {
-                                    SwingUtilities.invokeLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            JOptionPane
-                                                    .showMessageDialog(
-                                                            resultsScrollPane,
-                                                            (value != null) ? engine
-                                                                    .getLocation()
-                                                                    + "\n"
-                                                                    + value.getMessage()
-                                                                    : engine.getLocation()
-                                                                            + "\nUnexpected error.",
-                                                            "Loading error...",
-                                                            JOptionPane.ERROR_MESSAGE);
-                                        }
-                                    });
+                                    SwingUtilities.invokeLater(() -> JOptionPane
+                                            .showMessageDialog(
+                                                    resultsScrollPane,
+                                                    (value != null) ? engine
+                                                            .getLocation()
+                                                            + "\n"
+                                                            + value.getMessage()
+                                                            : engine.getLocation()
+                                                                    + "\nUnexpected error.",
+                                                    "Loading error...",
+                                                    JOptionPane.ERROR_MESSAGE));
                                 }
                             }
                         });
@@ -190,5 +156,17 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
     @Override
     public String toString() {
         return JMeterUtils.getResString("view_results_render_browser"); // $NON-NLS-1$
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.jmeter.visualizers.SamplerResultTab#clearData()
+     */
+    @Override
+    public void clearData() {
+        super.clearData();
+        if (browserPanel == null) {
+            browserPanel = initComponents("");
+        }
+        Platform.runLater(() -> engine.loadContent(""));
     }
 }

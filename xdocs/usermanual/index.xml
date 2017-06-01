@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<document next="intro.html" id="$Id$">
+<document next="get-started.html" id="$Id$">
 <properties>
 <title>User's Manual</title>
 </properties>
@@ -41,20 +41,19 @@
   <li><a href="#build-ws-test-plan">+</a>...<a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
   <li><a href="#build-jms-point-to-point-test-plan">+</a>...<a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
   <li><a href="#build-jms-topic-test-plan">+</a>...<a href="build-jms-topic-test-plan.html">11. Building a JMS Topic Test Plan</a></li>
-  <li><a href="#build-monitor-test-plan">+</a>...<a href="build-monitor-test-plan.html">12. Building a Monitor Test Plan</a></li>
-  <li><a href="#listeners">+</a>...<a href="listeners.html">13. Listeners</a></li>
-  <li><a href="#remote-test">+</a>...<a href="remote-test.html">14. Remote Testing</a></li>
-  <li><a href="#generating-dashboard">+</a>...<a href="generating-dashboard.html">15. Dashboard Report</a></li>
-  <li><a href="#realtime-results">+</a>...<a href="realtime-results.html">16. Real time Results</a></li>
-  <li><a href="#best-practices">+</a>...<a href="best-practices.html">17. Best Practices</a></li>
-  <li><a href="#boss">+</a>...<a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
-  <li><a href="#component_reference">+</a>...<a href="component_reference.html">19. Component Reference</a></li>
-  <li><a href="#properties_reference">+</a>...<a href="properties_reference.html">20. Properties Reference</a></li>
-  <li><a href="#functions">+</a>...<a href="functions.html">21. Functions</a></li>
-  <li><a href="#regex">+</a>...<a href="regular_expressions.html">22. Regular Expressions</a></li>
-  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">23. Hints and Tips</a></li>
-  <li><a href="#glossary">+</a>...<a href="glossary.html">24. Glossary</a></li>
-  <li><a href="#history_future">+</a>...<a href="history_future.html">25. History / Future</a></li>  
+  <li><a href="#listeners">+</a>...<a href="listeners.html">12. Listeners</a></li>
+  <li><a href="#remote-test">+</a>...<a href="remote-test.html">13. Remote Testing</a></li>
+  <li><a href="#generating-dashboard">+</a>...<a href="generating-dashboard.html">14. Dashboard Report</a></li>
+  <li><a href="#realtime-results">+</a>...<a href="realtime-results.html">15. Real time Results</a></li>
+  <li><a href="#best-practices">+</a>...<a href="best-practices.html">16. Best Practices</a></li>
+  <li><a href="#boss">+</a>...<a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
+  <li><a href="#component_reference">+</a>...<a href="component_reference.html">18. Component Reference</a></li>
+  <li><a href="#properties_reference">+</a>...<a href="properties_reference.html">19. Properties Reference</a></li>
+  <li><a href="#functions">+</a>...<a href="functions.html">20. Functions</a></li>
+  <li><a href="#regex">+</a>...<a href="regular_expressions.html">21. Regular Expressions</a></li>
+  <li><a href="#hints">+</a>...<a href="hints_and_tips.html">22. Hints and Tips</a></li>
+  <li><a href="#glossary">+</a>...<a href="glossary.html">23. Glossary</a></li>
+  <li><a href="#history_future">+</a>...<a href="history_future.html">24. History / Future</a></li>  
 </ul>
 </subsection>
 <subsection name="Detailed Section List" anchor="details">
@@ -89,7 +88,7 @@
      <ul>
         <li><a href="get-started.html#classpath">1.4.1 JMeter's Classpath</a></li>
         <li><a href="get-started.html#template">1.4.2 Create Test Plan from Template</a></li>
-        <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behing a proxy</a></li>
+        <li><a href="get-started.html#proxy_server">1.4.3 Using JMeter behind a proxy</a></li>
         <li><a href="get-started.html#non_gui">1.4.4 Non-GUI Mode</a></li>
         <li><a href="get-started.html#server">1.4.5 Server Mode</a></li>
         <li><a href="get-started.html#override">1.4.6 Overriding Properties Via The Command Line</a></li>
@@ -186,28 +185,27 @@
  <li><a name="build-ws-test-plan"/><a href="build-ws-test-plan.html">9. Building a Webservice Test Plan</a></li>
  <li><a name="build-jms-point-to-point-test-plan"/><a href="build-jms-point-to-point-test-plan.html">10. Building a JMS Point to point Test Plan</a></li>
  <li><a name="build-jms-topic-test-plan"/><a href="build-jms-topic-test-plan.html">11. Building a JMS topic Test Plan</a></li>
- <li><a name="build-monitor-test-plan"/><a href="build-monitor-test-plan.html">12. Building a Monitor Test Plan</a></li>
- <li><a name="listeners"/><a href="listeners.html">13. Introduction to Listeners</a></li>
- <li><a name="remote-test"/><a href="remote-test.html">14. Remote Testing</a></li>
- <li><a name="generating-dashboard"/><a href="generating-dashboard.html">15. Dashboard Report</a>
+ <li><a name="listeners"/><a href="listeners.html">12. Introduction to Listeners</a></li>
+ <li><a name="remote-test"/><a href="remote-test.html">13. Remote Testing</a></li>
+ <li><a name="generating-dashboard"/><a href="generating-dashboard.html">14. Dashboard Report</a>
    <ul>
-     <li><a href="generating-dashboard.html#overview">15.1 Overview</a></li>
-     <li><a href="generating-dashboard.html#configuration">15.2 Configuring Dashboard Generation</a></li>
-     <li><a href="generating-dashboard.html#report">15.3 Generating reports</a></li>
-     <li><a href="generating-dashboard.html#default_graphs">15.4 Default graphs</a></li>
-     <li><a href="generating-dashboard.html#development">15.5 Want to improve Report Dashboard</a></li>
+     <li><a href="generating-dashboard.html#overview">14.1 Overview</a></li>
+     <li><a href="generating-dashboard.html#configuration">14.2 Configuring Dashboard Generation</a></li>
+     <li><a href="generating-dashboard.html#report">14.3 Generating reports</a></li>
+     <li><a href="generating-dashboard.html#default_graphs">14.4 Default graphs</a></li>
+     <li><a href="generating-dashboard.html#development">14.5 Want to improve Report Dashboard</a></li>
    </ul>
  </li>
- <li><a name="realtime-results"/><a href="realtime-results.html">16. Real time Results</a></li>
- <li><a name="best-practices"/><a href="best-practices.html">17. Best Practices</a></li>
- <li><a name="boss"/><a href="boss.html">18. Help! My boss wants me to load test our web app!</a></li>
- <li><a name="component_reference"/><a href="component_reference.html">19. Component Reference</a></li>
- <li><a name="properties"/><a href="properties_reference.html">20. Properties reference</a></li>
- <li><a name="functions"/><a href="functions.html">21. Functions</a></li>
- <li><a name="regex"/><a href="regular_expressions.html">22. Regular Expressions</a></li>
- <li><a name="hints"/><a href="hints_and_tips.html">23. Hints and Tips</a></li>
- <li><a name="glossary"/><a href="glossary.html">24. Glossary</a></li>
- <li><a name="history_future"/><a href="history_future.html">25. History / Future</a></li>
+ <li><a name="realtime-results"/><a href="realtime-results.html">15. Real time Results</a></li>
+ <li><a name="best-practices"/><a href="best-practices.html">16. Best Practices</a></li>
+ <li><a name="boss"/><a href="boss.html">17. Help! My boss wants me to load test our web app!</a></li>
+ <li><a name="component_reference"/><a href="component_reference.html">18. Component Reference</a></li>
+ <li><a name="properties"/><a href="properties_reference.html">19. Properties reference</a></li>
+ <li><a name="functions"/><a href="functions.html">20. Functions</a></li>
+ <li><a name="regex"/><a href="regular_expressions.html">21. Regular Expressions</a></li>
+ <li><a name="hints"/><a href="hints_and_tips.html">22. Hints and Tips</a></li>
+ <li><a name="glossary"/><a href="glossary.html">23. Glossary</a></li>
+ <li><a name="history_future"/><a href="history_future.html">24. History / Future</a></li>
  
 </ul>
 </subsection>

@@ -28,7 +28,7 @@ import org.apache.jmeter.testelement.TestElement;
 import org.junit.Test;
 
 /**
- * This class represents a controller that can controll the number of times that
+ * This class represents a controller that can control the number of times that
  * it is executed, either by the total number of times the user wants the
  * controller executed (BYNUMBER) or by the percentage of time it is called
  * (BYPERCENT)

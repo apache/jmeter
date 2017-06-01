@@ -33,9 +33,14 @@ public class TestJMeterUtils {
         String sep = System.getProperty("line.separator");
         assertEquals("line one" + sep + "line two" + sep, JMeterUtils.getResourceFileAsText("resourcefile.txt"));
     }
-    
+
     @Test
     public void testGetResourceFileAsTextWithMisingResource() throws Exception{
         assertEquals("", JMeterUtils.getResourceFileAsText("not_existant_resourcefile.txt"));
+    }
+
+    @Test
+    public void testGesResStringDefaultWithNonExistantKey() throws Exception {
+        assertEquals("[res_key=noValidKey]", JMeterUtils.getResString("noValidKey"));
     }
 }

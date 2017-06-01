@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 import org.apache.jmeter.util.JMeterUtils;
 
@@ -43,6 +44,7 @@ public class SplashScreen extends JWindow {
      */
     public SplashScreen() {
         imageLabel.setIcon(JMeterUtils.getImage("jmeter.png"));
+        imageLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         setLayout(borderLayout);
         add(imageLabel, BorderLayout.CENTER);
         add(progressBar, BorderLayout.SOUTH);
@@ -54,11 +56,9 @@ public class SplashScreen extends JWindow {
      * Show screen
      */
     public void showScreen() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                setVisible(true);
-                setAlwaysOnTop(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            setVisible(true);
+            setAlwaysOnTop(true);
         });
     }
 
@@ -66,11 +66,9 @@ public class SplashScreen extends JWindow {
      * Close splash
      */
     public void close() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                setVisible(false);
-                dispose();
-            }
+        SwingUtilities.invokeLater(() -> {
+            setVisible(false);
+            dispose();
         });
     }
 
@@ -78,10 +76,6 @@ public class SplashScreen extends JWindow {
      * @param progress Loading progress
      */
     public void setProgress(final int progress) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                progressBar.setValue(progress);
-            }
-        });
+        SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
     }
 }

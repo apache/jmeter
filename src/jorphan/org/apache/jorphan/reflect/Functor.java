@@ -145,7 +145,7 @@ public class Functor {
     /**
      * Create a functor with the class, method name, and argument class types.
      *
-     * Subsequent invoke() calls must provide the appropriate ivokee object.
+     * Subsequent invoke() calls must provide the appropriate invokee object.
      *
      * @param _clazz the class in which to find the method
      * @param _methodName method name

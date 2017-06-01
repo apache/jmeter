@@ -87,11 +87,11 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
             log.warn("You're using property 'httpclient.timeout' that will soon be deprecated for HttpClient3.1, you should either set "
                     + "timeout in HTTP Request GUI, HTTP Request Defaults or set http.socket.timeout in httpclient.parameters");
         }
-        if (NONPROXY_HOSTS.length() > 0){
+        if (NONPROXY_HOSTS.length() > 0) {
             StringTokenizer s = new StringTokenizer(NONPROXY_HOSTS,"|");// $NON-NLS-1$
-            while (s.hasMoreTokens()){
+            while (s.hasMoreTokens()) {
                 String t = s.nextToken();
-                if (t.indexOf('*') ==0){// e.g. *.apache.org // $NON-NLS-1$
+                if (t.indexOf('*') ==0) {// e.g. *.apache.org // $NON-NLS-1$
                     nonProxyHostSuffix.add(t.substring(1));
                 } else {
                     nonProxyHostFull.add(t);// e.g. www.apache.org
@@ -100,13 +100,13 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
         }
         NON_PROXY_HOST_SUFFIX_SIZE=nonProxyHostSuffix.size();
 
-        InetAddress inet=null;
+        InetAddress inet = null;
         String localHostOrIP =
             JMeterUtils.getPropDefault("httpclient.localaddress",""); // $NON-NLS-1$
-        if (localHostOrIP.length() > 0){
+        if (localHostOrIP.length() > 0) {
             try {
                 inet = InetAddress.getByName(localHostOrIP);
-                log.info("Using localAddress "+inet.getHostAddress());
+                log.info("Using localAddress {}", inet.getHostAddress());
             } catch (UnknownHostException e) {
                 log.warn(e.getLocalizedMessage());
             }
@@ -116,8 +116,7 @@ public abstract class HTTPHCAbstractImpl extends HTTPAbstractImpl {
         }
         localAddress = inet;
         LOCALHOST = localHostOrIP;
-        log.info("Local host = "+LOCALHOST);
-
+        log.info("Local host = {}", LOCALHOST);
     }
 
     protected HTTPHCAbstractImpl(HTTPSamplerBase testElement) {

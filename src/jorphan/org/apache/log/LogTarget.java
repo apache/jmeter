@@ -33,7 +33,7 @@ public interface LogTarget
      * Process a log event.
      * In NO case should this method ever throw an exception/error.
      * The reason is that logging is usually added for debugging/auditing
-     * purposes and it would be unnaceptable to have your debugging
+     * purposes and it would be unacceptable to have your debugging
      * code cause more errors.
      *
      * @param event the event

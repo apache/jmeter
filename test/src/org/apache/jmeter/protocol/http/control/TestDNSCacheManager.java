@@ -20,6 +20,7 @@ package org.apache.jmeter.protocol.http.control;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -94,6 +95,7 @@ public class TestDNSCacheManager extends JMeterTestCase {
     
     @Test
     public void testWithCustomResolverAnd1Server() throws UnknownHostException {
+        assumeTrue(!Boolean.getBoolean("skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server"));
         DNSCacheManager original = new DNSCacheManager();
         original.addServer(VALID_DNS_SERVER);
         original.setCustomResolver(true);

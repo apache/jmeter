@@ -551,6 +551,80 @@ jmeter -Duser.dir=/home/mstover/jmeter_stuff \
     <source>jmeter -Lorg.apache.jmeter.engine=DEBUG</source>
     <source>jmeter -Lcom.example.foo=DEBUG</source>
     <source>jmeter -LDEBUG</source>
+
+    <p>
+        <b>Differences in Logging : Old vs New Practices</b>:
+    </p>
+    <p>
+      As JMeter uses SLF4J as logging API and Apache Log4j 2 as a logging framework since 3.2, not every log level
+      used before 3.2 can match exactly with one of the new available log levels provided by SLF4J/Log4j2.
+      Therefore, please keep the following differences and new suggested practices in mind
+      if you need to migrate any existing logging configurations and logging code.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Old Practices Before 3.2</th>
+          <th>New Practices Since 3.2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Logger Reference
+          </td>
+          <td>
+            Logger reference through <code>LoggingManager</code>:
+            <source>LoggingManager.getLoggerFor(String category);
+LoggingManager.getLoggerForClass();</source>
+          </td>
+          <td>
+            Use SLF4J API with either category or explicit class:
+            <source>LoggerFactory.getLogger(String category);
+LoggerFactory.getLogger(Foo.class);</source>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Log Levels in Configuration or Command Line Arguments
+          </td>
+          <td>
+            Old Log Levels:
+            <ul>
+              <li>DEBUG</li>
+              <li>INFO</li>
+              <li>WARN</li>
+              <li>ERROR</li>
+              <li>FATAL_ERROR</li>
+              <li>NONE</li>
+            </ul>
+          </td>
+          <td>
+            Mapping to New Levels through SLF4J/Log4j2:
+            <ul>
+              <li>DEBUG</li>
+              <li>INFO</li>
+              <li>WARN</li>
+              <li>ERROR</li>
+              <li>ERROR</li>
+              <li>NONE</li>
+            </ul>
+            <div>
+              <em><b>Note:</b></em>
+              Since 'FATAL_ERROR' is not supported by SLF4J API,
+              it is treated as 'ERROR' instead for existing code not to break.
+            </div>
+            <div>
+              <em><b>Note:</b></em>
+              'TRACE' level, which is less specific than 'DEBUG', is supported additionally since 3.2.
+              Look up SLF4J or Apache Log4J 2 documentations for details.
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <note>
     JMeter does not generally use pop-up dialog boxes for errors, as these would interfere with
     running tests. Nor does it report any error for a mis-spelt variable or function; instead the

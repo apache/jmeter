@@ -36,6 +36,9 @@
     
     <h2>Last Build status on Jenkins</h2>
     <a href='https://builds.apache.org/job/JMeter-trunk/'><img src='https://builds.apache.org/buildStatus/icon?job=JMeter-trunk' /></a>
+
+    <h2>Last Quality Report on Sonar</h2>
+    <a href="https://builds.apache.org/analysis/dashboard/index/org.apache.jmeter:JMeter">Apache JMeter quality report</a>
     
     <h2>Where are the nightly builds?</h2>
     <p>JMeter CI builds are currently run by Jenkins and Buildbot</p>

@@ -18,7 +18,7 @@
 
 <!DOCTYPE document
 [
-<!ENTITY sect-num '21'>
+<!ENTITY sect-num '20'>
 <!ENTITY ccedil   "&#x000E7;" >
 <!ENTITY eacute   "&#x000E9;" >
 <!ENTITY hellip   "&#x02026;" >
@@ -112,6 +112,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Information</td><td> <a href="#__machineIP">machineIP</a></td><td>get the local machine IP address</td><td>2.6</td></tr>
         <tr><td>Information</td><td> <a href="#__machineName">machineName</a></td><td>get the local machine name</td><td>1.X</td></tr>
         <tr><td>Information</td><td> <a href="#__time">time</a></td><td>return current time in various formats</td><td>2.2</td></tr>
+        <tr><td>Information</td><td> <a href="#__timeShift">timeShift</a></td><td>return a date in various formats with the specified amount of seconds/minutes/hours/days added</td><td>3.3</td></tr>
         <tr><td>Information</td><td> <a href="#__log">log</a></td><td>log (or display) a message (and return the value)</td><td>2.2</td></tr>
         <tr><td>Information</td><td> <a href="#__logn">logn</a></td><td>log (or display) a message (empty return value)</td><td>2.2</td></tr>
         <tr><td>Input</td><td> <a href="#__StringFromFile">StringFromFile</a></td><td>read a line from a file</td><td>1.9</td></tr>
@@ -143,6 +144,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>String</td><td> <a href="#__unescape">unescape</a></td><td>Process strings containing Java escapes (e.g. \n &amp; \t)</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__unescapeHtml">unescapeHtml</a></td><td>Decode HTML-encoded strings</td><td>2.3.3</td></tr>
         <tr><td>String</td><td> <a href="#__escapeHtml">escapeHtml</a></td><td>Encode strings using HTML encoding</td><td>2.3.3</td></tr>
+        <tr><td>String</td><td> <a href="#__escapeXml">escapeXml</a></td><td>Encode strings using XMl encoding</td><td>3.2</td></tr>
         <tr><td>String</td><td> <a href="#__urldecode">urldecode</a></td><td>Decode a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__urlencode">urlencode</a></td><td>Encode a string to a application/x-www-form-urlencoded string</td><td>2.10</td></tr>
         <tr><td>String</td><td> <a href="#__TestPlanName">TestPlanName</a></td><td>Return name of current test plan</td><td>2.6</td></tr>
@@ -572,7 +574,7 @@ For Rhino engine, please see <a href="http://www.mozilla.org/rhino/overview.html
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>threadName</code> - String containing the current thread name</li>
@@ -884,7 +886,7 @@ sample init file in the bin directory: <code>BeanShellFunction.bshrc</code>.
 <p>
 The following variables are set before the script is executed:
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the BeanShell function (*)</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the BeanShell function (*)</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -929,7 +931,7 @@ sample init file in the <code>bin</code> directory: <code>utility.groovy</code>.
 The following variables are set before the script is executed:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the groovy function (*)</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the groovy function (*)</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -1105,7 +1107,7 @@ The following shorthand aliases are provided:
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -1156,7 +1158,7 @@ i.intValue(); // or use i.longValue()
 The following variables are made available to the script:
 </p>
 <ul>
-<li><code>log</code> - the <a href="http://excalibur.apache.org/apidocs/org/apache/log/Logger.html">Logger</a> for the function</li>
+<li><code>log</code> - the <a href="https://www.slf4j.org/api/org/slf4j/Logger.html">Logger</a> for the function</li>
 <li><code>ctx</code> - <a href="../api/org/apache/jmeter/threads/JMeterContext.html">JMeterContext</a> object</li>
 <li><code>vars</code> - <a href="../api/org/apache/jmeter/threads/JMeterVariables.html">JMeterVariables</a> object</li>
 <li><code>props</code> - JMeterProperties (class <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html"><code>java.util.Properties</code></a>) object</li>
@@ -1473,6 +1475,56 @@ becomes:
         <property name="Variable Name" required="No">
 A reference name - <code>refName</code> - for reusing the value created by this function. Stored values are of the form <code>${refName}</code>.
         </property>
+</properties>
+</component>
+
+<component index="&sect-num;.5.33" name="__escapeXml">
+<description>
+    <p>
+Function which escapes the characters in a String using XML 1.0 entities.
+</p>
+<p>
+For example,<code>&quot;bread&quot; &amp; &apos;butter&apos;</code>
+becomes:
+<code>&#38;quot;bread&#38;quot; &#38;amp; &#38;apos;butter&#38;apos;</code>.
+</p>
+    <p>
+    Uses <code>StringEscapeUtils#escapeXml10(String)</code> from Commons Lang.
+    </p>
+    </description>
+
+<properties>
+        <property name="String to escape" required="Yes">
+        The string to be escaped.
+        </property>
+</properties>
+</component>
+
+
+<component index="&sect-num;.5.22" name="__timeShift">
+<description>
+    <p>The timeShift function returns a date in the given format with the specified amount of seconds, minutes, hours, days or months added</p>
+    </description>
+<properties>
+        <property name="Format" required="No">
+        The format to be passed to DateTimeFormatter.
+        If omitted, the function uses milliseconds since epoch format.
+        </property>
+        <property name="Date to shift" required="No">
+        Indicate the date in the format set by the parameter 'Format' to shift
+        If omitted, the date is set to now
+        </property>
+        <property name="value to shift" required="No">
+        Indicate the specified amount of seconds, minutes, hours or days to shift according to a textual representation of a duration such as PnDTnHnMn.nS. See https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence- 
+        <ul>
+        <li><code>PT20.345S</code> parses as 20.345 seconds</li>
+        <li><code>PT15M</code> parses as 15 minutes</li>
+        <li><code>PT10H</code> parses as 10 hours</li>
+        <li><code>P2D</code> parses as 2 days</li>
+        <li><code>-P6H3M</code> parses as -6 hours and -3 minutes</li>
+        </ul>
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 </component>
 
