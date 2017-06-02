@@ -181,6 +181,7 @@ Summary
 <h3>Report / Dashboard</h3>
 <ul>
     <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61151</bug>Report/Dashboard : Top 5 Errors by Sampler and Errors : If assertion contains html code, the html part is hidden</li>
 </ul>
 
 <h3>General</h3>

@@ -89,7 +89,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
         String responseCode = sample.getResponseCode();
         String responseMessage = sample.getResponseMessage();
         String key = responseCode + (!StringUtils.isEmpty(responseMessage) ? 
-                 "/" + StringEscapeUtils.escapeJson(responseMessage) : "");
+                 "/" + StringEscapeUtils.escapeJson(StringEscapeUtils.escapeHtml4(responseMessage)) : "");
         if (isSuccessCode(responseCode) || 
                 (StringUtils.isEmpty(responseCode) && 
                         !StringUtils.isEmpty(sample.getFailureMessage()))) {
@@ -97,7 +97,7 @@ public class ErrorsSummaryConsumer extends AbstractSummaryConsumer<Long> {
             if (ASSERTION_RESULTS_FAILURE_MESSAGE) {
                 String msg = sample.getFailureMessage();
                 if (!StringUtils.isEmpty(msg)) {
-                    key = StringEscapeUtils.escapeJson(msg);
+                    key = StringEscapeUtils.escapeJson(StringEscapeUtils.escapeHtml4(msg));
                 }
             }
         }
