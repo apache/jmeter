@@ -865,7 +865,7 @@ below.
   <dt><code>compile-rmi</code></dt><dd>compiles the samplers in rmi directory and all dependencies</dd>
   <dt><code>compile-tests</code></dt><dd>compiles the tests and all dependencies</dd>
   <dt><code>docs-api</code></dt><dd>creates the javadocs</dd>
-  <dt><code>docs-all</code><dt><dd>generates all docs.</dd>
+  <dt><code>docs-all</code></dt><dd>generates all docs.</dd>
   <dt><code>package</code></dt><dd>compiles everything and creates jar files of the compiled protocols</dd>
   <dt><code>package-only</code></dt><dd>creates jar files of the compiled components</dd>
 </dl>
