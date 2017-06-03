@@ -1106,7 +1106,7 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 </source>
 <ch_title>BackendListener now allows you to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
-Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
+Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in parameter <code>samplersList</code>
 </p>
 <figure width="806" height="380" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 <ch_category>Protocols and Load Testing improvements</ch_category>
@@ -1180,8 +1180,8 @@ This validation mode can be customized.
 <ch_title>Apache Groovy bundled with JMeter</ch_title>
 <p><a href="http://www.groovy-lang.org/" target="_blank">Apache Groovy</a>, the well-known JVM scripting language, is now bundled with Apache JMeter in lib folder. 
 This allows you to use it immediately through JSR223 Elements by selecting the Groovy language.</p>
-<ch_title>Superflous and old properties removed</ch_title>
-<p>Old properties that existed to maintain backward compatibility or to offer some superflous customization have been removed.
+<ch_title>Superfluous and old properties removed</ch_title>
+<p>Old properties that existed to maintain backward compatibility or to offer some superfluous customization have been removed.
 Read "Incompatible changes" section to see which properties have been removed.</p> 
 <ch_title>Code and documentation improvements</ch_title>
 <ul>
@@ -3620,7 +3620,7 @@ Previously the default was the HTTP Java implementation (i.e. the implementation
 <figure width="586" height="682" image="changes/2.8/05_http_defaults_url_filter.png"></figure>
 </p>
 
-<h4>Miscellanous</h4>
+<h4>Miscellaneous</h4>
 <ul>
     <li>CSV Dataset : Embedded new lines are now supported in quoted data</li> 
     <li>JMX files now contain the version of JMeter that created the file</li> 
@@ -5222,7 +5222,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <h3>General</h3>
 <ul>
 <li><bugzilla>47223</bugzilla> - Slow Aggregate Report Performance (StatCalculator)</li>
-<li><bugzilla>47980</bugzilla> - hostname resolves to 127.0.0.1 - specifiying IP not possible</li>
+<li><bugzilla>47980</bugzilla> - hostname resolves to 127.0.0.1 - specifying IP not possible</li>
 <li><bugzilla>47943</bugzilla> - DisabledComponentRemover is not used in Start class</li>
 <li>HeapDumper class for runtime generation of dumps</li>
 <li>Basic read-only JavaMail provider implementation for reading raw mail files</li>
@@ -5376,7 +5376,7 @@ Client-server mode has been improved, and the server can optionally use a fixed 
 
 <p>
 Various I18N changes have been made; language change works better (though not perfect yet).
-There are improved French translations as well as new Polish and Brazilian Portugese translations.
+There are improved French translations as well as new Polish and Brazilian Portuguese translations.
 </p>
 
 <p>
@@ -5768,7 +5768,7 @@ A simple HTTP Cache Manager has been added. This needs further development.
 
 <p>
 View Results Tree Listener now uses Tidy to display XML.
-This should allow more content to be displayed succesfully.
+This should allow more content to be displayed successfully.
 It also avoids the need to download remote DTD files, which can slow the rendering considerably.
 </p>
 
@@ -6923,7 +6923,7 @@ with "\" if they are literal values</li>
 <li>New cut/copy/paste functionality</li>
 <li>SSL testing should work with less user-fudging, and in non-gui mode</li>
 <li>Mailer Model works in non-gui mode</li>
-<li>New Througput Controller</li>
+<li>New Throughput Controller</li>
 <li>New Module Controller</li>
 <li>Tests can now be scheduled to run from a certain time till a certain time</li>
 <li>Remote JMeter servers can be started from a non-gui client.  Also, in gui mode, all remote servers can be started with a single click</li>

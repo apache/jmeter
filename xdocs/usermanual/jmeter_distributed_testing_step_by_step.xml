@@ -145,7 +145,7 @@ There are some basic limitations for distributed testing. Here's the list of the
 <ol>
   <li>RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy.</li>
   <li>Since version 2.9, JMeter sends all the test results stripping Response data to the controlling console, this allows
-      us to reduce impact on network IO. Ensure you monitor your network traffic so that this trafic does not incur contention</li>
+      us to reduce impact on network IO. Ensure you monitor your network traffic so that this traffic does not incur contention</li>
   <li>A single JMeter client running on a 2-3 GHz CPU (recent CPU) can handle 1000-2000 threads depending on the type of test.</li>
 </ol>
 

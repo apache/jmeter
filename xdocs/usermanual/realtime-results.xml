@@ -153,7 +153,7 @@ database = "jmeter"  # store graphite data in this database
     <subsection name="&sect-num;.2.3 Grafana configuration" anchor="grafana_configuration">
     <p>
     Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br/>
-    Read <a href="http://grafana.org/docs/" targer="_blank">documentation</a> for more details.
+    Read <a href="http://grafana.org/docs/" target="_blank">documentation</a> for more details.
     Open <code>config.js</code> file and find <code>datasources</code> element, and edit it like this:<br/>
     </p>
     <source>

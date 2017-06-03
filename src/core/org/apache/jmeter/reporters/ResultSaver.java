@@ -105,7 +105,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     }
 
     /**
-     * @return next number accross all instances
+     * @return next number across all instances
      */
     private long nextNumber() {
         synchronized(LOCK) {
