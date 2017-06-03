@@ -2100,7 +2100,7 @@ other controllers for each loop iteration. </p>
 <properties>
         <property name="name" required="No">Descriptive name for this controller that is shown in the tree.</property>
         <property name="ignore sub-controller blocks" required="No">If checked, the interleave controller will treat sub-controllers like single request elements and only allow one request per controller at a time.  </property>
-        <property name="Interleave accross threads" required="No">If checked, the interleave controller will alternate among each of its children controllers for each loop iteration but accross all threads, for example in a 
+        <property name="Interleave across threads" required="No">If checked, the interleave controller will alternate among each of its children controllers for each loop iteration but across all threads, for example in a 
         configuration with 4 threads and 3 child controllers, on first iteration
         thread 1 will run first child, thread 2 second child, thread 3 third child, thread 4 first child, on next iteration each thread will run the following child controller</property>
 </properties>
@@ -4533,7 +4533,7 @@ These can be used anywhere within the expression and remain in effect until over
         </ul>
         <code>Equals</code> and <code>Substring</code> patterns are plain strings, not regular expressions.
         <code>NOT</code> may also be selected to invert the result of the check.
-        <code>OR</code> Apply each assertion in OR combination (if 1 pattern to test maches, Assertion will be ok) instead of AND (All patterns must match so that Assertion is OK).</property>
+        <code>OR</code> Apply each assertion in OR combination (if 1 pattern to test matches, Assertion will be ok) instead of AND (All patterns must match so that Assertion is OK).</property>
         <property name="Patterns to Test" required="Yes">A list of patterns to
         be tested.  
         Each pattern is tested separately. 
@@ -5540,7 +5540,7 @@ this one will be used by "<code>Calculate Price cut off</code>".
     </ol>
     </example>
     
-    <p>See also the <complink name="Regular Expression Extractor"/> element, which is used to extract parametes names and values</p>
+    <p>See also the <complink name="Regular Expression Extractor"/> element, which is used to extract parameters names and values</p>
 </component>
 <links>
         <link href="../demos/RegEx-User-Parameters.jmx">Test Plan showing how to use RegEx User Parameters</link>

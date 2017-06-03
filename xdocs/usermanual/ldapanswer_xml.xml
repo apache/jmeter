@@ -41,7 +41,7 @@
 </li>
 <li>
     each ldapanswer contains 4 sections, an "operation" section (enclosed by 
-    &lt;operation&gt; tags) a respons code section (enclosed by &lt;responsecode&gt; tags), a 
+    &lt;operation&gt; tags) a response code section (enclosed by &lt;responsecode&gt; tags), a 
     response message (enclosed by &lt;responsemessage&gt; tags and (only with a search 
     request) a searchresult section (enclosed with &ltsearchresult&gt tags>
 </li>
@@ -75,7 +75,7 @@ following tags (with a short explanation) are used
     delete
     </li>
     <li>
-    modfy
+    modfiy
     </li>
     <li>
     rename
@@ -151,7 +151,7 @@ This will be used only in search requests.</li>
 <p>
 As the response code, the official LDAP error definitions are used, so this section
 contains the error message as returned from the server.
-A succesfull request always returns "Success" as the responsmessage.
+A successful request always returns "Success" as the response message.
 The following tag is used:
 <!--
 &lt;responsemessage&gt;<br>
@@ -161,7 +161,7 @@ The following tag is used:
 <p>
 As the response code, the official LDAP error definitions are used, so this section
 contains the error number as returned from the server.
-A succesfull request always returns 0 (zero) as the responscode.
+A successful request always returns 0 (zero) as the response code.
 The following tag is used:
 <!--
 &lt;responsecode&gt;<br>
@@ -178,7 +178,7 @@ It contains the following tags:
 <ol>
 <li>
 &lt;dn&gt;
-This contains the complete distinghuised name of the object which is represented here
+This contains the complete distinguished name of the object which is represented here
 </li>
 <li>
 &lt;returnedattr&gt;
