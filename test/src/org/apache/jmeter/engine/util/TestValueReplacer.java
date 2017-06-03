@@ -107,23 +107,35 @@ public class TestValueReplacer extends JMeterTestCase {
             String replacedDomain = element.getPropertyAsString("domain");
             assertEquals("${${shortMatch}", replacedDomain);
         }
-        
+
         @Test
-        public void test2Matches() throws Exception {
+        public void testPartialWordMatchesWithoutParens() throws Exception {
+            assertEquals("toto%40005", replaceWord("005", "toto%40005"));
+        }
+
+        @Test
+        public void testPartialWordMatchesWithParens() throws Exception {
+            assertEquals("toto%40${domainMatcher}", replaceWord("(005)", "toto%40005"));
+        }
+
+        @Test
+        public void testCompleteWordMatchesWithoutParens() throws Exception {
+            assertEquals("toto@${domainMatcher}", replaceWord("005", "toto@005"));
+        }
+
+        @Test
+        public void testCompleteWordMatchesWithParens() throws Exception {
+            assertEquals("toto@${domainMatcher}", replaceWord("(005)", "toto@005"));
+        }
+
+        private String replaceWord(String matchRegex, String testData) throws Exception {
             TestPlan plan = new TestPlan();
-            plan.addParameter("firstMatch", "toto");
-            plan.addParameter("secondMatch", "005");
+            plan.addParameter("domainMatcher", matchRegex);
             ValueReplacer replacer = new ValueReplacer(plan);
             TestElement element = new TestPlan();
-            element.setProperty(new StringProperty("mail", "toto%40005"));
+            element.setProperty(new StringProperty("mail", testData));
             replacer.reverseReplace(element, true);
-            String replacedDomain = element.getPropertyAsString("mail");
-            assertEquals("${firstMatch}%40005", replacedDomain);
-            
-            element.setProperty(new StringProperty("mail", "toto@005"));
-            replacer.reverseReplace(element, true);
-            replacedDomain = element.getPropertyAsString("mail");
-            assertEquals("${firstMatch}@${secondMatch}", replacedDomain);
+            return element.getPropertyAsString("mail");
         }
 
         @Test
