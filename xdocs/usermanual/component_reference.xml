@@ -6688,7 +6688,7 @@ Jakarta ORO also supports zero-width look-ahead, so one can match <code>/images/
 but retain the trailing <code>/</code> in the output by using <code>(^/images(?=/))</code>.</p>
 
 <note>
-Note that the current version of Jakara ORO does not support look-behind - i.e. <code>(?&lt;=&hellip;)</code> or <code>(?&lt;!&hellip;)</code>.
+Note that the current version of Jakarta ORO does not support look-behind - i.e. <code>(?&lt;=&hellip;)</code> or <code>(?&lt;!&hellip;)</code>.
 </note>
 
 <p>Look out for overlapping matchers. For example the value <code>.*</code> as a regex in a variable named
