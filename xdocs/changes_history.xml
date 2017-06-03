@@ -4607,7 +4607,7 @@ The thread is not now started unless the pause time is greater than 0.
 <li>HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).</li>
 <li>Various fixes to JMS samplers</li>
 <li>Functions are no longer spuriously invoked when used with a Configuration element</li>
-<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant</li>
+<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improvements on WSDL configuration assistant</li>
 <li>Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.</li>
 </ul>
 

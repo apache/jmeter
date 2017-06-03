@@ -1086,7 +1086,7 @@ JMETER-SERVER</source>
     Defaults to empty value.
 </property>
 <property name="beanshell.sampler.init">
-    Define the intialisation files for BeanShell Sampler, Function and
+    Define the initialisation files for BeanShell Sampler, Function and
     other BeanShell elements.<br/>
     <note>N.B. Beanshell test elements do not share interpreters.
     Each element in each thread has its own interpreter.
