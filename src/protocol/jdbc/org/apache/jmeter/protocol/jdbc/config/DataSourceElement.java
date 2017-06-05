@@ -298,8 +298,8 @@ public class DataSourceElement extends AbstractTestElement
             sharedDSC=null;
         }
 
-        DataSourceComponentImpl(BasicDataSource p_dsc){
-            sharedDSC=p_dsc;
+        DataSourceComponentImpl(BasicDataSource dsc){
+            sharedDSC = dsc;
         }
 
         /**
