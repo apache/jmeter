@@ -307,16 +307,14 @@ public class DataSourceElement extends AbstractTestElement
          */
         public String getConnectionInfo() {
             BasicDataSource dsc;
-            boolean shared = false;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
-                shared = true;
             } else {
                 Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
                 dsc = poolMap.get(getDataSourceName());
             }
             StringBuilder builder = new StringBuilder(100);
-            builder.append("shared:").append(shared)
+            builder.append("shared:").append(sharedDSC != null)
                 .append(", driver:").append(dsc.getDriverClassName())
                 .append(", url:").append(dsc.getUrl())
                 .append(", user:").append(dsc.getUsername());
