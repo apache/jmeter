@@ -301,18 +301,12 @@ public class DataSourceElement extends AbstractTestElement
         DataSourceComponentImpl(BasicDataSource p_dsc){
             sharedDSC=p_dsc;
         }
-        
+
         /**
          * @return String connection information
          */
         public String getConnectionInfo() {
-            BasicDataSource dsc;
-            if (sharedDSC != null){ // i.e. shared pool
-                dsc = sharedDSC;
-            } else {
-                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
-                dsc = poolMap.get(getDataSourceName());
-            }
+            BasicDataSource dsc = getConfiguredDatatSource();
             StringBuilder builder = new StringBuilder(100);
             builder.append("shared:").append(sharedDSC != null)
                 .append(", driver:").append(dsc.getDriverClassName())
@@ -326,22 +320,8 @@ public class DataSourceElement extends AbstractTestElement
          * @throws SQLException if database access error occurred
          */
         public Connection getConnection() throws SQLException {
-            Connection conn;
-            BasicDataSource dsc;
-            if (sharedDSC != null){ // i.e. shared pool
-                dsc = sharedDSC;
-            } else {
-                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
-                dsc = poolMap.get(getDataSourceName());
-                if (dsc == null){
-                    dsc = initPool("1");
-                    poolMap.put(getDataSourceName(),dsc);
-                    log.debug("Storing pool: {}@{}", getName(), System.identityHashCode(dsc));
-                    perThreadPoolSet.add(dsc);
-                }
-            }
-
-            conn=dsc.getConnection();
+            BasicDataSource dsc = getConfiguredDatatSource();
+            Connection conn=dsc.getConnection();
             int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
             if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
                 try {
@@ -356,6 +336,23 @@ public class DataSourceElement extends AbstractTestElement
             }
 
             return conn;
+        }
+
+        private BasicDataSource getConfiguredDatatSource() {
+            BasicDataSource dsc;
+            if (sharedDSC != null){ // i.e. shared pool
+                dsc = sharedDSC;
+            } else {
+                Map<String, BasicDataSource> poolMap = perThreadPoolMap.get();
+                dsc = poolMap.get(getDataSourceName());
+                if (dsc == null){
+                    dsc = initPool("1");
+                    poolMap.put(getDataSourceName(),dsc);
+                    log.debug("Storing pool: {}@{}", getName(), System.identityHashCode(dsc));
+                    perThreadPoolSet.add(dsc);
+                }
+            }
+            return dsc;
         }
     }
 
