@@ -142,24 +142,43 @@ public class DataSourceElement extends AbstractTestElement
     }
 
     /**
-     * @param poolName Pool name
-     * @return Connection information on poolName
+     * Gets a textual description about the pools configuration.
+     *
+     * @param poolName
+     *            Pool name
+     * @return Connection information on {@code poolName} or a short message,
+     *         when the JMeter object specified by {@code poolName} is not a
+     *         pool
+     * @throws SQLException
+     *             when an error occurs, while gathering information about the
+     *             connection
      */
     public static String getConnectionInfo(String poolName) throws SQLException{
-        Object poolObject = 
+        Object poolObject =
                 JMeterContextService.getContext().getVariables().getObject(poolName);
         if (poolObject instanceof DataSourceComponentImpl) {
             DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
             return pool.getConnectionInfo();
         } else {
-            return "Object:"+poolName+" is not of expected type '"+DataSourceComponentImpl.class.getName()+"'";
+            return "Object:" + poolName + " is not of expected type '" + DataSourceComponentImpl.class.getName() + "'";
         }
     }
-    /*
-     * Utility routine to get the connection from the pool.
+
+    /**
+     * Utility routine to get the connection from the pool.<br>
      * Purpose:
-     * - allows JDBCSampler to be entirely independent of the pooling classes
-     * - allows the pool storage mechanism to be changed if necessary
+     * <ul>
+     * <li>allows JDBCSampler to be entirely independent of the pooling classes
+     * </li>
+     * <li>allows the pool storage mechanism to be changed if necessary</li>
+     * </ul>
+     * 
+     * @param poolName
+     *            name of the pool to get a connection from
+     * @return a possible cached connection from the pool
+     * @throws SQLException
+     *             when an error occurs while getting the connection from the
+     *             pool
      */
     public static Connection getConnection(String poolName) throws SQLException{
         Object poolObject = 
@@ -171,8 +190,9 @@ public class DataSourceElement extends AbstractTestElement
                 DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
                 return pool.getConnection();    
             } else {
-                String errorMsg = "Found object stored under variable:'"+poolName
-                        +"' with class:"+poolObject.getClass().getName()+" and value: '"+poolObject+" but it's not a DataSourceComponent, check you're not already using this name as another variable";
+                String errorMsg = "Found object stored under variable:'" + poolName + "' with class:"
+                        + poolObject.getClass().getName() + " and value: '" + poolObject
+                        + " but it's not a DataSourceComponent, check you're not already using this name as another variable";
                 log.error(errorMsg);
                 throw new SQLException(errorMsg); 
             }
@@ -266,10 +286,9 @@ public class DataSourceElement extends AbstractTestElement
     private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
             ThreadLocal.withInitial(HashMap::new);
 
-    /*
-     * Wrapper class to allow getConnection() to be implemented for both shared
+    /**
+     * Wrapper class to allow {@link DataSourceElement#getConnection(String)} to be implemented for both shared
      * and per-thread pools.
-     *
      */
     private class DataSourceComponentImpl {
 
