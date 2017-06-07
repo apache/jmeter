@@ -195,6 +195,7 @@ Summary
     <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
     <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
     <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
+    <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
