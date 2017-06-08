@@ -23,8 +23,8 @@ import java.util.Map;
 import org.apache.jmeter.report.processor.TimeRateAggregatorFactory;
 import org.apache.jmeter.report.processor.graph.AbstractGraphConsumer;
 import org.apache.jmeter.report.processor.graph.AbstractOverTimeGraphConsumer;
-import org.apache.jmeter.report.processor.graph.CountValueSelector;
 import org.apache.jmeter.report.processor.graph.GroupInfo;
+import org.apache.jmeter.report.processor.graph.SamplerCountValueSelector;
 import org.apache.jmeter.report.processor.graph.StaticSeriesSelector;
 import org.apache.jmeter.report.processor.graph.TimeStampKeysSelector;
 
@@ -62,7 +62,7 @@ public class HitsPerSecondGraphConsumer extends AbstractOverTimeGraphConsumer {
         groupInfos.put(AbstractGraphConsumer.DEFAULT_GROUP, new GroupInfo(
                 new TimeRateAggregatorFactory(), new StaticSeriesSelector(),
                 // We ignore Transaction Controller results
-                new CountValueSelector(true), false, false));
+                new SamplerCountValueSelector(true), false, false));
         return groupInfos;
     }
 
