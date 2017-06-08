@@ -62,8 +62,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String TAG_TRANSACTION = ",transaction=";
 
-    private static final String TAG_STATUS = ",status=";
+    // As influxdb can't rename tag for now, keep the old name for backward compatibility
+    private static final String TAG_STATUS = ",statut=";
     private static final String TAG_APPLICATION = ",application=";
+    private static final String TAG_RESPONSE_CODE = ",responseCode=";
+    private static final String TAG_RESPONSE_MESSAGE = ",responseMessage=";
 
     private static final String METRIC_COUNT = "count=";
     private static final String METRIC_COUNT_ERROR = "countError=";
@@ -172,8 +175,24 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         // FOR KO STATUS
         addMetric(transaction, metric.getFailures(), true, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
+
+        metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
+                    error.getResponseMessage(), count));
     }
 
+    private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
+        if (count > 0) {
+            StringBuilder tag = new StringBuilder(70);
+            tag.append(TAG_APPLICATION).append(application);
+            tag.append(TAG_TRANSACTION).append(transaction);
+            tag.append(TAG_RESPONSE_CODE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseCode));
+            tag.append(TAG_RESPONSE_MESSAGE).append(AbstractInfluxdbMetricsSender.tagToStringValue(responseMessage));
+
+            StringBuilder field = new StringBuilder(30);
+            field.append(METRIC_COUNT).append(count);
+            influxdbMetricsManager.addMetric(measurement, tag.toString(), field.toString());
+        }
+    }
 
     private void addMetric(String transaction, int count, boolean includeResponseCode,
             String statut, double mean, double minTime, double maxTime, 
