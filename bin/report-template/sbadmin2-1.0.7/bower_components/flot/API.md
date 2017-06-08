@@ -143,7 +143,7 @@ the plot, see below.
 
 The rest of the options are all documented below as they are the same
 as the default options passed in via the options parameter in the plot
-commmand. When you specify them for a specific data series, they will
+command. When you specify them for a specific data series, they will
 override the default options for the plot for that data series.
 
 Here's a complete example of a simple data specification:
