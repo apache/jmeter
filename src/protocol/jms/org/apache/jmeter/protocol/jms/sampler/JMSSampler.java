@@ -369,7 +369,7 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
             } else {
 
                 if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue);
+                    executor = new ExtendedTemporaryQueueExecutor(session, sendQueue, getTimeoutAsInt());
                 } else {
                     producer = session.createSender(sendQueue);
                     executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
