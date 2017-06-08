@@ -161,6 +161,24 @@ public class ClientJMeterEngine implements JMeterEngine {
      * Tidy up RMI access to allow JMeter client to exit.
      * Currently just interrupts the "RMI Reaper" thread.
      * @param logger where to log the information
+     * @deprecated since 3.2, use {@link #tidyRMI(Logger)}.
+     */
+    @Deprecated
+    public static void tidyRMI(org.apache.log.Logger logger) {
+        String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
+        for(Thread t : Thread.getAllStackTraces().keySet()){
+            String name = t.getName();
+            if (name.matches(reaperRE)) {
+                logger.info("Interrupting "+name);
+                t.interrupt();
+            }
+        }
+    }
+
+    /**
+     * Tidy up RMI access to allow JMeter client to exit.
+     * Currently just interrups the "RMI Reaper" thread.
+     * @param logger where to log the information
      */
     public static void tidyRMI(Logger logger) {
         String reaperRE = JMeterUtils.getPropDefault("rmi.thread.name", "^RMI Reaper$");
