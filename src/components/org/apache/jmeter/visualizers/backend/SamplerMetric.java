@@ -311,7 +311,7 @@ public class SamplerMetric {
     }
     
     /**
-     * Returns details of errors occurs
+     * Returns by type ( response code and message ) the count of errors occurs
      * @return errors
      */
     public Map<ErrorMetric, Integer> getErrors() {
