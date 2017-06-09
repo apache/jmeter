@@ -51,7 +51,7 @@ public class ErrorMetric {
         if (responseCode.isEmpty()) {
             return "0";
         } else {
-            return responseCode;
+            return responseCode.trim();
         }
     }
 
@@ -62,7 +62,7 @@ public class ErrorMetric {
         if (responseMessage.isEmpty()) {
             return "None";
         } else {
-            return responseMessage;
+            return responseMessage.trim();
         }
     }
 
@@ -83,7 +83,7 @@ public class ErrorMetric {
 
     @Override
     public int hashCode() {
-        return getResponseCode().hashCode() + getResponseMessage().hashCode();
+        return getResponseCode().toLowerCase().hashCode() + getResponseMessage().toLowerCase().hashCode();
     }
 
 }
