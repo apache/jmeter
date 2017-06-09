@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.jmeter.control.TransactionController;
@@ -62,7 +63,7 @@ public class SamplerMetric {
     private int successes;
     private int failures;
     private int hits;
-    private HashMap<ErrorMetric, Integer> errors = new HashMap<ErrorMetric, Integer>();
+    private Map<ErrorMetric, Integer> errors = new HashMap<>();
 
     
     /**
@@ -313,7 +314,7 @@ public class SamplerMetric {
      * Returns details of errors occurs
      * @return errors
      */
-    public HashMap<ErrorMetric, Integer> getErrors() {
+    public Map<ErrorMetric, Integer> getErrors() {
         return errors;
     }
 }
