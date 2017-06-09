@@ -26,9 +26,16 @@ import org.apache.jmeter.samplers.SampleResult;
  */
 public class ErrorMetric {
 
-    private String responseCode = "";
-    private String responseMessage = "";
-
+    /**
+     * Error code of a sample result, by example : "400"
+     */
+    private String responseCode = ""; // Never return null
+    
+    /**
+     * Error response message of a sample result, , by example : "bad request"
+     */
+    private String responseMessage = ""; // Never return null
+ 
     public ErrorMetric() {
     }
 
@@ -38,7 +45,7 @@ public class ErrorMetric {
     }
 
     /**
-     * @return the response code , '0' if he code is empty
+     * @return the response code , '0' if the code is empty
      */
     public String getResponseCode() {
         if (responseCode.isEmpty()) {
