@@ -73,12 +73,9 @@ public class ErrorMetric {
         }
 
         ErrorMetric otherError = (ErrorMetric) other;
-        if (getResponseCode().equalsIgnoreCase(otherError.getResponseCode())
-                && getResponseMessage().equalsIgnoreCase(otherError.getResponseMessage())) {
-            return true;
-        } else {
-            return false;
-        }
+        return (getResponseCode().equalsIgnoreCase(otherError.getResponseCode())
+                && getResponseMessage().equalsIgnoreCase(otherError.getResponseMessage()));
+ 
     }
 
     @Override
