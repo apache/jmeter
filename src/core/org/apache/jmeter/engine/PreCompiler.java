@@ -47,63 +47,87 @@ public class PreCompiler implements HashTreeTraverser {
 //   In the latter case, only ResultCollectors are updated,
 //   as only these are relevant to the client, and updating
 //   other elements causes all sorts of problems.
-    private final boolean isRemote; // skip certain processing for remote tests
+    private final boolean isClientSide; // skip certain processing for remote tests
 
     public PreCompiler() {
         replacer = new ValueReplacer();
-        isRemote = false;
+        isClientSide = false;
     }
 
     public PreCompiler(boolean remote) {
         replacer = new ValueReplacer();
-        isRemote = remote;
+        isClientSide = remote;
     }
 
     /** {@inheritDoc} */
     @Override
     public void addNode(Object node, HashTree subTree) {
-        if(isRemote && (node instanceof ResultCollector || node instanceof Backend))
-        {
-            try {
-                replacer.replaceValues((TestElement) node);
-            } catch (InvalidVariableException e) {
-                log.error("invalid variables", e);
+        if(isClientSide) {
+            if(node instanceof ResultCollector || node instanceof Backend) {
+                try {
+                    replacer.replaceValues((TestElement) node);
+                } catch (InvalidVariableException e) {
+                    log.error("invalid variables in node {}", ((TestElement)node).getName(), e);
+                }
             }
-        }
 
-        if(!isRemote && node instanceof TestElement)
-        {
-            try {
-                replacer.replaceValues((TestElement) node);
-            } catch (InvalidVariableException e) {
-                log.error("invalid variables", e);
+            if (node instanceof TestPlan) {
+                JMeterVariables vars = createVars((TestPlan)node);
+                // Don't store variable of test plan in the context for client side
+                JMeterContextService.setClientVariables(vars);
             }
-        }
-        if (node instanceof TestPlan) {
-            ((TestPlan)node).prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
-            Map<String, String> args = ((TestPlan) node).getUserDefinedVariables();
-            replacer.setUserDefinedVariables(args);
-            JMeterVariables vars = new JMeterVariables();
-            vars.putAll(args);
-            // Don't store variable of test plan in the context for client side
-            if (isRemote) {
-                JMeterContextService.setClientVariable(vars);
-            } else { 
+
+            if (node instanceof Arguments) {
+                // Don't store User Defined Variables in the context for client side
+                Map<String, String> args = createArgumentsMap((Arguments) node);
+                JMeterContextService.getClientVariables().putAll(args);
+            }
+
+        } else {
+            if(node instanceof TestElement) {
+                try {
+                    replacer.replaceValues((TestElement) node);
+                } catch (InvalidVariableException e) {
+                    log.error("invalid variables in node {}", ((TestElement)node).getName(), e);
+                }
+            }
+            
+            if (node instanceof TestPlan) {
+                JMeterVariables vars = createVars((TestPlan)node);
                 JMeterContextService.getContext().setVariables(vars);
             }
-        }
-
-        if (node instanceof Arguments) {
-            ((Arguments)node).setRunningVersion(true);
-            Map<String, String> args = ((Arguments) node).getArgumentsAsMap();
-            replacer.addVariables(args);
-            // Don't store User Defined Variables in the context for client side
-            if (isRemote) {
-                JMeterContextService.getClientVariable().putAll(args);
-            } else { 
+            
+            if (node instanceof Arguments) {
+                Map<String, String> args = createArgumentsMap((Arguments) node);
                 JMeterContextService.getContext().getVariables().putAll(args);
             }
         }
+    }
+    
+    /**
+     * Create Map of Arguments
+     * @param arguments {@link Arguments}
+     * @return {@link Map}
+     */
+    private Map<String, String> createArgumentsMap(Arguments arguments) {
+        arguments.setRunningVersion(true);
+        Map<String, String> args = arguments.getArgumentsAsMap();
+        replacer.addVariables(args);
+        return args;
+    }
+
+    /**
+     * Create variables for testPlan
+     * @param testPlan {@link JMeterVariables}
+     * @return {@link JMeterVariables}
+     */
+    private JMeterVariables createVars(TestPlan testPlan) {
+        testPlan.prepareForPreCompile(); //A hack to make user-defined variables in the testplan element more dynamic
+        Map<String, String> args = testPlan.getUserDefinedVariables();
+        replacer.setUserDefinedVariables(args);
+        JMeterVariables vars = new JMeterVariables();
+        vars.putAll(args);
+        return vars;
     }
 
     /** {@inheritDoc} */
