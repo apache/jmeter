@@ -47,9 +47,8 @@ public final class JMeterContextService {
     //@GuardedGy("this")
     private static int totalThreads = 0;
     
-    //@GuardedGy("this")
     private static JMeterVariables variables = null;
-    
+
 
     /**
      * Private constructor to prevent instantiation.
@@ -168,10 +167,11 @@ public final class JMeterContextService {
     }
     
     /**
-     * Get all variables accessible for JMeter client in a distributed test (exclusively test plan and user defined variables )
-     * @return variables available for JMeter client 
+     * Get all variables accessible for JMeter client in a distributed test
+     * (only test plan and user defined variables)
+     * @return {@link JMeterVariables} available for JMeter client 
      */
-    public static JMeterVariables getClientVariable() {
+    public static JMeterVariables getClientVariables() {
         return variables;
     }
     
@@ -179,9 +179,9 @@ public final class JMeterContextService {
      * Set variables for JMeter client in a distributed test
      * @param var {@link JMeterVariables}
      */
-    public static void setClientVariable(JMeterVariables var) {
+    public static void setClientVariables(JMeterVariables var) {
         variables = var;
-    }    
+    }
 
     public static class ThreadCounts {
         
@@ -197,5 +197,4 @@ public final class JMeterContextService {
             finishedThreads = finished;
         }
     }
-
 }
