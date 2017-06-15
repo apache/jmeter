@@ -159,7 +159,7 @@ extension.
 <OL>
   <LI>Package the class files into a JAR file. </LI>
   <LI>Place the JAR file into the <TT>ext</TT> subdirectory of the JMeter root
-  install directroy. </LI>
+  install directory. </LI>
   <LI>Edit the <TT>bin/jmeter.properties</TT> file of the JMeter installation.
   Find the <TT>search_paths</TT> entry and add your JAR to the list. It should
   look like <PRE>search_paths=ApacheJMeter.jar;classes;../ext/YourJar.jar</PRE></LI>
@@ -186,7 +186,7 @@ extension.
   override the priority.</P></LI>
   <LI>Implement <TT>clone</TT> carefully. This is an often overlooked method for
   a lot of folks. JMeter makes heavy use of cloning. Check out some of the
-  JMeter coniguration elements and controllers to see how they do it. Notice
+  JMeter configuration elements and controllers to see how they do it. Notice
   that in most cases, a special method is usually invoked to perform base class
   cloning activities. For configuration elements, this is
   <TT>configureClone</TT>. For controllers, it is <TT>standardCloneProc</TT>.

@@ -54,7 +54,7 @@ public class HTTPArgument extends Argument implements Serializable {
      * The value is assumed to be not encoded.
      *
      * @param name
-     *            name of the paramter
+     *            name of the parameter
      * @param value
      *            value of the parameter
      * @param metadata

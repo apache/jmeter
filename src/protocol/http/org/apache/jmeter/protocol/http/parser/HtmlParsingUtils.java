@@ -155,7 +155,7 @@ public final class HtmlParsingUtils {
 
     /**
      * Match the input argument against the pattern using String.equals() or pattern matching if that fails
-     * using case-insenssitive matching.
+     * using case-insensitive matching.
      *
      * @param arg input string
      * @param pat pattern string

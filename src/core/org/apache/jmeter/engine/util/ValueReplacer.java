@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Perfom replacement of ${variable} references.
+ * Perform replacement of ${variable} references.
  */
 public class ValueReplacer {
     private static final Logger log = LoggerFactory.getLogger(ValueReplacer.class);

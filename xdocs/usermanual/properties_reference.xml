@@ -296,7 +296,7 @@ JMETER-SERVER</source>
     Defaults to: <code>1099</code>
 </property>
 <property name="client.rmi.localport">
-    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controler)<br/>
+    Parameter that controls the RMI port used by the <code>RemoteSampleListenerImpl</code> (The Controller)<br/>
     Default value is <code>0</code>, which means port is randomly assigned.
     <note>You may need to open a port in the firewall on the Controller machine.</note>
     Defaults to: <code>0</code>
@@ -867,7 +867,7 @@ JMETER-SERVER</source>
         and <code>sample_sender_strip_also_on_error</code></dd>
         <dt><code>Asynch</code></dt>
         <dd>Asynchronous sender; uses a queue and background worker process to return the samples.
-        Configured by propertiy <code>asynch.batch.queue.size</code></dd>
+        Configured by property <code>asynch.batch.queue.size</code></dd>
         <dt><code>StrippedAsynch</code></dt>
         <dd>Same as <code>Asynch</code> but strips response data from SampleResult.
         Configured by properties <code>asynch.batch.queue.size</code>
@@ -957,7 +957,7 @@ JMETER-SERVER</source>
     Defaults to platforms default charset as returned by <code>Charset.defaultCharset().name()</code>
 </property>
 <property name="tcp.status.prefix">
-    String at the begining of the status response code.<br/>
+    String at the beginning of the status response code.<br/>
     Defaults to: <code>Status</code></property>
 <property name="tcp.status.suffix">
     String at the end of the status response code.<br/>
@@ -1086,7 +1086,7 @@ JMETER-SERVER</source>
     Defaults to empty value.
 </property>
 <property name="beanshell.sampler.init">
-    Define the intialisation files for BeanShell Sampler, Function and
+    Define the initialisation files for BeanShell Sampler, Function and
     other BeanShell elements.<br/>
     <note>N.B. Beanshell test elements do not share interpreters.
     Each element in each thread has its own interpreter.
@@ -1171,7 +1171,7 @@ JMETER-SERVER</source>
 <properties>
 <property name="ldapsampler.max_sorted_results">
     Maximum number of search results returned by a search that will be sorted
-    to guarantee a stable ordering (if more results then this limit are retruned
+    to guarantee a stable ordering (if more results then this limit are returned
     then no sorting is done).<br/>
     Set to zero to turn off all sorting, in which case "Equals" response assertions
     will be very likely to fail against search results.<br/>
@@ -1484,7 +1484,7 @@ JMETER-SERVER</source>
 </property>
 <property name="jmeter.reportgenerator.statistic_window">
     Sets the size of the sliding window used by percentile evaluation.<br/>
-    <note>Caution: higher value provides a better accurency but needs more memory.</note>
+    <note>Caution: higher value provides a better accuracy but needs more memory.</note>
     Defaults to: <code>20000</code>
 </property>
 <property name="jmeter.reportgenerator.report_title">

@@ -572,7 +572,7 @@ public class LdapExtConfigGui extends AbstractConfigGui implements ItemListener 
     }
 
     /***************************************************************************
-     * This will initalise all the panels in the LdapConfigGui
+     * This will initialise all the panels in the LdapConfigGui
      **************************************************************************/
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
         setLayout(new BorderLayout(0, 5));

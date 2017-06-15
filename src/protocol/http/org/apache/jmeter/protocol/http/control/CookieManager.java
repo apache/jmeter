@@ -103,10 +103,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * The default policy for new CookieManager elements is defined by 
      * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_POLICY CookiePanel#DEFAULT_POLICY}
      *
-     * @deprecated not intended for use outside this class (should have been created private)
      */
-    @Deprecated
-    public static final String DEFAULT_POLICY = CookieSpecs.BROWSER_COMPATIBILITY;
+    private static final String DEFAULT_POLICY = CookieSpecs.STANDARD;
     
     /**
      * Defines the implementation that is assumed when the JMX file does not contain an entry for it
@@ -115,10 +113,8 @@ public class CookieManager extends ConfigTestElement implements TestStateListene
      * The default implementation for new CookieManager elements is defined by 
      * {@link org.apache.jmeter.protocol.http.gui.CookiePanel#DEFAULT_IMPLEMENTATION CookiePanel#DEFAULT_IMPLEMENTATION}
      *
-     * @deprecated not intended for use outside this class (should have been created private)
      */
-    @Deprecated
-    public static final String DEFAULT_IMPLEMENTATION = "org.apache.jmeter.protocol.http.control.HC3CookieHandler";
+    private static final String DEFAULT_IMPLEMENTATION = HC4CookieHandler.class.getName();
 
     public CookieManager() {
         clearCookies(); // Ensure that there is always a collection available

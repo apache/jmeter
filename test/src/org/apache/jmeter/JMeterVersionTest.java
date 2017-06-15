@@ -255,7 +255,7 @@ public class JMeterVersionTest extends JMeterTestCase {
               binaryJarNames.add(jarName);                
             }
         }
-        // Extract the jar names fron LICENSE
+        // Extract the jar names from LICENSE
         final BufferedReader license = new BufferedReader(
                 new FileReader(getFileFromHome("LICENSE"))); // assume default charset is OK here
         final Pattern p = Pattern.compile("^\\* (\\S+?)\\.jar(.*)");

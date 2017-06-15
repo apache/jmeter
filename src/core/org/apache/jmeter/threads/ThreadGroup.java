@@ -385,7 +385,6 @@ public class ThreadGroup extends AbstractThreadGroup {
             numThreads = getNumThreads();
             setNumThreads(numThreads + 1);
         }
-        setDelay(0);
         newJmThread = startNewThread(notifier, threadGroupTree, engine, numThreads, context, now, delay);
         JMeterContextService.addTotalThreads( 1 );
         log.info("Started new thread in group {}", groupNumber);
@@ -540,7 +539,10 @@ public class ThreadGroup extends AbstractThreadGroup {
         if (delayedStartup) {
             waitThreadStopped(threadStarter);
         }
-        
+        /* @Bugzilla 60933
+         * Like threads can be added on the fly during a test into allThreads
+         * we have to check if allThreads is rly empty before stop 
+         */
         while ( !allThreads.isEmpty() ) {
             for (Thread t : allThreads.values()) {
                 waitThreadStopped(t);

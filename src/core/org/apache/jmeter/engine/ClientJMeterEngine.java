@@ -112,7 +112,9 @@ public class ClientJMeterEngine implements JMeterEngine {
         HashTree testTree = test;
 
         synchronized(testTree) {
-            testTree.traverse(new PreCompiler(true));  // limit the changes to client only test elements
+            PreCompiler compiler = new PreCompiler(true);
+            testTree.traverse(compiler);  // limit the changes to client only test elements
+            JMeterContextService.initClientSideVariables(compiler.getClientSideVariables());
             testTree.traverse(new TurnElementsOn());
             testTree.traverse(new ConvertListeners());
         }

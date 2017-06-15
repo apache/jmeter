@@ -467,7 +467,7 @@ public class SmtpPanel extends JPanel {
      * (checkbox)
      *
      * @param val
-     *            Schould message size be calculated?
+     *            Should message size be calculated?
      */
     public void setMessageSizeStatistic(boolean val) {
         cbMessageSizeStats.setSelected(val);

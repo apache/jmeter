@@ -30,12 +30,12 @@ bsh-2.0b5.jar (org.bsh)
 -------------
 - BeanShell test elements
 
-dec-0.1.1 (org.brotli.dec)
+dec-0.1.2 (org.brotli.dec)
 -----------------
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.4.0
+caffeine 2.5.2
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
@@ -57,7 +57,7 @@ commons-io-2.5
 http://commons.apache.org/downloads/download_io.cgi
 - FTPSampler
 
-commons-jexl-2.1.1, commons-jexl3-3.0
+commons-jexl-2.1.1, commons-jexl3-3.1
 ----------------
 http://commons.apache.org/downloads/download_jexl.cgi
 - Jexl function and BSF test elements
@@ -115,22 +115,22 @@ jdom-1.1.3
 http://www.jdom.org/downloads/index.html
 - Anakia
 
-jodd-core-3.8.1
+jodd-core-3.8.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-lagarto-3.8.1
+jodd-lagarto-3.8.6
 --------
 http://jodd.org/doc/csselly/
 - CSS/JQuery like extractor
 
-jodd-log-3.8.1
+jodd-log-3.8.6
 --------
 http://www.jodd.org/
 - CSS/JQuery like extractor dependency
 
-jodd-props-3.8.1
+jodd-props-3.8.6
 --------
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
@@ -152,17 +152,17 @@ jsoup-1.10.2
 http://www.jsoup.org/
 - CSS/JQuery like extractor
 
-log4j2
+log4j2-2.8.2
 --------
 https://logging.apache.org/log4j/2.x/
 - Logging framework
 
-ph-css-5.0.3
+ph-css-5.0.4
 --------
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-8.6.0
+ph-commons-8.6.5
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -221,7 +221,7 @@ http://www.slf4j.org/
 - jodd-core
 - json-path
 
-tika-1.14
+tika-1.15
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor
@@ -255,7 +255,7 @@ http://xerces.apache.org/xerces2-j/download.cgi
 
 The x* jars above are used for XML handling
 
-xmlgraphics-commons-2.1 (org.apache.xmlgraphics.image.codec)
+xmlgraphics-commons-2.2 (org.apache.xmlgraphics.image.codec)
 ------------------
 http://xmlgraphics.apache.org/commons/download.html
 - SaveGraphicsService
@@ -273,7 +273,7 @@ or
 http://www.extreme.indiana.edu/dist/java-repository/xpp3/distributions/
 - xstream
 
-xstream-1.4.9
+xstream-1.4.10
 -------------
 http://x-stream.github.io/download.html
 - SaveService

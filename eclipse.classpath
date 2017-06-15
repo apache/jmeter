@@ -49,18 +49,18 @@
 	<classpathentry kind="lib" path="lib/asm-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
-	<classpathentry kind="lib" path="lib/caffeine-2.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/caffeine-2.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-dbcp2-2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jexl-2.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-jexl3-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
-	<classpathentry kind="lib" path="lib/dec-0.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dec-0.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/dnsjava-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
 	<classpathentry kind="lib" path="lib/groovy-all-2.4.11.jar"/>
@@ -74,10 +74,10 @@
 	<classpathentry kind="lib" path="lib/httpmime-4.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/jcharts-0.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-core-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-log-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jodd-props-3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-core-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-lagarto-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-log-3.8.6.jar"/>
+	<classpathentry kind="lib" path="lib/jodd-props-3.8.6.jar"/>
 	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-smart-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.10.2.jar"/>
@@ -85,27 +85,27 @@
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
-	<classpathentry kind="lib" path="lib/ph-css-5.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/ph-commons-8.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/ph-css-5.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/ph-commons-8.6.5.jar"/>
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/tika-core-1.14.jar"/>
-	<classpathentry kind="lib" path="lib/tika-parsers-1.14.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.15.jar"/>
+	<classpathentry kind="lib" path="lib/tika-parsers-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.4.01.jar"/>
-	<classpathentry kind="lib" path="lib/xmlgraphics-commons-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlgraphics-commons-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlpull-1.1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.4.9.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>

@@ -141,11 +141,44 @@ public class DataSourceElement extends AbstractTestElement
         return el;
     }
 
-    /*
-     * Utility routine to get the connection from the pool.
+    /**
+     * Gets a textual description about the pools configuration.
+     *
+     * @param poolName
+     *            Pool name
+     * @return Connection information on {@code poolName} or a short message,
+     *         when the JMeter object specified by {@code poolName} is not a
+     *         pool
+     * @throws SQLException
+     *             when an error occurs, while gathering information about the
+     *             connection
+     */
+    public static String getConnectionInfo(String poolName) throws SQLException{
+        Object poolObject =
+                JMeterContextService.getContext().getVariables().getObject(poolName);
+        if (poolObject instanceof DataSourceComponentImpl) {
+            DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
+            return pool.getConnectionInfo();
+        } else {
+            return "Object:" + poolName + " is not of expected type '" + DataSourceComponentImpl.class.getName() + "'";
+        }
+    }
+
+    /**
+     * Utility routine to get the connection from the pool.<br>
      * Purpose:
-     * - allows JDBCSampler to be entirely independent of the pooling classes
-     * - allows the pool storage mechanism to be changed if necessary
+     * <ul>
+     * <li>allows JDBCSampler to be entirely independent of the pooling classes
+     * </li>
+     * <li>allows the pool storage mechanism to be changed if necessary</li>
+     * </ul>
+     * 
+     * @param poolName
+     *            name of the pool to get a connection from
+     * @return a possible cached connection from the pool
+     * @throws SQLException
+     *             when an error occurs while getting the connection from the
+     *             pool
      */
     public static Connection getConnection(String poolName) throws SQLException{
         Object poolObject = 
@@ -157,8 +190,9 @@ public class DataSourceElement extends AbstractTestElement
                 DataSourceComponentImpl pool = (DataSourceComponentImpl) poolObject;
                 return pool.getConnection();    
             } else {
-                String errorMsg = "Found object stored under variable:'"+poolName
-                        +"' with class:"+poolObject.getClass().getName()+" and value: '"+poolObject+" but it's not a DataSourceComponent, check you're not already using this name as another variable";
+                String errorMsg = "Found object stored under variable:'" + poolName + "' with class:"
+                        + poolObject.getClass().getName() + " and value: '" + poolObject
+                        + " but it's not a DataSourceComponent, check you're not already using this name as another variable";
                 log.error(errorMsg);
                 throw new SQLException(errorMsg); 
             }
@@ -252,10 +286,9 @@ public class DataSourceElement extends AbstractTestElement
     private static final ThreadLocal<Map<String, BasicDataSource>> perThreadPoolMap =
             ThreadLocal.withInitial(HashMap::new);
 
-    /*
-     * Wrapper class to allow getConnection() to be implemented for both shared
+    /**
+     * Wrapper class to allow {@link DataSourceElement#getConnection(String)} to be implemented for both shared
      * and per-thread pools.
-     *
      */
     private class DataSourceComponentImpl {
 
@@ -265,8 +298,21 @@ public class DataSourceElement extends AbstractTestElement
             sharedDSC=null;
         }
 
-        DataSourceComponentImpl(BasicDataSource p_dsc){
-            sharedDSC=p_dsc;
+        DataSourceComponentImpl(BasicDataSource dsc){
+            sharedDSC = dsc;
+        }
+
+        /**
+         * @return String connection information
+         */
+        public String getConnectionInfo() {
+            BasicDataSource dsc = getConfiguredDatatSource();
+            StringBuilder builder = new StringBuilder(100);
+            builder.append("shared:").append(sharedDSC != null)
+                .append(", driver:").append(dsc.getDriverClassName())
+                .append(", url:").append(dsc.getUrl())
+                .append(", user:").append(dsc.getUsername());
+            return builder.toString();
         }
 
         /**
@@ -274,7 +320,24 @@ public class DataSourceElement extends AbstractTestElement
          * @throws SQLException if database access error occurred
          */
         public Connection getConnection() throws SQLException {
-            Connection conn;
+            BasicDataSource dsc = getConfiguredDatatSource();
+            Connection conn=dsc.getConnection();
+            int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
+            if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
+                try {
+                    // make sure setting the new isolation mode is done in an auto committed transaction
+                    conn.setTransactionIsolation(isolation);
+                    log.debug("Setting transaction isolation: {}@{}",
+                            isolation, System.identityHashCode(dsc));
+                } catch (SQLException ex) {
+                    log.error("Could not set transaction isolation: {}@{}", 
+                            isolation, System.identityHashCode(dsc), ex);
+                }
+            }
+            return conn;
+        }
+
+        private BasicDataSource getConfiguredDatatSource() {
             BasicDataSource dsc;
             if (sharedDSC != null){ // i.e. shared pool
                 dsc = sharedDSC;
@@ -288,22 +351,7 @@ public class DataSourceElement extends AbstractTestElement
                     perThreadPoolSet.add(dsc);
                 }
             }
-
-            conn=dsc.getConnection();
-            int isolation = DataSourceElementBeanInfo.getTransactionIsolationMode(getTransactionIsolation());
-            if (isolation >= 0 && conn.getTransactionIsolation() != isolation) {
-                try {
-                    // make sure setting the new isolation mode is done in an auto committed transaction
-                    conn.setTransactionIsolation(isolation);
-                    log.debug("Setting transaction isolation: {}@{}",
-                            isolation, System.identityHashCode(dsc));
-                } catch (SQLException ex) {
-                    log.error("Could not set transaction isolation: {}@{}", 
-                            isolation, System.identityHashCode(dsc), ex);
-                }   
-            }
-
-            return conn;
+            return dsc;
         }
     }
 

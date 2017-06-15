@@ -85,7 +85,7 @@ public class FileToString extends AbstractFunction {
         String encoding = null;//means platform default
         if (values.length >= ENCODING) {
             encoding = ((CompoundVariable) values[ENCODING - 1]).execute().trim();
-            if (encoding.length() <= 0) { // empty encoding, return to platorm default
+            if (encoding.length() <= 0) { // empty encoding, return to platform default
                 encoding = null;
             }
         }

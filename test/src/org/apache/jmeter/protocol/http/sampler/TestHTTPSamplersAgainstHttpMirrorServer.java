@@ -86,7 +86,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
     // This is used to emulate @before class and @after class
     public static Test suite(){
         final TestSuite testSuite = new TestSuite(TestHTTPSamplersAgainstHttpMirrorServer.class);
-        // Add parameterised tests. For simplicity we assune each has cases 0-10
+        // Add parameterised tests. For simplicity we assume each has cases 0-10
         for(int i=0; i<11; i++) {
             testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters", i));
             testSuite.addTest(new TestHTTPSamplersAgainstHttpMirrorServer("itemised_testGetRequest_Parameters3", i));

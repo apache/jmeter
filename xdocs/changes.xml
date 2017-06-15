@@ -76,6 +76,9 @@ Summary
 
 <ch_section>Incompatible changes</ch_section>
 
+<li>In InfluxDbBackendListenerClient, statut property has been renamed to status</li>
+<li>In CookieManager, DEFAULT_IMPLEMENTATION and DEFAULT_IMPLEMENTATION constants are now private.
+<note>If you're using ignorecookies with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back </note></li>
 <h3>Removed elements or functions</h3>
 
 <h3>Logging changes</h3>
@@ -87,6 +90,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><bug>61056</bug>HTTP : Support brotli decoding</li>
+    <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -95,10 +99,12 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>61131</bug>IfController and WhileController : Improve UX</li>
 </ul>
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>61167</bug>InfluxdbBackendListener : add number of errors by response code and message for each transaction</li> 
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -108,6 +114,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61040</bug>Add a time shifting function</li>
+    <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
 </ul>
 
 <h3>I18N</h3>
@@ -125,6 +132,15 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
+    <li>Updated to caffeine 2.5.2 (from 2.4.0)</li>
+    <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
+    <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
+    <li>Updated to ph-commons 8.6.5 (from 8.6.0)</li>
+    <li>Updated to log4j2 2.8.2 (from 2.8.1)</li>
+    <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
+    <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
+    <li>Updated to xstream 1.4.10 (from 1.4.9)</li>
+    <li>Updated to Apache Tika 1.15 (from 1.14)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -137,6 +153,7 @@ Summary
 
 <h3>Other Samplers</h3>
 <ul>
+    <li><bug>60889</bug>JMeter JDBC sample calls SELECT USER() when testing with MySQL JDBC due to Connection#toString call for response headers.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -146,6 +163,7 @@ Summary
 <h3>Listeners</h3>
 <ul>
     <li><bug>61005</bug>View Results Tree - Browser Response Data is not clearing</li>
+    <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not KO and OK</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -163,6 +181,8 @@ Summary
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61151</bug>Report/Dashboard : Top 5 Errors by Sampler and Errors : If assertion contains html code, the html part is hidden</li>
 </ul>
 
 <h3>General</h3>
@@ -172,8 +192,11 @@ Summary
     <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
     <li><bug>61054</bug>Endless loop in JOrphanUtils#replaceAllWithRegex when regex is contained in replacement</li>
     <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some LAF</li>
-    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&F on Linux/XWayland</li>
+    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
     <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+    <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
+    <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
+    <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -185,10 +208,12 @@ Summary
 <li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
 <li>Anthony Kearns (anthony.kearns atrightside.co)</li>
 <li>Emilian Bold (emi @ apache.org)</li>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
 <ul>
+<li>Liu XP (liu_xp2003 at sina.com)</li>
 </ul>
 <p>
 Apologies if we have omitted anyone else.

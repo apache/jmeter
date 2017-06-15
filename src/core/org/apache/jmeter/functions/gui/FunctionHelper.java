@@ -46,6 +46,9 @@ import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
 import org.apache.jmeter.gui.action.Help;
 import org.apache.jmeter.gui.action.KeyStrokes;
+import org.apache.jmeter.gui.util.JSyntaxTextArea;
+import org.apache.jmeter.gui.util.JTextScrollPane;
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.property.PropertyIterator;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jmeter.util.LocaleChangeEvent;
@@ -63,7 +66,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
 
     private JLabeledTextField cutPasteFunction;
     
-    private JLabel resultat;
+    private JSyntaxTextArea resultTextArea;
 
     public FunctionHelper() {
         super((JFrame) null, JMeterUtils.getResString("function_helper_title"), false); //$NON-NLS-1$
@@ -103,18 +106,22 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         comboPanel.add(helpButton);
         this.getContentPane().add(comboPanel, BorderLayout.NORTH);
         this.getContentPane().add(parameterPanel, BorderLayout.CENTER);
-        JPanel resultsPanel = new JPanel(new BorderLayout());
+        JPanel resultsPanel = new VerticalPanel();
         JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
         generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
         generatePanel.add(generateButton);
-        resultat = new JLabel("");
-        displayPanel.add(resultat);
-        resultsPanel.add(generatePanel, BorderLayout.NORTH );
-        resultsPanel.add(displayPanel, BorderLayout.WEST );
+        resultTextArea = JSyntaxTextArea.getInstance(5,50);
+        resultTextArea.setToolTipText(JMeterUtils.getResString("function_helper_dialog_result_warn"));
+        displayPanel.add(new JLabel(JMeterUtils.getResString("result_function")));
+        displayPanel.add(JTextScrollPane.getInstance(resultTextArea));
+        
+        resultsPanel.add(generatePanel);
+        resultsPanel.add(displayPanel);
+        
         this.getContentPane().add(resultsPanel, BorderLayout.SOUTH);
         this.pack();
         ComponentUtil.centerComponentInWindow(this);
@@ -143,6 +150,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             getContentPane().add(parameterPanel, BorderLayout.CENTER);
             this.pack();
             this.validate();
+            resultTextArea.setText("");
             this.repaint();
         } catch (InstantiationException | IllegalAccessException e) {
         }
@@ -168,9 +176,9 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
             functionCall.append(")");
         }
         functionCall.append("}");
-        cutPasteFunction.setText(functionCall.toString() );
+        cutPasteFunction.setText(functionCall.toString());
         CompoundVariable function = new CompoundVariable(functionCall.toString());
-        resultat.setText(JMeterUtils.getResString("result_function") + function.execute().trim()); 
+        resultTextArea.setText(function.execute().trim()); 
     }
 
     private class HelpListener implements ActionListener {

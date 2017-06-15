@@ -84,7 +84,7 @@ public class TCLogParser implements LogParser {
      * Also, are they any different from HTTPConstants.GET etc. ?
      * In some cases they seem to be used as the method name from the Tomcat log.
      * However the RMETHOD field is used as the value for HTTPSamplerBase.METHOD,
-     * for which HTTPConstants is most approriate.
+     * for which HTTPConstants is most appropriate.
      */
     public static final String GET = "GET";
 

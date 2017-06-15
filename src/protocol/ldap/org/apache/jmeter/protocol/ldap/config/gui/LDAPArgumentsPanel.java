@@ -99,7 +99,7 @@ public class LDAPArgumentsPanel extends AbstractConfigGui implements ActionListe
     /**
      * This is the list of menu categories this gui component will be available
      * under. The LDAPArgumentsPanel is not intended to be used as a standalone
-     * component, so this inplementation returns null.
+     * component, so this implementation returns null.
      *
      * @return a Collection of Strings, where each element is one of the
      *         constants defined in MenuFactory

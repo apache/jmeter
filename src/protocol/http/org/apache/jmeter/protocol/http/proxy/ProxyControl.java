@@ -219,7 +219,7 @@ public class ProxyControl extends GenericController {
     private static final Preferences PREFERENCES = Preferences.userNodeForPackage(ProxyControl.class);
 
     /**
-     * Whether to use dymanic key generation (if supported)
+     * Whether to use dynamic key generation (if supported)
      */
     private static final boolean USE_DYNAMIC_KEYS = JMeterUtils.getPropDefault("proxy.cert.dynamic_keys", true); // $NON-NLS-1$
 
@@ -576,7 +576,7 @@ public class ProxyControl extends GenericController {
      * Always sends the result to any registered sample listeners.
      *
      * @param sampler the sampler, may be null
-     * @param testElements the test elements to be added (e.g. header namager) under the Sampler
+     * @param testElements the test elements to be added (e.g. header manager) under the Sampler
      * @param result the sample result, not null
      * TODO param serverResponse to be added to allow saving of the
      * server's response while recording.

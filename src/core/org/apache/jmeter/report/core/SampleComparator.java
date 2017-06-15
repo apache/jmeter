@@ -48,7 +48,7 @@ public interface SampleComparator {
      * Initializes the comparator with the {@link SampleMetadata} of the samples
      * to be compared.<br>
      * <p>
-     * This function is invoked before any call to the<code>comapre</code>
+     * This function is invoked before any call to the<code>compare</code>
      * service.
      * </p>
      * <p>

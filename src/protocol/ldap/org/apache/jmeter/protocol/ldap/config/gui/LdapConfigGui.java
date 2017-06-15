@@ -296,7 +296,7 @@ public class LdapConfigGui extends AbstractConfigGui implements ItemListener {
     }
 
     /**
-     * This will create the Root distinguised name panel in the LdapConfigGui.
+     * This will create the Root distinguished name panel in the LdapConfigGui.
      */
     private JPanel createRootdnPanel() {
         return createLabelPanel("dn", rootdn);

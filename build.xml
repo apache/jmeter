@@ -336,8 +336,8 @@
 
   <!-- Directory where Jacoco libraries live -->
   <!-- I'm to lazy to fix this now, so I tag along with rat & checkstyle,
-    which already live there. But: none of these should apear on the classpath
-    of Jmeter, neither runtime, nor compiletime. These are only required on the
+    which already live there. But: none of these should appear on the classpath
+    of JMeter, neither runtime, nor compiletime. These are only required on the
     Ant classpath, so judging from comments elsewhere, this is the wrong place.
   -->
   <property name="lib.coverage" location="lib/opt"/>

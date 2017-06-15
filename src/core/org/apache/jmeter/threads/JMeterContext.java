@@ -80,7 +80,9 @@ public class JMeterContext {
      */
     public JMeterVariables getVariables() {
         // If context variable is null ( Client side ) return client variables
-        return (variables == null) ? JMeterContextService.getClientVariable() : variables;
+        return (variables != null) ? 
+                variables : 
+                JMeterContextService.getClientSideVariables();
     }
 
     public void setVariables(JMeterVariables vars) {

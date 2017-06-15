@@ -215,7 +215,7 @@ public class IfController extends GenericController implements Serializable, Thr
 
     @Override
     public boolean isDone() {
-        // bug 26672 : the isDone result should always be false and not based on the expession evaluation
+        // bug 26672 : the isDone result should always be false and not based on the expression evaluation
         // if an IfController ever gets evaluated to false it gets removed from the test tree. 
         // The problem is that the condition might get evaluated to true the next iteration, 
         // which we don't get the opportunity for
@@ -227,7 +227,7 @@ public class IfController extends GenericController implements Serializable, Thr
      */
     @Override
     public Sampler next() {
-        // We should only evalute the condition if it is the first
+        // We should only evaluate the condition if it is the first
         // time ( first "iteration" ) we are called.
         // For subsequent calls, we are inside the IfControllerGroup,
         // so then we just pass the control to the next item inside the if control

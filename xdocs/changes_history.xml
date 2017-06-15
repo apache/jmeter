@@ -661,7 +661,7 @@ This allows you to update Think Times from one place and let you gain productivi
     <li>Since version 3.1, <code>jmeter.save.saveservice.connect_time</code> property value is <code>true</code>, meaning CSV file for results will contain an additional column containing connection time, see <bugzilla>60106</bugzilla></li>
     <li>Since version 3.1, Random Timer subclasses (Gaussian Random Timer, Uniform Random Timer and Poisson Random Timer) implement interface <code><a href="./api/org/apache/jmeter/timers/ModifiableTimer.html">org.apache.jmeter.timers.ModifiableTimer</a></code></li>
     <li>Since version 3.1, if you don't select any language in JSR223 Test Elements, Apache Groovy language will be used. See <bugzilla>59945</bugzilla></li>
-    <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the begining or end of your variable names. See <bugzilla>60221</bugzilla></li>
+    <li>Since version 3.1, CSV DataSet now trims variable names to avoid issues due to spaces between variables names when configuring CSV DataSet. This should not have any impact for you unless you use space at the beginning or end of your variable names. See <bugzilla>60221</bugzilla></li>
     <li>Since version 3.1, HTTP Request is able when using HttpClient4 (default) implementation to handle responses bigger than <code>2147483647</code> Bytes, that is 2GB. To allow this two properties have been introduced:
     <ul>
         <li><code>httpsampler.max_bytes_to_store_per_request</code> (defaults to 10MB) will control what is held in memory. By default JMeter will only keep in memory the first 10MB of a response. If you have responses larger than this value and use assertions that are after the first 10MB, then you must increase this value</li>
@@ -1106,7 +1106,7 @@ Generate Summary Results =  32257 in 00:03:39 =  147.3/s Avg:     0 Min:     0 M
 </source>
 <ch_title>BackendListener now allows you to define sampler list as a regular expression</ch_title>
 <p>You can now use a regular expression to select the samplers you want to filter. 
-Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in pararameter <code>samplersList</code>
+Use parameter: <code>useRegexpForSamplersList=true</code> and put a regex in parameter <code>samplersList</code>
 </p>
 <figure width="806" height="380" image="changes/3.0/graphite_backend_listener_regex.png" ></figure>
 <ch_category>Protocols and Load Testing improvements</ch_category>
@@ -1180,8 +1180,8 @@ This validation mode can be customized.
 <ch_title>Apache Groovy bundled with JMeter</ch_title>
 <p><a href="http://www.groovy-lang.org/" target="_blank">Apache Groovy</a>, the well-known JVM scripting language, is now bundled with Apache JMeter in lib folder. 
 This allows you to use it immediately through JSR223 Elements by selecting the Groovy language.</p>
-<ch_title>Superflous and old properties removed</ch_title>
-<p>Old properties that existed to maintain backward compatibility or to offer some superflous customization have been removed.
+<ch_title>Superfluous and old properties removed</ch_title>
+<p>Old properties that existed to maintain backward compatibility or to offer some superfluous customization have been removed.
 Read "Incompatible changes" section to see which properties have been removed.</p> 
 <ch_title>Code and documentation improvements</ch_title>
 <ul>
@@ -3620,7 +3620,7 @@ Previously the default was the HTTP Java implementation (i.e. the implementation
 <figure width="586" height="682" image="changes/2.8/05_http_defaults_url_filter.png"></figure>
 </p>
 
-<h4>Miscellanous</h4>
+<h4>Miscellaneous</h4>
 <ul>
     <li>CSV Dataset : Embedded new lines are now supported in quoted data</li> 
     <li>JMX files now contain the version of JMeter that created the file</li> 
@@ -4607,7 +4607,7 @@ The thread is not now started unless the pause time is greater than 0.
 <li>HttpClient4 sampler now re-uses connections properly (previously it would use one per sample, which could quickly cause resource exhaustion).</li>
 <li>Various fixes to JMS samplers</li>
 <li>Functions are no longer spuriously invoked when used with a Configuration element</li>
-<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improments on WSDL configuration assistant</li>
+<li>WebService sampler GUI has been re-organized for better design and more user-friendliness. Some improvements on WSDL configuration assistant</li>
 <li>Better handling of test shutdown. System.exit now only called if there is no other option; even this can be disabled.</li>
 </ul>
 
@@ -4853,7 +4853,7 @@ Rather than delegating to the JMeter thread handler for "unexpected" failures, e
 
 <h3>Controllers</h3>
 <ul>
-<li><bugzilla>50032</bugzilla> - Last_Sample_Ok along with other controllers doesnt work correctly when the threadgroup has multiple loops</li>
+<li><bugzilla>50032</bugzilla> - Last_Sample_Ok along with other controllers doesn't work correctly when the threadgroup has multiple loops</li>
 <li><bugzilla>50080</bugzilla> - Transaction controller incorrectly creates samples including timer duration</li>
 <li><bugzilla>50134</bugzilla> - TransactionController : Reports bad response time when it contains other TransactionControllers</li>
 </ul>
@@ -4967,7 +4967,7 @@ Fixed RMI startup to provide location of JMX file relative to user.dir.
 <li><bugzilla>30563</bugzilla> - Thread Group should have a start next loop option on Sample Error</li>
 <li><bugzilla>50347</bugzilla> - Eclipse setup instructions should remind user to download dependent jars</li>
 <li><bugzilla>50490</bugzilla> - Setup and Post Thread Group enhancements for better test flow.</li>
-<li>All BeansShell test elements now have the script variables "prev" and "Label" defined.</li>
+<li>All BeanShell test elements now have the script variables "prev" and "Label" defined.</li>
 <li><bugzilla>50708</bugzilla> - Classpath jar order in NewDriver not alphabetically</li>
 <li><bugzilla>50659</bugzilla> - JMeter server does not support concurrent tests - prevent client from starting another</li>
 <li>Added remote shutdown functionality</li>
@@ -5222,7 +5222,7 @@ In particular, Aggregate Report can now handle large numbers of samples.
 <h3>General</h3>
 <ul>
 <li><bugzilla>47223</bugzilla> - Slow Aggregate Report Performance (StatCalculator)</li>
-<li><bugzilla>47980</bugzilla> - hostname resolves to 127.0.0.1 - specifiying IP not possible</li>
+<li><bugzilla>47980</bugzilla> - hostname resolves to 127.0.0.1 - specifying IP not possible</li>
 <li><bugzilla>47943</bugzilla> - DisabledComponentRemover is not used in Start class</li>
 <li>HeapDumper class for runtime generation of dumps</li>
 <li>Basic read-only JavaMail provider implementation for reading raw mail files</li>
@@ -5376,7 +5376,7 @@ Client-server mode has been improved, and the server can optionally use a fixed 
 
 <p>
 Various I18N changes have been made; language change works better (though not perfect yet).
-There are improved French translations as well as new Polish and Brazilian Portugese translations.
+There are improved French translations as well as new Polish and Brazilian Portuguese translations.
 </p>
 
 <p>
@@ -5768,7 +5768,7 @@ A simple HTTP Cache Manager has been added. This needs further development.
 
 <p>
 View Results Tree Listener now uses Tidy to display XML.
-This should allow more content to be displayed succesfully.
+This should allow more content to be displayed successfully.
 It also avoids the need to download remote DTD files, which can slow the rendering considerably.
 </p>
 
@@ -6326,7 +6326,7 @@ the Clearable method is now clearData() and the JMeterGUIComponent method is now
 3<sup>rd</sup> party add-ons may need to be rebuilt.
 </p>
 <p>
-Calulator and SamplingStatCalculator classes no longer provide any formatting of their data.
+Calculator and SamplingStatCalculator classes no longer provide any formatting of their data.
 Formatting should now be done using the jorphan.gui Renderer classes.
 </p>
 <p>
@@ -6364,7 +6364,7 @@ It was unused so far, and used the only Sun-specific class in JMeter.
 
 <li>BeanShell Post-Processor no longer ignores samples with zero-length result data</li>
 <li>Added beanshell.init.file property to run a BeanShell script at startup</li>
-<li><bugzilla>39864</bugzilla> - BeanShell init files now found from currrent or bin directory</li>
+<li><bugzilla>39864</bugzilla> - BeanShell init files now found from current or bin directory</li>
 <li>BeanShell elements now support ThreadListener and TestListener interfaces</li>
 <li>BSF Sampler passes additional variables to the script</li>
 
@@ -6861,7 +6861,7 @@ More work is needed to be able to control this from the GUI </li>
 <li>Proxy restart works better (stop waits for daemon to finish) </li>
 <li>Scheduler ignores start if it has already passed </li>
 <li>Scheduler now has delay function </li>
-<li>added Summariser test element (mainly for non-GUI) testing. This prints summary statistics to System.out and/or the log file every so oftem (3 minutes by default). Multiple summarisers can be used; samples are accumulated by summariser name. </li>
+<li>added Summariser test element (mainly for non-GUI) testing. This prints summary statistics to System.out and/or the log file every so often (3 minutes by default). Multiple summarisers can be used; samples are accumulated by summariser name. </li>
 <li>Extra Proxy Server options: 
 Create all samplers with keep-alive disabled 
 Add Separator markers between sets of samples 
@@ -6875,7 +6875,7 @@ Add Response Assertion to first sampler in each set </li>
       <li>__property() and __P() functions</li>
       <li>__log() and __logn() - for writing to the log file</li>
       <li>_StringFromFile can now process a sequence of files, e.g. dir/file01.txt, dir/file02.txt etc </li>
-      <li>_StringFromFile() funtion can now use a variable or function for the file name </li>
+      <li>_StringFromFile() function can now use a variable or function for the file name </li>
     </ul>
     <li>New / amended Assertions</li>
     <ul>
@@ -6923,7 +6923,7 @@ with "\" if they are literal values</li>
 <li>New cut/copy/paste functionality</li>
 <li>SSL testing should work with less user-fudging, and in non-gui mode</li>
 <li>Mailer Model works in non-gui mode</li>
-<li>New Througput Controller</li>
+<li>New Throughput Controller</li>
 <li>New Module Controller</li>
 <li>Tests can now be scheduled to run from a certain time till a certain time</li>
 <li>Remote JMeter servers can be started from a non-gui client.  Also, in gui mode, all remote servers can be started with a single click</li>

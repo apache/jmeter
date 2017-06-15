@@ -62,6 +62,7 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
 
     private static final String TAG_TRANSACTION = ",transaction=";
 
+    // As influxdb can't rename tag for now, keep the old name for backward compatibility
     private static final String TAG_STATUS = ",statut=";
     private static final String TAG_APPLICATION = ",application=";
     private static final String TAG_RESPONSE_CODE = ",responseCode=";
@@ -172,12 +173,11 @@ public class InfluxdbBackendListenerClient extends AbstractBackendListenerClient
         addMetric(transaction, metric.getSuccesses(), false, TAG_OK, metric.getOkMean(), metric.getOkMinTime(),
                 metric.getOkMaxTime(), okPercentiles.values(), metric::getOkPercentile);
         // FOR KO STATUS
-        if (!summaryOnly) {
-            metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
-                    error.getResponseMessage(), count));
-        }
         addMetric(transaction, metric.getFailures(), true, TAG_KO, metric.getKoMean(), metric.getKoMinTime(),
                 metric.getKoMaxTime(), koPercentiles.values(), metric::getKoPercentile);
+
+        metric.getErrors().forEach((error, count) -> addErrorMetric(transaction, error.getResponseCode(),
+                    error.getResponseMessage(), count));
     }
 
     private void addErrorMetric(String transaction, String responseCode, String responseMessage, long count) {
