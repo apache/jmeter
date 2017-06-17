@@ -32,19 +32,19 @@ public final class JMeterContextService {
         }
     };
 
-    //@GuardedGy("this")
+    //@GuardedBy(JMeterContextService.class)
     private static long testStart = 0;
 
-    //@GuardedGy("this")
+    //@GuardedBy(JMeterContextService.class)
     private static int numberOfActiveThreads = 0;
 
-    //@GuardedGy("this")
+    //@GuardedBy(JMeterContextService.class)
     private static int numberOfThreadsStarted = 0;
 
-    //@GuardedGy("this")
+    //@GuardedBy(JMeterContextService.class)
     private static int numberOfThreadsFinished = 0;
 
-    //@GuardedGy("this")
+    //@GuardedBy(JMeterContextService.class)
     private static int totalThreads = 0;
     
     private static UnmodifiableJMeterVariables variables;
