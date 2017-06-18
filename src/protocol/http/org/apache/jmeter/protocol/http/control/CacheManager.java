@@ -181,64 +181,88 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String MAX_AGE = "max-age=";
-            
+
             if(cacheControl != null && cacheControl.contains("no-store")) {
                 // We must not store an CacheEntry, otherwise a 
                 // conditional request may be made
                 return;
             }
             if (expires != null) {
-                try {
-                    expiresDate = org.apache.http.client.utils.DateUtils.parseDate(expires);
-                } catch (IllegalArgumentException e) {
-                    if (log.isDebugEnabled()){
-                        log.debug("Unable to parse Expires: '"+expires+"' "+e);
-                    }
-                    expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be treated as expired
-                }
+                expiresDate = extractExpiresDateFromExpires(expires);
             }
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
             if(cacheControl != null && !cacheControl.contains("no-cache")) {
-                // the max-age directive overrides the Expires header,
-                if(cacheControl.contains(MAX_AGE)) {
-                    long maxAgeInSecs = Long.parseLong(
-                            cacheControl.substring(cacheControl.indexOf(MAX_AGE)+MAX_AGE.length())
-                                .split("[, ]")[0] // Bug 51932 - allow for optional trailing attributes
-                            );
-                    expiresDate=new Date(System.currentTimeMillis()+maxAgeInSecs*1000);
-
-                } else if(expires==null) { // No max-age && No expires
-                    if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
-                        try {
-                            Date responseDate = DateUtils.parseDate( date );
-                            Date lastModifiedAsDate = DateUtils.parseDate( lastModified );
-                            // see https://developer.mozilla.org/en/HTTP_Caching_FAQ
-                            // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
-                            expiresDate=new Date(System.currentTimeMillis()
-                                    +Math.round((responseDate.getTime()-lastModifiedAsDate.getTime())*0.1));
-                        } catch(IllegalArgumentException e) {
-                            // date or lastModified may be null or in bad format
-                            if(log.isWarnEnabled()) {
-                                log.warn("Failed computing expiration date with following info:"
-                                    +lastModified + "," 
-                                    + cacheControl + ","
-                                    + expires + "," 
-                                    + etag + ","
-                                    + url + ","
-                                    + date);
-                            }
-                            // TODO Can't see anything in SPEC
-                            expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);
-                        }
-                    } else {
-                        // TODO Can't see anything in SPEC
-                        expiresDate = new Date(System.currentTimeMillis()+ONE_YEAR_MS);
-                    }
-                }  
+                expiresDate = extractExpiresDateFromCacheControl(lastModified,
+                        cacheControl, expires, etag, url, date, MAX_AGE);
                 // else expiresDate computed in (expires!=null) condition is used
             }
         }
         getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
+    }
+
+    private Date extractExpiresDateFromExpires(String expires) {
+        Date expiresDate;
+        try {
+            expiresDate = org.apache.http.client.utils.DateUtils
+                    .parseDate(expires);
+        } catch (IllegalArgumentException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Unable to parse Expires: '" + expires + "' " + e);
+            }
+            expiresDate = CacheManager.EXPIRED_DATE; // invalid dates must be
+                                                     // treated as expired
+        }
+        return expiresDate;
+    }
+
+    private Date extractExpiresDateFromCacheControl(String lastModified,
+            String cacheControl, String expires, String etag, String url,
+            String date, final String maxAge) {
+        // the max-age directive overrides the Expires header,
+        if (cacheControl.contains(maxAge)) {
+            long maxAgeInSecs = Long.parseLong(cacheControl
+                    .substring(cacheControl.indexOf(maxAge) + maxAge.length())
+                    .split("[, ]")[0] // Bug 51932 - allow for optional trailing
+                                      // attributes
+            );
+            return new Date(System.currentTimeMillis() + maxAgeInSecs * 1000);
+
+        } else if (expires == null) { // No max-age && No expires
+            return calcExpiresDate(lastModified, cacheControl, expires, etag,
+                    url, date);
+        }
+        return null;
+    }
+
+    private Date calcExpiresDate(String lastModified, String cacheControl,
+            String expires, String etag, String url, String date) {
+        if(!StringUtils.isEmpty(lastModified) && !StringUtils.isEmpty(date)) {
+            try {
+                Date responseDate = DateUtils.parseDate(date);
+                Date lastModifiedAsDate = DateUtils.parseDate(lastModified);
+                // see https://developer.mozilla.org/en/HTTP_Caching_FAQ
+                // see http://www.ietf.org/rfc/rfc2616.txt#13.2.4 
+                return new Date(System.currentTimeMillis() + Math.round(
+                        (responseDate.getTime() - lastModifiedAsDate.getTime())
+                                * 0.1));
+            } catch(IllegalArgumentException e) {
+                // date or lastModified may be null or in bad format
+                if(log.isWarnEnabled()) {
+                    log.warn("Failed computing expiration date with following info:"
+                        +lastModified + "," 
+                        + cacheControl + ","
+                        + expires + "," 
+                        + etag + ","
+                        + url + ","
+                        + date);
+                }
+                // TODO Can't see anything in SPEC
+                return new Date(System.currentTimeMillis() + ONE_YEAR_MS);
+            }
+        } else {
+            // TODO Can't see anything in SPEC
+            return new Date(System.currentTimeMillis() + ONE_YEAR_MS);
+        }
     }
 
     // Apache HttpClient
