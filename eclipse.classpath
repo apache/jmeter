@@ -80,7 +80,7 @@
 	<classpathentry kind="lib" path="lib/jodd-props-3.8.6.jar"/>
 	<classpathentry kind="lib" path="lib/json-path-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/json-smart-2.3.jar"/>
-	<classpathentry kind="lib" path="lib/jsoup-1.10.2.jar"/>
+	<classpathentry kind="lib" path="lib/jsoup-1.10.3.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
