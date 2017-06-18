@@ -11,7 +11,7 @@ commons-dbcp2-2.1.1.jar
 commons-io-2.5.jar
 commons-jexl-2.1.1.jar
 commons-jexl3-3.1.jar
-commons-lang3-3.5.jar
+commons-lang3-3.6.jar
 commons-math3-3.5.jar
 commons-net-3.6.jar
 commons-pool2-2.4.2.jar
