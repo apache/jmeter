@@ -180,7 +180,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         }
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
-            final String MAX_AGE = "max-age=";
+            final String maxAge = "max-age=";
 
             if(cacheControl != null && cacheControl.contains("no-store")) {
                 // We must not store an CacheEntry, otherwise a 
@@ -193,7 +193,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
             if(cacheControl != null && !cacheControl.contains("no-cache")) {
                 expiresDate = extractExpiresDateFromCacheControl(lastModified,
-                        cacheControl, expires, etag, url, date, MAX_AGE);
+                        cacheControl, expires, etag, url, date, maxAge);
                 // else expiresDate computed in (expires!=null) condition is used
             }
         }
