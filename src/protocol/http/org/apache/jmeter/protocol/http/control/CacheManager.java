@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
@@ -141,7 +144,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
         @Override
         public String toString() {
-            return lastModified + " " + etag;
+            return lastModified + " " + etag + " " + varyHeader;
         }
 
         public Date getExpires() {
@@ -168,21 +171,26 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String url = conn.getURL().toString();
             String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
             String date = conn.getHeaderField(HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, res.getRequestHeaders()));
+            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders())));
         }
     }
 
-    private Pair<String, String> getVaryHeader(String headerName, String reqHeaders) {
+    private Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
         if (headerName == null) {
             return null;
         }
-        for (String headerLine: reqHeaders.split("\n")) {
-            if (headerLine.startsWith(headerName + ": ")) {
-                log.debug("Found vary value {} for {} in response", headerLine, headerName);
-                return new ImmutablePair<>(headerName, headerLine.split(": ", 2)[1]);
+        final Set<String> names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
+        final Map<String, List<String>> values = new HashMap<>();
+        for (final String name: names) {
+            values.put(name, new ArrayList<String>());
+        }
+        for (Header header: reqHeaders) {
+            if (names.contains(header.getName())) {
+                log.debug("Found vary value {} for {} in response", header, headerName);
+                values.get(header.getName()).add(header.getValue());
             }
         }
-        return null;
+        return new ImmutablePair<>(headerName, values.toString());
     }
 
     /**
@@ -202,7 +210,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, res.getRequestHeaders())); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
         }
     }
 
@@ -433,6 +441,17 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return result.toArray(new Header[result.size()]);
     }
 
+    private Header[] asHeaders(String allHeaders) {
+        List<Header> result = new ArrayList<>();
+        for (String line: allHeaders.split("\\n")) {
+            String[] splitted = line.split(": ", 2);
+            if (splitted.length == 2) {
+                result.add(new BasicHeader(splitted[0], splitted[1]));
+            }
+        }
+        return result.toArray(new Header[result.size()]);
+    }
+
     private Header[] asHeaders(Map<String, List<String>> headers) {
         List<Header> result = new ArrayList<>(headers.size());
         for (Map.Entry<String, List<String>> header: headers.entrySet()) {
@@ -467,6 +486,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     private boolean entryStillValid(CacheEntry entry) {
+        log.debug("Check if entry {} is still valid", entry);
         if (entry != null && entry.getVaryHeader() == null) {
             final Date expiresDate = entry.getExpires();
             if (expiresDate != null) {
@@ -490,18 +510,17 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return null;
         }
         if (entry.getVaryHeader() == null) {
-            log.debug("No vary for url {}, but entry found", url);
+            log.debug("Entry {} with no vary found for url {}", entry, url);
             return entry;
         }
         if (headers == null) {
-            log.debug("Entry found, but it should depend on vary {} for url {}", entry.getVaryHeader(), url);
+            log.debug("Entry {} found, but it should depend on vary {} for url {}", entry, entry.getVaryHeader(), url);
             return null;
         }
-        for (Header header: headers) {
-            if (entry.getVaryHeader().equalsIgnoreCase(header.getName())) {
-                log.debug("inCache {} {} with vary: {}", url, entry, entry.getVaryHeader());
-                return getEntry(varyUrl(url, entry.getVaryHeader(), header.getValue()), null);
-            }
+        Pair<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
+        if (varyPair != null) {
+            log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
+            return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getRight()), null);
         }
         return null;
     }
