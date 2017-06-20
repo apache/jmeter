@@ -160,14 +160,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param res result
      */
     public void saveDetails(URLConnection conn, HTTPSampleResult res){
-        if (isCacheable(res)){
+        final String varyHeader = conn.getHeaderField(HTTPConstants.VARY);
+        if (isCacheable(res, varyHeader)){
             String lastModified = conn.getHeaderField(HTTPConstants.LAST_MODIFIED);
             String expires = conn.getHeaderField(HTTPConstants.EXPIRES);
             String etag = conn.getHeaderField(HTTPConstants.ETAG);
             String url = conn.getURL().toString();
             String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
             String date = conn.getHeaderField(HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(conn.getHeaderField(HTTPConstants.VARY), res.getRequestHeaders()));
+            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, res.getRequestHeaders()));
         }
     }
 
@@ -194,13 +195,14 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      *            result to decide if result is cacheable
      */
     public void saveDetails(HttpResponse method, HTTPSampleResult res) {
-        if (isCacheable(res)){
+        final String varyHeader = getHeader(method, HTTPConstants.VARY);
+        if (isCacheable(res, varyHeader)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(getHeader(method, HTTPConstants.VARY), res.getRequestHeaders())); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, res.getRequestHeaders())); // TODO correct URL?
         }
     }
 
@@ -323,7 +325,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * Is the sample result OK to cache?
      * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
-    private boolean isCacheable(HTTPSampleResult res){
+    private boolean isCacheable(HTTPSampleResult res, String varyHeader){
+        if ("*".equals(varyHeader)) {
+            return false;
+        }
         final String responseCode = res.getResponseCode();
         return isCacheableMethod(res) 
                 && (("200".compareTo(responseCode) <= 0  // $NON-NLS-1$
