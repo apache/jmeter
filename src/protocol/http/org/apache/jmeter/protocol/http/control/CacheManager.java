@@ -241,7 +241,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             // if no-cache is present, ensure that expiresDate remains null, which forces revalidation
             if(cacheControl != null && !cacheControl.contains("no-cache")) {
                 expiresDate = extractExpiresDateFromCacheControl(lastModified,
-                        cacheControl, expires, etag, url, date, maxAge);
+                        cacheControl, expires, etag, url, date, maxAge, expiresDate);
                 // else expiresDate computed in (expires!=null) condition is used
             }
         }
@@ -275,7 +275,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private Date extractExpiresDateFromCacheControl(String lastModified,
             String cacheControl, String expires, String etag, String url,
-            String date, final String maxAge) {
+            String date, final String maxAge, Date defaultExpiresDate) {
         // the max-age directive overrides the Expires header,
         if (cacheControl.contains(maxAge)) {
             long maxAgeInSecs = Long.parseLong(cacheControl
@@ -289,7 +289,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return calcExpiresDate(lastModified, cacheControl, expires, etag,
                     url, date);
         }
-        return null;
+        return defaultExpiresDate;
     }
 
     private Date calcExpiresDate(String lastModified, String cacheControl,
