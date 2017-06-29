@@ -176,6 +176,16 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
     }
 
     @Test
+    public void testCacheMultiValueVaryHeaders() throws Exception {
+        String varyHeader = "Accept-Encoding";
+        testCacheVary(varyHeader,
+                new Header[] { new Header(varyHeader, "value"),
+                        new Header(varyHeader, "another value") },
+                new Header[] { new Header(varyHeader,
+                        "something completely different") });
+    }
+
+    @Test
     public void testCacheMultipleVaryHeaders() throws Exception {
         String varyHeader = "Accept-Encoding";
         testCacheVary(varyHeader,
@@ -185,6 +195,14 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
                         "something completely different") });
     }
 
+    private String asString(Header[] headers) {
+        StringBuilder result = new StringBuilder();
+        for (Header header: headers) {
+            result.append(header.getName()).append(": ").append(header.getValue()).append("\n");
+        }
+        return result.toString();
+    }
+
     private void testCacheVary(String vary, Header[] origHeaders, Header[] differentHeaders) throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
@@ -192,7 +210,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url, origHeaders));
         setExpires(makeDate(new Date(System.currentTimeMillis())));
         setCacheControl("public, max-age=5");
-        sampleResultOK.setRequestHeaders(vary + ": value");
+        sampleResultOK.setRequestHeaders(asString(origHeaders));
         this.vary = vary;
         cacheResult(sampleResultOK);
         assertNotNull("Should find entry with vary header", getThreadCacheEntry(LOCAL_HOST).getVaryHeader());
