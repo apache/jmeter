@@ -18,6 +18,12 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -32,8 +38,6 @@ import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public abstract class TestCacheManagerBase extends JMeterTestCase {
     protected static final String LOCAL_HOST = "http://localhost/";
@@ -157,25 +161,44 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
 
     @Test
     public void testCacheVarySomething() throws Exception {
-        testCacheVary("Something");
+        String varyHeader = "Something";
+        testCacheVary(varyHeader, new Header[] { new Header(varyHeader, "value") },
+                new Header[] {
+                        new Header(varyHeader, "something completely different") });
     }
 
     @Test
     public void testCacheVaryAcceptEncoding() throws Exception {
-        testCacheVary("Accept-Encoding");
+        String varyHeader = "Accept-Encoding";
+        testCacheVary(varyHeader,
+                new Header[] { new Header(varyHeader, "value") }, new Header[] {
+                        new Header(varyHeader, "something completely different") });
     }
 
-    private void testCacheVary(String vary) throws Exception {
+    @Test
+    public void testCacheMultipleVaryHeaders() throws Exception {
+        String varyHeader = "Accept-Encoding";
+        testCacheVary(varyHeader,
+                new Header[] { new Header(varyHeader, "value"),
+                        new Header(varyHeader, "another value") },
+                new Header[] { new Header(varyHeader,
+                        "something completely different") });
+    }
+
+    private void testCacheVary(String vary, Header[] origHeaders, Header[] differentHeaders) throws Exception {
         this.cacheManager.setUseExpires(true);
         this.cacheManager.testIterationStart(null);
         assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url, origHeaders));
         setExpires(makeDate(new Date(System.currentTimeMillis())));
         setCacheControl("public, max-age=5");
+        sampleResultOK.setRequestHeaders(vary + ": value");
         this.vary = vary;
         cacheResult(sampleResultOK);
-        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
-        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        assertNotNull("Should find entry with vary header", getThreadCacheEntry(LOCAL_HOST).getVaryHeader());
+        assertFalse("Should not find valid entry without headers", this.cacheManager.inCache(url));
+        assertTrue("Should find valid entry with headers", this.cacheManager.inCache(url, origHeaders));
+        assertFalse("Should not find valid entry with different header", this.cacheManager.inCache(url, differentHeaders));
         this.vary = null;
     }
 
