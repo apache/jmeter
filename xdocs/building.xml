@@ -34,7 +34,7 @@ Before you can compile JMeter, you will need a few things:
 </ul>
 
 <h3>Acquiring the source</h3>
-<p>The full source is distributed alongside the binary, and you can also find source repositories <a href="./svnindex.html">here</a> .</p>
+<p>The full source is distributed alongside the binary, and you can also find it <a href="./svnindex.html">in the source repositories.</a></p>
 <p>
 The source archive, SVN and GIT do not contain any of the required library files.
 
