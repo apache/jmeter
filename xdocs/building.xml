@@ -95,10 +95,10 @@ Ensure you read <code>eclipse.md</code> for project configuration.
 JMeter can be built entirely using Ant.
 The basic command is:</p>
 <source>
-ant [install]
+ant install
 </source>
 <p>
-See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used.
+See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used. Note that you can skip the word <code><em>install</em></code> after <code>ant</code> as it is the default target.
 </p>
 </section>
 
