@@ -25,6 +25,14 @@
   </properties>
 <body>
 <section name="Building JMeter" >
+
+Before you can compile JMeter, you will need a few things:
+<ul>
+<li>a Java 8 compatible JDK (Java Development Kit)</li>
+<li>a working installation of <a href="http://ant.apache.org">ant</a> (at least version 1.8.2)</li>
+<li>the JMeter sources as shown in the next section</li>
+</ul>
+
 <h3>Acquiring the source</h3>
 <p>The full source is distributed alongside the binary, and you can also find source repositories <a href="./svnindex.html">here</a> .</p>
 <p>
