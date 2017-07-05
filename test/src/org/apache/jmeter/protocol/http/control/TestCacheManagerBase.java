@@ -187,12 +187,25 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
 
     @Test
     public void testCacheMultipleVaryHeaders() throws Exception {
-        String varyHeader = "Accept-Encoding";
-        testCacheVary(varyHeader,
-                new Header[] { new Header(varyHeader, "value"),
-                        new Header(varyHeader, "another value") },
-                new Header[] { new Header(varyHeader,
-                        "something completely different") });
+        String varyHeaderOne = "Accept-Encoding";
+        String varyHeaderTwo = "Something";
+        testCacheVary(varyHeaderOne + "," + varyHeaderTwo,
+                new Header[] { new Header(varyHeaderOne, "first value"),
+                        new Header(varyHeaderTwo, "another value") },
+                new Header[] { new Header(varyHeaderOne,
+                        "first") });
+    }
+
+    @Test
+    public void testCacheMultipleMultiVaryHeaders() throws Exception {
+        String varyHeaderOne = "Accept-Encoding";
+        String varyHeaderTwo = "Something";
+        testCacheVary(varyHeaderOne + "," + varyHeaderTwo,
+                new Header[] { new Header(varyHeaderOne, "first value"),
+                        new Header(varyHeaderOne, "second value"),
+                        new Header(varyHeaderTwo, "another value") },
+                new Header[] { new Header(varyHeaderOne, "first value"),
+                        new Header(varyHeaderOne, "another value") });
     }
 
     private String asString(Header[] headers) {
