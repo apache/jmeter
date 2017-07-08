@@ -143,6 +143,7 @@ Summary
     <li>Updated to Apache Tika 1.15 (from 1.14)</li>
     <li>Updated to jsoup-1.10.3 (from 1.10.2)</li>
     <li>Updated to commons-lang3 3.6 (from 3.5)</li>
+    <li>Updated to json-path 2.4.0 (from 2.2.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
