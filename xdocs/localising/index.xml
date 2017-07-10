@@ -91,12 +91,12 @@ Of course you could also send the translator the whole jmeter directory, but thi
 <section name="Downloading and running i18nEdit" anchor="i18nEdit">
 
 <p>The runtime for i18nEdit can be obtained from
-<a href="http://www.cantamen.com/i18nedit.php">http://www.cantamen.com/i18nedit.php</a>.
-Download the binary distribution (i18nedit-1.0.0.jar) and save it locally.</p>
+<a href="https://sourceforge.net/projects/i18nedit/">https://sourceforge.net/projects/i18nedit/</a>.
+Download the binary distribution (i18nedit-1.2.2.jar) and save it locally.</p>
 <p>To run i18nEdit, just make sure to have a reasonably modern Java Runtime Environment in your PATH, change
-to the directory where you saved i18nedit-1.0.0.jar, then issue the following command:</p>
+to the directory where you saved i18nedit-1.2.2.jar, then issue the following command:</p>
 <source>
-java -jar i18nedit-1.0.0.jar
+java -jar i18nedit-1.2.2.jar
 </source>
 
 Then:
