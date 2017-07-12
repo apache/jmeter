@@ -250,7 +250,7 @@ The following software is provided under the Apache License V 2.0 (as above):
 * json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
-* ph-commons-8.6.5.jar
+* ph-commons-8.6.6.jar
 * ph-css-5.0.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
