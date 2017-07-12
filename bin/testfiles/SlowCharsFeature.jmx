@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170227">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170705">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -161,6 +161,12 @@ SampleResult.setBytes(0);</stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Assertion>
         <hashTree/>
+        <SizeAssertion guiclass="SizeAssertionGui" testclass="SizeAssertion" testname="RA_Size" enabled="true">
+          <stringProp name="Assertion.test_field">SizeAssertion.response_data</stringProp>
+          <stringProp name="SizeAssertion.size">7001</stringProp>
+          <intProp name="SizeAssertion.operator">1</intProp>
+        </SizeAssertion>
+        <hashTree/>
       </hashTree>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -219,7 +225,6 @@ SampleResult.setBytes(0);</stringProp>
             <responseDataOnError>false</responseDataOnError>
             <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
           </value>
         </objProp>
         <stringProp name="filename">SlowCharsFeature_${__property(jmeter.httpsampler,,HttpClient4)}.xml</stringProp>
