@@ -610,7 +610,9 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
             log.debug("End : sample");
             return res;
         } catch (IOException e) {
-            res.sampleEnd();
+            if (res.getEndTime() == 0) {
+                res.sampleEnd();
+            }
             savedConn = null; // we don't want interrupt to try disconnection again
             // We don't want to continue using this connection, even if KeepAlive is set
             if (conn != null) { // May not exist
