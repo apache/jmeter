@@ -96,25 +96,30 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * Perhaps add original response later?
      */
     // package-protected to allow access by unit-test cases
-    static class CacheEntry{
+    static class CacheEntry {
         private final String lastModified;
         private final String etag;
         private final Date expires;
-        public CacheEntry(String lastModified, Date expires, String etag){
-           this.lastModified = lastModified;
-           this.etag = etag;
-           this.expires = expires;
-       }
+
+        public CacheEntry(String lastModified, Date expires, String etag) {
+            this.lastModified = lastModified;
+            this.etag = etag;
+            this.expires = expires;
+        }
+
         public String getLastModified() {
             return lastModified;
         }
+
         public String getEtag() {
             return etag;
         }
+
         @Override
-        public String toString(){
-            return lastModified+" "+etag;
+        public String toString() {
+            return lastModified + " " + etag;
         }
+
         public Date getExpires() {
             return expires;
         }
