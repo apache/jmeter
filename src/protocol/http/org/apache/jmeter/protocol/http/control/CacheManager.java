@@ -329,21 +329,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      */
     public boolean inCache(URL url) {
         CacheEntry entry = getCache().get(url.toString());
-        if (log.isDebugEnabled()){
-            log.debug("inCache "+url.toString()+" "+entry);
-        }
+        log.debug("inCache {} {}", url, entry);
         if (entry != null){
             final Date expiresDate = entry.getExpires();
             if (expiresDate != null) {
                 if (expiresDate.after(new Date())) {
-                    if (log.isDebugEnabled()){
-                        log.debug("Expires= " + expiresDate + " (Valid)");
-                    }
+                    log.debug("Expires= {} (Valid)", expiresDate);
                     return true;
                 } else {
-                    if (log.isDebugEnabled()){
-                        log.debug("Expires= " + expiresDate + " (Expired)");
-                    }
+                    log.debug("Expires= {} (Expired)", expiresDate);
                 }
             }
         }
