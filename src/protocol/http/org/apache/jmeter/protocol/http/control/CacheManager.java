@@ -282,7 +282,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void setHeaders(URL url, HttpRequestBase request) {
         CacheEntry entry = getCache().get(url.toString());
         if (log.isDebugEnabled()){
-            log.debug(request.getMethod()+"(OAH) "+url.toString()+" "+entry);
+            log.debug("{}(OAH) {} {}", request.getMethod(), url.toString(), entry);
         }
         if (entry != null){
             final String lastModified = entry.getLastModified();
@@ -308,7 +308,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void setHeaders(HttpURLConnection conn, URL url) {
         CacheEntry entry = getCache().get(url.toString());
         if (log.isDebugEnabled()){
-            log.debug(conn.getRequestMethod()+"(Java) "+url.toString()+" "+entry);
+            log.debug("{}(Java) {} {}", conn.getRequestMethod(), url.toString(), entry);
         }
         if (entry != null){
             final String lastModified = entry.getLastModified();
