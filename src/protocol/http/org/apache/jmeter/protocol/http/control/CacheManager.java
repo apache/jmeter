@@ -22,16 +22,26 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.DateUtils;
+import org.apache.http.message.BasicHeader;
 import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
@@ -100,11 +110,28 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         private final String lastModified;
         private final String etag;
         private final Date expires;
+        private final String varyHeader;
 
+        /**
+         * 
+         * @param lastModified
+         * @param expires
+         * @param etag
+         * @deprecated use {@link CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
+         */
+        @Deprecated
         public CacheEntry(String lastModified, Date expires, String etag) {
             this.lastModified = lastModified;
             this.etag = etag;
             this.expires = expires;
+            this.varyHeader = null;
+        }
+
+        public CacheEntry(String lastModified, Date expires, String etag, String varyHeader) {
+            this.lastModified = lastModified;
+            this.etag = etag;
+            this.expires = expires;
+            this.varyHeader = varyHeader;
         }
 
         public String getLastModified() {
@@ -117,11 +144,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
         @Override
         public String toString() {
-            return lastModified + " " + etag;
+            return lastModified + " " + etag + " " + varyHeader;
         }
 
         public Date getExpires() {
             return expires;
+        }
+
+        public String getVaryHeader() {
+            return varyHeader;
         }
     }
 
@@ -132,19 +163,34 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param res result
      */
     public void saveDetails(URLConnection conn, HTTPSampleResult res){
-        if (isCacheable(res) && !hasVaryHeader(conn)){
+        final String varyHeader = conn.getHeaderField(HTTPConstants.VARY);
+        if (isCacheable(res, varyHeader)){
             String lastModified = conn.getHeaderField(HTTPConstants.LAST_MODIFIED);
             String expires = conn.getHeaderField(HTTPConstants.EXPIRES);
             String etag = conn.getHeaderField(HTTPConstants.ETAG);
             String url = conn.getURL().toString();
             String cacheControl = conn.getHeaderField(HTTPConstants.CACHE_CONTROL);
             String date = conn.getHeaderField(HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, url, date);
+            setCache(lastModified, cacheControl, expires, etag, url, date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders())));
         }
     }
 
-    private boolean hasVaryHeader(URLConnection conn) {
-        return conn.getHeaderField(HTTPConstants.VARY) != null;
+    private Pair<String, String> getVaryHeader(String headerName, Header[] reqHeaders) {
+        if (headerName == null) {
+            return null;
+        }
+        final Set<String> names = new HashSet<>(Arrays.asList(headerName.split(",\\s*")));
+        final Map<String, List<String>> values = new HashMap<>();
+        for (final String name: names) {
+            values.put(name, new ArrayList<String>());
+        }
+        for (Header header: reqHeaders) {
+            if (names.contains(header.getName())) {
+                log.debug("Found vary value {} for {} in response", header, headerName);
+                values.get(header.getName()).add(header.getValue());
+            }
+        }
+        return new ImmutablePair<>(headerName, values.toString());
     }
 
     /**
@@ -157,22 +203,19 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      *            result to decide if result is cacheable
      */
     public void saveDetails(HttpResponse method, HTTPSampleResult res) {
-        if (isCacheable(res) && !hasVaryHeader(method)){
+        final String varyHeader = getHeader(method, HTTPConstants.VARY);
+        if (isCacheable(res, varyHeader)){
             String lastModified = getHeader(method ,HTTPConstants.LAST_MODIFIED);
             String expires = getHeader(method ,HTTPConstants.EXPIRES);
             String etag = getHeader(method ,HTTPConstants.ETAG);
             String cacheControl = getHeader(method, HTTPConstants.CACHE_CONTROL);
             String date = getHeader(method, HTTPConstants.DATE);
-            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date); // TODO correct URL?
+            setCache(lastModified, cacheControl, expires, etag, res.getUrlAsString(), date, getVaryHeader(varyHeader, asHeaders(res.getRequestHeaders()))); // TODO correct URL?
         }
     }
 
-    private boolean hasVaryHeader(HttpResponse method) {
-        return getHeader(method, HTTPConstants.VARY) != null;
-    }
-
     // helper method to save the cache entry
-    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date) {
+    private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date, Pair<String, String> varyHeader) {
         if (log.isDebugEnabled()){
             log.debug("setCache("
                   + lastModified + "," 
@@ -202,7 +245,17 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 // else expiresDate computed in (expires!=null) condition is used
             }
         }
-        getCache().put(url, new CacheEntry(lastModified, expiresDate, etag));
+        if (varyHeader != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Set entry into cache for url {} and vary {} ({})", url,
+                        varyHeader,
+                        varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()));
+            }
+            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
+            getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
+        } else {
+            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, null));
+        }
     }
 
     private Date extractExpiresDateFromExpires(String expires) {
@@ -280,7 +333,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * Is the sample result OK to cache?
      * i.e is it in the 2xx range or equal to 304, and is it a cacheable method?
      */
-    private boolean isCacheable(HTTPSampleResult res){
+    private boolean isCacheable(HTTPSampleResult res, String varyHeader){
+        if ("*".equals(varyHeader)) {
+            return false;
+        }
         final String responseCode = res.getResponseCode();
         return isCacheableMethod(res) 
                 && (("200".compareTo(responseCode) <= 0  // $NON-NLS-1$
@@ -309,7 +365,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param request where to set the headers
      */
     public void setHeaders(URL url, HttpRequestBase request) {
-        CacheEntry entry = getCache().get(url.toString());
+        CacheEntry entry = getEntry(url.toString(), request.getAllHeaders());
         if (log.isDebugEnabled()){
             log.debug("{}(OAH) {} {}", request.getMethod(), url.toString(), entry);
         }
@@ -335,7 +391,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * @param conn where to set the headers
      */
     public void setHeaders(HttpURLConnection conn, URL url) {
-        CacheEntry entry = getCache().get(url.toString());
+        CacheEntry entry = getEntry(url.toString(), asHeaders(conn.getHeaderFields()));
         if (log.isDebugEnabled()){
             log.debug("{}(Java) {} {}", conn.getRequestMethod(), url.toString(), entry);
         }
@@ -352,14 +408,86 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     }
 
     /**
-     * Check the cache, if the entry has an expires header and the entry has not expired, return true<br>
-     * @param url {@link URL} to look up in cache
-     * @return <code>true</code> if entry has an expires header and the entry has not expired, else <code>false</code>
+     * Check the cache, if the entry has an expires header and the entry has not
+     * expired, return <code>true</code><br>
+     * 
+     * @param url
+     *            {@link URL} to look up in cache
+     * @return <code>true</code> if entry has an expires header and the entry
+     *         has not expired, else <code>false</code>
+     * @deprecated use a version of {@link CacheManager#inCache(URL, Header[])}
+     *             or
+     *             {@link CacheManager#inCache(URL, org.apache.jmeter.protocol.http.control.Header[])}
      */
+    @Deprecated
     public boolean inCache(URL url) {
-        CacheEntry entry = getCache().get(url.toString());
-        log.debug("inCache {} {}", url, entry);
-        if (entry != null){
+        return entryStillValid(getEntry(url.toString(), null));
+    }
+
+    public boolean inCache(URL url, Header[] allHeaders) {
+        return entryStillValid(getEntry(url.toString(), allHeaders));
+    }
+
+    public boolean inCache(URL url, org.apache.jmeter.protocol.http.control.Header[] allHeaders) {
+        return entryStillValid(getEntry(url.toString(), asHeaders(allHeaders)));
+    }
+
+    private Header[] asHeaders(
+            org.apache.jmeter.protocol.http.control.Header[] allHeaders) {
+        final List<Header> result = new ArrayList<>(allHeaders.length);
+        for (org.apache.jmeter.protocol.http.control.Header header: allHeaders) {
+            result.add(new HeaderAdapter(header));
+        }
+        return result.toArray(new Header[result.size()]);
+    }
+
+    private Header[] asHeaders(String allHeaders) {
+        List<Header> result = new ArrayList<>();
+        for (String line: allHeaders.split("\\n")) {
+            String[] splitted = line.split(": ", 2);
+            if (splitted.length == 2) {
+                result.add(new BasicHeader(splitted[0], splitted[1]));
+            }
+        }
+        return result.toArray(new Header[result.size()]);
+    }
+
+    private Header[] asHeaders(Map<String, List<String>> headers) {
+        List<Header> result = new ArrayList<>(headers.size());
+        for (Map.Entry<String, List<String>> header: headers.entrySet()) {
+            new BasicHeader(header.getKey(), String.join(", ", header.getValue()));
+        }
+        return result.toArray(new Header[result.size()]);
+    }
+
+    private static class HeaderAdapter implements Header {
+
+        private final org.apache.jmeter.protocol.http.control.Header delegate;
+
+        public HeaderAdapter(org.apache.jmeter.protocol.http.control.Header delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public HeaderElement[] getElements() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getName() {
+            return delegate.getName();
+        }
+
+        @Override
+        public String getValue() {
+            return delegate.getValue();
+        }
+
+    }
+
+    private boolean entryStillValid(CacheEntry entry) {
+        log.debug("Check if entry {} is still valid", entry);
+        if (entry != null && entry.getVaryHeader() == null) {
             final Date expiresDate = entry.getExpires();
             if (expiresDate != null) {
                 if (expiresDate.after(new Date())) {
@@ -373,8 +501,36 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         return false;
     }
 
+    private CacheEntry getEntry(String url, Header[] headers) {
+        CacheEntry entry = getCache().get(url);
+        log.debug("Cache: {}", getCache());
+        log.debug("inCache {} {} {}", url, entry, headers);
+        if (entry == null) {
+            log.debug("No entry found for url {}", url);
+            return null;
+        }
+        if (entry.getVaryHeader() == null) {
+            log.debug("Entry {} with no vary found for url {}", entry, url);
+            return entry;
+        }
+        if (headers == null) {
+            log.debug("Entry {} found, but it should depend on vary {} for url {}", entry, entry.getVaryHeader(), url);
+            return null;
+        }
+        Pair<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
+        if (varyPair != null) {
+            log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
+            return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getRight()), null);
+        }
+        return null;
+    }
+
+    private String varyUrl(String url, String headerName, String headerValue) {
+        return "vary-" + headerName + "-" + headerValue + "-" + url;
+    }
+
     private Map<String, CacheEntry> getCache() {
-        return localCache != null?localCache:threadCache.get();
+        return localCache != null ? localCache : threadCache.get();
     }
 
     public boolean getClearEachIteration() {
