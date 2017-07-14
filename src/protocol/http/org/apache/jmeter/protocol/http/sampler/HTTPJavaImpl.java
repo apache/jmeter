@@ -630,17 +630,17 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
     }
 
     private Header[] getHeaders(HeaderManager headerManager) {
-        if (headerManager == null) {
-            return new Header[0];
-        }
-        final List<Header> allHeaders = new ArrayList<>();
-        final CollectionProperty headers = headerManager.getHeaders();
-        if (headers != null) {
-            for (final JMeterProperty jMeterProperty : headers) {
-                allHeaders.add((Header) jMeterProperty.getObjectValue());
+        if (headerManager != null) {
+            final CollectionProperty headers = headerManager.getHeaders();
+            if (headers != null) {
+                final List<Header> allHeaders = new ArrayList<>(headers.size());
+                for (final JMeterProperty jMeterProperty : headers) {
+                    allHeaders.add((Header) jMeterProperty.getObjectValue());
+                }
+                return allHeaders.toArray(new Header[allHeaders.size()]);
             }
         }
-        return allHeaders.toArray(new Header[allHeaders.size()]);
+        return new Header[0];
     }
 
     protected void disconnect(HttpURLConnection conn) {
