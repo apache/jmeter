@@ -83,7 +83,7 @@ public class XPathFileContainer {
     }
 
     public String getXPathString(int num) {
-        return nodeList.item(num).getNodeValue();
+        return XPathUtil.getValueForNode(nodeList.item(num));
     }
 
     /**
