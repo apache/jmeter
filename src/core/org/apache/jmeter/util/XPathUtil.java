@@ -274,11 +274,11 @@ public class XPathUtil {
     }
     
     /**
-     * Return value for node
+     * Return value for node including node element
      * @param node Node
      * @return String
      */
-    private static String getValueForNode(Node node) {
+    private static String getNodeContent(Node node) {
         StringWriter sw = new StringWriter();
         try {
             Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -288,6 +288,20 @@ public class XPathUtil {
             sw.write(e.getMessageAndLocation());
         }
         return sw.toString();
+    }
+    
+    /**
+     * @param node {@link Node}
+     * @return String content of node
+     */
+    public static String getValueForNode(Node node) {
+        // elements have empty nodeValue, but we are usually interested in their content
+        final Node firstChild = node.getFirstChild();
+        if (firstChild != null) {
+            return firstChild.getNodeValue();
+        } else {
+            return node.getNodeValue();
+        }
     }
 
     /**
@@ -347,15 +361,9 @@ public class XPathUtil {
                 }
                 if ( match instanceof Element ){
                     if (fragment){
-                        val = getValueForNode(match);
+                        val = getNodeContent(match);
                     } else {
-                        // elements have empty nodeValue, but we are usually interested in their content
-                        final Node firstChild = match.getFirstChild();
-                        if (firstChild != null) {
-                            val = firstChild.getNodeValue();
-                        } else {
-                            val = match.getNodeValue(); // TODO is this correct?
-                        }
+                        val = getValueForNode(match);
                     }
                 } else {
                    val = match.getNodeValue();
