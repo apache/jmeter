@@ -182,6 +182,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
+    <li><bug>61260</bug><code>__XPath</code> function returns null despite xpath checker founds matches</li>
 </ul>
 
 <h3>I18N</h3>

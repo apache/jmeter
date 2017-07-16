@@ -97,6 +97,7 @@ public class PackageTest extends JMeterTestCaseJUnit {
         xpath.addTest(new PackageTest("XPathtestNull"));
         xpath.addTest(new PackageTest("XPathtestrowNum"));
         xpath.addTest(new PackageTest("XPathEmpty"));
+        xpath.addTest(new PackageTest("XPathFile"));
         xpath.addTest(new PackageTest("XPathFile1"));
         xpath.addTest(new PackageTest("XPathFile2"));
         xpath.addTest(new PackageTest("XPathNoFile"));
@@ -347,6 +348,17 @@ public class PackageTest extends JMeterTestCaseJUnit {
         XPath xp = setupXPath("no-such-file","");
         String val=xp.execute();
         assertEquals("",val); // TODO - should check that error has been logged...
+    }
+
+    public void XPathFile() throws Exception{
+        XPath xp = setupXPath("testfiles/XPathTest2.xml","note/body");
+        assertEquals("Don't forget me this weekend!",xp.execute());
+        
+        xp = setupXPath("testfiles/XPathTest2.xml","//note2");
+        assertEquals("", xp.execute());
+        
+        xp = setupXPath("testfiles/XPathTest2.xml","//note/to");
+        assertEquals("Tove", xp.execute());
     }
     
     public void XPathFile1() throws Exception{
