@@ -31,10 +31,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
@@ -53,10 +59,12 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.EnumerationUtils;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.commons.lang3.StringUtils;
@@ -169,17 +177,32 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
      * Update the visualizer with new data.
      */
     private void updateGui() {
+        TreePath selectedPath = null;
+        Object oldSelectedElement;
+        Set<Object> oldExpandedElements;
+        Set<TreePath> newExpandedPaths = new HashSet<>();
         synchronized (buffer) {
             if (!dataChanged) {
                 return;
             }
+            
+            final Enumeration<TreePath> expandedElements = jTree.getExpandedDescendants(new TreePath(root));
+            oldExpandedElements = extractExpandedObjects(expandedElements);
+            oldSelectedElement = getSelectedObject();
             root.removeAllChildren();
             for (Object sampler: buffer) {
                 SampleResult res = (SampleResult) sampler;
                 // Add sample
                 DefaultMutableTreeNode currNode = new SearchableTreeNode(res, treeModel);
                 treeModel.insertNodeInto(currNode, root, root.getChildCount());
-                addSubResults(currNode, res);
+                List<TreeNode> path = new ArrayList<>(Arrays.asList(root, currNode));
+                selectedPath = checkExpandedOrSelected(path,
+                        res, oldSelectedElement,
+                        oldExpandedElements, newExpandedPaths, selectedPath);
+                TreePath potentialSelection = addSubResults(currNode, res, path, oldSelectedElement, oldExpandedElements, newExpandedPaths);
+                if (potentialSelection != null) {
+                    selectedPath = potentialSelection;
+                }
                 // Add any assertion that failed as children of the sample node
                 AssertionResult[] assertionResults = res.getAssertionResults();
                 int assertionIndex = currNode.getChildCount();
@@ -187,6 +210,10 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     if (assertionResult.isFailure() || assertionResult.isError()) {
                         DefaultMutableTreeNode assertionNode = new SearchableTreeNode(assertionResult, treeModel);
                         treeModel.insertNodeInto(assertionNode, currNode, assertionIndex++);
+                        selectedPath = checkExpandedOrSelected(path,
+                                assertionResult, oldSelectedElement,
+                                oldExpandedElements, newExpandedPaths, selectedPath,
+                                assertionNode);
                     }
                 }
             }
@@ -197,23 +224,84 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
         if (root.getChildCount() == 1) {
             jTree.expandPath(new TreePath(root));
         }
+        newExpandedPaths.stream().forEach(jTree::expandPath);
+        if (selectedPath != null) {
+            jTree.setSelectionPath(selectedPath);
+        }
         if (autoScrollCB.isSelected() && root.getChildCount() > 1) {
             jTree.scrollPathToVisible(new TreePath(new Object[] { root,
                     treeModel.getChild(root, root.getChildCount() - 1) }));
         }
     }
 
-    private void addSubResults(DefaultMutableTreeNode currNode, SampleResult res) {
+    private Object getSelectedObject() {
+        Object oldSelectedElement;
+        DefaultMutableTreeNode oldSelectedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+        oldSelectedElement = oldSelectedNode == null ? null : oldSelectedNode.getUserObject();
+        return oldSelectedElement;
+    }
+
+    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+            Object item, Object oldSelectedObject,
+            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            TreePath defaultPath) {
+        TreePath result = defaultPath;
+        if (oldSelectedObject == item) {
+            result = toTreePath(path);
+        }
+        if (oldExpandedObjects.contains(item)) {
+            newExpandedPaths.add(toTreePath(path));
+        }
+        return result;
+    }
+
+    private TreePath checkExpandedOrSelected(List<TreeNode> path,
+            Object item, Object oldSelectedObject,
+            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths,
+            TreePath defaultPath, DefaultMutableTreeNode extensionNode) {
+        TreePath result = defaultPath;
+        if (oldSelectedObject == item) {
+            result = toTreePath(path, extensionNode); 
+        }
+        if (oldExpandedObjects.contains(item)) {
+            newExpandedPaths.add(toTreePath(path, extensionNode));
+        }
+        return result;
+    }
+
+    private Set<Object> extractExpandedObjects(final Enumeration<TreePath> expandedElements) {
+        if (expandedElements != null) {
+            @SuppressWarnings("unchecked")
+            final List<TreePath> list = EnumerationUtils.toList(expandedElements);
+            log.debug("Expanded: {}", list);
+            Set<Object> result = list.stream()
+                    .map(TreePath::getLastPathComponent)
+                    .map(c -> (DefaultMutableTreeNode) c)
+                    .map(DefaultMutableTreeNode::getUserObject)
+                    .collect(Collectors.toSet());
+            log.debug("Elements: {}", result);
+            return result;
+        }
+        return Collections.emptySet();
+    }
+
+    private TreePath addSubResults(DefaultMutableTreeNode currNode,
+            SampleResult res, List<TreeNode> path, Object selectedObject,
+            Set<Object> oldExpandedObjects, Set<TreePath> newExpandedPaths) {
         SampleResult[] subResults = res.getSubResults();
 
         int leafIndex = 0;
+        TreePath result = null;
 
         for (SampleResult child : subResults) {
             log.debug("updateGui1 : child sample result - {}", child);
             DefaultMutableTreeNode leafNode = new SearchableTreeNode(child, treeModel);
 
             treeModel.insertNodeInto(leafNode, currNode, leafIndex++);
-            addSubResults(leafNode, child);
+            List<TreeNode> newPath = new ArrayList<>(path);
+            newPath.add(leafNode);
+            result = checkExpandedOrSelected(newPath, child, selectedObject, oldExpandedObjects, newExpandedPaths, result);
+            addSubResults(leafNode, child, newPath, selectedObject, oldExpandedObjects, newExpandedPaths);
             // Add any assertion that failed as children of the sample node
             AssertionResult[] assertionResults = child.getAssertionResults();
             int assertionIndex = leafNode.getChildCount();
@@ -221,9 +309,24 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                 if (item.isFailure() || item.isError()) {
                     DefaultMutableTreeNode assertionNode = new SearchableTreeNode(item, treeModel);
                     treeModel.insertNodeInto(assertionNode, leafNode, assertionIndex++);
+                    result = checkExpandedOrSelected(path, item,
+                            selectedObject, oldExpandedObjects, newExpandedPaths, result,
+                            assertionNode);
                 }
             }
         }
+        return result;
+    }
+
+    private TreePath toTreePath(List<TreeNode> newPath) {
+        return new TreePath(newPath.toArray(new TreeNode[newPath.size()]));
+    }
+
+    private TreePath toTreePath(List<TreeNode> path,
+            DefaultMutableTreeNode extensionNode) {
+        TreeNode[] result = path.toArray(new TreeNode[path.size() + 1]);
+        result[result.length - 1] = extensionNode;
+        return new TreePath(result);
     }
 
     /** {@inheritDoc} */
