@@ -204,6 +204,7 @@ Summary
     <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
     <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
     <li><bug>61270</bug>Fixed width fonts too small in text areas to read under hidpi (user manual bug)</li>
+    <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
