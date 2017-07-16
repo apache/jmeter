@@ -320,7 +320,7 @@ public final class ActionRouter implements ActionListener {
                     return Optional.of(new String[] { ownPath.getAbsolutePath() });
                 }
             } catch (URISyntaxException ex) {
-                //ignore
+                log.debug("Can't get location for class sources", ex);
             }
         }
         return Optional.empty();
