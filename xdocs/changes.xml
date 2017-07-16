@@ -80,7 +80,7 @@ Summary
 <li>In CookieManager, DEFAULT_IMPLEMENTATION and DEFAULT_IMPLEMENTATION constants are now private.
 <note>If you're using ignorecookies with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back </note></li>
 <h3>Removed elements or functions</h3>
-
+    <li><code>_StringFromFile</code> function has been dropped, use <code>__StringFromFile</code> instead</li>
 <h3>Logging changes</h3>
 
 <!-- =================== Improvements =================== -->
@@ -179,6 +179,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
 </ul>
 
 <h3>I18N</h3>

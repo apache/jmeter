@@ -432,8 +432,6 @@ be in the interval -2147483648 to 2147483647.
 </p>
 </component>
 
-<!-- Alternate spelling -->
-<a name="_StringFromFile"/>
 <component index="&sect-num;.5.5" name="__StringFromFile">
 
 <description>
@@ -520,8 +518,8 @@ Here are a few format strings and the corresponding sequences they will generate
     the sequence number is interpreted as a loop count, and the file will be used at most "<code>end</code>" times.
     In this case the filename is not formatted.
     <br></br>
-    <code>${_StringFromFile(PIN#'.'DAT,,1,2)}</code> - reads <code>PIN1.DAT</code>, <code>PIN2.DAT</code><br></br>
-    <code>${_StringFromFile(PIN.DAT,,,2)}</code> - reads <code>PIN.DAT</code> twice<br></br>
+    <code>${__StringFromFile(PIN#'.'DAT,,1,2)}</code> - reads <code>PIN1.DAT</code>, <code>PIN2.DAT</code><br></br>
+    <code>${__StringFromFile(PIN.DAT,,,2)}</code> - reads <code>PIN.DAT</code> twice<br></br>
     Note that the "<code>.</code>" in <code>PIN.DAT</code> above should <u>not</u> be quoted.
     In this case the start number is omitted, so the file name is used exactly as is.
     </p>
@@ -697,7 +695,7 @@ This leads to creation of match number variable called <code>varName_matchNr</co
 </component>
 
 <component index="&sect-num;.5.8" name="__CSVRead">
-<description><p>The CSVRead function returns a string from a CSV file (c.f. <a href="#_StringFromFile">StringFromFile</a>)</p>
+<description><p>The CSVRead function returns a string from a CSV file (c.f. <a href="#__StringFromFile">StringFromFile</a>)</p>
     <p>NOTE: JMeter supports multiple file names.
     </p>
     <p><b>In most cases, the newer 
