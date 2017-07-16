@@ -444,7 +444,7 @@ public class ReportGenerator {
                 for (Map.Entry<String, Long[]> entry : configuration.getApdexPerTransaction().entrySet()) {
                     org.apache.oro.text.regex.Pattern regex = JMeterUtils.getPatternCache().getPattern(entry.getKey());
                     PatternMatcher matcher = JMeterUtils.getMatcher();
-                    if (matcher.matches(sampleName, regex)) {
+                    if (sampleName != null && matcher.matches(sampleName, regex)) {
                         Long satisfied = entry.getValue()[0];
                         Long tolerated = entry.getValue()[1];
                         if(log.isDebugEnabled()) {
