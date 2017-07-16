@@ -3507,7 +3507,7 @@ By default, a Graphite implementation is provided.
 <description>
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
-    It is easier to use than the <code>__CSVRead()</code> and <code>_StringFromFile()</code> functions.
+    It is easier to use than the <code>__CSVRead()</code> and <code>__StringFromFile()</code> functions.
     It is well suited to handling large numbers of variables, and is also useful for testing with
     "random" and unique values.</p>
     <p>Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
