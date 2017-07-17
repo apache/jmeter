@@ -25,8 +25,8 @@ jorphan.jar (part of JMeter)
 logkit-2.0.jar
 oro-2.0.8.jar
 serializer-2.7.2.jar
-tika-core-1.15.jar
-tika-parsers-1.15.jar
+tika-core-1.16.jar
+tika-parsers-1.16.jar
 xalan-2.7.2.jar
 xercesImpl-2.11.0.jar
 xml-apis-1.4.01.jar
