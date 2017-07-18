@@ -395,7 +395,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
 
         JPanel pathPanel =  new HorizontalPanel();
-        pathPanel.setPreferredSize(new Dimension(80,30));
         if (notConfigOnly){
             pathPanel.add(method);
         }
