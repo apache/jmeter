@@ -142,11 +142,11 @@ SampleResult.setBytes(0);</stringProp>
         <hashTree/>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="RA_PartialContent" enabled="true">
           <collectionProp name="Asserion.test_strings">
-            <stringProp name="-724192961">HTTP/1.1 206 Partial Content</stringProp>
+            <stringProp name="343054290">HTTP/1.1 206 Partial [Cc]ontent</stringProp>
           </collectionProp>
           <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
           <boolProp name="Assertion.assume_success">false</boolProp>
-          <intProp name="Assertion.test_type">16</intProp>
+          <intProp name="Assertion.test_type">2</intProp>
         </ResponseAssertion>
         <hashTree/>
         <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSA-CheckResponseTimeHigherThan5s" enabled="true">
