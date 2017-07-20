@@ -148,6 +148,8 @@ The <code>system.properties</code> file gives more flexibility.</note>
         This is because the <code>CrossPlatform</code> LAF generally looks better than the <code>System</code> LAF.
         See <bugzilla>52026</bugzilla> for details.
     </note>
+    <note>When you change Look and Feel (LAF) from JMeter GUI through menu Options &gt; Look and Feel, 
+    you should restart JMeter to ensure change is fully effective.</note>
  </property>
 <property name="jmeter.loggerpanel.display">
     Display LoggerPanel.<br/>
