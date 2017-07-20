@@ -35,19 +35,20 @@ import org.slf4j.LoggerFactory;
  * line-thru the data in the CSV file - one line per each test. E.g. inserting
  * the following in the test scripts :
  *
- * ${_CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 1st column ( represented by the '0'),
- * ${_CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
- * return the 2nd column ( represented by the '1'),
- * ${_CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
- *
+ * <pre>{@code
+ * ${__CSVRead(c:/BOF/abcd.csv,0)} // read (first) line of 'c:/BOF/abcd.csv' ,
+ * return the 1<sup>st</sup> column ( represented by the '0'),
+ * ${__CSVRead(c:/BOF/abcd.csv,1)} // read (first) line of 'c:/BOF/abcd.csv' ,
+ * return the 2<sup>nd</sup> column ( represented by the '1'),
+ * ${__CSVRead(c:/BOF/abcd.csv,next())} // Go to next line of 'c:/BOF/abcd.csv'
+ * }</pre>
  * NOTE: A single instance of each different file is opened and used for all
- * threads.
+ * threads.<br><br>
  *
- * To open the same file twice, use the alias function: __CSVRead(abc.csv,*ONE);
- * __CSVRead(abc.csv,*TWO);
- *
- * __CSVRead(*ONE,1); etc
+ * To open the same file twice, use the alias function: {@code __CSVRead(abc.csv,*ONE);
+ * __CSVRead(abc.csv,*TWO);}
+ *<br>
+ * {@code __CSVRead(*ONE,1);} etc
  * @since 1.9
  */
 public class CSVRead extends AbstractFunction {
@@ -94,7 +95,7 @@ public class CSVRead extends AbstractFunction {
             FileWrapper.endRow(fileName);
 
             /*
-             * All done now ,so return the empty string - this allows the caller
+             * All done now, so return the empty string - this allows the caller
              * to append __CSVRead(file,next) to the last instance of
              * __CSVRead(file,col)
              *
