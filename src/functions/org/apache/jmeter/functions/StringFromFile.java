@@ -38,18 +38,24 @@ import org.apache.jorphan.util.JMeterStopThreadException;
 import org.slf4j.Logger;
 
 /**
- * StringFromFile Function to read a String from a text file.
- *
+ * <p>StringFromFile Function to read a String from a text file.</p>
+ * 
  * Parameters:
- * - file name
- * - variable name (optional - defaults to StringFromFile_)
+ * <ul>
+ *   <li>file name</li>
+ *   <li>variable name (optional - defaults to {@code StringFromFile_})</li>
+ *   <li>sequence start</li>
+ *   <li>sequence end</li>
+ * </ul>
  *
  * Returns:
- * - the next line from the file
- * - or **ERR** if an error occurs
- * - value is also saved in the variable for later re-use.
+ * <ul>
+ *   <li>the next line from the file</li>
+ *   <li>or {@code **ERR**} if an error occurs</li>
+ *   <li>value is also saved in the variable for later re-use.</li>
+ * </ul>
  *
- * Ensure that different variable names are used for each call to the function
+ * <p>Ensure that different variable names are used for each call to the function</p>
  *
  *
  * Notes:
