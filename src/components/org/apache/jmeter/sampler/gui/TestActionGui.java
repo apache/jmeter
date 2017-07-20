@@ -142,7 +142,7 @@ public class TestActionGui extends AbstractSamplerGui {
         super.clearGui();
 
         targetBox.setSelectedIndex(0);
-        durationField.setText(""); //$NON-NLS-1$
+        durationField.setText("0"); //$NON-NLS-1$
         pauseButton.setSelected(true);
         action = TestAction.PAUSE;
         target = TestAction.THREAD;
