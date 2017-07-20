@@ -95,6 +95,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>61320</bug>Test Action : Set duration to 0 by default</li>
 </ul>
 
 <h3>Controllers</h3>
