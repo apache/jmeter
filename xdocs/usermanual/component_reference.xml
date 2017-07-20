@@ -4256,6 +4256,8 @@ The number is calculated using the formula <code>minimum+Random.nextInt(maximum-
 This means that <code>maximum-minimum</code> - i.e. the range - must be less than <code>2147483647</code>,
 however the <code>minimum</code> and <code>maximum</code> values can be any <code>long</code> values so long as the range is OK.
 </p>
+<note>As the random value is evaluated at the start of each iteration, it is probably not a good idea
+to use a variable other than a property as a value for the minimum or maximum. It would be zero on the first iteration.</note>
 </description>
 
 <properties>
