@@ -18,6 +18,10 @@
  * 
  * @version $Id$
 -->
+<!DOCTYPE document [
+  <!ENTITY ndash  "&#x02013;">
+  <!ENTITY hellip "&#x02026;">
+]>
 <document>
 
   <properties>
@@ -33,8 +37,8 @@
 <section name="Introduction" anchor="intro">
 
 <p>This document describes the process of creating and maintaining translated texts for JMeter in languages
-other than English. English has been tacitly chosen as the project's primary (or "default") language -- despite its
-obvious inadequacy for reasonably unambiguous communication -- as a tribute to the Power of the Empire :-)<br/>
+other than English. English has been tacitly chosen as the project's primary (or "default") language &ndash; despite its
+obvious inadequacy for reasonably unambiguous communication &ndash; as a tribute to the Power of the Empire :-)<br/>
 The metropolitan language texts are thus maintained by the software developers, while other project contributors 
 (called "translators" in this document) take care of maintaining the texts in the languages of the
 provinces. The process of producing and maintaining the later is called "translation" in this document.</p>
@@ -67,9 +71,9 @@ local disk.</p>
 <p>If you are familiar with SVN or you're brave, feel free to anonymously connect to the Apache SVN server
 and obtain the JMeter source yourself, as described in
 <a href="http://jmeter.apache.org/svnindex.html">http://jmeter.apache.org/svnindex.html</a>
--- the files necessary to the translation process are all under the jmeter/src directory.
+&ndash; the files necessary to the translation process are all under the <code>jmeter/src</code> directory.
 </p>
-<p>Once you've unpacked or checked out the files, make sure to find file src/i18nedit.properties in there:
+<p>Once you've unpacked or checked out the files, make sure to find file <code>src/i18nedit.properties</code> in there:
 you'll need to know where it is to start working with i18nEdit.</p>
 
 </section>
@@ -91,21 +95,21 @@ Of course you could also send the translator the whole jmeter directory, but thi
 <section name="Downloading and running i18nEdit" anchor="i18nEdit">
 
 <p>The runtime for i18nEdit can be obtained from
-<a href="http://www.cantamen.com/i18nedit.php">http://www.cantamen.com/i18nedit.php</a>.
-Download the binary distribution (i18nedit-1.0.0.jar) and save it locally.</p>
+<a href="https://sourceforge.net/projects/i18nedit/">https://sourceforge.net/projects/i18nedit/</a>.
+Download the binary distribution (i18nedit-1.2.2.jar) and save it locally.</p>
 <p>To run i18nEdit, just make sure to have a reasonably modern Java Runtime Environment in your PATH, change
-to the directory where you saved i18nedit-1.0.0.jar, then issue the following command:</p>
+to the directory where you saved i18nedit-1.2.2.jar, then issue the following command:</p>
 <source>
-java -jar i18nedit-1.0.0.jar
+java -jar i18nedit-1.2.2.jar
 </source>
 
 Then:
 <ol>
 <li>If you've never run i18nEdit before, choose a language. The rest of this document assumes you chose UK English.</li>
-<li>Select the "Projects" menu, then "Open project...".</li>
-<li>Navigate to jmeter/src/, select i18nedit.properties, and press the "Open" button.</li>
-<li>In the window that opens, select the "Project" menu, then "Project settings". Check that your target language
-appears in the list in field "Additional locales (ISO codes)". Otherwise, add it now. Press "Save".</li>
+<li>Select the "<code>Projects</code>" menu, then "<code>Open project&hellip;</code>".</li>
+<li>Navigate to <code>jmeter/src/</code>, select <code>i18nedit.properties</code>, and press the "<code>Open</code>" button.</li>
+<li>In the window that opens, select the "<code>Project</code>" menu, then "<code>Project settings</code>". Check that your target language
+appears in the list in field "<code>Additional locales (ISO codes)</code>". Otherwise, add it now. Press "<code>Save</code>".</li>
 </ol>
 You're now ready to start translating.
 
@@ -113,14 +117,14 @@ You're now ready to start translating.
 
 <section name="Translating" anchor="translating">
 
-<p>Before you start translating, select the "Project" menu, then "Translation settings". Choose work mode
-"Directed translation (source to target)". Enter "en" (without the quotes) in the "Source localization" field. Enter
-the ISO code of your target language in the "Target localization field".</p>
+<p>Before you start translating, select the "<code>Project</code>" menu, then "<code>Translation settings</code>". Choose work mode
+"<code>Directed translation (source to target)</code>". Enter "<code>en</code>" (without the quotes) in the "<code>Source localization</code>" field. Enter
+the ISO code of your target language in the "<code>Target localization field</code>".</p>
 
-<p>Click on one of the editable fields in the right panel ("Comment" or "Content" for your language). Press F2.
+<p>Click on one of the editable fields in the right panel ("<code>Comment</code>" or "<code>Content</code>" for your language). Press <keycombo><keysym>F2</keysym></keycombo>.
 i18nEdit will bring you to the first property that requires your attention, either because a translation does not yet
 exist for it or because the English text has changed since the translation was provided. Enter or fix the text if
-necessary, then press F2 again to repeat the process.</p>
+necessary, then press <keycombo><keysym>F2</keysym></keycombo> again to repeat the process.</p>
 
 <p>i18nEdit's on-line help is excellent: read through it for more information and tips.</p>
 
@@ -128,7 +132,7 @@ necessary, then press F2 again to repeat the process.</p>
 
 <section name="Submitting your translations to the project" anchor="submitting">
 
-<p>Once you're done translating, just pack up the whole set of files in jmeter/src in a jar, zip, tar,
+<p>Once you're done translating, just pack up the whole set of files in <code>jmeter/src</code> in a jar, zip, tar,
 tgz, or alike and attach them to a JMeter bug report
 (follow link to "Known bugs" in <a href="http://jmeter.apache.org/">JMeter's home page</a> for that).</p>
 
@@ -142,10 +146,10 @@ the project:
 <li>Unpack the files submitted by the translator in a separate directory.</li>
 <li>Start i18nEdit as described in <a href="#i18nEdit">Downloading and running i18nEdit</a> above.</li>
 <li>If the translator worked in a new language, make sure it is listed in the Additional locales field in the Project Settings.</li>
-<li>Open the "Team" menu and select "Merge changes as integrator".</li>
-<li>Enter the path to the src directory in the files submitted by the translator.</li>
+<li>Open the "<code>Team</code>" menu and select "<code>Merge changes as integrator</code>".</li>
+<li>Enter the path to the <code>src</code> directory in the files submitted by the translator.</li>
 <li>Select the translator's target language.</li>
-<li>Press "Perform merge".</li>
+<li>Press "<code>Perform merge</code>".</li>
 <li>Close i18nEdit and commit to SVN as usual (remember to Refresh your project if you're using Eclipse).</li>
 </ol>
 

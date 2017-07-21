@@ -76,10 +76,6 @@ public class CompoundVariable implements Function {
                 String referenceKey = tempFunc.getReferenceKey();
                 if (referenceKey.length() > 0) { // ignore self
                     functions.put(referenceKey, tempFunc.getClass());
-                    // Add alias for original StringFromFile name (had only one underscore)
-                    if (referenceKey.equals("__StringFromFile")){//$NON-NLS-1$
-                        functions.put("_StringFromFile", tempFunc.getClass());//$NON-NLS-1$
-                    }
                 }
             }
             

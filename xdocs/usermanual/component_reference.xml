@@ -3507,7 +3507,7 @@ By default, a Graphite implementation is provided.
 <description>
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
-    It is easier to use than the <code>__CSVRead()</code> and <code>_StringFromFile()</code> functions.
+    It is easier to use than the <code>__CSVRead()</code> and <code>__StringFromFile()</code> functions.
     It is well suited to handling large numbers of variables, and is also useful for testing with
     "random" and unique values.</p>
     <p>Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
@@ -3805,7 +3805,6 @@ If the requested document has not changed since it was cached, then the response
 Likewise if the <code>Expires</code> date is in the future.
 This may cause problems for Assertions.
 </note>
-<note>Responses with a <code>Vary</code> header will not be cached.</note>
 </description>
 <properties>
   <property name="Name" required="No">Descriptive name for this element that is shown in the tree. </property>
@@ -4257,6 +4256,8 @@ The number is calculated using the formula <code>minimum+Random.nextInt(maximum-
 This means that <code>maximum-minimum</code> - i.e. the range - must be less than <code>2147483647</code>,
 however the <code>minimum</code> and <code>maximum</code> values can be any <code>long</code> values so long as the range is OK.
 </p>
+<note>As the random value is evaluated at the start of each iteration, it is probably not a good idea
+to use a variable other than a property as a value for the minimum or maximum. It would be zero on the first iteration.</note>
 </description>
 
 <properties>

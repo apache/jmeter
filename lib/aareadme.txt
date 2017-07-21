@@ -35,7 +35,7 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.5.2
+caffeine 2.5.3
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
@@ -67,7 +67,7 @@ commons-lang-2.6
 http://commons.apache.org/downloads/download_lang.cgi
 - velocity (Anakia)
 
-commons-lang3-3.5
+commons-lang3-3.6
 ----------------
 http://commons.apache.org/downloads/download_lang.cgi
 - URLCollection (unescapeXml)
@@ -92,7 +92,7 @@ dnsjava-2.1.8
 http://www.dnsjava.org/download/
 - DNSCacheManager
 
-groovy-all-2.4.10
+groovy-all-2.4.12
 ----------------------
 Advised scripting language for JSR223 Test Elements
 
@@ -135,7 +135,7 @@ jodd-props-3.8.6
 http://www.jodd.org/
 - used by Report/Dashboard feature properties management
 
-json-path-2.2.0
+json-path-2.4.0
 --------
 https://github.com/jayway/JsonPath
 - JSON Path Extractor
@@ -147,7 +147,7 @@ https://github.com/netplex/json-smart-v2
 - JSON Path Extractor
 - JSON Path Renderer
 
-jsoup-1.10.2
+jsoup-1.10.3
 --------
 http://www.jsoup.org/
 - CSS/JQuery like extractor
@@ -162,7 +162,7 @@ ph-css-5.0.4
 https://github.com/phax/ph-css
 - CssParser
 
-ph-commons-8.6.5
+ph-commons-8.6.6
 --------
 https://github.com/phax/ph-commons
 - CssParser
@@ -221,7 +221,7 @@ http://www.slf4j.org/
 - jodd-core
 - json-path
 
-tika-1.15
+tika-1.16
 --------------
 http://tika.apache.org/
 - Regular Expression Extractor

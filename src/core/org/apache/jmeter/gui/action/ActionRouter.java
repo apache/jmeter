@@ -21,10 +21,16 @@ package org.apache.jmeter.gui.action;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.CodeSource;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
@@ -291,6 +297,35 @@ public final class ActionRouter implements ActionListener {
         }
     }
 
+    private static List<String> findClassesThatExtend(String className, String excluding, String[] searchPath) throws IOException, ClassNotFoundException {
+            List<String> listClasses = ClassFinder.findClassesThatExtend(
+                    searchPath, // strPathsOrJars - pathNames or jarfiles to search for classes
+                    new Class[] { Class.forName(className) },
+                    false, // innerClasses - should we include inner classes?
+                    null, // contains - className should contain this string
+                    // Ignore the classes which are specific to the reporting tool
+                    excluding, // notContains - className should not contain this string
+                    false); // annotations - true if classNames are annotations
+
+            return listClasses;
+    }
+
+    private static Optional<String[]> getCodeSourceSearchPath() {
+        CodeSource codeSource = ActionRouter.class.getProtectionDomain().getCodeSource();
+        if (codeSource != null) {
+            try {
+                URL ownLocation = codeSource.getLocation();
+                File ownPath = new File(ownLocation.toURI());
+                if (ownPath.exists()) {
+                    return Optional.of(new String[] { ownPath.getAbsolutePath() });
+                }
+            } catch (URISyntaxException ex) {
+                log.debug("Can't get location for class sources", ex);
+            }
+        }
+        return Optional.empty();
+    }
+
     /**
      * Only for use by the JMeter.startGui.
      * This method must not be called by getInstance() as was done previously.
@@ -301,15 +336,21 @@ public final class ActionRouter implements ActionListener {
             return; // already done
         }
         try {
-            List<String> listClasses = ClassFinder.findClassesThatExtend(
-                    JMeterUtils.getSearchPaths(), // strPathsOrJars - pathNames or jarfiles to search for classes
-                    // classNames - required parent class(es) or annotations
-                    new Class[] {Class.forName("org.apache.jmeter.gui.action.Command") }, // $NON-NLS-1$
-                    false, // innerClasses - should we include inner classes?
-                    null, // contains - className should contain this string
-                    // Ignore the classes which are specific to the reporting tool
-                    "org.apache.jmeter.report.gui", // $NON-NLS-1$ // notContains - className should not contain this string
-                    false); // annotations - true if classNames are annotations
+            List<String> listClasses = findClassesThatExtend("org.apache.jmeter.gui.action.Command", // $NON-NLS-1$
+                    "org.apache.jmeter.report.gui", // $NON-NLS-1$
+                    JMeterUtils.getSearchPaths());
+
+            if (listClasses.isEmpty()) {
+                //fallback
+                Optional<String[]> codeSourceSearchPath = getCodeSourceSearchPath();
+                if (codeSourceSearchPath.isPresent()) {
+                    log.info("Using fallback search path");
+                    listClasses = findClassesThatExtend("org.apache.jmeter.gui.action.Command", // $NON-NLS-1$
+                            "org.apache.jmeter.report.gui", // $NON-NLS-1$
+                            codeSourceSearchPath.get());
+                }
+            }
+
             if (listClasses.isEmpty()) {
                 log.error("!!!!!Uh-oh, didn't find any action handlers!!!!!");
                 throw new JMeterError("No action handlers found - check JMeterHome and libraries");
@@ -344,3 +385,4 @@ public final class ActionRouter implements ActionListener {
         return INSTANCE;
     }
 }
+

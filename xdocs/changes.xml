@@ -80,7 +80,7 @@ Summary
 <li>In CookieManager, DEFAULT_IMPLEMENTATION and DEFAULT_IMPLEMENTATION constants are now private.
 <note>If you're using ignorecookies with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back </note></li>
 <h3>Removed elements or functions</h3>
-
+    <li><code>_StringFromFile</code> function has been dropped, use <code>__StringFromFile</code> instead</li>
 <h3>Logging changes</h3>
 
 <!-- =================== Improvements =================== -->
@@ -95,6 +95,7 @@ Summary
 
 <h3>Other samplers</h3>
 <ul>
+    <li><bug>61320</bug>Test Action : Set duration to 0 by default</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -109,6 +110,7 @@ Summary
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
+    <li><bug>61176</bug><pr>298</pr>Cache responses that have <code>vary</code> header in the <code>CacheManager</code>.</li>
 </ul>
 
 <h3>Functions</h3>
@@ -127,20 +129,25 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
+       where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
-    <li>Updated to groovy 2.4.11 (from 2.4.10)</li>
-    <li>Updated to caffeine 2.5.2 (from 2.4.0)</li>
+    <li>Updated to groovy 2.4.12 (from 2.4.10)</li>
+    <li>Updated to caffeine 2.5.3 (from 2.4.0)</li>
     <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
     <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
-    <li>Updated to ph-commons 8.6.5 (from 8.6.0)</li>
+    <li>Updated to ph-commons 8.6.6 (from 8.6.0)</li>
     <li>Updated to log4j2 2.8.2 (from 2.8.1)</li>
     <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
     <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
     <li>Updated to xstream 1.4.10 (from 1.4.9)</li>
-    <li>Updated to Apache Tika 1.15 (from 1.14)</li>
+    <li>Updated to Apache Tika 1.16 (from 1.14)</li>
+    <li>Updated to jsoup-1.10.3 (from 1.10.2)</li>
+    <li>Updated to commons-lang3 3.6 (from 3.5)</li>
+    <li>Updated to json-path 2.4.0 (from 2.2.0)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -154,6 +161,8 @@ Summary
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>60889</bug>JMeter JDBC sample calls SELECT USER() when testing with MySQL JDBC due to Connection#toString call for response headers.</li>
+    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is false, a rollback statement happens each time a Request is executed</li>
+    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachements where specified.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -164,15 +173,19 @@ Summary
 <ul>
     <li><bug>61005</bug>View Results Tree - Browser Response Data is not clearing</li>
     <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not KO and OK</li>
+    <li><bug>60961</bug>Try to keep status of selected and expanded elements in View Results Tree when new elements are added.</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
     <li><bug>58743</bug><pr>293</pr>TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
+    <li><bug>61314</bug>HTTP URL Re-writing Modifier doesn't replace existing jsessionid in http sampler, but adds to the end</li>
 </ul>
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
+    <li><bug>61260</bug><code>__XPath</code> function returns null despite xpath checker founds matches</li>
 </ul>
 
 <h3>I18N</h3>
@@ -197,6 +210,8 @@ Summary
     <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
     <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
     <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
+    <li><bug>61270</bug>Fixed width fonts too small in text areas to read under hidpi (user manual bug)</li>
+    <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
 </ul>
 
  <!--  =================== Thanks =================== -->

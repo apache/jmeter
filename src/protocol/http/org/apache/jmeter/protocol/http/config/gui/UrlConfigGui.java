@@ -20,7 +20,6 @@ package org.apache.jmeter.protocol.http.config.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -395,7 +394,6 @@ public class UrlConfigGui extends JPanel implements ChangeListener {
         }
 
         JPanel pathPanel =  new HorizontalPanel();
-        pathPanel.setPreferredSize(new Dimension(80,30));
         if (notConfigOnly){
             pathPanel.add(method);
         }

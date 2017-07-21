@@ -49,7 +49,7 @@ public class UserParameters extends AbstractTestElement implements Serializable,
      * shared between all threads see the clone() method below
      *
      * The lock ensures that all the variables are processed together, which is
-     * important for functions such as __CSVRead and _StringFromFile.
+     * important for functions such as __CSVRead and __StringFromFile.
      * But it has a performance drawback.
      */
     private transient Object lock = new Object();

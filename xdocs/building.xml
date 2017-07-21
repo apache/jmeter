@@ -25,8 +25,16 @@
   </properties>
 <body>
 <section name="Building JMeter" >
+
+Before you can compile JMeter, you will need a few things:
+<ul>
+<li>a Java 8 compatible JDK (Java Development Kit)</li>
+<li>a working installation of <a href="http://ant.apache.org">Ant</a> (at least version 1.8.2)</li>
+<li>the JMeter sources as shown in the next section</li>
+</ul>
+
 <h3>Acquiring the source</h3>
-<p>The full source is distributed alongside the binary, and you can also find source repositories <a href="./svnindex.html">here</a> .</p>
+<p>The full source is distributed alongside the binary, and you can also find it <a href="./svnindex.html">in the source repositories.</a></p>
 <p>
 The source archive, SVN and GIT do not contain any of the required library files.
 
@@ -95,10 +103,10 @@ Ensure you read <code>eclipse.md</code> for project configuration.
 JMeter can be built entirely using Ant.
 The basic command is:</p>
 <source>
-ant [install]
+ant install
 </source>
 <p>
-See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used.
+See <code>build.xml</code> (or call <code>ant -p</code>) for the other targets that can be used. Note that you can skip the word <code><em>install</em></code> after <code>ant</code> as it is the default target.
 </p>
 </section>
 

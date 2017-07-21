@@ -216,12 +216,12 @@ The following software is provided under the Apache License V 2.0 (as above):
 * commons-io-2.5.jar
 * commons-jexl2-2.1.1.jar
 * commons-jexl3-3.1.jar
-* commons-lang3-3.5.jar
+* commons-lang3-3.6.jar
 * commons-math3-3.6.1.jar
 * commons-net-3.6.jar
 * commons-pool2-2.4.2.jar
 * dec-0.1.2.jar
-* groovy-all-2.4.11.jar
+* groovy-all-2.4.12.jar
 * httpasyncclient-4.1.3.jar
 * httpclient-4.5.3.jar
 * httpcore-4.4.6.jar
@@ -235,8 +235,8 @@ The following software is provided under the Apache License V 2.0 (as above):
 * log4j-slf4j-impl-2.8.2.jar
 * serializer-2.7.2.jar
 * startbootstrap-sb-admin-2-1.0.7
-* tika-core-1.15.jar
-* tika-parsers-1.15.jar
+* tika-core-1.16.jar
+* tika-parsers-1.16.jar
 * xalan-2.7.2.jar
 * xerces-2.11.0.jar
 * xml-apis-1.4.01.jar
@@ -245,12 +245,12 @@ The following software is provided under the Apache License V 2.0 (as above):
 - Software produced outside the ASF which is available under AL 2.0:
 
 * accessors-smart-1.2.jar
-* caffeine-2.5.2.jar
+* caffeine-2.5.3.jar
 * freemarker-2.3.23.jar (AL2.0, see licenses/bin for additional info)
-* json-path-2.2.0.jar
+* json-path-2.4.0.jar
 * json-smart-2.3.jar
 * mongo-java-driver-2.11.3.jar
-* ph-commons-8.6.5.jar
+* ph-commons-8.6.6.jar
 * ph-css-5.0.4.jar
 
 - Software produced outside the ASF which is available under other licenses (not AL 2.0):
@@ -263,7 +263,7 @@ For details, please see the files under: licenses/bin
 * javamail-1.5.0-b01.jar (CDDL Version 1.0)
 * jcharts-0.7.5.jar (?)
 * jcl-over-slf4j-1.7.25.jar (MIT)
-* jsoup-1.10.2.jar (MIT)
+* jsoup-1.10.3.jar (MIT)
 * jodd-core-3.8.6.jar (Simplified BSD)
 * jodd-lagarto-3.8.6.jar (Simplified BSD)
 * jodd-log-3.8.6.jar (Simplified BSD)

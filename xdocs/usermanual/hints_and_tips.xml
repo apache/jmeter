@@ -116,11 +116,19 @@ will match any component that contains test in searchable elements of the compon
       <dt><code>jmeter.tree.icons.size</code></dt>
       <dd>with these values: <code>19x19</code> (default size), <code>24x24</code>, <code>32x32</code> (Suggested value for HiDPI) or <code>48x48</code></dd>
     </dl>
+    <p>Additionally you can increase the font size of the text areas in some elements like JSR223 sampler by changing theses properties:</p>
+    <dl>
+      <dt><code>jsyntaxtextarea.font.family</code></dt>
+      <dd>set to <code>Hack</code> to activate and to change the font and their size</dd>
+      <dt><code>jsyntaxtextarea.font.size</code></dt>
+      <dd>set to a greater value, like <code>28</code> (Suggested value for HiDPI)</dd>
+    </dl>
     <note>This is not a full HiDPI support and only affects
       <ul>
         <li>JMeter tree nodes</li>
-        <li>icons in the menus</li>
+        <li>Icons in the toolbar</li>
         <li>Tables content</li>
+        <li>Font size into text areas</li>
       </ul>
     </note>
 </description>
