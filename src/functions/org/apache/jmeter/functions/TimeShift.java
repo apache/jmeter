@@ -87,8 +87,8 @@ public class TimeShift extends AbstractFunction {
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String dateString;
-        String amountToShift = dateToShiftCompound.execute().trim();
-        String dateToShift = amountToShiftCompound.execute().trim();
+        String amountToShift = amountToShiftCompound.execute().trim();
+        String dateToShift = dateToShiftCompound.execute().trim();
         LocalDateTime localDateTimeToShift = LocalDateTime.now(systemDefaultZoneID);
         DateTimeFormatter formatter = null;
         if (!StringUtils.isEmpty(format)) {
