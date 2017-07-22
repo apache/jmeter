@@ -174,6 +174,7 @@ Summary
     <li><bug>61005</bug>View Results Tree - Browser Response Data is not clearing</li>
     <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not KO and OK</li>
     <li><bug>60961</bug>Try to keep status of selected and expanded elements in View Results Tree when new elements are added.</li>
+    <li><bug>61198</bug>Backend Listener does not work properly in main script when included scripts also contain Backend Listener</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
