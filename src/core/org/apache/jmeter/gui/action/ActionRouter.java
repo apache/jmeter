@@ -67,6 +67,7 @@ public final class ActionRouter implements ActionListener {
 
     private void performAction(final ActionEvent e) {
         String actionCommand = e.getActionCommand();
+        GuiPackage.getInstance().beginUndoTransaction();
         try {
             try {
                 GuiPackage.getInstance().updateCurrentGui();
@@ -100,6 +101,8 @@ public final class ActionRouter implements ActionListener {
         } catch (NullPointerException er) {
             log.error("performAction({}) {} caused", actionCommand, e, er);
             JMeterUtils.reportErrorToUser("Sorry, this feature (" + actionCommand + ") not yet implemented");
+        } finally {
+            GuiPackage.getInstance().endUndoTransaction();
         }
     }
 
