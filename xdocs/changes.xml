@@ -161,7 +161,7 @@ Summary
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>60889</bug>JMeter JDBC sample calls SELECT USER() when testing with MySQL JDBC due to Connection#toString call for response headers.</li>
-    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is false, a rollback statement happens each time a Request is executed</li>
+    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is false, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
     <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachements where specified.</li>
 </ul>
 
@@ -220,9 +220,10 @@ Summary
 <p>We thank all contributors mentioned in bug and improvement sections above:
 </p>
 <ul>
-<li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 @ github)</li>
+<li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 at github)</li>
 <li>Anthony Kearns (anthony.kearns atrightside.co)</li>
-<li>Emilian Bold (emi @ apache.org)</li>
+<li>Emilian Bold (emi at apache.org)</li>
+<li>Liu XP (liu_xp2003 at sina.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
