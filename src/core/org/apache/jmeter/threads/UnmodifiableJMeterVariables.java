@@ -46,6 +46,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#getThreadName()
      */
+    @Override
     public String getThreadName() {
         return variables.getThreadName();
     }
@@ -53,6 +54,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#getIteration()
      */
+    @Override
     public int getIteration() {
         return variables.getIteration();
     }
@@ -60,6 +62,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * 
      * @see org.apache.jmeter.threads.JMeterVariables#incIteration()
      */
+    @Override
     public void incIteration() {
         throw new UnsupportedOperationException();
     }
@@ -68,6 +71,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#remove(java.lang.String)
      */
+    @Override
     public Object remove(String key) {
         throw new UnsupportedOperationException();
     }
@@ -76,6 +80,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @param value
      * @see org.apache.jmeter.threads.JMeterVariables#put(java.lang.String, java.lang.String)
      */
+    @Override
     public void put(String key, String value) {
         throw new UnsupportedOperationException();
     }
@@ -84,6 +89,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @param value
      * @see org.apache.jmeter.threads.JMeterVariables#putObject(java.lang.String, java.lang.Object)
      */
+    @Override
     public void putObject(String key, Object value) {
         throw new UnsupportedOperationException();
     }
@@ -91,6 +97,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @param vars
      * @see org.apache.jmeter.threads.JMeterVariables#putAll(java.util.Map)
      */
+    @Override
     public void putAll(Map<String, ?> vars) {
         throw new UnsupportedOperationException();
     }
@@ -98,6 +105,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @param vars
      * @see org.apache.jmeter.threads.JMeterVariables#putAll(org.apache.jmeter.threads.JMeterVariables)
      */
+    @Override
     public void putAll(JMeterVariables vars) {
         throw new UnsupportedOperationException();
     }
@@ -106,6 +114,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#get(java.lang.String)
      */
+    @Override
     public String get(String key) {
         return variables.get(key);
     }
@@ -122,6 +131,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#getObject(java.lang.String)
      */
+    @Override
     public Object getObject(String key) {
         return variables.getObject(key);
     }
@@ -129,6 +139,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#getIterator()
      */
+    @Override
     public Iterator<Entry<String, Object>> getIterator() {
         return variables.getIterator();
     }
@@ -136,6 +147,7 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
      * @return
      * @see org.apache.jmeter.threads.JMeterVariables#entrySet()
      */
+    @Override
     public Set<Entry<String, Object>> entrySet() {
         return variables.entrySet();
     }
