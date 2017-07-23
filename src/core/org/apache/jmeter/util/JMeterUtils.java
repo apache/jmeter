@@ -1276,7 +1276,8 @@ public class JMeterUtils implements UnitTestManager {
         for (Class<?> allowHierarchy : Arrays.asList(java.util.Collection.class,
                 org.apache.jmeter.testelement.TestElement.class,
                 org.apache.jorphan.collections.HashTree.class,
-                org.apache.jmeter.samplers.SampleSaveConfiguration.class)) {
+                org.apache.jmeter.samplers.SampleSaveConfiguration.class,
+                org.apache.jmeter.samplers.SampleResult.class)) {
             xstream.allowTypeHierarchy(allowHierarchy);
         }
         xstream.allowTypes(new String[] {
