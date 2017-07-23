@@ -124,13 +124,26 @@ public class TestUnmodifiableJMeterVariables {
     }
 
     @Test
-    public void testEqualsObject() {
-        assertThat(unmodifiables, CoreMatchers.is(vars));
+    public void testEqualsObjectSymmetry() {
+        UnmodifiableJMeterVariables otherUnmodifiables = new UnmodifiableJMeterVariables(vars);
+        assertThat(unmodifiables, CoreMatchers.is(otherUnmodifiables));
+        assertThat(otherUnmodifiables, CoreMatchers.is(unmodifiables));
+    }
+
+    @Test
+    public void testEqualsObjectReflexivity() {
+        assertThat(unmodifiables, CoreMatchers.is(unmodifiables));
+    }
+
+    @Test
+    public void testEqualsObjectWithJMeterVariables() {
+        assertThat(unmodifiables.equals(vars), CoreMatchers.is(vars.equals(unmodifiables)));
     }
 
     @Test
     public void testHashCode() {
-        assertThat(unmodifiables.hashCode(), CoreMatchers.is(vars.hashCode()));
+        UnmodifiableJMeterVariables otherUnmodifiables = new UnmodifiableJMeterVariables(vars);
+        assertThat(unmodifiables.hashCode(), CoreMatchers.is(otherUnmodifiables.hashCode()));
     }
 
 }
