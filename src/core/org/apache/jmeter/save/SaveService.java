@@ -114,6 +114,8 @@ public class SaveService {
     private static final XStream JTLSAVER = new XStreamWrapper(new PureJavaReflectionProvider());
     static {
         JTLSAVER.setMode(XStream.NO_REFERENCES); // This is needed to stop XStream keeping copies of each class
+        JMeterUtils.setupXStreamSecurityPolicy(JMXSAVER);
+        JMeterUtils.setupXStreamSecurityPolicy(JTLSAVER);
     }
 
     // The XML header, with placeholder for encoding, since that is controlled by property

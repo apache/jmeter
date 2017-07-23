@@ -87,6 +87,7 @@ public class TemplateManager {
                 return factory;
             }
         });
+        JMeterUtils.setupXStreamSecurityPolicy(xstream);
         xstream.alias("template", Template.class);
         xstream.alias("templates", Templates.class);
         xstream.useAttributeFor(Template.class, "isTestPlan");

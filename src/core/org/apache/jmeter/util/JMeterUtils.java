@@ -69,6 +69,10 @@ import org.apache.oro.text.regex.Perl5Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
+import com.thoughtworks.xstream.security.NoTypePermission;
+
 /**
  * This class contains the static utility methods used by JMeter.
  *
@@ -1249,5 +1253,18 @@ public class JMeterUtils implements UnitTestManager {
                 w.pack();
             }
         }
+    }
+
+    /**
+     * Setup default security policy
+     * @param xstream {@link XStream}
+     */
+    public static void setupXStreamSecurityPolicy(XStream xstream) {
+        // This will lift the insecure warning
+        xstream.addPermission(NoTypePermission.NONE);
+        // We reapply very permissive policy
+        // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
+        // TODO : How much are we concerned by CVE-2013-7285 
+        xstream.addPermission(AnyTypePermission.ANY);
     }
 }
