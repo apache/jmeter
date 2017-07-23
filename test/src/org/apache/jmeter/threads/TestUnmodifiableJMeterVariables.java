@@ -31,105 +31,106 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestUnmodifiableJMeterVariables {
-	
-	private static final String MY_OBJECT_KEY = "my.objectKey";
-	private static final String MY_KEY = "my.key";
-	private JMeterVariables vars;
-	private UnmodifiableJMeterVariables unmodifiables;
 
-	@Before
-	public void setUp() {
-		vars = new JMeterVariables();
-		vars.put(MY_KEY, "something to test for");
-		vars.putObject(MY_OBJECT_KEY, new Object());
-		unmodifiables = new UnmodifiableJMeterVariables(vars);
-	}
+    private static final String MY_OBJECT_KEY = "my.objectKey";
+    private static final String MY_KEY = "my.key";
+    private JMeterVariables vars;
+    private UnmodifiableJMeterVariables unmodifiables;
 
-	@Test
-	public void testGetThreadName() {
-		assertThat(unmodifiables.getThreadName(), CoreMatchers.is(vars.getThreadName()));
-	}
+    @Before
+    public void setUp() {
+        vars = new JMeterVariables();
+        vars.put(MY_KEY, "something to test for");
+        vars.putObject(MY_OBJECT_KEY, new Object());
+        unmodifiables = new UnmodifiableJMeterVariables(vars);
+    }
 
-	@Test
-	public void testGetIteration() {
-		assertThat(unmodifiables.getIteration(), CoreMatchers.is(vars.getIteration()));
-	}
+    @Test
+    public void testGetThreadName() {
+        assertThat(unmodifiables.getThreadName(), CoreMatchers.is(vars.getThreadName()));
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testIncIteration() {
-		unmodifiables.incIteration();
-	}
+    @Test
+    public void testGetIteration() {
+        assertThat(unmodifiables.getIteration(), CoreMatchers.is(vars.getIteration()));
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testRemove() {
-		unmodifiables.remove("some.key");
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIncIteration() {
+        unmodifiables.incIteration();
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testPut() {
-		unmodifiables.put("some.key", "anything");
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testRemove() {
+        unmodifiables.remove("some.key");
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testPutObject() {
-		unmodifiables.putObject("some.key", new Object());
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPut() {
+        unmodifiables.put("some.key", "anything");
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testPutAllMapOfStringQ() {
-		unmodifiables.putAll(Collections.emptyMap());;
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPutObject() {
+        unmodifiables.putObject("some.key", new Object());
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testPutAllJMeterVariables() {
-		unmodifiables.putAll(vars);
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPutAllMapOfStringQ() {
+        unmodifiables.putAll(Collections.emptyMap());
+        ;
+    }
 
-	@Test
-	public void testGet() {
-		assertThat(unmodifiables.get(MY_KEY), CoreMatchers.is(vars.get(MY_KEY)));
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testPutAllJMeterVariables() {
+        unmodifiables.putAll(vars);
+    }
 
-	@Test
-	public void testGetObject() {
-		assertThat(unmodifiables.getObject(MY_OBJECT_KEY), CoreMatchers.is(vars.getObject(MY_OBJECT_KEY)));
-	}
+    @Test
+    public void testGet() {
+        assertThat(unmodifiables.get(MY_KEY), CoreMatchers.is(vars.get(MY_KEY)));
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testGetIteratorIsUnmodifable() {
-		Iterator<Entry<String, Object>> iterator = unmodifiables.getIterator();
-		assertThat(iterator.hasNext(), CoreMatchers.is(true));
-		iterator.next();
-		iterator.remove();
-	}
-	
-	@Test
-	public void testGetIterator() {
-		assertThat(iteratorToMap(unmodifiables.getIterator()), CoreMatchers.is(iteratorToMap(vars.getIterator())));
-	}
-	
-	private <K,V> Map<K, V>iteratorToMap(Iterator<Entry<K, V>> it) {
-		Map<K,V> result = new HashMap<>();
-		while (it.hasNext()) {
-			Entry<K, V> entry = it.next();
-			result.put(entry.getKey(), entry.getValue());
-		}
-		return result;
-	}
+    @Test
+    public void testGetObject() {
+        assertThat(unmodifiables.getObject(MY_OBJECT_KEY), CoreMatchers.is(vars.getObject(MY_OBJECT_KEY)));
+    }
 
-	@Test
-	public void testEntrySet() {
-		assertThat(unmodifiables.entrySet(), CoreMatchers.is(vars.entrySet()));
-	}
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetIteratorIsUnmodifable() {
+        Iterator<Entry<String, Object>> iterator = unmodifiables.getIterator();
+        assertThat(iterator.hasNext(), CoreMatchers.is(true));
+        iterator.next();
+        iterator.remove();
+    }
 
-	@Test
-	public void testEqualsObject() {
-		assertThat(unmodifiables, CoreMatchers.is(vars));
-	}
-	
-	@Test
-	public void testHashCode() {
-		assertThat(unmodifiables.hashCode(), CoreMatchers.is(vars.hashCode()));
-	}
+    @Test
+    public void testGetIterator() {
+        assertThat(iteratorToMap(unmodifiables.getIterator()), CoreMatchers.is(iteratorToMap(vars.getIterator())));
+    }
+
+    private <K, V> Map<K, V> iteratorToMap(Iterator<Entry<K, V>> it) {
+        Map<K, V> result = new HashMap<>();
+        while (it.hasNext()) {
+            Entry<K, V> entry = it.next();
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
+    }
+
+    @Test
+    public void testEntrySet() {
+        assertThat(unmodifiables.entrySet(), CoreMatchers.is(vars.entrySet()));
+    }
+
+    @Test
+    public void testEqualsObject() {
+        assertThat(unmodifiables, CoreMatchers.is(vars));
+    }
+
+    @Test
+    public void testHashCode() {
+        assertThat(unmodifiables.hashCode(), CoreMatchers.is(vars.hashCode()));
+    }
 
 }
