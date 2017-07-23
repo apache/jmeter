@@ -63,14 +63,20 @@ Summary
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
 <ch_section>IMPORTANT CHANGES</ch_section>
+HTTP Sampler now supports Brotli compression. A long standing bug that occured when more than one TableEditor were used, was eventually tackled. The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager, as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release 
+
 
 <ch_title>Core improvements</ch_title>
+Continued to improve the quality of our code.
 
 <ch_title>UX improvements</ch_title>
+More work has been done to better support HiDPI. Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, where fixed.
 
 <ch_title>Report/Dashboard improvements</ch_title>
+Various small fixes to improve robustness.
 
 <ch_title>Documentation improvements</ch_title>
+Incorporated feed back about unclear documentation.
 
 <!-- =================== Incompatible changes =================== -->
 
