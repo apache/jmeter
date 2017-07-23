@@ -40,8 +40,13 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
 
     @Override
     public int hashCode() {
-        return variables.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((variables == null) ? 0 : variables.hashCode());
+        return result;
     }
+    
 
     @Override
     public String getThreadName() {
@@ -88,8 +93,21 @@ class UnmodifiableJMeterVariables extends JMeterVariables {
         return variables.get(key);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        return variables.equals(obj);
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UnmodifiableJMeterVariables other = (UnmodifiableJMeterVariables) obj;
+        if (variables == null) {
+            if (other.variables != null)
+                return false;
+        } else if (!variables.equals(other.variables))
+            return false;
+        return true;
     }
  
     @Override
