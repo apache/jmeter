@@ -36,6 +36,7 @@ public class UndoHistoryItem implements Serializable {
     private final HashTree tree;
     // TODO: find a way to show this comment in menu item and toolbar tooltip
     private final String comment;
+    private final TreeState treeState;
 
     /**
      * This constructor is for Unit test purposes only
@@ -43,17 +44,21 @@ public class UndoHistoryItem implements Serializable {
      */
     @Deprecated
     public UndoHistoryItem() {
-        tree = null;
-        comment = null;
+        this(null, null, null);
     }
 
     /**
      * @param copy HashTree
      * @param acomment String
      */
-    public UndoHistoryItem(HashTree copy, String acomment) {
+    public UndoHistoryItem(HashTree copy, String acomment, TreeState treeState) {
         tree = copy;
         comment = acomment;
+        this.treeState = treeState;
+    }
+
+    public TreeState getTreeState() {
+        return treeState;
     }
 
     /**

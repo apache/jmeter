@@ -26,6 +26,10 @@ public interface TreeState {
      * @param guiPackage {@link GuiPackage} to be used
      */
     public static TreeState from(GuiPackage guiPackage) {
+        if (guiPackage == null) {
+            return NOTHING;
+        }
+
         MainFrame mainframe = guiPackage.getMainFrame();
         if (mainframe != null) {
             final JTree tree = mainframe.getTree();
