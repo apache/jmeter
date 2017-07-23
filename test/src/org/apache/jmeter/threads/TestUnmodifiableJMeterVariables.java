@@ -78,7 +78,6 @@ public class TestUnmodifiableJMeterVariables {
     @Test(expected = UnsupportedOperationException.class)
     public void testPutAllMapOfStringQ() {
         unmodifiables.putAll(Collections.emptyMap());
-        ;
     }
 
     @Test(expected = UnsupportedOperationException.class)
