@@ -111,7 +111,8 @@ Incorporated feed back about unclear documentation.
 
 <h3>Listeners</h3>
 <ul>
-    <li><bug>61167</bug>InfluxdbBackendListener : add number of errors by response code and message for each transaction</li> 
+    <li><bug>61167</bug>InfluxdbBackendListener : add number of errors by response code and message for each transaction</li>
+    <li><bug>61068</bug>Introduce property <code>resultcollector.action_if_file_exists</code> to control the popup "File already exists" when starting a test</li> 
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
