@@ -136,7 +136,10 @@ public class UndoHistory implements TreeModelListener, Serializable {
         // cloning is required because we need to immute stored data
         HashTree copy = UndoCommand.convertAndCloneSubTree(tree);
 
-        addEdit(new UndoHistoryItem(copy, comment, TreeState.from(GuiPackage.getInstance())));
+        GuiPackage guiPackage = GuiPackage.getInstance();
+        //or maybe a Boolean?
+        boolean dirty = guiPackage != null ? guiPackage.isDirty() : false;
+        addEdit(new UndoHistoryItem(copy, comment, TreeState.from(guiPackage), dirty));
 
         working = false;
     }
@@ -167,6 +170,7 @@ public class UndoHistory implements TreeModelListener, Serializable {
         } finally {
             // load tree UI state
             z.getTreeState().restore(guiInstance);
+            guiInstance.setDirty(z.isDirty());
         }
         setLastKnownState(z);
 
