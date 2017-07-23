@@ -38,18 +38,24 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractAction implements Command {
     private static final Logger log = LoggerFactory.getLogger(AbstractAction.class);
 
+    private enum ActionOnFile {
+        APPEND,
+        DELETE,
+        ASK
+    }
+    
+    private static final ActionOnFile actionOnFile = 
+            ActionOnFile.valueOf(
+                    JMeterUtils.getPropDefault(
+                            "resultcollector.action_if_file_exists", 
+                            ActionOnFile.ASK.name()));
+    
     /**
      * @see Command#doAction(ActionEvent)
      */
     @Override
     public void doAction(ActionEvent e) throws IllegalUserActionException {
     }
-
-    /**
-     * @see Command#getActionNames()
-     */
-    @Override
-    abstract public Set<String> getActionNames();
 
     /**
      * @param e the event that led to the call of this method
@@ -80,33 +86,50 @@ public abstract class AbstractAction implements Command {
             ResultCollector rc = irc.next();
             File f = new File(rc.getFilename());
             if (f.exists()) {
-                String[] option = new String[] { JMeterUtils.getResString("concat_result"),
-                        JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file") };
-                String question = MessageFormat.format(
-                        JMeterUtils.getResString("ask_existing_file"), // $NON-NLS-1$
-                        rc.getFilename());
-                // Interactive question
-                int response = JOptionPane.showOptionDialog(GuiPackage.getInstance().getMainFrame(), 
-                        question, JMeterUtils.getResString("warning"),
-                        JOptionPane.YES_NO_CANCEL_OPTION, 
-                        JOptionPane.WARNING_MESSAGE, 
-                        null, 
-                        option, 
-                        option[0]);
-
-                switch (response) {
-                    case JOptionPane.NO_OPTION:
-                        // Exit without start the test
-                        return false;
-                    case JOptionPane.CANCEL_OPTION:
-                        // replace_file so delete the existing one
-                        f.delete();
+                switch (actionOnFile) {
+                    case APPEND:
                         break;
-                    case JOptionPane.YES_OPTION:
-                        // append is the default behaviour, so nothing to do
-                        break;
+                    case DELETE:
+                        if(f.delete()) {
+                            break;
+                        } else {
+                            log.error("Could not delete existing file {}", f.getAbsolutePath());
+                            return false;
+                        }
+                    case ASK:
                     default:
-                        return false;
+                        String[] option = new String[] { JMeterUtils.getResString("concat_result"),
+                                JMeterUtils.getResString("dont_start"), JMeterUtils.getResString("replace_file") };
+                        String question = MessageFormat.format(
+                                JMeterUtils.getResString("ask_existing_file"), // $NON-NLS-1$
+                                rc.getFilename());
+                        // Interactive question
+                        int response = JOptionPane.showOptionDialog(GuiPackage.getInstance().getMainFrame(), 
+                                question, JMeterUtils.getResString("warning"),
+                                JOptionPane.YES_NO_CANCEL_OPTION, 
+                                JOptionPane.WARNING_MESSAGE, 
+                                null, 
+                                option, 
+                                option[0]);
+        
+                        switch (response) {
+                            case JOptionPane.CANCEL_OPTION:
+                                // replace_file so delete the existing one
+                                if(f.delete()) {
+                                    break;
+                                } else {
+                                    log.error("Could not delete existing file {}", f.getAbsolutePath());
+                                    return false;
+                                }
+                            case JOptionPane.YES_OPTION:
+                                // append is the default behaviour, so nothing to do
+                                break;
+                            case JOptionPane.NO_OPTION:
+                            default:
+                                // Exit without start the test
+                                return false;
+                        }
+                        break;
                 }
             }
         }
