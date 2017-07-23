@@ -71,7 +71,11 @@ import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
+import com.thoughtworks.xstream.security.ArrayTypePermission;
 import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.NullPermission;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
+import com.thoughtworks.xstream.security.TypePermission;
 
 /**
  * This class contains the static utility methods used by JMeter.
@@ -1261,10 +1265,39 @@ public class JMeterUtils implements UnitTestManager {
      */
     public static void setupXStreamSecurityPolicy(XStream xstream) {
         // This will lift the insecure warning
+        // disallow any class
         xstream.addPermission(NoTypePermission.NONE);
-        // We reapply very permissive policy
-        // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
-        // TODO : How much are we concerned by CVE-2013-7285 
-        xstream.addPermission(AnyTypePermission.ANY);
+        // allow some classes that are hopefully secure
+        for (TypePermission perm : Arrays.asList(NullPermission.NULL,
+                ArrayTypePermission.ARRAYS,
+                PrimitiveTypePermission.PRIMITIVES)) {
+            xstream.addPermission(perm);
+        }
+        for (Class<?> allowHierarchy : Arrays.asList(java.util.Collection.class,
+                org.apache.jmeter.testelement.TestElement.class,
+                org.apache.jorphan.collections.HashTree.class,
+                org.apache.jmeter.samplers.SampleSaveConfiguration.class)) {
+            xstream.allowTypeHierarchy(allowHierarchy);
+        }
+        xstream.allowTypes(new String[] {
+                "org.apache.jmeter.save.ScriptWrapper",
+                "org.apache.jmeter.testelement.property.JMeterProperty" });
+        xstream.allowTypesByRegExp(new String[] {
+                "^org\\.apache\\.jmeter\\.(testelement|protocol|gui\\.action\\.template)\\..*" });
+        // let the user decide, whether he needs more
+        String[] regexps = getPropDefault("jmeter.xstream.regex_whitelists", "").split("\\s*,\\s*");
+        if (regexps.length > 0) {
+            xstream.allowTypesByRegExp(regexps);
+        }
+        String[] wildcards = getPropDefault("jmeter.xstream.wildcard_whitelists", "").split("\\s*,\\s*");
+        if (wildcards.length > 0) {
+            xstream.allowTypesByWildcard(wildcards);
+        }
+        if (getPropDefault("jmeter.xstream.permissive", false)) {
+            // We reapply very permissive policy
+            // See https://groups.google.com/forum/#!topic/xstream-user/wiKfdJPL8aY
+            // User has decided to be vulnerable to CVE-2013-7285
+            xstream.addPermission(AnyTypePermission.ANY);
+        }
     }
 }
