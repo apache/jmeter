@@ -364,21 +364,26 @@ public class HTTPJavaImpl extends HTTPAbstractImpl {
      *            for this <code>UrlConfig</code>
      * @param cacheManager the CacheManager (may be null)
      */
-    private void setConnectionHeaders(HttpURLConnection conn, URL u, HeaderManager headerManager, CacheManager cacheManager) {
+    private void setConnectionHeaders(HttpURLConnection conn, URL u, 
+            HeaderManager headerManager, CacheManager cacheManager) {
         // Add all the headers from the HeaderManager
+        Header[] arrayOfHeaders = null;
         if (headerManager != null) {
             CollectionProperty headers = headerManager.getHeaders();
             if (headers != null) {
+                int i=0;
+                arrayOfHeaders = new Header[headers.size()];
                 for (JMeterProperty jMeterProperty : headers) {
                     Header header = (Header) jMeterProperty.getObjectValue();
                     String n = header.getName();
                     String v = header.getValue();
+                    arrayOfHeaders[i++] = header;
                     conn.addRequestProperty(n, v);
                 }
             }
         }
         if (cacheManager != null){
-            cacheManager.setHeaders(conn, u);
+            cacheManager.setHeaders(conn, arrayOfHeaders, u);
         }
     }
 

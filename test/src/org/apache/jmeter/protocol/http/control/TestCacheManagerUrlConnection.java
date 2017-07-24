@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,10 +60,25 @@ public class TestCacheManagerUrlConnection extends TestCacheManagerUrlConnection
     protected void addRequestHeader(String requestHeader, String value) {
         // no-op
     }
+    
+    private org.apache.jmeter.protocol.http.control.Header[] asHeaders(Map<String, List<String>> headers) {
+        List<org.apache.jmeter.protocol.http.control.Header> result = new ArrayList<>(headers.size());
+        for (Map.Entry<String, List<String>> header: headers.entrySet()) {
+            // Java Implementation returns a null header for URL
+            if(header.getKey() != null) {
+                result.add(new org.apache.jmeter.protocol.http.control.Header(
+                        header.getKey(), String.join(", ", header.getValue())));
+            }
+        }
+        return result.toArray(new org.apache.jmeter.protocol.http.control.Header[result.size()]);
+    }
 
     @Override
     protected void setRequestHeaders() {
-        this.cacheManager.setHeaders((HttpURLConnection)this.urlConnection, this.url);
+        this.cacheManager.setHeaders(
+                (HttpURLConnection)this.urlConnection, 
+                asHeaders(urlConnection.getHeaderFields()),
+                this.url);
     }
 
     private static void checkProperty(Map<String, List<String>> properties, String property, String expectedPropertyValue) {
