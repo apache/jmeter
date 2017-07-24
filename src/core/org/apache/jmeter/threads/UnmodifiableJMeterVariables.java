@@ -29,120 +29,107 @@ import java.util.Set;
  */
 class UnmodifiableJMeterVariables extends JMeterVariables {
     private JMeterVariables variables;
+
     /**
-     * 
+     * Wrap the {@code variables} to make them unmodifiable.
+     * @param variables to wrap
      */
     public UnmodifiableJMeterVariables(JMeterVariables variables) {
         this.variables = variables;
     }
-    /**
-     * @return
-     * @see java.lang.Object#hashCode()
-     */
+
+    @Override
     public int hashCode() {
-        return variables.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((variables == null) ? 0 : variables.hashCode());
+        return result;
     }
-    /**
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#getThreadName()
-     */
+    
+
+    @Override
     public String getThreadName() {
         return variables.getThreadName();
     }
-    /**
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#getIteration()
-     */
+
+    @Override
     public int getIteration() {
         return variables.getIteration();
     }
-    /**
-     * 
-     * @see org.apache.jmeter.threads.JMeterVariables#incIteration()
-     */
+
+    @Override
     public void incIteration() {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param key
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#remove(java.lang.String)
-     */
+
+    @Override
     public Object remove(String key) {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param key
-     * @param value
-     * @see org.apache.jmeter.threads.JMeterVariables#put(java.lang.String, java.lang.String)
-     */
+
+    @Override
     public void put(String key, String value) {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param key
-     * @param value
-     * @see org.apache.jmeter.threads.JMeterVariables#putObject(java.lang.String, java.lang.Object)
-     */
+ 
+    @Override
     public void putObject(String key, Object value) {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param vars
-     * @see org.apache.jmeter.threads.JMeterVariables#putAll(java.util.Map)
-     */
+
+    @Override
     public void putAll(Map<String, ?> vars) {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param vars
-     * @see org.apache.jmeter.threads.JMeterVariables#putAll(org.apache.jmeter.threads.JMeterVariables)
-     */
+
+    @Override
     public void putAll(JMeterVariables vars) {
         throw new UnsupportedOperationException();
     }
-    /**
-     * @param key
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#get(java.lang.String)
-     */
+
+    @Override
     public String get(String key) {
         return variables.get(key);
     }
-    /**
-     * @param obj
-     * @return
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
+
+    @Override
     public boolean equals(Object obj) {
-        return variables.equals(obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        UnmodifiableJMeterVariables other = (UnmodifiableJMeterVariables) obj;
+        if (variables == null) {
+            if (other.variables != null) {
+                return false;
+            }
+        } else if (!variables.equals(other.variables)) {
+            return false;
+        }
+        return true;
     }
-    /**
-     * @param key
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#getObject(java.lang.String)
-     */
+ 
+    @Override
     public Object getObject(String key) {
         return variables.getObject(key);
     }
-    /**
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#getIterator()
-     */
+
+    @Override
     public Iterator<Entry<String, Object>> getIterator() {
         return variables.getIterator();
     }
-    /**
-     * @return
-     * @see org.apache.jmeter.threads.JMeterVariables#entrySet()
-     */
+
+    @Override
     public Set<Entry<String, Object>> entrySet() {
         return variables.entrySet();
     }
-    /**
-     * @return
-     * @see java.lang.Object#toString()
-     */
+
     public String toString() {
         return variables.toString();
     }

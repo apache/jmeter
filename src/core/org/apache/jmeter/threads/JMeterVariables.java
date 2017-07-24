@@ -44,6 +44,9 @@ public class JMeterVariables {
       "TESTSTART.MS", // $NON-NLS-1$
     };
 
+    /**
+     * Constructor, that preloads the variables from the JMeter properties
+     */
     public JMeterVariables() {
         preloadVariables();
     }
@@ -57,14 +60,23 @@ public class JMeterVariables {
         }
     }
 
+    /**
+     * @return the name of the currently running thread 
+     */
     public String getThreadName() {
         return Thread.currentThread().getName();
     }
 
+    /**
+     * @return the current number of iterations
+     */
     public int getIteration() {
         return iteration;
     }
 
+    /**
+     * Increase the current number of iterations
+     */
     public void incIteration() {
         iteration++;
     }
@@ -100,10 +112,18 @@ public class JMeterVariables {
         variables.put(key, value);
     }
 
+    /**
+     * Updates the variables with all entries found in the {@link Map} {@code vars}
+     * @param vars map with the entries to be updated
+     */
     public void putAll(Map<String, ?> vars) {
         variables.putAll(vars);
     }
 
+    /**
+     * Updates the variables with all entries found in the variables in {@code vars}
+     * @param vars {@link JMeterVariables} with the entries to be updated
+     */
     public void putAll(JMeterVariables vars) {
         putAll(vars.variables);
     }
@@ -138,6 +158,9 @@ public class JMeterVariables {
     }
 
     // Used by DebugSampler
+    /**
+     * @return an unmodifiable view of the entries contained in {@link JMeterVariables}
+     */
     public Set<Entry<String, Object>> entrySet(){
         return Collections.unmodifiableMap(variables).entrySet();
     }

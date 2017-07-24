@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.jmeter.protocol.jms.sampler.PublisherSampler;
+import org.apache.jmeter.util.JMeterUtils;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.thoughtworks.xstream.XStream;
@@ -66,6 +67,7 @@ class ObjectMessageRenderer implements MessageRenderer<Serializable> {
       Serializable readObject = null;
       try {
           XStream xstream = new XStream();
+          JMeterUtils.setupXStreamSecurityPolicy(xstream);
           readObject = (Serializable) xstream.fromXML(xmlMessage, readObject);
       } catch (Exception e) {
           throw new IllegalStateException("Unable to load object instance from text", e);
