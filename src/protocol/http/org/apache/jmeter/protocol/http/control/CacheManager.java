@@ -388,10 +388,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      * <li>If-None-Match</li>
      * </ul>
      * @param url {@link URL} to look up in cache
+     * @param headers Array of {@link org.apache.jmeter.protocol.http.control.Header}
      * @param conn where to set the headers
      */
-    public void setHeaders(HttpURLConnection conn, URL url) {
-        CacheEntry entry = getEntry(url.toString(), asHeaders(conn.getHeaderFields()));
+    public void setHeaders(HttpURLConnection conn,
+            org.apache.jmeter.protocol.http.control.Header[] headers, URL url) {
+        CacheEntry entry = getEntry(url.toString(), 
+                headers != null ? asHeaders(headers) : new Header[0]);
         if (log.isDebugEnabled()){
             log.debug("{}(Java) {} {}", conn.getRequestMethod(), url.toString(), entry);
         }
@@ -448,14 +451,6 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             if (splitted.length == 2) {
                 result.add(new BasicHeader(splitted[0], splitted[1]));
             }
-        }
-        return result.toArray(new Header[result.size()]);
-    }
-
-    private Header[] asHeaders(Map<String, List<String>> headers) {
-        List<Header> result = new ArrayList<>(headers.size());
-        for (Map.Entry<String, List<String>> header: headers.entrySet()) {
-            new BasicHeader(header.getKey(), String.join(", ", header.getValue()));
         }
         return result.toArray(new Header[result.size()]);
     }
