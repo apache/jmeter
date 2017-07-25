@@ -188,6 +188,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>58743</bug><pr>293</pr>TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
     <li><bug>61314</bug>HTTP URL Re-writing Modifier doesn't replace existing <code>jsessionid</code> in http sampler, but adds it to the end</li>
+    <li><bug>61336</bug>BeanShell Assertion : mistake in Chinese translation</li>
 </ul>
 
 <h3>Functions</h3>
