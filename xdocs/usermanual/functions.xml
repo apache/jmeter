@@ -1506,6 +1506,7 @@ becomes:
 <properties>
         <property name="Format" required="No">
         The format to be passed to DateTimeFormatter.
+        See https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
         If omitted, the function uses milliseconds since epoch format.
         </property>
         <property name="Date to shift" required="No">
@@ -1521,6 +1522,11 @@ becomes:
         <li><code>P2D</code> parses as 2 days</li>
         <li><code>-P6H3M</code> parses as -6 hours and -3 minutes</li>
         </ul>
+        </property>
+        <property name="Locale to use for format" required="No">
+        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore. ex: en_EN
+        See http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
+        If omitted, by default the function use the ApacheJMeter locale one.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
