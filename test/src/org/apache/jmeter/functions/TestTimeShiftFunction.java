@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.TimeZone;
+import java.util.Random;
 
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.junit.JMeterTestCase;
@@ -135,6 +136,27 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("")));
+    }
+    
+    
+    @Test
+    public void testRandomPeriod() throws Exception {
+        Random r = new Random();
+        int randomInt = r.ints(1, 60).limit(1).findFirst().getAsInt();
+        vars.put("random", String.valueOf( randomInt ) );
+        Collection<CompoundVariable> params = makeParams("YYYY-MM-dd'T'HH:mm:ss", "", "PT${random}M", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        LocalDateTime randomFutureDate = LocalDateTime.parse(value);
+        LocalDateTime checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
+        assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
+        randomInt = r.ints(1, 60).limit(1).findFirst().getAsInt();
+        vars.put("random", String.valueOf( randomInt ) );
+        value = function.execute(result, null);
+        randomFutureDate = LocalDateTime.parse(value);
+        checkFutureDate = LocalDateTime.now().plusMinutes(randomInt);
+        assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
+        
     }
 
 }
