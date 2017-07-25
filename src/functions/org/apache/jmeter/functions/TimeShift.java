@@ -71,8 +71,8 @@ public class TimeShift extends AbstractFunction {
 
     // Ensure that these are set, even if no paramters are provided
     private String format = ""; //$NON-NLS-1$
-    private String dateToShift = ""; //$NON-NLS-1$
-    private String amountToShift = ""; //$NON-NLS-1$
+    private CompoundVariable dateToShiftCompound; //$NON-NLS-1$
+    private CompoundVariable amountToShiftCompound; //$NON-NLS-1$
     private String variableName = ""; //$NON-NLS-1$
     private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
@@ -87,6 +87,8 @@ public class TimeShift extends AbstractFunction {
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
         String dateString;
+        String amountToShift = amountToShiftCompound.execute().trim();
+        String dateToShift = dateToShiftCompound.execute().trim();
         LocalDateTime localDateTimeToShift = LocalDateTime.now(systemDefaultZoneID);
         DateTimeFormatter formatter = null;
         if (!StringUtils.isEmpty(format)) {
@@ -161,8 +163,8 @@ public class TimeShift extends AbstractFunction {
         Object[] values = parameters.toArray();
 
         format = ((CompoundVariable) values[0]).execute().trim();
-        dateToShift = ((CompoundVariable) values[1]).execute().trim();
-        amountToShift = ((CompoundVariable) values[2]).execute().trim();
+        dateToShiftCompound = (CompoundVariable) values[1];
+        amountToShiftCompound = (CompoundVariable) values[2];
         variableName = ((CompoundVariable) values[3]).execute().trim();
 
         // Create the cache
