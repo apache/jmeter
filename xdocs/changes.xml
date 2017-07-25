@@ -124,6 +124,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61040</bug>Add a time shifting function</li>
     <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
+	<li><bug>61341</bug>Add locale parameter to timeShift function</li>
 </ul>
 
 <h3>I18N</h3>
@@ -182,6 +183,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not <code>KO</code> and <code>OK</code></li>
     <li><bug>60961</bug>Try to keep status of selected and expanded elements in View Results Tree when new elements are added.</li>
     <li><bug>61198</bug>Backend Listener does not work properly in main script when included scripts also contain Backend Listener</li>
+	<li><bug>61339</bug>Fix reset metric on timed mode</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
