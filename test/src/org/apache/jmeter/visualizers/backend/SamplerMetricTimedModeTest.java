@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import org.apache.jmeter.samplers.SampleResult;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,11 +88,6 @@ public class SamplerMetricTimedModeTest {
         result.sampleStart();
         result.setEndTime(result.getStartTime() + DEFAULT_ELAPSED_TIME);
         return result;
-    }
-
-    @After
-    public void cleanSampleResult() {
-
     }
 
 }
