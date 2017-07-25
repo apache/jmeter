@@ -158,5 +158,26 @@ public class TestTimeShiftFunction extends JMeterTestCase {
         assertThat(randomFutureDate, within(5, ChronoUnit.SECONDS, checkFutureDate) );
         
     }
-
+    
+    
+    @Test
+    public void testNowPlusOneDayWithLocale() throws Exception {
+        Collection<CompoundVariable> params = makeParams("YYYY-MMMM-dd", "2017-juillet-01", "P1D", "fr_FR", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        assertThat(value, is(equalTo("2017-juillet-02")));
+        params = makeParams("YYYY-MMMM-dd", "2017-July-01", "P1D", "en_EN", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        assertThat(value, is(equalTo("2017-July-02")));
+        params = makeParams("YYYY-MMMM-dd", "2017-julio-01", "P1D", "es_ES", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        assertThat(value, is(equalTo("2017-julio-02")));
+        params = makeParams("YYYY-MMMM-dd", "2017-Juli-01", "P1D", "de_DE", "");
+        function.setParameters(params);
+        value = function.execute(result, null);
+        assertThat(value, is(equalTo("2017-Juli-02")));
+    }
+   
 }
