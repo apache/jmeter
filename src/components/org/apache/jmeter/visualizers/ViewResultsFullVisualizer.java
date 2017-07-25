@@ -139,6 +139,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     private static final int REFRESH_PERIOD = JMeterUtils.getPropDefault("jmeter.gui.refresh_period", 500);
 
     private ResultRenderer resultsRender = null;
+    private Object resultsObject = null;
 
     private TreeSelectionEvent lastSelectionEvent;
 
@@ -337,6 +338,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             dataChanged = true;
         }
         resultsRender.clearData();
+        resultsObject = null;
     }
 
     /** {@inheritDoc} */
@@ -382,7 +384,8 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
             node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
         }
 
-        if (node != null) {
+        if (node != null && node.getUserObject() != resultsObject) {
+            resultsObject = node.getUserObject();
             // to restore last tab used
             if (rightSide.getTabCount() > selectedTab) {
                 resultsRender.setLastSelectedTab(rightSide.getSelectedIndex());
