@@ -80,7 +80,7 @@ public class TimeShift extends AbstractFunction {
     private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
 
     
-    class LocaleFormatObject {
+    private static final class LocaleFormatObject {
 
         private String format;
         private Locale locale;
@@ -113,6 +113,14 @@ public class TimeShift extends AbstractFunction {
             return format.equals(otherError.getFormat())
                     && locale.getDisplayName().equals(otherError.getLocale().getDisplayName());
         }
+
+        /**
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "LocaleFormatObject [format=" + format + ", locale=" + locale + "]";
+        }
         
         
     }
@@ -127,7 +135,6 @@ public class TimeShift extends AbstractFunction {
     /** {@inheritDoc} */
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-        String dateString;
         String amountToShift = amountToShiftCompound.execute().trim();
         String dateToShift = dateToShiftCompound.execute().trim();
         LocalDateTime localDateTimeToShift = LocalDateTime.now(systemDefaultZoneID);
@@ -152,7 +159,8 @@ public class TimeShift extends AbstractFunction {
                             ZoneId.systemDefault());
                 }
             } catch (DateTimeParseException | NumberFormatException ex) {
-                log.error("Failed to parse the date '{}' to shift", dateToShift, ex); // $NON-NLS-1$
+                log.error("Failed to parse the date '{}' to shift with formatter '{}'", 
+                        dateToShift, formatter, ex); // $NON-NLS-1$
             }
         }
 
@@ -165,7 +173,7 @@ public class TimeShift extends AbstractFunction {
                 log.error("Failed to parse the amount duration '{}' to shift (see https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-) ", amountToShift, ex); // $NON-NLS-1$
             }
         }
-
+        String dateString;
         if (formatter != null) {
             dateString = localDateTimeToShift.format(formatter);
         } else {
@@ -183,7 +191,6 @@ public class TimeShift extends AbstractFunction {
     }
 
     private DateTimeFormatter createFormatter(LocaleFormatObject format) {
-
         log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
         return new DateTimeFormatterBuilder().appendPattern(format.getFormat()).parseDefaulting(ChronoField.NANO_OF_SECOND, 0)
                 .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0).parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
@@ -191,12 +198,6 @@ public class TimeShift extends AbstractFunction {
                 .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
                 .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(format.getLocale());
 
-    }
-
-    protected static Cache<LocaleFormatObject, DateTimeFormatter> buildCache() {
-        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
-        cacheBuilder.maximumSize(100);
-        return cacheBuilder.build();
     }
 
     /** {@inheritDoc} */
@@ -213,14 +214,15 @@ public class TimeShift extends AbstractFunction {
             variableName = ((CompoundVariable) values[3]).execute().trim();
         } else {
             String localeAsString = ((CompoundVariable) values[3]).execute().trim();
-            if (!localeAsString.equals("")) {
+            if (!localeAsString.trim().isEmpty()) {
                 locale = LocaleUtils.toLocale(localeAsString);
             }
             variableName = ((CompoundVariable) values[4]).execute().trim();
         }
         // Create the cache
         if (dateTimeFormatterCache == null) {
-            dateTimeFormatterCache = buildCache();
+            dateTimeFormatterCache = Caffeine.newBuilder()
+                    .maximumSize(100).build();
         }
     }
 
