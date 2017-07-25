@@ -18,9 +18,7 @@
 
 package org.apache.jmeter.visualizers.backend;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,24 +57,22 @@ public class SamplerMetric {
     /**
      * Timeboxed percentiles don't makes sense
      */
-    private DescriptiveStatistics pctResponseStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
+    private DescriptiveStatistics pctResponseStats = new DescriptiveStatistics(SLIDING_WINDOW_SIZE);
     private int successes;
     private int failures;
     private int hits;
     private Map<ErrorMetric, Integer> errors = new HashMap<>();
-
 
     
     /**
      * 
      */
     public SamplerMetric() {
-        List<DescriptiveStatistics> stats = new ArrayList<>(4);
-        stats.add(pctResponseStats);
-        stats.addAll(windowedStats);
-        // Limit to sliding window of SLIDING_WINDOW_SIZE values
-        for (DescriptiveStatistics stat : stats) {
-            stat.setWindowSize(SLIDING_WINDOW_SIZE);
+        // Limit to sliding window of SLIDING_WINDOW_SIZE values for FIXED mode
+        if (WINDOW_MODE == WindowMode.FIXED) {
+            for (DescriptiveStatistics stat : windowedStats) {
+                stat.setWindowSize(SLIDING_WINDOW_SIZE);
+            }
         }
     }
 
@@ -84,11 +80,7 @@ public class SamplerMetric {
      * @return List of {@link DescriptiveStatistics}
      */
     private List<DescriptiveStatistics> initWindowedStats() {
-        if (WINDOW_MODE == WindowMode.FIXED) {
-            return Arrays.asList(okResponsesStats, koResponsesStats, allResponsesStats);
-        } else {
-            return Collections.emptyList();
-        }
+        return Arrays.asList(okResponsesStats, koResponsesStats, allResponsesStats);
     }
 
     /**
@@ -96,7 +88,6 @@ public class SamplerMetric {
      * @param result {@link SampleResult} to be used
      */
     public synchronized void add(SampleResult result) {
-        
         if(result.isSuccessful()) {
             successes+=result.getSampleCount()-result.getErrorCount();
         } else {
@@ -313,7 +304,7 @@ public class SamplerMetric {
     }
     
     /**
-     * Returns details of errors occurs
+     * Returns by type ( response code and message ) the count of errors occurs
      * @return errors
      */
     public Map<ErrorMetric, Integer> getErrors() {
