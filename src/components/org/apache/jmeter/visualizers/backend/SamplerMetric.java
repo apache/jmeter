@@ -51,7 +51,7 @@ public class SamplerMetric {
      */
     private DescriptiveStatistics allResponsesStats = new DescriptiveStatistics(LARGE_SLIDING_WINDOW_SIZE);
     /**
-     *  OK, KO, ALL stats if WindowMode is FIXED
+     *  OK, KO, ALL stats
      */
     private List<DescriptiveStatistics> windowedStats = initWindowedStats();
     /**
