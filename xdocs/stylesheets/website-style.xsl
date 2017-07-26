@@ -482,7 +482,7 @@
   <xsl:template name="funclink">
     <xsl:param name="name" />
     <a
-      href="{concat($relative-path, '/usermanual/functions.html#', translate(@name, ' ', '_'))}"
+      href="{concat($relative-path, '/usermanual/functions.html#', translate(@name, ' ()', '_'))}"
     >
       <xsl:value-of select="@name" />
     </a>
