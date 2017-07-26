@@ -498,8 +498,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private CacheEntry getEntry(String url, Header[] headers) {
         CacheEntry entry = getCache().get(url);
-        log.debug("Cache: {}", getCache());
-        log.debug("inCache {} {} {}", url, entry, headers);
+        if (log.isDebugEnabled()) {
+            log.debug("Cache: {}", getCache());
+            log.debug("inCache {} {} {}", url, entry, headers);
+        }
         if (entry == null) {
             log.debug("No entry found for url {}", url);
             return null;
@@ -509,12 +511,16 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return entry;
         }
         if (headers == null) {
-            log.debug("Entry {} found, but it should depend on vary {} for url {}", entry, entry.getVaryHeader(), url);
+            if (log.isDebugEnabled()) {
+                log.debug("Entry {} found, but it should depend on vary {} for url {}", entry, entry.getVaryHeader(), url);
+            }
             return null;
         }
         Pair<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
         if (varyPair != null) {
-            log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
+            if (log.isDebugEnabled()) {
+                log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
+            }
             return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getRight()), null);
         }
         return null;
