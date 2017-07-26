@@ -49,7 +49,7 @@
  <note>
  Several test elements use JMeter properties to control their behaviour.
  These properties are normally resolved when the class is loaded.
- This generally occurs before the test plan starts, so it's not possible to change the settings by using the <code><funclink name="__setProperty">__setProperty()</funclink></code> function.
+ This generally occurs before the test plan starts, so it's not possible to change the settings by using the <code><funclink name="__setProperty()"/></code> function.
 </note>
 <p>
 </p>
@@ -369,7 +369,7 @@ as a test plan created using a recorder would continue from the redirected URL.
 For the <code>POST</code> and <code>PUT</code> method, if there is no file to send, and the name(s) of the parameter(s) are omitted,
 then the body is created by concatenating all the value(s) of the parameters.
 Note that the values are concatenated without adding any end-of-line characters.
-These can be added by using the <code>__char()</code> function in the value fields.
+These can be added by using the <code><funclink name="__char()"/></code> function in the value fields.
 This allows arbitrary bodies to be sent.
 The values are encoded if the encoding flag is set.
 See also the MIME Type above how you can control the <code>content-type</code> request header that is sent.
@@ -2033,7 +2033,7 @@ count to three, JMeter will send a total of <code>2 * 3 = 6</code> HTTP Requests
                 element behaves slightly different.  Unless set to forever, it stops the test after
                 the given number of iterations have been done.</p>
                 <note>When using a function in this field, be aware it may be evaluated multiple times.
-                Example using <code>__Random</code> will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.</note></property>
+                Example using <code><funclink name="__Random"/></code> will evaluate it to a different value for each child samplers of Loop Controller and result into unwanted behaviour.</note></property>
 </properties>
 
 <example title="Looping Example" anchor="loop_example">
@@ -2255,7 +2255,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         <note>
         No variables are made available to the script when the condition is interpreted as Javascript.
         If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
-        a <code>__jexl3</code>, <code>__groovy</code> or <code>__javaScript()</code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
+        a <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> or <code><funclink name="__javaScript()"/></code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
         </note>
         <note>
         To test if a variable is undefined (or null) do the following, suppose var is named <code>myVar</code>, expression will be:
@@ -2272,7 +2272,7 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
     For example, <code>${FOUND}</code> or <code>${__jexl3(${VAR} &gt; 100)}</code>.
     Unlike the Javascript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
-    <note>Checking this and using <code>__jexl3</code> or <code>__groovy</code> function in Condition is advised for performances</note>
+    <note>Checking this and using <code><funclink name="__jexl3"/></code> or <code><funclink name="__groovy"/></code> function in Condition is advised for performances</note>
     </property>
     <property name="Evaluate for all children" required="Yes">
     Should condition be evaluated for all children?
@@ -2323,7 +2323,7 @@ This allows the use of JavaScript, BeanShell, properties or variables as needed.
 <br></br>
 <note>
 Note that the condition is evaluated twice, once before starting sampling children and once at end of children sampling, so putting
-non idempotent functions in Condition (like <code>__counter</code>) can introduce issues.
+non idempotent functions in Condition (like <code><funclink name="__counter"/></code>) can introduce issues.
 </note>
 <br></br>
 For example:
@@ -3507,7 +3507,7 @@ By default, a Graphite implementation is provided.
 <description>
     <p>
     CSV Data Set Config is used to read lines from a file, and split them into variables.
-    It is easier to use than the <code>__CSVRead()</code> and <code>__StringFromFile()</code> functions.
+    It is easier to use than the <code><funclink name="__CSVRead()"/></code> and <code><funclink name="__StringFromFile()"/></code> functions.
     It is well suited to handling large numbers of variables, and is also useful for testing with
     "random" and unique values.</p>
     <p>Generating unique random values at run-time is expensive in terms of CPU and memory, so just create the data
@@ -4202,7 +4202,7 @@ So you cannot reference variables which are defined as part of a test run, e.g. 
 UDVs should not be used with functions that generate different results each time they are called.
 Only the result of the first function call will be saved in the variable. 
 </b>
-However, UDVs can be used with functions such as <code>__P()</code>, for example:
+However, UDVs can be used with functions such as <code><funclink name="__P()"/></code>, for example:
 </p>
 <source>
 HOST      ${__P(host,localhost)} 
@@ -4246,7 +4246,7 @@ You can reference variables defined in earlier UDVs or on the Test Plan.
 <description>
 <p>
 The Random Variable Config Element is used to generate random numeric strings and store them in variable for use later.
-It's simpler than using <complink name="User Defined Variables"/> together with the <code>__Random()</code> function.
+It's simpler than using <complink name="User Defined Variables"/> together with the <code><funclink name="__Random()"/></code> function.
 </p>
 <p>
 The output variable is constructed by using the random number generator,

@@ -331,7 +331,7 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #end
 
 #macro (funclink $funclink)
-<a href="$relativePath/usermanual/functions.html#$funclink.getAttributeValue("name").replace($space,$udsc)">$funclink.getAttributeValue("name")</a>##
+<a href="$relativePath/usermanual/functions.html#$funclink.getAttributeValue("name").replace($space,$udsc).replace("(","").replace(")","")">$funclink.getAttributeValue("name")</a>##
 #end
 
 #macro (outputTag $tag)
