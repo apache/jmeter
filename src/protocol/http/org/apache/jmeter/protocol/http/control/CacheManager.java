@@ -142,17 +142,21 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return etag;
         }
 
-        @Override
-        public String toString() {
-            return lastModified + " " + etag + " " + varyHeader;
-        }
-
         public Date getExpires() {
             return expires;
         }
 
         public String getVaryHeader() {
             return varyHeader;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "CacheEntry [lastModified=" + lastModified + ", etag=" + etag + ", expires=" + expires
+                    + ", varyHeader=" + varyHeader + "]";
         }
     }
 
@@ -254,7 +258,12 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
             getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
         } else {
-            getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, null));
+            CacheEntry cacheEntry = new CacheEntry(lastModified, expiresDate, etag, null);
+            if (log.isDebugEnabled()) {
+                log.debug("Set entry {} into cache for url {}", url,
+                        cacheEntry);
+            }
+            getCache().put(url, cacheEntry);
         }
     }
 
@@ -367,7 +376,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
     public void setHeaders(URL url, HttpRequestBase request) {
         CacheEntry entry = getEntry(url.toString(), request.getAllHeaders());
         if (log.isDebugEnabled()){
-            log.debug("{}(OAH) {} {}", request.getMethod(), url.toString(), entry);
+            log.debug("setHeaders for HTTP Method:{}(OAH) URL:{} Entry:{}", request.getMethod(), url.toString(), entry);
         }
         if (entry != null){
             final String lastModified = entry.getLastModified();
@@ -396,7 +405,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         CacheEntry entry = getEntry(url.toString(), 
                 headers != null ? asHeaders(headers) : new Header[0]);
         if (log.isDebugEnabled()){
-            log.debug("{}(Java) {} {}", conn.getRequestMethod(), url.toString(), entry);
+            log.debug("setHeaders HTTP Method{}(Java) url:{} entry:{}", conn.getRequestMethod(), url.toString(), entry);
         }
         if (entry != null){
             final String lastModified = entry.getLastModified();
@@ -424,15 +433,15 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
      */
     @Deprecated
     public boolean inCache(URL url) {
-        return entryStillValid(getEntry(url.toString(), null));
+        return entryStillValid(url, getEntry(url.toString(), null));
     }
 
     public boolean inCache(URL url, Header[] allHeaders) {
-        return entryStillValid(getEntry(url.toString(), allHeaders));
+        return entryStillValid(url, getEntry(url.toString(), allHeaders));
     }
 
     public boolean inCache(URL url, org.apache.jmeter.protocol.http.control.Header[] allHeaders) {
-        return entryStillValid(getEntry(url.toString(), asHeaders(allHeaders)));
+        return entryStillValid(url, getEntry(url.toString(), asHeaders(allHeaders)));
     }
 
     private Header[] asHeaders(
@@ -480,17 +489,19 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     }
 
-    private boolean entryStillValid(CacheEntry entry) {
-        log.debug("Check if entry {} is still valid", entry);
+    private boolean entryStillValid(URL url, CacheEntry entry) {
+        log.debug("Check if entry {} is still valid for url {}", entry, url);
         if (entry != null && entry.getVaryHeader() == null) {
             final Date expiresDate = entry.getExpires();
             if (expiresDate != null) {
                 if (expiresDate.after(new Date())) {
-                    log.debug("Expires= {} (Valid)", expiresDate);
+                    log.debug("Expires= {} (Valid) for url {}", expiresDate, url);
                     return true;
                 } else {
-                    log.debug("Expires= {} (Expired)", expiresDate);
+                    log.debug("Expires= {} (Expired) for url {}", expiresDate, url);
                 }
+            } else {
+                log.debug("expiresDate is null for url {}", expiresDate, url);
             }
         }
         return false;
@@ -498,10 +509,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     private CacheEntry getEntry(String url, Header[] headers) {
         CacheEntry entry = getCache().get(url);
-        if (log.isDebugEnabled()) {
-            log.debug("Cache: {}", getCache());
-            log.debug("inCache {} {} {}", url, entry, headers);
-        }
+        log.debug("getEntry url:{} entry:{} header:{}", url, entry, headers);
         if (entry == null) {
             log.debug("No entry found for url {}", url);
             return null;
@@ -511,14 +519,14 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             return entry;
         }
         if (headers == null) {
-            if (log.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
                 log.debug("Entry {} found, but it should depend on vary {} for url {}", entry, entry.getVaryHeader(), url);
             }
             return null;
         }
         Pair<String, String> varyPair = getVaryHeader(entry.getVaryHeader(), headers);
         if (varyPair != null) {
-            if (log.isDebugEnabled()) {
+            if(log.isDebugEnabled()) {
                 log.debug("Looking again for {} because of {} with vary: {} ({})", url, entry, entry.getVaryHeader(), varyPair);
             }
             return getEntry(varyUrl(url, entry.getVaryHeader(), varyPair.getRight()), null);
