@@ -86,7 +86,7 @@ Incorporated feed back about unclear documentation.
 <li>In CookieManager, <code>DEFAULT_IMPLEMENTATION</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
 <note>If you're using <code>ignorecookies</code> with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back.</note></li>
 <h3>Removed elements or functions</h3>
-    <li><code>_StringFromFile</code> function has been dropped, use <code><funclink="__StringFromFile"/></code> instead</li>
+    <li><code>_StringFromFile</code> function has been dropped, use <code><funclink name="__StringFromFile"/></code> instead</li>
 <h3>Logging changes</h3>
 
 <!-- =================== Improvements =================== -->
@@ -194,7 +194,7 @@ Incorporated feed back about unclear documentation.
 <h3>Functions</h3>
 <ul>
     <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
-    <li><bug>61260</bug><code><funclink="__XPath"/></code> function returns null despite xpath checker founds matches</li>
+    <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite xpath checker founds matches</li>
 </ul>
 
 <h3>I18N</h3>
