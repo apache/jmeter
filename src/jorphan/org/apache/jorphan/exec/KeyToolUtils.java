@@ -86,7 +86,7 @@ public class KeyToolUtils {
         if (keytoolDir != null) {
             keytoolPath = new File(new File(keytoolDir), KEYTOOL).getPath();
             if (!checkKeytool(keytoolPath)) {
-                log.error("Cannot find keytool using property " + KEYTOOL_DIRECTORY + "=" + keytoolDir);
+                log.error("Cannot find keytool using property {}={}", KEYTOOL_DIRECTORY, keytoolDir);
                 keytoolPath = null; // don't try anything else if the property is provided
             }
         } else {
@@ -104,9 +104,9 @@ public class KeyToolUtils {
             }
         }
         if (keytoolPath == null) {
-            log.error("Unable to find keytool application. Check PATH or define system property " + KEYTOOL_DIRECTORY);
+            log.error("Unable to find keytool application. Check PATH or define system property {}", KEYTOOL_DIRECTORY);
         } else {
-            log.info("keytool found at '" + keytoolPath + "'");
+            log.info("keytool found at '{}'", keytoolPath);
         }
         KEYTOOL_PATH = keytoolPath;
     }
