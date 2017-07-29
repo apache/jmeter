@@ -227,16 +227,8 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
 
     // helper method to save the cache entry
     private void setCache(String lastModified, String cacheControl, String expires, String etag, String url, String date, Pair<String, String> varyHeader) {
-        if (log.isDebugEnabled()){
-            log.debug("setCache("
-                  + lastModified + "," 
-                  + cacheControl + ","
-                  + expires + "," 
-                  + etag + ","
-                  + url + ","
-                  + date
-                  + ")");
-        }
+        log.debug("setCache({}, {}, {}, {}, {}, {}, {})", lastModified,
+                cacheControl, expires, etag, url, date, varyHeader);
         Date expiresDate = null; // i.e. not using Expires
         if (useExpires) {// Check that we are processing Expires/CacheControl
             final String maxAge = "max-age=";
@@ -270,10 +262,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                 return;
             }
             CacheEntry cacheEntry = new CacheEntry(lastModified, expiresDate, etag, null);
-            if (log.isDebugEnabled()) {
-                log.debug("Set entry {} into cache for url {}", url,
-                        cacheEntry);
-            }
+            log.debug("Set entry {} into cache for url {}", url, cacheEntry);
             getCache().put(url, cacheEntry);
         }
     }
