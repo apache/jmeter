@@ -113,10 +113,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
         private final String varyHeader;
 
         /**
-         * 
-         * @param lastModified
-         * @param expires
-         * @param etag
+         * Deprecated Constructor for a CacheEntry
+         * @param lastModified formatted string containing the last modification time of the http response
+         * @param expires formatted string containing the expiration time of the http response
+         * @param etag of the http response
          * @deprecated use {@link CacheEntry(String lastModified, Date expires, String etag, String varyHeader)} instead
          */
         @Deprecated
@@ -127,6 +127,13 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             this.varyHeader = null;
         }
 
+        /**
+         * Constructor for a CacheEntry
+         * @param lastModified formatted string containing the last modification time of the http response
+         * @param expires formatted string containing the expiration time of the http response
+         * @param etag of the http response
+         * @param varyHeader formatted string containing the vary header entries
+         */
         public CacheEntry(String lastModified, Date expires, String etag, String varyHeader) {
             this.lastModified = lastModified;
             this.etag = etag;
