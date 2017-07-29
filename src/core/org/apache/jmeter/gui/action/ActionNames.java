@@ -40,6 +40,7 @@ public final class ActionNames {
     public static final String CHANGE_PARENT    = "Change Parent"; // $NON-NLS-1$
     public static final String CHECK_DIRTY      = "check_dirty"; // $NON-NLS-1$
     public static final String CHECK_REMOVE     = "check_remove"; // $NON-NLS-1$
+    public static final String CHECK_CUT        = "check_cut"; // $NON-NLS-1$
     public static final String CLEAR            = "action.clear"; // $NON-NLS-1$
     public static final String CLEAR_ALL        = "action.clear_all"; // $NON-NLS-1$
     public static final String CLOSE            = "close"; // $NON-NLS-1$
