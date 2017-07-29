@@ -104,7 +104,7 @@ public class Daemon extends Thread implements Stoppable {
         this.target = target;
         this.daemonPort = port;
         this.proxyClass = proxyClass;
-        log.info("Creating Daemon Socket on port: " + daemonPort);
+        log.info("Creating Daemon Socket on port: {}", daemonPort);
         mainSocket = new ServerSocket(daemonPort);
         mainSocket.setSoTimeout(ACCEPT_TIMEOUT);
     }
@@ -145,10 +145,6 @@ public class Daemon extends Thread implements Stoppable {
         } finally {
             JOrphanUtils.closeQuietly(mainSocket);
         }
-
-        // Clear maps
-        pageEncodings = null;
-        formEncodings = null;
     }
 
     /**
