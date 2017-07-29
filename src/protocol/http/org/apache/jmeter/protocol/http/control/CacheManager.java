@@ -258,6 +258,10 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
             getCache().put(url, new CacheEntry(lastModified, expiresDate, etag, varyHeader.getLeft()));
             getCache().put(varyUrl(url, varyHeader.getLeft(), varyHeader.getRight()), new CacheEntry(lastModified, expiresDate, etag, null));
         } else {
+            if (getCache().get(url) != null) {
+                log.debug("Entry for {} already in cache.", url);
+                return;
+            }
             CacheEntry cacheEntry = new CacheEntry(lastModified, expiresDate, etag, null);
             if (log.isDebugEnabled()) {
                 log.debug("Set entry {} into cache for url {}", url,
