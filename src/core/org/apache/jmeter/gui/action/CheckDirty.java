@@ -59,6 +59,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         commands.add(ActionNames.SUB_TREE_LOADED);
         commands.add(ActionNames.ADD_ALL);
         commands.add(ActionNames.CHECK_REMOVE);
+        commands.add(ActionNames.CHECK_CUT);
     }
 
     public CheckDirty() {
@@ -91,7 +92,8 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
             if (isWorkbenchSaveable()) {
                 GuiPackage.getInstance().getTreeModel().getWorkBench().traverse(this);
             }
-        } else if (action.equals(ActionNames.CHECK_REMOVE)) {
+        } else if (action.equals(ActionNames.CHECK_REMOVE) ||
+                action.equals(ActionNames.CHECK_CUT)) {
             GuiPackage guiPackage = GuiPackage.getInstance();
             JMeterTreeNode[] nodes = guiPackage.getTreeListener().getSelectedNodes();
             removeMode = true;
