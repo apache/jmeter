@@ -505,7 +505,7 @@ public class CacheManager extends ConfigTestElement implements TestStateListener
                     log.debug("Expires= {} (Expired) for url {}", expiresDate, url);
                 }
             } else {
-                log.debug("expiresDate is null for url {}", expiresDate, url);
+                log.debug("expiresDate is null for url {}", url);
             }
         }
         return false;
