@@ -83,20 +83,20 @@
 	<classpathentry kind="lib" path="lib/jsoup-1.10.3.jar"/>
 	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/mail-1.5.0-b01.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.3.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/ph-css-5.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/ph-commons-8.6.6.jar"/>
-	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/rsyntaxtextarea-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/serializer-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-ext-1.7.25.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-api-2.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-core-2.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-slf4j-impl-2.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/tika-core-1.16.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.16.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.7.2.jar"/>
@@ -108,8 +108,8 @@
 	<classpathentry kind="lib" path="lib/xstream-1.4.10.jar"/>
 	<!-- Needed for build and test -->
 	<classpathentry kind="lib" path="lib/api/bcmail-jdk15on-1.49.jar"/>
-	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
 	<classpathentry kind="lib" path="lib/api/bcpkix-jdk15on-1.49.jar"/>
+	<classpathentry kind="lib" path="lib/api/bcprov-jdk15on-1.49.jar"/>
 	<classpathentry kind="src" path="test/resources" output="build/test"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
