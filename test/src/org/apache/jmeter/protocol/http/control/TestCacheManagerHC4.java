@@ -18,8 +18,16 @@
 
 package org.apache.jmeter.protocol.http.control;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,8 +42,9 @@ import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicHeader;
 import org.apache.jmeter.protocol.http.sampler.HTTPSampleResult;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
-
-import static org.junit.Assert.assertEquals;
+import org.apache.jmeter.protocol.http.util.HTTPConstantsInterface;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test {@link CacheManager} that uses HTTPHC4Impl
@@ -242,6 +251,53 @@ public class TestCacheManagerHC4 extends TestCacheManagerBase {
         org.apache.http.Header header = this.httpMethod.getLastHeader(requestHeader);
         assertEquals("Wrong name in header for " + requestHeader, requestHeader, header.getName());
         assertEquals("Wrong value for header " + header, expectedValue, header.getValue());
+    }
+    
+    @Test
+    public void testBug61321() throws Exception {
+        this.cacheManager.setUseExpires(false);
+        this.cacheManager.testIterationStart(null);
+        assertNull("Should not find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        cacheResult(sampleResultOK);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should find valid entry", this.cacheManager.inCache(url));
+        cacheManager.setHeaders(url, httpMethod);
+        checkIfModifiedSinceHeader(httpMethod);
+        
+        this.httpMethod = new HttpPostStub();
+        sampleResultOK = getSampleResultWithSpecifiedResponseCode("304");
+        setLastModified(null);
+        cacheResult(sampleResultOK);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        cacheManager.setHeaders(url, httpMethod);
+        checkIfModifiedSinceHeader(httpMethod);
+
+        this.httpMethod = new HttpPostStub();
+        sampleResultOK = getSampleResultWithSpecifiedResponseCode("304");
+        setLastModified(null);
+        cacheResult(sampleResultOK);
+        assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
+        assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
+        cacheManager.setHeaders(url, httpMethod);
+        checkIfModifiedSinceHeader(httpMethod);
+    }
+
+    /**
+     * 
+     */
+    protected void checkIfModifiedSinceHeader(HttpRequestBase httpMethod) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+        try {
+            assertEquals("Should have found 1 header "+HTTPConstantsInterface.IF_MODIFIED_SINCE, 
+                    1, 
+                    httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE).length);
+            Date date = dateFormat.parse(httpMethod.getHeaders(HTTPConstantsInterface.IF_MODIFIED_SINCE)[0].getValue());
+            assertNotNull("Should have found a valid entry", date);
+        } catch(ParseException e) {
+            Assert.fail("Invalid header format for:"+ HTTPConstantsInterface.IF_MODIFIED_SINCE);
+        }
     }
 
 }
