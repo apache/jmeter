@@ -138,6 +138,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
        where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
+    <li>Set 'Max Number of Connections' to 0 into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
