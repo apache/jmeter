@@ -67,10 +67,15 @@ public class TransactionSampler extends AbstractSampler {
     }
 
     public TransactionSampler(TransactionController controller, String name) {
+        this(controller, name, "");
+    }
+    
+    public TransactionSampler(TransactionController controller, String name, String comment) {
         transactionController = controller;
         setName(name); // ensure name is available for debugging
         transactionSampleResult = new SampleResult();
         transactionSampleResult.setSampleLabel(name);
+        transactionSampleResult.setSampleComment(comment);
         // Assume success
         transactionSampleResult.setSuccessful(true);
         transactionSampleResult.sampleStart();

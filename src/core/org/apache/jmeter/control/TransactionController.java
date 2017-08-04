@@ -155,7 +155,7 @@ public class TransactionController extends GenericController implements SampleLi
             if (log.isDebugEnabled()) {
                 log.debug("Start of transaction {}", getName());
             }
-            transactionSampler = new TransactionSampler(this, getName());
+            transactionSampler = new TransactionSampler(this, getName(), getComment());
         }
 
         // Sample the children of the transaction
