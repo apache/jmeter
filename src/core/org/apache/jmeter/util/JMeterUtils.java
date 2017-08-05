@@ -44,6 +44,8 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
@@ -83,7 +85,31 @@ import com.thoughtworks.xstream.security.TypePermission;
  */
 public class JMeterUtils implements UnitTestManager {
     private static final Logger log = LoggerFactory.getLogger(JMeterUtils.class);
-    
+
+    /**
+     * Implementation of {@link TypePermission} that permits any class to be
+     * de-serialized, but logs the first occurrence of it.
+     */
+    private static final class LoggingPermissiveTypePermission
+            implements TypePermission {
+        private ConcurrentMap<Class<?>, Boolean> seenClasses = new ConcurrentHashMap<>();
+
+        @Override
+        public boolean allows(
+                @SuppressWarnings("rawtypes") Class classToCheck) {
+            if (seenClasses.putIfAbsent(classToCheck, true) == null) {
+                log.info(
+                        "Class {} with interfaces {} is getting de-serialized, "
+                                + "but it is not considered secure. Please report the "
+                                + "class to the JMeter project. "
+                                + "Meanwhile you can add this class the property 'jmeter.xstream.wildcard_whitelists'",
+                        classToCheck,
+                        Arrays.asList(classToCheck.getInterfaces()));
+            }
+            return true;
+        }
+    }
+
     // Note: cannot use a static variable here, because that would be processed before the JMeter properties
     // have been defined (Bug 52783)
     private static class LazyPatternCacheHolder {
@@ -1267,6 +1293,7 @@ public class JMeterUtils implements UnitTestManager {
         // This will lift the insecure warning
         // disallow any class
         xstream.addPermission(NoTypePermission.NONE);
+        xstream.addPermission(new LoggingPermissiveTypePermission());
         // allow some classes that are hopefully secure
         for (TypePermission perm : Arrays.asList(NullPermission.NULL,
                 ArrayTypePermission.ARRAYS,
