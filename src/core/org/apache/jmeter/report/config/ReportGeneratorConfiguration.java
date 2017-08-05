@@ -725,7 +725,7 @@ public class ReportGeneratorConfiguration {
      * Parses a string coming from properties to fill a map containing
      * sample names as keys and an array of 2 longs [satisfied, tolerated] as values.
      * The sample name can be a regex supplied by the user.
-     * @param apdexPerTransaction, the string coming from properties
+     * @param apdexPerTransaction the string coming from properties
      * @return {@link Map} containing for each sample name or sample name regex an array of Long corresponding to satisfied and tolerated apdex thresholds.
      */
     public static Map<String, Long[]> getApdexPerTransactionParts(String apdexPerTransaction) {
