@@ -223,6 +223,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61270</bug>Fixed width fonts too small in text areas to read under hidpi (user manual bug)</li>
     <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
     <li><bug>61359</bug>When cutting an element from Tree, Test plan is not marked as dirty</li>
+    <li><bug>61380</bug>JMeter shutdown using timers releases thundering herd of interrupted samplers</li>
 </ul>
 
  <!--  =================== Thanks =================== -->
