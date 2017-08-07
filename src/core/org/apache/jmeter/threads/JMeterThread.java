@@ -1,4 +1,5 @@
 /*
+
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -433,7 +434,7 @@ public class JMeterThread implements Runnable, Interruptible {
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test: {}", e.toString());
             }
-            if (current != null && current instanceof TransactionSampler) {
+            if (current instanceof TransactionSampler) {
                 doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
             }
             shutdownTest();
@@ -441,7 +442,7 @@ public class JMeterThread implements Runnable, Interruptible {
             if (log.isInfoEnabled()) {
                 log.info("Stopping Test with interruption of current samplers: {}", e.toString());
             }
-            if (current != null && current instanceof TransactionSampler) {
+            if (current instanceof TransactionSampler) {
                 doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
             }
             stopTestNow();
@@ -449,7 +450,7 @@ public class JMeterThread implements Runnable, Interruptible {
             if (log.isInfoEnabled()) {
                 log.info("Stopping Thread: {}", e.toString());
             }
-            if (current != null && current instanceof TransactionSampler) {
+            if (current instanceof TransactionSampler) {
                 doEndTransactionSampler((TransactionSampler) current, parent, compiler.configureTransactionSampler((TransactionSampler) current), threadContext);
             }
             stopThread();
