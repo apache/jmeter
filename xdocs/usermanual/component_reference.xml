@@ -4288,11 +4288,11 @@ with the start, continuing on like that until the test is ended.  </p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
-        number during the first iteration.</property>
+        <property name="Starting value" required="Yes">The starting value for the counter.  The counter will equal this
+        value during the first iteration.</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
-        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the <code>Start</code> value.
+        <property name="Maximum value" required="No">If the counter exceeds the maximum, then it is reset to the <code>Starting value</code>.
         Default is <code>Long.MAX_VALUE</code>
         </property>
         <property name="Format" required="No">Optional format, e.g. <code>000</code> will format as <code>001</code>, <code>002</code>, etc. 
