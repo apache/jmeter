@@ -102,6 +102,7 @@ Incorporated feed back about unclear documentation.
 <h3>Other samplers</h3>
 <ul>
     <li><bug>61320</bug>Test Action : Set duration to <code>0</code> by default</li>
+    <li>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
 </ul>
 
 <h3>Controllers</h3>

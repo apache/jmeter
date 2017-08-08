@@ -63,7 +63,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
         p = property("poolMax");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "10");
+        p.setValue(DEFAULT, "0");
         p = property("timeout");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "10000");
