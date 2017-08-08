@@ -122,9 +122,9 @@ public class CounterConfigGui extends AbstractConfigGui implements ActionListene
         setBorder(makeBorder());
         setLayout(new VerticalLayout(5, VerticalLayout.BOTH));
 
-        startField = new JLabeledTextField(JMeterUtils.getResString("start"));//$NON-NLS-1$
+        startField = new JLabeledTextField(JMeterUtils.getResString("start_value"));//$NON-NLS-1$
         incrField = new JLabeledTextField(JMeterUtils.getResString("increment"));//$NON-NLS-1$
-        endField = new JLabeledTextField(JMeterUtils.getResString("max"));//$NON-NLS-1$
+        endField = new JLabeledTextField(JMeterUtils.getResString("max_value"));//$NON-NLS-1$
         varNameField = new JLabeledTextField(JMeterUtils.getResString("var_name"));//$NON-NLS-1$
         formatField = new JLabeledTextField(JMeterUtils.getResString("format"));//$NON-NLS-1$
         perUserField = new JCheckBox(JMeterUtils.getResString("counter_per_user"));//$NON-NLS-1$
