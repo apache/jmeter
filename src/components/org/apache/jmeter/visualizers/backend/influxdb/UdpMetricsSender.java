@@ -38,92 +38,93 @@ import org.slf4j.LoggerFactory;
  * 
  */
 class UdpMetricsSender extends AbstractInfluxdbMetricsSender {
-	private static final Logger log = LoggerFactory.getLogger(UdpMetricsSender.class);
+    private static final Logger log = LoggerFactory.getLogger(UdpMetricsSender.class);
 
-	int SOCKET_CONNECT_TIMEOUT_MS = 1000;
-	int SOCKET_TIMEOUT = 1000;
+    int SOCKET_CONNECT_TIMEOUT_MS = 1000;
+    int SOCKET_TIMEOUT = 1000;
 
-	private final Object lock = new Object();
+    private final Object lock = new Object();
 
-	private String udpUrl;
-	private int udpPort;
+    private String udpUrl;
+    private int udpPort;
 
-	private List<MetricTuple> metrics = new ArrayList<>();
+    private List<MetricTuple> metrics = new ArrayList<>();
 
-	UdpMetricsSender() {
-		super();
-	}
+    UdpMetricsSender() {
+        super();
+    }
 
-	@Override
-	public void setup(String influxdbUrl) throws Exception {
-		try {
-			udpUrl = influxdbUrl.split(":")[0];
-			udpPort = Integer.parseInt(influxdbUrl.split(":")[1]);
-		} catch (Exception e) {
-			log.error("Influxdb url is wrong. The format shoule be <host/ip>:<port>");
-		}
-	}
+    @Override
+    public void setup(String influxdbUrl) throws Exception {
+        try {
+            udpUrl = influxdbUrl.split(":")[0];
+            udpPort = Integer.parseInt(influxdbUrl.split(":")[1]);
+        } catch (Exception e) {
+            log.error("Influxdb url is wrong. The format shoule be <host/ip>:<port>");
+        }
+    }
 
-	@Override
-	public void addMetric(String mesurement, String tag, String field) {
-		synchronized (lock) {
-			metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));
-		}
-	}
+    @Override
+    public void addMetric(String mesurement, String tag, String field) {
+        synchronized (lock) {
+            metrics.add(new MetricTuple(mesurement, tag, field, System.currentTimeMillis()));
+        }
+    }
 
-	@Override
-	public void writeAndSendMetrics() {
-		List<MetricTuple> tempMetrics;
-		synchronized (lock) {
-			if (metrics.isEmpty()) {
-				return;
-			}
-			tempMetrics = metrics;
-			metrics = new ArrayList<>(tempMetrics.size());
-		}
-		final List<MetricTuple> copyMetrics = tempMetrics;
+    @Override
+    public void writeAndSendMetrics() {
+        List<MetricTuple> tempMetrics;
+        synchronized (lock) {
+            if (metrics.isEmpty()) {
+                return;
+            }
+            tempMetrics = metrics;
+            metrics = new ArrayList<>(tempMetrics.size());
+        }
+        final List<MetricTuple> copyMetrics = tempMetrics;
 
-		if (!copyMetrics.isEmpty()) {
-			StringBuilder sb = new StringBuilder(copyMetrics.size() * 35);
-			for (MetricTuple metric : copyMetrics) {
-				// Add TimeStamp in nanosecond from epoch ( default in InfluxDB )
-				sb.append(metric.measurement).append(metric.tag).append(" ") //$NON-NLS-1$
-						.append(metric.field).append(" ").append(metric.timestamp + "000000").append("\n"); //$NON-NLS-3$
-			}
+        if (!copyMetrics.isEmpty()) {
+            StringBuilder sb = new StringBuilder(copyMetrics.size() * 35);
+            for (MetricTuple metric : copyMetrics) {
+                // Add TimeStamp in nanosecond from epoch ( default in InfluxDB
+                // )
+                sb.append(metric.measurement).append(metric.tag).append(" ") //$NON-NLS-1$
+                    .append(metric.field).append(" ").append(metric.timestamp + "000000").append("\n"); //$NON-NLS-3$
+            }
 
-			DatagramSocket ds = null;
-			try {
-				ds = new DatagramSocket();
-			} catch (SocketException e) {
-				log.error("Cannot open udp port!");
-				return;
-			}
+            DatagramSocket ds = null;
+            try {
+                ds = new DatagramSocket();
+            } catch (SocketException e) {
+                log.error("Cannot open udp port!");
+                return;
+            }
 
-			byte[] buf = sb.toString().getBytes();
-			InetAddress destination = null;
-			try {
-				destination = InetAddress.getByName(udpUrl);
-			} catch (UnknownHostException e) {
-				log.error("Unknown host for udp");
-			}
-			DatagramPacket dp = new DatagramPacket(buf, buf.length, destination, udpPort);
+            byte[] buf = sb.toString().getBytes();
+            InetAddress destination = null;
+            try {
+                destination = InetAddress.getByName(udpUrl);
+            } catch (UnknownHostException e) {
+                log.error("Unknown host for udp");
+            }
+            DatagramPacket dp = new DatagramPacket(buf, buf.length, destination, udpPort);
 
-			try {
-				ds.send(dp);
-			} catch (IOException e) {
-				log.error("Error in transferring udp package");
-			}
-			ds.close();
+            try {
+                ds.send(dp);
+            } catch (IOException e) {
+                log.error("Error in transferring udp package");
+            }
+            ds.close();
 
-			// We drop metrics in all cases
-			copyMetrics.clear();
-		}
+            // We drop metrics in all cases
+            copyMetrics.clear();
+        }
 
-	}
+    }
 
-	@Override
-	public void destroy() {
+    @Override
+    public void destroy() {
 
-	}
+    }
 
 }
