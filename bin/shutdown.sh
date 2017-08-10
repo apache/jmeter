@@ -19,6 +19,6 @@
 
 #   P1 = command port for JMeter instance (defaults to 4445)
 
-DIRNAME=`dirname $0`
+DIRNAME="$(dirname "$0")"
 
-java -cp ${DIRNAME}/ApacheJMeter.jar org.apache.jmeter.util.ShutdownClient Shutdown "$@"
+java -cp "${DIRNAME}/ApacheJMeter.jar" org.apache.jmeter.util.ShutdownClient Shutdown "$@"
