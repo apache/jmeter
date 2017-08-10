@@ -123,6 +123,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomDate">RandomDate</a></td><td>generate random date within a specific date range</td><td>3.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomFromMultipleVars">RandomFromMultipleVars</a></td><td>extracts an element from the values of a set of variables separated by <code>|</code></td><td>3.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td><td>2.6</td></tr>
         <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
@@ -635,6 +636,27 @@ the comma after <code>7</code> is escaped.</note>
 <p>Examples:
 <source>${__Random(0,10)}</source> will return a random number between 0 and 10<br/>
 <source>${__Random(0,10, MYVAR)}</source> will return a random number between 0 and 10 and store it in <code>MYVAR</code>. <code>${MYVAR}</code> will contain the random number<br/>
+</p>
+</component>
+
+<component index="&sect-num;.5.8" name="__RandomDate">
+<description><p>The randomDate function returns a random date that lies between the given start date and end date values.</p></description>
+
+<properties>
+        <property name="Time format" required="No">Format string for DateTimeFormatter (default yyyy-MM-dd)</property>
+        <property name="Start date" required="No">The start date, the default is now</property>
+        <property name="End date" required="Yes">The end date</property>
+        <property name="Locale to use for format" required="No">
+        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore. ex: en_EN
+        See http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
+        If omitted, by default the function use the ApacheJMeter locale one.
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+</properties>
+
+<p>Examples:
+<source>${__randomDate(,,2050-07-08,,)}</source> will return a random date between now and 2050-07-08. For example 2039-06-21<br/>
+<source>${__randomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date like 04 03 2034<br/>
 </p>
 </component>
 
