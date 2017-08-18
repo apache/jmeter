@@ -35,7 +35,7 @@ STOREPASSWORD=password
 KEYPASSWORD=password
 
 ## generate the keystore with the certificate
-keytool -genkeypair -alias jmeter -keystore ${KEYSTORE} -keypass ${KEYPASSWORD} -storepass ${STOREPASSWORD} -validity ${VALIDITY} -keyalg RSA -dname "${DNAME}"
+keytool -genkeypair -alias jmeter -keystore ${KEYSTORE} -keypass ${KEYPASSWORD} -storepass ${STOREPASSWORD} -validity "${VALIDITY}" -keyalg RSA -dname "${DNAME}"
 
 ## show the contents
 keytool -list -v -keystore ${KEYSTORE} -storepass ${STOREPASSWORD}
