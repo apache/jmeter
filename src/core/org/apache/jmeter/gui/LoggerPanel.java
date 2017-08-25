@@ -101,8 +101,10 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
                 clear();
             });
             JPopupMenu pop = jSyntaxTextArea.getPopupMenu();
+            pop.addSeparator();
             pop.add(increase);
             pop.add(decrease);
+            pop.addSeparator();
             pop.add(clear);
             areaScrollPane = JTextScrollPane.getInstance(jSyntaxTextArea);
             jTextArea = jSyntaxTextArea;
