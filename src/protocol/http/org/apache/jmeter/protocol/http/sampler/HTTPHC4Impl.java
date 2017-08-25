@@ -1242,7 +1242,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if(getUseMultipartForPost()) {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
-            Charset charset = null;
+            Charset charset;
             if(haveContentEncoding) {
                 charset = Charset.forName(contentEncoding);
             } else {
@@ -1254,8 +1254,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                         getDoBrowserCompatibleMultipart(), charset, haveContentEncoding);
             }
             // Write the request to our own stream
-            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create()
-                    .setCharset(charset);
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
             if(getDoBrowserCompatibleMultipart()) {
                 multipartEntityBuilder.setLaxMode();
             } else {
