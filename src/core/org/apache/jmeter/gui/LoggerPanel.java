@@ -61,6 +61,7 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     private JMenuItem increase;
     private JMenuItem decrease;
+    private JMenuItem clear;
 
     /**
      * Pane for display JMeter log file
@@ -95,9 +96,14 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             increase.addActionListener(new IncreaseFontAction(jSyntaxTextArea, this));
             decrease = new JMenuItem(String.format(JMeterUtils.getResString("font.decrease"), (fontSize - 1)));
             decrease.addActionListener(new DecreaseFontAction(jSyntaxTextArea, this));
+            clear = new JMenuItem(JMeterUtils.getResString("clear"));
+            clear.addActionListener(l -> {
+                clear();
+            });
             JPopupMenu pop = jSyntaxTextArea.getPopupMenu();
             pop.add(increase);
             pop.add(decrease);
+            pop.add(clear);
             areaScrollPane = JTextScrollPane.getInstance(jSyntaxTextArea);
             jTextArea = jSyntaxTextArea;
         } else {
@@ -105,8 +111,6 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             jTextArea =  new JTextArea(15, 80);
             areaScrollPane = new JScrollPane(jTextArea);
         }
-
-        Font f = jTextArea.getFont();
 
         areaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
