@@ -198,15 +198,15 @@ class HttpMetricsSender extends AbstractInfluxdbMetricsSender {
                     public void cancelled() {
                         log.warn("Request to influxDB server was cancelled");
                     }
-                });
-               
+                });               
             }catch (URISyntaxException ex ) {
                 log.error(ex.getMessage());
+            } finally {
+                // We drop metrics in all cases
+                copyMetrics.clear();
             }
         }
 
-        // We drop metrics in all cases
-        copyMetrics.clear();
     }
 
     /**
