@@ -148,7 +148,7 @@ Incorporated feed back about unclear documentation.
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to groovy 2.4.12 (from 2.4.10)</li>
-    <li>Updated to caffeine 2.5.3 (from 2.4.0)</li>
+    <li>Updated to caffeine 2.5.5 (from 2.4.0)</li>
     <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
     <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
     <li>Updated to ph-commons 8.6.6 (from 8.6.0)</li>
