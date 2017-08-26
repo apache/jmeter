@@ -113,7 +113,8 @@ Incorporated feed back about unclear documentation.
 <h3>Listeners</h3>
 <ul>
     <li><bug>61167</bug>InfluxdbBackendListener : add number of errors by response code and message for each transaction</li>
-    <li><bug>61068</bug>Introduce property <code>resultcollector.action_if_file_exists</code> to control the popup "File already exists" when starting a test</li> 
+    <li><bug>61068</bug>Introduce property <code>resultcollector.action_if_file_exists</code> to control the popup "File already exists" when starting a test</li>
+    <li><bug>61457</bug>InfluxDB backend listener client : Support sending result to InfluxDB through UDP protocol. Partly based on <pr>302</pr> by Junlong Wu (github id mybreeze77)</li> 
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
@@ -246,6 +247,7 @@ Incorporated feed back about unclear documentation.
 <li>Liu XP (liu_xp2003 at sina.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
 <li>Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
+<li>Junlong Wu (github id mybreeze77)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
