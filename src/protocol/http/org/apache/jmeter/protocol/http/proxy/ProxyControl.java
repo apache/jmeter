@@ -688,18 +688,25 @@ public class ProxyControl extends GenericController {
                             if(BASIC_AUTH.equals(authType)) {
                                 String authCred= new String(Base64.decodeBase64(authCredentialsBase64));
                                 String[] loginPassword = authCred.split(":"); //$NON-NLS-1$
-                                authorization.setUser(loginPassword[0]);
-                                authorization.setPass(loginPassword[1]);
+                                if(loginPassword.length == 2) {
+                                    authorization.setUser(loginPassword[0]);
+                                    authorization.setPass(loginPassword[1]);
+                                } else {
+                                    log.error("Error parsing BASIC Auth authorization header:'{}', decoded value:'{}'", 
+                                            authCredentialsBase64, authCred);
+                                    // we keep initial header
+                                    return null;
+                                }
                             } else {
                                 // Digest or Kerberos
                                 authorization.setUser("${AUTH_LOGIN}");//$NON-NLS-1$
                                 authorization.setPass("${AUTH_PASSWORD}");//$NON-NLS-1$
-                                
                             }
                         }
                         // remove HEADER_AUTHORIZATION from HeaderManager 
                         // because it's useless after creating Authorization object
                         iterator.remove();
+                        break;
                     }
                 }
             }
