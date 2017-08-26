@@ -18,7 +18,7 @@
 #   Run the JMeter mirror server in non-GUI mode
 #   P1 = port to use (default 8080)
 
-cd `dirname $0`
+cd "$(dirname "$0")" || exit 1
 
 CP=../lib/ext/ApacheJMeter_http.jar:../lib/ext/ApacheJMeter_core.jar:../lib/jorphan.jar:../lib/oro-2.0.8.jar
 CP=${CP}:../lib/slf4j-api-1.7.25.jar:../lib/jcl-over-slf4j-1.7.25.jar:../lib/log4j-slf4j-impl-2.8.2.jar
