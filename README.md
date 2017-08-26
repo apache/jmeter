@@ -4,6 +4,8 @@
 
 [![Build Status](https://api.travis-ci.org/apache/jmeter.svg?branch=trunk)](https://travis-ci.org/apache/jmeter/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.jmeter/ApacheJMeter)
+[![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Stack Overflow](http://img.shields.io/:stack%20overflow-jmeter-brightgreen.svg)](http://stackoverflow.com/questions/tagged/jmeter)
 
 ## What is it?
 
