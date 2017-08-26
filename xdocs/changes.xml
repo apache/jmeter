@@ -171,6 +171,7 @@ Incorporated feed back about unclear documentation.
   <li><bug>61384</bug>Don't set the charset on enclosing <code>multipart/form-data</code> header. It irritates some servers.<br/>
      The charset was added sometime back while refactoring to use a newer api of http client.
      See <bug>56141</bug> for more info.</li>
+  <li><bug>61456</bug>java.lang.ArrayIndexOutOfBoundsException when recording with JMeter and weird Basic Auth Authorization header</li>
 </ul>
 
 <h3>Other Samplers</h3>
