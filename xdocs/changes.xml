@@ -141,6 +141,7 @@ Incorporated feed back about unclear documentation.
     <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
        where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
     <li>Set 'Max Number of Connections' to 0 into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
+    <li><bug>61399</bug>Make some bin and extras scripts Shellcheck compatible. Contributed by Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -243,6 +244,7 @@ Incorporated feed back about unclear documentation.
 <li>Emilian Bold (emi at apache.org)</li>
 <li>Liu XP (liu_xp2003 at sina.com)</li>
 <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
