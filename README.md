@@ -98,6 +98,10 @@ The documentation available as of the date of this release is
 also included, in HTML format, in the `printable_docs/` directory,
 and it may be browsed starting from the file called `index.html`.
 
+## Reporting a bug/enhancement
+
+See [Issue Tracking](http://jmeter.apache.org/issues.html)
+
 ## Build instructions
 
 ### Release builds
