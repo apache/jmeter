@@ -893,7 +893,6 @@ mirrorServer.start();</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="54777371">Content-Disposition: form-data; name=&quot;name1&quot;</stringProp>
-              <stringProp name="2102497404">; charset=UTF-8</stringProp>
               <stringProp name="-823812896">value1</stringProp>
               <stringProp name="-1299776663">boundary=${boundary}</stringProp>
               <stringProp name="182753948">${boundary}</stringProp>
@@ -909,9 +908,13 @@ mirrorServer.start();</stringProp>
             <stringProp name="cacheKey">9e8a05ef-13b4-408f-a030-2702cfff8a88</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">if(prev.getSamplerData().indexOf(&apos;Content-Disposition: form-data; name=&quot;安_param&quot;&apos;) &lt; 0) {
+            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;安_param&quot;&apos;;
+if(&quot;Java&quot;.equals(props.getProperty(&quot;jmeter.httpsampler&quot;))) {
+	textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
+}
+if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
 	AssertionResult.setFailure(true);
-	AssertionResult.setFailureMessage(&quot;Request does not contains &apos;Content-Disposition: form-data; name=\&quot;安_param\&quot;&apos;&quot;);
+	AssertionResult.setFailureMessage(&quot;Request does not contains &apos;&quot;+textToCheck+&quot;&apos;&quot;);
 }
 </stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
