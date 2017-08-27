@@ -1242,7 +1242,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         if(getUseMultipartForPost()) {
             // If a content encoding is specified, we use that as the
             // encoding of any parameter values
-            Charset charset;
+            Charset charset = null;
             if(haveContentEncoding) {
                 charset = Charset.forName(contentEncoding);
             } else {
@@ -1255,6 +1255,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             }
             // Write the request to our own stream
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            if(haveContentEncoding) {
+                multipartEntityBuilder.setCharset(charset);
+            }
             if(getDoBrowserCompatibleMultipart()) {
                 multipartEntityBuilder.setLaxMode();
             } else {
@@ -1268,7 +1271,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 if (arg.isSkippable(parameterName)) {
                     continue;
                 }
-                StringBody stringBody = new StringBody(arg.getValue(), ContentType.create("text/plain", charset));
+                StringBody stringBody;
+                if(haveContentEncoding) {
+                    stringBody = new StringBody(arg.getValue(), ContentType.create("text/plain", charset));
+                } else {
+                    stringBody = new StringBody(arg.getValue(), ContentType.create("text/plain"));
+                }
                 FormBodyPart formPart = FormBodyPartBuilder.create(
                         parameterName, stringBody).build();
                 multipartEntityBuilder.addPart(formPart);
