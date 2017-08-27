@@ -167,6 +167,13 @@
     <error>false</error>
   </assertionResult>
 </httpSample>
+<httpSample s="true" lb="HR-POST_WITH_PARAMETERS_MULTIPART_UTF-8" rc="200" dt="text">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</httpSample>
 <httpSample s="true" lb="HR-POST_WITH_BODY" rc="200" dt="text">
   <assertionResult>
     <name>Response Assertion</name>
