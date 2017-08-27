@@ -173,6 +173,11 @@
     <failure>false</failure>
     <error>false</error>
   </assertionResult>
+  <assertionResult>
+    <name>JSR223-Assertion-CheckCorrectEncodingForParam</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
 </httpSample>
 <httpSample s="true" lb="HR-POST_WITH_BODY" rc="200" dt="text">
   <assertionResult>
