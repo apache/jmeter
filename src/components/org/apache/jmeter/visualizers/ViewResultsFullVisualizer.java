@@ -378,13 +378,21 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
     /** {@inheritDoc} */
     @Override
     public void valueChanged(TreeSelectionEvent e) {
+        valueChanged(e, false);
+    }
+
+    /**
+     * @param e {@link TreeSelectionEvent}
+     * @param forceRendering boolean
+     */
+    private void valueChanged(TreeSelectionEvent e, boolean forceRendering) {
         lastSelectionEvent = e;
         DefaultMutableTreeNode node;
         synchronized (this) {
             node = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
         }
 
-        if (node != null && node.getUserObject() != resultsObject) {
+        if (node != null && (forceRendering || node.getUserObject() != resultsObject)) {
             resultsObject = node.getUserObject();
             // to restore last tab used
             if (rightSide.getTabCount() > selectedTab) {
@@ -525,7 +533,7 @@ implements ActionListener, TreeSelectionListener, Clearable, ItemListener {
                     log.debug("selectedTab={}", selectedTab);
                     resultsRender.init();
                     // To display current sampler result before change
-                    this.valueChanged(lastSelectionEvent);
+                    this.valueChanged(lastSelectionEvent, true);
                 }
             }
         }
