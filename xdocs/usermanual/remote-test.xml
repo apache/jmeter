@@ -220,7 +220,7 @@ all the following need to agree:</p>
 <li>On the client, update the <code>remote_hosts</code> property to include the new remote <code>host:port</code> settings</li>
 </ul>
 
-<p>Since Jmeter 2.1.1, the jmeter-server scripts provide support for changing the port.
+<p>Since JMeter 2.1.1, the jmeter-server scripts provide support for changing the port.
 For example, assume you want to use port <code>1664</code> (perhaps <code>1099</code> is already used).</p>
 On Windows (in a DOS box)
 <source>
