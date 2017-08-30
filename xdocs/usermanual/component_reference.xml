@@ -1682,7 +1682,7 @@ The current implementation supports standard JUnit convention and extensions. It
 includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>. The sampler works like the
 <complink name="Java Request" /> with some differences.
 <ul>
-<li>rather than use Jmeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
+<li>rather than use JMeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
 <li>JUnit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
 You can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
 <li>JUnit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
@@ -1761,7 +1761,7 @@ The following JUnit4 annotations are recognised:
 <note>
 Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
 This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excluded from the sample time.
-As a consequence, the sampler time excludes the time taken to call setUp/tearDown methods.
+As a consequence, the sampler time excludes the time taken to call <code>setUp</code>/<code>tearDown</code> methods and their annotation based alternatives.
 </note>
 </component>
 
