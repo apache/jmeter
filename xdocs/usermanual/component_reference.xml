@@ -1687,8 +1687,8 @@ includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</co
 You can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
 <li>JUnit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
 <li>The sampler measures the elapsed time only for the test method and does not include <code>setUp</code> and <code>tearDown</code>.</li>
-<li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
-<li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since Jmeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
+<li>Each time the test method is called, JMeter will pass the result to the listeners.</li>
+<li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since JMeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
 <li>The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
@@ -1717,7 +1717,7 @@ By default, JMeter will provide some default values for the success/failure code
 <h3>General Guidelines</h3>
 If you use <code>setUp</code> and <code>tearDown</code>, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
-Here are some general guidelines for writing JUnit tests so they work well with Jmeter. Since JMeter runs multi-threaded, it is important to keep certain things in mind.
+Here are some general guidelines for writing JUnit tests so they work well with JMeter. Since JMeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
 <li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This generally means avoid using static members.</li>
 <li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
