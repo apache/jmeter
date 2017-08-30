@@ -1074,8 +1074,8 @@ The following shorthand aliases are provided:
 <li><code>YMD</code> = <code>yyyyMMdd</code></li>
 <li><code>HMS</code> = <code>HHmmss</code></li>
 <li><code>YMDHMS</code> = <code>yyyyMMdd-HHmmss</code></li>
-<li><code>USER1</code> = whatever is in the Jmeter property <code>time.USER1</code></li>
-<li><code>USER2</code> = whatever is in the Jmeter property <code>time.USER2</code></li>
+<li><code>USER1</code> = whatever is in the JMeter property <code>time.USER1</code></li>
+<li><code>USER2</code> = whatever is in the JMeter property <code>time.USER2</code></li>
 </ul>
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <code>time.YMD=yyMMdd</code>
