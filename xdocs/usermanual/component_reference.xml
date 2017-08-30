@@ -1712,16 +1712,16 @@ public class myTestCase {
 }
 </source>
 </example>
-By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
+By default, JMeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
 <note>
 <h3>General Guidelines</h3>
 If you use <code>setUp</code> and <code>tearDown</code>, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
-Here are some general guidelines for writing JUnit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
+Here are some general guidelines for writing JUnit tests so they work well with Jmeter. Since JMeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
 <li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This generally means avoid using static members.</li>
 <li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
-<li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default JUnit behavior.</li>
+<li>Avoid making test methods depend on each other. Since JMeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default JUnit behavior.</li>
 <li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
 <li>Each sampler creates an instance of the test class, so write your test so the setup happens in <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>.</li>
 </ul>
@@ -1761,6 +1761,7 @@ The following JUnit4 annotations are recognised:
 <note>
 Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
 This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excluded from the sample time.
+As a consequence, the sampler time excludes the time taken to call setUp/tearDown methods.
 </note>
 </component>
 
