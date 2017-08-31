@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestTimeRandomDateFunction extends JMeterTestCase {
-	
+
     private AbstractFunction function;
 
     private SampleResult result;
@@ -31,7 +31,7 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
     private JMeterContext jmctx = null;
 
     private String value;
-    
+
     @Before
     public void setUp() {
         jmctx = JMeterContextService.getContext();
@@ -41,78 +41,78 @@ public class TestTimeRandomDateFunction extends JMeterTestCase {
         jmctx.setPreviousResult(result);
         function = new RandomDate();
     }
- 
+
     @Test
     public void testParameterCount() throws Exception {
         checkInvalidParameterCounts(function, 1, 5);
     }
-    
+
     @Test
     public void testDefault() throws Exception {
-    	String EndDate = "2099-01-01";
-    	String FormatDate = "yyyy-dd-MM";
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FormatDate);
-        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate,"", "");
+        String EndDate = "2099-01-01";
+        String FormatDate = "yyyy-dd-MM";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FormatDate);
+        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDate result = LocalDate.parse(value,formatter);
+        LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now();
-        LocalDate max = LocalDate.parse(EndDate,formatter);
+        LocalDate max = LocalDate.parse(EndDate, formatter);
         assertTrue(now.isBefore(result) && result.isBefore(max));
     }
-    
+
     @Test
     public void testDefault2() throws Exception {
-    	String EndDate = "2099-01-01";
-        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "", EndDate,"", "");
+        String EndDate = "2099-01-01";
+        Collection<CompoundVariable> params = makeParams("yyyy-dd-MM", "", EndDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertEquals(10,value.length());
+        assertEquals(10, value.length());
     }
-    
+
     @Test
     public void testFormatDate() throws Exception {
-    	String EndDate = "01 01 2099";
-    	String FormatDate = "dd MM yyyy";
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FormatDate);
-        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate,"", "");
+        String EndDate = "01 01 2099";
+        String FormatDate = "dd MM yyyy";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FormatDate);
+        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        LocalDate result = LocalDate.parse(value,formatter);
+        LocalDate result = LocalDate.parse(value, formatter);
         LocalDate now = LocalDate.now();
-        LocalDate max = LocalDate.parse(EndDate,formatter);
+        LocalDate max = LocalDate.parse(EndDate, formatter);
         assertTrue(now.isBefore(result) && result.isBefore(max));
     }
 
     @Test
     public void testFormatDate2() throws Exception {
-    	String EndDate = "01012099";
-    	String FormatDate = "ddMMyyyy";
-        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate,"", "");
+        String EndDate = "01012099";
+        String FormatDate = "ddMMyyyy";
+        Collection<CompoundVariable> params = makeParams(FormatDate, "", EndDate, "", "");
         function.setParameters(params);
         value = function.execute(result, null);
-        assertEquals(8,value.length());
+        assertEquals(8, value.length());
     }
- 
+
     @Test
     public void testFormatDate3() throws Exception {
-    	String StartDate = "29 Aug 2111";
-    	String EndDate = "30 Aug 2111";
-    	String FormatDate = "dd MMM yyyy";
-    	String localeAsString = "en_EN";
-        Collection<CompoundVariable> params = makeParams(FormatDate, StartDate, EndDate,localeAsString, "");
+        String StartDate = "29 Aug 2111";
+        String EndDate = "30 Aug 2111";
+        String FormatDate = "dd MMM yyyy";
+        String localeAsString = "en_EN";
+        Collection<CompoundVariable> params = makeParams(FormatDate, StartDate, EndDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("29 Aug 2111")));
     }
- 
+
     @Test
     public void testFrenchFormatDate() throws Exception {
-    	String StartDate = "29 mars 2111";
-    	String EndDate = "30 mars 2111";
-    	String FormatDate = "dd MMM yyyy";
-    	String localeAsString = "fr_FR";
-        Collection<CompoundVariable> params = makeParams(FormatDate, StartDate, EndDate,localeAsString, "");
+        String StartDate = "29 mars 2111";
+        String EndDate = "30 mars 2111";
+        String FormatDate = "dd MMM yyyy";
+        String localeAsString = "fr_FR";
+        Collection<CompoundVariable> params = makeParams(FormatDate, StartDate, EndDate, localeAsString, "");
         function.setParameters(params);
         value = function.execute(result, null);
         assertThat(value, is(equalTo("29 mars 2111")));

@@ -47,198 +47,197 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 /**
  * RandomDate Function permit to generate a date in a specific range
  *
- * Parameters: - Time format @see
- * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - default yyyy-MM-dd) - Start date formated
- * as first param (optional - defaults now) - End date - a string of the
- * locale for the format ( optional ) - variable name ( optional )
+ * Parameters: - Time format @see https://docs.oracle.com/javase/8/docs/api/java
+ * ime/format/DateTimeFormatter.html (optional - default yyyy-MM-dd) - Start
+ * date formated as first param (optional - defaults now) - End date - a string
+ * of the locale for the format ( optional ) - variable name ( optional )
  *
- * Returns: a formatted date with the specified number of (days, month, year)
- * - value is also saved in the variable for later re-use.
+ * Returns: a formatted date with the specified number of (days, month, year) -
+ * value is also saved in the variable for later re-use.
+ * 
  * @since 3.3
  */
 
 public class RandomDate extends AbstractFunction {
 
-	private static final Logger log = LoggerFactory.getLogger(RandomDate.class);
+    private static final Logger log = LoggerFactory.getLogger(RandomDate.class);
 
-	private static final String KEY = "__RandomDate"; // $NON-NLS-1$
-	
+    private static final String KEY = "__RandomDate"; // $NON-NLS-1$
+
     private static final int MIN_PARAMETER_COUNT = 1;
 
     private static final int MAX_PARAMETER_COUNT = 5;
 
-	private static final List<String> desc = Arrays.asList(JMeterUtils.getResString("time_format_random"),
-	        JMeterUtils.getResString("date_start"), JMeterUtils.getResString("date_end"),
-	        JMeterUtils.getResString("locale_format"), JMeterUtils.getResString("function_name_paropt"));
+    private static final List<String> desc = Arrays.asList(JMeterUtils.getResString("time_format_random"),
+            JMeterUtils.getResString("date_start"), JMeterUtils.getResString("date_end"),
+            JMeterUtils.getResString("locale_format"), JMeterUtils.getResString("function_name_paropt"));
 
-	// Ensure that these are set, even if no parameters are provided
-	private String format = ""; //$NON-NLS-1$
-	private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
-	private String variableName = ""; //$NON-NLS-1$
-	private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); //$NON-NLS-1$
-	private String dateStart; //$NON-NLS-1$
-	private String dateEnd; //$NON-NLS-1$
-	private Object[] values;
+    // Ensure that these are set, even if no parameters are provided
+    private String format = ""; //$NON-NLS-1$
+    private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
+    private String variableName = ""; //$NON-NLS-1$
+    private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); // $NON-NLS-1$
+    private String dateStart; // $NON-NLS-1$
+    private String dateEnd; // $NON-NLS-1$
+    private Object[] values;
 
-	private static final class LocaleFormatObject {
+    private static final class LocaleFormatObject {
 
-		private String format;
-		private Locale locale;
+        private String format;
+        private Locale locale;
 
-		public LocaleFormatObject(String format, Locale locale) {
-			this.format = format;
-			this.locale = locale;
-		}
+        public LocaleFormatObject(String format, Locale locale) {
+            this.format = format;
+            this.locale = locale;
+        }
 
-		public String getFormat() {
-			return format;
-		}
+        public String getFormat() {
+            return format;
+        }
 
-		public Locale getLocale() {
-			return locale;
-		}
+        public Locale getLocale() {
+            return locale;
+        }
 
-		@Override
-		public int hashCode() {
-			return format.hashCode() + locale.hashCode();
-		}
+        @Override
+        public int hashCode() {
+            return format.hashCode() + locale.hashCode();
+        }
 
-		@Override
-		public boolean equals(Object other) {
-			if (!(other instanceof LocaleFormatObject)) {
-				return false;
-			}
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof LocaleFormatObject)) {
+                return false;
+            }
 
-			LocaleFormatObject otherError = (LocaleFormatObject) other;
-			return format.equals(otherError.getFormat())
-			        && locale.getDisplayName().equals(otherError.getLocale().getDisplayName());
-		}
+            LocaleFormatObject otherError = (LocaleFormatObject) other;
+            return format.equals(otherError.getFormat())
+                    && locale.getDisplayName().equals(otherError.getLocale().getDisplayName());
+        }
 
-		/**
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "LocaleFormatObject [format=" + format + ", locale=" + locale + "]";
-		}
+        /**
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return "LocaleFormatObject [format=" + format + ", locale=" + locale + "]";
+        }
 
-	}
+    }
 
-	/** Date time format cache handler **/
-	private Cache<LocaleFormatObject, DateTimeFormatter> dateRandomFormatterCache = null;
+    /** Date time format cache handler **/
+    private Cache<LocaleFormatObject, DateTimeFormatter> dateRandomFormatterCache = null;
 
-	public RandomDate() {
-		super();
-	}
+    public RandomDate() {
+        super();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-		long localStartDate = 0;
-		long localEndDate = 0;
+    /** {@inheritDoc} */
+    @Override
+    public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
+        long localStartDate = 0;
+        long localEndDate = 0;
 
-		DateTimeFormatter formatter = null;
-		format = ((CompoundVariable) values[0]).execute().trim();
-		String localeAsString = ((CompoundVariable) values[3]).execute().trim();
-		if (!localeAsString.trim().isEmpty()) {
-			locale = LocaleUtils.toLocale(localeAsString);
-		}
-		
-		if (!StringUtils.isEmpty(format)) {
-			try {
-				LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
-				formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
-			} catch (IllegalArgumentException ex) {
-				log.error(
-				        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
-				        format, ex); // $NON-NLS-1$
-				return "";
-			}
-		} else {
-			try {
-				LocaleFormatObject lfo = new LocaleFormatObject("yyyy-MM-dd", locale);
-				formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
-			} catch (IllegalArgumentException ex) {
-				log.error(
-				        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
-				        format, ex); // $NON-NLS-1$
-				return "";
-			}
-		}
+        DateTimeFormatter formatter = null;
+        format = ((CompoundVariable) values[0]).execute().trim();
+        String localeAsString = ((CompoundVariable) values[3]).execute().trim();
+        if (!localeAsString.trim().isEmpty()) {
+            locale = LocaleUtils.toLocale(localeAsString);
+        }
 
-		dateStart = ((CompoundVariable) values[1]).execute().trim();
-		if (!dateStart.isEmpty()) {
-			try {
-					localStartDate = LocalDate.parse(dateStart, formatter).toEpochDay();
-			} catch (DateTimeParseException | NumberFormatException ex) {
-				log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
-			}
-		} else {
-			try {
-				localStartDate = LocalDate.now(systemDefaultZoneID).toEpochDay();
-			} catch (DateTimeParseException | NumberFormatException ex) {
-				log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
-			}
-		}
+        if (!StringUtils.isEmpty(format)) {
+            try {
+                LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
+                formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
+            } catch (IllegalArgumentException ex) {
+                log.error(
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        format, ex); // $NON-NLS-1$
+                return "";
+            }
+        } else {
+            try {
+                LocaleFormatObject lfo = new LocaleFormatObject("yyyy-MM-dd", locale);
+                formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
+            } catch (IllegalArgumentException ex) {
+                log.error(
+                        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java    ime/format/DateTimeFormatter.html)",
+                        format, ex); // $NON-NLS-1$
+                return "";
+            }
+        }
 
-		dateEnd = ((CompoundVariable) values[2]).execute().trim();
-		try {
-			localEndDate = LocalDate.parse(dateEnd, formatter).toEpochDay();
-		} catch (DateTimeParseException | NumberFormatException ex) {
-			log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateEnd, formatter, ex); // $NON-NLS-1$
-		}
+        dateStart = ((CompoundVariable) values[1]).execute().trim();
+        if (!dateStart.isEmpty()) {
+            try {
+                localStartDate = LocalDate.parse(dateStart, formatter).toEpochDay();
+            } catch (DateTimeParseException | NumberFormatException ex) {
+                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+            }
+        } else {
+            try {
+                localStartDate = LocalDate.now(systemDefaultZoneID).toEpochDay();
+            } catch (DateTimeParseException | NumberFormatException ex) {
+                log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateStart, formatter, ex); // $NON-NLS-1$
+            }
+        }
 
-		// Generate the random date
-		String dateString="";
-		long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
-		try {
-			dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
-		} catch (DateTimeParseException | NumberFormatException ex) {
-			log.error("Failed to parse the date '{}' to shift with formatter '{}'", randomDay, formatter, ex); // $NON-NLS-1$
-		}
-		
-		variableName = ((CompoundVariable) values[4]).execute().trim();
-		if (!StringUtils.isEmpty(variableName)) {
-			JMeterVariables vars = getVariables();
-			if (vars != null) {// vars will be null on TestPlan
-				vars.put(variableName, dateString);
-			}
-		}
-		return dateString;
-	}
+        dateEnd = ((CompoundVariable) values[2]).execute().trim();
+        try {
+            localEndDate = LocalDate.parse(dateEnd, formatter).toEpochDay();
+        } catch (DateTimeParseException | NumberFormatException ex) {
+            log.error("Failed to parse the date '{}' to shift with formatter '{}'", dateEnd, formatter, ex); // $NON-NLS-1$
+        }
 
-	private DateTimeFormatter createFormatter(LocaleFormatObject format) {
-		log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
-		return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
-		        .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-		        .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(format.getLocale());
+        // Generate the random date
+        String dateString = "";
+        long randomDay = ThreadLocalRandom.current().nextLong(localStartDate, localEndDate);
+        try {
+            dateString = LocalDate.ofEpochDay(randomDay).format(formatter);
+        } catch (DateTimeParseException | NumberFormatException ex) {
+            log.error("Failed to parse the date '{}' to shift with formatter '{}'", randomDay, formatter, ex); // $NON-NLS-1$
+        }
 
-	}
+        variableName = ((CompoundVariable) values[4]).execute().trim();
+        if (!StringUtils.isEmpty(variableName)) {
+            JMeterVariables vars = getVariables();
+            if (vars != null) {// vars will be null on TestPlan
+                vars.put(variableName, dateString);
+            }
+        }
+        return dateString;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
+    private DateTimeFormatter createFormatter(LocaleFormatObject format) {
+        log.debug("Create a new instance of DateTimeFormatter for format '{}' in the cache", format);
+        return new DateTimeFormatterBuilder().appendPattern(format.getFormat())
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                .parseDefaulting(ChronoField.YEAR_OF_ERA, Year.now().getValue()).toFormatter(format.getLocale());
 
-		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
-		values = parameters.toArray();
-		// Create the cache
-		if (dateRandomFormatterCache == null) {
-			dateRandomFormatterCache = Caffeine.newBuilder().maximumSize(100).build();
-		}
-	}
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getReferenceKey() {
-		return KEY;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
-	/** {@inheritDoc} */
-	@Override
-	public List<String> getArgumentDesc() {
-		return desc;
-	}
+        checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+        values = parameters.toArray();
+        // Create the cache
+        if (dateRandomFormatterCache == null) {
+            dateRandomFormatterCache = Caffeine.newBuilder().maximumSize(100).build();
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getReferenceKey() {
+        return KEY;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<String> getArgumentDesc() {
+        return desc;
+    }
 
 }
-
