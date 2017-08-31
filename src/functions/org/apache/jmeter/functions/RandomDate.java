@@ -18,11 +18,9 @@
 
 package org.apache.jmeter.functions;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -49,17 +47,14 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 /**
  * RandomDate Function permit to generate a date in a specific range
  *
- * Parameters: - format date @see
+ * Parameters: - Time format @see
  * https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
- * (optional - defaults to epoch time in millisecond) - date to shift formated
- * as first param (optional - defaults now) - amount of (seconds, minutes,
- * hours, days ) to add (optional - default nothing is add ) - a string of the
+ * (optional - default yyyy-MM-dd) - Start date formated
+ * as first param (optional - defaults now) - End date - a string of the
  * locale for the format ( optional ) - variable name ( optional )
  *
- * Returns: a formatted date with the specified number of (seconds, minutes,
- * hours, days or months ) added. - value is also saved in the variable for
- * later re-use.
- *
+ * Returns: a formatted date with the specified number of (days, month, year)
+ * - value is also saved in the variable for later re-use.
  * @since 3.3
  */
 
@@ -68,18 +63,23 @@ public class RandomDate extends AbstractFunction {
 	private static final Logger log = LoggerFactory.getLogger(RandomDate.class);
 
 	private static final String KEY = "__RandomDate"; // $NON-NLS-1$
+	
+    private static final int MIN_PARAMETER_COUNT = 1;
+
+    private static final int MAX_PARAMETER_COUNT = 5;
 
 	private static final List<String> desc = Arrays.asList(JMeterUtils.getResString("time_format_random"),
 	        JMeterUtils.getResString("date_start"), JMeterUtils.getResString("date_end"),
 	        JMeterUtils.getResString("locale_format"), JMeterUtils.getResString("function_name_paropt"));
 
-	// Ensure that these are set, even if no paramters are provided
+	// Ensure that these are set, even if no parameters are provided
 	private String format = ""; //$NON-NLS-1$
-	private CompoundVariable dateStartCompound; // $NON-NLS-1$
-	private CompoundVariable dateEndCompound; // $NON-NLS-1$
 	private Locale locale = JMeterUtils.getLocale(); // $NON-NLS-1$
 	private String variableName = ""; //$NON-NLS-1$
-	private ZoneId systemDefaultZoneID = ZoneId.systemDefault();
+	private ZoneId systemDefaultZoneID = ZoneId.systemDefault(); //$NON-NLS-1$
+	private String dateStart; //$NON-NLS-1$
+	private String dateEnd; //$NON-NLS-1$
+	private Object[] values;
 
 	private static final class LocaleFormatObject {
 
@@ -126,7 +126,7 @@ public class RandomDate extends AbstractFunction {
 	}
 
 	/** Date time format cache handler **/
-	private Cache<LocaleFormatObject, DateTimeFormatter> dateFormatterCache = null;
+	private Cache<LocaleFormatObject, DateTimeFormatter> dateRandomFormatterCache = null;
 
 	public RandomDate() {
 		super();
@@ -135,16 +135,20 @@ public class RandomDate extends AbstractFunction {
 	/** {@inheritDoc} */
 	@Override
 	public String execute(SampleResult previousResult, Sampler currentSampler) throws InvalidVariableException {
-		String dateStart = dateStartCompound.execute().trim();
-		String dateEnd = dateEndCompound.execute().trim();
 		long localStartDate = 0;
 		long localEndDate = 0;
 
 		DateTimeFormatter formatter = null;
+		format = ((CompoundVariable) values[0]).execute().trim();
+		String localeAsString = ((CompoundVariable) values[3]).execute().trim();
+		if (!localeAsString.trim().isEmpty()) {
+			locale = LocaleUtils.toLocale(localeAsString);
+		}
+		
 		if (!StringUtils.isEmpty(format)) {
 			try {
 				LocaleFormatObject lfo = new LocaleFormatObject(format, locale);
-				formatter = dateFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
+				formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
 			} catch (IllegalArgumentException ex) {
 				log.error(
 				        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
@@ -154,7 +158,7 @@ public class RandomDate extends AbstractFunction {
 		} else {
 			try {
 				LocaleFormatObject lfo = new LocaleFormatObject("yyyy-MM-dd", locale);
-				formatter = dateFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
+				formatter = dateRandomFormatterCache.get(lfo, key -> createFormatter((LocaleFormatObject) key));
 			} catch (IllegalArgumentException ex) {
 				log.error(
 				        "Format date pattern '{}' is invalid (see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)",
@@ -163,6 +167,7 @@ public class RandomDate extends AbstractFunction {
 			}
 		}
 
+		dateStart = ((CompoundVariable) values[1]).execute().trim();
 		if (!dateStart.isEmpty()) {
 			try {
 					localStartDate = LocalDate.parse(dateStart, formatter).toEpochDay();
@@ -177,6 +182,7 @@ public class RandomDate extends AbstractFunction {
 			}
 		}
 
+		dateEnd = ((CompoundVariable) values[2]).execute().trim();
 		try {
 			localEndDate = LocalDate.parse(dateEnd, formatter).toEpochDay();
 		} catch (DateTimeParseException | NumberFormatException ex) {
@@ -192,6 +198,7 @@ public class RandomDate extends AbstractFunction {
 			log.error("Failed to parse the date '{}' to shift with formatter '{}'", randomDay, formatter, ex); // $NON-NLS-1$
 		}
 		
+		variableName = ((CompoundVariable) values[4]).execute().trim();
 		if (!StringUtils.isEmpty(variableName)) {
 			JMeterVariables vars = getVariables();
 			if (vars != null) {// vars will be null on TestPlan
@@ -213,24 +220,11 @@ public class RandomDate extends AbstractFunction {
 	@Override
 	public void setParameters(Collection<CompoundVariable> parameters) throws InvalidVariableException {
 
-		checkParameterCount(parameters, 4, 5);
-		Object[] values = parameters.toArray();
-
-		format = ((CompoundVariable) values[0]).execute().trim();
-		dateStartCompound = (CompoundVariable) values[1];
-		dateEndCompound = (CompoundVariable) values[2];
-		if (values.length == 4) {
-			variableName = ((CompoundVariable) values[3]).execute().trim();
-		} else {
-			String localeAsString = ((CompoundVariable) values[3]).execute().trim();
-			if (!localeAsString.trim().isEmpty()) {
-				locale = LocaleUtils.toLocale(localeAsString);
-			}
-			variableName = ((CompoundVariable) values[4]).execute().trim();
-		}
+		checkParameterCount(parameters, MIN_PARAMETER_COUNT, MAX_PARAMETER_COUNT);
+		values = parameters.toArray();
 		// Create the cache
-		if (dateFormatterCache == null) {
-			dateFormatterCache = Caffeine.newBuilder().maximumSize(100).build();
+		if (dateRandomFormatterCache == null) {
+			dateRandomFormatterCache = Caffeine.newBuilder().maximumSize(100).build();
 		}
 	}
 
