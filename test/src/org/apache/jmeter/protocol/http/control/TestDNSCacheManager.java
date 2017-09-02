@@ -47,6 +47,16 @@ public class TestDNSCacheManager extends JMeterTestCase {
     }
 
     @Test
+    public void testWithOneAsStaticHostAndInvalidCustomResolver() throws Exception {
+        DNSCacheManager manager = new DNSCacheManager();
+        manager.setCustomResolver(true);
+        manager.addServer(INVALID_DNS_SERVER);
+        manager.addHost("localhost", "127.0.0.1");
+        assertThat(manager.resolve("localhost"),
+                CoreMatchers.is(CoreMatchers.equalTo(new InetAddress[] { InetAddress.getByName("127.0.0.1") })));
+    }
+
+    @Test
     public void testWithMultipleStaticHost() throws Exception {
         DNSCacheManager manager = new DNSCacheManager();
         manager.setCustomResolver(true);
