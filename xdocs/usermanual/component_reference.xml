@@ -4028,6 +4028,20 @@ instead. (see figures 12 and 13).</p>
         <property name="Validation Query" required="No">A simple query used to determine if the database is still responding.
         This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
         However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
+        <p>The list of the validation queries can be configured with <code>jdbc.config.check.query</code> property and are by default:</p>
+            <ul>
+              <li>hsqldb - select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</li>
+              <li>Oracle - select 1 from dual</li>
+              <li>DB2 - select 1 from sysibm.sysdummy1</li>
+              <li>mysql - select 1</li>
+              <li>microsoft SQL Server - select 1</li>
+              <li>postgresql - select 1</li>
+              <li>ingres - select 1</li>
+              <li>derby - values 1</li>
+              <li>H2 - select 1</li>
+              <li>Firebird - select 1 from rdb$database</li>
+            </ul>
+        <note>The list come from <a href="https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases">https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases</a> and it can be incorrect</note>
         <note>Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
         This is DBCP behaviour.</note>
         </property>
