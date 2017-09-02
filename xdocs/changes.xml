@@ -185,6 +185,7 @@ Incorporated feed back about unclear documentation.
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>61375</bug>Use system DNS resolver as last resort, when resolving entries in the static host table.</li>
 </ul>
 
 <h3>Listeners</h3>
