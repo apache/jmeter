@@ -655,8 +655,8 @@ the comma after <code>7</code> is escaped.</note>
 </properties>
 
 <p>Examples:
-<source>${__randomDate(,,2050-07-08,,)}</source> will return a random date between now and 2050-07-08. For example 2039-06-21<br/>
-<source>${__randomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date like 04 03 2034<br/>
+<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between now and 2050-07-08. For example 2039-06-21<br/>
+<source>${__RandomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date like 04 03 2034<br/>
 </p>
 </component>
 
