@@ -18,6 +18,8 @@
 
 package org.apache.jmeter.gui.action;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -30,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.MenuElement;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.apache.jmeter.control.TransactionController;
@@ -39,7 +42,6 @@ import org.apache.jmeter.gui.tree.JMeterTreeNode;
 import org.apache.jmeter.gui.util.EscapeDialog;
 import org.apache.jmeter.gui.util.JSyntaxTextArea;
 import org.apache.jmeter.gui.util.JTextScrollPane;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.sampler.DebugSampler;
 import org.apache.jmeter.sampler.TestAction;
 import org.apache.jmeter.samplers.Sampler;
@@ -157,14 +159,15 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
     private static final void showResult(String result) {
         EscapeDialog messageDialog = new EscapeDialog(GuiPackage.getInstance().getMainFrame(),
                 JMeterUtils.getResString("export_transactions_title"), true); //$NON-NLS-1$
-        VerticalPanel verticalPanel = new VerticalPanel();
-        messageDialog.getContentPane().add(verticalPanel);
-        verticalPanel.add(new JLabel(
-                JMeterUtils.getResString("export_transactions_exported_property")));//$NON-NLS-1$
+        Container contentPane = messageDialog.getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(new JLabel(
+                JMeterUtils.getResString("export_transactions_exported_property"), 
+                SwingConstants.CENTER), BorderLayout.NORTH);//$NON-NLS-1$
         JSyntaxTextArea syntaxTextArea = JSyntaxTextArea.getInstance(10, 80, true);
         syntaxTextArea.setText(result);
         syntaxTextArea.setCaretPosition(0);
-        verticalPanel.add(JTextScrollPane.getInstance(syntaxTextArea));
+        contentPane.add(JTextScrollPane.getInstance(syntaxTextArea), BorderLayout.CENTER);
         messageDialog.pack();
         ComponentUtil.centerComponentInComponent(GuiPackage.getInstance().getMainFrame(), messageDialog);
         SwingUtilities.invokeLater(() -> messageDialog.setVisible(true));
