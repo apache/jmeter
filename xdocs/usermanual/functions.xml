@@ -640,7 +640,7 @@ the comma after <code>7</code> is escaped.</note>
 </component>
 
 <component index="&sect-num;.5.8" name="__RandomDate">
-<description><p>The randomDate function returns a random date that lies between the given start date and end date values.</p></description>
+<description><p>The RandomDate function returns a random date that lies between the given start date and end date values.</p></description>
 
 <properties>
         <property name="Time format" required="No">Format string for DateTimeFormatter (default <code>yyyy-MM-dd</code>)</property>
