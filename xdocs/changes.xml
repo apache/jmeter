@@ -103,6 +103,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61320</bug>Test Action : Set duration to <code>0</code> by default</li>
     <li>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
+    <li>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
 </ul>
 
 <h3>Controllers</h3>
