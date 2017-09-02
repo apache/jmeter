@@ -136,6 +136,7 @@ Incorporated feed back about unclear documentation.
 
 <h3>Report / Dashboard</h3>
 <ul>
+    <li><bug>61481</bug>Help Menu Item to export transaction for Web report</li>
 </ul>
 
 <h3>General</h3>
