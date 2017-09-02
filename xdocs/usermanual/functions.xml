@@ -643,20 +643,20 @@ the comma after <code>7</code> is escaped.</note>
 <description><p>The randomDate function returns a random date that lies between the given start date and end date values.</p></description>
 
 <properties>
-        <property name="Time format" required="No">Format string for DateTimeFormatter (default yyyy-MM-dd)</property>
-        <property name="Start date" required="No">The start date, the default is now</property>
+        <property name="Time format" required="No">Format string for DateTimeFormatter (default <code>yyyy-MM-dd</code>)</property>
+        <property name="Start date" required="No">The start date, the default is <em>now</em></property>
         <property name="End date" required="Yes">The end date</property>
         <property name="Locale to use for format" required="No">
-        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore. ex: en_EN
-        See http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html
-        If omitted, by default the function use the ApacheJMeter locale one.
+        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore, e.g. <code>en_EN</code>
+        See <a href="http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html">http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html</a>
+        If omitted, by default the function uses the Apache JMeter locale one.
         </property>
         <property name="Name of variable" required="No">The name of the variable to set.</property>
 </properties>
 
 <p>Examples:
-<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between now and 2050-07-08. For example 2039-06-21<br/>
-<source>${__RandomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date like 04 03 2034<br/>
+<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between <em>now</em> and <code>2050-07-08</code>. For example <code>2039-06-21</code><br/>
+<source>${__RandomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date with a custom format like <code>04 03 2034</code><br/>
 </p>
 </component>
 
