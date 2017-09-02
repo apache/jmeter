@@ -139,7 +139,7 @@ public class TestSimpleFunctions extends JMeterTestCase {
         String ret = function.execute(result, null);
         assertEquals("<Français>", ret);
     }
-    
+
     @Test
     public void testUnEscapeHtml3() throws Exception {
         AbstractFunction function = new UnEscapeHtml();
