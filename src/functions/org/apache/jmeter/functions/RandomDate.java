@@ -140,7 +140,7 @@ public class RandomDate extends AbstractFunction {
         long localStartDate = 0;
         long localEndDate = 0;
 
-        DateTimeFormatter formatter = null;
+        DateTimeFormatter formatter;
         format = ((CompoundVariable) values[0]).execute().trim();
         String localeAsString = ((CompoundVariable) values[3]).execute().trim();
         if (!localeAsString.trim().isEmpty()) {
