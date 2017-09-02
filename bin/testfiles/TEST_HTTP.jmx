@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170827">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170902">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -908,10 +908,7 @@ mirrorServer.start();</stringProp>
             <stringProp name="cacheKey">9e8a05ef-13b4-408f-a030-2702cfff8a88</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;安_param&quot;&apos;;
-if(&quot;Java&quot;.equals(props.getProperty(&quot;jmeter.httpsampler&quot;))) {
-	textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
-}
+            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
 if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
 	AssertionResult.setFailure(true);
 	AssertionResult.setFailureMessage(&quot;Request does not contains &apos;&quot;+textToCheck+&quot;&apos;&quot;);
