@@ -1279,7 +1279,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         output.write("\"".getBytes(ISO_8859_1));
         output.write(CRLF);
         output.write("Content-Type: text/plain".getBytes(ISO_8859_1));
-        if(contentEncoding != null && !"US-ASCII".equalsIgnoreCase(contentEncoding)) {
+        if(contentEncoding != null) {
             output.write("; charset=".getBytes(ISO_8859_1));
             output.write(contentEncoding.getBytes(ISO_8859_1));
         }
@@ -1302,7 +1302,7 @@ public class TestHTTPSamplersAgainstHttpMirrorServer extends JMeterTestCaseJUnit
         output.write("\"".getBytes(ISO_8859_1));
         output.write(CRLF);
         output.write("Content-Type: text/plain".getBytes(ISO_8859_1));
-        if(contentEncoding != null && !"US-ASCII".equalsIgnoreCase(contentEncoding)) {
+        if(contentEncoding != null) {
             output.write("; charset=".getBytes(ISO_8859_1));
             output.write(contentEncoding.getBytes(ISO_8859_1));
         }
