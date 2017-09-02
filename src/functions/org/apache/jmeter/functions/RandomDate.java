@@ -45,19 +45,21 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
- * RandomDate Function permit to generate a date in a specific range
+ * RandomDate Function generates a date in a specific range
  *
- * Parameters: - Time format @see https://docs.oracle.com/javase/8/docs/api/java
- * ime/format/DateTimeFormatter.html (optional - default yyyy-MM-dd) - Start
- * date formated as first param (optional - defaults now) - End date - a string
- * of the locale for the format ( optional ) - variable name ( optional )
- *
- * Returns: a formatted date with the specified number of (days, month, year) -
- * value is also saved in the variable for later re-use.
+ * Parameters: 
+ * <ul>
+ *  <li>Time format @see https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html (optional - defaults to yyyy-MM-dd)</li>
+ *  <li>Start date formated as first param (optional - defaults to now)</li>
+ *  <li>End date</li>
+ *  <li>Locale for the format (optional)</li> 
+ *  <li>variable name (optional)</li>
+ * </ul>
+ * Returns a formatted date with the specified number of (days, month, year) <br/>
+ * Value is also saved in the variable for later re-use.
  * 
  * @since 3.3
  */
-
 public class RandomDate extends AbstractFunction {
 
     private static final Logger log = LoggerFactory.getLogger(RandomDate.class);
@@ -126,7 +128,7 @@ public class RandomDate extends AbstractFunction {
     }
 
     /** Date time format cache handler **/
-    private Cache<LocaleFormatObject, DateTimeFormatter> dateRandomFormatterCache = null;
+    private Cache<LocaleFormatObject, DateTimeFormatter> dateRandomFormatterCache;
 
     public RandomDate() {
         super();
@@ -241,4 +243,3 @@ public class RandomDate extends AbstractFunction {
     }
 
 }
-
