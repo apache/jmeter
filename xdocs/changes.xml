@@ -211,6 +211,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
     <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite xpath checker founds matches</li>
+    <li><bug>58876</bug>TestPlanName function returns null for a newly saved Test Plan and uses previously opened one for a new one</li>
 </ul>
 
 <h3>I18N</h3>

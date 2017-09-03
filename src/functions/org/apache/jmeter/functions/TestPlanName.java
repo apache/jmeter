@@ -48,7 +48,11 @@ public class TestPlanName extends AbstractFunction {
     @Override
     public String execute(SampleResult previousResult, Sampler currentSampler)
             throws InvalidVariableException {
-        return FileServer.getFileServer().getScriptName();
+        String scriptName = FileServer.getFileServer().getScriptName();
+        if(scriptName == null) {
+            scriptName = "Save Test plan before calling " + KEY + " function";
+        }
+        return scriptName;
     }
 
     /** {@inheritDoc} */
