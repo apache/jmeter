@@ -124,7 +124,7 @@
   <property name="skip.batchtest_SlowCharsFeature" value="false" />
   <property name="skip.batchtest_TestKeepAlive" value="false" />
   <property name="skip.batchtest_ResponseDecompression" value="false" />
-  <property name="skip.test_https" value="true" />
+  <property name="skip.test_https" value="false" />
   <property name="skip.test_http" value="false" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
 
