@@ -81,6 +81,7 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     public void doAction(ActionEvent e) {
         String action = e.getActionCommand();
         if (action.equals(ActionNames.SUB_TREE_SAVED)) {
+            previousGuiItems.clear();
             HashTree subTree = (HashTree) e.getSource();
             subTree.traverse(this);
         } else if (action.equals(ActionNames.SUB_TREE_LOADED)) {
