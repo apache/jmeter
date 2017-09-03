@@ -27,6 +27,8 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
+import org.apache.jmeter.samplers.SampleResult;
 import org.junit.Test;
 
 public class LengthPrefixedBinaryTCPClientImplTest {
@@ -53,7 +55,7 @@ public class LengthPrefixedBinaryTCPClientImplTest {
         final byte[] byteArray = os.toByteArray();
         assertEquals(2+(DATA.length()/2), byteArray.length);
         ByteArrayInputStream is = new ByteArrayInputStream(byteArray);
-        assertEquals(DATA, lp.read(is));
+        assertEquals(DATA, lp.read(is, new SampleResult()));
     }
 
 }

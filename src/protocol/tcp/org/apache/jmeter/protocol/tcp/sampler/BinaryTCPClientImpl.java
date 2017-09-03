@@ -112,7 +112,8 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
     
     @Deprecated
     public String read(InputStream is) throws ReadException {
-        return null;
+        log.warn("Deprecated method, use read(is, sampleResult) instead");
+        return read(is, new SampleResult());
     }
 
     /**
