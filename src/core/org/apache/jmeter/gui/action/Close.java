@@ -27,6 +27,7 @@ import javax.swing.JTree;
 
 import org.apache.jmeter.gui.GuiPackage;
 import org.apache.jmeter.gui.util.FocusRequester;
+import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.util.JMeterUtils;
 
 /**
@@ -108,6 +109,7 @@ public class Close extends AbstractActionWithNoRunningTest {
         JTree tree = guiPackage.getTreeListener().getJTree();
         tree.setSelectionRow(0);
         FocusRequester.requestFocus(tree);
+        FileServer.getFileServer().setScriptName(null);
         ActionRouter.getInstance().actionPerformed(new ActionEvent(e.getSource(), e.getID(), ActionNames.ADD_ALL));
     }
 }
