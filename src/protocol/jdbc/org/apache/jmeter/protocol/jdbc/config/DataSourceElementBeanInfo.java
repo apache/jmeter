@@ -90,9 +90,8 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "5000");
         p = property("checkQuery", TypeEditor.ComboStringEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "Select 1");
-        String[] CHECK_QUERY = getCheckQuery();
-        p.setValue(TAGS, CHECK_QUERY);
+        p.setValue(DEFAULT, "");
+        p.setValue(TAGS, JOrphanUtils.split(JMeterUtils.getPropDefault("jdbc.config.check.query", ""), "|"));
         p = property("dbUrl");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -135,14 +134,5 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
             }
         }
         return -1;
-    }
-
-    /**
-     * Get the check queris for the main databases
-     * Based in https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases
-     * @return a String[] with the list of check queries
-     */
-    private String[] getCheckQuery() {
-        return JOrphanUtils.split(JMeterUtils.getPropDefault("jdbc.config.check.query", ""), "|"); //$NON-NLS-1$
     }
 }

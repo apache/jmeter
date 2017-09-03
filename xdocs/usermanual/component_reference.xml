@@ -4029,19 +4029,19 @@ instead. (see figures 12 and 13).</p>
         This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
         However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
         <p>The list of the validation queries can be configured with <code>jdbc.config.check.query</code> property and are by default:</p>
-            <ul>
-              <li>hsqldb - select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</li>
-              <li>Oracle - select 1 from dual</li>
-              <li>DB2 - select 1 from sysibm.sysdummy1</li>
-              <li>mysql - select 1</li>
-              <li>microsoft SQL Server - select 1</li>
-              <li>postgresql - select 1</li>
-              <li>ingres - select 1</li>
-              <li>derby - values 1</li>
-              <li>H2 - select 1</li>
-              <li>Firebird - select 1 from rdb$database</li>
-            </ul>
-        <note>The list come from <a href="https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases">https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases</a> and it can be incorrect</note>
+            <dl>
+              <dt>hsqldb</dt><dd>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</dd>
+              <dt>Oracle</dt><dd>select 1 from dual</dd>
+              <dt>DB2</dt><dd>select 1 from sysibm.sysdummy1</dd>
+              <dt>mysql</dt><dd>select 1</dd>
+              <dt>microsoft SQL Server</dt><dd>select 1</dd>
+              <dt>postgresql</dt><dd>select 1</dd>
+              <dt>ingres</dt><dd>select 1</dd>
+              <dt>derby</dt><dd>values 1</dd>
+              <dt>H2</dt><dd>select 1</dd>
+              <dt>Firebird</dt><dd>select 1 from rdb$database</dd>
+            </dl>
+        <note>The list come from <a href="https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases">stackoverflow entry on different database validation queries</a> and it can be incorrect</note>
         <note>Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
         This is DBCP behaviour.</note>
         </property>
