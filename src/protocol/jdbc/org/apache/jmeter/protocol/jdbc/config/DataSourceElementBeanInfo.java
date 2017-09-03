@@ -146,7 +146,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
     }
 
     /**
-     * Get the check queris for the main databases
+     * Get the check queries for the main databases
      * Based in https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases
      * @return a String[] with the list of check queries
      */
