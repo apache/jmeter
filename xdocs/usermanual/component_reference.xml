@@ -4033,11 +4033,11 @@ instead. (see figures 12 and 13).</p>
               <dt>hsqldb</dt><dd>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</dd>
               <dt>Oracle</dt><dd>select 1 from dual</dd>
               <dt>DB2</dt><dd>select 1 from sysibm.sysdummy1</dd>
-              <dt>mysql</dt><dd>select 1</dd>
-              <dt>microsoft SQL Server</dt><dd>select 1</dd>
-              <dt>postgresql</dt><dd>select 1</dd>
-              <dt>ingres</dt><dd>select 1</dd>
-              <dt>derby</dt><dd>values 1</dd>
+              <dt>MySQL</dt><dd>select 1</dd>
+              <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd>select 1</dd>
+              <dt>PostgreSQL</dt><dd>select 1</dd>
+              <dt>Ingres</dt><dd>select 1</dd>
+              <dt>Derby</dt><dd>values 1</dd>
               <dt>H2</dt><dd>select 1</dd>
               <dt>Firebird</dt><dd>select 1 from rdb$database</dd>
             </dl>
