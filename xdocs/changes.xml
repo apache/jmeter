@@ -105,6 +105,7 @@ Incorporated feed back about unclear documentation.
     <li>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
     <li>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use isValid method of JDBC driver</li>
     <li>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
+    <li>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
 </ul>
 
 <h3>Controllers</h3>
