@@ -3989,7 +3989,7 @@ instead. (see figures 12 and 13).</p>
 </component>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.10" 
-                 width="474" height="458" screenshot="jdbc-config/jdbc-conn-config.png">
+                 width="697" height="656" screenshot="jdbc-config/jdbc-conn-config.png">
     <description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
      from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
      Otherwise each thread gets its own connection.
@@ -4047,7 +4047,25 @@ instead. (see figures 12 and 13).</p>
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
-        JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).</property>
+        JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).
+        <p>The list of the validation queries can be configured with <code>jdbc.config.jdbc.driver.class</code> property and are by default:</p>
+            <dl>
+              <dt>hsqldb</dt><dd>org.hsqldb.jdbc.JDBCDriver</dd>
+              <dt>Oracle</dt><dd>oracle.jdbc.OracleDriver</dd>
+              <dt>DB2</dt><dd>com.ibm.db2.jcc.DB2Driver</dd>
+              <dt>MySQL</dt><dd>com.mysql.jdbc.Driver</dd>
+              <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd>com.microsoft.sqlserver.jdbc.SQLServerDriver or com.microsoft.jdbc.sqlserver.SQLServerDriver</dd>
+              <dt>PostgreSQL</dt><dd>org.postgresql.Driver</dd>
+              <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
+              <dt>Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
+              <dt>H2</dt><dd>org.h2.Driver</dd>
+              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDrivery</dd>
+              <dt>Apache Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
+              <dt>MariaDB</dt><dd>org.mariadb.jdbc.Driver</dd>
+              <dt>SQLite</dt><dd>org.sqlite.JDBC</dd>
+              <dt>Sybase AES</dt><dd>net.sourceforge.jtds.jdbc.Driver</dd>
+            </dl>
+        </property>
         <property name="Username" required="No">Name of user to connect as.</property>
         <property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
     </properties>

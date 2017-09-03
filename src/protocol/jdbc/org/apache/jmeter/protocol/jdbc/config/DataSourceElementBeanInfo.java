@@ -95,9 +95,10 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p = property("dbUrl");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("driver");
+        p = property("driver", TypeEditor.ComboStringEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+        p.setValue(TAGS, getListJDBCDriverClass());
         p = property("username");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -135,4 +136,13 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         }
         return -1;
     }
+
+    /**
+     * Get the list of JDBC driver classname for the main databases
+     * @return a String[] with the list of JDBC driver classname
+     */
+    private String[] getListJDBCDriverClass() {
+        return JOrphanUtils.split(JMeterUtils.getPropDefault("jdbc.config.jdbc.driver.class", ""), "|"); //$NON-NLS-1$
+    }
+
 }
