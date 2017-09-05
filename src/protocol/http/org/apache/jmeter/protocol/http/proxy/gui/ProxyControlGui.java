@@ -631,6 +631,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
             enableRestart();
         } else if(fieldName.equals(PREFIX_HTTP_SAMPLER_NAME)) {
             model.setPrefixHTTPSampleName(prefixHTTPSampleName.getText());
+            enableRestart();
         }
     }
 
@@ -817,7 +818,6 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         prefixHTTPSampleName = new JTextField(4);
         prefixHTTPSampleName.addKeyListener(this);
         prefixHTTPSampleName.setName(PREFIX_HTTP_SAMPLER_NAME);
-        // TODO Not sure this is needed
         prefixHTTPSampleName.setActionCommand(ENABLE_RESTART);
         JLabel labelPrefix = new JLabel(JMeterUtils.getResString("proxy_prefix_http_sampler_name")); // $NON-NLS-1$
         labelPrefix.setLabelFor(prefixHTTPSampleName);
