@@ -97,7 +97,6 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61056</bug>HTTP : Support brotli decoding</li>
     <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
-    <li>Test Script Recorder : enable proxy restart when prefix is modified</li>
 </ul>
 
 <h3>Other samplers</h3>
