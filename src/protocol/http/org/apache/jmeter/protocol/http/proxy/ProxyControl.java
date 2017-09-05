@@ -985,23 +985,25 @@ public class ProxyControl extends GenericController {
         variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
         ValueReplacer replacer = new ValueReplacer(variables);
         JMeterTreeNode mySelf = model.getNodeOf(this);
-        Enumeration<JMeterTreeNode> children = mySelf.children();
-        while (children.hasMoreElements()) {
-            JMeterTreeNode templateNode = children.nextElement();
-            if (templateNode.isEnabled()) {
-                TestElement template = templateNode.getTestElement();
-                if (template instanceof Timer) {
-                    TestElement timer = (TestElement) template.clone();
-                    try {
-                        timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
-                        replacer.undoReverseReplace(timer);
-                        model.addComponent(timer, node);
-                    } catch (InvalidVariableException
-                            | IllegalUserActionException e) {
-                        // Not 100% sure, but I believe this can't happen, so
-                        // I'll log and throw an error:
-                        log.error("Program error", e);
-                        throw new Error(e);
+        if(mySelf != null) {
+            Enumeration<JMeterTreeNode> children = mySelf.children();
+            while (children.hasMoreElements()) {
+                JMeterTreeNode templateNode = children.nextElement();
+                if (templateNode.isEnabled()) {
+                    TestElement template = templateNode.getTestElement();
+                    if (template instanceof Timer) {
+                        TestElement timer = (TestElement) template.clone();
+                        try {
+                            timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
+                            replacer.undoReverseReplace(timer);
+                            model.addComponent(timer, node);
+                        } catch (InvalidVariableException
+                                | IllegalUserActionException e) {
+                            // Not 100% sure, but I believe this can't happen, so
+                            // I'll log and throw an error:
+                            log.error("Program error adding timers", e);
+                            throw new Error(e);
+                        }
                     }
                 }
             }
@@ -1088,25 +1090,27 @@ public class ProxyControl extends GenericController {
         LinkedList<TestElement> elements = new LinkedList<>();
 
         // Look for elements directly within the HTTP proxy:
-        Enumeration<?> kids = treeModel.getNodeOf(this).children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement element = (TestElement) subNode.getUserObject();
-                if (myClass.isInstance(element)) {
-                    if (ascending) {
-                        elements.addFirst(element);
-                    } else {
-                        elements.add(element);
+        JMeterTreeNode node = treeModel.getNodeOf(this);
+        if(node != null) {
+            Enumeration<?> kids = node.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement element = (TestElement) subNode.getUserObject();
+                    if (myClass.isInstance(element)) {
+                        if (ascending) {
+                            elements.addFirst(element);
+                        } else {
+                            elements.add(element);
+                        }
                     }
                 }
             }
         }
-
         // Look for arguments elements in the target controller or higher up:
         for (JMeterTreeNode controller = myTarget; controller != null; controller = (JMeterTreeNode) controller
                 .getParent()) {
-            kids = controller.children();
+            Enumeration<?> kids = controller.children();
             while (kids.hasMoreElements()) {
                 JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
                 if (subNode.isEnabled()) {
@@ -1360,13 +1364,15 @@ public class ProxyControl extends GenericController {
     private void notifySampleListeners(SampleEvent event) {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof SampleListener) {
-                    ((SampleListener) testElement).sampleOccurred(event);
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof SampleListener) {
+                        ((SampleListener) testElement).sampleOccurred(event);
+                    }
                 }
             }
         }
@@ -1379,13 +1385,15 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfStart() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof TestStateListener) {
-                    ((TestStateListener) testElement).testStarted();
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof TestStateListener) {
+                        ((TestStateListener) testElement).testStarted();
+                    }
                 }
             }
         }
@@ -1398,13 +1406,15 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfEnd() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof TestStateListener) { // TL - TE
-                    ((TestStateListener) testElement).testEnded();
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof TestStateListener) { // TL - TE
+                        ((TestStateListener) testElement).testEnded();
+                    }
                 }
             }
         }
