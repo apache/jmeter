@@ -97,6 +97,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61056</bug>HTTP : Support brotli decoding</li>
     <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
+    <li><bug>61492</bug>HTTP(S) Test Script Recorder : Add the possibility to change the value of proxy.pause in the GUI</li>
 </ul>
 
 <h3>Other samplers</h3>
