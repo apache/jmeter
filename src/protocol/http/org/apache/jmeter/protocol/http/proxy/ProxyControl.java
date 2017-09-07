@@ -395,7 +395,7 @@ public class ProxyControl extends GenericController {
     }
     
     public void setProxyPauseHTTPSample(String proxyPauseHTTPSample) {
-    setProperty(PROXY_PAUSE_HTTP_SAMPLER, proxyPauseHTTPSample);
+        setProperty(PROXY_PAUSE_HTTP_SAMPLER, proxyPauseHTTPSample);
     }
 
     public void setNotifyChildSamplerListenerOfFilteredSamplers(boolean b) {
@@ -486,7 +486,7 @@ public class ProxyControl extends GenericController {
     
     public String getProxyPauseHTTPSample() {
         return getPropertyAsString(PROXY_PAUSE_HTTP_SAMPLER);
-        }
+    }
 
     public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
         return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, true);
@@ -530,9 +530,9 @@ public class ProxyControl extends GenericController {
             server = new Daemon(getPort(), this);
             if (getProxyPauseHTTPSample().isEmpty()) {
                 sampleGap = JMeterUtils.getPropDefault("proxy.pause", 5000);
-                } else {
-                    sampleGap = Long.parseLong(getProxyPauseHTTPSample().trim());
-                }
+            } else {
+                sampleGap = Long.parseLong(getProxyPauseHTTPSample().trim());
+            }
             server.start();
             if (GuiPackage.getInstance() != null) {
                 GuiPackage.getInstance().register(server);
