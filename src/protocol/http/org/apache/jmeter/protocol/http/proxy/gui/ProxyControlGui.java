@@ -161,7 +161,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
      */
     private JTextField prefixHTTPSampleName;
     
-    /*
+    /**
      * Delay between HTTP requests
      */
     private JTextField proxyPauseHTTPSample;
@@ -229,7 +229,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
     private static final String ADD_SUGGESTED_EXCLUDES = "exclude_suggested";
 
     private static final String PREFIX_HTTP_SAMPLER_NAME = "proxy_prefix_http_sampler_name"; // $NON-NLS-1$
-    
+
     private static final String PROXY_PAUSE_HTTP_SAMPLER = "proxy_pause_http_sampler"; // $NON-NLS-1$
     //- action names
 
@@ -643,17 +643,16 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         } else if(fieldName.equals(PROXY_PAUSE_HTTP_SAMPLER)) {
             try {
                 Long.parseLong(proxyPauseHTTPSample.getText());
-                } catch (NumberFormatException nfe) {
-                    int length = proxyPauseHTTPSample.getText().length();
-                    if (length > 0) {
-                        JOptionPane.showMessageDialog(this, 
-                                JMeterUtils.getResString("proxy_settings_pause_error_digits"), // $NON-NLS-1$
-                                JMeterUtils.getResString("proxy_settings_pause_error_invalid_data"), // $NON-NLS-1$
-                                JOptionPane.WARNING_MESSAGE);
-                        // Drop the last character:
-                        proxyPauseHTTPSample.setText(proxyPauseHTTPSample.getText().substring(0, length-1));
-                        }
-                    }
+            } catch (NumberFormatException nfe) {
+                int length = proxyPauseHTTPSample.getText().length();
+                if (length > 0) {
+                    JOptionPane.showMessageDialog(this, JMeterUtils.getResString("proxy_settings_pause_error_digits"), // $NON-NLS-1$
+                            JMeterUtils.getResString("proxy_settings_pause_error_invalid_data"), // $NON-NLS-1$
+                            JOptionPane.WARNING_MESSAGE);
+                    // Drop the last character:
+                    proxyPauseHTTPSample.setText(proxyPauseHTTPSample.getText().substring(0, length - 1));
+                }
+            }
             model.setProxyPauseHTTPSample(proxyPauseHTTPSample.getText());
             enableRestart();
         }
@@ -850,7 +849,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         proxyPauseHTTPSample.addKeyListener(this);
         proxyPauseHTTPSample.setName(PROXY_PAUSE_HTTP_SAMPLER);
         proxyPauseHTTPSample.setActionCommand(ENABLE_RESTART);
-        JLabel labelProxyPause= new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
+        JLabel labelProxyPause = new JLabel(JMeterUtils.getResString("proxy_pause_http_sampler")); // $NON-NLS-1$
         labelProxyPause.setLabelFor(proxyPauseHTTPSample);
 
         JLabel labelSamplerType = new JLabel(JMeterUtils.getResString("proxy_sampler_type")); // $NON-NLS-1$
@@ -879,7 +878,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
         panel.add(labelProxyPause, gbc.clone());
         gbc.gridx++;
         gbc.weightx = 3;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(proxyPauseHTTPSample, gbc.clone());
         gbc.weightx = 1;
         gbc.gridx = 0;
