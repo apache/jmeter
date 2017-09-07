@@ -179,6 +179,7 @@ Incorporated feed back about unclear documentation.
      The charset was added sometime back while refactoring to use a newer api of http client.
      See <bug>56141</bug> for more info.</li>
   <li><bug>61456</bug>java.lang.ArrayIndexOutOfBoundsException when recording with JMeter and weird Basic Auth Authorization header</li>
+  <li><bug>61395</bug>Large server response truncation can impact recording</li>
 </ul>
 
 <h3>Other Samplers</h3>

@@ -50,6 +50,7 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterException;
@@ -171,6 +172,7 @@ public class Proxy extends Thread {
         }
         SamplerCreator samplerCreator = null;
         try {
+            JMeterContextService.getContext().setRecording(true);
             // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             if (ba.length == 0) {
@@ -303,6 +305,7 @@ public class Proxy extends Thread {
             if(sampler != null) {
                 sampler.threadFinished(); // Needed for HTTPSampler2
             }
+            JMeterContextService.getContext().setRecording(false);
         }
     }
 

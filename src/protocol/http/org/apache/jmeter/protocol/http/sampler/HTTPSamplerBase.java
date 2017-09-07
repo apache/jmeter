@@ -1827,9 +1827,11 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 
                 if (md == null) {
                     if(storeInBOS) {
-                        if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
+                        if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST 
+                                || JMeterContextService.getContext().isRecording()) {
                             w.write(readBuffer, 0, bytesReadInBuffer);
                         } else {
+                            log.debug("Big response, truncating it to {} bytes", MAX_BYTES_TO_STORE_PER_REQUEST);
                             w.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
                             storeInBOS = false;
                         }
