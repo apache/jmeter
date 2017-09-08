@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         super();
         setEolByte(EOM_INT);
         if (useEolByte) {
-            log.info("Using eomByte=" + eolByte);
+            log.info("Using eomByte={}", eolByte);
         }
     }
 
@@ -108,6 +109,12 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
         throw new UnsupportedOperationException(
                 "Method not supported for Length-Prefixed data.");
     }
+    
+    @Deprecated
+    public String read(InputStream is) throws ReadException {
+        log.warn("Deprecated method, use read(is, sampleResult) instead");
+        return read(is, new SampleResult());
+    }
 
     /**
      * Reads data until the defined EOM byte is reached.
@@ -118,12 +125,17 @@ public class BinaryTCPClientImpl extends AbstractTCPClient {
      * @throws ReadException when reading fails
      */
     @Override
-    public String read(InputStream is) throws ReadException {
+    public String read(InputStream is, SampleResult sampleResult) throws ReadException {
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {
             byte[] buffer = new byte[4096];
             int x = 0;
+            boolean first = true;
             while ((x = is.read(buffer)) > -1) {
+                if (first) {
+                    sampleResult.latencyEnd();
+                    first = false;
+                }
                 w.write(buffer, 0, x);
                 if (useEolByte && (buffer[x - 1] == eolByte)) {
                     break;
