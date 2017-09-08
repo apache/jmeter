@@ -224,5 +224,3 @@ may be subject to export controls on cryptographic software:
 
 
 **Thank you for using Apache JMeter.**
-
-This closes #306
