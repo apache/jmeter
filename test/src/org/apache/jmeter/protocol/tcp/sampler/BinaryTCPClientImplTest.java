@@ -28,6 +28,8 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.junit.Test;
 
@@ -85,6 +87,6 @@ public class BinaryTCPClientImplTest {
         os.close();
         assertEquals("12345",os.toString("ISO-8859-1"));
         ByteArrayInputStream bis = new ByteArrayInputStream(os.toByteArray());
-        assertEquals("3132333435",bi.read(bis));
+        assertEquals("3132333435",bi.read(bis, new SampleResult()));
     }
 }
