@@ -69,7 +69,7 @@ public class ExportTransactionAndSamplerNames extends AbstractAction implements 
     
     private static final Set<String> commands = new HashSet<>();
 
-    private static final String EXPORT_NAMES = "export_trans_names";
+    private static final String EXPORT_NAMES = "export_transactions_menu";
     
 
     static {
