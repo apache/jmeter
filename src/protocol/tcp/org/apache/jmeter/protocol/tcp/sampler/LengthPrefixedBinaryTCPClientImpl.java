@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
@@ -72,21 +73,28 @@ public class LengthPrefixedBinaryTCPClientImpl extends TCPClientDecorator {
         this.tcpClient.write(os, is);
     }
 
+    @Deprecated
+    public String read(InputStream is) throws ReadException {
+        log.warn("Deprecated method, use read(is, sampleResult) instead");
+        return read(is, new SampleResult());
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public String read(InputStream is) throws ReadException{
+    public String read(InputStream is, SampleResult sampleResult) throws ReadException{
         byte[] msg = new byte[0];
         int msgLen = 0;
         byte[] lengthBuffer = new byte[lengthPrefixLen];
         try {
             if (is.read(lengthBuffer, 0, lengthPrefixLen) == lengthPrefixLen) {
+                sampleResult.latencyEnd();
                 msgLen = byteArrayToInt(lengthBuffer);
                 msg = new byte[msgLen];
                 int bytes = JOrphanUtils.read(is, msg, 0, msgLen);
                 if (bytes < msgLen) {
-                    log.warn("Incomplete message read, expected: "+msgLen+" got: "+bytes);
+                    log.warn("Incomplete message read, expected: {} got: {}", msgLen, bytes);
                 }
             }
     
