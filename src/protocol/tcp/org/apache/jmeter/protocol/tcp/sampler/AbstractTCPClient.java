@@ -18,6 +18,10 @@
 
 package org.apache.jmeter.protocol.tcp.sampler;
 
+import java.io.InputStream;
+
+import org.apache.jmeter.samplers.SampleResult;
+
 /**
  * Basic implementation of TCPClient interface.
  */
@@ -76,4 +80,12 @@ public abstract class AbstractTCPClient implements TCPClient {
         this.charset = charset;
     }
 
+    /**
+     * Default implementation calls {@link TCPClient#read(InputStream)} for backward compatibility
+     * @see org.apache.jmeter.protocol.tcp.sampler.TCPClient#read(java.io.InputStream, org.apache.jmeter.samplers.SampleResult)
+     */
+    @Override
+    public String read(InputStream is, SampleResult sampleResult) throws ReadException {
+        return read(is);
+    }
 }
