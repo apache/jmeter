@@ -96,7 +96,7 @@ public class TCPClientImpl extends AbstractTCPClient {
 
     @Deprecated
     public String read(InputStream is) throws ReadException {
-        return null;
+        return read(is, new SampleResult());
     }
     
     /**
