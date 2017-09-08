@@ -103,10 +103,10 @@ Incorporated feed back about unclear documentation.
 <h3>Other samplers</h3>
 <ul>
     <li><bug>61320</bug>Test Action : Set duration to <code>0</code> by default</li>
-    <li>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
-    <li>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use isValid method of JDBC driver</li>
-    <li>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
-    <li>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
+    <li><bug>61504</bug>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
+    <li><bug>61505</bug>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use isValid method of JDBC driver</li>
+    <li><bug>61506</bug>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
+    <li><bug>61507</bug>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
     <li><bug>60156</bug> - TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
@@ -131,12 +131,12 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61040</bug>Add a time shifting function</li>
     <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
-    <li>Add a random date within a specific date range function</li>
+    <li><bug>61508</bug>Add a random date within a specific date range function</li>
 </ul>
 
 <h3>I18N</h3>
 <ul>
-    <li>Better label/translation/documentation for labels start and max for Counter element</li>
+    <li><bug>61509</bug>Better label/translation/documentation for labels start and max for Counter element</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -148,7 +148,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
        where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
-    <li>Set 'Max Number of Connections' to 0 into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
+    <li><bug>61510</bug>Set 'Max Number of Connections' to 0 into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
     <li><bug>61399</bug>Make some bin and extras scripts Shellcheck compatible. Contributed by Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
 </ul>
 
