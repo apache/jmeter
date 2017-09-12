@@ -49,7 +49,7 @@ public class HttpPoolEntry extends PoolEntry<HttpRoute, OperatedClientConnection
     }
 
     @Override
-    @SuppressWarnings("UnsynchronizedOverridesSynchronized")
+    @SuppressWarnings("sync-override")
     /**
      * No synchronization added as the override is just for logging.
      * Adding synhronized within logging might introduce too much locking
