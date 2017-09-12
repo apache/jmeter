@@ -18,9 +18,10 @@
 
 package org.apache.jmeter.functions;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,6 +68,7 @@ public class Groovy extends AbstractFunction {
 
 
     public Groovy() {
+        super();
     }
     
     /**
@@ -74,6 +76,7 @@ public class Groovy extends AbstractFunction {
      * @param bindings Bindings
      */
     protected void populateBindings(Bindings bindings) {
+        // NOOP
     }
 
     /** {@inheritDoc} */
@@ -120,20 +123,15 @@ public class Groovy extends AbstractFunction {
                 resultStr = out.toString();
             }
             
-            if (varName.length() > 0) {// vars will be null on TestPlan
-                if(vars != null) {
-                    vars.put(varName, resultStr);
-                }
+            if (varName.length() > 0 && vars != null) {// vars will be null on TestPlan
+                vars.put(varName, resultStr);
             }
         } catch (Exception ex) // Mainly for bsh.EvalError
         {
             log.warn("Error running groovy script", ex);
         }
-        if(log.isDebugEnabled()) {
-            log.debug("__groovy("+script+","+varName+")=" + resultStr);
-        }
+        log.debug("__groovy({},{})={}",script, varName, resultStr);
         return resultStr;
-
     }
 
     /** {@inheritDoc} */
@@ -155,7 +153,7 @@ public class Groovy extends AbstractFunction {
                             ", nor from:"+file.getAbsolutePath()+", check property '"+INIT_FILE+"'");
                 }
             }
-            try (FileReader fr = new FileReader(file); BufferedReader reader = new BufferedReader(fr)) {
+            try (Reader reader = Files.newBufferedReader(file.toPath(), Charset.defaultCharset())) {
                 Bindings bindings = scriptEngine.createBindings();
                 bindings.put("log", log);
                 scriptEngine.eval(reader, bindings);
