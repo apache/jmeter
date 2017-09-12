@@ -20,13 +20,14 @@ package org.apache.jmeter.protocol.http.control;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -234,13 +235,13 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
             s2 = url2.toString();
         }
 
-        log.debug("Target URL strings to match against: "+s1+" and "+s2);
+        log.debug("Target URL strings to match against: {} and {}", s1, s2);
         // TODO should really return most specific (i.e. longest) match.
         for (JMeterProperty jMeterProperty : getAuthObjects()) {
             Authorization auth = (Authorization) jMeterProperty.getObjectValue();
 
             String uRL = auth.getURL();
-            log.debug("Checking match against auth'n entry: "+uRL);
+            log.debug("Checking match against auth'n entry: {}", uRL);
             if (s1.startsWith(uRL) || s2 != null && s2.startsWith(uRL)) {
                 log.debug("Matched");
                 return auth;
@@ -364,8 +365,7 @@ public class AuthManager extends ConfigTestElement implements TestStateListener,
         }
 
         boolean ok = true;
-        try ( FileReader fr = new FileReader(file); 
-                BufferedReader reader = new BufferedReader(fr)){
+        try (BufferedReader reader = Files.newBufferedReader(file.toPath(), Charset.defaultCharset())){
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
