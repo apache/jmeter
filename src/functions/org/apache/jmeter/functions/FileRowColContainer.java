@@ -19,9 +19,11 @@
 package org.apache.jmeter.functions;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -54,7 +56,7 @@ public class FileRowColContainer {
     private final String delimiter;
 
     public FileRowColContainer(String file, String delim) throws IOException, FileNotFoundException {
-        log.debug("FRCC(" + file + "," + delim + ")");
+        log.debug("FRCC({},{})", file, delim);
         fileName = file;
         delimiter = delim;
         nextRow = 0;
@@ -63,7 +65,7 @@ public class FileRowColContainer {
     }
 
     public FileRowColContainer(String file) throws IOException, FileNotFoundException {
-        log.debug("FRCC(" + file + ")[" + DELIMITER + "]");
+        log.debug("FRCC({})[{}]", file, DELIMITER);
         fileName = file;
         delimiter = DELIMITER;
         nextRow = 0;
@@ -72,8 +74,9 @@ public class FileRowColContainer {
     }
 
     private void load() throws IOException, FileNotFoundException {
-        try ( FileReader fis = new FileReader(fileName);
-                BufferedReader myBread = new BufferedReader(fis);) {
+        try (BufferedReader myBread = 
+                Files.newBufferedReader(new File(fileName).toPath(), 
+                        Charset.defaultCharset())) {
             String line = myBread.readLine();
             /*
              * N.B. Stop reading the file if we get a blank line: This allows
@@ -104,7 +107,7 @@ public class FileRowColContainer {
     public String getColumn(int row, int col) throws IndexOutOfBoundsException {
         String colData;
         colData = fileData.get(row).get(col);
-        log.debug(fileName + "(" + row + "," + col + "): " + colData);
+        log.debug("{}({},{}):{}", fileName, row, col, colData);
         return colData;
     }
 
@@ -118,11 +121,10 @@ public class FileRowColContainer {
     public int nextRow() {
         int row = nextRow;
         nextRow++;
-        if (nextRow >= fileData.size())// 0-based
-        {
+        if (nextRow >= fileData.size()) {// 0-based
             nextRow = 0;
         }
-        log.debug("Row: " + row);
+        log.debug("Row: {}", row);
         return row;
     }
 
