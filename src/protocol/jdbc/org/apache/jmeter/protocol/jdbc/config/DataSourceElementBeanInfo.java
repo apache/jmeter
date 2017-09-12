@@ -30,6 +30,8 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jmeter.testbeans.BeanInfoSupport;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
+import org.apache.jmeter.util.JMeterUtils;
+import org.apache.jorphan.util.JOrphanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +65,7 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p.setValue(DEFAULT, "");
         p = property("poolMax");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "10");
+        p.setValue(DEFAULT, "0");
         p = property("timeout");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "10000");
@@ -86,15 +88,17 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         p = property("connectionAge");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "5000");
-        p = property("checkQuery");
+        p = property("checkQuery", TypeEditor.ComboStringEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
-        p.setValue(DEFAULT, "Select 1");
+        p.setValue(DEFAULT, "");
+        p.setValue(TAGS, getListCheckQuery());
         p = property("dbUrl");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
-        p = property("driver");
+        p = property("driver", TypeEditor.ComboStringEditor);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
+        p.setValue(TAGS, getListJDBCDriverClass());
         p = property("username");
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");
@@ -132,4 +136,22 @@ public class DataSourceElementBeanInfo extends BeanInfoSupport {
         }
         return -1;
     }
+
+    /**
+     * Get the list of JDBC driver classname for the main databases
+     * @return a String[] with the list of JDBC driver classname
+     */
+    private String[] getListJDBCDriverClass() {
+        return JOrphanUtils.split(JMeterUtils.getPropDefault("jdbc.config.jdbc.driver.class", ""), "|"); //$NON-NLS-1$
+    }
+
+    /**
+     * Get the check queries for the main databases
+     * Based in https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases
+     * @return a String[] with the list of check queries
+     */
+    private String[] getListCheckQuery() {
+        return JOrphanUtils.split(JMeterUtils.getPropDefault("jdbc.config.check.query", ""), "|"); //$NON-NLS-1$
+    }
+
 }

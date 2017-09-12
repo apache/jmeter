@@ -158,6 +158,8 @@ public class ProxyControl extends GenericController {
     private static final String SAMPLER_DOWNLOAD_IMAGES = "ProxyControlGui.sampler_download_images"; // $NON-NLS-1$
     
     private static final String PREFIX_HTTP_SAMPLER_NAME = "ProxyControlGui.proxy_prefix_http_sampler_name"; // $NON-NLS-1$
+    
+    private static final String PROXY_PAUSE_HTTP_SAMPLER = "ProxyControlGui.proxy_pause_http_sampler"; // $NON-NLS-1$
 
     private static final String REGEX_MATCH = "ProxyControlGui.regex_match"; // $NON-NLS-1$
 
@@ -185,8 +187,7 @@ public class ProxyControl extends GenericController {
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC3_1 = "1";
     private static final String SAMPLER_TYPE_HTTP_SAMPLER_HC4 = "2";
 
-    private static final long SAMPLE_GAP =
-        JMeterUtils.getPropDefault("proxy.pause", 5000); // $NON-NLS-1$
+    private long sampleGap; // $NON-NLS-1$
     // Detect if user has pressed a new link
 
     // for ssl connection
@@ -392,6 +393,10 @@ public class ProxyControl extends GenericController {
     public void setPrefixHTTPSampleName(String prefixHTTPSampleName) {
         setProperty(PREFIX_HTTP_SAMPLER_NAME, prefixHTTPSampleName);
     }
+    
+    public void setProxyPauseHTTPSample(String proxyPauseHTTPSample) {
+        setProperty(PROXY_PAUSE_HTTP_SAMPLER, proxyPauseHTTPSample);
+    }
 
     public void setNotifyChildSamplerListenerOfFilteredSamplers(boolean b) {
         notifyChildSamplerListenersOfFilteredSamples = b;
@@ -478,6 +483,10 @@ public class ProxyControl extends GenericController {
     public String getPrefixHTTPSampleName() {
         return getPropertyAsString(PREFIX_HTTP_SAMPLER_NAME);
     }
+    
+    public String getProxyPauseHTTPSample() {
+        return getPropertyAsString(PROXY_PAUSE_HTTP_SAMPLER);
+    }
 
     public boolean getNotifyChildSamplerListenerOfFilteredSamplers() {
         return getPropertyAsBoolean(NOTIFY_CHILD_SAMPLER_LISTENERS_FILTERED, true);
@@ -519,6 +528,11 @@ public class ProxyControl extends GenericController {
         notifyTestListenersOfStart();
         try {
             server = new Daemon(getPort(), this);
+            if (getProxyPauseHTTPSample().isEmpty()) {
+                sampleGap = JMeterUtils.getPropDefault("proxy.pause", 5000);
+            } else {
+                sampleGap = Long.parseLong(getProxyPauseHTTPSample().trim());
+            }
             server.start();
             if (GuiPackage.getInstance() != null) {
                 GuiPackage.getInstance().register(server);
@@ -688,18 +702,25 @@ public class ProxyControl extends GenericController {
                             if(BASIC_AUTH.equals(authType)) {
                                 String authCred= new String(Base64.decodeBase64(authCredentialsBase64));
                                 String[] loginPassword = authCred.split(":"); //$NON-NLS-1$
-                                authorization.setUser(loginPassword[0]);
-                                authorization.setPass(loginPassword[1]);
+                                if(loginPassword.length == 2) {
+                                    authorization.setUser(loginPassword[0]);
+                                    authorization.setPass(loginPassword[1]);
+                                } else {
+                                    log.error("Error parsing BASIC Auth authorization header:'{}', decoded value:'{}'", 
+                                            authCredentialsBase64, authCred);
+                                    // we keep initial header
+                                    return null;
+                                }
                             } else {
                                 // Digest or Kerberos
                                 authorization.setUser("${AUTH_LOGIN}");//$NON-NLS-1$
                                 authorization.setPass("${AUTH_PASSWORD}");//$NON-NLS-1$
-                                
                             }
                         }
                         // remove HEADER_AUTHORIZATION from HeaderManager 
                         // because it's useless after creating Authorization object
                         iterator.remove();
+                        break;
                     }
                 }
             }
@@ -978,23 +999,25 @@ public class ProxyControl extends GenericController {
         variables.addParameter("T", Long.toString(deltaT)); // $NON-NLS-1$
         ValueReplacer replacer = new ValueReplacer(variables);
         JMeterTreeNode mySelf = model.getNodeOf(this);
-        Enumeration<JMeterTreeNode> children = mySelf.children();
-        while (children.hasMoreElements()) {
-            JMeterTreeNode templateNode = children.nextElement();
-            if (templateNode.isEnabled()) {
-                TestElement template = templateNode.getTestElement();
-                if (template instanceof Timer) {
-                    TestElement timer = (TestElement) template.clone();
-                    try {
-                        timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
-                        replacer.undoReverseReplace(timer);
-                        model.addComponent(timer, node);
-                    } catch (InvalidVariableException
-                            | IllegalUserActionException e) {
-                        // Not 100% sure, but I believe this can't happen, so
-                        // I'll log and throw an error:
-                        log.error("Program error", e);
-                        throw new Error(e);
+        if(mySelf != null) {
+            Enumeration<JMeterTreeNode> children = mySelf.children();
+            while (children.hasMoreElements()) {
+                JMeterTreeNode templateNode = children.nextElement();
+                if (templateNode.isEnabled()) {
+                    TestElement template = templateNode.getTestElement();
+                    if (template instanceof Timer) {
+                        TestElement timer = (TestElement) template.clone();
+                        try {
+                            timer.setComment("Recorded:"+Long.toString(deltaT)+"ms");
+                            replacer.undoReverseReplace(timer);
+                            model.addComponent(timer, node);
+                        } catch (InvalidVariableException
+                                | IllegalUserActionException e) {
+                            // Not 100% sure, but I believe this can't happen, so
+                            // I'll log and throw an error:
+                            log.error("Program error adding timers", e);
+                            throw new Error(e);
+                        }
                     }
                 }
             }
@@ -1081,25 +1104,27 @@ public class ProxyControl extends GenericController {
         LinkedList<TestElement> elements = new LinkedList<>();
 
         // Look for elements directly within the HTTP proxy:
-        Enumeration<?> kids = treeModel.getNodeOf(this).children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement element = (TestElement) subNode.getUserObject();
-                if (myClass.isInstance(element)) {
-                    if (ascending) {
-                        elements.addFirst(element);
-                    } else {
-                        elements.add(element);
+        JMeterTreeNode node = treeModel.getNodeOf(this);
+        if(node != null) {
+            Enumeration<?> kids = node.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement element = (TestElement) subNode.getUserObject();
+                    if (myClass.isInstance(element)) {
+                        if (ascending) {
+                            elements.addFirst(element);
+                        } else {
+                            elements.add(element);
+                        }
                     }
                 }
             }
         }
-
         // Look for arguments elements in the target controller or higher up:
         for (JMeterTreeNode controller = myTarget; controller != null; controller = (JMeterTreeNode) controller
                 .getParent()) {
-            kids = controller.children();
+            Enumeration<?> kids = controller.children();
             while (kids.hasMoreElements()) {
                 JMeterTreeNode subNode = (JMeterTreeNode) kids.nextElement();
                 if (subNode.isEnabled()) {
@@ -1141,7 +1166,7 @@ public class ProxyControl extends GenericController {
             long now = System.currentTimeMillis();
             long deltaT = now - lastTime;
             int cachedGroupingMode = groupingMode;
-            if (deltaT > SAMPLE_GAP) {
+            if (deltaT > sampleGap) {
                 if (!myTarget.isLeaf() && cachedGroupingMode == GROUPING_ADD_SEPARATORS) {
                     addDivider(treeModel, myTarget);
                 }
@@ -1353,13 +1378,15 @@ public class ProxyControl extends GenericController {
     private void notifySampleListeners(SampleEvent event) {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof SampleListener) {
-                    ((SampleListener) testElement).sampleOccurred(event);
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof SampleListener) {
+                        ((SampleListener) testElement).sampleOccurred(event);
+                    }
                 }
             }
         }
@@ -1372,13 +1399,15 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfStart() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof TestStateListener) {
-                    ((TestStateListener) testElement).testStarted();
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof TestStateListener) {
+                        ((TestStateListener) testElement).testStarted();
+                    }
                 }
             }
         }
@@ -1391,13 +1420,15 @@ public class ProxyControl extends GenericController {
     private void notifyTestListenersOfEnd() {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
-        Enumeration<JMeterTreeNode> kids = myNode.children();
-        while (kids.hasMoreElements()) {
-            JMeterTreeNode subNode = kids.nextElement();
-            if (subNode.isEnabled()) {
-                TestElement testElement = subNode.getTestElement();
-                if (testElement instanceof TestStateListener) { // TL - TE
-                    ((TestStateListener) testElement).testEnded();
+        if(myNode != null) {
+            Enumeration<JMeterTreeNode> kids = myNode.children();
+            while (kids.hasMoreElements()) {
+                JMeterTreeNode subNode = kids.nextElement();
+                if (subNode.isEnabled()) {
+                    TestElement testElement = subNode.getTestElement();
+                    if (testElement instanceof TestStateListener) { // TL - TE
+                        ((TestStateListener) testElement).testEnded();
+                    }
                 }
             }
         }

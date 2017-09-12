@@ -50,6 +50,7 @@ import org.apache.jmeter.protocol.http.util.ConversionUtils;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.LoggerFactory;
 import org.apache.jorphan.util.JMeterException;
@@ -167,26 +168,27 @@ public class Proxy extends Thread {
         HTTPSamplerBase sampler = null;
         final boolean isDebug = log.isDebugEnabled();
         if (isDebug) {
-            log.debug(port + "====================================================================");
+            log.debug("{} ====================================================================", port);
         }
         SamplerCreator samplerCreator = null;
         try {
+            JMeterContextService.getContext().setRecording(true);
             // Now, parse initial request (in case it is a CONNECT request)
             byte[] ba = request.parse(new BufferedInputStream(clientSocket.getInputStream()));
             if (ba.length == 0) {
                 if (isDebug) {
-                    log.debug(port + "Empty request, ignored");
+                    log.debug("{} Empty request, ignored", port);
                 }
                 throw new JMeterException(); // hack to skip processing
             }
             if (isDebug) {
-                log.debug(port + "Initial request: " + new String(ba));
+                log.debug("{} Initial request: {}", port, new String(ba));
             }
             outStreamClient = clientSocket.getOutputStream();
 
             if ((request.getMethod().startsWith(HTTPConstants.CONNECT)) && (outStreamClient != null)) {
                 if (isDebug) {
-                    log.debug(port + "Method CONNECT => SSL");
+                    log.debug("{} Method CONNECT => SSL", port);
                 }
                 // write a OK response to browser, to engage SSL exchange
                 outStreamClient.write(("HTTP/1.0 200 OK\r\n\r\n").getBytes(SampleResult.DEFAULT_HTTP_ENCODING)); // $NON-NLS-1$
@@ -195,7 +197,7 @@ public class Proxy extends Thread {
                 String[] param = request.getUrl().split(":");  // $NON-NLS-1$
                 if (param.length == 2) {
                     if (isDebug) {
-                        log.debug(port + "Start to negotiate SSL connection, host: " + param[0]);
+                        log.debug("{} Start to negotiate SSL connection, host: {}", port ,param[0]);
                     }
                     clientSocket = startSSL(clientSocket, param[0]);
                 } else {
@@ -209,16 +211,18 @@ public class Proxy extends Thread {
                 } catch (IOException ioe) { // most likely this is because of a certificate error
                     // param.length is 2 here
                     final String url = " for '"+ param[0] +"'";
-                    log.warn(port + "Problem with SSL certificate"+url+"? Ensure browser is set to accept the JMeter proxy cert: " + ioe.getMessage());
+                    log.warn("{} Problem with SSL certificate for url {}? Ensure browser is set to accept the JMeter proxy cert: {}", 
+                            port, url,ioe.getMessage());
                     // won't work: writeErrorToClient(HttpReplyHdr.formInternalError());
                     result = generateErrorResult(result, request, ioe, "\n**ensure browser is set to accept the JMeter proxy certificate**"); // Generate result (if nec.) and populate it
                     throw new JMeterException(); // hack to skip processing
                 }
                 if (isDebug) {
-                    log.debug(port + "Reparse: " + new String(ba));
+                    log.debug("{} Reparse: ", port, new String(ba));
                 }
                 if (ba.length == 0) {
-                    log.warn(port + "Empty response to http over SSL. Probably waiting for user to authorize the certificate for " + request.getUrl());
+                    log.warn("{} Empty response to http over SSL. Probably waiting for user to authorize the certificate for {}",
+                                port, request.getUrl());
                     throw new JMeterException(); // hack to skip processing
                 }
             }
@@ -235,7 +239,7 @@ public class Proxy extends Thread {
 
             sampler.threadStarted(); // Needed for HTTPSampler2
             if (isDebug) {
-                log.debug(port + "Execute sample: " + sampler.getMethod() + " " + sampler.getUrl());
+                log.debug("{} Execute sample: {} and url {}",port, sampler.getMethod(), sampler.getUrl());
             }
             result = sampler.sample();
 
@@ -301,6 +305,7 @@ public class Proxy extends Thread {
             if(sampler != null) {
                 sampler.threadFinished(); // Needed for HTTPSampler2
             }
+            JMeterContextService.getContext().setRecording(false);
         }
     }
 

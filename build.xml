@@ -1699,7 +1699,7 @@ run JMeter unless all the JMeter jars are added.
     }
     void processFiles(basename, targetDir) {
       // combine all the extensions in one list
-      extensions = new String[]{".zip", ".zip.asc", ".zip.md5", ".zip.sha", ".tgz", ".tgz.asc", ".tgz.md5", ".tgz.sha"};
+      extensions = new String[]{".zip", ".zip.asc", ".zip.md5", ".zip.sha512", ".tgz", ".tgz.asc", ".tgz.md5", ".tgz.sha512"};
       for (i = 0; i < extensions.length; ++i) {
         extension = extensions[i];
         srcFile = basename + extension;
@@ -1812,8 +1812,8 @@ run JMeter unless all the JMeter jars are added.
         release/jmeter/[source|binaries]
 
         Files that are expected to be present:
-        apache-jmeter-<version>.[tgz|zip] + [.asc|.md5|.sha]
-        apache-jmeter-<version>_src.[tgz|zip] + [.asc|.md5|.sha]
+        apache-jmeter-<version>.[tgz|zip] + [.asc|.md5|.sha512]
+        apache-jmeter-<version>_src.[tgz|zip] + [.asc|.md5|.sha512]
 
         Must have SVN installed, in particular the svnmucc command-line client.
 
@@ -2206,9 +2206,9 @@ run JMeter unless all the JMeter jars are added.
     <basename property="_base" file="${path}"/>
     <checksum algorithm="MD5" file="${path}" property="md5"/>
     <echo message="${md5} *${_base}" file="${path}.md5"/>
-    <echo message="Creating SHA for ${path}"/>
-    <checksum algorithm="SHA" file="${path}" property="sha"/>
-    <echo message="${sha} *${_base}" file="${path}.sha"/>
+    <echo message="Creating SHA-512 for ${path}"/>
+  	<checksum algorithm="SHA-512" file="${path}" property="sha512"/>
+    <echo message="${sha512} *${_base}" file="${path}.sha512"/>
   </target>
 
   <!--
@@ -3479,8 +3479,8 @@ run JMeter unless all the JMeter jars are added.
       ]]>
     </scriptdef>
     <gpg>
-      <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
-      <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
+      <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha512"/>
+      <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha512"/>
     </gpg>
   </target>
 

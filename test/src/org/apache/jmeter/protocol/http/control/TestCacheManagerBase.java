@@ -86,7 +86,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
 
     protected abstract void setRequestHeaders();
 
-    private void sleepTill(long deadline) {
+    protected void sleepTill(long deadline) {
         while (System.currentTimeMillis() < deadline) {
             try {
                 Thread.sleep(100);
@@ -344,7 +344,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertNotNull("Should find entry", getThreadCacheEntry(LOCAL_HOST));
         assertFalse("Should not find valid entry", this.cacheManager.inCache(url));
     }
-
+    
     @Test
     public void testGetClearEachIteration() throws Exception {
         assertFalse("Should default not to clear after each iteration.", this.cacheManager.getClearEachIteration());
@@ -406,7 +406,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         assertTrue("ThreadCache should be emptied by call to clear.", getThreadCache().isEmpty());
     }
 
-    private HTTPSampleResult getSampleResultWithSpecifiedResponseCode(String code) {
+    protected HTTPSampleResult getSampleResultWithSpecifiedResponseCode(String code) {
         HTTPSampleResult sampleResult = new HTTPSampleResult();
         sampleResult.setResponseCode(code);
         sampleResult.setHTTPMethod("GET");
@@ -422,7 +422,7 @@ public abstract class TestCacheManagerBase extends JMeterTestCase {
         return threadLocal.get();
     }
 
-    private CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
+    protected CacheManager.CacheEntry getThreadCacheEntry(String url) throws Exception {
         return getThreadCache().get(url);
     }
     

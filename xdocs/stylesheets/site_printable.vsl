@@ -188,6 +188,8 @@ No
 <li><a href="$items.getAttributeValue("href")">$xmlout.outputString($items,true)</a></li>
 #elseif($items.getName() == "complink")
 <li>#complink($items)</li>
+#elseif($items.getName() == "funclink")
+<li>#funclink($items)</li>
 #end
 #end
 </ul>
@@ -269,6 +271,8 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 #note($node)
 #elseif($node.getName() == "complink")
 #complink($node)
+#elseif($node.getName() == "funclink")
+#funclink($node)
 #elseif($node.getName() == "figure")
 #figure($node)
 #elseif ($node.getName() == "links")
@@ -324,6 +328,10 @@ Contributed by $id.getAttributeValue("name") &lt;$id.getAttributeValue("mail")&g
 
 #macro (complink $complink)
 <a href="$relativePath/usermanual/component_reference.html#$complink.getAttributeValue("name").replace($space,$udsc)">$complink.getAttributeValue("name")</a>##
+#end
+
+#macro (funclink $funclink)
+<a href="$relativePath/usermanual/functions.html#$funclink.getAttributeValue("name").replace($space,$udsc).replace("(","").replace(")","")">$funclink.getAttributeValue("name")</a>##
 #end
 
 #macro (outputTag $tag)

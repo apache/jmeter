@@ -123,6 +123,7 @@ Alternatively, just use <code>/</code> instead for the path separator - e.g. <co
         <tr><td>Calculation</td><td> <a href="#__intSum">intSum</a></td><td>add int numbers</td><td>1.8.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__longSum">longSum</a></td><td>add long numbers</td><td>2.3.2</td></tr>
         <tr><td>Calculation</td><td> <a href="#__Random">Random</a></td><td>generate a random number</td><td>1.9</td></tr>
+        <tr><td>Calculation</td><td> <a href="#__RandomDate">RandomDate</a></td><td>generate random date within a specific date range</td><td>3.3</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomFromMultipleVars">RandomFromMultipleVars</a></td><td>extracts an element from the values of a set of variables separated by <code>|</code></td><td>3.1</td></tr>
         <tr><td>Calculation</td><td> <a href="#__RandomString">RandomString</a></td><td>generate a random string</td><td>2.6</td></tr>
         <tr><td>Calculation</td><td> <a href="#__UUID">UUID</a></td><td>generate a random type 4 UUID</td><td>2.9</td></tr>
@@ -638,6 +639,27 @@ the comma after <code>7</code> is escaped.</note>
 </p>
 </component>
 
+<component index="&sect-num;.5.8" name="__RandomDate">
+<description><p>The RandomDate function returns a random date that lies between the given start date and end date values.</p></description>
+
+<properties>
+        <property name="Time format" required="No">Format string for DateTimeFormatter (default <code>yyyy-MM-dd</code>)</property>
+        <property name="Start date" required="No">The start date, the default is <em>now</em></property>
+        <property name="End date" required="Yes">The end date</property>
+        <property name="Locale to use for format" required="No">
+        The string format of a locale. The language code must be lowercase. The country code must be uppercase. The separator must be an underscore, e.g. <code>en_EN</code>.
+        See <a href="http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html">http://www.oracle.com/technetwork/java/javase/javase7locales-334809.html</a>.
+        If omitted, by default the function uses the Apache JMeter locale one.
+        </property>
+        <property name="Name of variable" required="No">The name of the variable to set.</property>
+</properties>
+
+<p>Examples:
+<source>${__RandomDate(,,2050-07-08,,)}</source> will return a random date between <em>now</em> and <code>2050-07-08</code>. For example <code>2039-06-21</code><br/>
+<source>${__RandomDate(dd MM yyyy,,08 07 2050,,)}</source> will return a random date with a custom format like <code>04 03 2034</code><br/>
+</p>
+</component>
+
 <component index="&sect-num;.5.8" name="__RandomString">
 <description><p>The RandomString function returns a random String of length using characters in chars to use.</p></description>
 
@@ -1074,8 +1096,8 @@ The following shorthand aliases are provided:
 <li><code>YMD</code> = <code>yyyyMMdd</code></li>
 <li><code>HMS</code> = <code>HHmmss</code></li>
 <li><code>YMDHMS</code> = <code>yyyyMMdd-HHmmss</code></li>
-<li><code>USER1</code> = whatever is in the Jmeter property <code>time.USER1</code></li>
-<li><code>USER2</code> = whatever is in the Jmeter property <code>time.USER2</code></li>
+<li><code>USER1</code> = whatever is in the JMeter property <code>time.USER1</code></li>
+<li><code>USER2</code> = whatever is in the JMeter property <code>time.USER2</code></li>
 </ul>
 <p>The defaults can be changed by setting the appropriate JMeter property, e.g.
 <code>time.YMD=yyMMdd</code>

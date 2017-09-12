@@ -479,6 +479,21 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="funclink">
+    <xsl:param name="name" />
+    <a
+      href="{concat($relative-path, '/usermanual/functions.html#', translate(@name, ' ()', '_'))}"
+    >
+      <xsl:value-of select="@name" />
+    </a>
+  </xsl:template>
+
+  <xsl:template match="funclink">
+    <xsl:call-template name="funclink">
+      <xsl:with-param name="name" select="@name" />
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="figure">
     <figure>
       <xsl:call-template name="image">
