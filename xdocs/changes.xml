@@ -63,7 +63,10 @@ Summary
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
 <ch_section>IMPORTANT CHANGES</ch_section>
-HTTP Sampler now supports Brotli compression. A long standing bug that occured when more than one TableEditor were used, was eventually tackled. The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager, as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release 
+HTTP Sampler now supports Brotli compression. 
+A long standing bug that occured when more than one TableEditor were used, was eventually tackled. 
+The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager, 
+as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release 
 
 
 <ch_title>Core improvements</ch_title>
@@ -85,6 +88,7 @@ Incorporated feed back about unclear documentation.
 <li>In InfluxDbBackendListenerClient, <code>statut</code> property has been renamed to <code>status</code></li>
 <li>In CookieManager, <code>DEFAULT_IMPLEMENTATION</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
 <note>If you're using <code>ignorecookies</code> with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back.</note></li>
+<li>JMeter will not truncate anymore by default responses exceeding 10 MB. If you want to enable this truncation, see property <code>httpsampler.max_bytes_to_store_per_request</code></li>
 <h3>Removed elements or functions</h3>
     <li><code>_StringFromFile</code> function has been dropped, use <code><funclink name="__StringFromFile"/></code> instead</li>
 <h3>Logging changes</h3>
