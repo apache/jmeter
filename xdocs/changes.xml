@@ -111,6 +111,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61505</bug>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use isValid method of JDBC driver</li>
     <li><bug>61506</bug>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
     <li><bug>61507</bug>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
+    <li><bug>61525</bug>OS Process Sampler : Add browser button to Command and Working directory fields</li>
     <li><bug>60156</bug> - TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
