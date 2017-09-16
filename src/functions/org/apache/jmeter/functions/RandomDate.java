@@ -55,7 +55,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  *  <li>Locale for the format (optional)</li> 
  *  <li>variable name (optional)</li>
  * </ul>
- * Returns a formatted date with the specified number of (days, month, year) <br/>
+ * Returns a formatted date with the specified number of (days, month, year)
  * Value is also saved in the variable for later re-use.
  * 
  * @since 3.3

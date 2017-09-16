@@ -82,7 +82,7 @@ public interface TCPClient {
      *            InputStream for socket
      * @param sampleResult {@link SampleResult}
      * @return String read from socket
-     * @throws ReadException
+     * @throws ReadException exception that can contain partial response
      */
     String read(InputStream is, SampleResult sampleResult) throws ReadException;
 
