@@ -114,6 +114,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61525</bug>OS Process Sampler : Add browser button to Command and Working directory fields</li>
     <li><bug>60156</bug> - TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61039</bug>CSV data set config : Add browser button to Filename field</li>
+    <li><bug>61527</bug>CSV data set config : Add a list for main file encoding values for File encoding attribute</li>
 </ul>
 
 <h3>Controllers</h3>
