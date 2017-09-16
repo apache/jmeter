@@ -57,11 +57,12 @@ public class JTreeTable extends JTable {
     }
 
     /**
-     * @param rowData the data for the table
+     * @param rowData the data for the table. Has to be a {@link Vector} of {@link Vector}s.
      * @param columnNames the names for the columns
      */
+    @SuppressWarnings("unchecked")
     public JTreeTable(Vector<?> rowData, Vector<?> columnNames) {
-        super(rowData, columnNames);
+        super((Vector<? extends Vector<?>>) rowData, columnNames);
     }
 
 }
