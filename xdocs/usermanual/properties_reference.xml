@@ -1172,12 +1172,12 @@ JMETER-SERVER</source>
 <section name="&sect-num;.33 CSV DataSet configuration" anchor="csv_dataset">
 <properties>
 <property name="csvdataset.eofstring">
-    List of file encoding values<br/>
-    Defaults to: <code>platform default</code>
-</property>
-<property name="csvdataset.file.encoding">
     String to return at <abbr title="end of file"><code>EOF</code></abbr> (if recycle not used).<br/>
     Defaults to: <code>&lt;EOF&gt;</code>
+</property>
+<property name="csvdataset.file.encoding_list">
+    List of file encoding values<br/>
+    Defaults to: <code>platform default</code>
 </property>
 </properties>
 </section>
