@@ -1000,9 +1000,9 @@ public class ProxyControl extends GenericController {
         ValueReplacer replacer = new ValueReplacer(variables);
         JMeterTreeNode mySelf = model.getNodeOf(this);
         if(mySelf != null) {
-            Enumeration<JMeterTreeNode> children = mySelf.children();
+            Enumeration<?> children = mySelf.children();
             while (children.hasMoreElements()) {
-                JMeterTreeNode templateNode = children.nextElement();
+                JMeterTreeNode templateNode = (JMeterTreeNode)children.nextElement();
                 if (templateNode.isEnabled()) {
                     TestElement template = templateNode.getTestElement();
                     if (template instanceof Timer) {
@@ -1379,9 +1379,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof SampleListener) {
@@ -1400,9 +1400,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) {
@@ -1421,9 +1421,9 @@ public class ProxyControl extends GenericController {
         JMeterTreeModel treeModel = getJmeterTreeModel();
         JMeterTreeNode myNode = treeModel.getNodeOf(this);
         if(myNode != null) {
-            Enumeration<JMeterTreeNode> kids = myNode.children();
+            Enumeration<?> kids = myNode.children();
             while (kids.hasMoreElements()) {
-                JMeterTreeNode subNode = kids.nextElement();
+                JMeterTreeNode subNode = (JMeterTreeNode)kids.nextElement();
                 if (subNode.isEnabled()) {
                     TestElement testElement = subNode.getTestElement();
                     if (testElement instanceof TestStateListener) { // TL - TE
