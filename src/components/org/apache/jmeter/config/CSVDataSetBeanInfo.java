@@ -21,6 +21,7 @@ package org.apache.jmeter.config;
 import java.beans.PropertyDescriptor;
 
 import org.apache.jmeter.testbeans.BeanInfoSupport;
+import org.apache.jmeter.testbeans.gui.FileEditor;
 import org.apache.jmeter.testbeans.gui.TypeEditor;
 
 public class CSVDataSetBeanInfo extends BeanInfoSupport {
@@ -61,6 +62,7 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
         p.setValue(DEFAULT, "");        //$NON-NLS-1$
         p.setValue(NOT_EXPRESSION, Boolean.TRUE);
+        p.setPropertyEditorClass(FileEditor.class);
 
         p = property(FILE_ENCODING);
         p.setValue(NOT_UNDEFINED, Boolean.TRUE);
