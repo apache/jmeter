@@ -112,9 +112,7 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
 
     private void createScene(final String htmlContent) {
         Platform.setImplicitExit(false);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
+        Platform.runLater(() -> {
 
                 WebView view = new WebView();
                 engine = view.getEngine();
@@ -126,12 +124,8 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
                                 .invokeLater(() -> progressBar.setValue(newValue.intValue())));
 
                 engine.getLoadWorker().exceptionProperty()
-                        .addListener(new ChangeListener<Throwable>() {
-
-                            @Override
-                            public void changed(
-                                    ObservableValue<? extends Throwable> o,
-                                    Throwable old, final Throwable value) {
+                        .addListener((ObservableValue<? extends Throwable> o,
+                                Throwable old, final Throwable value) -> {
                                 if (engine.getLoadWorker().getState() == State.FAILED) {
                                     SwingUtilities.invokeLater(() -> JOptionPane
                                             .showMessageDialog(
@@ -145,10 +139,8 @@ public class RenderInBrowser extends SamplerResultTab implements ResultRenderer 
                                                     "Loading error...",
                                                     JOptionPane.ERROR_MESSAGE));
                                 }
-                            }
                         });
                 jfxPanel.setScene(new Scene(view));
-            }
         });
     }
 
