@@ -196,6 +196,6 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
     @Override
     @SuppressWarnings("unchecked")
     public Enumeration<JMeterTreeNode> children() {
-        return super.children();
+        return (Enumeration<JMeterTreeNode>) super.children();
     }
 }
