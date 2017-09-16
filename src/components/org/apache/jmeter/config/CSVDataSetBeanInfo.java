@@ -133,6 +133,6 @@ public class CSVDataSetBeanInfo extends BeanInfoSupport {
      * @return a String[] with the list of file encoding
      */
     private String[] getListFileEncoding() {
-        return JOrphanUtils.split(JMeterUtils.getPropDefault("csvdataset.file.encoding", ""), "|"); //$NON-NLS-1$
+        return JOrphanUtils.split(JMeterUtils.getPropDefault("csvdataset.file.encoding_list", ""), "|"); //$NON-NLS-1$
     }
 }
