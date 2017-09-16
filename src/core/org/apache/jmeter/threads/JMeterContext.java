@@ -206,7 +206,7 @@ public class JMeterContext {
     }
 
     /**
-     * param recording true if we are recording
+     * @param recording true if we are recording
      */
     public void setRecording(boolean recording) {
         this.recording = recording;
