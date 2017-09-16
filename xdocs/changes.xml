@@ -173,6 +173,7 @@ Incorporated feed back about unclear documentation.
     <li>Updated to jsoup-1.10.3 (from 1.10.2)</li>
     <li>Updated to commons-lang3 3.6 (from 3.5)</li>
     <li>Updated to json-path 2.4.0 (from 2.2.0)</li>
+    <li>Updated to httpcore 4.4.7 (from 4.4.6)</li>
     <li><bug>61438</bug>Change the cryptographic signature of packages from sha-1 to sha-512</li>
 </ul>
 
