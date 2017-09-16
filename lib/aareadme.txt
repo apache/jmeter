@@ -87,6 +87,11 @@ commons-pool2-2.4.2
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
 
+commons-text-1.1
+-----------------
+https://commons.apache.org/proper/commons-text/
+- Random Strings
+
 dnsjava-2.1.8
 -----------------
 http://www.dnsjava.org/download/
