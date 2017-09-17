@@ -63,10 +63,10 @@ Summary
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
 <ch_section>IMPORTANT CHANGES</ch_section>
-HTTP Sampler now supports Brotli compression.
-A long standing bug that occurred when more than one TableEditor were used, was eventually tackled.
-The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
-as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release
+<p>HTTP Sampler now supports Brotli compression.</p>
+<p>A long standing bug that occurred when more than one TableEditor were used, was eventually tackled.</p>
+<p>The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
+as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release</p>
 
 
 <ch_title>Core improvements</ch_title>
@@ -108,11 +108,11 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61320</bug>Test Action : Set duration to <code>0</code> by default</li>
     <li><bug>61504</bug>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
-    <li><bug>61505</bug>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use isValid method of JDBC driver</li>
+    <li><bug>61505</bug>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use <code>isValid</code> method of JDBC driver</li>
     <li><bug>61506</bug>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
     <li><bug>61507</bug>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
     <li><bug>61525</bug>OS Process Sampler : Add browser button to Command and Working directory fields</li>
-    <li><bug>60156</bug> - TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>60156</bug>TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61039</bug>CSV data set config : Add browser button to Filename field</li>
     <li><bug>61527</bug>CSV data set config : Add a list for main file encoding values for File encoding attribute</li>
 </ul>
@@ -155,7 +155,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
        where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
-    <li><bug>61510</bug>Set 'Max Number of Connections' to 0 into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
+    <li><bug>61510</bug>Set 'Max Number of Connections' to <code>0</code> into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
     <li><bug>61399</bug>Make some bin and extras scripts Shellcheck compatible. Contributed by Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
 </ul>
 
@@ -187,14 +187,14 @@ Incorporated feed back about unclear documentation.
   <li><bug>61384</bug>Don't set the charset on enclosing <code>multipart/form-data</code> header. It irritates some servers.<br/>
      The charset was added sometime back while refactoring to use a newer API of http client.
      See <bug>56141</bug> for more info.</li>
-  <li><bug>61456</bug>java.lang.ArrayIndexOutOfBoundsException when recording with JMeter and weird Basic Auth Authorization header</li>
+  <li><bug>61456</bug><code>java.lang.ArrayIndexOutOfBoundsException</code> when recording with JMeter and weird Basic Auth Authorization header</li>
   <li><bug>61395</bug>Large server response truncation can impact recording</li>
 </ul>
 
 <h3>Other Samplers</h3>
 <ul>
     <li><bug>60889</bug>JMeter JDBC sample calls <code>SELECT USER()</code> when testing with MySQL JDBC due to <code>Connection#toString</code> call for response headers.</li>
-    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is false, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
+    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is <code>false</code>, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
     <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachments where specified.</li>
 </ul>
 
@@ -223,7 +223,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
     <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite XPath checker founds matches</li>
-    <li><bug>58876</bug>TestPlanName function returns null for a newly saved Test Plan and uses previously opened one for a new one</li>
+    <li><bug>58876</bug>TestPlanName function returns <code>null</code> for a newly saved Test Plan and uses previously opened one for a new one</li>
 </ul>
 
 <h3>I18N</h3>
@@ -232,7 +232,7 @@ Incorporated feed back about unclear documentation.
 
 <h3>Report / Dashboard</h3>
 <ul>
-    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a failureMessage is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a <code>failureMessage</code> is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61151</bug>Report/Dashboard : Top 5 Errors by Sampler and Errors : If assertion contains html code, the html part is hidden</li>
 </ul>
 
@@ -253,7 +253,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
     <li><bug>61359</bug>When cutting an element from Tree, Test plan is not marked as dirty</li>
     <li><bug>61380</bug>JMeter shutdown using timers releases thundering herd of interrupted samplers</li>
-    <li><bug>57055</bug>CheckDirty.doAction should clear previousGuiItems for SUB_TREE_SAVED</li>
+    <li><bug>57055</bug>CheckDirty.doAction should clear previousGuiItems for <code>SUB_TREE_SAVED</code></li>
 </ul>
 
  <!--  =================== Thanks =================== -->
@@ -284,7 +284,7 @@ Apologies if we have omitted anyone else.
 <ch_section>Known problems and workarounds</ch_section>
 <ul>
 <li>View Results Tree may freeze rendering large response particularly if this response has no spaces, see <bugzilla>60816</bugzilla>.
-This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling JEditorPane.setText() or JTextArea.setText() with long text without space</a>.
+This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling <code>JEditorPane.setText()</code> or <code>JTextArea.setText()</code> with long text without space</a>.
 </li>
 </ul>
 <ul>
@@ -310,7 +310,7 @@ The fix is to run JMeter as Administrator, it will create the registry key for y
 You may encounter the following error:
 <source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
  if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
- algorithm using MD2 (like md2WithRSAEncryption) or with a SSL certificate with a size lower than 1024 bits.
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
 This error is related to increased security in Java 8+.
 <br></br>
 To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
@@ -335,7 +335,7 @@ The fix is to use JDK9 b65 or later (but be aware that Java 9 is not certified y
 </li>
 
 <li>
-JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with JAVA 7 on Mac OSX.
+JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
 This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
 The fix is to use JDK 8 b132 or later.
 </li>
