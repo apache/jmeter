@@ -2724,6 +2724,11 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TEST_HTTPS.jmx"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JDBC_TESTS"/>
+      <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
+    </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
@@ -3179,6 +3184,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xmlpull"/>
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
+    <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
