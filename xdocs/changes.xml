@@ -57,35 +57,47 @@ Summary
 </ul>
 
 <ch_section>New and Noteworthy</ch_section>
-
+<note>JMeter does not yet support JAVA 9, next JMeter version will support it, you can help and follow progress on this item in <bugzilla>61529</bugzilla> .</note>
 <!-- <ch_category>Sample category</ch_category> -->
 <!-- <ch_title>Sample title</ch_title> -->
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
-
-<p>HTTP Sampler now supports Brotli compression.</p>
-<p>A long standing bug that occurred when more than one TableEditor were used, was eventually tackled.</p>
+<ch_title>Core improvements</ch_title>
+<p>HTTP Sampler now supports Brotli decompression.</p>
+<p>InfluxDB BackendListener now supports sending results to InfluxDB through UDP protocol.
+<figure width="825" height="328" image="changes/3.3/influxdb_udp.png"></figure></p>
+<p>TCP Sampler now computes latency, see <bugzilla>60156</bugzilla></p>
+<p>Continued to improve the quality of our code and tests coverage. See <a href="https://builds.apache.org/analysis/overview?id=12927" >Quality report</a></p>
+<ch_title>UX improvements</ch_title>
+<p>More work has been done to better support HiDPI.</p>
+<p>Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, where fixed.</p>
 <p>The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
 as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release</p>
-
-
-<ch_title>Core improvements</ch_title>
-Continued to improve the quality of our code.
-
-<ch_title>UX improvements</ch_title>
-More work has been done to better support HiDPI. Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, where fixed.
-
+<p>JDBC Sampler UX has been improved by adding select boxes for drivers and validation queries.
+<figure width="821" height="543" image="changes/3.3/jdbc_config_validation_driver_url.png"></figure>
+<figure width="820" height="451" image="changes/3.3/jdbc_config_validation_query.png"></figure>
+</p>
+<p>If Controller and While Controller UX have been improved
+<figure width="821" height="348" image="changes/3.3/jmeter_if_controller.png"></figure>
+</p>
 <ch_title>Report/Dashboard improvements</ch_title>
-Various small fixes to improve robustness.
-
+A new Help menu item has been added to simplify configuration of report generation.
+<figure width="491" height="455" image="changes/3.3/jmeter_export_transactions_menu.png"></figure>
+<figure width="609" height="188" image="changes/3.3/jmeter_export_transactions_result.png"></figure>
 <ch_title>Documentation improvements</ch_title>
-Incorporated feed back about unclear documentation.
+Incorporated feedback about unclear documentation.
 
 <ch_title>Functions</ch_title>
-<p>Function Helper Dialog: a new field that shows execution result has been added.</p>
+<p>Function Helper Dialog: a new field that shows execution result has been added.
+<figure width="693" height="344" image="changes/3.3/jmeter_function_result.png"></figure>
+</p>
 <p>New functions:</p>
 <ul>
-<li><code><funclink name="__timeShift"/></code> - return a date in various formats with the specified amount of seconds/minutes/hours/days added.</li>
-<li><code><funclink name="__RandomDate"/></code> - generate random date within a specific date range.</li>
+<li><code><funclink name="__timeShift"/></code> - return a date in various formats with the specified amount of seconds/minutes/hours/days added.
+<figure width="757" height="376" image="changes/3.3/jmeter_function_add_time.png"></figure>
+</li>
+<li><code><funclink name="__RandomDate"/></code> - generate random date within a specific date range.
+<figure width="700" height="369" image="changes/3.3/jmeter_function_random_date.png"></figure>
+</li>
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
@@ -93,9 +105,11 @@ Incorporated feed back about unclear documentation.
 <ch_section>Incompatible changes</ch_section>
 <ul>
 <li>In InfluxDbBackendListenerClient, <code>statut</code> property has been renamed to <code>status</code></li>
-<li>In CookieManager, <code>DEFAULT_IMPLEMENTATION</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
+<li>In CookieManager, <code>DEFAULT_POLICY</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
 <note>If you're using <code>ignorecookies</code> with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back.</note></li>
 <li>JMeter will not truncate anymore by default responses exceeding 10 MB. If you want to enable this truncation, see property <code>httpsampler.max_bytes_to_store_per_request</code></li>
+<li><code>org.apache.jmeter.protocol.tcp.sampler.TCPClient.read(InputStream)</code> has been deprecated in favor or org.apache.jmeter.protocol.tcp.sampler.TCPClient.read(InputStream, SampleResult), 
+ensure you update your implementation to be able to compute latency, see <bugzilla>60156</bugzilla></li>
 </ul>
 <h3>Removed elements or functions</h3>
 <ul>
@@ -340,7 +354,7 @@ The fix is to use JDK8_u45 or later.
 View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
 This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
 See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
-The fix is to use JDK9 b65 or later (but be aware that Java 9 is not certified yet for JMeter).
+The fix is to use JDK9 b65 or later.
 </li>
 
 <li>
