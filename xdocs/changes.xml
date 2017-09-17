@@ -62,7 +62,6 @@ Summary
 <!-- <ch_title>Sample title</ch_title> -->
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 
-<ch_section>IMPORTANT CHANGES</ch_section>
 <p>HTTP Sampler now supports Brotli compression.</p>
 <p>A long standing bug that occurred when more than one TableEditor were used, was eventually tackled.</p>
 <p>The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
