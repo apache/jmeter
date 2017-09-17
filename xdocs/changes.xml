@@ -63,9 +63,12 @@ Summary
 <!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
 <ch_title>Core improvements</ch_title>
 <p>HTTP Sampler now supports Brotli decompression.</p>
+<p>CacheManager now completely supports Vary header.</p>
 <p>InfluxDB BackendListener now supports sending results to InfluxDB through UDP protocol.
-<figure width="825" height="328" image="changes/3.3/influxdb_udp.png"></figure></p>
+<figure width="825" height="328" image="changes/3.3/influxdb_udp.png"></figure>
+It has also been enhanced to send number of errors by response code and message for each transaction</p>
 <p>TCP Sampler now computes latency, see <bugzilla>60156</bugzilla></p>
+<p>Upgraded dependencies to last available versions bringing performance improvements and bug fixes</p>
 <p>Continued to improve the quality of our code and tests coverage. See <a href="https://builds.apache.org/analysis/overview?id=12927" >Quality report</a></p>
 <ch_title>UX improvements</ch_title>
 <p>More work has been done to better support HiDPI.</p>
@@ -154,7 +157,7 @@ ensure you update your implementation to be able to compute latency, see <bugzil
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
 <ul>
-    <li><bug>61176</bug><pr>298</pr>Cache responses that have <code>vary</code> header in the <code>CacheManager</code>.</li>
+    <li><bug>61176</bug><pr>298</pr> Cache responses that have <code>vary</code> header in the <code>CacheManager</code>.</li>
 </ul>
 
 <h3>Functions</h3>
