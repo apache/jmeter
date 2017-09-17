@@ -84,13 +84,16 @@ Incorporated feed back about unclear documentation.
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
-
+<ul>
 <li>In InfluxDbBackendListenerClient, <code>statut</code> property has been renamed to <code>status</code></li>
 <li>In CookieManager, <code>DEFAULT_IMPLEMENTATION</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
 <note>If you're using <code>ignorecookies</code> with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back.</note></li>
 <li>JMeter will not truncate anymore by default responses exceeding 10 MB. If you want to enable this truncation, see property <code>httpsampler.max_bytes_to_store_per_request</code></li>
+</ul>
 <h3>Removed elements or functions</h3>
+<ul>
     <li><code>_StringFromFile</code> function has been dropped, use <code><funclink name="__StringFromFile"/></code> instead</li>
+</ul>
 <h3>Logging changes</h3>
 
 <!-- =================== Improvements =================== -->
