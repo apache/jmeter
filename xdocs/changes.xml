@@ -72,7 +72,7 @@ It has also been enhanced to send number of errors by response code and message 
 <p>Continued to improve the quality of our code and tests coverage. See <a href="https://builds.apache.org/analysis/overview?id=12927" >Quality report</a></p>
 <ch_title>UX improvements</ch_title>
 <p>More work has been done to better support HiDPI.</p>
-<p>Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, where fixed.</p>
+<p>Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, were fixed.</p>
 <p>The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
 as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release</p>
 <p>JDBC Sampler UX has been improved by adding select boxes for drivers and validation queries.
@@ -221,7 +221,7 @@ ensure you update your implementation to be able to compute latency, see <bugzil
 <ul>
     <li><bug>60889</bug>JMeter JDBC sample calls <code>SELECT USER()</code> when testing with MySQL JDBC due to <code>Connection#toString</code> call for response headers.</li>
     <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is <code>false</code>, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
-    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachments where specified.</li>
+    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachments were specified.</li>
 </ul>
 
 <h3>Controllers</h3>
