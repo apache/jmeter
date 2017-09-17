@@ -64,7 +64,7 @@ Summary
 
 <ch_section>IMPORTANT CHANGES</ch_section>
 HTTP Sampler now supports Brotli compression. 
-A long standing bug that occured when more than one TableEditor were used, was eventually tackled. 
+A long standing bug that occurred when more than one TableEditor were used, was eventually tackled. 
 The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager, 
 as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release 
 
@@ -185,7 +185,7 @@ Incorporated feed back about unclear documentation.
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
   <li><bug>61384</bug>Don't set the charset on enclosing <code>multipart/form-data</code> header. It irritates some servers.<br/>
-     The charset was added sometime back while refactoring to use a newer api of http client.
+     The charset was added sometime back while refactoring to use a newer API of http client.
      See <bug>56141</bug> for more info.</li>
   <li><bug>61456</bug>java.lang.ArrayIndexOutOfBoundsException when recording with JMeter and weird Basic Auth Authorization header</li>
   <li><bug>61395</bug>Large server response truncation can impact recording</li>
@@ -195,7 +195,7 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><bug>60889</bug>JMeter JDBC sample calls <code>SELECT USER()</code> when testing with MySQL JDBC due to <code>Connection#toString</code> call for response headers.</li>
     <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is false, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
-    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachements where specified.</li>
+    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachments where specified.</li>
 </ul>
 
 <h3>Controllers</h3>
@@ -222,7 +222,7 @@ Incorporated feed back about unclear documentation.
 <h3>Functions</h3>
 <ul>
     <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
-    <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite xpath checker founds matches</li>
+    <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite XPath checker founds matches</li>
     <li><bug>58876</bug>TestPlanName function returns null for a newly saved Test Plan and uses previously opened one for a new one</li>
 </ul>
 
@@ -241,7 +241,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>60743</bug>Stopping / Shutting down Test might create a deadlock due to HTTPCORE-446, fixed by HttpCore upgrade to 4.4.7</li>
     <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
     <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
-    <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in gui mode</li>
+    <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in GUI mode</li>
     <li><bug>61054</bug>Endless loop in <code>JOrphanUtils#replaceAllWithRegex</code> when regex is contained in replacement</li>
     <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some L&amp;F</li>
     <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
@@ -249,7 +249,7 @@ Incorporated feed back about unclear documentation.
     <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
     <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
     <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
-    <li><bug>61270</bug>Fixed width fonts too small in text areas to read under hidpi (user manual bug)</li>
+    <li><bug>61270</bug>Fixed width fonts too small in text areas to read under HiDPI (user manual bug)</li>
     <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
     <li><bug>61359</bug>When cutting an element from Tree, Test plan is not marked as dirty</li>
     <li><bug>61380</bug>JMeter shutdown using timers releases thundering herd of interrupted samplers</li>
