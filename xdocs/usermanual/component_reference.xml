@@ -4844,7 +4844,7 @@ props.put("PROP1","1234");
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - the assertion result</li>
+<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
@@ -4897,7 +4897,7 @@ props.put("PROP1","1234");
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - the assertion result</li>
+<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
