@@ -84,8 +84,8 @@ Incorporated feed back about unclear documentation.
 <p>Function Helper Dialog: a new field that shows execution result has been added.</p>
 <p>New functions:</p>
 <ul>
-<li>timeShift - return a date in various formats with the specified amount of seconds/minutes/hours/days added.</li>
-<li>RandomDate - generate random date within a specific date range.</li>
+<li><code><funclink name="__timeShift"/></code> - return a date in various formats with the specified amount of seconds/minutes/hours/days added.</li>
+<li><code><funclink name="__RandomDate"/></code> - generate random date within a specific date range.</li>
 </ul>
 
 <!-- =================== Incompatible changes =================== -->
