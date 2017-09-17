@@ -94,7 +94,6 @@ Incorporated feed back about unclear documentation.
 <ul>
     <li><code>_StringFromFile</code> function has been dropped, use <code><funclink name="__StringFromFile"/></code> instead</li>
 </ul>
-<h3>Logging changes</h3>
 
 <!-- =================== Improvements =================== -->
 
