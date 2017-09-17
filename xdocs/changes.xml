@@ -80,6 +80,14 @@ Various small fixes to improve robustness.
 <ch_title>Documentation improvements</ch_title>
 Incorporated feed back about unclear documentation.
 
+<ch_title>Functions</ch_title>
+<p>Function Helper Dialog: a new field that shows execution result has been added.</p>
+<p>New functions:</p>
+<ul>
+<li>timeShift - return a date in various formats with the specified amount of seconds/minutes/hours/days added.</li>
+<li>RandomDate - generate random date within a specific date range.</li>
+</ul>
+
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
