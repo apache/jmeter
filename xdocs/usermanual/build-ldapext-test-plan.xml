@@ -395,7 +395,7 @@ this will move the complete subtree, plus all retired people in the subtree to t
 </p>
 <p>
 <figure image="ldaptest/extmoddn.png">
-Figure &sect-num;.3.8. Rename example</figure>
+Figure &sect-num;.3.7. Rename example</figure>
 </p>
 </subsection>
 
@@ -417,7 +417,7 @@ you need to enter "<code>cn=John Junior Doe,ou=Users</code>" in the <code>Delete
 </p>
 <p>
 <figure image="ldaptest/extdel.png">
-Figure &sect-num;.3.7. Delete example</figure>
+Figure &sect-num;.3.8. Delete example</figure>
 </p>
 </subsection>
 
