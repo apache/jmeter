@@ -33,7 +33,7 @@
         <p>In this section, you will learn how to create a basic Test Plan to test an LDAP server.
 You will create four users that send requests for four tests on the LDAP server. Also, you will tell
 the users to run their tests 4 times. So,  the total number of requests is (4 users) x (4 requests) x
-repeat 4 times) = 40 LDAP requests. To construct the Test Plan, you will use the following elements:
+(repeat 4 times) = 64 LDAP requests. To construct the Test Plan, you will use the following elements:
 <a href="test_plan.html#thread_group">Thread Group</a>,
 <complink name="LDAP Request"/>,
 <complink name="LDAP Request Defaults"/>, and
