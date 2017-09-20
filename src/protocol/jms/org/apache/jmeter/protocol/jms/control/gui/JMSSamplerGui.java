@@ -63,6 +63,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
     private JLabeledTextField priority = new JLabeledTextField(JMeterUtils.getResString("jms_priority"),1); //$NON-NLS-1$
 
     private JLabeledTextField jmsSelector = new JLabeledTextField(JMeterUtils.getResString("jms_selector")); //$NON-NLS-1$
+    
+    private JLabeledTextField numberOfSamplesToAggregate = new JLabeledTextField("Number of samples to aggregate"); //$NON-NLS-1$
 
     private JSyntaxTextArea messageContent = JSyntaxTextArea.getInstance(10, 50); //$NON-NLS-1$
 
@@ -71,10 +73,13 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
     private JLabeledTextField providerUrl = new JLabeledTextField(JMeterUtils.getResString("jms_provider_url")); //$NON-NLS-1$
 
-    private String[] labels = new String[] { JMeterUtils.getResString("jms_request"), //$NON-NLS-1$
-            JMeterUtils.getResString("jms_requestreply") }; //$NON-NLS-1$
+    private String[] labels = new String[] { JMeterUtils.getResString("jms_request"),
+            JMeterUtils.getResString("jms_requestreply"),
+            JMeterUtils.getResString("jms_read"),
+            JMeterUtils.getResString("jms_browse"),
+            JMeterUtils.getResString("jms_clear")}; //$NON-NLS-1$
 
-    private JLabeledChoice oneWay = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
+    private JLabeledChoice jmsConnectionMode = new JLabeledChoice(JMeterUtils.getResString("jms_communication_style"), labels); //$NON-NLS-1$
 
     private JMSPropertiesPanel jmsPropertiesPanel;
 
@@ -99,11 +104,12 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         queueConnectionFactory.setText(""); // $NON-NLS-1$
         sendQueue.setText(""); // $NON-NLS-1$
         receiveQueue.setText(""); // $NON-NLS-1$
-        ((JComboBox<?>) oneWay.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
+        ((JComboBox<?>) jmsConnectionMode.getComponentList().get(1)).setSelectedItem(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
         timeout.setText("");  // $NON-NLS-1$
         expiration.setText("");  // $NON-NLS-1$
         priority.setText("");  // $NON-NLS-1$
         jmsSelector.setText(""); // $NON-NLS-1$
+        numberOfSamplesToAggregate.setText(""); // $NON-NLS-1$
         messageContent.setInitialText(""); // $NON-NLS-1$
         initialContextFactory.setText(""); // $NON-NLS-1$
         providerUrl.setText(""); // $NON-NLS-1$
@@ -124,8 +130,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setSendQueue(sendQueue.getText());
         element.setReceiveQueue(receiveQueue.getText());
 
-        boolean isOneway = oneWay.getText().equals(JMeterUtils.getResString("jms_request")); //$NON-NLS-1$
-        element.setIsOneway(isOneway);
+        element.setJmsConnectionMode(jmsConnectionMode.getText());
 
         element.setNonPersistent(useNonPersistentDelivery.isSelected());
         element.setUseReqMsgIdAsCorrelId(useReqMsgIdAsCorrelId.isSelected());
@@ -134,6 +139,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         element.setExpiration(expiration.getText());
         element.setPriority(priority.getText());
         element.setJMSSelector(jmsSelector.getText());
+        element.setNumberOfSamplesToAggregate(numberOfSamplesToAggregate.getText());
         element.setContent(messageContent.getText());
 
         element.setInitialContextFactory(initialContextFactory.getText());
@@ -167,14 +173,8 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         sendQueue.setText(sampler.getSendQueue());
         receiveQueue.setText(sampler.getReceiveQueue());
 
-        JComboBox<?> box = (JComboBox<?>) oneWay.getComponentList().get(1);
-        String selected = null;
-        if (sampler.isOneway()) {
-            selected = JMeterUtils.getResString("jms_request"); //$NON-NLS-1$
-        } else {
-            selected = JMeterUtils.getResString("jms_requestreply"); //$NON-NLS-1$
-        }
-        box.setSelectedItem(selected);
+        JComboBox<?> box = (JComboBox<?>) jmsConnectionMode.getComponentList().get(1);
+        box.setSelectedItem(sampler.getJmsConnectionMode());
 
         useNonPersistentDelivery.setSelected(sampler.isNonPersistent());
         useReqMsgIdAsCorrelId.setSelected(sampler.isUseReqMsgIdAsCorrelId());
@@ -184,6 +184,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
         expiration.setText(sampler.getExpiration());
         priority.setText(sampler.getPriority());
         jmsSelector.setText(sampler.getJMSSelector());
+        numberOfSamplesToAggregate.setText(sampler.getNumberOfSamplesToAggregate());
         messageContent.setInitialText(sampler.getContent());
         initialContextFactory.setText(sampler.getInitialContextFactory());
         providerUrl.setText(sampler.getContextProvider());
@@ -220,6 +221,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel receiveQueuePanel = new JPanel(new BorderLayout(5, 0));
         receiveQueuePanel.add(jmsSelector,BorderLayout.SOUTH);
+        receiveQueuePanel.add(numberOfSamplesToAggregate,BorderLayout.CENTER);
         receiveQueuePanel.add(receiveQueue,BorderLayout.NORTH);
         jmsQueueingPanel.add(receiveQueuePanel, BorderLayout.SOUTH);
 
@@ -240,7 +242,7 @@ public class JMSSamplerGui extends AbstractSamplerGui {
 
         JPanel messageNorthPanel = new JPanel(new BorderLayout());
         JPanel onewayPanel = new HorizontalPanel();
-        onewayPanel.add(oneWay);
+        onewayPanel.add(jmsConnectionMode);
         onewayPanel.add(correlationPanel);
         messageNorthPanel.add(onewayPanel, BorderLayout.NORTH);
 

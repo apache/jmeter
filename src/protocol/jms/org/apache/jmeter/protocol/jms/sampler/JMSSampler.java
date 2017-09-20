@@ -19,15 +19,21 @@
 package org.apache.jmeter.protocol.jms.sampler;
 
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.jms.BytesMessage;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
@@ -41,9 +47,12 @@ import org.apache.jmeter.protocol.jms.Utils;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Sampler;
 import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jmeter.testelement.property.BooleanProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
+import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,86 +63,94 @@ import org.slf4j.LoggerFactory;
  */
 public class JMSSampler extends AbstractSampler implements ThreadListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JMSSampler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JMSSampler.class);
 
-    private static final long serialVersionUID = 233L;
+	private static final long serialVersionUID = 233L;
 
-    private static final int DEFAULT_TIMEOUT = 2000;
-    private static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
+	private static final int DEFAULT_TIMEOUT = 2000;
+	private static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
 
-    //++ These are JMX names, and must not be changed
-    private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
+	// ++ These are JMX names, and must not be changed
+	private static final String JNDI_INITIAL_CONTEXT_FACTORY = "JMSSampler.initialContextFactory"; // $NON-NLS-1$
 
-    private static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
+	private static final String JNDI_CONTEXT_PROVIDER_URL = "JMSSampler.contextProviderUrl"; // $NON-NLS-1$
 
-    private static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
+	private static final String JNDI_PROPERTIES = "JMSSampler.jndiProperties"; // $NON-NLS-1$
 
-    private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
+	private static final String TIMEOUT = "JMSSampler.timeout"; // $NON-NLS-1$
 
-    private static final String JMS_PRIORITY = "JMSSampler.priority"; // $NON-NLS-1$
+	private static final String JMS_PRIORITY = "JMSSampler.priority"; // $NON-NLS-1$
 
-    private static final String JMS_EXPIRATION = "JMSSampler.expiration"; // $NON-NLS-1$
+	private static final String JMS_EXPIRATION = "JMSSampler.expiration"; // $NON-NLS-1$
 
-    private static final String JMS_SELECTOR = "JMSSampler.jmsSelector"; // $NON-NLS-1$
+	private static final String JMS_SELECTOR = "JMSSampler.jmsSelector"; // $NON-NLS-1$
 
-    private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
+	private static final String JMS_SELECTOR_DEFAULT = ""; // $NON-NLS-1$
 
-    private static final String IS_ONE_WAY = "JMSSampler.isFireAndForget"; // $NON-NLS-1$
+	private static final String JMS_NUMBEROFSAMPLES = "JMSSampler.jmsNumberOfSamplesToAggregate"; // $NON-NLS-1$
 
-    private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
+	private static final String JMS_NUMBEROFSAMPLES_DEFAULT = "1"; // $NON-NLS-1$
 
-    private static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
+	public static final String JMS_CONNECTIONMODE = "JMSSampler.connectionMode"; // $NON-NLS-1$
 
-    private static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
+	private static final String JMS_PROPERTIES = "arguments"; // $NON-NLS-1$
 
-    private static final String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
+	private static final String RECEIVE_QUEUE = "JMSSampler.ReceiveQueue"; // $NON-NLS-1$
 
-    private static final String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
+	private static final String XML_DATA = "HTTPSamper.xml_data"; // $NON-NLS-1$
 
-    private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
+	private static final String SEND_QUEUE = "JMSSampler.SendQueue"; // $NON-NLS-1$
 
-    private static final String USE_REQ_MSGID_AS_CORRELID = "JMSSampler.useReqMsgIdAsCorrelId"; // $NON-NLS-1$
+	private static final String QUEUE_CONNECTION_FACTORY_JNDI = "JMSSampler.queueconnectionfactory"; // $NON-NLS-1$
 
-    private static final String USE_RES_MSGID_AS_CORRELID = "JMSSampler.useResMsgIdAsCorrelId"; // $NON-NLS-1$
+	private static final String IS_NON_PERSISTENT = "JMSSampler.isNonPersistent"; // $NON-NLS-1$
 
-    private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default to be applied
+	private static final String USE_REQ_MSGID_AS_CORRELID = "JMSSampler.useReqMsgIdAsCorrelId"; // $NON-NLS-1$
 
+	private static final String USE_RES_MSGID_AS_CORRELID = "JMSSampler.useResMsgIdAsCorrelId"; // $NON-NLS-1$
 
-    //--
+	private static final boolean USE_RES_MSGID_AS_CORRELID_DEFAULT = false; // Default to be applied
 
-    // Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
-    private static final boolean USE_SECURITY_PROPERTIES =
-        JMeterUtils.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
+	// --
 
-    //
-    // Member variables
-    //
-    /** Queue for receiving messages (if applicable). */
-    private transient Queue receiveQueue;
+	// Should we use java.naming.security.[principal|credentials] to create the QueueConnection?
+	private static final boolean USE_SECURITY_PROPERTIES = 
+		JMeterUtils.getPropDefault("JMSSampler.useSecurity.properties", true); // $NON-NLS-1$
 
-    /** The session with the queueing system. */
-    private transient QueueSession session;
+	//
+	// Member variables
+	//
+	/** Queue for receiving messages (if applicable). */
+	private transient Queue receiveQueue;
 
-    /** Connection to the queueing system. */
-    private transient QueueConnection connection;
+	/** Queue for sending messages. */
+	private Queue sendQueue;
 
-    /** The executor for (pseudo) synchronous communication. */
-    private transient QueueExecutor executor;
+	/** The session with the queueing system. */
+	private transient QueueSession session;
 
-    /** Producer of the messages. */
-    private transient QueueSender producer;
+	/** Connection to the queueing system. */
+	private transient QueueConnection connection;
 
-    private transient Receiver receiverThread = null;
+	/** The executor for (pseudo) synchronous communication. */
+	private transient QueueExecutor executor;
 
-    private transient Throwable thrown = null;
+	/** Producer of the messages. */
+	private transient QueueSender producer;
 
-    private transient Context context = null;
+	private transient Receiver receiverThread = null;
 
-    /**
+	private transient Throwable thrown = null;
+
+	private transient Context context = null;
+
+	/**
      * {@inheritDoc}
      */
     @Override
     public SampleResult sample(Entry entry) {
+    	JMeterContext context = JMeterContextService.getContext();
+
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
         res.setSamplerData(getContent());
@@ -142,35 +159,17 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         res.sampleStart();
 
         try {
-            TextMessage msg = createMessage();
-            if (isOneway()) {
-                int deliveryMode = isNonPersistent() ? 
-                        DeliveryMode.NON_PERSISTENT:DeliveryMode.PERSISTENT;
-                producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), 
-                        Long.parseLong(getExpiration()));
-                res.setRequestHeaders(Utils.messageProperties(msg));
-                res.setResponseOK();
-                res.setResponseData("Oneway request has no response data", null);
+    		LOGGER.debug("Point-to-point mode: " + this.getJmsConnectionMode());
+            if (isBrowse()) {
+				handleBrowse(res);
+			} else if (isClearQueue()) {
+				handleClearQueue(res);
+			} else if (isOneway()) {
+				handleOneWay(res);
+            }  else if (isRead()) {
+            	handleRead(context, res);
             } else {
-                if (!useTemporyQueue()) {
-                    msg.setJMSReplyTo(receiveQueue);
-                }
-                Message replyMsg = executor.sendAndReceive(msg,
-                        isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT, 
-                        Integer.parseInt(getPriority()), 
-                        Long.parseLong(getExpiration()));
-                res.setRequestHeaders(Utils.messageProperties(msg));
-                if (replyMsg == null) {
-                    res.setResponseMessage("No reply message received");
-                } else {
-                    if (replyMsg instanceof TextMessage) {
-                        res.setResponseData(((TextMessage) replyMsg).getText(), null);
-                    } else {
-                        res.setResponseData(replyMsg.toString(), null);
-                    }
-                    res.setResponseHeaders(Utils.messageProperties(replyMsg));
-                    res.setResponseOK();
-                }
+				handleRequestResponse(res);
             }
         } catch (Exception e) {
             LOGGER.warn(e.getLocalizedMessage(), e);
@@ -184,368 +183,621 @@ public class JMSSampler extends AbstractSampler implements ThreadListener {
         return res;
     }
 
-    private TextMessage createMessage() throws JMSException {
-        if (session == null) {
-            throw new IllegalStateException("Session may not be null while creating message");
-        }
-        TextMessage msg = session.createTextMessage();
-        msg.setText(getContent());
-        addJMSProperties(msg);
-        return msg;
-    }
+	private void handleBrowse(SampleResult res) throws JMSException {
+		LOGGER.debug("isBrowseOnly");
+		StringBuffer sb = new StringBuffer("");
+		res.setSuccessful(true);
+		sb.append("\n \n  Browse message on Send Queue " + sendQueue.getQueueName());
+		sb.append(browseQueueDetails(sendQueue, res));
+		res.setResponseData(sb.toString().getBytes());
+	}
 
-    private void addJMSProperties(TextMessage msg) throws JMSException {
-        Utils.addJMSProperties(msg, getJMSProperties().getJmsPropertysAsMap());
-    }
+	private void handleClearQueue(SampleResult res) throws JMSException {
+		LOGGER.debug("isClearQueue");
+		StringBuffer sb = new StringBuffer("");
+		res.setSuccessful(true);
+		sb.append("\n \n  Clear messages on Send Queue " + sendQueue.getQueueName());
+		sb.append(clearQueue(sendQueue, res));
+		res.setResponseData(sb.toString().getBytes());
+	}
+	
+	private void handleOneWay(SampleResult res) throws JMSException {
+		LOGGER.debug("isOneWay");
+		TextMessage msg = createMessage();
+		int deliveryMode = isNonPersistent() ? 
+		        DeliveryMode.NON_PERSISTENT:DeliveryMode.PERSISTENT;
+		producer.send(msg, deliveryMode, Integer.parseInt(getPriority()), 
+		        Long.parseLong(getExpiration()));
+		res.setRequestHeaders(Utils.messageProperties(msg));
+		res.setResponseOK();
+		res.setResponseData("Oneway request has no response data", null);
+	}
 
-    /** 
-     * @return {@link JMSProperties} JMS Properties
-     */
-    public JMSProperties getJMSProperties() {
-        Object o = getProperty(JMS_PROPERTIES).getObjectValue();
-        JMSProperties jmsProperties = null;
-        // Backward compatibility with versions <= 2.10
-        if(o instanceof Arguments) {
-            jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments)o);
-        } else {
-            jmsProperties = (JMSProperties) o;
-        }
-        if(jmsProperties == null) {
-            jmsProperties = new JMSProperties();
-            setJMSProperties(jmsProperties);
-        }
-        return jmsProperties;
-    }
-    
-    /**
-     * @param jmsProperties JMS Properties
-     */
-    public void setJMSProperties(JMSProperties jmsProperties) {
-        setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
-    }
+	private void handleRead(JMeterContext context, SampleResult res) {
+		LOGGER.debug("isRead");
+		StringBuffer sb = new StringBuffer("");
+		res.setSuccessful(true);
+		Sampler sampler = context.getPreviousSampler();
+		SampleResult sr = context.getPreviousResult();
+		String jmsSelector = getJMSSelector();
+		if (jmsSelector.equals("_PREV_SAMPLER_")) {
+			if (sampler instanceof JMSSampler) {
+				jmsSelector = sr.getResponseMessage();
+			}
+		}
+		int sampleCounter = 0;
+		int sampleTries = 0;
+		String result = null;
+		
+		StringBuilder buffer = new StringBuilder();
+		StringBuilder propBuffer = new StringBuilder();
+		
+		do {
+			result = browseQueueForConsumption(sendQueue, jmsSelector, res, buffer, propBuffer);
+			if (result!=null) {
+				sb.append(result);
+				sb.append('\n');
+				sampleCounter++;
+			}
+			sampleTries++;
+		} while ((result != null) && (sampleTries < getNumberOfSamplesToAggregateAsInt()));
+		
+		res.setResponseMessage(sampleCounter + " samples messages received");
+		res.setResponseData(buffer.toString().getBytes()); // TODO - charset?
+		res.setResponseHeaders(propBuffer.toString());
+		if (sampleCounter == 0) {
+			res.setResponseCode("404");
+			res.setSuccessful(false);
+		} else {
+			res.setResponseCodeOK();
+			res.setSuccessful(true);
+		}
+		res.setResponseMessage(sampleCounter + " message(s) received successfully");
+		res.setSamplerData(getNumberOfSamplesToAggregateAsInt()+ " messages expected");
+		res.setSampleCount(sampleCounter);
+	}
+	
+	private void handleRequestResponse(SampleResult res) throws JMSException {
+		TextMessage msg = createMessage();
+		if (!useTemporyQueue()) {
+			LOGGER.debug("NO TEMP QUEUE");
+			msg.setJMSReplyTo(receiveQueue);
+		}
+		LOGGER.debug("Create temp message");
+		Message replyMsg = executor.sendAndReceive(msg,
+		        isNonPersistent() ? DeliveryMode.NON_PERSISTENT : DeliveryMode.PERSISTENT, 
+		        Integer.parseInt(getPriority()), 
+		        Long.parseLong(getExpiration()));
+		res.setRequestHeaders(Utils.messageProperties(msg));
+		if (replyMsg == null) {
+		    res.setResponseMessage("No reply message received");
+		} else {
+		    if (replyMsg instanceof TextMessage) {
+		        res.setResponseData(((TextMessage) replyMsg).getText(), null);
+		    } else {
+		        res.setResponseData(replyMsg.toString(), null);
+		    }
+		    res.setResponseHeaders(Utils.messageProperties(replyMsg));
+		    res.setResponseOK();
+		}
+	}
 
-    public Arguments getJNDIProperties() {
-        return getArguments(JMSSampler.JNDI_PROPERTIES);
-    }
+	private String browseQueueForConsumption(Queue queue, String jmsSelector, SampleResult res, StringBuilder buffer,
+			StringBuilder propBuffer) {
+		String retVal = null;
+		try {
+			QueueReceiver consumer = session.createReceiver(queue, jmsSelector);
+			Message reply = consumer.receive(Long.valueOf(getTimeout()));
+			LOGGER.debug("Message: " + reply);
+			consumer.close();
+			if (reply != null) {
+				res.setResponseMessage("1 message(s) received successfully");
+				res.setResponseHeaders(reply.toString());
+				TextMessage msg = (TextMessage) reply;
+				retVal = msg.getText();
+				extractContent(buffer, propBuffer, msg);
+			} else {
+				res.setResponseMessage("No message received");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			LOGGER.error(ex.getMessage());
+		}
+		return retVal;
+	}
 
-    public void setJNDIProperties(Arguments args) {
-        setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, args));
-    }
+	private void extractContent(StringBuilder buffer, StringBuilder propBuffer, Message msg) {
+		if (msg != null) {
+			try {
+				if (msg instanceof TextMessage) {
+					buffer.append(((TextMessage) msg).getText());
+				} else if (msg instanceof ObjectMessage) {
+					ObjectMessage objectMessage = (ObjectMessage) msg;
+					if (objectMessage.getObject() != null) {
+						buffer.append(objectMessage.getObject().getClass());
+					} else {
+						buffer.append("object is null");
+					}
+				} else if (msg instanceof BytesMessage) {
+					BytesMessage bytesMessage = (BytesMessage) msg;
+					buffer.append(bytesMessage.getBodyLength() + " bytes received in BytesMessage");
+				} else if (msg instanceof MapMessage) {
+					MapMessage mapm = (MapMessage) msg;
+					@SuppressWarnings("unchecked") // MapNames are Strings
+					Enumeration<String> enumb = mapm.getMapNames();
+					while (enumb.hasMoreElements()) {
+						String name = enumb.nextElement();
+						Object obj = mapm.getObject(name);
+						buffer.append(name);
+						buffer.append(",");
+						buffer.append(obj.getClass().getCanonicalName());
+						buffer.append(",");
+						buffer.append(obj);
+						buffer.append("\n");
+					}
+				}
+				Utils.messageProperties(propBuffer, msg);
+			} catch (JMSException e) {
+				LOGGER.error(e.getMessage());
+			}
+		}
+	}
 
-    public String getQueueConnectionFactory() {
-        return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
-    }
+	private String browseQueueDetails(Queue queue, SampleResult res) {
+		try {
+			String messageBodies = new String("\n==== Browsing Messages === \n");
+			// get some queue details
+			QueueBrowser qBrowser = session.createBrowser(queue);
+			// browse the messages
+			Enumeration<?> e = qBrowser.getEnumeration();
+			int numMsgs = 0;
+			// count number of messages
+			String corrID = "";
+			while (e.hasMoreElements()) {
+				TextMessage message = (TextMessage) e.nextElement();
+				corrID = message.getJMSCorrelationID();
+				if (corrID == null) {
+					corrID = message.getJMSMessageID();
+					messageBodies = messageBodies + numMsgs + " - MessageID: " + corrID + ": " + message.getText() + "\n";
+				} else {
+					messageBodies = messageBodies + numMsgs + " - CorrelationID: " + corrID + ": " + message.getText() + "\n";
+				}
+				numMsgs++;
+			}
+			res.setResponseMessage(numMsgs + " messages available on the queue");
+			res.setResponseHeaders(qBrowser.toString());
+			return (messageBodies + queue.getQueueName() + " has " + numMsgs + " messages");
+		} catch (Exception e) {
+			res.setResponseMessage("Error counting message on the queue");
+			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return "";
+		}
+	}
 
-    public void setQueueConnectionFactory(String qcf) {
-        setProperty(QUEUE_CONNECTION_FACTORY_JNDI, qcf);
-    }
+	private String clearQueue(Queue queue, SampleResult res) {
+		String retVal = null;
+		try {
+			QueueReceiver consumer = session.createReceiver(queue);
+			Message deletedMsg = null;
+			long deletedMsgCount = 0;
+			do {
+				deletedMsg = consumer.receiveNoWait();
+				if (deletedMsg != null) {
+					deletedMsgCount++;
+					deletedMsg.acknowledge();
+				}
+			} while (deletedMsg != null);
+			retVal = deletedMsgCount + " message(s) removed";
+			res.setResponseMessage(retVal);
+		} catch (Exception ex) {
+			res.setResponseMessage("Error clearing queue");
+			ex.printStackTrace();
+			LOGGER.error(ex.getMessage());
+		}
+		return retVal;
+	}
 
-    public String getSendQueue() {
-        return getPropertyAsString(SEND_QUEUE);
-    }
+	private TextMessage createMessage() throws JMSException {
+		if (session == null) {
+			throw new IllegalStateException("Session may not be null while creating message");
+		}
+		TextMessage msg = session.createTextMessage();
+		msg.setText(getContent());
+		addJMSProperties(msg);
+		return msg;
+	}
 
-    public void setSendQueue(String name) {
-        setProperty(SEND_QUEUE, name);
-    }
+	private void addJMSProperties(TextMessage msg) throws JMSException {
+		Utils.addJMSProperties(msg, getJMSProperties().getJmsPropertysAsMap());
+	}
 
-    public String getReceiveQueue() {
-        return getPropertyAsString(RECEIVE_QUEUE);
-    }
+	/**
+	 * @return {@link JMSProperties} JMS Properties
+	 */
+	public JMSProperties getJMSProperties() {
+		Object o = getProperty(JMS_PROPERTIES).getObjectValue();
+		JMSProperties jmsProperties = null;
+		// Backward compatibility with versions <= 2.10
+		if (o instanceof Arguments) {
+			jmsProperties = Utils.convertArgumentsToJmsProperties((Arguments) o);
+		} else {
+			jmsProperties = (JMSProperties) o;
+		}
+		if (jmsProperties == null) {
+			jmsProperties = new JMSProperties();
+			setJMSProperties(jmsProperties);
+		}
+		return jmsProperties;
+	}
 
-    public void setReceiveQueue(String name) {
-        setProperty(RECEIVE_QUEUE, name);
-    }
+	/**
+	 * @param jmsProperties JMS Properties
+	 */
+	public void setJMSProperties(JMSProperties jmsProperties) {
+		setProperty(new TestElementProperty(JMS_PROPERTIES, jmsProperties));
+	}
 
-    public String getContent() {
-        return getPropertyAsString(XML_DATA);
-    }
+	public Arguments getJNDIProperties() {
+		return getArguments(JMSSampler.JNDI_PROPERTIES);
+	}
 
-    public void setContent(String content) {
-        setProperty(XML_DATA, content);
-    }
+	public void setJNDIProperties(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JNDI_PROPERTIES, args));
+	}
 
-    public boolean isOneway() {
-        return getPropertyAsBoolean(IS_ONE_WAY);
-    }
+	public String getQueueConnectionFactory() {
+		return getPropertyAsString(QUEUE_CONNECTION_FACTORY_JNDI);
+	}
 
-    public boolean isNonPersistent() {
-        return getPropertyAsBoolean(IS_NON_PERSISTENT);
-    }
+	public void setQueueConnectionFactory(String qcf) {
+		setProperty(QUEUE_CONNECTION_FACTORY_JNDI, qcf);
+	}
 
-    /**
-     * Which request field to use for correlation?
-     * 
-     * @return true if correlation should use the request JMSMessageID rather than JMSCorrelationID
-     */
-    public boolean isUseReqMsgIdAsCorrelId() {
-        return getPropertyAsBoolean(USE_REQ_MSGID_AS_CORRELID);
-    }
+	public String getSendQueue() {
+		return getPropertyAsString(SEND_QUEUE);
+	}
 
-    /**
-     * Which response field to use for correlation?
-     * 
-     * @return true if correlation should use the response JMSMessageID rather than JMSCorrelationID
-     */
-    public boolean isUseResMsgIdAsCorrelId() {
-        return getPropertyAsBoolean(USE_RES_MSGID_AS_CORRELID, USE_RES_MSGID_AS_CORRELID_DEFAULT);
-    }
+	public void setSendQueue(String name) {
+		setProperty(SEND_QUEUE, name);
+	}
 
-    public String getInitialContextFactory() {
-        return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
-    }
+	public String getReceiveQueue() {
+		return getPropertyAsString(RECEIVE_QUEUE);
+	}
 
-    public String getContextProvider() {
-        return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
-    }
+	public void setReceiveQueue(String name) {
+		setProperty(RECEIVE_QUEUE, name);
+	}
 
-    public void setIsOneway(boolean isOneway) {
-        setProperty(new BooleanProperty(IS_ONE_WAY, isOneway));
-    }
+	public String getContent() {
+		return getPropertyAsString(XML_DATA);
+	}
 
-    public void setNonPersistent(boolean value) {
-        setProperty(new BooleanProperty(IS_NON_PERSISTENT, value));
-    }
+	public void setContent(String content) {
+		setProperty(XML_DATA, content);
+	}
 
-    public void setUseReqMsgIdAsCorrelId(boolean value) {
-        setProperty(new BooleanProperty(USE_REQ_MSGID_AS_CORRELID, value));
-    }
+	public boolean isOneway() {
+		return JMeterUtils.getResString("jms_request").equals(this.getJmsConnectionMode());
+	}
 
-    public void setUseResMsgIdAsCorrelId(boolean value) {
-        setProperty(USE_RES_MSGID_AS_CORRELID, value, USE_RES_MSGID_AS_CORRELID_DEFAULT);
-    }
+	public boolean isRead() {
+		return JMeterUtils.getResString("jms_read").equals(this.getJmsConnectionMode());
+	}
 
-    @Override
-    public String toString() {
-        return getQueueConnectionFactory() + ", queue: " + getSendQueue();
-    }
+	public boolean isBrowse() {
+		return JMeterUtils.getResString("jms_browse").equals(this.getJmsConnectionMode());
+	}
 
-    @Override
-    public void threadStarted() {
-        logThreadStart();
+	public boolean isClearQueue() {
+		return JMeterUtils.getResString("jms_clear").equals(this.getJmsConnectionMode());
+	}
 
-        thrown = null;
-        try {
-            context = getInitialContext();
-            Object obj = context.lookup(getQueueConnectionFactory());
-            if (!(obj instanceof QueueConnectionFactory)) {
-                String msg = "QueueConnectionFactory expected, but got "
-                    + (obj != null ? obj.getClass().getName() : "null");
-                LOGGER.error(msg);
-                throw new IllegalStateException(msg);
-            }
-            QueueConnectionFactory factory = (QueueConnectionFactory) obj;
-            Queue sendQueue = (Queue) context.lookup(getSendQueue());
+	public boolean isNonPersistent() {
+		return getPropertyAsBoolean(IS_NON_PERSISTENT);
+	}
 
-            if (!useTemporyQueue()) {
-                receiveQueue = (Queue) context.lookup(getReceiveQueue());
-                receiverThread = Receiver.createReceiver(factory, receiveQueue, Utils.getFromEnvironment(context, Context.SECURITY_PRINCIPAL), 
-                        Utils.getFromEnvironment(context, Context.SECURITY_CREDENTIALS)
-                        , isUseResMsgIdAsCorrelId(), getJMSSelector());
-            }
+	/**
+	 * Which request field to use for correlation?
+	 * 
+	 * @return true if correlation should use the request JMSMessageID rather than JMSCorrelationID
+	 */
+	public boolean isUseReqMsgIdAsCorrelId() {
+		return getPropertyAsBoolean(USE_REQ_MSGID_AS_CORRELID);
+	}
 
-            String principal = null;
-            String credentials = null;
-            if (USE_SECURITY_PROPERTIES){
-                principal = Utils.getFromEnvironment(context, Context.SECURITY_PRINCIPAL);
-                credentials = Utils.getFromEnvironment(context, Context.SECURITY_CREDENTIALS);
-            }
-            if (principal != null && credentials != null) {
-                connection = factory.createQueueConnection(principal, credentials);
-            } else {
-                connection = factory.createQueueConnection();
-            }
+	/**
+	 * Which response field to use for correlation?
+	 * 
+	 * @return true if correlation should use the response JMSMessageID rather than JMSCorrelationID
+	 */
+	public boolean isUseResMsgIdAsCorrelId() {
+		return getPropertyAsBoolean(USE_RES_MSGID_AS_CORRELID, USE_RES_MSGID_AS_CORRELID_DEFAULT);
+	}
 
-            session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+	public String getInitialContextFactory() {
+		return getPropertyAsString(JMSSampler.JNDI_INITIAL_CONTEXT_FACTORY);
+	}
 
-            LOGGER.debug("Session created");
+	public String getContextProvider() {
+		return getPropertyAsString(JMSSampler.JNDI_CONTEXT_PROVIDER_URL);
+	}
 
-            if (isOneway()) {
-                producer = session.createSender(sendQueue);
-                if (isNonPersistent()) {
-                    producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                }
-                producer.setPriority(Integer.parseInt(getPriority()));
-                producer.setTimeToLive(Long.parseLong(getExpiration()));
-            } else {
+	public void setJmsConnectionMode(String mode) {
+		setProperty(JMS_CONNECTIONMODE, mode);
+	}
 
-                if (useTemporyQueue()) {
-                    executor = new TemporaryQueueExecutor(session, sendQueue);
-                } else {
-                    producer = session.createSender(sendQueue);
-                    executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
-                }
-            }
-            LOGGER.debug("Starting connection");
+	public String getJmsConnectionMode() {
+		return this.getPropertyAsString(JMS_CONNECTIONMODE);
+	}
 
-            connection.start();
+	public void setNonPersistent(boolean value) {
+		setProperty(new BooleanProperty(IS_NON_PERSISTENT, value));
+	}
 
-            LOGGER.debug("Connection started");
-        } catch (Exception | NoClassDefFoundError e) {
-            thrown = e;
-            LOGGER.error(e.getLocalizedMessage(), e);
-        }
-    }
+	public void setUseReqMsgIdAsCorrelId(boolean value) {
+		setProperty(new BooleanProperty(USE_REQ_MSGID_AS_CORRELID, value));
+	}
 
-    private Context getInitialContext() throws NamingException {
-        Hashtable<String, String> table = new Hashtable<>();
+	public void setUseResMsgIdAsCorrelId(boolean value) {
+		setProperty(USE_RES_MSGID_AS_CORRELID, value, USE_RES_MSGID_AS_CORRELID_DEFAULT);
+	}
 
-        if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
-            LOGGER.debug("Using InitialContext [{}]", getInitialContextFactory());
-            table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
-        }
-        if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
-            LOGGER.debug("Using Provider [{}]", getContextProvider());
-            table.put(Context.PROVIDER_URL, getContextProvider());
-        }
-        Map<String, String> map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
-        if (LOGGER.isDebugEnabled()) {
-            if (map.isEmpty()) {
-                LOGGER.debug("Empty JNDI properties");
-            } else {
-                LOGGER.debug("Number of JNDI properties: {}", map.size());
-            }
-        }
-        for (Map.Entry<String, String> me : map.entrySet()) {
-            table.put(me.getKey(), me.getValue());
-        }
+	@Override
+	public String toString() {
+		return getQueueConnectionFactory() + ", queue: " + getSendQueue();
+	}
 
-        Context context = new InitialContext(table);
-        if (LOGGER.isDebugEnabled()) {
-            printEnvironment(context);
-        }
-        return context;
-    }
+	@Override
+	public void threadStarted() {
+		logThreadStart();
 
-    private void printEnvironment(Context context) throws NamingException {
-        try {
-            Hashtable<?,?> env = context.getEnvironment();
-            if(env != null) {
-                LOGGER.debug("Initial Context Properties");
-                for (Map.Entry<?, ?> entry : env.entrySet()) {
-                    LOGGER.debug("{}={}", entry.getKey(), entry.getValue());
-                }
-            } else {
-                LOGGER.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
-            }
-        } catch (javax.naming.OperationNotSupportedException ex) {
-            // Some JNDI implementation can return this
-            LOGGER.warn("context.getEnvironment() not supported by implementation ");
-        }
-    }
+		thrown = null;
+		try {
+			context = getInitialContext();
+			Object obj = context.lookup(getQueueConnectionFactory());
+			if (!(obj instanceof QueueConnectionFactory)) {
+				String msg = "QueueConnectionFactory expected, but got "
+						+ (obj != null ? obj.getClass().getName() : "null");
+				LOGGER.error(msg);
+				throw new IllegalStateException(msg);
+			}
+			QueueConnectionFactory factory = (QueueConnectionFactory) obj;
+			sendQueue = (Queue) context.lookup(getSendQueue());
 
-    private void logThreadStart() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Thread started " + new Date());
-            LOGGER.debug("JMSSampler: [" + Thread.currentThread().getName() + "], hashCode=[" + hashCode() + "]");
-            LOGGER.debug("QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
-            LOGGER.debug("Timeout             = " + getTimeout() + "]");
-            LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
-            LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
-        }
-    }
+			if (!useTemporyQueue()) {
+				receiveQueue = (Queue) context.lookup(getReceiveQueue());
+				receiverThread = Receiver.createReceiver(factory, receiveQueue,
+						Utils.getFromEnvironment(context, Context.SECURITY_PRINCIPAL),
+						Utils.getFromEnvironment(context, Context.SECURITY_CREDENTIALS), isUseResMsgIdAsCorrelId(),
+						getJMSSelector());
+			}
 
-    private int getTimeoutAsInt() {
-        if (getPropertyAsInt(TIMEOUT) < 1) {
-            return DEFAULT_TIMEOUT;
-        }
-        return getPropertyAsInt(TIMEOUT);
-    }
+			String principal = null;
+			String credentials = null;
+			if (USE_SECURITY_PROPERTIES) {
+				principal = Utils.getFromEnvironment(context, Context.SECURITY_PRINCIPAL);
+				credentials = Utils.getFromEnvironment(context, Context.SECURITY_CREDENTIALS);
+			}
+			if (principal != null && credentials != null) {
+				connection = factory.createQueueConnection(principal, credentials);
+			} else {
+				connection = factory.createQueueConnection();
+			}
 
-    public String getTimeout() {
-        return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
-    }
-    
-    public String getExpiration() {
-        String expiration = getPropertyAsString(JMS_EXPIRATION);
-        if (expiration.length() == 0) {
-            return Utils.DEFAULT_NO_EXPIRY;
-        } else {
-            return expiration;
-        }
-    }
+			session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
-    public String getPriority() {
-        String priority = getPropertyAsString(JMS_PRIORITY);
-        if (priority.length() == 0) {
-            return Utils.DEFAULT_PRIORITY_4;
-        } else {
-            return priority;
-        }
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void threadFinished() {
-        LOGGER.debug("Thread ended {}", new Date());
+			LOGGER.debug("Session created");
 
-        if (context != null) {
-            try {
-                context.close();
-            } catch (NamingException ignored) {
-                // ignore
-            }
-        }
-        Utils.close(session, LOGGER);
-        Utils.close(connection, LOGGER);
-        if (receiverThread != null) {
-            receiverThread.deactivate();
-        }
-    }
+			if (isBrowse() || isRead() || isClearQueue()) {
+				// Do nothing!
+			} else if (isOneway()) {
+				producer = session.createSender(sendQueue);
+				if (isNonPersistent()) {
+					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+				}
+				producer.setPriority(Integer.parseInt(getPriority()));
+				producer.setTimeToLive(Long.parseLong(getExpiration()));
+			} else {
+				if (useTemporyQueue()) {
+					executor = new TemporaryQueueExecutor(session, sendQueue);
+				} else {
+					producer = session.createSender(sendQueue);
+					executor = new FixedQueueExecutor(producer, getTimeoutAsInt(), isUseReqMsgIdAsCorrelId());
+				}
+			}
+			LOGGER.debug("Starting connection");
 
-    private boolean useTemporyQueue() {
-        String recvQueue = getReceiveQueue();
-        return recvQueue == null || recvQueue.trim().length() == 0;
-    }
+			connection.start();
 
-    public void setArguments(Arguments args) {
-        setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
-    }
+			LOGGER.debug("Connection started");
+		} catch (Exception | NoClassDefFoundError e) {
+			thrown = e;
+			LOGGER.error(e.getLocalizedMessage(), e);
+		}
+	}
 
-    public Arguments getArguments(String name) {
-        return (Arguments) getProperty(name).getObjectValue();
-    }
+	private Context getInitialContext() throws NamingException {
+		Hashtable<String, String> table = new Hashtable<>();
 
-    public void setTimeout(String s) {
-        setProperty(JMSSampler.TIMEOUT, s);
-    }
-    
-    public void setPriority(String s) {
-        setProperty(JMSSampler.JMS_PRIORITY, s, Utils.DEFAULT_PRIORITY_4);
-    }
-    
-    public void setExpiration(String s) {
-        setProperty(JMSSampler.JMS_EXPIRATION, s, Utils.DEFAULT_NO_EXPIRY);
-    }
+		if (getInitialContextFactory() != null && getInitialContextFactory().trim().length() > 0) {
+			LOGGER.debug("Using InitialContext [{}]", getInitialContextFactory());
+			table.put(Context.INITIAL_CONTEXT_FACTORY, getInitialContextFactory());
+		}
+		if (getContextProvider() != null && getContextProvider().trim().length() > 0) {
+			LOGGER.debug("Using Provider [{}]", getContextProvider());
+			table.put(Context.PROVIDER_URL, getContextProvider());
+		}
+		Map<String, String> map = getArguments(JMSSampler.JNDI_PROPERTIES).getArgumentsAsMap();
+		if (LOGGER.isDebugEnabled()) {
+			if (map.isEmpty()) {
+				LOGGER.debug("Empty JNDI properties");
+			} else {
+				LOGGER.debug("Number of JNDI properties: {}", map.size());
+			}
+		}
+		for (Map.Entry<String, String> me : map.entrySet()) {
+			table.put(me.getKey(), me.getValue());
+		}
 
-    /**
-     * @return String JMS Selector
-     */
-    public String getJMSSelector() {
-        return getPropertyAsString(JMSSampler.JMS_SELECTOR, JMS_SELECTOR_DEFAULT);
-    }
+		Context context = new InitialContext(table);
+		if (LOGGER.isDebugEnabled()) {
+			printEnvironment(context);
+		}
+		return context;
+	}
 
-    /**
-     * @param selector String selector
-     */
-    public void setJMSSelector(String selector) {
-        setProperty(JMSSampler.JMS_SELECTOR, selector, JMS_SELECTOR_DEFAULT);
-    }
-    
-    /**
-     * @param string name of the initial context factory to use
-     */
-    public void setInitialContextFactory(String string) {
-        setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
+	private void printEnvironment(Context context) throws NamingException {
+		try {
+			Hashtable<?, ?> env = context.getEnvironment();
+			if (env != null) {
+				LOGGER.debug("Initial Context Properties");
+				for (Map.Entry<?, ?> entry : env.entrySet()) {
+					LOGGER.debug("{}={}", entry.getKey(), entry.getValue());
+				}
+			} else {
+				LOGGER.warn("context.getEnvironment() returned null (should not happen according to javadoc but non compliant implementation can return this)");
+			}
+		} catch (javax.naming.OperationNotSupportedException ex) {
+			// Some JNDI implementation can return this
+			LOGGER.warn("context.getEnvironment() not supported by implementation ");
+		}
+	}
 
-    }
+	private void logThreadStart() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Thread started " + new Date());
+			LOGGER.debug("JMSSampler: [" + Thread.currentThread().getName() + "], hashCode=[" + hashCode() + "]");
+			LOGGER.debug("QCF: [" + getQueueConnectionFactory() + "], sendQueue=[" + getSendQueue() + "]");
+			LOGGER.debug("Timeout             = " + getTimeout() + "]");
+			LOGGER.debug("Use temporary queue =" + useTemporyQueue() + "]");
+			LOGGER.debug("Reply queue         =" + getReceiveQueue() + "]");
+		}
+	}
 
-    /**
-     * @param string url of the provider
-     */
-    public void setContextProvider(String string) {
-        setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
+	private int getTimeoutAsInt() {
+		if (getPropertyAsInt(TIMEOUT) < 1) {
+			return DEFAULT_TIMEOUT;
+		}
+		return getPropertyAsInt(TIMEOUT);
+	}
 
-    }
+	public String getTimeout() {
+		return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);
+	}
+
+	public String getExpiration() {
+		String expiration = getPropertyAsString(JMS_EXPIRATION);
+		if (expiration.length() == 0) {
+			return Utils.DEFAULT_NO_EXPIRY;
+		} else {
+			return expiration;
+		}
+	}
+
+	public String getPriority() {
+		String priority = getPropertyAsString(JMS_PRIORITY);
+		if (priority.length() == 0) {
+			return Utils.DEFAULT_PRIORITY_4;
+		} else {
+			return priority;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void threadFinished() {
+		LOGGER.debug("Thread ended {}", new Date());
+
+		if (context != null) {
+			try {
+				context.close();
+			} catch (NamingException ignored) {
+				// ignore
+			}
+		}
+		Utils.close(session, LOGGER);
+		Utils.close(connection, LOGGER);
+		if (receiverThread != null) {
+			receiverThread.deactivate();
+		}
+	}
+
+	private boolean useTemporyQueue() {
+		String recvQueue = getReceiveQueue();
+		return recvQueue == null || recvQueue.trim().length() == 0;
+	}
+
+	public void setArguments(Arguments args) {
+		setProperty(new TestElementProperty(JMSSampler.JMS_PROPERTIES, args));
+	}
+
+	public Arguments getArguments(String name) {
+		return (Arguments) getProperty(name).getObjectValue();
+	}
+
+	public void setTimeout(String s) {
+		setProperty(JMSSampler.TIMEOUT, s);
+	}
+
+	public void setPriority(String s) {
+		setProperty(JMSSampler.JMS_PRIORITY, s, Utils.DEFAULT_PRIORITY_4);
+	}
+
+	public void setExpiration(String s) {
+		setProperty(JMSSampler.JMS_EXPIRATION, s, Utils.DEFAULT_NO_EXPIRY);
+	}
+
+	/**
+	 * @return String JMS Selector
+	 */
+	public String getJMSSelector() {
+		return getPropertyAsString(JMSSampler.JMS_SELECTOR, JMS_SELECTOR_DEFAULT);
+	}
+
+	/**
+	 * @param selector
+	 *            String selector
+	 */
+	public void setJMSSelector(String selector) {
+		setProperty(JMSSampler.JMS_SELECTOR, selector, JMS_SELECTOR_DEFAULT);
+	}
+
+	public String getNumberOfSamplesToAggregate() {
+		return getPropertyAsString(JMSSampler.JMS_NUMBEROFSAMPLES, JMS_NUMBEROFSAMPLES_DEFAULT);
+	}
+
+	public void setNumberOfSamplesToAggregate(String selector) {
+		setProperty(JMSSampler.JMS_NUMBEROFSAMPLES, selector, JMS_NUMBEROFSAMPLES_DEFAULT);
+	}
+
+	private int getNumberOfSamplesToAggregateAsInt() {
+		int val = 1;
+		try {
+			val = getPropertyAsInt(JMS_NUMBEROFSAMPLES);
+		} catch (Exception e) {
+			val = 1;
+		}
+		if (val < 1) {
+			val = 1;
+		}
+		return val;
+	}
+
+	/**
+	 * @param string name of the initial context factory to use
+	 */
+	public void setInitialContextFactory(String string) {
+		setProperty(JNDI_INITIAL_CONTEXT_FACTORY, string);
+	}
+
+	/**
+	 * @param string url of the provider
+	 */
+	public void setContextProvider(String string) {
+		setProperty(JNDI_CONTEXT_PROVIDER_URL, string);
+	}
 }
