@@ -566,7 +566,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.3-SNAPSHOT"/>
+    <property name="jmeter.version" value="3.3"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -3229,6 +3229,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar"/>
       <!-- tidy up unused logkit jars -->
       <fileset dir="${lib.dir}" includes="logkit-2.0.jar"/>
+      <fileset dir="${lib.opt}" includes="org.jacoco.ant-0.7.8-nodeps.jar"/>
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>

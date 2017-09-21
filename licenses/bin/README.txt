@@ -19,7 +19,8 @@ excalibur-logger-1.1.jar
 geronimo-jms_1.1_spec-1.1.1.jar
 groovy-all-2.4.10.jar
 httpclient-4.5.3.jar
-httpcore-4.4.6.jar
+httpcore-4.4.7.jar
+httpcore-nio-4.4.7.jar
 httpmime-4.5.3.jar
 jorphan.jar (part of JMeter)
 logkit-2.0.jar

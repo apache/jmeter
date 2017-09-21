@@ -1175,6 +1175,10 @@ JMETER-SERVER</source>
     String to return at <abbr title="end of file"><code>EOF</code></abbr> (if recycle not used).<br/>
     Defaults to: <code>&lt;EOF&gt;</code>
 </property>
+<property name="csvdataset.file.encoding_list">
+    List of file encoding values<br/>
+    Defaults to: <code>platform default</code>
+</property>
 </properties>
 </section>
 <section name="&sect-num;.34 LDAP Sampler configuration" anchor="ldap">
@@ -1236,7 +1240,7 @@ JMETER-SERVER</source>
     Max size of bytes stored in memory per <code>SampleResult</code>. Ensure that you
     don't exceed the maximum capacity of a Java Array and remember that the higher you
     set this value, the more memory JMeter will consume.<br/>
-    Defaults to: <code>10485760</code> bytes
+    Defaults to: <code>0</code> bytes which means no truncation will occur
 </property>
 <property name="httpsampler.max_buffer_size">
     Max size of buffer in bytes used when reading responses.<br/>
