@@ -11,7 +11,7 @@
 	<groupId>com.airfrance.qualif.jmeter</groupId>
 	<artifactId>apache-jmeter</artifactId>
 	<packaging>pom</packaging>
-	<version>3.3</version>
+	<version>3.4-SNAPSHOT</version>
 
 	<properties>
 		<scmCommentPrefix>AFKLM-</scmCommentPrefix>
@@ -22,7 +22,7 @@
 	<scm>
 		<connection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</connection>
 		<developerConnection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</developerConnection>
-		<tag>3.3</tag>
+		<tag>master</tag>
 		<url>https://bitbucket.devnet.klm.com/projects/TCPOW/repos/apache-jmeter/browse</url>
 	</scm>
 
