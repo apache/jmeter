@@ -3584,7 +3584,7 @@ By default, a Graphite implementation is provided.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
   </property>
-  <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
+  <property name="Use first line as Variable Names" required="No">
   Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
   if Variable Names is empty the first line must contain the headers.
   </property>
