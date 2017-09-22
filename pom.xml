@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -12,7 +11,7 @@
 	<groupId>com.airfrance.qualif.jmeter</groupId>
 	<artifactId>apache-jmeter</artifactId>
 	<packaging>pom</packaging>
-	<version>3.3-SNAPSHOT</version>
+	<version>3.3</version>
 
 	<properties>
 		<scmCommentPrefix>AFKLM-</scmCommentPrefix>
@@ -23,7 +22,7 @@
 	<scm>
 		<connection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</connection>
 		<developerConnection>scm:git:https://bitbucket.devnet.klm.com/scm/TCPOW/apache-jmeter.git</developerConnection>
-		<tag>master</tag>
+		<tag>3.3</tag>
 		<url>https://bitbucket.devnet.klm.com/projects/TCPOW/repos/apache-jmeter/browse</url>
 	</scm>
 
