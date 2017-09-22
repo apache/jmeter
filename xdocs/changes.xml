@@ -102,6 +102,7 @@ Summary
 
 <h3>I18N</h3>
 <ul>
+    <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
