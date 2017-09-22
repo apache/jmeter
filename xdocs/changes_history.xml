@@ -39,6 +39,335 @@ Current changes are detailed in <a href="changes.html">Changes</a>.
 <p><b>Changes sections are chronologically ordered from top (most recent) to bottom 
 (least recent)</b></p>
 
+<!--  =================== 3.3 =================== -->
+
+<h1>Version 3.3</h1>
+<p>
+Summary
+</p>
+<ul>
+<li><a href="#New and Noteworthy">New and Noteworthy</a></li>
+<li><a href="#Incompatible changes">Incompatible changes</a></li>
+<li><a href="#Bug fixes">Bug fixes</a></li>
+<li><a href="#Improvements">Improvements</a></li>
+<li><a href="#Non-functional changes">Non-functional changes</a></li>
+<li><a href="#Known problems and workarounds">Known problems and workarounds</a></li>
+<li><a href="#Thanks">Thanks</a></li>
+
+</ul>
+
+<ch_section>New and Noteworthy</ch_section>
+<note>JMeter does not yet support JAVA 9, next JMeter version will support it, you can help and follow progress on this item in <bugzilla>61529</bugzilla>.</note>
+<note>Using last minor version of JAVA 8 is advised to avoid facing any JDK bug.</note>
+<!-- <ch_category>Sample category</ch_category> -->
+<!-- <ch_title>Sample title</ch_title> -->
+<!-- <figure width="846" height="613" image="changes/3.0/view_results_tree_search_feature.png"></figure> -->
+<ch_title>Core improvements</ch_title>
+<p>HTTP Sampler now supports Brotli decompression.</p>
+<p>CacheManager now completely supports Vary header.</p>
+<p>InfluxDB BackendListener now supports sending results to InfluxDB through UDP protocol.
+<figure width="825" height="328" image="changes/3.3/influxdb_udp.png"></figure>
+It has also been enhanced to send number of errors by response code and message for each transaction</p>
+<p>TCP Sampler now computes latency, see <bugzilla>60156</bugzilla></p>
+<p>Upgraded dependencies to last available versions bringing performance improvements and bug fixes</p>
+<p>Continued to improve the quality of our code and tests coverage. See <a href="https://builds.apache.org/analysis/overview?id=12927" >Quality report</a></p>
+<ch_title>UX improvements</ch_title>
+<p>More work has been done to better support HiDPI.</p>
+<p>Some bugs, that crept in with the work on lowering the memory usage of View Results Tree, were fixed.</p>
+<p>The constant <code>DEFAULT_IMPLEMENTATION</code> was removed from CookieManager,
+as it lost it purpose with the removal of the alternate HTTP Client implementation in the last release</p>
+<p>JDBC Sampler UX has been improved by adding select boxes for drivers and validation queries.
+<figure width="821" height="543" image="changes/3.3/jdbc_config_validation_driver_url.png"></figure>
+<figure width="820" height="451" image="changes/3.3/jdbc_config_validation_query.png"></figure>
+</p>
+<p>If Controller and While Controller UX have been improved
+<figure width="821" height="348" image="changes/3.3/jmeter_if_controller.png"></figure>
+</p>
+<ch_title>Report/Dashboard improvements</ch_title>
+A new Help menu item has been added to simplify configuration of report generation.
+<figure width="491" height="455" image="changes/3.3/jmeter_export_transactions_menu.png"></figure>
+<figure width="609" height="188" image="changes/3.3/jmeter_export_transactions_result.png"></figure>
+<ch_title>Documentation improvements</ch_title>
+Incorporated feedback about unclear documentation.
+
+<ch_title>Functions</ch_title>
+<p>Function Helper Dialog: a new field that shows execution result has been added.
+<figure width="693" height="344" image="changes/3.3/jmeter_function_result.png"></figure>
+</p>
+<p>New functions:</p>
+<ul>
+<li><code><funclink name="__timeShift"/></code> - return a date in various formats with the specified amount of seconds/minutes/hours/days added.
+<figure width="757" height="376" image="changes/3.3/jmeter_function_add_time.png"></figure>
+</li>
+<li><code><funclink name="__RandomDate"/></code> - generate random date within a specific date range.
+<figure width="700" height="369" image="changes/3.3/jmeter_function_random_date.png"></figure>
+</li>
+</ul>
+
+<!-- =================== Incompatible changes =================== -->
+
+<ch_section>Incompatible changes</ch_section>
+<ul>
+<li>In InfluxDbBackendListenerClient, <code>statut</code> property has been renamed to <code>status</code></li>
+<li>In CookieManager, <code>DEFAULT_POLICY</code> and <code>DEFAULT_IMPLEMENTATION</code> constants are now private.
+<note>If you're using <code>ignorecookies</code> with HC3CookieHandler (&lt; JMeter 3.1)  configuration will be reset, ensure you put it back.</note></li>
+<li>JMeter will not truncate anymore by default responses exceeding 10 MB. If you want to enable this truncation, see property <code>httpsampler.max_bytes_to_store_per_request</code></li>
+<li><code>org.apache.jmeter.protocol.tcp.sampler.TCPClient.read(InputStream)</code> has been deprecated in favor or org.apache.jmeter.protocol.tcp.sampler.TCPClient.read(InputStream, SampleResult), 
+ensure you update your implementation to be able to compute latency, see <bugzilla>60156</bugzilla></li>
+</ul>
+<h3>Removed elements or functions</h3>
+<ul>
+    <li><code>_StringFromFile</code> function has been dropped, use <code><funclink name="__StringFromFile"/></code> instead</li>
+</ul>
+
+<!-- =================== Improvements =================== -->
+
+<ch_section>Improvements</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+    <li><bug>61056</bug>HTTP : Support brotli decoding</li>
+    <li><bug>61135</bug>CookieManager : Drop Implementation select box and cleanup class</li>
+    <li><bug>61492</bug>HTTP(S) Test Script Recorder : Add the possibility to change the value of proxy.pause in the GUI</li>
+</ul>
+
+<h3>Other samplers</h3>
+<ul>
+    <li><bug>61320</bug>Test Action : Set duration to <code>0</code> by default</li>
+    <li><bug>61504</bug>JDBC Connection Configuration : Set Max Number of Connections to <code>0</code> by default</li>
+    <li><bug>61505</bug>JDBC Connection Configuration : Set "Validation Query" to <code>empty</code> by default to use <code>isValid</code> method of JDBC driver</li>
+    <li><bug>61506</bug>JDBC Connection Configuration : Add a list for main databases validation queries for "Validation Query" attribute</li>
+    <li><bug>61507</bug>JDBC Connection Configuration : Add a list for main databases JDBC driver class name for "JDBC Driver class" attribute</li>
+    <li><bug>61525</bug>OS Process Sampler : Add browser button to Command and Working directory fields</li>
+    <li><bug>60156</bug>TCPSampler : Latency is not measured for TCP Sampler. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61039</bug>CSV data set config : Add browser button to Filename field</li>
+    <li><bug>61527</bug>CSV data set config : Add a list for main file encoding values for File encoding attribute</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+    <li><bug>61131</bug>IfController and WhileController : Improve UX</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+    <li><bug>61167</bug>InfluxdbBackendListener : add number of errors by response code and message for each transaction</li>
+    <li><bug>61068</bug>Introduce property <code>resultcollector.action_if_file_exists</code> to control the popup "File already exists" when starting a test</li>
+    <li><bug>61457</bug>InfluxDB backend listener client : Support sending result to InfluxDB through UDP protocol. Partly based on <pr>302</pr> by Junlong Wu (github id mybreeze77)</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+    <li><bug>61176</bug><pr>298</pr> Cache responses that have <code>vary</code> header in the <code>CacheManager</code>.</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+    <li><bug>61040</bug>Add a time shifting function</li>
+    <li><bug>61126</bug>Function Helper Dialog : Add a field that shows execution result</li>
+    <li><bug>61508</bug>Add a random date within a specific date range function</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+    <li><bug>61509</bug>Better label/translation/documentation for labels start and max for Counter element</li>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+    <li><bug>61481</bug>Help Menu Item to export transaction for Web report</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+    <li>When looking for classes in <code>ActionRouter</code>, fall back to location of the jar,
+       where <code>ActionRouter</code> is loaded from. Provided by Emilian Bold (emi at apache.org)</li>
+    <li><bug>61510</bug>Set 'Max Number of Connections' to <code>0</code> into 'JDBC Connection Configuration' for the 'JDBC Load Test template'</li>
+    <li><bug>61399</bug>Make some bin and extras scripts Shellcheck compatible. Contributed by Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
+</ul>
+
+<ch_section>Non-functional changes</ch_section>
+<ul>
+    <li>Updated to groovy 2.4.12 (from 2.4.10)</li>
+    <li>Updated to caffeine 2.5.5 (from 2.4.0)</li>
+    <li>Updated to commons-jexl3 3.1 (from 3.0)</li>
+    <li>Updated to ph-css 5.0.4 (from 5.0.3)</li>
+    <li>Updated to ph-commons 8.6.6 (from 8.6.0)</li>
+    <li>Updated to log4j2 2.8.2 (from 2.8.1)</li>
+    <li>Updated to xmlgraphics-commons 2.2 (from 2.1)</li>
+    <li>Updated to jodd 3.8.6 (from 3.8.1)</li>
+    <li>Updated to xstream 1.4.10 (from 1.4.9)</li>
+    <li>Updated to Apache Tika 1.16 (from 1.14)</li>
+    <li>Updated to jsoup-1.10.3 (from 1.10.2)</li>
+    <li>Updated to commons-lang3 3.6 (from 3.5)</li>
+    <li>Updated to json-path 2.4.0 (from 2.2.0)</li>
+    <li>Updated to httpcore 4.4.7 (from 4.4.6)</li>
+    <li><bug>61438</bug>Change the cryptographic signature of packages from sha-1 to sha-512</li>
+</ul>
+
+ <!-- =================== Bug fixes =================== -->
+
+<ch_section>Bug fixes</ch_section>
+
+<h3>HTTP Samplers and Test Script Recorder</h3>
+<ul>
+  <li><bug>61384</bug>Don't set the charset on enclosing <code>multipart/form-data</code> header. It irritates some servers.<br/>
+     The charset was added sometime back while refactoring to use a newer API of http client.
+     See <bug>56141</bug> for more info.</li>
+  <li><bug>61456</bug><code>java.lang.ArrayIndexOutOfBoundsException</code> when recording with JMeter and weird Basic Auth Authorization header</li>
+  <li><bug>61395</bug>Large server response truncation can impact recording</li>
+</ul>
+
+<h3>Other Samplers</h3>
+<ul>
+    <li><bug>60889</bug>JMeter JDBC sample calls <code>SELECT USER()</code> when testing with MySQL JDBC due to <code>Connection#toString</code> call for response headers.</li>
+    <li><bug>61259</bug>JDBC Request : since JMeter 3.0, when JDBC auto-commit is <code>false</code>, a rollback statement happens each time a Request is executed. Partly contributed by Liu XP (liu_xp2003 at sina.com)</li>
+    <li><bug>61319</bug>Fix regression: SMTP Sampler could not send mails, when no attachments were specified.</li>
+</ul>
+
+<h3>Controllers</h3>
+<ul>
+    <li><bug>61375</bug>Use system DNS resolver as last resort, when resolving entries in the static host table.</li>
+</ul>
+
+<h3>Listeners</h3>
+<ul>
+    <li><bug>61005</bug>View Results Tree - Browser Response Data is not clearing</li>
+    <li><bug>61121</bug>InfluxdbBackendListenerClient: Only all percentiles are sent, not <code>KO</code> and <code>OK</code></li>
+    <li><bug>60961</bug>Try to keep status of selected and expanded elements in View Results Tree when new elements are added.</li>
+    <li><bug>61198</bug>Backend Listener does not work properly in main script when included scripts also contain Backend Listener</li>
+    <li><bug>61493</bug>Max/Min threads are interchanged in Graphite and InfluxDB backend listener</li>
+</ul>
+
+<h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
+<ul>
+    <li><bug>58743</bug><pr>293</pr> TableEditor can't be saved, when using two or more instances. Bugfix provided by Emilian Bold (emi at apache.org)</li>
+    <li><bug>61314</bug>HTTP URL Re-writing Modifier doesn't replace existing <code>jsessionid</code> in http sampler, but adds it to the end</li>
+    <li><bug>61336</bug>BeanShell Assertion : mistake in Chinese translation</li>
+</ul>
+
+<h3>Functions</h3>
+<ul>
+    <li><bug>61258</bug>StringFromFile function is mentioned twice in the Function helper dialog</li>
+    <li><bug>61260</bug><code><funclink name="__XPath"/></code> function returns null despite XPath checker founds matches</li>
+    <li><bug>58876</bug>TestPlanName function returns <code>null</code> for a newly saved Test Plan and uses previously opened one for a new one</li>
+</ul>
+
+<h3>I18N</h3>
+<ul>
+</ul>
+
+<h3>Report / Dashboard</h3>
+<ul>
+    <li><bug>61129</bug>Report/Dashboard : If response code is empty but a <code>failureMessage</code> is present, Errors and Top 5 Errors are not accurate. Contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61151</bug>Report/Dashboard : Top 5 Errors by Sampler and Errors : If assertion contains html code, the html part is hidden</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+    <li><bug>60743</bug>Stopping / Shutting down Test might create a deadlock due to HTTPCORE-446, fixed by HttpCore upgrade to 4.4.7</li>
+    <li><bug>60994</bug>Fix some typo in comments or log messages. <pr>289</pr> and <pr>290</pr></li>
+    <li><bug>61011</bug>Replace occurrences count is not correct (Path and Host replacement are counted twice)</li>
+    <li><bug>61026</bug>Cannot run program "keytool": CreateProcess error=2 when starting JMeter 3.2 in GUI mode</li>
+    <li><bug>61054</bug>Endless loop in <code>JOrphanUtils#replaceAllWithRegex</code> when regex is contained in replacement</li>
+    <li><bug>60995</bug>HTTP Test Script Recorder: Port field is very small under some L&amp;F</li>
+    <li><bug>61073</bug>HTTP(S) Test Script Recorder panel have some fields with bad size on HiDPI screen or GTK+ L&amp;F on Linux/XWayland</li>
+    <li><bug>57958</bug>Fix transaction sample not generated if thread stops/restarts. Implemented by Artem Fedorov (artem at blazemeter.com) and contributed by BlazeMeter Ltd.</li>
+    <li><bug>61050</bug>Handle uninitialized RessourceBundle more gracefully, when calling <code>JMeterUtils#getResString</code>.</li>
+    <li><bug>61100</bug>Invalid GC Log Filename on Windows</li>
+    <li><bug>57962</bug>Allow to use variables ( from User Defined Variables only ) in all listeners in slave mode</li>
+    <li><bug>61270</bug>Fixed width fonts too small in text areas to read under HiDPI (user manual bug)</li>
+    <li><bug>61292</bug>Make processing of samples in reporter more robust.</li>
+    <li><bug>61359</bug>When cutting an element from Tree, Test plan is not marked as dirty</li>
+    <li><bug>61380</bug>JMeter shutdown using timers releases thundering herd of interrupted samplers</li>
+    <li><bug>57055</bug>CheckDirty.doAction should clear previousGuiItems for <code>SUB_TREE_SAVED</code></li>
+</ul>
+
+ <!--  =================== Thanks =================== -->
+
+<ch_section>Thanks</ch_section>
+<p>We thank all contributors mentioned in bug and improvement sections above:
+</p>
+<ul>
+<li>Anass Benomar (abenomar at umanis.com, Mithrandir0407 at github)</li>
+<li>Anthony Kearns (anthony.kearns atrightside.co)</li>
+<li>Emilian Bold (emi at apache.org)</li>
+<li>Liu XP (liu_xp2003 at sina.com)</li>
+<li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+<li>Wolfgang Wagner (internetwolf2000 at hotmail.com)</li>
+<li>Junlong Wu (github id mybreeze77)</li>
+</ul>
+<p>We also thank bug reporters who helped us improve JMeter. <br/>
+For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
+<ul>
+<li>Liu XP (liu_xp2003 at sina.com)</li>
+<li>Alexander Podelko (apodelko at yahoo.com)</li>
+</ul>
+<p>
+Apologies if we have omitted anyone else.
+ </p>
+ <!--  =================== Known bugs or issues related to JAVA Bugs =================== -->
+
+<ch_section>Known problems and workarounds</ch_section>
+<ul>
+<li>View Results Tree may freeze rendering large response particularly if this response has no spaces, see <bugzilla>60816</bugzilla>.
+This is due to an identified Java Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8172336">UI stuck when calling <code>JEditorPane.setText()</code> or <code>JTextArea.setText()</code> with long text without space</a>.
+</li>
+</ul>
+<ul>
+<li>The Once Only controller behaves correctly under a Thread Group or Loop Controller,
+but otherwise its behaviour is not consistent (or clearly specified).</li>
+
+<li>
+The numbers that appear to the left of the green box are the number of active threads / total number of threads,
+the total number of threads only applies to a locally run test, otherwise it will show <code>0</code> (see <bugzilla>55510</bugzilla>).
+</li>
+
+<li>
+Note that under some windows systems you may have this WARNING:
+<source>
+java.util.prefs.WindowsPreferences
+WARNING: Could not open/create prefs root node Software\JavaSoft\Prefs at root 0
+x80000002. Windows RegCreateKeyEx(&hellip;) returned error code 5.
+</source>
+The fix is to run JMeter as Administrator, it will create the registry key for you, then you can restart JMeter as a normal user and you won't have the warning anymore.
+</li>
+
+<li>
+You may encounter the following error:
+<source>java.security.cert.CertificateException: Certificates does not conform to algorithm constraints</source>
+ if you run a HTTPS request on a web site with a SSL certificate (itself or one of SSL certificates in its chain of trust) with a signature
+ algorithm using MD2 (like <code>md2WithRSAEncryption</code>) or with a SSL certificate with a size lower than 1024 bits.
+This error is related to increased security in Java 8+.
+<br></br>
+To allow you to perform your HTTPS request, you can downgrade the security of your Java installation by editing
+the Java <code>jdk.certpath.disabledAlgorithms</code> property. Remove the MD2 value or the constraint on size, depending on your case.
+<br></br>
+This property is in this file:
+<source>JAVA_HOME/jre/lib/security/java.security</source>
+See  <bugzilla>56357</bugzilla> for details.
+</li>
+
+<li>
+Under Mac OSX Aggregate Graph will show wrong values due to mirroring effect on numbers.
+This is due to a known Java bug, see Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8065373" >JDK-8065373</a>
+The fix is to use JDK8_u45 or later.
+</li>
+
+<li>
+View Results Tree may fail to display some HTML code under HTML renderer, see <bugzilla>54586</bugzilla>.
+This is due to a known Java bug which fails to parse "<code>px</code>" units in row/col attributes.
+See Bug <a href="https://bugs.openjdk.java.net/browse/JDK-8031109" >JDK-8031109</a>
+The fix is to use JDK9 b65 or later.
+</li>
+
+<li>
+JTable selection with keyboard (<keycombo><keysym>SHIFT</keysym><keysym>up/down</keysym></keycombo>) is totally unusable with Java 7 on Mac OSX.
+This is due to a known Java bug <a href="https://bugs.openjdk.java.net/browse/JDK-8025126" >JDK-8025126</a>
+The fix is to use JDK 8 b132 or later.
+</li>
+</ul>
+
 <!--  =================== 3.2 =================== -->
 
 <h1>Version 3.2</h1>
