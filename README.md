@@ -50,9 +50,10 @@ The following requirements exist for running Apache JMeter:
 
 *  Java Interpreter:
 
-    A fully compliant Java 8 (or later) Runtime Environment is required 
+    A fully compliant Java 8 Runtime Environment is required 
     for Apache JMeter to execute. A JDK with keytool utility is better suited 
     for Recording HTTPS websites. 
+    Java 9 is not yet supported as of version 3.3.
 
 *  Optional jars:
 
