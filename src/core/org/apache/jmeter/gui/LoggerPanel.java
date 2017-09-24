@@ -18,14 +18,11 @@
 
 package org.apache.jmeter.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.Timer;
+import javax.swing.*;
 
 import org.apache.commons.collections.Buffer;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
@@ -62,6 +59,10 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
 
     private volatile boolean logChanged = false;
 
+    private JMenuItem increase;
+    private JMenuItem decrease;
+    private JMenuItem clear;
+
     /**
      * Pane for display JMeter log file
      */
@@ -90,6 +91,21 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             jSyntaxTextArea.setLineWrap(false);
             jSyntaxTextArea.setLanguage("text");
             jSyntaxTextArea.setMargin(new Insets(2, 2, 2, 2)); // space between borders and text
+            int fontSize = jSyntaxTextArea.getFont().getSize();
+            increase = new JMenuItem(String.format(JMeterUtils.getResString("font.increase"), (fontSize + 1)));
+            increase.addActionListener(new IncreaseFontAction(jSyntaxTextArea, this));
+            decrease = new JMenuItem(String.format(JMeterUtils.getResString("font.decrease"), (fontSize - 1)));
+            decrease.addActionListener(new DecreaseFontAction(jSyntaxTextArea, this));
+            clear = new JMenuItem(JMeterUtils.getResString("clear"));
+            clear.addActionListener(l -> {
+                clear();
+            });
+            JPopupMenu pop = jSyntaxTextArea.getPopupMenu();
+            pop.addSeparator();
+            pop.add(increase);
+            pop.add(decrease);
+            pop.addSeparator();
+            pop.add(clear);
             areaScrollPane = JTextScrollPane.getInstance(jSyntaxTextArea);
             jTextArea = jSyntaxTextArea;
         } else {
@@ -162,5 +178,57 @@ public class LoggerPanel extends JPanel implements GuiLogEventListener {
             events.clear();
         }
         logChanged = true;
+    }
+
+    public void updateFontMenu(int fontSize) {
+        increase.setText(" Increase Font to " + (fontSize + 1) + " pt");
+        decrease.setText(" Decrease Font to " + (fontSize - 1) + " pt");
+    }
+}
+
+
+abstract class FontAction implements ActionListener {
+
+    private final JTextArea jTextArea;
+    private final LoggerPanel parent;
+
+    public FontAction(JTextArea jTextArea, LoggerPanel parent) {
+        super();
+        this.jTextArea = jTextArea;
+        this.parent = parent;
+    }
+
+    public void actionPerformed(ActionEvent e, int delta) {
+        Font f = jTextArea.getFont();
+        float size = f.getSize();
+        float newSize = size + delta;
+        Font newFont = f.deriveFont(newSize);
+        jTextArea.setFont(newFont);
+        jTextArea.repaint();
+        parent.updateFontMenu((int)newSize);
+    }
+}
+
+class IncreaseFontAction extends FontAction {
+
+    public IncreaseFontAction(JTextArea jTextArea, LoggerPanel parent) {
+        super(jTextArea, parent);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.actionPerformed(e, +1);
+    }
+}
+
+class DecreaseFontAction extends FontAction {
+
+    public DecreaseFontAction(JTextArea jTextArea, LoggerPanel parent) {
+        super(jTextArea, parent);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.actionPerformed(e, -1);
     }
 }
