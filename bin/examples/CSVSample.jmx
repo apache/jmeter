@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.1">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170917">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="CSVSample" enabled="true">
       <stringProp name="TestPlan.comments">Example of using CSV DataSet</stringProp>
@@ -33,9 +33,10 @@
           <stringProp name="filename">CSVSample_user.csv</stringProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">false</boolProp>
-          <stringProp name="shareMode">All threads</stringProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
           <boolProp name="stopThread">true</boolProp>
           <stringProp name="variableNames">USER,PASS</stringProp>
+          <boolProp name="ignoreFirstLine">false</boolProp>
         </CSVDataSet>
         <hashTree/>
         <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Dummy Login" enabled="true">
@@ -148,7 +149,7 @@
         </JavaSampler>
         <hashTree/>
         <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-          <stringProp name="WhileController.condition">${__jexl(&quot;${ACTION}&quot; != &quot;&lt;EOF&gt;&quot;)}</stringProp>
+          <stringProp name="WhileController.condition">${__jexl3(&quot;${ACTION}&quot; != &quot;&lt;EOF&gt;&quot;)}</stringProp>
         </WhileController>
         <hashTree>
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Get Actions" enabled="true">
@@ -159,7 +160,8 @@
             <boolProp name="quotedData">true</boolProp>
             <boolProp name="recycle">false</boolProp>
             <boolProp name="stopThread">false</boolProp>
-            <stringProp name="shareMode">All threads</stringProp>
+            <stringProp name="shareMode">shareMode.all</stringProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
           </CSVDataSet>
           <hashTree/>
           <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
@@ -379,5 +381,9 @@
       </ResultCollector>
       <hashTree/>
     </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree/>
   </hashTree>
 </jmeterTestPlan>
