@@ -115,7 +115,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         JPanel resultsPanel = new VerticalPanel();
         JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
+        cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35, null, false); //$NON-NLS-1$
         generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
