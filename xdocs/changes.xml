@@ -71,7 +71,9 @@ Summary
 <!-- =================== Incompatible changes =================== -->
 
 <ch_section>Incompatible changes</ch_section>
-
+<ul>
+    <li><code>Start time</code> and <code>End date</code> of Thread Group have been removed, see <bugzilla>61549</bugzilla></li>
+</ul>
 <!-- =================== Improvements =================== -->
 
 <ch_section>Improvements</ch_section>
@@ -112,6 +114,7 @@ Summary
 
 <h3>General</h3>
 <ul>
+    <li><bug>61549</bug>Thread Group : Remove start and end date</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>

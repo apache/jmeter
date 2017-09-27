@@ -6266,19 +6266,13 @@ Behaviour can be modified with some properties by setting in user.properties:
         This is the original default, and is appropriate for tests where threads are active throughout most of the test.
         </property>
         <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
-        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
-            Note: the <code>Startup Delay</code> field over-rides this - see below.
-            </property>
-        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.
-            Note: the <code>Duration</code> field over-rides this - see below.
-            </property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
-            JMeter will use this to calculate the End Time, and ignore the <code>End Time</code> value.
+            JMeter will use this to calculate the End Time.
         </property>
         <property name="Startup delay (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative startup delay.
-            JMeter will use this to calculate the Start Time, and ignore the <code>Start Time</code> value.
+            JMeter will use this to calculate the Start Time.
         </property>
 </properties>
 </component>
