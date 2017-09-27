@@ -94,11 +94,11 @@ public class CSVReadFunctionTest extends JMeterTestCase {
     
     @Test
     public void testCSValias() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/test.csv", "*A");
+        CSVRead cr1 = setCSVReadParams("bin/testfiles/test.csv", "*A");
         CSVRead cr2 = setCSVReadParams("*A", "1");
         CSVRead cr3 = setCSVReadParams("*A", "next");
 
-        CSVRead cr4 = setCSVReadParams("testfiles/test.csv", "*B");
+        CSVRead cr4 = setCSVReadParams("bin/testfiles/test.csv", "*B");
         CSVRead cr5 = setCSVReadParams("*B", "2");
         CSVRead cr6 = setCSVReadParams("*B", "next");
 
@@ -116,6 +116,7 @@ public class CSVReadFunctionTest extends JMeterTestCase {
 
         s = cr3.execute(null, null);// *A next
         assertEquals("", s);
+
         s = cr2.execute(null, null);// col 1, line 2, *A
         assertEquals("b2", s);
 
@@ -132,8 +133,8 @@ public class CSVReadFunctionTest extends JMeterTestCase {
     // Check blank lines are treated as EOF
     @Test
     public void CSVBlankLine() throws Exception {
-        CSVRead csv1 = setCSVReadParams("testfiles/testblank.csv", "1");
-        CSVRead csv2 = setCSVReadParams("testfiles/testblank.csv", "next");
+        CSVRead csv1 = setCSVReadParams("bin/testfiles/testblank.csv", "1");
+        CSVRead csv2 = setCSVReadParams("bin/testfiles/testblank.csv", "next");
 
         String s;
 
@@ -154,10 +155,10 @@ public class CSVReadFunctionTest extends JMeterTestCase {
     
     @Test
     public void CSVRun() throws Exception {
-        CSVRead cr1 = setCSVReadParams("testfiles/test.csv", "1");
-        CSVRead cr2 = setCSVReadParams("testfiles/test.csv", "2");
-        CSVRead cr3 = setCSVReadParams("testfiles/test.csv", "3");
-        CSVRead cr4 = setCSVReadParams("testfiles/test.csv", "next");
+        CSVRead cr1 = setCSVReadParams("bin/testfiles/test.csv", "1");
+        CSVRead cr2 = setCSVReadParams("bin/testfiles/test.csv", "2");
+        CSVRead cr3 = setCSVReadParams("bin/testfiles/test.csv", "3");
+        CSVRead cr4 = setCSVReadParams("bin/testfiles/test.csv", "next");
         CSVRead cr5 = setCSVReadParams("", "0");
         CSVRead cr6 = setCSVReadParams("", "next");
         

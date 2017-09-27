@@ -47,8 +47,20 @@ import org.slf4j.LoggerFactory;
  * To open the same file twice, use the alias function: __CSVRead(abc.csv,*ONE);
  * __CSVRead(abc.csv,*TWO);
  *
- * __CSVRead(*ONE,1); etc
+ * __CSVRead(*ONE,1); etc <li><li>
+ *
+ * Loop Count in the Thread Group does not repeat the whole data set specified in there.
+ * it repeat the loop count by discarding the number of data in the csv file.
+ * if there are 2 data sets(2 rows) in the csv file and lopp count set to 4, 2 data rows are testing
+ * for 2 times not each data set by 4 times.</li><li>
+ *
+ * Each Thread assign as Number of Threads in the Thread Group execute(test) only one data row.
+ * one thread for one data set.
+ * if number of threads are more than number of rows extra threads are execute again from the begining.
+ * if number of threads are less, threads are execute number of rows that are equal to number of threads.
  * @since 1.9
+ *
+ *
  */
 public class CSVRead extends AbstractFunction {
     private static final Logger log = LoggerFactory.getLogger(CSVRead.class);
