@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.CodeSource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +58,10 @@ public final class ActionRouter implements ActionListener {
     private final Map<String, Set<ActionListener>> postActionListeners =
             new HashMap<>();
 
+    // New action will clear undo, no point in having a transaction. Same with open
+    // EMI: XXX: Commands could also have an annotation to sigal the Undo preference
+    private final List<String> NO_TRANSACTION_ACTIONS = Arrays.asList(ActionNames.CLOSE, ActionNames.OPEN, ActionNames.OPEN_RECENT);
+
     private ActionRouter() {
     }
 
@@ -67,6 +72,9 @@ public final class ActionRouter implements ActionListener {
 
     private void performAction(final ActionEvent e) {
         String actionCommand = e.getActionCommand();
+        if(!NO_TRANSACTION_ACTIONS.contains(actionCommand)) {
+            GuiPackage.getInstance().beginUndoTransaction();
+        }
         try {
             try {
                 GuiPackage.getInstance().updateCurrentGui();
@@ -100,6 +108,10 @@ public final class ActionRouter implements ActionListener {
         } catch (NullPointerException er) {
             log.error("performAction({}) {} caused", actionCommand, e, er);
             JMeterUtils.reportErrorToUser("Sorry, this feature (" + actionCommand + ") not yet implemented");
+        } finally {
+            if(!NO_TRANSACTION_ACTIONS.contains(actionCommand)) {
+                GuiPackage.getInstance().endUndoTransaction();
+            }
         }
     }
 
@@ -288,7 +300,7 @@ public final class ActionRouter implements ActionListener {
     private void actionPerformed(Class<? extends Command> action, ActionEvent e, Map<String, Set<ActionListener>> actionListeners) {
         if (action != null) {
             Set<ActionListener> listenerSet = actionListeners.get(action.getName());
-            if (listenerSet != null && listenerSet.size() > 0) {
+            if (listenerSet != null && !listenerSet.isEmpty()) {
                 ActionListener[] listeners = listenerSet.toArray(new ActionListener[listenerSet.size()]);
                 for (ActionListener listener : listeners) {
                     listener.actionPerformed(e);
