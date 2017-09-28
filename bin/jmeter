@@ -23,24 +23,43 @@
 ##   JVM_ARGS="-Xms512m -Xmx512m" jmeter etc.
 ##
 ##   ==============================================
-
-# Minimal version to run JMeter
-MINIMAL_VERSION=1.8.0
-
-# Check if Java is present and the minimal version requirement
-_java=`type java | awk '{ print $ NF }'`
-CURRENT_VERSION=`"$_java" -version 2>&1 | awk -F'"' '/version/ {print $2}'`
-minimal_version=`echo $MINIMAL_VERSION | awk -F'.' '{ print $2 }'`
-current_version=`echo $CURRENT_VERSION | awk -F'.' '{ print $2 }'`
-if [ $current_version ]; then
-        if [ $current_version -lt $minimal_version ]; then
-                 echo "Error: Java version is too low to run JMeter. Needs at least Java >= ${MINIMAL_VERSION}." 
-                 exit 1
-        fi
-    else
-         echo "Not able to find Java executable or version. Please check your Java installation."
-         exit 1
+# Make sure prerequisite environment variables are set
+if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+  if $darwin; then
+    # 
+    if [ -x '/usr/libexec/java_home' ] ; then
+      export JAVA_HOME=`/usr/libexec/java_home`
+    # 
+    elif [ -d "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home" ]; then
+      export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+    fi
+  else
+    JAVA_PATH=`which java 2>/dev/null`
+    if [ "x$JAVA_PATH" != "x" ]; then
+      JAVA_PATH=`dirname $JAVA_PATH 2>/dev/null`
+      JRE_HOME=`dirname $JAVA_PATH 2>/dev/null`
+    fi
+    if [ "x$JRE_HOME" = "x" ]; then
+      # XXX: Should we try other locations?
+      if [ -x /usr/bin/java ]; then
+        JRE_HOME=/usr
+      fi
+    fi
+  fi
+  if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+    echo "Neither the JAVA_HOME nor the JRE_HOME environment variable is defined"
+    echo "At least one of these environment variable is needed to run this program"
+    exit 1
+  fi
 fi
+if [ -z "$JAVA_HOME" -a "$1" = "debug" ]; then
+  echo "JAVA_HOME should point to a JDK in order to run in debug mode."
+  exit 1
+fi
+if [ -z "$JRE_HOME" ]; then
+  JRE_HOME="$JAVA_HOME"
+fi
+
 
 JMETER_OPTS=""
 case `uname` in
@@ -100,4 +119,4 @@ SERVER="-server"
 
 ARGS="$SERVER $DUMP $HEAP $VERBOSE_GC $GC_ALGO $SYSTEM_PROPS"
 
-java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
+$JAVA_HOME/bin/java $ARGS $JVM_ARGS $JMETER_OPTS -jar "$PRGDIR/ApacheJMeter.jar" "$@"
