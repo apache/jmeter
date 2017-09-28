@@ -32,15 +32,29 @@ import org.apache.oro.text.regex.PatternMatcher;
 import org.junit.Test;
 
 import jodd.props.Props;
-
+/**
+ * This is a test class
+ *  to test the
+ *  getClass().getResource() issue it check as getClass().getResourceAsStream
+ */
 public class ApdexPerTransactionTest extends JMeterTestCase {
 	
-	// prop in the file mixes comma, semicolon and spans several lines.
-	// it also includes hardcoded sample names mixed with regexes 
+/**
+ * Prop in the file mixes comma, semicolon and spans several lines.
+ * it also includes hardcoded sample names mixed with regexes
+ * In here some imported statements are changed from original one other changes are mentioned in below
+ */
 	private static final String apdexString = "sample(\\d+):1000|2000;samples12:3000|4000;scenar01-12:5000|6000";
-	
+/**
+ * In here throws exception due to this method can throws them when create REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION and props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
+ * but original one didn't throws them that also cause to issue
+ * and remove some
+ * statements from original as well as props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
+ * is additionally added to this method
+ */
 	@Test
 	public void testgetApdexPerTransactionProperty() throws Exception {
+
 		final Props props = new Props();
 		final String REPORT_GENERATOR_KEY_PREFIX = "jmeter.reportgenerator";
 		final char KEY_DELIMITER = '.';
@@ -52,8 +66,14 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
         		REPORT_GENERATOR_KEY_APDEX_PER_TRANSACTION);
 		assertEquals(apdexString, apdexPerTransaction);
 	}
-	
-    @Test
+	/**
+	 * In here throws exception due to props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
+	 * statement it throws exceptions
+	 *  and remove some
+	 *  statements from test method as well as props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
+	 *  is additionally added to this method for original one
+	 */
+	@Test
     public void testgetApdexPerTransactionPropertySimple() throws Exception {
         final Props props = new Props();
         props.load(this.getClass().getResourceAsStream("reportgenerator_test.properties"));
@@ -102,15 +122,15 @@ public class ApdexPerTransactionTest extends JMeterTestCase {
        assertNotNull("map should not be null", apdex);
        assertEquals(0, apdex.size());
    }
-	
+	/**
+	 * matching pairs :
+	 * sample(\d+) sample2,
+	 * sample(\d+) sample12,
+	 * scenar01-12 scenar01-12,
+	 * samples12 samples12
+	 */
 	@Test
 	public void testSampleNameMatching() {
-		/* matching pairs : 
-		 * sample(\d+) sample2
-		 * sample(\d+) sample12
-		 * scenar01-12 scenar01-12
-		 * samples12 samples12
-		 * */
 		
 		String[] sampleNames = {"sample2","sample12", "scenar01-12", "samples12"};
 		
