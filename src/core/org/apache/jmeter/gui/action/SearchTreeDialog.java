@@ -96,8 +96,6 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
 
     private JButton searchAndExpandButton;
 
-    private JButton replaceButton;
-
     public SearchTreeDialog() {
         super((JFrame) null, JMeterUtils.getResString("search_tree_title"), false); //$NON-NLS-1$
         init();
@@ -170,7 +168,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
         searchButton.addActionListener(this);
         searchAndExpandButton = new JButton(JMeterUtils.getResString("search_expand")); //$NON-NLS-1$
         searchAndExpandButton.addActionListener(this);
-        replaceButton = new JButton(JMeterUtils.getResString("search_replace_all")); //$NON-NLS-1$
+        JButton replaceButton = new JButton(JMeterUtils.getResString("search_replace_all")); //$NON-NLS-1$
         replaceButton.addActionListener(this);
         cancelButton = new JButton(JMeterUtils.getResString("cancel")); //$NON-NLS-1$
         cancelButton.addActionListener(this);
@@ -232,31 +230,36 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
             searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
         }
         GuiPackage guiPackage = GuiPackage.getInstance();
-        JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
-        Set<JMeterTreeNode> nodes = new HashSet<>();
         int numberOfMatches = 0;
-        for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
-            try {
-                Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
-                List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
-                List<String> searchableTokens = searchable.getSearchableTokens();
-                boolean result = searcher.search(searchableTokens);
-                if (result) {
-                    numberOfMatches++;
-                    nodes.addAll(matchingNodes);
+        try {
+            guiPackage.beginUndoTransaction();
+            JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
+            Set<JMeterTreeNode> nodes = new HashSet<>();
+            for (JMeterTreeNode jMeterTreeNode : jMeterTreeModel.getNodesOfType(Searchable.class)) {
+                try {
+                    Searchable searchable = (Searchable) jMeterTreeNode.getUserObject();
+                    List<JMeterTreeNode> matchingNodes = jMeterTreeNode.getPathToThreadGroup();
+                    List<String> searchableTokens = searchable.getSearchableTokens();
+                    boolean result = searcher.search(searchableTokens);
+                    if (result) {
+                        numberOfMatches++;
+                        nodes.addAll(matchingNodes);
+                    }
+                } catch (Exception ex) {
+                    logger.error("Error occurred searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
                 }
-            } catch (Exception ex) {
-                logger.error("Error occurred searching for word:"+ wordToSearch+ " in node:"+jMeterTreeNode.getName(), ex);
             }
-        }
-        GuiPackage guiInstance = GuiPackage.getInstance();
-        JTree jTree = guiInstance.getMainFrame().getTree();
-
-        for (JMeterTreeNode jMeterTreeNode : nodes) {
-            jMeterTreeNode.setMarkedBySearch(true);
-            if (expand) {
-                jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
+            GuiPackage guiInstance = GuiPackage.getInstance();
+            JTree jTree = guiInstance.getMainFrame().getTree();
+    
+            for (JMeterTreeNode jMeterTreeNode : nodes) {
+                jMeterTreeNode.setMarkedBySearch(true);
+                if (expand) {
+                    jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
+                }
             }
+        } finally {
+            guiPackage.endUndoTransaction();
         }
         GuiPackage.getInstance().getMainFrame().repaint();
         searchTF.requestFocusInWindow();
