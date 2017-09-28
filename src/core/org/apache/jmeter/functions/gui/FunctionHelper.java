@@ -38,9 +38,11 @@ import javax.swing.JRootPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.engine.ClientJMeterEngine;
 import org.apache.jmeter.engine.util.CompoundVariable;
 import org.apache.jmeter.functions.Function;
 import org.apache.jmeter.gui.action.ActionRouter;
@@ -56,9 +58,13 @@ import org.apache.jmeter.util.LocaleChangeListener;
 import org.apache.jorphan.gui.ComponentUtil;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FunctionHelper extends JDialog implements ActionListener, ChangeListener, LocaleChangeListener {
     private static final long serialVersionUID = 240L;
+
+    private static final Logger log = LoggerFactory.getLogger(ClientJMeterEngine.class);
 
     private JLabeledChoice functionList;
 
@@ -109,7 +115,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         JPanel resultsPanel = new VerticalPanel();
         JPanel generatePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel displayPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35); //$NON-NLS-1$
+        cutPasteFunction = new JLabeledTextField(JMeterUtils.getResString("cut_paste_function"), 35, null, false); //$NON-NLS-1$
         generatePanel.add(cutPasteFunction);
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
@@ -178,7 +184,14 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         functionCall.append("}");
         cutPasteFunction.setText(functionCall.toString());
         CompoundVariable function = new CompoundVariable(functionCall.toString());
-        resultTextArea.setText(function.execute().trim()); 
+        try {
+            resultTextArea.setText(function.execute().trim());
+        } catch(Exception ex) {
+            log.error("Error calling function {}", functionCall.toString(), ex);
+            resultTextArea.setText(ex.getMessage() + ", \nstacktrace:\n "+
+                    ExceptionUtils.getStackTrace(ex));
+            resultTextArea.setCaretPosition(0);
+        }
     }
 
     private class HelpListener implements ActionListener {

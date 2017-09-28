@@ -140,7 +140,7 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
 
     @Override
     public void testEnded(String host) {
-        
+        // NOOP
     }
 
     /**
@@ -298,5 +298,21 @@ public class ResultSaver extends AbstractTestElement implements NoThreadClone, S
     // Mutable int to keep track of sample count
     private static class Counter{
         int num;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

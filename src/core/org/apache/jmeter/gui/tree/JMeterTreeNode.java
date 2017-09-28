@@ -95,6 +95,9 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
      * @param tagged The flag to be used for tagging
      */
     public void setMarkedBySearch(boolean tagged) {
+        if(this.markedBySearch == tagged) {
+            return;
+        }
         this.markedBySearch = tagged;
         treeModel.nodeChanged(this);
     }

@@ -85,7 +85,7 @@ PRGDIR=`dirname "$PRG"`
 
 # This is the base heap size -- you may increase or decrease it to fit your
 # system's memory availability:
-HEAP="-Xms512m -Xmx512m"
+HEAP="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m"
 
 #VERBOSE_GC="-verbose:gc -Xloggc:gc_jmeter_%p.log -XX:+PrintGCDetails -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintHeapAtGC -XX:+PrintGCApplicationConcurrentTime -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps"
 

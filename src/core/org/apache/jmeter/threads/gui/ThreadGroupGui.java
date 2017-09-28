@@ -21,7 +21,6 @@ package org.apache.jmeter.threads.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -31,11 +30,9 @@ import javax.swing.JTextField;
 
 import org.apache.jmeter.control.LoopController;
 import org.apache.jmeter.control.gui.LoopControlPanel;
-import org.apache.jmeter.gui.util.JDateField;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.LongProperty;
 import org.apache.jmeter.threads.AbstractThreadGroup;
 import org.apache.jmeter.threads.ThreadGroup;
 import org.apache.jmeter.util.JMeterUtils;
@@ -45,8 +42,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
     private LoopControlPanel loopPanel;
 
-    private VerticalPanel mainPanel;
-
     private static final String THREAD_NAME = "Thread Field";
 
     private static final String RAMP_NAME = "Ramp Up Field";
@@ -54,10 +49,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
     private JTextField threadInput;
 
     private JTextField rampInput;
-
-    private JDateField start;
-
-    private JDateField end;
 
     private final boolean showDelayedStart;
 
@@ -101,8 +92,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         tg.setProperty(AbstractThreadGroup.NUM_THREADS, threadInput.getText());
         tg.setProperty(ThreadGroup.RAMP_TIME, rampInput.getText());
-        tg.setProperty(new LongProperty(ThreadGroup.START_TIME, start.getDate().getTime()));
-        tg.setProperty(new LongProperty(ThreadGroup.END_TIME, end.getDate().getTime()));
         if (showDelayedStart) {
             tg.setProperty(ThreadGroup.DELAYED_START, delayedStart.isSelected(), false);
         }
@@ -124,15 +113,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
 
         toggleSchedulerFields(scheduler.isSelected());
 
-        // Check if the property exists
-        String s = tg.getPropertyAsString(ThreadGroup.START_TIME);
-        if (s.length() == 0) {// Must be an old test plan
-            start.setDate(new Date());
-            end.setDate(new Date());
-        } else {
-            start.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.START_TIME)));
-            end.setDate(new Date(tg.getPropertyAsLong(ThreadGroup.END_TIME)));
-        }
         duration.setText(tg.getPropertyAsString(ThreadGroup.DURATION));
         delay.setText(tg.getPropertyAsString(ThreadGroup.DELAY));
     }
@@ -148,8 +128,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
      * @param enable boolean used to enable/disable fields related to scheduler
      */
     private void toggleSchedulerFields(boolean enable) {
-        start.setEnabled(enable);
-        end.setEnabled(enable);
         duration.setEnabled(enable);
         delay.setEnabled(enable);
     }
@@ -162,34 +140,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         return loopPanel;
     }
 
-    /**
-     * Create a panel containing the StartTime field and corresponding label.
-     *
-     * @return a GUI panel containing the StartTime field
-     */
-    private JPanel createStartTimePanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("starttime")); //$NON-NLS-1$
-        panel.add(label, BorderLayout.WEST);
-        start = new JDateField();
-        panel.add(start, BorderLayout.CENTER);
-        return panel;
-    }
-
-    /**
-     * Create a panel containing the EndTime field and corresponding label.
-     *
-     * @return a GUI panel containing the EndTime field
-     */
-    private JPanel createEndTimePanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 0));
-        JLabel label = new JLabel(JMeterUtils.getResString("endtime")); // $NON-NLS-1$
-        panel.add(label, BorderLayout.WEST);
-
-        end = new JDateField();
-        panel.add(end, BorderLayout.CENTER);
-        return panel;
-    }
 
     /**
      * Create a panel containing the Duration field and corresponding label.
@@ -239,9 +189,6 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
             delayedStart.setSelected(false);
         }
         scheduler.setSelected(false);
-        Date today = new Date();
-        end.setDate(today);
-        start.setDate(today);
         delay.setText(""); // $NON-NLS-1$
         duration.setText(""); // $NON-NLS-1$
     }
@@ -287,13 +234,11 @@ public class ThreadGroupGui extends AbstractThreadGroupGui implements ItemListen
         scheduler = new JCheckBox(JMeterUtils.getResString("scheduler")); // $NON-NLS-1$
         scheduler.addItemListener(this);
         threadPropsPanel.add(scheduler);
-        mainPanel = new VerticalPanel();
+        VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 JMeterUtils.getResString("scheduler_configuration"))); // $NON-NLS-1$
         mainPanel.add(createDurationPanel());
         mainPanel.add(createDelayPanel());
-        mainPanel.add(createStartTimePanel());
-        mainPanel.add(createEndTimePanel());
         toggleSchedulerFields(false);
         VerticalPanel intgrationPanel = new VerticalPanel();
         intgrationPanel.add(threadPropsPanel);

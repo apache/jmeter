@@ -1,0 +1,12 @@
+label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
+JDBC_DROP_TABLE,42501 -5501,java.sql.SQLSyntaxErrorException: user lacks privilege or object not found: USERS in statement [drop table USERS],setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_CREATE_TABLE,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
+JDBC_INSERT,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_SELECT,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_SELECT_PREPARED,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_COMMIT,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_INSERT_VICTOR_HUGO,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_CHECK_COUNT_2,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_ROLLBACK,200,OK,Thread Group 1-1,text,true,1,1,1,0
+JDBC_CHECK_COUNT_1,200,OK,Thread Group 1-1,text,true,1,1,1,0
+CheckTransaction,200,"Number of samples in transaction : 4, number of failing samples : 0",Thread Group 1-1,,true,1,1,1,0

@@ -13,7 +13,7 @@
     <hashTree>
       <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
         <boolProp name="autocommit">true</boolProp>
-        <stringProp name="checkQuery">Select 1</stringProp>
+        <stringProp name="checkQuery"></stringProp>
         <stringProp name="connectionAge">5000</stringProp>
         <stringProp name="dataSource">jdbcConfig</stringProp>
         <stringProp name="dbUrl">jdbc:postgresql://hostname:port/dbname</stringProp>

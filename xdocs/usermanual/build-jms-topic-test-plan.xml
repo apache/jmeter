@@ -155,7 +155,7 @@ to the Publisher element
 (<menuchoice>
   <guimenuitem>Add</guimenuitem>
   <guimenuitem>Sampler</guimenuitem>
-  <guimenuitem>JMS Subscriber</guimenuitem>
+  <guimenuitem>JMS Publisher</guimenuitem>
 </menuchoice>).
 Then, select the JMS Publisher element in the tree and edit the following properties:
 </p>

@@ -570,7 +570,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.3-SNAPSHOT"/>
+    <property name="jmeter.version" value="3.4-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -2735,6 +2735,11 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TEST_HTTPS.jmx"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JDBC_TESTS"/>
+      <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
+    </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
@@ -3192,6 +3197,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xmlpull"/>
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
+    <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
@@ -3242,6 +3248,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar"/>
       <!-- tidy up unused logkit jars -->
       <fileset dir="${lib.dir}" includes="logkit-2.0.jar"/>
+      <fileset dir="${lib.opt}" includes="org.jacoco.ant-0.7.8-nodeps.jar"/>
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>
