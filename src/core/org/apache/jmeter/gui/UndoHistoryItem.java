@@ -21,6 +21,7 @@ package org.apache.jmeter.gui;
 import org.apache.jorphan.collections.HashTree;
 
 import java.io.Serializable;
+import org.apache.jmeter.engine.TreeCloner;
 
 /**
  * Undo history item
@@ -35,6 +36,8 @@ public class UndoHistoryItem implements Serializable {
     private final HashTree tree;
     // TODO: find a way to show this comment in menu item and toolbar tooltip
     private final String comment;
+    private final TreeState treeState;
+    private final boolean dirty;
 
     /**
      * This constructor is for Unit test purposes only
@@ -42,24 +45,39 @@ public class UndoHistoryItem implements Serializable {
      */
     @Deprecated
     public UndoHistoryItem() {
-        tree = null;
-        comment = null;
+        this(null, null, null, false);
     }
 
     /**
      * @param copy HashTree
      * @param acomment String
      */
-    public UndoHistoryItem(HashTree copy, String acomment) {
+    public UndoHistoryItem(HashTree copy, String acomment, TreeState treeState, boolean dirty) {
         tree = copy;
         comment = acomment;
+        this.treeState = treeState;
+        this.dirty = dirty;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public TreeState getTreeState() {
+        return treeState;
     }
 
     /**
      * @return {@link org.apache.jorphan.collections.HashTree}
      */
     public HashTree getTree() {
-        return tree;
+        //EMI: It's important we return a clone here and not the actual tree because
+        // the history item might still be part of some undo action and we don't
+        // want to expose (and corrupt then via edits) internal data
+        TreeCloner cloner = new TreeCloner(false);
+        tree.traverse(cloner);
+
+        return cloner.getClonedTree();
     }
 
     /**
