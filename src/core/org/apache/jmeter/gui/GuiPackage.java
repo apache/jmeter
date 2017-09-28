@@ -810,12 +810,17 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
     }
 
     /**
-     * Navigate back and forward through undo history
-     *
-     * @param offset int
+     * Navigate back through undo history
      */
-    public void goInHistory(int offset) {
-        undoHistory.moveInHistory(offset, this.treeModel);
+    public void undo() {
+        undoHistory.undo();
+    }
+
+    /**
+     * Navigate forward through undo history
+     */
+    public void redo() {
+        undoHistory.redo();
     }
 
     /**
@@ -900,5 +905,19 @@ public final class GuiPackage implements LocaleChangeListener, HistoryListener {
      */
     public GuiLogEventBus getLogEventBus() {
         return logEventBus;
+    }
+
+    /**
+     * Begin a group of actions modeled as 1 undo
+     */
+    public void beginUndoTransaction() {
+        undoHistory.beginUndoTransaction();
+    }
+
+    /**
+     * End a group of actions modeled as 1 undo
+     */
+    public void endUndoTransaction() {
+        undoHistory.endUndoTransaction();
     }
 }
