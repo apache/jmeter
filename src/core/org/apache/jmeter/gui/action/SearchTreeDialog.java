@@ -232,6 +232,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
             searcher = new RawTextSearcher(isCaseSensitiveCB.isSelected(), searchTF.getText());
         }
         GuiPackage guiPackage = GuiPackage.getInstance();
+        guiPackage.beginUndoTransaction();
         JMeterTreeModel jMeterTreeModel = guiPackage.getTreeModel();
         Set<JMeterTreeNode> nodes = new HashSet<>();
         int numberOfMatches = 0;
@@ -258,6 +259,7 @@ public class SearchTreeDialog extends JDialog implements ActionListener {
                 jTree.expandPath(new TreePath(jMeterTreeNode.getPath()));
             }
         }
+        guiPackage.endUndoTransaction();
         GuiPackage.getInstance().getMainFrame().repaint();
         searchTF.requestFocusInWindow();
         statusLabel.setText(

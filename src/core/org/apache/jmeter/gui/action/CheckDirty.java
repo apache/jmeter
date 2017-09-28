@@ -65,11 +65,12 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
     public CheckDirty() {
         previousGuiItems = new HashMap<>();
         ActionRouter.getInstance().addPreActionListener(ExitCommand.class, this);
+        ActionRouter.getInstance().addPostActionListener(UndoCommand.class, this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(ActionNames.EXIT)) {
+        if (e.getActionCommand().equals(ActionNames.EXIT) || e.getActionCommand().equals(ActionNames.UNDO) || e.getActionCommand().equals(ActionNames.REDO)) {
             doAction(e);
         }
     }
@@ -110,6 +111,16 @@ public class CheckDirty extends AbstractAction implements HashTreeTraverser, Act
         // If we are merging in another test plan, we know the test plan is dirty now
         if(action.equals(ActionNames.SUB_TREE_MERGED)) {
             dirty = true;
+        } else if (action.equals(ActionNames.UNDO) || action.equals(ActionNames.REDO)) {
+            dirty = GuiPackage.getInstance().isDirty();
+            log.debug("Restoring dirty after undo/redo");
+
+            //remember
+            previousGuiItems.clear();
+            GuiPackage.getInstance().getTreeModel().getTestPlan().traverse(this);
+            if (isWorkbenchSaveable()) {
+                GuiPackage.getInstance().getTreeModel().getWorkBench().traverse(this);
+            }
         }
         else {
             dirty = false;
