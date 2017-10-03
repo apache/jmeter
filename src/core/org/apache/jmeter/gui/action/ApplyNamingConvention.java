@@ -75,11 +75,11 @@ public class ApplyNamingConvention extends AbstractAction {
             JMeterTreeNode currentNode) {
         TreeNodeNamingPolicy namingPolicy = guiPackage.getNamingPolicy();
         guiPackage.updateCurrentNode();
-        Enumeration<JMeterTreeNode> enumeration = currentNode.children();
+        Enumeration<?> enumeration = currentNode.children();
         int index = 0;
         namingPolicy.resetState(currentNode);
         while(enumeration.hasMoreElements()) {
-            JMeterTreeNode childNode = enumeration.nextElement();
+            JMeterTreeNode childNode = (JMeterTreeNode)enumeration.nextElement();
             namingPolicy.rename(currentNode, childNode, index);
             index++;
         }        
