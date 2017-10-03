@@ -217,8 +217,14 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
                 List<InetAddress> addresses = new ArrayList<>();
                 for (String address : Arrays.asList(entry.getAddress().split("\\s*,\\s*"))) {
                     try {
-                        addresses.addAll(Arrays.asList(requestLookup(address)));
+                        final InetAddress[] requestLookup = requestLookup(address);
+                        if (requestLookup == null) {
+                            addAsLiteralAddress(addresses, address);
+                        } else {
+                            addresses.addAll(Arrays.asList(requestLookup));
+                        }
                     } catch (UnknownHostException e) {
+                        addAsLiteralAddress(addresses, address);
                         log.warn("Couldn't resolve static address {} for host {}", address, host, e);
                     }
                 }
@@ -226,6 +232,15 @@ public class DNSCacheManager extends ConfigTestElement implements TestIterationL
             }
         }
         return new InetAddress[0];
+    }
+
+    private void addAsLiteralAddress(List<InetAddress> addresses,
+            String address) {
+        try {
+            addresses.add(InetAddress.getByName(address));
+        } catch (UnknownHostException e) {
+            log.info("Couldn't convert {} as literal address to InetAddress", address, e);
+        }
     }
 
     /**

@@ -56,7 +56,7 @@ public class TransactionSampler extends AbstractSampler {
 
     private int noFailingSamples = 0;
 
-    private int totalTime = 0;
+    private long totalTime = 0;
 
     /**
      * @deprecated only for use by test code

@@ -58,7 +58,7 @@ public class UserMetric {
      *          using a sliding window of SLIDING_WINDOW_SIZE
      */
     public int getMaxActiveThreads() {
-        return (int) usersStats.getMin();
+        return (int) usersStats.getMax();
     }
 
     /**
@@ -74,7 +74,7 @@ public class UserMetric {
      *          using a sliding window of SLIDING_WINDOW_SIZE
      */
     public int getMinActiveThreads() {
-        return (int) usersStats.getMax();
+        return (int) usersStats.getMin();
     }
 
     /**

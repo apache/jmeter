@@ -49,6 +49,11 @@ public class HttpPoolEntry extends PoolEntry<HttpRoute, OperatedClientConnection
     }
 
     @Override
+    @SuppressWarnings("sync-override")
+    /**
+     * No synchronization added as the override is just for logging.
+     * Adding synhronized within logging might introduce too much locking
+     */
     public boolean isExpired(final long now) {
         final boolean expired = super.isExpired(now);
         if (expired && this.log.isDebugEnabled()) {

@@ -132,6 +132,24 @@ public class TestSimpleFunctions extends JMeterTestCase {
     }
 
     @Test
+    public void testUnEscapeHtml2() throws Exception {
+        AbstractFunction function = new UnEscapeHtml();
+        params.add(new CompoundVariable("&lt;Fran&ccedil;ais&gt;"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals("<Français>", ret);
+    }
+
+    @Test
+    public void testUnEscapeHtml3() throws Exception {
+        AbstractFunction function = new UnEscapeHtml();
+        params.add(new CompoundVariable("&gt;&zzzz;x"));
+        function.setParameters(params);
+        String ret = function.execute(result, null);
+        assertEquals(">&zzzz;x", ret);
+    }
+
+    @Test
     public void testEscapeXml() throws Exception {
         AbstractFunction function = new EscapeXml();
         params.add(new CompoundVariable("\"bread\" & <'butter'>"));

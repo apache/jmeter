@@ -54,6 +54,8 @@ public class JMeterContext {
 
     private ConcurrentHashMap<String, Object> samplerContext = new ConcurrentHashMap<>(5);
 
+    private boolean recording;
+
     JMeterContext() {
         clear0();
     }
@@ -70,6 +72,7 @@ public class JMeterContext {
         samplingStarted = false;
         threadNum = 0;
         thread = null;
+        recording = false;
         samplerContext.clear();
     }
 
@@ -200,5 +203,19 @@ public class JMeterContext {
      */
     public Map<String, Object> getSamplerContext() {
         return samplerContext;
+    }
+
+    /**
+     * @param recording true if we are recording
+     */
+    public void setRecording(boolean recording) {
+        this.recording = recording;
+    }
+
+    /**
+     * @return the recording
+     */
+    public boolean isRecording() {
+        return recording;
     }
 }

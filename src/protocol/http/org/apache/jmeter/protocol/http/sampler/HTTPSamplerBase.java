@@ -192,7 +192,7 @@ public abstract class HTTPSamplerBase extends AbstractSampler
     public static final boolean BROWSER_COMPATIBLE_MULTIPART_MODE_DEFAULT = false; // The default setting to be used (i.e. historic)
 
     private static final int MAX_BYTES_TO_STORE_PER_REQUEST =
-            JMeterUtils.getPropDefault("httpsampler.max_bytes_to_store_per_request", 10 * 1024 *1024); // $NON-NLS-1$ // default value: 10MB
+            JMeterUtils.getPropDefault("httpsampler.max_bytes_to_store_per_request", 0); // $NON-NLS-1$ // default value: 0 don't truncate
 
     private static final int MAX_BUFFER_SIZE = 
             JMeterUtils.getPropDefault("httpsampler.max_buffer_size", 65 * 1024); // $NON-NLS-1$
@@ -1827,9 +1827,12 @@ public abstract class HTTPSamplerBase extends AbstractSampler
                 
                 if (md == null) {
                     if(storeInBOS) {
-                        if(totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) {
+                        if(MAX_BYTES_TO_STORE_PER_REQUEST <= 0 ||
+                                (totalBytes+bytesReadInBuffer<=MAX_BYTES_TO_STORE_PER_REQUEST) ||
+                                JMeterContextService.getContext().isRecording()) {
                             w.write(readBuffer, 0, bytesReadInBuffer);
                         } else {
+                            log.debug("Big response, truncating it to {} bytes", MAX_BYTES_TO_STORE_PER_REQUEST);
                             w.write(readBuffer, 0, (int)(MAX_BYTES_TO_STORE_PER_REQUEST-totalBytes));
                             storeInBOS = false;
                         }

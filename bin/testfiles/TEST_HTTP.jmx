@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170228">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3-SNAPSHOT.20170902">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -819,7 +819,7 @@ mirrorServer.start();</stringProp>
               <stringProp name="1052466409">User-Agent: </stringProp>
               <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
               <stringProp name="54777371">Content-Disposition: form-data; name=&quot;name1&quot;</stringProp>
-              <stringProp name="-378849006">Content-Type: text/plain; charset=</stringProp>
+              <stringProp name="-1752268452">Content-Type: text/plain</stringProp>
               <stringProp name="80784828">Content-Transfer-Encoding: 8bit</stringProp>
               <stringProp name="-823812896">value1</stringProp>
               <stringProp name="-1299776663">boundary=${boundary}</stringProp>
@@ -829,6 +829,93 @@ mirrorServer.start();</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_PARAMETERS_MULTIPART_UTF-8" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="name1" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">value1</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">name1</stringProp>
+              </elementProp>
+              <elementProp name="安_param" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">value2</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">安_param</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/test?name0=value0</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">true</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Accept-Encoding" elementType="Header">
+                <stringProp name="Header.name">Accept-Encoding</stringProp>
+                <stringProp name="Header.value">gzip</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="REE_boundary" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">boundary</stringProp>
+            <stringProp name="RegexExtractor.regex">boundary=(.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default">nv_boundary</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+          </RegexExtractor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-530323176">POST /test?name0=value0 HTTP/1.1</stringProp>
+              <stringProp name="894172713">Connection: keep-alive</stringProp>
+              <stringProp name="-1680100360">Accept-Encoding: gzip</stringProp>
+              <stringProp name="2117109222">Host: localhost:8081</stringProp>
+              <stringProp name="1052466409">User-Agent: </stringProp>
+              <stringProp name="-1722553038">Content-Type: multipart/form-data; boundary=</stringProp>
+              <stringProp name="54777371">Content-Disposition: form-data; name=&quot;name1&quot;</stringProp>
+              <stringProp name="-823812896">value1</stringProp>
+              <stringProp name="-1299776663">boundary=${boundary}</stringProp>
+              <stringProp name="182753948">${boundary}</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+            <stringProp name="TestPlan.comments">Content-Type: multipart/form-data; boundary=</stringProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223-Assertion-CheckCorrectEncodingForParam" enabled="true">
+            <stringProp name="TestPlan.comments">Workaround as Mirror Server corrupts encoding</stringProp>
+            <stringProp name="cacheKey">9e8a05ef-13b4-408f-a030-2702cfff8a88</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">String textToCheck =  &apos;Content-Disposition: form-data; name=&quot;?_param&quot;&apos;;
+if(prev.getSamplerData().indexOf(textToCheck) &lt; 0) {
+	AssertionResult.setFailure(true);
+	AssertionResult.setFailureMessage(&quot;Request does not contains &apos;&quot;+textToCheck+&quot;&apos;&quot;);
+}
+</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HR-POST_WITH_BODY" enabled="true">

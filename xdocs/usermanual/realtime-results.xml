@@ -34,7 +34,9 @@
 <p>Since JMeter 2.13 you can get real-time results sent to a backend through the 
 <a href="component_reference.html#Backend_Listener">Backend Listener</a> using potentially any backend (JDBC, JMS, Webservice, &hellip;)
 by providing a class which implements <a href="../api/org/apache/jmeter/visualizers/backend/AbstractBackendListenerClient.html" >AbstractBackendListenerClient</a>.<br/>
-JMeter ships with a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
+JMeter ships with:
+<ul>
+<li>a GraphiteBackendListenerClient which allows you to send metrics to a Graphite Backend.<br/>
 This feature provides:
 <ul>
 <li>Live results</li>
@@ -43,9 +45,24 @@ This feature provides:
 <li>Storing monitoring data as long as JMeter results in the same backend</li>
 <li>&hellip;</li>
 </ul>
-In this document we will present the configuration setup to graph and historize the data in 2 different backends:
+</li>
+<li>an InfluxDBBackendListenerClient introduced in JMeter 3.2 which allows you to send metrics to an InfluxDB Backend using UDP or HTTP protocols
+This feature provides:
 <ul>
-<li>InfluxDB</li>
+<li>Live results</li>
+<li>Nice graphs for metrics</li>
+<li>Ability to compare 2 or more load tests</li>
+<li>Ability to add annotations to graphs</li>
+<li>Storing monitoring data as long as JMeter results in the same backend</li>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
+In this document we will present the configuration setup to graph and historize the data in different backends:
+<ul>
+<li>InfluxDB setup for InfluxDBBackendListenerClient</li>
+<li>InfluxDB setup for GraphiteBackendListenerClient</li>
+<li>Grafana</li>
 <li>Graphite</li>
 </ul>
 </p>
@@ -122,15 +139,27 @@ In this document we will present the configuration setup to graph and historize 
     <figure width="902" height="341" image="backend_listener.png">Graphite configuration</figure>
 </subsection>
 
-<subsection name="&sect-num;.2 InfluxDB" anchor="influxdb">
+<subsection name="&sect-num;.3 InfluxDB database configuration" anchor="influxdb_db_configuration">
+    <p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/getting_started/" >influx shell</a> and <a href="https://docs.influxdata.com/influxdb/v1.1/query_language/database_management/" >create two databases</a>:
+    <ul>
+        <li>grafana : Used by Grafana to store the dashboards we will create</li>
+        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
+        element in <code>influxdb.conf</code> or <code>config.toml</code></li>
+    </ul>
+    </p>
+
+<subsection name="&sect-num;.3.1 InfluxDB setup for InfluxDBBackendListenerClient" anchor="influxdb">
 <p>InfluxDB is an open-source, distributed, time-series database that allows to 
 easily store metrics.
 Installation and configuration is very easy, read this for more details <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/installation/" target="_blank" >InfluxDB documentation</a>.<br/>
 InfluxDB data can be easily viewed in a browser through either <a href="https://github.com/hakobera/influga"  target="_blank">Influga</a> or <a href="http://grafana.org/"  target="_blank">Grafana</a>.
 We will use Grafana in this case.
+<b>There is no particular configuration to setup when using <code>InfluxDBBackendListenerClient</code></b>
 </p>
-    <subsection name="&sect-num;.2.1 InfluxDB graphite listener configuration" anchor="influxdb_configuration">
-    <p>To enable Graphite listener in InfluxDB, edit files <code>/opt/influxdb/shared/config.toml</code> or <code>/usr/local/etc/influxdb.conf</code>,
+</subsection>
+
+<subsection name="&sect-num;.3.2 InfluxDB setup for GraphiteBackendListenerClient" anchor="influxdb_through_graphite_configuration">
+    <p>To enable Graphite listener in InfluxDB for <code>GraphiteBackendListenerClient</code>, edit files <code>/opt/influxdb/shared/config.toml</code> or <code>/usr/local/etc/influxdb.conf</code>,
     find "<code>[[graphite]]</code>" and set this:
     </p>
     <source>
@@ -140,17 +169,10 @@ enabled = true
 bind-address = ":2003" # If not set, is actually set to bind-address.
 database = "jmeter"  # store graphite data in this database
     </source>
-    </subsection>
-    <subsection name="&sect-num;.2.2 InfluxDB database configuration" anchor="influxdb_db_configuration">
-    <p>Connect to InfluxDB using <a href="https://docs.influxdata.com/influxdb/v1.1/introduction/getting_started/" >influx shell</a> and <a href="https://docs.influxdata.com/influxdb/v1.1/query_language/database_management/" >create two databases</a>:
-    <ul>
-        <li>grafana : Used by Grafana to store the dashboards we will create</li>
-        <li>jmeter : Used by InfluxDB to store the data sent to Graphite Listener as per database="jmeter" config
-        element in <code>influxdb.conf</code> or <code>config.toml</code></li>
-    </ul>
-    </p>
-    </subsection>
-    <subsection name="&sect-num;.2.3 Grafana configuration" anchor="grafana_configuration">
+</subsection>
+</subsection>
+    
+<subsection name="&sect-num;.4 Grafana configuration" anchor="grafana_configuration">
     <p>
     Installing grafana is just a matter of putting the unzipped bundle behind an Apache HTTP server.<br/>
     Read <a href="http://grafana.org/docs/" target="_blank">documentation</a> for more details.
@@ -179,11 +201,9 @@ datasources: {
     </note>
     Here is the kind of dashboard that you could obtain:
     <figure width="1265" height="581" image="grafana_dashboard.png">Grafana dashboard</figure> 
-    
-    </subsection>
 </subsection>
 
-<subsection name="&sect-num;.3 Graphite" anchor="graphite">
+<subsection name="&sect-num;.5 Graphite" anchor="graphite">
 <p>HELP WELCOME for this section, see <a href="../building.html" >Contributing documentation</a></p>
 </subsection>
 

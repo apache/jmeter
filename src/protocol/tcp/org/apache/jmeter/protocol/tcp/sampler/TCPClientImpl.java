@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,14 +56,14 @@ public class TCPClientImpl extends AbstractTCPClient {
         super();
         setEolByte(EOL_INT);
         if (useEolByte) {
-            log.info("Using eolByte=" + eolByte);
+            log.info("Using eolByte={}", eolByte);
         }
         setCharset(CHARSET);
         String configuredCharset = JMeterUtils.getProperty("tcp.charset");
         if(StringUtils.isEmpty(configuredCharset)) {
-            log.info("Using platform default charset:"+CHARSET);
+            log.info("Using platform default charset:{}",CHARSET);
         } else {
-            log.info("Using charset:"+configuredCharset);
+            log.info("Using charset:{}", configuredCharset);
         }
     }
 
@@ -93,18 +94,28 @@ public class TCPClientImpl extends AbstractTCPClient {
         }
     }
 
+    @Deprecated
+    public String read(InputStream is) throws ReadException {
+        return read(is, new SampleResult());
+    }
+    
     /**
      * Reads data until the defined EOL byte is reached.
      * If there is no EOL byte defined, then reads until
      * the end of the stream is reached.
      */
     @Override
-    public String read(InputStream is) throws ReadException{
+    public String read(InputStream is, SampleResult sampleResult) throws ReadException{
         ByteArrayOutputStream w = new ByteArrayOutputStream();
         try {
             byte[] buffer = new byte[4096];
             int x = 0;
+            boolean first = true;
             while ((x = is.read(buffer)) > -1) {
+                if (first) {
+                    sampleResult.latencyEnd();
+                    first = false;
+                }
                 w.write(buffer, 0, x);
                 if (useEolByte && (buffer[x - 1] == eolByte)) {
                     break;

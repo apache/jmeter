@@ -28,18 +28,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.jmeter.samplers.SampleResult;
+
 /**
  * Interface required by TCPSampler for TCPClient implementations.
  */
 public interface TCPClient {
 
     /**
-     * Versions of JMeter after 2.3.2 invoke this method when the thread starts.
+     * Invoked when the thread starts.
      */
     void setupTest();
 
     /**
-     * Versions of JMeter after 2.3.2 invoke this method when the thread ends.
+     * Invoked when the thread ends
      */
     void teardownTest();
 
@@ -69,8 +71,20 @@ public interface TCPClient {
      *            InputStream for socket
      * @return String read from socket
      * @throws ReadException exception that can contain partial response (Response until error occurred)
+     * @deprecated since 3.3, implement {@link TCPClient#read(InputStream, SampleResult)} instead, will be removed in future version
      */
+    @Deprecated
     String read(InputStream is) throws ReadException;
+
+    /**
+     * 
+     * @param is -
+     *            InputStream for socket
+     * @param sampleResult {@link SampleResult}
+     * @return String read from socket
+     * @throws ReadException exception that can contain partial response
+     */
+    String read(InputStream is, SampleResult sampleResult) throws ReadException;
 
     /**
      * Get the end-of-line/end-of-message byte.

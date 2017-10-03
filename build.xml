@@ -124,7 +124,7 @@
   <property name="skip.batchtest_SlowCharsFeature" value="false" />
   <property name="skip.batchtest_TestKeepAlive" value="false" />
   <property name="skip.batchtest_ResponseDecompression" value="false" />
-  <property name="skip.test_https" value="true" />
+  <property name="skip.test_https" value="false" />
   <property name="skip.test_http" value="false" />
   <property name="skip.test_TestDNSCacheManager.testWithCustomResolverAnd1Server" value="false" />
 
@@ -566,7 +566,7 @@
       JMeter version
       This is overridden for formal releases.
     -->
-    <property name="jmeter.version" value="3.3-SNAPSHOT"/>
+    <property name="jmeter.version" value="3.4-SNAPSHOT"/>
     <!-- Remember to change "docversion" below if necessary -->
     <condition property="implementation.version"
           value="${jmeter.version} r${svn.revision}" else="${jmeter.version}.${DSTAMP}">
@@ -1699,7 +1699,7 @@ run JMeter unless all the JMeter jars are added.
     }
     void processFiles(basename, targetDir) {
       // combine all the extensions in one list
-      extensions = new String[]{".zip", ".zip.asc", ".zip.md5", ".zip.sha", ".tgz", ".tgz.asc", ".tgz.md5", ".tgz.sha"};
+      extensions = new String[]{".zip", ".zip.asc", ".zip.md5", ".zip.sha512", ".tgz", ".tgz.asc", ".tgz.md5", ".tgz.sha512"};
       for (i = 0; i < extensions.length; ++i) {
         extension = extensions[i];
         srcFile = basename + extension;
@@ -1812,8 +1812,8 @@ run JMeter unless all the JMeter jars are added.
         release/jmeter/[source|binaries]
 
         Files that are expected to be present:
-        apache-jmeter-<version>.[tgz|zip] + [.asc|.md5|.sha]
-        apache-jmeter-<version>_src.[tgz|zip] + [.asc|.md5|.sha]
+        apache-jmeter-<version>.[tgz|zip] + [.asc|.md5|.sha512]
+        apache-jmeter-<version>_src.[tgz|zip] + [.asc|.md5|.sha512]
 
         Must have SVN installed, in particular the svnmucc command-line client.
 
@@ -2206,9 +2206,9 @@ run JMeter unless all the JMeter jars are added.
     <basename property="_base" file="${path}"/>
     <checksum algorithm="MD5" file="${path}" property="md5"/>
     <echo message="${md5} *${_base}" file="${path}.md5"/>
-    <echo message="Creating SHA for ${path}"/>
-    <checksum algorithm="SHA" file="${path}" property="sha"/>
-    <echo message="${sha} *${_base}" file="${path}.sha"/>
+    <echo message="Creating SHA-512 for ${path}"/>
+  	<checksum algorithm="SHA-512" file="${path}" property="sha512"/>
+    <echo message="${sha512} *${_base}" file="${path}.sha512"/>
   </target>
 
   <!--
@@ -2724,6 +2724,11 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.jmx" value="TEST_HTTPS.jmx"/>
       <param name="skip.batchtest" value="${skip.test_https}" />
     </antcall>
+      
+    <antcall target="batchtest">
+      <param name="batchtest.name" value="JDBC_TESTS"/>
+      <param name="batchtest.jmx" value="JDBC_TESTS.jmx"/>
+    </antcall>
 
     <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
@@ -3179,6 +3184,7 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xmlpull"/>
     <process_jarfile jarname="xpp3"/>
     <process_jarfile jarname="xstream"/>
+    <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
@@ -3229,6 +3235,7 @@ run JMeter unless all the JMeter jars are added.
       <fileset dir="${lib.dir}" includes="htmllexer-2.1.jar htmlparser-2.1.jar"/>
       <!-- tidy up unused logkit jars -->
       <fileset dir="${lib.dir}" includes="logkit-2.0.jar"/>
+      <fileset dir="${lib.opt}" includes="org.jacoco.ant-0.7.8-nodeps.jar"/>
     </delete>
     <antcall target="_process_all_jars">
         <param name="_get_file" value="true"/>
@@ -3479,8 +3486,8 @@ run JMeter unless all the JMeter jars are added.
       ]]>
     </scriptdef>
     <gpg>
-      <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
-      <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha1 *.sha"/>
+      <fileset dir="${dist.dir}"  includes="*.*" excludes="*.asc *.md5 *.sha512"/>
+      <fileset dir="${maven.dir}" includes="*.*" excludes="*.asc *.md5 *.sha512"/>
     </gpg>
   </target>
 

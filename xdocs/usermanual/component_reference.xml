@@ -666,7 +666,7 @@ This will not have any impact on existing Test plans.
     </properties>
 </component>
 <component name="LDAP Request" index="&sect-num;.1.7" width="621" height="462" screenshot="ldap_request.png">
-  <description>This Sampler lets you send a different Ldap request(<code>Add</code>, <code>Modify</code>, <code>Delete</code> and <code>Search</code>) to an LDAP server.
+  <description>This Sampler lets you send a different LDAP request(<code>Add</code>, <code>Modify</code>, <code>Delete</code> and <code>Search</code>) to an LDAP server.
     <p>If you are going to send multiple requests to the same LDAP server, consider
       using an <complink name="LDAP Request Defaults"/>
       Configuration Element so you do not have to enter the same information for each
@@ -745,7 +745,7 @@ This will not have any impact on existing Test plans.
     <property name="Server Name or IP" required="Yes">Domain name or IP address of the LDAP server.
       JMeter assumes the LDAP server is listening on the default port (<code>389</code>).</property>
     <property name="Port" required="Yes">Port to connect to (default is <code>389</code>).</property>
-    <property name="root DN" required="Yes">Base DN to use for ldap operations</property>
+    <property name="root DN" required="Yes">Base DN to use for LDAP operations</property>
     <property name="Username" required="Usually">LDAP server username.</property>
     <property name="Password" required="Usually">LDAP server password. (N.B. this is stored unencrypted in the test plan)</property>
     <property name="Entry DN" required="Yes, if User Defined Test and Add Test or Modify Test is selected">the name of the context to create or Modify; may not be empty.
@@ -761,7 +761,7 @@ This will not have any impact on existing Test plans.
   </properties>
 
   <links>
-    <link href="build-ldap-test-plan.html">Building an Ldap Test Plan</link>
+    <link href="build-ldap-test-plan.html">Building an LDAP Test Plan</link>
     <complink name="LDAP Request Defaults"/>
   </links>
 
@@ -833,7 +833,7 @@ This will not have any impact on existing Test plans.
      </dd>
      <dt><b>Add test</b></dt>
      <dd>
-       <p>This is the ldap "<code>add</code>" operation. It can be used to add any kind of
+       <p>This is the LDAP "<code>add</code>" operation. It can be used to add any kind of
        object to the LDAP server.</p>
        <properties>
          <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
@@ -913,7 +913,7 @@ This will not have any impact on existing Test plans.
 <center><h2>(Beta Code)</h2></center>
 <description><p>AccessLogSampler was designed to read access logs and generate http requests.
 For those not familiar with the access log, it is the log the webserver maintains of every
-request it accepted. This means every image, css file, javascript file, html file, &hellip;
+request it accepted. This means every image, CSS file, JavaScript file, html file, &hellip;
 The current implementation is complete, but some features have not been enabled. 
 There is a filter for the access log parser, but I haven't figured out how to link to the pre-processor. 
 Once I do, changes to the sampler will be made to enable that functionality.</p>
@@ -1120,8 +1120,8 @@ Beware however that misuse of any methods can cause subtle faults that may be di
         </note>
         <p>By default, JMeter supports the following languages:</p>
         <ul>
-        <li>javascript</li>
-        <li>xslt</li>
+        <li>JavaScript</li>
+        <li>XSLT</li>
         </ul>
         <note>Unlike the BeanShell sampler, the interpreter is not saved between invocations.</note>
     </description>
@@ -1129,7 +1129,7 @@ Beware however that misuse of any methods can cause subtle faults that may be di
     <property name="Name" required="No">Descriptive name for this sampler that is shown in the tree.</property>
     <property name="Scripting Language" required="Yes">Name of the BSF scripting language to be used.
       <note>N.B. Not all the languages in the drop-down list are supported by default.
-        The following are supported: javascript, xslt.
+        The following are supported: JavaScript, XSLT.
         Others may be available if the appropriate jar is installed in the JMeter lib directory.
       </note>
     </property>
@@ -1217,7 +1217,7 @@ To benefit from this feature:
     </note>
     </li>
 </ul>
-Cache size is controlled by the following jmeter property (<code>jmeter.properties</code>):
+Cache size is controlled by the following JMeter property (<code>jmeter.properties</code>):
 <source>jsr223.compiled_scripts_cache_size=100</source>
 <note>Unlike the <complink name="BeanShell Sampler" />, the interpreter is not saved between invocations.</note>
 <note>
@@ -1414,7 +1414,7 @@ Currently the only way to changes these is via the <a href="../api/org/apache/jm
   to create the connection.
   </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
-  <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the jms provider</property>
+  <property name="Provider URL" required="Yes, unless using jndi.properties">The URL for the JMS provider</property>
   <property name="Destination" required="Yes">The message destination (topic or queue name)</property>
   <property name="Setup" required="Yes">The destination setup type. With <code>At startup</code>, the destination name is static (i.e. always same name during the test), with <code>Each sample</code>, the destination name is dynamic and is evaluate at each sample (i.e. the destination name may be a variable)</property>
   <property name="Authentication" required="Yes">Authentication requirement for the JMS provider</property>
@@ -1521,7 +1521,7 @@ The following table shows some values which may be useful when configuring JMS:
   to create the connection.
   </property>
   <property name="JNDI Initial Context Factory" required="No">Name of the context factory</property>
-  <property name="Provider URL" required="No">The URL for the jms provider</property>
+  <property name="Provider URL" required="No">The URL for the JMS provider</property>
   <property name="Destination" required="Yes">the message destination (topic or queue name)</property>
   <property name="Durable Subscription ID" required="No">The ID to use for a durable subscription. On first 
   use the respective queue will automatically be generated by the JMS provider if it does not exist yet.</property>
@@ -1669,7 +1669,7 @@ The following table shows some values which may be useful when configuring JMS:
      The JNDI Properties are the specific properties for the underlying JNDI implementation.
   </property>
   <property name="Provider URL" required="No">
-    The URL for the jms provider.
+    The URL for the JMS provider.
   </property>
 </properties>
 </component>
@@ -1682,13 +1682,13 @@ The current implementation supports standard JUnit convention and extensions. It
 includes extensions like <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>. The sampler works like the
 <complink name="Java Request" /> with some differences.
 <ul>
-<li>rather than use Jmeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
+<li>rather than use JMeter's test interface, it scans the jar files for classes extending JUnit's <code>TestCase</code> class. That includes any class or subclass.</li>
 <li>JUnit test jar files should be placed in <code>jmeter/lib/junit</code> instead of <code>/lib</code> directory.
 You can also use the "<code>user.classpath</code>" property to specify where to look for <code>TestCase</code> classes.</li>
 <li>JUnit sampler does not use name/value pairs for configuration like the <complink name="Java Request" />. The sampler assumes <code>setUp</code> and <code>tearDown</code> will configure the test correctly.</li>
 <li>The sampler measures the elapsed time only for the test method and does not include <code>setUp</code> and <code>tearDown</code>.</li>
-<li>Each time the test method is called, Jmeter will pass the result to the listeners.</li>
-<li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since Jmeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
+<li>Each time the test method is called, JMeter will pass the result to the listeners.</li>
+<li>Support for <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code> is done as a method. Since JMeter is multi-threaded, we cannot call <code>oneTimeSetUp</code>/<code>oneTimeTearDown</code> the same way Maven does it.</li>
 <li>The sampler reports unexpected exceptions as errors.
 There are some important differences between standard JUnit test runners and JMeter's
 implementation. Rather than make a new instance of the class for each test, JMeter
@@ -1712,16 +1712,16 @@ public class myTestCase {
 }
 </source>
 </example>
-By default, Jmeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
+By default, JMeter will provide some default values for the success/failure code and message. Users should define a set of unique success and failure codes and use them uniformly across all tests.
 <note>
 <h3>General Guidelines</h3>
 If you use <code>setUp</code> and <code>tearDown</code>, make sure the methods are declared public. If you do not, the test may not run properly.
 <br></br>
-Here are some general guidelines for writing JUnit tests so they work well with Jmeter. Since Jmeter runs multi-threaded, it is important to keep certain things in mind.
+Here are some general guidelines for writing JUnit tests so they work well with JMeter. Since JMeter runs multi-threaded, it is important to keep certain things in mind.
 <ul>
 <li>Write the <code>setUp</code> and <code>tearDown</code> methods so they are thread safe. This generally means avoid using static members.</li>
 <li>Make the test methods discrete units of work and not long sequences of actions. By keeping the test method to a discrete operation, it makes it easier to combine test methods to create new test plans.</li>
-<li>Avoid making test methods depend on each other. Since Jmeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default JUnit behavior.</li>
+<li>Avoid making test methods depend on each other. Since JMeter allows arbitrary sequencing of test methods, the runtime behavior is different than the default JUnit behavior.</li>
 <li>If a test method is configurable, be careful about where the properties are stored. Reading the properties from the Jar file is recommended.</li>
 <li>Each sampler creates an instance of the test class, so write your test so the setup happens in <code>oneTimeSetUp</code> and <code>oneTimeTearDown</code>.</li>
 </ul>
@@ -1761,6 +1761,7 @@ The following JUnit4 annotations are recognised:
 <note>
 Note that JMeter currently runs the test methods directly, rather than leaving it to JUnit.
 This is to allow the <code>setUp</code>/<code>tearDown</code> methods to be excluded from the sample time.
+As a consequence, the sampler time excludes the time taken to call <code>setUp</code>/<code>tearDown</code> methods and their annotation based alternatives.
 </note>
 </component>
 
@@ -2243,17 +2244,17 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
         By default, the condition is evaluated only once on initial entry, but you have the option to have it evaluated for every runnable element contained in the controller.
         </p>
         <p>
-        The script can be processed as a variable expression, rather than requiring Javascript.
-        It was always possible to use functions and variables in the Javascript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
-        now this can be done without the overhead of using Javascript as well. For example, previously one could use the condition:
-        <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to Javascript
+        The script can be processed as a variable expression, rather than requiring JavaScript.
+        It was always possible to use functions and variables in the JavaScript condition, so long as they evaluated to "<code>true</code>" or "<code>false</code>";
+        now this can be done without the overhead of using JavaScript as well. For example, previously one could use the condition:
+        <code>${__jexl3(${VAR} == 23)}</code> and this would be evaluated as <code>true</code>/<code>false</code>, the result would then be passed to JavaScript
         which would then return <code>true</code>/<code>false</code>. If the Variable Expression option is selected, then the expression is evaluated
-        and compared with "<code>true</code>", without needing to use Javascript.
+        and compared with "<code>true</code>", without needing to use JavaScript.
         Also, variable expressions can return any value, whereas the
-        Javascript condition must return "<code>true</code>"/"<code>false</code>" or an error is logged.
+        JavaScript condition must return "<code>true</code>"/"<code>false</code>" or an error is logged.
         </p>
         <note>
-        No variables are made available to the script when the condition is interpreted as Javascript.
+        No variables are made available to the script when the condition is interpreted as JavaScript.
         If you need access to such variables, then select "<code>Interpret Condition as Variable Expression?</code>" and use
         a <code><funclink name="__jexl3"/></code>, <code><funclink name="__groovy"/></code> or <code><funclink name="__javaScript()"/></code> (discouraged for performance) function call. You can then use the objects "<code>vars</code>", "<code>log</code>", "<code>ctx</code>" etc. in the script.
         </note>
@@ -2267,11 +2268,11 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     </description>
 <properties>
     <property name="Name" required="No">Descriptive name for this controller that is shown in the tree.</property>
-    <property name="Condition (default Javascript)" required="Yes">By default the condition is interpreted as <b>Javascript</b> code that returns "<code>true</code>" or "<code>false</code>",
+    <property name="Condition (default JavaScript)" required="Yes">By default the condition is interpreted as <b>JavaScript</b> code that returns "<code>true</code>" or "<code>false</code>",
     but this can be overridden (see below)</property>
     <property name="Interpret Condition as Variable Expression?" required="Yes">If this is selected, then the condition must be an expression that evaluates to "<code>true</code>" (case is ignored).
     For example, <code>${FOUND}</code> or <code>${__jexl3(${VAR} &gt; 100)}</code>.
-    Unlike the Javascript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
+    Unlike the JavaScript case, the condition is only checked to see if it matches "<code>true</code>" (case is ignored).
     <note>Checking this and using <code><funclink name="__jexl3"/></code> or <code><funclink name="__groovy"/></code> function in Condition is advised for performances</note>
     </property>
     <property name="Evaluate for all children" required="Yes">
@@ -2279,13 +2280,13 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
     If not checked, then the condition is only evaluated on entry.
     </property>
 </properties>
-    <example title="Examples (Javascript)" anchor="example_if_javascript">
+    <example title="Examples (JavaScript)" anchor="example_if_javascript">
         <ul>
             <li><code>${COUNT} &lt; 10</code></li>
             <li><code>"${VAR}" == "abcd"</code></li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
-        <note>Note it is advised to avoid using Javascript mode for performances</note>
+        <note>Note it is advised to avoid using JavaScript mode for performances</note>
     </example>
     <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
@@ -2484,7 +2485,7 @@ otherwise a duplicate may be accidentally created when new elements are added to
 <component name="Include Controller" index="&sect-num;.2.14" width="417" height="130" screenshot="includecontroller.png">
     <description>
 <p>
-The include controller is designed to use an external jmx file. To use it, create a Test Fragment 
+The include controller is designed to use an external JMX file. To use it, create a Test Fragment 
 underneath the Test Plan and add any desired samplers, controllers etc. below it.
 Then save the Test Plan.  The file is now ready to be included as part of other Test Plans.
 </p>
@@ -3038,7 +3039,7 @@ the graph as a PNG file.</description>
 </p>
 <figure width="1147" height="420" image="aggregate_graph_settings.png">Aggregate graph settings</figure>
 </div>
-<note>Please note: All this parameters <em>aren't</em> saved in JMeter jmx script.</note>
+<note>Please note: All this parameters <em>aren't</em> saved in JMeter JMX script.</note>
 <properties>
         <property name="Column settings" required="Yes">
         <ul>
@@ -3076,7 +3077,7 @@ If many samples exist for the same timestamp, the mean value is displayed.
 </div>
 <note>Please note: All this parameters are saved in JMeter <code>.jmx</code> file.</note>
 <properties>
-        <property name="Interval (ms)" required="Yes">The time in milli-seconds for X axis interval. Samples are grouped according to this value.
+        <property name="Interval (ms)" required="Yes">The time in milliseconds for X axis interval. Samples are grouped according to this value.
         Before display the graph, click on <code>Apply interval</code> button to refresh internal data.</property>
         <property name="Sampler label selection" required="No">Filter by result label. A regular expression can be used, ex. <code>.*Transaction.*</code>. 
         Before display the graph, click on <code>Apply filter</code> button to refresh internal data.</property>
@@ -3571,7 +3572,7 @@ By default, a Graphite implementation is provided.
   <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
   <property name="Filename" required="Yes">Name of the file to be read. 
   <b>Relative file names are resolved with respect to the path of the active test plan.</b>
-  <b>For distributed testing, the CSV file must be stored on the server host system in the correct relative directory to where the jmeter server is started.</b>
+  <b>For distributed testing, the CSV file must be stored on the server host system in the correct relative directory to where the JMeter server is started.</b>
   Absolute file names are also supported, but note that they are unlikely to work in remote mode, 
   unless the remote server has the same directory structure.
   If the same physical file is referenced in two different ways - e.g. <code>csvdata.txt</code> and <code>./csvdata.txt</code> -
@@ -3583,7 +3584,7 @@ By default, a Graphite implementation is provided.
   JMeter supports CSV header lines:
   if the variable name field empty, then the first line of the file is read and interpreted as the list of column names.
   </property>
-  <property name="Ignore first line (only used if Variable Names is not empty)" required="No">
+  <property name="Use first line as Variable Names" required="No">
   Ignore first line of CSV file, it will only be used used if Variable Names is not empty, 
   if Variable Names is empty the first line must contain the headers.
   </property>
@@ -3629,19 +3630,19 @@ By default, a Graphite implementation is provided.
     if you want to use this mapping.
     </p>
     <example title="Usage of static host table" anchor="static_host_table">
-    <p>Say, you have a test server, that you want to reach with a name, that is not (yet) set up in your dns servers.
+    <p>Say, you have a test server, that you want to reach with a name, that is not (yet) set up in your DNS servers.
     For our example, this would be <code>www.example.com</code> for the server name, which you want to reach at the
-    ip of the server <code>a123.another.example.org</code>.
+    IP of the server <code>a123.another.example.org</code>.
     </p>
     <p>You could change your workstation and add an entry to your <code>/etc/hosts</code> file - or the equivalent for
     your OS, or add an entry to the Static Host Table of the DNS Cache Manager.
     </p>
     <p>You would type <code>www.example.com</code> into the first column (<code>Host</code>) and
     <code>a123.another.example.org</code> into the second column (<code>Hostname or IP address</code>).
-    As the name of the second column implies, you could even use the ip address of your test server there.
+    As the name of the second column implies, you could even use the IP address of your test server there.
     </p>
-    <p>The ip address for the test server will be looked up by using the custom dns resolver. When none is given, the
-    system dns resolver will be used.
+    <p>The IP address for the test server will be looked up by using the custom DNS resolver. When none is given, the
+    system DNS resolver will be used.
     </p>
     <p>Now you can use <code>www.example.com</code> in your HTTPClient4 samplers and the requests will be made against
     <code>a123.another.example.org</code> with all headers set to <code>www.example.com</code>.
@@ -3728,14 +3729,14 @@ The Realm only applies to the HttpClient sampler.
 </ul>
 <p>
 You can also configure those two properties in the file <code>bin/system.properties</code>.
-Look at the two sample configuration files (<code>krb5.conf</code> and <code>jaas.conf</code>) located in the jmeter <code>bin</code> folder
+Look at the two sample configuration files (<code>krb5.conf</code> and <code>jaas.conf</code>) located in the JMeter <code>bin</code> folder
 for references to more documentation, and tweak them to match your Kerberos configuration.
 </p>
 <p>
 When generating a SPN for Kerberos SPNEGO authentication IE and Firefox will omit the port number
 from the URL. Chrome has an option (<code>--enable-auth-negotiate-port</code>) to include the port
 number if it differs from the standard ones (<code>80</code> and <code>443</code>). That behavior
-can be emulated by setting the following jmeter property as below.
+can be emulated by setting the following JMeter property as below.
 </p>
 <p>
 In <code>jmeter.properties</code> or <code>user.properties</code>, set:
@@ -3783,7 +3784,7 @@ be able to run it.  However, you can use it as a reference in constructing your 
 <p>
 The HTTP Cache Manager is used to add caching functionality to HTTP requests within its scope to simulate browser cache feature.
 Each Virtual User thread has its own Cache. By default, Cache Manager will store up to 5000 items in cache per Virtual User thread, using LRU algorithm. 
-Use property "<code>maxSize</code>" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt the <code>-Xmx</code> jvm option accordingly.
+Use property "<code>maxSize</code>" to modify this value. Note that the more you increase this value the more HTTP Cache Manager will consume memory, so be sure to adapt the <code>-Xmx</code> JVM option accordingly.
 </p>
 <p>
 If a sample is successful (i.e. has response code <code>2xx</code>) then the <code>Last-Modified</code> and <code>Etag</code> (and <code>Expired</code> if relevant) values are saved for the URL.
@@ -3899,7 +3900,7 @@ All port values are treated equally; a sampler that does not specify a port will
 
 <properties>
         <property name="Name" required="No">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Server" required="No">Domain name or IP address of the web server. e.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.</property>
+        <property name="Server" required="No">Domain name or IP address of the web server. E.g. <code>www.example.com</code>. [Do not include the <code>http://</code> prefix.</property>
         <property name="Port" required="No">Port the web server is listening to.</property>
         <property name="Connect Timeout" required="No">Connection Timeout. Number of milliseconds to wait for a connection to open.</property>
         <property name="Response Timeout" required="No">Response Timeout. Number of milliseconds to wait for a response.</property>
@@ -3988,7 +3989,7 @@ instead. (see figures 12 and 13).</p>
 </component>
 
 <component name="JDBC Connection Configuration" index="&sect-num;.4.10" 
-                 width="474" height="458" screenshot="jdbc-config/jdbc-conn-config.png">
+                 width="697" height="656" screenshot="jdbc-config/jdbc-conn-config.png">
     <description>Creates a database connection (used by <complink name="JDBC Request"/>Sampler)
      from the supplied JDBC Connection settings. The connection may be optionally pooled between threads.
      Otherwise each thread gets its own connection.
@@ -4027,12 +4028,44 @@ instead. (see figures 12 and 13).</p>
         <property name="Validation Query" required="No">A simple query used to determine if the database is still responding.
         This defaults to the '<code>isValid()</code>' method of the jdbc driver, which is suitable for many databases.
         However some may require a different query; for example Oracle something like '<code>SELECT 1 FROM DUAL</code>' could be used.
+        <p>The list of the validation queries can be configured with <code>jdbc.config.check.query</code> property and are by default:</p>
+            <dl>
+              <dt>hsqldb</dt><dd><code>select 1 from INFORMATION_SCHEMA.SYSTEM_USERS</code></dd>
+              <dt>Oracle</dt><dd><code>select 1 from dual</code></dd>
+              <dt>DB2</dt><dd><code>select 1 from sysibm.sysdummy1</code></dd>
+              <dt>MySQL</dt><dd><code>select 1</code></dd>
+              <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd><code>select 1</code></dd>
+              <dt>PostgreSQL</dt><dd><code>select 1</code></dd>
+              <dt>Ingres</dt><dd><code>select 1</code></dd>
+              <dt>Derby</dt><dd><code>values 1</code></dd>
+              <dt>H2</dt><dd><code>select 1</code></dd>
+              <dt>Firebird</dt><dd><code>select 1 from rdb$database</code></dd>
+            </dl>
+        <note>The list come from <a href="https://stackoverflow.com/questions/10684244/dbcp-validationquery-for-different-databases">stackoverflow entry on different database validation queries</a> and it can be incorrect</note>
         <note>Note this validation query is used on pool creation to validate it even if "<code>Test While Idle</code>" suggests query would only be used on idle connections.
         This is DBCP behaviour.</note>
         </property>
         <property name="Database URL" required="Yes">JDBC Connection string for the database.</property>
         <property name="JDBC Driver class" required="Yes">Fully qualified name of driver class. (Must be in
-        JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).</property>
+        JMeter's classpath - easiest to copy <code>.jar</code> file into JMeter's <code>/lib</code> directory).
+        <p>The list of the validation queries can be configured with <code>jdbc.config.jdbc.driver.class</code> property and are by default:</p>
+            <dl>
+              <dt>hsqldb</dt><dd>org.hsqldb.jdbc.JDBCDriver</dd>
+              <dt>Oracle</dt><dd>oracle.jdbc.OracleDriver</dd>
+              <dt>DB2</dt><dd>com.ibm.db2.jcc.DB2Driver</dd>
+              <dt>MySQL</dt><dd>com.mysql.jdbc.Driver</dd>
+              <dt>Microsoft SQL Server (MS JDBC driver)</dt><dd>com.microsoft.sqlserver.jdbc.SQLServerDriver or com.microsoft.jdbc.sqlserver.SQLServerDriver</dd>
+              <dt>PostgreSQL</dt><dd>org.postgresql.Driver</dd>
+              <dt>Ingres</dt><dd>com.ingres.jdbc.IngresDriver</dd>
+              <dt>Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
+              <dt>H2</dt><dd>org.h2.Driver</dd>
+              <dt>Firebird</dt><dd>org.firebirdsql.jdbc.FBDrivery</dd>
+              <dt>Apache Derby</dt><dd>org.apache.derby.jdbc.ClientDriver</dd>
+              <dt>MariaDB</dt><dd>org.mariadb.jdbc.Driver</dd>
+              <dt>SQLite</dt><dd>org.sqlite.JDBC</dd>
+              <dt>Sybase AES</dt><dd>net.sourceforge.jtds.jdbc.Driver</dd>
+            </dl>
+        </property>
         <property name="Username" required="No">Name of user to connect as.</property>
         <property name="Password" required="No">Password to connect with. (N.B. this is stored unencrypted in the test plan)</property>
     </properties>
@@ -4182,7 +4215,7 @@ To make JMeter use more than one certificate you need to ensure that:
   <property name="Re-use connection" required="Yes">If selected, the connection is kept open. Otherwise it is closed when the data has been read.</property>
   <property name="Close connection" required="Yes">If selected, the connection will be closed after running the sampler.</property>  
   <property name="SO_LINGER" required="No">Enable/disable <code>SO_LINGER</code> with the specified linger time in seconds when a socket is created. If you set "<code>SO_LINGER</code>" value as <code>0</code>, you may prevent large numbers of sockets sitting around with a <code>TIME_WAIT</code> status.</property>
-  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range <code>-128</code> to <code>+127</code> to skip eol checking. You may set this in <code>jmeter.properties</code> file as well with the <code>tcp.eolByte</code> property. If you set this in TCP Sampler Config and in <code>jmeter.properties</code> file at the same time, the setting value in the TCP Sampler Config will be used.</property>
+  <property name="End of line(EOL) byte value" required="No">Byte value for end of line, set this to a value outside the range <code>-128</code> to <code>+127</code> to skip EOL checking. You may set this in <code>jmeter.properties</code> file as well with the <code>tcp.eolByte</code> property. If you set this in TCP Sampler Config and in <code>jmeter.properties</code> file at the same time, the setting value in the TCP Sampler Config will be used.</property>
   <property name="Connect Timeout" required="No">Connect Timeout (milliseconds, 0 disables).</property>
   <property name="Response Timeout" required="No">Response Timeout (milliseconds, 0 disables).</property>
   <property name="Set Nodelay" required="">Should the nodelay property be set?</property>
@@ -4288,11 +4321,11 @@ with the start, continuing on like that until the test is ended.  </p>
 </description>
 <properties>
         <property name="Name" required="">Descriptive name for this element that is shown in the tree.</property>
-        <property name="Start" required="Yes">The starting number for the counter.  The counter will equal this
-        number during the first iteration.</property>
+        <property name="Starting value" required="Yes">The starting value for the counter.  The counter will equal this
+        value during the first iteration.</property>
         <property name="Increment" required="Yes">How much to increment the counter by after each
         iteration.</property>
-        <property name="Maximum" required="No">If the counter exceeds the maximum, then it is reset to the <code>Start</code> value.
+        <property name="Maximum value" required="No">If the counter exceeds the maximum, then it is reset to the <code>Starting value</code>.
         Default is <code>Long.MAX_VALUE</code>
         </property>
         <property name="Format" required="No">Optional format, e.g. <code>000</code> will format as <code>001</code>, <code>002</code>, etc. 
@@ -4811,7 +4844,7 @@ props.put("PROP1","1234");
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - the assertion result</li>
+<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
@@ -4836,7 +4869,7 @@ The JSR223 Assertion allows JSR223 script code to be used to check the status of
         <li><code>args</code> - String array containing parameters, split on white-space</li>
     </ul></property>
     <property name="Script file" required="No">A file containing the script to run, if a relative file path is used, then it will be relative to directory referenced by "<code>user.dir</code>" System property</property>
-    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, beanshell and javascript are not)
+    <property name="Script compilation caching" required="No">Unique String across Test Plan that JMeter will use to cache result of Script compilation if language used supports <code><a href="https://docs.oracle.com/javase/8/docs/api/javax/script/Compilable.html">Compilable</a></code> interface (Groovy is one of these, java, BeanShell and JavaScript are not)
     <note>See note in JSR223 Sampler Java System property if you're using Groovy without checking this option</note>
     </property>
     <property name="Script" required="Yes (unless script file is provided)">The script to run.</property>
@@ -4864,7 +4897,7 @@ props.put("PROP1","1234");
 <li><code>SampleResult</code>, <code>prev</code> - (<a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>) - gives access to the previous SampleResult (if any)</li>
 <li><code>sampler</code> - (<a href="../api/org/apache/jmeter/samplers/Sampler.html">Sampler</a>) - gives access to the current sampler</li>
 <li><code>OUT</code> - <code>System.out</code> - e.g. <code>OUT.println("message")</code></li>
-<li><code>AssertionResult</code> - the assertion result</li>
+<li><code>AssertionResult</code> - (<a href="../api/org/apache/jmeter/assertions/AssertionResult.html">AssertionResult</a>) - the assertion result</li>
 </ul>
 <p>
 The script can check various aspects of the <a href="../api/org/apache/jmeter/samplers/SampleResult.html">SampleResult</a>.
@@ -5334,7 +5367,7 @@ If using distributed testing, ensure you switch mode (see <code>jmeter.propertie
 <p>User Variables can also be specified in the Test Plan but not specific to individual threads. This panel allows
 you to specify a series of values for any User Variable. For each thread, the variable will be assigned one of the values from the series
 in sequence. If there are more threads than values, the values get re-used. For example, this can be used to assign a distinct
-user id to be used by each thread. User variables can be referenced in any field of any jMeter Component.</p>
+user id to be used by each thread. User variables can be referenced in any field of any JMeter Component.</p>
 
 <p>The variable is specified by clicking the <code>Add Variable</code> button in the bottom of the panel and filling in the Variable name in the '<code>Name:</code>' column.
 To add a new value to the series, click the '<code>Add User</code>' button and fill in the desired value in the newly added column.</p>
@@ -5809,7 +5842,7 @@ extracting the node as text or attribute value and store the result into the giv
         <li><code>refName</code> - always set to the default value</li>
     </ul>
 <p>
-    Note that the refName variable is always set to the default value in this case.
+    Note that the <code>refName</code> variable is always set to the default value in this case.
 </p>
 </component>
 
@@ -6176,7 +6209,7 @@ See <a href="get-started.html#classpath">JMeter's Classpath</a> and
 
 <component name="Thread Group" index="&sect-num;.9.2"  width="706" height="407" screenshot="threadgroup.png">
 <description>
-<p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (num of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
+<p>A Thread Group defines a pool of users that will execute a particular test case against your server.  In the Thread Group GUI, you can control the number of users simulated (number of threads), the ramp up time (how long it takes to start all the threads), the number of times to perform the test, and optionally, a start and stop time for the test.</p>
 <p>
 See also <complink name="tearDown Thread Group"/> and <complink name="setUp Thread Group"/>.
 </p>
@@ -6233,19 +6266,13 @@ Behaviour can be modified with some properties by setting in user.properties:
         This is the original default, and is appropriate for tests where threads are active throughout most of the test.
         </property>
         <property name="Scheduler" required="Yes">If selected, enables the scheduler</property>
-        <property name="Start Time" required="No">If the scheduler checkbox is selected, one can choose an absolute start time.  When you start your test, JMeter will wait until the specified start time to begin testing.
-            Note: the <code>Startup Delay</code> field over-rides this - see below.
-            </property>
-        <property name="End Time" required="No">If the scheduler checkbox is selected, one can choose an absolute end time.  When you start your test, JMeter will wait until the specified start time to begin testing, and it will stop at the specified end time.
-            Note: the <code>Duration</code> field over-rides this - see below.
-            </property>
         <property name="Duration (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative end time. 
-            JMeter will use this to calculate the End Time, and ignore the <code>End Time</code> value.
+            JMeter will use this to calculate the End Time.
         </property>
         <property name="Startup delay (seconds)" required="No">
             If the scheduler checkbox is selected, one can choose a relative startup delay.
-            JMeter will use this to calculate the Start Time, and ignore the <code>Start Time</code> value.
+            JMeter will use this to calculate the Start Time.
         </property>
 </properties>
 </component>
@@ -6401,7 +6428,7 @@ As a consequence:
 You will need to accept the certificate in order to allow the JMeter Proxy to intercept the SSL traffic in order to
 record it.
 However, do not accept this certificate permanently; it should only be accepted temporarily.
-Browsers only prompt this dialogue for the certificate of the main url, not for the resources loaded in the page, such as images, css or javascript files hosted on a secured external CDN. 
+Browsers only prompt this dialogue for the certificate of the main URL, not for the resources loaded in the page, such as images, CSS or JavaScript files hosted on a secured external CDN. 
 If you have such resources (gmail has for example), you'll have to first browse manually to these other domains in order to accept JMeter's certificate for them. 
 Check in <code>jmeter.log</code> for secure domains that you need to register certificate for.
 </li>

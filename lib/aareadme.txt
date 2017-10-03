@@ -35,7 +35,7 @@ dec-0.1.2 (org.brotli.dec)
 https://github.com/google/brotli/tree/master/java/org/brotli
 - Used by HTTP4 HC Impl for brotli decoding
 
-caffeine 2.5.3
+caffeine 2.5.5
 -----------------
 https://github.com/ben-manes/caffeine/
 - Used by CssParser
@@ -86,6 +86,11 @@ commons-pool2-2.4.2
 -----------------
 http://commons.apache.org/proper/commons-pool/download_pool.cgi
 - BackendListener
+
+commons-text-1.1
+-----------------
+https://commons.apache.org/proper/commons-text/
+- Random Strings
 
 dnsjava-2.1.8
 -----------------

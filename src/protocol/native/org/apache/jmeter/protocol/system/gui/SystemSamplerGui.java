@@ -60,8 +60,8 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     private final FilePanelEntry stdin = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stdin")); // $NON-NLS-1$
     private final FilePanelEntry stdout = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stdout")); // $NON-NLS-1$
     private final FilePanelEntry stderr = new FilePanelEntry(JMeterUtils.getResString("system_sampler_stderr")); // $NON-NLS-1$
-    private JLabeledTextField directory;
-    private JLabeledTextField command;
+    private final FilePanelEntry directory = new FilePanelEntry(JMeterUtils.getResString("directory_field_title"), true); // $NON-NLS-1$
+    private final FilePanelEntry command = new FilePanelEntry(JMeterUtils.getResString("command_field_title")); // $NON-NLS-1$
     private JLabeledTextField timeout;
     private ArgumentsPanel argsPanel;
     private ArgumentsPanel envPanel;
@@ -123,10 +123,10 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         } else {
             systemSampler.setExpectedReturnCode(SystemSampler.DEFAULT_RETURN_CODE);
         }
-        systemSampler.setCommand(command.getText());
+        systemSampler.setCommand(command.getFilename());
         systemSampler.setArguments((Arguments)argsPanel.createTestElement());
         systemSampler.setEnvironmentVariables((Arguments)envPanel.createTestElement());
-        systemSampler.setDirectory(directory.getText());
+        systemSampler.setDirectory(directory.getFilename());
         systemSampler.setStdin(stdin.getFilename());
         systemSampler.setStdout(stdout.getFilename());
         systemSampler.setStderr(stderr.getFilename());
@@ -147,10 +147,10 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         checkReturnCode.setSelected(systemSampler.getCheckReturnCode());
         desiredReturnCode.setText(Integer.toString(systemSampler.getExpectedReturnCode()));
         desiredReturnCode.setEnabled(checkReturnCode.isSelected());
-        command.setText(systemSampler.getCommand());
+        command.setFilename(systemSampler.getCommand());
         argsPanel.configure(systemSampler.getArguments());
         envPanel.configure(systemSampler.getEnvironmentVariables());
-        directory.setText(systemSampler.getDirectory());
+        directory.setFilename(systemSampler.getDirectory());
         stdin.setFilename(systemSampler.getStdin());
         stdout.setFilename(systemSampler.getStdout());
         stderr.setFilename(systemSampler.getStderr());
@@ -201,12 +201,10 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.X_AXIS));
 
         JPanel cmdWkDirPane = new JPanel(new BorderLayout());
-        command = new JLabeledTextField(JMeterUtils.getResString("command_field_title")); // $NON-NLS-1$
-        cmdWkDirPane.add(command, BorderLayout.CENTER);
-        directory = new JLabeledTextField(JMeterUtils.getResString("directory_field_title")); // $NON-NLS-1$
-        cmdWkDirPane.add(directory, BorderLayout.EAST);
+        cmdWkDirPane.add(command, BorderLayout.NORTH);
+        cmdWkDirPane.add(directory, BorderLayout.SOUTH);
         cmdPanel.add(cmdWkDirPane);
-        
+
         JPanel panel = new VerticalPanel();
         panel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(),
@@ -216,6 +214,7 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
         panel.add(makeEnvironmentPanel(), BorderLayout.SOUTH);
         return panel;
     }
+
     
     /**
      * @return JPanel Arguments Panel
@@ -260,8 +259,8 @@ public class SystemSamplerGui extends AbstractSamplerGui implements ItemListener
     @Override
     public void clearGui() {
         super.clearGui();
-        directory.setText(""); // $NON-NLS-1$
-        command.setText(""); // $NON-NLS-1$
+        directory.clearGui();
+        command.clearGui();
         argsPanel.clearGui();
         envPanel.clearGui();
         desiredReturnCode.setText(""); // $NON-NLS-1$
