@@ -18,7 +18,8 @@
 <project name="JMeter" default="install" basedir="."
     xmlns:rat="antlib:org.apache.rat.anttasks"
     xmlns:jacoco="antlib:org.jacoco.ant"
-    xmlns="antlib:org.apache.tools.ant" >
+    xmlns="antlib:org.apache.tools.ant" 
+    xmlns:if="ant:if" >
   <description>
 
   N.B. To build JMeter from a release you need both the binary and source archives,
@@ -321,6 +322,9 @@
     <!-- docs.force uses the opposite sense to the anakia check -->
     <isfalse value="${docs.force}"/>
   </condition>
+  <condition property="java9">
+      <equals arg1="${ant.java.version}" arg2="9"/>
+  </condition>
 
   <!-- Directory where jars needed for creating documentation live -->
   <property name="lib.doc" value="lib/doc"/>
@@ -596,6 +600,7 @@
 
   <target name="ant-version" depends="_check_ant-version">
     <echo level="info">ant.version = ${ant.version}</echo>
+    <echo level="info">java.version = ${ant.java.version}</echo>
   </target>
 
   <target name="_check_ant-version">
@@ -897,6 +902,8 @@
       <classpath>
         <pathelement location="${dest.jar.jmeter}/ApacheJMeter.jar"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}run_gui:java(server)"/>
       <sysproperty key="jmeter.home" value="${basedir}"/>
     </java>
@@ -2449,6 +2456,8 @@ run JMeter unless all the JMeter jars are added.
             <path refid="classpath"/>
             <path refid="logging.classpath"/>
           </classpath>
+          <jvmarg value="--add-modules" if:set="java9" />
+          <jvmarg value="java.activation" if:set="java9" />
           <jvmarg value="${jacoco_params}batchtest:daemon:java(server)"/>
           <sysproperty key="java.awt.headless" value="true"/>
           <!-- Bug 59723 -->
@@ -2560,6 +2569,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="${jacoco_params}batchtest:java(${taskname})"/>
       <!-- Detect if non-GUI runs OK headless by forcing it to try using non-headless mode -->
       <sysproperty key="user.language" value="en"/>
@@ -2868,6 +2879,8 @@ run JMeter unless all the JMeter jars are added.
         <path refid="classpath"/>
         <path refid="logging.classpath"/>
       </classpath>
+      <jvmarg value="--add-modules" if:set="java9" />
+      <jvmarg value="java.activation" if:set="java9" />
       <jvmarg value="-server"/>
       <jvmarg value="${jacoco_params}_test:java"/>
       <jvmarg value="-Dfile.encoding=${test.encoding}"/>
