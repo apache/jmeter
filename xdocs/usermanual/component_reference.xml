@@ -2286,10 +2286,13 @@ Please refer to the <complink name="Constant Throughput Timer"/> for an element 
             <li><code>"${VAR}" == "abcd"</code></li>
         </ul>
         If there is an error interpreting the code, the condition is assumed to be <code>false</code>, and a message is logged in <code>jmeter.log</code>.
-        <note>Note it is advised to avoid using JavaScript mode for performances</note>
+        <note>Note it is advised to avoid using JavaScript mode for performance.<br /><br />When using <code><funclink name="__groovy"/></code> take care to not use variable replacement in the string, otherwise if using a variable that changes the script cannot be cached.  Instead get the variable using: <code>vars.get("myVar").</code>  See the Groovy examples below.</note>
     </example>
     <example title="Examples (Variable Expression)" anchor="example_if_variable">
         <ul>
+            <li><code>${__groovy(vars.get("myVar") != "Invalid" )}</code> (Groovy check myVar is not equal to Invalid)</li>
+            <li><code>${__groovy(vars.get("myInt").toInteger() &lt;=4 )}</code> (Groovy check myInt is less then or equal to 4)</li>
+            <li><code>${__groovy(vars.get("myMissing") != null )}</code> (Groovy check if the myMissing variable is not set)</li>
             <li><code>${__jexl3(${COUNT} &lt; 10)}</code></li>
             <li><code>${RESULT}</code></li>
             <li><code>${JMeterThread.last_sample_ok}</code> (check if the last sample succeeded)</li>
