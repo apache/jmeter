@@ -238,7 +238,7 @@ public class JavaConfigGui extends AbstractConfigGui implements ChangeListener {
      * @return a panel containing the relevant components
      */
     private JPanel createParameterPanel() {
-        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
+        argsPanel = new ArgumentsPanel(true,JMeterUtils.getResString("paramtable")); // $NON-NLS-1$
         return argsPanel;
     }
 
