@@ -101,6 +101,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
+    <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
 </ul>
 
 <h3>I18N</h3>

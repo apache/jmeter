@@ -102,7 +102,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
     }
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
-        parameterPanel = new ArgumentsPanel(JMeterUtils.getResString("function_params"), false); //$NON-NLS-1$
+        parameterPanel = new ArgumentsPanel(true,JMeterUtils.getResString("function_params")); //$NON-NLS-1$
         initializeFunctionList();
         this.getContentPane().setLayout(new BorderLayout(10, 10));
         JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -120,7 +120,7 @@ public class FunctionHelper extends JDialog implements ActionListener, ChangeLis
         JButton generateButton = new JButton(JMeterUtils.getResString("generate")); //$NON-NLS-1$
         generateButton.addActionListener(this);
         generatePanel.add(generateButton);
-        resultTextArea = JSyntaxTextArea.getInstance(5,50);
+        resultTextArea = JSyntaxTextArea.getInstance(5,60);
         resultTextArea.setToolTipText(JMeterUtils.getResString("function_helper_dialog_result_warn"));
         displayPanel.add(new JLabel(JMeterUtils.getResString("result_function")));
         displayPanel.add(JTextScrollPane.getInstance(resultTextArea));
