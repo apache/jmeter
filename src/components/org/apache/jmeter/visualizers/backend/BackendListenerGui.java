@@ -214,7 +214,7 @@ public class BackendListenerGui extends AbstractListenerGui implements ActionLis
      * @return a panel containing the relevant components
      */
     private JPanel createParameterPanel() {
-        argsPanel = new ArgumentsPanel(JMeterUtils.getResString("backend_listener_paramtable")); // $NON-NLS-1$
+        argsPanel = new ArgumentsPanel(true,JMeterUtils.getResString("backend_listener_paramtable")); // $NON-NLS-1$
         return argsPanel;
     }
 
