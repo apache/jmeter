@@ -92,6 +92,7 @@ Summary
 
 <h3>Listeners</h3>
 <ul>
+    <li><bug>61594</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Backend listener GUI</li>
 </ul>
 
 <h3>Timers, Assertions, Config, Pre- &amp; Post-Processors</h3>
