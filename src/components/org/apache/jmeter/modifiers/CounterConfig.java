@@ -21,12 +21,12 @@ package org.apache.jmeter.modifiers;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.jmeter.config.ConfigTestElement;
 import org.apache.jmeter.engine.event.LoopIterationEvent;
 import org.apache.jmeter.engine.event.LoopIterationListener;
 import org.apache.jmeter.engine.util.NoThreadClone;
-import org.apache.jmeter.testelement.AbstractTestElement;
-import org.apache.jmeter.testelement.property.BooleanProperty;
-import org.apache.jmeter.testelement.property.LongProperty;
+import org.apache.jmeter.testbeans.TestBean;
 import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.slf4j.Logger;
@@ -35,26 +35,24 @@ import org.slf4j.LoggerFactory;
 /**
  * Provides a counter per-thread(user) or per-thread group.
  */
-public class CounterConfig extends AbstractTestElement
-    implements Serializable, LoopIterationListener, NoThreadClone {
+public class CounterConfig extends ConfigTestElement
+    implements TestBean, Serializable, LoopIterationListener, NoThreadClone {
 
     private static final long serialVersionUID = 234L;
+    
+    private String startValue;
 
-    private static final String START = "CounterConfig.start"; // $NON-NLS-1$
+    private String maxValue;
 
-    private static final String END = "CounterConfig.end"; // $NON-NLS-1$
+    private String varName;
 
-    private static final String INCREMENT = "CounterConfig.incr"; // $NON-NLS-1$
+    private String format;
 
-    private static final String FORMAT = "CounterConfig.format"; // $NON-NLS-1$
+    private String increment;
 
-    private static final String PER_USER = "CounterConfig.per_user"; // $NON-NLS-1$
+    private boolean perUser;
 
-    private static final String VAR_NAME = "CounterConfig.name"; // $NON-NLS-1$
-
-    private static final String RESET_ON_THREAD_GROUP_ITERATION = "CounterConfig.reset_on_tg_iteration"; // $NON-NLS-1$
-
-    private static final boolean RESET_ON_THREAD_GROUP_ITERATION_DEFAULT = false;
+    private boolean resetPerTGIteration;
 
     // This class is not cloned per thread, so this is shared
     //@GuardedBy("this")
@@ -69,10 +67,14 @@ public class CounterConfig extends AbstractTestElement
     private static final Logger log = LoggerFactory.getLogger(CounterConfig.class);
 
     private void init() { // WARNING: called from ctor so must not be overridden (i.e. must be private or final)
+        if (NumberUtils.toLong(getStartValue()) > NumberUtils.toLong(getMaxValue())){
+            log.error("maximum({}) must be > minimum({})", getMaxValue(), getStartValue());
+            return;
+        }
         perTheadNumber = new ThreadLocal<Long>() {
             @Override
             protected Long initialValue() {
-                return Long.valueOf(getStart());
+                return Long.valueOf(getStartValue());
             }
         };
         perTheadLastIterationNumber = new ThreadLocal<Long>() {
@@ -100,9 +102,9 @@ public class CounterConfig extends AbstractTestElement
     public void iterationStart(LoopIterationEvent event) {
         // Cannot use getThreadContext() as not cloned per thread
         JMeterVariables variables = JMeterContextService.getContext().getVariables();
-        long start = getStart();
-        long end = getEnd();
-        long increment = getIncrement();
+        long start = Long.valueOf(getStartValue());
+        long end = Long.valueOf(getMaxValue());
+        long increment = Long.valueOf(getIncrement());
         if (!isPerUser()) {
             synchronized (this) {
                 if (globalCounter == Long.MIN_VALUE || globalCounter > end) {
@@ -113,12 +115,12 @@ public class CounterConfig extends AbstractTestElement
             }
         } else {
             long current = perTheadNumber.get().longValue();
-            if(isResetOnThreadGroupIteration()) {
+            if(isResetPerTGIteration()) {
                 int iteration = variables.getIteration();
                 Long lastIterationNumber = perTheadLastIterationNumber.get();
                 if(iteration != lastIterationNumber.longValue()) {
                     // reset
-                    current = getStart();
+                    current = Long.valueOf(getStartValue());
                 }
                 perTheadLastIterationNumber.set(Long.valueOf(iteration));
             }
@@ -145,97 +147,75 @@ public class CounterConfig extends AbstractTestElement
         return Long.toString(value);
     }
 
-    public void setStart(long start) {
-        setProperty(new LongProperty(START, start));
+
+
+    public String getStartValue() {
+        return startValue;
     }
 
-    public void setStart(String start) {
-        setProperty(START, start);
+
+    public void setStartValue(String startValue) {
+        this.startValue = startValue;
     }
 
-    public long getStart() {
-        return getPropertyAsLong(START);
+
+    public String getMaxValue() {
+        if ("".equals(maxValue)) {
+            maxValue = String.valueOf(Long.MAX_VALUE);
+        }
+        return maxValue;
     }
 
-    public String getStartAsString() {
-        return getPropertyAsString(START);
+
+    public void setMaxValue(String maxValue) {
+        this.maxValue = maxValue;
     }
 
-    public void setEnd(long end) {
-        setProperty(new LongProperty(END, end));
+
+    public boolean isResetPerTGIteration() {
+        return resetPerTGIteration;
     }
 
-    public void setEnd(String end) {
-        setProperty(END, end);
-    }
 
-    /**
-     * @param value boolean indicating if counter must be reset on Thread Group Iteration
-     */
-    public void setResetOnThreadGroupIteration(boolean value) {
-        setProperty(RESET_ON_THREAD_GROUP_ITERATION, value, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
-    }
-
-    /**
-     * @return true if counter must be reset on Thread Group Iteration
-     */
-    public boolean isResetOnThreadGroupIteration() {
-        return getPropertyAsBoolean(RESET_ON_THREAD_GROUP_ITERATION, RESET_ON_THREAD_GROUP_ITERATION_DEFAULT);
-    }
-
-    /**
-     *
-     * @return counter upper limit (default Long.MAX_VALUE)
-     */
-    public long getEnd() {
-       long propertyAsLong = getPropertyAsLong(END);
-       if (propertyAsLong == 0 && "".equals(getProperty(END).getStringValue())) {
-          propertyAsLong = Long.MAX_VALUE;
-       }
-       return propertyAsLong;
-    }
-
-    public String getEndAsString(){
-        return getPropertyAsString(END);
-    }
-
-    public void setIncrement(long inc) {
-        setProperty(new LongProperty(INCREMENT, inc));
-    }
-
-    public void setIncrement(String incr) {
-        setProperty(INCREMENT, incr);
-    }
-
-    public long getIncrement() {
-        return getPropertyAsLong(INCREMENT);
-    }
-
-    public String getIncrementAsString() {
-        return getPropertyAsString(INCREMENT);
-    }
-
-    public void setIsPerUser(boolean isPer) {
-        setProperty(new BooleanProperty(PER_USER, isPer));
+    public void setResetPerTGIteration(boolean resetPerTGIteration) {
+        this.resetPerTGIteration = resetPerTGIteration;
     }
 
     public boolean isPerUser() {
-        return getPropertyAsBoolean(PER_USER);
+        return perUser;
     }
 
-    public void setVarName(String name) {
-        setProperty(VAR_NAME, name);
+    public void setPerUser(boolean perUser) {
+        this.perUser = perUser;
     }
+
 
     public String getVarName() {
-        return getPropertyAsString(VAR_NAME);
+        return varName;
     }
 
-    public void setFormat(String format) {
-        setProperty(FORMAT, format);
+
+    public void setVarName(String varName) {
+        this.varName = varName;
     }
+
 
     public String getFormat() {
-        return getPropertyAsString(FORMAT);
+        return format;
+    }
+
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+
+    public String getIncrement() {
+        return increment;
+    }
+
+
+    public void setIncrement(String increment) {
+        this.increment = increment;
     }
 }
