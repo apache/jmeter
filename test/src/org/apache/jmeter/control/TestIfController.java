@@ -102,8 +102,8 @@ public class TestIfController extends JMeterTestCase {
         ifCont2.setEvaluateAll(false);
 
         CounterConfig counterConfig = new CounterConfig();
-        counterConfig.setStart(1);
-        counterConfig.setIncrement(1);
+        counterConfig.setStartValue("1");
+        counterConfig.setIncrement("1");
         counterConfig.setVarName("VAR1");
 
         DebugSampler debugSampler2 = new DebugSampler();
