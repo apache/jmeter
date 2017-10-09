@@ -25,12 +25,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import javax.net.ssl.SSLContext;
 import javax.security.auth.Subject;
 
 import org.apache.commons.io.IOUtils;
@@ -62,7 +67,6 @@ import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.DeflateInputStream;
@@ -83,13 +87,20 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Lookup;
+import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.ManagedHttpClientConnection;
+import org.apache.http.conn.SchemePortResolver;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
@@ -102,24 +113,26 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultClientConnectionReuseStrategy;
 import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
+import org.apache.http.impl.conn.DefaultHttpClientConnectionOperator;
+import org.apache.http.impl.conn.DefaultSchemePortResolver;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultDnsResolver;
+import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.DefaultedHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -165,6 +178,31 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     };
 
+    private static final class JMeterDefaultHttpClientConnectionOperator extends DefaultHttpClientConnectionOperator {
+
+        public JMeterDefaultHttpClientConnectionOperator(Lookup<ConnectionSocketFactory> socketFactoryRegistry, SchemePortResolver schemePortResolver,
+                DnsResolver dnsResolver) {
+            super(socketFactoryRegistry, schemePortResolver, dnsResolver);
+        }
+
+        /* (non-Javadoc)
+         * @see org.apache.http.impl.conn.DefaultHttpClientConnectionOperator#connect(org.apache.http.conn.ManagedHttpClientConnection, org.apache.http.HttpHost, java.net.InetSocketAddress, int, org.apache.http.config.SocketConfig, org.apache.http.protocol.HttpContext)
+         */
+        @Override
+        public void connect(ManagedHttpClientConnection conn, HttpHost host, InetSocketAddress localAddress,
+                int connectTimeout, SocketConfig socketConfig, HttpContext context) throws IOException {
+            try {
+                super.connect(conn, host, localAddress, connectTimeout, socketConfig, context);
+            } finally {
+                SampleResult sample = 
+                        (SampleResult)context.getAttribute(HTTPHC4Impl.SAMPLER_RESULT_TOKEN);
+                if (sample != null) {
+                    sample.connectEnd();
+                }
+            }
+        }
+        
+    }
     private static final InputStreamFactory DEFLATE = new InputStreamFactory() {
         @Override
         public InputStream create(final InputStream instream) throws IOException {
@@ -290,12 +328,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
     private static final Scheme SLOW_HTTP;
     
-    /*
-     * Create a set of default parameters from the ones initially created.
-     * This allows the defaults to be overridden if necessary from the properties file.
-     */
-    private static final HttpParams DEFAULT_HTTP_PARAMS;
-
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
     static final String SAMPLER_RESULT_TOKEN = "__jmeter.SAMPLER_RESULT__"; //$NON-NLS-1$
@@ -305,29 +337,13 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     static {
         log.info("HTTP request retry count = {}", RETRY_COUNT);
 
-        DEFAULT_HTTP_PARAMS = new SyncBasicHttpParams(); // Could we drop the Sync here?
-        DEFAULT_HTTP_PARAMS.setBooleanParameter(CoreConnectionPNames.STALE_CONNECTION_CHECK, false);
-        DEFAULT_HTTP_PARAMS.setIntParameter(ClientPNames.MAX_REDIRECTS, HTTPSamplerBase.MAX_REDIRECTS);
-        DefaultHttpClient.setDefaultHttpParams(DEFAULT_HTTP_PARAMS);
-        
-        // Process Apache HttpClient parameters file
-        String file=JMeterUtils.getProperty("hc.parameters.file"); // $NON-NLS-1$
-        if (file != null) {
-            HttpClientDefaultParameters.load(file, DEFAULT_HTTP_PARAMS);
-        }
-
         // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps={}", CPS_HTTP);
             SLOW_HTTP = new Scheme(HTTPConstants.PROTOCOL_HTTP, HTTPConstants.DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
         } else {
             SLOW_HTTP = null;
-        }
-        
-        if (localAddress != null){
-            DEFAULT_HTTP_PARAMS.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-        }
-        
+        }        
     }
 
     private volatile HttpUriRequest currentRequest; // Accessed from multiple threads
@@ -345,8 +361,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     private static Lookup<InputStreamFactory> createLookupRegistry() {
         return
                 RegistryBuilder.<InputStreamFactory>create()
-                .register("gzip", GZIP)
                 .register("br", BROTLI)
+                .register("gzip", GZIP)
                 .register("x-gzip", GZIP)
                 .register("deflate", DEFLATE).build();
     }
@@ -391,10 +407,10 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
 
         HTTPSampleResult res = createSampleResult(url, method);
 
-        CloseableHttpClient httpClient = setupClient(url);
-
+        CloseableHttpClient httpClient = null;
         HttpRequestBase httpRequest = null;
         try {
+            httpClient = setupClient(url);
             URI uri = url.toURI();
             if (method.equals(HTTPConstants.POST)) {
                 httpRequest = new HttpPost(uri);
@@ -457,9 +473,8 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             final HttpRequest request = (HttpRequest) localContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
             extractClientContextAfterSample(localContext);
             // We've finished with the request, so we can add the LocalAddress to it for display
-            final InetAddress localAddr = (InetAddress) httpRequest.getParams().getParameter(ConnRoutePNames.LOCAL_ADDRESS);
-            if (localAddr != null) {
-                request.addHeader(HEADER_LOCAL_ADDRESS, localAddr.toString());
+            if (localAddress != null) {
+                request.addHeader(HEADER_LOCAL_ADDRESS, localAddress.toString());
             }
             res.setRequestHeaders(getConnectionHeaders(request));
 
@@ -795,7 +810,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
     }
 
-    private CloseableHttpClient setupClient(URL url) {
+    private CloseableHttpClient setupClient(URL url) throws GeneralSecurityException {
 
         Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         
@@ -833,57 +848,95 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         }
 
         if (httpClient != null && resetSSLContext && HTTPConstants.PROTOCOL_HTTPS.equalsIgnoreCase(url.getProtocol())) {
-            ((AbstractHttpClient) httpClient).clearRequestInterceptors(); 
-            ((AbstractHttpClient) httpClient).clearResponseInterceptors(); 
-            httpClient.getConnectionManager().closeIdleConnections(1L, TimeUnit.MICROSECONDS);
-            httpClient = null;
+            JOrphanUtils.closeQuietly(httpClient);
             JsseSSLManager sslMgr = (JsseSSLManager) SSLManager.getInstance();
             sslMgr.resetContext();
             resetSSLContext = false;
         }
 
         if (httpClient == null) { // One-time init for this client
-
-            HttpParams clientParams = new DefaultedHttpParams(new BasicHttpParams(), DEFAULT_HTTP_PARAMS);
-
             DnsResolver resolver = this.testElement.getDNSResolver();
             if (resolver == null) {
                 resolver = SystemDefaultDnsResolver.INSTANCE;
             }
-            MeasuringConnectionManager connManager = new MeasuringConnectionManager(
-                    createSchemeRegistry(), 
-                    resolver, 
-                    TIME_TO_LIVE,
-                    VALIDITY_AFTER_INACTIVITY_TIMEOUT);
+            Registry<ConnectionSocketFactory> registry;
+            try {
+                final SSLContext sslcontext = SSLContexts.custom()
+                        .loadTrustMaterial(null, new org.apache.http.conn.ssl.TrustStrategy() {
+                            public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                                return true;
+                            }
+                        })
+                        .build();
+                final SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslcontext,
+                        NoopHostnameVerifier.INSTANCE);
+                    
+                registry = RegistryBuilder.<ConnectionSocketFactory> create().
+                        register("https", socketFactory).
+                        register("http", PlainConnectionSocketFactory.getSocketFactory()).
+                        build();
+            } catch (GeneralSecurityException e) {
+                log.debug("", e);
+                registry = RegistryBuilder.<ConnectionSocketFactory> create().
+                        build();
+            }
             
             // Modern browsers use more connections per host than the current httpclient default (2)
             // when using parallel download the httpclient and connection manager are shared by the downloads threads
             // to be realistic JMeter must set an higher value to DefaultMaxPerRoute
+            PoolingHttpClientConnectionManager pHCCM = 
+                    new PoolingHttpClientConnectionManager(
+                            new JMeterDefaultHttpClientConnectionOperator(registry, null, resolver), 
+                            null, TIME_TO_LIVE, TimeUnit.MILLISECONDS);
+            pHCCM.setValidateAfterInactivity(VALIDITY_AFTER_INACTIVITY_TIMEOUT);
+
             if(concurrentDwn) {
                 try {
                     int maxConcurrentDownloads = Integer.parseInt(this.testElement.getConcurrentPool());
-                    connManager.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, connManager.getDefaultMaxPerRoute()));                
+                    pHCCM.setDefaultMaxPerRoute(Math.max(maxConcurrentDownloads, pHCCM.getDefaultMaxPerRoute()));
                 } catch (NumberFormatException nfe) {
                    // no need to log -> will be done by the sampler
                 }
             }
             
-            httpClient = new DefaultHttpClient(connManager, clientParams) {
-                @Override
-                protected HttpRequestRetryHandler createHttpRequestRetryHandler() {
-                    return new StandardHttpRequestRetryHandler(RETRY_COUNT, 
-                            REQUEST_SENT_RETRY_ENABLED);
-                }
-            };
+            DefaultCookieSpecProvider cookieSpecProvider = new DefaultCookieSpecProvider();
+            Lookup<CookieSpecProvider> cookieSpecRegistry = RegistryBuilder.<CookieSpecProvider>create()
+                    .register(CookieSpecs.IGNORE_COOKIES, cookieSpecProvider)
+                    .build();
+            
+            HttpClientBuilder builder = HttpClientBuilder.create().setConnectionManager(pHCCM).
+                    setSchemePortResolver(new DefaultSchemePortResolver()).
+                    setDnsResolver(resolver).
+                    setSSLContext(((JsseSSLManager)JsseSSLManager.getInstance()).getContext()).
+                    setDefaultCookieSpecRegistry(cookieSpecRegistry).
+                    setDefaultSocketConfig(SocketConfig.DEFAULT).
+                    setRedirectStrategy(new LaxRedirectStrategy()).
+                    setRetryHandler(new StandardHttpRequestRetryHandler(RETRY_COUNT, REQUEST_SENT_RETRY_ENABLED)).
+                    setConnectionReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
             
             if (IDLE_TIMEOUT > 0) {
-                ((AbstractHttpClient) httpClient).setKeepAliveStrategy(IDLE_STRATEGY );
+                builder.setKeepAliveStrategy(IDLE_STRATEGY);
             }
-            // see https://issues.apache.org/jira/browse/HTTPCORE-397
-            ((AbstractHttpClient) httpClient).setReuseStrategy(DefaultClientConnectionReuseStrategy.INSTANCE);
-            ((AbstractHttpClient) httpClient).addResponseInterceptor(RESPONSE_CONTENT_ENCODING);
-            ((AbstractHttpClient) httpClient).addResponseInterceptor(METRICS_SAVER); // HACK
-            ((AbstractHttpClient) httpClient).addRequestInterceptor(METRICS_RESETTER); 
+
+            // Set up proxy details
+            if(useProxy) {
+                HttpHost proxy = new HttpHost(proxyHost, proxyPort);
+                builder.setProxy(proxy);
+                
+                CredentialsProvider credsProvider = new BasicCredentialsProvider();
+                if (proxyUser.length() > 0) {
+                    credsProvider.setCredentials(
+                        new AuthScope(proxyHost, proxyPort),
+                        new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
+                }
+                builder.setDefaultCredentialsProvider(credsProvider);
+            }
+            if(getAutoRedirects()) {
+                builder.disableRedirectHandling();
+            }
+            builder.addInterceptorFirst(METRICS_RESETTER).addInterceptorLast(METRICS_SAVER);
+            builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
+            httpClient = builder.build();
             
             // Override the default schemes as necessary
             SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
@@ -891,22 +944,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             if (SLOW_HTTP != null){
                 schemeRegistry.register(SLOW_HTTP);
             }
-
-            // Set up proxy details
-            if(useProxy) {
-
-                HttpHost proxy = new HttpHost(proxyHost, proxyPort);
-                clientParams.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-                
-                if (proxyUser.length() > 0) {                   
-                    ((AbstractHttpClient) httpClient).getCredentialsProvider().setCredentials(
-                            new AuthScope(proxyHost, proxyPort),
-                            new NTCredentials(proxyUser, proxyPass, LOCALHOST, PROXY_DOMAIN));
-                }
-            }
-
-            // Bug 52126 - we do our own cookie handling
-            clientParams.setParameter(ClientPNames.COOKIE_POLICY, CookieSpecs.IGNORE_COOKIES);
 
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
@@ -931,19 +968,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
     }
 
     /**
-     * Setup LazySchemeSocketFactory
-     * @see "https://bz.apache.org/bugzilla/show_bug.cgi?id=58099"
-     */
-    private static SchemeRegistry createSchemeRegistry() {
-        final SchemeRegistry registry = new SchemeRegistry();
-        registry.register(
-                new Scheme("http", 80, PlainSocketFactory.getSocketFactory())); //$NON-NLS-1$
-        registry.register(
-                new Scheme("https", 443, new LazySchemeSocketFactory())); //$NON-NLS-1$
-        return registry;
-    }
-
-    /**
      * Setup following elements on httpRequest:
      * <ul>
      * <li>ConnRoutePNames.LOCAL_ADDRESS enabling IP-SPOOFING</li>
@@ -965,50 +989,47 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
      */
     protected void setupRequest(URL url, HttpRequestBase httpRequest, HTTPSampleResult res)
         throws IOException {
-
-    HttpParams requestParams = httpRequest.getParams();
+        RequestConfig.Builder rCB = RequestConfig.custom();
+        // Set up the local address if one exists
+        final InetAddress inetAddr = getIpSourceAddress();
+        if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
+            rCB.setLocalAddress(inetAddr);
+        } else if (localAddress != null){
+            rCB.setLocalAddress(localAddress);
+        } 
     
-    // Set up the local address if one exists
-    final InetAddress inetAddr = getIpSourceAddress();
-    if (inetAddr != null) {// Use special field ip source address (for pseudo 'ip spoofing')
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, inetAddr);
-    } else if (localAddress != null){
-        requestParams.setParameter(ConnRoutePNames.LOCAL_ADDRESS, localAddress);
-    } else { // reset in case was set previously
-        requestParams.removeParameter(ConnRoutePNames.LOCAL_ADDRESS);
-    }
-
-    int rto = getResponseTimeout();
-    if (rto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, rto);
-    }
-
-    int cto = getConnectTimeout();
-    if (cto > 0){
-        requestParams.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, cto);
-    }
-
-    requestParams.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, getAutoRedirects());
+        int rto = getResponseTimeout();
+        if (rto > 0){
+            rCB.setSocketTimeout(rto);
+        }
     
-    // a well-behaved browser is supposed to send 'Connection: close'
-    // with the last request to an HTTP server. Instead, most browsers
-    // leave it to the server to close the connection after their
-    // timeout period. Leave it to the JMeter user to decide.
-    if (getUseKeepAlive()) {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
-    } else {
-        httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        int cto = getConnectTimeout();
+        if (cto > 0){
+            rCB.setConnectTimeout(cto);
+        }
+    
+        rCB.setMaxRedirects(HTTPSamplerBase.MAX_REDIRECTS);
+        rCB.setRedirectsEnabled(getAutoRedirects());
+        httpRequest.setConfig(rCB.build());
+        // a well-behaved browser is supposed to send 'Connection: close'
+        // with the last request to an HTTP server. Instead, most browsers
+        // leave it to the server to close the connection after their
+        // timeout period. Leave it to the JMeter user to decide.
+        if (getUseKeepAlive()) {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.KEEP_ALIVE);
+        } else {
+            httpRequest.setHeader(HTTPConstants.HEADER_CONNECTION, HTTPConstants.CONNECTION_CLOSE);
+        }
+    
+        setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
+    
+        String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
+    
+        if (res != null) {
+            res.setCookies(cookies);
+        }
+    
     }
-
-    setConnectionHeaders(httpRequest, url, getHeaderManager(), getCacheManager());
-
-    String cookies = setConnectionCookie(httpRequest, url, getCookieManager());
-
-    if (res != null) {
-        res.setCookies(cookies);
-    }
-
-}
 
     
     /**
@@ -1515,7 +1536,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                 // FIXME Charset
                 try (InputStream in = entityEntry.getContent();
                         InputStream bounded = new BoundedInputStream(in, MAX_BODY_RETAIN_SIZE)) {
-                    entityBody.append(IOUtils.toString(bounded));
+                    entityBody.append(IOUtils.toString(bounded, charset));
                 }
                 if (entityEntry.getContentLength() > MAX_BODY_RETAIN_SIZE) {
                     entityBody.append("<actual file content shortened>");
@@ -1581,10 +1602,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         Map<HttpClientKey, CloseableHttpClient> mapHttpClientPerHttpClientKey = HTTPCLIENTS_CACHE_PER_THREAD_AND_HTTPCLIENTKEY.get();
         if ( mapHttpClientPerHttpClientKey != null ) {
             for ( CloseableHttpClient cl : mapHttpClientPerHttpClientKey.values() ) {
-                ((AbstractHttpClient) cl).clearRequestInterceptors(); 
-                ((AbstractHttpClient) cl).clearResponseInterceptors();
                 JOrphanUtils.closeQuietly(cl);
-                cl.getConnectionManager().shutdown();
             }
             mapHttpClientPerHttpClientKey.clear();
         }

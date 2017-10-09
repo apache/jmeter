@@ -33,7 +33,9 @@ import org.slf4j.Logger;
  * Implementation of AbstractConnPool to allow better connection validity 
  * management.
  * @since 3.2
+ * @deprecated removed since 3.4
  */
+@Deprecated
 public class HttpConnPool extends AbstractConnPool<HttpRoute, OperatedClientConnection, HttpPoolEntry> {
 
     private static final LongAdder COUNTER = new LongAdder();

@@ -31,7 +31,9 @@ import org.slf4j.Logger;
 /**
  * Implementation of {@link PoolEntry} 
  * @since 3.2
+ * @deprecated removed since 3.4
  */
+@Deprecated
 public class HttpPoolEntry extends PoolEntry<HttpRoute, OperatedClientConnection> {
 
     private final Logger log;

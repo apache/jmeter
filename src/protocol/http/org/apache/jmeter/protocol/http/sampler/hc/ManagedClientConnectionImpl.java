@@ -48,8 +48,9 @@ import org.apache.http.util.Asserts;
 /**
  * Implementation of {@link ManagedClientConnection} 
  * @since 3.2
- *
+ * @deprecated removed since 3.4
  */
+@Deprecated
 public class ManagedClientConnectionImpl implements ManagedClientConnection {
 
     private final ClientConnectionManager manager;

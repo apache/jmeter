@@ -50,7 +50,9 @@ import org.slf4j.LoggerFactory;
  * better validation mechanism introduced in 4.4
  * TODO : Remove when full upgrade to new HttpClient 4.5.X API is finished
  * Internal class, DO NOT USE
+ * @deprecated removed since 3.4
  */
+@Deprecated
 public class JMeterPoolingClientConnectionManager implements ClientConnectionManager, ConnPoolControl<HttpRoute> {
 
     private static final int VALIDATE_AFTER_INACTIVITY_DEFAULT = 1700;

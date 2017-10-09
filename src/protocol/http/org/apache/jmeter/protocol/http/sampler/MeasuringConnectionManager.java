@@ -48,7 +48,9 @@ import org.apache.jmeter.samplers.SampleResult;
  * Adapter for {@link PoolingClientConnectionManager}
  * that wraps all connection requests into time-measured implementation a private
  * MeasuringConnectionRequest
+ * @deprecated since JMeter 3.4
  */
+@Deprecated 
 public class MeasuringConnectionManager extends JMeterPoolingClientConnectionManager {
 
     public MeasuringConnectionManager(SchemeRegistry schemeRegistry, 
