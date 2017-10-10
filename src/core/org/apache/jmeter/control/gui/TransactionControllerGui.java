@@ -22,6 +22,7 @@ import javax.swing.JCheckBox;
 
 import org.apache.jmeter.control.TransactionController;
 import org.apache.jmeter.gui.util.CheckBoxPanel;
+import org.apache.jmeter.gui.util.TristateCheckBox;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.layout.VerticalLayout;
@@ -38,6 +39,9 @@ public class TransactionControllerGui extends AbstractControllerGui {
 
     /** if selected, add duration of timers to total runtime */
     private JCheckBox includeTimers;
+    
+    /** if selected, use comment in Sample Result */
+    private TristateCheckBox useComment;
 
     /**
      * Create a new TransactionControllerGui instance.
@@ -59,6 +63,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         super.configure(el);
         generateParentSample.setSelected(((TransactionController) el).isGenerateParentSample());
         includeTimers.setSelected(((TransactionController) el).isIncludeTimers());
+        useComment.setTristateFromProperty(((TransactionController) el), TransactionController.USE_COMMENT);
     }
 
     @Override
@@ -68,6 +73,7 @@ public class TransactionControllerGui extends AbstractControllerGui {
         TransactionController tc = (TransactionController) el;
         tc.setGenerateParentSample(generateParentSample.isSelected());
         tc.setIncludeTimers(includeTimers.isSelected());
+        useComment.setPropertyFromTristate(tc, TransactionController.USE_COMMENT);
     }
 
     @Override
@@ -86,5 +92,8 @@ public class TransactionControllerGui extends AbstractControllerGui {
         add(CheckBoxPanel.wrap(generateParentSample));
         includeTimers = new JCheckBox(JMeterUtils.getResString("transaction_controller_include_timers"), true); // $NON-NLS-1$
         add(CheckBoxPanel.wrap(includeTimers));
+        useComment = new TristateCheckBox(JMeterUtils.getResString("transaction_controller_use_comment")); // $NON-NLS-1$
+        useComment.setToolTipText(JMeterUtils.getResString("transaction_controller_use_comment_tooltip")); // $NON-NLS-1$
+        add(useComment);
     }
 }

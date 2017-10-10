@@ -31,6 +31,7 @@ import org.apache.jmeter.threads.JMeterThread;
 import org.apache.jmeter.threads.JMeterVariables;
 import org.apache.jmeter.threads.ListenerNotifier;
 import org.apache.jmeter.threads.SamplePackage;
+import org.apache.jmeter.util.JMeterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,8 @@ public class TransactionController extends GenericController implements SampleLi
     private static final String GENERATE_PARENT_SAMPLE = "TransactionController.parent";// $NON-NLS-1$
 
     private static final String INCLUDE_TIMERS = "TransactionController.includeTimers";// $NON-NLS-1$
+    
+    public static final String USE_COMMENT = "TransactionController.useComment";// $NON-NLS-1$
     
     private static final Logger log = LoggerFactory.getLogger(TransactionController.class);
 
@@ -155,7 +158,19 @@ public class TransactionController extends GenericController implements SampleLi
             if (log.isDebugEnabled()) {
                 log.debug("Start of transaction {}", getName());
             }
-            transactionSampler = new TransactionSampler(this, getName(), getComment());
+            
+            String useCommentOnAllTCs = JMeterUtils.getPropDefault(
+                    "transactioncontroller.use_comment_on_all", //$NON-NLS-1$
+                    "false"); //$NON-NLS-1$
+            String comment = getComment();
+            if (getUseComment().isEmpty()) { // Let global property decide
+                if (!useCommentOnAllTCs.equalsIgnoreCase("true")) { // ignore comment value in all SampleResults
+                    comment = "";
+                }
+            } else if (!getUseComment().equalsIgnoreCase("true")) { // force to ignore this value in particular
+                comment = "";
+            }
+            transactionSampler = new TransactionSampler(this, getName(), comment);
         }
 
         // Sample the children of the transaction
@@ -340,5 +355,13 @@ public class TransactionController extends GenericController implements SampleLi
      */
     public boolean isIncludeTimers() {
         return getPropertyAsBoolean(INCLUDE_TIMERS, DEFAULT_VALUE_FOR_INCLUDE_TIMERS);
+    }
+    
+    public void setUseComment(boolean useComment) {
+        setProperty(USE_COMMENT, Boolean.toString(useComment), "");
+    }
+    
+    public String getUseComment() {
+        return getPropertyAsString(USE_COMMENT);
     }
 }
