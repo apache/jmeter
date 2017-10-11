@@ -108,6 +108,7 @@ Summary
 <h3>I18N</h3>
 <ul>
     <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
+    <li><bug>61606</bug> Translate button "Browse..." in some elements (those who use FileEditor class</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
