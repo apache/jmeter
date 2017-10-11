@@ -34,6 +34,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import org.apache.jmeter.gui.util.FileDialoger;
+import org.apache.jmeter.util.JMeterUtils;
 
 /**
  * A property editor for File properties.
@@ -81,7 +82,7 @@ public class FileEditor implements PropertyEditor, ActionListener {
         }
 
         // Create a button to trigger the file chooser:
-        JButton button = new JButton("Browse...");
+        JButton button = new JButton(JMeterUtils.getResString("browse"));
         button.addActionListener(this);
 
         // Get a WrapperEditor to provide the field or combo -- we'll delegate
