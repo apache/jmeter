@@ -228,7 +228,7 @@ public abstract class SSLManager {
                         log.info("Truststore loaded OK from file");
                     }
                 } else {
-                    log.info("Truststore file not found, loading empty truststore");
+                    log.warn("Truststore file not found, loading empty truststore");
                     this.trustStore.load(null, null);
                 }
             } catch (Exception e) {

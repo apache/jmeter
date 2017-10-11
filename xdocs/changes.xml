@@ -80,6 +80,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -176,6 +177,7 @@ Summary
     <li>Emilian Bold (emi at apache.org)</li>
     <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
+    <li>Vincent Herilier (https://github.com/vherilier)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>
