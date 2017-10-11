@@ -101,6 +101,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
+    <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
 </ul>
 
 <h3>I18N</h3>
@@ -115,6 +116,7 @@ Summary
 <h3>General</h3>
 <ul>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
+    <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -136,6 +138,7 @@ Summary
 
 <h3>Controllers</h3>
 <ul>
+    <li><bug>61556</bug>Clarify in documentation performance impacts of ${} var usage in IfController and groovy. Contributed by Justin McCartney (be_strew at yahoo.co.uk)</li>
 </ul>
 
 <h3>Listeners</h3>
@@ -148,6 +151,7 @@ Summary
 
 <h3>Functions</h3>
 <ul>
+    <li><bug>61588</bug>Better log message for RandomDate function</li>
 </ul>
 
 <h3>I18N</h3>
@@ -170,6 +174,8 @@ Summary
 <ul>
     <li>Igor Panainte (panainte.i at gmail.com)</li>
     <li>Emilian Bold (emi at apache.org)</li>
+    <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
+    <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

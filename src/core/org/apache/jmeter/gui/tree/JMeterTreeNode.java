@@ -195,10 +195,4 @@ public class JMeterTreeNode extends DefaultMutableTreeNode implements NamedTreeN
         }
     }
 
-    // Override in order to provide type safety
-    @Override
-    @SuppressWarnings("unchecked")
-    public Enumeration<JMeterTreeNode> children() {
-        return (Enumeration<JMeterTreeNode>) super.children();
-    }
 }
