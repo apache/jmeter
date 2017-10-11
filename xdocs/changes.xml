@@ -119,6 +119,7 @@ Summary
 <ul>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
