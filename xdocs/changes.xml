@@ -80,6 +80,7 @@ Summary
 
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
+    <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
 </ul>
 
 <h3>Other samplers</h3>
@@ -107,6 +108,7 @@ Summary
 <h3>I18N</h3>
 <ul>
     <li><bug>61559</bug>Better label/translation/documentation for label ignoreFirstLine.displayName for CSV Data Set Config</li>
+    <li><bug>61606</bug>Translate button <code>Browse...</code> in some elements (which use FileEditor class)</li>
 </ul>
 
 <h3>Report / Dashboard</h3>
@@ -117,6 +119,7 @@ Summary
 <ul>
     <li><bug>61549</bug>Thread Group : Remove start and end date</li>
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
+    <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -176,6 +179,7 @@ Summary
     <li>Emilian Bold (emi at apache.org)</li>
     <li><a href="http://ubikloadpack.com">Ubik Load Pack</a></li>
     <li>Justin McCartney (be_strew at yahoo.co.uk)</li>
+    <li>Vincent Herilier (https://github.com/vherilier)</li>
 </ul>
 <p>We also thank bug reporters who helped us improve JMeter. <br/>
 For this release we want to give special thanks to the following reporters for the clear reports and tests made after our fixes:</p>

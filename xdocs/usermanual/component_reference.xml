@@ -2322,7 +2322,7 @@ If the last sample just before the loop failed, don't enter loop.</li>
 </ul>
 <note>
 The condition can be any variable or function that eventually evaluates to the string "<code>false</code>".
-This allows the use of JavaScript, BeanShell, properties or variables as needed.
+This allows the use of <code>__jexl3</code>, <code>__groovy</code> function, properties or variables as needed.
 </note>
 <br></br>
 <note>
@@ -2333,14 +2333,14 @@ non idempotent functions in Condition (like <code><funclink name="__counter"/></
 For example:
 <ul>
     <li><code>${VAR}</code> - where <code>VAR</code> is set to false by some other test element</li>
-    <li><code>${__javaScript(${C}==10)}</code></li>
-    <li><code>${__javaScript("${VAR2}"=="abcd")}</code></li>
+    <li><code>${__jexl3(${C}==10)}</code></li>
+    <li><code>${__jexl3("${VAR2}"=="abcd")}</code></li>
     <li><code>${_P(property)}</code> - where property is set to "<code>false</code>" somewhere else</li>
 </ul>
     </description>
 <properties>
-    <property name="Name" required="Yes">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
-    <property name="Condition" required="Yes">blank, <code>LAST</code>, or variable/function</property>
+    <property name="Name" required="No">Descriptive name for this controller that is shown in the tree, and used to name the transaction.</property>
+    <property name="Condition" required="No">blank, <code>LAST</code>, or variable/function</property>
 </properties>
 </component>
 
@@ -5047,7 +5047,7 @@ The value can be changed in various ways:
 </p>
 <ul>
 <li>using a counter variable</li>
-<li>using a JavaScript or BeanShell function to provide a changing value</li>
+<li>using a <code>__jexl3</code>, <code>__groovy</code> function to provide a changing value</li>
 <li>using the remote BeanShell server to change a JMeter property</li>
 </ul>
 <p>See <a href="best-practices.html">Best Practices</a> for further details.
