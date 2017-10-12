@@ -83,7 +83,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Lookup;
@@ -1135,7 +1134,11 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                                     port = -1; // no need to specify the port if it is the default
                                 }
                             }
-                            request.getParams().setParameter(ClientPNames.VIRTUAL_HOST, new HttpHost(v, port));
+                            if(port == -1) {
+                                request.addHeader(HEADER_HOST, v);
+                            } else {
+                                request.addHeader(HEADER_HOST, v+":"+port);
+                            }
                         } else {
                             request.addHeader(n, v);
                         }
