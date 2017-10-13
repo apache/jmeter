@@ -124,7 +124,6 @@ import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 import org.apache.http.impl.cookie.DefaultCookieSpecProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BufferedHeader;
-import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
@@ -1221,7 +1220,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         private boolean hideFileData;
         
         public ViewableFileBody(File file, String mimeType) {
-            super(file, mimeType);
+            super(file, ContentType.create(mimeType));
             hideFileData = false;
         }
 
@@ -1352,12 +1351,6 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             } else {
                 // In a post request which is not multipart, we only support
                 // parameters, no file upload is allowed
-
-                // If a content encoding is specified, we set it as http parameter, so that
-                // the post body will be encoded in the specified content encoding
-                if(haveContentEncoding) {
-                    post.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, contentEncoding);
-                }
 
                 // If none of the arguments have a name specified, we
                 // just send all the values as the post body
