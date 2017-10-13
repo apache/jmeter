@@ -93,8 +93,6 @@ import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.ManagedHttpClientConnection;
 import org.apache.http.conn.SchemePortResolver;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -144,7 +142,7 @@ import org.apache.jmeter.protocol.http.util.EncoderCache;
 import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.protocol.http.util.HTTPConstants;
 import org.apache.jmeter.protocol.http.util.HTTPFileArg;
-import org.apache.jmeter.protocol.http.util.SlowHC4SocketFactory;
+import org.apache.jmeter.protocol.http.util.SlowHCPlainConnectionSocketFactory;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.services.FileServer;
 import org.apache.jmeter.testelement.property.CollectionProperty;
@@ -325,7 +323,7 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         InheritableThreadLocal.withInitial(() -> new HashMap<>(5));
 
     // Scheme used for slow HTTP sockets. Cannot be set as a default, because must be set on an HttpClient instance.
-    private static final Scheme SLOW_HTTP;
+    private static final ConnectionSocketFactory SLOW_CONNECTION_SOCKET_FACTORY;
     
     private static final String USER_TOKEN = "__jmeter.USER_TOKEN__"; //$NON-NLS-1$
     
@@ -339,9 +337,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
         // Set up HTTP scheme override if necessary
         if (CPS_HTTP > 0) {
             log.info("Setting up HTTP SlowProtocol, cps={}", CPS_HTTP);
-            SLOW_HTTP = new Scheme(HTTPConstants.PROTOCOL_HTTP, HTTPConstants.DEFAULT_HTTP_PORT, new SlowHC4SocketFactory(CPS_HTTP));
+            SLOW_CONNECTION_SOCKET_FACTORY = new SlowHCPlainConnectionSocketFactory(CPS_HTTP);
         } else {
-            SLOW_HTTP = null;
+            SLOW_CONNECTION_SOCKET_FACTORY = PlainConnectionSocketFactory.getSocketFactory();
         }        
     }
 
@@ -867,12 +865,12 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
                             }
                         })
                         .build();
-                final SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslcontext,
+                final SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslcontext,
                         NoopHostnameVerifier.INSTANCE);
                     
                 registry = RegistryBuilder.<ConnectionSocketFactory> create().
-                        register("https", socketFactory).
-                        register("http", PlainConnectionSocketFactory.getSocketFactory()).
+                        register("https", sslSocketFactory).
+                        register("http", SLOW_CONNECTION_SOCKET_FACTORY).
                         build();
             } catch (GeneralSecurityException e) {
                 log.debug("", e);
@@ -936,18 +934,9 @@ public class HTTPHC4Impl extends HTTPHCAbstractImpl {
             builder.addInterceptorFirst(METRICS_RESETTER).addInterceptorLast(METRICS_SAVER);
             builder.disableContentCompression().addInterceptorLast(RESPONSE_CONTENT_ENCODING);
             httpClient = builder.build();
-            
-            // Override the default schemes as necessary
-            SchemeRegistry schemeRegistry = httpClient.getConnectionManager().getSchemeRegistry();
-
-            if (SLOW_HTTP != null){
-                schemeRegistry.register(SLOW_HTTP);
-            }
-
             if (log.isDebugEnabled()) {
                 log.debug("Created new HttpClient: @"+System.identityHashCode(httpClient) + " " + key.toString());
             }
-
             mapHttpClientPerHttpClientKey.put(key, httpClient); // save the agent for next time round
         } else {
             if (log.isDebugEnabled()) {

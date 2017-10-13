@@ -18,40 +18,32 @@
 
 package org.apache.jmeter.protocol.http.util;
 
+import java.io.IOException;
 import java.net.Socket;
 
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.params.HttpParams;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.protocol.HttpContext;
 import org.apache.jmeter.util.SlowSocket;
 
 /**
  * Apache HttpClient protocol factory to generate "slow" sockets for emulating dial-up modems
- * @deprecated since 3.4
+ * @since 3.4
  */
-@Deprecated
-public class SlowHC4SocketFactory extends PlainSocketFactory {
+public class SlowHCPlainConnectionSocketFactory extends PlainConnectionSocketFactory {
 
-    private final int CPS; // Characters per second to emulate
+    private final int charactersPerSecond; // Characters per second to emulate
 
     /**
      * Create a factory 
      * @param cps - characters per second
      */
-    public SlowHC4SocketFactory(final int cps) {
+    public SlowHCPlainConnectionSocketFactory(final int cps) {
         super();
-        CPS = cps;
-    }
-
-    // Override all the super-class Socket methods.
-    
-    @Override
-    public Socket createSocket(final HttpParams params) {
-        return new SlowSocket(CPS);
-    }
-
-    @Override
-    public Socket createSocket() {
-        return new SlowSocket(CPS);
+        this.charactersPerSecond = cps;
     }
     
+    @Override
+    public Socket createSocket(final HttpContext context) throws IOException {
+        return new SlowSocket(charactersPerSecond);
+    }
 }
