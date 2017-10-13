@@ -211,6 +211,20 @@ public class TransactionController extends GenericController implements SampleLi
             noFailingSamples = 0;
             res = new SampleResult();
             res.setSampleLabel(getName());
+            
+            String useCommentOnAllTCs = JMeterUtils.getPropDefault(
+                    "transactioncontroller.use_comment_on_all", //$NON-NLS-1$
+                    "false"); //$NON-NLS-1$
+            String comment = getComment();
+            if (getUseComment().isEmpty()) { // Let global property decide
+                if (!useCommentOnAllTCs.equalsIgnoreCase("true")) { // ignore comment value in all SampleResults
+                    comment = "";
+                }
+            } else if (!getUseComment().equalsIgnoreCase("true")) { // force to ignore this value in particular
+                comment = "";
+            }
+            res.setSampleComment(comment);
+            
             // Assume success
             res.setSuccessful(true);
             res.sampleStart();
