@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2-SNAPSHOT.20170219">
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.4-SNAPSHOT.20171014">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments">Test Header Manager merge feature</stringProp>
@@ -255,6 +255,7 @@
             <success>true</success>
             <label>true</label>
             <code>true</code>
+            <message>false</message>
             <threadName>true</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -271,7 +272,7 @@
             <assertionsResultsToSave>0</assertionsResultsToSave>
           </value>
         </objProp>
-        <stringProp name="filename">TestHeaderManager.csv</stringProp>
+        <stringProp name="filename">TestHeaderManager_${__P(jmeter.httpsampler,)}.csv</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
@@ -285,6 +286,7 @@
             <success>true</success>
             <label>true</label>
             <code>true</code>
+            <message>false</message>
             <threadName>false</threadName>
             <dataType>true</dataType>
             <encoding>false</encoding>
@@ -301,7 +303,7 @@
             <assertionsResultsToSave>0</assertionsResultsToSave>
           </value>
         </objProp>
-        <stringProp name="filename">TestHeaderManager.xml</stringProp>
+        <stringProp name="filename">TestHeaderManager_${__P(jmeter.httpsampler,)}.xml</stringProp>
       </ResultCollector>
       <hashTree/>
     </hashTree>

@@ -2762,20 +2762,6 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
-      <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
-      <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
-    </antcall>
-
-    <antcall target="batchtest">
-      <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
-      <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
-      <param name="batchtest.variable" value="jmeter.httpsampler"/>
-      <param name="batchtest.value" value="Java"/>
-      <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
-    </antcall>
-
-    <antcall target="batchtest">
       <param name="batchtest.name" value="TestKeepAlive"/>
       <param name="batchtest.jmx" value="TestKeepAlive.jmx"/>
       <param name="skip.batchtest" value="${skip.batchtest_TestKeepAlive}" />
@@ -2788,12 +2774,14 @@ run JMeter unless all the JMeter jars are added.
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="TestHeaderManager"/>
+      <param name="batchtest.name" value="TestHeaderManager_HttpClient4"/>
       <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
+      <param name="batchtest.variable" value="jmeter.httpsampler"/>
+      <param name="batchtest.value" value="HttpClient4"/>
     </antcall>
 
     <antcall target="batchtest">
-      <param name="batchtest.name" value="TestHeaderManager"/>
+      <param name="batchtest.name" value="TestHeaderManager_Java"/>
       <param name="batchtest.jmx" value="TestHeaderManager.jmx"/>
       <param name="batchtest.variable" value="jmeter.httpsampler"/>
       <param name="batchtest.value" value="Java"/>
@@ -2821,6 +2809,19 @@ run JMeter unless all the JMeter jars are added.
       <param name="batchtest.name" value="TestSchedulerWithTimer"/>
       <param name="batchtest.jmx" value="TestSchedulerWithTimer.jmx"/>
     </antcall>
+      
+      <antcall target="batchtest">
+        <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+        <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+        <param name="batchtest.variable" value="jmeter.httpsampler"/>
+        <param name="batchtest.value" value="Java"/>
+        <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
+      </antcall>
+      <antcall target="batchtest">
+        <param name="batchtest.name" value="Http4ImplPreemptiveBasicAuth"/>
+        <param name="batchtest.jmx" value="Http4ImplPreemptiveBasicAuth.jmx"/>
+        <param name="skip.batchtest" value="${skip.batchtest_Http4ImplPreemptiveBasicAuth}" />
+      </antcall>
   </target>
 
   <!-- Run all batch tests; used by test target -->

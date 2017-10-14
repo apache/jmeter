@@ -1,0 +1,3 @@
+HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Thread Group 1-1,text,true
+HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Thread Group 1-1,text,true
+HTTP Request,Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Thread Group 2-1,text,true
