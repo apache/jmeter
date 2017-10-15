@@ -26,7 +26,7 @@ bsf-2.4.0.jar (org.apache.bsf)
 http://jakarta.apache.org/site/downloads/downloads_bsf.cgi
 - BSF test elements (sampler etc.)
 
-bsh-2.0b5.jar (org.bsh)
+bsh-2.0b6.jar (org.bsh)
 -------------
 - BeanShell test elements
 
