@@ -48,7 +48,7 @@
 	<classpathentry kind="lib" path="lib/accessors-smart-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/bsh-2.0b5.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b6.jar"/>
 	<classpathentry kind="lib" path="lib/caffeine-2.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
