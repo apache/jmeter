@@ -3233,7 +3233,7 @@ run JMeter unless all the JMeter jars are added.
     <delete verbose="true">
       <!-- bcprov jars no longer have the same prefix so the wildcard delete does not work; drop any old ones -->
       <fileset dir="${lib.api}" includes="bcmail-jdk15-*.jar bcprov-jdk15-*.jar"/>
-      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar" />
+      <fileset dir="${lib.dir}" includes="ApacheJMeter_slf4j_logkit.jar bsh-2.0b5.jar" />
       <!-- tidy up unused Excalibur jars -->
       <fileset dir="${lib.dir}" includes="avalon-framework-4.1.4.jar excalibur-datasource-2.1.jar excalibur-instrument-1.0.jar excalibur-logger-1.1.jar excalibur-pool-api-2.1.jar excalibur-pool-impl-2.1.jar excalibur-pool-instrumented-2.1.jar"/>
       <!-- jdom jar has moved; drop the old one -->

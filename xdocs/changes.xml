@@ -124,6 +124,7 @@ Summary
 
 <ch_section>Non-functional changes</ch_section>
 <ul>
+    <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
@@ -155,6 +156,7 @@ Summary
 <h3>Functions</h3>
 <ul>
     <li><bug>61588</bug>Better log message for RandomDate function</li>
+    <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
 </ul>
 
 <h3>I18N</h3>
