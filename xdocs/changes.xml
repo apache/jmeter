@@ -103,6 +103,7 @@ Summary
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
+    <li><bug>61628</bug>If split string has empty separator default separator is not used </li>
 </ul>
 
 <h3>I18N</h3>
