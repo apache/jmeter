@@ -103,7 +103,6 @@ Summary
 <ul>
     <li><bug>61561</bug>Function helper dialog should display exception in result</li>
     <li><bug>61593</bug>Remove Detail, Add, Add from Clipboard, Delete buttons in Function Helper GUI</li>
-    <li><bug>61628</bug>If split string has empty separator default separator is not used </li>
 </ul>
 
 <h3>I18N</h3>
@@ -122,6 +121,7 @@ Summary
     <li><bug>61529</bug>Migration to Java 9. Partly contributed by Ubik Load Pack (support at ubikloadpack.com)</li>
     <li><bug>61607</bug>Add browse button in all beanshell elements to select beanshell script</li>
     <li><bug>61627</bug>Don't clear LogView anymore when clicking on Warning/Errors Indicator</li>
+    <li><bug>61629</bug>Add Think Times to Children menu should not consider disabled elements</li>
 </ul>
 
 <ch_section>Non-functional changes</ch_section>
@@ -159,6 +159,7 @@ Summary
 <ul>
     <li><bug>61588</bug>Better log message for RandomDate function</li>
     <li><bug>61619</bug>In Function Helper Dialog, the 1st function doesn't display default parameters</li>
+    <li><bug>61628</bug>If split string has empty separator default separator is not used</li>
 </ul>
 
 <h3>I18N</h3>
