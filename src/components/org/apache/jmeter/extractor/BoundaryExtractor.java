@@ -156,7 +156,7 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
             }
         } catch (RuntimeException e) {
             if (log.isWarnEnabled()) {
-                log.warn("{}: Error while generating result. {}", getName(), e.toString());
+                log.warn("{}: Error while generating result. {}", getName(), e.toString()); // NOSONAR We don't want to be too verbose
             }
         }
     }
@@ -242,16 +242,17 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
     private int extract(String leftBoundary, String rightBoundary, int matchNumber, String inputString,
             List<String> result, int found) {
         int startIndex = -1;
-        int endIndex = -1;
+        int endIndex;
+        int newFound = found;
         List<String> matches = new ArrayList<>();
         while(true) {
             startIndex = inputString.indexOf(leftBoundary, startIndex+1);
             if(startIndex >= 0) {
                 endIndex = inputString.indexOf(rightBoundary, startIndex+leftBoundary.length());
                 if(endIndex >= 0) {
-                    result.add(inputString.substring(startIndex+leftBoundary.length(), endIndex));
+                    matches.add(inputString.substring(startIndex+leftBoundary.length(), endIndex));
                 } else {
-                    result.add(inputString.substring(startIndex+leftBoundary.length()));
+                    matches.add(inputString.substring(startIndex+leftBoundary.length()));
                     break;
                 }
             } else {
@@ -260,14 +261,14 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
         }
         
         for (String element : matches) {
-            if (matchNumber <= 0 || found != matchNumber) {
+            if (matchNumber <= 0 || newFound != matchNumber) {
                 result.add(element);
-                found++;
+                newFound++;
             } else {
                 break;
             }
         }
-        return found;
+        return newFound;
     }
 
     public void setRefName(String refName) {
