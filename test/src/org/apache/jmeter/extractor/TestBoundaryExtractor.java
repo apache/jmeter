@@ -18,7 +18,10 @@
 
 package org.apache.jmeter.extractor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.threads.JMeterContext;
@@ -55,6 +58,128 @@ public class TestBoundaryExtractor {
         vars = new JMeterVariables();
         context.setVariables(vars);
         context.setPreviousResult(result);
+    }
+    
+    @Test
+    public void testStaleVariables() throws Exception {
+        result.setResponseData("zazzd azd azd azd <t>value</t>azdazd <t>value2</t>azd azd", null);
+        extractor.setLeftBoundary("<t>");
+        extractor.setRightBoundary("</t>");
+        extractor.setMatchNumber(-1);
+        extractor.setDefaultValue("default");
+        extractor.process();
+        assertEquals("value", vars.get("regVal_1"));
+        assertEquals("value2", vars.get("regVal_2"));
+        assertEquals("2", vars.get("regVal_matchNr"));
+        // Now rerun with match fail
+        extractor.setMatchNumber(10);
+        extractor.process();
+        assertEquals("default", vars.get("regVal"));
+        assertNull(vars.get("regVal_1"));
+        assertNull(vars.get("regVal_2"));
+        assertNull(vars.get("regVal_matchNr"));
+    }
+
+    @Test
+    public void testScope1() throws Exception {
+        result.setResponseData("<title>ONE</title>", "ISO-8859-1");
+        extractor.setScopeParent();
+        extractor.setMatchNumber(1);
+        extractor.setLeftBoundary("<title>");
+        extractor.setRightBoundary("</title>");
+        extractor.setDefaultValue("NOTFOUND");
+        extractor.process();
+        assertEquals("ONE", vars.get("regVal"));
+        extractor.setScopeAll();
+        extractor.process();
+        assertEquals("ONE", vars.get("regVal"));
+        extractor.setScopeChildren();
+        extractor.process();
+        assertEquals("NOTFOUND", vars.get("regVal"));
+    }
+
+    @Test
+    public void testScope2() throws Exception {
+        result.sampleStart();
+        result.setResponseData("<title>PARENT</title>", "ISO-8859-1");
+        result.sampleEnd();
+        SampleResult child1 = new SampleResult();
+        child1.sampleStart();
+        child1.setResponseData("<title>ONE</title>", "ISO-8859-1");
+        child1.sampleEnd();
+        result.addSubResult(child1);
+        SampleResult child2 = new SampleResult();
+        child2.sampleStart();
+        child2.setResponseData("<title>TWO</title>", "ISO-8859-1");
+        child2.sampleEnd();
+        result.addSubResult(child2);
+        SampleResult child3 = new SampleResult();
+        child3.sampleStart();
+        child3.setResponseData("<title>THREE</title>", "ISO-8859-1");
+        child3.sampleEnd();
+        result.addSubResult(child3);
+        extractor.setScopeParent();
+        extractor.setMatchNumber(1);
+        extractor.setLeftBoundary("<title>");
+        extractor.setRightBoundary("</title>");
+        extractor.setDefaultValue("NOTFOUND");
+        extractor.process();
+        assertEquals("PARENT", vars.get("regVal"));
+        extractor.setScopeAll();
+        extractor.setMatchNumber(3);
+        extractor.process();
+        assertEquals("TWO", vars.get("regVal"));
+        extractor.setScopeChildren();
+        extractor.process();
+        assertEquals("THREE", vars.get("regVal"));
+       
+
+        // Match all
+        extractor.setLeftBoundary("<title>");
+        extractor.setRightBoundary("</title>");
+        extractor.setMatchNumber(-1);
+
+        extractor.setScopeParent();
+        extractor.process();
+        assertEquals("1", vars.get("regVal_matchNr"));
+        extractor.setScopeAll();
+        extractor.process();
+        assertEquals("4", vars.get("regVal_matchNr"));
+        extractor.setScopeChildren();
+        extractor.process();
+        assertEquals("3", vars.get("regVal_matchNr"));
+
+        // Check random number
+        extractor.setMatchNumber(0);
+        extractor.setScopeParent();
+        extractor.process();
+        assertEquals("PARENT", vars.get("regVal"));
+        extractor.setLeftBoundary("<title>");
+        extractor.setRightBoundary("</title>");
+        extractor.setScopeAll();
+        extractor.process();
+        final String found = vars.get("regVal");
+        assertTrue(found.equals("ONE") || found.equals("TWO"));
+    }
+    
+    @Test
+    public void testEmptyDefaultVariable() throws Exception {
+        extractor.setLeftBoundary("<t1>");
+        extractor.setRightBoundary("</t1>");
+        extractor.setMatchNumber(1);
+        extractor.setDefaultEmptyValue(true);
+        extractor.process();
+        assertEquals("", vars.get("regVal"));
+    }
+    
+    @Test
+    public void testNotEmptyDefaultVariable() throws Exception {
+        extractor.setLeftBoundary("<t1>");
+        extractor.setRightBoundary("</t1>");
+        extractor.setMatchNumber(1);
+        extractor.setDefaultEmptyValue(false);
+        extractor.process();
+        assertNull(vars.get("regVal"));
     }
     
     @Test
