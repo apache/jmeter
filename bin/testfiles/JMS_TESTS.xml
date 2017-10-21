@@ -6,7 +6,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Test/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS-P2P-CustomCorrelationId" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -14,7 +13,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Test-with-customer-correlationId/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS-P2P-DifferentSelector" rc="" rm="No reply message received" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -22,7 +20,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: message expected to contain /No reply message received/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS-P2P-SameSelector" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -30,7 +27,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Test-with-customer-correlationId-and-jms-properties-matching-selector/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS-P2P-RequestOnly" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -38,7 +34,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Oneway request has no response data/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JSS-ConsumePreviousMessage" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -46,7 +41,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Received : Test-send-only/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS Publisher" rc="200" rm="1 messages published" tn="TG-JMS-PS 2-1" dt="" sc="1" ec="0" ng="1" na="1">
@@ -54,7 +48,6 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: message expected to contain /1 messages published/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="JMS Subscriber" rc="200" rm="1 message(s) received successfully of 1 expected" tn="TG-JMS-PS 2-1" dt="text" sc="1" ec="0" ng="1" na="1">
@@ -62,13 +55,11 @@
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: message expected to contain /1 message(s) received successfully of 1 expected/</failureMessage>
   </assertionResult>
   <assertionResult>
     <name>Response Assertion</name>
     <failure>false</failure>
     <error>false</error>
-    <failureMessage>Test succeeded: text expected to contain /Test Topic/</failureMessage>
   </assertionResult>
 </sample>
 <sample s="true" lb="BSS_stopActiveMQ" rc="200" rm="OK" tn="tearDown Thread Group 1-1" dt="text" sc="1" ec="0" ng="1" na="1"/>
