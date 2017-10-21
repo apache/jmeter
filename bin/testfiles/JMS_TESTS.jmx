@@ -56,7 +56,7 @@ bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);</stringProp>
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG-JMS-P2P" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -309,6 +309,88 @@ finally {
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-487953317">Received : Test-send-only</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG-JMS-PS" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <PublisherSampler guiclass="JMSPublisherGui" testclass="PublisherSampler" testname="JMS Publisher" enabled="true">
+          <stringProp name="jms.jndi_properties">false</stringProp>
+          <stringProp name="jms.initial_context_factory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="jms.provider_url">tcp://127.0.0.1:61616</stringProp>
+          <stringProp name="jms.connection_factory">ConnectionFactory</stringProp>
+          <stringProp name="jms.topic">dynamicTopics/requestTopic1</stringProp>
+          <stringProp name="jms.expiration"></stringProp>
+          <stringProp name="jms_error_reconnect_on_codes"></stringProp>
+          <stringProp name="jms.priority"></stringProp>
+          <stringProp name="jms.security_principle"></stringProp>
+          <stringProp name="jms.security_credentials"></stringProp>
+          <stringProp name="jms.text_message">Test Topic</stringProp>
+          <stringProp name="jms.input_file"></stringProp>
+          <stringProp name="jms.random_path"></stringProp>
+          <stringProp name="jms.config_choice">jms_use_text</stringProp>
+          <stringProp name="jms.config_msg_type">jms_text_message</stringProp>
+          <stringProp name="jms.iterations">1</stringProp>
+          <boolProp name="jms.authenticate">false</boolProp>
+          <elementProp name="jms.jmsProperties" elementType="JMSProperties">
+            <collectionProp name="JMSProperties.properties"/>
+          </elementProp>
+          <boolProp name="jms.destination_static">false</boolProp>
+        </PublisherSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1719216023">1 messages published</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <SubscriberSampler guiclass="JMSSubscriberGui" testclass="SubscriberSampler" testname="JMS Subscriber" enabled="true">
+          <stringProp name="jms.jndi_properties">false</stringProp>
+          <stringProp name="jms.initial_context_factory">org.apache.activemq.jndi.ActiveMQInitialContextFactory</stringProp>
+          <stringProp name="jms.provider_url">tcp://127.0.0.1:61616</stringProp>
+          <stringProp name="jms.connection_factory">ConnectionFactory</stringProp>
+          <stringProp name="jms.topic">dynamicTopics/requestTopic1</stringProp>
+          <stringProp name="jms.security_principle"></stringProp>
+          <stringProp name="jms.security_credentials"></stringProp>
+          <boolProp name="jms.authenticate">false</boolProp>
+          <stringProp name="jms.iterations">1</stringProp>
+          <stringProp name="jms.read_response">true</stringProp>
+          <stringProp name="jms.client_choice">jms_subscriber_receive</stringProp>
+          <stringProp name="jms_error_reconnect_on_codes"></stringProp>
+        </SubscriberSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1506174364">1 message(s) received successfully of 1 expected</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_message</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">16</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-2063475679">Test Topic</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
