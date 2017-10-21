@@ -128,6 +128,7 @@ Summary
 <ch_section>Non-functional changes</ch_section>
 <ul>
     <li>Updated to bsh-2.0b6 (from bsh-2.0b5)</li>
+    <li>Updated to rhino-1.7.7.2 (from rhino-1.7.7.1)</li>
 </ul>
 
  <!-- =================== Bug fixes =================== -->
