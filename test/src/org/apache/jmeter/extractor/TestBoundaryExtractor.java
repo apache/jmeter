@@ -61,6 +61,18 @@ public class TestBoundaryExtractor {
     }
     
     @Test
+    public void testMatchOnLeftOnly() throws Exception {
+        result.setResponseData("zazzd azd azd azd <t>value</t>azdazd <t>value2</t>azd azd", null);
+        extractor.setLeftBoundary("<t>");
+        extractor.setRightBoundary("</t1>");
+        extractor.setMatchNumber(0);
+        extractor.setDefaultValue("default");
+        extractor.process();
+        assertEquals("default", vars.get("regVal"));
+    }
+
+    
+    @Test
     public void testStaleVariables() throws Exception {
         result.setResponseData("zazzd azd azd azd <t>value</t>azdazd <t>value2</t>azd azd", null);
         extractor.setLeftBoundary("<t>");
@@ -171,6 +183,38 @@ public class TestBoundaryExtractor {
         extractor.setDefaultEmptyValue(true);
         extractor.process();
         assertEquals("", vars.get("regVal"));
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testIllegalArgumentException() throws Exception {
+        extractor.setLeftBoundary(null);
+        extractor.setRightBoundary(null);
+        extractor.setRefName(null);
+        extractor.setMatchNumber(1);
+        extractor.setDefaultEmptyValue(true);
+        extractor.process();
+        assertEquals("", vars.get("regVal"));
+    }
+    
+    @Test
+    public void testNoProcessing() throws Exception {
+        extractor.setLeftBoundary("<t>");
+        extractor.setRightBoundary("</t>");
+        extractor.setMatchNumber(1);
+        context.setPreviousResult(null);
+        extractor.setDefaultEmptyValue(true);
+        extractor.process();
+        assertNull(vars.get("regVal"));
+    }
+
+    @Test
+    public void testEmptyVariable() throws Exception {
+        extractor.setLeftBoundary("<t>");
+        extractor.setRightBoundary("</t>");
+        extractor.setMatchNumber(1);
+        extractor.setScopeVariable("contentvar");
+        extractor.process();
+        assertNull(vars.get("regVal"));
     }
     
     @Test
