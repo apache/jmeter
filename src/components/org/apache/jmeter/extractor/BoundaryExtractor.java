@@ -252,7 +252,6 @@ public class BoundaryExtractor extends AbstractScopedTestElement implements Post
                 if(endIndex >= 0) {
                     matches.add(inputString.substring(startIndex+leftBoundary.length(), endIndex));
                 } else {
-                    matches.add(inputString.substring(startIndex+leftBoundary.length()));
                     break;
                 }
             } else {
