@@ -29,6 +29,11 @@
             <stringProp name="Argument.value">2222</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="passivePort" elementType="Argument">
+            <stringProp name="Argument.name">passivePort</stringProp>
+            <stringProp name="Argument.value">2223</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </Arguments>
       <hashTree/>
@@ -70,10 +75,16 @@ import org.apache.ftpserver.ftplet.Authority;
 import java.util.List;
 import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
-
+import org.apache.ftpserver.DataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 
 FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;));
 new File(JMeterUtils.getJMeterHome(), &quot;bin/ftp_test&quot;).mkdir();
+
+DataConnectionConfigurationFactory dataConnectionConfigurationFactory = 
+	new DataConnectionConfigurationFactory();
+dataConnectionConfigurationFactory.setPassivePorts(vars.get(&quot;passivePort&quot;));	
+DataConnectionConfiguration dataConnectionConfiguration = dataConnectionConfigurationFactory.createDataConnectionConfiguration();
 
 PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
 UserManager userManager = userManagerFactory.createUserManager();
@@ -86,12 +97,13 @@ user.setAuthorities(authorities);
 user.setHomeDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin&quot;).getAbsolutePath());
 userManager.save(user);
 ListenerFactory listenerFactory = new ListenerFactory();
-listenerFactory.setPort(Integer.parseInt(vars.get(&quot;port&quot;)));
 
+listenerFactory.setDataConnectionConfiguration(dataConnectionConfiguration);
+listenerFactory.setPort(Integer.parseInt(vars.get(&quot;port&quot;)));
 FtpServerFactory factory = new FtpServerFactory();
 factory.setUserManager(userManager);
 factory.addListener(&quot;default&quot;, listenerFactory.createListener());
-         
+ 
 FtpServer server = factory.createServer();
 server.start();
 
