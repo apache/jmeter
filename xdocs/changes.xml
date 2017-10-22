@@ -100,6 +100,7 @@ Summary
 <ul>
     <li><bug>60213</bug>Boundary based extractor</li>
     <li><bug>61644</bug>HTTP Cache Manager: "Use Cache-Control/Expires header when processing GET requests" should be checked by default</li>
+    <li><bug>61645</bug>Response Assertion : Add ability to assert on Request Data</li>
 </ul>
 
 <h3>Functions</h3>
