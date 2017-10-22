@@ -104,7 +104,7 @@ public class CacheManagerGui extends AbstractConfigGui {
     public void clearGui() {
         super.clearGui();
         clearEachIteration.setSelected(false);
-        useExpires.setSelected(false);
+        useExpires.setSelected(true);
         maxCacheSize.setText(""); //$NON-NLS-1$
     }
 
