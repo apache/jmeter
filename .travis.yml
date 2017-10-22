@@ -16,3 +16,6 @@ matrix:
     - jdk: oraclejdk8
       script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
       sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
+	- jdk: oraclejdk9
+      script: ant -Djava.awt.headless=true -Drmi_force_localhost=true -Dskip.bug52310=true test
+	  sudo: true # otherwise TEST_HTTPS.jmx -> analytics.usa.gov does not work
