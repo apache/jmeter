@@ -2752,6 +2752,11 @@ run JMeter unless all the JMeter jars are added.
   	</antcall>
 
     <antcall target="batchtest">
+      <param name="batchtest.name" value="FTP_TESTS"/>
+      <param name="batchtest.jmx" value="FTP_TESTS.jmx"/>
+    </antcall>
+      
+    <antcall target="batchtest">
       <param name="batchtest.name" value="Bug60607"/>
       <param name="batchtest.jmx" value="Bug60607.jmx"/>
       <param name="skip.batchtest" value="${skip.bug60607}" />
@@ -3209,6 +3214,9 @@ run JMeter unless all the JMeter jars are added.
     <process_jarfile jarname="xstream"/>
     <process_jarfile jarname="hsqldb" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="activemq-all" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="mina-core" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftplet-api" dest.dir="${lib.coverage}" />
+    <process_jarfile jarname="ftpserver-core" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="jacocoant" dest.dir="${lib.coverage}" />
     <process_jarfile jarname="sonarqube-ant-task" dest.dir="${lib.coverage}" />
   </target>
