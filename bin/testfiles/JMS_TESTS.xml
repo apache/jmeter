@@ -8,6 +8,20 @@
     <error>false</error>
   </assertionResult>
 </sample>
+<sample s="true" lb="JSS-ConsumeUpcomingMessage" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
+<sample s="true" lb="JMS-P2P-DefaultCorrelationId-TempQueue" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
+  <assertionResult>
+    <name>Response Assertion</name>
+    <failure>false</failure>
+    <error>false</error>
+  </assertionResult>
+</sample>
 <sample s="true" lb="JMS-P2P-CustomCorrelationId" rc="200" rm="OK" tn="TG-JMS-P2P 1-1" dt="text" sc="1" ec="0" ng="1" na="1">
   <assertionResult>
     <name>Response Assertion</name>

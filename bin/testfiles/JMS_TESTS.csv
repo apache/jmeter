@@ -1,6 +1,8 @@
 label,responseCode,responseMessage,threadName,dataType,success,grpThreads,allThreads,SampleCount,ErrorCount
 BSS_startActiveMQ,200,OK,setUp Thread Group 1-1,text,true,1,1,1,0
 JMS-P2P-DefaultCorrelationId,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JSS-ConsumeUpcomingMessage,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
+JMS-P2P-DefaultCorrelationId-TempQueue,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
 JMS-P2P-CustomCorrelationId,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
 JMS-P2P-DifferentSelector,,No reply message received,TG-JMS-P2P 1-1,text,true,1,1,1,0
 JMS-P2P-SameSelector,200,OK,TG-JMS-P2P 1-1,text,true,1,1,1,0
