@@ -1031,7 +1031,7 @@ public class ProxyControlGui extends LogicControllerGui implements JMeterGUIComp
                 .getResString("notify_child_listeners_fr"))); // $NON-NLS-1$
         
         notifyChildSamplerListenerOfFilteredSamplersCB = new JCheckBox(JMeterUtils.getResString("notify_child_listeners_fr")); // $NON-NLS-1$
-        notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(true);
+        notifyChildSamplerListenerOfFilteredSamplersCB.setSelected(false);
         notifyChildSamplerListenerOfFilteredSamplersCB.addActionListener(this);
         notifyChildSamplerListenerOfFilteredSamplersCB.setActionCommand(ENABLE_RESTART);
 

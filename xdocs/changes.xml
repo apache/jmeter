@@ -81,6 +81,7 @@ Summary
 <h3>HTTP Samplers and Test Script Recorder</h3>
 <ul>
     <li><pr>316</pr>Warn about empty truststore loading. Contributed by Vincent Herilier (https://github.com/vherilier)</li>
+    <li><bug>61639</bug>HTTP(S) Test Script Recorder : In request filtering tab, uncheck by default "Notify Child Listeners of filtered samplers"</li>
 </ul>
 
 <h3>Other samplers</h3>
