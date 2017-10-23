@@ -2882,7 +2882,7 @@ run JMeter unless all the JMeter jars are added.
       <isset property="jacocoagent"/>
     </condition>
     <!-- fork="yes" is required or dir attribute is ignored -->
-    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin">
+    <java classname="org.apache.jorphan.test.AllTests" fork="yes" failonerror="true" dir="${basedir}/bin" newenvironment="true">
       <classpath>
         <fileset dir="${dest.jar.jmeter}" includes="ApacheJMeter.jar"/>
         <fileset dir="${dest.jar}" includes="*.jar"/>
