@@ -31,14 +31,14 @@ import org.apache.activemq.broker.BrokerFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
 import java.io.File;
-import java.net.URLEncoder;
 
 File file = new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;);
 log.info(&quot;Deleting {}&quot;, file);
 FileUtils.deleteDirectory(file);
 log.info(&quot;Creating activemq config from {}&quot;, JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;);
 try {
-	String path = URLEncoder.encode(JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;, &quot;UTF-8&quot;);
+	String path = JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;;
+	path = path.replace(&apos;\\&apos;, &apos;/&apos;);
 	BrokerService broker = BrokerFactory.createBroker(&quot;xbean:file:&quot;+path, true);
 	bsh.shared.myMap = new HashMap();
 	bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
