@@ -30,11 +30,19 @@
 import org.apache.activemq.broker.BrokerFactory;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.commons.io.FileUtils;
+import java.io.File;
 
-FileUtils.deleteDirectory(new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;));
-BrokerService broker = BrokerFactory.createBroker(&quot;xbean:file:&quot;+JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;, true);
-bsh.shared.myMap = new HashMap();
-bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
+File file = new File(JMeterUtils.getJMeterHome(), &quot;bin/activemq-data&quot;);
+log.info(&quot;Deleting {}&quot;, file);
+FileUtils.deleteDirectory(file);
+log.info(&quot;Creating activemq config from {}&quot;, JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;);
+try {
+	BrokerService broker = BrokerFactory.createBroker(&quot;xbean:file:&quot;+JMeterUtils.getJMeterHome()+ &quot;/bin/testfiles/activemq.xml&quot;, true);
+	bsh.shared.myMap = new HashMap();
+	bsh.shared.myMap.put(&quot;ACTIVEMQ_BROKER&quot;, broker);
+} catch(Exception ex) {
+	log.error(&quot;Error configuring ActiveMQ&quot;, ex);
+}
 </stringProp>
           <stringProp name="BeanShellSampler.filename"></stringProp>
           <stringProp name="BeanShellSampler.parameters"></stringProp>
